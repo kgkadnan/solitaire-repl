@@ -68,6 +68,14 @@ export const handleInputChange = async (
       citiesByState[state].includes(city)
     );
     if (state) {
+      dispatch(
+        updateFormState({
+          name: `formErrorState.online.sections[${[
+            kycScreenIdentifierNames.COMPANY_DETAILS
+          ]}][state]`,
+          value: ''
+        })
+      );
       const statePath = `formState.online.sections[${[
         kycScreenIdentifierNames.COMPANY_DETAILS
       ]}][state]`;

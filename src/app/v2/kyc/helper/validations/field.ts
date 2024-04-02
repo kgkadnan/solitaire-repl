@@ -570,9 +570,9 @@ class ValidationUltimateBeneficiaryNameCriteria {
 }
 
 class ValidationCityCriteria {
-  @IsString({ message: FIELD_INVALID('City') })
   @IsNotEmpty({ message: CITY_MANDATORY })
-  @Length(1, 140, { message: FIELD_INVALID('City Name') })
+  // @IsString({ message: FIELD_INVALID('City') })
+  // @Length(1, 140, { message: FIELD_INVALID('City Name') })
   city: string;
 
   constructor(city: string) {

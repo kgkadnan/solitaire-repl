@@ -84,24 +84,22 @@ const CompanyDetail = ({
   country,
   currentStepperStep
 }: any) => {
-  console.log(
-    formErrorState?.online?.sections?.[kycScreenIdentifierNames.COMPANY_DETAILS]
-  );
   const { data, error } = useGetCountryCodeQuery({});
   useEffect(() => {
     if (data) {
       dispatch(
         updateFormState({
           name: `formState.online.sections[${[
-            kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
+            kycScreenIdentifierNames.COMPANY_DETAILS
           ]}][company_country_code]`,
-          value: data.country_calling_code
+          value: data.country_calling_code.replace(/\+/g, '')
         })
       );
     } else if (error) {
       console.error('Error fetching country code', error);
     }
   }, [data, error]);
+
   const handleRadioChange = ({ value, formKey }: any) => {
     handleInputChange(
       `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][${formKey}]`,
@@ -365,7 +363,12 @@ const CompanyDetail = ({
         newData.push(label);
       }
     }
-
+    dispatch(
+      updateFormState({
+        name: `formErrorState.online.sections.${[screenName]}.${[key]}`,
+        value: ''
+      })
+    );
     dispatch(updateFormState({ name: path, value: newData }));
   };
 
@@ -381,7 +384,15 @@ const CompanyDetail = ({
       </div>
       <hr className="border-neutral200" />
       <div className="flex justify-center">
-        <div className="flex flex-col flex-wrap h-[990px] gap-[16px]  w-[760px]">
+        <div
+          className={`flex flex-col flex-wrap  gap-[16px]  w-[760px] ${
+            country === 'Belgium'
+              ? 'h-[867px]'
+              : country === 'India'
+              ? 'h-[970px]'
+              : 'h-[1030px]'
+          }`}
+        >
           {' '}
           {/* <div className="flex gap-[16px]"> */}
           <div className={'w-[50%]'}>
@@ -583,6 +594,18 @@ const CompanyDetail = ({
                   }}
                   // autoFocus={false}
                 />
+                {formErrorState?.online?.sections?.[
+                  kycScreenIdentifierNames.COMPANY_DETAILS
+                ]?.['city'] && (
+                  <p className="text-dangerMain h-1">
+                    {formErrorState?.online?.sections?.[
+                      kycScreenIdentifierNames.COMPANY_DETAILS
+                    ]?.['city'] &&
+                      formErrorState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['city']}
+                  </p>
+                )}
               </div>
             </div>
           )}
@@ -590,7 +613,7 @@ const CompanyDetail = ({
             <div className={'w-[50%]'}>
               {' '}
               <InputField
-                label={'Registered Address Line 2*'}
+                label={'Registered Address Line 2'}
                 onChange={e =>
                   handleInputChange(
                     `formState.online.sections[${[
@@ -604,7 +627,7 @@ const CompanyDetail = ({
                   )
                 }
                 type="text"
-                name={'Registered Address Line 2*'}
+                name={'Registered Address Line 2'}
                 value={
                   formState?.online?.sections?.[
                     kycScreenIdentifierNames.COMPANY_DETAILS
@@ -708,7 +731,7 @@ const CompanyDetail = ({
                     'company_country_code'
                   );
                 }}
-                isNotEditable={true}
+                isNotEditable={false}
                 containerStyle={'!w-full'}
                 type="number"
                 name="Contact Number*"
@@ -1655,6 +1678,237 @@ const CompanyDetail = ({
               </div>
             </div>
           )}
+          {country === countries.USA && (
+            <div className="w-[50%] flex flex-col  h-[24vh]">
+              <div className="flex flex-col gap-[10px]">
+                <p className="text-mRegular text-neutral900">
+                  Organisation Type*
+                </p>
+
+                <div className="flex  w-full justify-between flex-wrap  ">
+                  {' '}
+                  <div className="w-[50%] mb-3">
+                    <RadioButtonWithInput
+                      name="organisationType"
+                      label={'Individual'}
+                      value={'Individual'}
+                      onError={
+                        formErrorState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type'] ?? ''
+                      }
+                      requiresInput={false}
+                      selectedOption={organisationType}
+                      defaultSelected={
+                        formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type'] === 'Individual'
+                      }
+                      setState={setOrganisationType}
+                      onSelect={handleSelect}
+                      formKey={'organisation_type'}
+                      customStyle={{
+                        radio: '!text-mRegular !text-neutral900'
+                      }}
+                    />
+                  </div>
+                  <div className="w-[50%] mb-3">
+                    <RadioButtonWithInput
+                      name="organisationType"
+                      label={'Partnership Firm'}
+                      value={'Partnership Firm'}
+                      defaultSelected={
+                        formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type'] === 'Partnership Firm'
+                      }
+                      onError={
+                        formErrorState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type'] ?? ''
+                      }
+                      requiresInput={false}
+                      selectedOption={organisationType}
+                      setState={setOrganisationType}
+                      onSelect={handleSelect}
+                      formKey={'organisation_type'}
+                      customStyle={{
+                        radio: '!text-mRegular !text-neutral900'
+                      }}
+                    />
+                  </div>
+                  <div className="w-[50%] mb-3">
+                    <RadioButtonWithInput
+                      name="organisationType"
+                      label={'Private Ltd.'}
+                      value={'Private Ltd.'}
+                      defaultSelected={
+                        formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type'] === 'Private Ltd.'
+                      }
+                      onError={
+                        formErrorState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type'] ?? ''
+                      }
+                      requiresInput={false}
+                      setState={setOrganisationType}
+                      selectedOption={organisationType}
+                      onSelect={handleSelect}
+                      formKey={'organisation_type'}
+                      customStyle={{
+                        radio: '!text-mRegular !text-neutral900'
+                      }}
+                    />
+                  </div>{' '}
+                  <div className="w-[50%] mb-3">
+                    <RadioButtonWithInput
+                      name="organisationType"
+                      label={'LLP'}
+                      value={'LLP'}
+                      defaultSelected={
+                        formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type'] === 'LLP'
+                      }
+                      onError={
+                        formErrorState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type'] ?? ''
+                      }
+                      requiresInput={false}
+                      selectedOption={organisationType}
+                      setState={setOrganisationType}
+                      onSelect={handleSelect}
+                      formKey={'organisation_type'}
+                      customStyle={{
+                        radio: '!text-mRegular !text-neutral900'
+                      }}
+                    />
+                  </div>{' '}
+                  <div className="w-[50%] mb-3">
+                    <RadioButtonWithInput
+                      name="organisationType"
+                      label={'Public Ltd.'}
+                      value={'Public Ltd.'}
+                      defaultSelected={
+                        formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type'] === 'Public Ltd.'
+                      }
+                      onError={
+                        formErrorState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type'] ?? ''
+                      }
+                      requiresInput={false}
+                      selectedOption={organisationType}
+                      setState={setOrganisationType}
+                      onSelect={handleSelect}
+                      formKey={'organisation_type'}
+                      customStyle={{
+                        radio: '!text-mRegular !text-neutral900'
+                      }}
+                    />
+                  </div>{' '}
+                  <div className="w-[50%] mb-3">
+                    <RadioButtonWithInput
+                      name="organisationType"
+                      label={'OPC'}
+                      value={'OPC'}
+                      defaultSelected={
+                        formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type'] === 'OPC'
+                      }
+                      onError={
+                        formErrorState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type'] ?? ''
+                      }
+                      requiresInput={false}
+                      selectedOption={organisationType}
+                      setState={setOrganisationType}
+                      onSelect={handleSelect}
+                      formKey={'organisation_type'}
+                      customStyle={{
+                        radio: '!text-mRegular !text-neutral900'
+                      }}
+                    />
+                  </div>{' '}
+                  <div
+                    className={`w-[100%] relative ${
+                      organisationTypes.includes(
+                        formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type']
+                      ) && 'mb-[45px]'
+                    }`}
+                  >
+                    <RadioButtonWithInput
+                      name="organisationType"
+                      label={'Other'}
+                      value={'Other'}
+                      defaultValue={
+                        formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type']?.length > 0 &&
+                        organisationTypesNew.includes(
+                          formState?.online?.sections?.[
+                            kycScreenIdentifierNames.COMPANY_DETAILS
+                          ]?.['organisation_type']
+                        )
+                          ? ''
+                          : formState?.online?.sections?.[
+                              kycScreenIdentifierNames.COMPANY_DETAILS
+                            ]?.['organisation_type']
+                      }
+                      defaultSelected={
+                        formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type']?.length > 0
+                          ? organisationTypes.includes(
+                              formState?.online?.sections?.[
+                                kycScreenIdentifierNames.COMPANY_DETAILS
+                              ]?.['organisation_type']
+                            )
+                            ? false
+                            : true
+                          : false
+                      }
+                      onError={
+                        formErrorState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type'] ?? ''
+                      }
+                      requiresInput={true}
+                      selectedOption={organisationType}
+                      setState={setOrganisationType}
+                      onSelect={handleSelect}
+                      onInputValueChange={handleInputValueChange}
+                      formKey={'organisation_type'}
+                      customStyle={{
+                        radio: '!text-mRegular !text-neutral900'
+                      }}
+                      placeholder={'If other please specify'}
+                    />
+                  </div>{' '}
+                </div>
+              </div>
+              {formErrorState?.online?.sections?.[
+                kycScreenIdentifierNames.COMPANY_DETAILS
+              ]?.['organisation_type'] && (
+                <span className="text-dangerMain">
+                  {
+                    formErrorState?.online?.sections?.[
+                      kycScreenIdentifierNames.COMPANY_DETAILS
+                    ]?.['organisation_type']
+                  }
+                </span>
+              )}
+            </div>
+          )}
           {(country === countries.BELGIUM || country === countries.USA) && (
             <div className={'w-[50%]'}>
               {' '}
@@ -1866,7 +2120,7 @@ const CompanyDetail = ({
           {country === countries.INDIA && (
             <div className={'w-[50%]'}>
               <InputField
-                label={'Business Registration Number (CIN)'}
+                label={'Business Registration Number (CIN)*'}
                 onChange={e =>
                   handleInputChange(
                     `formState.online.sections[${[
@@ -1880,7 +2134,7 @@ const CompanyDetail = ({
                   )
                 }
                 type="text"
-                name={'Business Registration Number (CIN)'}
+                name={'Business Registration Number (CIN)*'}
                 value={
                   formState?.online?.sections?.[
                     kycScreenIdentifierNames.COMPANY_DETAILS
@@ -2118,7 +2372,7 @@ const CompanyDetail = ({
                         }
                       />
                     </div>
-                    <div className="w-[100%]">
+                    <div className="w-[380px]">
                       <CheckboxWithInput
                         label="Other"
                         defaultChecked={formState?.online?.sections?.[
@@ -2145,9 +2399,9 @@ const CompanyDetail = ({
                             label,
                             isChecked,
                             kycScreenIdentifierNames.COMPANY_DETAILS,
-                            'business_type',
+                            'industry_type',
                             inputValue,
-                            `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][business_type]`,
+                            `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][industry_type]`,
                             true
                           )
                         }
@@ -2170,6 +2424,237 @@ const CompanyDetail = ({
                   </span>
                 )}
               </div>
+            </div>
+          )}
+          {country === countries.BELGIUM && (
+            <div className="w-[50%] flex flex-col  h-[24vh]">
+              <div className="flex flex-col gap-[10px]">
+                <p className="text-mRegular text-neutral900">
+                  Organisation Type*
+                </p>
+
+                <div className="flex  w-full justify-between flex-wrap  ">
+                  {' '}
+                  <div className="w-[50%] mb-3">
+                    <RadioButtonWithInput
+                      name="organisationType"
+                      label={'Individual'}
+                      value={'Individual'}
+                      onError={
+                        formErrorState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type'] ?? ''
+                      }
+                      requiresInput={false}
+                      selectedOption={organisationType}
+                      defaultSelected={
+                        formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type'] === 'Individual'
+                      }
+                      setState={setOrganisationType}
+                      onSelect={handleSelect}
+                      formKey={'organisation_type'}
+                      customStyle={{
+                        radio: '!text-mRegular !text-neutral900'
+                      }}
+                    />
+                  </div>
+                  <div className="w-[50%] mb-3">
+                    <RadioButtonWithInput
+                      name="organisationType"
+                      label={'Partnership Firm'}
+                      value={'Partnership Firm'}
+                      defaultSelected={
+                        formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type'] === 'Partnership Firm'
+                      }
+                      onError={
+                        formErrorState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type'] ?? ''
+                      }
+                      requiresInput={false}
+                      selectedOption={organisationType}
+                      setState={setOrganisationType}
+                      onSelect={handleSelect}
+                      formKey={'organisation_type'}
+                      customStyle={{
+                        radio: '!text-mRegular !text-neutral900'
+                      }}
+                    />
+                  </div>
+                  <div className="w-[50%] mb-3">
+                    <RadioButtonWithInput
+                      name="organisationType"
+                      label={'Private Ltd.'}
+                      value={'Private Ltd.'}
+                      defaultSelected={
+                        formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type'] === 'Private Ltd.'
+                      }
+                      onError={
+                        formErrorState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type'] ?? ''
+                      }
+                      requiresInput={false}
+                      setState={setOrganisationType}
+                      selectedOption={organisationType}
+                      onSelect={handleSelect}
+                      formKey={'organisation_type'}
+                      customStyle={{
+                        radio: '!text-mRegular !text-neutral900'
+                      }}
+                    />
+                  </div>{' '}
+                  <div className="w-[50%] mb-3">
+                    <RadioButtonWithInput
+                      name="organisationType"
+                      label={'LLP'}
+                      value={'LLP'}
+                      defaultSelected={
+                        formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type'] === 'LLP'
+                      }
+                      onError={
+                        formErrorState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type'] ?? ''
+                      }
+                      requiresInput={false}
+                      selectedOption={organisationType}
+                      setState={setOrganisationType}
+                      onSelect={handleSelect}
+                      formKey={'organisation_type'}
+                      customStyle={{
+                        radio: '!text-mRegular !text-neutral900'
+                      }}
+                    />
+                  </div>{' '}
+                  <div className="w-[50%] mb-3">
+                    <RadioButtonWithInput
+                      name="organisationType"
+                      label={'Public Ltd.'}
+                      value={'Public Ltd.'}
+                      defaultSelected={
+                        formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type'] === 'Public Ltd.'
+                      }
+                      onError={
+                        formErrorState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type'] ?? ''
+                      }
+                      requiresInput={false}
+                      selectedOption={organisationType}
+                      setState={setOrganisationType}
+                      onSelect={handleSelect}
+                      formKey={'organisation_type'}
+                      customStyle={{
+                        radio: '!text-mRegular !text-neutral900'
+                      }}
+                    />
+                  </div>{' '}
+                  <div className="w-[50%] mb-3">
+                    <RadioButtonWithInput
+                      name="organisationType"
+                      label={'OPC'}
+                      value={'OPC'}
+                      defaultSelected={
+                        formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type'] === 'OPC'
+                      }
+                      onError={
+                        formErrorState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type'] ?? ''
+                      }
+                      requiresInput={false}
+                      selectedOption={organisationType}
+                      setState={setOrganisationType}
+                      onSelect={handleSelect}
+                      formKey={'organisation_type'}
+                      customStyle={{
+                        radio: '!text-mRegular !text-neutral900'
+                      }}
+                    />
+                  </div>{' '}
+                  <div
+                    className={`w-[100%] relative ${
+                      organisationTypes.includes(
+                        formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type']
+                      ) && 'mb-[45px]'
+                    }`}
+                  >
+                    <RadioButtonWithInput
+                      name="organisationType"
+                      label={'Other'}
+                      value={'Other'}
+                      defaultValue={
+                        formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type']?.length > 0 &&
+                        organisationTypesNew.includes(
+                          formState?.online?.sections?.[
+                            kycScreenIdentifierNames.COMPANY_DETAILS
+                          ]?.['organisation_type']
+                        )
+                          ? ''
+                          : formState?.online?.sections?.[
+                              kycScreenIdentifierNames.COMPANY_DETAILS
+                            ]?.['organisation_type']
+                      }
+                      defaultSelected={
+                        formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type']?.length > 0
+                          ? organisationTypes.includes(
+                              formState?.online?.sections?.[
+                                kycScreenIdentifierNames.COMPANY_DETAILS
+                              ]?.['organisation_type']
+                            )
+                            ? false
+                            : true
+                          : false
+                      }
+                      onError={
+                        formErrorState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type'] ?? ''
+                      }
+                      requiresInput={true}
+                      selectedOption={organisationType}
+                      setState={setOrganisationType}
+                      onSelect={handleSelect}
+                      onInputValueChange={handleInputValueChange}
+                      formKey={'organisation_type'}
+                      customStyle={{
+                        radio: '!text-mRegular !text-neutral900'
+                      }}
+                      placeholder={'If other please specify'}
+                    />
+                  </div>{' '}
+                </div>
+              </div>
+              {formErrorState?.online?.sections?.[
+                kycScreenIdentifierNames.COMPANY_DETAILS
+              ]?.['organisation_type'] && (
+                <span className="text-dangerMain">
+                  {
+                    formErrorState?.online?.sections?.[
+                      kycScreenIdentifierNames.COMPANY_DETAILS
+                    ]?.['organisation_type']
+                  }
+                </span>
+              )}
             </div>
           )}
           <div

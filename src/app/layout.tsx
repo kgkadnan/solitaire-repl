@@ -39,6 +39,30 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
   const SecureComponent = protectedRoutes.includes(path)
     ? authorizedLogin(ChildrenComponent)
     : ChildrenComponent;
+
+  useEffect(() => {
+    const handleContextMenu = (e: any) => {
+      e.preventDefault();
+    };
+
+    // Check if running on localhost
+    const isLocalhost =
+      window.location.hostname === 'localhost' ||
+      window.location.hostname === '127.0.0.1';
+
+    if (!isLocalhost) {
+      // Add event listener to prevent right-clicking
+      document.addEventListener('contextmenu', handleContextMenu);
+    } else {
+      // Remove event listener if not running on localhost
+      document.removeEventListener('contextmenu', handleContextMenu);
+    }
+
+    // Cleanup function to remove event listener
+    return () => {
+      document.removeEventListener('contextmenu', handleContextMenu);
+    };
+  }, []);
   return (
     <html lang="en">
       <head>
@@ -59,6 +83,17 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
         <link
           rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Inter"
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+                if (typeof window !== 'undefined') {
+                  document.addEventListener('contextmenu', function(e) {
+                    e.preventDefault();
+                  });
+                }
+              `
+          }}
         />
         {/* <!-- Google Tag Manager --> */}
 

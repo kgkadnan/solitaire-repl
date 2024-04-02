@@ -416,16 +416,17 @@ const KYC = () => {
                   })
                 );
 
-                Object.keys(kycDetails?.kyc?.profile_data?.online['4']).map(
-                  key => {
-                    dispatch(
-                      updateFormState({
-                        name: `formState.attachment[${key}].isFileUploaded`,
-                        value: true
-                      })
-                    );
-                  }
-                );
+                kycDetails?.kyc?.profile_data?.online['4'] &&
+                  Object.keys(kycDetails?.kyc?.profile_data?.online['4']).map(
+                    key => {
+                      dispatch(
+                        updateFormState({
+                          name: `formState.attachment[${key}].isFileUploaded`,
+                          value: true
+                        })
+                      );
+                    }
+                  );
               }
             } else {
               dispatch(
@@ -660,6 +661,8 @@ const KYC = () => {
         })
       );
     }
+
+    if (validationError?.length) return;
 
     // Make the API call to submit the form data
     let updatedCompanyDetails;
@@ -929,7 +932,7 @@ const KYC = () => {
     if (
       !validationError?.length &&
       !onlineValidator.length &&
-      !manualValidationError.length
+      !manualValidationError?.length
     ) {
       if (!formState.termAndCondition) {
         dispatch(
