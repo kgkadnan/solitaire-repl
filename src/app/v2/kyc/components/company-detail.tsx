@@ -566,7 +566,7 @@ const CompanyDetail = ({
                 <p className="text-mRegular text-neutral-900">City*</p>
                 <Select
                   name="city"
-                  placeholder={'Search by Saved Filter Parameter'}
+                  placeholder={'Enter City'}
                   options={computeCountryDropdownField(cities)}
                   onChange={({ value }: any) => {
                     handleInputChange(
@@ -584,16 +584,22 @@ const CompanyDetail = ({
                       kycScreenIdentifierNames.COMPANY_DETAILS
                     ]?.['city'] ?? ''
                   )}
-                  value={{
-                    label:
-                      formState?.online?.sections?.[
-                        kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['city'],
-                    value:
-                      formState?.online?.sections?.[
-                        kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['city']
-                  }}
+                  value={
+                    formState?.online?.sections?.[
+                      kycScreenIdentifierNames.COMPANY_DETAILS
+                    ]?.['city']
+                      ? {
+                          label:
+                            formState?.online?.sections?.[
+                              kycScreenIdentifierNames.COMPANY_DETAILS
+                            ]?.['city'],
+                          value:
+                            formState?.online?.sections?.[
+                              kycScreenIdentifierNames.COMPANY_DETAILS
+                            ]?.['city']
+                        }
+                      : ''
+                  }
                   // autoFocus={false}
                 />
                 {formErrorState?.online?.sections?.[
