@@ -157,7 +157,6 @@ export const validateScreen = async (
             );
             break;
           case supportedCountries.BELGIUM:
-            console.log('formData', formData);
             kycForm = new BelgiumBankDetails(
               formData.bank_name,
               formData.account_holder_name,

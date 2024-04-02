@@ -329,7 +329,7 @@ export class UsaKycPostCompanyDetailsValidation extends BelgiumKycPostCompanyDet
   @IsNotEmpty({ message: IS_ANTI_MONEY_LAUNDERING })
   is_anti_money_laundering: boolean;
 
-  @ValidateIf(object => object?.is_anti_money_laundering === false)
+  @ValidateIf((object, value) => object?.is_anti_money_laundering === value)
   @IsString({
     message: 'Reason for No Anti-Money Laundering Policy is Required.'
   })
