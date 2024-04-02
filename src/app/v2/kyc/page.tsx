@@ -92,7 +92,13 @@ const KYC = () => {
   const dispatch = useAppDispatch();
 
   const handleCountrySelection = (country: string) => {
-    setSelectedCountry(country);
+    if (formState.country === country) {
+      setSelectedCountry(country);
+    } else {
+      setSelectedCountry(country);
+      setSelectedSubmissionOption('');
+    }
+
     if (country === countries.OTHER) {
       setCurrentState(countries.OTHER);
     } else {
@@ -1005,17 +1011,6 @@ const KYC = () => {
       selectedCountry === countries.INDIA
   );
 
-  const indianManualSteps = [
-    {
-      name: 'Personal Details',
-      identifier: kycScreenIdentifierNames.PERSONAL_DETAILS
-    },
-    {
-      name: 'Download And Upload Hub',
-      identifier: kycScreenIdentifierNames.ATTACHMENT
-    }
-  ];
-
   function goToNextStep() {
     // Find the index of the current step, ignoring case
     let currentIndex = filteredSteps.findIndex(
@@ -1039,6 +1034,7 @@ const KYC = () => {
   //     return newCompletedSteps;
   //   });
   // };
+
   const renderStepperComponent = (state: string) => {
     switch (state) {
       case kycScreenIdentifierNames.COMPANY_OWNER_DETAILS:
@@ -1095,8 +1091,17 @@ const KYC = () => {
         );
     }
   };
-
-  const renderStepperComponentForIndiaOffline = (state: string) => {
+  const indianManualSteps = [
+    {
+      name: 'Personal Details',
+      identifier: kycScreenIdentifierNames.PERSONAL_DETAILS
+    },
+    {
+      name: 'Download And Upload Hub',
+      identifier: kycScreenIdentifierNames.ATTACHMENT
+    }
+  ];
+  const renderStepperComponentForOffline = (state: string) => {
     switch (state) {
       case kycScreenIdentifierNames.PERSONAL_DETAILS:
         return (
@@ -1162,17 +1167,14 @@ const KYC = () => {
           filteredSteps={filteredSteps}
         />
       );
-    } else if (
-      currentState === 'offline' &&
-      selectedCountry === countries.INDIA
-    ) {
+    } else if (currentState === countries.OTHER || currentState === 'offline') {
       return (
         <StepperComponent
           currentStepperStep={currentStepperStep}
           setCurrentStepperStep={setCurrentStepperStep}
           completedSteps={completedSteps}
           rejectedSteps={rejectedSteps}
-          renderStepperComponent={renderStepperComponentForIndiaOffline}
+          renderStepperComponent={renderStepperComponentForOffline}
           handleStepperNext={handleStepperNext}
           handleStepperBack={handleStepperBack}
           isEmailVerified={formState.isEmailVerified}
@@ -1180,22 +1182,23 @@ const KYC = () => {
           filteredSteps={indianManualSteps}
         />
       );
-    } else if (currentState === countries.OTHER || currentState === 'offline') {
-      return (
-        <RenderOffline
-          formErrorState={formErrorState}
-          formState={formState}
-          fromWhere={currentState}
-          selectedSubmissionOption={selectedSubmissionOption}
-          modalSetState={modalSetState}
-          modalState={modalState}
-          country={selectedCountry ?? formState.country}
-          handleTermAndCondition={handleTermAndCondition}
-          handleBack={handleBack}
-          handleSubmit={handleSubmit}
-        />
-      );
     }
+    // else if (currentState === countries.OTHER || currentState === 'offline') {
+    //   return (
+    //     <RenderOffline
+    //       formErrorState={formErrorState}
+    //       formState={formState}
+    //       fromWhere={currentState}
+    //       selectedSubmissionOption={selectedSubmissionOption}
+    //       modalSetState={modalSetState}
+    //       modalState={modalState}
+    //       country={selectedCountry ?? formState.country}
+    //       handleTermAndCondition={handleTermAndCondition}
+    //       handleBack={handleBack}
+    //       handleSubmit={handleSubmit}
+    //     />
+    //   );
+    // }
   };
 
   const renderContentWithInput = () => {

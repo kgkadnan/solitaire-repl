@@ -4,7 +4,7 @@ import { Dialog, DialogContent } from '../../ui/dialog';
 export interface IDialog {
   dialogContent: React.ReactNode;
   isOpens: boolean;
-  setIsOpen: Dispatch<SetStateAction<boolean>>;
+  setIsOpen?: Dispatch<SetStateAction<boolean>>;
   dialogStyle?: {
     dialogContent?: string;
   };
@@ -16,11 +16,9 @@ export const DialogComponent: React.FC<IDialog> = ({
   setIsOpen,
   dialogStyle
 }) => {
-  const onclose = (open: boolean) => {
-    setIsOpen(open);
-  };
   return (
-    <Dialog open={isOpens} onOpenChange={onclose} defaultOpen={false}>
+    <Dialog open={isOpens} defaultOpen={false}>
+      {/*Remove onOpenChange to prevent the dialog from closing when clicking outside the dialog*/}
       <DialogContent
         className={`max-w-[400px] min-h-[222px] bg-neutral25 max-h-[300px] flex flex-col justify-center  !rounded-[8px] p-[24px] ${dialogStyle?.dialogContent}`}
       >

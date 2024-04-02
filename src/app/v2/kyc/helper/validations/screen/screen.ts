@@ -111,11 +111,11 @@ export const validateScreen = async (
               formData.member_of_business_name,
               formData.ultimate_beneficiary_name,
               formData.vat_number,
-              formData.swift_code,
+              formData.fax_number,
+              formData.ownership_percentage,
               formData.federal_tax_id,
               formData.is_anti_money_laundering,
-              formData.no_anti_money_laundering_policy_reason,
-              formData.ownership_percentage // Added this missing argument
+              formData.no_anti_money_laundering_policy_reason
             );
 
             break;
@@ -157,6 +157,7 @@ export const validateScreen = async (
             );
             break;
           case supportedCountries.BELGIUM:
+            console.log('formData', formData);
             kycForm = new BelgiumBankDetails(
               formData.bank_name,
               formData.account_holder_name,
@@ -181,7 +182,10 @@ export const validateScreen = async (
   return validationErrors;
 };
 
-export const validateAttachment = async (formData: any, country: string) => {
+export const validateAttachment = async (
+  formData: any = {},
+  country: string
+) => {
   let validationErrors;
   let attachments = {};
   if (formData) {

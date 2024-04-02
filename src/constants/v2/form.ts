@@ -138,20 +138,20 @@ export const clarity = [
 
 export const fluorescence = [
   { title: 'None', short_name: 'NON' },
+  { title: 'Faint', short_name: 'FNT' },
   { title: 'Very Slight', short_name: 'VSL' },
   { title: 'Slight', short_name: 'SLT' },
-  { title: 'Faint', short_name: 'FNT' },
   { title: 'Medium', short_name: 'MED' },
   { title: 'Strong', short_name: 'STG' },
   { title: 'Very Strong', short_name: 'VSTG' }
 ];
 export const lab = [
   'GIA',
+  'HRD',
+  'IGI',
   'GIA DOR',
   'DBIOD',
   'FM',
-  'HRD',
-  'IGI',
   'NGTC',
   'KGK GRADING'
 ];

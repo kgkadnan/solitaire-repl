@@ -28,7 +28,8 @@ import {
   MSME_TYPE_INVALID,
   MEMBER_BUSINESS_INVALID,
   MEMBER_NAME_INVALID,
-  FIELD_INVALID
+  FIELD_INVALID,
+  IS_ANTI_MONEY_LAUNDERING
 } from '@/constants/error-messages/kyc';
 import {
   GST_NUMBER_REGEX,
@@ -325,15 +326,15 @@ export class UsaKycPostCompanyDetailsValidation extends BelgiumKycPostCompanyDet
   federal_tax_id: string;
 
   @IsBoolean({ message: ANTI_MONEY_LAUNDERING_INVALID })
-  @IsOptional()
-  is_anti_money_laundering: boolean = false;
+  @IsNotEmpty({ message: IS_ANTI_MONEY_LAUNDERING })
+  is_anti_money_laundering: boolean;
 
-  @ValidateIf(object => object?.is_anti_money_laundering === true)
+  @ValidateIf(object => object?.is_anti_money_laundering === false)
   @IsString({
-    message: ANTI_MONEY_LAUNDERING_POLICY_NAME_INVALID
+    message: 'Reason for No Anti-Money Laundering Policy is Required.'
   })
   @IsNotEmpty({
-    message: ANTI_MONEY_LAUNDERING_POLICY_NAME_MANDATORY
+    message: 'Reason for No Anti-Money Laundering Policy is Required.'
   })
   no_anti_money_laundering_policy_reason: string;
 

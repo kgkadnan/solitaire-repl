@@ -285,7 +285,8 @@ const CompanyDetail = ({
               kycScreenIdentifierNames.COMPANY_DETAILS
             ]?.['no_anti_money_laundering_policy_reason'] ?? ''
         }
-      ]
+      ],
+      inputCustomStyle: 'right-[-154px]'
     }
   ];
 
@@ -307,6 +308,9 @@ const CompanyDetail = ({
     'Individual',
     'Other'
   ];
+
+  console.log('formState', formState.online.sections);
+
   const [organisationType, setOrganisationType] = useState();
 
   const handleSelect = (value: any, formKey: string, setState: any) => {
@@ -390,7 +394,7 @@ const CompanyDetail = ({
               ? 'h-[867px]'
               : country === 'India'
               ? 'h-[970px]'
-              : 'h-[1030px]'
+              : 'h-[1028px]'
           }`}
         >
           {' '}
@@ -1531,7 +1535,7 @@ const CompanyDetail = ({
             </div>
           )}
           {(country === countries.BELGIUM || country === countries.USA) && (
-            <div className="flex">
+            <div className="flex w-[380px] h-[17vh]">
               <div className="w-full flex flex-col ">
                 <div className="flex flex-col gap-[5px]">
                   <p className="text-mRegular text-neutral900">
@@ -1651,9 +1655,9 @@ const CompanyDetail = ({
                             label,
                             isChecked,
                             kycScreenIdentifierNames.COMPANY_DETAILS,
-                            'business_type',
+                            'industry_type',
                             inputValue,
-                            `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][business_type]`,
+                            `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][industry_type]`,
                             true
                           )
                         }
@@ -1679,7 +1683,7 @@ const CompanyDetail = ({
             </div>
           )}
           {country === countries.USA && (
-            <div className="w-[50%] flex flex-col  h-[24vh]">
+            <div className="w-[50%] flex flex-col  h-[20vh]">
               <div className="flex flex-col gap-[10px]">
                 <p className="text-mRegular text-neutral900">
                   Organisation Type*
@@ -2427,7 +2431,7 @@ const CompanyDetail = ({
             </div>
           )}
           {country === countries.BELGIUM && (
-            <div className="w-[50%] flex flex-col  h-[24vh]">
+            <div className="w-[50%] flex flex-col \">
               <div className="flex flex-col gap-[10px]">
                 <p className="text-mRegular text-neutral900">
                   Organisation Type*
@@ -2585,15 +2589,7 @@ const CompanyDetail = ({
                       }}
                     />
                   </div>{' '}
-                  <div
-                    className={`w-[100%] relative ${
-                      organisationTypes.includes(
-                        formState?.online?.sections?.[
-                          kycScreenIdentifierNames.COMPANY_DETAILS
-                        ]?.['organisation_type']
-                      ) && 'mb-[45px]'
-                    }`}
-                  >
+                  <div className={`w-[100%] relative mb-[45px]`}>
                     <RadioButtonWithInput
                       name="organisationType"
                       label={'Other'}
@@ -2772,7 +2768,16 @@ const CompanyDetail = ({
             </div>
           )}
           {country === countries.USA && (
-            <div className="w-[50%] flex flex-col ">
+            <div
+              className={`w-[50%] flex flex-col 
+            ${
+              formState?.online?.sections?.[
+                kycScreenIdentifierNames.COMPANY_DETAILS
+              ]?.['is_anti_money_laundering'] === false && 'mb-[45px]'
+            }
+            
+            `}
+            >
               <div className="flex flex-col gap-[25px]">
                 <div>
                   <p className="text-mRegular text-neutral900">
@@ -2805,7 +2810,7 @@ const CompanyDetail = ({
                             radio: `!text-mRegular !text-neutral900  ${
                               formState?.online?.sections?.[
                                 kycScreenIdentifierNames.COMPANY_DETAILS
-                              ]?.['is_anti_money_laundering'] === true &&
+                              ]?.['is_anti_money_laundering'] === false &&
                               'mb-[10px]'
                             }`
                           }}

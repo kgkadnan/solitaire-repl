@@ -143,7 +143,7 @@ export const RenderOffline = ({
             country === countries.OTHER
               ? 'h-[380px]'
               : country !== countries.INDIA
-              ? 'h-[548px]'
+              ? 'h-[260px]'
               : ''
           } w-[100%] `}
         >
@@ -267,7 +267,7 @@ export const RenderOffline = ({
         </div>
       </div>
 
-      {country !== countries.INDIA && (
+      {/* {country !== countries.INDIA && (
         <div className="h-[72px] bg-neutral0 sticky bottom-0 border-[1px] border-solid border-neutral200 w-[1136px] rounded-t-[8px] mt-auto p-[16px]">
           {' '}
           <ActionButton
@@ -291,7 +291,7 @@ export const RenderOffline = ({
             containerStyle="!justify-between"
           />
         </div>
-      )}
+      )} */}
     </div>
   );
 };

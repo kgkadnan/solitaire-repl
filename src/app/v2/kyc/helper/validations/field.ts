@@ -18,6 +18,7 @@ import {
   GST_NUMBER_MANDATORY,
   IFSC_CODE_MANDATORY,
   INDUSTRY_TYPE_MANDATORY,
+  IS_ANTI_MONEY_LAUNDERING,
   LAST_NAME_MANDATORY,
   MEMBER_BUSINESS_INVALID,
   MEMBER_CHECK_MANDATORY,
@@ -725,7 +726,7 @@ class ValidationFederalTaxCriteria {
 }
 class ValidationIsAntiMoneyCriteria {
   @IsBoolean({ message: ANTI_MONEY_LAUNDERING_INVALID })
-  @IsOptional()
+  @IsNotEmpty({ message: IS_ANTI_MONEY_LAUNDERING })
   is_anti_money_laundering: boolean;
 
   constructor(is_anti_money_laundering: boolean) {
@@ -735,14 +736,18 @@ class ValidationIsAntiMoneyCriteria {
 class ValidationAntiMoneyPolicyNameCriteria {
   @ValidateIf(object => object?.is_anti_money_laundering === false)
   @IsString({
-    message: ANTI_MONEY_LAUNDERING_INVALID
+    message: 'Reason for No Anti-Money Laundering Policy is Required.'
   })
   @IsNotEmpty({
-    message: ANTI_MONEY_LAUNDERING_INVALID
+    message: 'Reason for No Anti-Money Laundering Policy is Required.'
   })
-  @Length(1, 140, { message: FIELD_INVALID('Anti Money Laundering Reason') })
+  @Length(1, 140, {
+    message: FIELD_INVALID(
+      'Reason for No Anti-Money Laundering Policy is Required.'
+    )
+  })
   @Matches(NAME_REGEX, {
-    message: ANTI_MONEY_LAUNDERING_INVALID
+    message: 'Reason for No Anti-Money Laundering Policy is Required.'
   })
   no_anti_money_laundering_policy_reason: string;
 

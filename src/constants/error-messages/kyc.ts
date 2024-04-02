@@ -3,7 +3,7 @@ export const SELECT_VALID_INPUT = 'Please select valid input to proceed';
 export const ANTI_MONEY_LAUNDERING_POLICY_NAME_INVALID =
   'Anti-money laundering policy name must be a non-empty string when registered under MSME Act';
 export const ANTI_MONEY_LAUNDERING_INVALID =
-  'Registered under MSME Act must be a boolean';
+  'Anti-Money Laundering Policy Status is Invalid.';
 export const MSME_REGISTRATION_NUMBER_INVALID =
   'MSME registration number must be a non-empty when MSME is registered';
 export const MSME_TYPE_INVALID =
@@ -73,6 +73,9 @@ export const VAT_NUMBER_MANDATORY = MANDATORY_ERROR('VAT number');
 
 // For UsaKycPostCompanyDetailsValidation
 export const FEDERAL_TAX_ID_MANDATORY = MANDATORY_ERROR('Federal tax ID');
+export const IS_ANTI_MONEY_LAUNDERING = MANDATORY_ERROR(
+  'Anti Money Laundering'
+);
 export const ANTI_MONEY_LAUNDERING_POLICY_NAME_MANDATORY = MANDATORY_ERROR(
   'Anti-money laundering policy name'
 );
