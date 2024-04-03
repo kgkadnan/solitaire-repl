@@ -41,7 +41,7 @@ import {
 } from '@/components/v2/common/otp-verication/hooks/otp-verification-state-management';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
-import { Metadata } from 'next';
+import Head from 'next/head';
 
 export interface IToken {
   token: string;
@@ -55,7 +55,7 @@ const initialTokenState = {
   tempToken: ''
 };
 
-export const metadata: Metadata = {
+const metadata = {
   title: 'Log in to Your KGK Diamonds Account',
   description:
     'Access your KGK Diamonds account to explore a world of exquisite diamonds and personalized services. Log in now!'
@@ -362,6 +362,10 @@ const Login = () => {
   return (
     <>
       {isLoading && <CustomKGKLoader />}
+      <Head>
+        <title>{metadata.title}</title>
+        <meta name="description" content={metadata.description} />
+      </Head>
       <DialogComponent
         dialogContent={dialogContent}
         isOpens={isDialogOpen}

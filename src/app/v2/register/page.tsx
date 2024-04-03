@@ -30,7 +30,7 @@ import {
 import { handleOTPChange } from '@/components/v2/common/otp-verication/helpers/handle-otp-change';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
-import { Metadata } from 'next';
+import Head from 'next/head';
 
 export interface IOtp {
   otpMobileNumber: string;
@@ -49,7 +49,7 @@ const initialTokenState = {
   tempToken: ''
 };
 
-export const metadata: Metadata = {
+const metadata = {
   title: 'Register for Exclusive Access | KGK Diamonds',
   description:
     'Sign up to unlock exclusive features and benefits at KGK Diamonds, a trusted name in the diamond industry since 1905. Join today!'
@@ -244,6 +244,10 @@ const Register = () => {
   return (
     <>
       {isLoading && <CustomKGKLoader />}
+      <Head>
+        <title>{metadata.title}</title>
+        <meta name="description" content={metadata.description} />
+      </Head>
       <InputDialogComponent
         isOpen={isInputDialogOpen}
         onClose={() => setIsInputDialogOpen(false)}
