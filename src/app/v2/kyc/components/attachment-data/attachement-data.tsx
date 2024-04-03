@@ -130,7 +130,7 @@ export let AttachmentData: any = {
     {
       id: '1',
       label: 'FEIN No. / Tax No. / Business Registration Copy',
-      isRequired: false,
+      isRequired: true,
       formKey: 'registration_number',
       maxFile: fileLimit.MAX_FILES,
       minFile: fileLimit.MIN_FILES,
@@ -159,7 +159,7 @@ export let AttachmentData: any = {
     {
       id: '1',
       label: 'FEIN No. / Tax No. / Business Registration Copy',
-      isRequired: false,
+      isRequired: true,
       formKey: 'registration_number',
       maxFile: fileLimit.MAX_FILES,
       minFile: fileLimit.MIN_FILES,

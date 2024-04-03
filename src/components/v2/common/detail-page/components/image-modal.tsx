@@ -50,7 +50,7 @@ const ImageModal: React.FC<ModalProps> = ({
       }, 2000);
     });
   };
-  console.log('Dsdsdsd', showDownloadButton);
+
   return (
     <div className="fixed z-[1200] inset-0 overflow-y-auto ">
       <Toast show={showToast} message="Copied Successfully" />
