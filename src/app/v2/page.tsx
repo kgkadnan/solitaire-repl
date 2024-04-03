@@ -84,7 +84,7 @@ const Dashboard = () => {
     'linear-gradient(90deg, #E1F6F1 0%, #FFF4E3 50%, #EFEFFD 100%)',
     'linear-gradient(90deg, #DBF2FC 0%, #E8E8FF 100%)'
   ];
-  const [stoneId, setStoneId] = useState();
+  const [stoneId, setStoneId] = useState('');
   const [searchData, setSearchData] = useState<any>();
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -532,6 +532,30 @@ const Dashboard = () => {
           setIsLoading(false);
           setError('Something went wrong');
         });
+    }
+  };
+  const handleInputSearch = () => {
+    if (stoneId.length > 0) {
+      setIsLoading(true);
+      getProductById({
+        search_keyword: stoneId
+      })
+        .then((res: any) => {
+          setIsLoading(false);
+          if (res?.error?.status === statusCode.NOT_FOUND) {
+            setError(`We couldn't find any results for this search`);
+          } else {
+            setSearchData(res?.data);
+            setError('');
+            setIsDetailPage(true);
+          }
+        })
+        .catch((e: any) => {
+          setIsLoading(false);
+          setError('Something went wrong');
+        });
+    } else {
+      setError('Please enter stone id or certificate number');
     }
   };
   useEffect(() => {
@@ -1075,7 +1099,10 @@ const Dashboard = () => {
                     onChange={handleStoneId}
                     onKeyDown={handleKeyDown}
                   />
-                  <div className="absolute left-0 top-[5px]">
+                  <div
+                    className="absolute left-0 top-[5px]"
+                    onClick={handleInputSearch}
+                  >
                     <Image src={searchIcon} alt={'searchIcon'} />
                   </div>
                   {/* <div className="absolute right-0 top-[5px]">

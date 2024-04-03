@@ -24,15 +24,15 @@ export const handleNumericRange = ({
   }
 
   if (isNaN(parsedMin) || isNaN(parsedMax)) {
-    setErrorState('Please enter both “Min” & “Max”');
-    setMinMaxError('Please enter both “Min” & “Max”');
+    setErrorState('Please enter both “From” & “To”');
+    setMinMaxError('Please enter both “From” & “To”');
 
     return;
   }
 
   if (parsedMin > parsedMax) {
-    setErrorState('“Min” should be less than “Max”');
-    setMinMaxError('“Min” should be less than “Max”');
+    setErrorState('“From” should be less than “To”');
+    setMinMaxError('“From” should be less than “To”');
 
     return;
   }
