@@ -60,11 +60,11 @@ export const Carat = ({
     // Normalize user input like '3-3.99' to '3.00-3.99'
     const caratRange = value.split('-');
     if (isNaN(Number(caratRange[0])) || isNaN(Number(caratRange[1]))) {
-      setCaratError('Please enter both “Min” & “Max”');
+      setCaratError('Please enter both “From” & “To”');
       return;
     }
     if (Number(caratRange[0]) > Number(caratRange[1])) {
-      setCaratError('“Min” should be less than “Max”');
+      setCaratError('“From” should be less than “To”');
       return;
     }
 
