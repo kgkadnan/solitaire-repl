@@ -12,7 +12,6 @@ import { useAppDispatch } from '@/hooks/hook';
 import { updateFormState } from '@/features/kyc/kyc';
 import { countries } from '@/constants/enums/kyc';
 import { DownloadAndUpload } from '@/components/v2/common/download-and-upload';
-import ActionButton from '@/components/v2/common/action-button';
 import { TermsDialogComponent } from './terms-and-conditions';
 
 export const RenderOffline = ({

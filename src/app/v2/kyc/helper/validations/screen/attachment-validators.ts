@@ -9,6 +9,7 @@ import {
   OWNER_ID_COPY,
   PAN_CARD,
   PASSPORT,
+  REGISTRATION_NUMBER,
   SECTION_194Q,
   TRADE_LICENSE
 } from '@/constants/error-messages/kyc';
@@ -83,7 +84,7 @@ export class IndianAttachmentValidation {
 }
 
 export class BelgiumAttachmentValidation {
-  @IsOptional()
+  @IsNotEmpty({ message: REGISTRATION_NUMBER })
   registration_number: string;
 
   @IsNotEmpty({ message: PASSPORT })
@@ -100,7 +101,7 @@ export class BelgiumAttachmentValidation {
 }
 
 export class UsaAttachmentValidation {
-  @IsOptional()
+  @IsNotEmpty({ message: REGISTRATION_NUMBER })
   registration_number: string;
 
   @IsNotEmpty({ message: PASSPORT })

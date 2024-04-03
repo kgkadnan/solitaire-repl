@@ -382,9 +382,9 @@ class ValidationSwitfCriteria {
   @Matches(SWIFT_CODE_REGEX, {
     message: FIELD_INVALID('Swift code')
   })
-  @Length(8, 11, {
-    message: FIELD_INVALID('Swift code')
-  })
+  // @Length(8, 11, {
+  //   message: FIELD_INVALID('Swift code')
+  // })
   swift_code: string;
 
   constructor(swift_code: string) {

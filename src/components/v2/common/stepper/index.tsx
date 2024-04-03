@@ -50,13 +50,17 @@ const StepperComponent: React.FC<IStepperComponentProps> = ({
 
   // Include the "Company Owner Details" only if the country is India
 
+  // console.log('completedSteps', completedSteps);
+  // console.log('rejectedSteps', rejectedSteps);
+
   const renderStepperIcon = (index: number) => {
-    if (index === currentStepperStep) {
-      return InProgress;
-    } else if (completedSteps.has(index)) {
+    // console.log('currentStepperStep', currentStepperStep, 'index', index);
+    if (completedSteps.has(index)) {
       return Completed;
     } else if (rejectedSteps.has(index)) {
       return Rejected;
+    } else if (index === currentStepperStep) {
+      return InProgress;
     } else {
       return NotStarted;
     }
@@ -95,7 +99,7 @@ const StepperComponent: React.FC<IStepperComponentProps> = ({
         })}
       </div>
       <div className="">
-        {renderStepperComponent(filteredSteps[currentStepperStep].identifier)}
+        {renderStepperComponent(filteredSteps[currentStepperStep]?.identifier)}
       </div>
       <div className="h-[72px] bg-neutral0 border-[1px] border-solid border-neutral200  sticky bottom-0 rounded-t-[8px] mt-auto p-[16px]">
         {' '}
@@ -113,21 +117,21 @@ const StepperComponent: React.FC<IStepperComponentProps> = ({
             {
               variant: 'primary',
               label:
-                filteredSteps[currentStepperStep].identifier ===
+                filteredSteps[currentStepperStep]?.identifier ===
                 kycScreenIdentifierNames.PERSONAL_DETAILS
                   ? isEmailVerified
                     ? 'Next'
                     : 'Verify Email'
-                  : filteredSteps[currentStepperStep].identifier ===
+                  : filteredSteps[currentStepperStep]?.identifier ===
                     kycScreenIdentifierNames.ATTACHMENT
                   ? ManageLocales('app.kyc.footer.submit')
                   : ManageLocales('app.kyc.footer.saveAndNext'),
               handler: () => {
-                filteredSteps[currentStepperStep].identifier ===
+                filteredSteps[currentStepperStep]?.identifier ===
                 kycScreenIdentifierNames.ATTACHMENT
                   ? handleSubmit()
                   : handleStepperNext({
-                      screenName: filteredSteps[currentStepperStep].identifier,
+                      screenName: filteredSteps[currentStepperStep]?.identifier,
                       currentState: currentStepperStep
                     });
               }
