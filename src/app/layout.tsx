@@ -51,12 +51,19 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
       window.location.hostname === '127.0.0.1';
 
     if (!isLocalhost) {
-      DisableDevtool({
-        ondevtoolopen(type, next) {
-          setOpen(true);
-          // next();
-        }
-      });
+      if (
+        typeof window !== 'undefined' &&
+        typeof window.navigator !== 'undefined' &&
+        typeof navigator !== 'undefined' &&
+        navigator.userAgent
+      ) {
+        DisableDevtool({
+          ondevtoolopen(type, next) {
+            setOpen(true);
+            // next();
+          }
+        });
+      }
     }
   }, []);
   return (
