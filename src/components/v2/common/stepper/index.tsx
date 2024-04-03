@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './stepper.module.scss'; // Ensure you have the corresponding CSS module file
-import { kycScreenIdentifierNames } from '@/constants/enums/kyc';
+import { countries, kycScreenIdentifierNames } from '@/constants/enums/kyc';
 import Image from 'next/image';
 import Completed from '@public/v2/assets/icons/stepper/completed.svg';
 import InProgress from '@public/v2/assets/icons/stepper/in-progress.svg';
@@ -20,6 +20,8 @@ interface IStepperComponentProps {
   isEmailVerified: boolean;
   handleSubmit: any;
   filteredSteps: any;
+  handleBack?: any;
+  fromWhere?: any;
 }
 // Define the steps with label and name
 
@@ -33,7 +35,9 @@ const StepperComponent: React.FC<IStepperComponentProps> = ({
   handleStepperBack,
   isEmailVerified,
   handleSubmit,
-  filteredSteps
+  filteredSteps,
+  handleBack,
+  fromWhere
 }) => {
   // Function to mark a step as completed
 
@@ -59,7 +63,11 @@ const StepperComponent: React.FC<IStepperComponentProps> = ({
   };
 
   return (
-    <div className="flex flex-col gap-[32px] h-[calc(100vh-60px)]  px-[110px] pt-[32px]">
+    <div
+      className={`flex flex-col gap-[32px] h-[calc(100vh-60px)]  px-[110px] pt-[32px] ${
+        currentStepperStep === 1 && 'h-[1250px]'
+      }`}
+    >
       <div className={styles.stepperContainer}>
         {filteredSteps.map((step: any, index: number) => {
           let stepStatusClass = '';
@@ -96,7 +104,11 @@ const StepperComponent: React.FC<IStepperComponentProps> = ({
             {
               variant: 'secondary',
               label: ManageLocales('app.kyc.footer.back'),
-              handler: () => handleStepperBack()
+
+              handler: () =>
+                fromWhere === countries.OTHER
+                  ? handleBack('country_selection')
+                  : handleStepperBack()
             },
             {
               variant: 'primary',
