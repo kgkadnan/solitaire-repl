@@ -515,7 +515,7 @@ const Dashboard = () => {
         .then((res: any) => {
           setIsLoading(false);
           if (res?.error?.status === statusCode.NOT_FOUND) {
-            setError(res.error.data.message);
+            setError("We couldn't find any results for this search");
           } else {
             setSearchData(res?.data);
             setError('');
@@ -1061,7 +1061,7 @@ const Dashboard = () => {
                   <input
                     className="px-10 py-2 w-full text-gray-600 rounded-lg focus:outline-none"
                     type="number"
-                    placeholder="Search for Diamonds"
+                    placeholder="Search by stone id or certificate number"
                     onChange={handleStoneId}
                     onKeyDown={handleKeyDown}
                   />
