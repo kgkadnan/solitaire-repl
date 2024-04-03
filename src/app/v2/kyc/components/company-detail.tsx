@@ -392,7 +392,7 @@ const CompanyDetail = ({
               ? 'h-[867px]'
               : country === 'India'
               ? 'h-[983px]'
-              : 'h-[1028px]'
+              : 'h-[1024px]'
           }`}
         >
           {' '}
@@ -1691,7 +1691,7 @@ const CompanyDetail = ({
             </div>
           )}
           {country === countries.USA && (
-            <div className="w-[50%] flex flex-col  h-[18vh]">
+            <div className="w-[50%] flex flex-col  h-[20vh]">
               <div className="flex flex-col gap-[10px]">
                 <p className="text-mRegular text-neutral900">
                   Organisation Type*
@@ -2038,6 +2038,48 @@ const CompanyDetail = ({
                     formErrorState?.online?.sections?.[
                       kycScreenIdentifierNames.COMPANY_DETAILS
                     ]?.['vat_number']
+                      ? 'border-dangerMain'
+                      : 'border-neutral200'
+                  }`
+                }}
+              />{' '}
+            </div>
+          )}
+          {country === countries.USA && (
+            <div className={'w-[50%]'}>
+              {' '}
+              <InputField
+                label={'Federal Tax ID*'}
+                onChange={e =>
+                  handleInputChange(
+                    `formState.online.sections[${[
+                      kycScreenIdentifierNames.COMPANY_DETAILS
+                    ]}][federal_tax_id]`,
+                    e.target.value,
+                    dispatch,
+                    kycScreenIdentifierNames.COMPANY_DETAILS,
+                    'federal_tax_id'
+                    // formState
+                  )
+                }
+                type="text"
+                name={'Federal Tax ID*'}
+                value={
+                  formState?.online?.sections?.[
+                    kycScreenIdentifierNames.COMPANY_DETAILS
+                  ]?.['federal_tax_id'] ?? ''
+                }
+                errorText={
+                  formErrorState?.online?.sections?.[
+                    kycScreenIdentifierNames.COMPANY_DETAILS
+                  ]?.['federal_tax_id'] ?? ''
+                }
+                placeholder={'Enter number'}
+                styles={{
+                  input: `${
+                    formErrorState?.online?.sections?.[
+                      kycScreenIdentifierNames.COMPANY_DETAILS
+                    ]?.['federal_tax_id']
                       ? 'border-dangerMain'
                       : 'border-neutral200'
                   }`

@@ -143,7 +143,6 @@ const DataTable = ({
   };
 
   const onDropDownClick = (value: any) => {
-    console.log('value', value);
     setIsLoading(true);
     setIsDropDownOpen(false);
 
