@@ -620,62 +620,46 @@ const KYC = () => {
       const screenValidationError = formErrorState?.attachment;
 
       if (formState.country === countries.INDIA) {
-        if (4 === currentStepperStep) {
-          rejectedSteps.delete(4);
-          setRejectedSteps(new Set(rejectedSteps));
-          completedSteps.delete(4);
-          setCompletedSteps(new Set(completedSteps));
-        } else if (!validationError?.length) {
+        if (
+          currentStepperStep > 4 &&
+          screenValidationError &&
+          !Object.keys(screenValidationError).length
+        ) {
           completedSteps.add(4);
-          setCompletedSteps(new Set(completedSteps));
           rejectedSteps.delete(4);
-          setRejectedSteps(new Set(rejectedSteps));
-        } else if (
-          currentStepperStep < 4 &&
-          screenValidationError &&
-          !Object.keys(screenValidationError).length
-        ) {
-          completedSteps.delete(4);
-          setCompletedSteps(new Set(completedSteps));
-          rejectedSteps.delete(4);
-          setRejectedSteps(new Set(rejectedSteps));
-        } else if (validationError.length) {
-          if (Array.isArray(validationError)) {
-            validationError.forEach(error => {
-              dispatch(
-                updateFormState({
-                  name: `formErrorState.attachment.${[error.property]}`,
-                  value: Object.values(error.constraints ?? {})[0] || ''
-                })
-              );
-            });
-          }
-          completedSteps.delete(4);
-          setCompletedSteps(new Set(completedSteps));
-          rejectedSteps.add(4);
-          setRejectedSteps(new Set(rejectedSteps));
-        }
-      } else {
-        if (3 === currentStepperStep) {
-          rejectedSteps.delete(3);
-          setRejectedSteps(new Set(rejectedSteps));
-          completedSteps.delete(3);
-          setCompletedSteps(new Set(completedSteps));
         } else if (!validationError?.length) {
-          completedSteps.add(3);
-          setCompletedSteps(new Set(completedSteps));
-          rejectedSteps.delete(3);
-          setRejectedSteps(new Set(rejectedSteps));
-        } else if (
-          currentStepperStep < 3 &&
+          rejectedSteps.delete(4);
+        } else if (4 === currentStepperStep) {
+          completedSteps.delete(4);
+        } else if (validationError.length && currentStepperStep >= 4) {
+          if (Array.isArray(validationError)) {
+            validationError.forEach(error => {
+              dispatch(
+                updateFormState({
+                  name: `formErrorState.attachment.${[error.property]}`,
+                  value: Object.values(error.constraints ?? {})[0] || ''
+                })
+              );
+            });
+          }
+          completedSteps.delete(4);
+          rejectedSteps.add(4);
+        }
+        setCompletedSteps(new Set(completedSteps));
+        setRejectedSteps(new Set(rejectedSteps));
+      } else {
+        if (
+          currentStepperStep > 3 &&
           screenValidationError &&
           !Object.keys(screenValidationError).length
         ) {
-          completedSteps.delete(3);
-          setCompletedSteps(new Set(completedSteps));
+          completedSteps.add(3);
           rejectedSteps.delete(3);
-          setRejectedSteps(new Set(rejectedSteps));
-        } else if (validationError.length) {
+        } else if (!validationError?.length) {
+          rejectedSteps.delete(3);
+        } else if (3 === currentStepperStep) {
+          completedSteps.delete(3);
+        } else if (validationError.length && currentStepperStep >= 3) {
           if (Array.isArray(validationError)) {
             validationError.forEach(error => {
               dispatch(
@@ -687,10 +671,10 @@ const KYC = () => {
             });
           }
           completedSteps.delete(3);
-          setCompletedSteps(new Set(completedSteps));
           rejectedSteps.add(3);
-          setRejectedSteps(new Set(rejectedSteps));
         }
+        setCompletedSteps(new Set(completedSteps));
+        setRejectedSteps(new Set(rejectedSteps));
       }
     };
 
@@ -701,6 +685,7 @@ const KYC = () => {
       );
 
       const screenValidationError = formErrorState?.attachment;
+
       if (
         currentStepperStep > 1 &&
         screenValidationError &&
@@ -937,6 +922,8 @@ const KYC = () => {
     })
       .unwrap()
       .then(() => {
+        completedSteps.add(currentStepperStep);
+        setCompletedSteps(new Set(completedSteps));
         setIsLoading(false);
         const authToken = JSON.parse(localStorage.getItem('auth')!);
 
@@ -1011,7 +998,10 @@ const KYC = () => {
       manualValidationError = await validateManualAttachment(
         formState.attachment
       );
-      if (Array.isArray(manualValidationError)) {
+      if (
+        Array.isArray(manualValidationError) &&
+        manualValidationError.length
+      ) {
         rejectedSteps.add(1);
         setRejectedSteps(new Set(rejectedSteps));
         manualValidationError.forEach(error => {
@@ -1045,7 +1035,14 @@ const KYC = () => {
       selectedCountry
     );
 
-    if (Array.isArray(validationError)) {
+    if (Array.isArray(validationError) && validationError.length) {
+      if (selectedCountry === 'India') {
+        rejectedSteps.add(4);
+      } else if (selectedCountry === 'Belgium' || selectedCountry === 'USA') {
+        rejectedSteps.add(3);
+      }
+      setRejectedSteps(new Set(rejectedSteps));
+
       validationError.forEach(error => {
         dispatch(
           updateFormState({
@@ -1062,6 +1059,19 @@ const KYC = () => {
       !manualValidationError?.length
     ) {
       if (!formState.termAndCondition) {
+        if (
+          formState.country === countries.OTHER ||
+          selectedSubmissionOption === 'offline'
+        ) {
+          rejectedSteps.add(1);
+          setRejectedSteps(new Set(rejectedSteps));
+        }
+        if (selectedCountry === 'India') {
+          rejectedSteps.add(4);
+        } else if (selectedCountry === 'Belgium' || selectedCountry === 'USA') {
+          rejectedSteps.add(3);
+        }
+        setRejectedSteps(new Set(rejectedSteps));
         dispatch(
           updateFormState({
             name: `formErrorState.termAndCondition`,

@@ -41,11 +41,6 @@ export const handleInputChange = async (
   key: string
   //   formState?: any
 ) => {
-  // let errors = await validateKYCField(
-  //   key,
-  //   typeof value === 'string' ? value.trim() : value
-  // );
-
   dispatch(
     updateFormState({
       name: `formErrorState.online.sections.${[screenName]}.${[key]}`,
