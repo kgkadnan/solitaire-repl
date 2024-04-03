@@ -1003,6 +1003,7 @@ const KYC = () => {
       }
     }
   };
+
   const steps = [
     {
       name: 'Personal Details',
@@ -1022,6 +1023,7 @@ const KYC = () => {
     },
     { name: 'Attachment', identifier: kycScreenIdentifierNames.ATTACHMENT }
   ];
+
   const filteredSteps = steps.filter(
     step =>
       step.identifier !== kycScreenIdentifierNames.COMPANY_OWNER_DETAILS ||
@@ -1108,7 +1110,7 @@ const KYC = () => {
         );
     }
   };
-  const indianManualSteps = [
+  const manualSteps = [
     {
       name: 'Personal Details',
       identifier: kycScreenIdentifierNames.PERSONAL_DETAILS
@@ -1196,7 +1198,9 @@ const KYC = () => {
           handleStepperBack={handleStepperBack}
           isEmailVerified={formState.isEmailVerified}
           handleSubmit={handleSubmit}
-          filteredSteps={indianManualSteps}
+          filteredSteps={manualSteps}
+          fromWhere={currentState}
+          handleBack={handleBack}
         />
       );
     }
