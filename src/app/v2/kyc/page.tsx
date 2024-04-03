@@ -620,45 +620,61 @@ const KYC = () => {
       const screenValidationError = formErrorState?.attachment;
 
       if (formState.country === countries.INDIA) {
-        if (
-          currentStepperStep > 4 &&
-          screenValidationError &&
-          !Object.keys(screenValidationError).length
-        ) {
+        if (4 === currentStepperStep) {
+          rejectedSteps.delete(4);
+          setRejectedSteps(new Set(rejectedSteps));
+          completedSteps.delete(4);
+          setCompletedSteps(new Set(completedSteps));
+        } else if (!validationError?.length) {
           completedSteps.add(4);
+          setCompletedSteps(new Set(completedSteps));
           rejectedSteps.delete(4);
-        } else if (!validationError?.length) {
-          rejectedSteps.delete(4);
-        } else if (4 === currentStepperStep) {
-          completedSteps.delete(4);
-        } else if (validationError.length) {
-          if (Array.isArray(validationError)) {
-            validationError.forEach(error => {
-              dispatch(
-                updateFormState({
-                  name: `formErrorState.attachment.${[error.property]}`,
-                  value: Object.values(error.constraints ?? {})[0] || ''
-                })
-              );
-            });
-          }
-          completedSteps.delete(4);
-          rejectedSteps.add(4);
-        }
-        setCompletedSteps(new Set(completedSteps));
-        setRejectedSteps(new Set(rejectedSteps));
-      } else {
-        if (
-          currentStepperStep > 3 &&
+          setRejectedSteps(new Set(rejectedSteps));
+        } else if (
+          currentStepperStep < 4 &&
           screenValidationError &&
           !Object.keys(screenValidationError).length
         ) {
-          completedSteps.add(3);
+          completedSteps.delete(4);
+          setCompletedSteps(new Set(completedSteps));
+          rejectedSteps.delete(4);
+          setRejectedSteps(new Set(rejectedSteps));
+        } else if (validationError.length) {
+          if (Array.isArray(validationError)) {
+            validationError.forEach(error => {
+              dispatch(
+                updateFormState({
+                  name: `formErrorState.attachment.${[error.property]}`,
+                  value: Object.values(error.constraints ?? {})[0] || ''
+                })
+              );
+            });
+          }
+          completedSteps.delete(4);
+          setCompletedSteps(new Set(completedSteps));
+          rejectedSteps.add(4);
+          setRejectedSteps(new Set(rejectedSteps));
+        }
+      } else {
+        if (3 === currentStepperStep) {
           rejectedSteps.delete(3);
-        } else if (!validationError?.length) {
-          rejectedSteps.delete(3);
-        } else if (3 === currentStepperStep) {
+          setRejectedSteps(new Set(rejectedSteps));
           completedSteps.delete(3);
+          setCompletedSteps(new Set(completedSteps));
+        } else if (!validationError?.length) {
+          completedSteps.add(3);
+          setCompletedSteps(new Set(completedSteps));
+          rejectedSteps.delete(3);
+          setRejectedSteps(new Set(rejectedSteps));
+        } else if (
+          currentStepperStep < 3 &&
+          screenValidationError &&
+          !Object.keys(screenValidationError).length
+        ) {
+          completedSteps.delete(3);
+          setCompletedSteps(new Set(completedSteps));
+          rejectedSteps.delete(3);
+          setRejectedSteps(new Set(rejectedSteps));
         } else if (validationError.length) {
           if (Array.isArray(validationError)) {
             validationError.forEach(error => {
@@ -671,10 +687,10 @@ const KYC = () => {
             });
           }
           completedSteps.delete(3);
+          setCompletedSteps(new Set(completedSteps));
           rejectedSteps.add(3);
+          setRejectedSteps(new Set(rejectedSteps));
         }
-        setCompletedSteps(new Set(completedSteps));
-        setRejectedSteps(new Set(rejectedSteps));
       }
     };
 
@@ -690,6 +706,7 @@ const KYC = () => {
         screenValidationError &&
         !Object.keys(screenValidationError).length
       ) {
+        // console.log('indexxxx', currentStepperStep, index);
         completedSteps.add(1);
         rejectedSteps.delete(1);
       } else if (!validationError?.length) {
@@ -1029,14 +1046,6 @@ const KYC = () => {
     );
 
     if (Array.isArray(validationError)) {
-      if (selectedCountry === 'India') {
-        rejectedSteps.add(4);
-        setRejectedSteps(new Set(rejectedSteps));
-      } else {
-        rejectedSteps.add(3);
-        setRejectedSteps(new Set(rejectedSteps));
-      }
-
       validationError.forEach(error => {
         dispatch(
           updateFormState({
