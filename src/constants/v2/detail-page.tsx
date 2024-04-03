@@ -93,7 +93,7 @@ export const inclusionDetailsHead4 = [
 
 export const otherInformationHead1 = [
   { key: 'key_to_symbol', label: 'Key to Symbol' },
-  { key: '', label: 'Report Comments' },
+  { key: 'report_comments', label: 'Report Comments' },
   { key: 'tracr_id', label: 'Tracr ID', hiddenBelow1024: true },
   { key: 'total_grade', label: 'Total Grade', hiddenBelow1024: true }
 ];
