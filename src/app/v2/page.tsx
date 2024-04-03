@@ -64,7 +64,7 @@ interface ITabs {
   link: string;
   data: any;
 }
-const metadata: Metadata = {
+export const metadata: Metadata = {
   title: 'Buy Diamonds in Few Clicks | KGK Diamonds',
   description:
     'Simplify your diamond buying with KGK Diamonds. where you can manage your diamonds, orders, and preferences seamlessly.'
