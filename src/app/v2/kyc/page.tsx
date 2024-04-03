@@ -49,6 +49,7 @@ import { KycStatusScreen } from '@/components/v2/common/kyc-status-screen';
 import logger from 'logging/log-util';
 import { statusCode } from '@/constants/enums/status-code';
 import { useRouter } from 'next/navigation';
+import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 
 const initialTokenState = {
   token: '',
@@ -72,6 +73,8 @@ const KYC = () => {
   const [submitKYC] = useSubmitKYCMutation();
   const [triggerAuth] = useLazyGetAuthDataQuery();
   const [resetKyc] = useResetKycMutation();
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const [currentStepperStep, setCurrentStepperStep] = useState(0);
   const [completedSteps, setCompletedSteps] = useState(new Set());
@@ -114,7 +117,18 @@ const KYC = () => {
   };
 
   const handleSubmissionOptionClick = (selection: string) => {
-    setSelectedSubmissionOption(selection);
+    if (selectedSubmissionOption === selection) {
+      setSelectedSubmissionOption(selection);
+    } else {
+      setSelectedSubmissionOption(selection);
+      dispatch(
+        updateFormState({
+          name: 'formState.attachment',
+          value: {}
+        })
+      );
+    }
+
     setCurrentState(selection);
     dispatch(
       updateFormState({
@@ -273,10 +287,10 @@ const KYC = () => {
               kycDetails &&
               kycDetails?.kyc &&
               !isResumeCalled &&
-              (kycDetails?.kyc?.profile_data?.country !== null ||
-                Object.keys(kycDetails?.kyc?.profile_data?.online).length >
-                  1) &&
-              Object?.keys(kycDetails?.kyc?.profile_data?.offline).length === 0
+              kycDetails?.kyc?.profile_data?.online &&
+              typeof kycDetails?.kyc?.profile_data?.online['2'] === 'object' &&
+              Object.keys(kycDetails?.kyc?.profile_data?.online['2']).length > 1
+              // &&Object?.keys(kycDetails?.kyc?.profile_data?.offline).length === 0
             ) {
               setIsResumeCalled(true);
               const { online, offline } = kycDetails.kyc.profile_data;
@@ -809,6 +823,7 @@ const KYC = () => {
   };
 
   const kycSubmitted = async () => {
+    setIsLoading(true);
     setIsDialogOpen(false);
     await submitKYC({
       country: selectedCountry,
@@ -820,6 +835,7 @@ const KYC = () => {
     })
       .unwrap()
       .then(() => {
+        setIsLoading(false);
         const authToken = JSON.parse(localStorage.getItem('auth')!);
 
         triggerAuth(authToken).then(res => {
@@ -853,6 +869,7 @@ const KYC = () => {
         );
       })
       .catch(e => {
+        setIsLoading(false);
         setIsDialogOpen(true); // Show error dialog
         setDialogContent(
           <>
@@ -986,6 +1003,7 @@ const KYC = () => {
       }
     }
   };
+
   const steps = [
     {
       name: 'Personal Details',
@@ -1005,6 +1023,7 @@ const KYC = () => {
     },
     { name: 'Attachment', identifier: kycScreenIdentifierNames.ATTACHMENT }
   ];
+
   const filteredSteps = steps.filter(
     step =>
       step.identifier !== kycScreenIdentifierNames.COMPANY_OWNER_DETAILS ||
@@ -1091,7 +1110,7 @@ const KYC = () => {
         );
     }
   };
-  const indianManualSteps = [
+  const manualSteps = [
     {
       name: 'Personal Details',
       identifier: kycScreenIdentifierNames.PERSONAL_DETAILS
@@ -1179,7 +1198,9 @@ const KYC = () => {
           handleStepperBack={handleStepperBack}
           isEmailVerified={formState.isEmailVerified}
           handleSubmit={handleSubmit}
-          filteredSteps={indianManualSteps}
+          filteredSteps={manualSteps}
+          fromWhere={currentState}
+          handleBack={handleBack}
         />
       );
     }
@@ -1323,8 +1344,9 @@ const KYC = () => {
   };
 
   return (
-    <div className="relative ">
+    <div className="relative">
       {' '}
+      {isLoading && <CustomKGKLoader />}
       <DialogComponent
         dialogContent={dialogContent}
         isOpens={isDialogOpen}

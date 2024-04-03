@@ -309,8 +309,6 @@ const CompanyDetail = ({
     'Other'
   ];
 
-  console.log('formState', formState.online.sections);
-
   const [organisationType, setOrganisationType] = useState();
 
   const handleSelect = (value: any, formKey: string, setState: any) => {
@@ -393,7 +391,7 @@ const CompanyDetail = ({
             country === 'Belgium'
               ? 'h-[867px]'
               : country === 'India'
-              ? 'h-[970px]'
+              ? 'h-[983px]'
               : 'h-[1028px]'
           }`}
         >
@@ -568,7 +566,7 @@ const CompanyDetail = ({
                 <p className="text-mRegular text-neutral-900">City*</p>
                 <Select
                   name="city"
-                  placeholder={'Search by Saved Filter Parameter'}
+                  placeholder={'Enter City'}
                   options={computeCountryDropdownField(cities)}
                   onChange={({ value }: any) => {
                     handleInputChange(
@@ -586,16 +584,22 @@ const CompanyDetail = ({
                       kycScreenIdentifierNames.COMPANY_DETAILS
                     ]?.['city'] ?? ''
                   )}
-                  value={{
-                    label:
-                      formState?.online?.sections?.[
-                        kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['city'],
-                    value:
-                      formState?.online?.sections?.[
-                        kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['city']
-                  }}
+                  value={
+                    formState?.online?.sections?.[
+                      kycScreenIdentifierNames.COMPANY_DETAILS
+                    ]?.['city']
+                      ? {
+                          label:
+                            formState?.online?.sections?.[
+                              kycScreenIdentifierNames.COMPANY_DETAILS
+                            ]?.['city'],
+                          value:
+                            formState?.online?.sections?.[
+                              kycScreenIdentifierNames.COMPANY_DETAILS
+                            ]?.['city']
+                        }
+                      : ''
+                  }
                   // autoFocus={false}
                 />
                 {formErrorState?.online?.sections?.[
@@ -1535,7 +1539,11 @@ const CompanyDetail = ({
             </div>
           )}
           {(country === countries.BELGIUM || country === countries.USA) && (
-            <div className="flex w-[380px] h-[17vh]">
+            <div
+              className={`flex w-[380px] ${
+                country === 'Belgium' && 'h-[17vh]'
+              } `}
+            >
               <div className="w-full flex flex-col ">
                 <div className="flex flex-col gap-[5px]">
                   <p className="text-mRegular text-neutral900">
@@ -1683,7 +1691,7 @@ const CompanyDetail = ({
             </div>
           )}
           {country === countries.USA && (
-            <div className="w-[50%] flex flex-col  h-[20vh]">
+            <div className="w-[50%] flex flex-col  h-[18vh]">
               <div className="flex flex-col gap-[10px]">
                 <p className="text-mRegular text-neutral900">
                   Organisation Type*
