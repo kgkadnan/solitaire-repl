@@ -1029,6 +1029,14 @@ const KYC = () => {
     );
 
     if (Array.isArray(validationError)) {
+      if (selectedCountry === 'India') {
+        rejectedSteps.add(4);
+        setRejectedSteps(new Set(rejectedSteps));
+      } else {
+        rejectedSteps.add(3);
+        setRejectedSteps(new Set(rejectedSteps));
+      }
+
       validationError.forEach(error => {
         dispatch(
           updateFormState({
