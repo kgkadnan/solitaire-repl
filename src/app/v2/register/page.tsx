@@ -49,7 +49,7 @@ const initialTokenState = {
   tempToken: ''
 };
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   title: 'Register for Exclusive Access | KGK Diamonds',
   description:
     'Sign up to unlock exclusive features and benefits at KGK Diamonds, a trusted name in the diamond industry since 1905. Join today!'

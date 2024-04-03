@@ -55,7 +55,7 @@ const initialTokenState = {
   tempToken: ''
 };
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   title: 'Log in to Your KGK Diamonds Account',
   description:
     'Access your KGK Diamonds account to explore a world of exquisite diamonds and personalized services. Log in now!'
