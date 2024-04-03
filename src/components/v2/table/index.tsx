@@ -128,7 +128,7 @@ const Table = ({
         // '&.MuiPaper-root': {
         //   borderRadius: '8px !important'
         // },
-        // borderRadius: '8px',
+        borderRadius: '8px',
         border: 'none'
       }
     },
@@ -170,6 +170,8 @@ const Table = ({
             ? 'calc(100vh - 390px)'
             : identifier === 'result'
             ? 'calc(100vh - 240px)'
+            : identifier === 'Dashboard'
+            ? 'calc(100vh - 220px)'
             : 'calc(100vh - 310px)',
         maxHeight:
           isNudge &&
@@ -182,6 +184,8 @@ const Table = ({
             ? 'calc(100vh - 390px)'
             : identifier === 'result'
             ? 'calc(100vh - 240px)'
+            : identifier === 'Dashboard'
+            ? 'calc(100vh - 220px)'
             : 'calc(100vh - 310px)'
       }
     },

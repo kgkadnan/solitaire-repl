@@ -389,7 +389,7 @@ export const columnHeaders = [
   },
   {
     label: 'Report Comments',
-    accessor: 'report_comment',
+    accessor: 'report_comments',
     sequence: 43,
     is_fixed: false,
     short_label: 'RPT Com',
