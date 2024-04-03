@@ -894,37 +894,47 @@ const DataTable = ({
                   }
                 ]}
               />
-              {/* <Dropdown
-              dropdownTrigger={
-                <Image
-                  src={threeDotsSvg}
-                  alt="threeDotsSvg"
-                  width={4}
-                  height={43}
-                />
-              }
-              dropdownMenu={[
-                {
-                  label: ManageLocales(
-                    'app.search.actionButton.bookAppointment'
-                  ),
-                  handler: () => {}
-                },
-                {
-                  label: ManageLocales(
-                    'app.search.actionButton.compareStone'
-                  ),
-                  handler: () => {}
-                },
-                {
-                  label: ManageLocales(
-                    'app.search.actionButton.findMatchingPair'
-                  ),
-                  handler: () => {}
+              <Dropdown
+                dropdownTrigger={
+                  <Image
+                    src={threeDotsSvg}
+                    alt="threeDotsSvg"
+                    width={4}
+                    height={43}
+                  />
                 }
-              ]}
-              isDisable={true}
-            /> */}
+                dropdownMenu={[
+                  {
+                    label: ManageLocales(
+                      'app.search.actionButton.bookAppointment'
+                    ),
+                    handler: () => {}
+                  },
+                  {
+                    label: ManageLocales(
+                      'app.search.actionButton.compareStone'
+                    ),
+                    handler: () => {}
+                  },
+                  {
+                    label: ManageLocales(
+                      'app.search.actionButton.findMatchingPair'
+                    ),
+                    handler: () => {}
+                  },
+                  {
+                    label: 'Compare Stone',
+                    handler: () => {}
+                    // handleCompareStone({
+                    //   isCheck:rowSelection,
+                    //   setIsError,
+                    //   setErrorText,
+                    //   activeCartRows: dataTableState.rows
+                    // })
+                  }
+                ]}
+                isDisable={true}
+              />
             </div>
           </div>
         )}
