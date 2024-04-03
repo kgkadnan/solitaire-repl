@@ -28,10 +28,9 @@ import {
   useOtpVerificationStateManagement
 } from '@/components/v2/common/otp-verication/hooks/otp-verification-state-management';
 import { handleOTPChange } from '@/components/v2/common/otp-verication/helpers/handle-otp-change';
-import { PHONE_REGEX } from '@/constants/validation-regex/regex';
-import { INVALID_PHONE } from '@/constants/error-messages/register';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
+import { Metadata } from 'next';
 
 export interface IOtp {
   otpMobileNumber: string;
@@ -49,6 +48,13 @@ const initialTokenState = {
   phoneToken: '',
   tempToken: ''
 };
+
+export const metadata: Metadata = {
+  title: 'Register for Exclusive Access | KGK Diamonds',
+  description:
+    'Sign up to unlock exclusive features and benefits at KGK Diamonds, a trusted name in the diamond industry since 1905. Join today!'
+};
+
 const Register = () => {
   const { registerState, registerSetState } = useRegisterStateManagement();
   const { registerFormState } = registerState;
