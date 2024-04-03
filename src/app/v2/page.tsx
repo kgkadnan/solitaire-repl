@@ -1061,7 +1061,7 @@ const Dashboard = () => {
                   <input
                     className="px-10 py-2 w-full text-gray-600 rounded-lg focus:outline-none"
                     type="number"
-                    placeholder='Search by stone id or certificate number'
+                    placeholder="Search by stone id or certificate number"
                     onChange={handleStoneId}
                     onKeyDown={handleKeyDown}
                   />
