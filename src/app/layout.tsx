@@ -84,6 +84,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
           rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Inter"
         />
+
         <script
           dangerouslySetInnerHTML={{
             __html: `

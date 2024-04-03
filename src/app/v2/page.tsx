@@ -55,6 +55,7 @@ import { handleComment } from './search/result/helpers/handle-comment';
 import ImageModal from '@/components/v2/common/detail-page/components/image-modal';
 import { FILE_URLS } from '@/constants/v2/detail-page';
 import { getShapeDisplayName } from '@/utils/v2/detail-page';
+import Head from 'next/head';
 
 // import useUser from '@/lib/use-auth';
 
@@ -63,6 +64,11 @@ interface ITabs {
   link: string;
   data: any;
 }
+const metadata = {
+  title: 'Buy Diamonds in Few Clicks | KGK Diamonds',
+  description:
+    'Simplify your diamond buying with KGK Diamonds. where you can manage your diamonds, orders, and preferences seamlessly.'
+};
 const Dashboard = () => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -905,6 +911,10 @@ const Dashboard = () => {
   };
   return (
     <>
+      <Head>
+        <title>{metadata.title}</title>
+        <meta name="description" content={metadata.description} />
+      </Head>
       {error !== '' && (
         <Toast show={error !== ''} message={error} isSuccess={false} />
       )}
