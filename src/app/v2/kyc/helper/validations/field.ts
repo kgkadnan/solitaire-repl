@@ -747,7 +747,7 @@ class ValidationIsAntiMoneyCriteria {
   }
 }
 class ValidationAntiMoneyPolicyNameCriteria {
-  @ValidateIf((object) => object?.is_anti_money_laundering === false)
+  @ValidateIf(object => object?.is_anti_money_laundering === false)
   @IsString({
     message: 'Reason for No Anti-Money Laundering Policy is Required.'
   })
