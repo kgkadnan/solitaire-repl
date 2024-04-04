@@ -168,13 +168,14 @@ export class IndiaKycPostCompanyDetailsValidation extends KycPostCompanyDetailsV
   @IsNotEmpty({ message: PINCODE_MANDATORY })
   pincode: string;
 
+ 
+  @IsString({ message: FIELD_INVALID('Company PAN') })
+  @IsNotEmpty({ message: COMPANY_PAN_NUMBER_MANDATORY })
+  @IsAlphanumeric(undefined, { message:FIELD_INVALID('Company PAN') })
+  @MinLength(10, { message:FIELD_INVALID('Company PAN') })
   @Matches(PAN_MATCH, {
     message: FIELD_INVALID('Company PAN')
   })
-  @IsString({ message: FIELD_INVALID('Company PAN') })
-  @IsNotEmpty({ message: COMPANY_PAN_NUMBER_MANDATORY })
-  @IsAlphanumeric(undefined, { message: COMPANY_PAN_NUMBER_MANDATORY })
-  @MinLength(10, { message: COMPANY_PAN_NUMBER_MANDATORY })
   company_pan_number: string;
 
   @Matches(GST_NUMBER_REGEX, {

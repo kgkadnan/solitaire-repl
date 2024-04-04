@@ -392,10 +392,10 @@ const CompanyDetail = ({
         <div
           className={`flex flex-col flex-wrap  gap-[16px]  w-[760px] ${
             country === 'Belgium'
-              ? 'h-[867px]'
+              ? 'h-[119vh]'
               : country === 'India'
-              ? 'h-[983px]'
-              : 'h-[1024px]'
+              ? 'h-[134vh]'
+              : 'h-[1040vh]'
           }`}
         >
           {' '}
