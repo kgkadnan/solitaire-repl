@@ -394,7 +394,7 @@ const CompanyDetail = ({
               ? 'h-[119vh]'
               : country === 'India'
               ? 'h-[137vh]'
-              : 'h-[1040vh]'
+              : 'h-[144vh]'
           }`}
         >
           {' '}
