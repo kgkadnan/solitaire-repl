@@ -107,6 +107,9 @@ dependencies:
   date-fns:
     specifier: ^2.30.0
     version: 2.30.0
+  disable-devtool:
+    specifier: ^0.3.7
+    version: 0.3.7
   embla-carousel:
     specifier: 8.0.0-rc19
     version: 8.0.0-rc19
@@ -9563,6 +9566,10 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       path-type: 4.0.0
+
+  /disable-devtool@0.3.7:
+    resolution: {integrity: sha512-xF5uyEpBhDuy7b4Bb88GQG4IB+2CwuQfkJK9vB/ym+85NQp/f7Wc6hnT40Jy2SkKvEf1xAKpvJUJU3LykTXxKg==}
+    dev: false
 
   /dlv@1.1.3:
     resolution: {integrity: sha512-+HlytyjlPKnIG8XuRG8WvmBP8xs8P71y+SKKS6ZXWoEgLuePxtDoUEiH7WkdePWrQ5JBpE6aoVqfZfJUQkjXwA==}

@@ -1,5 +1,5 @@
 'use client';
-import React, { ReactNode, FC, useEffect } from 'react';
+import React, { ReactNode, FC, useEffect, useState } from 'react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Inter } from 'next/font/google';
 import '../../styles/_globals.scss';
@@ -16,6 +16,8 @@ import {
 import { ThemeProviders } from './theme-providers';
 import Head from 'next/head';
 import AppDownloadPopup from '@/components/v2/common/alert-pop-for-mobile';
+import InvalidCreds from './v2/login/component/invalid-creds';
+import { DialogComponent } from '@/components/v2/common/dialog';
 
 const store = setupStore();
 
@@ -25,6 +27,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
   const path = usePathname();
   const isApplicationRoutes = applicationRoutes.includes(path);
   const isV2Route = v2Routes.includes(path);
+  const [open, setOpen] = useState(false);
 
   const showHeader =
     (isApplicationRoutes && !headerlessRoutes.includes(path)) || path === '/';
@@ -41,28 +44,27 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
     : ChildrenComponent;
 
   useEffect(() => {
-    const handleContextMenu = (e: any) => {
-      e.preventDefault();
-    };
-
-    // Check if running on localhost
-    const isLocalhost =
-      window.location.hostname === 'localhost' ||
-      window.location.hostname === '127.0.0.1';
-
-    if (!isLocalhost) {
-      // Add event listener to prevent right-clicking
-      document.addEventListener('contextmenu', handleContextMenu);
-    } else {
-      // Remove event listener if not running on localhost
-      document.removeEventListener('contextmenu', handleContextMenu);
+    if (
+      typeof window !== 'undefined' &&
+      typeof window.navigator !== 'undefined' &&
+      typeof navigator !== 'undefined' &&
+      navigator.userAgent
+    ) {
+      const disableDevtool = require('disable-devtool');
+      disableDevtool({
+        disableMenu: true,
+        ondevtoolopen(type: any, next: any) {
+          setOpen(true);
+          // You may choose to call next() if you want to allow the default behavior
+          // next();
+        },
+        ignore: () => {
+          return process.env.NEXT_ENV !== 'production';
+        }
+      });
     }
+  });
 
-    // Cleanup function to remove event listener
-    return () => {
-      document.removeEventListener('contextmenu', handleContextMenu);
-    };
-  }, []);
   return (
     <html lang="en">
       <head>
@@ -96,11 +98,22 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
               `
           }}
         />
-        {/* <!-- Google Tag Manager --> */}
-
-        {/* <!-- End Google Tag Manager --> */}
       </Head>
       <body className={inter.className}>
+        <DialogComponent
+          dialogContent={
+            <InvalidCreds
+              header="Warning"
+              content={
+                'Please first close developer tool window and then access website'
+              }
+              handleClick={() => setOpen(false)}
+              buttonText="Okay"
+            />
+          }
+          isOpens={open}
+          setIsOpen={setOpen}
+        />
         <noscript>
           <iframe
             src={`https://www.googletagmanager.com/ns.html?id=GTM-W85XMPHM`}
@@ -113,7 +126,6 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
           <ThemeProviders>
             {isV2Route ? (
               <>
-                {/* <AppDownloadPopup/> */}
                 {showHeader ? (
                   <SecureComponent>{children}</SecureComponent>
                 ) : (
