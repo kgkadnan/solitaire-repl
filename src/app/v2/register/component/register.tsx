@@ -4,13 +4,13 @@ import KgkIcon from '@public/v2/assets/icons/sidebar-icons/vector.svg';
 import { handleRegisterChange } from '../helpers/handle-register-change';
 import { handleRegister } from '../helpers/handle-register';
 import { IRegisterSetState, IRegisterState } from '../interface';
-import { IOtp, IToken } from '../page';
 import { InputField } from '@/components/v2/common/input-field';
 import { PasswordField } from '@/components/v2/common/input-field/password';
 import { ManageLocales } from '@/utils/v2/translate';
 import { IndividualActionButton } from '@/components/v2/common/action-button/individual-button';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { MobileInput } from '@/components/v2/common/input-field/mobile';
+import { IOtp, IToken } from './main';
 
 interface IRegisterComponent {
   registerSetState: IRegisterSetState;
