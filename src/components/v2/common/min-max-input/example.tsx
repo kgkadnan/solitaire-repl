@@ -6,7 +6,7 @@ export const MinMaxExample = () => {
   return (
     <MinMaxInput
       inputGap="gap-[20px]"
-      errorText="Please enter both “Min” & “Max”"
+      errorText="Please enter both “From” & “To”"
       minInputData={{
         minPlaceHolder: '0',
         minOnchange: () => '',

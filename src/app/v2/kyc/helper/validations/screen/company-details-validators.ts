@@ -329,7 +329,7 @@ export class UsaKycPostCompanyDetailsValidation extends BelgiumKycPostCompanyDet
   @IsNotEmpty({ message: IS_ANTI_MONEY_LAUNDERING })
   is_anti_money_laundering: boolean;
 
-  @ValidateIf(object => object?.is_anti_money_laundering === false)
+  @ValidateIf((object, value) => object?.is_anti_money_laundering === value)
   @IsString({
     message: 'Reason for No Anti-Money Laundering Policy is Required.'
   })
@@ -362,9 +362,9 @@ export class UsaKycPostCompanyDetailsValidation extends BelgiumKycPostCompanyDet
   ) {
     super(
       company_name,
+      year_of_establishment,
       address_line_1,
       address_line_2,
-      year_of_establishment,
       company_phone_number,
       company_email,
       business_type,

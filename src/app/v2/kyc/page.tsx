@@ -49,6 +49,7 @@ import { KycStatusScreen } from '@/components/v2/common/kyc-status-screen';
 import logger from 'logging/log-util';
 import { statusCode } from '@/constants/enums/status-code';
 import { useRouter } from 'next/navigation';
+import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 
 const initialTokenState = {
   token: '',
@@ -72,6 +73,8 @@ const KYC = () => {
   const [submitKYC] = useSubmitKYCMutation();
   const [triggerAuth] = useLazyGetAuthDataQuery();
   const [resetKyc] = useResetKycMutation();
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const [currentStepperStep, setCurrentStepperStep] = useState(0);
   const [completedSteps, setCompletedSteps] = useState(new Set());
@@ -114,7 +117,18 @@ const KYC = () => {
   };
 
   const handleSubmissionOptionClick = (selection: string) => {
-    setSelectedSubmissionOption(selection);
+    if (selectedSubmissionOption === selection) {
+      setSelectedSubmissionOption(selection);
+    } else {
+      setSelectedSubmissionOption(selection);
+      dispatch(
+        updateFormState({
+          name: 'formState.attachment',
+          value: {}
+        })
+      );
+    }
+
     setCurrentState(selection);
     dispatch(
       updateFormState({
@@ -145,9 +159,48 @@ const KYC = () => {
     return () => clearInterval(countdownInterval);
   }, [resendTimer]);
 
-  function findFirstNonFilledScreens(data: any) {
-    const filledScreens = Object.keys(data).map(Number);
-    const maxScreen = Math.max(...filledScreens);
+  async function findFirstNonFilledScreens(data: any, country: string) {
+    let sectionKeys: string[] =
+      country === 'India'
+        ? [
+            kycScreenIdentifierNames.PERSONAL_DETAILS,
+            kycScreenIdentifierNames.COMPANY_DETAILS,
+            kycScreenIdentifierNames.COMPANY_OWNER_DETAILS,
+            kycScreenIdentifierNames.BANKING_DETAILS
+          ]
+        : [
+            kycScreenIdentifierNames.PERSONAL_DETAILS,
+            kycScreenIdentifierNames.COMPANY_DETAILS,
+            kycScreenIdentifierNames.BANKING_DETAILS
+          ];
+
+    // Wait for all screen validations to complete
+    const filledScreensResults = await Promise.all(
+      Object.keys(data).map(async (item, index) => {
+        // It seems like there might be an error here, as you're using `index + 1` which might not correspond to the correct key in `data`
+        // Assuming `item` is the correct key to access the data object:
+        let validationErrors = await validateScreen(
+          data[item],
+          sectionKeys[index],
+          country
+        );
+
+        if (!validationErrors.length) {
+          if (sectionKeys.length - 1 >= index) {
+            return Number(item);
+          }
+        }
+        return undefined;
+      })
+    );
+
+    // Filter out undefined values to get filled screens
+    const filledScreens = filledScreensResults.filter(
+      (screen): screen is number => screen !== undefined
+    );
+
+    // Determine the maximum filled screen
+    const maxScreen = filledScreens.length > 0 ? Math.max(...filledScreens) : 0;
 
     const nonFilledScreens = [];
 
@@ -157,11 +210,17 @@ const KYC = () => {
       }
     }
 
-    if (nonFilledScreens.length) {
-      return nonFilledScreens;
-    } else {
-      return [maxScreen + 1];
+    // Add the next screen after the last filled one if no non-filled screens were found
+    if (nonFilledScreens.length === 0 && maxScreen > 0) {
+      nonFilledScreens.push(maxScreen + 1);
     }
+
+    // If no screens have been filled, start with the first one
+    if (nonFilledScreens.length === 0) {
+      nonFilledScreens.push(1);
+    }
+
+    return nonFilledScreens;
   }
 
   const handleTermAndCondition = (state: boolean) => {
@@ -273,61 +332,67 @@ const KYC = () => {
               kycDetails &&
               kycDetails?.kyc &&
               !isResumeCalled &&
-              (kycDetails?.kyc?.profile_data?.country !== null ||
-                Object.keys(kycDetails?.kyc?.profile_data?.online).length >
-                  1) &&
-              Object?.keys(kycDetails?.kyc?.profile_data?.offline).length === 0
+              kycDetails?.kyc?.profile_data?.online &&
+              typeof kycDetails?.kyc?.profile_data?.online['2'] === 'object' &&
+              Object.keys(kycDetails?.kyc?.profile_data?.online['2']).length > 1
+              // &&Object?.keys(kycDetails?.kyc?.profile_data?.offline).length === 0
             ) {
               setIsResumeCalled(true);
-              const { online, offline } = kycDetails.kyc.profile_data;
+              const { online, offline, country } = kycDetails.kyc.profile_data;
 
               const onlineData = online || {};
 
-              let firstNonFilledScreens =
-                findFirstNonFilledScreens(onlineData)[0] - 1;
+              // =
+              // findFirstNonFilledScreens(onlineData, country)[0] - 1;
 
-              if (firstNonFilledScreens > 0) {
-                setCurrentState('online');
-                setCurrentStepperStep(firstNonFilledScreens);
+              findFirstNonFilledScreens(onlineData, country).then(
+                nonFilledScreens => {
+                  let firstNonFilledScreens = nonFilledScreens[0] - 1;
 
-                offline
-                  ? setSelectedSubmissionOption('online')
-                  : setSelectedSubmissionOption('offline');
+                  if (firstNonFilledScreens > 0) {
+                    setCurrentState('online');
+                    setCurrentStepperStep(firstNonFilledScreens);
 
-                setIsDialogOpen(true);
-                setDialogContent(
-                  <>
-                    <div className="absolute left-[-84px] top-[-84px]">
-                      <Image src={warningIcon} alt="warningIcon" />
-                    </div>
-                    <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                      <div>
-                        <h1 className="text-headingS text-neutral900">
-                          Do you want to resume KYC process or restart it?
-                        </h1>
-                      </div>
-                      <ActionButton
-                        actionButtonData={[
-                          {
-                            variant: 'secondary',
-                            label: ManageLocales('app.modal.no'),
-                            handler: () => handleResetButton(),
-                            customStyle: 'flex-1 w-full h-10'
-                          },
-                          {
-                            variant: 'primary',
-                            label: ManageLocales('app.modal.yes'),
-                            handler: () => {
-                              setIsDialogOpen(false);
-                            },
-                            customStyle: 'flex-1 w-full h-10'
-                          }
-                        ]}
-                      />
-                    </div>
-                  </>
-                );
-              }
+                    offline
+                      ? setSelectedSubmissionOption('online')
+                      : setSelectedSubmissionOption('offline');
+
+                    setIsDialogOpen(true);
+                    setDialogContent(
+                      <>
+                        <div className="absolute left-[-84px] top-[-84px]">
+                          <Image src={warningIcon} alt="warningIcon" />
+                        </div>
+                        <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+                          <div>
+                            <h1 className="text-headingS text-neutral900">
+                              Do you want to resume KYC process or restart it?
+                            </h1>
+                          </div>
+                          <ActionButton
+                            actionButtonData={[
+                              {
+                                variant: 'secondary',
+                                label: ManageLocales('app.modal.no'),
+                                handler: () => handleResetButton(),
+                                customStyle: 'flex-1 w-full h-10'
+                              },
+                              {
+                                variant: 'primary',
+                                label: ManageLocales('app.modal.yes'),
+                                handler: () => {
+                                  setIsDialogOpen(false);
+                                },
+                                customStyle: 'flex-1 w-full h-10'
+                              }
+                            ]}
+                          />
+                        </div>
+                      </>
+                    );
+                  }
+                }
+              );
             } else {
               setCurrentState('country_selection');
             }
@@ -493,28 +558,32 @@ const KYC = () => {
         formState.country
       );
 
+      // console.log('validationErrors', validationErrors);
+
       const screenValidationError = formErrorState?.online?.sections[key];
 
-      if (index === currentStepperStep) {
-        rejectedSteps.delete(index);
-        setRejectedSteps(new Set(rejectedSteps));
-        completedSteps.delete(index);
-        setCompletedSteps(new Set(completedSteps));
-      } else if (!validationErrors.length) {
-        rejectedSteps.delete(index);
-        setRejectedSteps(new Set(rejectedSteps));
-        completedSteps.add(index);
-        setCompletedSteps(new Set(completedSteps));
-      } else if (
-        currentStepperStep < index &&
+      // console.log('screenValidationError', screenValidationError);
+
+      if (
+        currentStepperStep > index &&
         screenValidationError &&
         !Object.keys(screenValidationError).length
       ) {
-        completedSteps.delete(index);
-        setCompletedSteps(new Set(completedSteps));
+        // console.log('indexxxx', currentStepperStep, index);
+        completedSteps.add(index);
         rejectedSteps.delete(index);
-        setRejectedSteps(new Set(rejectedSteps));
-      } else if (validationErrors.length) {
+      } else if (!validationErrors.length) {
+        rejectedSteps.delete(index);
+
+        // completedSteps.add(index);
+        // setCompletedSteps(new Set(completedSteps));
+      } else if (index === currentStepperStep) {
+        // console.log('index === currentStepperStep', index, currentStepperStep);
+        // rejectedSteps.delete(index);
+        // setRejectedSteps(new Set(rejectedSteps));
+        completedSteps.delete(index);
+        // rejectedSteps.delete(index);
+      } else if (validationErrors.length && currentStepperStep >= index) {
         if (Array.isArray(validationErrors)) {
           validationErrors.forEach(error => {
             dispatch(
@@ -535,10 +604,11 @@ const KYC = () => {
           );
         }
         completedSteps.delete(index);
-        setCompletedSteps(new Set(completedSteps));
         rejectedSteps.add(index);
-        setRejectedSteps(new Set(rejectedSteps));
       }
+
+      setCompletedSteps(new Set(completedSteps));
+      setRejectedSteps(new Set(rejectedSteps));
     });
 
     const validate = async () => {
@@ -550,62 +620,46 @@ const KYC = () => {
       const screenValidationError = formErrorState?.attachment;
 
       if (formState.country === countries.INDIA) {
-        if (4 === currentStepperStep) {
-          rejectedSteps.delete(4);
-          setRejectedSteps(new Set(rejectedSteps));
-          completedSteps.delete(4);
-          setCompletedSteps(new Set(completedSteps));
-        } else if (!validationError?.length) {
+        if (
+          currentStepperStep > 4 &&
+          screenValidationError &&
+          !Object.keys(screenValidationError).length
+        ) {
           completedSteps.add(4);
-          setCompletedSteps(new Set(completedSteps));
           rejectedSteps.delete(4);
-          setRejectedSteps(new Set(rejectedSteps));
-        } else if (
-          currentStepperStep < 4 &&
-          screenValidationError &&
-          !Object.keys(screenValidationError).length
-        ) {
-          completedSteps.delete(4);
-          setCompletedSteps(new Set(completedSteps));
-          rejectedSteps.delete(4);
-          setRejectedSteps(new Set(rejectedSteps));
-        } else if (validationError.length) {
-          if (Array.isArray(validationError)) {
-            validationError.forEach(error => {
-              dispatch(
-                updateFormState({
-                  name: `formErrorState.attachment.${[error.property]}`,
-                  value: Object.values(error.constraints ?? {})[0] || ''
-                })
-              );
-            });
-          }
-          completedSteps.delete(4);
-          setCompletedSteps(new Set(completedSteps));
-          rejectedSteps.add(4);
-          setRejectedSteps(new Set(rejectedSteps));
-        }
-      } else {
-        if (3 === currentStepperStep) {
-          rejectedSteps.delete(3);
-          setRejectedSteps(new Set(rejectedSteps));
-          completedSteps.delete(3);
-          setCompletedSteps(new Set(completedSteps));
         } else if (!validationError?.length) {
-          completedSteps.add(3);
-          setCompletedSteps(new Set(completedSteps));
-          rejectedSteps.delete(3);
-          setRejectedSteps(new Set(rejectedSteps));
-        } else if (
-          currentStepperStep < 3 &&
+          rejectedSteps.delete(4);
+        } else if (4 === currentStepperStep) {
+          completedSteps.delete(4);
+        } else if (validationError.length && currentStepperStep >= 4) {
+          if (Array.isArray(validationError)) {
+            validationError.forEach(error => {
+              dispatch(
+                updateFormState({
+                  name: `formErrorState.attachment.${[error.property]}`,
+                  value: Object.values(error.constraints ?? {})[0] || ''
+                })
+              );
+            });
+          }
+          completedSteps.delete(4);
+          rejectedSteps.add(4);
+        }
+        setCompletedSteps(new Set(completedSteps));
+        setRejectedSteps(new Set(rejectedSteps));
+      } else {
+        if (
+          currentStepperStep > 3 &&
           screenValidationError &&
           !Object.keys(screenValidationError).length
         ) {
-          completedSteps.delete(3);
-          setCompletedSteps(new Set(completedSteps));
+          completedSteps.add(3);
           rejectedSteps.delete(3);
-          setRejectedSteps(new Set(rejectedSteps));
-        } else if (validationError.length) {
+        } else if (!validationError?.length) {
+          rejectedSteps.delete(3);
+        } else if (3 === currentStepperStep) {
+          completedSteps.delete(3);
+        } else if (validationError.length && currentStepperStep >= 3) {
           if (Array.isArray(validationError)) {
             validationError.forEach(error => {
               dispatch(
@@ -617,14 +671,57 @@ const KYC = () => {
             });
           }
           completedSteps.delete(3);
-          setCompletedSteps(new Set(completedSteps));
           rejectedSteps.add(3);
-          setRejectedSteps(new Set(rejectedSteps));
         }
+        setCompletedSteps(new Set(completedSteps));
+        setRejectedSteps(new Set(rejectedSteps));
       }
     };
-    !formState.offline && validate();
-  }, [formState]);
+
+    const validateOffline = async () => {
+      let validationError = await validateAttachment(
+        formState.attachment,
+        formState.country
+      );
+
+      const screenValidationError = formErrorState?.attachment;
+
+      if (
+        currentStepperStep > 1 &&
+        screenValidationError &&
+        !Object.keys(screenValidationError).length
+      ) {
+        // console.log('indexxxx', currentStepperStep, index);
+        completedSteps.add(1);
+        rejectedSteps.delete(1);
+      } else if (!validationError?.length) {
+        rejectedSteps.delete(1);
+      } else if (1 === currentStepperStep) {
+        completedSteps.delete(1);
+      } else if (validationError.length && currentStepperStep >= 1) {
+        if (Array.isArray(validationError)) {
+          validationError.forEach(error => {
+            dispatch(
+              updateFormState({
+                name: `formErrorState.attachment.${[error.property]}`,
+                value: Object.values(error.constraints ?? {})[0] || ''
+              })
+            );
+          });
+        }
+        completedSteps.delete(1);
+        rejectedSteps.add(1);
+      }
+      setCompletedSteps(new Set(completedSteps));
+      setRejectedSteps(new Set(rejectedSteps));
+    };
+
+    if (formState.offline) {
+      validateOffline();
+    } else {
+      validate();
+    }
+  }, [formState, currentStepperStep]);
 
   function checkOTPEntry(otpEntry: string[]) {
     for (let i = 0; i < otpEntry.length; i++) {
@@ -667,8 +764,12 @@ const KYC = () => {
         })
       );
     }
-
-    if (validationError?.length) return;
+    // console.log('currentState', currentState);
+    if (validationError?.length) {
+      rejectedSteps.add(currentState);
+      setRejectedSteps(new Set(rejectedSteps));
+      return;
+    }
 
     // Make the API call to submit the form data
     let updatedCompanyDetails;
@@ -809,6 +910,7 @@ const KYC = () => {
   };
 
   const kycSubmitted = async () => {
+    setIsLoading(true);
     setIsDialogOpen(false);
     await submitKYC({
       country: selectedCountry,
@@ -820,6 +922,9 @@ const KYC = () => {
     })
       .unwrap()
       .then(() => {
+        completedSteps.add(currentStepperStep);
+        setCompletedSteps(new Set(completedSteps));
+        setIsLoading(false);
         const authToken = JSON.parse(localStorage.getItem('auth')!);
 
         triggerAuth(authToken).then(res => {
@@ -853,6 +958,7 @@ const KYC = () => {
         );
       })
       .catch(e => {
+        setIsLoading(false);
         setIsDialogOpen(true); // Show error dialog
         setDialogContent(
           <>
@@ -892,7 +998,12 @@ const KYC = () => {
       manualValidationError = await validateManualAttachment(
         formState.attachment
       );
-      if (Array.isArray(manualValidationError)) {
+      if (
+        Array.isArray(manualValidationError) &&
+        manualValidationError.length
+      ) {
+        rejectedSteps.add(1);
+        setRejectedSteps(new Set(rejectedSteps));
         manualValidationError.forEach(error => {
           dispatch(
             updateFormState({
@@ -924,7 +1035,14 @@ const KYC = () => {
       selectedCountry
     );
 
-    if (Array.isArray(validationError)) {
+    if (Array.isArray(validationError) && validationError.length) {
+      if (selectedCountry === 'India') {
+        rejectedSteps.add(4);
+      } else if (selectedCountry === 'Belgium' || selectedCountry === 'USA') {
+        rejectedSteps.add(3);
+      }
+      setRejectedSteps(new Set(rejectedSteps));
+
       validationError.forEach(error => {
         dispatch(
           updateFormState({
@@ -941,6 +1059,19 @@ const KYC = () => {
       !manualValidationError?.length
     ) {
       if (!formState.termAndCondition) {
+        if (
+          formState.country === countries.OTHER ||
+          selectedSubmissionOption === 'offline'
+        ) {
+          rejectedSteps.add(1);
+          setRejectedSteps(new Set(rejectedSteps));
+        }
+        if (selectedCountry === 'India') {
+          rejectedSteps.add(4);
+        } else if (selectedCountry === 'Belgium' || selectedCountry === 'USA') {
+          rejectedSteps.add(3);
+        }
+        setRejectedSteps(new Set(rejectedSteps));
         dispatch(
           updateFormState({
             name: `formErrorState.termAndCondition`,
@@ -986,6 +1117,7 @@ const KYC = () => {
       }
     }
   };
+
   const steps = [
     {
       name: 'Personal Details',
@@ -1005,6 +1137,7 @@ const KYC = () => {
     },
     { name: 'Attachment', identifier: kycScreenIdentifierNames.ATTACHMENT }
   ];
+
   const filteredSteps = steps.filter(
     step =>
       step.identifier !== kycScreenIdentifierNames.COMPANY_OWNER_DETAILS ||
@@ -1091,7 +1224,7 @@ const KYC = () => {
         );
     }
   };
-  const indianManualSteps = [
+  const manualSteps = [
     {
       name: 'Personal Details',
       identifier: kycScreenIdentifierNames.PERSONAL_DETAILS
@@ -1179,7 +1312,9 @@ const KYC = () => {
           handleStepperBack={handleStepperBack}
           isEmailVerified={formState.isEmailVerified}
           handleSubmit={handleSubmit}
-          filteredSteps={indianManualSteps}
+          filteredSteps={manualSteps}
+          fromWhere={currentState}
+          handleBack={handleBack}
         />
       );
     }
@@ -1323,8 +1458,9 @@ const KYC = () => {
   };
 
   return (
-    <div className="relative ">
+    <div className="relative">
       {' '}
+      {isLoading && <CustomKGKLoader />}
       <DialogComponent
         dialogContent={dialogContent}
         isOpens={isDialogOpen}

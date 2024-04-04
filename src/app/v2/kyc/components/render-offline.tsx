@@ -12,7 +12,6 @@ import { useAppDispatch } from '@/hooks/hook';
 import { updateFormState } from '@/features/kyc/kyc';
 import { countries } from '@/constants/enums/kyc';
 import { DownloadAndUpload } from '@/components/v2/common/download-and-upload';
-import ActionButton from '@/components/v2/common/action-button';
 import { TermsDialogComponent } from './terms-and-conditions';
 
 export const RenderOffline = ({
@@ -158,7 +157,7 @@ export const RenderOffline = ({
           >
             <div className="w-[920px] flex flex-wrap flex-col  gap-[20px]">
               {AttachmentData &&
-                AttachmentData[country].map((attch: any) => {
+                AttachmentData[country]?.map((attch: any) => {
                   return attch.key && Object?.keys(attch.key).length ? (
                     <div key={attch.key} className="w-[50%]">
                       <h1 className="text-neutral900 text-mRegular py-3 capitalize ">

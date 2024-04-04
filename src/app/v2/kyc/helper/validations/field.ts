@@ -382,9 +382,9 @@ class ValidationSwitfCriteria {
   @Matches(SWIFT_CODE_REGEX, {
     message: FIELD_INVALID('Swift code')
   })
-  @Length(8, 11, {
-    message: FIELD_INVALID('Swift code')
-  })
+  // @Length(8, 11, {
+  //   message: FIELD_INVALID('Swift code')
+  // })
   swift_code: string;
 
   constructor(swift_code: string) {
@@ -734,7 +734,7 @@ class ValidationIsAntiMoneyCriteria {
   }
 }
 class ValidationAntiMoneyPolicyNameCriteria {
-  @ValidateIf(object => object?.is_anti_money_laundering === false)
+  @ValidateIf((object, value) => object?.is_anti_money_laundering === value)
   @IsString({
     message: 'Reason for No Anti-Money Laundering Policy is Required.'
   })

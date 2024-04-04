@@ -35,9 +35,9 @@ export const KycStatusScreen: React.FC<IKycStatusScreen> = ({ status }) => {
     }, 2000);
   };
   return (
-    <div className="relative w-full h-[100%]">
+    <div className="relative w-full h-[calc(100vh-60px)]">
       <Toast show={showToast} message="Copied Successfully" />
-      <div className="flex flex-col gap-y-10 justify-center items-center">
+      <div className="flex flex-col gap-y-10 justify-center items-center relative">
         <div className="">
           {status === kycStatus.PENDING ? (
             <Image src={pendingIcon} alt="kyc_pending_icon" />
@@ -76,7 +76,7 @@ export const KycStatusScreen: React.FC<IKycStatusScreen> = ({ status }) => {
                 ? 'We have received your KYC, we are reviewing it. We will give an update over it soon, by then you can explore our website'
                 : status === kycStatus.REJECTED
                 ? 'Your KYC verification has not been successful. To ensure compliance with our regulatory requirements and for further assistance, please contact your Key Account Manager directly. We appreciate your cooperation and understanding in this matter.'
-                : 'Your KYC verification has not been successful. To ensure compliance with our regulatory requirements and for further assistance, please contact your Key Account Manager directly. We appreciate your cooperation and understanding in this matter.'}
+                : 'Thank you for completing the KYC process. Your identity has been successfully verified, ensuring a secure experience for you on our platform.'}
             </p>
           </div>
           {status === kycStatus.REJECTED ? (

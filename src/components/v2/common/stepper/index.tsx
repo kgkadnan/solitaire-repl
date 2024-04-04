@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './stepper.module.scss'; // Ensure you have the corresponding CSS module file
-import { kycScreenIdentifierNames } from '@/constants/enums/kyc';
+import { countries, kycScreenIdentifierNames } from '@/constants/enums/kyc';
 import Image from 'next/image';
 import Completed from '@public/v2/assets/icons/stepper/completed.svg';
 import InProgress from '@public/v2/assets/icons/stepper/in-progress.svg';
@@ -20,6 +20,8 @@ interface IStepperComponentProps {
   isEmailVerified: boolean;
   handleSubmit: any;
   filteredSteps: any;
+  handleBack?: any;
+  fromWhere?: any;
 }
 // Define the steps with label and name
 
@@ -33,7 +35,9 @@ const StepperComponent: React.FC<IStepperComponentProps> = ({
   handleStepperBack,
   isEmailVerified,
   handleSubmit,
-  filteredSteps
+  filteredSteps,
+  handleBack,
+  fromWhere
 }) => {
   // Function to mark a step as completed
 
@@ -46,20 +50,28 @@ const StepperComponent: React.FC<IStepperComponentProps> = ({
 
   // Include the "Company Owner Details" only if the country is India
 
+  // console.log('completedSteps', completedSteps);
+  // console.log('rejectedSteps', rejectedSteps);
+
   const renderStepperIcon = (index: number) => {
-    if (index === currentStepperStep) {
-      return InProgress;
-    } else if (completedSteps.has(index)) {
+    // console.log('currentStepperStep', currentStepperStep, 'index', index);
+    if (completedSteps.has(index)) {
       return Completed;
     } else if (rejectedSteps.has(index)) {
       return Rejected;
+    } else if (index === currentStepperStep) {
+      return InProgress;
     } else {
       return NotStarted;
     }
   };
 
   return (
-    <div className="flex flex-col gap-[32px] h-[calc(100vh-60px)]  px-[110px] pt-[32px]">
+    <div
+      className={`flex flex-col gap-[32px] h-[calc(100vh-60px)]  px-[110px] pt-[32px] ${
+        currentStepperStep === 1 && 'h-[1250px]'
+      }`}
+    >
       <div className={styles.stepperContainer}>
         {filteredSteps.map((step: any, index: number) => {
           let stepStatusClass = '';
@@ -87,7 +99,7 @@ const StepperComponent: React.FC<IStepperComponentProps> = ({
         })}
       </div>
       <div className="">
-        {renderStepperComponent(filteredSteps[currentStepperStep].identifier)}
+        {renderStepperComponent(filteredSteps[currentStepperStep]?.identifier)}
       </div>
       <div className="h-[72px] bg-neutral0 border-[1px] border-solid border-neutral200  sticky bottom-0 rounded-t-[8px] mt-auto p-[16px]">
         {' '}
@@ -96,26 +108,30 @@ const StepperComponent: React.FC<IStepperComponentProps> = ({
             {
               variant: 'secondary',
               label: ManageLocales('app.kyc.footer.back'),
-              handler: () => handleStepperBack()
+
+              handler: () =>
+                fromWhere === countries.OTHER
+                  ? handleBack('country_selection')
+                  : handleStepperBack()
             },
             {
               variant: 'primary',
               label:
-                filteredSteps[currentStepperStep].identifier ===
+                filteredSteps[currentStepperStep]?.identifier ===
                 kycScreenIdentifierNames.PERSONAL_DETAILS
                   ? isEmailVerified
                     ? 'Next'
                     : 'Verify Email'
-                  : filteredSteps[currentStepperStep].identifier ===
+                  : filteredSteps[currentStepperStep]?.identifier ===
                     kycScreenIdentifierNames.ATTACHMENT
                   ? ManageLocales('app.kyc.footer.submit')
                   : ManageLocales('app.kyc.footer.saveAndNext'),
               handler: () => {
-                filteredSteps[currentStepperStep].identifier ===
+                filteredSteps[currentStepperStep]?.identifier ===
                 kycScreenIdentifierNames.ATTACHMENT
                   ? handleSubmit()
                   : handleStepperNext({
-                      screenName: filteredSteps[currentStepperStep].identifier,
+                      screenName: filteredSteps[currentStepperStep]?.identifier,
                       currentState: currentStepperStep
                     });
               }

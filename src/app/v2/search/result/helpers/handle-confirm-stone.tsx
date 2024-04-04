@@ -55,7 +55,7 @@ export const handleConfirmStone = ({
     setErrorText(SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH);
   } else if (selectedIds?.length) {
     setIsError(false);
-    setErrorText(SELECT_STONE_TO_PERFORM_ACTION);
+    // setErrorText(SELECT_STONE_TO_PERFORM_ACTION);
     setIsConfirmStone(true);
     const confirmStone = rows.filter(item => selectedIds?.includes(item.id));
     setConfirmStoneData(confirmStone);

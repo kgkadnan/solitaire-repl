@@ -23,6 +23,14 @@ export const productApi = createApi({
       }),
       providesTags: ['Product']
     }),
+    getProductById: builder.mutation({
+      query: data => ({
+        url: `/store/products/search`,
+        method: 'POST',
+        body: data
+      }),
+      invalidatesTags: ['Product']
+    }),
     confirmProduct: builder.mutation({
       query: data => ({
         url: `/store/products/confirm`,
@@ -39,5 +47,6 @@ export const {
   useLazyGetAllProductQuery,
   useGetProductCountQuery,
   useLazyGetProductCountQuery,
-  useConfirmProductMutation
+  useConfirmProductMutation,
+  useGetProductByIdMutation
 } = productApi;

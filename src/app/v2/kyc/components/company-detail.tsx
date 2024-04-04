@@ -309,8 +309,6 @@ const CompanyDetail = ({
     'Other'
   ];
 
-  console.log('formState', formState.online.sections);
-
   const [organisationType, setOrganisationType] = useState();
 
   const handleSelect = (value: any, formKey: string, setState: any) => {
@@ -393,8 +391,8 @@ const CompanyDetail = ({
             country === 'Belgium'
               ? 'h-[867px]'
               : country === 'India'
-              ? 'h-[970px]'
-              : 'h-[1028px]'
+              ? 'h-[983px]'
+              : 'h-[1024px]'
           }`}
         >
           {' '}
@@ -568,7 +566,7 @@ const CompanyDetail = ({
                 <p className="text-mRegular text-neutral-900">City*</p>
                 <Select
                   name="city"
-                  placeholder={'Search by Saved Filter Parameter'}
+                  placeholder={'Enter City'}
                   options={computeCountryDropdownField(cities)}
                   onChange={({ value }: any) => {
                     handleInputChange(
@@ -586,16 +584,22 @@ const CompanyDetail = ({
                       kycScreenIdentifierNames.COMPANY_DETAILS
                     ]?.['city'] ?? ''
                   )}
-                  value={{
-                    label:
-                      formState?.online?.sections?.[
-                        kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['city'],
-                    value:
-                      formState?.online?.sections?.[
-                        kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['city']
-                  }}
+                  value={
+                    formState?.online?.sections?.[
+                      kycScreenIdentifierNames.COMPANY_DETAILS
+                    ]?.['city']
+                      ? {
+                          label:
+                            formState?.online?.sections?.[
+                              kycScreenIdentifierNames.COMPANY_DETAILS
+                            ]?.['city'],
+                          value:
+                            formState?.online?.sections?.[
+                              kycScreenIdentifierNames.COMPANY_DETAILS
+                            ]?.['city']
+                        }
+                      : ''
+                  }
                   // autoFocus={false}
                 />
                 {formErrorState?.online?.sections?.[
@@ -1535,7 +1539,11 @@ const CompanyDetail = ({
             </div>
           )}
           {(country === countries.BELGIUM || country === countries.USA) && (
-            <div className="flex w-[380px] h-[17vh]">
+            <div
+              className={`flex w-[380px] ${
+                country === 'Belgium' && 'h-[17vh]'
+              } `}
+            >
               <div className="w-full flex flex-col ">
                 <div className="flex flex-col gap-[5px]">
                   <p className="text-mRegular text-neutral900">
@@ -2030,6 +2038,48 @@ const CompanyDetail = ({
                     formErrorState?.online?.sections?.[
                       kycScreenIdentifierNames.COMPANY_DETAILS
                     ]?.['vat_number']
+                      ? 'border-dangerMain'
+                      : 'border-neutral200'
+                  }`
+                }}
+              />{' '}
+            </div>
+          )}
+          {country === countries.USA && (
+            <div className={'w-[50%]'}>
+              {' '}
+              <InputField
+                label={'Federal Tax ID*'}
+                onChange={e =>
+                  handleInputChange(
+                    `formState.online.sections[${[
+                      kycScreenIdentifierNames.COMPANY_DETAILS
+                    ]}][federal_tax_id]`,
+                    e.target.value,
+                    dispatch,
+                    kycScreenIdentifierNames.COMPANY_DETAILS,
+                    'federal_tax_id'
+                    // formState
+                  )
+                }
+                type="text"
+                name={'Federal Tax ID*'}
+                value={
+                  formState?.online?.sections?.[
+                    kycScreenIdentifierNames.COMPANY_DETAILS
+                  ]?.['federal_tax_id'] ?? ''
+                }
+                errorText={
+                  formErrorState?.online?.sections?.[
+                    kycScreenIdentifierNames.COMPANY_DETAILS
+                  ]?.['federal_tax_id'] ?? ''
+                }
+                placeholder={'Enter number'}
+                styles={{
+                  input: `${
+                    formErrorState?.online?.sections?.[
+                      kycScreenIdentifierNames.COMPANY_DETAILS
+                    ]?.['federal_tax_id']
                       ? 'border-dangerMain'
                       : 'border-neutral200'
                   }`
