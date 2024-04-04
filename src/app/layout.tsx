@@ -18,7 +18,6 @@ import Head from 'next/head';
 import AppDownloadPopup from '@/components/v2/common/alert-pop-for-mobile';
 import InvalidCreds from './v2/login/component/invalid-creds';
 import { DialogComponent } from '@/components/v2/common/dialog';
-import SecurityProvider from '@/utils/security-provider';
 
 const store = setupStore();
 
@@ -124,20 +123,17 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
         </noscript>
         <Provider store={store}>
           <ThemeProviders>
-            <SecurityProvider>
-              {isV2Route ? (
-                <>
-                  {/* <AppDownloadPopup/> */}
-                  {showHeader ? (
-                    <SecureComponent>{children}</SecureComponent>
-                  ) : (
-                    <ChildrenComponent>{children}</ChildrenComponent>
-                  )}{' '}
-                </>
-              ) : (
-                <div>{children}</div>
-              )}
-            </SecurityProvider>
+            {isV2Route ? (
+              <>
+                {showHeader ? (
+                  <SecureComponent>{children}</SecureComponent>
+                ) : (
+                  <ChildrenComponent>{children}</ChildrenComponent>
+                )}{' '}
+              </>
+            ) : (
+              <div>{children}</div>
+            )}
           </ThemeProviders>
         </Provider>
         <SpeedInsights />
