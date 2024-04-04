@@ -9,7 +9,7 @@ import AppointmentIcon from '@public/v2/assets/icons/sidebar-icons/appointment.s
 import BidToBuyIcon from '@public/v2/assets/icons/sidebar-icons/bid-to-buy.svg?url';
 import { useRouter } from 'next/navigation';
 import { useGetCustomerQuery } from '@/features/api/dashboard';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import searchIcon from '@public/v2/assets/icons/data-table/search-icon.svg';
 import micIcon from '@public/v2/assets/icons/dashboard/mic.svg';
 import editIcon from '@public/v2/assets/icons/saved-search/edit-button.svg';
@@ -55,7 +55,6 @@ import { handleComment } from './search/result/helpers/handle-comment';
 import ImageModal from '@/components/v2/common/detail-page/components/image-modal';
 import { FILE_URLS } from '@/constants/v2/detail-page';
 import { getShapeDisplayName } from '@/utils/v2/detail-page';
-import Head from 'next/head';
 
 // import useUser from '@/lib/use-auth';
 
@@ -64,11 +63,7 @@ interface ITabs {
   link: string;
   data: any;
 }
-const metadata = {
-  title: 'Buy Diamonds in Few Clicks | KGK Diamonds',
-  description:
-    'Simplify your diamond buying with KGK Diamonds. where you can manage your diamonds, orders, and preferences seamlessly.'
-};
+
 const Dashboard = () => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -935,10 +930,6 @@ const Dashboard = () => {
   };
   return (
     <>
-      <Head>
-        <title>{metadata.title}</title>
-        <meta name="description" content={metadata.description} />
-      </Head>
       {error !== '' && (
         <Toast show={error !== ''} message={error} isSuccess={false} />
       )}
