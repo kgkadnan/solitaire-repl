@@ -65,6 +65,7 @@ import {
   ValidateIf,
   validate
 } from 'class-validator';
+import { IsArrayOfArraysValid, IsNotOther } from './screen/company-details-validators';
 
 export async function validateKYCField(fieldType: string, fieldValue: any) {
   let instance;
@@ -292,7 +293,9 @@ class ValidationCountryCodeCriteria {
 
 class ValidationPhoneCriteria {
   @MinLength(3, { message: FIELD_INVALID('Phone') })
-  @IsMobilePhone()
+  @IsMobilePhone(undefined ,{},{
+    message: FIELD_INVALID('Phone')
+  })
   @IsNotEmpty({ message: PHONE_NUMBER_MANDATORY })
   phone: string;
 
@@ -476,6 +479,7 @@ class ValidationAddressCriteria {
 
 class ValidationBusinessTypeCriteria {
   @ArrayNotEmpty({ message: BUSINESS_TYPE_MANDATORY })
+  @IsArrayOfArraysValid(BUSINESS_TYPE_MANDATORY)
   business_type: string[];
 
   constructor(business_type: string[]) {
@@ -484,6 +488,7 @@ class ValidationBusinessTypeCriteria {
 }
 class ValidationIndustryTypeCriteria {
   @ArrayNotEmpty({ message: INDUSTRY_TYPE_MANDATORY })
+  @IsArrayOfArraysValid(INDUSTRY_TYPE_MANDATORY)
   industry_type: string[];
 
   constructor(industry_type: string[]) {
@@ -494,6 +499,7 @@ class ValidationOrganisationTypeCriteria {
   @IsNotEmpty({ message: ORGANISATION_TYPE_MANDATORY })
   @IsString({ message: ORGANISATION_TYPE_MANDATORY })
   @Length(1, 140, { message: FIELD_INVALID('Organisation Type') })
+  @IsNotOther()
   organisation_type: string;
 
   constructor(organisation_type: string) {

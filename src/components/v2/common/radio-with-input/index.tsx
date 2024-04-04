@@ -62,6 +62,7 @@ const RadioButtonWithInput = ({
             type="text"
             name={inputName}
             value={inputValue}
+            errorText={onError}
             placeholder={placeholder}
             styles={{
               inputMain: `h-64px !w-[380px]`
