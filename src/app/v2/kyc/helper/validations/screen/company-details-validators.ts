@@ -53,11 +53,11 @@ import {
   Max,
   IsEmail,
   registerDecorator,
-  ValidationOptions, ValidatorConstraint, ValidatorConstraintInterface,
+  ValidationOptions,
+  ValidatorConstraint,
+  ValidatorConstraintInterface,
   ValidationArguments
 } from 'class-validator';
-
-
 
 // Custom validation constraint class
 // @ValidatorConstraint({ name: 'custom', async: false })
@@ -99,7 +99,7 @@ export class OrganisationTypeValidator implements ValidatorConstraintInterface {
   }
 
   defaultMessage(args: ValidationArguments) {
-    return ORGANISATION_TYPE_MANDATORY
+    return ORGANISATION_TYPE_MANDATORY;
   }
 }
 
@@ -111,7 +111,7 @@ export function IsNotOther(validationOptions?: ValidationOptions) {
       propertyName: propertyName,
       options: validationOptions,
       constraints: [],
-      validator: OrganisationTypeValidator, // Use the custom validator constraint
+      validator: OrganisationTypeValidator // Use the custom validator constraint
     });
   };
 }
@@ -136,20 +136,20 @@ export class ArrayOfArraysValidator implements ValidatorConstraintInterface {
 }
 
 // Decorator function to use the custom validation constraint
-export function IsArrayOfArraysValid(errorMessage: string, validationOptions?: ValidationOptions) {
+export function IsArrayOfArraysValid(
+  errorMessage: string,
+  validationOptions?: ValidationOptions
+) {
   return function (object: Object, propertyName: string) {
     registerDecorator({
       target: object.constructor,
       propertyName: propertyName,
       options: validationOptions,
       constraints: [errorMessage], // Pass the error message as a constraint
-      validator: ArrayOfArraysValidator, // Use the custom validator constraint
+      validator: ArrayOfArraysValidator // Use the custom validator constraint
     });
   };
 }
-
-
-
 
 export class KycPostCompanyDetailsValidation {
   @IsNotEmpty({ message: COMPANY_NAME_MANDATORY })
@@ -208,7 +208,7 @@ export class KycPostCompanyDetailsValidation {
   })
   is_member_of_business: boolean = false;
 
-  @ValidateIf((object) => object.is_member_of_business === true)
+  @ValidateIf(object => object.is_member_of_business === true)
   @IsNotEmpty({ message: MEMBER_NAME_MANDATORY })
   @IsString({ message: MEMBER_NAME_INVALID })
   @Length(1, 140, { message: FIELD_INVALID('Member of Business Name') })
@@ -291,7 +291,7 @@ export class IndiaKycPostCompanyDetailsValidation extends KycPostCompanyDetailsV
   @IsBoolean({ message: MSME_REGISTERED_INVALID })
   is_msme_registered: boolean = false;
 
-  @ValidateIf((object) => object?.is_msme_registered === true)
+  @ValidateIf(object => object?.is_msme_registered === true)
   @IsString({
     message: MSME_TYPE_INVALID
   })
@@ -299,7 +299,7 @@ export class IndiaKycPostCompanyDetailsValidation extends KycPostCompanyDetailsV
   @IsNotEmpty({ message: MSME_TYPE_MANDATORY })
   msme_type: string;
 
-  @ValidateIf((object) => object?.is_msme_registered === true)
+  @ValidateIf(object => object?.is_msme_registered === true)
   @IsString({
     message: MSME_REGISTRATION_NUMBER_INVALID
   })

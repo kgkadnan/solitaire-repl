@@ -74,22 +74,21 @@ export const RenderAttachment = ({
   };
   const fileUpload = ({ acceptedFiles, key }: any) => {
     handleFileupload({
-        acceptedFiles,
-        setUploadProgress: `formState.attachment[${key}].uploadProgress`,
-        setIsFileUploaded: `formState.attachment[${key}].isFileUploaded`,
-        setSelectedFile: `formState.attachment[${key}]`,
-        dispatch
-      });
-      dispatch(
-        updateFormState({
-          name: `formErrorState.attachment[${key}]`,
-          value: ''
-        })
-      );
+      acceptedFiles,
+      setUploadProgress: `formState.attachment[${key}].uploadProgress`,
+      setIsFileUploaded: `formState.attachment[${key}].isFileUploaded`,
+      setSelectedFile: `formState.attachment[${key}]`,
+      dispatch
+    });
+    dispatch(
+      updateFormState({
+        name: `formErrorState.attachment[${key}]`,
+        value: ''
+      })
+    );
     uploadDocument(buildFormData({ acceptedFiles, key }))
       .unwrap()
-      .then((res) => {
-      })
+      .then(res => {})
       .catch(error => {
         console.log('Error', error);
       });
@@ -117,7 +116,8 @@ export const RenderAttachment = ({
         <hr className="border-neutral200" />
         <div
           className={` ${'max-h-[670px]'} ${
-         (   country === countries.USA || country === countries.BELGIUM) && 'h-[39vh]'
+            (country === countries.USA || country === countries.BELGIUM) &&
+            'h-[39vh]'
           }  w-[100%] `}
         >
           <div

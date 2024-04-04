@@ -51,23 +51,21 @@ export const RenderOffline = ({
   };
   const fileUpload = ({ acceptedFiles, key }: any) => {
     handleFileupload({
-        acceptedFiles,
-        setUploadProgress: `formState.attachment[${key}].uploadProgress`,
-        setIsFileUploaded: `formState.attachment[${key}].isFileUploaded`,
-        setSelectedFile: `formState.attachment[${key}]`,
-        dispatch
-      });
-      dispatch(
-        updateFormState({
-          name: `formErrorState.attachment[${key}]`,
-          value: ''
-        })
-      );
+      acceptedFiles,
+      setUploadProgress: `formState.attachment[${key}].uploadProgress`,
+      setIsFileUploaded: `formState.attachment[${key}].isFileUploaded`,
+      setSelectedFile: `formState.attachment[${key}]`,
+      dispatch
+    });
+    dispatch(
+      updateFormState({
+        name: `formErrorState.attachment[${key}]`,
+        value: ''
+      })
+    );
     uploadDocument(buildFormData({ acceptedFiles, key }))
       .unwrap()
-      .then(() => {
-      
-      })
+      .then(() => {})
       .catch(error => {
         console.log('Error', error);
       });

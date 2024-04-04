@@ -65,7 +65,10 @@ import {
   ValidateIf,
   validate
 } from 'class-validator';
-import { IsArrayOfArraysValid, IsNotOther } from './screen/company-details-validators';
+import {
+  IsArrayOfArraysValid,
+  IsNotOther
+} from './screen/company-details-validators';
 
 export async function validateKYCField(fieldType: string, fieldValue: any) {
   let instance;
@@ -293,9 +296,13 @@ class ValidationCountryCodeCriteria {
 
 class ValidationPhoneCriteria {
   @MinLength(3, { message: FIELD_INVALID('Phone') })
-  @IsMobilePhone(undefined ,{},{
-    message: FIELD_INVALID('Phone')
-  })
+  @IsMobilePhone(
+    undefined,
+    {},
+    {
+      message: FIELD_INVALID('Phone')
+    }
+  )
   @IsNotEmpty({ message: PHONE_NUMBER_MANDATORY })
   phone: string;
 

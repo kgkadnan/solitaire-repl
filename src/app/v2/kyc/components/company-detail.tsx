@@ -300,9 +300,7 @@ const CompanyDetail = ({
     'Private Ltd.',
     'Partnership Firm',
     'Individual'
-  ]
-  ;
-
+  ];
   const organisationTypesNew = [
     'OPC',
     'Public Ltd.',
@@ -328,8 +326,6 @@ const CompanyDetail = ({
       formKey
     );
   };
-
-  
 
   const handleInputValueChange = (
     radioValue: any,
@@ -1321,19 +1317,21 @@ const CompanyDetail = ({
               </div>
               {formErrorState?.online?.sections?.[
                 kycScreenIdentifierNames.COMPANY_DETAILS
-              ]?.['organisation_type'] &&  formState?.online?.sections?.[
-                kycScreenIdentifierNames.COMPANY_DETAILS
-              ]?.['organisation_type'] !== 'Other' && formState?.online?.sections?.[
-                kycScreenIdentifierNames.COMPANY_DETAILS
-              ]?.['organisation_type'] !== '' && (
-                <span className={`text-dangerMain`}>
-                  {
-                    formErrorState?.online?.sections?.[
-                      kycScreenIdentifierNames.COMPANY_DETAILS
-                    ]?.['organisation_type']
-                  }
-                </span>
-              )}
+              ]?.['organisation_type'] &&
+                formState?.online?.sections?.[
+                  kycScreenIdentifierNames.COMPANY_DETAILS
+                ]?.['organisation_type'] !== 'Other' &&
+                formState?.online?.sections?.[
+                  kycScreenIdentifierNames.COMPANY_DETAILS
+                ]?.['organisation_type'] !== '' && (
+                  <span className={`text-dangerMain`}>
+                    {
+                      formErrorState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['organisation_type']
+                    }
+                  </span>
+                )}
             </div>
           )}
           {country === countries.INDIA && (
@@ -1924,19 +1922,21 @@ const CompanyDetail = ({
               </div>
               {formErrorState?.online?.sections?.[
                 kycScreenIdentifierNames.COMPANY_DETAILS
-              ]?.['organisation_type'] &&  formState?.online?.sections?.[
-                kycScreenIdentifierNames.COMPANY_DETAILS
-              ]?.['organisation_type'] !== 'Other' && formState?.online?.sections?.[
-                kycScreenIdentifierNames.COMPANY_DETAILS
-              ]?.['organisation_type'] !== '' && (
-                <span className={`text-dangerMain`}>
-                  {
-                    formErrorState?.online?.sections?.[
-                      kycScreenIdentifierNames.COMPANY_DETAILS
-                    ]?.['organisation_type']
-                  }
-                </span>
-              )}
+              ]?.['organisation_type'] &&
+                formState?.online?.sections?.[
+                  kycScreenIdentifierNames.COMPANY_DETAILS
+                ]?.['organisation_type'] !== 'Other' &&
+                formState?.online?.sections?.[
+                  kycScreenIdentifierNames.COMPANY_DETAILS
+                ]?.['organisation_type'] !== '' && (
+                  <span className={`text-dangerMain`}>
+                    {
+                      formErrorState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['organisation_type']
+                    }
+                  </span>
+                )}
             </div>
           )}
           {(country === countries.BELGIUM || country === countries.USA) && (
@@ -2710,19 +2710,21 @@ const CompanyDetail = ({
               </div>
               {formErrorState?.online?.sections?.[
                 kycScreenIdentifierNames.COMPANY_DETAILS
-              ]?.['organisation_type'] &&  formState?.online?.sections?.[
-                kycScreenIdentifierNames.COMPANY_DETAILS
-              ]?.['organisation_type'] !== 'Other' && formState?.online?.sections?.[
-                kycScreenIdentifierNames.COMPANY_DETAILS
-              ]?.['organisation_type'] !== '' && (
-                <span className={`text-dangerMain`}>
-                  {
-                    formErrorState?.online?.sections?.[
-                      kycScreenIdentifierNames.COMPANY_DETAILS
-                    ]?.['organisation_type']
-                  }
-                </span>
-              )}
+              ]?.['organisation_type'] &&
+                formState?.online?.sections?.[
+                  kycScreenIdentifierNames.COMPANY_DETAILS
+                ]?.['organisation_type'] !== 'Other' &&
+                formState?.online?.sections?.[
+                  kycScreenIdentifierNames.COMPANY_DETAILS
+                ]?.['organisation_type'] !== '' && (
+                  <span className={`text-dangerMain`}>
+                    {
+                      formErrorState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['organisation_type']
+                    }
+                  </span>
+                )}
             </div>
           )}
           <div
