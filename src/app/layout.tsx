@@ -50,7 +50,6 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
       typeof navigator !== 'undefined' &&
       navigator.userAgent
     ) {
-      // if (process.env.NEXT_ENV == 'production') {
       const disableDevtool = require('disable-devtool');
       disableDevtool({
         disableMenu: true,
@@ -58,9 +57,11 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
           setOpen(true);
           // You may choose to call next() if you want to allow the default behavior
           // next();
+        },
+        ignore: () => {
+          return process.env.NEXT_ENV !== 'production';
         }
       });
-      // }
     }
   });
 
