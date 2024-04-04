@@ -19,6 +19,7 @@ import AppDownloadPopup from '@/components/v2/common/alert-pop-for-mobile';
 import DisableDevtool from 'disable-devtool';
 import InvalidCreds from './v2/login/component/invalid-creds';
 import { DialogComponent } from '@/components/v2/common/dialog';
+import SecurityProvider from '@/utils/security-provider';
 
 const store = setupStore();
 
@@ -35,8 +36,10 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
   // Create a component that just renders children, with children as an optional prop
   const ChildrenComponent: FC<{ children?: ReactNode }> = ({ children }) => (
     <>
-      {children}
-      <AppDownloadPopup></AppDownloadPopup>
+      <SecurityProvider>
+        {children}
+        <AppDownloadPopup></AppDownloadPopup>
+      </SecurityProvider>
     </>
   );
   // Wrap the ChildrenComponent with authorizedLogin if it's a secure page
@@ -44,29 +47,29 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
     ? authorizedLogin(ChildrenComponent)
     : ChildrenComponent;
 
-  useEffect(() => {
-    // Check if running on localhost
-    const isLocalhost =
-      window.location.hostname === 'localhost' ||
-      window.location.hostname === '127.0.0.1';
+  // useEffect(() => {
+  //   // Check if running on localhost
+  //   const isLocalhost =
+  //     window.location.hostname === 'localhost' ||
+  //     window.location.hostname === '127.0.0.1';
 
-    if (isLocalhost) {
-      if (
-        window &&
-        typeof window !== 'undefined' &&
-        typeof window.navigator !== 'undefined' &&
-        typeof navigator !== 'undefined' &&
-        navigator.userAgent
-      ) {
-        DisableDevtool({
-          ondevtoolopen(type, next) {
-            setOpen(true);
-            next();
-          }
-        });
-      }
-    }
-  }, [window]);
+  //   if (isLocalhost) {
+  //     if (
+  //       window &&
+  //       typeof window !== 'undefined' &&
+  //       typeof window.navigator !== 'undefined' &&
+  //       typeof navigator !== 'undefined' &&
+  //       navigator.userAgent
+  //     ) {
+  //       DisableDevtool({
+  //         ondevtoolopen(type, next) {
+  //           setOpen(true);
+  //           next();
+  //         }
+  //       });
+  //     }
+  //   }
+  // }, [window]);
   return (
     <html lang="en">
       <head>
@@ -130,6 +133,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
         </noscript>
         <Provider store={store}>
           <ThemeProviders>
+            {/* <SecurityProvider> */}
             {isV2Route ? (
               <>
                 {/* <AppDownloadPopup/> */}
@@ -142,6 +146,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
             ) : (
               <div>{children}</div>
             )}
+            {/* </SecurityProvider> */}
           </ThemeProviders>
         </Provider>
         <SpeedInsights />
