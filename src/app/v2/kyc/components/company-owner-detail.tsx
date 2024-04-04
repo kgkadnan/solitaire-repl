@@ -14,7 +14,7 @@ const CompanyOwnerDetail = ({
   dispatch,
   currentStepperStep
 }: any) => {
-    const [selectedCountryIso,setSelectedCountryIso] = useState('')
+  const [selectedCountryIso, setSelectedCountryIso] = useState('');
   const { data, error } = useGetCountryCodeQuery({});
   useEffect(() => {
     if (data) {
@@ -26,13 +26,12 @@ const CompanyOwnerDetail = ({
           value: data.country_calling_code.replace('+', '')
         })
       );
-      setSelectedCountryIso(data?.country)
+      setSelectedCountryIso(data?.country);
     } else if (error) {
       console.error('Error fetching country code', error);
     }
   }, [data, error]);
 
- 
   return (
     <div className="flex flex-col gap-[16px]">
       <div className="flex items-center gap-[16px]">
@@ -160,7 +159,7 @@ const CompanyOwnerDetail = ({
               }}
             />
             <DynamicMobileInput
-            selectedCountryIso={selectedCountryIso}
+              selectedCountryIso={selectedCountryIso}
               label={'Contact Number*'}
               handleInputChange={e =>
                 e.target.value.trim().length <= 15
@@ -183,8 +182,8 @@ const CompanyOwnerDetail = ({
                       })
                     )
               }
-              handleSelectChange={({ value ,iso}: any) => {
-                setSelectedCountryIso(iso)
+              handleSelectChange={({ value, iso }: any) => {
+                setSelectedCountryIso(iso);
                 handleInputChange(
                   `formState.online.sections[${[
                     kycScreenIdentifierNames.COMPANY_OWNER_DETAILS

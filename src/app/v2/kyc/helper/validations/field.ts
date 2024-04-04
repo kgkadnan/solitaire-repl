@@ -605,11 +605,10 @@ class ValidationPincodeCriteria {
 }
 
 class ValidationPANCriteria {
-
   @IsString({ message: FIELD_INVALID('Company PAN') })
   @IsNotEmpty({ message: COMPANY_PAN_NUMBER_MANDATORY })
-  @IsAlphanumeric(undefined, { message:FIELD_INVALID('Company PAN')})
-  @MinLength(10, { message:FIELD_INVALID('Company PAN')})
+  @IsAlphanumeric(undefined, { message: FIELD_INVALID('Company PAN') })
+  @MinLength(10, { message: FIELD_INVALID('Company PAN') })
   @Matches(PAN_MATCH, {
     message: FIELD_INVALID('Company PAN')
   })

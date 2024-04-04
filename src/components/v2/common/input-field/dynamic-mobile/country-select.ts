@@ -37,8 +37,8 @@ export const colourStyles = (error: any, isDisabled?: boolean) => {
     singleValue: (styles: any) => ({
       ...styles,
       color: isDisabled ? 'var(--neutral-500)' : 'var(--neutral-900)',
-      display : 'flex',
-      alignItems: "center",
+      display: 'flex',
+      alignItems: 'center'
     }),
     placeholder: (styles: any) => ({
       ...styles,
@@ -58,8 +58,8 @@ export const colourStyles = (error: any, isDisabled?: boolean) => {
         backgroundColor: 'var(--neutral-0)',
         color: isDisabled ? 'var(--neutral-500)' : 'var(--neutral-900)',
         cursor: isDisabled ? 'not-allowed' : 'default',
-        display : 'flex',
-      alignItems: "center",
+        display: 'flex',
+        alignItems: 'center',
         ':active': {
           ...styles[':active'],
           border: 'none',

@@ -95,13 +95,13 @@ const CompanyDetail = ({
           value: data.country_calling_code.replace('+', '')
         })
       );
-      setSelectedCountryIso(data?.country)
+      setSelectedCountryIso(data?.country);
     } else if (error) {
       console.error('Error fetching country code', error);
     }
   }, [data, error]);
 
-  const [selectedCountryIso,setSelectedCountryIso] = useState('')
+  const [selectedCountryIso, setSelectedCountryIso] = useState('');
 
   const handleRadioChange = ({ value, formKey }: any) => {
     handleInputChange(
@@ -709,7 +709,7 @@ const CompanyDetail = ({
             <div className={'w-[50%]'}>
               {' '}
               <DynamicMobileInput
-              selectedCountryIso={selectedCountryIso}
+                selectedCountryIso={selectedCountryIso}
                 label={'Contact Number*'}
                 handleInputChange={e =>
                   e.target.value.trim().length <= 15
@@ -732,8 +732,8 @@ const CompanyDetail = ({
                         })
                       )
                 }
-                handleSelectChange={({ value,iso }: any) => {
-                    setSelectedCountryIso(iso)
+                handleSelectChange={({ value, iso }: any) => {
+                  setSelectedCountryIso(iso);
                   handleInputChange(
                     `formState.online.sections[${[
                       kycScreenIdentifierNames.COMPANY_DETAILS
@@ -859,7 +859,7 @@ const CompanyDetail = ({
           {country === countries.INDIA && (
             <div className={'w-[50%]'}>
               <DynamicMobileInput
-              selectedCountryIso={selectedCountryIso}
+                selectedCountryIso={selectedCountryIso}
                 label={'Contact Number*'}
                 handleInputChange={e =>
                   e.target.value.trim().length <= 15
@@ -882,8 +882,8 @@ const CompanyDetail = ({
                         })
                       )
                 }
-                handleSelectChange={({ value,iso }: any) => {
-                    setSelectedCountryIso(iso)
+                handleSelectChange={({ value, iso }: any) => {
+                  setSelectedCountryIso(iso);
                   handleInputChange(
                     `formState.online.sections[${[
                       kycScreenIdentifierNames.COMPANY_DETAILS

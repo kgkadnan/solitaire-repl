@@ -1081,7 +1081,7 @@ const KYC = () => {
       } else {
         setIsDialogOpen(true);
         setDialogContent(
-          <div className='h-[200px]'>
+          <div className="h-[200px]">
             <div className="absolute left-[-84px] top-[-84px]">
               <Image src={confirmIcon} alt="confirmIcon" />
             </div>
@@ -1412,30 +1412,29 @@ const KYC = () => {
                         setIsInputDialogOpen(false);
                         setIsDialogOpen(true);
                         setDialogContent(
-                            <>
-                              <div className="absolute left-[-84px] top-[-84px]">
-                                <Image src={confirmIcon} alt="confirmIcon" />
-                              </div>
-                              <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                                <h1 className="text-headingS text-neutral900">
+                          <>
+                            <div className="absolute left-[-84px] top-[-84px]">
+                              <Image src={confirmIcon} alt="confirmIcon" />
+                            </div>
+                            <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+                              <h1 className="text-headingS text-neutral900">
                                 Your email has been verified successfully
-                                </h1>
-                                <ActionButton
-                                  actionButtonData={[
-                                
-                                    {
-                                      variant: 'primary',
-                                      label: 'Next',
-                                      handler: () => {
-                                        setIsDialogOpen(false)
-                                      },
-                                      customStyle: 'flex-1 w-full h-10'
-                                    }
-                                  ]}
-                                />
-                              </div>
-                            </>
-                          );
+                              </h1>
+                              <ActionButton
+                                actionButtonData={[
+                                  {
+                                    variant: 'primary',
+                                    label: 'Next',
+                                    handler: () => {
+                                      setIsDialogOpen(false);
+                                    },
+                                    customStyle: 'flex-1 w-full h-10'
+                                  }
+                                ]}
+                              />
+                            </div>
+                          </>
+                        );
                         dispatch(
                           updateFormState({
                             name: 'formState.isEmailVerified',

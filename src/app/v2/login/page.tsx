@@ -100,12 +100,12 @@ const Login = () => {
       setPhoneNumber((prev: any) => ({
         ...prev,
         countryCode: currentCountryCode.country_calling_code.replace('+', ''),
-        iso : currentCountryCode?.country
+        iso: currentCountryCode?.country
       }));
       setOTPVerificationFormState({
         ...otpVerificationFormState,
         countryCode: currentCountryCode.country_calling_code.replace('+', ''),
-        iso : currentCountryCode?.country
+        iso: currentCountryCode?.country
       });
     } else if (error) {
       console.error('Error fetching country code', error);

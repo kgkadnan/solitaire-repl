@@ -102,17 +102,17 @@ export const RenderOffline = ({
       <TermsDialogComponent isOpens={openTerms} setIsOpen={setOpenTerms} />
       <div className="w-[920px] items-center mt-[20px] mb-[10px] flex gap-[16px]">
         <div>
-        <span className="rounded-[50%] bg-primaryMain flex items-center justify-center text-neutral25 text-lMedium font-medium w-[40px] h-[40px]">
-           2
+          <span className="rounded-[50%] bg-primaryMain flex items-center justify-center text-neutral25 text-lMedium font-medium w-[40px] h-[40px]">
+            2
           </span>
         </div>
         <div>
-        <h1 className="text-lMedium text-neutral-900 font-lMedium">
-          Download and Upload Hub
-        </h1>
-        <p className="text-lRegular text-neutral-600 font-lRegular">
-          Please download, complete, and manually upload your form here.
-        </p>
+          <h1 className="text-lMedium text-neutral-900 font-lMedium">
+            Download and Upload Hub
+          </h1>
+          <p className="text-lRegular text-neutral-600 font-lRegular">
+            Please download, complete, and manually upload your form here.
+          </p>
         </div>
       </div>
       <DownloadAndUpload

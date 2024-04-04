@@ -34,8 +34,8 @@ export const colourStyles = (error: any) => {
     singleValue: (styles: any) => ({
       ...styles,
       color: 'var(--neutral-500)',
-      display : 'flex',
-      alignItems: "center",
+      display: 'flex',
+      alignItems: 'center'
     }),
     placeholder: (styles: any) => ({
       ...styles,
@@ -54,9 +54,9 @@ export const colourStyles = (error: any) => {
         ...styles,
         backgroundColor: 'var(--neutral-0)',
         color: 'var(--neutral-900)',
-        
-        display : 'flex',
-        alignItems: "center",
+
+        display: 'flex',
+        alignItems: 'center',
         ':active': {
           ...styles[':active'],
           border: 'none',

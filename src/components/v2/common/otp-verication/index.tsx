@@ -14,7 +14,7 @@ export interface IOtp {
   otpMobileNumber: string;
   countryCode: string;
   codeAndNumber: string;
-  iso?: string
+  iso?: string;
 }
 
 interface IOTPVerification {
