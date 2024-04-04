@@ -59,12 +59,11 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
           // next();
         },
         ignore: () => {
-          return process.env.NEXT_ENV !== 'production';
+          return process.env.NEXT_PUBLIC_ENV !== 'production';
         }
       });
     }
   });
-
   return (
     <html lang="en">
       <head>
