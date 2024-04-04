@@ -761,13 +761,13 @@ const CompanyDetail = ({
                 }
                 countryCodeValue={{
                   label:
-                    formState?.online?.sections?.[
+                    `+${formState?.online?.sections?.[
                       kycScreenIdentifierNames.COMPANY_DETAILS
-                    ]?.['company_country_code'] ?? '',
+                    ]?.['company_country_code']}` ?? '',
                   value:
-                    formState?.online?.sections?.[
+                    `+${formState?.online?.sections?.[
                       kycScreenIdentifierNames.COMPANY_DETAILS
-                    ]?.['company_country_code'] ?? ''
+                    ]?.['company_country_code']}` ?? ''
                 }}
               />{' '}
             </div>
@@ -911,13 +911,13 @@ const CompanyDetail = ({
                 }
                 countryCodeValue={{
                   label:
-                    formState?.online?.sections?.[
+                    `+${formState?.online?.sections?.[
                       kycScreenIdentifierNames.COMPANY_DETAILS
-                    ]?.['company_country_code'] ?? '',
+                    ]?.['company_country_code']}` ?? '',
                   value:
-                    formState?.online?.sections?.[
+                    `+${formState?.online?.sections?.[
                       kycScreenIdentifierNames.COMPANY_DETAILS
-                    ]?.['company_country_code'] ?? ''
+                    ]?.['company_country_code']}` ?? ''
                 }}
               />
             </div>

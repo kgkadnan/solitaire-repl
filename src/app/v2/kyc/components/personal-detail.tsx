@@ -225,13 +225,13 @@ const PersonalDetail = ({
               }
               countryCodeValue={{
                 label:
-                  formState?.online?.sections?.[
+                  `+${formState?.online?.sections?.[
                     kycScreenIdentifierNames.PERSONAL_DETAILS
-                  ]?.['country_code'] ?? '',
+                  ]?.['country_code']}` ?? '',
                 value:
-                  formState?.online?.sections?.[
+                  `+${formState?.online?.sections?.[
                     kycScreenIdentifierNames.PERSONAL_DETAILS
-                  ]?.['country_code'] ?? ''
+                  ]?.['country_code']}` ?? ''
               }}
             />
             <InputField
