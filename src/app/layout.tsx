@@ -50,7 +50,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
       window.location.hostname === 'localhost' ||
       window.location.hostname === '127.0.0.1';
 
-    if (!isLocalhost) {
+    if (isLocalhost) {
       if (
         window &&
         typeof window !== 'undefined' &&
@@ -61,12 +61,12 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
         DisableDevtool({
           ondevtoolopen(type, next) {
             setOpen(true);
-            // next();
+            next();
           }
         });
       }
     }
-  }, []);
+  }, [window]);
   return (
     <html lang="en">
       <head>
