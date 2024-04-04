@@ -12,7 +12,7 @@ export const colourStyles = (error: any) => {
         : '1px solid var(--neutral-200)',
       borderRight: 'none',
       // outline: '1px solid var(--neutral-200)',
-      width: '78px',
+      width: '90px',
       boxShadow: 'var(--input-shadow) inset',
       // This line disable the blue border
       '&:hover': {
@@ -33,7 +33,9 @@ export const colourStyles = (error: any) => {
     }),
     singleValue: (styles: any) => ({
       ...styles,
-      color: 'var(--neutral-500)'
+      color: 'var(--neutral-500)',
+      display : 'flex',
+      alignItems: "center",
     }),
     placeholder: (styles: any) => ({
       ...styles,
@@ -52,6 +54,9 @@ export const colourStyles = (error: any) => {
         ...styles,
         backgroundColor: 'var(--neutral-0)',
         color: 'var(--neutral-900)',
+        
+        display : 'flex',
+        alignItems: "center",
         ':active': {
           ...styles[':active'],
           border: 'none',

@@ -6,6 +6,7 @@ export interface IRegister {
   countryCode: string;
   password: string;
   confirmPassword: string;
+  iso? :string
 }
 
 export const initialFormState: IRegister = {
@@ -15,7 +16,8 @@ export const initialFormState: IRegister = {
   mobileNumber: '',
   countryCode: '',
   password: '',
-  confirmPassword: ''
+  confirmPassword: '',
+  iso:''
 };
 
 export interface IRegisterSetState {

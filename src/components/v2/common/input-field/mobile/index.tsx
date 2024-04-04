@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { InputField } from '..';
 import { IInputFieldProps } from '../interface';
-import Select from 'react-select';
+import Select ,{components}from 'react-select';
 import countryCode from '../../../../../constants/country-code.json';
 import { colourStyles } from './country-select';
 import { useGetAllCountryCodeQuery } from '@/features/api/get-country-code';
@@ -31,15 +31,36 @@ export const MobileInput = ({
     }
   }, [getAllCountryCode]);
   const computeCountryDropdownField = (countryCode: any) => {
-    return countryCode?.map(({ code }: any) => ({
+    return countryCode?.map(({ code ,iso}: any) => ({
       label: code,
-      value: code
+      value: code,
+      iso:iso
     }));
   };
+
+
+  const Option = (props:any) => (
+    console.log("props",props),
+    <components.Option {...props} className="country-option">
+      <img src={`https://flagsapi.com/${props.data.iso}/flat/64.png`} style={{ width: 24 }}
+      alt="logo" />
+      +{props.data.label}
+    </components.Option>
+  );
+
+  const SingleValue = ({ children, ...props }:any) => (
+    <components.SingleValue {...props}>
+      <img src={`https://flagsapi.com/${registerFormState.iso}/flat/64.png`}   style={{ width: 24 }}
+      alt={registerFormState.iso} />
+      {children}
+    </components.SingleValue>
+  );
+
   const handleSelectChange = (selectValue: any) => {
     setRegisterFormState(() => ({
       ...registerFormState,
-      countryCode: selectValue?.value
+      countryCode: selectValue?.value,
+      iso : selectValue?.iso,
     }));
   };
 
@@ -59,6 +80,11 @@ export const MobileInput = ({
                 label: `+${registerFormState.countryCode}`,
                 value: registerFormState.countryCode
               }}
+              components={{
+                Option,
+                SingleValue
+              }}
+            
               // closeMenuOnSelect={false}
               autoFocus={false}
             />
