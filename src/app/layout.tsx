@@ -52,6 +52,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
 
     if (!isLocalhost) {
       if (
+        window &&
         typeof window !== 'undefined' &&
         typeof window.navigator !== 'undefined' &&
         typeof navigator !== 'undefined' &&
@@ -87,6 +88,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
           rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Inter"
         />
+        {/* <script disable-devtool-auto src='https://cdn.jsdelivr.net/npm/disable-devtool'></script> */}
 
         <script
           dangerouslySetInnerHTML={{
