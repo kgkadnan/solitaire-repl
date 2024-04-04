@@ -112,11 +112,13 @@ const Register = () => {
     if (data) {
       setRegisterFormState({
         ...registerFormState,
-        countryCode: data.country_calling_code.replace('+', '')
+        countryCode: data.country_calling_code.replace('+', ''),
+        iso: data?.country
       });
       setOTPVerificationFormState({
         ...otpVerificationFormState,
-        countryCode: data.country_calling_code.replace('+', '')
+        countryCode: data.country_calling_code.replace('+', ''),
+        iso: data?.country
       });
     } else if (error) {
       console.error('Error fetching country code', error);

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { InputField } from '..';
 import { IDynamicInputFieldProps } from '../interface';
-import Select from 'react-select';
+import Select, { components } from 'react-select';
 import countryCode from '../../../../../constants/country-code.json';
 import { colourStyles } from './country-select';
 import { useGetAllCountryCodeQuery } from '@/features/api/get-country-code';
@@ -9,6 +9,7 @@ import { useGetAllCountryCodeQuery } from '@/features/api/get-country-code';
 interface IDynamicMobileInputField extends IDynamicInputFieldProps {
   containerStyle?: string;
   isNotEditable?: boolean;
+  selectedCountryIso?: string;
 }
 
 export const DynamicMobileInput = ({
@@ -21,9 +22,11 @@ export const DynamicMobileInput = ({
   handleInputChange,
   containerStyle,
   placeholder,
-  isNotEditable = false
+  isNotEditable = false,
+  selectedCountryIso
 }: IDynamicMobileInputField) => {
   const { data: getAllCountryCode } = useGetAllCountryCodeQuery({});
+
   const [countryOption, setCountryOption] = useState<any>([]);
   useEffect(() => {
     if (getAllCountryCode?.length > 0) {
@@ -33,11 +36,34 @@ export const DynamicMobileInput = ({
     }
   }, [getAllCountryCode]);
   const computeCountryDropdownField = (countryCode: any) => {
-    return countryCode?.map(({ code }: any) => ({
+    return countryCode?.map(({ code, iso }: any) => ({
       label: code,
-      value: code
+      value: code,
+      iso: iso
     }));
   };
+
+  const Option = (props: any) => (
+    <components.Option {...props} className="country-option">
+      <img
+        src={`https://flagsapi.com/${props.data.iso}/flat/64.png`}
+        style={{ width: 24 }}
+        alt="logo"
+      />
+      +{props.data.label}
+    </components.Option>
+  );
+
+  const SingleValue = ({ children, ...props }: any) => (
+    <components.SingleValue {...props}>
+      <img
+        src={`https://flagsapi.com/${selectedCountryIso}/flat/64.png`}
+        style={{ width: 24 }}
+        alt={''}
+      />
+      {children}
+    </components.SingleValue>
+  );
 
   return (
     <div className={`flex text-left flex-col ${containerStyle}`}>
@@ -51,6 +77,10 @@ export const DynamicMobileInput = ({
             onChange={handleSelectChange}
             styles={colourStyles(errorText, isNotEditable)}
             value={countryCodeValue}
+            components={{
+              Option,
+              SingleValue
+            }}
             autoFocus={false}
             isDisabled={isNotEditable}
           />

@@ -186,7 +186,7 @@ export const RenderAttachment = ({
             </div>
           </div>
         </div>
-        <div className="w-[100%] flex flex-col py-3 justify-center items-center">
+        <div className="w-[100%] mt-3 flex flex-col py-3 justify-center items-center">
           <div className="flex  items-center w-[920px]">
             <div className="pr-3 flex items-center">
               <CheckboxComponent

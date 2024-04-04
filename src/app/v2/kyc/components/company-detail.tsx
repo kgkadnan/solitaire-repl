@@ -92,13 +92,16 @@ const CompanyDetail = ({
           name: `formState.online.sections[${[
             kycScreenIdentifierNames.COMPANY_DETAILS
           ]}][company_country_code]`,
-          value: data.country_calling_code.replace(/\+/g, '')
+          value: data.country_calling_code.replace('+', '')
         })
       );
+      setSelectedCountryIso(data?.country);
     } else if (error) {
       console.error('Error fetching country code', error);
     }
   }, [data, error]);
+
+  const [selectedCountryIso, setSelectedCountryIso] = useState('');
 
   const handleRadioChange = ({ value, formKey }: any) => {
     handleInputChange(
@@ -389,10 +392,10 @@ const CompanyDetail = ({
         <div
           className={`flex flex-col flex-wrap  gap-[16px]  w-[760px] ${
             country === 'Belgium'
-              ? 'h-[867px]'
+              ? 'h-[119vh]'
               : country === 'India'
-              ? 'h-[983px]'
-              : 'h-[1024px]'
+              ? 'h-[134vh]'
+              : 'h-[1040vh]'
           }`}
         >
           {' '}
@@ -706,6 +709,7 @@ const CompanyDetail = ({
             <div className={'w-[50%]'}>
               {' '}
               <DynamicMobileInput
+                selectedCountryIso={selectedCountryIso}
                 label={'Contact Number*'}
                 handleInputChange={e =>
                   e.target.value.trim().length <= 15
@@ -728,7 +732,8 @@ const CompanyDetail = ({
                         })
                       )
                 }
-                handleSelectChange={({ value }: any) => {
+                handleSelectChange={({ value, iso }: any) => {
+                  setSelectedCountryIso(iso);
                   handleInputChange(
                     `formState.online.sections[${[
                       kycScreenIdentifierNames.COMPANY_DETAILS
@@ -756,13 +761,13 @@ const CompanyDetail = ({
                 }
                 countryCodeValue={{
                   label:
-                    formState?.online?.sections?.[
+                    `+${formState?.online?.sections?.[
                       kycScreenIdentifierNames.COMPANY_DETAILS
-                    ]?.['company_country_code'] ?? '',
+                    ]?.['company_country_code']}` ?? '',
                   value:
-                    formState?.online?.sections?.[
+                    `+${formState?.online?.sections?.[
                       kycScreenIdentifierNames.COMPANY_DETAILS
-                    ]?.['company_country_code'] ?? ''
+                    ]?.['company_country_code']}` ?? ''
                 }}
               />{' '}
             </div>
@@ -854,6 +859,7 @@ const CompanyDetail = ({
           {country === countries.INDIA && (
             <div className={'w-[50%]'}>
               <DynamicMobileInput
+                selectedCountryIso={selectedCountryIso}
                 label={'Contact Number*'}
                 handleInputChange={e =>
                   e.target.value.trim().length <= 15
@@ -876,7 +882,8 @@ const CompanyDetail = ({
                         })
                       )
                 }
-                handleSelectChange={({ value }: any) => {
+                handleSelectChange={({ value, iso }: any) => {
+                  setSelectedCountryIso(iso);
                   handleInputChange(
                     `formState.online.sections[${[
                       kycScreenIdentifierNames.COMPANY_DETAILS
@@ -904,13 +911,13 @@ const CompanyDetail = ({
                 }
                 countryCodeValue={{
                   label:
-                    formState?.online?.sections?.[
+                    `+${formState?.online?.sections?.[
                       kycScreenIdentifierNames.COMPANY_DETAILS
-                    ]?.['company_country_code'] ?? '',
+                    ]?.['company_country_code']}` ?? '',
                   value:
-                    formState?.online?.sections?.[
+                    `+${formState?.online?.sections?.[
                       kycScreenIdentifierNames.COMPANY_DETAILS
-                    ]?.['company_country_code'] ?? ''
+                    ]?.['company_country_code']}` ?? ''
                 }}
               />
             </div>
