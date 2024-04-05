@@ -32,6 +32,7 @@ import {
   OWNER_PAN_NUMBER_OR_ADHAAR_MANDATORY,
   PHONE_NUMBER_MANDATORY,
   PINCODE_MANDATORY,
+  RANGE_VALIDATION,
   STATE_MANDATORY,
   SWIFT_CODE_MANDATORY,
   ULTIMATE_BENEFICIARY_NAME_MANDATORY,
@@ -44,6 +45,8 @@ import {
   IFSC_REGEX,
   NAME_REGEX,
   PAN_MATCH,
+  PHONE_REG,
+  PHONE_REGEX,
   SWIFT_CODE_REGEX
 } from '@/constants/validation-regex/regex';
 import {
@@ -296,13 +299,16 @@ class ValidationCountryCodeCriteria {
 
 class ValidationPhoneCriteria {
   @MinLength(3, { message: FIELD_INVALID('Phone') })
-  @IsMobilePhone(
-    undefined,
-    {},
-    {
-      message: FIELD_INVALID('Phone')
-    }
-  )
+//   @IsMobilePhone(
+//     undefined,
+//     {},
+//     {
+//       message: FIELD_INVALID('Phone')
+//     }
+//   )
+@Matches(PHONE_REG, {
+    message: RANGE_VALIDATION('Phone', 0, 15)
+  })
   @IsNotEmpty({ message: PHONE_NUMBER_MANDATORY })
   phone: string;
 
