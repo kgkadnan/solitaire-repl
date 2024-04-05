@@ -7,7 +7,7 @@ import { DynamicMobileInput } from '@/components/v2/common/input-field/dynamic-m
 import { updateFormState } from '@/features/kyc/kyc';
 import { RANGE_VALIDATION } from '@/constants/error-messages/kyc';
 import Select from 'react-select';
-import { colourStyles } from '../style/select-style';
+import { colourStyles } from '../helper/style/select-style';
 import { RadioButton } from '@/components/v2/common/radio';
 
 import CheckboxWithInput from '@/components/v2/common/check';
