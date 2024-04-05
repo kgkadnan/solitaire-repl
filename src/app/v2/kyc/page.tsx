@@ -147,17 +147,17 @@ const KYC = () => {
   };
 
   const resendLabel = resendTimer > 0 ? `(${resendTimer}Sec)` : '';
-  useEffect(() => {
-    let countdownInterval: NodeJS.Timeout;
+//   useEffect(() => {
+//     let countdownInterval: NodeJS.Timeout;
 
-    if (resendTimer > 0) {
-      countdownInterval = setInterval(() => {
-        setResendTimer((prevTimer: number) => prevTimer - 1);
-      }, 1000);
-    }
+//     if (resendTimer > 0) {
+//       countdownInterval = setInterval(() => {
+//         setResendTimer((prevTimer: number) => prevTimer - 1);
+//       }, 1000);
+//     }
 
-    return () => clearInterval(countdownInterval);
-  }, [resendTimer]);
+//     return () => clearInterval(countdownInterval);
+//   }, [resendTimer]);
 
   async function findFirstNonFilledScreens(data: any, country: string) {
     let sectionKeys: string[] =
@@ -174,6 +174,7 @@ const KYC = () => {
             kycScreenIdentifierNames.BANKING_DETAILS
           ];
 
+         
     // Wait for all screen validations to complete
     const filledScreensResults = await Promise.all(
       Object.keys(data).map(async (item, index) => {
@@ -184,6 +185,11 @@ const KYC = () => {
           sectionKeys[index],
           country
         );
+
+        dispatch( updateFormState({
+            name: `formErrorState.online.sections.${[sectionKeys[index]]}`,
+            value: {}
+          }))
 
         if (!validationErrors.length) {
           if (sectionKeys.length - 1 >= index) {
@@ -551,6 +557,7 @@ const KYC = () => {
             kycScreenIdentifierNames.BANKING_DETAILS
           ];
 
+          console.log("formState",formState.online.sections)
     sectionKeys.forEach(async (key, index: number) => {
       let validationErrors = await validateScreen(
         formState.online.sections[key],
@@ -558,31 +565,25 @@ const KYC = () => {
         formState.country
       );
 
+console.log("useEeffect" , completedSteps)
+
       // console.log('validationErrors', validationErrors);
 
       const screenValidationError = formErrorState?.online?.sections[key];
 
-      // console.log('screenValidationError', screenValidationError);
+      console.log('screenValidationError', screenValidationError);
 
       if (
         currentStepperStep > index &&
         screenValidationError &&
         !Object.keys(screenValidationError).length
       ) {
-        // console.log('indexxxx', currentStepperStep, index);
         completedSteps.add(index);
         rejectedSteps.delete(index);
       } else if (!validationErrors.length) {
         rejectedSteps.delete(index);
-
-        // completedSteps.add(index);
-        // setCompletedSteps(new Set(completedSteps));
       } else if (index === currentStepperStep) {
-        // console.log('index === currentStepperStep', index, currentStepperStep);
-        // rejectedSteps.delete(index);
-        // setRejectedSteps(new Set(rejectedSteps));
         completedSteps.delete(index);
-        // rejectedSteps.delete(index);
       } else if (validationErrors.length && currentStepperStep >= index) {
         if (Array.isArray(validationErrors)) {
           validationErrors.forEach(error => {
@@ -731,6 +732,7 @@ const KYC = () => {
     }
     return true;
   }
+  console.log("formState",formState)
 
   const handleStepperNext = async ({
     screenName,
@@ -848,7 +850,7 @@ const KYC = () => {
             response?.data?.statusCode === statusCode.NO_CONTENT) &&
           !validationError.length
         ) {
-          console.log('formState', formState.isEmailVerified);
+  
           // Step was successfully completed, move to the next step
           // console.log('nextStep', nextStep);
           completedSteps.add(currentState);
@@ -1518,7 +1520,7 @@ const KYC = () => {
     );
   };
 
-  console.log('formsTate', formState);
+
   return (
     <div className="relative">
       {' '}
