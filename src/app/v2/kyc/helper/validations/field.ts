@@ -65,6 +65,10 @@ import {
   ValidateIf,
   validate
 } from 'class-validator';
+import {
+  IsArrayOfArraysValid,
+  IsNotOther
+} from './screen/company-details-validators';
 
 export async function validateKYCField(fieldType: string, fieldValue: any) {
   let instance;
@@ -292,7 +296,13 @@ class ValidationCountryCodeCriteria {
 
 class ValidationPhoneCriteria {
   @MinLength(3, { message: FIELD_INVALID('Phone') })
-  @IsMobilePhone()
+  @IsMobilePhone(
+    undefined,
+    {},
+    {
+      message: FIELD_INVALID('Phone')
+    }
+  )
   @IsNotEmpty({ message: PHONE_NUMBER_MANDATORY })
   phone: string;
 
@@ -734,7 +744,7 @@ class ValidationIsAntiMoneyCriteria {
   }
 }
 class ValidationAntiMoneyPolicyNameCriteria {
-  @ValidateIf((object, value) => object?.is_anti_money_laundering === value)
+  @ValidateIf(object => object?.is_anti_money_laundering === false)
   @IsString({
     message: 'Reason for No Anti-Money Laundering Policy is Required.'
   })

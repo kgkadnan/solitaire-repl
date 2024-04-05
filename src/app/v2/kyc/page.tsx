@@ -1426,6 +1426,12 @@ const KYC = () => {
                                     variant: 'primary',
                                     label: 'Next',
                                     handler: () => {
+                                      handleStepperNext({
+                                        screenName:
+                                          filteredSteps[currentStepperStep]
+                                            ?.identifier,
+                                        currentState: currentStepperStep
+                                      });
                                       setIsDialogOpen(false);
                                     },
                                     customStyle: 'flex-1 w-full h-10'

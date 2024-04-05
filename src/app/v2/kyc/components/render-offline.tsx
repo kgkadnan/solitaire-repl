@@ -50,23 +50,22 @@ export const RenderOffline = ({
     return formData;
   };
   const fileUpload = ({ acceptedFiles, key }: any) => {
+    handleFileupload({
+      acceptedFiles,
+      setUploadProgress: `formState.attachment[${key}].uploadProgress`,
+      setIsFileUploaded: `formState.attachment[${key}].isFileUploaded`,
+      setSelectedFile: `formState.attachment[${key}]`,
+      dispatch
+    });
+    dispatch(
+      updateFormState({
+        name: `formErrorState.attachment[${key}]`,
+        value: ''
+      })
+    );
     uploadDocument(buildFormData({ acceptedFiles, key }))
       .unwrap()
-      .then(() => {
-        handleFileupload({
-          acceptedFiles,
-          setUploadProgress: `formState.attachment[${key}].uploadProgress`,
-          setIsFileUploaded: `formState.attachment[${key}].isFileUploaded`,
-          setSelectedFile: `formState.attachment[${key}]`,
-          dispatch
-        });
-        dispatch(
-          updateFormState({
-            name: `formErrorState.attachment[${key}]`,
-            value: ''
-          })
-        );
-      })
+      .then(() => {})
       .catch(error => {
         console.log('Error', error);
       });
@@ -148,8 +147,8 @@ export const RenderOffline = ({
           className={` ${'max-h-[670px]'} ${
             country === countries.OTHER
               ? 'h-[380px]'
-              : country !== countries.INDIA
-              ? 'h-[260px]'
+              : country === countries.BELGIUM || country === countries.USA
+              ? 'h-[20vh]'
               : ''
           } w-[100%] `}
         >
