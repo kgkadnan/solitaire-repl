@@ -1,6 +1,6 @@
 import { InputField } from '@/components/v2/common/input-field';
 import { kycScreenIdentifierNames } from '@/constants/enums/kyc';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { handleInputChange } from '../helper/handle-change';
 import { RANGE_VALIDATION } from '@/constants/error-messages/kyc';
 import { updateFormState } from '@/features/kyc/kyc';
@@ -14,6 +14,7 @@ const CompanyOwnerDetail = ({
   dispatch,
   currentStepperStep
 }: any) => {
+  const [selectedCountryIso, setSelectedCountryIso] = useState('');
   const { data, error } = useGetCountryCodeQuery({});
   useEffect(() => {
     if (data) {
@@ -22,13 +23,15 @@ const CompanyOwnerDetail = ({
           name: `formState.online.sections[${[
             kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
           ]}][owner_country_code]`,
-          value: data.country_calling_code.replace(/\+/g, '')
+          value: data.country_calling_code.replace('+', '')
         })
       );
+      setSelectedCountryIso(data?.country);
     } else if (error) {
       console.error('Error fetching country code', error);
     }
   }, [data, error]);
+
   return (
     <div className="flex flex-col gap-[16px]">
       <div className="flex items-center gap-[16px]">
@@ -156,6 +159,7 @@ const CompanyOwnerDetail = ({
               }}
             />
             <DynamicMobileInput
+              selectedCountryIso={selectedCountryIso}
               label={'Contact Number*'}
               handleInputChange={e =>
                 e.target.value.trim().length <= 15
@@ -173,12 +177,13 @@ const CompanyOwnerDetail = ({
                       updateFormState({
                         name: `formErrorState.online.sections[${[
                           kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
-                        ]}][owner_phone]}`,
-                        value: RANGE_VALIDATION('Contact Number*', 0, 15)
+                        ]}][owner_phone]`,
+                        value: RANGE_VALIDATION('Contact Number', 0, 15)
                       })
                     )
               }
-              handleSelectChange={({ value }: any) => {
+              handleSelectChange={({ value, iso }: any) => {
+                setSelectedCountryIso(iso);
                 handleInputChange(
                   `formState.online.sections[${[
                     kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
@@ -205,13 +210,13 @@ const CompanyOwnerDetail = ({
               }
               countryCodeValue={{
                 label:
-                  formState?.online?.sections?.[
-                    kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
-                  ]?.['owner_country_code'] ?? '',
+                  `+${formState?.online?.sections?.[
+                    kycScreenIdentifierNames.COMPANY_DETAILS
+                  ]?.['company_country_code']}` ?? '',
                 value:
-                  formState?.online?.sections?.[
-                    kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
-                  ]?.['owner_country_code'] ?? ''
+                  `+${formState?.online?.sections?.[
+                    kycScreenIdentifierNames.COMPANY_DETAILS
+                  ]?.['company_country_code']}` ?? ''
               }}
             />
           </div>

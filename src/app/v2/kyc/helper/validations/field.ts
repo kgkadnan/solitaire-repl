@@ -65,6 +65,10 @@ import {
   ValidateIf,
   validate
 } from 'class-validator';
+import {
+  IsArrayOfArraysValid,
+  IsNotOther
+} from './screen/company-details-validators';
 
 export async function validateKYCField(fieldType: string, fieldValue: any) {
   let instance;
@@ -292,7 +296,13 @@ class ValidationCountryCodeCriteria {
 
 class ValidationPhoneCriteria {
   @MinLength(3, { message: FIELD_INVALID('Phone') })
-  @IsMobilePhone()
+  @IsMobilePhone(
+    undefined,
+    {},
+    {
+      message: FIELD_INVALID('Phone')
+    }
+  )
   @IsNotEmpty({ message: PHONE_NUMBER_MANDATORY })
   phone: string;
 
@@ -605,13 +615,13 @@ class ValidationPincodeCriteria {
 }
 
 class ValidationPANCriteria {
+  @IsString({ message: FIELD_INVALID('Company PAN') })
+  @IsNotEmpty({ message: COMPANY_PAN_NUMBER_MANDATORY })
+  @IsAlphanumeric(undefined, { message: FIELD_INVALID('Company PAN') })
+  @MinLength(10, { message: FIELD_INVALID('Company PAN') })
   @Matches(PAN_MATCH, {
     message: FIELD_INVALID('Company PAN')
   })
-  @IsString({ message: FIELD_INVALID('Company PAN') })
-  @IsNotEmpty({ message: COMPANY_PAN_NUMBER_MANDATORY })
-  @IsAlphanumeric(undefined, { message: COMPANY_PAN_NUMBER_MANDATORY })
-  @MinLength(10, { message: COMPANY_PAN_NUMBER_MANDATORY })
   company_pan_number: string;
 
   constructor(company_pan_number: string) {
@@ -734,7 +744,7 @@ class ValidationIsAntiMoneyCriteria {
   }
 }
 class ValidationAntiMoneyPolicyNameCriteria {
-  @ValidateIf((object, value) => object?.is_anti_money_laundering === value)
+  @ValidateIf(object => object?.is_anti_money_laundering === false)
   @IsString({
     message: 'Reason for No Anti-Money Laundering Policy is Required.'
   })

@@ -12,7 +12,7 @@ export const colourStyles = (error: any, isDisabled?: boolean) => {
         : '1px solid var(--neutral-200)',
       borderRight: 'none',
       // outline: '1px solid var(--neutral-200)',
-      width: '60px',
+      width: '80px',
       boxShadow: 'var(--input-shadow) inset',
 
       // This line disable the blue border
@@ -24,7 +24,7 @@ export const colourStyles = (error: any, isDisabled?: boolean) => {
           : '1px solid var(--neutral-200)',
         borderRight: 'none'
       },
-      height: '39px'
+      height: '40px'
     }),
     indicatorSeparator: (styles: any) => ({
       ...styles,
@@ -36,7 +36,9 @@ export const colourStyles = (error: any, isDisabled?: boolean) => {
     }),
     singleValue: (styles: any) => ({
       ...styles,
-      color: isDisabled ? 'var(--neutral-500)' : 'var(--neutral-900)'
+      color: isDisabled ? 'var(--neutral-500)' : 'var(--neutral-900)',
+      display: 'flex',
+      alignItems: 'center'
     }),
     placeholder: (styles: any) => ({
       ...styles,
@@ -56,6 +58,8 @@ export const colourStyles = (error: any, isDisabled?: boolean) => {
         backgroundColor: 'var(--neutral-0)',
         color: isDisabled ? 'var(--neutral-500)' : 'var(--neutral-900)',
         cursor: isDisabled ? 'not-allowed' : 'default',
+        display: 'flex',
+        alignItems: 'center',
         ':active': {
           ...styles[':active'],
           border: 'none',

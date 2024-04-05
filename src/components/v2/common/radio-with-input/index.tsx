@@ -28,6 +28,7 @@ const RadioButtonWithInput = ({
     }
     // Set the default input value
     setInputValue(defaultValue);
+    onInputValueChange && onInputValueChange(value, defaultValue, formKey);
   }, []);
 
   const handleInputChange = (e: any) => {
@@ -62,6 +63,7 @@ const RadioButtonWithInput = ({
             type="text"
             name={inputName}
             value={inputValue}
+            errorText={onError}
             placeholder={placeholder}
             styles={{
               inputMain: `h-64px !w-[380px]`

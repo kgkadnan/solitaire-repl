@@ -40,7 +40,13 @@ export class PersonalDetails {
   @Length(1, 4, { message: FIELD_INVALID('Country Code') })
   country_code: string;
   @MinLength(3, { message: FIELD_INVALID('Phone') })
-  @IsMobilePhone()
+  @IsMobilePhone(
+    undefined,
+    {},
+    {
+      message: FIELD_INVALID('Phone')
+    }
+  )
   @IsNotEmpty({ message: PHONE_NUMBER_MANDATORY })
   phone: string;
 

@@ -147,17 +147,17 @@ const KYC = () => {
   };
 
   const resendLabel = resendTimer > 0 ? `(${resendTimer}Sec)` : '';
-  useEffect(() => {
-    let countdownInterval: NodeJS.Timeout;
+  //   useEffect(() => {
+  //     let countdownInterval: NodeJS.Timeout;
 
-    if (resendTimer > 0) {
-      countdownInterval = setInterval(() => {
-        setResendTimer((prevTimer: number) => prevTimer - 1);
-      }, 1000);
-    }
+  //     if (resendTimer > 0) {
+  //       countdownInterval = setInterval(() => {
+  //         setResendTimer((prevTimer: number) => prevTimer - 1);
+  //       }, 1000);
+  //     }
 
-    return () => clearInterval(countdownInterval);
-  }, [resendTimer]);
+  //     return () => clearInterval(countdownInterval);
+  //   }, [resendTimer]);
 
   async function findFirstNonFilledScreens(data: any, country: string) {
     let sectionKeys: string[] =
@@ -183,6 +183,13 @@ const KYC = () => {
           data[item],
           sectionKeys[index],
           country
+        );
+
+        dispatch(
+          updateFormState({
+            name: `formErrorState.online.sections.${[sectionKeys[index]]}`,
+            value: {}
+          })
         );
 
         if (!validationErrors.length) {
@@ -551,6 +558,7 @@ const KYC = () => {
             kycScreenIdentifierNames.BANKING_DETAILS
           ];
 
+    console.log('formState', formState.online.sections);
     sectionKeys.forEach(async (key, index: number) => {
       let validationErrors = await validateScreen(
         formState.online.sections[key],
@@ -558,31 +566,25 @@ const KYC = () => {
         formState.country
       );
 
+      console.log('useEeffect', completedSteps);
+
       // console.log('validationErrors', validationErrors);
 
       const screenValidationError = formErrorState?.online?.sections[key];
 
-      // console.log('screenValidationError', screenValidationError);
+      console.log('screenValidationError', screenValidationError);
 
       if (
         currentStepperStep > index &&
         screenValidationError &&
         !Object.keys(screenValidationError).length
       ) {
-        // console.log('indexxxx', currentStepperStep, index);
         completedSteps.add(index);
         rejectedSteps.delete(index);
       } else if (!validationErrors.length) {
         rejectedSteps.delete(index);
-
-        // completedSteps.add(index);
-        // setCompletedSteps(new Set(completedSteps));
       } else if (index === currentStepperStep) {
-        // console.log('index === currentStepperStep', index, currentStepperStep);
-        // rejectedSteps.delete(index);
-        // setRejectedSteps(new Set(rejectedSteps));
         completedSteps.delete(index);
-        // rejectedSteps.delete(index);
       } else if (validationErrors.length && currentStepperStep >= index) {
         if (Array.isArray(validationErrors)) {
           validationErrors.forEach(error => {
@@ -731,13 +733,16 @@ const KYC = () => {
     }
     return true;
   }
+  console.log('formState', formState);
 
   const handleStepperNext = async ({
     screenName,
-    currentState
+    currentState,
+    emailVerified = false
   }: {
     screenName: string;
     currentState: number;
+    emailVerified?: boolean;
   }) => {
     // const nextStep = currentStepperStep + 1;
     // Perform data validation
@@ -772,7 +777,7 @@ const KYC = () => {
     }
 
     // Make the API call to submit the form data
-    let updatedCompanyDetails;
+    let updatedCompanyDetails: any;
     if (screenName === kycScreenIdentifierNames.COMPANY_DETAILS) {
       const companyDetails =
         formState?.online?.sections?.[kycScreenIdentifierNames.COMPANY_DETAILS];
@@ -817,6 +822,30 @@ const KYC = () => {
       ID: currentState + 1
     })
       .then((response: any) => {
+        if (screenName === kycScreenIdentifierNames.COMPANY_DETAILS) {
+          if (
+            updatedCompanyDetails.organisation_type.length &&
+            updatedCompanyDetails.organisation_type.includes('Individual')
+          ) {
+            dispatch(
+              updateFormState({
+                name: `formState.online.sections[${[
+                  kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
+                ]}][owner_pan_or_aadhaar_number]`,
+                value: updatedCompanyDetails.company_pan_number
+              })
+            );
+          } else {
+            dispatch(
+              updateFormState({
+                name: `formState.online.sections[${[
+                  kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
+                ]}][owner_pan_or_aadhaar_number]`,
+                value: ''
+              })
+            );
+          }
+        }
         if (
           (response?.data?.statusCode === statusCode.SUCCESS ||
             response?.data?.statusCode === statusCode.NO_CONTENT) &&
@@ -828,6 +857,14 @@ const KYC = () => {
           setCompletedSteps(new Set(completedSteps));
           rejectedSteps.delete(currentState);
           setRejectedSteps(new Set(rejectedSteps));
+          if (
+            screenName === kycScreenIdentifierNames.PERSONAL_DETAILS &&
+            emailVerified
+          ) {
+            goToNextStep();
+            return;
+          }
+
           screenName === kycScreenIdentifierNames.PERSONAL_DETAILS &&
           !formState.isEmailVerified
             ? (setIsInputDialogOpen(true),
@@ -1081,13 +1118,13 @@ const KYC = () => {
       } else {
         setIsDialogOpen(true);
         setDialogContent(
-          <>
+          <div className="h-[200px]">
             <div className="absolute left-[-84px] top-[-84px]">
               <Image src={confirmIcon} alt="confirmIcon" />
             </div>
             <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
               <div>
-                <h1 className="text-headingS text-neutral900">Are you sure?</h1>
+                <h1 className="text-headingS text-neutral900">Confirmation</h1>
                 <p className="text-neutral600 text-mRegular">
                   Please review all the information you have entered before
                   submitting the form!
@@ -1112,7 +1149,7 @@ const KYC = () => {
                 ]}
               />
             </div>
-          </>
+          </div>
         );
       }
     }
@@ -1375,12 +1412,6 @@ const KYC = () => {
                       if (res) {
                         setResendTimer(60);
                         //  setIsInputDialogOpen(false)
-                        //  dispatch(
-                        //   updateFormState({
-                        //     name: 'formState.isEmailVerified',
-                        //     value: true
-                        //   })
-                        // );
                       }
                     })
                     .catch((e: any) => {
@@ -1409,12 +1440,44 @@ const KYC = () => {
                     .unwrap()
                     .then((res: any) => {
                       if (res) {
-                        setIsInputDialogOpen(false);
                         dispatch(
                           updateFormState({
                             name: 'formState.isEmailVerified',
                             value: true
                           })
+                        );
+                        setIsInputDialogOpen(false);
+                        setIsDialogOpen(true);
+                        setDialogContent(
+                          <>
+                            <div className="absolute left-[-84px] top-[-84px]">
+                              <Image src={confirmIcon} alt="confirmIcon" />
+                            </div>
+                            <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+                              <h1 className="text-headingS text-neutral900">
+                                Your email has been verified successfully
+                              </h1>
+                              <ActionButton
+                                actionButtonData={[
+                                  {
+                                    variant: 'primary',
+                                    label: 'Next',
+                                    handler: () => {
+                                      handleStepperNext({
+                                        screenName:
+                                          filteredSteps[currentStepperStep]
+                                            ?.identifier,
+                                        currentState: currentStepperStep,
+                                        emailVerified: true
+                                      });
+                                      setIsDialogOpen(false);
+                                    },
+                                    customStyle: 'flex-1 w-full h-10'
+                                  }
+                                ]}
+                              />
+                            </div>
+                          </>
                         );
                       }
                     })

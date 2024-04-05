@@ -92,13 +92,16 @@ const CompanyDetail = ({
           name: `formState.online.sections[${[
             kycScreenIdentifierNames.COMPANY_DETAILS
           ]}][company_country_code]`,
-          value: data.country_calling_code.replace(/\+/g, '')
+          value: data.country_calling_code.replace('+', '')
         })
       );
+      setSelectedCountryIso(data?.country);
     } else if (error) {
       console.error('Error fetching country code', error);
     }
   }, [data, error]);
+
+  const [selectedCountryIso, setSelectedCountryIso] = useState('');
 
   const handleRadioChange = ({ value, formKey }: any) => {
     handleInputChange(
@@ -200,7 +203,7 @@ const CompanyDetail = ({
         },
         {
           id: '2',
-          type: 'number',
+          type: 'text',
           name: 'Registration Number If you select “Yes”',
           onInputChange: (e: any) => {
             handleInputChange(
@@ -298,7 +301,6 @@ const CompanyDetail = ({
     'Partnership Firm',
     'Individual'
   ];
-
   const organisationTypesNew = [
     'OPC',
     'Public Ltd.',
@@ -389,10 +391,10 @@ const CompanyDetail = ({
         <div
           className={`flex flex-col flex-wrap  gap-[16px]  w-[760px] ${
             country === 'Belgium'
-              ? 'h-[867px]'
+              ? 'h-[119vh]'
               : country === 'India'
-              ? 'h-[983px]'
-              : 'h-[1024px]'
+              ? 'h-[137vh]'
+              : 'h-[144vh]'
           }`}
         >
           {' '}
@@ -452,7 +454,7 @@ const CompanyDetail = ({
                   // formState
                 )
               }
-              type="text"
+              type="number"
               name={'Year of Establishment*'}
               value={
                 formState?.online?.sections?.[
@@ -706,9 +708,10 @@ const CompanyDetail = ({
             <div className={'w-[50%]'}>
               {' '}
               <DynamicMobileInput
+                selectedCountryIso={selectedCountryIso}
                 label={'Contact Number*'}
                 handleInputChange={e =>
-                  e.target.value.trim().length <= 15
+                  e.target.value?.trim()?.length <= 15
                     ? handleInputChange(
                         `formState.online.sections[${[
                           kycScreenIdentifierNames.COMPANY_DETAILS
@@ -723,12 +726,13 @@ const CompanyDetail = ({
                         updateFormState({
                           name: `formErrorState.online.sections[${[
                             kycScreenIdentifierNames.COMPANY_DETAILS
-                          ]}][company_phone_number]}`,
-                          value: RANGE_VALIDATION('Contact Number*', 0, 15)
+                          ]}][company_phone_number]`,
+                          value: RANGE_VALIDATION('Contact Number', 0, 15)
                         })
                       )
                 }
-                handleSelectChange={({ value }: any) => {
+                handleSelectChange={({ value, iso }: any) => {
+                  setSelectedCountryIso(iso);
                   handleInputChange(
                     `formState.online.sections[${[
                       kycScreenIdentifierNames.COMPANY_DETAILS
@@ -756,13 +760,13 @@ const CompanyDetail = ({
                 }
                 countryCodeValue={{
                   label:
-                    formState?.online?.sections?.[
+                    `+${formState?.online?.sections?.[
                       kycScreenIdentifierNames.COMPANY_DETAILS
-                    ]?.['company_country_code'] ?? '',
+                    ]?.['company_country_code']}` ?? '',
                   value:
-                    formState?.online?.sections?.[
+                    `+${formState?.online?.sections?.[
                       kycScreenIdentifierNames.COMPANY_DETAILS
-                    ]?.['company_country_code'] ?? ''
+                    ]?.['company_country_code']}` ?? ''
                 }}
               />{' '}
             </div>
@@ -854,9 +858,10 @@ const CompanyDetail = ({
           {country === countries.INDIA && (
             <div className={'w-[50%]'}>
               <DynamicMobileInput
+                selectedCountryIso={selectedCountryIso}
                 label={'Contact Number*'}
                 handleInputChange={e =>
-                  e.target.value.trim().length <= 15
+                  e.target.value?.trim()?.length <= 15
                     ? handleInputChange(
                         `formState.online.sections[${[
                           kycScreenIdentifierNames.COMPANY_DETAILS
@@ -871,12 +876,13 @@ const CompanyDetail = ({
                         updateFormState({
                           name: `formErrorState.online.sections[${[
                             kycScreenIdentifierNames.COMPANY_DETAILS
-                          ]}][company_phone_number]}`,
-                          value: RANGE_VALIDATION('Contact Number*', 0, 15)
+                          ]}][company_phone_number]`,
+                          value: RANGE_VALIDATION('Contact Number', 0, 15)
                         })
                       )
                 }
-                handleSelectChange={({ value }: any) => {
+                handleSelectChange={({ value, iso }: any) => {
+                  setSelectedCountryIso(iso);
                   handleInputChange(
                     `formState.online.sections[${[
                       kycScreenIdentifierNames.COMPANY_DETAILS
@@ -904,13 +910,13 @@ const CompanyDetail = ({
                 }
                 countryCodeValue={{
                   label:
-                    formState?.online?.sections?.[
+                    `+${formState?.online?.sections?.[
                       kycScreenIdentifierNames.COMPANY_DETAILS
-                    ]?.['company_country_code'] ?? '',
+                    ]?.['company_country_code']}` ?? '',
                   value:
-                    formState?.online?.sections?.[
+                    `+${formState?.online?.sections?.[
                       kycScreenIdentifierNames.COMPANY_DETAILS
-                    ]?.['company_country_code'] ?? ''
+                    ]?.['company_country_code']}` ?? ''
                 }}
               />
             </div>
@@ -1263,6 +1269,19 @@ const CompanyDetail = ({
                       name="organisationType"
                       label={'Other'}
                       value={'Other'}
+                      defaultSelected={
+                        formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type']?.length > 0
+                          ? organisationTypes.includes(
+                              formState?.online?.sections?.[
+                                kycScreenIdentifierNames.COMPANY_DETAILS
+                              ]?.['organisation_type']
+                            )
+                            ? false
+                            : true
+                          : false
+                      }
                       defaultValue={
                         formState?.online?.sections?.[
                           kycScreenIdentifierNames.COMPANY_DETAILS
@@ -1276,19 +1295,6 @@ const CompanyDetail = ({
                           : formState?.online?.sections?.[
                               kycScreenIdentifierNames.COMPANY_DETAILS
                             ]?.['organisation_type']
-                      }
-                      defaultSelected={
-                        formState?.online?.sections?.[
-                          kycScreenIdentifierNames.COMPANY_DETAILS
-                        ]?.['organisation_type']?.length > 0
-                          ? organisationTypes.includes(
-                              formState?.online?.sections?.[
-                                kycScreenIdentifierNames.COMPANY_DETAILS
-                              ]?.['organisation_type']
-                            )
-                            ? false
-                            : true
-                          : false
                       }
                       onError={
                         formErrorState?.online?.sections?.[
@@ -1311,15 +1317,21 @@ const CompanyDetail = ({
               </div>
               {formErrorState?.online?.sections?.[
                 kycScreenIdentifierNames.COMPANY_DETAILS
-              ]?.['organisation_type'] && (
-                <span className="text-dangerMain">
-                  {
-                    formErrorState?.online?.sections?.[
-                      kycScreenIdentifierNames.COMPANY_DETAILS
-                    ]?.['organisation_type']
-                  }
-                </span>
-              )}
+              ]?.['organisation_type'] &&
+                formState?.online?.sections?.[
+                  kycScreenIdentifierNames.COMPANY_DETAILS
+                ]?.['organisation_type'] !== 'Other' &&
+                formState?.online?.sections?.[
+                  kycScreenIdentifierNames.COMPANY_DETAILS
+                ]?.['organisation_type'] !== '' && (
+                  <span className={`text-dangerMain`}>
+                    {
+                      formErrorState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['organisation_type']
+                    }
+                  </span>
+                )}
             </div>
           )}
           {country === countries.INDIA && (
@@ -1337,7 +1349,7 @@ const CompanyDetail = ({
                     // formState
                   )
                 }
-                type="text"
+                type="email"
                 name={'Company Email-ID*'}
                 value={
                   formState?.online?.sections?.[
@@ -1910,15 +1922,21 @@ const CompanyDetail = ({
               </div>
               {formErrorState?.online?.sections?.[
                 kycScreenIdentifierNames.COMPANY_DETAILS
-              ]?.['organisation_type'] && (
-                <span className="text-dangerMain">
-                  {
-                    formErrorState?.online?.sections?.[
-                      kycScreenIdentifierNames.COMPANY_DETAILS
-                    ]?.['organisation_type']
-                  }
-                </span>
-              )}
+              ]?.['organisation_type'] &&
+                formState?.online?.sections?.[
+                  kycScreenIdentifierNames.COMPANY_DETAILS
+                ]?.['organisation_type'] !== 'Other' &&
+                formState?.online?.sections?.[
+                  kycScreenIdentifierNames.COMPANY_DETAILS
+                ]?.['organisation_type'] !== '' && (
+                  <span className={`text-dangerMain`}>
+                    {
+                      formErrorState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['organisation_type']
+                    }
+                  </span>
+                )}
             </div>
           )}
           {(country === countries.BELGIUM || country === countries.USA) && (
@@ -2692,15 +2710,21 @@ const CompanyDetail = ({
               </div>
               {formErrorState?.online?.sections?.[
                 kycScreenIdentifierNames.COMPANY_DETAILS
-              ]?.['organisation_type'] && (
-                <span className="text-dangerMain">
-                  {
-                    formErrorState?.online?.sections?.[
-                      kycScreenIdentifierNames.COMPANY_DETAILS
-                    ]?.['organisation_type']
-                  }
-                </span>
-              )}
+              ]?.['organisation_type'] &&
+                formState?.online?.sections?.[
+                  kycScreenIdentifierNames.COMPANY_DETAILS
+                ]?.['organisation_type'] !== 'Other' &&
+                formState?.online?.sections?.[
+                  kycScreenIdentifierNames.COMPANY_DETAILS
+                ]?.['organisation_type'] !== '' && (
+                  <span className={`text-dangerMain`}>
+                    {
+                      formErrorState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['organisation_type']
+                    }
+                  </span>
+                )}
             </div>
           )}
           <div
