@@ -75,7 +75,7 @@ export let AttachmentData: any = {
       value: [
         {
           id: '1',
-          label: 'Pan Card/Aadhar Card*',
+          label: 'Pan Card / Aadhar Card*',
           isRequired: true,
           formKey: 'company_owner_pan_card',
           maxFile: fileLimit.MAX_FILES,
@@ -138,7 +138,7 @@ export let AttachmentData: any = {
     },
     {
       id: '2',
-      label: 'Driving License/Passport*',
+      label: 'Driving License / Passport*',
       isRequired: true,
       formKey: 'passport',
       maxFile: fileLimit.MAX_FILES,
@@ -167,7 +167,7 @@ export let AttachmentData: any = {
     },
     {
       id: '2',
-      label: 'Driving License/Passport*',
+      label: 'Driving License / Passport*',
       isRequired: true,
       formKey: 'passport',
       maxFile: fileLimit.MAX_FILES,
@@ -187,7 +187,7 @@ export let AttachmentData: any = {
   Other: [
     {
       id: '1',
-      label: 'Certificate of Incumbency/Extract of Registry*',
+      label: 'Certificate of Incumbency /  Extract of Registry*',
       isRequired: true,
       formKey: 'incumbency_certificate',
       maxFile: fileLimit.MAX_FILES,
@@ -196,7 +196,7 @@ export let AttachmentData: any = {
     },
     {
       id: '2',
-      label: 'Business Registration/Trade license*',
+      label: 'Business Registration / Trade license*',
       isRequired: true,
       formKey: 'trade_license',
       maxFile: fileLimit.MAX_FILES,
@@ -205,7 +205,7 @@ export let AttachmentData: any = {
     },
     {
       id: '3',
-      label: 'TRN/VAT/GST Certificate*',
+      label: 'TRN / VAT / GST Certificate*',
       isRequired: true,
       formKey: 'gst_certificate',
       maxFile: fileLimit.MAX_FILES,
@@ -214,7 +214,7 @@ export let AttachmentData: any = {
     },
     {
       id: '4',
-      label: 'MOA/AOA/Partnership Deed',
+      label: 'MOA / AOA /  Partnership Deed',
       isRequired: false,
       formKey: 'moa',
       maxFile: fileLimit.MAX_FILES,
@@ -223,7 +223,7 @@ export let AttachmentData: any = {
     },
     {
       id: '5',
-      label: 'ID Copy/Passport of Ultimate Beneficial Owners*',
+      label: 'ID Copy / Passport of Ultimate Beneficial Owners*',
       isRequired: true,
       formKey: 'owner_id_copy',
       maxFile: fileLimit.MAX_FILES,
@@ -232,7 +232,7 @@ export let AttachmentData: any = {
     },
     {
       id: '6',
-      label: 'ID Copy/Passport of Authorised Signatory/Manager*',
+      label: 'ID Copy / Passport of Authorised Signatory/Manager*',
       isRequired: true,
       formKey: 'manager_id_copy',
       maxFile: fileLimit.MAX_FILES,
