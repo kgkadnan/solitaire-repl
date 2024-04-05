@@ -734,10 +734,12 @@ const KYC = () => {
 
   const handleStepperNext = async ({
     screenName,
-    currentState
+    currentState,
+    emailVerified = false
   }: {
     screenName: string;
     currentState: number;
+    emailVerified?: boolean;
   }) => {
     // const nextStep = currentStepperStep + 1;
     // Perform data validation
@@ -846,12 +848,21 @@ const KYC = () => {
             response?.data?.statusCode === statusCode.NO_CONTENT) &&
           !validationError.length
         ) {
+          console.log('formState', formState.isEmailVerified);
           // Step was successfully completed, move to the next step
           // console.log('nextStep', nextStep);
           completedSteps.add(currentState);
           setCompletedSteps(new Set(completedSteps));
           rejectedSteps.delete(currentState);
           setRejectedSteps(new Set(rejectedSteps));
+          if (
+            screenName === kycScreenIdentifierNames.PERSONAL_DETAILS &&
+            emailVerified
+          ) {
+            goToNextStep();
+            return;
+          }
+
           screenName === kycScreenIdentifierNames.PERSONAL_DETAILS &&
           !formState.isEmailVerified
             ? (setIsInputDialogOpen(true),
@@ -1399,12 +1410,6 @@ const KYC = () => {
                       if (res) {
                         setResendTimer(60);
                         //  setIsInputDialogOpen(false)
-                        //  dispatch(
-                        //   updateFormState({
-                        //     name: 'formState.isEmailVerified',
-                        //     value: true
-                        //   })
-                        // );
                       }
                     })
                     .catch((e: any) => {
@@ -1433,6 +1438,12 @@ const KYC = () => {
                     .unwrap()
                     .then((res: any) => {
                       if (res) {
+                        dispatch(
+                          updateFormState({
+                            name: 'formState.isEmailVerified',
+                            value: true
+                          })
+                        );
                         setIsInputDialogOpen(false);
                         setIsDialogOpen(true);
                         setDialogContent(
@@ -1454,7 +1465,8 @@ const KYC = () => {
                                         screenName:
                                           filteredSteps[currentStepperStep]
                                             ?.identifier,
-                                        currentState: currentStepperStep
+                                        currentState: currentStepperStep,
+                                        emailVerified: true
                                       });
                                       setIsDialogOpen(false);
                                     },
@@ -1464,12 +1476,6 @@ const KYC = () => {
                               />
                             </div>
                           </>
-                        );
-                        dispatch(
-                          updateFormState({
-                            name: 'formState.isEmailVerified',
-                            value: true
-                          })
                         );
                       }
                     })
@@ -1512,6 +1518,7 @@ const KYC = () => {
     );
   };
 
+  console.log('formsTate', formState);
   return (
     <div className="relative">
       {' '}
