@@ -1326,6 +1326,7 @@ const KYC = () => {
           isEmailVerified={formState.isEmailVerified}
           handleSubmit={handleSubmit}
           filteredSteps={filteredSteps}
+          country={formState.country}
         />
       );
     } else if (currentState === countries.OTHER || currentState === 'offline') {
