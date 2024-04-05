@@ -313,8 +313,7 @@ const CompanyDetail = ({
 
   const [organisationType, setOrganisationType] = useState();
 
-  const handleSelect = (value: any, formKey: string, setState: any ) => {
-    
+  const handleSelect = (value: any, formKey: string, setState: any) => {
     setState(value);
     // Update the data array to include only the selected option, removing any previous selections
     // setData([value]);
@@ -1270,7 +1269,6 @@ const CompanyDetail = ({
                       name="organisationType"
                       label={'Other'}
                       value={'Other'}
-                     
                       defaultSelected={
                         formState?.online?.sections?.[
                           kycScreenIdentifierNames.COMPANY_DETAILS

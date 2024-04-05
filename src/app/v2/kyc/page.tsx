@@ -147,17 +147,17 @@ const KYC = () => {
   };
 
   const resendLabel = resendTimer > 0 ? `(${resendTimer}Sec)` : '';
-//   useEffect(() => {
-//     let countdownInterval: NodeJS.Timeout;
+  //   useEffect(() => {
+  //     let countdownInterval: NodeJS.Timeout;
 
-//     if (resendTimer > 0) {
-//       countdownInterval = setInterval(() => {
-//         setResendTimer((prevTimer: number) => prevTimer - 1);
-//       }, 1000);
-//     }
+  //     if (resendTimer > 0) {
+  //       countdownInterval = setInterval(() => {
+  //         setResendTimer((prevTimer: number) => prevTimer - 1);
+  //       }, 1000);
+  //     }
 
-//     return () => clearInterval(countdownInterval);
-//   }, [resendTimer]);
+  //     return () => clearInterval(countdownInterval);
+  //   }, [resendTimer]);
 
   async function findFirstNonFilledScreens(data: any, country: string) {
     let sectionKeys: string[] =
@@ -174,7 +174,6 @@ const KYC = () => {
             kycScreenIdentifierNames.BANKING_DETAILS
           ];
 
-         
     // Wait for all screen validations to complete
     const filledScreensResults = await Promise.all(
       Object.keys(data).map(async (item, index) => {
@@ -186,10 +185,12 @@ const KYC = () => {
           country
         );
 
-        dispatch( updateFormState({
+        dispatch(
+          updateFormState({
             name: `formErrorState.online.sections.${[sectionKeys[index]]}`,
             value: {}
-          }))
+          })
+        );
 
         if (!validationErrors.length) {
           if (sectionKeys.length - 1 >= index) {
@@ -557,7 +558,7 @@ const KYC = () => {
             kycScreenIdentifierNames.BANKING_DETAILS
           ];
 
-          console.log("formState",formState.online.sections)
+    console.log('formState', formState.online.sections);
     sectionKeys.forEach(async (key, index: number) => {
       let validationErrors = await validateScreen(
         formState.online.sections[key],
@@ -565,7 +566,7 @@ const KYC = () => {
         formState.country
       );
 
-console.log("useEeffect" , completedSteps)
+      console.log('useEeffect', completedSteps);
 
       // console.log('validationErrors', validationErrors);
 
@@ -732,7 +733,7 @@ console.log("useEeffect" , completedSteps)
     }
     return true;
   }
-  console.log("formState",formState)
+  console.log('formState', formState);
 
   const handleStepperNext = async ({
     screenName,
@@ -850,7 +851,6 @@ console.log("useEeffect" , completedSteps)
             response?.data?.statusCode === statusCode.NO_CONTENT) &&
           !validationError.length
         ) {
-  
           // Step was successfully completed, move to the next step
           // console.log('nextStep', nextStep);
           completedSteps.add(currentState);
@@ -1519,7 +1519,6 @@ console.log("useEeffect" , completedSteps)
       </div>
     );
   };
-
 
   return (
     <div className="relative">
