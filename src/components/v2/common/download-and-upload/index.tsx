@@ -122,13 +122,14 @@ export const DownloadAndUpload = ({
               <div
                 {...getRootProps()}
                 style={dropzoneStyle}
-                className={`flex items-center bg-neutral0  rounded-[10px]  border-[1px] ${
+                className={`flex items-center bg-neutral0  rounded-[8px]  border-[1px] ${
                   error.length ? 'border-dangerMain' : 'border-neutral-200'
                 } ${
                   isFileUploaded || error.length
                     ? 'border-solid shadow-sm'
                     : 'border-dashed'
                 }`}
+                
               >
                 <div className="w-[10%] flex items-start">
                   {!error?.length ? (

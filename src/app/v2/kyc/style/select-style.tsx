@@ -23,7 +23,7 @@ export const colourStyles = (error: any, isDisabled?: boolean) => {
           ? '1px solid var(--danger-main)'
           : '1px solid var(--neutral-200)'
       },
-      height: '39px'
+      height: '40px'
     }),
     indicatorSeparator: (styles: any) => ({
       ...styles,
