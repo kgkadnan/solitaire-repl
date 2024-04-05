@@ -92,7 +92,7 @@ const FileAttachments: React.FC<IFileAttachments> = ({
     <>
       <div>
         <div
-          className={`flex items-center bg-neutral25 rounded-[10px]  w-full  border-[1px] ${
+          className={`flex items-center bg-neutral25 rounded-[8px]  w-full  border-[1px] ${
             error.length ? 'border-dangerMain' : 'border-neutral-200'
           } ${
             isFileUploaded || error.length
@@ -116,7 +116,7 @@ const FileAttachments: React.FC<IFileAttachments> = ({
               <div className="flex ">
                 <Label className={` ${styles.label} `}>{lable}</Label>
 
-                <p className={styles.label}>{isRequired && '*'}</p>
+                <p className={styles.label}></p>
               </div>
               {Object.keys(selectedFile).length > 0 &&
                 uploadProgress === 0 &&

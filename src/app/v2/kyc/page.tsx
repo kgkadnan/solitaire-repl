@@ -557,8 +557,6 @@ const KYC = () => {
             kycScreenIdentifierNames.COMPANY_DETAILS,
             kycScreenIdentifierNames.BANKING_DETAILS
           ];
-
-    console.log('formState', formState.online.sections);
     sectionKeys.forEach(async (key, index: number) => {
       let validationErrors = await validateScreen(
         formState.online.sections[key],
@@ -566,13 +564,7 @@ const KYC = () => {
         formState.country
       );
 
-      console.log('useEeffect', completedSteps);
-
-      // console.log('validationErrors', validationErrors);
-
       const screenValidationError = formErrorState?.online?.sections[key];
-
-      console.log('screenValidationError', screenValidationError);
 
       if (
         currentStepperStep > index &&
@@ -733,7 +725,6 @@ const KYC = () => {
     }
     return true;
   }
-  console.log('formState', formState);
 
   const handleStepperNext = async ({
     screenName,

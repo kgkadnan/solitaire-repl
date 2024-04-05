@@ -144,7 +144,7 @@ const CompanyDetail = ({
             formErrorState?.online?.sections?.[
               kycScreenIdentifierNames.COMPANY_DETAILS
             ]?.['member_of_business_name'] ?? '',
-          placeholder: 'Name If you select “Yes”',
+          placeholder: 'Enter Name',
           value:
             formState?.online?.sections?.[
               kycScreenIdentifierNames.COMPANY_DETAILS
@@ -393,7 +393,7 @@ const CompanyDetail = ({
             country === 'Belgium'
               ? 'h-[119vh]'
               : country === 'India'
-              ? 'h-[137vh]'
+              ? 'h-[135vh]'
               : 'h-[144vh]'
           }`}
         >
@@ -562,62 +562,65 @@ const CompanyDetail = ({
             </div>
           )}
           {country === countries.INDIA && (
-            <div className={'w-[50%]'}>
-              <div className="flex text-left flex-col w-full">
-                {' '}
-                <p className="text-mRegular text-neutral-900">City*</p>
-                <Select
-                  name="city"
-                  placeholder={'Enter City'}
-                  options={computeCountryDropdownField(cities)}
-                  onChange={({ value }: any) => {
-                    handleInputChange(
-                      `formState.online.sections[${[
-                        kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]}][city]`,
-                      value,
-                      dispatch,
-                      kycScreenIdentifierNames.COMPANY_DETAILS,
-                      'city'
-                    );
-                  }}
-                  styles={colourStyles(
-                    formErrorState?.online?.sections?.[
-                      kycScreenIdentifierNames.COMPANY_DETAILS
-                    ]?.['city'] ?? ''
-                  )}
-                  value={
-                    formState?.online?.sections?.[
-                      kycScreenIdentifierNames.COMPANY_DETAILS
-                    ]?.['city']
-                      ? {
-                          label:
-                            formState?.online?.sections?.[
-                              kycScreenIdentifierNames.COMPANY_DETAILS
-                            ]?.['city'],
-                          value:
-                            formState?.online?.sections?.[
-                              kycScreenIdentifierNames.COMPANY_DETAILS
-                            ]?.['city']
-                        }
-                      : ''
-                  }
-                  // autoFocus={false}
-                />
-                {formErrorState?.online?.sections?.[
-                  kycScreenIdentifierNames.COMPANY_DETAILS
-                ]?.['city'] && (
-                  <p className="text-dangerMain h-1">
-                    {formErrorState?.online?.sections?.[
-                      kycScreenIdentifierNames.COMPANY_DETAILS
-                    ]?.['city'] &&
+            <>
+              <div className={'w-[50%]'}>
+                <div className="flex text-left flex-col w-full">
+                  {' '}
+                  <p className="text-mRegular text-neutral-900">City*</p>
+                  <Select
+                    name="city"
+                    placeholder={'Enter City'}
+                    options={computeCountryDropdownField(cities)}
+                    onChange={({ value }: any) => {
+                      handleInputChange(
+                        `formState.online.sections[${[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]}][city]`,
+                        value,
+                        dispatch,
+                        kycScreenIdentifierNames.COMPANY_DETAILS,
+                        'city'
+                      );
+                    }}
+                    styles={colourStyles(
                       formErrorState?.online?.sections?.[
                         kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['city']}
-                  </p>
-                )}
+                      ]?.['city'] ?? ''
+                    )}
+                    value={
+                      formState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['city']
+                        ? {
+                            label:
+                              formState?.online?.sections?.[
+                                kycScreenIdentifierNames.COMPANY_DETAILS
+                              ]?.['city'],
+                            value:
+                              formState?.online?.sections?.[
+                                kycScreenIdentifierNames.COMPANY_DETAILS
+                              ]?.['city']
+                          }
+                        : ''
+                    }
+                    // autoFocus={false}
+                  />
+                  {formErrorState?.online?.sections?.[
+                    kycScreenIdentifierNames.COMPANY_DETAILS
+                  ]?.['city'] && (
+                    <p className="text-dangerMain h-1">
+                      {formErrorState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['city'] &&
+                        formErrorState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['city']}
+                    </p>
+                  )}
+                </div>
+                <div className="h-[4px]"></div>
               </div>
-            </div>
+            </>
           )}
           {(country === countries.BELGIUM || country === countries.USA) && (
             <div className={'w-[50%]'}>
@@ -1269,6 +1272,7 @@ const CompanyDetail = ({
                       name="organisationType"
                       label={'Other'}
                       value={'Other'}
+                      showError={false}
                       defaultSelected={
                         formState?.online?.sections?.[
                           kycScreenIdentifierNames.COMPANY_DETAILS
@@ -1317,21 +1321,19 @@ const CompanyDetail = ({
               </div>
               {formErrorState?.online?.sections?.[
                 kycScreenIdentifierNames.COMPANY_DETAILS
-              ]?.['organisation_type'] &&
-                formState?.online?.sections?.[
-                  kycScreenIdentifierNames.COMPANY_DETAILS
-                ]?.['organisation_type'] !== 'Other' &&
-                formState?.online?.sections?.[
-                  kycScreenIdentifierNames.COMPANY_DETAILS
-                ]?.['organisation_type'] !== '' && (
-                  <span className={`text-dangerMain`}>
-                    {
-                      formErrorState?.online?.sections?.[
-                        kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['organisation_type']
-                    }
-                  </span>
-                )}
+              ]?.['organisation_type'] && (
+                <span
+                  className={`text-dangerMain ${
+                    organisationType === 'Other' && 'mt-[3.25rem]'
+                  }`}
+                >
+                  {
+                    formErrorState?.online?.sections?.[
+                      kycScreenIdentifierNames.COMPANY_DETAILS
+                    ]?.['organisation_type']
+                  }
+                </span>
+              )}
             </div>
           )}
           {country === countries.INDIA && (
@@ -1564,7 +1566,7 @@ const CompanyDetail = ({
 
                   <div className="flex flex-wrap gap-[14px]">
                     {' '}
-                    <div className="w-[30%]">
+                    <div className="w-[46%]">
                       <CheckboxWithInput
                         label="Diamonds"
                         defaultChecked={formState?.online?.sections?.[
@@ -1592,7 +1594,7 @@ const CompanyDetail = ({
                         }
                       />
                     </div>
-                    <div className="pl-[30px]">
+                    <div className="w-[50%]">
                       <CheckboxWithInput
                         label="Colour Stones"
                         defaultChecked={formState?.online?.sections?.[
@@ -1874,6 +1876,7 @@ const CompanyDetail = ({
                       name="organisationType"
                       label={'Other'}
                       value={'Other'}
+                      showError={false}
                       defaultValue={
                         formState?.online?.sections?.[
                           kycScreenIdentifierNames.COMPANY_DETAILS
@@ -1922,21 +1925,19 @@ const CompanyDetail = ({
               </div>
               {formErrorState?.online?.sections?.[
                 kycScreenIdentifierNames.COMPANY_DETAILS
-              ]?.['organisation_type'] &&
-                formState?.online?.sections?.[
-                  kycScreenIdentifierNames.COMPANY_DETAILS
-                ]?.['organisation_type'] !== 'Other' &&
-                formState?.online?.sections?.[
-                  kycScreenIdentifierNames.COMPANY_DETAILS
-                ]?.['organisation_type'] !== '' && (
-                  <span className={`text-dangerMain`}>
-                    {
-                      formErrorState?.online?.sections?.[
-                        kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['organisation_type']
-                    }
-                  </span>
-                )}
+              ]?.['organisation_type'] && (
+                <span
+                  className={`text-dangerMain ${
+                    organisationType === 'Other' && 'mt-[3.25rem]'
+                  }`}
+                >
+                  {
+                    formErrorState?.online?.sections?.[
+                      kycScreenIdentifierNames.COMPANY_DETAILS
+                    ]?.['organisation_type']
+                  }
+                </span>
+              )}
             </div>
           )}
           {(country === countries.BELGIUM || country === countries.USA) && (
@@ -2351,7 +2352,7 @@ const CompanyDetail = ({
             </div>
           )}
           {country === countries.INDIA && (
-            <div className="flex">
+            <div className="flex w-[380px]">
               <div className="w-full flex flex-col ">
                 <div className="flex flex-col gap-[5px]">
                   <p className="text-mRegular text-neutral900">
@@ -2360,7 +2361,7 @@ const CompanyDetail = ({
 
                   <div className="flex flex-wrap gap-[14px]">
                     {' '}
-                    <div className="w-[30%]">
+                    <div className="w-[46%]">
                       <CheckboxWithInput
                         label="Diamonds"
                         defaultChecked={formState?.online?.sections?.[
@@ -2388,7 +2389,7 @@ const CompanyDetail = ({
                         }
                       />
                     </div>
-                    <div className="pl-[30px]">
+                    <div className="w-[50%]">
                       <CheckboxWithInput
                         label="Colour Stones"
                         defaultChecked={formState?.online?.sections?.[
@@ -2642,6 +2643,7 @@ const CompanyDetail = ({
                           kycScreenIdentifierNames.COMPANY_DETAILS
                         ]?.['organisation_type'] === 'OPC'
                       }
+                      showError={false}
                       onError={
                         formErrorState?.online?.sections?.[
                           kycScreenIdentifierNames.COMPANY_DETAILS
@@ -2710,21 +2712,19 @@ const CompanyDetail = ({
               </div>
               {formErrorState?.online?.sections?.[
                 kycScreenIdentifierNames.COMPANY_DETAILS
-              ]?.['organisation_type'] &&
-                formState?.online?.sections?.[
-                  kycScreenIdentifierNames.COMPANY_DETAILS
-                ]?.['organisation_type'] !== 'Other' &&
-                formState?.online?.sections?.[
-                  kycScreenIdentifierNames.COMPANY_DETAILS
-                ]?.['organisation_type'] !== '' && (
-                  <span className={`text-dangerMain`}>
-                    {
-                      formErrorState?.online?.sections?.[
-                        kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['organisation_type']
-                    }
-                  </span>
-                )}
+              ]?.['organisation_type'] && (
+                <span
+                  className={`text-dangerMain ${
+                    organisationType === 'Other' && 'mt-[3.25rem]'
+                  }`}
+                >
+                  {
+                    formErrorState?.online?.sections?.[
+                      kycScreenIdentifierNames.COMPANY_DETAILS
+                    ]?.['organisation_type']
+                  }
+                </span>
+              )}
             </div>
           )}
           <div
