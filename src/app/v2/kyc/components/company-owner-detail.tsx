@@ -177,8 +177,8 @@ const CompanyOwnerDetail = ({
                       updateFormState({
                         name: `formErrorState.online.sections[${[
                           kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
-                        ]}][owner_phone]}`,
-                        value: RANGE_VALIDATION('Contact Number*', 0, 15)
+                        ]}][owner_phone]`,
+                        value: RANGE_VALIDATION('Contact Number', 0, 15)
                       })
                     )
               }

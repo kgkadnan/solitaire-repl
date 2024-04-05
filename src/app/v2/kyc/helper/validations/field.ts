@@ -486,7 +486,6 @@ class ValidationAddressCriteria {
 
 class ValidationBusinessTypeCriteria {
   @ArrayNotEmpty({ message: BUSINESS_TYPE_MANDATORY })
-  @IsArrayOfArraysValid(BUSINESS_TYPE_MANDATORY)
   business_type: string[];
 
   constructor(business_type: string[]) {
@@ -495,7 +494,6 @@ class ValidationBusinessTypeCriteria {
 }
 class ValidationIndustryTypeCriteria {
   @ArrayNotEmpty({ message: INDUSTRY_TYPE_MANDATORY })
-  @IsArrayOfArraysValid(INDUSTRY_TYPE_MANDATORY)
   industry_type: string[];
 
   constructor(industry_type: string[]) {
@@ -506,7 +504,6 @@ class ValidationOrganisationTypeCriteria {
   @IsNotEmpty({ message: ORGANISATION_TYPE_MANDATORY })
   @IsString({ message: ORGANISATION_TYPE_MANDATORY })
   @Length(1, 140, { message: FIELD_INVALID('Organisation Type') })
-  @IsNotOther()
   organisation_type: string;
 
   constructor(organisation_type: string) {

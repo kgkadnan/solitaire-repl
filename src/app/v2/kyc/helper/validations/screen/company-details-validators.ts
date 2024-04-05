@@ -126,12 +126,19 @@ export class ArrayOfArraysValidator implements ValidatorConstraintInterface {
 
   // Validate method remains the same
   validate(value: any[], args: ValidationArguments) {
-    if (!Array.isArray(value)) return false; // Not an array of arrays
-    for (const innerArray of value) {
-      if (!Array.isArray(innerArray) || innerArray.length < 2) return false; // Inner array doesn't have at least two elements
-      if (innerArray[0] === 'Other' && innerArray[1] === '') return false; // If first element is 'Other', second element should not be empty
-    }
-    return true;
+    // if (!Array.isArray(value) || value.some(item => !Array.isArray(item))) return false; // Not an array of arrays
+
+    // if (value.some(innerArray => innerArray.length < 2)) return false; // If any inner array doesn't have at least two elements, return false/
+
+    if (
+      value &&
+      value.some(
+        innerArray => innerArray[0] === 'Other' && innerArray[1] === ''
+      )
+    )
+      return false; // If any inner array has first element as 'Other' and second element as empty string, return false
+
+    return true; // Otherwise, return true indicating validation success
   }
 }
 
