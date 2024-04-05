@@ -7,7 +7,11 @@ import {
   PHONE_NUMBER_MANDATORY,
   RANGE_VALIDATION
 } from '@/constants/error-messages/kyc';
-import { NAME_REGEX, PHONE_REG, PHONE_REGEX } from '@/constants/validation-regex/regex';
+import {
+  NAME_REGEX,
+  PHONE_REG,
+  PHONE_REGEX
+} from '@/constants/validation-regex/regex';
 import {
   IsEmail,
   IsMobilePhone,
@@ -41,13 +45,13 @@ export class PersonalDetails {
   @Length(1, 4, { message: FIELD_INVALID('Country Code') })
   country_code: string;
   @MinLength(3, { message: FIELD_INVALID('Phone') })
-//   @IsMobilePhone(
-//     undefined,
-//     {},
-//     {
-//       message: FIELD_INVALID('Phone')
-//     }
-//   )
+  //   @IsMobilePhone(
+  //     undefined,
+  //     {},
+  //     {
+  //       message: FIELD_INVALID('Phone')
+  //     }
+  //   )
   @Matches(PHONE_REG, {
     message: RANGE_VALIDATION('Phone', 0, 15)
   })
