@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description:
     'Access your KGK Diamonds account to explore a world of exquisite diamonds and personalized services. Log in now!'
 };
-export default function Home() {
+export default function MainLogin() {
   return (
     <>
       <Login />
