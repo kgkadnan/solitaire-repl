@@ -563,63 +563,63 @@ const CompanyDetail = ({
           )}
           {country === countries.INDIA && (
             <>
-            <div className={'w-[50%]'}>
-              <div className="flex text-left flex-col w-full">
-                {' '}
-                <p className="text-mRegular text-neutral-900">City*</p>
-                <Select
-                  name="city"
-                  placeholder={'Enter City'}
-                  options={computeCountryDropdownField(cities)}
-                  onChange={({ value }: any) => {
-                    handleInputChange(
-                      `formState.online.sections[${[
-                        kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]}][city]`,
-                      value,
-                      dispatch,
-                      kycScreenIdentifierNames.COMPANY_DETAILS,
-                      'city'
-                    );
-                  }}
-                  styles={colourStyles(
-                    formErrorState?.online?.sections?.[
-                      kycScreenIdentifierNames.COMPANY_DETAILS
-                    ]?.['city'] ?? ''
-                  )}
-                  value={
-                    formState?.online?.sections?.[
-                      kycScreenIdentifierNames.COMPANY_DETAILS
-                    ]?.['city']
-                      ? {
-                          label:
-                            formState?.online?.sections?.[
-                              kycScreenIdentifierNames.COMPANY_DETAILS
-                            ]?.['city'],
-                          value:
-                            formState?.online?.sections?.[
-                              kycScreenIdentifierNames.COMPANY_DETAILS
-                            ]?.['city']
-                        }
-                      : ''
-                  }
-                  // autoFocus={false}
-                />
-                {formErrorState?.online?.sections?.[
-                  kycScreenIdentifierNames.COMPANY_DETAILS
-                ]?.['city'] && (
-                  <p className="text-dangerMain h-1">
-                    {formErrorState?.online?.sections?.[
-                      kycScreenIdentifierNames.COMPANY_DETAILS
-                    ]?.['city'] &&
+              <div className={'w-[50%]'}>
+                <div className="flex text-left flex-col w-full">
+                  {' '}
+                  <p className="text-mRegular text-neutral-900">City*</p>
+                  <Select
+                    name="city"
+                    placeholder={'Enter City'}
+                    options={computeCountryDropdownField(cities)}
+                    onChange={({ value }: any) => {
+                      handleInputChange(
+                        `formState.online.sections[${[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]}][city]`,
+                        value,
+                        dispatch,
+                        kycScreenIdentifierNames.COMPANY_DETAILS,
+                        'city'
+                      );
+                    }}
+                    styles={colourStyles(
                       formErrorState?.online?.sections?.[
                         kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['city']}
-                  </p>
-                )}
+                      ]?.['city'] ?? ''
+                    )}
+                    value={
+                      formState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['city']
+                        ? {
+                            label:
+                              formState?.online?.sections?.[
+                                kycScreenIdentifierNames.COMPANY_DETAILS
+                              ]?.['city'],
+                            value:
+                              formState?.online?.sections?.[
+                                kycScreenIdentifierNames.COMPANY_DETAILS
+                              ]?.['city']
+                          }
+                        : ''
+                    }
+                    // autoFocus={false}
+                  />
+                  {formErrorState?.online?.sections?.[
+                    kycScreenIdentifierNames.COMPANY_DETAILS
+                  ]?.['city'] && (
+                    <p className="text-dangerMain h-1">
+                      {formErrorState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['city'] &&
+                        formErrorState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['city']}
+                    </p>
+                  )}
+                </div>
+                <div className="h-[4px]"></div>
               </div>
-              <div className='h-[4px]'></div>
-            </div>
             </>
           )}
           {(country === countries.BELGIUM || country === countries.USA) && (
@@ -1321,16 +1321,19 @@ const CompanyDetail = ({
               </div>
               {formErrorState?.online?.sections?.[
                 kycScreenIdentifierNames.COMPANY_DETAILS
-              ]?.['organisation_type'] 
-                 && (
-                  <span className={`text-dangerMain ${organisationType === 'Other' && 'mt-[3.25rem]'}`}>
-                    {
-                      formErrorState?.online?.sections?.[
-                        kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['organisation_type']
-                    }
-                  </span>
-                )}
+              ]?.['organisation_type'] && (
+                <span
+                  className={`text-dangerMain ${
+                    organisationType === 'Other' && 'mt-[3.25rem]'
+                  }`}
+                >
+                  {
+                    formErrorState?.online?.sections?.[
+                      kycScreenIdentifierNames.COMPANY_DETAILS
+                    ]?.['organisation_type']
+                  }
+                </span>
+              )}
             </div>
           )}
           {country === countries.INDIA && (
@@ -1922,16 +1925,19 @@ const CompanyDetail = ({
               </div>
               {formErrorState?.online?.sections?.[
                 kycScreenIdentifierNames.COMPANY_DETAILS
-              ]?.['organisation_type'] 
-                 && (
-                    <span className={`text-dangerMain ${organisationType === 'Other' && 'mt-[3.25rem]'}`}>
-                    {
-                      formErrorState?.online?.sections?.[
-                        kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['organisation_type']
-                    }
-                  </span>
-                )}
+              ]?.['organisation_type'] && (
+                <span
+                  className={`text-dangerMain ${
+                    organisationType === 'Other' && 'mt-[3.25rem]'
+                  }`}
+                >
+                  {
+                    formErrorState?.online?.sections?.[
+                      kycScreenIdentifierNames.COMPANY_DETAILS
+                    ]?.['organisation_type']
+                  }
+                </span>
+              )}
             </div>
           )}
           {(country === countries.BELGIUM || country === countries.USA) && (
@@ -2706,16 +2712,19 @@ const CompanyDetail = ({
               </div>
               {formErrorState?.online?.sections?.[
                 kycScreenIdentifierNames.COMPANY_DETAILS
-              ]?.['organisation_type'] 
-                 && (
-                    <span className={`text-dangerMain ${organisationType === 'Other' && 'mt-[3.25rem]'}`}>
-                    {
-                      formErrorState?.online?.sections?.[
-                        kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['organisation_type']
-                    }
-                  </span>
-                )}
+              ]?.['organisation_type'] && (
+                <span
+                  className={`text-dangerMain ${
+                    organisationType === 'Other' && 'mt-[3.25rem]'
+                  }`}
+                >
+                  {
+                    formErrorState?.online?.sections?.[
+                      kycScreenIdentifierNames.COMPANY_DETAILS
+                    ]?.['organisation_type']
+                  }
+                </span>
+              )}
             </div>
           )}
           <div

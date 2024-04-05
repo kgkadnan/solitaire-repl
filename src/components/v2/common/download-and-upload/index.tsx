@@ -129,7 +129,6 @@ export const DownloadAndUpload = ({
                     ? 'border-solid shadow-sm'
                     : 'border-dashed'
                 }`}
-                
               >
                 <div className="w-[10%] flex items-start">
                   {!error?.length ? (

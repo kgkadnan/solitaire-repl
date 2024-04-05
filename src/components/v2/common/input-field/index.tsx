@@ -15,7 +15,7 @@ export const InputField = ({
   maxLength,
   onKeyDown,
   autoComplete,
-  showError = true,
+  showError = true
 }: IInputFieldProps) => {
   function disableWheel(e: any) {
     e.preventDefault();
@@ -54,7 +54,9 @@ export const InputField = ({
           autoComplete={autoComplete}
         />
       </div>
-      <p className="text-dangerMain h-1">{errorText && showError && errorText}</p>
+      <p className="text-dangerMain h-1">
+        {errorText && showError && errorText}
+      </p>
     </div>
   );
 };
