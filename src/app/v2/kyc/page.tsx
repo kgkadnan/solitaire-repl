@@ -772,7 +772,7 @@ const KYC = () => {
     }
 
     // Make the API call to submit the form data
-    let updatedCompanyDetails:any;
+    let updatedCompanyDetails: any;
     if (screenName === kycScreenIdentifierNames.COMPANY_DETAILS) {
       const companyDetails =
         formState?.online?.sections?.[kycScreenIdentifierNames.COMPANY_DETAILS];
@@ -817,23 +817,29 @@ const KYC = () => {
       ID: currentState + 1
     })
       .then((response: any) => {
-        if( screenName === kycScreenIdentifierNames.COMPANY_DETAILS){
-            if(updatedCompanyDetails.organisation_type.length && updatedCompanyDetails.organisation_type.includes('Individual')){
-                
-                dispatch( updateFormState({
-                    name: `formState.online.sections[${[
-                      kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
-                    ]}][owner_pan_or_aadhaar_number]`,
-                    value: updatedCompanyDetails.company_pan_number
-                  }))
-            }else {
-                dispatch( updateFormState({
-                    name: `formState.online.sections[${[
-                      kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
-                    ]}][owner_pan_or_aadhaar_number]`,
-                    value: ''
-                  }))
-            }
+        if (screenName === kycScreenIdentifierNames.COMPANY_DETAILS) {
+          if (
+            updatedCompanyDetails.organisation_type.length &&
+            updatedCompanyDetails.organisation_type.includes('Individual')
+          ) {
+            dispatch(
+              updateFormState({
+                name: `formState.online.sections[${[
+                  kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
+                ]}][owner_pan_or_aadhaar_number]`,
+                value: updatedCompanyDetails.company_pan_number
+              })
+            );
+          } else {
+            dispatch(
+              updateFormState({
+                name: `formState.online.sections[${[
+                  kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
+                ]}][owner_pan_or_aadhaar_number]`,
+                value: ''
+              })
+            );
+          }
         }
         if (
           (response?.data?.statusCode === statusCode.SUCCESS ||
