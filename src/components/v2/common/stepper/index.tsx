@@ -68,14 +68,18 @@ const StepperComponent: React.FC<IStepperComponentProps> = ({
     }
   };
 
+  console.log('filterSteps', filteredSteps);
+
   return (
     <div
       className={`flex flex-col gap-[32px] h-[calc(100vh-60px)]  px-[110px] pt-[32px] ${
-        currentStepperStep === 1 && country === countries.USA
+        filteredSteps['1'].identifier ===
+          kycScreenIdentifierNames.COMPANY_DETAILS &&
+        (country === countries.USA
           ? '!h-[1386px]'
           : country === countries.BELGIUM
           ? '!h-[1170px]'
-          : '!h-[1279px]'
+          : '!h-[1279px]')
       }`}
     >
       <div className={styles.stepperContainer}>
