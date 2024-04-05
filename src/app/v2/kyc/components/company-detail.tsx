@@ -1269,6 +1269,19 @@ const CompanyDetail = ({
                       name="organisationType"
                       label={'Other'}
                       value={'Other'}
+                      defaultSelected={
+                        formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type']?.length > 0
+                          ? organisationTypes.includes(
+                              formState?.online?.sections?.[
+                                kycScreenIdentifierNames.COMPANY_DETAILS
+                              ]?.['organisation_type']
+                            )
+                            ? false
+                            : true
+                          : false
+                      }
                       defaultValue={
                         formState?.online?.sections?.[
                           kycScreenIdentifierNames.COMPANY_DETAILS
@@ -1282,19 +1295,6 @@ const CompanyDetail = ({
                           : formState?.online?.sections?.[
                               kycScreenIdentifierNames.COMPANY_DETAILS
                             ]?.['organisation_type']
-                      }
-                      defaultSelected={
-                        formState?.online?.sections?.[
-                          kycScreenIdentifierNames.COMPANY_DETAILS
-                        ]?.['organisation_type']?.length > 0
-                          ? organisationTypes.includes(
-                              formState?.online?.sections?.[
-                                kycScreenIdentifierNames.COMPANY_DETAILS
-                              ]?.['organisation_type']
-                            )
-                            ? false
-                            : true
-                          : false
                       }
                       onError={
                         formErrorState?.online?.sections?.[
