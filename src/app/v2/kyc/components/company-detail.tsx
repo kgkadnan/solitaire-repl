@@ -313,7 +313,8 @@ const CompanyDetail = ({
 
   const [organisationType, setOrganisationType] = useState();
 
-  const handleSelect = (value: any, formKey: string, setState: any) => {
+  const handleSelect = (value: any, formKey: string, setState: any ) => {
+    
     setState(value);
     // Update the data array to include only the selected option, removing any previous selections
     // setData([value]);
@@ -1269,6 +1270,20 @@ const CompanyDetail = ({
                       name="organisationType"
                       label={'Other'}
                       value={'Other'}
+                     
+                      defaultSelected={
+                        formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type']?.length > 0
+                          ? organisationTypes.includes(
+                              formState?.online?.sections?.[
+                                kycScreenIdentifierNames.COMPANY_DETAILS
+                              ]?.['organisation_type']
+                            )
+                            ? false
+                            : true
+                          : false
+                      }
                       defaultValue={
                         formState?.online?.sections?.[
                           kycScreenIdentifierNames.COMPANY_DETAILS
@@ -1282,19 +1297,6 @@ const CompanyDetail = ({
                           : formState?.online?.sections?.[
                               kycScreenIdentifierNames.COMPANY_DETAILS
                             ]?.['organisation_type']
-                      }
-                      defaultSelected={
-                        formState?.online?.sections?.[
-                          kycScreenIdentifierNames.COMPANY_DETAILS
-                        ]?.['organisation_type']?.length > 0
-                          ? organisationTypes.includes(
-                              formState?.online?.sections?.[
-                                kycScreenIdentifierNames.COMPANY_DETAILS
-                              ]?.['organisation_type']
-                            )
-                            ? false
-                            : true
-                          : false
                       }
                       onError={
                         formErrorState?.online?.sections?.[
