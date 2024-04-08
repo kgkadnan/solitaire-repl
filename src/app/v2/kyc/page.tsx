@@ -93,13 +93,13 @@ const KYC = () => {
   const { setOtpValues, setResendTimer } = otpVerificationSetState;
 
   const dispatch = useAppDispatch();
-
   const handleCountrySelection = (country: string) => {
     if (formState.country === country) {
       setSelectedCountry(country);
     } else {
       setSelectedCountry(country);
       setSelectedSubmissionOption('');
+
     }
 
     if (country === countries.OTHER) {
