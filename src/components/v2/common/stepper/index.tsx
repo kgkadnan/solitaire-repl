@@ -52,7 +52,6 @@ const StepperComponent: React.FC<IStepperComponentProps> = ({
 
   // Include the "Company Owner Details" only if the country is India
 
-  // console.log('completedSteps', completedSteps);
   // console.log('rejectedSteps', rejectedSteps);
 
   const renderStepperIcon = (index: number) => {
