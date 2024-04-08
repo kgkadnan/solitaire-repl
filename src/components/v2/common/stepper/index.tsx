@@ -68,8 +68,6 @@ const StepperComponent: React.FC<IStepperComponentProps> = ({
     }
   };
 
- 
-
   return (
     <div
       className={`flex flex-col gap-[32px] h-[calc(100vh-60px)]  px-[110px] pt-[32px] ${

@@ -99,7 +99,6 @@ const KYC = () => {
     } else {
       setSelectedCountry(country);
       setSelectedSubmissionOption('');
-
     }
 
     if (country === countries.OTHER) {
