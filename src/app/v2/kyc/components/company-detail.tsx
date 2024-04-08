@@ -394,7 +394,7 @@ const CompanyDetail = ({
   return (
     <div className="flex flex-col gap-[16px]">
       <div className="flex items-center gap-[16px]">
-        <span className="rounded-[50%] bg-primaryMain flex items-center justify-center text-neutral25 text-lMedium font-medium w-[40px] h-[40px]">
+        <span className="rounded-[100%] bg-primaryMain flex items-center justify-center text-neutral25 text-lMedium font-medium w-[40px] h-[40px]">
           {currentStepperStep + 1}
         </span>
         <h1 className="text-headingS font-medium text-neutral900">
@@ -404,17 +404,18 @@ const CompanyDetail = ({
       <hr className="border-neutral200" />
       <div className="flex justify-center">
         <div
-          className={`flex flex-col flex-wrap  gap-[16px]  w-[760px] ${
+          className={` flex flex-col gap-[16px] flex-wrap   w-[760px] ${
             country === 'Belgium'
               ? 'h-[121vh]'
               : country === 'India'
               ? 'h-[137vh]'
-              : 'h-[155vh]'
+              : 'h-[1080px]'
           }`}
         >
+            <div className='w-[50%] flex flex-col gap-[16px]'>
           {' '}
           {/* <div className="flex gap-[16px]"> */}
-          <div className={'w-[50%]'}>
+          <div className={'w-[100%]'}>
             <InputField
               label={'Registered Company Name*'}
               onChange={e =>
@@ -453,7 +454,7 @@ const CompanyDetail = ({
               }}
             />
           </div>
-          <div className={'w-[50%]'}>
+          <div className={'w-[100%]'}>
             {' '}
             <InputField
               label={'Year of Establishment*'}
@@ -494,7 +495,7 @@ const CompanyDetail = ({
             />
           </div>
           {country === countries.INDIA && (
-            <div className={'w-[50%]'}>
+            <div className={'w-[100%]'}>
               {' '}
               <InputField
                 label={'Registered Address*'}
@@ -536,7 +537,7 @@ const CompanyDetail = ({
             </div>
           )}
           {(country === countries.BELGIUM || country === countries.USA) && (
-            <div className={'w-[50%]'}>
+            <div className={'w-[100%]'}>
               <InputField
                 label={'Registered Address Line 1*'}
                 onChange={e =>
@@ -578,7 +579,7 @@ const CompanyDetail = ({
           )}
           {country === countries.INDIA && (
             <>
-              <div className={'w-[50%]'}>
+              <div className={'w-[100%]'}>
                 <div className="flex text-left flex-col w-full">
                   {' '}
                   <p className="text-mRegular text-neutral-900">City*</p>
@@ -638,7 +639,7 @@ const CompanyDetail = ({
             </>
           )}
           {(country === countries.BELGIUM || country === countries.USA) && (
-            <div className={'w-[50%]'}>
+            <div className={'w-[100%]'}>
               {' '}
               <InputField
                 label={'Registered Address Line 2'}
@@ -680,7 +681,7 @@ const CompanyDetail = ({
             </div>
           )}
           {country === countries.INDIA && (
-            <div className={'w-[50%]'}>
+            <div className={'w-[100%]'}>
               {' '}
               <InputField
                 label={'State*'}
@@ -723,7 +724,7 @@ const CompanyDetail = ({
             </div>
           )}
           {(country === countries.BELGIUM || country === countries.USA) && (
-            <div className={'w-[50%]'}>
+            <div className={'w-[100%]'}>
               {' '}
               <DynamicMobileInput
                 selectedCountryIso={selectedCountryIso}
@@ -781,7 +782,7 @@ const CompanyDetail = ({
             </div>
           )}
           {country === countries.INDIA && (
-            <div className={'w-[50%]'}>
+            <div className={'w-[100%]'}>
               {' '}
               <InputField
                 label={'Pin-Code*'}
@@ -823,7 +824,7 @@ const CompanyDetail = ({
             </div>
           )}
           {(country === countries.BELGIUM || country === countries.USA) && (
-            <div className={'w-[50%]'}>
+            <div className={'w-[100%]'}>
               {' '}
               <InputField
                 label={'Company Email-ID*'}
@@ -865,7 +866,7 @@ const CompanyDetail = ({
             </div>
           )}
           {country === countries.INDIA && (
-            <div className={'w-[50%]'}>
+            <div className={'w-[100%]'}>
               <DynamicMobileInput
                 selectedCountryIso={selectedCountryIso}
                 label={'Contact Number*'}
@@ -922,7 +923,7 @@ const CompanyDetail = ({
             </div>
           )}
           {country === countries.INDIA && (
-            <div className="flex w-[50%]">
+            <div className="flex w-[100%]">
               <div className="w-full flex flex-col">
                 <div className="flex flex-col gap-[10px]">
                   <p className="text-mRegular text-neutral900">
@@ -1104,7 +1105,7 @@ const CompanyDetail = ({
             </div>
           )}
           {country === countries.INDIA && (
-            <div className="w-[50%] flex flex-col  h-[26vh]">
+            <div className="w-[100%] flex flex-col  h-[26vh]">
               <div className="flex flex-col gap-[10px]">
                 <p className="text-mRegular text-neutral900">
                   Organisation Type*
@@ -1339,48 +1340,9 @@ const CompanyDetail = ({
               )}
             </div>
           )}
-          {country === countries.INDIA && (
-            <div className={'w-[50%]'}>
-              {' '}
-              <InputField
-                label={'Company Email-ID*'}
-                onChange={e =>
-                  handleInputChange(
-                    `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][company_email]`,
-                    e.target.value,
-                    dispatch,
-                    kycScreenIdentifierNames.COMPANY_DETAILS,
-                    'company_email'
-                    // formState
-                  )
-                }
-                type="email"
-                name={'Company Email-ID*'}
-                value={
-                  formState?.online?.sections?.[
-                    kycScreenIdentifierNames.COMPANY_DETAILS
-                  ]?.['company_email'] ?? ''
-                }
-                errorText={
-                  formErrorState?.online?.sections?.[
-                    kycScreenIdentifierNames.COMPANY_DETAILS
-                  ]?.['company_email'] ?? ''
-                }
-                placeholder={'Enter email id'}
-                styles={{
-                  input: `${
-                    formErrorState?.online?.sections?.[
-                      kycScreenIdentifierNames.COMPANY_DETAILS
-                    ]?.['company_email']
-                      ? 'border-dangerMain'
-                      : 'border-neutral200'
-                  }`
-                }}
-              />{' '}
-            </div>
-          )}
+       
           {(country === countries.BELGIUM || country === countries.USA) && (
-            <div className="flex w-[50%]">
+            <div className="flex w-[100%]">
               <div className="w-full flex flex-col">
                 <div className="flex flex-col gap-[10px]">
                   <p className="text-mRegular text-neutral900">
@@ -1721,7 +1683,7 @@ const CompanyDetail = ({
           )}
           {country === countries.USA && (
             <>
-              <div className="w-[50%] flex flex-col  h-[25vh]">
+              <div className="w-[100%] flex flex-col  h-[25vh]">
                 <div className="flex flex-col gap-[10px]">
                   <p className="text-mRegular text-neutral900">
                     Organisation Type*
@@ -1955,11 +1917,55 @@ const CompanyDetail = ({
                   </span>
                 )}
               </div>
-              <div className="h-[10vh]"></div>
+              {/* <div className="h-[10vh]"></div> */}
             </>
           )}
+
+        </div>
+
+<div className='w-[50%] flex flex-col gap-[16px]'>
+    {country === countries.INDIA && (
+            <div className={'w-[100%]'}>
+              {' '}
+              <InputField
+                label={'Company Email-ID*'}
+                onChange={e =>
+                  handleInputChange(
+                    `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][company_email]`,
+                    e.target.value,
+                    dispatch,
+                    kycScreenIdentifierNames.COMPANY_DETAILS,
+                    'company_email'
+                    // formState
+                  )
+                }
+                type="email"
+                name={'Company Email-ID*'}
+                value={
+                  formState?.online?.sections?.[
+                    kycScreenIdentifierNames.COMPANY_DETAILS
+                  ]?.['company_email'] ?? ''
+                }
+                errorText={
+                  formErrorState?.online?.sections?.[
+                    kycScreenIdentifierNames.COMPANY_DETAILS
+                  ]?.['company_email'] ?? ''
+                }
+                placeholder={'Enter email id'}
+                styles={{
+                  input: `${
+                    formErrorState?.online?.sections?.[
+                      kycScreenIdentifierNames.COMPANY_DETAILS
+                    ]?.['company_email']
+                      ? 'border-dangerMain'
+                      : 'border-neutral200'
+                  }`
+                }}
+              />{' '}
+            </div>
+          )}        
           {(country === countries.BELGIUM || country === countries.USA) && (
-            <div className={'w-[50%]'}>
+            <div className={'w-[100%]'}>
               {' '}
               <InputField
                 label={'Business Registration Number(CIN)*'}
@@ -1999,7 +2005,7 @@ const CompanyDetail = ({
             </div>
           )}
           {country === countries.INDIA && (
-            <div className={'w-[50%]'}>
+            <div className={'w-[100%]'}>
               {' '}
               <InputField
                 label={'Company Pan-Card Number*'}
@@ -2041,7 +2047,7 @@ const CompanyDetail = ({
             </div>
           )}{' '}
           {(country === countries.BELGIUM || country === countries.USA) && (
-            <div className={'w-[50%]'}>
+            <div className={'w-[100%]'}>
               {' '}
               <InputField
                 label={'VAT Number*'}
@@ -2083,7 +2089,7 @@ const CompanyDetail = ({
             </div>
           )}
           {country === countries.USA && (
-            <div className={'w-[50%]'}>
+            <div className={'w-[100%]'}>
               {' '}
               <InputField
                 label={'Federal Tax ID*'}
@@ -2125,7 +2131,7 @@ const CompanyDetail = ({
             </div>
           )}
           {country === countries.INDIA && (
-            <div className={'w-[50%]'}>
+            <div className={'w-[100%]'}>
               {' '}
               <InputField
                 label={'GST Identification Number*'}
@@ -2167,7 +2173,7 @@ const CompanyDetail = ({
             </div>
           )}
           {(country === countries.BELGIUM || country === countries.USA) && (
-            <div className={'w-[50%]'}>
+            <div className={'w-[100%]'}>
               {' '}
               <InputField
                 label={'FAX Number'}
@@ -2209,7 +2215,7 @@ const CompanyDetail = ({
             </div>
           )}
           {country === countries.INDIA && (
-            <div className={'w-[50%]'}>
+            <div className={'w-[100%]'}>
               <InputField
                 label={'Business Registration Number (CIN)*'}
                 onChange={e =>
@@ -2249,7 +2255,7 @@ const CompanyDetail = ({
               />{' '}
             </div>
           )}
-          <div className={'w-[50%]'}>
+          <div className={'w-[100%]'}>
             <InputField
               label={'Subsidiary/Affiliated Company'}
               onChange={e =>
@@ -2288,7 +2294,7 @@ const CompanyDetail = ({
               }}
             />
           </div>
-          <div className={'w-[50%]'}>
+          <div className={'w-[100%]'}>
             <InputField
               label={'Ultimate Beneficiary Name*'}
               onChange={e =>
@@ -2328,7 +2334,7 @@ const CompanyDetail = ({
             />
           </div>
           {(country === countries.BELGIUM || country === countries.USA) && (
-            <div className={'w-[50%]'}>
+            <div className={'w-[100%]'}>
               {' '}
               <InputField
                 label={'Ultimate Beneficiary Ownership%'}
@@ -2524,7 +2530,7 @@ const CompanyDetail = ({
             </div>
           )}
           {country === countries.BELGIUM && (
-            <div className="w-[50%] flex flex-col">
+            <div className="w-[100%] flex flex-col">
               <div className="flex flex-col gap-[10px]">
                 <p className="text-mRegular text-neutral900">
                   Organisation Type*
@@ -2757,7 +2763,7 @@ const CompanyDetail = ({
             </div>
           )}
           <div
-            className={`w-[50%] flex flex-col ${
+            className={`w-[100%] flex flex-col ${
               formState?.online?.sections?.[
                 kycScreenIdentifierNames.COMPANY_DETAILS
               ]?.['is_member_of_business'] === true && 'mb-[54px]'
@@ -2816,7 +2822,7 @@ const CompanyDetail = ({
             )}
           </div>
           {country === countries.INDIA && (
-            <div className="w-[50%] flex flex-col ">
+            <div className="w-[100%] flex flex-col ">
               <div className="flex flex-col gap-[11px]">
                 <div>
                   <p className="text-mRegular text-neutral900">
@@ -2872,7 +2878,7 @@ const CompanyDetail = ({
           )}
           {country === countries.USA && (
             <div
-              className={`w-[50%] flex flex-col 
+              className={`w-[100%] flex flex-col 
             ${
               formState?.online?.sections?.[
                 kycScreenIdentifierNames.COMPANY_DETAILS
@@ -2936,6 +2942,7 @@ const CompanyDetail = ({
               )}
             </div>
           )}
+          </div>
         </div>
         <hr className="border-neutral200" />
       </div>
