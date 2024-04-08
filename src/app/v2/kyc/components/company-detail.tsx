@@ -356,7 +356,6 @@ const CompanyDetail = ({
       (item: any) => (Array.isArray(item) ? item[0] !== label : item !== label)
     );
 
-   
     newData = newData ?? [];
 
     if (isChecked) {
