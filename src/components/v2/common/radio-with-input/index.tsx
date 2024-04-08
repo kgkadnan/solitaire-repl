@@ -29,7 +29,9 @@ const RadioButtonWithInput = ({
     }
     // Set the default input value
     setInputValue(defaultValue);
-    onInputValueChange && onInputValueChange(value, defaultValue, formKey);
+    if (defaultValue.length > 0) {
+      onInputValueChange && onInputValueChange(value, defaultValue, formKey);
+    }
   }, []);
 
   const handleInputChange = (e: any) => {
