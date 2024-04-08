@@ -69,7 +69,7 @@ const StepperComponent: React.FC<IStepperComponentProps> = ({
 
   return (
     <div
-      className={`flex flex-col gap-[32px] h-[calc(100vh-60px)]  px-[110px] pt-[32px] ${
+      className={`flex w-full flex-col gap-[32px] h-[calc(100vh-60px)]  px-[110px] pt-[32px] ${
         filteredSteps[currentStepperStep]?.identifier ===
           kycScreenIdentifierNames.COMPANY_DETAILS &&
         (country === countries.USA
