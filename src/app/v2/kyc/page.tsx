@@ -247,11 +247,12 @@ const KYC = () => {
   const handleConfirmRestartKyc = () => {
     resetKyc({})
       .then((res: any) => {
+        setCurrentStepperStep(0);
+        setCompletedSteps(new Set());
         if (res.data.statusCode === statusCode.SUCCESS) {
-          setCurrentState('country_selection');
           setSelectedCountry('');
           setSelectedSubmissionOption('');
-          setCurrentStepperStep(0);
+
           dispatch(
             updateFormState({
               name: 'formState.country',
@@ -281,6 +282,7 @@ const KYC = () => {
               }
             })
           );
+          setCurrentState('country_selection');
 
           setIsDialogOpen(false);
         }
@@ -291,7 +293,6 @@ const KYC = () => {
   };
 
   const handleResetButton = () => {
-    setIsDialogOpen(true);
     setIsDialogOpen(true);
     setDialogContent(
       <>
@@ -812,7 +813,10 @@ const KYC = () => {
       ID: currentState + 1
     })
       .then((response: any) => {
-        if (screenName === kycScreenIdentifierNames.COMPANY_DETAILS) {
+        if (
+          screenName === kycScreenIdentifierNames.COMPANY_DETAILS &&
+          formState.country === 'India'
+        ) {
           if (
             updatedCompanyDetails.organisation_type.length &&
             updatedCompanyDetails.organisation_type.includes('Individual')
@@ -825,16 +829,17 @@ const KYC = () => {
                 value: updatedCompanyDetails.company_pan_number
               })
             );
-          } else {
-            dispatch(
-              updateFormState({
-                name: `formState.online.sections[${[
-                  kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
-                ]}][owner_pan_or_aadhaar_number]`,
-                value: ''
-              })
-            );
           }
+          //    else {
+          //     dispatch(
+          //       updateFormState({
+          //         name: `formState.online.sections[${[
+          //           kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
+          //         ]}][owner_pan_or_aadhaar_number]`,
+          //         value: ''
+          //       })
+          //     );
+          //   }
         }
         if (
           (response?.data?.statusCode === statusCode.SUCCESS ||

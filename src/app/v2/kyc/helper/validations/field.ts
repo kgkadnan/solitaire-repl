@@ -509,7 +509,6 @@ class ValidationIndustryTypeCriteria {
 class ValidationOrganisationTypeCriteria {
   @IsNotEmpty({ message: ORGANISATION_TYPE_MANDATORY })
   @IsString({ message: ORGANISATION_TYPE_MANDATORY })
-  @Length(1, 140, { message: FIELD_INVALID('Organisation Type') })
   organisation_type: string;
 
   constructor(organisation_type: string) {

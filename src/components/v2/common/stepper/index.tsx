@@ -52,7 +52,6 @@ const StepperComponent: React.FC<IStepperComponentProps> = ({
 
   // Include the "Company Owner Details" only if the country is India
 
-  // console.log('completedSteps', completedSteps);
   // console.log('rejectedSteps', rejectedSteps);
 
   const renderStepperIcon = (index: number) => {
@@ -74,10 +73,10 @@ const StepperComponent: React.FC<IStepperComponentProps> = ({
         filteredSteps[currentStepperStep]?.identifier ===
           kycScreenIdentifierNames.COMPANY_DETAILS &&
         (country === countries.USA
-          ? '!h-[1386px]'
+          ? '!h-[194.9vh]'
           : country === countries.BELGIUM
-          ? '!h-[1170px]'
-          : '!h-[1279px]')
+          ? '!h-[164.55vh]'
+          : '!h-[179.8vh]')
       }`}
     >
       <div className={styles.stepperContainer}>

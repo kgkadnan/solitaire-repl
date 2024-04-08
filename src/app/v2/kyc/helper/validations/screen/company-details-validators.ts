@@ -204,7 +204,6 @@ export class KycPostCompanyDetailsValidation {
 
   @IsString({ message: FIELD_INVALID('Subsidiary Company') })
   @IsOptional()
-  @Length(1, 140, { message: FIELD_INVALID('Subsidiary Company Name') })
   subsidiary_company: string;
 
   @IsBoolean({
