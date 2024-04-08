@@ -12,7 +12,8 @@ const CheckboxWithInput = ({
   styles,
   defaultChecked = false, // Added prop for initial checked state
   defaultValue = '', // Added prop for initial input value
-  onError
+  onError,
+  showError
 }: any) => {
   const [isChecked, setIsChecked] = useState(defaultChecked); // Initialize with defaultChecked value
   const [inputValue, setInputValue] = useState(defaultValue); // Initialize with defaultValue
@@ -71,6 +72,7 @@ const CheckboxWithInput = ({
           value={inputValue}
           errorText={inputError}
           placeholder={inputPlaceHolder}
+          showError={showError}
           styles={{
             inputMain: 'h-64px',
             input: `${inputError ? 'border-dangerMain' : 'border-neutral200'}`

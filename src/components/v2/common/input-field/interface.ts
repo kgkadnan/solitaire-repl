@@ -21,6 +21,7 @@ export interface IInputFieldProps {
   onFocus?: (event: ChangeEvent<HTMLInputElement>) => void;
   onKeyDown?: KeyboardEventHandler<HTMLInputElement>;
   autoComplete?: string;
+  showError?: boolean;
 }
 
 export interface IDynamicInputFieldProps {

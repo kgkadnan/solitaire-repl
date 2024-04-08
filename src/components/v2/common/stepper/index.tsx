@@ -22,6 +22,7 @@ interface IStepperComponentProps {
   filteredSteps: any;
   handleBack?: any;
   fromWhere?: any;
+  country?: any;
 }
 // Define the steps with label and name
 
@@ -37,7 +38,8 @@ const StepperComponent: React.FC<IStepperComponentProps> = ({
   handleSubmit,
   filteredSteps,
   handleBack,
-  fromWhere
+  fromWhere,
+  country
 }) => {
   // Function to mark a step as completed
 
@@ -69,7 +71,13 @@ const StepperComponent: React.FC<IStepperComponentProps> = ({
   return (
     <div
       className={`flex flex-col gap-[32px] h-[calc(100vh-60px)]  px-[110px] pt-[32px] ${
-        currentStepperStep === 1 && 'h-[1250px]'
+        filteredSteps[currentStepperStep]?.identifier ===
+          kycScreenIdentifierNames.COMPANY_DETAILS &&
+        (country === countries.USA
+          ? '!h-[1386px]'
+          : country === countries.BELGIUM
+          ? '!h-[1170px]'
+          : '!h-[1279px]')
       }`}
     >
       <div className={styles.stepperContainer}>
