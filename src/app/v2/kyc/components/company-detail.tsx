@@ -356,8 +356,6 @@ const CompanyDetail = ({
       (item: any) => (Array.isArray(item) ? item[0] !== label : item !== label)
     );
 
-    console.log('label', label);
-    console.log('isChecked', isChecked);
     newData = newData ?? [];
 
     if (isChecked) {
