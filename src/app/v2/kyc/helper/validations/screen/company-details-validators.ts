@@ -29,12 +29,14 @@ import {
   MEMBER_BUSINESS_INVALID,
   MEMBER_NAME_INVALID,
   FIELD_INVALID,
-  IS_ANTI_MONEY_LAUNDERING
+  IS_ANTI_MONEY_LAUNDERING,
+  RANGE_VALIDATION
 } from '@/constants/error-messages/kyc';
 import {
   GST_NUMBER_REGEX,
   NAME_REGEX,
-  PAN_MATCH
+  PAN_MATCH,
+  PHONE_REGEX
 } from '@/constants/validation-regex/regex';
 import {
   IsString,
@@ -175,6 +177,9 @@ export class KycPostCompanyDetailsValidation {
   year_of_establishment: string;
 
   @IsNotEmpty({ message: COMPANY_PHONE_NUMBER_MANDATORY })
+  @Matches(PHONE_REGEX, {
+    message: RANGE_VALIDATION('Company Phone', 0, 15)
+  })
   company_phone_number: string;
 
   @IsNotEmpty({ message: COMPANY_EMAIL_MANDATORY })

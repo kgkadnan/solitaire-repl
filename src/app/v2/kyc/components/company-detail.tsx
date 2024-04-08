@@ -406,7 +406,7 @@ const CompanyDetail = ({
         <div
           className={`flex flex-col flex-wrap  gap-[16px]  w-[760px] ${
             country === 'Belgium'
-              ? 'h-[120vh]'
+              ? 'h-[121vh]'
               : country === 'India'
               ? 'h-[137vh]'
               : 'h-[155vh]'
@@ -729,25 +729,16 @@ const CompanyDetail = ({
                 selectedCountryIso={selectedCountryIso}
                 label={'Contact Number*'}
                 handleInputChange={e =>
-                  e.target.value?.trim()?.length <= 15
-                    ? handleInputChange(
-                        `formState.online.sections[${[
-                          kycScreenIdentifierNames.COMPANY_DETAILS
-                        ]}][company_phone_number]`,
-                        e.target.value,
-                        dispatch,
-                        kycScreenIdentifierNames.COMPANY_DETAILS,
-                        'company_phone_number'
-                        // formState
-                      )
-                    : dispatch(
-                        updateFormState({
-                          name: `formErrorState.online.sections[${[
-                            kycScreenIdentifierNames.COMPANY_DETAILS
-                          ]}][company_phone_number]`,
-                          value: RANGE_VALIDATION('Contact Number', 0, 15)
-                        })
-                      )
+                  handleInputChange(
+                    `formState.online.sections[${[
+                      kycScreenIdentifierNames.COMPANY_DETAILS
+                    ]}][company_phone_number]`,
+                    e.target.value,
+                    dispatch,
+                    kycScreenIdentifierNames.COMPANY_DETAILS,
+                    'company_phone_number'
+                    // formState
+                  )
                 }
                 handleSelectChange={({ value, iso }: any) => {
                   setSelectedCountryIso(iso);
@@ -879,25 +870,16 @@ const CompanyDetail = ({
                 selectedCountryIso={selectedCountryIso}
                 label={'Contact Number*'}
                 handleInputChange={e =>
-                  e.target.value?.trim()?.length <= 15
-                    ? handleInputChange(
-                        `formState.online.sections[${[
-                          kycScreenIdentifierNames.COMPANY_DETAILS
-                        ]}][company_phone_number]`,
-                        e.target.value,
-                        dispatch,
-                        kycScreenIdentifierNames.COMPANY_DETAILS,
-                        'company_phone_number'
-                        // formState
-                      )
-                    : dispatch(
-                        updateFormState({
-                          name: `formErrorState.online.sections[${[
-                            kycScreenIdentifierNames.COMPANY_DETAILS
-                          ]}][company_phone_number]`,
-                          value: RANGE_VALIDATION('Contact Number', 0, 15)
-                        })
-                      )
+                  handleInputChange(
+                    `formState.online.sections[${[
+                      kycScreenIdentifierNames.COMPANY_DETAILS
+                    ]}][company_phone_number]`,
+                    e.target.value,
+                    dispatch,
+                    kycScreenIdentifierNames.COMPANY_DETAILS,
+                    'company_phone_number'
+                    // formState
+                  )
                 }
                 handleSelectChange={({ value, iso }: any) => {
                   setSelectedCountryIso(iso);
@@ -1582,7 +1564,7 @@ const CompanyDetail = ({
           {(country === countries.BELGIUM || country === countries.USA) && (
             <div
               className={`flex w-[380px] ${
-                country === 'Belgium' && 'h-[21vh]'
+                country === 'Belgium' && 'h-[22vh]'
               } `}
             >
               <div className="w-full flex flex-col ">
@@ -2778,7 +2760,7 @@ const CompanyDetail = ({
             className={`w-[50%] flex flex-col ${
               formState?.online?.sections?.[
                 kycScreenIdentifierNames.COMPANY_DETAILS
-              ]?.['is_member_of_business'] === true && 'mb-[45px]'
+              ]?.['is_member_of_business'] === true && 'mb-[54px]'
             }`}
           >
             <div className="flex flex-col gap-[11px] ">
