@@ -355,6 +355,9 @@ const CompanyDetail = ({
     let newData: any = formState.online.sections[screenName]?.[key]?.filter(
       (item: any) => (Array.isArray(item) ? item[0] !== label : item !== label)
     );
+
+    console.log('label', label);
+    console.log('isChecked', isChecked);
     newData = newData ?? [];
 
     if (isChecked) {
@@ -366,7 +369,21 @@ const CompanyDetail = ({
         // If the checkbox doesn't require input, add only the label
         newData.push(label);
       }
+    } else {
+      if (
+        label === 'Other' &&
+        !isChecked &&
+        inputValue &&
+        !newData.some((item: any) => Array.isArray(item))
+      ) {
+        const filteredData = newData.filter((items: any) => {
+          return items !== inputValue;
+        });
+
+        newData = filteredData;
+      }
     }
+
     dispatch(
       updateFormState({
         name: `formErrorState.online.sections.${[screenName]}.${[key]}`,
