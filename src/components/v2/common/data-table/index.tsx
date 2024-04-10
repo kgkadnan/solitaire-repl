@@ -135,7 +135,8 @@ const DataTable = ({
   setConfirmStoneData,
   deleteCartHandler,
   activeCartTab,
-  setIsCompareStone
+  setIsCompareStone,
+  setCompareStoneData
 }: any) => {
   // Fetching saved search data
   const router = useRouter();
@@ -957,7 +958,8 @@ const DataTable = ({
                         setIsError,
                         setErrorText,
                         activeCartRows: rows,
-                        setIsCompareStone
+                        setIsCompareStone,
+                        setCompareStoneData
                       })
                   }
                 ]}

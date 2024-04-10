@@ -28,7 +28,7 @@ export function RightSideContent({
 
     handleClick(itemId);
   };
-
+  console.log('jyoti', keyLabelMapping);
   return (
     <>
       <div
@@ -63,7 +63,9 @@ export function RightSideContent({
                     : (setIsError(true), setErrorText(MINIMUM_STONES))
                 }
               >
-                <CloseButton />
+                <Image src={CloseButton} alt="Preview" height={40} width={40} />
+
+                {/* <CloseButton /> */}
               </div>
             </div>
           </div>

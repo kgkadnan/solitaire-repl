@@ -11,6 +11,7 @@ interface ICompareStoneParams {
   activeCartRows: any;
   footerCheck?: string;
   setIsCompareStone: any;
+  setCompareStoneData: any;
 }
 
 export const handleCompareStone = ({
@@ -19,12 +20,14 @@ export const handleCompareStone = ({
   setErrorText,
   activeCartRows,
   footerCheck,
-  setIsCompareStone
+  setIsCompareStone,
+  setCompareStoneData
 }: ICompareStoneParams) => {
   console.log('called', isCheck);
   const maxStones = MAX_COMPARE_STONE;
   const minStones = MIN_COMPARE_STONE;
   let newCheck = Object.keys(isCheck);
+  console.log(newCheck, 'newCheck');
   if (newCheck.length > maxStones) {
     setIsError(true);
     setErrorText(`You can compare a maximum of ${maxStones} stones`);
@@ -36,8 +39,10 @@ export const handleCompareStone = ({
       return activeCartRows.find((row: any) => row.id === id);
     });
 
-    localStorage.setItem('compareStone', JSON.stringify(compareStones));
     setIsCompareStone(true);
+    setCompareStoneData(
+      compareStones.filter(value => value !== null && value !== undefined)
+    );
     // window.open(
     //   `/v2/compare-stone${footerCheck ? '?source=' + footerCheck : ''}`,
     //   '_blank'

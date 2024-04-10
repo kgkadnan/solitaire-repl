@@ -12,7 +12,6 @@ import {
   RenderDiscount,
   RenderLab
 } from '@/components/v2/table/helpers/render-cell';
-
 import React, { useEffect, useMemo, useState } from 'react';
 import { LeftFixedContent } from './left-panel';
 import { RightSideContent } from './right-panel';
@@ -20,6 +19,7 @@ import styles from './compare.module.scss';
 import { useCheckboxStateManagement } from '@/components/v2/common/checkbox/hooks/checkbox-state-management';
 import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
 import { IProduct } from '../../interface';
+import { CustomSideScrollable } from './side-scroll';
 const CompareStone = ({
   rows,
   columns,
@@ -28,10 +28,11 @@ const CompareStone = ({
   isFrom,
   handleDetailImage,
   handleDetailPage,
-  identifier
+  identifier,
+  setCompareStoneData
 }: any) => {
   const [rowSelection, setRowSelection] = useState({});
-  const [mappingColumn, setMappingColumn] = useState({});
+  const [mappingColumn, setMappingColumn] = useState<any>({});
 
   const [breadCrumLabel, setBreadCrumLabel] = useState('');
   const [compareValues, setCompareValues] = useState({});
@@ -40,6 +41,7 @@ const CompareStone = ({
   const { setSelectedCheckboxes } = checkboxSetState;
   const { errorSetState } = useErrorStateManagement();
   const { setIsError, setErrorText } = errorSetState;
+  console.log(rows, 'rows--------');
   useEffect(() => {
     if (isFrom === 'My Cart') {
       setBreadCrumLabel('My Cart');
@@ -63,96 +65,22 @@ const CompareStone = ({
         setBreadCrumLabel(`Result ${activeTab}`);
       }
     }
+    updateState(columns);
     // setMappingColumn(())
   }, []);
 
-  //   function updateState(column:any) {
-  //     const updatedObj = { ...mappingColumn }; // Create a copy of newObj
-  //     column.forEach((obj:any) => {
-  //         // Check if the key already exists in updatedObj
-  //         const key = Object.keys(obj)[0]; // Get the key dynamically
-  //             if (!(key in updatedObj)) {
-  //                 updatedObj[key]! = obj[key]; // Use the dynamic key to update the object
-  //             }
-  //     });
-  //     setMappingColumn(updatedObj); // Update the state with the updated object
-  // }
+  function updateState(column: any) {
+    console.log(column, 'column');
+    const updatedObj: any = { ...mappingColumn }; // Create a copy of newObj
+    column.forEach((obj: any) => {
+      // Check if the key already exists in updatedObj
+      if (!(obj.accessor in updatedObj)) {
+        updatedObj[obj.accessor] = obj.label; // Use the dynamic key to update the object
+      }
+    });
+    setMappingColumn(updatedObj); // Update the state with the updated object
+  }
 
-  const mapColumns = (columns: any) =>
-    columns
-      ?.filter(({ is_disabled }: any) => !is_disabled)
-      ?.sort(({ sequence: a }: any, { sequence: b }: any) => a - b)
-      .map(({ accessor, short_label, label }: any) => {
-        const commonProps = {
-          accessorKey: accessor,
-          header: short_label,
-          enableGlobalFilter: accessor === 'lot_id',
-          minSize: 5,
-          maxSize: accessor === 'details' ? 100 : 200,
-          size: accessor === 'measurements' ? 183 : 5,
-          Header: ({ column }: any) => (
-            <Tooltip
-              tooltipTrigger={<span>{column.columnDef.header}</span>}
-              tooltipContent={label}
-              tooltipContentStyles={'z-[4]'}
-            />
-          )
-        };
-
-        switch (accessor) {
-          case 'amount':
-            return { ...commonProps, Cell: RenderAmount };
-          case 'carat':
-            return { ...commonProps, Cell: RenderCarat };
-          case 'measurements':
-            return { ...commonProps, Cell: RenderMeasurements };
-          case 'discount':
-            return { ...commonProps, Cell: RenderDiscount };
-          case 'details':
-            return {
-              ...commonProps,
-              Cell: ({ row }: any) => {
-                return RenderDetails({ row, handleDetailImage });
-              }
-            };
-          case 'lot_id':
-            return {
-              ...commonProps,
-              Cell: ({ renderedCellValue, row }: any) => {
-                return RenderCartLotId({
-                  renderedCellValue,
-                  row,
-                  handleDetailPage
-                });
-              }
-            };
-          case 'price_per_carat':
-            return {
-              ...commonProps,
-              Cell: ({ renderedCellValue }: { renderedCellValue: any }) => (
-                <span>{`${
-                  renderedCellValue === 0
-                    ? '0.00'
-                    : renderedCellValue?.toFixed(2) ?? '0.00'
-                }`}</span>
-              )
-            };
-          case 'lab':
-            return { ...commonProps, Cell: RenderLab };
-          case 'location':
-            return { ...commonProps, Cell: RednderLocation };
-          case 'tracr_id':
-            return { ...commonProps, Cell: RenderTracerId };
-          default:
-            return {
-              ...commonProps,
-              Cell: ({ renderedCellValue }: { renderedCellValue: string }) => (
-                <span>{renderedCellValue ?? '-'}</span>
-              )
-            };
-        }
-      });
-  const memoizedColumns = useMemo(() => mapColumns(columns), [columns]);
   type HandleCloseType = (event: React.MouseEvent, id: string) => void;
 
   const handleClick = (id: string) => {
@@ -179,18 +107,14 @@ const CompareStone = ({
 
     const filterData = rows.filter((item: IProduct) => item.id !== id);
     console.log(filterData, 'filterData');
-    // setCompareStoneData(filterData);
+    setCompareStoneData(filterData);
   };
+  console.log('---------------------', mappingColumn);
   return (
     <div className="flex">
-      <div>
+      {/* <div>
         {
-          <LeftFixedContent
-            compareStoneData={rows}
-            // showDifferences={showDifferences}
-            keyLabelMapping={columns}
-            compareValues={compareValues}
-          />
+          
         }
       </div>
       <div role="scrollable-container" className={styles.scrollableContainer}>
@@ -199,21 +123,34 @@ const CompareStone = ({
           data-testid="scrollable-container"
         >
           {
-            <RightSideContent
-              compareStoneData={rows}
-              // showDifferences={showDifferences}
-              keyLabelMapping={columns}
-              compareValues={compareValues}
-              handleClick={handleClick}
-              handleClose={handleClose}
-              setIsError={setIsError}
-              setErrorText={setErrorText}
-              setIsCheck={setSelectedCheckboxes}
-              isCheck={selectedCheckboxes}
-            />
+           
           }
         </div>
-      </div>
+      </div> */}
+      <CustomSideScrollable
+        leftFixedContent={
+          <LeftFixedContent
+            compareStoneData={rows}
+            // showDifferences={showDifferences}
+            keyLabelMapping={mappingColumn}
+            compareValues={compareValues}
+          />
+        }
+        rightSideContent={
+          <RightSideContent
+            compareStoneData={rows}
+            // showDifferences={showDifferences}
+            keyLabelMapping={mappingColumn}
+            compareValues={compareValues}
+            handleClick={handleClick}
+            handleClose={handleClose}
+            setIsError={setIsError}
+            setErrorText={setErrorText}
+            setIsCheck={setSelectedCheckboxes}
+            isCheck={selectedCheckboxes}
+          />
+        }
+      />
     </div>
   );
 };

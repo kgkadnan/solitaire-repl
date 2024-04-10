@@ -131,6 +131,8 @@ const Result = ({
   const [isCompareStone, setIsCompareStone] = useState(false);
 
   const [confirmStoneData, setConfirmStoneData] = useState<IProduct[]>([]);
+  const [compareStoneData, setCompareStoneData] = useState<IProduct[]>([]);
+
   const [commentValue, setCommentValue] = useState('');
   const [textAreaValue, setTextAreaValue] = useState('');
 
@@ -1145,7 +1147,7 @@ const Result = ({
             />
           ) : isCompareStone ? (
             <CompareStone
-              rows={confirmStoneData}
+              rows={compareStoneData}
               columns={columnData}
               goBackToListView={goBackToListView}
               activeTab={activeTab}
@@ -1153,6 +1155,7 @@ const Result = ({
               handleDetailImage={handleDetailImage}
               handleDetailPage={handleDetailPage}
               identifier={'result'}
+              setCompareStoneData={setCompareStoneData}
             />
           ) : (
             <div className="">
@@ -1182,6 +1185,7 @@ const Result = ({
                 setIsConfirmStone={setIsConfirmStone}
                 setConfirmStoneData={setConfirmStoneData}
                 setIsCompareStone={setIsCompareStone}
+                setCompareStoneData={setCompareStoneData}
               />
             </div>
           )}
