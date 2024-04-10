@@ -384,21 +384,6 @@ const DataTable = ({
     });
   };
 
-  const StyledToggleFullScreenButton = styled(MRT_ToggleFullScreenButton)(
-    () => ({
-      border: `1px solid #E4E7EC`,
-      background: 'var(--neutral-0)',
-      padding: '4px',
-      width: '36px',
-      height: '36px',
-      borderRadius: '4px',
-      boxShadow: '0px 1px 0px 0px hsla(220, 43%, 11%, 0.12)',
-      ':hover': {
-        backgroundColor: 'var(--neutral-0) !important'
-      }
-    })
-  );
-
   let isNudge = localStorage.getItem('show-nudge') === 'MINI';
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
 
