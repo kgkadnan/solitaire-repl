@@ -546,6 +546,8 @@ const KYC = () => {
   }, []);
 
   useEffect(() => {
+    if (!formState.country) return;
+
     let sectionKeys: string[] =
       formState.country === 'India'
         ? [
@@ -570,8 +572,8 @@ const KYC = () => {
 
       if (
         currentStepperStep > index &&
-        screenValidationError &&
-        !Object.keys(screenValidationError).length
+        (!screenValidationError ||
+          (screenValidationError && !Object.keys(screenValidationError).length))
       ) {
         completedSteps.add(index);
         rejectedSteps.delete(index);
