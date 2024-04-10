@@ -374,7 +374,7 @@ const KYC = () => {
                         </div>
                         <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
                           <div>
-                            <h1 className="text-headingS text-neutral900">
+                            <h1 className="text-headingS text-neutral900 font-medium">
                               Do you want to resume KYC process or restart it?
                             </h1>
                           </div>
