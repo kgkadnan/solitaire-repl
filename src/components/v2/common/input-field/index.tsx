@@ -22,8 +22,6 @@ export const InputField = ({
   }
   const inputRef = useRef<any>(null);
 
-  console.log("name",name , disabled)
-
   return (
     <div className={`text-left w-full gap-1  ${styles?.inputMain}`}>
       {label && <p className="text-mRegular text-neutral900">{label}</p>}

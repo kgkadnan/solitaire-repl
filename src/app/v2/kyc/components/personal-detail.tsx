@@ -223,7 +223,6 @@ const PersonalDetail = ({
                   kycScreenIdentifierNames.PERSONAL_DETAILS
                 ]?.['phone'] ?? ''
               }
-             
               countryCodeValue={{
                 label:
                   `+${formState?.online?.sections?.[
