@@ -2,7 +2,6 @@ import {
   MAX_COMPARE_STONE,
   MIN_COMPARE_STONE
 } from '@/constants/business-logic';
-import { IProductItem } from '../../interface';
 
 // Define an interface for the function parameters
 interface ICompareStoneParams {
@@ -11,6 +10,7 @@ interface ICompareStoneParams {
   setErrorText: (text: string) => void;
   activeCartRows: any;
   footerCheck?: string;
+  setIsCompareStone: any;
 }
 
 export const handleCompareStone = ({
@@ -18,28 +18,30 @@ export const handleCompareStone = ({
   setIsError,
   setErrorText,
   activeCartRows,
-  footerCheck
+  footerCheck,
+  setIsCompareStone
 }: ICompareStoneParams) => {
+  console.log('called', isCheck);
   const maxStones = MAX_COMPARE_STONE;
   const minStones = MIN_COMPARE_STONE;
-
-  if (isCheck.length > maxStones) {
+  let newCheck = Object.keys(isCheck);
+  if (newCheck.length > maxStones) {
     setIsError(true);
     setErrorText(`You can compare a maximum of ${maxStones} stones`);
-  } else if (isCheck.length < minStones) {
+  } else if (newCheck.length < minStones) {
     setIsError(true);
     setErrorText(`Minimum ${minStones} stones are required to compare`);
   } else {
-    const compareStones = isCheck.map((id: string) => {
+    const compareStones = newCheck?.map((id: string) => {
       return activeCartRows.find((row: any) => row.id === id);
     });
 
     localStorage.setItem('compareStone', JSON.stringify(compareStones));
-
-    window.open(
-      `/compare-stone${footerCheck ? '?source=' + footerCheck : ''}`,
-      '_blank'
-    );
+    setIsCompareStone(true);
+    // window.open(
+    //   `/v2/compare-stone${footerCheck ? '?source=' + footerCheck : ''}`,
+    //   '_blank'
+    // );
     setIsError(false);
     setErrorText('');
   }

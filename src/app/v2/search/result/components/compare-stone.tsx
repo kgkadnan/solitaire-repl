@@ -31,9 +31,9 @@ const CompareStone = ({
   identifier
 }: any) => {
   const [rowSelection, setRowSelection] = useState({});
+  const [mappingColumn, setMappingColumn] = useState({});
 
   const [breadCrumLabel, setBreadCrumLabel] = useState('');
-  const [showDifferences, setShowDifferences] = useState(false);
   const [compareValues, setCompareValues] = useState({});
   const { checkboxState, checkboxSetState } = useCheckboxStateManagement();
   const { selectedCheckboxes } = checkboxState;
@@ -63,7 +63,20 @@ const CompareStone = ({
         setBreadCrumLabel(`Result ${activeTab}`);
       }
     }
+    // setMappingColumn(())
   }, []);
+
+  //   function updateState(column:any) {
+  //     const updatedObj = { ...mappingColumn }; // Create a copy of newObj
+  //     column.forEach((obj:any) => {
+  //         // Check if the key already exists in updatedObj
+  //         const key = Object.keys(obj)[0]; // Get the key dynamically
+  //             if (!(key in updatedObj)) {
+  //                 updatedObj[key]! = obj[key]; // Use the dynamic key to update the object
+  //             }
+  //     });
+  //     setMappingColumn(updatedObj); // Update the state with the updated object
+  // }
 
   const mapColumns = (columns: any) =>
     columns
@@ -174,7 +187,7 @@ const CompareStone = ({
         {
           <LeftFixedContent
             compareStoneData={rows}
-            showDifferences={showDifferences}
+            // showDifferences={showDifferences}
             keyLabelMapping={columns}
             compareValues={compareValues}
           />
@@ -188,7 +201,7 @@ const CompareStone = ({
           {
             <RightSideContent
               compareStoneData={rows}
-              showDifferences={showDifferences}
+              // showDifferences={showDifferences}
               keyLabelMapping={columns}
               compareValues={compareValues}
               handleClick={handleClick}

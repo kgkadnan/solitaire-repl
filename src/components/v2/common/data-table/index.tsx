@@ -53,6 +53,7 @@ import { InputDialogComponent } from '../input-dialog';
 import { InputField } from '../input-field';
 import { kycStatus } from '@/constants/enums/kyc';
 import { handleConfirmStone } from '@app/v2/search/result/helpers/handle-confirm-stone';
+import { handleCompareStone } from '@/app/v2/search/result/helpers/handle-compare-stone';
 
 const theme = createTheme({
   typography: {
@@ -126,7 +127,8 @@ const DataTable = ({
   setIsConfirmStone,
   setConfirmStoneData,
   deleteCartHandler,
-  activeCartTab
+  activeCartTab,
+  setIsCompareStone
 }: any) => {
   // Fetching saved search data
   const router = useRouter();
@@ -899,7 +901,7 @@ const DataTable = ({
                   <Image
                     src={threeDotsSvg}
                     alt="threeDotsSvg"
-                    width={4}
+                    width={43}
                     height={43}
                   />
                 }
@@ -924,16 +926,17 @@ const DataTable = ({
                   },
                   {
                     label: 'Compare Stone',
-                    handler: () => {}
-                    // handleCompareStone({
-                    //   isCheck:rowSelection,
-                    //   setIsError,
-                    //   setErrorText,
-                    //   activeCartRows: dataTableState.rows
-                    // })
+                    handler: () =>
+                      handleCompareStone({
+                        isCheck: rowSelection,
+                        setIsError,
+                        setErrorText,
+                        activeCartRows: rows,
+                        setIsCompareStone
+                      })
                   }
                 ]}
-                isDisable={true}
+                isDisable={false}
               />
             </div>
           </div>

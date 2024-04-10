@@ -7,7 +7,7 @@ export interface IDifferValue {
 
 export interface IRightSideContentProps {
   compareStoneData: IProduct[];
-  showDifferences: boolean;
+  // showDifferences: boolean;
   keyLabelMapping: IKeyLabelMapping;
   compareValues: IKeyLabelMapping;
   handleClick: (id: string) => void;
@@ -20,14 +20,14 @@ export interface IRightSideContentProps {
 
 export interface ILeftSideContentProps {
   compareStoneData: IProduct[];
-  showDifferences: boolean;
+  // showDifferences: boolean;
   keyLabelMapping: IKeyLabelMapping;
   compareValues: IKeyLabelMapping;
 }
 
 export interface IShowDifferencesChangeProps {
   compareStoneData: IProduct[];
-  showDifferences: boolean;
+  // showDifferences: boolean;
   keyLabelMapping: IKeyLabelMapping;
   setCompareValues: React.Dispatch<React.SetStateAction<IDifferValue>>;
   setShowDifferences: React.Dispatch<React.SetStateAction<boolean>>;

@@ -1,6 +1,6 @@
 'use client';
 import Image from 'next/image';
-import CloseButton from '@public/assets/icons/close-outline.svg?url';
+import CloseButton from '@public/v2/assets/icons/detail-page/close.svg';
 import { FILE_URLS } from '@/constants/business-logic';
 import { MINIMUM_STONES } from '@/constants/error-messages/compare-stone';
 import styles from './right.module.scss';
@@ -9,7 +9,7 @@ import Checkbox from '@/components/v2/common/checkbox';
 import { IProduct } from '../../interface';
 export function RightSideContent({
   compareStoneData,
-  showDifferences,
+  // showDifferences,
   keyLabelMapping,
   compareValues,
   handleClick,
@@ -75,21 +75,9 @@ export function RightSideContent({
             className={`border-r border-solitaireSenary ${styles.compareStoneValue}`}
             key={diamond.id}
           >
-            <div className="sticky top-[200px] w-full bg-solitaireSecondary">
-              <div className="">
-                <p>{diamond?.discount}</p>
-              </div>
-              <div className="">
-                <p>{diamond?.variants?.[0]?.prices?.[0]?.amount}</p>
-              </div>
-            </div>
-            {!showDifferences
-              ? Object.keys(keyLabelMapping).map(key => (
-                  <div key={key}>{key !== 'id' ? diamond[key] || '-' : ''}</div>
-                ))
-              : Object.keys(compareValues).map(key => (
-                  <div key={key}>{key !== 'id' ? diamond[key] || '-' : ''}</div>
-                ))}
+            {Object.keys(keyLabelMapping).map(key => (
+              <div key={key}>{key !== 'id' ? diamond[key] || '-' : ''}</div>
+            ))}
           </div>
         ))}
       </div>

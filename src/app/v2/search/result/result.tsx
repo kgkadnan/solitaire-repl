@@ -83,6 +83,7 @@ import { getShapeDisplayName } from '@/utils/v2/detail-page';
 import { FILE_URLS } from '@/constants/v2/detail-page';
 import { Toast } from '@/components/v2/common/copy-and-share/toast';
 import { handleCompareStone } from './helpers/handle-compare-stone';
+import CompareStone from './components/compare-stone';
 
 // Column mapper outside the component to avoid re-creation on each render
 
@@ -127,6 +128,8 @@ const Result = ({
   const [breadCrumLabel, setBreadCrumLabel] = useState('');
 
   const [isConfirmStone, setIsConfirmStone] = useState(false);
+  const [isCompareStone, setIsCompareStone] = useState(false);
+
   const [confirmStoneData, setConfirmStoneData] = useState<IProduct[]>([]);
   const [commentValue, setCommentValue] = useState('');
   const [textAreaValue, setTextAreaValue] = useState('');
@@ -1140,6 +1143,17 @@ const Result = ({
               handleDetailPage={handleDetailPage}
               identifier={'result'}
             />
+          ) : isCompareStone ? (
+            <CompareStone
+              rows={confirmStoneData}
+              columns={columnData}
+              goBackToListView={goBackToListView}
+              activeTab={activeTab}
+              isFrom={breadCrumLabel}
+              handleDetailImage={handleDetailImage}
+              handleDetailPage={handleDetailPage}
+              identifier={'result'}
+            />
           ) : (
             <div className="">
               <DataTable
@@ -1167,6 +1181,7 @@ const Result = ({
                 // handleConfirmStone={handleConfirmStone}
                 setIsConfirmStone={setIsConfirmStone}
                 setConfirmStoneData={setConfirmStoneData}
+                setIsCompareStone={setIsCompareStone}
               />
             </div>
           )}
