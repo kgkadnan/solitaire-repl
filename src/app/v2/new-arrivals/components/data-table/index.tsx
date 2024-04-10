@@ -374,7 +374,7 @@ const NewArrivalDataTable = ({
     //state
     getRowId: originalRow => originalRow.id,
     onRowSelectionChange: setRowSelection,
-    state: { columnOrder, rowSelection },
+    state: { columnOrder, rowSelection, isFullScreen: isFullScreen },
     //filters
     positionToolbarAlertBanner: 'none',
     enableFilters: true,
