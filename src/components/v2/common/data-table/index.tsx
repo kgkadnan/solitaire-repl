@@ -152,7 +152,7 @@ const DataTable = ({
 
   useEffect(() => {
     let isFullScreen = JSON.parse(localStorage.getItem('isFullScreen')!);
-    console.log("useEffectCalled======")
+    console.log('useEffectCalled======');
     setIsFullScreen(isFullScreen);
     // return () => {
     //   localStorage.setItem('isFullScreen', JSON.stringify(false));
