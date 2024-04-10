@@ -25,7 +25,7 @@ const ResponsiveTable: React.FC<ResponsiveTableProps> = ({
   return (
     <div className="overflow-x-auto" style={{ borderRadius: '4px' }}>
       <table className="divide-y divide-[#E4E7EC] border  border-[#E4E7EC] overflow-x-scroll rounded-[4px] border-separate border-spacing-0">
-        <thead className="bg-rgba-F9FAFB  leading-5 text-[#475467]">
+        <thead className="bg-neutral50  leading-5 text-[#475467]">
           <tr className="sm:text-[8px] lg:text-[16px] ">
             {tableHead.map((column, index) => (
               <th
