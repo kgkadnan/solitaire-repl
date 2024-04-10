@@ -440,6 +440,11 @@ const NewArrivalDataTable = ({
           '&.MuiTableRow-root .MuiTableCell-root::after': {
             backgroundColor: 'var(--neutral-25)'
           },
+          '&.MuiTableRow-root .MuiTableCell-root': {
+            backgroundColor: row.id.includes('shape')
+              ? 'var(--neutral-25)'
+              : 'var(--neutral-0)'
+          },
           '&.MuiTableRow-root:active .MuiTableCell-root::after': {
             backgroundColor: 'var(--neutral-100)'
           }
