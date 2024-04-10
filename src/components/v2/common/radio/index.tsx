@@ -49,7 +49,7 @@ export const RadioButton: React.FC<any> = ({
       <div className={`absolute top-[100%] ${inputCustomStyle}`}>
         {checked &&
           inputs &&
-          inputs.map((input: any , index :number) => (
+          inputs.map((input: any, index: number) => (
             <InputField
               key={input.id}
               onChange={input.onInputChange}
