@@ -31,7 +31,7 @@ import {
   useLazyGetAllSavedSearchesQuery,
   useUpdateSavedSearchMutation
 } from '@/features/api/saved-searches';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import SavedSearchDropDown from '../saved-search-dropdown';
 import { useLazyGetProductCountQuery } from '@/features/api/product';
 import { constructUrlParams } from '@/utils/v2/construct-url-params';
@@ -95,6 +95,12 @@ const theme = createTheme({
           fontStyle: 'normal !important'
         }
       }
+    },
+    MuiButtonBase: {
+      defaultProps: {
+        // The props to apply
+        disableRipple: true // No more ripple, on the whole application 💣!
+      }
     }
   }
 });
@@ -139,8 +145,18 @@ const DataTable = ({
   };
   const [isFullScreen, setIsFullScreen] = useState(false);
   const toggleFullScreen = () => {
+    localStorage.setItem('isFullScreen', JSON.stringify(!isFullScreen));
     setIsFullScreen(!isFullScreen);
   };
+
+  useEffect(() => {
+    let isFullScreen = JSON.parse(localStorage.getItem('isFullScreen')!);
+
+    setIsFullScreen(isFullScreen);
+    return () => {
+      localStorage.setItem('isFullScreen', JSON.stringify(false));
+    };
+  }, []);
 
   const onDropDownClick = (value: any) => {
     setIsLoading(true);
@@ -397,7 +413,10 @@ const DataTable = ({
     //state
     getRowId: originalRow => originalRow.id,
     onRowSelectionChange: setRowSelection,
-    state: { rowSelection },
+    state: {
+      rowSelection,
+      isFullScreen: JSON.parse(localStorage.getItem('isFullScreen')!)
+    },
     //filters
     positionToolbarAlertBanner: 'none',
     enableFilters: true,
