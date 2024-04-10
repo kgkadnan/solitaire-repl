@@ -67,6 +67,12 @@ const Table = ({
           }
         }
       },
+      MuiButtonBase: {
+        defaultProps: {
+          // The props to apply
+          disableRipple: true // No more ripple, on the whole application 💣!
+        }
+      },
       MuiTableHead: {
         styleOverrides: {
           root: {
