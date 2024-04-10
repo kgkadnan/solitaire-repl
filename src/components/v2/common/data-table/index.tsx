@@ -8,7 +8,8 @@ import {
   MaterialReactTable,
   useMaterialReactTable
 } from 'material-react-table';
-
+import expandIcon from '@public/v2/assets/icons/expand-icon.svg';
+import collapsIcon from '@public/v2/assets/icons/collapse-icon.svg';
 import downloadIcon from '@public/v2/assets/icons/data-table/download.svg';
 import saveIcon from '@public/v2/assets/icons/data-table/bookmark.svg';
 import BinIcon from '@public/v2/assets/icons/bin.svg';
@@ -31,7 +32,7 @@ import {
   useLazyGetAllSavedSearchesQuery,
   useUpdateSavedSearchMutation
 } from '@/features/api/saved-searches';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import SavedSearchDropDown from '../saved-search-dropdown';
 import { useLazyGetProductCountQuery } from '@/features/api/product';
 import { constructUrlParams } from '@/utils/v2/construct-url-params';
@@ -96,6 +97,12 @@ const theme = createTheme({
           fontStyle: 'normal !important'
         }
       }
+    },
+    MuiButtonBase: {
+      defaultProps: {
+        // The props to apply
+        disableRipple: true // No more ripple, on the whole application 💣!
+      }
     }
   }
 });
@@ -141,8 +148,15 @@ const DataTable = ({
   };
   const [isFullScreen, setIsFullScreen] = useState(false);
   const toggleFullScreen = () => {
+    localStorage.setItem('isFullScreen', JSON.stringify(!isFullScreen));
     setIsFullScreen(!isFullScreen);
   };
+
+  useEffect(() => {
+    let isFullScreen = JSON.parse(localStorage.getItem('isFullScreen')!);
+
+    setIsFullScreen(isFullScreen);
+  }, []);
 
   const onDropDownClick = (value: any) => {
     setIsLoading(true);
@@ -372,21 +386,6 @@ const DataTable = ({
     });
   };
 
-  const StyledToggleFullScreenButton = styled(MRT_ToggleFullScreenButton)(
-    () => ({
-      border: `1px solid #E4E7EC`,
-      background: 'var(--neutral-0)',
-      padding: '4px',
-      width: '36px',
-      height: '36px',
-      borderRadius: '4px',
-      boxShadow: '0px 1px 0px 0px hsla(220, 43%, 11%, 0.12)',
-      ':hover': {
-        backgroundColor: 'var(--neutral-0) !important'
-      }
-    })
-  );
-
   let isNudge = localStorage.getItem('show-nudge') === 'MINI';
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
 
@@ -399,7 +398,10 @@ const DataTable = ({
     //state
     getRowId: originalRow => originalRow.id,
     onRowSelectionChange: setRowSelection,
-    state: { rowSelection },
+    state: {
+      rowSelection,
+      isFullScreen: JSON.parse(localStorage.getItem('isFullScreen')!)
+    },
     //filters
     positionToolbarAlertBanner: 'none',
     enableFilters: true,
@@ -683,7 +685,7 @@ const DataTable = ({
     renderTopToolbar: ({ table }) => (
       <div>
         {isResult && (
-          <div className=" min-h-[55px] items-start justify-between border-b-[1px] border-neutral200 flex px-[16px] py-[8px] items-center">
+          <div className=" min-h-[55px] items-start justify-between border-b-[1px] border-neutral200 flex px-[16px] py-[8px]">
             <div className="flex lg-w-[calc(100%-500px)] gap-[12px] flex-wrap">
               <Breadcrum
                 searchParameters={searchParameters}
@@ -825,15 +827,32 @@ const DataTable = ({
               />
             </div>
 
-            <Tooltip
-              tooltipTrigger={
-                <div onClick={toggleFullScreen}>
-                  <StyledToggleFullScreenButton table={table} title="" />{' '}
-                </div>
-              }
-              tooltipContent={'Full Screen'}
-              tooltipContentStyles={'z-[4]'}
-            />
+            <div className="p-[4px] rounded-[4px] cursor-pointer">
+              <Tooltip
+                tooltipTrigger={
+                  <div onClick={toggleFullScreen}>
+                    {/* <StyledToggleFullScreenButton table={table} title="" />{' '} */}
+                    {isFullScreen ? (
+                      <Image
+                        src={collapsIcon}
+                        alt={'collapsIcon'}
+                        width={39}
+                        height={39}
+                      />
+                    ) : (
+                      <Image
+                        src={expandIcon}
+                        alt={'expandIcon'}
+                        width={39}
+                        height={39}
+                      />
+                    )}
+                  </div>
+                }
+                tooltipContent={'Full Screen'}
+                tooltipContentStyles={'z-[4]'}
+              />
+            </div>
 
             <div className="flex p-[4px] rounded-[4px] cursor-pointer">
               <Share
