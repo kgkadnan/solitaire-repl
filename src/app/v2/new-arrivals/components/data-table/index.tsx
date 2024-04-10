@@ -6,7 +6,8 @@ import {
   MaterialReactTable,
   useMaterialReactTable
 } from 'material-react-table';
-
+import expandIcon from '@public/v2/assets/icons/expand-icon.svg';
+import collapsIcon from '@public/v2/assets/icons/collapse-icon.svg';
 import downloadIcon from '@public/v2/assets/icons/data-table/download.svg';
 import downloadExcelIcon from '@public/v2/assets/icons/modal/download.svg';
 import Image from 'next/image';
@@ -163,21 +164,6 @@ const NewArrivalDataTable = ({
     });
   };
 
-  const StyledToggleFullScreenButton = styled(MRT_ToggleFullScreenButton)(
-    () => ({
-      border: `1px solid #E4E7EC`,
-      background: 'var(--neutral-0)',
-      padding: '4px',
-      width: '35px',
-      height: '35px',
-      borderRadius: '4px',
-      boxShadow: '0px 1px 0px 0px hsla(220, 43%, 11%, 0.12)',
-      ':hover': {
-        backgroundColor: 'var(--neutral-0) !important'
-      }
-    })
-  );
-
   const [bidValues, setBidValues] = useState<BidValues>({});
   const [columnOrder, setColumnOrder] = useState(
     [
@@ -310,15 +296,32 @@ const NewArrivalDataTable = ({
               />
             </div>
 
-            <Tooltip
-              tooltipTrigger={
-                <div onClick={toggleFullScreen}>
-                  <StyledToggleFullScreenButton table={table} title="" />{' '}
-                </div>
-              }
-              tooltipContent={'Full Screen'}
-              tooltipContentStyles={'z-[4]'}
-            />
+            <div className="p-[4px] rounded-[4px] cursor-pointer">
+              <Tooltip
+                tooltipTrigger={
+                  <div onClick={toggleFullScreen}>
+                    {/* <StyledToggleFullScreenButton table={table} title="" />{' '} */}
+                    {isFullScreen ? (
+                      <Image
+                        src={collapsIcon}
+                        alt={'collapsIcon'}
+                        width={39}
+                        height={39}
+                      />
+                    ) : (
+                      <Image
+                        src={expandIcon}
+                        alt={'expandIcon'}
+                        width={39}
+                        height={39}
+                      />
+                    )}
+                  </div>
+                }
+                tooltipContent={'Full Screen'}
+                tooltipContentStyles={'z-[4]'}
+              />
+            </div>
 
             <div className="flex p-[4px] rounded-[4px] cursor-pointer">
               <Share
