@@ -49,7 +49,7 @@ export const RadioButton: React.FC<any> = ({
       <div className={`absolute top-[100%] ${inputCustomStyle}`}>
         {checked &&
           inputs &&
-          inputs.map((input: any) => (
+          inputs.map((input: any, index: number) => (
             <InputField
               key={input.id}
               onChange={input.onInputChange}
@@ -59,8 +59,8 @@ export const RadioButton: React.FC<any> = ({
               errorText={input.error}
               placeholder={input.placeholder}
               styles={{
-                inputMain: `h-64px !w-[380px]  ${
-                  input.error?.length && 'mb-[14px]'
+                inputMain: `h-64px !w-[380px] ${index > 0 && 'mt-[14px]'} ${
+                  input.error?.length && 'mb-[22px]'
                 }`,
                 input: `${
                   input.error ? 'border-dangerMain' : 'border-neutral200'

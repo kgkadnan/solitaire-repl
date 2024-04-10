@@ -162,25 +162,16 @@ const CompanyOwnerDetail = ({
               selectedCountryIso={selectedCountryIso}
               label={'Contact Number*'}
               handleInputChange={e =>
-                e.target.value.trim().length <= 15
-                  ? handleInputChange(
-                      `formState.online.sections[${[
-                        kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
-                      ]}][owner_phone]`,
-                      e.target.value,
-                      dispatch,
-                      kycScreenIdentifierNames.COMPANY_OWNER_DETAILS,
-                      'owner_phone'
-                      // formState
-                    )
-                  : dispatch(
-                      updateFormState({
-                        name: `formErrorState.online.sections[${[
-                          kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
-                        ]}][owner_phone]`,
-                        value: RANGE_VALIDATION('Contact Number', 0, 15)
-                      })
-                    )
+                handleInputChange(
+                  `formState.online.sections[${[
+                    kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
+                  ]}][owner_phone]`,
+                  e.target.value,
+                  dispatch,
+                  kycScreenIdentifierNames.COMPANY_OWNER_DETAILS,
+                  'owner_phone'
+                  // formState
+                )
               }
               handleSelectChange={({ value, iso }: any) => {
                 setSelectedCountryIso(iso);
