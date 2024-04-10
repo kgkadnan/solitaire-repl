@@ -1452,7 +1452,7 @@ const KYC = () => {
                               <Image src={confirmIcon} alt="confirmIcon" />
                             </div>
                             <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                              <h1 className="text-headingS text-neutral900">
+                              <h1 className="text-headingS text-neutral900 font-medium">
                                 Your email has been verified successfully
                               </h1>
                               <ActionButton
