@@ -145,17 +145,18 @@ const DataTable = ({
   };
   const [isFullScreen, setIsFullScreen] = useState(false);
   const toggleFullScreen = () => {
+    console.log('h=====');
     localStorage.setItem('isFullScreen', JSON.stringify(!isFullScreen));
     setIsFullScreen(!isFullScreen);
   };
 
   useEffect(() => {
     let isFullScreen = JSON.parse(localStorage.getItem('isFullScreen')!);
-
+    console.log('useEffectCalled======');
     setIsFullScreen(isFullScreen);
-    return () => {
-      localStorage.setItem('isFullScreen', JSON.stringify(false));
-    };
+    // return () => {
+    //   localStorage.setItem('isFullScreen', JSON.stringify(false));
+    // };
   }, []);
 
   const onDropDownClick = (value: any) => {
