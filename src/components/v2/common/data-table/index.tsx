@@ -827,7 +827,7 @@ const DataTable = ({
                   />
                 }
                 tooltipContent={'Download Excel'}
-                tooltipContentStyles={'z-[4]'}
+                tooltipContentStyles={'z-[1000]'}
               />
             </div>
 
@@ -854,7 +854,7 @@ const DataTable = ({
                   </div>
                 }
                 tooltipContent={'Full Screen'}
-                tooltipContentStyles={'z-[4]'}
+                tooltipContentStyles={'z-[1000]'}
               />
             </div>
 

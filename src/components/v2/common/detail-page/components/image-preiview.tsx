@@ -156,7 +156,7 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
                     />
                   }
                   tooltipContent={'Download'}
-                  tooltipContentStyles={'z-[4]'}
+                  tooltipContentStyles={'z-[1000]'}
                 />
               )}
 

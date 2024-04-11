@@ -292,7 +292,7 @@ const NewArrivalDataTable = ({
                   />
                 }
                 tooltipContent={'Download Excel'}
-                tooltipContentStyles={'z-[4]'}
+                tooltipContentStyles={'z-[1000]'}
               />
             </div>
 
@@ -319,7 +319,7 @@ const NewArrivalDataTable = ({
                   </div>
                 }
                 tooltipContent={'Full Screen'}
-                tooltipContentStyles={'z-[4]'}
+                tooltipContentStyles={'z-[1000]'}
               />
             </div>
 
@@ -710,7 +710,7 @@ const NewArrivalDataTable = ({
                 type="text"
                 styles={{
                   inputMain: 'h-[40px]',
-                  input: 'bg-infoSurface border-infoBorder text-infoMain'
+                  input: '!bg-infoSurface !border-infoBorder !text-infoMain'
                 }}
                 value={`${row.original.current_max_bid}%`}
                 disabled

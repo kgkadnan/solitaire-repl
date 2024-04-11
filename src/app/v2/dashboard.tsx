@@ -592,7 +592,7 @@ const Dashboard = () => {
                 <Image src={confirmIcon} alt="confirmIcon" />
               </div>
               <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                <h1 className="text-headingS text-neutral900">
+                <h1 className="text-headingS text-neutral900 !font-medium	">
                   {res?.message}
                 </h1>
                 <ActionButton
@@ -1191,7 +1191,7 @@ const Dashboard = () => {
                     </Link>
                   </div>
                 </div>
-                <div className="p-4">
+                <div className="p-4 ">
                   {activeTab === 'Saved Search' &&
                     tabs
                       .find(tab => tab.label === activeTab)
@@ -1201,7 +1201,7 @@ const Dashboard = () => {
                         const gradientClass = gradientClasses[gradientIndex];
                         return (
                           <div
-                            className="p-[16px] flex flex-col md:flex-row w-full border-b-[1px] border-neutral200 cursor-pointer group hover:bg-neutral50"
+                            className="p-[16px] flex flex-col md:flex-row w-full border-[1px] border-neutral200 cursor-pointer group hover:bg-neutral50"
                             key={searchData?.id}
                             onClick={() =>
                               handleCardClick({
@@ -1254,7 +1254,7 @@ const Dashboard = () => {
                       })}
                   {(activeTab === 'Active Invoice' ||
                     activeTab === 'Pending Invoice') && (
-                    <div className="max-w-full overflow-x-auto">
+                    <div className="max-w-full overflow-x-auto border-[1px] border-neutral200">
                       {/* header */}
                       <div className="grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] text-mMedium h-[47px] border-b border-neutral-200 bg-neutral-50 text-neutral700">
                         {keys?.map(({ label }: any) => (

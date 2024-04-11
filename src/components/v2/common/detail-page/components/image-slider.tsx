@@ -149,7 +149,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images, setIsLoading }) => {
                             />
                           }
                           tooltipContent={'Download'}
-                          tooltipContentStyles={'z-[4]'}
+                          tooltipContentStyles={'z-[1000]'}
                         />
                       )}
                     </>
