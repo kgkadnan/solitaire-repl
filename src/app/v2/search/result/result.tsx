@@ -1059,7 +1059,7 @@ const Result = ({
             modalSetState={modalSetState}
             setIsLoading={setIsLoading}
           />
-          <div className="p-[16px] flex justify-end items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow ">
+          <div className="p-[16px] flex justify-end items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow mb-1">
             {isError && (
               <div>
                 <span className="hidden  text-successMain" />
