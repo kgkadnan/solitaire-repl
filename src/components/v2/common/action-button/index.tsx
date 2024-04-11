@@ -87,7 +87,7 @@ const ActionButton = ({
                     </Button>
                   }
                   tooltipContent={tooltip}
-                  tooltipContentStyles={'z-[4]'}
+                  tooltipContentStyles={'z-[1000]'}
                 />
               )}
             </div>

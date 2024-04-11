@@ -291,7 +291,7 @@ export function DiamondDetailsComponent({
                     />
                   }
                   tooltipContent={'Download Excel'}
-                  tooltipContentStyles={'z-[4]'}
+                  tooltipContentStyles={'z-[1000]'}
                 />
 
                 <Tooltip
@@ -306,7 +306,7 @@ export function DiamondDetailsComponent({
                     />
                   }
                   tooltipContent={'Media Link'}
-                  tooltipContentStyles={'z-[4]'}
+                  tooltipContentStyles={'z-[1000]'}
                 />
 
                 <div className="w-[38px] h-[38px]">

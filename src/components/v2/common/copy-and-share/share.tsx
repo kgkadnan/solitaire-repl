@@ -297,7 +297,7 @@ const Share = ({
             />
           }
           tooltipContent={'Share'}
-          tooltipContentStyles={'z-[4]'}
+          tooltipContentStyles={'z-[1000]'}
         />
         {/* <Image src={shareButtonSvg} alt={'share'} width={38} height={38} /> */}
       </div>
