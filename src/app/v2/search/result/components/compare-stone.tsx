@@ -1,25 +1,13 @@
-import {
-  RenderMeasurements,
-  RenderTracerId
-} from '@/components/v2/common/data-table/helpers/render-cell';
-import Tooltip from '@/components/v2/common/tooltip';
-import {
-  RednderLocation,
-  RenderAmount,
-  RenderCarat,
-  RenderCartLotId,
-  RenderDetails,
-  RenderDiscount,
-  RenderLab
-} from '@/components/v2/table/helpers/render-cell';
 import React, { useEffect, useMemo, useState } from 'react';
 import { LeftFixedContent } from './left-panel';
 import { RightSideContent } from './right-panel';
-import styles from './compare.module.scss';
 import { useCheckboxStateManagement } from '@/components/v2/common/checkbox/hooks/checkbox-state-management';
 import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
 import { IProduct } from '../../interface';
 import { CustomSideScrollable } from './side-scroll';
+import backWardArrow from '@public/v2/assets/icons/my-diamonds/backwardArrow.svg';
+import Image from 'next/image';
+import styles from './compare.module.scss';
 const CompareStone = ({
   rows,
   columns,
@@ -31,7 +19,6 @@ const CompareStone = ({
   identifier,
   setCompareStoneData
 }: any) => {
-  const [rowSelection, setRowSelection] = useState({});
   const [mappingColumn, setMappingColumn] = useState<any>({});
 
   const [breadCrumLabel, setBreadCrumLabel] = useState('');
@@ -41,7 +28,6 @@ const CompareStone = ({
   const { setSelectedCheckboxes } = checkboxSetState;
   const { errorSetState } = useErrorStateManagement();
   const { setIsError, setErrorText } = errorSetState;
-  console.log(rows, 'rows--------');
   useEffect(() => {
     if (isFrom === 'My Cart') {
       setBreadCrumLabel('My Cart');
@@ -66,11 +52,9 @@ const CompareStone = ({
       }
     }
     updateState(columns);
-    // setMappingColumn(())
   }, []);
 
   function updateState(column: any) {
-    console.log(column, 'column');
     const updatedObj: any = { ...mappingColumn }; // Create a copy of newObj
     column.forEach((obj: any) => {
       // Check if the key already exists in updatedObj
@@ -109,48 +93,58 @@ const CompareStone = ({
     console.log(filterData, 'filterData');
     setCompareStoneData(filterData);
   };
-  console.log('---------------------', mappingColumn);
   return (
-    <div className="flex">
-      {/* <div>
-        {
-          
-        }
-      </div>
-      <div role="scrollable-container" className={styles.scrollableContainer}>
-        <div
-          className={`${styles.scrollText}`}
-          data-testid="scrollable-container"
+    <div className="w-[calc(100vw-116px)] h-[calc(100vh-60px)]">
+      {' '}
+      <div className="flex gap-[8px] items-center p-4">
+        <Image
+          src={backWardArrow}
+          alt="backWardArrow"
+          onClick={() => {
+            goBackToListView();
+          }}
+          className="cursor-pointer"
+        />
+        <button
+          className="text-neutral600 text-sMedium font-regular cursor-pointer"
+          onClick={() => {
+            goBackToListView!();
+          }}
         >
-          {
-           
+          {breadCrumLabel}
+        </button>
+        <span className="text-neutral600">/</span>
+        <p className="text-neutral700 p-[8px] bg-neutral100 rounded-[4px] text-sMedium font-medium">
+          Compare Stone
+        </p>
+      </div>
+      <div className="flex">
+        <CustomSideScrollable
+          leftFixedStyle={styles.leftFixedContent}
+          leftFixedContent={
+            <LeftFixedContent
+              compareStoneData={rows}
+              // showDifferences={showDifferences}
+              keyLabelMapping={mappingColumn}
+              compareValues={compareValues}
+            />
           }
-        </div>
-      </div> */}
-      <CustomSideScrollable
-        leftFixedContent={
-          <LeftFixedContent
-            compareStoneData={rows}
-            // showDifferences={showDifferences}
-            keyLabelMapping={mappingColumn}
-            compareValues={compareValues}
-          />
-        }
-        rightSideContent={
-          <RightSideContent
-            compareStoneData={rows}
-            // showDifferences={showDifferences}
-            keyLabelMapping={mappingColumn}
-            compareValues={compareValues}
-            handleClick={handleClick}
-            handleClose={handleClose}
-            setIsError={setIsError}
-            setErrorText={setErrorText}
-            setIsCheck={setSelectedCheckboxes}
-            isCheck={selectedCheckboxes}
-          />
-        }
-      />
+          rightSideContent={
+            <RightSideContent
+              compareStoneData={rows}
+              // showDifferences={showDifferences}
+              keyLabelMapping={mappingColumn}
+              compareValues={compareValues}
+              handleClick={handleClick}
+              handleClose={handleClose}
+              setIsError={setIsError}
+              setErrorText={setErrorText}
+              setIsCheck={setSelectedCheckboxes}
+              isCheck={selectedCheckboxes}
+            />
+          }
+        />
+      </div>
     </div>
   );
 };

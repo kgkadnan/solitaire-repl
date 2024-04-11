@@ -82,7 +82,6 @@ import ImageModal from '@/components/v2/common/detail-page/components/image-moda
 import { getShapeDisplayName } from '@/utils/v2/detail-page';
 import { FILE_URLS } from '@/constants/v2/detail-page';
 import { Toast } from '@/components/v2/common/copy-and-share/toast';
-import { handleCompareStone } from './helpers/handle-compare-stone';
 import CompareStone from './components/compare-stone';
 
 // Column mapper outside the component to avoid re-creation on each render
@@ -738,6 +737,8 @@ const Result = ({
     }
     setIsConfirmStone(false);
     setConfirmStoneData([]);
+    setIsCompareStone(false);
+    setCompareStoneData([]);
   };
 
   const renderAddCommentDialogs = () => {
