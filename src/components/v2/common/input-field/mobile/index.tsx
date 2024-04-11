@@ -39,17 +39,14 @@ export const MobileInput = ({
   };
 
   const Option = (props: any) => (
-    console.log('props', props),
-    (
-      <components.Option {...props} className="country-option">
-        <img
-          src={`https://flagsapi.com/${props.data.iso}/flat/64.png`}
-          style={{ width: 24 }}
-          alt="logo"
-        />
-        +{props.data.label}
-      </components.Option>
-    )
+    <components.Option {...props} className="country-option">
+      <img
+        src={`https://flagsapi.com/${props.data.iso}/flat/64.png`}
+        style={{ width: 24 }}
+        alt="logo"
+      />
+      +{props.data.label}
+    </components.Option>
   );
 
   const SingleValue = ({ children, ...props }: any) => (

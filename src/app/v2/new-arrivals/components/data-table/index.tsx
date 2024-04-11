@@ -390,7 +390,6 @@ const NewArrivalDataTable = ({
       )}
     </div>
   );
-  console.log(activeCount, bidCount, historyCount);
   let isNudge = localStorage.getItem('show-nudge') === 'MINI';
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   //pass table options to useMaterialReactTable
@@ -438,7 +437,6 @@ const NewArrivalDataTable = ({
     muiTableBodyRowProps: ({ row }) => {
       const isHighlightBackground =
         activeTab !== 0 && RenderNewArrivalLotIdColor({ row });
-      console.log(isHighlightBackground, 'isHighlightBackground');
       return {
         onClick: row.id.includes('shape')
           ? row.getToggleExpandedHandler()

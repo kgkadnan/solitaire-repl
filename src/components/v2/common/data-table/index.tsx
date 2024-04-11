@@ -133,7 +133,8 @@ const DataTable = ({
   setIsConfirmStone,
   setConfirmStoneData,
   deleteCartHandler,
-  activeCartTab
+  activeCartTab,
+  setIsInputDialogOpen
 }: any) => {
   // Fetching saved search data
   const router = useRouter();
@@ -801,7 +802,7 @@ const DataTable = ({
                   onClick={() => {
                     searchParameters[activeTab - 1].saveSearchName.length
                       ? handleUpdateSaveSearch()
-                      : modalSetState.setIsInputDialogOpen(true);
+                      : setIsInputDialogOpen(true);
                   }}
                 >
                   <Image src={saveIcon} alt={'save search'} />
