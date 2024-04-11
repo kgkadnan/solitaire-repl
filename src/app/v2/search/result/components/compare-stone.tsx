@@ -8,6 +8,8 @@ import { CustomSideScrollable } from './side-scroll';
 import backWardArrow from '@public/v2/assets/icons/my-diamonds/backwardArrow.svg';
 import Image from 'next/image';
 import styles from './compare.module.scss';
+import ActionButton from '@/components/v2/common/action-button';
+import { ManageLocales } from '@/utils/v2/translate';
 const CompareStone = ({
   rows,
   columns,
@@ -17,7 +19,8 @@ const CompareStone = ({
   handleDetailImage,
   handleDetailPage,
   identifier,
-  setCompareStoneData
+  setCompareStoneData,
+  confirmStoneApiCall
 }: any) => {
   const [mappingColumn, setMappingColumn] = useState<any>({});
 
@@ -94,7 +97,7 @@ const CompareStone = ({
     setCompareStoneData(filterData);
   };
   return (
-    <div className="w-[calc(100vw-116px)] h-[calc(100vh-60px)]">
+    <div className="w-[calc(100vw-116px)] h-[calc(100vh-120px)] ">
       {' '}
       <div className="flex gap-[8px] items-center p-4">
         <Image
@@ -118,7 +121,7 @@ const CompareStone = ({
           Compare Stone
         </p>
       </div>
-      <div className="flex">
+      <div className="flex h-[80%] overflow-auto">
         <CustomSideScrollable
           leftFixedStyle={styles.leftFixedContent}
           leftFixedContent={
@@ -143,6 +146,25 @@ const CompareStone = ({
               isCheck={selectedCheckboxes}
             />
           }
+        />
+      </div>
+      <div className="px-4 py-2">
+        <ActionButton
+          actionButtonData={[
+            {
+              variant: 'secondary',
+              label: ManageLocales('app.confirmStone.footer.back'),
+              handler: () => {
+                goBackToListView();
+              }
+            },
+
+            {
+              variant: 'primary',
+              label: ManageLocales('app.confirmStone.footer.confirmStone'),
+              handler: () => confirmStoneApiCall()
+            }
+          ]}
         />
       </div>
     </div>

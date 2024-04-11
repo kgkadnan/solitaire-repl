@@ -1157,6 +1157,7 @@ const Result = ({
               handleDetailPage={handleDetailPage}
               identifier={'result'}
               setCompareStoneData={setCompareStoneData}
+              confirmStoneApiCall={confirmStoneApiCall}
             />
           ) : (
             <div className="">
