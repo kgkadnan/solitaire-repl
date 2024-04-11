@@ -817,7 +817,7 @@ const DataTable = ({
               ))}
 
             <div
-              className="p-[4px] rounded-[4px] cursor-pointer"
+              className=" rounded-[4px] cursor-pointer"
               onClick={handleDownloadExcel}
             >
               <Tooltip
@@ -830,11 +830,11 @@ const DataTable = ({
                   />
                 }
                 tooltipContent={'Download Excel'}
-                tooltipContentStyles={'z-[4]'}
+                tooltipContentStyles={'z-[1000]'}
               />
             </div>
 
-            <div className="p-[4px] rounded-[4px] cursor-pointer">
+            <div className=" rounded-[4px] cursor-pointer">
               <Tooltip
                 tooltipTrigger={
                   <div onClick={toggleFullScreen}>
@@ -857,11 +857,11 @@ const DataTable = ({
                   </div>
                 }
                 tooltipContent={'Full Screen'}
-                tooltipContentStyles={'z-[4]'}
+                tooltipContentStyles={'z-[1000]'}
               />
             </div>
 
-            <div className="flex p-[4px] rounded-[4px] cursor-pointer">
+            <div className="flex  rounded-[4px] cursor-pointer">
               <Share
                 rows={rows}
                 selectedProducts={rowSelection}

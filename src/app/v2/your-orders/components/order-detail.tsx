@@ -84,7 +84,7 @@ const OrderDetail: React.FC<IOrderDetail> = ({
             <Tooltip
               tooltipTrigger={<span>{column.columnDef.header}</span>}
               tooltipContent={label}
-              tooltipContentStyles={'z-[4]'}
+              tooltipContentStyles={'z-[1000]'}
             />
           )
         };

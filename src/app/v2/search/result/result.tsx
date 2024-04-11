@@ -220,7 +220,7 @@ const Result = ({
             <Tooltip
               tooltipTrigger={<span>{column.columnDef.header}</span>}
               tooltipContent={label}
-              tooltipContentStyles={'z-[4]'}
+              tooltipContentStyles={'z-[1000]'}
             />
           )
         };
@@ -436,13 +436,13 @@ const Result = ({
                   <Image src={confirmIcon} alt="confirmIcon" />
                 </div>
                 <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                  <h1 className="text-headingS text-neutral900">
+                  <h1 className="text-headingS text-neutral900 !font-medium	">
                     {res?.message}
                   </h1>
                   <ActionButton
                     actionButtonData={[
                       {
-                        variant: 'primary',
+                        variant: 'secondary',
                         label: ManageLocales('app.modal.continue'),
                         handler: () => setIsDialogOpen(false),
                         customStyle: 'flex-1 w-full h-10'
@@ -562,7 +562,7 @@ const Result = ({
                   <Image src={confirmIcon} alt="confirmIcon" />
                 </div>
                 <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                  <h1 className="text-headingS text-neutral900">
+                  <h1 className="text-headingS text-neutral900 !font-medium	">
                     {res?.message}
                   </h1>
                   <ActionButton
@@ -1066,7 +1066,7 @@ const Result = ({
             modalSetState={modalSetState}
             setIsLoading={setIsLoading}
           />
-          <div className="p-[16px] flex justify-end items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow ">
+          <div className="p-[16px] flex justify-end items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow mb-1">
             {isError && (
               <div>
                 <span className="hidden  text-successMain" />
