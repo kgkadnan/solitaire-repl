@@ -127,7 +127,7 @@ const Result = ({
   const [breadCrumLabel, setBreadCrumLabel] = useState('');
 
   const [isConfirmStone, setIsConfirmStone] = useState(false);
-  const [isCompareStone, setIsCompareStone] = useState(true);
+  const [isCompareStone, setIsCompareStone] = useState(false);
 
   const [confirmStoneData, setConfirmStoneData] = useState<IProduct[]>([]);
   const [compareStoneData, setCompareStoneData] = useState<IProduct[]>([]);
