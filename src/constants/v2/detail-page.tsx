@@ -1,7 +1,7 @@
 export const basiDetailsHead1 = [
   { key: 'lot_id', label: 'Stock No' }, //n
   { key: 'shape', label: 'Shape' },
-  { key: 'carat', label: 'Carat' },
+  { key: 'carats', label: 'Carats' },
   { key: 'clarity', label: 'Clarity' },
   { key: 'color', label: 'Color' },
   { key: 'cut', label: 'Cut' },

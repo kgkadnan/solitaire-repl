@@ -79,7 +79,7 @@ const ConfirmStone = ({
         switch (accessor) {
           case 'amount':
             return { ...commonProps, Cell: RenderAmount };
-          case 'carat':
+          case 'carats':
             return { ...commonProps, Cell: RenderCarat };
           case 'measurements':
             return { ...commonProps, Cell: RenderMeasurements };

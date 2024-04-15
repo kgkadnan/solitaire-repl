@@ -767,7 +767,7 @@ const MyCart = () => {
             return { ...commonProps, Cell: RenderAmount };
           case 'measurements':
             return { ...commonProps, Cell: RenderMeasurements };
-          case 'carat':
+          case 'carats':
             return { ...commonProps, Cell: RenderCarat };
           case 'shape_full':
             return { ...commonProps, Cell: RenderShape };
