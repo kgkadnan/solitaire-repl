@@ -9,14 +9,10 @@ export function LeftFixedContent({
 }: ILeftSideContentProps) {
   return (
     <>
-      <p
-        className={`border-b border-r border-solitaireSenary ${styles.compareStoneLeftFixed}`}
-      >
+      <p className={`border-b border-r  ${styles.compareStoneLeftFixed}`}>
         {ManageLocales('app.compareStone.diamondImage')}
       </p>
-      <div
-        className={`border-r border-solitaireSenary ${styles.compareDiamondKeys}`}
-      >
+      <div className={`border-r  ${styles.compareDiamondKeys}`}>
         <div>
           {Object.keys(keyLabelMapping).map(key => (
             <div key={key}>

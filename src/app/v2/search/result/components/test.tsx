@@ -10,7 +10,7 @@ import Image from 'next/image';
 import styles from './compare.module.scss';
 import ActionButton from '@/components/v2/common/action-button';
 import { ManageLocales } from '@/utils/v2/translate';
-const CompareStones = ({
+const CompareStone = ({
   rows,
   columns,
   goBackToListView,
@@ -120,30 +120,18 @@ const CompareStones = ({
           Compare Stone
         </p>
       </div>
-      <div className="flex h-[80%] overflow-auto">
-        <CustomSideScrollable
-          leftFixedStyle={styles.leftFixedContent}
-          leftFixedContent={
-            <LeftFixedContent
-              compareStoneData={rows}
-              keyLabelMapping={mappingColumn}
-              compareValues={compareValues}
-            />
-          }
-          rightSideContent={
-            <RightSideContent
-              compareStoneData={rows}
-              keyLabelMapping={mappingColumn}
-              compareValues={compareValues}
-              handleClick={handleClick}
-              handleClose={handleClose}
-              setIsError={setIsError}
-              setErrorText={setErrorText}
-              setIsCheck={setSelectedCheckboxes}
-              isCheck={selectedCheckboxes}
-            />
-          }
-        />
+      <div className="flex h-[80%] overflow-auto border-t-[1px] border-b-[1px] border-neutral200">
+        <div className="flex">
+          <div className="sticky left-0 bg-neutral50 text-neutral700 text-mMedium font-medium">
+            <div className="h-[234px] w-[108px] sticky top-0 text-center items-center flex justify-center border-[0.5px] border-neutral200">
+              Media
+            </div>
+            <div className="h-[500px]">left</div>
+          </div>
+          <div className="w-[1000px] bg-neutral0 text-neutral900 text-mMedium font-medium">
+            right
+          </div>
+        </div>
       </div>
       <div className="px-4 py-2 flex justify-between">
         <ActionButton
@@ -179,4 +167,4 @@ const CompareStones = ({
   );
 };
 
-export default CompareStones;
+export default CompareStone;

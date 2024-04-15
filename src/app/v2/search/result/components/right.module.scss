@@ -1,5 +1,5 @@
 .dimaondImageContainer {
-  background-color: hsl(var(--solitaire-secondary));
+  // background-color: hsl(var(--solitaire-secondary));
   height: 200px;
   position: sticky;
   top: 0;
@@ -21,7 +21,7 @@
 }
 
 .closeButton {
-  stroke: hsl(var(--solitaire-quaternary));
+  // stroke: hsl(var(--solitaire-quaternary));
   cursor: pointer;
   position: absolute;
   top: 8px;
@@ -29,10 +29,10 @@
 }
 
 .compareStoneValue {
-  background-color: hsl(var(--solitaire-secondary));
+  // background-color: hsl(var(--solitaire-secondary));
   width: 211px;
   font-size: 14px;
   line-height: 30px;
   padding-left: 40px;
-  color: hsl(var(--solitaire-tertiary));
+  // color: hsl(var(--solitaire-tertiary));
 }

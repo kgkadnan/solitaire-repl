@@ -82,7 +82,7 @@ import ImageModal from '@/components/v2/common/detail-page/components/image-moda
 import { getShapeDisplayName } from '@/utils/v2/detail-page';
 import { FILE_URLS } from '@/constants/v2/detail-page';
 import { Toast } from '@/components/v2/common/copy-and-share/toast';
-import CompareStone from './components/compare-stone';
+import CompareStone from './components/test';
 
 // Column mapper outside the component to avoid re-creation on each render
 
@@ -127,7 +127,7 @@ const Result = ({
   const [breadCrumLabel, setBreadCrumLabel] = useState('');
 
   const [isConfirmStone, setIsConfirmStone] = useState(false);
-  const [isCompareStone, setIsCompareStone] = useState(false);
+  const [isCompareStone, setIsCompareStone] = useState(true);
 
   const [confirmStoneData, setConfirmStoneData] = useState<IProduct[]>([]);
   const [compareStoneData, setCompareStoneData] = useState<IProduct[]>([]);
@@ -1157,7 +1157,7 @@ const Result = ({
               handleDetailPage={handleDetailPage}
               identifier={'result'}
               setCompareStoneData={setCompareStoneData}
-              confirmStoneApiCall={confirmStoneApiCall}
+              // confirmStoneApiCall={confirmStoneApiCall}
             />
           ) : (
             <div className="">
