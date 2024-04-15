@@ -58,11 +58,10 @@ const CompareStone = ({
       }
     }
   }, []);
-console.log(columns,"columns")
-  useEffect(()=>{
+  console.log(columns, 'columns');
+  useEffect(() => {
     updateState(columns);
-
-  },[columns])
+  }, [columns]);
   function updateState(column: any) {
     const updatedObj: any = { ...mappingColumn }; // Create a copy of newObj
     column?.forEach((obj: any) => {
@@ -102,7 +101,7 @@ console.log(columns,"columns")
     console.log(filterData, 'filterData');
     setCompareStoneData(filterData);
   };
-  console.log(mappingColumn,"----------->>>>>>")
+  console.log(mappingColumn, '----------->>>>>>');
   return (
     <div className="w-[calc(100vw-116px)] h-[calc(100vh-120px)] ">
       {' '}
@@ -130,68 +129,85 @@ console.log(columns,"columns")
       </div>
       <div className="flex  h-[80%] overflow-auto border-t-[1px] border-b-[1px] border-neutral200">
         <div className="flex ">
-          <div className="sticky left-0 bg-neutral50 text-neutral700 text-mMedium font-medium">
+          <div className="sticky left-0 bg-neutral50 text-neutral700 text-mMedium font-medium w-[150px]">
             <div className="h-[234px] sticky top-0 text-center items-center flex justify-center border-[0.5px] border-neutral200">
               Media
             </div>
-            <div className="h-[500px] flex flex-col">{Object.keys(mappingColumn).map(key => (
-            <div key={key} className='py-2 px-4 border-[1px] border-neutral200'>
-              
-              <span >{key !== 'id' && mappingColumn[key]}</span>
+            <div className="h-[500px] flex flex-col">
+              {Object.keys(mappingColumn).map(key => (
+                <div
+                  key={key}
+                  className="py-2 px-4 border-[1px] border-neutral200"
+                >
+                  <span>{key !== 'id' && mappingColumn[key]}</span>
+                </div>
+              ))}
             </div>
-          ))}</div>
           </div>
           <div className="w-[1000px] bg-neutral0 text-neutral900 text-mMedium font-medium">
-            <div className='flex h-[234px]'>{rows.map((items: IProduct) => (
-          <div key={items.id} className="w-[200px]">
-            <div className={`h-[200px]  ${styles.diamondImageContainer}`}>
-              <Image
-                className={styles.diamondImage}
-                src={`${FILE_URLS.IMG.replace('***', items?.lot_id ?? '')}`}
-                alt="Diamond Image"
-                width={180}
-                height={200}
-                onClick={() => {}
-                  // handleCheckboxClick(items.id)
-                }
-              />
-              <div className={styles.compareStoneCheckbox}>
-                {/* <Checkbox
+            <div className="flex h-[234px]">
+              {rows.map((items: IProduct) => (
+                <div key={items.id} className="w-[200px]">
+                  <div className={`h-[200px] flex`}>
+                    <Image
+                      className={styles.diamondImage}
+                      src={`${FILE_URLS.IMG.replace(
+                        '***',
+                        items?.lot_id ?? ''
+                      )}`}
+                      alt="Diamond Image"
+                      width={180}
+                      height={200}
+                      onClick={
+                        () => {}
+                        // handleCheckboxClick(items.id)
+                      }
+                    />
+                    <div className={styles.compareStoneCheckbox}>
+                      {/* <Checkbox
                   onClick={() => handleClick(items.id)}
                   data-testid={'compare stone checkbox'}
                   checked={isCheck.includes(items.id) || false}
                 /> 
                 */}
-                hi
-              </div>
-              <div
-                className={styles.closeButton}
-                data-testid={'Remove Stone'}
-                onClick={event =>
-                  rows.length > 2
-                    ? handleClose(event, items.id)
-                    : (setIsError(true), setErrorText(MINIMUM_STONES))
-                }
-              >
-                <Image src={CloseButton} alt="Preview" height={40} width={40} />
+                      hi
+                    </div>
+                    <div
+                      className={styles.closeButton}
+                      data-testid={'Remove Stone'}
+                      onClick={event =>
+                        rows.length > 2
+                          ? handleClose(event, items.id)
+                          : (setIsError(true), setErrorText(MINIMUM_STONES))
+                      }
+                    >
+                      <Image
+                        src={CloseButton}
+                        alt="Preview"
+                        height={40}
+                        width={40}
+                      />
 
-                {/* <CloseButton /> */}
-              </div>
+                      {/* <CloseButton /> */}
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
-          </div>
-        ))}</div>
-          <div className={`flex `}>
-        {rows.map((diamond: any) => (
-          <div
-            className={`w-[200px] py-2 px-4 border-[1px] border-neutral200`}
-            key={diamond.id}
-          >
-            {Object.keys(mappingColumn).map(key => (
-              <div key={key}>{key !== 'id' ? diamond[key] || '-' : ''}</div>
-            ))}
-          </div>
-        ))}
-      </div>
+            <div className={`flex `}>
+              {rows.map((diamond: any) => (
+                <div className={`w-[200px] `} key={diamond.id}>
+                  {Object.keys(mappingColumn).map(key => (
+                    <div
+                      key={key}
+                      className="py-2 px-4 border-[1px] border-neutral200"
+                    >
+                      {key !== 'id' ? diamond[key] || '-' : ''}
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
