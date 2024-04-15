@@ -9,6 +9,8 @@ import { ImagesType } from '../interfrace';
 import ImageList from './image-list';
 import downloadSvg from '@public/v2/assets/icons/detail-page/download.svg';
 import linkSvg from '@public/v2/assets/icons/detail-page/link.svg';
+import forwardArrow from '@public/v2/assets/icons/arrow-forward.svg';
+import backwardArrow from '@public/v2/assets/icons/arrow-backword.svg';
 
 interface ModalProps {
   isOpen: boolean;
@@ -31,6 +33,8 @@ const ImageModal: React.FC<ModalProps> = ({
   const handleImageClick = (index: number) => {
     setImageIndex(index);
   };
+
+  console.log('images', images);
 
   useEffect(() => {
     setShowDownloadButton('');
@@ -77,53 +81,81 @@ const ImageModal: React.FC<ModalProps> = ({
                 onImageClick={handleImageClick}
               />
             </div>
-            <div className="mt-2 ml-2">
-              {images[imageIndex].name === 'B2B' ||
-              images[imageIndex].name === 'B2B Sparkle' ||
-              images[imageIndex].name === 'GIA Certificate' ? (
-                images[imageIndex].url === 'null' ||
-                images[imageIndex].url === null ||
-                !images[imageIndex].url.length ? (
+            <div className="mt-2 ml-2 relative">
+              <div className="relative">
+                {images[imageIndex].name === 'B2B' ||
+                images[imageIndex].name === 'B2B Sparkle' ||
+                images[imageIndex].name === 'GIA Certificate' ? (
+                  images[imageIndex].url === 'null' ||
+                  images[imageIndex].url === null ||
+                  !images[imageIndex].url.length ? (
+                    <img
+                      src={NoImageFound}
+                      alt="NoImageFound"
+                      className="lg:w-[662px] lg:h-[510px] sm:w-[300px] sm:h-[210px]"
+                      height={600}
+                      width={650}
+                      style={{
+                        background: '#F2F4F7'
+                      }}
+                      onError={(e: any) => {
+                        setShowDownloadButton(images[imageIndex].name);
+                        e.target.onerror = null;
+                        e.target.src = NoImageFound.src;
+                      }}
+                    />
+                  ) : (
+                    <iframe
+                      frameBorder="0"
+                      src={images[imageIndex].url}
+                      className="lg:w-[650px] lg:h-[465px] sm:w-[300px] sm:h-[210px]"
+                    />
+                  )
+                ) : (
                   <img
-                    src={NoImageFound}
-                    alt="NoImageFound"
-                    className="lg:w-[662px] lg:h-[510px] sm:w-[300px] sm:h-[210px]"
-                    height={600}
-                    width={650}
+                    src={images[imageIndex].url}
                     style={{
                       background: '#F2F4F7'
                     }}
+                    className="lg:w-[662px] lg:h-[510px] sm:w-[300px] sm:h-[210px]"
+                    alt="Preview"
+                    height={600}
+                    width={650}
                     onError={(e: any) => {
                       setShowDownloadButton(images[imageIndex].name);
                       e.target.onerror = null;
                       e.target.src = NoImageFound.src;
                     }}
                   />
-                ) : (
-                  <iframe
-                    frameBorder="0"
-                    src={images[imageIndex].url}
-                    className="lg:w-[662px] lg:h-[465px] sm:w-[300px] sm:h-[210px]"
-                  />
-                )
-              ) : (
-                <img
-                  src={images[imageIndex].url}
-                  style={{
-                    background: '#F2F4F7'
-                  }}
-                  className="lg:w-[662px] lg:h-[510px] sm:w-[300px] sm:h-[210px]"
-                  alt="Preview"
-                  height={600}
-                  width={650}
-                  onError={(e: any) => {
-                    setShowDownloadButton(images[imageIndex].name);
-                    e.target.onerror = null;
-                    e.target.src = NoImageFound.src;
-                  }}
-                />
-              )}
+                )}
+              </div>
+              <button
+                onClick={() => {
+                  imageIndex > 0 && handleImageClick(imageIndex - 1);
+                }}
+                disabled={!(imageIndex > 0)}
+                className={`absolute top-1/2 left-4 transform -translate-y-1/2  rounded-[4px] hover:bg-neutral-50  p-2 border-solid border-neutral-200 shadow-sm ${
+                  imageIndex <= 0 ? 'bg-neutral50' : 'bg-neutral0'
+                }`}
+              >
+                <Image src={backwardArrow} alt="backwardArrow" />
+              </button>
+              <button
+                onClick={() => {
+                  imageIndex < images.length - 1 &&
+                    handleImageClick(imageIndex + 1);
+                }}
+                disabled={!(imageIndex < images.length - 1)}
+                className={`absolute top-1/2 right-4 transform -translate-y-1/2  rounded-[4px] hover:bg-neutral-50  p-2 border-solid border-neutral-200 shadow-sm ${
+                  imageIndex >= images.length - 1
+                    ? 'bg-neutral50'
+                    : 'bg-neutral0'
+                }`}
+              >
+                <Image src={forwardArrow} alt="forwardArrow" />
+              </button>
             </div>
+            ;
           </div>
 
           <div className="flex mt-5 justify-center">

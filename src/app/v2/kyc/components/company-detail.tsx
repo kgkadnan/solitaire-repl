@@ -5,7 +5,7 @@ import { handleInputChange } from '../helper/handle-change';
 import { ManageLocales } from '@/utils/v2/translate';
 import { DynamicMobileInput } from '@/components/v2/common/input-field/dynamic-mobile';
 import { updateFormState } from '@/features/kyc/kyc';
-import { RANGE_VALIDATION } from '@/constants/error-messages/kyc';
+
 import Select from 'react-select';
 import { colourStyles } from '../helper/style/select-style';
 import { RadioButton } from '@/components/v2/common/radio';
@@ -100,6 +100,13 @@ const CompanyDetail = ({
       console.error('Error fetching country code', error);
     }
   }, [data, error]);
+
+  console.log(
+    ' formErrorState?.online?.sections',
+    formState?.online?.sections?.[kycScreenIdentifierNames.COMPANY_DETAILS]?.[
+      'organisation_type'
+    ]
+  );
 
   const [selectedCountryIso, setSelectedCountryIso] = useState('');
 
@@ -939,9 +946,13 @@ const CompanyDetail = ({
                             kycScreenIdentifierNames.COMPANY_DETAILS
                           ]?.['business_type']?.includes('Manufacturer')}
                           onError={
-                            formErrorState?.online?.sections?.[
+                            (!formState?.online?.sections?.[
                               kycScreenIdentifierNames.COMPANY_DETAILS
-                            ]?.['business_type'] ?? ''
+                            ]?.['business_type']?.includes('Other') &&
+                              formErrorState?.online?.sections?.[
+                                kycScreenIdentifierNames.COMPANY_DETAILS
+                              ]?.['business_type']) ??
+                            ''
                           }
                           onDataUpdate={(
                             label: string,
@@ -967,9 +978,13 @@ const CompanyDetail = ({
                             kycScreenIdentifierNames.COMPANY_DETAILS
                           ]?.['business_type']?.includes('Retailer')}
                           onError={
-                            formErrorState?.online?.sections?.[
+                            (!formState?.online?.sections?.[
                               kycScreenIdentifierNames.COMPANY_DETAILS
-                            ]?.['business_type'] ?? ''
+                            ]?.['business_type']?.includes('Other') &&
+                              formErrorState?.online?.sections?.[
+                                kycScreenIdentifierNames.COMPANY_DETAILS
+                              ]?.['business_type']) ??
+                            ''
                           }
                           onDataUpdate={(
                             label: string,
@@ -995,9 +1010,13 @@ const CompanyDetail = ({
                             kycScreenIdentifierNames.COMPANY_DETAILS
                           ]?.['business_type']?.includes('Wholesaler')}
                           onError={
-                            formErrorState?.online?.sections?.[
+                            (!formState?.online?.sections?.[
                               kycScreenIdentifierNames.COMPANY_DETAILS
-                            ]?.['business_type'] ?? ''
+                            ]?.['business_type']?.includes('Other') &&
+                              formErrorState?.online?.sections?.[
+                                kycScreenIdentifierNames.COMPANY_DETAILS
+                              ]?.['business_type']) ??
+                            ''
                           }
                           onDataUpdate={(
                             label: string,
@@ -1023,9 +1042,13 @@ const CompanyDetail = ({
                             kycScreenIdentifierNames.COMPANY_DETAILS
                           ]?.['business_type']?.includes('Corporate Retailer')}
                           onError={
-                            formErrorState?.online?.sections?.[
+                            (!formState?.online?.sections?.[
                               kycScreenIdentifierNames.COMPANY_DETAILS
-                            ]?.['business_type'] ?? ''
+                            ]?.['business_type']?.includes('Other') &&
+                              formErrorState?.online?.sections?.[
+                                kycScreenIdentifierNames.COMPANY_DETAILS
+                              ]?.['business_type']) ??
+                            ''
                           }
                           onDataUpdate={(
                             label: string,
@@ -1053,9 +1076,13 @@ const CompanyDetail = ({
                             (item: any) => !businessTypes.includes(item)
                           )}
                           onError={
-                            formErrorState?.online?.sections?.[
+                            (!formState?.online?.sections?.[
                               kycScreenIdentifierNames.COMPANY_DETAILS
-                            ]?.['business_type'] ?? ''
+                            ]?.['business_type']?.includes('Other') &&
+                              formErrorState?.online?.sections?.[
+                                kycScreenIdentifierNames.COMPANY_DETAILS
+                              ]?.['business_type']) ??
+                            ''
                           }
                           inputError={
                             formErrorState?.online?.sections?.[
@@ -1119,9 +1146,13 @@ const CompanyDetail = ({
                         label={'Individual'}
                         value={'Individual'}
                         onError={
-                          formErrorState?.online?.sections?.[
+                          (formState?.online?.sections?.[
                             kycScreenIdentifierNames.COMPANY_DETAILS
-                          ]?.['organisation_type'] ?? ''
+                          ]?.['organisation_type'] !== 'Other' &&
+                            formErrorState?.online?.sections?.[
+                              kycScreenIdentifierNames.COMPANY_DETAILS
+                            ]?.['organisation_type']) ??
+                          ''
                         }
                         requiresInput={false}
                         selectedOption={organisationType}
@@ -1149,9 +1180,13 @@ const CompanyDetail = ({
                           ]?.['organisation_type'] === 'Partnership Firm'
                         }
                         onError={
-                          formErrorState?.online?.sections?.[
+                          (formState?.online?.sections?.[
                             kycScreenIdentifierNames.COMPANY_DETAILS
-                          ]?.['organisation_type'] ?? ''
+                          ]?.['organisation_type'] !== 'Other' &&
+                            formErrorState?.online?.sections?.[
+                              kycScreenIdentifierNames.COMPANY_DETAILS
+                            ]?.['organisation_type']) ??
+                          ''
                         }
                         requiresInput={false}
                         selectedOption={organisationType}
@@ -1174,9 +1209,13 @@ const CompanyDetail = ({
                           ]?.['organisation_type'] === 'Private Ltd.'
                         }
                         onError={
-                          formErrorState?.online?.sections?.[
+                          (formState?.online?.sections?.[
                             kycScreenIdentifierNames.COMPANY_DETAILS
-                          ]?.['organisation_type'] ?? ''
+                          ]?.['organisation_type'] !== 'Other' &&
+                            formErrorState?.online?.sections?.[
+                              kycScreenIdentifierNames.COMPANY_DETAILS
+                            ]?.['organisation_type']) ??
+                          ''
                         }
                         requiresInput={false}
                         setState={setOrganisationType}
@@ -1199,9 +1238,13 @@ const CompanyDetail = ({
                           ]?.['organisation_type'] === 'LLP'
                         }
                         onError={
-                          formErrorState?.online?.sections?.[
+                          (formState?.online?.sections?.[
                             kycScreenIdentifierNames.COMPANY_DETAILS
-                          ]?.['organisation_type'] ?? ''
+                          ]?.['organisation_type'] !== 'Other' &&
+                            formErrorState?.online?.sections?.[
+                              kycScreenIdentifierNames.COMPANY_DETAILS
+                            ]?.['organisation_type']) ??
+                          ''
                         }
                         requiresInput={false}
                         selectedOption={organisationType}
@@ -1224,9 +1267,13 @@ const CompanyDetail = ({
                           ]?.['organisation_type'] === 'Public Ltd.'
                         }
                         onError={
-                          formErrorState?.online?.sections?.[
+                          (formState?.online?.sections?.[
                             kycScreenIdentifierNames.COMPANY_DETAILS
-                          ]?.['organisation_type'] ?? ''
+                          ]?.['organisation_type'] !== 'Other' &&
+                            formErrorState?.online?.sections?.[
+                              kycScreenIdentifierNames.COMPANY_DETAILS
+                            ]?.['organisation_type']) ??
+                          ''
                         }
                         requiresInput={false}
                         selectedOption={organisationType}
@@ -1249,9 +1296,13 @@ const CompanyDetail = ({
                           ]?.['organisation_type'] === 'OPC'
                         }
                         onError={
-                          formErrorState?.online?.sections?.[
+                          (formState?.online?.sections?.[
                             kycScreenIdentifierNames.COMPANY_DETAILS
-                          ]?.['organisation_type'] ?? ''
+                          ]?.['organisation_type'] !== 'Other' &&
+                            formErrorState?.online?.sections?.[
+                              kycScreenIdentifierNames.COMPANY_DETAILS
+                            ]?.['organisation_type']) ??
+                          ''
                         }
                         requiresInput={false}
                         selectedOption={organisationType}
@@ -1305,6 +1356,15 @@ const CompanyDetail = ({
                               ]?.['organisation_type']
                         }
                         onError={
+                          (formState?.online?.sections?.[
+                            kycScreenIdentifierNames.COMPANY_DETAILS
+                          ]?.['organisation_type'] !== 'Other' &&
+                            formErrorState?.online?.sections?.[
+                              kycScreenIdentifierNames.COMPANY_DETAILS
+                            ]?.['organisation_type']) ??
+                          ''
+                        }
+                        onInputError={
                           formErrorState?.online?.sections?.[
                             kycScreenIdentifierNames.COMPANY_DETAILS
                           ]?.['organisation_type'] ?? ''
@@ -1696,9 +1756,13 @@ const CompanyDetail = ({
                           label={'Individual'}
                           value={'Individual'}
                           onError={
-                            formErrorState?.online?.sections?.[
+                            (formState?.online?.sections?.[
                               kycScreenIdentifierNames.COMPANY_DETAILS
-                            ]?.['organisation_type'] ?? ''
+                            ]?.['organisation_type'] !== 'Other' &&
+                              formErrorState?.online?.sections?.[
+                                kycScreenIdentifierNames.COMPANY_DETAILS
+                              ]?.['organisation_type']) ??
+                            ''
                           }
                           requiresInput={false}
                           selectedOption={organisationType}
@@ -1726,9 +1790,13 @@ const CompanyDetail = ({
                             ]?.['organisation_type'] === 'Partnership Firm'
                           }
                           onError={
-                            formErrorState?.online?.sections?.[
+                            (formState?.online?.sections?.[
                               kycScreenIdentifierNames.COMPANY_DETAILS
-                            ]?.['organisation_type'] ?? ''
+                            ]?.['organisation_type'] !== 'Other' &&
+                              formErrorState?.online?.sections?.[
+                                kycScreenIdentifierNames.COMPANY_DETAILS
+                              ]?.['organisation_type']) ??
+                            ''
                           }
                           requiresInput={false}
                           selectedOption={organisationType}
@@ -1751,9 +1819,13 @@ const CompanyDetail = ({
                             ]?.['organisation_type'] === 'Private Ltd.'
                           }
                           onError={
-                            formErrorState?.online?.sections?.[
+                            (formState?.online?.sections?.[
                               kycScreenIdentifierNames.COMPANY_DETAILS
-                            ]?.['organisation_type'] ?? ''
+                            ]?.['organisation_type'] !== 'Other' &&
+                              formErrorState?.online?.sections?.[
+                                kycScreenIdentifierNames.COMPANY_DETAILS
+                              ]?.['organisation_type']) ??
+                            ''
                           }
                           requiresInput={false}
                           setState={setOrganisationType}
@@ -1776,9 +1848,13 @@ const CompanyDetail = ({
                             ]?.['organisation_type'] === 'LLP'
                           }
                           onError={
-                            formErrorState?.online?.sections?.[
+                            (formState?.online?.sections?.[
                               kycScreenIdentifierNames.COMPANY_DETAILS
-                            ]?.['organisation_type'] ?? ''
+                            ]?.['organisation_type'] !== 'Other' &&
+                              formErrorState?.online?.sections?.[
+                                kycScreenIdentifierNames.COMPANY_DETAILS
+                              ]?.['organisation_type']) ??
+                            ''
                           }
                           requiresInput={false}
                           selectedOption={organisationType}
@@ -1801,9 +1877,13 @@ const CompanyDetail = ({
                             ]?.['organisation_type'] === 'Public Ltd.'
                           }
                           onError={
-                            formErrorState?.online?.sections?.[
+                            (formState?.online?.sections?.[
                               kycScreenIdentifierNames.COMPANY_DETAILS
-                            ]?.['organisation_type'] ?? ''
+                            ]?.['organisation_type'] !== 'Other' &&
+                              formErrorState?.online?.sections?.[
+                                kycScreenIdentifierNames.COMPANY_DETAILS
+                              ]?.['organisation_type']) ??
+                            ''
                           }
                           requiresInput={false}
                           selectedOption={organisationType}
@@ -1826,9 +1906,13 @@ const CompanyDetail = ({
                             ]?.['organisation_type'] === 'OPC'
                           }
                           onError={
-                            formErrorState?.online?.sections?.[
+                            (formState?.online?.sections?.[
                               kycScreenIdentifierNames.COMPANY_DETAILS
-                            ]?.['organisation_type'] ?? ''
+                            ]?.['organisation_type'] !== 'Other' &&
+                              formErrorState?.online?.sections?.[
+                                kycScreenIdentifierNames.COMPANY_DETAILS
+                              ]?.['organisation_type']) ??
+                            ''
                           }
                           requiresInput={false}
                           selectedOption={organisationType}
@@ -1854,6 +1938,19 @@ const CompanyDetail = ({
                           label={'Other'}
                           value={'Other'}
                           showError={false}
+                          defaultSelected={
+                            formState?.online?.sections?.[
+                              kycScreenIdentifierNames.COMPANY_DETAILS
+                            ]?.['organisation_type']?.length > 0
+                              ? organisationTypes.includes(
+                                  formState?.online?.sections?.[
+                                    kycScreenIdentifierNames.COMPANY_DETAILS
+                                  ]?.['organisation_type']
+                                )
+                                ? false
+                                : true
+                              : false
+                          }
                           defaultValue={
                             formState?.online?.sections?.[
                               kycScreenIdentifierNames.COMPANY_DETAILS
@@ -1868,20 +1965,16 @@ const CompanyDetail = ({
                                   kycScreenIdentifierNames.COMPANY_DETAILS
                                 ]?.['organisation_type']
                           }
-                          defaultSelected={
-                            formState?.online?.sections?.[
-                              kycScreenIdentifierNames.COMPANY_DETAILS
-                            ]?.['organisation_type']?.length > 0
-                              ? organisationTypes.includes(
-                                  formState?.online?.sections?.[
-                                    kycScreenIdentifierNames.COMPANY_DETAILS
-                                  ]?.['organisation_type']
-                                )
-                                ? false
-                                : true
-                              : false
-                          }
                           onError={
+                            (formState?.online?.sections?.[
+                              kycScreenIdentifierNames.COMPANY_DETAILS
+                            ]?.['organisation_type'] !== 'Other' &&
+                              formErrorState?.online?.sections?.[
+                                kycScreenIdentifierNames.COMPANY_DETAILS
+                              ]?.['organisation_type']) ??
+                            ''
+                          }
+                          onInputError={
                             formErrorState?.online?.sections?.[
                               kycScreenIdentifierNames.COMPANY_DETAILS
                             ]?.['organisation_type'] ?? ''
@@ -2542,9 +2635,13 @@ const CompanyDetail = ({
                         label={'Individual'}
                         value={'Individual'}
                         onError={
-                          formErrorState?.online?.sections?.[
+                          (formState?.online?.sections?.[
                             kycScreenIdentifierNames.COMPANY_DETAILS
-                          ]?.['organisation_type'] ?? ''
+                          ]?.['organisation_type'] !== 'Other' &&
+                            formErrorState?.online?.sections?.[
+                              kycScreenIdentifierNames.COMPANY_DETAILS
+                            ]?.['organisation_type']) ??
+                          ''
                         }
                         requiresInput={false}
                         selectedOption={organisationType}
@@ -2572,9 +2669,13 @@ const CompanyDetail = ({
                           ]?.['organisation_type'] === 'Partnership Firm'
                         }
                         onError={
-                          formErrorState?.online?.sections?.[
+                          (formState?.online?.sections?.[
                             kycScreenIdentifierNames.COMPANY_DETAILS
-                          ]?.['organisation_type'] ?? ''
+                          ]?.['organisation_type'] !== 'Other' &&
+                            formErrorState?.online?.sections?.[
+                              kycScreenIdentifierNames.COMPANY_DETAILS
+                            ]?.['organisation_type']) ??
+                          ''
                         }
                         requiresInput={false}
                         selectedOption={organisationType}
@@ -2597,9 +2698,13 @@ const CompanyDetail = ({
                           ]?.['organisation_type'] === 'Private Ltd.'
                         }
                         onError={
-                          formErrorState?.online?.sections?.[
+                          (formState?.online?.sections?.[
                             kycScreenIdentifierNames.COMPANY_DETAILS
-                          ]?.['organisation_type'] ?? ''
+                          ]?.['organisation_type'] !== 'Other' &&
+                            formErrorState?.online?.sections?.[
+                              kycScreenIdentifierNames.COMPANY_DETAILS
+                            ]?.['organisation_type']) ??
+                          ''
                         }
                         requiresInput={false}
                         setState={setOrganisationType}
@@ -2622,9 +2727,13 @@ const CompanyDetail = ({
                           ]?.['organisation_type'] === 'LLP'
                         }
                         onError={
-                          formErrorState?.online?.sections?.[
+                          (formState?.online?.sections?.[
                             kycScreenIdentifierNames.COMPANY_DETAILS
-                          ]?.['organisation_type'] ?? ''
+                          ]?.['organisation_type'] !== 'Other' &&
+                            formErrorState?.online?.sections?.[
+                              kycScreenIdentifierNames.COMPANY_DETAILS
+                            ]?.['organisation_type']) ??
+                          ''
                         }
                         requiresInput={false}
                         selectedOption={organisationType}
@@ -2647,9 +2756,13 @@ const CompanyDetail = ({
                           ]?.['organisation_type'] === 'Public Ltd.'
                         }
                         onError={
-                          formErrorState?.online?.sections?.[
+                          (formState?.online?.sections?.[
                             kycScreenIdentifierNames.COMPANY_DETAILS
-                          ]?.['organisation_type'] ?? ''
+                          ]?.['organisation_type'] !== 'Other' &&
+                            formErrorState?.online?.sections?.[
+                              kycScreenIdentifierNames.COMPANY_DETAILS
+                            ]?.['organisation_type']) ??
+                          ''
                         }
                         requiresInput={false}
                         selectedOption={organisationType}
@@ -2671,11 +2784,14 @@ const CompanyDetail = ({
                             kycScreenIdentifierNames.COMPANY_DETAILS
                           ]?.['organisation_type'] === 'OPC'
                         }
-                        showError={false}
                         onError={
-                          formErrorState?.online?.sections?.[
+                          (formState?.online?.sections?.[
                             kycScreenIdentifierNames.COMPANY_DETAILS
-                          ]?.['organisation_type'] ?? ''
+                          ]?.['organisation_type'] !== 'Other' &&
+                            formErrorState?.online?.sections?.[
+                              kycScreenIdentifierNames.COMPANY_DETAILS
+                            ]?.['organisation_type']) ??
+                          ''
                         }
                         requiresInput={false}
                         selectedOption={organisationType}
@@ -2689,7 +2805,11 @@ const CompanyDetail = ({
                     </div>{' '}
                     <div
                       className={`w-[100%] relative ${
-                        organisationType === 'Other' && 'mb-[45px]'
+                        organisationTypes.includes(
+                          formState?.online?.sections?.[
+                            kycScreenIdentifierNames.COMPANY_DETAILS
+                          ]?.['organisation_type']
+                        ) && 'mb-[45px]'
                       }`}
                     >
                       <RadioButtonWithInput
@@ -2697,6 +2817,19 @@ const CompanyDetail = ({
                         label={'Other'}
                         value={'Other'}
                         showError={false}
+                        defaultSelected={
+                          formState?.online?.sections?.[
+                            kycScreenIdentifierNames.COMPANY_DETAILS
+                          ]?.['organisation_type']?.length > 0
+                            ? organisationTypes.includes(
+                                formState?.online?.sections?.[
+                                  kycScreenIdentifierNames.COMPANY_DETAILS
+                                ]?.['organisation_type']
+                              )
+                              ? false
+                              : true
+                            : false
+                        }
                         defaultValue={
                           formState?.online?.sections?.[
                             kycScreenIdentifierNames.COMPANY_DETAILS
@@ -2711,20 +2844,16 @@ const CompanyDetail = ({
                                 kycScreenIdentifierNames.COMPANY_DETAILS
                               ]?.['organisation_type']
                         }
-                        defaultSelected={
-                          formState?.online?.sections?.[
-                            kycScreenIdentifierNames.COMPANY_DETAILS
-                          ]?.['organisation_type']?.length > 0
-                            ? organisationTypes.includes(
-                                formState?.online?.sections?.[
-                                  kycScreenIdentifierNames.COMPANY_DETAILS
-                                ]?.['organisation_type']
-                              )
-                              ? false
-                              : true
-                            : false
-                        }
                         onError={
+                          (formState?.online?.sections?.[
+                            kycScreenIdentifierNames.COMPANY_DETAILS
+                          ]?.['organisation_type'] !== 'Other' &&
+                            formErrorState?.online?.sections?.[
+                              kycScreenIdentifierNames.COMPANY_DETAILS
+                            ]?.['organisation_type']) ??
+                          ''
+                        }
+                        onInputError={
                           formErrorState?.online?.sections?.[
                             kycScreenIdentifierNames.COMPANY_DETAILS
                           ]?.['organisation_type'] ?? ''

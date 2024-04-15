@@ -63,8 +63,6 @@ export function DiamondDetailsComponent({
   const [tableData, setTableData] = useState<any>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  //   const dispatch: AppDispatch = useDispatch();
-  //   const diamondData = useSelector(selectDiamondData);
   const { errorSetState } = useErrorStateManagement();
 
   const { setIsError, setErrorText } = errorSetState;

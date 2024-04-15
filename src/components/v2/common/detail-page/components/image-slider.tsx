@@ -13,6 +13,8 @@ import './carousel.css'; // Import your custom CSS file for React Slick
 import Slider from 'react-slick';
 import { handleDownloadImage } from '@/utils/v2/detail-page';
 import downloadImg from '@public/v2/assets/icons/detail-page/download.svg';
+import forwardArrow from '@public/v2/assets/icons/arrow-forward.svg';
+import backwardArrow from '@public/v2/assets/icons/arrow-backword.svg';
 
 interface ImageSliderProps {
   images: ImagesType[];
@@ -25,6 +27,33 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images, setIsLoading }) => {
   const [showDownloadButton, setShowDownloadButton] = useState(false);
   const [imageName, setImageName] = useState('');
 
+  function SampleNextArrow(props: any) {
+    const { className, style, onClick } = props;
+    return (
+      <div
+        className={className}
+        style={{ ...style, background: 'red' }}
+        onClick={onClick}
+      >
+        {' '}
+        <Image src={forwardArrow} alt="forwardArrow" />
+      </div>
+    );
+  }
+
+  function SamplePrevArrow(props: any) {
+    const { className, style, onClick } = props;
+    return (
+      <div
+        className={className}
+        style={{ ...style, background: 'green' }}
+        onClick={onClick}
+      >
+        <Image src={backwardArrow} alt="backwardArrow" />
+      </div>
+    );
+  }
+
   const settings = {
     dots: true, // Show dot indicators
     infinite: true, // Infinite looping
@@ -32,6 +61,9 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images, setIsLoading }) => {
     slidesToShow: 1, // Number of slides to show at once
     slidesToScroll: 1, // Number of slides to scroll
     autoplay: false, // Enable autoplay
+    nextArrow: <SampleNextArrow />,
+    prevArrow: <SamplePrevArrow />,
+    arrows: true,
     afterChange: (current: number) => {
       setCurrentImageIndex(current);
       setImageName(images[current].name);
