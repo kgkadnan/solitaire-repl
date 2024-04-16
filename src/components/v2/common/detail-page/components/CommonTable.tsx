@@ -54,33 +54,39 @@ const ResponsiveTable: React.FC<ResponsiveTableProps> = ({
               key={rowIndex}
               className="font-medium sm:text-10px lg:text-[14px] leading-5 text-left text-rgba-101828"
             >
-              {tableHead.map((column, index) => (
-                <td
-                  key={column.key}
-                  style={{
-                    borderRadius: '4px'
-                    // outline: "1px solid #E4E7EC",
-                  }}
-                  className={`p-[9px] lg:p-3 whitespace-nowrap ${
-                    column.hiddenAbove1024 ? 'lg:hidden' : ''
-                  } ${column.hiddenBelow1024 ? 'hidden lg:table-cell' : ''}`}
-                >
-                  {column.key === 'amount'
-                    ? row?.variants?.length > 0
-                      ? row?.variants[0]?.prices[0]?.amount
-                        ? `${
-                            formatNumber(row?.variants[0]?.prices[0]?.amount) ??
-                            ''
-                          }`
+              {tableHead.map(column => {
+                console.log('row[column.key]', typeof row[column.key]);
+                return (
+                  <td
+                    key={column.key}
+                    style={{
+                      borderRadius: '4px'
+                      // outline: "1px solid #E4E7EC",
+                    }}
+                    className={`p-[9px] lg:p-3 whitespace-nowrap ${
+                      column.hiddenAbove1024 ? 'lg:hidden' : ''
+                    } ${column.hiddenBelow1024 ? 'hidden lg:table-cell' : ''}`}
+                  >
+                    {column.key === 'amount'
+                      ? row?.variants?.length > 0
+                        ? row?.variants[0]?.prices[0]?.amount
+                          ? `${
+                              formatNumber(
+                                row?.variants[0]?.prices[0]?.amount
+                              ) ?? ''
+                            }`
+                          : ''
+                        : row?.amount
+                        ? `${formatNumber(row?.amount) ?? ''}`
                         : ''
-                      : row?.amount
-                      ? `${formatNumber(row?.amount) ?? ''}`
-                      : ''
-                    : typeof row[column.key] === 'string'
-                    ? row[column.key]
-                    : row[column.key]?.toString() || '-'}
-                </td>
-              ))}
+                      : typeof row[column.key] === 'number'
+                      ? formatNumber(row[column.key]) ?? '-'
+                      : typeof row[column.key] === 'string'
+                      ? row[column.key]
+                      : row[column.key]?.toString() || '-'}
+                  </td>
+                );
+              })}
             </tr>
           ))}
         </tbody>

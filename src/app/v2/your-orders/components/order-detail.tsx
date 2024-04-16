@@ -96,6 +96,17 @@ const OrderDetail: React.FC<IOrderDetail> = ({
           case 'carats':
           case 'rap':
           case 'rap_value':
+          case 'table_percentage':
+          case 'depth_percentage':
+          case 'ratio':
+          case 'length':
+          case 'width':
+          case 'depth':
+          case 'crown_angle':
+          case 'crown_height':
+          case 'girdle_percentage':
+          case 'pavilion_angle':
+          case 'pavilion_height':
             return { ...commonProps, Cell: RenderCarat };
           case 'discount':
             return { ...commonProps, Cell: RenderDiscount };
@@ -117,6 +128,14 @@ const OrderDetail: React.FC<IOrderDetail> = ({
                 });
               }
             };
+          case 'key_to_symbol':
+            return {
+              ...commonProps,
+              Cell: ({ renderedCellValue }: { renderedCellValue: any }) => (
+                <span>{`${renderedCellValue?.toString() ?? '-'}`}</span>
+              )
+            };
+
           case 'lab':
             return { ...commonProps, Cell: RenderLab };
           case 'location':
