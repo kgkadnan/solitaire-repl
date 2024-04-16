@@ -267,7 +267,7 @@ export function DiamondDetailsComponent({
               : '2xl:h-[70vh]'
           }`}
         >
-          <div className="flex justify-between mt-4 2xl:mt-0 lg:w-[50%] 2xl:w-full">
+          <div className="flex xl:justify-start  2xl:justify-between mt-4 2xl:mt-0 2xl:w-full">
             <p
               className="sm:text-[22px] xl:text-[28px] text-[#344054] font-medium mr-5 "
               style={{ alignSelf: 'center' }}
@@ -275,7 +275,7 @@ export function DiamondDetailsComponent({
               Stock No: {tableData?.lot_id ?? '-'}
             </p>
 
-            <div className="flex lg:w-[50%] 2xl:w-[40%] justify-around items-center">
+            <div className="flex lg:w-[30%]  2xl:w-[40%] justify-around items-center">
               <div className="flex gap-3 items-center">
                 <Tooltip
                   tooltipTrigger={
