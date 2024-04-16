@@ -120,7 +120,7 @@ const MyCart = () => {
     isError &&
       setTimeout(() => {
         setIsError(false); // Hide the toast notification after some time
-      }, 2000);
+      }, 4000);
   }, [isError]);
   const processCartItems = ({
     cartItems,
@@ -862,7 +862,7 @@ const MyCart = () => {
             modalSetState={modalSetState}
           />
           <div className="p-[16px] flex justify-end items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow ">
-            {isError && (
+            {/* {isError && (
               <div>
                 <span className="hidden  text-successMain" />
                 <span
@@ -871,7 +871,7 @@ const MyCart = () => {
                   {errorText}
                 </span>
               </div>
-            )}
+            )} */}
             <ActionButton
               actionButtonData={[
                 {
@@ -879,7 +879,7 @@ const MyCart = () => {
                   label: ManageLocales('app.searchResult.confirmStone'),
                   isHidden: isConfirmStone,
                   handler: () => {
-                    setIsDetailPage(false);
+                    // setIsDetailPage(false);
                     const { id } = detailPageData;
                     const selectedRows = { [id]: true };
                     handleConfirmStone({
@@ -888,7 +888,8 @@ const MyCart = () => {
                       setIsError,
                       setErrorText,
                       setIsConfirmStone,
-                      setConfirmStoneData
+                      setConfirmStoneData,
+                      setIsDetailPage
                     });
                   }
                 }

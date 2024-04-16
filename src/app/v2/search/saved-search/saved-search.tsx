@@ -199,7 +199,7 @@ const SavedSearch = ({ setIsLoading, isLoading }: any) => {
     isError &&
       setTimeout(() => {
         setIsError(false); // Hide the toast notification after some time
-      }, 2000);
+      }, 4000);
   }, [isError]);
   return (
     <div className="mb-[20px]">

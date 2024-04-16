@@ -1038,7 +1038,7 @@ const Result = ({
     isError &&
       setTimeout(() => {
         setIsError(false); // Hide the toast notification after some time
-      }, 2000);
+      }, 4000);
   }, [isError]);
 
   return (
@@ -1093,7 +1093,7 @@ const Result = ({
             setIsLoading={setIsLoading}
           />
           <div className="p-[16px] flex justify-end items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow mb-1">
-            {isError && (
+            {/* {isError && (
               <div>
                 <span className="hidden  text-successMain" />
                 <span
@@ -1102,7 +1102,7 @@ const Result = ({
                   {errorText}
                 </span>
               </div>
-            )}
+            )} */}
             <ActionButton
               actionButtonData={[
                 {
@@ -1116,7 +1116,6 @@ const Result = ({
                   label: ManageLocales('app.searchResult.confirmStone'),
                   isHidden: isConfirmStone,
                   handler: () => {
-                    setIsDetailPage(false);
                     setBreadCrumLabel('Detail Page');
                     const { id } = detailPageData;
                     const selectedRows = { [id]: true };
@@ -1126,7 +1125,8 @@ const Result = ({
                       setIsError,
                       setErrorText,
                       setIsConfirmStone,
-                      setConfirmStoneData
+                      setConfirmStoneData,
+                      setIsDetailPage
                     });
                   }
                 }

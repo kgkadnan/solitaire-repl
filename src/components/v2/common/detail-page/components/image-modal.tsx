@@ -49,7 +49,7 @@ const ImageModal: React.FC<ModalProps> = ({
       setShowToast(true); // Show the toast notification
       setTimeout(() => {
         setShowToast(false); // Hide the toast notification after some time
-      }, 2000);
+      }, 4000);
     });
   };
 
