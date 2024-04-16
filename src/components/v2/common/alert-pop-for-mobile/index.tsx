@@ -5,6 +5,7 @@ import { Dialog, DialogContent } from '../../ui/dialog';
 import appDownload from '@public/app-download.png';
 import Image from 'next/image';
 import playStore from '@public/play-store.svg';
+import appleStore from '@public/apple-store.svg';
 
 const AppDownloadPopup = () => {
   const isMobile = useMediaQuery({ maxWidth: 1024 });
@@ -17,7 +18,7 @@ const AppDownloadPopup = () => {
 
       <Dialog open={true} defaultOpen={true}>
         <DialogContent
-          className={`max-w-[90%] min-h-[222px] bg-neutral25 max-h-[90%] flex flex-col overflow-y-auto  !rounded-[8px] p-[24px] items-center`}
+          className={`max-w-[100%] min-h-[100%] bg-neutral25 max-h-[90%] flex flex-col overflow-y-auto align-center justify-center  p-[24px] items-center`}
           style={{
             background:
               'linear-gradient(135deg, #DBF2FC 0%, #E8E8FF 30%, #FFF4E3 100%)'
@@ -37,13 +38,23 @@ const AppDownloadPopup = () => {
               height={400}
               width={196}
             />
-            <a
-              href="https://play.google.com/store/apps/details?id=com.kgk.diamonds"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Image src={playStore} alt="Download on Google Play" />
-            </a>
+            <div className="flex">
+              <a
+                href="https://play.google.com/store/apps/details?id=com.kgk.diamonds"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Image src={playStore} alt="Download on Google Play" />
+              </a>
+              <a
+                href="https://apps.apple.com/us/app/kgk-diamond/id6479595403"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2"
+              >
+                <Image src={appleStore} alt="Download on Apple Store" />
+              </a>
+            </div>
           </div>
         </DialogContent>
       </Dialog>
