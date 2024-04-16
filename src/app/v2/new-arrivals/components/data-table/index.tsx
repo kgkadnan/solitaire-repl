@@ -438,7 +438,7 @@ const NewArrivalDataTable = ({
     muiTableBodyRowProps: ({ row }) => {
       const isHighlightBackground =
         activeTab !== 0 && RenderNewArrivalLotIdColor({ row });
-      console.log(isHighlightBackground, 'isHighlightBackground');
+
       return {
         onClick: row.id.includes('shape')
           ? row.getToggleExpandedHandler()

@@ -34,11 +34,9 @@ const ImageModal: React.FC<ModalProps> = ({
     setImageIndex(index);
   };
 
-  console.log('images', images);
-
   useEffect(() => {
     setShowDownloadButton('');
-    setImageIndex(0);
+    // setImageIndex(0);
   }, [isOpen]);
   useEffect(() => {
     setImageIndex(selectedImageIndex || 0);
@@ -155,7 +153,6 @@ const ImageModal: React.FC<ModalProps> = ({
                 <Image src={forwardArrow} alt="forwardArrow" />
               </button>
             </div>
-            ;
           </div>
 
           <div className="flex mt-5 justify-center">
