@@ -18,7 +18,8 @@ const RadioButtonWithInput = ({
   defaultSelected = false, // New prop for default radio selection
   defaultValue = '', // New prop for default input value
   onError,
-  showError
+  showError,
+  onInputError
 }: any) => {
   const [inputValue, setInputValue] = useState('');
 
@@ -66,7 +67,7 @@ const RadioButtonWithInput = ({
             type="text"
             name={inputName}
             value={inputValue}
-            errorText={onError}
+            errorText={onInputError}
             placeholder={placeholder}
             showError={showError}
             styles={{

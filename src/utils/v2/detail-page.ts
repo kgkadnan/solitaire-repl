@@ -21,6 +21,7 @@ export const handleDownloadImage = async (
   setIsLoading?: any
 ) => {
   try {
+    console.log('download Image', imageUrl);
     // Place your async logic here
     setIsLoading(true);
     const response = await fetch(
