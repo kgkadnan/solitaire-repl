@@ -13,6 +13,7 @@ import {
   RenderDiscount,
   RenderLab
 } from '@/components/v2/table/helpers/render-cell';
+import { formatNumber } from '@/utils/fix-two-digit-number';
 
 import React, { useEffect, useMemo, useState } from 'react';
 
@@ -79,7 +80,9 @@ const ConfirmStone = ({
         switch (accessor) {
           case 'amount':
             return { ...commonProps, Cell: RenderAmount };
-          case 'carat':
+          case 'carats':
+          case 'rap':
+          case 'rap_value':
             return { ...commonProps, Cell: RenderCarat };
           case 'measurements':
             return { ...commonProps, Cell: RenderMeasurements };
@@ -110,7 +113,7 @@ const ConfirmStone = ({
                 <span>{`${
                   renderedCellValue === 0
                     ? '0.00'
-                    : renderedCellValue?.toFixed(2) ?? '0.00'
+                    : formatNumber(renderedCellValue) ?? '0.00'
                 }`}</span>
               )
             };

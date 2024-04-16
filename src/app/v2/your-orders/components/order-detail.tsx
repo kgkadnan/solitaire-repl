@@ -33,6 +33,7 @@ import { DiamondDetailsComponent } from '@/components/v2/common/detail-page';
 import ImageModal from '@/components/v2/common/detail-page/components/image-modal';
 import { FILE_URLS } from '@/constants/v2/detail-page';
 import { getShapeDisplayName } from '@/utils/v2/detail-page';
+import { formatNumber } from '@/utils/fix-two-digit-number';
 
 interface IOrderDetail {
   productDetailData: any;
@@ -92,7 +93,9 @@ const OrderDetail: React.FC<IOrderDetail> = ({
         switch (accessor) {
           case 'amount':
             return { ...commonProps, Cell: RenderAmount };
-          case 'carat':
+          case 'carats':
+          case 'rap':
+          case 'rap_value':
             return { ...commonProps, Cell: RenderCarat };
           case 'discount':
             return { ...commonProps, Cell: RenderDiscount };
@@ -130,7 +133,7 @@ const OrderDetail: React.FC<IOrderDetail> = ({
                 <span>{`${
                   renderedCellValue === 0
                     ? '0.00'
-                    : renderedCellValue?.toFixed(2) ?? '0.00'
+                    : formatNumber(renderedCellValue) ?? '0.00'
                 }`}</span>
               )
             };
@@ -428,7 +431,7 @@ const OrderDetail: React.FC<IOrderDetail> = ({
                               )}
                         </p>
                         <span className="text-neutral900 text-mMedium font-medium">
-                          {`$ ${productDetailData?.total.toFixed(2)}`}
+                          {`$ ${formatNumber(productDetailData?.total)}`}
                         </span>
                       </div>
                     </div>

@@ -40,6 +40,7 @@ import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
 import { kycStatus } from '@/constants/enums/kyc';
+import { formatNumber } from '@/utils/fix-two-digit-number';
 
 export function DiamondDetailsComponent({
   data,
@@ -375,12 +376,13 @@ export function DiamondDetailsComponent({
                 {tableData?.variants?.length > 0
                   ? tableData?.variants[0]?.prices[0]?.amount
                     ? `$${
-                        tableData?.variants[0]?.prices[0]?.amount?.toFixed(2) ??
-                        ''
+                        formatNumber(
+                          tableData?.variants[0]?.prices[0]?.amount
+                        ) ?? ''
                       }`
                     : ''
                   : tableData?.amount
-                  ? `$${tableData?.amount?.toFixed(2) ?? ''}`
+                  ? `$${formatNumber(tableData?.amount) ?? ''}`
                   : ''}
               </div>
               <p

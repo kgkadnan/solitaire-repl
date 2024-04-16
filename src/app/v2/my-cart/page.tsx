@@ -68,6 +68,7 @@ import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import { SubRoutes } from '@/constants/v2/enums/routes';
 import { Toast } from '@/components/v2/common/copy-and-share/toast';
 import { kycStatus } from '@/constants/enums/kyc';
+import { formatNumber } from '@/utils/fix-two-digit-number';
 
 const MyCart = () => {
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();
@@ -767,7 +768,9 @@ const MyCart = () => {
             return { ...commonProps, Cell: RenderAmount };
           case 'measurements':
             return { ...commonProps, Cell: RenderMeasurements };
-          case 'carat':
+          case 'carats':
+          case 'rap':
+          case 'rap_value':
             return { ...commonProps, Cell: RenderCarat };
           case 'shape_full':
             return { ...commonProps, Cell: RenderShape };
@@ -788,7 +791,7 @@ const MyCart = () => {
                 <span>{`${
                   renderedCellValue === 0
                     ? '0.00'
-                    : renderedCellValue?.toFixed(2) ?? '0.00'
+                    : formatNumber(renderedCellValue) ?? '0.00'
                 }`}</span>
               )
             };

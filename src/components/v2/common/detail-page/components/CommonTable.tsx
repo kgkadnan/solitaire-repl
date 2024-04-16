@@ -1,4 +1,5 @@
 // components/ResponsiveTable.tsx
+import { formatNumber } from '@/utils/fix-two-digit-number';
 import React from 'react';
 
 export interface TableColumn {
@@ -68,12 +69,12 @@ const ResponsiveTable: React.FC<ResponsiveTableProps> = ({
                     ? row?.variants?.length > 0
                       ? row?.variants[0]?.prices[0]?.amount
                         ? `${
-                            row?.variants[0]?.prices[0]?.amount?.toFixed(2) ??
+                            formatNumber(row?.variants[0]?.prices[0]?.amount) ??
                             ''
                           }`
                         : ''
                       : row?.amount
-                      ? `${row?.amount?.toFixed(2) ?? ''}`
+                      ? `${formatNumber(row?.amount) ?? ''}`
                       : ''
                     : typeof row[column.key] === 'string'
                     ? row[column.key]
