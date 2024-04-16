@@ -173,7 +173,7 @@ const Result = ({
           //   });
           //   newArr.push(obj);
           // });
-          dataTableSetState.setRows(res.data.products);
+          dataTableSetState.setRows(res.data?.products);
           setRowSelection({});
           setErrorText('');
           setData(res.data);
@@ -463,7 +463,7 @@ const Result = ({
               limit: LISTING_PAGE_DATA_LIMIT,
               offset: 0
             }).then(res => {
-              dataTableSetState.setRows(res.data.products);
+              dataTableSetState.setRows(res.data?.products);
               setRowSelection({});
               setErrorText('');
               setData(res.data);
@@ -592,7 +592,7 @@ const Result = ({
               limit: LISTING_PAGE_DATA_LIMIT,
               offset: 0
             }).then(res => {
-              dataTableSetState.setRows(res.data.products);
+              dataTableSetState.setRows(res.data?.products);
               setRowSelection({});
               setErrorText('');
               setData(res.data);
@@ -863,7 +863,7 @@ const Result = ({
               limit: LISTING_PAGE_DATA_LIMIT,
               offset: 0
             }).then(res => {
-              dataTableSetState.setRows(res.data.products);
+              dataTableSetState.setRows(res.data?.products);
               setRowSelection({});
               setErrorText('');
               setData(res.data);
