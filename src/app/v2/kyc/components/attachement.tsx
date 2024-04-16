@@ -73,23 +73,22 @@ export const RenderAttachment = ({
     return formData;
   };
   const fileUpload = ({ acceptedFiles, key }: any) => {
+    handleFileupload({
+      acceptedFiles,
+      setUploadProgress: `formState.attachment[${key}].uploadProgress`,
+      setIsFileUploaded: `formState.attachment[${key}].isFileUploaded`,
+      setSelectedFile: `formState.attachment[${key}]`,
+      dispatch
+    });
+    dispatch(
+      updateFormState({
+        name: `formErrorState.attachment[${key}]`,
+        value: ''
+      })
+    );
     uploadDocument(buildFormData({ acceptedFiles, key }))
       .unwrap()
-      .then(() => {
-        handleFileupload({
-          acceptedFiles,
-          setUploadProgress: `formState.attachment[${key}].uploadProgress`,
-          setIsFileUploaded: `formState.attachment[${key}].isFileUploaded`,
-          setSelectedFile: `formState.attachment[${key}]`,
-          dispatch
-        });
-        dispatch(
-          updateFormState({
-            name: `formErrorState.attachment[${key}]`,
-            value: ''
-          })
-        );
-      })
+      .then(res => {})
       .catch(error => {
         console.log('Error', error);
       });
@@ -117,7 +116,8 @@ export const RenderAttachment = ({
         <hr className="border-neutral200" />
         <div
           className={` ${'max-h-[670px]'} ${
-            country !== countries.INDIA && 'h-[548px]'
+            (country === countries.USA || country === countries.BELGIUM) &&
+            'h-[39vh]'
           }  w-[100%] `}
         >
           <div
@@ -186,7 +186,7 @@ export const RenderAttachment = ({
             </div>
           </div>
         </div>
-        <div className="w-[100%] flex flex-col py-3 justify-center items-center">
+        <div className="w-[100%] mt-3 flex flex-col py-3 justify-center items-center">
           <div className="flex  items-center w-[920px]">
             <div className="pr-3 flex items-center">
               <CheckboxComponent

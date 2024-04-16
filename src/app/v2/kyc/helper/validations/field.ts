@@ -32,6 +32,7 @@ import {
   OWNER_PAN_NUMBER_OR_ADHAAR_MANDATORY,
   PHONE_NUMBER_MANDATORY,
   PINCODE_MANDATORY,
+  RANGE_VALIDATION,
   STATE_MANDATORY,
   SWIFT_CODE_MANDATORY,
   ULTIMATE_BENEFICIARY_NAME_MANDATORY,
@@ -44,6 +45,8 @@ import {
   IFSC_REGEX,
   NAME_REGEX,
   PAN_MATCH,
+  PHONE_REG,
+  PHONE_REGEX,
   SWIFT_CODE_REGEX
 } from '@/constants/validation-regex/regex';
 import {
@@ -65,6 +68,10 @@ import {
   ValidateIf,
   validate
 } from 'class-validator';
+import {
+  IsArrayOfArraysValid,
+  IsNotOther
+} from './screen/company-details-validators';
 
 export async function validateKYCField(fieldType: string, fieldValue: any) {
   let instance;
@@ -292,7 +299,16 @@ class ValidationCountryCodeCriteria {
 
 class ValidationPhoneCriteria {
   @MinLength(3, { message: FIELD_INVALID('Phone') })
-  @IsMobilePhone()
+  //   @IsMobilePhone(
+  //     undefined,
+  //     {},
+  //     {
+  //       message: FIELD_INVALID('Phone')
+  //     }
+  //   )
+  @Matches(PHONE_REG, {
+    message: RANGE_VALIDATION('Phone', 0, 15)
+  })
   @IsNotEmpty({ message: PHONE_NUMBER_MANDATORY })
   phone: string;
 
@@ -493,7 +509,6 @@ class ValidationIndustryTypeCriteria {
 class ValidationOrganisationTypeCriteria {
   @IsNotEmpty({ message: ORGANISATION_TYPE_MANDATORY })
   @IsString({ message: ORGANISATION_TYPE_MANDATORY })
-  @Length(1, 140, { message: FIELD_INVALID('Organisation Type') })
   organisation_type: string;
 
   constructor(organisation_type: string) {
@@ -605,13 +620,13 @@ class ValidationPincodeCriteria {
 }
 
 class ValidationPANCriteria {
+  @IsString({ message: FIELD_INVALID('Company PAN') })
+  @IsNotEmpty({ message: COMPANY_PAN_NUMBER_MANDATORY })
+  @IsAlphanumeric(undefined, { message: FIELD_INVALID('Company PAN') })
+  @MinLength(10, { message: FIELD_INVALID('Company PAN') })
   @Matches(PAN_MATCH, {
     message: FIELD_INVALID('Company PAN')
   })
-  @IsString({ message: FIELD_INVALID('Company PAN') })
-  @IsNotEmpty({ message: COMPANY_PAN_NUMBER_MANDATORY })
-  @IsAlphanumeric(undefined, { message: COMPANY_PAN_NUMBER_MANDATORY })
-  @MinLength(10, { message: COMPANY_PAN_NUMBER_MANDATORY })
   company_pan_number: string;
 
   constructor(company_pan_number: string) {
@@ -734,7 +749,7 @@ class ValidationIsAntiMoneyCriteria {
   }
 }
 class ValidationAntiMoneyPolicyNameCriteria {
-  @ValidateIf((object, value) => object?.is_anti_money_laundering === value)
+  @ValidateIf(object => object?.is_anti_money_laundering === false)
   @IsString({
     message: 'Reason for No Anti-Money Laundering Policy is Required.'
   })

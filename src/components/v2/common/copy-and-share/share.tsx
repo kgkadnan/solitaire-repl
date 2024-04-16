@@ -10,6 +10,7 @@ import { SELECT_STONE_TO_PERFORM_ACTION } from '@/constants/error-messages/searc
 import { Toast } from './toast';
 import { IProduct } from '@/app/v2/search/interface';
 import Tooltip from '../tooltip';
+import { formatNumber } from '@/utils/fix-two-digit-number';
 
 const Share = ({
   rows,
@@ -142,7 +143,9 @@ const Share = ({
               attribute === 'current_max_bid' &&
               selectedAttributes['current_max_bid']
             ) {
-              return `Current Max Bid: ${product?.current_max_bid.toFixed(2)}`;
+              return `Current Max Bid: ${formatNumber(
+                product?.current_max_bid
+              )}`;
             }
             if (
               attribute === 'last_bid_date' &&
@@ -181,7 +184,7 @@ const Share = ({
       setTimeout(() => {
         // setCopied(false);
         setShowToast(false); // Hide the toast notification after some time
-      }, 2000);
+      }, 4000);
     } catch (err) {
       console.error('Failed to copy:', err);
     }
@@ -297,7 +300,7 @@ const Share = ({
             />
           }
           tooltipContent={'Share'}
-          tooltipContentStyles={'z-[4]'}
+          tooltipContentStyles={'z-[1000]'}
         />
         {/* <Image src={shareButtonSvg} alt={'share'} width={38} height={38} /> */}
       </div>

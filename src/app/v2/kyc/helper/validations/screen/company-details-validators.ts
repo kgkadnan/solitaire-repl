@@ -29,12 +29,14 @@ import {
   MEMBER_BUSINESS_INVALID,
   MEMBER_NAME_INVALID,
   FIELD_INVALID,
-  IS_ANTI_MONEY_LAUNDERING
+  IS_ANTI_MONEY_LAUNDERING,
+  RANGE_VALIDATION
 } from '@/constants/error-messages/kyc';
 import {
   GST_NUMBER_REGEX,
   NAME_REGEX,
-  PAN_MATCH
+  PAN_MATCH,
+  PHONE_REGEX
 } from '@/constants/validation-regex/regex';
 import {
   IsString,
@@ -50,8 +52,113 @@ import {
   MinLength,
   IsNumber,
   Min,
-  Max
+  Max,
+  IsEmail,
+  registerDecorator,
+  ValidationOptions,
+  ValidatorConstraint,
+  ValidatorConstraintInterface,
+  ValidationArguments
 } from 'class-validator';
+
+// Custom validation constraint class
+// @ValidatorConstraint({ name: 'custom', async: false })
+// export class ArrayOfArraysValidator implements ValidatorConstraintInterface {
+//   // Validate method to check if each inner array has at least two elements and if the first element is 'Other', the second element should not be empty
+//   validate(value: any[], args: ValidationArguments) {
+//     if (!Array.isArray(value)) return false; // Not an array of arrays
+//     for (const innerArray of value) {
+//       if (!Array.isArray(innerArray) || innerArray.length < 2) return false; // Inner array doesn't have at least two elements
+//       if (innerArray[0] === 'Other' && innerArray[1] === '') return false; // If first element is 'Other', second element should not be empty
+//     }
+//     return true;
+//   }
+
+//   defaultMessage(args: ValidationArguments) {
+//     return INDUSTRY_TYPE_MANDATORY;
+//   }
+// }
+
+// // Decorator function to use the custom validation constraint
+// export function IsArrayOfArraysValid(validationOptions?: ValidationOptions) {
+//   return function (object: Object, propertyName: string) {
+//     registerDecorator({
+//       target: object.constructor,
+//       propertyName: propertyName,
+//       options: validationOptions,
+//       constraints: [],
+//       validator: ArrayOfArraysValidator, // Use the custom validator constraint
+//     });
+//   };
+// }
+
+// Custom validation constraint class
+@ValidatorConstraint({ name: 'custom', async: false })
+export class OrganisationTypeValidator implements ValidatorConstraintInterface {
+  validate(value: any, args: ValidationArguments) {
+    // Check if the value is exactly 'Other'
+    return value !== 'Other';
+  }
+
+  defaultMessage(args: ValidationArguments) {
+    return ORGANISATION_TYPE_MANDATORY;
+  }
+}
+
+// Decorator function to use the custom validation constraint
+export function IsNotOther(validationOptions?: ValidationOptions) {
+  return function (object: Object, propertyName: string) {
+    registerDecorator({
+      target: object.constructor,
+      propertyName: propertyName,
+      options: validationOptions,
+      constraints: [],
+      validator: OrganisationTypeValidator // Use the custom validator constraint
+    });
+  };
+}
+
+// Custom validation constraint class
+@ValidatorConstraint({ name: 'custom', async: false })
+export class ArrayOfArraysValidator implements ValidatorConstraintInterface {
+  defaultMessage(args: ValidationArguments) {
+    // Get the error message passed as an argument
+    return args.constraints[0];
+  }
+
+  // Validate method remains the same
+  validate(value: any[], args: ValidationArguments) {
+    // if (!Array.isArray(value) || value.some(item => !Array.isArray(item))) return false; // Not an array of arrays
+
+    // if (value.some(innerArray => innerArray.length < 2)) return false; // If any inner array doesn't have at least two elements, return false/
+
+    if (
+      value &&
+      value.some(
+        innerArray => innerArray[0] === 'Other' && innerArray[1] === ''
+      )
+    )
+      return false; // If any inner array has first element as 'Other' and second element as empty string, return false
+
+    return true; // Otherwise, return true indicating validation success
+  }
+}
+
+// Decorator function to use the custom validation constraint
+export function IsArrayOfArraysValid(
+  errorMessage: string,
+  validationOptions?: ValidationOptions
+) {
+  return function (object: Object, propertyName: string) {
+    registerDecorator({
+      target: object.constructor,
+      propertyName: propertyName,
+      options: validationOptions,
+      constraints: [errorMessage], // Pass the error message as a constraint
+      validator: ArrayOfArraysValidator // Use the custom validator constraint
+    });
+  };
+}
 
 export class KycPostCompanyDetailsValidation {
   @IsNotEmpty({ message: COMPANY_NAME_MANDATORY })
@@ -70,19 +177,27 @@ export class KycPostCompanyDetailsValidation {
   year_of_establishment: string;
 
   @IsNotEmpty({ message: COMPANY_PHONE_NUMBER_MANDATORY })
+  @Matches(PHONE_REGEX, {
+    message: RANGE_VALIDATION('Company Phone', 0, 15)
+  })
   company_phone_number: string;
 
   @IsNotEmpty({ message: COMPANY_EMAIL_MANDATORY })
+  @Length(1, 140, { message: FIELD_INVALID('Company email') })
+  @IsEmail({}, { message: FIELD_INVALID('Company Email') })
   company_email: string;
 
   @ArrayNotEmpty({ message: BUSINESS_TYPE_MANDATORY })
+  @IsArrayOfArraysValid(BUSINESS_TYPE_MANDATORY)
   business_type: string[];
 
   @ArrayNotEmpty({ message: INDUSTRY_TYPE_MANDATORY })
+  @IsArrayOfArraysValid(INDUSTRY_TYPE_MANDATORY)
   industry_type: string[];
 
   @IsNotEmpty({ message: ORGANISATION_TYPE_MANDATORY })
   @IsString({ message: ORGANISATION_TYPE_MANDATORY })
+  @IsNotOther()
   organisation_type: string;
 
   @IsNotEmpty({ message: BUSINESS_REGISTRATION_NUMBER_MANDATORY })
@@ -94,7 +209,6 @@ export class KycPostCompanyDetailsValidation {
 
   @IsString({ message: FIELD_INVALID('Subsidiary Company') })
   @IsOptional()
-  @Length(1, 140, { message: FIELD_INVALID('Subsidiary Company Name') })
   subsidiary_company: string;
 
   @IsBoolean({
@@ -105,7 +219,7 @@ export class KycPostCompanyDetailsValidation {
   })
   is_member_of_business: boolean = false;
 
-  @ValidateIf((object, value) => object.is_member_of_business === value)
+  @ValidateIf(object => object.is_member_of_business === true)
   @IsNotEmpty({ message: MEMBER_NAME_MANDATORY })
   @IsString({ message: MEMBER_NAME_INVALID })
   @Length(1, 140, { message: FIELD_INVALID('Member of Business Name') })
@@ -168,13 +282,13 @@ export class IndiaKycPostCompanyDetailsValidation extends KycPostCompanyDetailsV
   @IsNotEmpty({ message: PINCODE_MANDATORY })
   pincode: string;
 
+  @IsString({ message: FIELD_INVALID('Company PAN') })
+  @IsNotEmpty({ message: COMPANY_PAN_NUMBER_MANDATORY })
+  @IsAlphanumeric(undefined, { message: FIELD_INVALID('Company PAN') })
+  @MinLength(10, { message: FIELD_INVALID('Company PAN') })
   @Matches(PAN_MATCH, {
     message: FIELD_INVALID('Company PAN')
   })
-  @IsString({ message: FIELD_INVALID('Company PAN') })
-  @IsNotEmpty({ message: COMPANY_PAN_NUMBER_MANDATORY })
-  @IsAlphanumeric(undefined, { message: COMPANY_PAN_NUMBER_MANDATORY })
-  @MinLength(10, { message: COMPANY_PAN_NUMBER_MANDATORY })
   company_pan_number: string;
 
   @Matches(GST_NUMBER_REGEX, {
@@ -188,7 +302,7 @@ export class IndiaKycPostCompanyDetailsValidation extends KycPostCompanyDetailsV
   @IsBoolean({ message: MSME_REGISTERED_INVALID })
   is_msme_registered: boolean = false;
 
-  @ValidateIf((object, value) => object?.is_msme_registered === value)
+  @ValidateIf(object => object?.is_msme_registered === true)
   @IsString({
     message: MSME_TYPE_INVALID
   })
@@ -196,7 +310,7 @@ export class IndiaKycPostCompanyDetailsValidation extends KycPostCompanyDetailsV
   @IsNotEmpty({ message: MSME_TYPE_MANDATORY })
   msme_type: string;
 
-  @ValidateIf((object, value) => object?.is_msme_registered === value)
+  @ValidateIf(object => object?.is_msme_registered === true)
   @IsString({
     message: MSME_REGISTRATION_NUMBER_INVALID
   })
@@ -329,7 +443,7 @@ export class UsaKycPostCompanyDetailsValidation extends BelgiumKycPostCompanyDet
   @IsNotEmpty({ message: IS_ANTI_MONEY_LAUNDERING })
   is_anti_money_laundering: boolean;
 
-  @ValidateIf((object, value) => object?.is_anti_money_laundering === value)
+  @ValidateIf(object => object?.is_anti_money_laundering === false)
   @IsString({
     message: 'Reason for No Anti-Money Laundering Policy is Required.'
   })

@@ -1,9 +1,9 @@
 import { validateAllFields } from './handle-validate-all-fields';
 
 import { IRegister } from '../interface';
-import { IOtp, IToken } from '../page';
 import InvalidCreds from '../../login/component/invalid-creds';
 import { statusCode } from '@/constants/enums/status-code';
+import { IOtp, IToken } from '../component/main';
 
 interface IHandleRegister {
   role: string;
@@ -72,7 +72,8 @@ export const handleRegister = async ({
       setIsDialogOpen(true);
       setDialogContent(
         <InvalidCreds
-          content={e?.data?.message}
+          content=""
+          header={e?.data?.message}
           handleClick={() => setIsDialogOpen(false)}
           buttonText={
             e.status === statusCode.DUPLICATE

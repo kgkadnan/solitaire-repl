@@ -2,8 +2,8 @@ import Image from 'next/image';
 import successIcon from '@public/v2/assets/icons/modal/confirm.svg';
 import InvalidCreds from '@/app/v2/login/component/invalid-creds';
 import { IOtp } from '..';
-import { IToken } from '@/app/v2/register/page';
 import ActionButton from '../../action-button';
+import { IToken } from '@/app/v2/register/component/main';
 interface IHandleResendOTP {
   otpVerificationFormState: IOtp;
   setResendTimer: React.Dispatch<React.SetStateAction<number>>;
@@ -61,7 +61,8 @@ export const handleResendOTP = ({
       setIsDialogOpen(true);
       setDialogContent(
         <InvalidCreds
-          content={e?.data?.message}
+          content=""
+          header={e?.data?.message}
           handleClick={() => setIsDialogOpen(false)}
         />
       );

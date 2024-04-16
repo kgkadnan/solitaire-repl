@@ -93,7 +93,6 @@ const KYC = () => {
   const { setOtpValues, setResendTimer } = otpVerificationSetState;
 
   const dispatch = useAppDispatch();
-
   const handleCountrySelection = (country: string) => {
     if (formState.country === country) {
       setSelectedCountry(country);
@@ -185,6 +184,13 @@ const KYC = () => {
           country
         );
 
+        dispatch(
+          updateFormState({
+            name: `formErrorState.online.sections.${[sectionKeys[index]]}`,
+            value: {}
+          })
+        );
+
         if (!validationErrors.length) {
           if (sectionKeys.length - 1 >= index) {
             return Number(item);
@@ -241,11 +247,12 @@ const KYC = () => {
   const handleConfirmRestartKyc = () => {
     resetKyc({})
       .then((res: any) => {
+        setCurrentStepperStep(0);
+        setCompletedSteps(new Set());
         if (res.data.statusCode === statusCode.SUCCESS) {
-          setCurrentState('country_selection');
           setSelectedCountry('');
           setSelectedSubmissionOption('');
-          setCurrentStepperStep(0);
+
           dispatch(
             updateFormState({
               name: 'formState.country',
@@ -275,6 +282,7 @@ const KYC = () => {
               }
             })
           );
+          setCurrentState('country_selection');
 
           setIsDialogOpen(false);
         }
@@ -286,7 +294,6 @@ const KYC = () => {
 
   const handleResetButton = () => {
     setIsDialogOpen(true);
-    setIsDialogOpen(true);
     setDialogContent(
       <>
         <div className="absolute left-[-84px] top-[-84px]">
@@ -294,7 +301,9 @@ const KYC = () => {
         </div>
         <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
           <div>
-            <h1 className="text-headingS text-neutral900">Are you sure?</h1>
+            <h1 className="text-headingS text-neutral900 font-medium">
+              Are you sure?
+            </h1>
             <p className="text-neutral600 text-mRegular">
               Do you want to restart KYC process
             </p>
@@ -365,7 +374,7 @@ const KYC = () => {
                         </div>
                         <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
                           <div>
-                            <h1 className="text-headingS text-neutral900">
+                            <h1 className="text-headingS text-neutral900 font-medium">
                               Do you want to resume KYC process or restart it?
                             </h1>
                           </div>
@@ -537,6 +546,8 @@ const KYC = () => {
   }, []);
 
   useEffect(() => {
+    if (!formState.country) return;
+
     let sectionKeys: string[] =
       formState.country === 'India'
         ? [
@@ -550,7 +561,6 @@ const KYC = () => {
             kycScreenIdentifierNames.COMPANY_DETAILS,
             kycScreenIdentifierNames.BANKING_DETAILS
           ];
-
     sectionKeys.forEach(async (key, index: number) => {
       let validationErrors = await validateScreen(
         formState.online.sections[key],
@@ -558,31 +568,19 @@ const KYC = () => {
         formState.country
       );
 
-      // console.log('validationErrors', validationErrors);
-
       const screenValidationError = formErrorState?.online?.sections[key];
-
-      // console.log('screenValidationError', screenValidationError);
 
       if (
         currentStepperStep > index &&
-        screenValidationError &&
-        !Object.keys(screenValidationError).length
+        (!screenValidationError ||
+          (screenValidationError && !Object.keys(screenValidationError).length))
       ) {
-        // console.log('indexxxx', currentStepperStep, index);
         completedSteps.add(index);
         rejectedSteps.delete(index);
       } else if (!validationErrors.length) {
         rejectedSteps.delete(index);
-
-        // completedSteps.add(index);
-        // setCompletedSteps(new Set(completedSteps));
       } else if (index === currentStepperStep) {
-        // console.log('index === currentStepperStep', index, currentStepperStep);
-        // rejectedSteps.delete(index);
-        // setRejectedSteps(new Set(rejectedSteps));
         completedSteps.delete(index);
-        // rejectedSteps.delete(index);
       } else if (validationErrors.length && currentStepperStep >= index) {
         if (Array.isArray(validationErrors)) {
           validationErrors.forEach(error => {
@@ -734,10 +732,12 @@ const KYC = () => {
 
   const handleStepperNext = async ({
     screenName,
-    currentState
+    currentState,
+    emailVerified = false
   }: {
     screenName: string;
     currentState: number;
+    emailVerified?: boolean;
   }) => {
     // const nextStep = currentStepperStep + 1;
     // Perform data validation
@@ -772,7 +772,7 @@ const KYC = () => {
     }
 
     // Make the API call to submit the form data
-    let updatedCompanyDetails;
+    let updatedCompanyDetails: any;
     if (screenName === kycScreenIdentifierNames.COMPANY_DETAILS) {
       const companyDetails =
         formState?.online?.sections?.[kycScreenIdentifierNames.COMPANY_DETAILS];
@@ -818,6 +818,34 @@ const KYC = () => {
     })
       .then((response: any) => {
         if (
+          screenName === kycScreenIdentifierNames.COMPANY_DETAILS &&
+          formState.country === 'India'
+        ) {
+          if (
+            updatedCompanyDetails.organisation_type.length &&
+            updatedCompanyDetails.organisation_type.includes('Individual')
+          ) {
+            dispatch(
+              updateFormState({
+                name: `formState.online.sections[${[
+                  kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
+                ]}][owner_pan_or_aadhaar_number]`,
+                value: updatedCompanyDetails.company_pan_number
+              })
+            );
+          }
+          //    else {
+          //     dispatch(
+          //       updateFormState({
+          //         name: `formState.online.sections[${[
+          //           kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
+          //         ]}][owner_pan_or_aadhaar_number]`,
+          //         value: ''
+          //       })
+          //     );
+          //   }
+        }
+        if (
           (response?.data?.statusCode === statusCode.SUCCESS ||
             response?.data?.statusCode === statusCode.NO_CONTENT) &&
           !validationError.length
@@ -828,6 +856,14 @@ const KYC = () => {
           setCompletedSteps(new Set(completedSteps));
           rejectedSteps.delete(currentState);
           setRejectedSteps(new Set(rejectedSteps));
+          if (
+            screenName === kycScreenIdentifierNames.PERSONAL_DETAILS &&
+            emailVerified
+          ) {
+            goToNextStep();
+            return;
+          }
+
           screenName === kycScreenIdentifierNames.PERSONAL_DETAILS &&
           !formState.isEmailVerified
             ? (setIsInputDialogOpen(true),
@@ -1081,13 +1117,13 @@ const KYC = () => {
       } else {
         setIsDialogOpen(true);
         setDialogContent(
-          <>
+          <div className="h-[200px]">
             <div className="absolute left-[-84px] top-[-84px]">
               <Image src={confirmIcon} alt="confirmIcon" />
             </div>
             <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
               <div>
-                <h1 className="text-headingS text-neutral900">Are you sure?</h1>
+                <h1 className="text-headingS text-neutral900">Confirmation</h1>
                 <p className="text-neutral600 text-mRegular">
                   Please review all the information you have entered before
                   submitting the form!
@@ -1112,7 +1148,7 @@ const KYC = () => {
                 ]}
               />
             </div>
-          </>
+          </div>
         );
       }
     }
@@ -1298,6 +1334,7 @@ const KYC = () => {
           isEmailVerified={formState.isEmailVerified}
           handleSubmit={handleSubmit}
           filteredSteps={filteredSteps}
+          country={formState.country}
         />
       );
     } else if (currentState === countries.OTHER || currentState === 'offline') {
@@ -1375,19 +1412,14 @@ const KYC = () => {
                       if (res) {
                         setResendTimer(60);
                         //  setIsInputDialogOpen(false)
-                        //  dispatch(
-                        //   updateFormState({
-                        //     name: 'formState.isEmailVerified',
-                        //     value: true
-                        //   })
-                        // );
                       }
                     })
                     .catch((e: any) => {
                       setIsDialogOpen(true);
                       setDialogContent(
                         <InvalidCreds
-                          content={e?.data?.message}
+                          content=""
+                          header={e?.data?.message}
                           handleClick={() => setIsDialogOpen(false)}
                         />
                       );
@@ -1409,12 +1441,44 @@ const KYC = () => {
                     .unwrap()
                     .then((res: any) => {
                       if (res) {
-                        setIsInputDialogOpen(false);
                         dispatch(
                           updateFormState({
                             name: 'formState.isEmailVerified',
                             value: true
                           })
+                        );
+                        setIsInputDialogOpen(false);
+                        setIsDialogOpen(true);
+                        setDialogContent(
+                          <>
+                            <div className="absolute left-[-84px] top-[-84px]">
+                              <Image src={confirmIcon} alt="confirmIcon" />
+                            </div>
+                            <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+                              <h1 className="text-headingS text-neutral900 font-medium">
+                                Your email has been verified successfully
+                              </h1>
+                              <ActionButton
+                                actionButtonData={[
+                                  {
+                                    variant: 'primary',
+                                    label: 'Next',
+                                    handler: () => {
+                                      handleStepperNext({
+                                        screenName:
+                                          filteredSteps[currentStepperStep]
+                                            ?.identifier,
+                                        currentState: currentStepperStep,
+                                        emailVerified: true
+                                      });
+                                      setIsDialogOpen(false);
+                                    },
+                                    customStyle: 'flex-1 w-full h-10'
+                                  }
+                                ]}
+                              />
+                            </div>
+                          </>
                         );
                       }
                     })
@@ -1422,7 +1486,8 @@ const KYC = () => {
                       setIsDialogOpen(true);
                       setDialogContent(
                         <InvalidCreds
-                          content={e?.data?.message}
+                          content=""
+                          header={e?.data?.message}
                           handleClick={() => setIsDialogOpen(false)}
                         />
                       );

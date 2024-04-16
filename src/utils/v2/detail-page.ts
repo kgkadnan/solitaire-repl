@@ -21,6 +21,7 @@ export const handleDownloadImage = async (
   setIsLoading?: any
 ) => {
   try {
+    console.log('download Image', imageUrl);
     // Place your async logic here
     setIsLoading(true);
     const response = await fetch(
@@ -40,7 +41,7 @@ export const handleDownloadImage = async (
     }
     const byteArray = new Uint8Array(byteNumbers);
     const blob = new Blob([byteArray], {
-      type: name === 'GIA Certificate' ? 'application/pdf' : 'image/*'
+      type: name === 'GIA Certificate' ? 'application/pdf' : 'image/jpeg'
     });
 
     // Create URL for the Blob

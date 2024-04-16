@@ -67,6 +67,12 @@ const Table = ({
           }
         }
       },
+      MuiButtonBase: {
+        defaultProps: {
+          // The props to apply
+          disableRipple: true // No more ripple, on the whole application 💣!
+        }
+      },
       MuiTableHead: {
         styleOverrides: {
           root: {
@@ -142,6 +148,12 @@ const Table = ({
         '&.MuiTableRow-root .MuiTableCell-root::after': {
           backgroundColor: 'var(--neutral-25)'
         },
+        '&.MuiTableRow-root .MuiTableCell-root': {
+          backgroundColor: row.id.includes('shape')
+            ? 'var(--neutral-25)'
+            : 'var(--neutral-0)'
+        },
+
         '&.MuiTableRow-root:active .MuiTableCell-root::after': {
           backgroundColor: 'var(--neutral-100)'
         }

@@ -23,7 +23,8 @@ import {
   basicDetails,
   inclusionDetails,
   mesurementsDetails,
-  otherInformationDetails
+  otherInformationDetails,
+  priceDetails
 } from '@/constants/v2/detail-page';
 import { Toast } from '../copy-and-share/toast';
 import Tooltip from '../tooltip';
@@ -39,6 +40,7 @@ import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
 import { kycStatus } from '@/constants/enums/kyc';
+import { formatNumber } from '@/utils/fix-two-digit-number';
 
 export function DiamondDetailsComponent({
   data,
@@ -62,8 +64,6 @@ export function DiamondDetailsComponent({
   const [tableData, setTableData] = useState<any>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  //   const dispatch: AppDispatch = useDispatch();
-  //   const diamondData = useSelector(selectDiamondData);
   const { errorSetState } = useErrorStateManagement();
 
   const { setIsError, setErrorText } = errorSetState;
@@ -100,7 +100,6 @@ export function DiamondDetailsComponent({
       </div>
     );
   };
-
   const images = [
     {
       name: getShapeDisplayName(tableData?.shape ?? ''),
@@ -152,7 +151,7 @@ export function DiamondDetailsComponent({
       setShowToast(true); // Show the toast notification
       setTimeout(() => {
         setShowToast(false); // Hide the toast notification after some time
-      }, 2000);
+      }, 4000);
     });
   };
   let statusValue = '';
@@ -224,26 +223,26 @@ export function DiamondDetailsComponent({
           </p>
         </div>
       </div>
-      <div className="xl:flex pt-5">
+      <div className="2xl:flex pt-5">
         <div
           className={`flex ${
             isNudge &&
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-              ? 'xl:h-[calc(73vh-60px)]'
-              : 'xl:h-[73vh]'
+              ? '2xl:h-[calc(70vh-60px)]'
+              : '2xl:h-[70vh]'
           }`}
         >
-          <div className="w-full xl:hidden">
+          <div className="w-full 2xl:hidden">
             <ImageSlider images={images} setIsLoading={setIsLoading} />
           </div>
           <div
-            className={`hidden xl:block mr-5 ${
+            className={`hidden 2xl:block mr-5 ${
               isNudge &&
               (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
                 isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-                ? 'h-[calc(73vh-60px)]'
-                : 'h-[73vh]'
+                ? 'h-[calc(70vh-60px)]'
+                : 'h-[70vh]'
             } overflow-y-scroll`}
           >
             <ImageList
@@ -252,7 +251,7 @@ export function DiamondDetailsComponent({
               onImageClick={handleImageClick}
             />
           </div>
-          <div className="hidden xl:block">
+          <div className="hidden 2xl:block">
             <ImagePreview
               images={images}
               selectedImageIndex={selectedImageIndex}
@@ -261,15 +260,15 @@ export function DiamondDetailsComponent({
           </div>
         </div>
         <div
-          className={`xl:w-2/3 xl:ml-10 mb-[12px] scroll-adjust-custom xl:overflow-y-scroll ${
+          className={`2xl:w-2/3 2xl:ml-10 mb-[12px] scroll-adjust-custom 2xl:overflow-y-scroll ${
             isNudge &&
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-              ? 'xl:h-[calc(73vh-60px)]'
-              : 'xl:h-[73vh]'
+              ? '2xl:h-[calc(70vh-60px)]'
+              : '2xl:h-[70vh]'
           }`}
         >
-          <div className="flex justify-between mt-4 xl:mt-0 w-full">
+          <div className="flex xl:justify-start  2xl:justify-between mt-4 2xl:mt-0 2xl:w-full">
             <p
               className="sm:text-[22px] xl:text-[28px] text-[#344054] font-medium mr-5 "
               style={{ alignSelf: 'center' }}
@@ -277,7 +276,7 @@ export function DiamondDetailsComponent({
               Stock No: {tableData?.lot_id ?? '-'}
             </p>
 
-            <div className="flex w-[40%] justify-around items-center">
+            <div className="flex lg:w-[30%]  2xl:w-[40%] justify-around items-center">
               <div className="flex gap-3 items-center">
                 <Tooltip
                   tooltipTrigger={
@@ -291,7 +290,7 @@ export function DiamondDetailsComponent({
                     />
                   }
                   tooltipContent={'Download Excel'}
-                  tooltipContentStyles={'z-[4]'}
+                  tooltipContentStyles={'z-[1000]'}
                 />
 
                 <Tooltip
@@ -306,7 +305,7 @@ export function DiamondDetailsComponent({
                     />
                   }
                   tooltipContent={'Media Link'}
-                  tooltipContentStyles={'z-[4]'}
+                  tooltipContentStyles={'z-[1000]'}
                 />
 
                 <div className="w-[38px] h-[38px]">
@@ -322,7 +321,7 @@ export function DiamondDetailsComponent({
               <div className="flex gap-3 items-center relative justify-center">
                 {/* Backward Arrow */}
                 <button
-                  className={`relative group  h-[34px] w-[37px] shadow-sm flex items-center justify-center rounded-[4px] hover:bg-neutral-50 border-[1px] border-neutral-200 ${
+                  className={`relative group  h-[35px] w-[37px] shadow-sm flex items-center justify-center rounded-[4px] hover:bg-neutral-50 border-[1px] border-neutral-200 ${
                     currentIndex <= 0 ? 'bg-neutral-50' : 'bg-neutral0 '
                   } `}
                   disabled={currentIndex <= 0}
@@ -345,7 +344,7 @@ export function DiamondDetailsComponent({
 
                 {/* Forward Arrow */}
                 <button
-                  className={`relative group  h-[34px] w-[37px] shadow-sm flex items-center justify-center rounded-[4px] hover:bg-neutral-50 border-[1px] border-neutral-200 ${
+                  className={`relative group  h-[35px] w-[37px] shadow-sm flex items-center justify-center rounded-[4px] hover:bg-neutral-50 border-[1px] border-neutral-200 ${
                     currentIndex >= data.length - 1
                       ? 'bg-neutral-50'
                       : 'bg-neutral0'
@@ -377,12 +376,13 @@ export function DiamondDetailsComponent({
                 {tableData?.variants?.length > 0
                   ? tableData?.variants[0]?.prices[0]?.amount
                     ? `$${
-                        tableData?.variants[0]?.prices[0]?.amount?.toFixed(2) ??
-                        ''
+                        formatNumber(
+                          tableData?.variants[0]?.prices[0]?.amount
+                        ) ?? ''
                       }`
                     : ''
                   : tableData?.amount
-                  ? `$${tableData?.amount?.toFixed(2) ?? ''}`
+                  ? `$${formatNumber(tableData?.amount) ?? ''}`
                   : ''}
               </div>
               <p
@@ -401,6 +401,12 @@ export function DiamondDetailsComponent({
             )}
 
             {RenderNewArrivalLotId({ tableData })}
+          </div>
+          <div className="pt-8 max-w-[100%] pr-[10px]">
+            <div className="sm:text-[14px] xl:text-[16px] text-[#344054]  font-medium">
+              Price Details
+            </div>
+            {displayTable(priceDetails)}
           </div>
           <div className="pt-8 max-w-[100%] pr-[10px]">
             <div className="sm:text-[14px] xl:text-[16px] text-[#344054]  font-medium">
@@ -423,7 +429,7 @@ export function DiamondDetailsComponent({
             {displayTable(inclusionDetails)}
           </div>
 
-          <div className="mt-6 max-w-[100%] pr-[10px]">
+          <div className="mt-6 max-w-[100%] pr-[10px] mb-5">
             <div className="sm:text-[14px] xl:text-[16px] font-medium text-[#344054]">
               Other Information
             </div>

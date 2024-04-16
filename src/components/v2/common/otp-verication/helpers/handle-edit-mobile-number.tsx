@@ -46,10 +46,7 @@ export const handleEditMobileNumber = ({
     }));
   } else {
     // if (verifyNumber?.exists === false) {
-    setOTPVerificationFormState(prev => ({
-      ...prev,
-      codeAndNumber: `${otpVerificationFormState.countryCode} ${otpVerificationFormState.otpMobileNumber}`
-    }));
+
     sendOtp({
       phone: otpVerificationFormState.otpMobileNumber,
       country_code: otpVerificationFormState.countryCode,
@@ -57,6 +54,10 @@ export const handleEditMobileNumber = ({
     })
       .unwrap()
       .then((res: any) => {
+        setOTPVerificationFormState(prev => ({
+          ...prev,
+          codeAndNumber: `${otpVerificationFormState.countryCode} ${otpVerificationFormState.otpMobileNumber}`
+        }));
         setToken(prev => ({
           ...prev,
           phoneToken: res.token
@@ -92,7 +93,8 @@ export const handleEditMobileNumber = ({
         setIsDialogOpen(true);
         setDialogContent(
           <InvalidCreds
-            content={e?.data?.message}
+            content=""
+            header={e?.data?.message}
             handleClick={() => setIsDialogOpen(false)}
           />
         );

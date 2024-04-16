@@ -5,9 +5,10 @@ import {
   OWNER_FIRST_NAME_MANDATORY,
   OWNER_LAST_NAME_MANDATORY,
   OWNER_PAN_NUMBER_OR_ADHAAR_MANDATORY,
-  OWNER_PHONE_MANDATORY
+  OWNER_PHONE_MANDATORY,
+  RANGE_VALIDATION
 } from '@/constants/error-messages/kyc';
-import { NAME_REGEX } from '@/constants/validation-regex/regex';
+import { NAME_REGEX, PHONE_REGEX } from '@/constants/validation-regex/regex';
 import {
   IsAlphanumeric,
   IsEmail,
@@ -46,6 +47,9 @@ export class IndiaKycPostCompanyOwnerInformation {
   owner_country_code: string;
 
   @IsNotEmpty({ message: OWNER_PHONE_MANDATORY })
+  @Matches(PHONE_REGEX, {
+    message: RANGE_VALIDATION('Owner Phone', 0, 15)
+  })
   owner_phone: string;
 
   // @Matches(PAN_MATCH, { message: FIELD_INVALID('PAN Number') })
