@@ -101,13 +101,6 @@ const CompanyDetail = ({
     }
   }, [data, error]);
 
-  console.log(
-    ' formErrorState?.online?.sections',
-    formState?.online?.sections?.[kycScreenIdentifierNames.COMPANY_DETAILS]?.[
-      'organisation_type'
-    ]
-  );
-
   const [selectedCountryIso, setSelectedCountryIso] = useState('');
 
   const handleRadioChange = ({ value, formKey }: any) => {
@@ -948,7 +941,9 @@ const CompanyDetail = ({
                           onError={
                             (!formState?.online?.sections?.[
                               kycScreenIdentifierNames.COMPANY_DETAILS
-                            ]?.['business_type']?.includes('Other') &&
+                            ]?.['business_type']?.some((item: any) =>
+                              item.includes('Other')
+                            ) &&
                               formErrorState?.online?.sections?.[
                                 kycScreenIdentifierNames.COMPANY_DETAILS
                               ]?.['business_type']) ??
@@ -980,7 +975,9 @@ const CompanyDetail = ({
                           onError={
                             (!formState?.online?.sections?.[
                               kycScreenIdentifierNames.COMPANY_DETAILS
-                            ]?.['business_type']?.includes('Other') &&
+                            ]?.['business_type']?.some((item: any) =>
+                              item.includes('Other')
+                            ) &&
                               formErrorState?.online?.sections?.[
                                 kycScreenIdentifierNames.COMPANY_DETAILS
                               ]?.['business_type']) ??
@@ -1012,7 +1009,9 @@ const CompanyDetail = ({
                           onError={
                             (!formState?.online?.sections?.[
                               kycScreenIdentifierNames.COMPANY_DETAILS
-                            ]?.['business_type']?.includes('Other') &&
+                            ]?.['business_type']?.some((item: any) =>
+                              item.includes('Other')
+                            ) &&
                               formErrorState?.online?.sections?.[
                                 kycScreenIdentifierNames.COMPANY_DETAILS
                               ]?.['business_type']) ??
@@ -1044,7 +1043,9 @@ const CompanyDetail = ({
                           onError={
                             (!formState?.online?.sections?.[
                               kycScreenIdentifierNames.COMPANY_DETAILS
-                            ]?.['business_type']?.includes('Other') &&
+                            ]?.['business_type']?.some((item: any) =>
+                              item.includes('Other')
+                            ) &&
                               formErrorState?.online?.sections?.[
                                 kycScreenIdentifierNames.COMPANY_DETAILS
                               ]?.['business_type']) ??
@@ -1078,7 +1079,9 @@ const CompanyDetail = ({
                           onError={
                             (!formState?.online?.sections?.[
                               kycScreenIdentifierNames.COMPANY_DETAILS
-                            ]?.['business_type']?.includes('Other') &&
+                            ]?.['business_type']?.some((item: any) =>
+                              item.includes('Other')
+                            ) &&
                               formErrorState?.online?.sections?.[
                                 kycScreenIdentifierNames.COMPANY_DETAILS
                               ]?.['business_type']) ??
@@ -1417,9 +1420,15 @@ const CompanyDetail = ({
                             kycScreenIdentifierNames.COMPANY_DETAILS
                           ]?.['business_type']?.includes('Manufacturer')}
                           onError={
-                            formErrorState?.online?.sections?.[
+                            (!formState?.online?.sections?.[
                               kycScreenIdentifierNames.COMPANY_DETAILS
-                            ]?.['business_type'] ?? ''
+                            ]?.['business_type']?.some((item: any) =>
+                              item.includes('Other')
+                            ) &&
+                              formErrorState?.online?.sections?.[
+                                kycScreenIdentifierNames.COMPANY_DETAILS
+                              ]?.['business_type']) ??
+                            ''
                           }
                           onDataUpdate={(
                             label: string,
@@ -1445,9 +1454,15 @@ const CompanyDetail = ({
                             kycScreenIdentifierNames.COMPANY_DETAILS
                           ]?.['business_type']?.includes('Retailer')}
                           onError={
-                            formErrorState?.online?.sections?.[
+                            (!formState?.online?.sections?.[
                               kycScreenIdentifierNames.COMPANY_DETAILS
-                            ]?.['business_type'] ?? ''
+                            ]?.['business_type']?.some((item: any) =>
+                              item.includes('Other')
+                            ) &&
+                              formErrorState?.online?.sections?.[
+                                kycScreenIdentifierNames.COMPANY_DETAILS
+                              ]?.['business_type']) ??
+                            ''
                           }
                           onDataUpdate={(
                             label: string,
@@ -1473,9 +1488,15 @@ const CompanyDetail = ({
                             kycScreenIdentifierNames.COMPANY_DETAILS
                           ]?.['business_type']?.includes('Wholesaler')}
                           onError={
-                            formErrorState?.online?.sections?.[
+                            (!formState?.online?.sections?.[
                               kycScreenIdentifierNames.COMPANY_DETAILS
-                            ]?.['business_type'] ?? ''
+                            ]?.['business_type']?.some((item: any) =>
+                              item.includes('Other')
+                            ) &&
+                              formErrorState?.online?.sections?.[
+                                kycScreenIdentifierNames.COMPANY_DETAILS
+                              ]?.['business_type']) ??
+                            ''
                           }
                           onDataUpdate={(
                             label: string,
@@ -1501,9 +1522,15 @@ const CompanyDetail = ({
                             kycScreenIdentifierNames.COMPANY_DETAILS
                           ]?.['business_type']?.includes('Corporate Retailer')}
                           onError={
-                            formErrorState?.online?.sections?.[
+                            (!formState?.online?.sections?.[
                               kycScreenIdentifierNames.COMPANY_DETAILS
-                            ]?.['business_type'] ?? ''
+                            ]?.['business_type']?.some((item: any) =>
+                              item.includes('Other')
+                            ) &&
+                              formErrorState?.online?.sections?.[
+                                kycScreenIdentifierNames.COMPANY_DETAILS
+                              ]?.['business_type']) ??
+                            ''
                           }
                           onDataUpdate={(
                             label: string,
@@ -1531,9 +1558,15 @@ const CompanyDetail = ({
                             (item: any) => !businessTypes.includes(item)
                           )}
                           onError={
-                            formErrorState?.online?.sections?.[
+                            (!formState?.online?.sections?.[
                               kycScreenIdentifierNames.COMPANY_DETAILS
-                            ]?.['business_type'] ?? ''
+                            ]?.['business_type']?.some((item: any) =>
+                              item.includes('Other')
+                            ) &&
+                              formErrorState?.online?.sections?.[
+                                kycScreenIdentifierNames.COMPANY_DETAILS
+                              ]?.['business_type']) ??
+                            ''
                           }
                           inputError={
                             formErrorState?.online?.sections?.[
@@ -1603,9 +1636,15 @@ const CompanyDetail = ({
                             kycScreenIdentifierNames.COMPANY_DETAILS
                           ]?.['industry_type']?.includes('Diamonds')}
                           onError={
-                            formErrorState?.online?.sections?.[
+                            (!formState?.online?.sections?.[
                               kycScreenIdentifierNames.COMPANY_DETAILS
-                            ]?.['industry_type'] ?? ''
+                            ]?.['industry_type']?.some((item: any) =>
+                              item.includes('Other')
+                            ) &&
+                              formErrorState?.online?.sections?.[
+                                kycScreenIdentifierNames.COMPANY_DETAILS
+                              ]?.['industry_type']) ??
+                            ''
                           }
                           onDataUpdate={(
                             label: string,
@@ -1631,9 +1670,15 @@ const CompanyDetail = ({
                             kycScreenIdentifierNames.COMPANY_DETAILS
                           ]?.['industry_type']?.includes('Colour Stones')}
                           onError={
-                            formErrorState?.online?.sections?.[
+                            (!formState?.online?.sections?.[
                               kycScreenIdentifierNames.COMPANY_DETAILS
-                            ]?.['industry_type'] ?? ''
+                            ]?.['industry_type']?.some((item: any) =>
+                              item.includes('Other')
+                            ) &&
+                              formErrorState?.online?.sections?.[
+                                kycScreenIdentifierNames.COMPANY_DETAILS
+                              ]?.['industry_type']) ??
+                            ''
                           }
                           onDataUpdate={(
                             label: string,
@@ -1659,9 +1704,15 @@ const CompanyDetail = ({
                             kycScreenIdentifierNames.COMPANY_DETAILS
                           ]?.['industry_type']?.includes('Jewellery')}
                           onError={
-                            formErrorState?.online?.sections?.[
+                            (!formState?.online?.sections?.[
                               kycScreenIdentifierNames.COMPANY_DETAILS
-                            ]?.['industry_type'] ?? ''
+                            ]?.['industry_type']?.some((item: any) =>
+                              item.includes('Other')
+                            ) &&
+                              formErrorState?.online?.sections?.[
+                                kycScreenIdentifierNames.COMPANY_DETAILS
+                              ]?.['industry_type']) ??
+                            ''
                           }
                           onDataUpdate={(
                             label: string,
@@ -1700,9 +1751,15 @@ const CompanyDetail = ({
                             (item: any) => !typesOfIndustryTypes.includes(item)
                           )}
                           onError={
-                            formErrorState?.online?.sections?.[
+                            (!formState?.online?.sections?.[
                               kycScreenIdentifierNames.COMPANY_DETAILS
-                            ]?.['industry_type'] ?? ''
+                            ]?.['industry_type']?.some((item: any) =>
+                              item.includes('Other')
+                            ) &&
+                              formErrorState?.online?.sections?.[
+                                kycScreenIdentifierNames.COMPANY_DETAILS
+                              ]?.['industry_type']) ??
+                            ''
                           }
                           onDataUpdate={(
                             label: string,
@@ -2483,9 +2540,15 @@ const CompanyDetail = ({
                             kycScreenIdentifierNames.COMPANY_DETAILS
                           ]?.['industry_type']?.includes('Diamonds')}
                           onError={
-                            formErrorState?.online?.sections?.[
+                            (!formState?.online?.sections?.[
                               kycScreenIdentifierNames.COMPANY_DETAILS
-                            ]?.['industry_type'] ?? ''
+                            ]?.['industry_type']?.some((item: any) =>
+                              item.includes('Other')
+                            ) &&
+                              formErrorState?.online?.sections?.[
+                                kycScreenIdentifierNames.COMPANY_DETAILS
+                              ]?.['industry_type']) ??
+                            ''
                           }
                           onDataUpdate={(
                             label: string,
@@ -2511,9 +2574,15 @@ const CompanyDetail = ({
                             kycScreenIdentifierNames.COMPANY_DETAILS
                           ]?.['industry_type']?.includes('Colour Stones')}
                           onError={
-                            formErrorState?.online?.sections?.[
+                            (!formState?.online?.sections?.[
                               kycScreenIdentifierNames.COMPANY_DETAILS
-                            ]?.['industry_type'] ?? ''
+                            ]?.['industry_type']?.some((item: any) =>
+                              item.includes('Other')
+                            ) &&
+                              formErrorState?.online?.sections?.[
+                                kycScreenIdentifierNames.COMPANY_DETAILS
+                              ]?.['industry_type']) ??
+                            ''
                           }
                           onDataUpdate={(
                             label: string,
@@ -2539,9 +2608,15 @@ const CompanyDetail = ({
                             kycScreenIdentifierNames.COMPANY_DETAILS
                           ]?.['industry_type']?.includes('Jewellery')}
                           onError={
-                            formErrorState?.online?.sections?.[
+                            (!formState?.online?.sections?.[
                               kycScreenIdentifierNames.COMPANY_DETAILS
-                            ]?.['industry_type'] ?? ''
+                            ]?.['industry_type']?.some((item: any) =>
+                              item.includes('Other')
+                            ) &&
+                              formErrorState?.online?.sections?.[
+                                kycScreenIdentifierNames.COMPANY_DETAILS
+                              ]?.['industry_type']) ??
+                            ''
                           }
                           onDataUpdate={(
                             label: string,
@@ -2574,9 +2649,15 @@ const CompanyDetail = ({
                             (item: any) => !typesOfIndustryTypes.includes(item)
                           )}
                           onError={
-                            formErrorState?.online?.sections?.[
+                            (!formState?.online?.sections?.[
                               kycScreenIdentifierNames.COMPANY_DETAILS
-                            ]?.['industry_type'] ?? ''
+                            ]?.['industry_type']?.some((item: any) =>
+                              item.includes('Other')
+                            ) &&
+                              formErrorState?.online?.sections?.[
+                                kycScreenIdentifierNames.COMPANY_DETAILS
+                              ]?.['industry_type']) ??
+                            ''
                           }
                           inputError={
                             formErrorState?.online?.sections?.[
