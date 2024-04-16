@@ -60,7 +60,7 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
         ref={containerRef}
       >
         {images.map((image, index) => (
-          <div key={index} className="relative mb-4 cursor-pointer">
+          <div key={index} className="relative  cursor-pointer pb-4">
             {image.name === 'B2B' ||
             image.name === 'B2B Sparkle' ||
             image.name === 'GIA Certificate' ? (
@@ -120,7 +120,7 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
                   background: '#F2F4F7'
                 }}
                 alt={`Image ${index + 1}`}
-                className={`mb-4`}
+                // className={`mb-4`}
                 onError={e => {
                   setShowDownloadButton(prevState => [
                     ...prevState,
@@ -160,7 +160,7 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
                 />
               )}
 
-            <span className="lg:block sm:hidden text-center">
+            <span className="lg:block sm:hidden text-center pt-[4px]">
               {image?.name}
             </span>
           </div>

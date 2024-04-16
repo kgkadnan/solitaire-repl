@@ -83,6 +83,8 @@ import { getShapeDisplayName } from '@/utils/v2/detail-page';
 import { FILE_URLS } from '@/constants/v2/detail-page';
 import { Toast } from '@/components/v2/common/copy-and-share/toast';
 import CompareStone from './components/test';
+import { statusCode } from '@/constants/enums/status-code';
+import { formatNumber } from '@/utils/fix-two-digit-number';
 
 // Column mapper outside the component to avoid re-creation on each render
 
@@ -178,7 +180,36 @@ const Result = ({
           //   });
           //   newArr.push(obj);
           // });
-          dataTableSetState.setRows(res.data.products);
+          if (res?.error?.status === statusCode.UNAUTHORIZED) {
+            console.log('test', res);
+            setIsDialogOpen(true);
+            setDialogContent(
+              <>
+                <div className="absolute left-[-84px] top-[-84px]">
+                  <Image src={errorSvg} alt="errorSvg" />
+                </div>
+                <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+                  <p className="text-neutral900 text-headingS font-medium">
+                    {res?.error?.data?.message}
+                  </p>
+                  <ActionButton
+                    actionButtonData={[
+                      {
+                        variant: 'primary',
+                        label: ManageLocales('app.modal.okay'),
+                        handler: () => {
+                          setIsDialogOpen(false);
+                        },
+                        customStyle: 'flex-1 w-full h-10'
+                      }
+                    ]}
+                  />
+                </div>
+              </>
+            );
+          }
+
+          dataTableSetState.setRows(res.data?.products);
           setRowSelection({});
           setErrorText('');
           setData(res.data);
@@ -299,7 +330,22 @@ const Result = ({
             return { ...commonProps, Cell: RenderMeasurements };
           case 'shape_full':
             return { ...commonProps, Cell: RenderShape };
-          case 'carat':
+          case 'carats':
+          case 'rap':
+          case 'rap_value':
+          case 'table_percentage':
+          case 'depth_percentage':
+          case 'ratio':
+          case 'length':
+          case 'width':
+          case 'depth':
+          case 'crown_angle':
+          case 'crown_height':
+          case 'girdle_percentage':
+          case 'pavilion_angle':
+          case 'pavilion_height':
+          case 'lower_half':
+          case 'star_length':
             return { ...commonProps, Cell: RenderCarat };
           case 'discount':
             return { ...commonProps, Cell: RenderDiscount };
@@ -310,6 +356,14 @@ const Result = ({
                 return RenderDetails({ row, handleDetailImage });
               }
             };
+
+          case 'key_to_symbol':
+            return {
+              ...commonProps,
+              Cell: ({ renderedCellValue }: { renderedCellValue: any }) => (
+                <span>{`${renderedCellValue?.toString() ?? '-'}`}</span>
+              )
+            };
           case 'price_per_carat':
             return {
               ...commonProps,
@@ -317,7 +371,7 @@ const Result = ({
                 <span>{`${
                   renderedCellValue === 0
                     ? '0.00'
-                    : renderedCellValue?.toFixed(2) ?? '0.00'
+                    : formatNumber(renderedCellValue) ?? '0.00'
                 }`}</span>
               )
             };
@@ -468,7 +522,7 @@ const Result = ({
               limit: LISTING_PAGE_DATA_LIMIT,
               offset: 0
             }).then(res => {
-              dataTableSetState.setRows(res.data.products);
+              dataTableSetState.setRows(res.data?.products);
               setRowSelection({});
               setErrorText('');
               setData(res.data);
@@ -597,7 +651,7 @@ const Result = ({
               limit: LISTING_PAGE_DATA_LIMIT,
               offset: 0
             }).then(res => {
-              dataTableSetState.setRows(res.data.products);
+              dataTableSetState.setRows(res.data?.products);
               setRowSelection({});
               setErrorText('');
               setData(res.data);
@@ -870,7 +924,7 @@ const Result = ({
               limit: LISTING_PAGE_DATA_LIMIT,
               offset: 0
             }).then(res => {
-              dataTableSetState.setRows(res.data.products);
+              dataTableSetState.setRows(res.data?.products);
               setRowSelection({});
               setErrorText('');
               setData(res.data);
@@ -929,7 +983,7 @@ const Result = ({
                   <Image src={errorSvg} alt="errorSvg" />
                 </div>
                 <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                  <p className="text-neutral600 text-mRegular font-sans">
+                  <p className="text-headingS text-neutral900 font-medium">
                     {e?.data?.message}
                   </p>
                   <ActionButton
@@ -1012,7 +1066,7 @@ const Result = ({
     isError &&
       setTimeout(() => {
         setIsError(false); // Hide the toast notification after some time
-      }, 2000);
+      }, 4000);
   }, [isError]);
 
   return (
@@ -1067,7 +1121,7 @@ const Result = ({
             setIsLoading={setIsLoading}
           />
           <div className="p-[16px] flex justify-end items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow mb-1">
-            {isError && (
+            {/* {isError && (
               <div>
                 <span className="hidden  text-successMain" />
                 <span
@@ -1076,7 +1130,7 @@ const Result = ({
                   {errorText}
                 </span>
               </div>
-            )}
+            )} */}
             <ActionButton
               actionButtonData={[
                 {
@@ -1090,7 +1144,6 @@ const Result = ({
                   label: ManageLocales('app.searchResult.confirmStone'),
                   isHidden: isConfirmStone,
                   handler: () => {
-                    setIsDetailPage(false);
                     setBreadCrumLabel('Detail Page');
                     const { id } = detailPageData;
                     const selectedRows = { [id]: true };
@@ -1100,7 +1153,8 @@ const Result = ({
                       setIsError,
                       setErrorText,
                       setIsConfirmStone,
-                      setConfirmStoneData
+                      setConfirmStoneData,
+                      setIsDetailPage
                     });
                   }
                 }

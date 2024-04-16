@@ -36,7 +36,7 @@ const KAMCard: React.FC<IKAMCardProps> = ({
     setTimeout(() => {
       // setCopied(false);
       setShowToast(false); // Hide the toast notification after some time
-    }, 2000);
+    }, 4000);
   };
   return (
     <>

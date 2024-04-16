@@ -93,7 +93,8 @@ export const handleEditMobileNumber = ({
         setIsDialogOpen(true);
         setDialogContent(
           <InvalidCreds
-            content={e?.data?.message}
+            content=""
+            header={e?.data?.message}
             handleClick={() => setIsDialogOpen(false)}
           />
         );

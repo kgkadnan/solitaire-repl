@@ -12,6 +12,7 @@ import Usa from '@public/v2/assets/png/data-table/USA.png';
 import Isr from '@public/v2/assets/png/data-table/ISR.png';
 import Bel from '@public/v2/assets/png/data-table/BEL.png';
 import Dub from '@public/v2/assets/png/data-table/DUB.png';
+import { formatNumber } from '@/utils/fix-two-digit-number';
 
 export const RenderDetails = ({ row, handleDetailImage }: any) => {
   return (
@@ -157,7 +158,7 @@ export const RenderLab = ({ renderedCellValue, row }: any) => {
           {renderedCellValue}
         </Link>
       ) : (
-        <span className={className}>{renderedCellValue ?? '-'}</span>
+        <span className={''}>{renderedCellValue ?? '-'}</span>
       )}
     </>
   );
@@ -171,7 +172,7 @@ export const RenderDiscount = ({ renderedCellValue }: any) => {
       {`${
         renderedCellValue === 0
           ? '0.00'
-          : renderedCellValue?.toFixed(2) ?? '0.00'
+          : formatNumber(renderedCellValue) ?? '0.00'
       }%`}
     </div>
   );
@@ -179,14 +180,16 @@ export const RenderDiscount = ({ renderedCellValue }: any) => {
 
 export const RenderCarat = ({ renderedCellValue }: any) => {
   return (
-    <span>{`${renderedCellValue ? renderedCellValue.toFixed(2) : '-'}`}</span>
+    <span>{`${
+      renderedCellValue ? formatNumber(renderedCellValue) : '-'
+    }`}</span>
   );
 };
 
 export const RenderAmount = ({ row }: any) => {
   return (
     <span>{`${
-      row.original.variants[0].prices[0]?.amount?.toFixed(2) ?? '-'
+      formatNumber(row.original.variants[0].prices[0]?.amount) ?? '-'
     }`}</span>
   );
 };
@@ -202,12 +205,12 @@ export const RenderMeasurements = ({ row }: any) => {
 };
 
 export const RenderNewArrivalPrice = ({ row }: any) => {
-  return <span>{`${row?.original?.price?.toFixed(2) ?? '-'}`}</span>;
+  return <span>{`${formatNumber(row?.original?.price) ?? '-'}`}</span>;
 };
 
 export const RenderNewArrivalPricePerCarat = ({ row }: any) => {
   return (
-    <span>{`${row?.original?.price_per_carat?.toFixed(2) ?? '0.00'}`}</span>
+    <span>{`${formatNumber(row?.original?.price_per_carat) ?? '0.00'}`}</span>
   );
 };
 
@@ -220,7 +223,7 @@ export const RenderNewArrivalBidDiscount = ({ renderedCellValue }: any) => {
         {`${
           renderedCellValue === 0
             ? '0.00'
-            : renderedCellValue?.toFixed(2) ?? '0.00'
+            : formatNumber(renderedCellValue) ?? '0.00'
         }%`}
       </div>
     </div>

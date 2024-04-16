@@ -32,6 +32,7 @@ import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import { RenderNewArrivalLotIdColor } from '@/components/v2/common/data-table/helpers/render-cell';
 import Tooltip from '@/components/v2/common/tooltip';
 import { kycStatus } from '@/constants/enums/kyc';
+import { formatNumber } from '@/utils/fix-two-digit-number';
 
 const theme = createTheme({
   typography: {
@@ -438,7 +439,7 @@ const NewArrivalDataTable = ({
     muiTableBodyRowProps: ({ row }) => {
       const isHighlightBackground =
         activeTab !== 0 && RenderNewArrivalLotIdColor({ row });
-      console.log(isHighlightBackground, 'isHighlightBackground');
+
       return {
         onClick: row.id.includes('shape')
           ? row.getToggleExpandedHandler()
@@ -753,14 +754,10 @@ const NewArrivalDataTable = ({
                   type="text"
                   value={
                     bidValues[row.id] !== undefined
-                      ? (
-                          row.original.rap *
-                          (1 + bidValues[row.id] / 100)
-                        ).toFixed(2)
-                      : row.original.price_per_carat.toFixed(2)
-                    //   (row.original.rap *
-                    //   (1 + bidValues[row.id] / 100)
-                    // ).toFixed(2)
+                      ? formatNumber(
+                          row.original.rap * (1 + bidValues[row.id] / 100)
+                        )
+                      : formatNumber(row.original.price_per_carat)
                   }
                   styles={{
                     inputMain: 'h-[40px]',
@@ -781,94 +778,97 @@ const NewArrivalDataTable = ({
                   }}
                   value={
                     bidValues[row.id] !== undefined
-                      ? (
+                      ? formatNumber(
                           row.original.rap *
-                          (1 + bidValues[row.id] / 100) *
-                          row.original.carats
-                        ).toFixed(2)
-                      : row.original.price.toFixed(2)
+                            (1 + bidValues[row.id] / 100) *
+                            row.original.carats
+                        )
+                      : formatNumber(row.original.price)
                   }
                   disabled
                 />
               </div>
               <div className="">
                 <div className="text-mRegular text-neutral700">Bid Disc%</div>
-                <div className="h-[40px] flex gap-1">
-                  <div
-                    onClick={() =>
-                      handleDecrement(row.id, row.original.current_max_bid)
-                    }
-                  >
-                    <DecrementIcon />
-                  </div>
-                  <div className="w-[120px]">
-                    <InputField
-                      // label={'Bid Amt $'}
-                      type="number"
-                      styles={{ inputMain: 'h-[64px]' }}
-                      value={
-                        bidValue
-                        // row.original.my_current_bid ??
-                        // row.original.current_max_bid - 0.5
+                <div className="gap-6 flex">
+                  <div className="h-[40px] flex gap-1">
+                    <div
+                      onClick={() =>
+                        handleDecrement(row.id, row.original.current_max_bid)
                       }
-                      onChange={e => {
-                        setBidValues((prevValues: any) => {
-                          // If there's already a bid value for this row, increment it
-                          return {
-                            ...prevValues,
-                            [row.id]: e.target.value
-                          };
+                    >
+                      <DecrementIcon />
+                    </div>
+                    <div className="w-[120px]">
+                      <InputField
+                        // label={'Bid Amt $'}
+                        type="number"
+                        styles={{ inputMain: 'h-[64px]' }}
+                        value={
+                          bidValue
+                          // row.original.my_current_bid ??
+                          // row.original.current_max_bid - 0.5
+                        }
+                        onChange={e => {
+                          setBidValues((prevValues: any) => {
+                            // If there's already a bid value for this row, increment it
+                            return {
+                              ...prevValues,
+                              [row.id]: e.target.value
+                            };
 
-                          // If no bid value for this row yet, start from current_max_bid and add 0.5
-                        });
-                      }}
+                            // If no bid value for this row yet, start from current_max_bid and add 0.5
+                          });
+                        }}
+                      />
+                    </div>
+                    <div
+                      onClick={() =>
+                        handleIncrement(row.id, row.original.current_max_bid)
+                      }
+                    >
+                      <IncrementIcon />
+                    </div>
+                  </div>
+                  <div className="flex items-end">
+                    <ActionButton
+                      actionButtonData={[
+                        {
+                          variant: 'primary',
+                          label: activeTab === 0 ? 'Add Bid' : 'Update Bid',
+                          handler: () => {
+                            if (!bidError) {
+                              if (bidValue < row.original.current_max_bid) {
+                                setBidError(
+                                  'Bid value cannot be less than current maximum bid.'
+                                );
+                                return; // Exit early, do not update bidValues
+                              }
+                              socketManager.emit('place_bid', {
+                                product_id: row.id,
+                                bid_value: bidValues[row.id]
+                              });
+                              activeTab === 0 &&
+                                setRowSelection((prev: any) => {
+                                  let prevRows = { ...prev };
+                                  delete prevRows[row.id];
+                                  return prevRows;
+                                });
+                              setBidError('');
+                            }
+                          },
+                          customStyle: 'flex-1 w-full h-10'
+                        }
+                      ]}
                     />
                   </div>
-                  <div
-                    onClick={() =>
-                      handleIncrement(row.id, row.original.current_max_bid)
-                    }
-                  >
-                    <IncrementIcon />
-                  </div>
                 </div>
-              </div>
-              <div className="flex items-end">
-                <ActionButton
-                  actionButtonData={[
-                    {
-                      variant: 'primary',
-                      label: activeTab === 0 ? 'Add Bid' : 'Update Bid',
-                      handler: () => {
-                        if (!bidError) {
-                          if (bidValue < row.original.current_max_bid) {
-                            setBidError(
-                              'Bid value cannot be less than current maximum bid.'
-                            );
-                            return; // Exit early, do not update bidValues
-                          }
-                          socketManager.emit('place_bid', {
-                            product_id: row.id,
-                            bid_value: bidValues[row.id]
-                          });
-                          activeTab === 0 &&
-                            setRowSelection((prev: any) => {
-                              let prevRows = { ...prev };
-                              delete prevRows[row.id];
-                              return prevRows;
-                            });
-                          setBidError('');
-                        }
-                      },
-                      customStyle: 'flex-1 w-full h-10'
-                    }
-                  ]}
-                />
+                <div className=" text-dangerMain text-sRegular">{bidError}</div>
               </div>
             </div>
-            <div className="pl-10 text-dangerMain text-mRegular">
+            {/* <div className="pl-10 text-dangerMain text-mRegular">
               {bidError}
-            </div>
+            </div> */}
           </div>
         );
       }

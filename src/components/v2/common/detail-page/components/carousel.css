@@ -2,7 +2,6 @@
 
 .details-slider .slick-active  button:before {
     color: White !important;
-  
     background: White !important;
     height: 8px;
     width: 16px;
@@ -11,6 +10,22 @@
   }
   .details-slider .slick-slide {
     height: 340px;
+ 
+  }
+
+
+  .details-slider 
+  {
+    justify-content: center;
+    display: flex;
+  }
+
+  .details-slider .slick-prev, .slick-next {
+    font-size: 15px !important;
+  }
+  
+  .details-slider   .slick-prev:before, .slick-next:before  {
+    content: '' !important;
   }
   
   .details-slider .slick-dots li button:before {
@@ -27,14 +42,12 @@
   }
   .details-slider .slick-dots{
     bottom: 0px !important;
-   
   }
   .details-slider .slick-dots li{
     /* margin: 0px !important; */
     margin: 0px 5px;
     height: 5px;
     width: 5px;
-   
     text-align: center;
     justify-content: center;
     display: inline-flex;
@@ -61,6 +74,8 @@
     width: 16px;
     border-radius: 10px;
   }
+
+
   .details-slider .slick-dots .slick-active button{
     background: #1D2939 !important;
     width: 16px;

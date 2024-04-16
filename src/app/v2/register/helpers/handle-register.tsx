@@ -72,7 +72,8 @@ export const handleRegister = async ({
       setIsDialogOpen(true);
       setDialogContent(
         <InvalidCreds
-          content={e?.data?.message}
+          content=""
+          header={e?.data?.message}
           handleClick={() => setIsDialogOpen(false)}
           buttonText={
             e.status === statusCode.DUPLICATE
