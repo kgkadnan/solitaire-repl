@@ -83,6 +83,19 @@ const ConfirmStone = ({
           case 'carats':
           case 'rap':
           case 'rap_value':
+          case 'table_percentage':
+          case 'depth_percentage':
+          case 'ratio':
+          case 'length':
+          case 'width':
+          case 'depth':
+          case 'crown_angle':
+          case 'crown_height':
+          case 'girdle_percentage':
+          case 'pavilion_angle':
+          case 'pavilion_height':
+          case 'lower_half':
+          case 'star_length':
             return { ...commonProps, Cell: RenderCarat };
           case 'measurements':
             return { ...commonProps, Cell: RenderMeasurements };
@@ -105,6 +118,13 @@ const ConfirmStone = ({
                   handleDetailPage
                 });
               }
+            };
+          case 'key_to_symbol':
+            return {
+              ...commonProps,
+              Cell: ({ renderedCellValue }: { renderedCellValue: any }) => (
+                <span>{`${renderedCellValue?.toString() ?? '-'}`}</span>
+              )
             };
           case 'price_per_carat':
             return {
