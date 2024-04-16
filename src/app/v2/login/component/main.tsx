@@ -158,8 +158,10 @@ const Login = () => {
             setIsDialogOpen(true);
             setDialogContent(
               <InvalidCreds
-                content={_e.data.message}
+                header={_e.data.message}
                 handleClick={() => setIsDialogOpen(false)}
+                content={''}
+                buttonText="Try Again"
               />
             );
           });
@@ -195,14 +197,17 @@ const Login = () => {
             content={INCORRECT_LOGIN_CREDENTIALS}
             handleClick={() => setIsDialogOpen(false)}
             header="Login Failed"
+            buttonText="Try Again"
           />
         );
       } else if (res.error) {
         setIsDialogOpen(true);
         setDialogContent(
           <InvalidCreds
-            content={res.error.data.message}
+            content=""
+            header={res.error.data.message}
             handleClick={() => setIsDialogOpen(false)}
+            buttonText="Try Again"
           />
         );
       } else if (res.data.access_token) {

@@ -866,7 +866,7 @@ const NewArrivalDataTable = ({
                     />
                   </div>
                 </div>
-                <div className=" text-dangerMain text-mRegular">{bidError}</div>
+                <div className=" text-dangerMain text-sRegular">{bidError}</div>
               </div>
             </div>
             {/* <div className="pl-10 text-dangerMain text-mRegular">
