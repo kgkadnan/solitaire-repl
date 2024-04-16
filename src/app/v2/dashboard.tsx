@@ -219,7 +219,7 @@ const Dashboard = () => {
       // const tabsCopy = [...tabs]; // Make a copy of the current tabs
 
       // Check if there are saved searches and add the "Saved Search" tab
-      if (customerData.customer.saved_searches.length > 0) {
+      if (customerData.customer.saved_searches?.length > 0) {
         tabsCopy.push({
           label: 'Saved Search',
           link: '/v2/search?active-tab=saved-search',
@@ -238,7 +238,7 @@ const Dashboard = () => {
       setActiveTab(tabsCopy[0]?.label);
 
       // Check for pending and active invoices
-      if (customerData.customer.orders.length > 0) {
+      if (customerData.customer?.orders?.length > 0) {
         const pendingInvoices = customerData.customer.orders
           .filter((item: any) => item.invoice_id === null)
           .slice(0, 5);

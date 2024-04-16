@@ -82,6 +82,7 @@ import ImageModal from '@/components/v2/common/detail-page/components/image-moda
 import { getShapeDisplayName } from '@/utils/v2/detail-page';
 import { FILE_URLS } from '@/constants/v2/detail-page';
 import { Toast } from '@/components/v2/common/copy-and-share/toast';
+import { statusCode } from '@/constants/enums/status-code';
 
 // Column mapper outside the component to avoid re-creation on each render
 
@@ -173,6 +174,35 @@ const Result = ({
           //   });
           //   newArr.push(obj);
           // });
+          if (res?.error?.status === statusCode.UNAUTHORIZED) {
+            console.log('test', res);
+            setIsDialogOpen(true);
+            setDialogContent(
+              <>
+                <div className="absolute left-[-84px] top-[-84px]">
+                  <Image src={errorSvg} alt="errorSvg" />
+                </div>
+                <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+                  <p className="text-neutral900 text-headingS font-medium">
+                    {res?.error?.data?.message}
+                  </p>
+                  <ActionButton
+                    actionButtonData={[
+                      {
+                        variant: 'primary',
+                        label: ManageLocales('app.modal.okay'),
+                        handler: () => {
+                          setIsDialogOpen(false);
+                        },
+                        customStyle: 'flex-1 w-full h-10'
+                      }
+                    ]}
+                  />
+                </div>
+              </>
+            );
+          }
+
           dataTableSetState.setRows(res.data?.products);
           setRowSelection({});
           setErrorText('');
