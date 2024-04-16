@@ -32,7 +32,7 @@ export const KycStatusScreen: React.FC<IKycStatusScreen> = ({ status }) => {
     setTimeout(() => {
       // setCopied(false);
       setShowToast(false); // Hide the toast notification after some time
-    }, 2000);
+    }, 4000);
   };
   return (
     <div className="relative w-full h-[calc(100vh-60px)]">

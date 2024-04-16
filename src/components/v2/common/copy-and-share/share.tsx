@@ -184,7 +184,7 @@ const Share = ({
       setTimeout(() => {
         // setCopied(false);
         setShowToast(false); // Hide the toast notification after some time
-      }, 2000);
+      }, 4000);
     } catch (err) {
       console.error('Failed to copy:', err);
     }

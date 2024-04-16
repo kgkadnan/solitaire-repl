@@ -557,7 +557,7 @@ const Dashboard = () => {
     error &&
       setTimeout(() => {
         setError(''); // Hide the toast notification after some time
-      }, 2000);
+      }, 4000);
   }, [error]);
 
   const goBack = () => {
@@ -977,7 +977,7 @@ const Dashboard = () => {
                   label: ManageLocales('app.searchResult.confirmStone'),
                   isHidden: isConfirmStone,
                   handler: () => {
-                    setIsDetailPage(false);
+                    // setIsDetailPage(false);
                     setBreadCrumLabel('Detail Page');
                     const selectedRows = { [searchData.id]: true };
                     handleConfirmStone({
@@ -986,7 +986,8 @@ const Dashboard = () => {
                       setIsError,
                       setErrorText: setError,
                       setIsConfirmStone,
-                      setConfirmStoneData
+                      setConfirmStoneData,
+                      setIsDetailPage
                     });
                   }
                 }
