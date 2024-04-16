@@ -133,7 +133,7 @@ const ImageModal: React.FC<ModalProps> = ({
                 }}
                 disabled={!(imageIndex > 0)}
                 className={`absolute top-1/2 left-4 transform -translate-y-1/2  rounded-[4px] hover:bg-neutral-50  p-2 border-solid border-neutral-200 shadow-sm ${
-                  imageIndex <= 0 ? 'bg-neutral50' : 'bg-neutral0'
+                  imageIndex <= 0 ? '!bg-neutral200' : 'bg-neutral0'
                 }`}
               >
                 <Image src={backwardArrow} alt="backwardArrow" />
@@ -146,7 +146,7 @@ const ImageModal: React.FC<ModalProps> = ({
                 disabled={!(imageIndex < images.length - 1)}
                 className={`absolute top-1/2 right-4 transform -translate-y-1/2  rounded-[4px] hover:bg-neutral-50  p-2 border-solid border-neutral-200 shadow-sm ${
                   imageIndex >= images.length - 1
-                    ? 'bg-neutral50'
+                    ? '!bg-neutral200'
                     : 'bg-neutral0'
                 }`}
               >
