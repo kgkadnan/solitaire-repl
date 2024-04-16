@@ -17,7 +17,7 @@ import searchIcon from '@public/v2/assets/icons/data-table/search-icon.svg';
 import { ThemeProvider, createTheme, styled } from '@mui/material/styles';
 import { ManageLocales } from '@/utils/v2/translate';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
 import Share from '@/components/v2/common/copy-and-share/share';
@@ -122,7 +122,20 @@ const NewArrivalDataTable = ({
   const toggleFullScreen = () => {
     setIsFullScreen(!isFullScreen);
   };
+  useEffect(() => {
+    const handleKeyPress = (event: any) => {
+      if (event.key === 'Escape') {
+        setIsFullScreen(false);
+        localStorage.setItem('isFullScreen', JSON.stringify(false));
+      }
+    };
 
+    document.addEventListener('keydown', handleKeyPress);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyPress);
+    };
+  }, []);
   const getShapeDisplayName = ({ value }: { value: string }) => {
     switch (value) {
       case 'EM':
@@ -346,7 +359,9 @@ const NewArrivalDataTable = ({
                     )}
                   </div>
                 }
-                tooltipContent={'Full Screen'}
+                tooltipContent={
+                  isFullScreen ? 'Exit Full Screen' : 'Full Screen'
+                }
                 tooltipContentStyles={'z-[1000]'}
               />
             </div>
