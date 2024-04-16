@@ -332,6 +332,7 @@ const SavedSearch = ({ setIsLoading, isLoading }: any) => {
                       >
                         {name
                           .split(' ') // Split the name into words
+                          .slice(0, 2) // Take only the first two words
                           .map(word => word.charAt(0)) // Extract the first character of each word
                           .join('')}
                       </div>
