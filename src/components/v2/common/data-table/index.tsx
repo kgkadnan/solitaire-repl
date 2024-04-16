@@ -853,7 +853,9 @@ const DataTable = ({
                     )}
                   </div>
                 }
-                tooltipContent={'Full Screen'}
+                tooltipContent={
+                  isFullScreen ? 'Exit Full Screen' : 'Full Screen'
+                }
                 tooltipContentStyles={'z-[1000]'}
               />
             </div>
