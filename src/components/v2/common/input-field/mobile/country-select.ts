@@ -12,7 +12,7 @@ export const colourStyles = (error: any) => {
         : '1px solid var(--neutral-200)',
       borderRight: 'none',
       // outline: '1px solid var(--neutral-200)',
-      width: '90px',
+      width: '110px',
       boxShadow: 'var(--input-shadow) inset',
       // This line disable the blue border
       '&:hover': {
@@ -47,7 +47,13 @@ export const colourStyles = (error: any) => {
       ...styles,
       backgroundColor: 'var(--neutral-0)',
       minHeight: '10vh',
-      height: '17vh'
+      height: '17vh',
+      borderRadius: '6px'
+    }),
+    menu: (styles: any) => ({
+      ...styles,
+
+      marginTop: '2px !important'
     }),
     option: (styles: { [x: string]: any }) => {
       return {
