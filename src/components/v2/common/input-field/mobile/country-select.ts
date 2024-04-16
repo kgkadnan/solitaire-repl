@@ -47,7 +47,13 @@ export const colourStyles = (error: any) => {
       ...styles,
       backgroundColor: 'var(--neutral-0)',
       minHeight: '10vh',
-      height: '17vh'
+      height: '17vh',
+      borderRadius: '6px'
+    }),
+    menu: (styles: any) => ({
+      ...styles,
+
+      marginTop: '2px !important'
     }),
     option: (styles: { [x: string]: any }) => {
       return {
