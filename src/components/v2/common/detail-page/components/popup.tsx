@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import React from 'react';
 import NoImageFound from '@public/v2/assets/icons/detail-page/fall-back-img.svg';
 import { FILE_URLS } from '@/constants/v2/detail-page';

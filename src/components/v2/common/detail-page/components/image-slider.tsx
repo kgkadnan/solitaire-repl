@@ -24,7 +24,7 @@ interface ImageSliderProps {
 const ImageSlider: React.FC<ImageSliderProps> = ({ images, setIsLoading }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [showDownloadButton, setShowDownloadButton] = useState(false);
+  const [showDownloadButton, setShowDownloadButton] = useState<string[]>([]);
   const [imageName, setImageName] = useState('');
 
   function SampleNextArrow(props: any) {
@@ -92,7 +92,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images, setIsLoading }) => {
 
   useEffect(() => {
     setImageName(images[0].name);
-  }, []);
+  }, [images]);
 
   return (
     <div className="details-slider">
@@ -131,7 +131,10 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images, setIsLoading }) => {
                               objectFit: 'cover'
                             }}
                             onLoad={() => {
-                              setShowDownloadButton(true);
+                              setShowDownloadButton(prevState => [
+                                ...prevState,
+                                img.name
+                              ]);
                             }}
                           />
                         ) : (
@@ -142,7 +145,10 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images, setIsLoading }) => {
                             style={{ height: '100%', width: '100%' }}
                             onError={e => {
                               handleImageError(e);
-                              setShowDownloadButton(true);
+                              setShowDownloadButton(prevState => [
+                                ...prevState,
+                                img.name
+                              ]);
                             }}
                           />
                         )}
@@ -161,7 +167,10 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images, setIsLoading }) => {
                         alt="test"
                         onError={e => {
                           handleImageError(e);
-                          setShowDownloadButton(true);
+                          setShowDownloadButton(prevState => [
+                            ...prevState,
+                            img.name
+                          ]);
                         }}
                         onClick={() => {
                           setIsModalOpen(!isModalOpen);
@@ -169,7 +178,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images, setIsLoading }) => {
                       />
                     )}
 
-                    {!showDownloadButton && (
+                    {!showDownloadButton.includes(img.name) && (
                       <>
                         {!(
                           img.name === 'B2B' || img.name === 'B2B Sparkle'
@@ -177,13 +186,17 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images, setIsLoading }) => {
                           <Tooltip
                             tooltipTrigger={
                               <Image
-                                className="absolute top-3 left-3 p-1"
+                                className="absolute top-3 left-3 p-1 cursor-pointer"
                                 src={downloadImg}
                                 height={40}
                                 width={40}
                                 alt={'Download'}
                                 onClick={() => {
-                                  handleDownloadImage(img.url || '', img.name);
+                                  handleDownloadImage(
+                                    img?.url || '',
+                                    img.name,
+                                    setIsLoading
+                                  );
                                 }}
                               />
                             }
