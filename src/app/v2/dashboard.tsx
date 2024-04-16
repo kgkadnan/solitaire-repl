@@ -906,7 +906,7 @@ const Dashboard = () => {
                   <Image src={errorSvg} alt="errorSvg" />
                 </div>
                 <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                  <p className="text-headingS text-neutral900">
+                  <p className="text-headingS text-neutral900 font-medium">
                     {e?.data?.message}
                   </p>
                   <ActionButton
