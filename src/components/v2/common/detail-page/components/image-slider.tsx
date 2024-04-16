@@ -43,6 +43,10 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images, setIsLoading }) => {
     );
   }
 
+  useEffect(() => {
+    setShowDownloadButton([]);
+  }, []);
+
   function SamplePrevArrow(props: any) {
     const { className, currentSlide, onClick } = props;
     return (
