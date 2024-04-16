@@ -32,6 +32,7 @@ import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import { RenderNewArrivalLotIdColor } from '@/components/v2/common/data-table/helpers/render-cell';
 import Tooltip from '@/components/v2/common/tooltip';
 import { kycStatus } from '@/constants/enums/kyc';
+import { formatNumber } from '@/utils/fix-two-digit-number';
 
 const theme = createTheme({
   typography: {
@@ -753,14 +754,10 @@ const NewArrivalDataTable = ({
                   type="text"
                   value={
                     bidValues[row.id] !== undefined
-                      ? (
-                          row.original.rap *
-                          (1 + bidValues[row.id] / 100)
-                        ).toFixed(2)
-                      : row.original.price_per_carat.toFixed(2)
-                    //   (row.original.rap *
-                    //   (1 + bidValues[row.id] / 100)
-                    // ).toFixed(2)
+                      ? formatNumber(
+                          row.original.rap * (1 + bidValues[row.id] / 100)
+                        )
+                      : formatNumber(row.original.price_per_carat)
                   }
                   styles={{
                     inputMain: 'h-[40px]',
@@ -781,12 +778,12 @@ const NewArrivalDataTable = ({
                   }}
                   value={
                     bidValues[row.id] !== undefined
-                      ? (
+                      ? formatNumber(
                           row.original.rap *
-                          (1 + bidValues[row.id] / 100) *
-                          row.original.carats
-                        ).toFixed(2)
-                      : row.original.price.toFixed(2)
+                            (1 + bidValues[row.id] / 100) *
+                            row.original.carats
+                        )
+                      : formatNumber(row.original.price)
                   }
                   disabled
                 />

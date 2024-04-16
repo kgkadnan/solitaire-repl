@@ -92,7 +92,9 @@ const NewArrivals = () => {
             return { ...commonProps, Cell: RenderMeasurements };
           case 'shape_full':
             return { ...commonProps, Cell: RenderShape };
-          case 'carat':
+          case 'carats':
+          case 'rap':
+          case 'rap_value':
             return { ...commonProps, Cell: RenderCarat };
           case 'discount':
             return { ...commonProps, Cell: RenderDiscount };

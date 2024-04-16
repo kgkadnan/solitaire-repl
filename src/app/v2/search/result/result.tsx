@@ -83,6 +83,7 @@ import { getShapeDisplayName } from '@/utils/v2/detail-page';
 import { FILE_URLS } from '@/constants/v2/detail-page';
 import { Toast } from '@/components/v2/common/copy-and-share/toast';
 import { statusCode } from '@/constants/enums/status-code';
+import { formatNumber } from '@/utils/fix-two-digit-number';
 
 // Column mapper outside the component to avoid re-creation on each render
 
@@ -324,7 +325,9 @@ const Result = ({
             return { ...commonProps, Cell: RenderMeasurements };
           case 'shape_full':
             return { ...commonProps, Cell: RenderShape };
-          case 'carat':
+          case 'carats':
+          case 'rap':
+          case 'rap_value':
             return { ...commonProps, Cell: RenderCarat };
           case 'discount':
             return { ...commonProps, Cell: RenderDiscount };
@@ -342,7 +345,7 @@ const Result = ({
                 <span>{`${
                   renderedCellValue === 0
                     ? '0.00'
-                    : renderedCellValue?.toFixed(2) ?? '0.00'
+                    : formatNumber(renderedCellValue) ?? '0.00'
                 }`}</span>
               )
             };
