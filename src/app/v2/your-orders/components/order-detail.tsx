@@ -107,6 +107,8 @@ const OrderDetail: React.FC<IOrderDetail> = ({
           case 'girdle_percentage':
           case 'pavilion_angle':
           case 'pavilion_height':
+          case 'lower_half':
+          case 'star_length':
             return { ...commonProps, Cell: RenderCarat };
           case 'discount':
             return { ...commonProps, Cell: RenderDiscount };
