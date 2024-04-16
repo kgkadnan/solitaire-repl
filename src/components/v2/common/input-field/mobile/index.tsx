@@ -93,7 +93,7 @@ export const MobileInput = ({
               }}
               // closeMenuOnSelect={false}
               autoFocus={false}
-              defaultMenuIsOpen={true}
+              // defaultMenuIsOpen={true}
             />
           </div>
           <InputField
