@@ -833,17 +833,16 @@ const KYC = () => {
                 value: updatedCompanyDetails.company_pan_number
               })
             );
+          } else {
+            dispatch(
+              updateFormState({
+                name: `formState.online.sections[${[
+                  kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
+                ]}][owner_pan_or_aadhaar_number]`,
+                value: ''
+              })
+            );
           }
-          //    else {
-          //     dispatch(
-          //       updateFormState({
-          //         name: `formState.online.sections[${[
-          //           kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
-          //         ]}][owner_pan_or_aadhaar_number]`,
-          //         value: ''
-          //       })
-          //     );
-          //   }
         }
         if (
           (response?.data?.statusCode === statusCode.SUCCESS ||
