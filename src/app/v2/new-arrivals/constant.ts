@@ -398,7 +398,7 @@ export const columnHeaders = [
   },
   {
     label: 'Key to Symbols',
-    accessor: 'key_to_symbols',
+    accessor: 'key_to_symbol',
     sequence: 44,
     is_fixed: false,
     short_label: 'Key to Symbols',
