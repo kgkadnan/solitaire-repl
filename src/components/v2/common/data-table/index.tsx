@@ -158,6 +158,20 @@ const DataTable = ({
 
     setIsFullScreen(isFullScreen);
   }, []);
+  useEffect(() => {
+    const handleKeyPress = (event: any) => {
+      if (event.key === 'Escape') {
+        setIsFullScreen(false);
+        localStorage.setItem('isFullScreen', JSON.stringify(false));
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyPress);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyPress);
+    };
+  }, []);
 
   const onDropDownClick = (value: any) => {
     setIsLoading(true);
@@ -856,7 +870,9 @@ const DataTable = ({
                     )}
                   </div>
                 }
-                tooltipContent={'Full Screen'}
+                tooltipContent={
+                  isFullScreen ? 'Exit Full Screen' : 'Full Screen'
+                }
                 tooltipContentStyles={'z-[1000]'}
               />
             </div>
