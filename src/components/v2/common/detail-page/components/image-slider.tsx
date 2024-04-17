@@ -145,8 +145,8 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images, setIsLoading }) => {
                           <iframe
                             frameBorder="0"
                             src={img.url}
-                            className="object-contain"
-                            style={{ height: '100%', width: '100%' }}
+                            // className="object-contain"
+                            style={{ width: '273px', height: '282px' }}
                             onError={e => {
                               handleImageError(e);
                               setShowDownloadButton(prevState => [
@@ -190,7 +190,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images, setIsLoading }) => {
                           <Tooltip
                             tooltipTrigger={
                               <Image
-                                className="absolute top-3 left-3 p-1 cursor-pointer"
+                                className="absolute  top-[1.2rem] left-[2.3rem] p-1 cursor-pointer"
                                 src={downloadImg}
                                 height={40}
                                 width={40}

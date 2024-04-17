@@ -1223,6 +1223,7 @@ const Dashboard = () => {
                               >
                                 {searchData.name
                                   ?.split(' ') // Split the name into words
+                                  .slice(0, 2)
                                   .map((word: string) => word.charAt(0)) // Extract the first character of each word
                                   .join('')}
                               </div>
