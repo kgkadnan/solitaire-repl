@@ -176,7 +176,6 @@ const Result = ({
           //   newArr.push(obj);
           // });
           if (res?.error?.status === statusCode.UNAUTHORIZED) {
-            console.log('test', res);
             setIsDialogOpen(true);
             setDialogContent(
               <>
@@ -356,7 +355,11 @@ const Result = ({
             return {
               ...commonProps,
               Cell: ({ renderedCellValue }: { renderedCellValue: any }) => (
-                <span>{`${renderedCellValue?.toString() ?? '-'}`}</span>
+                <span>{`${
+                  renderedCellValue?.length > 0
+                    ? renderedCellValue?.toString()
+                    : '-'
+                }`}</span>
               )
             };
           case 'price_per_carat':
@@ -1073,6 +1076,7 @@ const Result = ({
         onClose={() => setIsModalOpen(!isModalOpen)}
         selectedImageIndex={0}
         images={images}
+        fromDetailPage={true}
       />
       <DialogComponent
         dialogContent={dialogContent}

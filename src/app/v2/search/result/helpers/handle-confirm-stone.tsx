@@ -61,7 +61,7 @@ export const handleConfirmStone = ({
     setIsConfirmStone(true);
     const confirmStone = rows.filter(item => selectedIds?.includes(item.id));
     setConfirmStoneData(confirmStone);
-    setIsDetailPage(false);
+    setIsDetailPage && setIsDetailPage(false);
   } else {
     setIsError(true);
     setErrorText(SELECT_STONE_TO_PERFORM_ACTION);

@@ -18,6 +18,7 @@ interface ModalProps {
   selectedImageIndex: number;
   images: ImagesType[];
   setIsLoading?: any;
+  fromDetailPage?: boolean;
 }
 
 const ImageModal: React.FC<ModalProps> = ({
@@ -25,7 +26,8 @@ const ImageModal: React.FC<ModalProps> = ({
   onClose,
   images,
   selectedImageIndex,
-  setIsLoading
+  setIsLoading,
+  fromDetailPage = false
 }) => {
   const [imageIndex, setImageIndex] = useState<number>(0);
   const [showToast, setShowToast] = useState(false);
@@ -36,7 +38,7 @@ const ImageModal: React.FC<ModalProps> = ({
 
   useEffect(() => {
     setShowDownloadButton('');
-    // setImageIndex(0);
+    fromDetailPage && setImageIndex(0);
   }, [isOpen]);
   useEffect(() => {
     setImageIndex(selectedImageIndex || 0);
@@ -52,7 +54,6 @@ const ImageModal: React.FC<ModalProps> = ({
       }, 4000);
     });
   };
-
   return (
     <div className="fixed z-[1200] inset-0 overflow-y-auto ">
       <Toast show={showToast} message="Copied Successfully" />

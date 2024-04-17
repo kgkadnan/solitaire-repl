@@ -211,10 +211,12 @@ const Dashboard = () => {
     }
   ];
   useEffect(() => {
+    !customerData && setIsLoading(true);
     refetchCustomerData();
   }, []);
   useEffect(() => {
     if (customerData) {
+      setIsLoading(false);
       const tabsCopy: ITabs[] = []; // Make a copy of the current tabs
       // const tabsCopy = [...tabs]; // Make a copy of the current tabs
 

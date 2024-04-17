@@ -123,7 +123,11 @@ const ConfirmStone = ({
             return {
               ...commonProps,
               Cell: ({ renderedCellValue }: { renderedCellValue: any }) => (
-                <span>{`${renderedCellValue?.toString() ?? '-'}`}</span>
+                <span>{`${
+                  renderedCellValue?.length > 0
+                    ? renderedCellValue?.toString()
+                    : '-'
+                }`}</span>
               )
             };
           case 'price_per_carat':
