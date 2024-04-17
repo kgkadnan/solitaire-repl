@@ -137,9 +137,9 @@ const CompareStone = ({
               {Object.keys(mappingColumn).map(key => (
                 <div
                   key={key}
-                  className="py-2 px-4 border-[1px] border-neutral200"
+                  className="py-2 px-4 border-[1px] border-neutral200 h-[38px]"
                 >
-                  <span>{key !== 'id' && mappingColumn[key]}</span>
+                  {key !== 'id' && mappingColumn[key]}
                 </div>
               ))}
             </div>
@@ -148,7 +148,7 @@ const CompareStone = ({
             <div className="flex h-[234px]">
               {rows.map((items: IProduct) => (
                 <div key={items.id} className="w-[200px]">
-                  <div className={`h-[200px] flex`}>
+                  <div className={`h-[200px] flex flex-col`}>
                     <Image
                       className={styles.diamondImage}
                       src={`${FILE_URLS.IMG.replace(
@@ -163,7 +163,8 @@ const CompareStone = ({
                         // handleCheckboxClick(items.id)
                       }
                     />
-                    <div className={styles.compareStoneCheckbox}>
+                    <div className='flex justify-between'>
+                    <div >
                       {/* <Checkbox
                   onClick={() => handleClick(items.id)}
                   data-testid={'compare stone checkbox'}
@@ -190,6 +191,7 @@ const CompareStone = ({
 
                       {/* <CloseButton /> */}
                     </div>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -200,7 +202,7 @@ const CompareStone = ({
                   {Object.keys(mappingColumn).map(key => (
                     <div
                       key={key}
-                      className="py-2 px-4 border-[1px] border-neutral200"
+                      className="py-2 px-4 border-[1px] border-neutral200 h-[38px] whitespace-nowrap overflow-hidden overflow-ellipsis"
                     >
                       {key !== 'id' ? diamond[key] || '-' : ''}
                     </div>
