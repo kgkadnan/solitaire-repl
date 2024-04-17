@@ -406,7 +406,6 @@ const NewArrivalDataTable = ({
       )}
     </div>
   );
-  console.log(activeCount, bidCount, historyCount);
   let isNudge = localStorage.getItem('show-nudge') === 'MINI';
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   //pass table options to useMaterialReactTable

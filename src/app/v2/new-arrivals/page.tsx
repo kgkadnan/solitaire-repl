@@ -128,10 +128,15 @@ const NewArrivals = () => {
               }
             };
           case 'key_to_symbol':
+          case 'report_comments':
             return {
               ...commonProps,
               Cell: ({ renderedCellValue }: { renderedCellValue: any }) => (
-                <span>{`${renderedCellValue?.toString() ?? '-'}`}</span>
+                <span>{`${
+                  renderedCellValue?.length > 0
+                    ? renderedCellValue?.toString()
+                    : '-'
+                }`}</span>
               )
             };
           case 'details':
@@ -497,6 +502,7 @@ const NewArrivals = () => {
         selectedImageIndex={0}
         images={images}
         setIsLoading={setIsLoading}
+        fromDetailPage={true}
       />
       <DialogComponent
         dialogContent={modalState.dialogContent}

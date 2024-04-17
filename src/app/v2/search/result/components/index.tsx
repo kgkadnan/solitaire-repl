@@ -120,10 +120,15 @@ const ConfirmStone = ({
               }
             };
           case 'key_to_symbol':
+          case 'report_comments':
             return {
               ...commonProps,
               Cell: ({ renderedCellValue }: { renderedCellValue: any }) => (
-                <span>{`${renderedCellValue?.toString() ?? '-'}`}</span>
+                <span>{`${
+                  renderedCellValue?.length > 0
+                    ? renderedCellValue?.toString()
+                    : '-'
+                }`}</span>
               )
             };
           case 'price_per_carat':

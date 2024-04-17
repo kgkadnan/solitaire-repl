@@ -131,10 +131,15 @@ const OrderDetail: React.FC<IOrderDetail> = ({
               }
             };
           case 'key_to_symbol':
+          case 'report_comments':
             return {
               ...commonProps,
               Cell: ({ renderedCellValue }: { renderedCellValue: any }) => (
-                <span>{`${renderedCellValue?.toString() ?? '-'}`}</span>
+                <span>{`${
+                  renderedCellValue?.length > 0
+                    ? renderedCellValue?.toString()
+                    : '-'
+                }`}</span>
               )
             };
 
@@ -335,6 +340,7 @@ const OrderDetail: React.FC<IOrderDetail> = ({
         selectedImageIndex={0}
         images={images}
         setIsLoading={setIsLoading}
+        fromDetailPage={true}
       />{' '}
       {productDetailData && Object.keys(productDetailData).length > 0 && (
         <div>
