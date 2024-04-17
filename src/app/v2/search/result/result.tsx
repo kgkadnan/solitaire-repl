@@ -352,6 +352,7 @@ const Result = ({
             };
 
           case 'key_to_symbol':
+          case 'report_comments':
             return {
               ...commonProps,
               Cell: ({ renderedCellValue }: { renderedCellValue: any }) => (
