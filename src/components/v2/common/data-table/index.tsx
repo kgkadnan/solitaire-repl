@@ -133,7 +133,9 @@ const DataTable = ({
   setIsConfirmStone,
   setConfirmStoneData,
   deleteCartHandler,
-  activeCartTab
+  activeCartTab,
+  isDashboard,
+  setIsDetailPage
 }: any) => {
   // Fetching saved search data
   const router = useRouter();
@@ -534,6 +536,8 @@ const DataTable = ({
             ? showCalculatedField
               ? 'calc(100vh - 130px)'
               : 'calc(100vh - 90px)'
+            : isDashboard
+            ? 'calc(100vh - 180px)'
             : 'calc(100vh - 230px)'
           : myCart
           ? showCalculatedField
@@ -557,6 +561,8 @@ const DataTable = ({
             ? showCalculatedField
               ? 'calc(100vh - 130px)'
               : 'calc(100vh - 90px)'
+            : isDashboard
+            ? 'calc(100vh - 180px)'
             : 'calc(100vh - 230px)'
           : myCart
           ? showCalculatedField
@@ -887,8 +893,12 @@ const DataTable = ({
       </div>
     ),
     renderBottomToolbar: ({ table }) => (
-      <div className=" px-[16px] border-t-[1px] border-neutral200">
-        {isResult && (
+      <div
+        className={`px-[16px] border-t-[1px] border-neutral200 ${
+          isDashboard && 'border-b-[1px]'
+        }`}
+      >
+        {(isResult || isDashboard) && (
           <div className="flex items-center justify-between">
             <div className="flex gap-4 h-[30px]">
               <div className=" border-[1px] border-lengendInCardBorder rounded-[4px] bg-legendInCartFill text-legendInCart">
@@ -923,14 +933,24 @@ const DataTable = ({
                     variant: 'primary',
                     label: ManageLocales('app.searchResult.confirmStone'),
                     handler: () => {
-                      handleConfirmStone({
-                        selectedRows: rowSelection,
-                        rows: rows,
-                        setIsError,
-                        setErrorText,
-                        setIsConfirmStone,
-                        setConfirmStoneData
-                      });
+                      isDashboard
+                        ? handleConfirmStone({
+                            selectedRows: rowSelection,
+                            rows: rows,
+                            setIsError,
+                            setErrorText,
+                            setIsConfirmStone,
+                            setConfirmStoneData,
+                            setIsDetailPage
+                          })
+                        : handleConfirmStone({
+                            selectedRows: rowSelection,
+                            rows: rows,
+                            setIsError,
+                            setErrorText,
+                            setIsConfirmStone,
+                            setConfirmStoneData
+                          });
                     }
                   }
                 ]}
