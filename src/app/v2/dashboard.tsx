@@ -187,9 +187,7 @@ const Dashboard = () => {
   }, [searchData?.foundProducts]);
   useEffect(() => {
     if (searchData?.notFoundKeywords?.length > 0) {
-      setError(
-        `We couldn't find any results for the search with stone numbers - ${searchData?.notFoundKeywords?.toString()}`
-      );
+      setError('Some stones are not available');
     }
   }, [searchData?.notFoundKeywords]);
   useEffect(() => {
