@@ -25,7 +25,7 @@ export const productApi = createApi({
     }),
     getProductById: builder.mutation({
       query: data => ({
-        url: `/store/products/search`,
+        url: `/store/products/v2/search`,
         method: 'POST',
         body: data
       }),
