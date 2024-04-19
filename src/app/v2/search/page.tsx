@@ -244,7 +244,7 @@ const Search = () => {
                       } else {
                         setIsInputDialogOpen(true);
                         setIsDialogOpen(false);
-                        closeSearch(id, yourSelection);
+                        // closeSearch(id, yourSelection);
                       }
                     },
                     customStyle: 'flex-1 h-10'
@@ -321,10 +321,14 @@ const Search = () => {
                 variant: 'primary',
                 label: ManageLocales('app.modal.save'),
                 handler: () => {
+                  let yourSelection = JSON.parse(
+                    localStorage.getItem('Search')!
+                  );
+                  console.log(yourSelection, 'yourSelection-----------');
                   if (!saveSearchName.length) {
                     setInputError('Please enter name');
                   } else {
-                    !inputError.length &&
+                    if (!inputError.length) {
                       handleSaveSearch({
                         addSavedSearch,
                         saveSearchName,
@@ -335,6 +339,8 @@ const Search = () => {
                         setSaveSearchName,
                         setInputError
                       });
+                      // closeSearch(id, yourSelection);
+                    }
                   }
                 },
                 customStyle: 'flex-1 h-10'

@@ -979,6 +979,7 @@ const Result = ({
       }, 4000);
   }, [isError]);
 
+  console.log('datadatahi', data);
   return (
     <div className="relative">
       {isError && (
