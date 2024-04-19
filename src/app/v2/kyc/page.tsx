@@ -545,6 +545,14 @@ const KYC = () => {
     });
   }, []);
 
+  function areAllKeysEmpty(obj: any) {
+    for (const key in obj) {
+      if (obj[key] !== '') {
+        return false;
+      }
+    }
+    return true;
+  }
   useEffect(() => {
     if (!formState.country) return;
 
@@ -561,6 +569,7 @@ const KYC = () => {
             kycScreenIdentifierNames.COMPANY_DETAILS,
             kycScreenIdentifierNames.BANKING_DETAILS
           ];
+
     sectionKeys.forEach(async (key, index: number) => {
       let validationErrors = await validateScreen(
         formState.online.sections[key],
@@ -572,7 +581,7 @@ const KYC = () => {
 
       if (
         currentStepperStep > index &&
-        (!screenValidationError ||
+        (areAllKeysEmpty(screenValidationError) ||
           (screenValidationError && !Object.keys(screenValidationError).length))
       ) {
         completedSteps.add(index);
@@ -689,7 +698,6 @@ const KYC = () => {
         screenValidationError &&
         !Object.keys(screenValidationError).length
       ) {
-        // console.log('indexxxx', currentStepperStep, index);
         completedSteps.add(1);
         rejectedSteps.delete(1);
       } else if (!validationError?.length) {
@@ -764,7 +772,7 @@ const KYC = () => {
         })
       );
     }
-    // console.log('currentState', currentState);
+
     if (validationError?.length) {
       rejectedSteps.add(currentState);
       setRejectedSteps(new Set(rejectedSteps));
@@ -818,43 +826,17 @@ const KYC = () => {
     })
       .then((response: any) => {
         if (
-          screenName === kycScreenIdentifierNames.COMPANY_DETAILS &&
-          formState.country === 'India'
-        ) {
-          if (
-            updatedCompanyDetails.organisation_type.length &&
-            updatedCompanyDetails.organisation_type.includes('Individual')
-          ) {
-            dispatch(
-              updateFormState({
-                name: `formState.online.sections[${[
-                  kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
-                ]}][owner_pan_or_aadhaar_number]`,
-                value: updatedCompanyDetails.company_pan_number
-              })
-            );
-          } else {
-            dispatch(
-              updateFormState({
-                name: `formState.online.sections[${[
-                  kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
-                ]}][owner_pan_or_aadhaar_number]`,
-                value: ''
-              })
-            );
-          }
-        }
-        if (
           (response?.data?.statusCode === statusCode.SUCCESS ||
             response?.data?.statusCode === statusCode.NO_CONTENT) &&
           !validationError.length
         ) {
           // Step was successfully completed, move to the next step
-          // console.log('nextStep', nextStep);
+
           completedSteps.add(currentState);
           setCompletedSteps(new Set(completedSteps));
           rejectedSteps.delete(currentState);
           setRejectedSteps(new Set(rejectedSteps));
+
           if (
             screenName === kycScreenIdentifierNames.PERSONAL_DETAILS &&
             emailVerified
@@ -872,7 +854,34 @@ const KYC = () => {
               })))
             : {};
           formState.isEmailVerified && goToNextStep();
-
+          if (
+            screenName === kycScreenIdentifierNames.COMPANY_DETAILS &&
+            formState.country === 'India' &&
+            updatedCompanyDetails.organisation_type.length
+          ) {
+            if (
+              updatedCompanyDetails.organisation_type.length &&
+              updatedCompanyDetails.organisation_type.includes('Individual')
+            ) {
+              dispatch(
+                updateFormState({
+                  name: `formState.online.sections[${[
+                    kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
+                  ]}][owner_pan_or_aadhaar_number]`,
+                  value: updatedCompanyDetails.company_pan_number
+                })
+              );
+            } else {
+              dispatch(
+                updateFormState({
+                  name: `formState.online.sections[${[
+                    kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
+                  ]}][owner_pan_or_aadhaar_number]`,
+                  value: ''
+                })
+              );
+            }
+          }
           // setCurrentStepperStep(nextStep);
         } else {
           rejectedSteps.add(currentState);
