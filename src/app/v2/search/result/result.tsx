@@ -94,7 +94,8 @@ const Result = ({
   handleCloseAllTabs,
   handleCloseSpecificTab,
   setSearchParameters,
-  setIsLoading
+  setIsLoading,
+  setIsInputDialogOpen
 }: {
   activeTab: number;
   searchParameters: any;
@@ -103,6 +104,7 @@ const Result = ({
   handleCloseAllTabs: () => void;
   handleCloseSpecificTab: (id: number) => void;
   setIsLoading: any;
+  setIsInputDialogOpen: any;
 }) => {
   const dispatch = useAppDispatch();
 
@@ -110,12 +112,11 @@ const Result = ({
     useGetSavedSearchListQuery('');
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();
   const { errorState, errorSetState } = useErrorStateManagement();
-  const { setIsError, setErrorText, setInputError } = errorSetState;
-  const { isError, errorText, inputError } = errorState;
+  const { setIsError, setErrorText } = errorSetState;
+  const { isError, errorText } = errorState;
   const { modalState, modalSetState } = useModalStateManagement();
-  const { isDialogOpen, dialogContent, isInputDialogOpen } = modalState;
-  const { setIsDialogOpen, setDialogContent, setIsInputDialogOpen } =
-    modalSetState;
+  const { isDialogOpen, dialogContent } = modalState;
+  const { setIsDialogOpen, setDialogContent } = modalSetState;
   const [isAddCommentDialogOpen, setIsAddCommentDialogOpen] = useState(false);
   const [saveSearchName, setSaveSearchName] = useState('');
   const [data, setData] = useState([]);
@@ -695,94 +696,6 @@ const Result = ({
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputError('');
-    const inputValue = e.target.value;
-    if (inputValue.length <= 20) {
-      setSaveSearchName(inputValue);
-    } else {
-      setSaveSearchName(inputValue.slice(0, 20));
-      setInputError('Input cannot exceed 20 characters');
-    }
-  };
-
-  const renderContentWithInput = () => {
-    return (
-      <>
-        {' '}
-        <div className="absolute left-[-84px] top-[-84px]">
-          <Image src={bookmarkIcon} alt="bookmarkIcon" />
-        </div>
-        <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px] ">
-          <div>
-            <h1 className="text-headingS text-neutral900">
-              {' '}
-              {ManageLocales('app.advanceSearch.savedSearch.input.header')}
-            </h1>
-            <p className="text-neutral600 text-mRegular">
-              {ManageLocales('app.advanceSearch.savedSearch.input.content')}
-            </p>
-          </div>
-          <div>
-            <InputField
-              type="text"
-              value={saveSearchName}
-              name={'savedSearch'}
-              placeholder={'Search Name'}
-              onChange={handleInputChange}
-              styles={{
-                inputMain: 'w-full',
-                input: `h-[40px] p-2 flex-grow block w-[100%] !text-primaryMain min-w-0 rounded-r-sm text-mRegular shadow-[var(--input-shadow)] border-[1px] border-neutral200 rounded-r-[4px]
-                ${inputError ? 'border-dangerMain' : 'border-neutral200'}`
-              }}
-            />
-
-            <div className=" text-dangerMain text-sRegular font-regular flex text-left h-[5px]">
-              {inputError ?? ''}
-            </div>
-          </div>
-
-          <ActionButton
-            actionButtonData={[
-              {
-                variant: 'secondary',
-                label: ManageLocales('app.modal.cancel'),
-                handler: () => {
-                  setSaveSearchName('');
-                  setInputError('');
-                  setIsInputDialogOpen(false);
-                },
-                customStyle: 'flex-1 h-10'
-              },
-              {
-                variant: 'primary',
-                label: ManageLocales('app.modal.save'),
-                handler: () => {
-                  if (!saveSearchName.length) {
-                    setInputError('Please enter name');
-                  } else {
-                    !inputError.length &&
-                      handleSaveSearch({
-                        addSavedSearch,
-                        saveSearchName,
-                        activeTab,
-                        data,
-                        setIsInputDialogOpen,
-                        setStoredSelection: setSearchParameters,
-                        setSaveSearchName,
-                        setInputError
-                      });
-                  }
-                },
-                customStyle: 'flex-1 h-10'
-              }
-            ]}
-          />
-        </div>
-      </>
-    );
-  };
-
   const goBackToListView = (isFrom?: string) => {
     if (isFrom === 'Detail Page') {
       setIsDetailPage(true);
@@ -1066,6 +979,7 @@ const Result = ({
       }, 4000);
   }, [isError]);
 
+  console.log('datadatahi', data);
   return (
     <div className="relative">
       {isError && (
@@ -1085,11 +999,7 @@ const Result = ({
         setIsOpen={setIsDialogOpen}
         dialogStyle={{ dialogContent: isConfirmStone ? 'h-[240px]' : '' }}
       />
-      <InputDialogComponent
-        isOpen={isInputDialogOpen}
-        onClose={() => setIsInputDialogOpen(false)}
-        renderContent={renderContentWithInput}
-      />
+
       <AddCommentDialog
         isOpen={isAddCommentDialogOpen}
         onClose={() => setIsAddCommentDialogOpen(false)}
@@ -1225,6 +1135,7 @@ const Result = ({
                 // handleConfirmStone={handleConfirmStone}
                 setIsConfirmStone={setIsConfirmStone}
                 setConfirmStoneData={setConfirmStoneData}
+                setIsInputDialogOpen={setIsInputDialogOpen}
               />
             </div>
           )}

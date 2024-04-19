@@ -134,6 +134,7 @@ const DataTable = ({
   setConfirmStoneData,
   deleteCartHandler,
   activeCartTab,
+  setIsInputDialogOpen,
   isDashboard,
   setIsDetailPage
 }: any) => {
@@ -354,7 +355,7 @@ const DataTable = ({
 
   const handleUpdateSaveSearch = () => {
     const yourSelection = JSON.parse(localStorage.getItem('Search')!);
-
+    console.log('data', data);
     const updateSaveSearchData = {
       id: yourSelection[activeTab - 1]?.id,
       meta_data: yourSelection[activeTab - 1]?.queryParams,
@@ -821,7 +822,7 @@ const DataTable = ({
                   onClick={() => {
                     searchParameters[activeTab - 1].saveSearchName.length
                       ? handleUpdateSaveSearch()
-                      : modalSetState.setIsInputDialogOpen(true);
+                      : setIsInputDialogOpen(true);
                   }}
                 >
                   <Image src={saveIcon} alt={'save search'} />
