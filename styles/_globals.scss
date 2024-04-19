@@ -354,5 +354,6 @@
   input:-webkit-autofill:focus {
     -webkit-box-shadow: var(--input-shadow) inset !important;
     transition: background-color 5000s ease-in-out 0s !important; /* Adjust the transition to a long duration */
+    font-size: inherit !important;
   }
 }

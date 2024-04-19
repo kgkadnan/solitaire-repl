@@ -40,6 +40,7 @@ import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
 import { kycStatus } from '@/constants/enums/kyc';
+import { formatNumber } from '@/utils/fix-two-digit-number';
 
 export function DiamondDetailsComponent({
   data,
@@ -63,8 +64,6 @@ export function DiamondDetailsComponent({
   const [tableData, setTableData] = useState<any>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  //   const dispatch: AppDispatch = useDispatch();
-  //   const diamondData = useSelector(selectDiamondData);
   const { errorSetState } = useErrorStateManagement();
 
   const { setIsError, setErrorText } = errorSetState;
@@ -152,7 +151,7 @@ export function DiamondDetailsComponent({
       setShowToast(true); // Show the toast notification
       setTimeout(() => {
         setShowToast(false); // Hide the toast notification after some time
-      }, 2000);
+      }, 4000);
     });
   };
   let statusValue = '';
@@ -269,7 +268,7 @@ export function DiamondDetailsComponent({
               : '2xl:h-[70vh]'
           }`}
         >
-          <div className="flex justify-between mt-4 2xl:mt-0 w-full">
+          <div className="flex xl:justify-start  2xl:justify-between mt-4 2xl:mt-0 2xl:w-full">
             <p
               className="sm:text-[22px] xl:text-[28px] text-[#344054] font-medium mr-5 "
               style={{ alignSelf: 'center' }}
@@ -277,7 +276,7 @@ export function DiamondDetailsComponent({
               Stock No: {tableData?.lot_id ?? '-'}
             </p>
 
-            <div className="flex w-[40%] justify-around items-center">
+            <div className="flex lg:w-[30%]  2xl:w-[40%] justify-around items-center">
               <div className="flex gap-3 items-center">
                 <Tooltip
                   tooltipTrigger={
@@ -322,7 +321,7 @@ export function DiamondDetailsComponent({
               <div className="flex gap-3 items-center relative justify-center">
                 {/* Backward Arrow */}
                 <button
-                  className={`relative group  h-[34px] w-[37px] shadow-sm flex items-center justify-center rounded-[4px] hover:bg-neutral-50 border-[1px] border-neutral-200 ${
+                  className={`relative group  h-[35px] w-[37px] shadow-sm flex items-center justify-center rounded-[4px] hover:bg-neutral-50 border-[1px] border-neutral-200 ${
                     currentIndex <= 0 ? 'bg-neutral-50' : 'bg-neutral0 '
                   } `}
                   disabled={currentIndex <= 0}
@@ -345,7 +344,7 @@ export function DiamondDetailsComponent({
 
                 {/* Forward Arrow */}
                 <button
-                  className={`relative group  h-[34px] w-[37px] shadow-sm flex items-center justify-center rounded-[4px] hover:bg-neutral-50 border-[1px] border-neutral-200 ${
+                  className={`relative group  h-[35px] w-[37px] shadow-sm flex items-center justify-center rounded-[4px] hover:bg-neutral-50 border-[1px] border-neutral-200 ${
                     currentIndex >= data.length - 1
                       ? 'bg-neutral-50'
                       : 'bg-neutral0'
@@ -377,12 +376,13 @@ export function DiamondDetailsComponent({
                 {tableData?.variants?.length > 0
                   ? tableData?.variants[0]?.prices[0]?.amount
                     ? `$${
-                        tableData?.variants[0]?.prices[0]?.amount?.toFixed(2) ??
-                        ''
+                        formatNumber(
+                          tableData?.variants[0]?.prices[0]?.amount
+                        ) ?? ''
                       }`
                     : ''
                   : tableData?.amount
-                  ? `$${tableData?.amount?.toFixed(2) ?? ''}`
+                  ? `$${formatNumber(tableData?.amount) ?? ''}`
                   : ''}
               </div>
               <p

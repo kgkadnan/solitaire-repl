@@ -68,6 +68,7 @@ import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import { SubRoutes } from '@/constants/v2/enums/routes';
 import { Toast } from '@/components/v2/common/copy-and-share/toast';
 import { kycStatus } from '@/constants/enums/kyc';
+import { formatNumber } from '@/utils/fix-two-digit-number';
 
 const MyCart = () => {
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();
@@ -119,7 +120,7 @@ const MyCart = () => {
     isError &&
       setTimeout(() => {
         setIsError(false); // Hide the toast notification after some time
-      }, 2000);
+      }, 4000);
   }, [isError]);
   const processCartItems = ({
     cartItems,
@@ -572,7 +573,7 @@ const MyCart = () => {
                   <Image src={errorSvg} alt="errorSvg" />
                 </div>
                 <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                  <p className="text-neutral600 text-mRegular font-sans">
+                  <p className="text-headingS text-neutral900 font-medium">
                     {e?.data?.message}
                   </p>
                   <ActionButton
@@ -762,12 +763,39 @@ const MyCart = () => {
                 });
               }
             };
+          case 'key_to_symbol':
+          case 'report_comments':
+            return {
+              ...commonProps,
+              Cell: ({ renderedCellValue }: { renderedCellValue: any }) => (
+                <span>{`${
+                  renderedCellValue?.length > 0
+                    ? renderedCellValue?.toString()
+                    : '-'
+                }`}</span>
+              )
+            };
 
           case 'amount':
             return { ...commonProps, Cell: RenderAmount };
           case 'measurements':
             return { ...commonProps, Cell: RenderMeasurements };
-          case 'carat':
+          case 'carats':
+          case 'rap':
+          case 'rap_value':
+          case 'table_percentage':
+          case 'depth_percentage':
+          case 'ratio':
+          case 'length':
+          case 'width':
+          case 'depth':
+          case 'crown_angle':
+          case 'crown_height':
+          case 'girdle_percentage':
+          case 'pavilion_angle':
+          case 'pavilion_height':
+          case 'lower_half':
+          case 'star_length':
             return { ...commonProps, Cell: RenderCarat };
           case 'shape_full':
             return { ...commonProps, Cell: RenderShape };
@@ -788,7 +816,7 @@ const MyCart = () => {
                 <span>{`${
                   renderedCellValue === 0
                     ? '0.00'
-                    : renderedCellValue?.toFixed(2) ?? '0.00'
+                    : formatNumber(renderedCellValue) ?? '0.00'
                 }`}</span>
               )
             };
@@ -829,6 +857,7 @@ const MyCart = () => {
         selectedImageIndex={0}
         images={images}
         setIsLoading={setIsLoading}
+        fromDetailPage={true}
       />
       <DialogComponent
         dialogContent={dialogContent}
@@ -859,7 +888,7 @@ const MyCart = () => {
             modalSetState={modalSetState}
           />
           <div className="p-[16px] flex justify-end items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow ">
-            {isError && (
+            {/* {isError && (
               <div>
                 <span className="hidden  text-successMain" />
                 <span
@@ -868,7 +897,7 @@ const MyCart = () => {
                   {errorText}
                 </span>
               </div>
-            )}
+            )} */}
             <ActionButton
               actionButtonData={[
                 {
@@ -876,7 +905,7 @@ const MyCart = () => {
                   label: ManageLocales('app.searchResult.confirmStone'),
                   isHidden: isConfirmStone,
                   handler: () => {
-                    setIsDetailPage(false);
+                    // setIsDetailPage(false);
                     const { id } = detailPageData;
                     const selectedRows = { [id]: true };
                     handleConfirmStone({
@@ -885,7 +914,8 @@ const MyCart = () => {
                       setIsError,
                       setErrorText,
                       setIsConfirmStone,
-                      setConfirmStoneData
+                      setConfirmStoneData,
+                      setIsDetailPage
                     });
                   }
                 }

@@ -99,7 +99,8 @@ const ForgotPassword = () => {
         setIsDialogOpen(true);
         setDialogContent(
           <InvalidCreds
-            content={res?.error.data.message}
+            content=""
+            header={res?.error.data.message}
             handleClick={() => setIsDialogOpen(false)}
           />
         );

@@ -25,6 +25,7 @@ interface IHandleConfirmStone {
   setIsError: Dispatch<SetStateAction<boolean>>;
   setIsConfirmStone: Dispatch<SetStateAction<boolean>>;
   setConfirmStoneData: Dispatch<SetStateAction<IProduct[]>>;
+  setIsDetailPage?: any;
 }
 export const handleConfirmStone = ({
   selectedRows,
@@ -32,7 +33,8 @@ export const handleConfirmStone = ({
   setErrorText,
   setIsError,
   setIsConfirmStone,
-  setConfirmStoneData
+  setConfirmStoneData,
+  setIsDetailPage
 }: IHandleConfirmStone) => {
   let selectedIds = Object.keys(selectedRows);
   const hasMemoOut = selectedIds?.some(id => {
@@ -59,6 +61,7 @@ export const handleConfirmStone = ({
     setIsConfirmStone(true);
     const confirmStone = rows.filter(item => selectedIds?.includes(item.id));
     setConfirmStoneData(confirmStone);
+    setIsDetailPage && setIsDetailPage(false);
   } else {
     setIsError(true);
     setErrorText(SELECT_STONE_TO_PERFORM_ACTION);

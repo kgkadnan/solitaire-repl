@@ -13,6 +13,7 @@ import {
   RenderDiscount,
   RenderLab
 } from '@/components/v2/table/helpers/render-cell';
+import { formatNumber } from '@/utils/fix-two-digit-number';
 
 import React, { useEffect, useMemo, useState } from 'react';
 
@@ -79,7 +80,22 @@ const ConfirmStone = ({
         switch (accessor) {
           case 'amount':
             return { ...commonProps, Cell: RenderAmount };
-          case 'carat':
+          case 'carats':
+          case 'rap':
+          case 'rap_value':
+          case 'table_percentage':
+          case 'depth_percentage':
+          case 'ratio':
+          case 'length':
+          case 'width':
+          case 'depth':
+          case 'crown_angle':
+          case 'crown_height':
+          case 'girdle_percentage':
+          case 'pavilion_angle':
+          case 'pavilion_height':
+          case 'lower_half':
+          case 'star_length':
             return { ...commonProps, Cell: RenderCarat };
           case 'measurements':
             return { ...commonProps, Cell: RenderMeasurements };
@@ -103,6 +119,18 @@ const ConfirmStone = ({
                 });
               }
             };
+          case 'key_to_symbol':
+          case 'report_comments':
+            return {
+              ...commonProps,
+              Cell: ({ renderedCellValue }: { renderedCellValue: any }) => (
+                <span>{`${
+                  renderedCellValue?.length > 0
+                    ? renderedCellValue?.toString()
+                    : '-'
+                }`}</span>
+              )
+            };
           case 'price_per_carat':
             return {
               ...commonProps,
@@ -110,7 +138,7 @@ const ConfirmStone = ({
                 <span>{`${
                   renderedCellValue === 0
                     ? '0.00'
-                    : renderedCellValue?.toFixed(2) ?? '0.00'
+                    : formatNumber(renderedCellValue) ?? '0.00'
                 }`}</span>
               )
             };

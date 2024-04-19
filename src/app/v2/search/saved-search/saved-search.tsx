@@ -199,7 +199,7 @@ const SavedSearch = ({ setIsLoading, isLoading }: any) => {
     isError &&
       setTimeout(() => {
         setIsError(false); // Hide the toast notification after some time
-      }, 2000);
+      }, 4000);
   }, [isError]);
   return (
     <div className="mb-[20px]">
@@ -332,6 +332,7 @@ const SavedSearch = ({ setIsLoading, isLoading }: any) => {
                       >
                         {name
                           .split(' ') // Split the name into words
+                          .slice(0, 2) // Take only the first two words
                           .map(word => word.charAt(0)) // Extract the first character of each word
                           .join('')}
                       </div>
