@@ -350,7 +350,8 @@ const CompanyDetail = ({
     key: any,
     inputValue: any,
     path: any,
-    requiresInput: any
+    requiresInput: any,
+    allowedValues?: any
   ) => {
     let newData: any = formState.online.sections[screenName]?.[key]?.filter(
       (item: any) => (Array.isArray(item) ? item[0] !== label : item !== label)
@@ -363,6 +364,16 @@ const CompanyDetail = ({
       if (requiresInput) {
         inputValue = inputValue.replace(',', '');
         newData.push([label, inputValue]);
+
+        let ndata = newData.filter((item: any) => {
+          if (Array.isArray(item)) {
+            return true; // Keep arrays
+          } else {
+            return allowedValues.includes(item); // Keep allowed strings
+          }
+        });
+
+        newData = ndata;
       } else if (!requiresInput) {
         // If the checkbox doesn't require input, add only the label
         newData.push(label);
@@ -378,7 +389,15 @@ const CompanyDetail = ({
           return items !== inputValue;
         });
 
-        newData = filteredData;
+        let ndata = filteredData.filter((item: any) => {
+          if (Array.isArray(item)) {
+            return true; // Keep arrays
+          } else {
+            return allowedValues.includes(item); // Keep allowed strings
+          }
+        });
+
+        newData = ndata;
       }
     }
 
@@ -1110,7 +1129,8 @@ const CompanyDetail = ({
                               'business_type',
                               inputValue,
                               `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][business_type]`,
-                              true
+                              true,
+                              businessTypes
                             )
                           }
                           showInput={true}
@@ -1591,7 +1611,8 @@ const CompanyDetail = ({
                               'business_type',
                               inputValue,
                               `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][business_type]`,
-                              true
+                              true,
+                              businessTypes
                             )
                           }
                           showInput={true}
@@ -1773,7 +1794,8 @@ const CompanyDetail = ({
                               'industry_type',
                               inputValue,
                               `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][industry_type]`,
-                              true
+                              true,
+                              typesOfIndustryTypes
                             )
                           }
                           showInput={true}
@@ -2677,7 +2699,8 @@ const CompanyDetail = ({
                               'industry_type',
                               inputValue,
                               `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][industry_type]`,
-                              true
+                              true,
+                              typesOfIndustryTypes
                             )
                           }
                           showInput={true}
