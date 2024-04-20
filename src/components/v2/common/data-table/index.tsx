@@ -355,7 +355,6 @@ const DataTable = ({
 
   const handleUpdateSaveSearch = () => {
     const yourSelection = JSON.parse(localStorage.getItem('Search')!);
-    console.log('data', data);
     const updateSaveSearchData = {
       id: yourSelection[activeTab - 1]?.id,
       meta_data: yourSelection[activeTab - 1]?.queryParams,

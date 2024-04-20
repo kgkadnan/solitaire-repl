@@ -15,6 +15,7 @@ import { handleDownloadImage } from '@/utils/v2/detail-page';
 import downloadImg from '@public/v2/assets/icons/detail-page/download.svg';
 import forwardArrow from '@public/v2/assets/icons/arrow-forward.svg';
 import backwardArrow from '@public/v2/assets/icons/arrow-backword.svg';
+import { checkImage } from '../helpers/check-image';
 
 interface ImageSliderProps {
   images: ImagesType[];
@@ -26,6 +27,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images, setIsLoading }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [showDownloadButton, setShowDownloadButton] = useState<string[]>([]);
   const [imageName, setImageName] = useState('');
+  const [validImages, setValidImages] = useState<ImagesType[]>([]);
 
   function SampleNextArrow(props: any) {
     const { className, onClick, currentSlide, slideCount } = props;
@@ -74,7 +76,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images, setIsLoading }) => {
     arrows: true,
     afterChange: (current: number) => {
       setCurrentImageIndex(current);
-      setImageName(images[current].name);
+      setImageName(validImages[current].name);
     },
     appendDots: (dots: any) => (
       <div
@@ -95,14 +97,50 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images, setIsLoading }) => {
   };
 
   useEffect(() => {
-    setImageName(images[0].name);
+    async function loadImages() {
+      const validImageIndexes = await Promise.all(
+        images.map(async (image, index) => {
+          let isValid;
+          if (
+            image.name === 'GIA Certificate' ||
+            image.name === 'B2B' ||
+            image.name === 'B2B Sparkle'
+          ) {
+            if (
+              image.url === 'null' ||
+              image.url === null ||
+              !image.url.length
+            ) {
+              isValid = false;
+            } else {
+              isValid = true;
+            }
+          } else {
+            isValid = await checkImage(image.url);
+          }
+
+          return isValid ? index : null;
+        })
+      );
+      setValidImages(
+        validImageIndexes
+          .filter(index => index !== null)
+          .map((items: any) => images[items])
+      );
+    }
+
+    loadImages();
   }, [images]);
+
+  useEffect(() => {
+    validImages && setImageName(validImages[0]?.name);
+  }, [validImages]);
 
   return (
     <div className="details-slider">
       <div className="w-[35%]">
         <Slider {...settings}>
-          {images.map((img, index) => {
+          {validImages.map((img, index) => {
             return (
               <div
                 key={index}
