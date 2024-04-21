@@ -144,7 +144,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images, setIsLoading }) => {
             return (
               <div
                 key={index}
-                className="flex flex-col items-center justify-center gap-[12px]"
+                className="flex cursor-pointer flex-col items-center justify-center gap-[12px]"
               >
                 <div className="relative w-full min-h-[328px]">
                   <div className="absolute w-full flex justify-center inset-0 p-5">
@@ -263,7 +263,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images, setIsLoading }) => {
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(!isModalOpen)}
           selectedImageIndex={currentImageIndex}
-          images={images}
+          images={validImages}
           setIsLoading={setIsLoading}
         />
       </div>
