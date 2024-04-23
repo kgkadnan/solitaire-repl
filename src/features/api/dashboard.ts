@@ -14,7 +14,14 @@ export const dashboardApi = createApi({
     }),
     getBidHistory: builder.query({
       query: () => `store/customers/me/bid-history`
+    }),
+    getBidToBuyHistory: builder.query({
+      query: () => `store/customers/me/bidtobuy-history`
     })
   })
 });
-export const { useGetCustomerQuery, useGetBidHistoryQuery } = dashboardApi;
+export const {
+  useGetCustomerQuery,
+  useGetBidHistoryQuery,
+  useGetBidToBuyHistoryQuery
+} = dashboardApi;
