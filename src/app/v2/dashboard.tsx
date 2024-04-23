@@ -1516,7 +1516,7 @@ const Dashboard = () => {
           {' '}
           <div className="flex flex-col gap-4 mb-[20px]">
             <div
-              className={`bg-cover bg-no-repeat flex justify-center flex-col items-center h-[220px] gap-5`}
+              className={`bg-cover mx-[-20px]  bg-no-repeat flex justify-center flex-col items-center h-[220px] gap-5`}
               style={{
                 backgroundImage: 'url(/gradient.png)'
               }}
@@ -1545,6 +1545,7 @@ const Dashboard = () => {
                 </div>
               </div>
             </div>
+
             <div className="flex justify-between gap-4">
               {options.map(data => {
                 return (
@@ -1750,10 +1751,8 @@ const Dashboard = () => {
               </div>
             )}
           </div>
-          <div
-            className="border-t-[1px] border-l-[1px] border-r-[1px] rounded-[8px] p-4 flex justify-between border-neutral200 text-lRegular 
-mt-auto"
-          >
+          <div className="flex-grow"></div>
+          <div className="border-t-[1px] border-l-[1px] border-r-[1px] rounded-[8px] p-4 flex justify-between border-neutral200 text-lRegular">
             {/* for fixed footer */}
             {/* fixed bottom-0 left-[84px] right-0 bg-white  */}
             <div className="text-infoMain  flex gap-6 cursor-pointer">
