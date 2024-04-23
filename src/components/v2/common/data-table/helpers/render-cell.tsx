@@ -178,6 +178,41 @@ export const RenderDiscount = ({ renderedCellValue }: any) => {
   );
 };
 
+export const DiscountWithCross = ({ renderedCellValue }: any) => {
+  return (
+    <span
+      style={{
+        position: 'relative',
+        display: 'inline-block',
+        padding: '2px 8px',
+        border: '1px',
+        width: '74px',
+        textAlign: 'end',
+        borderRadius: '4px',
+        background: 'var(--neutral-50)',
+        color: 'var(--neutral-500)'
+      }}
+    >
+      {`${
+        renderedCellValue === 0
+          ? '0.00'
+          : formatNumber(renderedCellValue) ?? '0.00'
+      }%`}
+      <span
+        style={{
+          position: 'absolute',
+          top: '50%',
+          right: '6px',
+          width: '85%',
+          height: '1px',
+          backgroundColor: 'black',
+          transform: 'translateY(-50%) rotate(-15deg)'
+        }}
+      ></span>
+    </span>
+  );
+};
+
 export const RenderCarat = ({ renderedCellValue }: any) => {
   return (
     <span>{`${

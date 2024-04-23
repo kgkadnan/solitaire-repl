@@ -9,15 +9,14 @@ import {
 import expandIcon from '@public/v2/assets/icons/expand-icon.svg';
 import collapsIcon from '@public/v2/assets/icons/collapse-icon.svg';
 import downloadIcon from '@public/v2/assets/icons/data-table/download.svg';
-import downloadExcelIcon from '@public/v2/assets/icons/modal/download.svg';
 import Image from 'next/image';
 import searchIcon from '@public/v2/assets/icons/data-table/search-icon.svg';
 
 // theme.js
-import { ThemeProvider, createTheme, styled } from '@mui/material/styles';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 import { useEffect, useState } from 'react';
-
+import DisableDecrementIcon from '@public/v2/assets/icons/new-arrivals/disable-decrement.svg?url';
 import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
 import Share from '@/components/v2/common/copy-and-share/share';
 import ActionButton from '@/components/v2/common/action-button';
@@ -393,6 +392,7 @@ const BidToByDataTable = ({
     onRowSelectionChange: setRowSelection,
     state: { columnOrder, rowSelection, isFullScreen: isFullScreen },
     //filters
+
     positionToolbarAlertBanner: 'none',
     enableFilters: true,
     enableColumnActions: false,
@@ -786,13 +786,18 @@ const BidToByDataTable = ({
                 <div className="text-mRegular text-neutral700">Bid Disc%</div>
                 <div className="gap-6 flex">
                   <div className="h-[40px] flex gap-1">
-                    <div
-                      onClick={() =>
-                        handleDecrement(row.id, row.original.current_max_bid)
-                      }
-                    >
-                      <DecrementIcon />
-                    </div>
+                    {bidValue <= row.original.current_max_bid ? (
+                      <DisableDecrementIcon />
+                    ) : (
+                      <div
+                        onClick={() =>
+                          handleDecrement(row.id, row.original.current_max_bid)
+                        }
+                      >
+                        <DecrementIcon />
+                      </div>
+                    )}
+
                     <div className="w-[120px]">
                       <InputField
                         // label={'Bid Amt $'}
@@ -838,7 +843,7 @@ const BidToByDataTable = ({
                                 );
                                 return; // Exit early, do not update bidValues
                               }
-                              socketManager.emit('place_bid', {
+                              socketManager.emit('place_bidtobuy', {
                                 product_id: row.id,
                                 bid_value: bidValues[row.id]
                               });

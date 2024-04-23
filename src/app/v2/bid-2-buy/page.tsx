@@ -11,10 +11,10 @@ import {
   RenderMeasurements,
   RenderTracerId,
   RenderNewArrivalPrice,
-  RenderNewArrivalBidDiscount,
   RenderNewArrivalPricePerCarat,
   RenderCartLotId,
-  RenderBidDate
+  RenderBidDate,
+  DiscountWithCross
 } from '@/components/v2/common/data-table/helpers/render-cell';
 import Tooltip from '@/components/v2/common/tooltip';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
@@ -110,9 +110,9 @@ const BidToBuy = () => {
           case 'star_length':
             return { ...commonProps, Cell: RenderCarat };
           case 'discount':
-            return { ...commonProps, Cell: RenderDiscount };
+            return { ...commonProps, Cell: DiscountWithCross };
           case 'current_max_bid':
-            return { ...commonProps, Cell: RenderNewArrivalBidDiscount };
+            return { ...commonProps, Cell: RenderDiscount };
           case 'last_bid_date':
             return { ...commonProps, Cell: RenderBidDate };
 
@@ -336,7 +336,7 @@ const BidToBuy = () => {
     } else if (activeTab === 1 && activeBid?.length > 0) {
       return (
         <div className="flex items-center justify-between px-4 py-0">
-          <div className="flex gap-4">
+          {/* <div className="flex gap-4">
             <div className=" border-[1px] border-successBorder rounded-[4px] bg-successSurface text-successMain">
               <p className="text-mMedium font-medium px-[6px] py-[4px]">
                 Winning
@@ -348,7 +348,8 @@ const BidToBuy = () => {
                 Losing
               </p>
             </div>
-          </div>
+          </div> */}
+          <div></div>
           <MRT_TablePagination table={table} />
           <div className="flex items-center gap-3">
             <ActionButton
@@ -389,7 +390,7 @@ const BidToBuy = () => {
                                 variant: 'primary',
                                 label: 'Cancel Bid',
                                 handler: () => {
-                                  socketManager.emit('cancel_bid', {
+                                  socketManager.emit('cancel_bidtobuy', {
                                     product_ids: Object.keys(rowSelection)
                                   });
                                 },
@@ -408,25 +409,28 @@ const BidToBuy = () => {
           </div>
         </div>
       );
-    } else if (activeTab === 2 && bidHistory?.data?.length > 0) {
-      return (
-        <div className="flex items-center justify-between px-4 py-0">
-          <div className="flex gap-4">
-            <div className=" border-[1px] border-successBorder rounded-[4px] bg-successSurface text-successMain">
-              <p className="text-mMedium font-medium px-[6px] py-[4px]">Won</p>
-            </div>
-            <div className=" border-[1px] border-dangerBorder rounded-[4px] bg-dangerSurface text-dangerMain">
-              <p className="text-mMedium font-medium px-[6px] py-[4px]">
-                {' '}
-                Lost
-              </p>
-            </div>
-          </div>
-          <MRT_TablePagination table={table} />
-          <div></div>
-        </div>
-      );
-    } else {
+    }
+    // else if (activeTab === 2 && bidHistory?.data?.length > 0) {
+    //   return (
+    //     <div className="flex items-center justify-end px-4 py-0">
+    //       {/* <div className="flex gap-4">
+    //         <div className=" border-[1px] border-successBorder rounded-[4px] bg-successSurface text-successMain">
+    //           <p className="text-mMedium font-medium px-[6px] py-[4px]">Won</p>
+    //         </div>
+    //         <div className=" border-[1px] border-dangerBorder rounded-[4px] bg-dangerSurface text-dangerMain">
+    //           <p className="text-mMedium font-medium px-[6px] py-[4px]">
+    //             {' '}
+    //             Lost
+    //           </p>
+    //         </div>
+    //       </div> */}
+    //       {/* <div></div> */}
+    //       {/* <MRT_TablePagination table={table} /> */}
+    //       <div></div>
+    //     </div>
+    //   );
+    // }
+    else {
       return null;
     }
   };
