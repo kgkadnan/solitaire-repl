@@ -1516,7 +1516,7 @@ const Dashboard = () => {
           {' '}
           <div className="flex flex-col gap-4 mb-[20px]">
             <div
-              className={`bg-cover mx-[-20px]  bg-no-repeat flex justify-center flex-col items-center h-[220px] gap-5`}
+              className={`bg-cover ml-[-20px] mr-[-16px]  bg-no-repeat flex justify-center flex-col items-center h-[220px] gap-5`}
               style={{
                 backgroundImage: 'url(/gradient.png)'
               }}
