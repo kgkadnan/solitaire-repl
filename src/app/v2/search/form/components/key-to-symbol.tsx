@@ -1,13 +1,16 @@
 import { AccordionComponent } from '@/components/v2/common/accordion';
 import Tile from '@/components/v2/common/tile';
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import { keyToSymbol } from '@/constants/v2/form';
 import { compareArrays } from '../helpers/compare-arrays';
 import { handleFilterChange } from '../helpers/handle-filter-changes';
+import { RadioButton } from '@/components/v2/common/radio';
 
 interface IKeyToSymbolProps {
   selectedKeyToSymbol: string[];
   setSelectedKeyToSymbol: Dispatch<SetStateAction<string[]>>;
+  selectionChecked: any;
+  setSelectionChecked: any;
 }
 
 const handleKeyToSymbolChange = ({
@@ -41,8 +44,26 @@ const handleKeyToSymbolChange = ({
 
 export const KeyToSymbol = ({
   selectedKeyToSymbol,
-  setSelectedKeyToSymbol
+  setSelectedKeyToSymbol,
+  selectionChecked,
+  setSelectionChecked
 }: IKeyToSymbolProps) => {
+  const keyToSymbolRadio = [
+    {
+      name: 'keyToSymbols',
+      id: '1',
+      value: true,
+      label: 'Contains',
+      checked: selectionChecked === 'contain'
+    },
+    {
+      name: 'keyToSymbols',
+      id: '2',
+      value: false,
+      label: 'Does not contains',
+      checked: selectionChecked === 'notContain'
+    }
+  ];
   return (
     <div id="Key to Symbol">
       <AccordionComponent
@@ -51,6 +72,26 @@ export const KeyToSymbol = ({
         defaultValue="closed"
         accordionContent={
           <div className="px-[16px] py-[24px]">
+            <div className="flex pb-[10px] ">
+              <RadioButton
+                radioMetaData={keyToSymbolRadio[0]}
+                onChange={() => {
+                  setSelectionChecked('contain');
+                }}
+                customStyle={{
+                  radio: `!text-mRegular !text-neutral900 pr-[10px]`
+                }}
+              />
+              <RadioButton
+                radioMetaData={keyToSymbolRadio[1]}
+                onChange={() => {
+                  setSelectionChecked('notContain');
+                }}
+                customStyle={{
+                  radio: `!text-mRegular !text-neutral900`
+                }}
+              />
+            </div>
             <Tile
               tileData={keyToSymbol}
               selectedTile={selectedKeyToSymbol}
