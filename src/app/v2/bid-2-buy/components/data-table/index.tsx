@@ -20,17 +20,18 @@ import DisableDecrementIcon from '@public/v2/assets/icons/new-arrivals/disable-d
 import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
 import Share from '@/components/v2/common/copy-and-share/share';
 import ActionButton from '@/components/v2/common/action-button';
-import Bid2BuyCalculatedField from '../bid-2-buy-calculated-field';
-import Tab from '../tabs';
+import Bid2BuyCalculatedField from '@app/v2/new-arrivals/components/new-arrival-calculated-field';
+import Tab from '@components/v2/common/bid-tabs/index';
 import { InputField } from '@/components/v2/common/input-field';
 import DecrementIcon from '@public/v2/assets/icons/new-arrivals/decrement.svg?url';
 import IncrementIcon from '@public/v2/assets/icons/new-arrivals/increment.svg?url';
 import empty from '@public/v2/assets/icons/data-table/empty-bid-to-buy.svg';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
-import { RenderNewArrivalLotIdColor } from '@/components/v2/common/data-table/helpers/render-cell';
 import Tooltip from '@/components/v2/common/tooltip';
 import { kycStatus } from '@/constants/enums/kyc';
 import { formatNumber } from '@/utils/fix-two-digit-number';
+import { handleDecrementDiscount } from '@/utils/v2/handle-decrement-discount';
+import { handleIncrementDiscount } from '@/utils/v2/handle-increment-discount';
 
 const theme = createTheme({
   typography: {
@@ -90,7 +91,7 @@ const theme = createTheme({
   }
 });
 
-interface BidValues {
+export interface BidValues {
   [key: string]: number;
 }
 const BidToByDataTable = ({
@@ -187,53 +188,6 @@ const BidToByDataTable = ({
       ...columns.map((c: any) => c.accessorKey)
     ] //array of column ids (Initializing is optional as of v2.10.0)
   );
-
-  const handleIncrement = (rowId: string, currentMaxBid: any) => {
-    // Retrieve the current_max_bid for the row from the rows data
-    setBidError('');
-    setBidValues(prevValues => {
-      const currentBidValue = prevValues[rowId];
-      // If there's already a bid value for this row, increment it
-      if (currentBidValue !== undefined) {
-        return {
-          ...prevValues,
-          [rowId]: Number(currentBidValue) + 0.5
-        };
-      }
-      // If no bid value for this row yet, start from current_max_bid and add 0.5
-      else {
-        return {
-          ...prevValues,
-          [rowId]: Number(currentMaxBid) + 0.5
-        };
-      }
-    });
-  };
-
-  const handleDecrement = (rowId: string, currentMaxBid: any) => {
-    setBidValues(prevValues => {
-      const currentBidValue = prevValues[rowId];
-      // Calculate the new bid value
-      const newBidValue =
-        currentBidValue !== undefined
-          ? Number(currentBidValue) - 0.5
-          : Number(currentMaxBid) - 0.5;
-
-      // Check if the new bid value is less than or equal to currentMaxBid
-      if (newBidValue >= currentMaxBid) {
-        setBidError('');
-        // Update the bid value
-        return {
-          ...prevValues,
-          [rowId]: newBidValue
-        };
-      } else {
-        // Set error because attempting to decrement below currentMaxBid
-        setBidError('Bid value cannot be less than current maximum bid.');
-        return prevValues; // Return previous values without modification
-      }
-    });
-  };
 
   const renderTopToolbar = ({ table }: any) => (
     <div>
@@ -791,7 +745,12 @@ const BidToByDataTable = ({
                     ) : (
                       <div
                         onClick={() =>
-                          handleDecrement(row.id, row.original.current_max_bid)
+                          handleDecrementDiscount(
+                            row.id,
+                            row.original.current_max_bid,
+                            setBidError,
+                            setBidValues
+                          )
                         }
                       >
                         <DecrementIcon />
@@ -823,7 +782,12 @@ const BidToByDataTable = ({
                     </div>
                     <div
                       onClick={() =>
-                        handleIncrement(row.id, row.original.current_max_bid)
+                        handleIncrementDiscount(
+                          row.id,
+                          row.original.current_max_bid,
+                          setBidError,
+                          setBidValues
+                        )
                       }
                     >
                       <IncrementIcon />

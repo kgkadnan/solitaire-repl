@@ -23,7 +23,7 @@ import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
 import Share from '@/components/v2/common/copy-and-share/share';
 import ActionButton from '@/components/v2/common/action-button';
 import NewArrivalCalculatedField from '../new-arrival-calculated-field';
-import Tab from '../tabs';
+import Tab from '@components/v2/common/bid-tabs/index';
 import { InputField } from '@/components/v2/common/input-field';
 import DecrementIcon from '@public/v2/assets/icons/new-arrivals/decrement.svg?url';
 import IncrementIcon from '@public/v2/assets/icons/new-arrivals/increment.svg?url';
@@ -33,6 +33,8 @@ import { RenderNewArrivalLotIdColor } from '@/components/v2/common/data-table/he
 import Tooltip from '@/components/v2/common/tooltip';
 import { kycStatus } from '@/constants/enums/kyc';
 import { formatNumber } from '@/utils/fix-two-digit-number';
+import { handleIncrementDiscount } from '@/utils/v2/handle-increment-discount';
+import { handleDecrementDiscount } from '@/utils/v2/handle-decrement-discount';
 
 const theme = createTheme({
   typography: {
@@ -190,28 +192,6 @@ const NewArrivalDataTable = ({
     ] //array of column ids (Initializing is optional as of v2.10.0)
   );
 
-  const handleIncrement = (rowId: string, currentMaxBid: any) => {
-    // Retrieve the current_max_bid for the row from the rows data
-    setBidError('');
-    setBidValues(prevValues => {
-      const currentBidValue = prevValues[rowId];
-      // If there's already a bid value for this row, increment it
-      if (currentBidValue !== undefined) {
-        return {
-          ...prevValues,
-          [rowId]: Number(currentBidValue) + 0.5
-        };
-      }
-      // If no bid value for this row yet, start from current_max_bid and add 0.5
-      else {
-        return {
-          ...prevValues,
-          [rowId]: Number(currentMaxBid) + 0.5
-        };
-      }
-    });
-  };
-
   // const handleDecrement = (rowId: string, currentMaxBid: any) => {
   //   // Retrieve the current_max_bid for the row from the rows data
 
@@ -233,30 +213,6 @@ const NewArrivalDataTable = ({
   //     }
   //   });
   // };
-  const handleDecrement = (rowId: string, currentMaxBid: any) => {
-    setBidValues(prevValues => {
-      const currentBidValue = prevValues[rowId];
-      // Calculate the new bid value
-      const newBidValue =
-        currentBidValue !== undefined
-          ? Number(currentBidValue) - 0.5
-          : Number(currentMaxBid) - 0.5;
-
-      // Check if the new bid value is less than or equal to currentMaxBid
-      if (newBidValue >= currentMaxBid) {
-        setBidError('');
-        // Update the bid value
-        return {
-          ...prevValues,
-          [rowId]: newBidValue
-        };
-      } else {
-        // Set error because attempting to decrement below currentMaxBid
-        setBidError('Bid value cannot be less than current maximum bid.');
-        return prevValues; // Return previous values without modification
-      }
-    });
-  };
 
   const renderTopToolbar = ({ table }: any) => (
     <div>
@@ -808,7 +764,12 @@ const NewArrivalDataTable = ({
                   <div className="h-[40px] flex gap-1">
                     <div
                       onClick={() =>
-                        handleDecrement(row.id, row.original.current_max_bid)
+                        handleDecrementDiscount(
+                          row.id,
+                          row.original.current_max_bid,
+                          setBidError,
+                          setBidValues
+                        )
                       }
                     >
                       <DecrementIcon />
@@ -838,7 +799,12 @@ const NewArrivalDataTable = ({
                     </div>
                     <div
                       onClick={() =>
-                        handleIncrement(row.id, row.original.current_max_bid)
+                        handleIncrementDiscount(
+                          row.id,
+                          row.original.current_max_bid,
+                          setBidError,
+                          setBidValues
+                        )
                       }
                     >
                       <IncrementIcon />
