@@ -2,7 +2,6 @@ import { Box, Stack } from '@mui/material';
 import {
   MRT_ExpandButton,
   MRT_GlobalFilterTextField,
-  MRT_ToggleFullScreenButton,
   MaterialReactTable,
   useMaterialReactTable
 } from 'material-react-table';
