@@ -2,11 +2,12 @@ import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import NoImageFound from '@public/v2/assets/icons/detail-page/fall-back-img.svg';
 import { checkImage } from '../helpers/check-image';
+import { loadImages } from '../helpers/load-images';
 
 export interface ImagesType {
   name: string;
   url: string;
-  isSepratorNeeded?: boolean;
+  showDivider?: boolean;
 }
 
 interface ImageListProps {
@@ -38,39 +39,7 @@ const ImageList: React.FC<ImageListProps> = ({
   const [validImages, setValidImages] = useState<any>([]);
 
   useEffect(() => {
-    async function loadImages() {
-      const validImageIndexes = await Promise.all(
-        images.map(async (image, index) => {
-          let isValid;
-          if (
-            image.name === 'GIA Certificate' ||
-            image.name === 'B2B' ||
-            image.name === 'B2B Sparkle'
-          ) {
-            if (
-              image.url === 'null' ||
-              image.url === null ||
-              !image.url.length
-            ) {
-              isValid = false;
-            } else {
-              isValid = true;
-            }
-          } else {
-            isValid = await checkImage(image.url);
-          }
-
-          return isValid ? index : null;
-        })
-      );
-      setValidImages(
-        validImageIndexes
-          .filter(index => index !== null)
-          .map((items: any) => images[items])
-      );
-    }
-
-    loadImages();
+    loadImages(images, setValidImages, checkImage);
   }, [images]);
 
   return (
@@ -105,7 +74,7 @@ const ImageList: React.FC<ImageListProps> = ({
                   // className="mr-[37px]"
                 />
 
-                {image.isSepratorNeeded && (
+                {image.showDivider && (
                   <hr
                     className="1px solid var(--neutral-200) my-[4px] mt-[15px]"
                     style={{ borderColor: 'var(--neutral-200)' }}
@@ -130,7 +99,7 @@ const ImageList: React.FC<ImageListProps> = ({
                   // onError={handleImageError}
                   onClick={() => handleClick(index)}
                 />
-                {image.isSepratorNeeded && (
+                {image.showDivider && (
                   <hr
                     className="1px solid var(--neutral-200) my-[4px] mt-[15px]"
                     style={{ borderColor: 'var(--neutral-200)' }}
