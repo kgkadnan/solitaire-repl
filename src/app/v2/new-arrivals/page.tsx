@@ -439,7 +439,7 @@ const NewArrivals = () => {
     {
       name: 'GIA Certificate',
       url: detailImageData?.certificate_url ?? '',
-      isSepratorNeeded: true
+      showDivider: true
     },
     {
       name: 'B2B',
@@ -451,7 +451,7 @@ const NewArrivals = () => {
         '***',
         detailImageData?.lot_id ?? ''
       )}`,
-      isSepratorNeeded: true
+      showDivider: true
     },
 
     {
@@ -476,7 +476,7 @@ const NewArrivals = () => {
         '***',
         detailImageData?.lot_id ?? ''
       )}`,
-      isSepratorNeeded: true
+      showDivider: true
     }
   ];
 
