@@ -163,34 +163,34 @@ const CompareStone = ({
                         // handleCheckboxClick(items.id)
                       }
                     />
-                    <div className='flex justify-between'>
-                    <div >
-                      {/* <Checkbox
+                    <div className="flex justify-between">
+                      <div>
+                        {/* <Checkbox
                   onClick={() => handleClick(items.id)}
                   data-testid={'compare stone checkbox'}
                   checked={isCheck.includes(items.id) || false}
                 /> 
                 */}
-                      hi
-                    </div>
-                    <div
-                      className={styles.closeButton}
-                      data-testid={'Remove Stone'}
-                      onClick={event =>
-                        rows.length > 2
-                          ? handleClose(event, items.id)
-                          : (setIsError(true), setErrorText(MINIMUM_STONES))
-                      }
-                    >
-                      <Image
-                        src={CloseButton}
-                        alt="Preview"
-                        height={40}
-                        width={40}
-                      />
+                        hi
+                      </div>
+                      <div
+                        className={styles.closeButton}
+                        data-testid={'Remove Stone'}
+                        onClick={event =>
+                          rows.length > 2
+                            ? handleClose(event, items.id)
+                            : (setIsError(true), setErrorText(MINIMUM_STONES))
+                        }
+                      >
+                        <Image
+                          src={CloseButton}
+                          alt="Preview"
+                          height={40}
+                          width={40}
+                        />
 
-                      {/* <CloseButton /> */}
-                    </div>
+                        {/* <CloseButton /> */}
+                      </div>
                     </div>
                   </div>
                 </div>
