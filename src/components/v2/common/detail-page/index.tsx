@@ -108,7 +108,7 @@ export function DiamondDetailsComponent({
     {
       name: 'GIA Certificate',
       url: `${tableData?.certificate_url}`,
-      isSepratorNeeded: true
+      showDivider: true
     },
     {
       name: 'B2B',
@@ -117,7 +117,7 @@ export function DiamondDetailsComponent({
     {
       name: 'B2B Sparkle',
       url: `${FILE_URLS.B2B_SPARKLE.replace('***', tableData?.lot_id ?? '')}`,
-      isSepratorNeeded: true
+      showDivider: true
     },
 
     {
@@ -139,7 +139,7 @@ export function DiamondDetailsComponent({
     {
       name: 'Fluorescence',
       url: `${FILE_URLS.FLUORESCENCE.replace('***', tableData?.lot_id ?? '')}`,
-      isSepratorNeeded: true
+      showDivider: true
     }
   ];
 
