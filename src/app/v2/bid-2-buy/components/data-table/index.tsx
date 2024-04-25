@@ -110,7 +110,6 @@ const BidToByDataTable = ({
   renderFooter
 }: any) => {
   // Fetching saved search data
-
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [bidError, setBidError] = useState('');
 
@@ -349,7 +348,7 @@ const BidToByDataTable = ({
     enableDensityToggle: false,
     enableHiding: false,
     enableColumnFilters: false,
-    enablePagination: true,
+    enablePagination: activeTab !== 2,
     enableStickyHeader: true,
     enableGrouping: true,
     enableExpandAll: false,
@@ -478,6 +477,10 @@ const BidToByDataTable = ({
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
           ? 'calc(100vh - 362px)'
+          : !rows.length
+          ? 'calc(100vh - 260px)'
+          : !rows.length
+          ? 'calc(100vh - 260px)'
           : 'calc(100vh - 295px)',
         maxHeight: isFullScreen
           ? activeTab === 2
@@ -493,7 +496,7 @@ const BidToByDataTable = ({
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
           ? 'calc(100vh - 362px)'
-          : 'calc(100vh - 295px)'
+          : 'calc(100vh - 260px)'
       }
     },
     muiTableHeadRowProps: {

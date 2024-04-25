@@ -762,7 +762,7 @@ const NewArrivalDataTable = ({
                 <div className="text-mRegular text-neutral700">Bid Disc%</div>
                 <div className="gap-6 flex">
                   <div className="h-[40px] flex gap-1">
-                    {bidValue <= row.original.discount ? (
+                    {bidValue <= row.original.current_max_bid ? (
                       <DisableDecrementIcon />
                     ) : (
                       <div

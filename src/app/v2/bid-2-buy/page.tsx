@@ -214,7 +214,6 @@ const BidToBuy = () => {
     if (authToken) useSocket(socketManager, authToken);
   }, [authToken]);
   const handleBidStones = useCallback((data: any) => {
-    console.log('bid', data);
     setActiveBid(data.activeStone);
     setBid(data.bidStone);
     setTime(data.endTime);
@@ -317,41 +316,36 @@ const BidToBuy = () => {
     if (activeTab === 0 && bid?.length > 0) {
       return (
         <div className="flex items-center justify-between px-4 py-0">
-          <div></div>
-          <MRT_TablePagination table={table} />
-          <ActionButton
-            actionButtonData={[
-              {
-                variant: 'secondary',
-                label: 'Clear All',
-                handler: () => {
-                  setRowSelection({});
-                },
-                isDisable: !Object.keys(rowSelection).length
-              }
-            ]}
-          />
+          <div className="flex  ml-[85px] justify-center flex-1">
+            <MRT_TablePagination table={table} />
+          </div>
+          <div className="flex items-center gap-3">
+            <ActionButton
+              actionButtonData={[
+                {
+                  variant: 'secondary',
+                  label: 'Clear All',
+                  handler: () => {
+                    setRowSelection({});
+                  },
+                  isDisable: !Object.keys(rowSelection).length
+                }
+              ]}
+            />
+          </div>
         </div>
       );
     } else if (activeTab === 1 && activeBid?.length > 0) {
       return (
         <div className="flex items-center justify-between px-4 py-0">
-          {/* <div className="flex gap-4">
-            <div className=" border-[1px] border-successBorder rounded-[4px] bg-successSurface text-successMain">
-              <p className="text-mMedium font-medium px-[6px] py-[4px]">
-                Winning
-              </p>
-            </div>
-            <div className=" border-[1px] border-dangerBorder rounded-[4px] bg-dangerSurface text-dangerMain">
-              <p className="text-mMedium font-medium px-[6px] py-[4px]">
-                {' '}
-                Losing
-              </p>
-            </div>
-          </div> */}
-          <div></div>
-          <MRT_TablePagination table={table} />
+          <div className="flex ml-[200px] justify-center flex-1">
+            {' '}
+            {/* Aligns MRT_TablePagination to the middle */}
+            <MRT_TablePagination table={table} />
+          </div>
           <div className="flex items-center gap-3">
+            {' '}
+            {/* Aligns ActionButton to the end */}
             <ActionButton
               actionButtonData={[
                 {
@@ -393,6 +387,7 @@ const BidToBuy = () => {
                                   socketManager.emit('cancel_bidtobuy', {
                                     product_ids: Object.keys(rowSelection)
                                   });
+                                  modalSetState.setIsDialogOpen(false);
                                 },
                                 customStyle: 'flex-1 w-full'
                               }
