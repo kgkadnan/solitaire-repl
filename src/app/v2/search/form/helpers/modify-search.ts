@@ -67,7 +67,8 @@ export const setModifySearch = (data: any, setState: any, carat: any) => {
     setPavilionAngleMin,
     setStarLengthMax,
     setStarLengthMin,
-    setSelectedGirdle
+    setSelectedGirdle,
+    setSelectionChecked
   } = setState;
   data?.shape && setSelectedShape(data?.shape);
   data?.carats && setSelectedCaratRange(data?.carats);
@@ -143,4 +144,6 @@ export const setModifySearch = (data: any, setState: any, carat: any) => {
   const girdleData = girdleSortedArray.slice(minIndex, maxIndex + 1);
   data?.girdle && setSelectedGirdle(girdleData);
   data?.key_to_symbol && setSelectedKeyToSymbol(data?.key_to_symbol);
+  data?.key_to_symbol_search_type &&
+    setSelectionChecked(data?.key_to_symbol_search_type);
 };

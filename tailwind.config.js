@@ -136,6 +136,7 @@ module.exports = {
         warningHover: 'var(--warning-hover)',
         warningPressed: 'var(--warning-pressed)',
         warningFocus: 'var(--warning-focus)',
+        visRed: 'var(--vis-red)',
         infoMain: 'var(--info-main)',
         infoSurface: 'var(--info-surface)',
         infoBorder: 'var(--info-border)',

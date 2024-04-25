@@ -608,7 +608,7 @@ const MyCart = () => {
     {
       name: 'GIA Certificate',
       url: detailImageData?.certificate_url ?? '',
-      isSepratorNeeded: true
+      showDivider: true
     },
     {
       name: 'B2B',
@@ -620,7 +620,7 @@ const MyCart = () => {
         '***',
         detailImageData?.lot_id ?? ''
       )}`,
-      isSepratorNeeded: true
+      showDivider: true
     },
 
     {
@@ -645,7 +645,7 @@ const MyCart = () => {
         '***',
         detailImageData?.lot_id ?? ''
       )}`,
-      isSepratorNeeded: true
+      showDivider: true
     }
   ];
 
