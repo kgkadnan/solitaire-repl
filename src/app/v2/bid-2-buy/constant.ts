@@ -137,16 +137,16 @@ export const columnHeaders = [
   },
   {
     label: 'Max Disc %',
-    accessor: 'current_max_bid',
+    accessor: 'discount',
     sequence: 16,
     is_fixed: false,
-    short_label: 'Current Max. Bid%',
+    short_label: 'Max Disc %',
     is_disabled: false,
     id: 'cus_ma-lis-seq_01HQSNF0TT2MZS9M0YHPDH3E8F'
   },
   {
     label: 'Discount',
-    accessor: 'discount',
+    accessor: 'original_discount',
     sequence: 15,
     is_fixed: false,
     short_label: 'Disc %',

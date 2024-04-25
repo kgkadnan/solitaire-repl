@@ -1,5 +1,5 @@
 import { ManageLocales } from '@/utils/v2/translate';
-import React from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import KgkIcon from '@public/v2/assets/icons/sidebar-icons/vector.svg';
 import DashboardIcon from '@public/v2/assets/icons/sidebar-icons/dashboard-square.svg?url';
 import ArrivalIcon from '@public/v2/assets/icons/sidebar-icons/new-arrivals.svg?url';
@@ -10,11 +10,14 @@ import BookmarkIcon from '@public/v2/assets/icons/sidebar-icons/bookmark.svg?url
 // import AppointmentIcon from '@public/v2/assets/icons/sidebar-icons/appointment.svg?url';
 import CartIcon from '@public/v2/assets/icons/sidebar-icons/shopping-cart.svg?url';
 // import SettingIcon from '@public/v2/assets/icons/sidebar-icons/setting.svg?url';
+import styles from './side-navigation.module.scss';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import Tooltip from '../tooltip';
 import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
 import { Button } from '../../ui/button';
+import { SocketManager, useSocket } from '@/hooks/v2/socket-manager';
+import useUser from '@/lib/use-auth';
 
 interface ISideNavigationBar {
   src?: React.ReactNode;
@@ -25,6 +28,8 @@ interface ISideNavigationBar {
 const SideNavigationBar = () => {
   const currentRoute = usePathname();
   const currentSubRoute = useSearchParams().get('active-tab');
+
+  const [showPulse, setShowPulse] = useState(false);
 
   const router = useRouter();
 
@@ -95,6 +100,41 @@ const SideNavigationBar = () => {
     //   isActive: currentRoute === Routes.SETTINGS
     // }
   ];
+
+  const { authToken } = useUser();
+
+  const socketManager = useMemo(() => new SocketManager(), []);
+  useEffect(() => {
+    if (authToken) useSocket(socketManager, authToken);
+  }, [authToken]);
+
+  const handleBidStones = useCallback((data: any) => {
+    if (data.endTime) {
+      setShowPulse(true);
+    } else {
+      setShowPulse(false);
+    }
+    // Set other related state here
+  }, []);
+  useEffect(() => {
+    const handleRequestGetBidStones = (data: any) => {
+      socketManager.emit('get_bidtobuy_stones');
+    };
+    socketManager.on('bidtobuy_stones', handleBidStones);
+
+    // Setting up the event listener for "request_get_bid_stones"
+    socketManager.on('request_get_bidtobuy_stones', handleRequestGetBidStones);
+
+    // Return a cleanup function to remove the listeners
+    return () => {
+      socketManager.off('bidtobuy_stones', handleBidStones);
+      socketManager.off(
+        'request_get_bidtobuy_stones',
+        handleRequestGetBidStones
+      );
+    };
+  }, [socketManager, handleBidStones, authToken]);
+
   return (
     <div className="w-[84px] border-r-[1px] border-neutral200 overflow-hidden h-[100vh] fixed z-50 pt-[8px] flex flex-col items-center bg-neutral0">
       <div className="mb-[16px] cursor-pointer">
@@ -104,6 +144,7 @@ const SideNavigationBar = () => {
           onClick={() => router.push(Routes.DASHBOARD)}
         />
       </div>
+
       <div className="z-50 flex flex-col gap-2">
         {SideNavigationData.map((items: ISideNavigationBar) => {
           return (
@@ -112,7 +153,17 @@ const SideNavigationBar = () => {
                 <Tooltip
                   tooltipContentSide="right"
                   tooltipTrigger={
-                    <div className="">
+                    <div
+                      className={` ${
+                        items.link === Routes.BID_2_BUY &&
+                        showPulse &&
+                        styles.notification_dot
+                      } ${
+                        items.link === Routes.BID_2_BUY &&
+                        showPulse &&
+                        styles.pulse
+                      }`}
+                    >
                       <Button
                         onClick={() => router.push(items.link!)}
                         className={

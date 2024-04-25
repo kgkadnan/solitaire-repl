@@ -189,7 +189,7 @@ const BidToByDataTable = ({
   );
 
   const handleIncrement = (rowId: string, currentMaxBid: any) => {
-    // Retrieve the current_max_bid for the row from the rows data
+    // Retrieve the discount for the row from the rows data
     setBidError('');
     setBidValues(prevValues => {
       const currentBidValue = prevValues[rowId];
@@ -200,7 +200,7 @@ const BidToByDataTable = ({
           [rowId]: Number(currentBidValue) + 0.5
         };
       }
-      // If no bid value for this row yet, start from current_max_bid and add 0.5
+      // If no bid value for this row yet, start from discount and add 0.5
       else {
         return {
           ...prevValues,
@@ -229,7 +229,7 @@ const BidToByDataTable = ({
         };
       } else {
         // Set error because attempting to decrement below currentMaxBid
-        setBidError('Bid value cannot be less than current maximum bid.');
+        setBidError('Bid value cannot be less than maximum discount.');
         return prevValues; // Return previous values without modification
       }
     });
@@ -715,7 +715,7 @@ const BidToByDataTable = ({
         const bidValue =
           bidValues[row.id] !== undefined
             ? bidValues[row.id]
-            : row.original.current_max_bid;
+            : row.original.discount;
 
         // If the row is selected, return the detail panel content
         return (
@@ -736,7 +736,7 @@ const BidToByDataTable = ({
                     inputMain: 'h-[40px]',
                     input: '!bg-infoSurface !border-infoBorder !text-infoMain'
                   }}
-                  value={`${row.original.current_max_bid}%`}
+                  value={`${row.original.discount}%`}
                   disabled
                 />
               </div> */}
@@ -786,12 +786,12 @@ const BidToByDataTable = ({
                 <div className="text-mRegular text-neutral700">Bid Disc%</div>
                 <div className="gap-6 flex">
                   <div className="h-[40px] flex gap-1">
-                    {bidValue <= row.original.current_max_bid ? (
+                    {bidValue <= row.original.discount ? (
                       <DisableDecrementIcon />
                     ) : (
                       <div
                         onClick={() =>
-                          handleDecrement(row.id, row.original.current_max_bid)
+                          handleDecrement(row.id, row.original.discount)
                         }
                       >
                         <DecrementIcon />
@@ -806,9 +806,10 @@ const BidToByDataTable = ({
                         value={
                           bidValue
                           // row.original.my_current_bid ??
-                          // row.original.current_max_bid - 0.5
+                          // row.original.discount - 0.5
                         }
                         onChange={e => {
+                          setBidError('');
                           setBidValues((prevValues: any) => {
                             // If there's already a bid value for this row, increment it
                             return {
@@ -816,14 +817,14 @@ const BidToByDataTable = ({
                               [row.id]: e.target.value
                             };
 
-                            // If no bid value for this row yet, start from current_max_bid and add 0.5
+                            // If no bid value for this row yet, start from discount and add 0.5
                           });
                         }}
                       />
                     </div>
                     <div
                       onClick={() =>
-                        handleIncrement(row.id, row.original.current_max_bid)
+                        handleIncrement(row.id, row.original.discount)
                       }
                     >
                       <IncrementIcon />
@@ -837,9 +838,9 @@ const BidToByDataTable = ({
                           label: activeTab === 0 ? 'Add Bid' : 'Update Bid',
                           handler: () => {
                             if (!bidError) {
-                              if (bidValue < row.original.current_max_bid) {
+                              if (bidValue < row.original.discount) {
                                 setBidError(
-                                  'Bid value cannot be less than current maximum bid.'
+                                  'Bid value cannot be less than maximum discount.'
                                 );
                                 return; // Exit early, do not update bidValues
                               }
