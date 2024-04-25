@@ -58,9 +58,6 @@ const theme = createTheme({
             borderBottom: 'none' // Customize the border as needed
           }
         }
-        // '&:hover':{
-        //   background:"red !important"
-        // }
       }
     },
     MuiTableHead: {
@@ -355,8 +352,6 @@ const BidToByDataTable = ({
     enableColumnFilters: false,
     enablePagination: true,
     enableStickyHeader: true,
-    // enableBottomToolbar: false,
-    // enableRowVirtualization:true,
     enableGrouping: true,
     enableExpandAll: false,
     enableColumnDragging: false,
@@ -368,8 +363,6 @@ const BidToByDataTable = ({
     renderTopToolbar,
     renderBottomToolbar,
     renderEmptyRowsFallback: NoResultsComponent,
-    // renderFallbackComponent: NoResultsComponent,
-    // enableExpanding: true,
 
     icons: {
       SearchIcon: () => (
@@ -380,21 +373,13 @@ const BidToByDataTable = ({
     // selectAllMode: undefined,
 
     muiTableBodyRowProps: ({ row }) => {
-      // const isHighlightBackground =
-      //   activeTab !== 0 && RenderNewArrivalLotIdColor({ row });
-
       return {
         onClick: row.id.includes('shape')
           ? row.getToggleExpandedHandler()
           : row.getToggleSelectedHandler(),
         sx: {
           cursor: 'pointer',
-          // '&.MuiTableRow-root:hover .MuiTableCell-root::after': {
-          //   backgroundColor: isHighlightBackground
-          //     ? isHighlightBackground.background
-          //     : 'var(--neutral-50)'
-          //     // backgroundColor: 'var(--neutral-50)'
-          // },
+
           '&.MuiTableRow-root': {
             // Define styles for the ::after pseudo-element of each cell within a hovered row
             '& .MuiTableCell-root::after': {
@@ -403,10 +388,6 @@ const BidToByDataTable = ({
             },
             // Target the specific cell that matches the lot_id column within a hovered row
             '& .MuiTableCell-root[data-index="1"]::after': {
-              // Change the background color to red if isHighlightBackground is true, otherwise maintain the default hover color
-              // backgroundColor: isHighlightBackground
-              //   ? `${isHighlightBackground.background} !important`
-              //   : 'var(--neutral-50)'
               backgroundColor: 'var(--neutral-50)'
             }
           },
@@ -478,16 +459,11 @@ const BidToByDataTable = ({
       pagination: { pageSize: 20, pageIndex: 0 }
     },
 
-    // renderEmptyRowsFallback: () => {
-    //   return <>no result</>;
-    // },
     positionGlobalFilter: 'left',
     //styling
 
     muiTableContainerProps: {
       sx: {
-        // minHeight: 'calc(100vh - 399px)',
-        // maxHeight: 'calc(100vh - 399px)'
         height: isFullScreen ? '70vh' : 'calc(100vh - 399px)',
         minHeight: isFullScreen
           ? activeTab === 2
@@ -527,28 +503,18 @@ const BidToByDataTable = ({
         boxShadow: 'none'
       }
     },
-    // muiTableBodyCellProps: ({ cell }) => {
+
     muiTableBodyCellProps: ({ cell, row }) => {
-      // const isHighlightBackground =
-      //   activeTab !== 0 &&
-      //   cell.column.id === 'lot_id' &&
-      //   RenderNewArrivalLotIdColor({ row });
       return {
         sx: {
           color: 'var(--neutral-900)',
           '&.MuiTableCell-root': {
             padding: '4px 8px',
-            // background: isHighlightBackground
-            //   ? `${isHighlightBackground.background} !important `
-            //   : 'White',
+
             background: 'White',
-            // color: isHighlightBackground && isHighlightBackground.text,
+
             opacity: 1,
-            // '&:hover': {
-            //   background: isHighlightBackground
-            //     ? isHighlightBackground.background
-            //     : 'White'
-            // },
+
             '&:hover': {
               background: 'White'
             },
@@ -588,9 +554,7 @@ const BidToByDataTable = ({
                 cell.id === 'shape:RMB_lot_id') &&
               'none'
           },
-          // '&.MuiTableCell-root[data-index="1"] ':{
-          //   display:'none'
-          // },
+
           whiteSpace: 'nowrap',
           borderBottom: '1px solid var(--neutral-50)'
         }
@@ -637,7 +601,6 @@ const BidToByDataTable = ({
         '& .MuiSvgIcon-root': {
           fontSize: '26px',
           fontWeight: 100
-          // fill: 'var(--neutral-200)'
         },
         '& .MuiCheckbox-indeterminate': {
           display: 'none'
@@ -660,7 +623,6 @@ const BidToByDataTable = ({
         border: 'none'
       }
     },
-    // muiTableBodyProps: rows?.length === 0 ? { style: { display: 'none' } } : {},
     muiTableHeadProps: rows?.length === 0 ? { style: { display: 'none' } } : {},
 
     renderDetailPanel: ({ row }) => {
@@ -678,22 +640,6 @@ const BidToByDataTable = ({
               className="flex gap-6"
               onClick={event => event.stopPropagation()}
             >
-              {/* <div className="w-[120px] ml-10">
-                <div className="text-mRegular text-neutral700">
-                  Current Max Bid%
-                </div>
-
-                <InputField
-                  // label={'Current Max Bid%'}
-                  type="text"
-                  styles={{
-                    inputMain: 'h-[40px]',
-                    input: '!bg-infoSurface !border-infoBorder !text-infoMain'
-                  }}
-                  value={`${row.original.current_max_bid}%`}
-                  disabled
-                />
-              </div> */}
               <div className="w-[120px] ml-10">
                 <div className="!text-mRegular !text-neutral500">Bid Pr/Ct</div>
 
@@ -718,7 +664,6 @@ const BidToByDataTable = ({
                 <div className="!text-mRegular !text-neutral700">Bid Amt $</div>
 
                 <InputField
-                  // label={'Bid Amt $'}
                   type="text"
                   styles={{
                     inputMain: 'h-[40px]',
@@ -759,14 +704,9 @@ const BidToByDataTable = ({
 
                     <div className="w-[120px]">
                       <InputField
-                        // label={'Bid Amt $'}
                         type="number"
                         styles={{ inputMain: 'h-[64px]' }}
-                        value={
-                          bidValue
-                          // row.original.my_current_bid ??
-                          // row.original.current_max_bid - 0.5
-                        }
+                        value={bidValue}
                         onChange={e => {
                           setBidValues((prevValues: any) => {
                             // If there's already a bid value for this row, increment it
