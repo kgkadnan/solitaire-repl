@@ -1,6 +1,6 @@
 'use client';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import NewArrivalDataTable from './components/data-table';
+import BidToByDataTable from './components/data-table';
 import {
   RenderCarat,
   RenderDiscount,
@@ -11,10 +11,10 @@ import {
   RenderMeasurements,
   RenderTracerId,
   RenderNewArrivalPrice,
-  RenderNewArrivalBidDiscount,
   RenderNewArrivalPricePerCarat,
   RenderCartLotId,
-  RenderBidDate
+  RenderBidDate,
+  DiscountWithCross
 } from '@/components/v2/common/data-table/helpers/render-cell';
 import Tooltip from '@/components/v2/common/tooltip';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
@@ -23,7 +23,7 @@ import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
 import { columnHeaders } from './constant';
 import { SocketManager, useSocket } from '@/hooks/v2/socket-manager';
 import CountdownTimer from '@components/v2/common/timer/index';
-import { useGetBidHistoryQuery } from '@/features/api/dashboard';
+import { useGetBidToBuyHistoryQuery } from '@/features/api/dashboard';
 import InvalidCreds from '../login/component/invalid-creds';
 import { DialogComponent } from '@/components/v2/common/dialog';
 import ActionButton from '@/components/v2/common/action-button';
@@ -42,7 +42,7 @@ import { useSearchParams } from 'next/navigation';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import { Toast } from '@/components/v2/common/copy-and-share/toast';
 
-const NewArrivals = () => {
+const BidToBuy = () => {
   const [isDetailPage, setIsDetailPage] = useState(false);
   const [detailPageData, setDetailPageData] = useState<any>({});
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -61,7 +61,7 @@ const NewArrivals = () => {
     setIsModalOpen(true);
   };
 
-  const { data: bidHistory } = useGetBidHistoryQuery({});
+  const { data: bidHistory } = useGetBidToBuyHistoryQuery({});
   const mapColumns = (columns: any) =>
     columns
       ?.filter(({ is_disabled }: any) => !is_disabled)
@@ -110,9 +110,9 @@ const NewArrivals = () => {
           case 'star_length':
             return { ...commonProps, Cell: RenderCarat };
           case 'discount':
-            return { ...commonProps, Cell: RenderDiscount };
+            return { ...commonProps, Cell: DiscountWithCross };
           case 'current_max_bid':
-            return { ...commonProps, Cell: RenderNewArrivalBidDiscount };
+            return { ...commonProps, Cell: RenderDiscount };
           case 'last_bid_date':
             return { ...commonProps, Cell: RenderBidDate };
 
@@ -150,8 +150,6 @@ const NewArrivals = () => {
             return { ...commonProps, Cell: RenderLab };
           case 'location':
             return { ...commonProps, Cell: RednderLocation };
-          // case 'lot_id':
-          //   return { ...commonProps, Cell: RenderNewArrivalLotId };
           case 'price_per_carat':
             return { ...commonProps, Cell: RenderNewArrivalPricePerCarat };
 
@@ -211,8 +209,6 @@ const NewArrivals = () => {
     setTimeDifference(timeDiff);
   }, [time]);
   const { authToken } = useUser();
-
-  // const socketManager = new SocketManager();
   const socketManager = useMemo(() => new SocketManager(), []);
   useEffect(() => {
     if (authToken) useSocket(socketManager, authToken);
@@ -282,19 +278,19 @@ const NewArrivals = () => {
   }, []);
   useEffect(() => {
     const handleRequestGetBidStones = (data: any) => {
-      socketManager.emit('get_bid_stones');
+      socketManager.emit('get_bidtobuy_stones');
     };
-    socketManager.on('bid_stones', handleBidStones);
+    socketManager.on('bidtobuy_stones', handleBidStones);
     socketManager.on('error', handleError);
-    socketManager.on('bid_placed', handleBidPlaced);
-    socketManager.on('bid_canceled', handleBidCanceled);
+    socketManager.on('place_bidtobuy', handleBidPlaced);
+    socketManager.on('cancel_bidtobuy', handleBidCanceled);
 
     // Setting up the event listener for "request_get_bid_stones"
     socketManager.on('request_get_bid_stones', handleRequestGetBidStones);
 
     // Return a cleanup function to remove the listeners
     return () => {
-      socketManager.off('bid_stones', handleBidStones);
+      socketManager.off('bidtobuy_stones', handleBidStones);
       socketManager.off('error', handleError);
       socketManager.off('request_get_bid_stones', handleRequestGetBidStones);
     };
@@ -336,7 +332,7 @@ const NewArrivals = () => {
     } else if (activeTab === 1 && activeBid?.length > 0) {
       return (
         <div className="flex items-center justify-between px-4 py-0">
-          <div className="flex gap-4">
+          {/* <div className="flex gap-4">
             <div className=" border-[1px] border-successBorder rounded-[4px] bg-successSurface text-successMain">
               <p className="text-mMedium font-medium px-[6px] py-[4px]">
                 Winning
@@ -348,7 +344,8 @@ const NewArrivals = () => {
                 Losing
               </p>
             </div>
-          </div>
+          </div> */}
+          <div></div>
           <MRT_TablePagination table={table} />
           <div className="flex items-center gap-3">
             <ActionButton
@@ -389,7 +386,7 @@ const NewArrivals = () => {
                                 variant: 'primary',
                                 label: 'Cancel Bid',
                                 handler: () => {
-                                  socketManager.emit('cancel_bid', {
+                                  socketManager.emit('cancel_bidtobuy', {
                                     product_ids: Object.keys(rowSelection)
                                   });
                                 },
@@ -408,24 +405,6 @@ const NewArrivals = () => {
           </div>
         </div>
       );
-    } else if (activeTab === 2 && bidHistory?.data?.length > 0) {
-      return (
-        <div className="flex items-center justify-between px-4 py-0">
-          <div className="flex gap-4">
-            <div className=" border-[1px] border-successBorder rounded-[4px] bg-successSurface text-successMain">
-              <p className="text-mMedium font-medium px-[6px] py-[4px]">Won</p>
-            </div>
-            <div className=" border-[1px] border-dangerBorder rounded-[4px] bg-dangerSurface text-dangerMain">
-              <p className="text-mMedium font-medium px-[6px] py-[4px]">
-                {' '}
-                Lost
-              </p>
-            </div>
-          </div>
-          <MRT_TablePagination table={table} />
-          <div></div>
-        </div>
-      );
     } else {
       return null;
     }
@@ -439,7 +418,7 @@ const NewArrivals = () => {
     {
       name: 'GIA Certificate',
       url: detailImageData?.certificate_url ?? '',
-      showDivider: true
+      isSepratorNeeded: true
     },
     {
       name: 'B2B',
@@ -451,7 +430,7 @@ const NewArrivals = () => {
         '***',
         detailImageData?.lot_id ?? ''
       )}`,
-      showDivider: true
+      isSepratorNeeded: true
     },
 
     {
@@ -476,7 +455,7 @@ const NewArrivals = () => {
         '***',
         detailImageData?.lot_id ?? ''
       )}`,
-      showDivider: true
+      isSepratorNeeded: true
     }
   ];
 
@@ -490,6 +469,8 @@ const NewArrivals = () => {
         setIsError(false); // Hide the toast notification after some time
       }, 4000);
   }, [isError]);
+
+  console.log('isLoading', isLoading);
   return (
     <div className="mb-[20px] relative">
       {isLoading && <CustomKGKLoader />}
@@ -523,7 +504,7 @@ const NewArrivals = () => {
             filterData={detailPageData}
             goBackToListView={goBack}
             handleDetailPage={handleDetailPage}
-            breadCrumLabel={'New Arrival'}
+            breadCrumLabel={'Bid 2 Buy'}
             modalSetState={modalSetState}
             setIsLoading={setIsLoading}
             activeTab={activeTab}
@@ -534,7 +515,7 @@ const NewArrivals = () => {
           {' '}
           <div className="flex  py-[4px] items-center justify-between">
             <p className="text-lMedium font-medium text-neutral900">
-              New Arrivals
+              Bid to Buy
             </p>
             {timeDifference !== null && timeDifference >= 0 && (
               <CountdownTimer
@@ -554,7 +535,7 @@ const NewArrivals = () => {
     </div> */}
             <div className="border-b-[1px] border-neutral200">
               {
-                <NewArrivalDataTable
+                <BidToByDataTable
                   columns={
                     activeTab === 2
                       ? memoizedColumns.filter(
@@ -604,4 +585,4 @@ const NewArrivals = () => {
     </div>
   );
 };
-export default NewArrivals;
+export default BidToBuy;

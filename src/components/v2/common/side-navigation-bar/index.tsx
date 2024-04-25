@@ -3,7 +3,7 @@ import React from 'react';
 import KgkIcon from '@public/v2/assets/icons/sidebar-icons/vector.svg';
 import DashboardIcon from '@public/v2/assets/icons/sidebar-icons/dashboard-square.svg?url';
 import ArrivalIcon from '@public/v2/assets/icons/sidebar-icons/new-arrivals.svg?url';
-
+import Bid2BuyIcon from '@public/v2/assets/icons/sidebar-icons/bid-2-buy.svg?url';
 import SearchIcon from '@public/v2/assets/icons/sidebar-icons/search.svg?url';
 import MyDaimondsIcon from '@public/v2/assets/icons/sidebar-icons/diamond.svg?url';
 import BookmarkIcon from '@public/v2/assets/icons/sidebar-icons/bookmark.svg?url';
@@ -40,6 +40,12 @@ const SideNavigationBar = () => {
       title: ManageLocales('app.sideNavigationBar.newArrivals'),
       link: Routes.NEW_ARRIVAL,
       isActive: currentRoute === Routes.NEW_ARRIVAL
+    },
+    {
+      src: <Bid2BuyIcon />,
+      title: ManageLocales('app.sideNavigationBar.bidToBuy'),
+      link: Routes.BID_2_BUY,
+      isActive: currentRoute === Routes.BID_2_BUY
     },
     {
       title: 'line-separator-1'

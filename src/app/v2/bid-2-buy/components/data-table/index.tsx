@@ -9,32 +9,29 @@ import {
 import expandIcon from '@public/v2/assets/icons/expand-icon.svg';
 import collapsIcon from '@public/v2/assets/icons/collapse-icon.svg';
 import downloadIcon from '@public/v2/assets/icons/data-table/download.svg';
-import downloadExcelIcon from '@public/v2/assets/icons/modal/download.svg';
 import Image from 'next/image';
 import searchIcon from '@public/v2/assets/icons/data-table/search-icon.svg';
 
 // theme.js
-import { ThemeProvider, createTheme, styled } from '@mui/material/styles';
-import { ManageLocales } from '@/utils/v2/translate';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 import { useEffect, useState } from 'react';
-
+import DisableDecrementIcon from '@public/v2/assets/icons/new-arrivals/disable-decrement.svg?url';
 import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
 import Share from '@/components/v2/common/copy-and-share/share';
 import ActionButton from '@/components/v2/common/action-button';
-import NewArrivalCalculatedField from '../new-arrival-calculated-field';
+import Bid2BuyCalculatedField from '@app/v2/new-arrivals/components/new-arrival-calculated-field';
 import Tab from '@components/v2/common/bid-tabs/index';
 import { InputField } from '@/components/v2/common/input-field';
 import DecrementIcon from '@public/v2/assets/icons/new-arrivals/decrement.svg?url';
 import IncrementIcon from '@public/v2/assets/icons/new-arrivals/increment.svg?url';
-import empty from '@public/v2/assets/icons/data-table/empty-new-arrivals.svg';
+import empty from '@public/v2/assets/icons/data-table/empty-bid-to-buy.svg';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
-import { RenderNewArrivalLotIdColor } from '@/components/v2/common/data-table/helpers/render-cell';
 import Tooltip from '@/components/v2/common/tooltip';
 import { kycStatus } from '@/constants/enums/kyc';
 import { formatNumber } from '@/utils/fix-two-digit-number';
-import { handleIncrementDiscount } from '@/utils/v2/handle-increment-discount';
 import { handleDecrementDiscount } from '@/utils/v2/handle-decrement-discount';
+import { handleIncrementDiscount } from '@/utils/v2/handle-increment-discount';
 
 const theme = createTheme({
   typography: {
@@ -61,9 +58,6 @@ const theme = createTheme({
             borderBottom: 'none' // Customize the border as needed
           }
         }
-        // '&:hover':{
-        //   background:"red !important"
-        // }
       }
     },
     MuiTableHead: {
@@ -94,10 +88,10 @@ const theme = createTheme({
   }
 });
 
-interface BidValues {
+export interface BidValues {
   [key: string]: number;
 }
-const NewArrivalDataTable = ({
+const BidToByDataTable = ({
   columns,
   modalSetState,
   downloadExcel,
@@ -178,7 +172,7 @@ const NewArrivalDataTable = ({
       modalSetState,
       setRowSelection,
       setIsLoading: setIsLoading,
-      [activeTab === 2 ? 'fromNewArrivalBidHistory' : 'fromNewArrivalBid']: true
+      [activeTab === 2 ? 'fromBid2BuyHistory' : 'fromBid2Buy']: true
     });
   };
 
@@ -191,28 +185,6 @@ const NewArrivalDataTable = ({
       ...columns.map((c: any) => c.accessorKey)
     ] //array of column ids (Initializing is optional as of v2.10.0)
   );
-
-  // const handleDecrement = (rowId: string, currentMaxBid: any) => {
-  //   // Retrieve the current_max_bid for the row from the rows data
-
-  //   setBidValues(prevValues => {
-  //     const currentBidValue = prevValues[rowId];
-  //     // If there's already a bid value for this row, decrement it but don't go below current_max_bid
-  //     if (currentBidValue !== undefined) {
-  //       return {
-  //         ...prevValues,
-  //         [rowId]: Number(currentBidValue) - 0.5
-  //       };
-  //     }
-  //     // If no bid value for this row yet, just set it to current_max_bid (can't decrement below it)
-  //     else {
-  //       return {
-  //         ...prevValues,
-  //         [rowId]: Number(currentMaxBid) - 0.5
-  //       };
-  //     }
-  //   });
-  // };
 
   const renderTopToolbar = ({ table }: any) => (
     <div>
@@ -337,10 +309,7 @@ const NewArrivalDataTable = ({
       </div>
 
       {rows.length > 0 && activeTab !== 2 && (
-        <NewArrivalCalculatedField
-          rows={rows}
-          selectedProducts={rowSelection}
-        />
+        <Bid2BuyCalculatedField rows={rows} selectedProducts={rowSelection} />
       )}
     </div>
   );
@@ -353,8 +322,8 @@ const NewArrivalDataTable = ({
         <>
           <Image src={empty} alt={'empty'} />
           <p className="text-neutral900  w-[320px] text-center ">
-            Our diamond collection awaits new arrivals. Stay tuned for dazzling
-            additions soon.
+            Every month we provide an extra discount on a few stones which you
+            can bid to buy. Stay tuned.
           </p>
         </>
       ) : (
@@ -374,6 +343,7 @@ const NewArrivalDataTable = ({
     onRowSelectionChange: setRowSelection,
     state: { columnOrder, rowSelection, isFullScreen: isFullScreen },
     //filters
+
     positionToolbarAlertBanner: 'none',
     enableFilters: true,
     enableColumnActions: false,
@@ -382,8 +352,6 @@ const NewArrivalDataTable = ({
     enableColumnFilters: false,
     enablePagination: true,
     enableStickyHeader: true,
-    // enableBottomToolbar: false,
-    // enableRowVirtualization:true,
     enableGrouping: true,
     enableExpandAll: false,
     enableColumnDragging: false,
@@ -395,8 +363,6 @@ const NewArrivalDataTable = ({
     renderTopToolbar,
     renderBottomToolbar,
     renderEmptyRowsFallback: NoResultsComponent,
-    // renderFallbackComponent: NoResultsComponent,
-    // enableExpanding: true,
 
     icons: {
       SearchIcon: () => (
@@ -407,21 +373,13 @@ const NewArrivalDataTable = ({
     // selectAllMode: undefined,
 
     muiTableBodyRowProps: ({ row }) => {
-      const isHighlightBackground =
-        activeTab !== 0 && RenderNewArrivalLotIdColor({ row });
-
       return {
         onClick: row.id.includes('shape')
           ? row.getToggleExpandedHandler()
           : row.getToggleSelectedHandler(),
         sx: {
           cursor: 'pointer',
-          // '&.MuiTableRow-root:hover .MuiTableCell-root::after': {
-          //   backgroundColor: isHighlightBackground
-          //     ? isHighlightBackground.background
-          //     : 'var(--neutral-50)'
-          //     // backgroundColor: 'var(--neutral-50)'
-          // },
+
           '&.MuiTableRow-root': {
             // Define styles for the ::after pseudo-element of each cell within a hovered row
             '& .MuiTableCell-root::after': {
@@ -430,10 +388,7 @@ const NewArrivalDataTable = ({
             },
             // Target the specific cell that matches the lot_id column within a hovered row
             '& .MuiTableCell-root[data-index="1"]::after': {
-              // Change the background color to red if isHighlightBackground is true, otherwise maintain the default hover color
-              backgroundColor: isHighlightBackground
-                ? `${isHighlightBackground.background} !important`
-                : 'var(--neutral-50)'
+              backgroundColor: 'var(--neutral-50)'
             }
           },
           '&.MuiTableRow-root .MuiTableCell-root::after': {
@@ -504,16 +459,11 @@ const NewArrivalDataTable = ({
       pagination: { pageSize: 20, pageIndex: 0 }
     },
 
-    // renderEmptyRowsFallback: () => {
-    //   return <>no result</>;
-    // },
     positionGlobalFilter: 'left',
     //styling
 
     muiTableContainerProps: {
       sx: {
-        // minHeight: 'calc(100vh - 399px)',
-        // maxHeight: 'calc(100vh - 399px)'
         height: isFullScreen ? '70vh' : 'calc(100vh - 399px)',
         minHeight: isFullScreen
           ? activeTab === 2
@@ -553,26 +503,20 @@ const NewArrivalDataTable = ({
         boxShadow: 'none'
       }
     },
-    // muiTableBodyCellProps: ({ cell }) => {
+
     muiTableBodyCellProps: ({ cell, row }) => {
-      const isHighlightBackground =
-        activeTab !== 0 &&
-        cell.column.id === 'lot_id' &&
-        RenderNewArrivalLotIdColor({ row });
       return {
         sx: {
           color: 'var(--neutral-900)',
           '&.MuiTableCell-root': {
             padding: '4px 8px',
-            background: isHighlightBackground
-              ? `${isHighlightBackground.background} !important `
-              : 'White',
-            color: isHighlightBackground && isHighlightBackground.text,
+
+            background: 'White',
+
             opacity: 1,
+
             '&:hover': {
-              background: isHighlightBackground
-                ? isHighlightBackground.background
-                : 'White'
+              background: 'White'
             },
             visibility:
               (cell.id === 'shape:RAD_lot_id' ||
@@ -610,9 +554,7 @@ const NewArrivalDataTable = ({
                 cell.id === 'shape:RMB_lot_id') &&
               'none'
           },
-          // '&.MuiTableCell-root[data-index="1"] ':{
-          //   display:'none'
-          // },
+
           whiteSpace: 'nowrap',
           borderBottom: '1px solid var(--neutral-50)'
         }
@@ -659,7 +601,6 @@ const NewArrivalDataTable = ({
         '& .MuiSvgIcon-root': {
           fontSize: '26px',
           fontWeight: 100
-          // fill: 'var(--neutral-200)'
         },
         '& .MuiCheckbox-indeterminate': {
           display: 'none'
@@ -682,7 +623,6 @@ const NewArrivalDataTable = ({
         border: 'none'
       }
     },
-    // muiTableBodyProps: rows?.length === 0 ? { style: { display: 'none' } } : {},
     muiTableHeadProps: rows?.length === 0 ? { style: { display: 'none' } } : {},
 
     renderDetailPanel: ({ row }) => {
@@ -701,22 +641,6 @@ const NewArrivalDataTable = ({
               onClick={event => event.stopPropagation()}
             >
               <div className="w-[120px] ml-10">
-                <div className="text-mRegular text-neutral700">
-                  Current Max Bid%
-                </div>
-
-                <InputField
-                  // label={'Current Max Bid%'}
-                  type="text"
-                  styles={{
-                    inputMain: 'h-[40px]',
-                    input: '!bg-infoSurface !border-infoBorder !text-infoMain'
-                  }}
-                  value={`${row.original.current_max_bid}%`}
-                  disabled
-                />
-              </div>
-              <div className="w-[120px]">
                 <div className="!text-mRegular !text-neutral500">Bid Pr/Ct</div>
 
                 <InputField
@@ -740,7 +664,6 @@ const NewArrivalDataTable = ({
                 <div className="!text-mRegular !text-neutral700">Bid Amt $</div>
 
                 <InputField
-                  // label={'Bid Amt $'}
                   type="text"
                   styles={{
                     inputMain: 'h-[40px]',
@@ -762,28 +685,28 @@ const NewArrivalDataTable = ({
                 <div className="text-mRegular text-neutral700">Bid Disc%</div>
                 <div className="gap-6 flex">
                   <div className="h-[40px] flex gap-1">
-                    <div
-                      onClick={() =>
-                        handleDecrementDiscount(
-                          row.id,
-                          row.original.current_max_bid,
-                          setBidError,
-                          setBidValues
-                        )
-                      }
-                    >
-                      <DecrementIcon />
-                    </div>
+                    {bidValue <= row.original.current_max_bid ? (
+                      <DisableDecrementIcon />
+                    ) : (
+                      <div
+                        onClick={() =>
+                          handleDecrementDiscount(
+                            row.id,
+                            row.original.current_max_bid,
+                            setBidError,
+                            setBidValues
+                          )
+                        }
+                      >
+                        <DecrementIcon />
+                      </div>
+                    )}
+
                     <div className="w-[120px]">
                       <InputField
-                        // label={'Bid Amt $'}
                         type="number"
                         styles={{ inputMain: 'h-[64px]' }}
-                        value={
-                          bidValue
-                          // row.original.my_current_bid ??
-                          // row.original.current_max_bid - 0.5
-                        }
+                        value={bidValue}
                         onChange={e => {
                           setBidValues((prevValues: any) => {
                             // If there's already a bid value for this row, increment it
@@ -824,7 +747,7 @@ const NewArrivalDataTable = ({
                                 );
                                 return; // Exit early, do not update bidValues
                               }
-                              socketManager.emit('place_bid', {
+                              socketManager.emit('place_bidtobuy', {
                                 product_id: row.id,
                                 bid_value: bidValues[row.id]
                               });
@@ -862,4 +785,4 @@ const NewArrivalDataTable = ({
   );
 };
 
-export default NewArrivalDataTable;
+export default BidToByDataTable;
