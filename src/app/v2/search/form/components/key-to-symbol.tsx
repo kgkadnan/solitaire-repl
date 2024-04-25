@@ -61,7 +61,7 @@ export const KeyToSymbol = ({
       id: '2',
       value: false,
       label: 'Does not contains',
-      checked: selectionChecked === 'notContain'
+      checked: selectionChecked === 'doesNotContain'
     }
   ];
   return (
@@ -85,7 +85,7 @@ export const KeyToSymbol = ({
               <RadioButton
                 radioMetaData={keyToSymbolRadio[1]}
                 onChange={() => {
-                  setSelectionChecked('notContain');
+                  setSelectionChecked('doesNotContain');
                 }}
                 customStyle={{
                   radio: `!text-mRegular !text-neutral900`
