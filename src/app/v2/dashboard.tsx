@@ -1618,7 +1618,11 @@ const Dashboard = () => {
                             </div>
                           ) : (
                             !data?.start_at &&
-                            data?.count > 0 && <div>{data?.count}</div>
+                            data?.count > 0 && (
+                              <div className="text-neutral-900 text-headingS">
+                                {data?.count}
+                              </div>
+                            )
                           )}
                         </>
                       ) : (
