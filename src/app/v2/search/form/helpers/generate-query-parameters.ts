@@ -81,6 +81,7 @@ interface IState {
   starLengthMax: string;
   starLengthMin: string;
   caratRangeData?: string[];
+  selectionChecked: string;
 }
 
 // Define a function to generate query parameters based on the provided state
@@ -151,7 +152,8 @@ export const generateQueryParams = (state: IState) => {
     starLengthMax,
     starLengthMin,
     selectedWhiteColor,
-    selectedGirdle
+    selectedGirdle,
+    selectionChecked
   } = state;
 
   // Initialize an empty object to store query parameters
@@ -190,6 +192,8 @@ export const generateQueryParams = (state: IState) => {
   selectedCulet?.length !== 0 && (queryParams['culet'] = selectedCulet);
   selectedKeyToSymbol?.length !== 0 &&
     (queryParams['key_to_symbol'] = selectedKeyToSymbol);
+  selectedKeyToSymbol?.length !== 0 &&
+    (queryParams['key_to_symbol_search_type'] = selectionChecked);
   selectedLab?.length !== 0 && (queryParams['lab'] = selectedLab);
   selectedLocation?.length !== 0 &&
     (queryParams['location'] = selectedLocation);
