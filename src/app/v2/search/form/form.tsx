@@ -134,7 +134,8 @@ const Form = ({
     selectedCaratRange,
     selectedFancyColor,
     selectedIntensity,
-    selectedOvertone
+    selectedOvertone,
+    selectionChecked
   } = state;
   const {
     setCaratMin,
@@ -157,7 +158,8 @@ const Form = ({
     setPricePerCaratMin,
     setPricePerCaratMax,
     setSelectedKeyToSymbol,
-    setSelectedCaratRange
+    setSelectedCaratRange,
+    setSelectionChecked
   } = setState;
 
   // const modifySearchFrom = searchParams.get('edit');
@@ -882,6 +884,8 @@ const Form = ({
           <KeyToSymbol
             selectedKeyToSymbol={selectedKeyToSymbol}
             setSelectedKeyToSymbol={setSelectedKeyToSymbol}
+            setSelectionChecked={setSelectionChecked}
+            selectionChecked={selectionChecked}
           />
         </div>
       </div>
