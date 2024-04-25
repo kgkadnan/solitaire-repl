@@ -9,8 +9,8 @@ import {
 import expandIcon from '@public/v2/assets/icons/expand-icon.svg';
 import collapsIcon from '@public/v2/assets/icons/collapse-icon.svg';
 import downloadIcon from '@public/v2/assets/icons/data-table/download.svg';
-import downloadExcelIcon from '@public/v2/assets/icons/modal/download.svg';
 import Image from 'next/image';
+import DisableDecrementIcon from '@public/v2/assets/icons/new-arrivals/disable-decrement.svg?url';
 import searchIcon from '@public/v2/assets/icons/data-table/search-icon.svg';
 
 // theme.js
@@ -762,18 +762,22 @@ const NewArrivalDataTable = ({
                 <div className="text-mRegular text-neutral700">Bid Disc%</div>
                 <div className="gap-6 flex">
                   <div className="h-[40px] flex gap-1">
-                    <div
-                      onClick={() =>
-                        handleDecrementDiscount(
-                          row.id,
-                          row.original.current_max_bid,
-                          setBidError,
-                          setBidValues
-                        )
-                      }
-                    >
-                      <DecrementIcon />
-                    </div>
+                    {bidValue <= row.original.current_max_bid ? (
+                      <DisableDecrementIcon />
+                    ) : (
+                      <div
+                        onClick={() =>
+                          handleDecrementDiscount(
+                            row.id,
+                            row.original.current_max_bid,
+                            setBidError,
+                            setBidValues
+                          )
+                        }
+                      >
+                        <DecrementIcon />
+                      </div>
+                    )}
                     <div className="w-[120px]">
                       <InputField
                         // label={'Bid Amt $'}

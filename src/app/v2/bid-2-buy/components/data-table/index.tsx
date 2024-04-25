@@ -2,7 +2,6 @@ import { Box, Stack } from '@mui/material';
 import {
   MRT_ExpandButton,
   MRT_GlobalFilterTextField,
-  MRT_ToggleFullScreenButton,
   MaterialReactTable,
   useMaterialReactTable
 } from 'material-react-table';
@@ -111,7 +110,6 @@ const BidToByDataTable = ({
   renderFooter
 }: any) => {
   // Fetching saved search data
-
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [bidError, setBidError] = useState('');
 
@@ -350,7 +348,7 @@ const BidToByDataTable = ({
     enableDensityToggle: false,
     enableHiding: false,
     enableColumnFilters: false,
-    enablePagination: true,
+    enablePagination: activeTab !== 2,
     enableStickyHeader: true,
     enableGrouping: true,
     enableExpandAll: false,
@@ -479,6 +477,10 @@ const BidToByDataTable = ({
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
           ? 'calc(100vh - 362px)'
+          : !rows.length
+          ? 'calc(100vh - 260px)'
+          : !rows.length
+          ? 'calc(100vh - 260px)'
           : 'calc(100vh - 295px)',
         maxHeight: isFullScreen
           ? activeTab === 2
@@ -494,7 +496,7 @@ const BidToByDataTable = ({
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
           ? 'calc(100vh - 362px)'
-          : 'calc(100vh - 295px)'
+          : 'calc(100vh - 260px)'
       }
     },
     muiTableHeadRowProps: {
@@ -631,7 +633,7 @@ const BidToByDataTable = ({
         const bidValue =
           bidValues[row.id] !== undefined
             ? bidValues[row.id]
-            : row.original.current_max_bid;
+            : row.original.discount;
 
         // If the row is selected, return the detail panel content
         return (
@@ -685,14 +687,14 @@ const BidToByDataTable = ({
                 <div className="text-mRegular text-neutral700">Bid Disc%</div>
                 <div className="gap-6 flex">
                   <div className="h-[40px] flex gap-1">
-                    {bidValue <= row.original.current_max_bid ? (
+                    {bidValue <= row.original.discount ? (
                       <DisableDecrementIcon />
                     ) : (
                       <div
                         onClick={() =>
                           handleDecrementDiscount(
                             row.id,
-                            row.original.current_max_bid,
+                            row.original.discount,
                             setBidError,
                             setBidValues
                           )
@@ -708,6 +710,7 @@ const BidToByDataTable = ({
                         styles={{ inputMain: 'h-[64px]' }}
                         value={bidValue}
                         onChange={e => {
+                          setBidError('');
                           setBidValues((prevValues: any) => {
                             // If there's already a bid value for this row, increment it
                             return {
@@ -715,7 +718,7 @@ const BidToByDataTable = ({
                               [row.id]: e.target.value
                             };
 
-                            // If no bid value for this row yet, start from current_max_bid and add 0.5
+                            // If no bid value for this row yet, start from discount and add 0.5
                           });
                         }}
                       />
@@ -724,7 +727,7 @@ const BidToByDataTable = ({
                       onClick={() =>
                         handleIncrementDiscount(
                           row.id,
-                          row.original.current_max_bid,
+                          row.original.discount,
                           setBidError,
                           setBidValues
                         )
@@ -741,9 +744,9 @@ const BidToByDataTable = ({
                           label: activeTab === 0 ? 'Add Bid' : 'Update Bid',
                           handler: () => {
                             if (!bidError) {
-                              if (bidValue < row.original.current_max_bid) {
+                              if (bidValue < row.original.discount) {
                                 setBidError(
-                                  'Bid value cannot be less than current maximum bid.'
+                                  'Bid value cannot be less than maximum discount.'
                                 );
                                 return; // Exit early, do not update bidValues
                               }

@@ -109,9 +109,9 @@ const BidToBuy = () => {
           case 'lower_half':
           case 'star_length':
             return { ...commonProps, Cell: RenderCarat };
-          case 'discount':
+          case 'original_discount':
             return { ...commonProps, Cell: DiscountWithCross };
-          case 'current_max_bid':
+          case 'discount':
             return { ...commonProps, Cell: RenderDiscount };
           case 'last_bid_date':
             return { ...commonProps, Cell: RenderBidDate };
@@ -182,7 +182,7 @@ const BidToBuy = () => {
     setActiveTab(index);
     if (index === 1 && activeBid.length > 0) {
       activeBid.map((row: any) => {
-        if (row.current_max_bid > row.my_current_bid) {
+        if (row.discount > row.my_current_bid) {
           setRowSelection(prev => {
             return { ...prev, [row.id]: true };
           });
@@ -219,7 +219,7 @@ const BidToBuy = () => {
     setTime(data.endTime);
     if (data.activeStone) {
       data.activeStone.map((row: any) => {
-        if (row.current_max_bid > row.my_current_bid) {
+        if (row.discount > row.my_current_bid) {
           setRowSelection(prev => {
             return { ...prev, [row.id]: true };
           });
@@ -286,13 +286,16 @@ const BidToBuy = () => {
     socketManager.on('cancel_bidtobuy', handleBidCanceled);
 
     // Setting up the event listener for "request_get_bid_stones"
-    socketManager.on('request_get_bid_stones', handleRequestGetBidStones);
+    socketManager.on('request_get_bidtobuy_stones', handleRequestGetBidStones);
 
     // Return a cleanup function to remove the listeners
     return () => {
       socketManager.off('bidtobuy_stones', handleBidStones);
       socketManager.off('error', handleError);
-      socketManager.off('request_get_bid_stones', handleRequestGetBidStones);
+      socketManager.off(
+        'request_get_bidtobuy_stones',
+        handleRequestGetBidStones
+      );
     };
   }, [socketManager, handleBidStones, handleError, authToken]);
 
@@ -313,41 +316,36 @@ const BidToBuy = () => {
     if (activeTab === 0 && bid?.length > 0) {
       return (
         <div className="flex items-center justify-between px-4 py-0">
-          <div></div>
-          <MRT_TablePagination table={table} />
-          <ActionButton
-            actionButtonData={[
-              {
-                variant: 'secondary',
-                label: 'Clear All',
-                handler: () => {
-                  setRowSelection({});
-                },
-                isDisable: !Object.keys(rowSelection).length
-              }
-            ]}
-          />
+          <div className="flex  ml-[85px] justify-center flex-1">
+            <MRT_TablePagination table={table} />
+          </div>
+          <div className="flex items-center gap-3">
+            <ActionButton
+              actionButtonData={[
+                {
+                  variant: 'secondary',
+                  label: 'Clear All',
+                  handler: () => {
+                    setRowSelection({});
+                  },
+                  isDisable: !Object.keys(rowSelection).length
+                }
+              ]}
+            />
+          </div>
         </div>
       );
     } else if (activeTab === 1 && activeBid?.length > 0) {
       return (
         <div className="flex items-center justify-between px-4 py-0">
-          {/* <div className="flex gap-4">
-            <div className=" border-[1px] border-successBorder rounded-[4px] bg-successSurface text-successMain">
-              <p className="text-mMedium font-medium px-[6px] py-[4px]">
-                Winning
-              </p>
-            </div>
-            <div className=" border-[1px] border-dangerBorder rounded-[4px] bg-dangerSurface text-dangerMain">
-              <p className="text-mMedium font-medium px-[6px] py-[4px]">
-                {' '}
-                Losing
-              </p>
-            </div>
-          </div> */}
-          <div></div>
-          <MRT_TablePagination table={table} />
+          <div className="flex ml-[200px] justify-center flex-1">
+            {' '}
+            {/* Aligns MRT_TablePagination to the middle */}
+            <MRT_TablePagination table={table} />
+          </div>
           <div className="flex items-center gap-3">
+            {' '}
+            {/* Aligns ActionButton to the end */}
             <ActionButton
               actionButtonData={[
                 {
@@ -389,6 +387,7 @@ const BidToBuy = () => {
                                   socketManager.emit('cancel_bidtobuy', {
                                     product_ids: Object.keys(rowSelection)
                                   });
+                                  modalSetState.setIsDialogOpen(false);
                                 },
                                 customStyle: 'flex-1 w-full'
                               }
@@ -470,7 +469,6 @@ const BidToBuy = () => {
       }, 4000);
   }, [isError]);
 
-  console.log('isLoading', isLoading);
   return (
     <div className="mb-[20px] relative">
       {isLoading && <CustomKGKLoader />}
@@ -539,10 +537,8 @@ const BidToBuy = () => {
                   columns={
                     activeTab === 2
                       ? memoizedColumns.filter(
-                          (data: any) =>
-                            data.accessorKey !== 'current_max_bid' &&
-                            data.accessorKey !== 'shape'
-                        ) // Filter out data with accessor key 'current_max_bid'
+                          (data: any) => data.accessorKey !== 'shape'
+                        ) // Filter out data with accessor key 'discount'
                       : activeTab === 1
                       ? memoizedColumns.filter(
                           (data: any) =>
