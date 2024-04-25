@@ -1004,7 +1004,7 @@ const Dashboard = () => {
     {
       name: 'GIA Certificate',
       url: detailImageData?.certificate_url ?? '',
-      isSepratorNeeded: true
+      showDivider: true
     },
     {
       name: 'B2B',
@@ -1016,7 +1016,7 @@ const Dashboard = () => {
         '***',
         detailImageData?.lot_id ?? ''
       )}`,
-      isSepratorNeeded: true
+      showDivider: true
     },
 
     {
@@ -1041,7 +1041,7 @@ const Dashboard = () => {
         '***',
         detailImageData?.lot_id ?? ''
       )}`,
-      isSepratorNeeded: true
+      showDivider: true
     }
   ];
 

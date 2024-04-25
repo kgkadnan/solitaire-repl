@@ -291,7 +291,7 @@ const OrderDetail: React.FC<IOrderDetail> = ({
     {
       name: 'GIA Certificate',
       url: detailImageData?.certificate_url ?? '',
-      isSepratorNeeded: true
+      showDivider: true
     },
     {
       name: 'B2B',
@@ -303,7 +303,7 @@ const OrderDetail: React.FC<IOrderDetail> = ({
         '***',
         detailImageData?.lot_id ?? ''
       )}`,
-      isSepratorNeeded: true
+      showDivider: true
     },
 
     {
@@ -328,7 +328,7 @@ const OrderDetail: React.FC<IOrderDetail> = ({
         '***',
         detailImageData?.lot_id ?? ''
       )}`,
-      isSepratorNeeded: true
+      showDivider: true
     }
   ];
 
