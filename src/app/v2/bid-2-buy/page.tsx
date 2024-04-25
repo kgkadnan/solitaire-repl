@@ -22,7 +22,7 @@ import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
 import { columnHeaders } from './constant';
 import { SocketManager, useSocket } from '@/hooks/v2/socket-manager';
-import CountdownTimer from './components/timer';
+import CountdownTimer from '@components/v2/common/timer/index';
 import { useGetBidToBuyHistoryQuery } from '@/features/api/dashboard';
 import InvalidCreds from '../login/component/invalid-creds';
 import { DialogComponent } from '@/components/v2/common/dialog';
@@ -150,8 +150,6 @@ const BidToBuy = () => {
             return { ...commonProps, Cell: RenderLab };
           case 'location':
             return { ...commonProps, Cell: RednderLocation };
-          // case 'lot_id':
-          //   return { ...commonProps, Cell: RenderNewArrivalLotId };
           case 'price_per_carat':
             return { ...commonProps, Cell: RenderNewArrivalPricePerCarat };
 
@@ -211,8 +209,6 @@ const BidToBuy = () => {
     setTimeDifference(timeDiff);
   }, [time]);
   const { authToken } = useUser();
-
-  // const socketManager = new SocketManager();
   const socketManager = useMemo(() => new SocketManager(), []);
   useEffect(() => {
     if (authToken) useSocket(socketManager, authToken);
@@ -413,28 +409,7 @@ const BidToBuy = () => {
           </div>
         </div>
       );
-    }
-    // else if (activeTab === 2 && bidHistory?.data?.length > 0) {
-    //   return (
-    //     <div className="flex items-center justify-end px-4 py-0">
-    //       {/* <div className="flex gap-4">
-    //         <div className=" border-[1px] border-successBorder rounded-[4px] bg-successSurface text-successMain">
-    //           <p className="text-mMedium font-medium px-[6px] py-[4px]">Won</p>
-    //         </div>
-    //         <div className=" border-[1px] border-dangerBorder rounded-[4px] bg-dangerSurface text-dangerMain">
-    //           <p className="text-mMedium font-medium px-[6px] py-[4px]">
-    //             {' '}
-    //             Lost
-    //           </p>
-    //         </div>
-    //       </div> */}
-    //       {/* <div></div> */}
-    //       {/* <MRT_TablePagination table={table} /> */}
-    //       <div></div>
-    //     </div>
-    //   );
-    // }
-    else {
+    } else {
       return null;
     }
   };

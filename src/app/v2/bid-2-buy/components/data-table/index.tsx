@@ -19,17 +19,18 @@ import DisableDecrementIcon from '@public/v2/assets/icons/new-arrivals/disable-d
 import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
 import Share from '@/components/v2/common/copy-and-share/share';
 import ActionButton from '@/components/v2/common/action-button';
-import Bid2BuyCalculatedField from '../bid-2-buy-calculated-field';
-import Tab from '../tabs';
+import Bid2BuyCalculatedField from '@app/v2/new-arrivals/components/new-arrival-calculated-field';
+import Tab from '@components/v2/common/bid-tabs/index';
 import { InputField } from '@/components/v2/common/input-field';
 import DecrementIcon from '@public/v2/assets/icons/new-arrivals/decrement.svg?url';
 import IncrementIcon from '@public/v2/assets/icons/new-arrivals/increment.svg?url';
 import empty from '@public/v2/assets/icons/data-table/empty-bid-to-buy.svg';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
-import { RenderNewArrivalLotIdColor } from '@/components/v2/common/data-table/helpers/render-cell';
 import Tooltip from '@/components/v2/common/tooltip';
 import { kycStatus } from '@/constants/enums/kyc';
 import { formatNumber } from '@/utils/fix-two-digit-number';
+import { handleDecrementDiscount } from '@/utils/v2/handle-decrement-discount';
+import { handleIncrementDiscount } from '@/utils/v2/handle-increment-discount';
 
 const theme = createTheme({
   typography: {
@@ -56,9 +57,6 @@ const theme = createTheme({
             borderBottom: 'none' // Customize the border as needed
           }
         }
-        // '&:hover':{
-        //   background:"red !important"
-        // }
       }
     },
     MuiTableHead: {
@@ -89,7 +87,7 @@ const theme = createTheme({
   }
 });
 
-interface BidValues {
+export interface BidValues {
   [key: string]: number;
 }
 const BidToByDataTable = ({
@@ -186,53 +184,6 @@ const BidToByDataTable = ({
       ...columns.map((c: any) => c.accessorKey)
     ] //array of column ids (Initializing is optional as of v2.10.0)
   );
-
-  const handleIncrement = (rowId: string, currentMaxBid: any) => {
-    // Retrieve the discount for the row from the rows data
-    setBidError('');
-    setBidValues(prevValues => {
-      const currentBidValue = prevValues[rowId];
-      // If there's already a bid value for this row, increment it
-      if (currentBidValue !== undefined) {
-        return {
-          ...prevValues,
-          [rowId]: Number(currentBidValue) + 0.5
-        };
-      }
-      // If no bid value for this row yet, start from discount and add 0.5
-      else {
-        return {
-          ...prevValues,
-          [rowId]: Number(currentMaxBid) + 0.5
-        };
-      }
-    });
-  };
-
-  const handleDecrement = (rowId: string, currentMaxBid: any) => {
-    setBidValues(prevValues => {
-      const currentBidValue = prevValues[rowId];
-      // Calculate the new bid value
-      const newBidValue =
-        currentBidValue !== undefined
-          ? Number(currentBidValue) - 0.5
-          : Number(currentMaxBid) - 0.5;
-
-      // Check if the new bid value is less than or equal to currentMaxBid
-      if (newBidValue >= currentMaxBid) {
-        setBidError('');
-        // Update the bid value
-        return {
-          ...prevValues,
-          [rowId]: newBidValue
-        };
-      } else {
-        // Set error because attempting to decrement below currentMaxBid
-        setBidError('Bid value cannot be less than maximum discount.');
-        return prevValues; // Return previous values without modification
-      }
-    });
-  };
 
   const renderTopToolbar = ({ table }: any) => (
     <div>
@@ -400,8 +351,6 @@ const BidToByDataTable = ({
     enableColumnFilters: false,
     enablePagination: true,
     enableStickyHeader: true,
-    // enableBottomToolbar: false,
-    // enableRowVirtualization:true,
     enableGrouping: true,
     enableExpandAll: false,
     enableColumnDragging: false,
@@ -413,8 +362,6 @@ const BidToByDataTable = ({
     renderTopToolbar,
     renderBottomToolbar,
     renderEmptyRowsFallback: NoResultsComponent,
-    // renderFallbackComponent: NoResultsComponent,
-    // enableExpanding: true,
 
     icons: {
       SearchIcon: () => (
@@ -425,21 +372,13 @@ const BidToByDataTable = ({
     // selectAllMode: undefined,
 
     muiTableBodyRowProps: ({ row }) => {
-      // const isHighlightBackground =
-      //   activeTab !== 0 && RenderNewArrivalLotIdColor({ row });
-
       return {
         onClick: row.id.includes('shape')
           ? row.getToggleExpandedHandler()
           : row.getToggleSelectedHandler(),
         sx: {
           cursor: 'pointer',
-          // '&.MuiTableRow-root:hover .MuiTableCell-root::after': {
-          //   backgroundColor: isHighlightBackground
-          //     ? isHighlightBackground.background
-          //     : 'var(--neutral-50)'
-          //     // backgroundColor: 'var(--neutral-50)'
-          // },
+
           '&.MuiTableRow-root': {
             // Define styles for the ::after pseudo-element of each cell within a hovered row
             '& .MuiTableCell-root::after': {
@@ -448,10 +387,6 @@ const BidToByDataTable = ({
             },
             // Target the specific cell that matches the lot_id column within a hovered row
             '& .MuiTableCell-root[data-index="1"]::after': {
-              // Change the background color to red if isHighlightBackground is true, otherwise maintain the default hover color
-              // backgroundColor: isHighlightBackground
-              //   ? `${isHighlightBackground.background} !important`
-              //   : 'var(--neutral-50)'
               backgroundColor: 'var(--neutral-50)'
             }
           },
@@ -523,16 +458,11 @@ const BidToByDataTable = ({
       pagination: { pageSize: 20, pageIndex: 0 }
     },
 
-    // renderEmptyRowsFallback: () => {
-    //   return <>no result</>;
-    // },
     positionGlobalFilter: 'left',
     //styling
 
     muiTableContainerProps: {
       sx: {
-        // minHeight: 'calc(100vh - 399px)',
-        // maxHeight: 'calc(100vh - 399px)'
         height: isFullScreen ? '70vh' : 'calc(100vh - 399px)',
         minHeight: isFullScreen
           ? activeTab === 2
@@ -572,28 +502,18 @@ const BidToByDataTable = ({
         boxShadow: 'none'
       }
     },
-    // muiTableBodyCellProps: ({ cell }) => {
+
     muiTableBodyCellProps: ({ cell, row }) => {
-      // const isHighlightBackground =
-      //   activeTab !== 0 &&
-      //   cell.column.id === 'lot_id' &&
-      //   RenderNewArrivalLotIdColor({ row });
       return {
         sx: {
           color: 'var(--neutral-900)',
           '&.MuiTableCell-root': {
             padding: '4px 8px',
-            // background: isHighlightBackground
-            //   ? `${isHighlightBackground.background} !important `
-            //   : 'White',
+
             background: 'White',
-            // color: isHighlightBackground && isHighlightBackground.text,
+
             opacity: 1,
-            // '&:hover': {
-            //   background: isHighlightBackground
-            //     ? isHighlightBackground.background
-            //     : 'White'
-            // },
+
             '&:hover': {
               background: 'White'
             },
@@ -633,9 +553,7 @@ const BidToByDataTable = ({
                 cell.id === 'shape:RMB_lot_id') &&
               'none'
           },
-          // '&.MuiTableCell-root[data-index="1"] ':{
-          //   display:'none'
-          // },
+
           whiteSpace: 'nowrap',
           borderBottom: '1px solid var(--neutral-50)'
         }
@@ -682,7 +600,6 @@ const BidToByDataTable = ({
         '& .MuiSvgIcon-root': {
           fontSize: '26px',
           fontWeight: 100
-          // fill: 'var(--neutral-200)'
         },
         '& .MuiCheckbox-indeterminate': {
           display: 'none'
@@ -705,7 +622,6 @@ const BidToByDataTable = ({
         border: 'none'
       }
     },
-    // muiTableBodyProps: rows?.length === 0 ? { style: { display: 'none' } } : {},
     muiTableHeadProps: rows?.length === 0 ? { style: { display: 'none' } } : {},
 
     renderDetailPanel: ({ row }) => {
@@ -723,22 +639,6 @@ const BidToByDataTable = ({
               className="flex gap-6"
               onClick={event => event.stopPropagation()}
             >
-              {/* <div className="w-[120px] ml-10">
-                <div className="text-mRegular text-neutral700">
-                  Current Max Bid%
-                </div>
-
-                <InputField
-                  // label={'Current Max Bid%'}
-                  type="text"
-                  styles={{
-                    inputMain: 'h-[40px]',
-                    input: '!bg-infoSurface !border-infoBorder !text-infoMain'
-                  }}
-                  value={`${row.original.discount}%`}
-                  disabled
-                />
-              </div> */}
               <div className="w-[120px] ml-10">
                 <div className="!text-mRegular !text-neutral500">Bid Pr/Ct</div>
 
@@ -763,7 +663,6 @@ const BidToByDataTable = ({
                 <div className="!text-mRegular !text-neutral700">Bid Amt $</div>
 
                 <InputField
-                  // label={'Bid Amt $'}
                   type="text"
                   styles={{
                     inputMain: 'h-[40px]',
@@ -790,7 +689,12 @@ const BidToByDataTable = ({
                     ) : (
                       <div
                         onClick={() =>
-                          handleDecrement(row.id, row.original.discount)
+                          handleDecrementDiscount(
+                            row.id,
+                            row.original.discount,
+                            setBidError,
+                            setBidValues
+                          )
                         }
                       >
                         <DecrementIcon />
@@ -799,14 +703,9 @@ const BidToByDataTable = ({
 
                     <div className="w-[120px]">
                       <InputField
-                        // label={'Bid Amt $'}
                         type="number"
                         styles={{ inputMain: 'h-[64px]' }}
-                        value={
-                          bidValue
-                          // row.original.my_current_bid ??
-                          // row.original.discount - 0.5
-                        }
+                        value={bidValue}
                         onChange={e => {
                           setBidError('');
                           setBidValues((prevValues: any) => {
@@ -823,7 +722,12 @@ const BidToByDataTable = ({
                     </div>
                     <div
                       onClick={() =>
-                        handleIncrement(row.id, row.original.discount)
+                        handleIncrementDiscount(
+                          row.id,
+                          row.original.discount,
+                          setBidError,
+                          setBidValues
+                        )
                       }
                     >
                       <IncrementIcon />
