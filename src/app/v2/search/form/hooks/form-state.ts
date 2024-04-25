@@ -22,6 +22,8 @@ const useFormStateManagement = () => {
   const [selectedCulet, setSelectedCulet] = useState<string[]>([]);
 
   const [selectedKeyToSymbol, setSelectedKeyToSymbol] = useState<string[]>([]);
+  const [selectionChecked, setSelectionChecked] = useState<string>('contain');
+
   const [selectedLab, setSelectedLab] = useState<string[]>([]);
   const [selectedLocation, setSelectedLocation] = useState<string[]>([]);
   const [selectedOrigin, setSelectedOrigin] = useState<string[]>([]);
@@ -153,7 +155,8 @@ const useFormStateManagement = () => {
       starLengthMax,
       starLengthMin,
       selectedColor,
-      selectedGirdle
+      selectedGirdle,
+      selectionChecked
     },
     setState: {
       setSelectedShape,
@@ -227,7 +230,8 @@ const useFormStateManagement = () => {
       setStarLengthMax,
       setStarLengthMin,
       setSelectedColor,
-      setSelectedGirdle
+      setSelectedGirdle,
+      setSelectionChecked
     },
     carat: {
       caratRangeData: caratRangeData,

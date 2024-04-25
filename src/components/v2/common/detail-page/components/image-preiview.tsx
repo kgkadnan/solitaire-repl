@@ -7,6 +7,8 @@ import Tooltip from '../../tooltip';
 import { handleDownloadImage } from '@/utils/v2/detail-page';
 import downloadImg from '@public/v2/assets/icons/detail-page/download.svg';
 import ImageModal from './image-modal';
+import { checkImage } from '../helpers/check-image';
+import { loadImages } from '../helpers/load-images';
 
 interface ImagePreviewProps {
   images: ImagesType[];
@@ -53,124 +55,113 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
     }
   }, []);
 
+  const [validImages, setValidImages] = useState<any>([]);
+
+  useEffect(() => {
+    loadImages(images, setValidImages, checkImage);
+  }, [images]);
+
   return (
     <>
       <div
         className="scroll-adjust-custom lg:overflow-y-scroll h-[100%]"
         ref={containerRef}
       >
-        {images.map((image, index) => (
-          <div key={index} className="relative  cursor-pointer pb-4">
-            {image.name === 'B2B' ||
-            image.name === 'B2B Sparkle' ||
-            image.name === 'GIA Certificate' ? (
-              <div
-                className="relative overflow-hidden"
-                onClick={() => {
-                  setOpenDialogImageIndex(index);
-                  setIsModalOpen(!isModalOpen);
-                }}
-              >
-                <div className="absolute top-0 left-0 right-0 bottom-0 cursor-pointer"></div>
+        {validImages.map((image: any, index: number) => {
+          // const image = images[validImageIndex];
+          return (
+            <>
+              <div key={index} className="relative  cursor-pointer pb-4">
+                {image.name === 'B2B' ||
+                image.name === 'B2B Sparkle' ||
+                image.name === 'GIA Certificate' ? (
+                  <div
+                    className="relative overflow-hidden"
+                    onClick={() => {
+                      setOpenDialogImageIndex(index);
+                      setIsModalOpen(!isModalOpen);
+                    }}
+                  >
+                    <div className="absolute top-0 left-0 right-0 bottom-0 cursor-pointer"></div>
 
-                {image.url === 'null' ||
-                image.url === null ||
-                !image.url.length ? (
+                    <iframe
+                      key={index}
+                      style={{ height: '380px', width: '485px' }}
+                      frameBorder="0"
+                      src={image.url}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      onError={e => {
+                        handleImageError(e);
+                        setShowDownloadButton(prevState => [
+                          ...prevState,
+                          image.name
+                        ]);
+                      }}
+                    />
+                  </div>
+                ) : (
                   <img
-                    src={NoImageFound}
-                    alt="NoImageFound"
+                    key={index}
+                    src={image?.url}
                     style={{
                       height: '380px',
                       width: '485px',
-                      background: '#F2F4F7',
-                      objectFit: 'cover'
+                      background: '#F2F4F7'
                     }}
-                    onError={e => {
-                      setShowDownloadButton(prevState => [
-                        ...prevState,
-                        image.name
-                      ]);
-                      handleImageError(e);
-                    }}
-                  />
-                ) : (
-                  <iframe
-                    key={index}
-                    style={{ height: '380px', width: '485px' }}
-                    frameBorder="0"
-                    src={image.url}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    onError={e => {
-                      handleImageError(e);
-                      setShowDownloadButton(prevState => [
-                        ...prevState,
-                        image.name
-                      ]);
+                    alt={`Image ${index + 1}`}
+                    // className={`mb-4`}
+                    // onError={e => {
+                    //   setShowDownloadButton(prevState => [
+                    //     ...prevState,
+                    //     image.name
+                    //   ]);
+                    //   handleImageError(e);
+                    // }}
+                    onClick={() => {
+                      setOpenDialogImageIndex(index);
+                      setIsModalOpen(!isModalOpen);
                     }}
                   />
                 )}
-              </div>
-            ) : (
-              <img
-                key={index}
-                src={image?.url}
-                style={{
-                  height: '380px',
-                  width: '485px',
-                  background: '#F2F4F7'
-                }}
-                alt={`Image ${index + 1}`}
-                // className={`mb-4`}
-                onError={e => {
-                  setShowDownloadButton(prevState => [
-                    ...prevState,
-                    image.name
-                  ]);
-                  handleImageError(e);
-                }}
-                onClick={() => {
-                  setOpenDialogImageIndex(index);
-                  setIsModalOpen(!isModalOpen);
-                }}
-              />
-            )}
 
-            {image.name !== 'B2B' &&
-              image.name !== 'B2B Sparkle' &&
-              !showDownloadButton.includes(image.name) && (
-                <Tooltip
-                  tooltipTrigger={
-                    <Image
-                      className="absolute top-3 left-3 p-1"
-                      src={downloadImg}
-                      height={40}
-                      width={40}
-                      alt={'Download'}
-                      onClick={() => {
-                        handleDownloadImage(
-                          image?.url || '',
-                          image.name,
-                          setIsLoading
-                        );
-                      }}
+                {image.name !== 'B2B' &&
+                  image.name !== 'B2B Sparkle' &&
+                  !showDownloadButton.includes(image.name) && (
+                    <Tooltip
+                      tooltipTrigger={
+                        <Image
+                          className="absolute top-3 left-3 p-1"
+                          src={downloadImg}
+                          height={40}
+                          width={40}
+                          alt={'Download'}
+                          onClick={() => {
+                            handleDownloadImage(
+                              image?.url || '',
+                              image.name,
+                              setIsLoading
+                            );
+                          }}
+                        />
+                      }
+                      tooltipContent={'Download'}
+                      tooltipContentStyles={'z-[1000]'}
                     />
-                  }
-                  tooltipContent={'Download'}
-                  tooltipContentStyles={'z-[1000]'}
-                />
-              )}
+                  )}
 
-            <span className="lg:block sm:hidden text-center pt-[4px]">
-              {image?.name}
-            </span>
-          </div>
-        ))}
+                <span className="lg:block sm:hidden text-center pt-[4px]">
+                  {image?.name}
+                </span>
+              </div>
+            </>
+          );
+        })}
       </div>
       <ImageModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(!isModalOpen)}
         selectedImageIndex={openDialogImageIndex}
-        images={images}
+        images={validImages}
         setIsLoading={setIsLoading}
       />
     </>

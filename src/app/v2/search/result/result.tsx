@@ -931,7 +931,7 @@ const Result = ({
     {
       name: 'GIA Certificate',
       url: detailImageData?.certificate_url ?? '',
-      isSepratorNeeded: true
+      showDivider: true
     },
     {
       name: 'B2B',
@@ -943,7 +943,7 @@ const Result = ({
         '***',
         detailImageData?.lot_id ?? ''
       )}`,
-      isSepratorNeeded: true
+      showDivider: true
     },
 
     {
@@ -968,7 +968,7 @@ const Result = ({
         '***',
         detailImageData?.lot_id ?? ''
       )}`,
-      isSepratorNeeded: true
+      showDivider: true
     }
   ];
 
@@ -986,7 +986,6 @@ const Result = ({
       }, 4000);
   }, [isError]);
 
-  console.log('datadatahi', data);
   return (
     <div className="relative">
       {isError && (
