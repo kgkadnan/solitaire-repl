@@ -9,7 +9,7 @@ import AppointmentIcon from '@public/v2/assets/icons/sidebar-icons/appointment.s
 import BidToBuyIcon from '@public/v2/assets/icons/sidebar-icons/bid-to-buy.svg?url';
 import { useRouter } from 'next/navigation';
 import { useGetCustomerQuery } from '@/features/api/dashboard';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import searchIcon from '@public/v2/assets/icons/data-table/search-icon.svg';
 import micIcon from '@public/v2/assets/icons/dashboard/mic.svg';
 import editIcon from '@public/v2/assets/icons/saved-search/edit-button.svg';
@@ -55,6 +55,34 @@ import { handleComment } from './search/result/helpers/handle-comment';
 import ImageModal from '@/components/v2/common/detail-page/components/image-modal';
 import { FILE_URLS } from '@/constants/v2/detail-page';
 import { getShapeDisplayName } from '@/utils/v2/detail-page';
+import DataTable from '@/components/v2/common/data-table';
+import { formatNumber } from '@/utils/fix-two-digit-number';
+import Tooltip from '@/components/v2/common/tooltip';
+import {
+  clarity,
+  fluorescenceSortOrder,
+  sideBlackSortOrder,
+  tableBlackSortOrder,
+  tableInclusionSortOrder
+} from '@/constants/v2/form';
+import {
+  RednderLocation,
+  RenderAmount,
+  RenderCarat,
+  RenderDetails,
+  RenderDiscount,
+  RenderLab,
+  RenderLotId,
+  RenderMeasurements,
+  RenderShape,
+  RenderTracerId
+} from '@/components/v2/common/data-table/helpers/render-cell';
+import { MRT_RowSelectionState } from 'material-react-table';
+import { useDownloadExcelMutation } from '@/features/api/download-excel';
+import backWardArrow from '@public/v2/assets/icons/my-diamonds/backwardArrow.svg';
+import { NOT_MORE_THAN_300 } from '@/constants/error-messages/search';
+import { NO_STONES_SELECTED } from '@/constants/error-messages/cart';
+import { notificationBadge } from '@/features/notification/notification-slice';
 
 // import useUser from '@/lib/use-auth';
 
@@ -72,6 +100,9 @@ const Dashboard = () => {
     useGetCustomerQuery({});
 
   const [activeTab, setActiveTab] = useState<string>('');
+  const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
+  const [downloadExcel] = useDownloadExcelMutation();
+
   const [tabs, setTabs] = useState<ITabs[]>([]);
   const optionsClasses = [
     'linear-gradient(90deg, #DBF2FC 0%, #E8E8FF 30%, #FFF4E3 100%)',
@@ -81,6 +112,8 @@ const Dashboard = () => {
   ];
   const [stoneId, setStoneId] = useState('');
   const [searchData, setSearchData] = useState<any>();
+  const [searchColumn, setSearchColumn] = useState<any>();
+
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [breadCrumLabel, setBreadCrumLabel] = useState('');
@@ -93,9 +126,10 @@ const Dashboard = () => {
   const [detailPageData, setDetailPageData] = useState<any>({});
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isDetailPage, setIsDetailPage] = useState(false);
+  const [isDiamondDetail, setIsDiamondDetail] = useState(false);
 
   const { errorSetState } = useErrorStateManagement();
-  const { setIsError, setErrorText } = errorSetState;
+  const { setIsError } = errorSetState;
 
   const options = [
     {
@@ -145,7 +179,220 @@ const Dashboard = () => {
     styles.gradient3,
     styles.gradient4
   ];
+  const memoizedRows = useMemo(() => {
+    setBreadCrumLabel('Dashboard');
+    return Array.isArray(searchData?.foundProducts)
+      ? searchData?.foundProducts
+      : [];
+  }, [searchData?.foundProducts]);
+  useEffect(() => {
+    if (searchData?.notFoundKeywords?.length > 0) {
+      setError('Some stones are not available');
+    }
+  }, [searchData?.notFoundKeywords]);
+  useEffect(() => {
+    const fetchColumns = async () => {
+      const response = await triggerColumn({});
+      const shapeColumn = response.data?.find(
+        (column: any) => column.accessor === 'shape'
+      );
 
+      if (response.data?.length) {
+        let additionalColumn = {
+          accessor: 'shape_full',
+          id: shapeColumn?.id,
+          is_disabled: shapeColumn?.is_disabled,
+          is_fixed: shapeColumn?.is_fixed,
+          label: shapeColumn?.label,
+          sequence: shapeColumn?.sequence,
+          short_label: shapeColumn?.short_label
+        };
+
+        const updatedColumns = [...response.data, additionalColumn];
+        setSearchColumn(updatedColumns);
+      }
+    };
+
+    fetchColumns();
+  }, []);
+  const mapColumns = (columns: any) =>
+    columns
+      ?.filter(({ is_disabled }: any) => !is_disabled)
+      ?.sort(({ sequence: a }: any, { sequence: b }: any) => a - b)
+      .map(({ accessor, short_label, label }: any) => {
+        const commonProps = {
+          accessorKey: accessor,
+          header: short_label,
+          enableGlobalFilter: accessor === 'lot_id',
+          enableGrouping: accessor === 'shape',
+          enableSorting: accessor !== 'shape_full' && accessor !== 'details',
+          minSize: 5,
+          maxSize: accessor === 'details' ? 100 : 200,
+          size: 5,
+          Header: ({ column }: any) => (
+            <Tooltip
+              tooltipTrigger={<span>{column.columnDef.header}</span>}
+              tooltipContent={label}
+              tooltipContentStyles={'z-[1000]'}
+            />
+          )
+        };
+
+        switch (accessor) {
+          case 'clarity':
+            return {
+              ...commonProps,
+              sortingFn: (rowA: any, rowB: any, columnId: string) => {
+                const indexA = clarity.indexOf(rowA.original[columnId]);
+                const indexB = clarity.indexOf(rowB.original[columnId]);
+                return indexA - indexB;
+              }
+            };
+          case 'table_inclusion':
+            return {
+              ...commonProps,
+              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-',
+              sortingFn: (rowA: any, rowB: any, columnId: string) => {
+                const indexA = tableInclusionSortOrder.indexOf(
+                  rowA.original[columnId]
+                );
+                const indexB = tableInclusionSortOrder.indexOf(
+                  rowB.original[columnId]
+                );
+                return indexA - indexB;
+              }
+            };
+          case 'table_black':
+            return {
+              ...commonProps,
+              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-',
+              sortingFn: (rowA: any, rowB: any, columnId: string) => {
+                const indexA = tableBlackSortOrder.indexOf(
+                  rowA.original[columnId]
+                );
+                const indexB = tableBlackSortOrder.indexOf(
+                  rowB.original[columnId]
+                );
+                return indexA - indexB;
+              }
+            };
+
+          case 'side_black':
+            return {
+              ...commonProps,
+              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-',
+              sortingFn: (rowA: any, rowB: any, columnId: string) => {
+                const indexA = sideBlackSortOrder.indexOf(
+                  rowA.original[columnId]
+                );
+                const indexB = sideBlackSortOrder.indexOf(
+                  rowB.original[columnId]
+                );
+                return indexA - indexB;
+              }
+            };
+
+          case 'fluorescence':
+            return {
+              ...commonProps,
+              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-',
+              sortingFn: (rowA: any, rowB: any, columnId: string) => {
+                const indexA = fluorescenceSortOrder.indexOf(
+                  rowA.original[columnId]
+                );
+                const indexB = fluorescenceSortOrder.indexOf(
+                  rowB.original[columnId]
+                );
+                return indexA - indexB;
+              }
+            };
+          case 'amount':
+            return { ...commonProps, Cell: RenderAmount };
+          case 'measurements':
+            return { ...commonProps, Cell: RenderMeasurements };
+          case 'shape_full':
+            return { ...commonProps, Cell: RenderShape };
+          case 'carats':
+          case 'rap':
+          case 'rap_value':
+          case 'table_percentage':
+          case 'depth_percentage':
+          case 'ratio':
+          case 'length':
+          case 'width':
+          case 'depth':
+          case 'crown_angle':
+          case 'crown_height':
+          case 'girdle_percentage':
+          case 'pavilion_angle':
+          case 'pavilion_height':
+          case 'lower_half':
+          case 'star_length':
+            return { ...commonProps, Cell: RenderCarat };
+          case 'discount':
+            return { ...commonProps, Cell: RenderDiscount };
+          case 'details':
+            return {
+              ...commonProps,
+              Cell: ({ row }: any) => {
+                return RenderDetails({ row, handleDetailImage });
+              }
+            };
+
+          case 'key_to_symbol':
+          case 'report_comments':
+            return {
+              ...commonProps,
+              Cell: ({ renderedCellValue }: { renderedCellValue: any }) => (
+                <span>{`${
+                  renderedCellValue?.length > 0
+                    ? renderedCellValue?.toString()
+                    : '-'
+                }`}</span>
+              )
+            };
+          case 'price_per_carat':
+            return {
+              ...commonProps,
+              Cell: ({ renderedCellValue }: { renderedCellValue: any }) => (
+                <span>{`${
+                  renderedCellValue === 0
+                    ? '0.00'
+                    : formatNumber(renderedCellValue) ?? '0.00'
+                }`}</span>
+              )
+            };
+          case 'lab':
+            return { ...commonProps, Cell: RenderLab };
+          case 'location':
+            return { ...commonProps, Cell: RednderLocation };
+          case 'lot_id':
+            return {
+              ...commonProps,
+              Cell: ({ renderedCellValue, row }: any) => {
+                return RenderLotId({
+                  renderedCellValue,
+                  row,
+                  handleDetailPage
+                });
+              }
+            };
+
+          case 'tracr_id':
+            return { ...commonProps, Cell: RenderTracerId };
+          default:
+            return {
+              ...commonProps,
+              Cell: ({ renderedCellValue }: { renderedCellValue: string }) => (
+                <span>{renderedCellValue ?? '-'}</span>
+              )
+            };
+        }
+      });
+  const memoizedColumns = useMemo(
+    () => mapColumns(searchColumn),
+    [searchColumn]
+  );
   const handleEdit = (stone: string) => {
     let savedSearchEditData = customerData?.customer.saved_searches.filter(
       (items: any) => {
@@ -563,8 +810,9 @@ const Dashboard = () => {
   }, [error]);
 
   const goBack = () => {
-    setBreadCrumLabel('');
-    setSearchData({});
+    setIsDiamondDetail(false);
+    // setBreadCrumLabel('Search Results');
+    // setSearchData({});
   };
 
   const handleAddToCartDetailPage = () => {
@@ -664,6 +912,7 @@ const Dashboard = () => {
       setIsDetailPage(true);
       setBreadCrumLabel('');
     }
+    setIsDetailPage(true);
     setIsConfirmStone(false);
     setConfirmStoneData([]);
   };
@@ -737,7 +986,7 @@ const Dashboard = () => {
     if (isConfirmStone) {
       setBreadCrumLabel('Confirm Stone');
     }
-    setIsDetailPage(true);
+    setIsDiamondDetail(true);
     setIsError(false);
     setError('');
     setDetailPageData(row);
@@ -930,6 +1179,132 @@ const Dashboard = () => {
         });
     }
   };
+  const handleAddToCart = () => {
+    let selectedIds = Object.keys(rowSelection);
+
+    if (selectedIds.length > 300) {
+      setIsError(true);
+      setError(NOT_MORE_THAN_300);
+    } else if (!selectedIds.length) {
+      setIsError(true);
+      setError(NO_STONES_SELECTED);
+    } else {
+      setIsLoading(true);
+      const variantIds = selectedIds
+        ?.map((id: string) => {
+          const myCartCheck: IProduct | object =
+            searchData?.foundProducts.find((row: IProduct) => {
+              return row?.id === id;
+            }) ?? {};
+
+          if (myCartCheck && 'variants' in myCartCheck) {
+            return myCartCheck.variants[0]?.id;
+          }
+          return '';
+        })
+        .filter(Boolean);
+
+      // If there are variant IDs, add to the cart
+      if (variantIds.length) {
+        addCart({
+          variants: variantIds
+        })
+          .unwrap()
+          .then((res: any) => {
+            setIsLoading(false);
+            setIsDialogOpen(true);
+            setDialogContent(
+              <>
+                <div className="absolute left-[-84px] top-[-84px]">
+                  <Image src={confirmIcon} alt="confirmIcon" />
+                </div>
+                <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+                  <h1 className="text-headingS text-neutral900 !font-medium	">
+                    {res?.message}
+                  </h1>
+                  <ActionButton
+                    actionButtonData={[
+                      {
+                        variant: 'secondary',
+                        label: ManageLocales('app.modal.continue'),
+                        handler: () => {
+                          setIsDialogOpen(false), setIsDetailPage(true);
+                        },
+                        customStyle: 'flex-1 w-full h-10'
+                      },
+                      {
+                        variant: 'primary',
+                        label: 'Go to "My Cart"',
+                        handler: () => {
+                          router.push('/v2/my-cart');
+                        },
+                        customStyle: 'flex-1 w-full h-10'
+                      }
+                    ]}
+                  />
+                </div>
+              </>
+            );
+            // On success, show confirmation dialog and update badge
+            setIsError(false);
+            setError('');
+            getProductById({
+              search_keyword: stoneId
+            })
+              .then((res: any) => {
+                setIsLoading(false);
+                if (res?.error?.status === statusCode.NOT_FOUND) {
+                  setError(`We couldn't find any results for this search`);
+                } else {
+                  setSearchData(res?.data);
+                  setError('');
+                  setIsDetailPage(true);
+                }
+              })
+              .catch((e: any) => {
+                setIsLoading(false);
+                setError('Something went wrong');
+              });
+            dispatch(notificationBadge(true));
+
+            // refetchRow();
+          })
+          .catch(error => {
+            setIsLoading(false);
+            // On error, set error state and error message
+
+            setIsDialogOpen(true);
+            setDialogContent(
+              <>
+                <div className="absolute left-[-84px] top-[-84px]">
+                  <Image src={errorSvg} alt="errorSvg" />
+                </div>
+                <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+                  <p className="text-neutral600 text-mRegular">
+                    {error?.data?.message}
+                  </p>
+                  <ActionButton
+                    actionButtonData={[
+                      {
+                        variant: 'primary',
+                        label: ManageLocales('app.modal.okay'),
+                        handler: () => {
+                          setIsDialogOpen(false);
+                        },
+                        customStyle: 'flex-1 w-full h-10'
+                      }
+                    ]}
+                  />
+                </div>
+              </>
+            );
+          });
+        // Clear the selected checkboxes
+        setRowSelection({});
+      }
+      // }
+    }
+  };
   return (
     <>
       {error !== '' && (
@@ -954,18 +1329,30 @@ const Dashboard = () => {
         renderContent={renderAddCommentDialogs}
       />
 
-      {isDetailPage && searchData && Object.keys(searchData).length > 0 ? (
-        <div className="mb-[10px]">
+      {isDiamondDetail && detailPageData?.length ? (
+        <>
           <DiamondDetailsComponent
-            data={[searchData]}
-            filterData={searchData}
+            data={searchData?.foundProducts}
+            filterData={detailPageData}
             goBackToListView={goBack}
             handleDetailPage={handleDetailPage}
-            breadCrumLabel={'Dashboard'}
+            breadCrumLabel={
+              breadCrumLabel.length ? breadCrumLabel : 'Search Results'
+            }
             modalSetState={modalSetState}
             setIsLoading={setIsLoading}
           />
-          <div className="p-[16px] flex justify-end items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow ">
+          <div className="p-[16px] flex justify-end items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow mb-1">
+            {/* {isError && (
+              <div>
+                <span className="hidden  text-successMain" />
+                <span
+                  className={`text-mRegular font-medium text-dangerMain pl-[8px]`}
+                >
+                  {errorText}
+                </span>
+              </div>
+            )} */}
             <ActionButton
               actionButtonData={[
                 {
@@ -979,12 +1366,12 @@ const Dashboard = () => {
                   label: ManageLocales('app.searchResult.confirmStone'),
                   isHidden: isConfirmStone,
                   handler: () => {
-                    // setIsDetailPage(false);
                     setBreadCrumLabel('Detail Page');
-                    const selectedRows = { [searchData.id]: true };
+                    const { id } = detailPageData;
+                    const selectedRows = { [id]: true };
                     handleConfirmStone({
                       selectedRows: selectedRows,
-                      rows: [searchData],
+                      rows: searchData,
                       setIsError,
                       setErrorText: setError,
                       setIsConfirmStone,
@@ -1021,6 +1408,59 @@ const Dashboard = () => {
               isDisable={true}
             />
           </div>
+        </>
+      ) : isDetailPage && searchData && Object.keys(searchData).length > 0 ? (
+        <div className="mb-[10px]">
+          <div className="flex py-[8px] items-center ">
+            <p className="text-lMedium font-medium text-neutral900">
+              {ManageLocales('app.result.headerResult')}
+            </p>
+          </div>
+          <div className="border-[1px] border-neutral200 rounded-[8px]">
+            <div className="flex items-center border-b-[1px] border-neutral200 p-2">
+              <Image
+                src={backWardArrow}
+                alt="backWardArrow"
+                onClick={() => {
+                  setIsDetailPage(false);
+                }}
+                className="cursor-pointer"
+              />
+              <div className="flex gap-[8px] items-center">
+                <button
+                  className="text-neutral600 text-sMedium font-regular cursor-pointer"
+                  onClick={() => {
+                    setIsDetailPage(false);
+                  }}
+                >
+                  {breadCrumLabel}
+                </button>
+                <span className="text-neutral600">/</span>
+                <p className="text-neutral700 p-[8px] bg-neutral100 rounded-[4px] text-sMedium font-medium">
+                  Search Results
+                </p>
+              </div>
+            </div>
+            <DataTable
+              rows={memoizedRows}
+              columns={memoizedColumns}
+              setRowSelection={setRowSelection}
+              rowSelection={rowSelection}
+              showCalculatedField={true}
+              isResult={false}
+              modalSetState={modalSetState}
+              setErrorText={setError}
+              downloadExcel={downloadExcel}
+              setIsError={setIsError}
+              setIsLoading={setIsLoading}
+              handleAddToCart={handleAddToCart}
+              handleConfirmStone={handleConfirmStone}
+              setIsConfirmStone={setIsConfirmStone}
+              setConfirmStoneData={setConfirmStoneData}
+              isDashboard={true}
+              setIsDetailPage={setIsDetailPage}
+            />
+          </div>
         </div>
       ) : isConfirmStone ? (
         <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow mt-[16px]">
@@ -1041,7 +1481,7 @@ const Dashboard = () => {
                   variant: 'secondary',
                   label: ManageLocales('app.confirmStone.footer.back'),
                   handler: () => {
-                    goBackToListView();
+                    setIsDetailPage(true);
                   }
                 },
 
@@ -1088,7 +1528,7 @@ const Dashboard = () => {
                 <div className="relative flex-grow items-center">
                   <input
                     className="px-10 py-2 w-full text-gray-600 rounded-lg focus:outline-none"
-                    type="number"
+                    type="string"
                     placeholder="Search by stone id or certificate number"
                     onChange={handleStoneId}
                     onKeyDown={handleKeyDown}

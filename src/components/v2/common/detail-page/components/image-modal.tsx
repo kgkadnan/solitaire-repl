@@ -62,9 +62,12 @@ const ImageModal: React.FC<ModalProps> = ({
         <div className="fixed inset-0 bg-[#101828] opacity-40"></div>
         <div className="bg-white rounded-lg p-2 sm:min-h-[350px] sm:min-w-[340px] lg:p-6 z-20 lg:min-h-[700px] lg:min-w-[800px] relative">
           <div className="flex justify-between">
-            <p className="flex items-center font-medium text-neutral-900">
-              {images[imageIndex].name}
-            </p>
+            <div className="w-full flex justify-center">
+              <p className="flex items-center font-medium text-neutral-900">
+                {images[imageIndex].name}
+              </p>
+            </div>
+
             <button
               onClick={onClose}
               className="text-gray-500 hover:text-gray-800 focus:outline-none"
