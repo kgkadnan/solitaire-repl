@@ -995,7 +995,7 @@ const Result = ({
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(!isModalOpen)}
         selectedImageIndex={0}
-        images={images}
+        images={validImages}
         fromDetailPage={true}
       />
       <DialogComponent
