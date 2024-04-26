@@ -170,7 +170,7 @@ const BidToByDataTable = ({
       modalSetState,
       setRowSelection,
       setIsLoading: setIsLoading,
-      [activeTab === 2 ? 'fromBid2BuyHistory' : 'fromBid2Buy']: true
+      [activeTab === 2 ? 'fromBidToBuyHistory' : 'fromBidToBuy']: true
     });
   };
 
