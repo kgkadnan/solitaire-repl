@@ -48,8 +48,8 @@ export const downloadExcelHandler = async ({
     order_id: orderId,
     from_new_arrival_bid: fromNewArrivalBid,
     from_new_arrival_bid_history: fromNewArrivalBidHistory,
-    from_bid_2_buy_history: fromBid2BuyHistory,
-    from_bid_2_buy: fromBid2Buy
+    from_bid_to_buy_history: fromBid2BuyHistory,
+    from_bid_to_buy: fromBid2Buy
   })
     .unwrap()
     .then((res: IDownloadExcelApiResponse) => {
