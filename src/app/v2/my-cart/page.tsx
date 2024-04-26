@@ -69,6 +69,8 @@ import { SubRoutes } from '@/constants/v2/enums/routes';
 import { Toast } from '@/components/v2/common/copy-and-share/toast';
 import { kycStatus } from '@/constants/enums/kyc';
 import { formatNumber } from '@/utils/fix-two-digit-number';
+import { loadImages } from '@/components/v2/common/detail-page/helpers/load-images';
+import { checkImage } from '@/components/v2/common/detail-page/helpers/check-image';
 
 const MyCart = () => {
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();
@@ -91,6 +93,7 @@ const MyCart = () => {
   const [confirmStoneData, setConfirmStoneData] = useState<IProduct[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  const [validImages, setValidImages] = useState<any>([]);
   const [isDetailPage, setIsDetailPage] = useState(false);
   const [detailPageData, setDetailPageData] = useState<any>({});
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -845,6 +848,10 @@ const MyCart = () => {
   let isNudge = localStorage.getItem('show-nudge') === 'MINI';
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
 
+  useEffect(() => {
+    loadImages(images, setValidImages, checkImage);
+  }, [detailImageData]);
+
   return (
     <div className="relative">
       {isLoading && <CustomKGKLoader />}
@@ -855,7 +862,7 @@ const MyCart = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(!isModalOpen)}
         selectedImageIndex={0}
-        images={images}
+        images={validImages}
         setIsLoading={setIsLoading}
         fromDetailPage={true}
       />

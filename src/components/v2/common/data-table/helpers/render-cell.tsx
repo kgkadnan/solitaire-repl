@@ -185,12 +185,12 @@ export const DiscountWithCross = ({ renderedCellValue }: any) => {
         position: 'relative',
         display: 'inline-block',
         padding: '2px 8px',
-        border: '1px',
         width: '74px',
         textAlign: 'end',
         borderRadius: '4px',
-        background: 'var(--neutral-50)',
-        color: 'var(--neutral-500)'
+        background: 'var(--neutral-100)',
+        color: 'var(--neutral-500)',
+        border: '1px solid var(--neutral-200)'
       }}
     >
       {`${

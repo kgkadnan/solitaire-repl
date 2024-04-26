@@ -41,13 +41,15 @@ import { FILE_URLS } from '@/constants/v2/detail-page';
 import { useSearchParams } from 'next/navigation';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import { Toast } from '@/components/v2/common/copy-and-share/toast';
+import { loadImages } from '@/components/v2/common/detail-page/helpers/load-images';
+import { checkImage } from '@/components/v2/common/detail-page/helpers/check-image';
 
 const BidToBuy = () => {
   const [isDetailPage, setIsDetailPage] = useState(false);
   const [detailPageData, setDetailPageData] = useState<any>({});
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [detailImageData, setDetailImageData] = useState<any>({});
-
+  const [validImages, setValidImages] = useState<any>([]);
   const pathName = useSearchParams().get('path');
   const [isLoading, setIsLoading] = useState(false); // State to track loading
 
@@ -180,6 +182,7 @@ const BidToBuy = () => {
 
   const handleTabClick = (index: number) => {
     setActiveTab(index);
+    setRowSelection({});
     if (index === 1 && activeBid.length > 0) {
       activeBid.map((row: any) => {
         if (row.discount > row.my_current_bid) {
@@ -194,13 +197,11 @@ const BidToBuy = () => {
           });
         }
       });
-    } else {
-      setRowSelection({});
     }
   };
   const [activeBid, setActiveBid] = useState<any>();
   const [bid, setBid] = useState<any>();
-  const [time, setTime] = useState();
+  const [time, setTime] = useState('');
   useEffect(() => {
     const currentTime: any = new Date();
     const targetTime: any = new Date(time!);
@@ -469,6 +470,9 @@ const BidToBuy = () => {
       }, 4000);
   }, [isError]);
 
+  useEffect(() => {
+    loadImages(images, setValidImages, checkImage);
+  }, [detailImageData]);
   return (
     <div className="mb-[20px] relative">
       {isLoading && <CustomKGKLoader />}
@@ -479,7 +483,7 @@ const BidToBuy = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(!isModalOpen)}
         selectedImageIndex={0}
-        images={images}
+        images={validImages}
         setIsLoading={setIsLoading}
         fromDetailPage={true}
       />
@@ -512,9 +516,21 @@ const BidToBuy = () => {
         <>
           {' '}
           <div className="flex  py-[4px] items-center justify-between">
-            <p className="text-lMedium font-medium text-neutral900">
-              Bid to Buy
-            </p>
+            <div className="flex gap-3 items-center">
+              <p className="text-lMedium font-medium text-neutral900">
+                Bid to Buy
+              </p>
+              {time && time?.length ? (
+                <div className="text-successMain text-lMedium font-medium">
+                  ACTIVE
+                </div>
+              ) : (
+                <div className="text-visRed text-lMedium font-medium">
+                  INACTIVE
+                </div>
+              )}
+            </div>
+
             {timeDifference !== null && timeDifference >= 0 && (
               <CountdownTimer
                 initialHours={Math.floor(timeDifference / (1000 * 60 * 60))}

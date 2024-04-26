@@ -60,7 +60,7 @@ const ImageModal: React.FC<ModalProps> = ({
       <div className="flex items-center justify-center min-h-screen">
         {/* Background overlay */}
         <div className="fixed inset-0 bg-[#101828] opacity-40"></div>
-        <div className="bg-white rounded-lg p-2 sm:min-h-[350px] sm:min-w-[340px] lg:p-6 z-20 lg:min-h-[700px] lg:min-w-[800px] relative">
+        <div className="bg-white p-2 rounded-[4px] sm:min-h-[350px] sm:min-w-[340px] lg:p-6 z-20 lg:min-h-[700px] lg:min-w-[800px] relative">
           <div className="flex justify-between">
             <div className="w-full flex justify-center">
               <p className="flex items-center font-medium text-neutral-900">
@@ -76,7 +76,7 @@ const ImageModal: React.FC<ModalProps> = ({
             </button>
           </div>
           <div className="flex w-[100%]">
-            <div className="mt-2 sm:max-h-[210px] lg:max-h-[510px] overflow-y-scroll w-[12%]">
+            <div className="mt-2 sm:max-h-[210px] overflow-auto lg:max-h-[510px] w-[12%]">
               <ImageList
                 images={images}
                 selectedImageIndex={imageIndex}
@@ -136,7 +136,12 @@ const ImageModal: React.FC<ModalProps> = ({
                   imageIndex > 0 && handleImageClick(imageIndex - 1);
                 }}
                 disabled={!(imageIndex > 0)}
-                className={`absolute top-1/2 left-4 transform -translate-y-1/2  rounded-[4px] hover:bg-neutral-50  p-2 border-solid border-neutral-200 shadow-sm ${
+                className={`absolute ${
+                  images[imageIndex].name === 'B2B' ||
+                  images[imageIndex].name === 'B2B Sparkle'
+                    ? 'top-[54.8%]'
+                    : 'top-1/2'
+                }  left-4 transform -translate-y-1/2  rounded-[4px] hover:bg-neutral-50  p-2 border-solid border-neutral-200 shadow-sm ${
                   imageIndex <= 0 ? '!bg-neutral200' : 'bg-neutral0'
                 }`}
               >
@@ -148,7 +153,12 @@ const ImageModal: React.FC<ModalProps> = ({
                     handleImageClick(imageIndex + 1);
                 }}
                 disabled={!(imageIndex < images.length - 1)}
-                className={`absolute top-1/2 right-4 transform -translate-y-1/2  rounded-[4px] hover:bg-neutral-50  p-2 border-solid border-neutral-200 shadow-sm ${
+                className={`absolute ${
+                  images[imageIndex].name === 'B2B' ||
+                  images[imageIndex].name === 'B2B Sparkle'
+                    ? 'top-[54.8%]'
+                    : 'top-1/2'
+                }   right-4 transform -translate-y-1/2  rounded-[4px] hover:bg-neutral-50  p-2 border-solid border-neutral-200 shadow-sm ${
                   imageIndex >= images.length - 1
                     ? '!bg-neutral200'
                     : 'bg-neutral0'

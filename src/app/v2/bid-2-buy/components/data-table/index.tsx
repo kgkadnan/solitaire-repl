@@ -313,7 +313,11 @@ const BidToByDataTable = ({
   );
   const renderBottomToolbar = ({ table }: any) => renderFooter(table);
   const NoResultsComponent = () => (
-    <div className="flex flex-col items-center justify-center gap-5 h-[60vh] mt-[50px]">
+    <div
+      className={`flex flex-col items-center justify-center gap-5 ${
+        !rows.length ? 'h-[77vh]' : 'h-[60vh]'
+      }  mt-[50px]`}
+    >
       {(activeTab === 1 && activeCount === 0) ||
       (activeTab === 0 && bidCount === 0) ||
       (activeTab === 2 && historyCount === 0) ? (
@@ -465,7 +469,7 @@ const BidToByDataTable = ({
         height: isFullScreen ? '70vh' : 'calc(100vh - 399px)',
         minHeight: isFullScreen
           ? activeTab === 2
-            ? 'calc(100vh - 125px)'
+            ? 'calc(100vh - 123px)'
             : 'calc(100vh - 175px)'
           : activeTab === 2
           ? isNudge &&
@@ -484,7 +488,7 @@ const BidToByDataTable = ({
           : 'calc(100vh - 295px)',
         maxHeight: isFullScreen
           ? activeTab === 2
-            ? 'calc(100vh - 125px)'
+            ? 'calc(100vh - 123px)'
             : 'calc(100vh - 175px)'
           : activeTab === 2
           ? isNudge &&

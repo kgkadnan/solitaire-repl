@@ -1,33 +1,32 @@
 .notification_dot {
-    display: inline-block;
-    position: relative;
+  display: inline-block;
+  position: relative;
+}
+
+.notification_dot::after {
+  content: '';
+  display: block;
+  width: 8px;
+  height: 8px;
+  background-color: red;
+  border-radius: 50%;
+  position: absolute;
+  top: 5px;
+  right: 3px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 2px rgba(255, 0, 0, 0.4); /* Lighter red color */
   }
-  
-  .notification_dot::after {
-    content: '';
-    display: block;
-    width: 8px;
-    height: 8px;
-    background-color: red;
-    border-radius: 50%;
-    position: absolute;
-    top: 5px;
-    right: 3px;
-    animation: pulse 2s infinite;
+  25% {
+    box-shadow: 0 0 0 5px rgba(255, 0, 0, 0.3); /* Lighter red color */
   }
-  
-  @keyframes pulse {
-    0% {
-      box-shadow: 0 0 0 2px rgba(255, 0, 0, 0.4); /* Lighter red color */
-    }
-    25% {
-      box-shadow: 0 0 0 5px rgba(255, 0, 0, 0.3); /* Lighter red color */
-    }
-    50% {
-      box-shadow: 0 0 0 7px rgba(255, 0, 0, 0.2); /* Lighter red color */
-    }
-    100% {
-      box-shadow: 0 0 0 10px rgba(255, 0, 0, 0); /* Transparent */
-    }
+  50% {
+    box-shadow: 0 0 0 7px rgba(255, 0, 0, 0.2); /* Lighter red color */
   }
-  
+  100% {
+    box-shadow: 0 0 0 10px rgba(255, 0, 0, 0); /* Transparent */
+  }
+}
