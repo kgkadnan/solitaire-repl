@@ -83,6 +83,8 @@ import backWardArrow from '@public/v2/assets/icons/my-diamonds/backwardArrow.svg
 import { NOT_MORE_THAN_300 } from '@/constants/error-messages/search';
 import { NO_STONES_SELECTED } from '@/constants/error-messages/cart';
 import { notificationBadge } from '@/features/notification/notification-slice';
+import { loadImages } from '@/components/v2/common/detail-page/helpers/load-images';
+import { checkImage } from '@/components/v2/common/detail-page/helpers/check-image';
 
 // import useUser from '@/lib/use-auth';
 
@@ -104,7 +106,7 @@ const Dashboard = () => {
 
   const { data: customerData, refetch: refetchCustomerData } =
     useGetCustomerQuery({});
-
+  const [validImages, setValidImages] = useState<any>([]);
   const [activeTab, setActiveTab] = useState<string>('');
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
   const [downloadExcel] = useDownloadExcelMutation();
@@ -1312,6 +1314,10 @@ const Dashboard = () => {
       // }
     }
   };
+
+  useEffect(() => {
+    loadImages(images, setValidImages, checkImage);
+  }, [detailImageData]);
   return (
     <>
       {error !== '' && (
@@ -1322,7 +1328,7 @@ const Dashboard = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(!isModalOpen)}
         selectedImageIndex={0}
-        images={images}
+        images={validImages}
       />
       <DialogComponent
         dialogContent={dialogContent}
@@ -1517,7 +1523,7 @@ const Dashboard = () => {
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
               ? 'h-[87vh]'
-              : 'h-[calc(87vh - 61px)]'
+              : 'h-[92vh]'
           } `}
         >
           {' '}
@@ -1583,11 +1589,11 @@ const Dashboard = () => {
                         </p>
                         {data.label === 'Bid to Buy' &&
                           (!data?.start_at && data?.count > 0 ? (
-                            <div className="text-successMain text-sMedium">
+                            <div className="text-successMain text-sMedium ">
                               ACTIVE
                             </div>
                           ) : (
-                            <div className="text-visRed text-sMedium">
+                            <div className="text-visRed text-sMedium ">
                               INACTIVE
                             </div>
                           ))}
@@ -1806,8 +1812,7 @@ const Dashboard = () => {
               </div>
             )}
           </div>
-          <div className="flex-grow"></div>
-          <div className="border-t-[1px] border-l-[1px] border-r-[1px] rounded-[8px] p-4 flex justify-between border-neutral200 text-lRegular">
+          <div className="border-t-[1px] mt-auto border-l-[1px] border-r-[1px] rounded-[8px] p-4 flex justify-between border-neutral200 text-lRegular">
             {/* for fixed footer */}
             {/* fixed bottom-0 left-[84px] right-0 bg-white  */}
             <div className="text-infoMain  flex gap-6 cursor-pointer">

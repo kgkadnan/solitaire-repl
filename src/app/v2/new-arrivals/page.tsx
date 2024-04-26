@@ -41,13 +41,14 @@ import { FILE_URLS } from '@/constants/v2/detail-page';
 import { useSearchParams } from 'next/navigation';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import { Toast } from '@/components/v2/common/copy-and-share/toast';
+import { loadImages } from '@/components/v2/common/detail-page/helpers/load-images';
 
 const NewArrivals = () => {
   const [isDetailPage, setIsDetailPage] = useState(false);
   const [detailPageData, setDetailPageData] = useState<any>({});
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [detailImageData, setDetailImageData] = useState<any>({});
-
+  const [validImages, setValidImages] = useState<any>([]);
   const pathName = useSearchParams().get('path');
   const [isLoading, setIsLoading] = useState(false); // State to track loading
 
@@ -182,6 +183,7 @@ const NewArrivals = () => {
 
   const handleTabClick = (index: number) => {
     setActiveTab(index);
+    setRowSelection({});
     if (index === 1 && activeBid.length > 0) {
       activeBid.map((row: any) => {
         if (row.current_max_bid > row.my_current_bid) {
@@ -196,8 +198,6 @@ const NewArrivals = () => {
           });
         }
       });
-    } else {
-      setRowSelection({});
     }
   };
   const [activeBid, setActiveBid] = useState<any>();
@@ -490,6 +490,10 @@ const NewArrivals = () => {
         setIsError(false); // Hide the toast notification after some time
       }, 4000);
   }, [isError]);
+
+  useEffect(() => {
+    loadImages(images, setValidImages, checkImage);
+  }, [detailImageData]);
   return (
     <div className="mb-[20px] relative">
       {isLoading && <CustomKGKLoader />}
@@ -500,7 +504,7 @@ const NewArrivals = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(!isModalOpen)}
         selectedImageIndex={0}
-        images={images}
+        images={validImages}
         setIsLoading={setIsLoading}
         fromDetailPage={true}
       />
