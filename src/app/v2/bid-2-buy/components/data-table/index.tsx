@@ -170,7 +170,7 @@ const BidToByDataTable = ({
       modalSetState,
       setRowSelection,
       setIsLoading: setIsLoading,
-      [activeTab === 2 ? 'fromBid2BuyHistory' : 'fromBid2Buy']: true
+      [activeTab === 2 ? 'fromBidToBuyHistory' : 'fromBidToBuy']: true
     });
   };
 
@@ -312,10 +312,11 @@ const BidToByDataTable = ({
     </div>
   );
   const renderBottomToolbar = ({ table }: any) => renderFooter(table);
+
   const NoResultsComponent = () => (
     <div
       className={`flex flex-col items-center justify-center gap-5 ${
-        !rows.length ? 'h-[77vh]' : 'h-[60vh]'
+        isFullScreen ? 'h-[69vh]' : !rows.length ? 'h-[55vh]' : 'h-[60vh]'
       }  mt-[50px]`}
     >
       {(activeTab === 1 && activeCount === 0) ||
@@ -328,6 +329,8 @@ const BidToByDataTable = ({
             can bid to buy. Stay tuned.
           </p>
         </>
+      ) : rows.length ? (
+        ''
       ) : (
         <CustomKGKLoader />
       )}

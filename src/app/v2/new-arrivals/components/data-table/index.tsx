@@ -346,7 +346,11 @@ const NewArrivalDataTable = ({
   );
   const renderBottomToolbar = ({ table }: any) => renderFooter(table);
   const NoResultsComponent = () => (
-    <div className="flex flex-col items-center justify-center gap-5 h-[60vh] mt-[50px]">
+    <div
+      className={`flex flex-col items-center justify-center gap-5 ${
+        isFullScreen ? 'h-[69vh]' : !rows.length ? 'h-[55vh]' : 'h-[60vh]'
+      }  mt-[50px]`}
+    >
       {(activeTab === 1 && activeCount === 0) ||
       (activeTab === 0 && bidCount === 0) ||
       (activeTab === 2 && historyCount === 0) ? (
@@ -357,6 +361,8 @@ const NewArrivalDataTable = ({
             additions soon.
           </p>
         </>
+      ) : rows.length ? (
+        ''
       ) : (
         <CustomKGKLoader />
       )}
