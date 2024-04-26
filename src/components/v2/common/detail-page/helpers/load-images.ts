@@ -16,7 +16,27 @@ export async function loadImages(
         if (image.url === 'null' || image.url === null || !image.url.length) {
           isValid = false;
         } else {
-          isValid = true;
+          let xhr = new XMLHttpRequest();
+          xhr.open('GET', image.url);
+
+          // request state change event
+          xhr.onreadystatechange = function () {
+            // request completed?
+            if (xhr.readyState !== 4) return;
+
+            if (xhr.status === 200) {
+              isValid = true;
+              // request successful - show response
+              console.log(xhr.responseText);
+            } else {
+              isValid = false;
+              // request error
+              console.log('HTTP error', xhr.status, xhr.statusText);
+            }
+          };
+
+          // start request
+          xhr.send();
         }
       } else {
         isValid = await checkImage(image.url);
