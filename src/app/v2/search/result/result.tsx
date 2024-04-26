@@ -1125,6 +1125,9 @@ const Result = ({
               handleDetailPage={handleDetailPage}
               identifier={'result'}
               setCompareStoneData={setCompareStoneData}
+              compareStoneData={compareStoneData}
+              setIsError={setIsError}
+              setErrorText={setErrorText}
               // confirmStoneApiCall={confirmStoneApiCall}
             />
           ) : (
