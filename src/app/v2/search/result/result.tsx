@@ -85,6 +85,8 @@ import { Toast } from '@/components/v2/common/copy-and-share/toast';
 import CompareStone from './components/test';
 import { statusCode } from '@/constants/enums/status-code';
 import { formatNumber } from '@/utils/fix-two-digit-number';
+import { loadImages } from '@/components/v2/common/detail-page/helpers/load-images';
+import { checkImage } from '@/components/v2/common/detail-page/helpers/check-image';
 
 // Column mapper outside the component to avoid re-creation on each render
 
@@ -122,7 +124,7 @@ const Result = ({
   const [saveSearchName, setSaveSearchName] = useState('');
   const [data, setData] = useState([]);
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
-
+  const [validImages, setValidImages] = useState<any>([]);
   const [isDetailPage, setIsDetailPage] = useState(false);
   const [detailPageData, setDetailPageData] = useState<any>({});
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -986,6 +988,10 @@ const Result = ({
       }, 4000);
   }, [isError]);
 
+  useEffect(() => {
+    loadImages(images, setValidImages, checkImage);
+  }, [detailImageData]);
+
   return (
     <div className="relative">
       {isError && (
@@ -996,7 +1002,7 @@ const Result = ({
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(!isModalOpen)}
         selectedImageIndex={0}
-        images={images}
+        images={validImages}
         fromDetailPage={true}
       />
       <DialogComponent

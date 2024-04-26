@@ -19,6 +19,7 @@ export class SocketManager {
   initAndConnect() {
     this.socket.on('connect', () => {
       this.emit('get_bid_stones');
+      this.emit('get_bidtobuy_stones');
     });
   }
 

@@ -41,6 +41,9 @@ import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
 import { kycStatus } from '@/constants/enums/kyc';
 import { formatNumber } from '@/utils/fix-two-digit-number';
+import { loadImages } from './helpers/load-images';
+import { checkImage } from './helpers/check-image';
+import { ImagesType } from './interfrace';
 
 export function DiamondDetailsComponent({
   data,
@@ -63,7 +66,7 @@ export function DiamondDetailsComponent({
 }) {
   const [tableData, setTableData] = useState<any>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-
+  const [validImages, setValidImages] = useState<ImagesType[]>([]);
   const { errorSetState } = useErrorStateManagement();
 
   const { setIsError, setErrorText } = errorSetState;
@@ -142,6 +145,10 @@ export function DiamondDetailsComponent({
       showDivider: true
     }
   ];
+
+  useEffect(() => {
+    loadImages(images, setValidImages, checkImage);
+  }, [tableData?.lot_id, tableData?.certificate_url]);
 
   const copyLink = () => {
     const link = `${process.env.NEXT_PUBLIC_DNA_URL}${filterData?.public_url
@@ -234,7 +241,7 @@ export function DiamondDetailsComponent({
           }`}
         >
           <div className="w-full 2xl:hidden">
-            <ImageSlider images={images} setIsLoading={setIsLoading} />
+            <ImageSlider images={validImages} setIsLoading={setIsLoading} />
           </div>
           <div
             className={`hidden 2xl:block mr-5 ${
@@ -246,14 +253,14 @@ export function DiamondDetailsComponent({
             } overflow-y-scroll`}
           >
             <ImageList
-              images={images}
+              images={validImages}
               selectedImageIndex={selectedImageIndex}
               onImageClick={handleImageClick}
             />
           </div>
           <div className="hidden 2xl:block">
             <ImagePreview
-              images={images}
+              images={validImages}
               selectedImageIndex={selectedImageIndex}
               setIsLoading={setIsLoading}
             />

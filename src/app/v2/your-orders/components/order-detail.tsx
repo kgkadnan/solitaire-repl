@@ -34,7 +34,8 @@ import ImageModal from '@/components/v2/common/detail-page/components/image-moda
 import { FILE_URLS } from '@/constants/v2/detail-page';
 import { getShapeDisplayName } from '@/utils/v2/detail-page';
 import { formatNumber } from '@/utils/fix-two-digit-number';
-
+import { loadImages } from '@/components/v2/common/detail-page/helpers/load-images';
+import { checkImage } from '@/components/v2/common/detail-page/helpers/check-image';
 interface IOrderDetail {
   productDetailData: any;
   goBackToListView: () => void;
@@ -54,7 +55,7 @@ const OrderDetail: React.FC<IOrderDetail> = ({
     useLazyGetManageListingSequenceQuery<IManageListingSequenceResponse>();
 
   const [downloadExcel] = useDownloadExcelMutation();
-
+  const [validImages, setValidImages] = useState<any>([]);
   const [isDetailPage, setIsDetailPage] = useState(false);
   const [detailPageData, setDetailPageData] = useState<any>({});
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -331,6 +332,9 @@ const OrderDetail: React.FC<IOrderDetail> = ({
       showDivider: true
     }
   ];
+  useEffect(() => {
+    loadImages(images, setValidImages, checkImage);
+  }, [detailImageData]);
 
   return (
     <>
@@ -338,7 +342,7 @@ const OrderDetail: React.FC<IOrderDetail> = ({
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(!isModalOpen)}
         selectedImageIndex={0}
-        images={images}
+        images={validImages}
         setIsLoading={setIsLoading}
         fromDetailPage={true}
       />{' '}

@@ -14,7 +14,7 @@ import searchIcon from '@public/v2/assets/icons/data-table/search-icon.svg';
 import micIcon from '@public/v2/assets/icons/dashboard/mic.svg';
 import editIcon from '@public/v2/assets/icons/saved-search/edit-button.svg';
 import threeDotsSvg from '@public/v2/assets/icons/threedots.svg';
-
+import BidHammer from '@public/v2/assets/icons/dashboard/bid-hammer.svg';
 import Image from 'next/image';
 import { handleCardClick } from './search/saved-search/helpers/handle-card-click';
 import {
@@ -83,6 +83,8 @@ import backWardArrow from '@public/v2/assets/icons/my-diamonds/backwardArrow.svg
 import { NOT_MORE_THAN_300 } from '@/constants/error-messages/search';
 import { NO_STONES_SELECTED } from '@/constants/error-messages/cart';
 import { notificationBadge } from '@/features/notification/notification-slice';
+import { loadImages } from '@/components/v2/common/detail-page/helpers/load-images';
+import { checkImage } from '@/components/v2/common/detail-page/helpers/check-image';
 
 // import useUser from '@/lib/use-auth';
 
@@ -92,13 +94,19 @@ interface ITabs {
   data: any;
 }
 
+function formatDateString(dateString: string) {
+  const date = new Date(dateString);
+  const day = date.getDate();
+  const month = date.toLocaleString('default', { month: 'short' });
+  return `${day} ${month}`;
+}
 const Dashboard = () => {
   const router = useRouter();
   const dispatch = useDispatch();
 
   const { data: customerData, refetch: refetchCustomerData } =
     useGetCustomerQuery({});
-
+  const [validImages, setValidImages] = useState<any>([]);
   const [activeTab, setActiveTab] = useState<string>('');
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
   const [downloadExcel] = useDownloadExcelMutation();
@@ -152,9 +160,10 @@ const Dashboard = () => {
       label: 'Bid to Buy',
       icon: <BidToBuyIcon />,
       color: optionsClasses[2],
-      count: 0,
-      isAvailable: false,
-      link: '/v2/my-cart'
+      count: customerData?.customer?.bid_to_buy?.count,
+      start_at: customerData?.customer?.bid_to_buy?.starts_at,
+      isAvailable: true,
+      link: '/v2/bid-2-buy'
     },
     {
       label: 'My Appointments',
@@ -1305,6 +1314,10 @@ const Dashboard = () => {
       // }
     }
   };
+
+  useEffect(() => {
+    loadImages(images, setValidImages, checkImage);
+  }, [detailImageData]);
   return (
     <>
       {error !== '' && (
@@ -1315,7 +1328,7 @@ const Dashboard = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(!isModalOpen)}
         selectedImageIndex={0}
-        images={images}
+        images={validImages}
       />
       <DialogComponent
         dialogContent={dialogContent}
@@ -1510,13 +1523,13 @@ const Dashboard = () => {
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
               ? 'h-[87vh]'
-              : 'h-[calc(87vh - 61px)]'
+              : 'h-[92vh]'
           } `}
         >
           {' '}
           <div className="flex flex-col gap-4 mb-[20px]">
             <div
-              className={`bg-cover bg-no-repeat flex justify-center flex-col items-center h-[220px] gap-5`}
+              className={`bg-cover ml-[-20px] mr-[-16px]  bg-no-repeat flex justify-center flex-col items-center h-[220px] gap-5`}
               style={{
                 backgroundImage: 'url(/gradient.png)'
               }}
@@ -1545,6 +1558,7 @@ const Dashboard = () => {
                 </div>
               </div>
             </div>
+
             <div className="flex justify-between gap-4">
               {options.map(data => {
                 return (
@@ -1568,17 +1582,65 @@ const Dashboard = () => {
                       {' '}
                       {data.icon}{' '}
                     </div>
-                    <div>
-                      <p className="text-neutral600 text-mRegular">
-                        {data.label}
-                      </p>
-                      <p className={`text-neutral900 text-headingS medium `}>
-                        {data.isAvailable
-                          ? data.count === 0
-                            ? '-'
-                            : data.count
-                          : 'Coming Soon'}
-                      </p>
+                    <div className="w-full">
+                      <div className="flex justify-between">
+                        <p className="text-neutral600 text-mRegular">
+                          {data.label}
+                        </p>
+                        {data.label === 'Bid to Buy' &&
+                          (!data?.start_at && data?.count > 0 ? (
+                            <div className="text-successMain text-sMedium ">
+                              ACTIVE
+                            </div>
+                          ) : (
+                            <div className="text-visRed text-sMedium ">
+                              INACTIVE
+                            </div>
+                          ))}
+                      </div>
+
+                      {data.label === 'Bid to Buy' ? (
+                        <>
+                          {data.start_at && data.count ? (
+                            <div className=" mt-1 flex items-center gap-2 rounded-[4px] px-1 h-[26px] bg-[#F1FAF8]">
+                              <Image
+                                src={BidHammer}
+                                alt="Bid to Buy"
+                                className="mb-2"
+                              />
+                              <p className="m-0 p-0 text-neutral-900 text-lRegular">
+                                Bid starts on {formatDateString(data.start_at)}
+                              </p>
+                            </div>
+                          ) : data.start_at && !data.count ? (
+                            <div className=" mt-1 flex items-center gap-2 rounded-[4px] px-1 h-[26px] bg-[#F1FAF8]">
+                              <Image
+                                src={BidHammer}
+                                alt="Bid to Buy"
+                                className="mb-2"
+                              />
+                              <p className="m-0 p-0 text-neutral-900 text-lRegular">
+                                Stay tuned
+                              </p>
+                            </div>
+                          ) : (
+                            !data?.start_at &&
+                            data?.count > 0 && (
+                              <div className="text-neutral-900 text-headingS">
+                                {data?.count}
+                              </div>
+                            )
+                          )}
+                        </>
+                      ) : (
+                        <p className={`text-neutral900 text-headingS medium `}>
+                          {data.isAvailable
+                            ? data.count === 0
+                              ? '-'
+                              : data.count
+                            : 'Coming Soon'}
+                        </p>
+                      )}
                     </div>
                   </div>
                 );
@@ -1750,10 +1812,7 @@ const Dashboard = () => {
               </div>
             )}
           </div>
-          <div
-            className="border-t-[1px] border-l-[1px] border-r-[1px] rounded-[8px] p-4 flex justify-between border-neutral200 text-lRegular 
-mt-auto"
-          >
+          <div className="border-t-[1px] mt-auto border-l-[1px] border-r-[1px] rounded-[8px] p-4 flex justify-between border-neutral200 text-lRegular">
             {/* for fixed footer */}
             {/* fixed bottom-0 left-[84px] right-0 bg-white  */}
             <div className="text-infoMain  flex gap-6 cursor-pointer">
