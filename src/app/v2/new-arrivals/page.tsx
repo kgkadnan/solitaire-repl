@@ -42,6 +42,7 @@ import { useSearchParams } from 'next/navigation';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import { Toast } from '@/components/v2/common/copy-and-share/toast';
 import { loadImages } from '@/components/v2/common/detail-page/helpers/load-images';
+import { checkImage } from '@/components/v2/common/detail-page/helpers/check-image';
 
 const NewArrivals = () => {
   const [isDetailPage, setIsDetailPage] = useState(false);
