@@ -28,7 +28,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images, setIsLoading }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [showDownloadButton, setShowDownloadButton] = useState<string[]>([]);
   const [imageName, setImageName] = useState('');
-  const [validImages, setValidImages] = useState<ImagesType[]>([]);
+  // const [validImages, setValidImages] = useState<ImagesType[]>([]);
 
   function SampleNextArrow(props: any) {
     const { className, onClick, currentSlide, slideCount } = props;
@@ -77,7 +77,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images, setIsLoading }) => {
     arrows: true,
     afterChange: (current: number) => {
       setCurrentImageIndex(current);
-      setImageName(validImages[current].name);
+      setImageName(images[current].name);
     },
     appendDots: (dots: any) => (
       <div
@@ -97,19 +97,21 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images, setIsLoading }) => {
     event.target.src = NoImageFound.src; // Set the fallback image when the original image fails to load
   };
 
-  useEffect(() => {
-    loadImages(images, setValidImages, checkImage);
-  }, [images]);
+  // useEffect(() => {
+  //   loadImages(images, setValidImages, checkImage);
+  // }, [images]);
 
   useEffect(() => {
-    validImages && setImageName(validImages[0]?.name);
-  }, [validImages]);
+    setImageName(images[0]?.name);
+  }, [images]);
+
+  // console.log('validImages', validImages);
 
   return (
     <div className="details-slider">
       <div className="w-[35%]">
         <Slider {...settings}>
-          {validImages.map((img, index) => {
+          {images.map((img, index) => {
             return (
               <div
                 key={index}
@@ -232,7 +234,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images, setIsLoading }) => {
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(!isModalOpen)}
           selectedImageIndex={currentImageIndex}
-          images={validImages}
+          images={images}
           setIsLoading={setIsLoading}
         />
       </div>

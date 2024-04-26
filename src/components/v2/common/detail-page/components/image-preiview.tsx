@@ -55,11 +55,11 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
     }
   }, []);
 
-  const [validImages, setValidImages] = useState<any>([]);
+  // const [validImages, setValidImages] = useState<any>([]);
 
-  useEffect(() => {
-    loadImages(images, setValidImages, checkImage);
-  }, [images]);
+  // useEffect(() => {
+  //   loadImages(images, setValidImages, checkImage);
+  // }, [images]);
 
   return (
     <>
@@ -67,7 +67,7 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
         className="scroll-adjust-custom lg:overflow-y-scroll h-[100%]"
         ref={containerRef}
       >
-        {validImages.map((image: any, index: number) => {
+        {images.map((image: any, index: number) => {
           // const image = images[validImageIndex];
           return (
             <>
@@ -161,7 +161,7 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(!isModalOpen)}
         selectedImageIndex={openDialogImageIndex}
-        images={validImages}
+        images={images}
         setIsLoading={setIsLoading}
       />
     </>
