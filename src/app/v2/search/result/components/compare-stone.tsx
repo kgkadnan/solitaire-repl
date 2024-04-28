@@ -7,10 +7,19 @@ import styles from './compare.module.scss';
 import ActionButton from '@/components/v2/common/action-button';
 import { ManageLocales } from '@/utils/v2/translate';
 import { FILE_URLS } from '@/constants/v2/detail-page';
-import { MINIMUM_STONES } from '@/constants/error-messages/compare-stone';
+import {
+  MINIMUM_STONES,
+  NO_STONES_SELECTED
+} from '@/constants/error-messages/compare-stone';
 import CloseButton from '@public/v2/assets/icons/close.svg';
 import CheckboxComponent from '@/components/v2/common/checkbox';
 import Media from '@public/v2/assets/icons/data-table/Media.svg';
+import { NOT_MORE_THAN_300 } from '@/constants/error-messages/search';
+import confirmIcon from '@public/v2/assets/icons/modal/confirm.svg';
+import { useAddCartMutation } from '@/features/api/cart';
+import { useRouter } from 'next/navigation';
+import errorSvg from '@public/v2/assets/icons/modal/error.svg';
+import { handleConfirmStone } from '../helpers/handle-confirm-stone';
 
 const CompareStone = ({
   rows,
@@ -19,22 +28,26 @@ const CompareStone = ({
   activeTab,
   isFrom,
   handleDetailImage,
-  handleDetailPage,
-  identifier,
   setCompareStoneData,
   compareStoneData,
   setIsError,
-  setErrorText
+  setErrorText,
+  setIsLoading,
+  setIsDialogOpen,
+  setDialogContent,
+  setIsConfirmStone,
+  setConfirmStoneData,
+  setIsDetailPage
 }: any) => {
   const [mappingColumn, setMappingColumn] = useState<any>({});
 
   const [breadCrumLabel, setBreadCrumLabel] = useState('');
-  const [compareValues, setCompareValues] = useState({});
   const { checkboxState, checkboxSetState } = useCheckboxStateManagement();
   const { selectedCheckboxes } = checkboxState;
   const { setSelectedCheckboxes } = checkboxSetState;
-  // const { errorSetState } = useErrorStateManagement();
-  // const { setIsError, setErrorText } = errorSetState;
+  const [addCart] = useAddCartMutation();
+  const router = useRouter();
+
   useEffect(() => {
     if (isFrom === 'My Cart') {
       setBreadCrumLabel('My Cart');
@@ -59,7 +72,6 @@ const CompareStone = ({
       }
     }
   }, []);
-  console.log(columns, 'columns');
   useEffect(() => {
     updateState(columns);
   }, [columns]);
@@ -88,21 +100,123 @@ const CompareStone = ({
     setIsError(false);
   };
   const handleClose: HandleCloseType = (event, id) => {
-    // const compareStones = JSON.parse(
-    //   localStorage.getItem('compareStone') ?? '[]'
-    // );
-
-    const updatedStones = compareStoneData.filter(
-      (stone: IProduct) => stone.id !== id
-    );
-
-    // localStorage.setItem('compareStone', JSON.stringify(updatedStones));
-
     const filterData = rows.filter((item: IProduct) => item.id !== id);
-    // console.log(filterData, 'filterData');
     setCompareStoneData(filterData);
   };
-  console.log(mappingColumn, '----------->>>>>>');
+  const handleAddToCartFromCompareStone = () => {
+    if (selectedCheckboxes.length > 300) {
+      setIsError(true);
+      setErrorText(NOT_MORE_THAN_300);
+    } else if (!selectedCheckboxes.length) {
+      setIsError(true);
+      setErrorText(NO_STONES_SELECTED);
+    } else {
+      setIsLoading(true);
+      const variantIds = selectedCheckboxes
+        ?.map((id: string) => {
+          const myCartCheck: IProduct | object =
+            rows.find((row: IProduct) => {
+              return row?.id === id;
+            }) ?? {};
+
+          if (myCartCheck && 'variants' in myCartCheck) {
+            return myCartCheck.variants[0]?.id;
+          }
+          return '';
+        })
+        .filter(Boolean);
+
+      // If there are variant IDs, add to the cart
+      if (variantIds.length) {
+        addCart({
+          variants: variantIds
+        })
+          .unwrap()
+          .then((res: any) => {
+            setIsLoading(false);
+            setIsDialogOpen(true);
+            setDialogContent(
+              <>
+                <div className="absolute left-[-84px] top-[-84px]">
+                  <Image src={confirmIcon} alt="confirmIcon" />
+                </div>
+                <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+                  <h1 className="text-headingS text-neutral900 !font-medium	">
+                    {res?.message}
+                  </h1>
+                  <ActionButton
+                    actionButtonData={[
+                      {
+                        variant: 'secondary',
+                        label: ManageLocales('app.modal.continue'),
+                        handler: () => setIsDialogOpen(false),
+                        customStyle: 'flex-1 w-full h-10'
+                      },
+                      {
+                        variant: 'primary',
+                        label: 'Go to "My Cart"',
+                        handler: () => {
+                          router.push('/v2/my-cart');
+                        },
+                        customStyle: 'flex-1 w-full h-10'
+                      }
+                    ]}
+                  />
+                </div>
+              </>
+            );
+            // On success, show confirmation dialog and update badge
+            setIsError(false);
+            setErrorText('');
+            // triggerProductApi({
+            //   url: searchUrl,
+            //   limit: LISTING_PAGE_DATA_LIMIT,
+            //   offset: 0
+            // }).then(res => {
+            //   dataTableSetState.setRows(res.data?.products);
+            //   setRowSelection({});
+            //   setErrorText('');
+            //   setData(res.data);
+            // });
+            // dispatch(notificationBadge(true));
+          })
+          .catch(error => {
+            setIsLoading(false);
+            // On error, set error state and error message
+
+            setIsDialogOpen(true);
+            setDialogContent(
+              <>
+                <div className="absolute left-[-84px] top-[-84px]">
+                  <Image src={errorSvg} alt="errorSvg" />
+                </div>
+                <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+                  <p className="text-neutral600 text-mRegular">
+                    {error?.data?.message}
+                  </p>
+                  <ActionButton
+                    actionButtonData={[
+                      {
+                        variant: 'primary',
+                        label: ManageLocales('app.modal.okay'),
+                        handler: () => {
+                          setIsDialogOpen(false);
+                        },
+                        customStyle: 'flex-1 w-full h-10'
+                      }
+                    ]}
+                  />
+                </div>
+              </>
+            );
+          });
+        // Clear the selected checkboxes
+        // setRowSelection({});
+        setSelectedCheckboxes([]);
+      }
+      // }
+    }
+  };
   return (
     <div className="w-[calc(100vw-116px)] h-[calc(100vh-120px)] ">
       {' '}
@@ -171,24 +285,25 @@ const CompareStone = ({
                     <div className="flex justify-between">
                       <div>
                         <CheckboxComponent
-                          onClick={() => {}}
+                          onClick={() => handleClick(items.id)}
                           data-testid={'compare stone checkbox'}
-                          isChecked={true}
-                          // isChecked={isCheck.includes(items.id) || false}
+                          isChecked={
+                            selectedCheckboxes.includes(items.id) || false
+                          }
                         />
                       </div>
                       <div>
                         <button
                           onClick={e => {
                             e.stopPropagation();
-                            // handleDetailImage({ row: row.original });
+                            handleDetailImage({ row: items });
                           }}
                         >
                           <Image src={Media} alt="Media" />
                         </button>
                       </div>
                       <div
-                        className={styles.closeButton}
+                        className={`${styles.closeButton} cursor-pointer`}
                         data-testid={'Remove Stone'}
                         onClick={event =>
                           rows.length > 2
@@ -245,14 +360,31 @@ const CompareStone = ({
               variant: 'secondary',
               label: 'Add to Cart',
               handler: () => {
-                // goBackToListView();
+                handleAddToCartFromCompareStone();
               }
             },
 
             {
               variant: 'primary',
               label: ManageLocales('app.confirmStone.footer.confirmStone'),
-              handler: () => {}
+              handler: () => {
+                const result = selectedCheckboxes.reduce(
+                  (obj, item) => {
+                    obj[item] = true;
+                    return obj;
+                  },
+                  {} as { [key: string]: boolean }
+                );
+                handleConfirmStone({
+                  selectedRows: result,
+                  rows: rows,
+                  setIsError,
+                  setErrorText,
+                  setIsConfirmStone,
+                  setConfirmStoneData,
+                  setIsDetailPage
+                });
+              }
             }
           ]}
         />

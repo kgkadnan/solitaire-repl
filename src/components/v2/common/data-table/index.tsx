@@ -972,19 +972,16 @@ const DataTable = ({
                     label: ManageLocales(
                       'app.search.actionButton.bookAppointment'
                     ),
-                    handler: () => {}
+                    handler: () => {},
+                    commingSoon: true
                   },
-                  {
-                    label: ManageLocales(
-                      'app.search.actionButton.compareStone'
-                    ),
-                    handler: () => {}
-                  },
+
                   {
                     label: ManageLocales(
                       'app.search.actionButton.findMatchingPair'
                     ),
-                    handler: () => {}
+                    handler: () => {},
+                    commingSoon: true
                   },
                   {
                     label: 'Compare Stone',
@@ -999,7 +996,7 @@ const DataTable = ({
                       })
                   }
                 ]}
-                isDisable={false}
+                isDisable={true}
               />
             </div>
           </div>
@@ -1046,33 +1043,36 @@ const DataTable = ({
                   />
                 }
                 dropdownMenu={[
-                  {
-                    label: ManageLocales(
-                      'app.myCart.actionButton.compareStone'
-                    ),
-                    handler: () => {},
-                    isHidden: activeTab === SOLD_STATUS
-                  },
+                  // {
+                  //   label: ManageLocales(
+                  //     'app.myCart.actionButton.compareStone'
+                  //   ),
+                  //   handler: () => {},
+                  //   isHidden: activeTab === SOLD_STATUS
+                  // },
                   {
                     label: ManageLocales(
                       'app.myCart.actionButton.findMatchingPair'
                     ),
                     handler: () => {},
-                    isHidden: activeTab !== AVAILABLE_STATUS
+                    isHidden: activeTab !== AVAILABLE_STATUS,
+                    commingSoon: true
                   },
                   {
                     label: ManageLocales(
                       'app.myCart.actionButton.bookAppointment'
                     ),
                     handler: () => {},
-                    isHidden: activeTab !== AVAILABLE_STATUS
+                    isHidden: activeTab !== AVAILABLE_STATUS,
+                    commingSoon: true
                   },
                   {
                     label: ManageLocales(
                       'app.myCart.actionButton.viewSimilarStone'
                     ),
                     handler: () => {},
-                    isHidden: activeTab === AVAILABLE_STATUS
+                    isHidden: activeTab === AVAILABLE_STATUS,
+                    commingSoon: true
                   }
                 ]}
                 isDisable={true}
