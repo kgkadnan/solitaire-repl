@@ -37,7 +37,8 @@ const CompareStone = ({
   setDialogContent,
   setIsConfirmStone,
   setConfirmStoneData,
-  setIsDetailPage
+  setIsDetailPage,
+  setIsCompareStone
 }: any) => {
   const [mappingColumn, setMappingColumn] = useState<any>({});
 
@@ -244,27 +245,30 @@ const CompareStone = ({
       </div>
       <div className="flex  h-[calc(100%-120px)] overflow-auto border-t-[1px] border-b-[1px] border-neutral200">
         <div className="flex ">
-          <div className="sticky left-0  min-h-[2080px] text-neutral700 text-mMedium font-medium w-[150px] z-1">
-            <div className="h-[234px] sticky top-0 text-center items-center flex justify-center border-[0.5px] border-neutral200 z-2">
+          <div
+            className="sticky left-0  min-h-[2080px] text-neutral700 text-mMedium font-medium w-[150px] !z-5"
+            style={{ zIndex: 5 }}
+          >
+            <div className="h-[234px] sticky top-0 text-center items-center flex justify-center border-[0.5px] border-neutral200 bg-neutral50">
               Media
             </div>
             <div className=" flex flex-col">
               {Object.keys(mappingColumn).map(key => (
                 <div
                   key={key}
-                  className="py-2 px-4 border-[1px] border-neutral200 h-[38px]"
+                  className="py-2 px-4 border-[1px] border-neutral200 h-[38px] bg-neutral50"
                 >
                   {key !== 'id' && mappingColumn[key]}
                 </div>
               ))}
             </div>
           </div>
-          <div className=" bg-neutral0 text-neutral900 text-mMedium font-medium min-h-[2080px]">
+          <div className=" bg-neutral0 text-neutral900 text-mMedium font-medium min-h-[2080px] !z-2">
             <div className="flex h-[234px] sticky top-0 ">
               {rows.map((items: IProduct) => (
                 <div key={items.id} className="w-[200px]">
                   <div
-                    className={`h-[234px] flex flex-col border-[0.5px] border-neutral200  p-2 gap-[10px]`}
+                    className={`h-[234px] flex flex-col border-[0.5px] border-neutral200 bg-neutral0 p-2 gap-[10px]`}
                   >
                     <div className="w-[180px] h-[175px]">
                       <Image
@@ -331,7 +335,7 @@ const CompareStone = ({
                   {Object.keys(mappingColumn).map(key => (
                     <div
                       key={key}
-                      className="py-2 px-4 border-[1px] border-neutral200 h-[38px] whitespace-nowrap overflow-hidden overflow-ellipsis"
+                      className="py-2 px-4 border-[1px] border-neutral200 h-[38px] whitespace-nowrap overflow-hidden overflow-ellipsis  bg-neutral0"
                     >
                       {key !== 'id' ? diamond[key] || '-' : ''}
                     </div>
@@ -368,6 +372,7 @@ const CompareStone = ({
               variant: 'primary',
               label: ManageLocales('app.confirmStone.footer.confirmStone'),
               handler: () => {
+                // setIsCompare
                 const result = selectedCheckboxes.reduce(
                   (obj, item) => {
                     obj[item] = true;

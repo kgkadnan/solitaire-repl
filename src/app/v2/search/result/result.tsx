@@ -1126,6 +1126,7 @@ const Result = ({
               setIsConfirmStone={setIsConfirmStone}
               setConfirmStoneData={setConfirmStoneData}
               setIsDetailPage={setIsDetailPage}
+              setIsCompareStone={setIsCompareStone}
             />
           ) : (
             <div className="">

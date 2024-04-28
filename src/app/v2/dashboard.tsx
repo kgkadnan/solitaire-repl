@@ -928,6 +928,8 @@ const Dashboard = () => {
     setIsDetailPage(true);
     setIsConfirmStone(false);
     setConfirmStoneData([]);
+    setIsCompareStone(false);
+    setCompareStoneData([]);
   };
 
   const renderAddCommentDialogs = () => {
@@ -1435,7 +1437,7 @@ const Dashboard = () => {
             columns={columnData}
             goBackToListView={goBackToListView}
             activeTab={activeTab}
-            isFrom={breadCrumLabel}
+            isFrom={'Dashboard'}
             handleDetailImage={handleDetailImage}
             setCompareStoneData={setCompareStoneData}
             compareStoneData={compareStoneData}
@@ -1447,6 +1449,7 @@ const Dashboard = () => {
             setIsConfirmStone={setIsConfirmStone}
             setConfirmStoneData={setConfirmStoneData}
             setIsDetailPage={setIsDetailPage}
+            setIsCompareStone={setIsCompareStone}
           />
         </div>
       ) : isDetailPage && searchData && Object.keys(searchData).length > 0 ? (
