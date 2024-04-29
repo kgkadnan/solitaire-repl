@@ -39,7 +39,13 @@ const VolumeDiscount: React.FC<any> = ({
             </p>
           </div>
         </div>
-        <div className="px-[12px] border-b-[1px] border-neutral200">slider</div>
+        <div className="px-[12px] border-b-[1px] border-neutral200">
+          <div className="text-sMedium text-neutral600 font-medium">
+            Spend <span className="font-semiBold">$100K</span> more within{' '}
+            <span className="font-semiBold">01</span> hours to get a 2% volume
+            discount
+          </div>
+        </div>
         <div>
           {timeDifference !== null && (
             <CountdownTimer
