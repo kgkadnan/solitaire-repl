@@ -134,7 +134,7 @@ const Table = ({
         // '&.MuiPaper-root': {
         //   borderRadius: '8px !important'
         // },
-        borderRadius: '8px',
+        borderRadius: '8px 8px 0px 0px ',
         border: 'none'
       }
     },
