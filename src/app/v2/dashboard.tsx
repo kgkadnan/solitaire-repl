@@ -85,6 +85,7 @@ import { NO_STONES_SELECTED } from '@/constants/error-messages/cart';
 import { notificationBadge } from '@/features/notification/notification-slice';
 import { loadImages } from '@/components/v2/common/detail-page/helpers/load-images';
 import { checkImage } from '@/components/v2/common/detail-page/helpers/check-image';
+import CompareStone from './search/result/components/compare-stone';
 
 // import useUser from '@/lib/use-auth';
 
@@ -127,6 +128,9 @@ const Dashboard = () => {
   const [breadCrumLabel, setBreadCrumLabel] = useState('');
   const [isConfirmStone, setIsConfirmStone] = useState(false);
   const [confirmStoneData, setConfirmStoneData] = useState<IProduct[]>([]);
+  const [compareStoneData, setCompareStoneData] = useState<IProduct[]>([]);
+  const [isCompareStone, setIsCompareStone] = useState(false);
+
   const [isAddCommentDialogOpen, setIsAddCommentDialogOpen] = useState(false);
   const [textAreaValue, setTextAreaValue] = useState('');
   const [detailImageData, setDetailImageData] = useState<any>({});
@@ -924,6 +928,8 @@ const Dashboard = () => {
     setIsDetailPage(true);
     setIsConfirmStone(false);
     setConfirmStoneData([]);
+    setIsCompareStone(false);
+    setCompareStoneData([]);
   };
 
   const renderAddCommentDialogs = () => {
@@ -1409,24 +1415,57 @@ const Dashboard = () => {
                   label: ManageLocales(
                     'app.search.actionButton.bookAppointment'
                   ),
-                  handler: () => {}
+                  handler: () => {},
+                  commingSoon: true
                 },
                 {
                   label: ManageLocales(
                     'app.search.actionButton.findMatchingPair'
                   ),
-                  handler: () => {}
+                  handler: () => {},
+                  commingSoon: true
                 }
               ]}
               isDisable={true}
             />
           </div>
         </>
+      ) : isCompareStone ? (
+        <div className="flex">
+          <div className="flex py-[8px] items-center ">
+            <p className="text-lMedium font-medium text-neutral900">
+              Dashboard Comparison Overview
+            </p>
+          </div>
+          <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow mt-[16px]">
+            <CompareStone
+              rows={compareStoneData}
+              columns={columnData}
+              goBackToListView={goBackToListView}
+              activeTab={activeTab}
+              isFrom={'Dashboard'}
+              handleDetailImage={handleDetailImage}
+              setCompareStoneData={setCompareStoneData}
+              compareStoneData={compareStoneData}
+              setIsError={setIsError}
+              setErrorText={setError}
+              setIsLoading={setIsLoading}
+              setIsDialogOpen={setIsDialogOpen}
+              setDialogContent={setDialogContent}
+              setIsConfirmStone={setIsConfirmStone}
+              setConfirmStoneData={setConfirmStoneData}
+              setIsDetailPage={setIsDetailPage}
+              setIsCompareStone={setIsCompareStone}
+            />
+          </div>
+        </div>
       ) : isDetailPage && searchData && Object.keys(searchData).length > 0 ? (
         <div className="mb-[10px]">
           <div className="flex py-[8px] items-center ">
             <p className="text-lMedium font-medium text-neutral900">
-              {ManageLocales('app.result.headerResult')}
+              {isCompareStone
+                ? 'Dashboard Comparison Overview'
+                : ManageLocales('app.result.headerResult')}
             </p>
           </div>
           <div className="border-[1px] border-neutral200 rounded-[8px]">
@@ -1472,6 +1511,8 @@ const Dashboard = () => {
               setConfirmStoneData={setConfirmStoneData}
               isDashboard={true}
               setIsDetailPage={setIsDetailPage}
+              setIsCompareStone={setIsCompareStone}
+              setCompareStoneData={setCompareStoneData}
             />
           </div>
         </div>

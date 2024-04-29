@@ -942,13 +942,15 @@ const MyCart = () => {
                   label: ManageLocales(
                     'app.search.actionButton.bookAppointment'
                   ),
-                  handler: () => {}
+                  handler: () => {},
+                  commingSoon: true
                 },
                 {
                   label: ManageLocales(
                     'app.search.actionButton.findMatchingPair'
                   ),
-                  handler: () => {}
+                  handler: () => {},
+                  commingSoon: true
                 }
               ]}
               isDisable={true}

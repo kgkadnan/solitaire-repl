@@ -14,6 +14,7 @@ interface IDropdownMenu {
   label: string;
   handler: any;
   isHidden?: any;
+  commingSoon?: boolean;
 }
 export interface IDropdownData {
   dropdownTrigger: React.ReactNode;
@@ -55,11 +56,11 @@ export const Dropdown: React.FC<IDropdownData> = ({
               <div
                 key={items.label}
                 onClick={() => {
-                  isDisable ? null : handleItemClick(items.handler);
+                  items?.commingSoon ? null : handleItemClick(items.handler);
                 }}
                 className={`cursor-pointer hover:bg-neutral-100  p-[6px] ${
-                  isDisable ? 'text-neutral400' : 'text-neutral900'
-                }  ${isDisable ? 'bg-neutral100' : 'bg-neutral0'}`}
+                  items?.commingSoon ? 'text-neutral400' : 'text-neutral900'
+                }  ${items?.commingSoon ? 'bg-neutral100' : 'bg-neutral0'}`}
               >
                 <DropdownMenuLabel>{items.label}</DropdownMenuLabel>
               </div>

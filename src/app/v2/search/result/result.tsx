@@ -43,7 +43,6 @@ import { notificationBadge } from '@/features/notification/notification-slice';
 import { useAddCartMutation } from '@/features/api/cart';
 import { useAppDispatch } from '@/hooks/hook';
 import Image from 'next/image';
-import bookmarkIcon from '@public/v2/assets/icons/modal/bookmark.svg';
 import errorSvg from '@public/v2/assets/icons/modal/error.svg';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import { DialogComponent } from '@/components/v2/common/dialog';
@@ -59,9 +58,6 @@ import { SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH } from '@/constants/error-message
 import { NOT_MORE_THAN_300 } from '@/constants/error-messages/search';
 import { NO_STONES_AVAILABLE } from '@/constants/error-messages/compare-stone';
 import { NO_STONES_SELECTED } from '@/constants/error-messages/cart';
-import { InputDialogComponent } from '@/components/v2/common/input-dialog';
-import { InputField } from '@/components/v2/common/input-field';
-import { handleSaveSearch } from './helpers/handle-save-search';
 import {
   useAddSavedSearchMutation,
   useGetSavedSearchListQuery
@@ -82,6 +78,7 @@ import ImageModal from '@/components/v2/common/detail-page/components/image-moda
 import { getShapeDisplayName } from '@/utils/v2/detail-page';
 import { FILE_URLS } from '@/constants/v2/detail-page';
 import { Toast } from '@/components/v2/common/copy-and-share/toast';
+import CompareStone from './components/compare-stone';
 import { statusCode } from '@/constants/enums/status-code';
 import { formatNumber } from '@/utils/fix-two-digit-number';
 import { loadImages } from '@/components/v2/common/detail-page/helpers/load-images';
@@ -120,7 +117,6 @@ const Result = ({
   const { isDialogOpen, dialogContent } = modalState;
   const { setIsDialogOpen, setDialogContent } = modalSetState;
   const [isAddCommentDialogOpen, setIsAddCommentDialogOpen] = useState(false);
-  const [saveSearchName, setSaveSearchName] = useState('');
   const [data, setData] = useState([]);
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
   const [validImages, setValidImages] = useState<any>([]);
@@ -131,7 +127,11 @@ const Result = ({
   const [breadCrumLabel, setBreadCrumLabel] = useState('');
 
   const [isConfirmStone, setIsConfirmStone] = useState(false);
+  const [isCompareStone, setIsCompareStone] = useState(false);
+
   const [confirmStoneData, setConfirmStoneData] = useState<IProduct[]>([]);
+  const [compareStoneData, setCompareStoneData] = useState<IProduct[]>([]);
+
   const [commentValue, setCommentValue] = useState('');
   const [textAreaValue, setTextAreaValue] = useState('');
 
@@ -226,6 +226,7 @@ const Result = ({
   };
 
   const handleDetailImage = ({ row }: any) => {
+    console.log('111111111111111', row);
     setDetailImageData(row);
     setIsModalOpen(true);
   };
@@ -705,6 +706,8 @@ const Result = ({
     }
     setIsConfirmStone(false);
     setConfirmStoneData([]);
+    setIsCompareStone(false);
+    setCompareStoneData([]);
   };
 
   const renderAddCommentDialogs = () => {
@@ -1015,6 +1018,8 @@ const Result = ({
           <p className="text-lMedium font-medium text-neutral900">
             {editRoute
               ? ManageLocales('app.result.headerEdit')
+              : isCompareStone
+              ? 'Dashboard Comparison Overview'
               : ManageLocales('app.result.headerResult')}
           </p>
         </div>
@@ -1034,16 +1039,6 @@ const Result = ({
             setIsLoading={setIsLoading}
           />
           <div className="p-[16px] flex justify-end items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow mb-1">
-            {/* {isError && (
-              <div>
-                <span className="hidden  text-successMain" />
-                <span
-                  className={`text-mRegular font-medium text-dangerMain pl-[8px]`}
-                >
-                  {errorText}
-                </span>
-              </div>
-            )} */}
             <ActionButton
               actionButtonData={[
                 {
@@ -1087,13 +1082,15 @@ const Result = ({
                   label: ManageLocales(
                     'app.search.actionButton.bookAppointment'
                   ),
-                  handler: () => {}
+                  handler: () => {},
+                  commingSoon: true
                 },
                 {
                   label: ManageLocales(
                     'app.search.actionButton.findMatchingPair'
                   ),
-                  handler: () => {}
+                  handler: () => {},
+                  commingSoon: true
                 }
               ]}
               isDisable={true}
@@ -1112,6 +1109,26 @@ const Result = ({
               handleDetailImage={handleDetailImage}
               handleDetailPage={handleDetailPage}
               identifier={'result'}
+            />
+          ) : isCompareStone ? (
+            <CompareStone
+              rows={compareStoneData}
+              columns={columnData}
+              goBackToListView={goBackToListView}
+              activeTab={activeTab}
+              isFrom={breadCrumLabel}
+              handleDetailImage={handleDetailImage}
+              setCompareStoneData={setCompareStoneData}
+              compareStoneData={compareStoneData}
+              setIsError={setIsError}
+              setErrorText={setErrorText}
+              setIsLoading={setIsLoading}
+              setIsDialogOpen={setIsDialogOpen}
+              setDialogContent={setDialogContent}
+              setIsConfirmStone={setIsConfirmStone}
+              setConfirmStoneData={setConfirmStoneData}
+              setIsDetailPage={setIsDetailPage}
+              setIsCompareStone={setIsCompareStone}
             />
           ) : (
             <div className="">
@@ -1137,9 +1154,10 @@ const Result = ({
                 searchList={searchList}
                 setIsLoading={setIsLoading}
                 handleAddToCart={handleAddToCart}
-                // handleConfirmStone={handleConfirmStone}
                 setIsConfirmStone={setIsConfirmStone}
                 setConfirmStoneData={setConfirmStoneData}
+                setIsCompareStone={setIsCompareStone}
+                setCompareStoneData={setCompareStoneData}
                 setIsInputDialogOpen={setIsInputDialogOpen}
               />
             </div>
