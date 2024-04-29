@@ -160,14 +160,22 @@ const Dashboard = () => {
       isAvailable: true,
       link: '/v2/my-cart'
     },
+    // {
+    //   label: 'Bid to Buy',
+    //   icon: <BidToBuyIcon />,
+    //   color: optionsClasses[2],
+    //   count: customerData?.customer?.bid_to_buy?.count,
+    //   start_at: customerData?.customer?.bid_to_buy?.starts_at,
+    //   isAvailable: true,
+    //   link: '/v2/bid-2-buy'
+    // },
     {
       label: 'Bid to Buy',
       icon: <BidToBuyIcon />,
       color: optionsClasses[2],
-      count: customerData?.customer?.bid_to_buy?.count,
-      start_at: customerData?.customer?.bid_to_buy?.starts_at,
-      isAvailable: true,
-      link: '/v2/bid-2-buy'
+      count: 0,
+      isAvailable: false,
+      link: '/v2/my-cart'
     },
     {
       label: 'My Appointments',
@@ -1628,7 +1636,7 @@ const Dashboard = () => {
                         <p className="text-neutral600 text-mRegular">
                           {data.label}
                         </p>
-                        {data.label === 'Bid to Buy' &&
+                        {/* {data.label === 'Bid to Buy' &&
                           (!data?.start_at && data?.count > 0 ? (
                             <div className="text-successMain text-sMedium ">
                               ACTIVE
@@ -1637,10 +1645,10 @@ const Dashboard = () => {
                             <div className="text-visRed text-sMedium ">
                               INACTIVE
                             </div>
-                          ))}
+                          ))} */}
                       </div>
 
-                      {data.label === 'Bid to Buy' ? (
+                      {/* {data.label === 'Bid to Buy' ? (
                         <>
                           {data.start_at && data.count ? (
                             <div className=" mt-1 flex items-center gap-2 rounded-[4px] px-1 h-[26px] bg-[#F1FAF8]">
@@ -1673,15 +1681,15 @@ const Dashboard = () => {
                             )
                           )}
                         </>
-                      ) : (
-                        <p className={`text-neutral900 text-headingS medium `}>
-                          {data.isAvailable
-                            ? data.count === 0
-                              ? '-'
-                              : data.count
-                            : 'Coming Soon'}
-                        </p>
-                      )}
+                      ) : ( */}
+                      <p className={`text-neutral900 text-headingS medium `}>
+                        {data.isAvailable
+                          ? data.count === 0
+                            ? '-'
+                            : data.count
+                          : 'Coming Soon'}
+                      </p>
+                      {/* )} */}
                     </div>
                   </div>
                 );
