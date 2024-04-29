@@ -86,6 +86,7 @@ import { notificationBadge } from '@/features/notification/notification-slice';
 import { loadImages } from '@/components/v2/common/detail-page/helpers/load-images';
 import { checkImage } from '@/components/v2/common/detail-page/helpers/check-image';
 import CompareStone from './search/result/components/compare-stone';
+import VolumeDiscount from '@/components/v2/common/volume-discount';
 
 // import useUser from '@/lib/use-auth';
 
@@ -1700,146 +1701,157 @@ const Dashboard = () => {
               </div>
             </div>
             {tabs.length > 0 && (
-              <div className="w-full border-[1px] border-neutral200 rounded-[8px]">
-                <div className="border-b-[1px] border-neutral200 p-4">
-                  <div className="flex border-b border-neutral200 w-full ml-3 text-mMedium font-medium justify-between pr-4">
-                    <div>
-                      {tabs.map(({ label }: any) => {
-                        return (
-                          <button
-                            className={`p-2 ${
-                              activeTab === label
-                                ? 'text-neutral900 border-b-[2px] border-primaryMain'
-                                : 'text-neutral600 '
-                            }`}
-                            key={label}
-                            onClick={() => handleTabs({ tab: label })}
-                          >
-                            {label}
-                          </button>
-                        );
-                      })}
+              <div className="flex gap-4">
+                <div className="w-full border-[1px] border-neutral200 rounded-[8px]">
+                  <div className="border-b-[1px] border-neutral200 p-4">
+                    <div className="flex border-b border-neutral200 w-full ml-3 text-mMedium font-medium justify-between pr-4">
+                      <div>
+                        {tabs.map(({ label }: any) => {
+                          return (
+                            <button
+                              className={`p-2 ${
+                                activeTab === label
+                                  ? 'text-neutral900 border-b-[2px] border-primaryMain'
+                                  : 'text-neutral600 '
+                              }`}
+                              key={label}
+                              onClick={() => handleTabs({ tab: label })}
+                            >
+                              {label}
+                            </button>
+                          );
+                        })}
+                      </div>
+                      <Link
+                        href={redirectLink()}
+                        className="cursor-pointer text-infoMain text-sRegular flex items-center"
+                      >
+                        View All
+                      </Link>
                     </div>
-                    <Link
-                      href={redirectLink()}
-                      className="cursor-pointer text-infoMain text-sRegular flex items-center"
-                    >
-                      View All
-                    </Link>
+                  </div>
+                  <div className="p-4 ">
+                    {activeTab === 'Saved Search' &&
+                      tabs
+                        .find(tab => tab.label === activeTab)
+                        ?.data?.map((searchData: any, index: number) => {
+                          const gradientIndex = index % gradientClasses.length;
+                          // Get the gradient class for the calculated index
+                          const gradientClass = gradientClasses[gradientIndex];
+                          return (
+                            <div
+                              className="p-[16px] flex flex-col md:flex-row w-full border-[1px] border-neutral200 cursor-pointer group hover:bg-neutral50"
+                              key={searchData?.id}
+                              onClick={() =>
+                                handleCardClick({
+                                  id: searchData.id,
+                                  savedSearchData: tabs.find(
+                                    tab => tab.label === activeTab
+                                  )?.data,
+                                  router,
+                                  triggerProductCountApi,
+                                  setDialogContent,
+                                  setIsDialogOpen
+                                })
+                              }
+                            >
+                              <div className="flex items-center gap-[18px] md:w-[40%]">
+                                <div
+                                  className={` ${gradientClass} text-headingM w-[69px] h-[69px] text-neutral700 uppercase p-[14px] rounded-[4px] font-medium text-center`}
+                                >
+                                  {searchData.name
+                                    ?.split(' ') // Split the name into words
+                                    .slice(0, 2)
+                                    .map((word: string) => word.charAt(0)) // Extract the first character of each word
+                                    .join('')}
+                                </div>
+                                <div className="flex flex-col gap-[18px]">
+                                  <h1 className="text-neutral900 font-medium text-mMedium capitalize">
+                                    {searchData.name}
+                                  </h1>
+                                  <div className="text-neutral700 font-regular text-sMedium">
+                                    {formatCreatedAt(searchData.created_at)}
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="w-full md:w-[60%] mt-4 md:mt-0">
+                                <DisplayTable
+                                  column={column}
+                                  row={[searchData.meta_data]}
+                                />
+                              </div>
+                              <button
+                                className="w-full md:w-[10%] flex justify-end items-start opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                                onClick={e => {
+                                  e.stopPropagation();
+                                  handleEdit(searchData.id);
+                                }}
+                              >
+                                <Image src={editIcon} alt="editIcon" />
+                              </button>
+                            </div>
+                          );
+                        })}
+                    {(activeTab === 'Active Invoice' ||
+                      activeTab === 'Pending Invoice') && (
+                      <div className="max-w-full overflow-x-auto border-[1px] border-neutral200">
+                        {/* header */}
+                        <div className="grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] text-mMedium h-[47px] border-b border-neutral-200 bg-neutral-50 text-neutral700">
+                          {keys?.map(({ label }: any) => (
+                            <div
+                              key={label}
+                              className="p-4 text-left font-medium"
+                            >
+                              {label}
+                            </div>
+                          ))}
+                        </div>
+                        {/* rows */}
+                        <div className="">
+                          {data?.length > 0 ? (
+                            data?.map((items: any) => (
+                              <div
+                                key={items.order_id}
+                                onClick={() => {
+                                  if (activeTab === 'Active Invoice') {
+                                    router.push(
+                                      `/v2/your-orders?path=active&id=${items?.id}`
+                                    );
+                                  } else {
+                                    router.push(
+                                      `/v2/your-orders?id=${items?.id}`
+                                    );
+                                  }
+                                  //  handleShowDetails(items?.id);
+                                }}
+                                className="cursor-pointer grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] bg-neutral0 border-b border-neutral-200 hover:bg-neutral-50"
+                              >
+                                {keys?.map(
+                                  ({ accessor }: any, index: number) => (
+                                    <div
+                                      key={index}
+                                      className="flex items-center text-lRegular space-x-2 py-3 pr-3 pl-4 text-left text-gray-800"
+                                    >
+                                      {renderCellContent(accessor, items)}
+                                    </div>
+                                  )
+                                )}
+                              </div>
+                            ))
+                          ) : (
+                            <></>
+                          )}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
-                <div className="p-4 ">
-                  {activeTab === 'Saved Search' &&
-                    tabs
-                      .find(tab => tab.label === activeTab)
-                      ?.data?.map((searchData: any, index: number) => {
-                        const gradientIndex = index % gradientClasses.length;
-                        // Get the gradient class for the calculated index
-                        const gradientClass = gradientClasses[gradientIndex];
-                        return (
-                          <div
-                            className="p-[16px] flex flex-col md:flex-row w-full border-[1px] border-neutral200 cursor-pointer group hover:bg-neutral50"
-                            key={searchData?.id}
-                            onClick={() =>
-                              handleCardClick({
-                                id: searchData.id,
-                                savedSearchData: tabs.find(
-                                  tab => tab.label === activeTab
-                                )?.data,
-                                router,
-                                triggerProductCountApi,
-                                setDialogContent,
-                                setIsDialogOpen
-                              })
-                            }
-                          >
-                            <div className="flex items-center gap-[18px] md:w-[40%]">
-                              <div
-                                className={` ${gradientClass} text-headingM w-[69px] h-[69px] text-neutral700 uppercase p-[14px] rounded-[4px] font-medium text-center`}
-                              >
-                                {searchData.name
-                                  ?.split(' ') // Split the name into words
-                                  .slice(0, 2)
-                                  .map((word: string) => word.charAt(0)) // Extract the first character of each word
-                                  .join('')}
-                              </div>
-                              <div className="flex flex-col gap-[18px]">
-                                <h1 className="text-neutral900 font-medium text-mMedium capitalize">
-                                  {searchData.name}
-                                </h1>
-                                <div className="text-neutral700 font-regular text-sMedium">
-                                  {formatCreatedAt(searchData.created_at)}
-                                </div>
-                              </div>
-                            </div>
-                            <div className="w-full md:w-[50%] mt-4 md:mt-0">
-                              <DisplayTable
-                                column={column}
-                                row={[searchData.meta_data]}
-                              />
-                            </div>
-                            <button
-                              className="w-full md:w-[10%] flex justify-end items-start opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                              onClick={e => {
-                                e.stopPropagation();
-                                handleEdit(searchData.id);
-                              }}
-                            >
-                              <Image src={editIcon} alt="editIcon" />
-                            </button>
-                          </div>
-                        );
-                      })}
-                  {(activeTab === 'Active Invoice' ||
-                    activeTab === 'Pending Invoice') && (
-                    <div className="max-w-full overflow-x-auto border-[1px] border-neutral200">
-                      {/* header */}
-                      <div className="grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] text-mMedium h-[47px] border-b border-neutral-200 bg-neutral-50 text-neutral700">
-                        {keys?.map(({ label }: any) => (
-                          <div
-                            key={label}
-                            className="p-4 text-left font-medium"
-                          >
-                            {label}
-                          </div>
-                        ))}
-                      </div>
-                      {/* rows */}
-                      <div className="">
-                        {data?.length > 0 ? (
-                          data?.map((items: any) => (
-                            <div
-                              key={items.order_id}
-                              onClick={() => {
-                                if (activeTab === 'Active Invoice') {
-                                  router.push(
-                                    `/v2/your-orders?path=active&id=${items?.id}`
-                                  );
-                                } else {
-                                  router.push(
-                                    `/v2/your-orders?id=${items?.id}`
-                                  );
-                                }
-                                //  handleShowDetails(items?.id);
-                              }}
-                              className="cursor-pointer grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] bg-neutral0 border-b border-neutral-200 hover:bg-neutral-50"
-                            >
-                              {keys?.map(({ accessor }: any, index: number) => (
-                                <div
-                                  key={index}
-                                  className="flex items-center text-lRegular space-x-2 py-3 pr-3 pl-4 text-left text-gray-800"
-                                >
-                                  {renderCellContent(accessor, items)}
-                                </div>
-                              ))}
-                            </div>
-                          ))
-                        ) : (
-                          <></>
-                        )}
-                      </div>
-                    </div>
-                  )}
+                <div className="flex-shrink-0 w-[300px] max-w-full">
+                  <VolumeDiscount
+                    totalSpent={299}
+                    expiryTime={new Date('2024-05-26T08:36:00.118Z')}
+                    eligibleForDiscount={false}
+                  />
                 </div>
               </div>
             )}
