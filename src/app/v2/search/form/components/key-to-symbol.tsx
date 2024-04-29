@@ -72,14 +72,14 @@ export const KeyToSymbol = ({
         defaultValue="closed"
         accordionContent={
           <div className="px-[16px] py-[24px]">
-            <div className="flex pb-[10px] ">
+            <div className="flex pb-[16px] ">
               <RadioButton
                 radioMetaData={keyToSymbolRadio[0]}
                 onChange={() => {
                   setSelectionChecked('contain');
                 }}
                 customStyle={{
-                  radio: `!text-mRegular !text-neutral900 pr-[10px]`
+                  radio: `!text-mRegular !text-neutral900 pr-[10px] h-[22px] !flex items-center`
                 }}
               />
               <RadioButton
@@ -88,7 +88,7 @@ export const KeyToSymbol = ({
                   setSelectionChecked('doesNotContain');
                 }}
                 customStyle={{
-                  radio: `!text-mRegular !text-neutral900`
+                  radio: `!text-mRegular !text-neutral900 h-[22px] !flex items-center`
                 }}
               />
             </div>
