@@ -30,48 +30,21 @@ const MyAppointments = () => {
   const [triggerMyAppointment] = useLazyGetmyAppointmentQuery({});
   const [deleteMyAppointment] = useDeleteMyAppointmentMutation({});
   const [pastAppointments, setPastAppointments] = useState([]);
-  const [upcommingAppointments, setUpcommingAppointments] = useState([
-    {
-      appointment_type: 'In-Person Appointment',
-      customer_id: 'cus_01HSDKR5Q404QPZCDYCPM60N2C',
-      stones: ['438967092', '441680704'],
-      reason: null,
-      address:
-        'DE 4011 - 4016, Tower D, Bharat Diamond Bourse, G Block BKC, Mumbai.',
-      appointment_at: '2024-05-02T07:00:00.000Z',
-      status: 'Active',
-      id: 'CA_01HWD4MXDJ7HKRME6AT29GMH6J',
-      created_at: '2024-04-26T12:03:58.616Z',
-      updated_at: '2024-04-26T12:03:58.616Z'
-    },
-    {
-      appointment_type: 'In-Person Appointment',
-      customer_id: 'cus_01HSDKR5Q404QPZCDYCPM60N2C',
-      stones: ['438967092', '441680704'],
-      reason: 'fasfasdasd',
-      address:
-        'DE 4011 - 4016, Tower D, Bharat Diamond Bourse, G Block BKC, Mumbai.',
-      appointment_at: '2024-05-02T07:00:00.000Z',
-      status: 'Active',
-      id: 'CA_01HWD4MXDJ7HKRME6AT29GMH6J',
-      created_at: '2024-04-26T12:03:58.616Z',
-      updated_at: '2024-04-26T12:03:58.616Z'
-    }
-  ]);
+  const [upcommingAppointments, setUpcommingAppointments] = useState([]);
 
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState(UPCOMMING_APPOINTMENTS);
 
-  // useEffect(() => {
-  //   setIsLoading(true);
-  //   triggerMyAppointment({}).then(res => {
-  //     setIsLoading(false);
-  //     console.log(res);
-  //     let { history, upcoming } = res.data.data;
-  //     setUpcommingAppointments(upcoming);
-  //     setPastAppointments(history);
-  //   });
-  // }, []);
+  useEffect(() => {
+    setIsLoading(true);
+    triggerMyAppointment({}).then(res => {
+      setIsLoading(false);
+      console.log(res);
+      let { history, upcoming } = res.data.data;
+      setUpcommingAppointments(upcoming);
+      setPastAppointments(history);
+    });
+  }, []);
 
   const MyAppointmentsTabs = [
     {
