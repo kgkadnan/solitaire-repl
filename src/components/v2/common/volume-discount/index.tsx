@@ -6,15 +6,17 @@ const VolumeDiscount: React.FC<any> = ({
   expiryTime,
   eligibleForDiscount
 }) => {
-  // const [timeDifference, setTimeDifference] = useState(expiryTime);
+  const [timeDifference, setTimeDifference] = useState(null);
 
-  // useEffect(() => {
-  //     const currentTime: any = new Date();
-  //     const targetTime: any = new Date(expiryTime!);
-  //     const timeDiff: any = targetTime - currentTime;
+  useEffect(() => {
+    if (expiryTime) {
+      const currentTime: any = new Date();
+      const targetTime: any = new Date(expiryTime!);
+      const timeDiff: any = targetTime - currentTime;
 
-  //     setTimeDifference(timeDiff);
-  //   }, [expiryTime]);
+      setTimeDifference(timeDiff);
+    }
+  }, [expiryTime]);
   return (
     <>
       <div
@@ -25,17 +27,29 @@ const VolumeDiscount: React.FC<any> = ({
           <div className="font-medium text-[18px] text-neutral900">
             Volume Discount
           </div>
-          <div>eligi</div>
+          <div
+            className={`border-[1px]  px-[6px] py-1  rounded-[4px] ${
+              eligibleForDiscount
+                ? 'bg-successSurface border-successBorder text-successMain'
+                : 'bg-dangerSurface border-dangerBorder text-dangerMain'
+            }`}
+          >
+            <p className="text-mMedium font-medium ">
+              {eligibleForDiscount ? 'Eligible' : 'Not Eligible'}
+            </p>
+          </div>
         </div>
-        hi
+        <div className="px-[12px] border-b-[1px] border-neutral200">slider</div>
         <div>
-          <CountdownTimer
-            initialHours={Math.floor(expiryTime / (1000 * 60 * 60))}
-            initialMinutes={Math.floor(
-              (expiryTime % (1000 * 60 * 60)) / (1000 * 60)
-            )}
-            initialSeconds={Math.floor((expiryTime % (1000 * 60)) / 1000)}
-          />
+          {timeDifference !== null && (
+            <CountdownTimer
+              initialHours={Math.floor(timeDifference / (1000 * 60 * 60))}
+              initialMinutes={Math.floor(
+                (timeDifference % (1000 * 60 * 60)) / (1000 * 60)
+              )}
+              initialSeconds={Math.floor((timeDifference % (1000 * 60)) / 1000)}
+            />
+          )}
         </div>
       </div>
     </>

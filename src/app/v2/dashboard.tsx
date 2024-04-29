@@ -141,6 +141,7 @@ const Dashboard = () => {
   const [isDetailPage, setIsDetailPage] = useState(false);
   const [isDiamondDetail, setIsDiamondDetail] = useState(false);
 
+  const [timeLeftForVolumeDiscount, setTimeLeftForVolumeDiscount] = useState();
   const { errorSetState } = useErrorStateManagement();
   const { setIsError } = errorSetState;
 
@@ -478,6 +479,9 @@ const Dashboard = () => {
   useEffect(() => {
     if (customerData) {
       setIsLoading(false);
+      // setTimeLeftForVolumeDiscount(
+      //   new Date(customerData?.customer?.volumeDiscount?.expiryTime)
+      // );
       const tabsCopy: ITabs[] = []; // Make a copy of the current tabs
       // const tabsCopy = [...tabs]; // Make a copy of the current tabs
 
@@ -1857,9 +1861,16 @@ const Dashboard = () => {
                 </div>
                 <div className="flex-shrink-0 w-[300px] max-w-full">
                   <VolumeDiscount
-                    totalSpent={299}
-                    expiryTime={new Date('2024-05-26T08:36:00.118Z')}
-                    eligibleForDiscount={false}
+                    totalSpent={
+                      customerData?.customer?.volumeDiscount?.totalSpent
+                    }
+                    expiryTime={
+                      customerData?.customer?.volumeDiscount?.expiryTime
+                    }
+                    eligibleForDiscount={
+                      customerData?.customer?.volumeDiscount
+                        ?.eligibleForDiscount
+                    }
                   />
                 </div>
               </div>
