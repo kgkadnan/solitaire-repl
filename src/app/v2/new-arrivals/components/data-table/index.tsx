@@ -769,7 +769,9 @@ const NewArrivalDataTable = ({
                 <div className="gap-6 flex">
                   <div className="h-[40px] flex gap-1">
                     {bidValue <= row.original.current_max_bid ? (
-                      <DisableDecrementIcon />
+                      <div className="cursor-not-allowed">
+                        <DisableDecrementIcon />
+                      </div>
                     ) : (
                       <div
                         onClick={() =>

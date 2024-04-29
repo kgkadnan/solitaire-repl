@@ -1624,7 +1624,7 @@ const Dashboard = () => {
                       {data.icon}{' '}
                     </div>
                     <div className="w-full">
-                      <div className="flex justify-between">
+                      <div className="flex justify-between items-baseline">
                         <p className="text-neutral600 text-mRegular">
                           {data.label}
                         </p>
