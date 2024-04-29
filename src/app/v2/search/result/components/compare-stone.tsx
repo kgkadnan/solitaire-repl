@@ -254,7 +254,7 @@ const CompareStone = ({
             className="sticky left-0  min-h-[2080px] text-neutral700 text-mMedium font-medium w-[150px] !z-5"
             style={{ zIndex: 5 }}
           >
-            <div className="h-[234px] sticky top-0 text-center items-center flex justify-center border-[0.5px] border-neutral200 bg-neutral50">
+            <div className="h-[234px] sticky top-0 text-center items-center flex px-4  border-[0.5px] border-neutral200 bg-neutral50">
               Media
             </div>
             <div className=" flex flex-col">
