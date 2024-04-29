@@ -20,6 +20,7 @@ import { useAddCartMutation } from '@/features/api/cart';
 import { useRouter } from 'next/navigation';
 import errorSvg from '@public/v2/assets/icons/modal/error.svg';
 import { handleConfirmStone } from '../helpers/handle-confirm-stone';
+import NoImageFound from '@public/v2/assets/icons/compare-stone/fallback.svg';
 
 const CompareStone = ({
   rows,
@@ -218,6 +219,10 @@ const CompareStone = ({
       // }
     }
   };
+  const handleImageError = (event: any) => {
+    event.target.src = NoImageFound.src; // Set the fallback image when the original image fails to load
+  };
+
   return (
     <div className="w-[calc(100vw-116px)] h-[calc(100vh-120px)] ">
       {' '}
@@ -266,13 +271,13 @@ const CompareStone = ({
           <div className=" bg-neutral0 text-neutral900 text-mMedium font-medium min-h-[2080px] !z-2">
             <div className="flex h-[234px] sticky top-0 ">
               {rows.map((items: IProduct) => (
-                <div key={items.id} className="w-[200px]">
+                <div key={items.id} className="w-[198px]">
                   <div
                     className={`h-[234px] flex flex-col border-[0.5px] border-neutral200 bg-neutral0 p-2 gap-[10px]`}
                   >
                     <div className="w-[180px] h-[175px]">
-                      <Image
-                        className={styles.diamondImage}
+                      <img
+                        // className="!h-[175px] !w-[180px]"
                         src={`${FILE_URLS.IMG.replace(
                           '***',
                           items?.lot_id ?? ''
@@ -284,6 +289,9 @@ const CompareStone = ({
                           () => {}
                           // handleCheckboxClick(items.id)
                         }
+                        onError={e => {
+                          handleImageError(e);
+                        }}
                       />
                     </div>
                     <div className="flex justify-between">
@@ -331,7 +339,7 @@ const CompareStone = ({
             </div>
             <div className={`flex `}>
               {rows.map((diamond: any) => (
-                <div className={`w-[200px] `} key={diamond.id}>
+                <div className={`w-[198px] `} key={diamond.id}>
                   {Object.keys(mappingColumn).map(key => (
                     <div
                       key={key}

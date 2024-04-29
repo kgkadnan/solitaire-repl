@@ -324,7 +324,7 @@ const BidToByDataTable = ({
       (activeTab === 2 && historyCount === 0) ? (
         <>
           <Image src={empty} alt={'empty'} />
-          <p className="text-neutral900  w-[320px] text-center ">
+          <p className="text-neutral900  w-[350px] text-center ">
             Every month we provide an extra discount on a few stones which you
             can bid to buy. Stay tuned.
           </p>
@@ -695,7 +695,9 @@ const BidToByDataTable = ({
                 <div className="gap-6 flex">
                   <div className="h-[40px] flex gap-1">
                     {bidValue <= row.original.discount ? (
-                      <DisableDecrementIcon />
+                      <div className="cursor-not-allowed">
+                        <DisableDecrementIcon />
+                      </div>
                     ) : (
                       <div
                         onClick={() =>

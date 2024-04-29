@@ -1018,6 +1018,8 @@ const Result = ({
           <p className="text-lMedium font-medium text-neutral900">
             {editRoute
               ? ManageLocales('app.result.headerEdit')
+              : isCompareStone
+              ? 'Diamond Comparison Overview'
               : ManageLocales('app.result.headerResult')}
           </p>
         </div>

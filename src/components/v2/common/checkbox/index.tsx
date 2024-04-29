@@ -31,7 +31,7 @@ const CheckboxComponent = ({
     <div className="flex flex-col gap-[5px]">
       <div className="flex gap-[5px]">
         <Checkbox
-          className={`rounded-[4px] border-neutral200 bg-neutral0 h-[20px] w-[20px] data-[state=checked]:border-primaryMain data-[state=checked]:bg-primaryMain data-[state=checked]:text-neutral25 ${styles}`}
+          className={`rounded-[4px] border-neutral200 bg-neutral0 h-[20px] w-[20px] data-[state=checked]:border-primaryMain data-[state=checked]:bg-primaryMain data-[state=checked]:text-neutral25 hover:border-primaryMain focus:border-[2px] focus:border-primaryFocus ${styles}`}
           onClick={onClick}
           checked={isChecked}
         />

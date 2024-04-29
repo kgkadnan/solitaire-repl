@@ -1432,32 +1432,41 @@ const Dashboard = () => {
           </div>
         </>
       ) : isCompareStone ? (
-        <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow mt-[16px]">
-          <CompareStone
-            rows={compareStoneData}
-            columns={columnData}
-            goBackToListView={goBackToListView}
-            activeTab={activeTab}
-            isFrom={'Dashboard'}
-            handleDetailImage={handleDetailImage}
-            setCompareStoneData={setCompareStoneData}
-            compareStoneData={compareStoneData}
-            setIsError={setIsError}
-            setErrorText={setError}
-            setIsLoading={setIsLoading}
-            setIsDialogOpen={setIsDialogOpen}
-            setDialogContent={setDialogContent}
-            setIsConfirmStone={setIsConfirmStone}
-            setConfirmStoneData={setConfirmStoneData}
-            setIsDetailPage={setIsDetailPage}
-            setIsCompareStone={setIsCompareStone}
-          />
+        <div className="flex">
+          <div className="flex py-[8px] items-center ">
+            <p className="text-lMedium font-medium text-neutral900">
+              Diamond Comparison Overview
+            </p>
+          </div>
+          <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow mt-[16px]">
+            <CompareStone
+              rows={compareStoneData}
+              columns={columnData}
+              goBackToListView={goBackToListView}
+              activeTab={activeTab}
+              isFrom={'Dashboard'}
+              handleDetailImage={handleDetailImage}
+              setCompareStoneData={setCompareStoneData}
+              compareStoneData={compareStoneData}
+              setIsError={setIsError}
+              setErrorText={setError}
+              setIsLoading={setIsLoading}
+              setIsDialogOpen={setIsDialogOpen}
+              setDialogContent={setDialogContent}
+              setIsConfirmStone={setIsConfirmStone}
+              setConfirmStoneData={setConfirmStoneData}
+              setIsDetailPage={setIsDetailPage}
+              setIsCompareStone={setIsCompareStone}
+            />
+          </div>
         </div>
       ) : isDetailPage && searchData && Object.keys(searchData).length > 0 ? (
         <div className="mb-[10px]">
           <div className="flex py-[8px] items-center ">
             <p className="text-lMedium font-medium text-neutral900">
-              {ManageLocales('app.result.headerResult')}
+              {isCompareStone
+                ? 'Diamond Comparison Overview'
+                : ManageLocales('app.result.headerResult')}
             </p>
           </div>
           <div className="border-[1px] border-neutral200 rounded-[8px]">
@@ -1616,7 +1625,7 @@ const Dashboard = () => {
                       {data.icon}{' '}
                     </div>
                     <div className="w-full">
-                      <div className="flex justify-between">
+                      <div className="flex justify-between items-baseline">
                         <p className="text-neutral600 text-mRegular">
                           {data.label}
                         </p>
