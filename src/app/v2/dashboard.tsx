@@ -1434,7 +1434,7 @@ const Dashboard = () => {
         <div className="flex">
           <div className="flex py-[8px] items-center ">
             <p className="text-lMedium font-medium text-neutral900">
-              Dashboard Comparison Overview
+              Diamond Comparison Overview
             </p>
           </div>
           <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow mt-[16px]">
@@ -1464,7 +1464,7 @@ const Dashboard = () => {
           <div className="flex py-[8px] items-center ">
             <p className="text-lMedium font-medium text-neutral900">
               {isCompareStone
-                ? 'Dashboard Comparison Overview'
+                ? 'Diamond Comparison Overview'
                 : ManageLocales('app.result.headerResult')}
             </p>
           </div>
