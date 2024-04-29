@@ -1019,7 +1019,7 @@ const Result = ({
             {editRoute
               ? ManageLocales('app.result.headerEdit')
               : isCompareStone
-              ? 'Dashboard Comparison Overview'
+              ? 'Diamond Comparison Overview'
               : ManageLocales('app.result.headerResult')}
           </p>
         </div>
