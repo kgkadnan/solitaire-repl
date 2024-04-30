@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react';
 import CountdownTimer from '../timer';
+import { VOLUME_DISCOUNT_LIMIT } from '@/constants/business-logic';
+import StaticSlider from './static-slider';
+import CustomizedSlider from './test';
+import CustomSlider from './custom';
 
 const VolumeDiscount: React.FC<any> = ({
   totalSpent,
@@ -39,12 +43,42 @@ const VolumeDiscount: React.FC<any> = ({
             </p>
           </div>
         </div>
-        <div className="px-[12px] border-b-[1px] border-neutral200">
-          <div className="text-sMedium text-neutral600 font-medium">
-            Spend <span className="font-semiBold">$100K</span> more within{' '}
-            <span className="font-semiBold">01</span> hours to get a 2% volume
-            discount
-          </div>
+        <div className="px-[12px] py-[28px] border-b-[1px] border-neutral200">
+          {eligibleForDiscount ? (
+            <div>
+              <p className="text-successHover text-sRegular font-medium">
+                You are eligible for a volume discount of 2.0%
+              </p>
+              slider
+              <div className="text-sMedium text-neutral600 font-medium bg-[#F1FAF8] rounded-[4px] p-[6px]">
+                You can utilize current volume discount within
+                <span className="font-semiBold">
+                  {Math.floor(timeDifference! / (1000 * 60 * 60))}
+                </span>{' '}
+                hours.
+              </div>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-[40px]">
+              {/* <CustomSlider/> */}
+              <StaticSlider
+                filledRange={10}
+                // filledRange={totalSpent}
+              />
+              {/* <CustomizedSlider/> */}
+              <div className="text-sMedium text-neutral600 font-medium bg-[#F1FAF8] rounded-[4px] p-[6px]">
+                Spend{' '}
+                <span className="font-semiBold">
+                  ${VOLUME_DISCOUNT_LIMIT - totalSpent}K
+                </span>{' '}
+                more within{' '}
+                <span className="font-semiBold">
+                  {Math.floor(timeDifference! / (1000 * 60 * 60))}
+                </span>{' '}
+                hours to get a 2% volume discount
+              </div>
+            </div>
+          )}
         </div>
         <div>
           {timeDifference !== null && (

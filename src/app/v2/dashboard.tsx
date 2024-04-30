@@ -1865,7 +1865,8 @@ const Dashboard = () => {
                       customerData?.customer?.volumeDiscount?.totalSpent
                     }
                     expiryTime={
-                      customerData?.customer?.volumeDiscount?.expiryTime
+                      '2024-05-28T09:08:46.603Z'
+                      // customerData?.customer?.volumeDiscount?.expiryTime
                     }
                     eligibleForDiscount={
                       customerData?.customer?.volumeDiscount
