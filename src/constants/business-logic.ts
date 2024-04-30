@@ -37,7 +37,7 @@ export const PENDING_INVOICE = 'pendingInvoice';
 export const ACTIVE_INVOICE = 'activeInvoice';
 export const INVOICE_HISTORY = 'invoiceHistory';
 
-export const UPCOMMING_APPOINTMENTS = 'upcommingAppointments';
+export const UPCOMING_APPOINTMENTS = 'upcomingAppointments';
 export const PAST_APPOINTMENTS = 'pastAppointments';
 
 export const PENING_INVOICE_BREADCRUMB_LABEL = 'Pending Invoice';

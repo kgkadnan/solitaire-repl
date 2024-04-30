@@ -1,15 +1,17 @@
 'use client';
 import ActionButton from '@/components/v2/common/action-button';
 import {
-  UPCOMMING_APPOINTMENTS,
+  UPCOMING_APPOINTMENTS,
   PAST_APPOINTMENTS
 } from '@/constants/business-logic';
 import { ManageLocales } from '@/utils/v2/translate';
 import React, { useEffect, useState } from 'react';
 import bookAppointment from '@public/v2/assets/icons/my-appointments/book-appointments.svg';
+import confirmIcon from '@public/v2/assets/icons/modal/confirm.svg';
+import errorSvg from '@public/v2/assets/icons/modal/error.svg';
 import {
   useDeleteMyAppointmentMutation,
-  useLazyGetmyAppointmentQuery
+  useLazyGetMyAppointmentQuery
 } from '@/features/api/my-appointments';
 import styles from './my-appointments.module.scss';
 import deleteAppointmentSvg from '@public/v2/assets/icons/my-appointments/delete-appointment.svg';
@@ -25,31 +27,42 @@ import {
   formatDateString,
   getTimeRange
 } from './helpers/data-formatters';
+import { DialogComponent } from '@/components/v2/common/dialog';
+import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
+import BinIcon from '@public/v2/assets/icons/bin.svg';
+
+interface ITabsData {
+  [key: string]: {
+    keys: { label: string; accessor: string }[];
+    data: any[];
+  };
+}
 
 const MyAppointments = () => {
-  const [triggerMyAppointment] = useLazyGetmyAppointmentQuery({});
+  const [triggerMyAppointment, { data: myAppointmentData }] =
+    useLazyGetMyAppointmentQuery({});
   const [deleteMyAppointment] = useDeleteMyAppointmentMutation({});
+  const { modalState, modalSetState } = useModalStateManagement();
   const [pastAppointments, setPastAppointments] = useState([]);
-  const [upcommingAppointments, setUpcommingAppointments] = useState([]);
+  const [upcomingAppointments, setUpcomingAppointments] = useState([]);
 
   const [isLoading, setIsLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState(UPCOMMING_APPOINTMENTS);
+  const [activeTab, setActiveTab] = useState(UPCOMING_APPOINTMENTS);
 
   useEffect(() => {
     setIsLoading(true);
     triggerMyAppointment({}).then(res => {
       setIsLoading(false);
-      console.log(res);
       let { history, upcoming } = res.data.data;
-      setUpcommingAppointments(upcoming);
+      setUpcomingAppointments(upcoming);
       setPastAppointments(history);
     });
   }, []);
 
   const MyAppointmentsTabs = [
     {
-      label: ManageLocales('app.myAppointments.upcommingAppointments'),
-      status: UPCOMMING_APPOINTMENTS
+      label: ManageLocales('app.myAppointments.upcomingAppointments'),
+      status: UPCOMING_APPOINTMENTS
     },
     {
       label: ManageLocales('app.myAppointments.pastAppointments'),
@@ -57,8 +70,11 @@ const MyAppointments = () => {
     }
   ];
 
-  const handleTabs = ({ tab }: { tab: string }) => {
+  const switchTabs = ({ tab }: { tab: string }) => {
     setActiveTab(tab);
+    let { history, upcoming } = myAppointmentData.data;
+    setUpcomingAppointments(upcoming);
+    setPastAppointments(history);
   };
 
   const handleDeleteAppointment = ({
@@ -70,14 +86,66 @@ const MyAppointments = () => {
       .unwrap()
       .then(() => {
         setIsLoading(false);
+        modalSetState.setIsDialogOpen(true);
+        modalSetState.setDialogContent(
+          <>
+            <div className="absolute left-[-84px] top-[-84px]">
+              <Image src={confirmIcon} alt="confirmIcon" />
+            </div>
+            <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+              <div>
+                <h1 className="text-headingS text-neutral900">
+                  Appointment cancelled successfully
+                </h1>
+              </div>
+              <ActionButton
+                actionButtonData={[
+                  {
+                    variant: 'secondary',
+                    label: ManageLocales('app.modal.okay'),
+                    handler: () => {
+                      modalSetState.setDialogContent(false);
+                    },
+                    customStyle: 'w-full flex-1'
+                  }
+                ]}
+              />
+            </div>
+          </>
+        );
       })
-      .catch(() => {
+      .catch((error: any) => {
         setIsLoading(false);
+        modalSetState.setIsDialogOpen(true);
+        modalSetState.setDialogContent(
+          <>
+            <div className="absolute left-[-84px] top-[-84px]">
+              <Image src={errorSvg} alt="errorSvg" />
+            </div>
+            <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+              <p className="text-neutral600 text-mRegular">
+                {error?.data?.message}
+              </p>
+              <ActionButton
+                actionButtonData={[
+                  {
+                    variant: 'primary',
+                    label: ManageLocales('app.modal.okay'),
+                    handler: () => {
+                      modalSetState.setIsDialogOpen(false);
+                    },
+                    customStyle: 'flex-1 w-full h-10'
+                  }
+                ]}
+              />
+            </div>
+          </>
+        );
       });
   };
 
-  const tabsData: any = {
-    upcommingAppointments: {
+  const tabsData: ITabsData = {
+    upcomingAppointments: {
       keys: [
         { label: 'Date', accessor: 'updated_at' },
         { label: 'Time Slot', accessor: 'appointment_at' },
@@ -85,7 +153,7 @@ const MyAppointments = () => {
         { label: 'Comment', accessor: 'reason' },
         { label: 'Action', accessor: 'action' }
       ],
-      data: upcommingAppointments
+      data: upcomingAppointments
     },
     pastAppointments: {
       keys: [
@@ -107,7 +175,11 @@ const MyAppointments = () => {
         return (
           <div className="flex items-center gap-3">
             <div
-              className={` ${styles.gradient} w-[64px] h-[64px] text-neutral700 p-[14px] rounded-[4px] font-medium text-center`}
+              className={` ${
+                activeTab === PAST_APPOINTMENTS
+                  ? 'bg-neutral100'
+                  : styles.gradient
+              } w-[64px] h-[64px] text-neutral700 p-[14px] rounded-[4px] font-medium text-center`}
             >
               <div>
                 <p className="text-sMedium font-normal ">
@@ -119,7 +191,7 @@ const MyAppointments = () => {
               </div>
             </div>
             <div>
-              <p className="text-lRegular text-neutral-900 font-normal">
+              <p className="text-lRegular text-neutral900 font-normal">
                 {formatDateString(value[accessor])}
               </p>
             </div>
@@ -128,13 +200,13 @@ const MyAppointments = () => {
 
       case 'appointment_at':
         return (
-          <span className="text-lRegular text-neutral-900 font-normal">
+          <span className="text-lRegular text-neutral900 font-normal">
             {getTimeRange(value[accessor])}
           </span>
         );
       case 'address':
         return (
-          <span className="text-lRegular text-neutral-900 font-normal">
+          <span className="text-lRegular text-neutral900 font-normal">
             {value[accessor]}
           </span>
         );
@@ -142,38 +214,39 @@ const MyAppointments = () => {
       case 'action':
         return (
           <div className="flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            <Tooltip
-              tooltipTrigger={
-                <div className="cursor-pointer">
-                  <Image src={editAppointmentSvg} alt={'editAppointmentSvg'} />
-                </div>
-              }
-              tooltipContent={ManageLocales('app.myAppointments.reschedule')}
-              tooltipContentStyles={'z-[1000]'}
-            />
-            <Tooltip
-              tooltipTrigger={
-                <div
-                  className="cursor-pointer"
-                  onClick={() => {
+            <ActionButton
+              actionButtonData={[
+                {
+                  variant: 'secondary',
+                  svg: editAppointmentSvg,
+                  handler: () => {
                     setIsLoading(true);
                     handleDeleteAppointment({ appointmentId: value.id });
-                  }}
-                >
-                  <Image
-                    src={deleteAppointmentSvg}
-                    alt={'deleteAppointmentSvg'}
-                  />
-                </div>
-              }
-              tooltipContent={ManageLocales('app.myAppointments.cancel')}
-              tooltipContentStyles={'z-[1000]'}
+                  },
+                  customStyle: 'w-[40px] h-[40px]',
+                  tooltip: ManageLocales('app.myAppointments.reschedule')
+                }
+              ]}
+            />
+            <ActionButton
+              actionButtonData={[
+                {
+                  variant: 'secondary',
+                  svg: BinIcon,
+                  handler: () => {
+                    setIsLoading(true);
+                    handleDeleteAppointment({ appointmentId: value.id });
+                  },
+                  customStyle: 'w-[40px] h-[40px]',
+                  tooltip: ManageLocales('app.myAppointments.cancel')
+                }
+              ]}
             />
           </div>
         );
       default:
         return (
-          <span className="text-lRegular text-neutral-900 font-normal">
+          <span className="text-lRegular text-neutral900 font-normal">
             {value[accessor] ?? '-'}
           </span>
         );
@@ -197,7 +270,7 @@ const MyAppointments = () => {
                   index === MyAppointmentsTabs.length - 1 && 'rounded-r-[8px]'
                 }`}
                   key={label}
-                  onClick={() => handleTabs({ tab: status })}
+                  onClick={() => switchTabs({ tab: status })}
                 >
                   {label}
                 </button>
@@ -219,7 +292,7 @@ const MyAppointments = () => {
         {data?.length > 0 ? (
           <table className="w-full">
             <thead>
-              <tr className="text-mMedium h-[47px] border-b  border-neutral-200 bg-neutral-50 text-neutral700">
+              <tr className="text-mMedium h-[47px] border-b  border-neutral200 bg-neutral50 text-neutral700">
                 {keys?.map(({ label }: any) => (
                   <td key={label} className="p-4 text-left font-medium">
                     {label}
@@ -232,7 +305,7 @@ const MyAppointments = () => {
                 return (
                   <tr
                     key={items.id}
-                    className={`bg-neutral0 group  border-neutral-200 hover:bg-neutral-50 ${
+                    className={`bg-neutral0 group  border-neutral200 hover:bg-neutral50 ${
                       index >= data.length - 1 ? 'rounded-[8px]' : 'border-b'
                     }`}
                   >
@@ -284,6 +357,11 @@ const MyAppointments = () => {
           : 'h-[calc(100vh-84px)]'
       }`}
     >
+      <DialogComponent
+        dialogContent={modalState.dialogContent}
+        isOpens={modalState.isDialogOpen}
+        setIsOpen={modalSetState.setIsDialogOpen}
+      />
       {isLoading && <CustomKGKLoader />}
       <div className="flex  py-[8px] items-center">
         <p className="text-lMedium font-medium text-neutral900">

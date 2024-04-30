@@ -1,14 +1,13 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { createBaseQuery } from './base-query';
 
-// const header =
 export const myAppointmentApi = createApi({
   reducerPath: 'myAppointmentReducer',
   baseQuery: createBaseQuery(),
   tagTypes: ['my-appointment'],
 
   endpoints: builder => ({
-    getmyAppointment: builder.query({
+    getMyAppointment: builder.query({
       query: () => `store/appointments`,
       providesTags: ['my-appointment']
     }),
@@ -22,5 +21,5 @@ export const myAppointmentApi = createApi({
   })
 });
 
-export const { useLazyGetmyAppointmentQuery, useDeleteMyAppointmentMutation } =
+export const { useLazyGetMyAppointmentQuery, useDeleteMyAppointmentMutation } =
   myAppointmentApi;

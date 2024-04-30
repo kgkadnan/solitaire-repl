@@ -183,7 +183,7 @@
 
 
   "app.myAppointments.myAppointments" : "My Appointments",
-  "app.myAppointments.upcommingAppointments":"Upcoming Appointments",
+  "app.myAppointments.upcomingAppointments":"Upcoming Appointments",
   "app.myAppointments.pastAppointments":"Past Appointments",
   "app.myAppointments.bookAppointment":"Book Appointments",
   "app.myAppointments.reschedule" : "Reschedule",
