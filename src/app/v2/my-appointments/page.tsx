@@ -30,13 +30,7 @@ import {
 import { DialogComponent } from '@/components/v2/common/dialog';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import BinIcon from '@public/v2/assets/icons/bin.svg';
-
-interface ITabsData {
-  [key: string]: {
-    keys: { label: string; accessor: string }[];
-    data: any[];
-  };
-}
+import { ITabsData } from './interface';
 
 const MyAppointments = () => {
   const [triggerMyAppointment, { data: myAppointmentData }] =
