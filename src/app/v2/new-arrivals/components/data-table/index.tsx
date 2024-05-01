@@ -120,7 +120,31 @@ const NewArrivalDataTable = ({
 
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [bidError, setBidError] = useState('');
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 20 //customize the default page size
+  });
 
+  const [paginatedData, setPaginatedData] = useState<any>([]);
+
+  useEffect(() => {
+    if (activeTab !== 2) {
+      // Calculate the start and end indices for the current page
+      const startIndex = pagination.pageIndex * pagination.pageSize;
+      const endIndex = startIndex + pagination.pageSize;
+      // Slice the data to get the current page's data
+      const newData = rows.slice(startIndex, endIndex);
+      // Update the paginated data state
+      setPaginatedData(newData);
+    } else {
+      setPaginatedData(rows);
+    }
+  }, [
+    rows,
+    pagination.pageIndex, //re-fetch when page index changes
+    pagination.pageSize, //re-fetch when page size changes
+    activeTab
+  ]);
   const toggleFullScreen = () => {
     setIsFullScreen(!isFullScreen);
   };
@@ -373,12 +397,17 @@ const NewArrivalDataTable = ({
   //pass table options to useMaterialReactTable
   const table = useMaterialReactTable({
     columns,
-    data: rows, //must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
+    data: paginatedData, //must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
 
     //state
     getRowId: originalRow => originalRow.id,
     onRowSelectionChange: setRowSelection,
-    state: { columnOrder, rowSelection, isFullScreen: isFullScreen },
+    state: {
+      columnOrder,
+      rowSelection,
+      isFullScreen: isFullScreen,
+      pagination
+    },
     //filters
     positionToolbarAlertBanner: 'none',
     enableFilters: true,
@@ -386,7 +415,7 @@ const NewArrivalDataTable = ({
     enableDensityToggle: false,
     enableHiding: false,
     enableColumnFilters: false,
-    enablePagination: true,
+    // enablePagination: true,
     enableStickyHeader: true,
     // enableBottomToolbar: false,
     // enableRowVirtualization:true,
@@ -403,6 +432,9 @@ const NewArrivalDataTable = ({
     renderEmptyRowsFallback: NoResultsComponent,
     // renderFallbackComponent: NoResultsComponent,
     // enableExpanding: true,
+    manualPagination: true,
+    rowCount: rows.length,
+    onPaginationChange: setPagination, //hoist pagination state to your state when it changes internally
 
     icons: {
       SearchIcon: () => (
@@ -507,7 +539,7 @@ const NewArrivalDataTable = ({
       columnPinning: {
         left: ['mrt-row-select', 'lot_id', 'mrt-row-expand']
       },
-      pagination: { pageSize: 20, pageIndex: 0 }
+      pagination: pagination
     },
 
     // renderEmptyRowsFallback: () => {
