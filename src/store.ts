@@ -35,7 +35,7 @@ import { publicApi } from './features/api/public';
 import { manageSubscriptionApi } from './features/api/manage-subscription';
 import { myAccountApi } from './features/api/my-account';
 import { newNotificationApi } from './features/api/notification/notification';
-
+import { faqsApi } from './features/api/faqs';
 const rootReducer = combineReducers({
   notificationBadge: notificationBadgeReducer,
   profileUpdate: profileUpdateReducer,
@@ -67,7 +67,8 @@ const rootReducer = combineReducers({
   [publicApi.reducerPath]: publicApi.reducer,
   [manageSubscriptionApi.reducerPath]: manageSubscriptionApi.reducer,
   [myAccountApi.reducerPath]: myAccountApi.reducer,
-  [newNotificationApi.reducerPath]: newNotificationApi.reducer
+  [newNotificationApi.reducerPath]: newNotificationApi.reducer,
+  [faqsApi.reducerPath]: faqsApi.reducer
 });
 
 export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
@@ -99,7 +100,8 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
         publicApi.middleware,
         manageSubscriptionApi.middleware,
         myAccountApi.middleware,
-        newNotificationApi.middleware
+        newNotificationApi.middleware,
+        faqsApi.middleware
       ),
     preloadedState
   });
