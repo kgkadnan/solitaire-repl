@@ -21,7 +21,7 @@ const FAQs = () => {
         <p>Frequently Asked Questions</p>
       </div>
       <div>
-        {faqData.map((faq: any, index: number) => {
+        {faqData?.map((faq: any, index: number) => {
           return (
             <div key={index}>
               <Collapsible title={faq?.question}>
