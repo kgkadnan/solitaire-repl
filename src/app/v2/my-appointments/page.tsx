@@ -218,7 +218,7 @@ const MyAppointments = () => {
                 activeTab === PAST_APPOINTMENTS
                   ? 'bg-neutral100'
                   : styles.gradient
-              } w-[64px] h-[64px] text-neutral700 p-[14px] rounded-[4px] font-medium text-center`}
+              } w-[64px] h-[64px] text-neutral700 p-[14px] rounded-[4px] font-medium flex justify-center items-center text-center`}
             >
               <div>
                 <p className="text-sMedium font-normal ">
