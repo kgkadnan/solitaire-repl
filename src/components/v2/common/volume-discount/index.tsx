@@ -2,8 +2,6 @@ import { useEffect, useState } from 'react';
 import CountdownTimer from '../timer';
 import { VOLUME_DISCOUNT_LIMIT } from '@/constants/business-logic';
 import StaticSlider from './static-slider';
-import CustomizedSlider from './test';
-import CustomSlider from './custom';
 
 const VolumeDiscount: React.FC<any> = ({
   totalSpent,
@@ -59,10 +57,10 @@ const VolumeDiscount: React.FC<any> = ({
               </div>
             </div>
           ) : (
-            <div className="flex flex-col gap-[40px]">
+            <div className="flex flex-col gap-[80px]">
               {/* <CustomSlider/> */}
               <StaticSlider
-                filledRange={10}
+                filledRange={25000}
                 // filledRange={totalSpent}
               />
               {/* <CustomizedSlider/> */}

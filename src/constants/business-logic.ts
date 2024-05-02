@@ -85,4 +85,4 @@ export const LAB_LINKS = {
   IGI_LINK: 'https://www.igi.org/verify-your-report/?r=',
   HRD_LINK: 'https://my.hrdantwerp.com/?id=34&record_number='
 };
-export const VOLUME_DISCOUNT_LIMIT = 300;
+export const VOLUME_DISCOUNT_LIMIT = 300000;
