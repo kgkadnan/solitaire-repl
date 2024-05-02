@@ -87,6 +87,9 @@ import { loadImages } from '@/components/v2/common/detail-page/helpers/load-imag
 import { checkImage } from '@/components/v2/common/detail-page/helpers/check-image';
 import CompareStone from './search/result/components/compare-stone';
 import VolumeDiscount from '@/components/v2/common/volume-discount';
+import EmptyScreen from '@/components/v2/common/empty-screen';
+import emptyOrderSvg from '@public/v2/assets/icons/empty-order.svg';
+import empty from '@public/v2/assets/icons/saved-search/empty-screen-saved-search.svg';
 
 // import useUser from '@/lib/use-auth';
 
@@ -479,92 +482,92 @@ const Dashboard = () => {
   useEffect(() => {
     if (customerData) {
       setIsLoading(false);
-      // setTimeLeftForVolumeDiscount(
-      //   new Date(customerData?.customer?.volumeDiscount?.expiryTime)
-      // );
+
       const tabsCopy: ITabs[] = []; // Make a copy of the current tabs
       // const tabsCopy = [...tabs]; // Make a copy of the current tabs
 
       // Check if there are saved searches and add the "Saved Search" tab
-      if (customerData.customer.saved_searches?.length > 0) {
-        tabsCopy.push({
-          label: 'Saved Search',
-          link: '/v2/search?active-tab=saved-search',
-          data: customerData.customer.saved_searches.slice(0, 5)
-        });
-      } else {
-        // Remove the "Saved Search" tab if there are no saved searches
-        const index = tabsCopy?.findIndex(tab => tab.label === 'Saved Search');
-        if (index !== -1) {
-          tabsCopy?.splice(index, 1);
-        }
-      }
+      // if (customerData.customer.saved_searches?.length > 0) {
+      tabsCopy.push({
+        label: 'Saved Search',
+        link: '/v2/search?active-tab=saved-search',
+        data: customerData.customer?.saved_searches?.slice(0, 5) ?? []
+      });
+      // } else {
+      //   // Remove the "Saved Search" tab if there are no saved searches
+      //   const index = tabsCopy?.findIndex(tab => tab.label === 'Saved Search');
+      //   if (index !== -1) {
+      //     tabsCopy?.splice(index, 1);
+      //   }
+      // }
 
       // Update the tabs state
-      setTabs(tabsCopy);
-      setActiveTab(tabsCopy[0]?.label);
+      // setTabs(tabsCopy);
+      // setActiveTab(tabsCopy[0]?.label);
 
       // Check for pending and active invoices
-      if (customerData.customer?.orders?.length > 0) {
-        const pendingInvoices = customerData.customer.orders
+      // if (customerData.customer?.orders?.length > 0) {
+      const pendingInvoices =
+        customerData.customer.orders
           .filter((item: any) => item.invoice_id === null)
-          .slice(0, 5);
+          .slice(0, 5) ?? [];
 
-        const activeInvoices = customerData.customer.orders
+      const activeInvoices =
+        customerData.customer.orders
           .filter(
             (item: any) => item.invoice_id !== null && item.status === 'pending'
           )
-          .slice(0, 5);
+          .slice(0, 5) ?? [];
 
-        // Update or add "Pending Invoice" tab
-        const pendingTab = tabsCopy.find(
-          tab => tab.label === 'Pending Invoice'
-        );
-        if (pendingInvoices.length > 0) {
-          if (pendingTab) {
-            pendingTab.data = pendingInvoices;
-          } else {
-            tabsCopy.push({
-              label: 'Pending Invoice',
-              link: '/v2/your-orders',
-              data: pendingInvoices
-            });
-          }
-        } else {
-          // Remove "Pending Invoice" tab if there are no pending invoices
-          const index = tabsCopy.findIndex(
-            tab => tab.label === 'Pending Invoice'
-          );
-          if (index !== -1) {
-            tabsCopy.splice(index, 1);
-          }
-        }
+      // Update or add "Pending Invoice" tab
+      // const pendingTab = tabsCopy.find(
+      //   tab => tab.label === 'Pending Invoice'
+      // );
+      // if (pendingInvoices.length > 0) {
+      //   if (pendingTab) {
+      //     pendingTab.data = pendingInvoices;
+      //   } else {
+      tabsCopy.push({
+        label: 'Pending Invoice',
+        link: '/v2/your-orders',
+        data: pendingInvoices
+      });
+      //   }
+      // } else {
+      //   // Remove "Pending Invoice" tab if there are no pending invoices
+      //   const index = tabsCopy.findIndex(
+      //     tab => tab.label === 'Pending Invoice'
+      //   );
+      //   if (index !== -1) {
+      //     tabsCopy.splice(index, 1);
+      //   }
+      // }
 
-        // Update or add "Active Invoice" tab
-        const activeTab = tabsCopy.find(tab => tab.label === 'Active Invoice');
-        if (activeInvoices.length > 0) {
-          if (activeTab) {
-            activeTab.data = activeInvoices;
-          } else {
-            tabsCopy.push({
-              label: 'Active Invoice',
-              link: '/v2/your-orders',
-              data: activeInvoices
-            });
-          }
-        } else {
-          // Remove "Active Invoice" tab if there are no active invoices
-          const index = tabsCopy.findIndex(
-            tab => tab.label === 'Active Invoice'
-          );
-          if (index !== -1) {
-            tabsCopy.splice(index, 1);
-          }
-        }
-        // Update the tabs state
-        setTabs(tabsCopy);
-        setActiveTab(tabsCopy[0].label);
-      }
+      // Update or add "Active Invoice" tab
+      // const activeTab = tabsCopy.find(tab => tab.label === 'Active Invoice');
+      // if (activeInvoices.length > 0) {
+      //   if (activeTab) {
+      //     activeTab.data = activeInvoices;
+      //   } else {
+      tabsCopy.push({
+        label: 'Active Invoice',
+        link: '/v2/your-orders',
+        data: activeInvoices
+      });
+      //   }
+      // } else {
+      //   // Remove "Active Invoice" tab if there are no active invoices
+      //   const index = tabsCopy.findIndex(
+      //     tab => tab.label === 'Active Invoice'
+      //   );
+      //   if (index !== -1) {
+      //     tabsCopy.splice(index, 1);
+      //   }
+      // }
+      // Update the tabs state
+      setTabs(tabsCopy);
+      setActiveTab(tabsCopy[0].label);
+      // }
     }
   }, [customerData]);
 
@@ -1714,8 +1717,8 @@ const Dashboard = () => {
               </div>
             </div>
             {tabs.length > 0 && (
-              <div className="flex gap-4">
-                <div className="w-full border-[1px] border-neutral200 rounded-[8px]">
+              <div className="flex gap-4 ">
+                <div className="w-full border-[1px] border-neutral200 rounded-[8px] flex-1 flex-shrink min-w-0">
                   <div className="border-b-[1px] border-neutral200 p-4">
                     <div className="flex border-b border-neutral200 w-full ml-3 text-mMedium font-medium justify-between pr-4">
                       <div>
@@ -1745,66 +1748,82 @@ const Dashboard = () => {
                   </div>
                   <div className="p-4 ">
                     {activeTab === 'Saved Search' &&
-                      tabs
-                        .find(tab => tab.label === activeTab)
-                        ?.data?.map((searchData: any, index: number) => {
-                          const gradientIndex = index % gradientClasses.length;
-                          // Get the gradient class for the calculated index
-                          const gradientClass = gradientClasses[gradientIndex];
-                          return (
-                            <div
-                              className="p-[16px] flex flex-col md:flex-row w-full border-[1px] border-neutral200 cursor-pointer group hover:bg-neutral50"
-                              key={searchData?.id}
-                              onClick={() =>
-                                handleCardClick({
-                                  id: searchData.id,
-                                  savedSearchData: tabs.find(
-                                    tab => tab.label === activeTab
-                                  )?.data,
-                                  router,
-                                  triggerProductCountApi,
-                                  setDialogContent,
-                                  setIsDialogOpen
-                                })
-                              }
-                            >
-                              <div className="flex items-center gap-[18px] md:w-[40%]">
-                                <div
-                                  className={` ${gradientClass} text-headingM w-[69px] h-[69px] text-neutral700 uppercase p-[14px] rounded-[4px] font-medium text-center`}
-                                >
-                                  {searchData.name
-                                    ?.split(' ') // Split the name into words
-                                    .slice(0, 2)
-                                    .map((word: string) => word.charAt(0)) // Extract the first character of each word
-                                    .join('')}
-                                </div>
-                                <div className="flex flex-col gap-[18px]">
-                                  <h1 className="text-neutral900 font-medium text-mMedium capitalize">
-                                    {searchData.name}
-                                  </h1>
-                                  <div className="text-neutral700 font-regular text-sMedium">
-                                    {formatCreatedAt(searchData.created_at)}
+                      (tabs.find(tab => tab.label === activeTab)?.data.length >
+                      0 ? (
+                        tabs
+                          .find(tab => tab.label === activeTab)
+                          ?.data?.map((searchData: any, index: number) => {
+                            const gradientIndex =
+                              index % gradientClasses.length;
+                            // Get the gradient class for the calculated index
+                            const gradientClass =
+                              gradientClasses[gradientIndex];
+                            return (
+                              <div
+                                className="p-[16px] flex flex-col md:flex-row w-full border-[1px] border-neutral200 cursor-pointer group hover:bg-neutral50"
+                                key={searchData?.id}
+                                onClick={() =>
+                                  handleCardClick({
+                                    id: searchData.id,
+                                    savedSearchData: tabs.find(
+                                      tab => tab.label === activeTab
+                                    )?.data,
+                                    router,
+                                    triggerProductCountApi,
+                                    setDialogContent,
+                                    setIsDialogOpen
+                                  })
+                                }
+                              >
+                                <div className="flex items-center gap-[18px] md:w-[40%]">
+                                  <div
+                                    className={` ${gradientClass} text-headingM w-[69px] h-[69px] text-neutral700 uppercase p-[14px] rounded-[4px] font-medium text-center`}
+                                  >
+                                    {searchData.name
+                                      ?.split(' ') // Split the name into words
+                                      .slice(0, 2)
+                                      .map((word: string) => word.charAt(0)) // Extract the first character of each word
+                                      .join('')}
+                                  </div>
+                                  <div className="flex flex-col gap-[18px]">
+                                    <h1 className="text-neutral900 font-medium text-mMedium capitalize">
+                                      {searchData.name}
+                                    </h1>
+                                    <div className="text-neutral700 font-regular text-sMedium">
+                                      {formatCreatedAt(searchData.created_at)}
+                                    </div>
                                   </div>
                                 </div>
+                                <div className="w-full md:w-[60%] mt-4 md:mt-0">
+                                  <DisplayTable
+                                    column={column}
+                                    row={[searchData.meta_data]}
+                                  />
+                                </div>
+                                <button
+                                  className="w-full md:w-[10%] flex justify-end items-start opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                                  onClick={e => {
+                                    e.stopPropagation();
+                                    handleEdit(searchData.id);
+                                  }}
+                                >
+                                  <Image src={editIcon} alt="editIcon" />
+                                </button>
                               </div>
-                              <div className="w-full md:w-[60%] mt-4 md:mt-0">
-                                <DisplayTable
-                                  column={column}
-                                  row={[searchData.meta_data]}
-                                />
-                              </div>
-                              <button
-                                className="w-full md:w-[10%] flex justify-end items-start opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                                onClick={e => {
-                                  e.stopPropagation();
-                                  handleEdit(searchData.id);
-                                }}
-                              >
-                                <Image src={editIcon} alt="editIcon" />
-                              </button>
-                            </div>
-                          );
-                        })}
+                            );
+                          })
+                      ) : (
+                        <EmptyScreen
+                          label="Search Diamonds"
+                          message="No saved searches so far. Let’s save some searches!"
+                          onClickHandler={() =>
+                            router.push(
+                              `/v2/search?active-tab=${SubRoutes.NEW_SEARCH}`
+                            )
+                          }
+                          imageSrc={empty}
+                        />
+                      ))}
                     {(activeTab === 'Active Invoice' ||
                       activeTab === 'Pending Invoice') && (
                       <div className="max-w-full overflow-x-auto border-[1px] border-neutral200">
@@ -1852,25 +1871,38 @@ const Dashboard = () => {
                               </div>
                             ))
                           ) : (
-                            <></>
+                            // <> <div className="min-h-[73vh] h-[65vh]">
+                            <EmptyScreen
+                              label="Search Diamonds"
+                              message="Looks like you haven't placed any orders yet. Let’s place some orders!"
+                              onClickHandler={() =>
+                                router.push(
+                                  `/v2/search?active-tab=${SubRoutes.NEW_SEARCH}`
+                                )
+                              }
+                              imageSrc={emptyOrderSvg}
+                            />
+                            // </div></>
                           )}
                         </div>
                       </div>
                     )}
                   </div>
                 </div>
-                <div className="flex-shrink-0 w-[300px] max-w-full">
+                <div className="w-[300px]">
                   <VolumeDiscount
                     totalSpent={
-                      customerData?.customer?.volumeDiscount?.totalSpent
+                      400000
+                      // customerData?.customer?.volumeDiscount?.totalSpent
                     }
                     expiryTime={
                       '2024-05-28T09:08:46.603Z'
                       // customerData?.customer?.volumeDiscount?.expiryTime
                     }
                     eligibleForDiscount={
-                      customerData?.customer?.volumeDiscount
-                        ?.eligibleForDiscount
+                      true
+                      // customerData?.customer?.volumeDiscount
+                      //   ?.eligibleForDiscount
                     }
                   />
                 </div>
