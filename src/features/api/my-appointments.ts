@@ -7,10 +7,23 @@ export const myAppointmentApi = createApi({
   tagTypes: ['my-appointment'],
 
   endpoints: builder => ({
+    addMyAppointment: builder.mutation({
+      query: data => ({
+        url: `store/appointments`,
+        method: 'POST',
+        body: data
+      }),
+      invalidatesTags: ['my-appointment']
+    }),
     getMyAppointment: builder.query({
       query: () => `store/appointments`,
       providesTags: ['my-appointment']
     }),
+    getMyAppointmentCreatePayload: builder.query({
+      query: () => `/store/appointments/create-request-payload`,
+      providesTags: ['my-appointment']
+    }),
+
     deleteMyAppointment: builder.mutation({
       query: appointmentId => ({
         url: `store/appointments/${appointmentId}`,
@@ -21,5 +34,9 @@ export const myAppointmentApi = createApi({
   })
 });
 
-export const { useLazyGetMyAppointmentQuery, useDeleteMyAppointmentMutation } =
-  myAppointmentApi;
+export const {
+  useLazyGetMyAppointmentQuery,
+  useDeleteMyAppointmentMutation,
+  useLazyGetMyAppointmentCreatePayloadQuery,
+  useAddMyAppointmentMutation
+} = myAppointmentApi;

@@ -187,6 +187,7 @@
   "app.myAppointments.pastAppointments":"Past Appointments",
   "app.myAppointments.bookAppointment":"Book Appointments",
   "app.myAppointments.reschedule" : "Reschedule",
-  "app.myAppointments.cancel":"Cancel"
+  "app.myAppointments.cancel":"Cancel",
+  "app.myAppointments.confirmAppointments":"Confirm Appointment"
 
 }

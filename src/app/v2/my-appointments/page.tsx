@@ -11,16 +11,16 @@ import confirmIcon from '@public/v2/assets/icons/modal/confirm.svg';
 import errorSvg from '@public/v2/assets/icons/modal/error.svg';
 import {
   useDeleteMyAppointmentMutation,
+  useLazyGetMyAppointmentCreatePayloadQuery,
   useLazyGetMyAppointmentQuery
 } from '@/features/api/my-appointments';
 import styles from './my-appointments.module.scss';
-import deleteAppointmentSvg from '@public/v2/assets/icons/my-appointments/delete-appointment.svg';
 import editAppointmentSvg from '@public/v2/assets/icons/my-appointments/edit-appointment.svg';
 import Image from 'next/image';
-import Tooltip from '@/components/v2/common/tooltip';
 import { kycStatus } from '@/constants/enums/kyc';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import emptyAppointmentSvg from '@public/v2/assets/icons/my-appointments/empty-appointment.svg';
+import warningIcon from '@public/v2/assets/icons/modal/warning.svg';
 import {
   formatDate,
   formatDateForMonth,
@@ -31,27 +31,59 @@ import { DialogComponent } from '@/components/v2/common/dialog';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import BinIcon from '@public/v2/assets/icons/bin.svg';
 import { ITabsData } from './interface';
+import BookAppointment from './components/book-appointment/book-appointment';
+export interface ISlot {
+  datetimeString: string;
+  isAvailable: boolean;
+}
+
+export interface ISlots {
+  [index: string]: ISlot;
+}
+
+export interface IAppointmentPayload {
+  kam: {
+    kam_name: string;
+  };
+  storeAddresses: string[];
+  timeSlots: {
+    dates: { date: string; day: string }[];
+    slots: ISlots;
+  };
+}
 
 const MyAppointments = () => {
   const [triggerMyAppointment, { data: myAppointmentData }] =
     useLazyGetMyAppointmentQuery({});
   const [deleteMyAppointment] = useDeleteMyAppointmentMutation({});
+  const [triggerCreatePayload] = useLazyGetMyAppointmentCreatePayloadQuery({});
   const { modalState, modalSetState } = useModalStateManagement();
   const [pastAppointments, setPastAppointments] = useState([]);
   const [upcomingAppointments, setUpcomingAppointments] = useState([]);
+  const [showAppointment, setShowAppointment] = useState(false);
+  const [appointmentPayload, setAppointmentPayload] =
+    useState<IAppointmentPayload>({
+      kam: { kam_name: '' },
+      storeAddresses: [],
+      timeSlots: { dates: [{ date: '', day: '' }], slots: {} }
+    });
 
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState(UPCOMING_APPOINTMENTS);
 
-  useEffect(() => {
-    setIsLoading(true);
+  const getAppointment = () => {
     triggerMyAppointment({}).then(res => {
       setIsLoading(false);
       let { history, upcoming } = res.data.data;
       setUpcomingAppointments(upcoming);
       setPastAppointments(history);
     });
-  }, []);
+  };
+
+  useEffect(() => {
+    setIsLoading(true);
+    getAppointment();
+  }, [myAppointmentData]);
 
   const MyAppointmentsTabs = [
     {
@@ -95,10 +127,10 @@ const MyAppointments = () => {
               <ActionButton
                 actionButtonData={[
                   {
-                    variant: 'secondary',
+                    variant: 'primary',
                     label: ManageLocales('app.modal.okay'),
                     handler: () => {
-                      modalSetState.setDialogContent(false);
+                      modalSetState.setIsDialogOpen(false);
                     },
                     customStyle: 'w-full flex-1'
                   }
@@ -107,6 +139,7 @@ const MyAppointments = () => {
             </div>
           </>
         );
+        getAppointment();
       })
       .catch((error: any) => {
         setIsLoading(false);
@@ -136,6 +169,18 @@ const MyAppointments = () => {
           </>
         );
       });
+  };
+
+  const handleCreateAppointment = () => {
+    setShowAppointment(true);
+    triggerCreatePayload({}).then(payload => {
+      let { data } = payload.data;
+      setAppointmentPayload(data);
+    });
+  };
+
+  const goBackToListView = () => {
+    setShowAppointment(false);
   };
 
   const tabsData: ITabsData = {
@@ -215,7 +260,6 @@ const MyAppointments = () => {
                   svg: editAppointmentSvg,
                   handler: () => {
                     setIsLoading(true);
-                    handleDeleteAppointment({ appointmentId: value.id });
                   },
                   customStyle: 'w-[40px] h-[40px]',
                   tooltip: ManageLocales('app.myAppointments.reschedule')
@@ -228,8 +272,43 @@ const MyAppointments = () => {
                   variant: 'secondary',
                   svg: BinIcon,
                   handler: () => {
-                    setIsLoading(true);
-                    handleDeleteAppointment({ appointmentId: value.id });
+                    modalSetState.setIsDialogOpen(true);
+                    modalSetState.setDialogContent(
+                      <>
+                        <div className="absolute left-[-84px] top-[-84px]">
+                          <Image src={warningIcon} alt="warning" />
+                        </div>
+                        <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[357px]">
+                          <h1 className="text-headingS text-neutral900">
+                            Do you want to cancel this appointment?
+                          </h1>
+                          <ActionButton
+                            actionButtonData={[
+                              {
+                                variant: 'secondary',
+                                label: 'No',
+                                handler: () => {
+                                  modalSetState.setIsDialogOpen(false);
+                                },
+                                customStyle: 'flex-1 w-full'
+                              },
+                              {
+                                variant: 'primary',
+                                label: 'Yes',
+                                handler: () => {
+                                  setIsLoading(true);
+                                  modalSetState.setIsDialogOpen(false);
+                                  handleDeleteAppointment({
+                                    appointmentId: value.id
+                                  });
+                                },
+                                customStyle: 'flex-1 w-full'
+                              }
+                            ]}
+                          />
+                        </div>
+                      </>
+                    );
                   },
                   customStyle: 'w-[40px] h-[40px]',
                   tooltip: ManageLocales('app.myAppointments.cancel')
@@ -248,124 +327,148 @@ const MyAppointments = () => {
   };
 
   const renderContent = () => {
-    return (
-      <>
-        <div className="flex p-[16px] bg-neutral0 justify-between items-center border-b-[1px] border-neutral200 rounded-t-[8px] ">
-          <div className="flex  w-[50%]  text-mMedium font-medium h-[40px] ">
-            {MyAppointmentsTabs.map(({ label, status }, index) => {
-              return (
-                <button
-                  className={`border-[1px] border-neutral200 px-[16px] py-[8px] ${
-                    activeTab === status
-                      ? 'bg-primaryMain text-neutral25 border-primaryMain'
-                      : 'bg-neutral0 text-neutral900 '
-                  } ${index === 0 && 'rounded-l-[8px]'}
-                ${
-                  index === MyAppointmentsTabs.length - 1 && 'rounded-r-[8px]'
-                }`}
-                  key={label}
-                  onClick={() => switchTabs({ tab: status })}
-                >
-                  {label}
-                </button>
-              );
-            })}
-          </div>
-          <ActionButton
-            actionButtonData={[
-              {
-                variant: 'secondary',
-                label: ManageLocales('app.myAppointments.bookAppointment'),
-                handler: () => {},
-                customStyle: 'flex-1 w-full h-10',
-                svg: bookAppointment
-              }
-            ]}
-          />
-        </div>
-        {data?.length > 0 ? (
-          <table className="w-full">
-            <thead>
-              <tr className="text-mMedium h-[47px] border-b  border-neutral200 bg-neutral50 text-neutral700">
-                {keys?.map(({ label }: any) => (
-                  <td key={label} className="p-4 text-left font-medium">
-                    {label}
-                  </td>
-                ))}
-              </tr>
-            </thead>
-            <tbody className="">
-              {data?.map((items: any, index: number) => {
+    if (showAppointment) {
+      return (
+        <BookAppointment
+          breadCrumLabel={ManageLocales('app.myAppointments.myAppointments')}
+          goBackToListView={goBackToListView}
+          appointmentPayload={appointmentPayload}
+          setIsLoading={setIsLoading}
+          modalSetState={modalSetState}
+          getAppointment={getAppointment}
+        />
+      );
+    } else {
+      return (
+        <>
+          <div className="flex p-[16px] bg-neutral0 justify-between items-center border-b-[1px] border-neutral200 rounded-t-[8px] ">
+            <div className="flex  w-[50%]  text-mMedium font-medium h-[40px] ">
+              {MyAppointmentsTabs.map(({ label, status }, index) => {
                 return (
-                  <tr
-                    key={items.id}
-                    className={`bg-neutral0 group  border-neutral200 hover:bg-neutral50 ${
-                      index >= data.length - 1 ? 'rounded-[8px]' : 'border-b'
-                    }`}
+                  <button
+                    className={`border-[1px] border-neutral200 px-[16px] py-[8px] ${
+                      activeTab === status
+                        ? 'bg-primaryMain text-neutral25 border-primaryMain'
+                        : 'bg-neutral0 text-neutral900 '
+                    } ${index === 0 && 'rounded-l-[8px]'}
+                  ${
+                    index === MyAppointmentsTabs.length - 1 && 'rounded-r-[8px]'
+                  }`}
+                    key={label}
+                    onClick={() => switchTabs({ tab: status })}
                   >
-                    {keys?.map(({ accessor }: any, index: number) => {
-                      return (
-                        <td
-                          key={accessor}
-                          className={` ${
-                            accessor === 'address' || accessor === 'reason'
-                              ? 'w-[25%]'
-                              : 'w-[15%]'
-                          } text-lRegular rounded-b-[8px] space-x-2 p-[16px] text-left text-gray-800`}
-                        >
-                          {renderCellContent(accessor, items)}
-                        </td>
-                      );
-                    })}
-                  </tr>
+                    {label}
+                  </button>
                 );
               })}
-            </tbody>
-          </table>
-        ) : (
-          !isLoading && (
-            <div
-              className={`flex flex-col items-center justify-center h-[73vh] gap-5 `}
-            >
-              <Image src={emptyAppointmentSvg} alt={'emptyAppointmentSvg'} />
-              <p className="text-neutral900  w-[320px] text-center ">
-                No Appointment yet!
-              </p>
             </div>
-          )
-        )}
-      </>
-    );
+            <ActionButton
+              actionButtonData={[
+                {
+                  variant: 'secondary',
+                  label: ManageLocales('app.myAppointments.bookAppointment'),
+                  handler: () => {
+                    handleCreateAppointment();
+                  },
+                  customStyle: 'flex-1 w-full h-10',
+                  svg: bookAppointment
+                }
+              ]}
+            />
+          </div>
+          {data?.length > 0 ? (
+            <table className="w-full">
+              <thead>
+                <tr className="text-mMedium h-[47px] border-b  border-neutral200 bg-neutral50 text-neutral700">
+                  {keys?.map(({ label }: any) => (
+                    <td key={label} className="p-4 text-left font-medium">
+                      {label}
+                    </td>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="">
+                {data?.map((items: any, index: number) => {
+                  return (
+                    <tr
+                      key={items.id}
+                      className={`bg-neutral0 group  border-neutral200 hover:bg-neutral50 ${
+                        index >= data.length - 1 ? 'rounded-[8px]' : 'border-b'
+                      }`}
+                    >
+                      {keys?.map(({ accessor }: any, index: number) => {
+                        return (
+                          <td
+                            key={accessor}
+                            className={` ${
+                              accessor === 'address' || accessor === 'reason'
+                                ? 'w-[25%]'
+                                : 'w-[15%]'
+                            } text-lRegular rounded-b-[8px] space-x-2 p-[16px] text-left text-gray-800`}
+                          >
+                            {renderCellContent(accessor, items)}
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          ) : (
+            !isLoading && (
+              <div
+                className={`flex flex-col items-center justify-center h-[73vh] gap-5 `}
+              >
+                <Image src={emptyAppointmentSvg} alt={'emptyAppointmentSvg'} />
+                <p className="text-neutral900  w-[320px] text-center ">
+                  No Appointment yet!
+                </p>
+              </div>
+            )
+          )}
+        </>
+      );
+    }
   };
 
   let isNudge = localStorage.getItem('show-nudge') === 'MINI';
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
 
   return (
-    <div
-      className={`relative mb-[20px] ${
-        isNudge &&
-        (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
-          isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-          ? 'h-[calc(100vh-144px)]'
-          : 'h-[calc(100vh-84px)]'
-      }`}
-    >
+    <>
+      {' '}
       <DialogComponent
         dialogContent={modalState.dialogContent}
         isOpens={modalState.isDialogOpen}
         setIsOpen={modalSetState.setIsDialogOpen}
       />
-      {isLoading && <CustomKGKLoader />}
-      <div className="flex  py-[8px] items-center">
-        <p className="text-lMedium font-medium text-neutral900">
-          {ManageLocales('app.myAppointments.myAppointments')}
-        </p>
+      <div
+        className={`relative mb-[20px] 
+      ${
+        isNudge &&
+        (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+          isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+          ? showAppointment
+            ? 'h-[calc(100vh-10px)]'
+            : 'h-[calc(100vh-144px)]'
+          : showAppointment
+          ? 'h-[calc(100vh--50px)]'
+          : 'h-[calc(100vh-84px)]'
+      }
+      `}
+      >
+        {isLoading && <CustomKGKLoader />}
+        <div className="flex  py-[8px] items-center">
+          <p className="text-lMedium font-medium text-neutral900">
+            {ManageLocales('app.myAppointments.myAppointments')}
+          </p>
+        </div>
+        <div className="border-[1px] border-neutral200 rounded-[8px]">
+          {renderContent()}
+        </div>
       </div>
-      <div className="border-[1px] border-neutral200 rounded-[8px]">
-        {renderContent()}
-      </div>
-    </div>
+    </>
   );
 };
 
