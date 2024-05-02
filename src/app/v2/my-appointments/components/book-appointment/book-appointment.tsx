@@ -52,7 +52,7 @@ const BookAppointment: React.FC<IBookAppointment> = ({
   const [slots, setSlots] = useState<ISlots>({});
   const [selectedDate, setSelectedDate] = useState<number>(0);
   const [selectedSlot, setSelectedSlot] = useState('');
-  const [textAreaValue, setTextAreaValue] = useState('');
+  const [comment, setComment] = useState('');
 
   useEffect(() => {
     let { kam, storeAddresses, timeSlots } = appointmentPayload;
@@ -85,7 +85,7 @@ const BookAppointment: React.FC<IBookAppointment> = ({
     setIsLoading(true);
     addMyAppointment({
       appointment_at: selectedSlot,
-      reason: textAreaValue,
+      reason: comment,
       address: location[0]
     })
       .unwrap()
@@ -331,11 +331,11 @@ const BookAppointment: React.FC<IBookAppointment> = ({
             </div>
             <div>
               <textarea
-                value={textAreaValue}
+                value={comment}
                 name="textarea"
                 placeholder="Enter comment"
                 className="w-full h-[40px] bg-infoSurface text-neutral500 rounded-[4px] text-sMobileRegular font-normal resize-none focus:outline-none p-[11px] border-infoBorder border-[1px] mt-2"
-                onChange={e => handleComment(e, setTextAreaValue)}
+                onChange={e => handleComment(e, setComment)}
               />
             </div>
           </div>

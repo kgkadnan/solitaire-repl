@@ -30,7 +30,7 @@ import {
 import { DialogComponent } from '@/components/v2/common/dialog';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import BinIcon from '@public/v2/assets/icons/bin.svg';
-import { ITabsData } from './interface';
+import { IAppointmentData, ITabsData } from './interface';
 import BookAppointment from './components/book-appointment/book-appointment';
 export interface ISlot {
   datetimeString: string;
@@ -67,6 +67,12 @@ const MyAppointments = () => {
       storeAddresses: [],
       timeSlots: { dates: [{ date: '', day: '' }], slots: {} }
     });
+  const [editAppointmentData, setEditAppointmentData] = useState({
+    selectedDate: '',
+    selectedSlot: '',
+    comment: '',
+    location: ''
+  });
 
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState(UPCOMING_APPOINTMENTS);
@@ -179,6 +185,11 @@ const MyAppointments = () => {
     });
   };
 
+  const handleEditAppointment = ({ editData }: IAppointmentData) => {
+    setIsLoading(true);
+    handleCreateAppointment();
+  };
+
   const goBackToListView = () => {
     setShowAppointment(false);
   };
@@ -209,6 +220,7 @@ const MyAppointments = () => {
   const { keys, data } = tabsData[activeTab] || { keys: [], data: [] };
 
   const renderCellContent = (accessor: string, value: any) => {
+    console.log('editData', value);
     switch (accessor) {
       case 'updated_at':
         return (
@@ -259,8 +271,7 @@ const MyAppointments = () => {
                   variant: 'secondary',
                   svg: editAppointmentSvg,
                   handler: () => {
-                    setIsLoading(true);
-                    setShowAppointment(true);
+                    handleEditAppointment({ editData: value });
                   },
                   customStyle: 'w-[40px] h-[40px]',
                   tooltip: ManageLocales('app.myAppointments.reschedule')
@@ -321,7 +332,7 @@ const MyAppointments = () => {
       default:
         return (
           <span className="text-lRegular text-neutral900 font-normal">
-            {value[accessor] ?? '-'}
+            {(value as any)[accessor] ?? '-'}
           </span>
         );
     }
@@ -381,7 +392,7 @@ const MyAppointments = () => {
             <table className="w-full">
               <thead>
                 <tr className="text-mMedium h-[47px] border-b  border-neutral200 bg-neutral50 text-neutral700">
-                  {keys?.map(({ label }: any) => (
+                  {keys?.map(({ label }) => (
                     <td key={label} className="p-4 text-left font-medium">
                       {label}
                     </td>
@@ -389,7 +400,7 @@ const MyAppointments = () => {
                 </tr>
               </thead>
               <tbody className="">
-                {data?.map((items: any, index: number) => {
+                {data?.map((items, index: number) => {
                   return (
                     <tr
                       key={items.id}
@@ -397,7 +408,7 @@ const MyAppointments = () => {
                         index >= data.length - 1 ? 'rounded-[8px]' : 'border-b'
                       }`}
                     >
-                      {keys?.map(({ accessor }: any, index: number) => {
+                      {keys?.map(({ accessor }) => {
                         return (
                           <td
                             key={accessor}
