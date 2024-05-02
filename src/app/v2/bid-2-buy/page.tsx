@@ -405,6 +405,8 @@ const BidToBuy = () => {
           </div>
         </div>
       );
+    } else if (activeTab === 2) {
+      return <></>;
     } else {
       return null;
     }
