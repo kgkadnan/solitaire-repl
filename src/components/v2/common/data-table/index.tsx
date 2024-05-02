@@ -4,7 +4,6 @@ import {
   MRT_ExpandButton,
   MRT_GlobalFilterTextField,
   MRT_TablePagination,
-  MRT_ToggleFullScreenButton,
   MaterialReactTable,
   useMaterialReactTable
 } from 'material-react-table';
@@ -155,6 +154,27 @@ const DataTable = ({
     localStorage.setItem('isFullScreen', JSON.stringify(!isFullScreen));
     setIsFullScreen(!isFullScreen);
   };
+
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 20 //customize the default page size
+  });
+
+  const [paginatedData, setPaginatedData] = useState<any>([]);
+
+  useEffect(() => {
+    // Calculate the start and end indices for the current page
+    const startIndex = pagination.pageIndex * pagination.pageSize;
+    const endIndex = startIndex + pagination.pageSize;
+    // Slice the data to get the current page's data
+    const newData = rows.slice(startIndex, endIndex);
+    // Update the paginated data state
+    setPaginatedData(newData);
+  }, [
+    rows,
+    pagination.pageIndex, //re-fetch when page index changes
+    pagination.pageSize //re-fetch when page size changes
+  ]);
 
   useEffect(() => {
     let isFullScreen = JSON.parse(localStorage.getItem('isFullScreen')!);
@@ -405,19 +425,19 @@ const DataTable = ({
 
   let isNudge = localStorage.getItem('show-nudge') === 'MINI';
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
-
   const NoResultsComponent = () => <></>;
   //pass table options to useMaterialReactTable
   const table = useMaterialReactTable({
     columns,
-    data: rows, //must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
+    data: paginatedData, //must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
 
     //state
-    getRowId: originalRow => originalRow.id,
+    getRowId: originalRow => originalRow?.id,
     onRowSelectionChange: setRowSelection,
     state: {
       rowSelection,
-      isFullScreen: JSON.parse(localStorage.getItem('isFullScreen')!)
+      isFullScreen: JSON.parse(localStorage.getItem('isFullScreen')!),
+      pagination
     },
     //filters
     positionToolbarAlertBanner: 'none',
@@ -426,7 +446,7 @@ const DataTable = ({
     enableDensityToggle: false,
     enableHiding: false,
     enableColumnFilters: false,
-    enablePagination: true,
+    // enablePagination: true,
     enableStickyHeader: true,
     enableBottomToolbar: true,
     enableGrouping: true,
@@ -438,12 +458,14 @@ const DataTable = ({
     globalFilterFn: 'startsWith',
     selectAllMode: 'page',
     renderEmptyRowsFallback: NoResultsComponent,
+    manualPagination: true,
+    rowCount: rows.length,
+    onPaginationChange: setPagination, //hoist pagination state to your state when it changes internally
     icons: {
       SearchIcon: () => (
         <Image src={searchIcon} alt={'searchIcon'} className="mr-[6px]" />
       )
     },
-
     // selectAllMode: undefined,
 
     muiTableBodyRowProps: ({ row }) => {
@@ -520,7 +542,7 @@ const DataTable = ({
       columnPinning: {
         left: ['mrt-row-select', 'lot_id', 'mrt-row-expand']
       },
-      pagination: { pageSize: 20, pageIndex: 0 }
+      pagination: pagination
     },
 
     // renderEmptyRowsFallback: () => {

@@ -412,7 +412,7 @@ const NewArrivals = () => {
     } else if (activeTab === 2 && bidHistory?.data?.length > 0) {
       return (
         <div className="flex items-center justify-between px-4 py-0">
-          <div className="flex gap-4">
+          <div className="flex gap-4 py-2">
             <div className=" border-[1px] border-successBorder rounded-[4px] bg-successSurface text-successMain">
               <p className="text-mMedium font-medium px-[6px] py-[4px]">Won</p>
             </div>
@@ -423,7 +423,7 @@ const NewArrivals = () => {
               </p>
             </div>
           </div>
-          <MRT_TablePagination table={table} />
+          {/* <MRT_TablePagination table={table} /> */}
           <div></div>
         </div>
       );
