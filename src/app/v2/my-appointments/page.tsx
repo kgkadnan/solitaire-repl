@@ -38,7 +38,7 @@ export interface ISlot {
 }
 
 export interface ISlots {
-  [index: string]: ISlot;
+  [index: string]: any;
 }
 
 export interface IAppointmentPayload {
@@ -260,6 +260,7 @@ const MyAppointments = () => {
                   svg: editAppointmentSvg,
                   handler: () => {
                     setIsLoading(true);
+                    setShowAppointment(true);
                   },
                   customStyle: 'w-[40px] h-[40px]',
                   tooltip: ManageLocales('app.myAppointments.reschedule')
