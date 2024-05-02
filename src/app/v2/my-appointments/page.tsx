@@ -68,7 +68,7 @@ const MyAppointments = () => {
       timeSlots: { dates: [{ date: '', day: '' }], slots: {} }
     });
   const [editAppointmentData, setEditAppointmentData] = useState({
-    selectedDate: '',
+    selectedDate: 0,
     selectedSlot: '',
     comment: '',
     location: ''
@@ -185,10 +185,38 @@ const MyAppointments = () => {
     });
   };
 
-  const handleEditAppointment = ({ editData }: IAppointmentData) => {
-    setIsLoading(true);
+  function formatDateTimeForEdit(dateString: string) {
+    const date = new Date(dateString);
+
+    // Get the date in MM/DD/YYYY format
+    const formattedDate = `${
+      date.getMonth() + 1
+    }/${date.getDate()}/${date.getFullYear()}`;
+
+    // Get the time in hh:mm:ss AM/PM format
+    const hours = date.getHours() > 12 ? date.getHours() - 12 : date.getHours();
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const seconds = date.getSeconds().toString().padStart(2, '0');
+    const meridiem = date.getHours() >= 12 ? 'PM' : 'AM';
+    const formattedTime = `${hours}:${minutes}:${seconds} ${meridiem}`;
+
+    // Combine date and time
+    const formattedDateTime = `${formattedDate}, ${formattedTime}`;
+
+    return formattedDateTime;
+  }
+
+  const handleEditAppointment = ({ editData }: any) => {
     handleCreateAppointment();
+    setEditAppointmentData({
+      selectedDate: formatDate(editData.appointment_at),
+      selectedSlot: formatDateTimeForEdit(editData.appointment_at),
+      comment: editData.reason,
+      location: editData.address
+    });
   };
+
+  console.log('eddiddd', editAppointmentData);
 
   const goBackToListView = () => {
     setShowAppointment(false);
@@ -197,7 +225,7 @@ const MyAppointments = () => {
   const tabsData: ITabsData = {
     upcomingAppointments: {
       keys: [
-        { label: 'Date', accessor: 'updated_at' },
+        { label: 'Date', accessor: 'appointment_at' },
         { label: 'Time Slot', accessor: 'appointment_at' },
         { label: 'Location', accessor: 'address' },
         { label: 'Comment', accessor: 'reason' },
@@ -207,7 +235,7 @@ const MyAppointments = () => {
     },
     pastAppointments: {
       keys: [
-        { label: 'Date', accessor: 'updated_at' },
+        { label: 'Date', accessor: 'appointment_at' },
         { label: 'Time Slot', accessor: 'appointment_at' },
         { label: 'Location', accessor: 'address' },
         { label: 'Comment', accessor: 'reason' }
@@ -219,122 +247,118 @@ const MyAppointments = () => {
   // Get the keys and data for the active tab
   const { keys, data } = tabsData[activeTab] || { keys: [], data: [] };
 
-  const renderCellContent = (accessor: string, value: any) => {
-    console.log('editData', value);
-    switch (accessor) {
-      case 'updated_at':
-        return (
-          <div className="flex items-center gap-3">
-            <div
-              className={` ${
-                activeTab === PAST_APPOINTMENTS
-                  ? 'bg-neutral100'
-                  : styles.gradient
-              } w-[64px] h-[64px] text-neutral700 p-[14px] rounded-[4px] font-medium flex justify-center items-center text-center`}
-            >
-              <div>
-                <p className="text-sMedium font-normal ">
-                  {formatDateForMonth(value[accessor])}
-                </p>
-                <p className="text-headingS font-medium">
-                  {formatDate(value[accessor])}
-                </p>
-              </div>
-            </div>
+  const renderCellContent = (label: string, accessor: string, value: any) => {
+    if (accessor === 'appointment_at' && label === 'Date') {
+      return (
+        <div className="flex items-center gap-3">
+          <div
+            className={` ${
+              activeTab === PAST_APPOINTMENTS
+                ? 'bg-neutral100'
+                : styles.gradient
+            } w-[64px] h-[64px] text-neutral700 p-[14px] rounded-[4px] font-medium flex justify-center items-center text-center`}
+          >
             <div>
-              <p className="text-lRegular text-neutral900 font-normal">
-                {formatDateString(value[accessor])}
+              <p className="text-sMedium font-normal ">
+                {formatDateForMonth(value[accessor])}
+              </p>
+              <p className="text-headingS font-medium">
+                {formatDate(value[accessor])}
               </p>
             </div>
           </div>
-        );
-
-      case 'appointment_at':
-        return (
-          <span className="text-lRegular text-neutral900 font-normal">
-            {getTimeRange(value[accessor])}
-          </span>
-        );
-      case 'address':
-        return (
-          <span className="text-lRegular text-neutral900 font-normal">
-            {value[accessor]}
-          </span>
-        );
-
-      case 'action':
-        return (
-          <div className="flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            <ActionButton
-              actionButtonData={[
-                {
-                  variant: 'secondary',
-                  svg: editAppointmentSvg,
-                  handler: () => {
-                    handleEditAppointment({ editData: value });
-                  },
-                  customStyle: 'w-[40px] h-[40px]',
-                  tooltip: ManageLocales('app.myAppointments.reschedule')
-                }
-              ]}
-            />
-            <ActionButton
-              actionButtonData={[
-                {
-                  variant: 'secondary',
-                  svg: BinIcon,
-                  handler: () => {
-                    modalSetState.setIsDialogOpen(true);
-                    modalSetState.setDialogContent(
-                      <>
-                        <div className="absolute left-[-84px] top-[-84px]">
-                          <Image src={warningIcon} alt="warning" />
-                        </div>
-                        <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[357px]">
-                          <h1 className="text-headingS text-neutral900">
-                            Do you want to cancel this appointment?
-                          </h1>
-                          <ActionButton
-                            actionButtonData={[
-                              {
-                                variant: 'secondary',
-                                label: 'No',
-                                handler: () => {
-                                  modalSetState.setIsDialogOpen(false);
-                                },
-                                customStyle: 'flex-1 w-full'
-                              },
-                              {
-                                variant: 'primary',
-                                label: 'Yes',
-                                handler: () => {
-                                  setIsLoading(true);
-                                  modalSetState.setIsDialogOpen(false);
-                                  handleDeleteAppointment({
-                                    appointmentId: value.id
-                                  });
-                                },
-                                customStyle: 'flex-1 w-full'
-                              }
-                            ]}
-                          />
-                        </div>
-                      </>
-                    );
-                  },
-                  customStyle: 'w-[40px] h-[40px]',
-                  tooltip: ManageLocales('app.myAppointments.cancel')
-                }
-              ]}
-            />
+          <div>
+            <p className="text-lRegular text-neutral900 font-normal">
+              {formatDateString(value[accessor])}
+            </p>
           </div>
-        );
-      default:
-        return (
-          <span className="text-lRegular text-neutral900 font-normal">
-            {(value as any)[accessor] ?? '-'}
-          </span>
-        );
+        </div>
+      );
+    } else if (accessor === 'appointment_at' && label === 'Time Slot') {
+      return (
+        <span className="text-lRegular text-neutral900 font-normal">
+          {getTimeRange(value[accessor])}
+        </span>
+      );
+    } else if (accessor === 'address') {
+      return (
+        <span className="text-lRegular text-neutral900 font-normal">
+          {value[accessor]}
+        </span>
+      );
+    } else if (accessor === 'action') {
+      return (
+        <div className="flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <ActionButton
+            actionButtonData={[
+              {
+                variant: 'secondary',
+                svg: editAppointmentSvg,
+                handler: () => {
+                  handleEditAppointment({ editData: value });
+                },
+                customStyle: 'w-[40px] h-[40px]',
+                tooltip: ManageLocales('app.myAppointments.reschedule')
+              }
+            ]}
+          />
+          <ActionButton
+            actionButtonData={[
+              {
+                variant: 'secondary',
+                svg: BinIcon,
+                handler: () => {
+                  modalSetState.setIsDialogOpen(true);
+                  modalSetState.setDialogContent(
+                    <>
+                      <div className="absolute left-[-84px] top-[-84px]">
+                        <Image src={warningIcon} alt="warning" />
+                      </div>
+                      <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[357px]">
+                        <h1 className="text-headingS text-neutral900">
+                          Do you want to cancel this appointment?
+                        </h1>
+                        <ActionButton
+                          actionButtonData={[
+                            {
+                              variant: 'secondary',
+                              label: 'No',
+                              handler: () => {
+                                modalSetState.setIsDialogOpen(false);
+                              },
+                              customStyle: 'flex-1 w-full'
+                            },
+                            {
+                              variant: 'primary',
+                              label: 'Yes',
+                              handler: () => {
+                                setIsLoading(true);
+                                modalSetState.setIsDialogOpen(false);
+                                handleDeleteAppointment({
+                                  appointmentId: value.id
+                                });
+                              },
+                              customStyle: 'flex-1 w-full'
+                            }
+                          ]}
+                        />
+                      </div>
+                    </>
+                  );
+                },
+                customStyle: 'w-[40px] h-[40px]',
+                tooltip: ManageLocales('app.myAppointments.cancel')
+              }
+            ]}
+          />
+        </div>
+      );
+    } else {
+      return (
+        <span className="text-lRegular text-neutral900 font-normal">
+          {(value as any)[accessor] ?? '-'}
+        </span>
+      );
     }
   };
 
@@ -408,7 +432,7 @@ const MyAppointments = () => {
                         index >= data.length - 1 ? 'rounded-[8px]' : 'border-b'
                       }`}
                     >
-                      {keys?.map(({ accessor }) => {
+                      {keys?.map(({ accessor, label }) => {
                         return (
                           <td
                             key={accessor}
@@ -418,7 +442,7 @@ const MyAppointments = () => {
                                 : 'w-[15%]'
                             } text-lRegular rounded-b-[8px] space-x-2 p-[16px] text-left text-gray-800`}
                           >
-                            {renderCellContent(accessor, items)}
+                            {renderCellContent(label, accessor, items)}
                           </td>
                         );
                       })}
