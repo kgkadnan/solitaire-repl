@@ -1892,17 +1892,15 @@ const Dashboard = () => {
                 <div className="w-[300px]">
                   <VolumeDiscount
                     totalSpent={
-                      400000
-                      // customerData?.customer?.volumeDiscount?.totalSpent
+                      customerData?.customer?.volumeDiscount?.totalSpent
                     }
                     expiryTime={
-                      '2024-05-28T09:08:46.603Z'
-                      // customerData?.customer?.volumeDiscount?.expiryTime
+                      // '2024-05-28T09:08:46.603Z'
+                      customerData?.customer?.volumeDiscount?.expiryTime
                     }
                     eligibleForDiscount={
-                      true
-                      // customerData?.customer?.volumeDiscount
-                      //   ?.eligibleForDiscount
+                      customerData?.customer?.volumeDiscount
+                        ?.eligibleForDiscount
                     }
                   />
                 </div>

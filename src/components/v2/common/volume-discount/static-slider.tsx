@@ -2,22 +2,27 @@ import { VOLUME_DISCOUNT_LIMIT } from '@/constants/business-logic';
 import React from 'react';
 import Tooltip from '../tooltip';
 
-const StaticSlider = ({ filledRange }: any) => {
+const StaticSlider = ({ totalSpent }: any) => {
+  let filledRange =
+    totalSpent < VOLUME_DISCOUNT_LIMIT ? totalSpent : VOLUME_DISCOUNT_LIMIT;
   return (
     <div className="pt-2">
       {/* Slider Track */}
+
       <div
         className={`bg-[#F9FAFB] rounded-[18px] h-[35px] flex px-2 items-center gap-1 relative ${
-          filledRange >= VOLUME_DISCOUNT_LIMIT && 'mb-[60px]'
+          totalSpent >= VOLUME_DISCOUNT_LIMIT && 'mb-[60px]'
         }`}
       >
+        <div className="absolute top-[17px] left-[34px] transform -translate-y-1/2 -translate-x-1/2 w-2 h-2 bg-[#5995ED] rounded-full"></div>
+
         <span className="text-sRegular text-neutral900">$0K</span>
         <input
           type="range"
           min={0}
           max={VOLUME_DISCOUNT_LIMIT}
           value={filledRange}
-          className="slider appearance-none h-1 w-full rounded-full relative"
+          className="slider appearance-none h-1 w-full rounded-full relative customStaticSlider"
           readOnly
           style={{
             background: `linear-gradient(to right, #5995ED 0%,#168B85, #FFAD05 ${
@@ -25,7 +30,26 @@ const StaticSlider = ({ filledRange }: any) => {
             }%, #E4E7EC ${filledRange / 3000}%, #E4E7EC 100%)`
           }}
         />
+        <style jsx>{`
+          input[type='range']::-webkit-slider-thumb {
+            display: none;
+          }
+
+          input[type='range']::-moz-range-thumb {
+            display: none;
+          }
+        `}</style>
         <span className="text-sRegular text-neutral900">$300K</span>
+        <div
+          className="absolute top-[17px]  transform -translate-y-1/2 translate-x-1/2 w-2 h-2 bg-[#FFAD05] rounded-full"
+          style={{
+            left: `calc(${(filledRange / VOLUME_DISCOUNT_LIMIT) * 100}% - ${
+              (filledRange / 50000) * 6 -
+              (filledRange > VOLUME_DISCOUNT_LIMIT / 2 ? 13 : 11)
+            }%)`
+          }}
+        ></div>
+
         {/* Pinpoint circle at end of filled range */}
         {filledRange < VOLUME_DISCOUNT_LIMIT ? (
           <>
@@ -55,7 +79,8 @@ const StaticSlider = ({ filledRange }: any) => {
               className="absolute top-9 text-center"
               style={{
                 left: `calc(${(filledRange / VOLUME_DISCOUNT_LIMIT) * 100}% - ${
-                  (filledRange / 50000) * 6 - 10
+                  (filledRange / 50000) * 6 -
+                  (filledRange > VOLUME_DISCOUNT_LIMIT / 2 ? 10 : 8)
                 }%)`
               }}
             >

@@ -50,7 +50,7 @@ const VolumeDiscount: React.FC<any> = ({
               <p className="text-successHover text-sRegular font-medium">
                 You are eligible for a volume discount of 2.0%
               </p>
-              <StaticSlider filledRange={totalSpent} />
+              <StaticSlider totalSpent={totalSpent} />
               <div className="text-sMedium text-neutral600 font-medium bg-[#F1FAF8] rounded-[4px] p-[6px]">
                 You can utilize current volume discount within &nbsp;
                 <span className="font-semiBold">
@@ -61,7 +61,7 @@ const VolumeDiscount: React.FC<any> = ({
             </div>
           ) : (
             <div className="flex flex-col gap-[72px]">
-              <StaticSlider filledRange={totalSpent} />
+              <StaticSlider totalSpent={totalSpent} />
               <div className="text-sMedium text-neutral600 font-medium bg-[#F1FAF8] rounded-[4px] p-[6px]">
                 Spend{' '}
                 <span className="font-semiBold">
