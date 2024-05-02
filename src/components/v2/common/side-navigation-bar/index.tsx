@@ -7,6 +7,7 @@ import Bid2BuyIcon from '@public/v2/assets/icons/sidebar-icons/bid-2-buy.svg?url
 import SearchIcon from '@public/v2/assets/icons/sidebar-icons/search.svg?url';
 import MyDaimondsIcon from '@public/v2/assets/icons/sidebar-icons/diamond.svg?url';
 import BookmarkIcon from '@public/v2/assets/icons/sidebar-icons/bookmark.svg?url';
+import MyAppointments from '@public/v2/assets/icons/sidebar-icons/my-appointments.svg?url';
 // import AppointmentIcon from '@public/v2/assets/icons/sidebar-icons/appointment.svg?url';
 import CartIcon from '@public/v2/assets/icons/sidebar-icons/shopping-cart.svg?url';
 // import SettingIcon from '@public/v2/assets/icons/sidebar-icons/setting.svg?url';
@@ -89,6 +90,12 @@ const SideNavigationBar = () => {
       title: ManageLocales('app.sideNavigationBar.yourOrders'),
       link: Routes.YOUR_ORDERS,
       isActive: currentRoute === Routes.YOUR_ORDERS
+    },
+    {
+      src: <MyAppointments />,
+      title: ManageLocales('app.sideNavigationBar.myAppointments'),
+      link: Routes.MY_APPOINTMENTS,
+      isActive: currentRoute === Routes.MY_APPOINTMENTS
     }
     // {
     //   title: 'line-separator-2'
