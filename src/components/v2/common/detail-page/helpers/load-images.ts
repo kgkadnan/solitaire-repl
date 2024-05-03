@@ -13,10 +13,33 @@ export async function loadImages(
         image.name === 'B2B' ||
         image.name === 'B2B Sparkle'
       ) {
-        if (image.url === 'null' || image.url === null || !image.url.length) {
+        if (
+          image.url === 'null' ||
+          image.url === null ||
+          !image.url.length ||
+          image.url === undefined
+        ) {
           isValid = false;
         } else {
-          isValid = true;
+          var checkUrl: any = image.url;
+          if (image.name === 'GIA Certificate') {
+            try {
+              checkUrl = new URL(image.url);
+              checkUrl = `${process.env.NEXT_PUBLIC_API_URL}public/proxy${checkUrl.pathname}`;
+            } catch (error) {
+              isValid = false;
+            }
+          } else {
+            checkUrl = image.url_check;
+          }
+          const response = await fetch(checkUrl);
+
+          const status = response.status;
+          if (status === 200) {
+            isValid = true;
+          } else {
+            isValid = false;
+          }
         }
       } else {
         isValid = await checkImage(image.url);

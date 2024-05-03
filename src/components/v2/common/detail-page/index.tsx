@@ -44,6 +44,7 @@ import { formatNumber } from '@/utils/fix-two-digit-number';
 import { loadImages } from './helpers/load-images';
 import { checkImage } from './helpers/check-image';
 import { ImagesType } from './interfrace';
+import fallbackImage from '@public/v2/assets/icons/not-found.svg';
 
 export function DiamondDetailsComponent({
   data,
@@ -115,11 +116,19 @@ export function DiamondDetailsComponent({
     },
     {
       name: 'B2B',
-      url: `${FILE_URLS.B2B.replace('***', tableData?.lot_id ?? '')}`
+      url: `${FILE_URLS.B2B.replace('***', tableData?.lot_id ?? '')}`,
+      url_check: `${FILE_URLS.B2B_CHECK.replace(
+        '***',
+        tableData?.lot_id ?? ''
+      )}`
     },
     {
       name: 'B2B Sparkle',
       url: `${FILE_URLS.B2B_SPARKLE.replace('***', tableData?.lot_id ?? '')}`,
+      url_check: `${FILE_URLS.B2B_SPARKLE_CHECK.replace(
+        '***',
+        tableData?.lot_id ?? ''
+      )}`,
       showDivider: true
     },
 
@@ -149,6 +158,18 @@ export function DiamondDetailsComponent({
   useEffect(() => {
     loadImages(images, setValidImages, checkImage);
   }, [tableData?.lot_id, tableData?.certificate_url]);
+
+  useEffect(() => {
+    if (!validImages.length) {
+      setValidImages([
+        {
+          name: 'No Data Found',
+          url: fallbackImage,
+          showDivider: true
+        }
+      ]);
+    }
+  }, [validImages]);
 
   const copyLink = () => {
     const link = `${process.env.NEXT_PUBLIC_DNA_URL}${filterData?.public_url
@@ -230,21 +251,21 @@ export function DiamondDetailsComponent({
           </p>
         </div>
       </div>
-      <div className="2xl:flex pt-5">
+      <div className="xl:flex pt-5">
         <div
           className={`flex ${
             isNudge &&
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-              ? '2xl:h-[calc(70vh-60px)]'
-              : '2xl:h-[70vh]'
+              ? 'xl:h-[calc(70vh-60px)]'
+              : 'xl:h-[70vh]'
           }`}
         >
-          <div className="w-full 2xl:hidden">
+          <div className="w-full xl:hidden">
             <ImageSlider images={validImages} setIsLoading={setIsLoading} />
           </div>
           <div
-            className={`hidden 2xl:block mr-5 ${
+            className={`hidden xl:block mr-5 ${
               isNudge &&
               (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
                 isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
@@ -258,7 +279,7 @@ export function DiamondDetailsComponent({
               onImageClick={handleImageClick}
             />
           </div>
-          <div className="hidden 2xl:block">
+          <div className="hidden xl:block">
             <ImagePreview
               images={validImages}
               selectedImageIndex={selectedImageIndex}
@@ -267,15 +288,15 @@ export function DiamondDetailsComponent({
           </div>
         </div>
         <div
-          className={`2xl:w-2/3 2xl:ml-10 mb-[12px] scroll-adjust-custom 2xl:overflow-y-scroll ${
+          className={`xl:w-2/3 xl:ml-10 mb-[12px] scroll-adjust-custom xl:overflow-y-scroll ${
             isNudge &&
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-              ? '2xl:h-[calc(70vh-60px)]'
-              : '2xl:h-[70vh]'
+              ? 'xl:h-[calc(70vh-60px)]'
+              : 'xl:h-[70vh]'
           }`}
         >
-          <div className="flex xl:justify-start  2xl:justify-between mt-4 2xl:mt-0 2xl:w-full">
+          <div className="flex xl:justify-start  xl:justify-between mt-4 xl:mt-0 xl:w-full">
             <p
               className="sm:text-[22px] xl:text-[28px] text-[#344054] font-medium mr-5 "
               style={{ alignSelf: 'center' }}
@@ -283,7 +304,7 @@ export function DiamondDetailsComponent({
               Stock No: {tableData?.lot_id ?? '-'}
             </p>
 
-            <div className="flex lg:w-[30%]  2xl:w-[40%] justify-around items-center">
+            <div className="flex lg:w-[30%]  xl:w-[40%] justify-around items-center">
               <div className="flex gap-3 items-center">
                 <Tooltip
                   tooltipTrigger={
