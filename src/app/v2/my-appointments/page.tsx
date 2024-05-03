@@ -11,7 +11,7 @@ import confirmIcon from '@public/v2/assets/icons/modal/confirm.svg';
 import errorSvg from '@public/v2/assets/icons/modal/error.svg';
 import {
   useDeleteMyAppointmentMutation,
-  useLazyGetMyAppointmentCreatePayloadQuery,
+  useLazyGetAvailableMyAppointmentSlotsQuery,
   useLazyGetMyAppointmentQuery
 } from '@/features/api/my-appointments';
 import styles from './my-appointments.module.scss';
@@ -56,7 +56,9 @@ const MyAppointments = () => {
   const [triggerMyAppointment, { data: myAppointmentData }] =
     useLazyGetMyAppointmentQuery({});
   const [deleteMyAppointment] = useDeleteMyAppointmentMutation({});
-  const [triggerCreatePayload] = useLazyGetMyAppointmentCreatePayloadQuery({});
+  const [triggerAvailableSlots] = useLazyGetAvailableMyAppointmentSlotsQuery(
+    {}
+  );
   const { modalState, modalSetState } = useModalStateManagement();
   const [pastAppointments, setPastAppointments] = useState([]);
   const [upcomingAppointments, setUpcomingAppointments] = useState([]);
@@ -173,7 +175,7 @@ const MyAppointments = () => {
 
   const handleCreateAppointment = () => {
     setShowAppointment(true);
-    triggerCreatePayload({}).then(payload => {
+    triggerAvailableSlots({}).then(payload => {
       let { data } = payload.data;
       setAppointmentPayload(data);
     });
