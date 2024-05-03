@@ -152,59 +152,34 @@ const BookAppointment: React.FC<IBookAppointment> = ({
       .catch(error => {
         setIsLoading(false);
         goBackToListView();
-        if (error.status === 400) {
-          modalSetState.setIsDialogOpen(true);
-          modalSetState.setDialogContent(
-            <>
-              <div className="absolute left-[-84px] top-[-84px]">
-                <Image src={warningIcon} alt="warningIcon" />
-              </div>
-              <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                <p className="text-neutral900 text-headingS font-normal">
-                  {error?.data?.message}
-                </p>
-                <ActionButton
-                  actionButtonData={[
-                    {
-                      variant: 'primary',
-                      label: ManageLocales('app.modal.okay'),
-                      handler: () => {
-                        modalSetState.setIsDialogOpen(false);
-                      },
-                      customStyle: 'flex-1 w-full h-10'
-                    }
-                  ]}
-                />
-              </div>
-            </>
-          );
-        } else {
-          modalSetState.setIsDialogOpen(true);
-          modalSetState.setDialogContent(
-            <>
-              <div className="absolute left-[-84px] top-[-84px]">
-                <Image src={errorSvg} alt="errorSvg" />
-              </div>
-              <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                <p className="text-neutral600 text-mRegular">
-                  {error?.data?.message}
-                </p>
-                <ActionButton
-                  actionButtonData={[
-                    {
-                      variant: 'primary',
-                      label: ManageLocales('app.modal.okay'),
-                      handler: () => {
-                        modalSetState.setIsDialogOpen(false);
-                      },
-                      customStyle: 'flex-1 w-full h-10'
-                    }
-                  ]}
-                />
-              </div>
-            </>
-          );
-        }
+        modalSetState.setIsDialogOpen(true);
+        modalSetState.setDialogContent(
+          <>
+            <div className="absolute left-[-84px] top-[-84px]">
+              <Image
+                src={error.status === 400 ? warningIcon : errorSvg}
+                alt={`${error.status === 400 ? 'warningIcon' : 'errorSvg'}`}
+              />
+            </div>
+            <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+              <p className="text-neutral600 text-mRegular">
+                {error?.data?.message}
+              </p>
+              <ActionButton
+                actionButtonData={[
+                  {
+                    variant: 'primary',
+                    label: ManageLocales('app.modal.okay'),
+                    handler: () => {
+                      modalSetState.setIsDialogOpen(false);
+                    },
+                    customStyle: 'flex-1 w-full h-10'
+                  }
+                ]}
+              />
+            </div>
+          </>
+        );
       });
   };
 

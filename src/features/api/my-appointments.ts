@@ -27,7 +27,7 @@ export const myAppointmentApi = createApi({
       query: () => `store/appointments`,
       providesTags: ['my-appointment']
     }),
-    getMyAppointmentCreatePayload: builder.query({
+    getAvailableMyAppointmentSlots: builder.query({
       query: () => `/store/appointments/create-request-payload`,
       providesTags: ['my-appointment']
     }),
@@ -45,7 +45,6 @@ export const myAppointmentApi = createApi({
 export const {
   useLazyGetMyAppointmentQuery,
   useDeleteMyAppointmentMutation,
-  useLazyGetMyAppointmentCreatePayloadQuery,
-  useAddMyAppointmentMutation,
-  useRescheduleMyAppointmentMutation
+  useLazyGetAvailableMyAppointmentSlotsQuery,
+  useAddMyAppointmentMutation
 } = myAppointmentApi;

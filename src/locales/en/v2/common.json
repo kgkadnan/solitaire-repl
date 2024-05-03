@@ -16,6 +16,7 @@
   "app.sideNavigationBar.settings": "Settings",
   "app.sideNavigationBar.newArrivals": "New Arrivals",
   "app.sideNavigationBar.bidToBuy": "Bid to Buy",
+  "app.sideNavigationBar.faqs": "FAQs",
 
   "app.result.headerResult": "Here are the relevant results for your search",
   "app.result.headerEdit": "You are editing your",
@@ -191,5 +192,6 @@
   "app.myAppointments.cancel":"Cancel",
   "app.myAppointments.confirmAppointments":"Confirm Appointment",
   "app.myAppointments.rescheduleAppointments":"Reschedule Appointment"
+
 
 }
