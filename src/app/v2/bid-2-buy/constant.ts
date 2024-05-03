@@ -145,6 +145,15 @@ export const columnHeaders = [
     id: 'cus_ma-lis-seq_01HQSNF0TT2MZS9M0YHPDH3E8F'
   },
   {
+    label: 'Max Disc %',
+    accessor: 'my_current_bid',
+    sequence: 17,
+    is_fixed: false,
+    short_label: 'Max Disc %',
+    is_disabled: false,
+    id: 'cus_ma-lis-seq_01HQSNF0TT2MZS9M0YHPDH3E8F'
+  },
+  {
     label: 'Discount',
     accessor: 'original_discount',
     sequence: 15,
