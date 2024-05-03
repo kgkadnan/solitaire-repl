@@ -9,7 +9,7 @@
   "app.sideNavigationBar.search": "Search",
   "app.sideNavigationBar.dashboard": "Dashboard",
   "app.sideNavigationBar.yourOrders": "Your Orders",
-  "app.sideNavigationBar.myAppointments" : "My Appointments",
+  "app.sideNavigationBar.myAppointments": "My Appointments",
   "app.sideNavigationBar.bookmark": "Saved Search ",
   "app.sideNavigationBar.appointments": "Appointments",
   "app.sideNavigationBar.myCart": "My Cart",
@@ -181,12 +181,10 @@
   "app.modal.kyc.emailVerification": "Email Verification",
   "app.kyc.statusScreen.exploreWebsite": "Explore Website",
 
-
-  "app.myAppointments.myAppointments" : "My Appointments",
-  "app.myAppointments.upcomingAppointments":"Upcoming Appointments",
-  "app.myAppointments.pastAppointments":"Past Appointments",
-  "app.myAppointments.bookAppointment":"Book Appointments",
-  "app.myAppointments.reschedule" : "Reschedule",
-  "app.myAppointments.cancel":"Cancel"
-
+  "app.myAppointments.myAppointments": "My Appointments",
+  "app.myAppointments.upcomingAppointments": "Upcoming Appointments",
+  "app.myAppointments.pastAppointments": "Past Appointments",
+  "app.myAppointments.bookAppointment": "Book Appointments",
+  "app.myAppointments.reschedule": "Reschedule",
+  "app.myAppointments.cancel": "Cancel"
 }
