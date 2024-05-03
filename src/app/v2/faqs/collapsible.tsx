@@ -15,13 +15,12 @@ const Collapsible = ({ title, children }: any) => {
 
   return (
     <div>
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+      <div className="flex items-center cursor-pointer" onClick={handleToggle}>
+        {/* <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           {title}
-        </Typography>
-        <IconButton onClick={handleToggle}>
-          {isExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-        </IconButton>
+        </Typography> */}
+        <div>{title}</div>
+        {isExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
       </div>
       <Collapse in={isExpanded} timeout="auto" unmountOnExit>
         {children}
