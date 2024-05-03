@@ -1,10 +1,8 @@
 'use client';
 import React, { useState } from 'react';
-import { Typography, IconButton, Collapse } from '@mui/material';
-import {
-  ExpandMore as ExpandMoreIcon,
-  ExpandLess as ExpandLessIcon
-} from '@mui/icons-material';
+import { Collapse } from '@mui/material';
+import ArrowDown from '@public/v2/assets/icons/arrow-down.svg?url';
+import ArrowRight from '@public/v2/assets/icons/arrow-right.svg?url';
 
 const Collapsible = ({ title, children }: any) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -14,16 +12,16 @@ const Collapsible = ({ title, children }: any) => {
   };
 
   return (
-    <div>
-      <div className="flex items-center cursor-pointer" onClick={handleToggle}>
-        {/* <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          {title}
-        </Typography> */}
-        <div>{title}</div>
-        {isExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+    <div className=" border-b-[2px] border-[#E4E7EC] p-[22px]">
+      <div
+        className="flex items-center cursor-pointer justify-between"
+        onClick={handleToggle}
+      >
+        <div className="text-lRegular text-neutral700">{title}</div>
+        {isExpanded ? <ArrowDown /> : <ArrowRight />}
       </div>
       <Collapse in={isExpanded} timeout="auto" unmountOnExit>
-        {children}
+        <p className="text-neutral600 text-mRegular mt-5"> {children}</p>
       </Collapse>
     </div>
   );
