@@ -15,7 +15,7 @@ import {
   useLazyGetMyAppointmentQuery
 } from '@/features/api/my-appointments';
 import styles from './my-appointments.module.scss';
-import editAppointmentSvg from '@public/v2/assets/icons/my-appointments/edit-appointment.svg';
+import rescheduleAppointmentSvg from '@public/v2/assets/icons/my-appointments/edit-appointment.svg';
 import Image from 'next/image';
 import { kycStatus } from '@/constants/enums/kyc';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
@@ -30,7 +30,7 @@ import {
 import { DialogComponent } from '@/components/v2/common/dialog';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import BinIcon from '@public/v2/assets/icons/bin.svg';
-import { IAppointmentData, ITabsData } from './interface';
+import { ITabsData } from './interface';
 import BookAppointment from './components/book-appointment/book-appointment';
 export interface ISlot {
   datetimeString: string;
@@ -52,6 +52,15 @@ export interface IAppointmentPayload {
   };
 }
 
+export interface IRescheduleAppointmentData {
+  selectedDate: number;
+  selectedSlot: string;
+  comment: string;
+  location: string;
+  appointmentId: string;
+  stones: string[];
+}
+
 const MyAppointments = () => {
   const [triggerMyAppointment, { data: myAppointmentData }] =
     useLazyGetMyAppointmentQuery({});
@@ -60,19 +69,15 @@ const MyAppointments = () => {
   const { modalState, modalSetState } = useModalStateManagement();
   const [pastAppointments, setPastAppointments] = useState([]);
   const [upcomingAppointments, setUpcomingAppointments] = useState([]);
-  const [showAppointment, setShowAppointment] = useState(false);
+  const [showAppointmentForm, setShowAppointmentForm] = useState(false);
   const [appointmentPayload, setAppointmentPayload] =
     useState<IAppointmentPayload>({
       kam: { kam_name: '' },
       storeAddresses: [],
       timeSlots: { dates: [{ date: '', day: '' }], slots: {} }
     });
-  const [editAppointmentData, setEditAppointmentData] = useState({
-    selectedDate: 0,
-    selectedSlot: '',
-    comment: '',
-    location: ''
-  });
+  const [rescheduleAppointmentData, setRescheduleAppointmentData] =
+    useState<IRescheduleAppointmentData>();
 
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState(UPCOMING_APPOINTMENTS);
@@ -178,14 +183,14 @@ const MyAppointments = () => {
   };
 
   const handleCreateAppointment = () => {
-    setShowAppointment(true);
+    setShowAppointmentForm(true);
     triggerCreatePayload({}).then(payload => {
       let { data } = payload.data;
       setAppointmentPayload(data);
     });
   };
 
-  function formatDateTimeForEdit(dateString: string) {
+  function formatDateTimeForReschedule(dateString: string) {
     const date = new Date(dateString);
 
     // Get the date in MM/DD/YYYY format
@@ -206,20 +211,21 @@ const MyAppointments = () => {
     return formattedDateTime;
   }
 
-  const handleEditAppointment = ({ editData }: any) => {
+  const handleRescheduleAppointment = ({ rescheduleData }: any) => {
     handleCreateAppointment();
-    setEditAppointmentData({
-      selectedDate: formatDate(editData.appointment_at),
-      selectedSlot: formatDateTimeForEdit(editData.appointment_at),
-      comment: editData.reason,
-      location: editData.address
+    setRescheduleAppointmentData({
+      selectedDate: formatDate(rescheduleData.appointment_at),
+      selectedSlot: formatDateTimeForReschedule(rescheduleData.appointment_at),
+      comment: rescheduleData.reason,
+      location: rescheduleData.address,
+      appointmentId: rescheduleData.id,
+      stones: rescheduleData.stones
     });
   };
 
-  console.log('eddiddd', editAppointmentData);
-
   const goBackToListView = () => {
-    setShowAppointment(false);
+    setRescheduleAppointmentData(undefined);
+    setShowAppointmentForm(false);
   };
 
   const tabsData: ITabsData = {
@@ -293,9 +299,9 @@ const MyAppointments = () => {
             actionButtonData={[
               {
                 variant: 'secondary',
-                svg: editAppointmentSvg,
+                svg: rescheduleAppointmentSvg,
                 handler: () => {
-                  handleEditAppointment({ editData: value });
+                  handleRescheduleAppointment({ rescheduleData: value });
                 },
                 customStyle: 'w-[40px] h-[40px]',
                 tooltip: ManageLocales('app.myAppointments.reschedule')
@@ -363,7 +369,7 @@ const MyAppointments = () => {
   };
 
   const renderContent = () => {
-    if (showAppointment) {
+    if (showAppointmentForm) {
       return (
         <BookAppointment
           breadCrumLabel={ManageLocales('app.myAppointments.myAppointments')}
@@ -372,6 +378,7 @@ const MyAppointments = () => {
           setIsLoading={setIsLoading}
           modalSetState={modalSetState}
           getAppointment={getAppointment}
+          rescheduleAppointmentData={rescheduleAppointmentData}
         />
       );
     } else {
@@ -485,22 +492,29 @@ const MyAppointments = () => {
         isNudge &&
         (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
           isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-          ? showAppointment
+          ? showAppointmentForm
             ? 'h-[calc(100vh-10px)]'
             : 'h-[calc(100vh-144px)]'
-          : showAppointment
+          : showAppointmentForm
           ? 'h-[calc(100vh--50px)]'
           : 'h-[calc(100vh-84px)]'
       }
       `}
       >
         {isLoading && <CustomKGKLoader />}
-        <div className="flex  py-[8px] items-center">
-          <p className="text-lMedium font-medium text-neutral900">
-            {ManageLocales('app.myAppointments.myAppointments')}
-          </p>
-        </div>
-        <div className="border-[1px] border-neutral200 rounded-[8px]">
+        {!showAppointmentForm && (
+          <div className="flex  py-[8px] items-center">
+            <p className="text-lMedium font-medium text-neutral900">
+              {ManageLocales('app.myAppointments.myAppointments')}
+            </p>
+          </div>
+        )}
+
+        <div
+          className={`border-[1px] border-neutral200 rounded-[8px] ${
+            showAppointmentForm && 'mt-[24px]'
+          }`}
+        >
           {renderContent()}
         </div>
       </div>
