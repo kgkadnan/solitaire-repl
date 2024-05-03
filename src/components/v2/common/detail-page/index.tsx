@@ -251,21 +251,21 @@ export function DiamondDetailsComponent({
           </p>
         </div>
       </div>
-      <div className="xl:flex pt-5">
+      <div className="2xl:flex pt-5">
         <div
           className={`flex ${
             isNudge &&
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-              ? 'xl:h-[calc(70vh-60px)]'
-              : 'xl:h-[70vh]'
+              ? '2xl:h-[calc(70vh-60px)]'
+              : '2xl:h-[70vh]'
           }`}
         >
-          <div className="w-full xl:hidden">
+          <div className="w-full 2xl:hidden">
             <ImageSlider images={validImages} setIsLoading={setIsLoading} />
           </div>
           <div
-            className={`hidden xl:block mr-5 ${
+            className={`hidden 2xl:block mr-5 ${
               isNudge &&
               (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
                 isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
@@ -279,7 +279,7 @@ export function DiamondDetailsComponent({
               onImageClick={handleImageClick}
             />
           </div>
-          <div className="hidden xl:block">
+          <div className="hidden 2xl:block">
             <ImagePreview
               images={validImages}
               selectedImageIndex={selectedImageIndex}
@@ -288,23 +288,23 @@ export function DiamondDetailsComponent({
           </div>
         </div>
         <div
-          className={`xl:w-2/3 xl:ml-10 mb-[12px] scroll-adjust-custom xl:overflow-y-scroll ${
+          className={`2xl:w-2/3 2xl:ml-10 mb-[12px] scroll-adjust-custom 2xl:overflow-y-scroll ${
             isNudge &&
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-              ? 'xl:h-[calc(70vh-60px)]'
-              : 'xl:h-[70vh]'
+              ? '2xl:h-[calc(70vh-60px)]'
+              : '2xl:h-[70vh]'
           }`}
         >
-          <div className="flex xl:justify-start  xl:justify-between mt-4 xl:mt-0 xl:w-full">
+          <div className="flex 2xl:justify-start  2xl:justify-between mt-4 2xl:mt-0 2xl:w-full">
             <p
-              className="sm:text-[22px] xl:text-[28px] text-[#344054] font-medium mr-5 "
+              className="sm:text-[22px] 2xl:text-[28px] text-[#344054] font-medium mr-5 "
               style={{ alignSelf: 'center' }}
             >
               Stock No: {tableData?.lot_id ?? '-'}
             </p>
 
-            <div className="flex lg:w-[30%]  xl:w-[40%] justify-around items-center">
+            <div className="flex lg:w-[30%]  2xl:w-[40%] justify-around items-center">
               <div className="flex gap-3 items-center">
                 <Tooltip
                   tooltipTrigger={
@@ -431,34 +431,34 @@ export function DiamondDetailsComponent({
             {RenderNewArrivalLotId({ tableData })}
           </div>
           <div className="pt-8 max-w-[100%] pr-[10px]">
-            <div className="sm:text-[14px] xl:text-[16px] text-[#344054]  font-medium">
+            <div className="sm:text-[14px] 2xl:text-[16px] text-[#344054]  font-medium">
               Price Details
             </div>
             {displayTable(priceDetails)}
           </div>
           <div className="pt-8 max-w-[100%] pr-[10px]">
-            <div className="sm:text-[14px] xl:text-[16px] text-[#344054]  font-medium">
+            <div className="sm:text-[14px] 2xl:text-[16px] text-[#344054]  font-medium">
               Basic Details
             </div>
             {displayTable(basicDetails)}
           </div>
 
           <div className="mt-6 max-w-[100%] pr-[10px]">
-            <div className="sm:text-[14px] xl:text-[16px]  font-medium text-[#344054]">
+            <div className="sm:text-[14px] 2xl:text-[16px]  font-medium text-[#344054]">
               Measurements
             </div>
             {displayTable(mesurementsDetails)}
           </div>
 
           <div className="mt-6 max-w-[100%] pr-[10px]">
-            <div className="sm:text-[14px] xl:text-[16px] font-medium text-[#344054]">
+            <div className="sm:text-[14px] 2xl:text-[16px] font-medium text-[#344054]">
               Inclusion Details
             </div>
             {displayTable(inclusionDetails)}
           </div>
 
           <div className="mt-6 max-w-[100%] pr-[10px] mb-5">
-            <div className="sm:text-[14px] xl:text-[16px] font-medium text-[#344054]">
+            <div className="sm:text-[14px] 2xl:text-[16px] font-medium text-[#344054]">
               Other Information
             </div>
             {displayTable(otherInformationDetails)}
