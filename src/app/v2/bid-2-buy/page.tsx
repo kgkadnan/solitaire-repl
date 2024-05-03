@@ -43,6 +43,7 @@ import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import { Toast } from '@/components/v2/common/copy-and-share/toast';
 import { loadImages } from '@/components/v2/common/detail-page/helpers/load-images';
 import { checkImage } from '@/components/v2/common/detail-page/helpers/check-image';
+import fallbackImage from '@public/v2/assets/icons/not-found.svg';
 
 const BidToBuy = () => {
   const [isDetailPage, setIsDetailPage] = useState(false);
@@ -427,7 +428,11 @@ const BidToBuy = () => {
     },
     {
       name: 'B2B',
-      url: `${FILE_URLS.B2B.replace('***', detailImageData?.lot_id ?? '')}`
+      url: `${FILE_URLS.B2B.replace('***', detailImageData?.lot_id ?? '')}`,
+      url_check: `${FILE_URLS.B2B_CHECK.replace(
+        '***',
+        detailImageData?.lot_id ?? ''
+      )}`
     },
     {
       name: 'B2B Sparkle',
@@ -435,7 +440,11 @@ const BidToBuy = () => {
         '***',
         detailImageData?.lot_id ?? ''
       )}`,
-      isSepratorNeeded: true
+      url_check: `${FILE_URLS.B2B_SPARKLE_CHECK.replace(
+        '***',
+        detailImageData?.lot_id ?? ''
+      )}`,
+      showDivider: true
     },
 
     {
@@ -478,6 +487,18 @@ const BidToBuy = () => {
   useEffect(() => {
     loadImages(images, setValidImages, checkImage);
   }, [detailImageData]);
+  useEffect(() => {
+    if (!validImages.length) {
+      setValidImages([
+        {
+          name: '',
+          url: fallbackImage,
+          showDivider: true
+        }
+      ]);
+    }
+  }, [validImages]);
+
   return (
     <div className="mb-[20px] relative">
       {isLoading && <CustomKGKLoader />}

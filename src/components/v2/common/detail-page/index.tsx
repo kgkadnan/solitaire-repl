@@ -44,6 +44,7 @@ import { formatNumber } from '@/utils/fix-two-digit-number';
 import { loadImages } from './helpers/load-images';
 import { checkImage } from './helpers/check-image';
 import { ImagesType } from './interfrace';
+import fallbackImage from '@public/v2/assets/icons/not-found.svg';
 
 export function DiamondDetailsComponent({
   data,
@@ -115,11 +116,19 @@ export function DiamondDetailsComponent({
     },
     {
       name: 'B2B',
-      url: `${FILE_URLS.B2B.replace('***', tableData?.lot_id ?? '')}`
+      url: `${FILE_URLS.B2B.replace('***', tableData?.lot_id ?? '')}`,
+      url_check: `${FILE_URLS.B2B_CHECK.replace(
+        '***',
+        tableData?.lot_id ?? ''
+      )}`
     },
     {
       name: 'B2B Sparkle',
       url: `${FILE_URLS.B2B_SPARKLE.replace('***', tableData?.lot_id ?? '')}`,
+      url_check: `${FILE_URLS.B2B_SPARKLE_CHECK.replace(
+        '***',
+        tableData?.lot_id ?? ''
+      )}`,
       showDivider: true
     },
 
@@ -149,6 +158,18 @@ export function DiamondDetailsComponent({
   useEffect(() => {
     loadImages(images, setValidImages, checkImage);
   }, [tableData?.lot_id, tableData?.certificate_url]);
+
+  useEffect(() => {
+    if (!validImages.length) {
+      setValidImages([
+        {
+          name: 'No Data Found',
+          url: fallbackImage,
+          showDivider: true
+        }
+      ]);
+    }
+  }, [validImages]);
 
   const copyLink = () => {
     const link = `${process.env.NEXT_PUBLIC_DNA_URL}${filterData?.public_url
@@ -275,9 +296,9 @@ export function DiamondDetailsComponent({
               : '2xl:h-[70vh]'
           }`}
         >
-          <div className="flex xl:justify-start  2xl:justify-between mt-4 2xl:mt-0 2xl:w-full">
+          <div className="flex 2xl:justify-start  2xl:justify-between mt-4 2xl:mt-0 2xl:w-full">
             <p
-              className="sm:text-[22px] xl:text-[28px] text-[#344054] font-medium mr-5 "
+              className="sm:text-[22px] 2xl:text-[28px] text-[#344054] font-medium mr-5 "
               style={{ alignSelf: 'center' }}
             >
               Stock No: {tableData?.lot_id ?? '-'}
@@ -410,34 +431,34 @@ export function DiamondDetailsComponent({
             {RenderNewArrivalLotId({ tableData })}
           </div>
           <div className="pt-8 max-w-[100%] pr-[10px]">
-            <div className="sm:text-[14px] xl:text-[16px] text-[#344054]  font-medium">
+            <div className="sm:text-[14px] 2xl:text-[16px] text-[#344054]  font-medium">
               Price Details
             </div>
             {displayTable(priceDetails)}
           </div>
           <div className="pt-8 max-w-[100%] pr-[10px]">
-            <div className="sm:text-[14px] xl:text-[16px] text-[#344054]  font-medium">
+            <div className="sm:text-[14px] 2xl:text-[16px] text-[#344054]  font-medium">
               Basic Details
             </div>
             {displayTable(basicDetails)}
           </div>
 
           <div className="mt-6 max-w-[100%] pr-[10px]">
-            <div className="sm:text-[14px] xl:text-[16px]  font-medium text-[#344054]">
+            <div className="sm:text-[14px] 2xl:text-[16px]  font-medium text-[#344054]">
               Measurements
             </div>
             {displayTable(mesurementsDetails)}
           </div>
 
           <div className="mt-6 max-w-[100%] pr-[10px]">
-            <div className="sm:text-[14px] xl:text-[16px] font-medium text-[#344054]">
+            <div className="sm:text-[14px] 2xl:text-[16px] font-medium text-[#344054]">
               Inclusion Details
             </div>
             {displayTable(inclusionDetails)}
           </div>
 
           <div className="mt-6 max-w-[100%] pr-[10px] mb-5">
-            <div className="sm:text-[14px] xl:text-[16px] font-medium text-[#344054]">
+            <div className="sm:text-[14px] 2xl:text-[16px] font-medium text-[#344054]">
               Other Information
             </div>
             {displayTable(otherInformationDetails)}
