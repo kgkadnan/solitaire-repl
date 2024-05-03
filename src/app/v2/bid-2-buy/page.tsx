@@ -115,6 +115,8 @@ const BidToBuy = () => {
             return { ...commonProps, Cell: DiscountWithCross };
           case 'discount':
             return { ...commonProps, Cell: RenderDiscount };
+          case 'my_current_bid':
+            return { ...commonProps, Cell: RenderDiscount };
           case 'last_bid_date':
             return { ...commonProps, Cell: RenderBidDate };
 
@@ -215,6 +217,7 @@ const BidToBuy = () => {
     if (authToken) useSocket(socketManager, authToken);
   }, [authToken]);
   const handleBidStones = useCallback((data: any) => {
+    console.log('data', data);
     setActiveBid(data.activeStone);
     setBid(data.bidStone);
     setTime(data.endTime);
@@ -555,16 +558,21 @@ const BidToBuy = () => {
                   columns={
                     activeTab === 2
                       ? memoizedColumns.filter(
-                          (data: any) => data.accessorKey !== 'shape'
-                        ) // Filter out data with accessor key 'discount'
+                          (data: any) =>
+                            data.accessorKey !== 'shape' &&
+                            data.accessorKey !== 'discount'
+                        )
                       : activeTab === 1
                       ? memoizedColumns.filter(
                           (data: any) =>
                             data.accessorKey !== 'last_bid_date' &&
-                            data.accessorKey !== 'shape'
+                            data.accessorKey !== 'shape' &&
+                            data.accessorKey !== 'discount'
                         )
                       : memoizedColumns.filter(
-                          (data: any) => data.accessorKey !== 'last_bid_date'
+                          (data: any) =>
+                            data.accessorKey !== 'my_current_bid' &&
+                            data.accessorKey !== 'last_bid_date'
                         )
                   }
                   modalSetState={modalSetState}

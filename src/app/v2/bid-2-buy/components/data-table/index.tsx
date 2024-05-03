@@ -205,6 +205,21 @@ const BidToByDataTable = ({
       'mrt-row-select',
       'lot_id',
       'last_bid_date',
+      'details',
+      'location',
+      'lab',
+      'shape',
+      'shape_full',
+      'carats',
+      'color',
+      'clarity',
+      'cut',
+      'polish',
+      'symmetry',
+      'fluorescence',
+      'rap_value',
+      'discount',
+      'my_current_bid',
       ...columns.map((c: any) => c.accessorKey)
     ] //array of column ids (Initializing is optional as of v2.10.0)
   );
@@ -212,7 +227,7 @@ const BidToByDataTable = ({
   const renderTopToolbar = ({ table }: any) => (
     <div>
       <div
-        className={` border-neutral200 ${
+        className={`border-neutral200 ${
           (activeTab !== 2 || (activeTab === 2 && historyCount === 0)) &&
           'border-b-[1px]'
         }`}
@@ -332,7 +347,11 @@ const BidToByDataTable = ({
       </div>
 
       {rows.length > 0 && activeTab !== 2 && (
-        <Bid2BuyCalculatedField rows={rows} selectedProducts={rowSelection} />
+        <Bid2BuyCalculatedField
+          rows={rows}
+          selectedProducts={rowSelection}
+          showMyCurrentBid={activeTab === 1}
+        />
       )}
     </div>
   );
@@ -673,6 +692,8 @@ const BidToByDataTable = ({
         const bidValue =
           bidValues[row.id] !== undefined
             ? bidValues[row.id]
+            : activeTab === 1
+            ? row.original.my_current_bid
             : row.original.discount;
 
         // If the row is selected, return the detail panel content
@@ -727,7 +748,10 @@ const BidToByDataTable = ({
                 <div className="text-mRegular text-neutral700">Bid Disc%</div>
                 <div className="gap-6 flex">
                   <div className="h-[40px] flex gap-1">
-                    {bidValue <= row.original.discount ? (
+                    {bidValue <=
+                    (activeTab === 1
+                      ? row.original.my_current_bid
+                      : row.original.discount) ? (
                       <div className="cursor-not-allowed">
                         <DisableDecrementIcon />
                       </div>
@@ -736,7 +760,9 @@ const BidToByDataTable = ({
                         onClick={() =>
                           handleDecrementDiscount(
                             row.id,
-                            row.original.discount,
+                            activeTab === 1
+                              ? row.original.my_current_bid
+                              : row.original.discount,
                             setBidError,
                             setBidValues
                           )
@@ -769,7 +795,9 @@ const BidToByDataTable = ({
                       onClick={() =>
                         handleIncrementDiscount(
                           row.id,
-                          row.original.discount,
+                          activeTab === 1
+                            ? row.original.my_current_bid
+                            : row.original.discount,
                           setBidError,
                           setBidValues
                         )
@@ -786,7 +814,12 @@ const BidToByDataTable = ({
                           label: activeTab === 0 ? 'Add Bid' : 'Update Bid',
                           handler: () => {
                             if (!bidError) {
-                              if (bidValue < row.original.discount) {
+                              if (
+                                bidValue <
+                                (activeTab === 1
+                                  ? row.original.my_current_bid
+                                  : row.original.discount)
+                              ) {
                                 setBidError(
                                   'Bid value cannot be less than maximum discount.'
                                 );

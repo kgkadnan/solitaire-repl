@@ -4,11 +4,13 @@ import { IProduct } from '../../search/interface';
 interface INewArrivalCalculatedField {
   rows: any[];
   selectedProducts: Record<string, boolean>;
+  showMyCurrentBid?: boolean;
 }
 
 const NewArrivalCalculatedField = ({
   rows,
-  selectedProducts
+  selectedProducts,
+  showMyCurrentBid
 }: INewArrivalCalculatedField) => {
   const [selectedRows, setSelectedRows] = useState<any[]>(
     rows.filter((row: any) => row.id in selectedProducts)
@@ -39,8 +41,11 @@ const NewArrivalCalculatedField = ({
     let average = 0;
     if (data?.length > 0) {
       selectedRows.forEach(row => {
-        if (type === 'discount' && row.discount !== null) {
-          sum += row.discount;
+        if (
+          type === (showMyCurrentBid ? 'my_current_bid' : 'discount') &&
+          (showMyCurrentBid ? row.my_current_bid : row.discount) !== null
+        ) {
+          sum += showMyCurrentBid ? row.my_current_bid : row.discount;
         } else if (type === 'pr/ct' && row.price_per_carat !== null) {
           sum += row.price_per_carat;
         }
@@ -62,8 +67,14 @@ const NewArrivalCalculatedField = ({
         value: computeTotal('carats')
       },
       {
-        label: ManageLocales('app.calculatedField.discount'),
-        value: calculateAverage('discount')
+        label: ManageLocales(
+          showMyCurrentBid
+            ? 'app.calculatedField.maxDiscount'
+            : 'app.calculatedField.discount'
+        ),
+        value: calculateAverage(
+          showMyCurrentBid ? 'my_current_bid' : 'discount'
+        )
       },
       {
         label: ManageLocales('app.calculatedField.pr/ct'),
