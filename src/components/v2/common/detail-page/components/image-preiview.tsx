@@ -104,7 +104,8 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
 
                   {image.name !== 'B2B' &&
                     image.name !== 'B2B Sparkle' &&
-                    image.name !== 'No Data Found' && (
+                    image.name !== 'No Data Found' &&
+                    image.name !== '' && (
                       <Tooltip
                         tooltipTrigger={
                           <Image
