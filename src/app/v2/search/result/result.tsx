@@ -149,6 +149,7 @@ const Result = ({
       storeAddresses: [],
       timeSlots: { dates: [{ date: '', day: '' }], slots: {} }
     });
+  const [lotIds, setLotIds] = useState<string[]>([]);
 
   // UseMutation to add items to the cart
   const [addCart] = useAddCartMutation();
@@ -467,11 +468,28 @@ const Result = ({
   };
 
   const handleCreateAppointment = () => {
-    setShowAppointmentForm(true);
-    triggerAvailableSlots({}).then(payload => {
-      let { data } = payload.data;
-      setAppointmentPayload(data);
-    });
+    let selectedIds = Object.keys(rowSelection);
+    if (selectedIds.length > 0) {
+      setShowAppointmentForm(true);
+      triggerAvailableSlots({}).then(payload => {
+        let { data } = payload.data;
+        setAppointmentPayload(data);
+      });
+      console.log('rowSelection', dataTableState.rows);
+
+      const lotIds = selectedIds?.map((id: string) => {
+        const getLotIds: any =
+          dataTableState.rows.find((row: IProduct) => {
+            return row?.id === id;
+          }) ?? {};
+
+        if (getLotIds) {
+          return getLotIds?.lot_id;
+        }
+        return '';
+      });
+      setLotIds(lotIds);
+    }
   };
 
   const handleAddToCart = () => {
@@ -729,6 +747,12 @@ const Result = ({
     setConfirmStoneData([]);
     setIsCompareStone(false);
     setCompareStoneData([]);
+    setShowAppointmentForm(false);
+    setAppointmentPayload({
+      kam: { kam_name: '' },
+      storeAddresses: [],
+      timeSlots: { dates: [{ date: '', day: '' }], slots: {} }
+    });
   };
 
   const renderAddCommentDialogs = () => {
@@ -1179,6 +1203,7 @@ const Result = ({
               appointmentPayload={appointmentPayload}
               setIsLoading={setIsLoading}
               modalSetState={modalSetState}
+              lotIds={lotIds}
             />
           ) : (
             <div className="">
@@ -1209,6 +1234,7 @@ const Result = ({
                 setIsCompareStone={setIsCompareStone}
                 setCompareStoneData={setCompareStoneData}
                 setIsInputDialogOpen={setIsInputDialogOpen}
+                handleCreateAppointment={handleCreateAppointment}
               />
             </div>
           )}

@@ -138,7 +138,8 @@ const DataTable = ({
   setCompareStoneData,
   setIsInputDialogOpen,
   isDashboard,
-  setIsDetailPage
+  setIsDetailPage,
+  handleCreateAppointment
 }: any) => {
   // Fetching saved search data
   const router = useRouter();
@@ -994,7 +995,9 @@ const DataTable = ({
                     label: ManageLocales(
                       'app.search.actionButton.bookAppointment'
                     ),
-                    handler: () => {}
+                    handler: () => {
+                      handleCreateAppointment();
+                    }
                   },
 
                   {

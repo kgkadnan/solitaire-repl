@@ -34,6 +34,7 @@ interface IBookAppointment {
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   getAppointment?: () => void;
   rescheduleAppointmentData?: IRescheduleAppointmentData;
+  lotIds?: string[];
 }
 
 interface IKam {
@@ -52,7 +53,8 @@ const BookAppointment: React.FC<IBookAppointment> = ({
   setIsLoading,
   modalSetState,
   getAppointment,
-  rescheduleAppointmentData
+  rescheduleAppointmentData,
+  lotIds
 }) => {
   const [addMyAppointment] = useAddMyAppointmentMutation();
   const [rescheduleMyAppointment] = useRescheduleMyAppointmentMutation();
@@ -74,7 +76,16 @@ const BookAppointment: React.FC<IBookAppointment> = ({
   useEffect(() => {
     let { kam, storeAddresses, timeSlots } = appointmentPayload;
 
-    if (hasDataOnRescheduleAppointment() && rescheduleAppointmentData) {
+    if (lotIds?.length) {
+      setStones(lotIds);
+      let createComment = `I want to know more about ${lotIds.map(
+        lotId => lotId
+      )}`;
+      setComment(createComment);
+      console.log('createComment', createComment);
+      setSelectedDate(Number(timeSlots.dates[0].date));
+      setLocation(storeAddresses);
+    } else if (hasDataOnRescheduleAppointment() && rescheduleAppointmentData) {
       setSelectedDate(rescheduleAppointmentData.selectedDate);
       setSelectedSlot(rescheduleAppointmentData.selectedSlot);
       setComment(rescheduleAppointmentData.comment);
