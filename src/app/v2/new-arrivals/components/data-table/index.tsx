@@ -122,7 +122,7 @@ const NewArrivalDataTable = ({
   const [bidError, setBidError] = useState('');
   const [pagination, setPagination] = useState({
     pageIndex: 0,
-    pageSize: 5 //customize the default page size
+    pageSize: 20 //customize the default page size
   });
 
   const [paginatedData, setPaginatedData] = useState<any>([]);
