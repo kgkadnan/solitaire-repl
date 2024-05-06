@@ -46,5 +46,6 @@ export const {
   useLazyGetMyAppointmentQuery,
   useDeleteMyAppointmentMutation,
   useLazyGetAvailableMyAppointmentSlotsQuery,
-  useAddMyAppointmentMutation
+  useAddMyAppointmentMutation,
+  useRescheduleMyAppointmentMutation
 } = myAppointmentApi;
