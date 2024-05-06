@@ -1705,11 +1705,13 @@ const Dashboard = () => {
                           )}
                         </>
                       ) : data.label === 'My Appointments' ? (
-                        <p className="text-headingS text-infoMain">
-                          Schedule Now
+                        <p className="text-headingS text-infoMain  underline">
+                          Book Now
                         </p>
                       ) : (
-                        <p className={`text-neutral900 text-headingS medium `}>
+                        <p
+                          className={`text-neutral900 text-headingS font-medium `}
+                        >
                           {data.isAvailable
                             ? data.count === 0
                               ? '-'

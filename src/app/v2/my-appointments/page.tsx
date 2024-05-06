@@ -217,7 +217,7 @@ const MyAppointments = () => {
     handleCreateAppointment();
     setRescheduleAppointmentData({
       selectedDate: formatDate(rescheduleData.appointment_at),
-      selectedSlot: formatDateTimeForReschedule(rescheduleData.appointment_at),
+      selectedSlot: rescheduleData.appointment_at,
       comment: rescheduleData.reason,
       location: rescheduleData.address,
       appointmentId: rescheduleData.id,
