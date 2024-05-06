@@ -15,6 +15,14 @@ export const myAppointmentApi = createApi({
       }),
       invalidatesTags: ['my-appointment']
     }),
+    rescheduleMyAppointment: builder.mutation({
+      query: ({ appointmentId, data }) => ({
+        url: `store/appointments/${appointmentId}`,
+        method: 'PUT',
+        body: data
+      }),
+      invalidatesTags: ['my-appointment']
+    }),
     getMyAppointment: builder.query({
       query: () => `store/appointments`,
       providesTags: ['my-appointment']
@@ -38,5 +46,6 @@ export const {
   useLazyGetMyAppointmentQuery,
   useDeleteMyAppointmentMutation,
   useLazyGetAvailableMyAppointmentSlotsQuery,
-  useAddMyAppointmentMutation
+  useAddMyAppointmentMutation,
+  useRescheduleMyAppointmentMutation
 } = myAppointmentApi;

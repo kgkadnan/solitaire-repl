@@ -1,11 +1,13 @@
 export function formatDateForMonth(dateStr: string) {
   const date = new Date(dateStr);
-  return date.toLocaleDateString('en-US', { month: 'long' });
+  const month = date.toLocaleString('default', { month: 'long' });
+  return month;
 }
 
 export function formatDate(dateStr: string) {
   const date = new Date(dateStr);
-  return date.toLocaleDateString('en-US', { day: 'numeric' });
+  const day = date.getDate();
+  return day;
 }
 
 export function getTimeRange(isoTime: string): string {

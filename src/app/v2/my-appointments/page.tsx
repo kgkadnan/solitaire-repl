@@ -15,7 +15,7 @@ import {
   useLazyGetMyAppointmentQuery
 } from '@/features/api/my-appointments';
 import styles from './my-appointments.module.scss';
-import editAppointmentSvg from '@public/v2/assets/icons/my-appointments/edit-appointment.svg';
+import rescheduleAppointmentSvg from '@public/v2/assets/icons/my-appointments/edit-appointment.svg';
 import Image from 'next/image';
 import { kycStatus } from '@/constants/enums/kyc';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
@@ -52,6 +52,15 @@ export interface IAppointmentPayload {
   };
 }
 
+export interface IRescheduleAppointmentData {
+  selectedDate: number;
+  selectedSlot: string;
+  comment: string;
+  location: string;
+  appointmentId: string;
+  stones: string[];
+}
+
 const MyAppointments = () => {
   const [triggerMyAppointment, { data: myAppointmentData }] =
     useLazyGetMyAppointmentQuery({});
@@ -62,13 +71,15 @@ const MyAppointments = () => {
   const { modalState, modalSetState } = useModalStateManagement();
   const [pastAppointments, setPastAppointments] = useState([]);
   const [upcomingAppointments, setUpcomingAppointments] = useState([]);
-  const [showAppointment, setShowAppointment] = useState(false);
+  const [showAppointmentForm, setShowAppointmentForm] = useState(false);
   const [appointmentPayload, setAppointmentPayload] =
     useState<IAppointmentPayload>({
       kam: { kam_name: '' },
       storeAddresses: [],
       timeSlots: { dates: [{ date: '', day: '' }], slots: {} }
     });
+  const [rescheduleAppointmentData, setRescheduleAppointmentData] =
+    useState<IRescheduleAppointmentData>();
 
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState(UPCOMING_APPOINTMENTS);
@@ -174,21 +185,55 @@ const MyAppointments = () => {
   };
 
   const handleCreateAppointment = () => {
-    setShowAppointment(true);
+    setShowAppointmentForm(true);
     triggerAvailableSlots({}).then(payload => {
       let { data } = payload.data;
       setAppointmentPayload(data);
     });
   };
 
+  function formatDateTimeForReschedule(dateString: string) {
+    const date = new Date(dateString);
+
+    // Get the date in MM/DD/YYYY format
+    const formattedDate = `${
+      date.getMonth() + 1
+    }/${date.getDate()}/${date.getFullYear()}`;
+
+    // Get the time in hh:mm:ss AM/PM format
+    const hours = date.getHours() > 12 ? date.getHours() - 12 : date.getHours();
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const seconds = date.getSeconds().toString().padStart(2, '0');
+    const meridiem = date.getHours() >= 12 ? 'PM' : 'AM';
+    const formattedTime = `${hours}:${minutes}:${seconds} ${meridiem}`;
+
+    // Combine date and time
+    const formattedDateTime = `${formattedDate}, ${formattedTime}`;
+
+    return formattedDateTime;
+  }
+
+  const handleRescheduleAppointment = ({ rescheduleData }: any) => {
+    handleCreateAppointment();
+    setRescheduleAppointmentData({
+      selectedDate: formatDate(rescheduleData.appointment_at),
+      selectedSlot: rescheduleData.appointment_at,
+      comment: rescheduleData.reason,
+      location: rescheduleData.address,
+      appointmentId: rescheduleData.id,
+      stones: rescheduleData.stones
+    });
+  };
+
   const goBackToListView = () => {
-    setShowAppointment(false);
+    setRescheduleAppointmentData(undefined);
+    setShowAppointmentForm(false);
   };
 
   const tabsData: ITabsData = {
     upcomingAppointments: {
       keys: [
-        { label: 'Date', accessor: 'updated_at' },
+        { label: 'Date', accessor: 'appointment_at' },
         { label: 'Time Slot', accessor: 'appointment_at' },
         { label: 'Location', accessor: 'address' },
         { label: 'Comment', accessor: 'reason' },
@@ -198,7 +243,7 @@ const MyAppointments = () => {
     },
     pastAppointments: {
       keys: [
-        { label: 'Date', accessor: 'updated_at' },
+        { label: 'Date', accessor: 'appointment_at' },
         { label: 'Time Slot', accessor: 'appointment_at' },
         { label: 'Location', accessor: 'address' },
         { label: 'Comment', accessor: 'reason' }
@@ -210,127 +255,123 @@ const MyAppointments = () => {
   // Get the keys and data for the active tab
   const { keys, data } = tabsData[activeTab] || { keys: [], data: [] };
 
-  const renderCellContent = (accessor: string, value: any) => {
-    switch (accessor) {
-      case 'updated_at':
-        return (
-          <div className="flex items-center gap-3">
-            <div
-              className={` ${
-                activeTab === PAST_APPOINTMENTS
-                  ? 'bg-neutral100'
-                  : styles.gradient
-              } w-[64px] h-[64px] text-neutral700 p-[14px] rounded-[4px] font-medium flex justify-center items-center text-center`}
-            >
-              <div>
-                <p className="text-sMedium font-normal ">
-                  {formatDateForMonth(value[accessor])}
-                </p>
-                <p className="text-headingS font-medium">
-                  {formatDate(value[accessor])}
-                </p>
-              </div>
-            </div>
+  const renderCellContent = (label: string, accessor: string, value: any) => {
+    if (accessor === 'appointment_at' && label === 'Date') {
+      return (
+        <div className="flex items-center gap-3">
+          <div
+            className={` ${
+              activeTab === PAST_APPOINTMENTS
+                ? 'bg-neutral100'
+                : styles.gradient
+            } w-[64px] h-[64px] text-neutral700 p-[14px] rounded-[4px] font-medium flex justify-center items-center text-center`}
+          >
             <div>
-              <p className="text-lRegular text-neutral900 font-normal">
-                {formatDateString(value[accessor])}
+              <p className="text-sMedium font-normal ">
+                {formatDateForMonth(value[accessor])}
+              </p>
+              <p className="text-headingS font-medium">
+                {formatDate(value[accessor])}
               </p>
             </div>
           </div>
-        );
-
-      case 'appointment_at':
-        return (
-          <span className="text-lRegular text-neutral900 font-normal">
-            {getTimeRange(value[accessor])}
-          </span>
-        );
-      case 'address':
-        return (
-          <span className="text-lRegular text-neutral900 font-normal">
-            {value[accessor]}
-          </span>
-        );
-
-      case 'action':
-        return (
-          <div className="flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            <ActionButton
-              actionButtonData={[
-                {
-                  variant: 'secondary',
-                  svg: editAppointmentSvg,
-                  handler: () => {
-                    setIsLoading(true);
-                    setShowAppointment(true);
-                  },
-                  customStyle: 'w-[40px] h-[40px]',
-                  tooltip: ManageLocales('app.myAppointments.reschedule')
-                }
-              ]}
-            />
-            <ActionButton
-              actionButtonData={[
-                {
-                  variant: 'secondary',
-                  svg: BinIcon,
-                  handler: () => {
-                    modalSetState.setIsDialogOpen(true);
-                    modalSetState.setDialogContent(
-                      <>
-                        <div className="absolute left-[-84px] top-[-84px]">
-                          <Image src={warningIcon} alt="warning" />
-                        </div>
-                        <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[357px]">
-                          <h1 className="text-headingS text-neutral900">
-                            Do you want to cancel this appointment?
-                          </h1>
-                          <ActionButton
-                            actionButtonData={[
-                              {
-                                variant: 'secondary',
-                                label: 'No',
-                                handler: () => {
-                                  modalSetState.setIsDialogOpen(false);
-                                },
-                                customStyle: 'flex-1 w-full'
-                              },
-                              {
-                                variant: 'primary',
-                                label: 'Yes',
-                                handler: () => {
-                                  setIsLoading(true);
-                                  modalSetState.setIsDialogOpen(false);
-                                  handleDeleteAppointment({
-                                    appointmentId: value.id
-                                  });
-                                },
-                                customStyle: 'flex-1 w-full'
-                              }
-                            ]}
-                          />
-                        </div>
-                      </>
-                    );
-                  },
-                  customStyle: 'w-[40px] h-[40px]',
-                  tooltip: ManageLocales('app.myAppointments.cancel')
-                }
-              ]}
-            />
+          <div>
+            <p className="text-lRegular text-neutral900 font-normal">
+              {formatDateString(value[accessor])}
+            </p>
           </div>
-        );
-      default:
-        return (
-          <span className="text-lRegular text-neutral900 font-normal">
-            {value[accessor] ?? '-'}
-          </span>
-        );
+        </div>
+      );
+    } else if (accessor === 'appointment_at' && label === 'Time Slot') {
+      return (
+        <span className="text-lRegular text-neutral900 font-normal">
+          {getTimeRange(value[accessor])}
+        </span>
+      );
+    } else if (accessor === 'address') {
+      return (
+        <span className="text-lRegular text-neutral900 font-normal">
+          {value[accessor]}
+        </span>
+      );
+    } else if (accessor === 'action') {
+      return (
+        <div className="flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <ActionButton
+            actionButtonData={[
+              {
+                variant: 'secondary',
+                svg: rescheduleAppointmentSvg,
+                handler: () => {
+                  handleRescheduleAppointment({ rescheduleData: value });
+                },
+                customStyle: 'w-[40px] h-[40px]',
+                tooltip: ManageLocales('app.myAppointments.reschedule')
+              }
+            ]}
+          />
+          <ActionButton
+            actionButtonData={[
+              {
+                variant: 'secondary',
+                svg: BinIcon,
+                handler: () => {
+                  modalSetState.setIsDialogOpen(true);
+                  modalSetState.setDialogContent(
+                    <>
+                      <div className="absolute left-[-84px] top-[-84px]">
+                        <Image src={warningIcon} alt="warning" />
+                      </div>
+                      <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[357px]">
+                        <h1 className="text-headingS text-neutral900">
+                          Do you want to cancel this appointment?
+                        </h1>
+                        <ActionButton
+                          actionButtonData={[
+                            {
+                              variant: 'secondary',
+                              label: 'No',
+                              handler: () => {
+                                modalSetState.setIsDialogOpen(false);
+                              },
+                              customStyle: 'flex-1 w-full'
+                            },
+                            {
+                              variant: 'primary',
+                              label: 'Yes',
+                              handler: () => {
+                                setIsLoading(true);
+                                modalSetState.setIsDialogOpen(false);
+                                handleDeleteAppointment({
+                                  appointmentId: value.id
+                                });
+                              },
+                              customStyle: 'flex-1 w-full'
+                            }
+                          ]}
+                        />
+                      </div>
+                    </>
+                  );
+                },
+                customStyle: 'w-[40px] h-[40px]',
+                tooltip: ManageLocales('app.myAppointments.cancel')
+              }
+            ]}
+          />
+        </div>
+      );
+    } else {
+      return (
+        <span className="text-lRegular text-neutral900 font-normal">
+          {(value as any)[accessor] ?? '-'}
+        </span>
+      );
     }
   };
 
   const renderContent = () => {
-    if (showAppointment) {
+    if (showAppointmentForm) {
       return (
         <BookAppointment
           breadCrumLabel={ManageLocales('app.myAppointments.myAppointments')}
@@ -339,6 +380,7 @@ const MyAppointments = () => {
           setIsLoading={setIsLoading}
           modalSetState={modalSetState}
           getAppointment={getAppointment}
+          rescheduleAppointmentData={rescheduleAppointmentData}
         />
       );
     } else {
@@ -383,7 +425,7 @@ const MyAppointments = () => {
             <table className="w-full">
               <thead>
                 <tr className="text-mMedium h-[47px] border-b  border-neutral200 bg-neutral50 text-neutral700">
-                  {keys?.map(({ label }: any) => (
+                  {keys?.map(({ label }) => (
                     <td key={label} className="p-4 text-left font-medium">
                       {label}
                     </td>
@@ -391,7 +433,7 @@ const MyAppointments = () => {
                 </tr>
               </thead>
               <tbody className="">
-                {data?.map((items: any, index: number) => {
+                {data?.map((items, index: number) => {
                   return (
                     <tr
                       key={items.id}
@@ -399,7 +441,7 @@ const MyAppointments = () => {
                         index >= data.length - 1 ? 'rounded-[8px]' : 'border-b'
                       }`}
                     >
-                      {keys?.map(({ accessor }: any, index: number) => {
+                      {keys?.map(({ accessor, label }) => {
                         return (
                           <td
                             key={accessor}
@@ -409,7 +451,7 @@ const MyAppointments = () => {
                                 : 'w-[15%]'
                             } text-lRegular rounded-b-[8px] space-x-2 p-[16px] text-left text-gray-800`}
                           >
-                            {renderCellContent(accessor, items)}
+                            {renderCellContent(label, accessor, items)}
                           </td>
                         );
                       })}
@@ -452,22 +494,29 @@ const MyAppointments = () => {
         isNudge &&
         (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
           isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-          ? showAppointment
+          ? showAppointmentForm
             ? 'h-[calc(100vh-10px)]'
             : 'h-[calc(100vh-144px)]'
-          : showAppointment
+          : showAppointmentForm
           ? 'h-[calc(100vh--50px)]'
           : 'h-[calc(100vh-84px)]'
       }
       `}
       >
         {isLoading && <CustomKGKLoader />}
-        <div className="flex  py-[8px] items-center">
-          <p className="text-lMedium font-medium text-neutral900">
-            {ManageLocales('app.myAppointments.myAppointments')}
-          </p>
-        </div>
-        <div className="border-[1px] border-neutral200 rounded-[8px]">
+        {!showAppointmentForm && (
+          <div className="flex  py-[8px] items-center">
+            <p className="text-lMedium font-medium text-neutral900">
+              {ManageLocales('app.myAppointments.myAppointments')}
+            </p>
+          </div>
+        )}
+
+        <div
+          className={`border-[1px] border-neutral200 rounded-[8px] ${
+            showAppointmentForm && 'mt-[24px]'
+          }`}
+        >
           {renderContent()}
         </div>
       </div>

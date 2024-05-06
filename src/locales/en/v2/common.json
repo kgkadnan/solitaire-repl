@@ -183,11 +183,15 @@
   "app.modal.kyc.emailVerification": "Email Verification",
   "app.kyc.statusScreen.exploreWebsite": "Explore Website",
 
-  "app.myAppointments.myAppointments": "My Appointments",
-  "app.myAppointments.upcomingAppointments": "Upcoming Appointments",
-  "app.myAppointments.pastAppointments": "Past Appointments",
-  "app.myAppointments.bookAppointment": "Book Appointments",
-  "app.myAppointments.reschedule": "Reschedule",
-  "app.myAppointments.cancel": "Cancel",
-  "app.myAppointments.confirmAppointments": "Confirm Appointment"
+
+  "app.myAppointments.myAppointments" : "My Appointments",
+  "app.myAppointments.upcomingAppointments":"Upcoming Appointments",
+  "app.myAppointments.pastAppointments":"Past Appointments",
+  "app.myAppointments.bookAppointment":"Book Appointments",
+  "app.myAppointments.reschedule" : "Reschedule",
+  "app.myAppointments.cancel":"Cancel",
+  "app.myAppointments.confirmAppointments":"Confirm Appointment",
+  "app.myAppointments.rescheduleAppointments":"Reschedule Appointment"
+
+
 }
