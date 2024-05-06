@@ -53,6 +53,8 @@ const ImageModal: React.FC<ModalProps> = ({
       }, 4000);
     });
   };
+
+  console.log('images[imageIndex]?.name', images[imageIndex]?.name);
   return (
     <div className="fixed z-[1200] inset-0 overflow-y-auto ">
       <Toast show={showToast} message="Copied Successfully" />
@@ -165,7 +167,8 @@ const ImageModal: React.FC<ModalProps> = ({
           <div className="flex mt-5 justify-center">
             {images[imageIndex]?.name !== 'B2B' &&
               images[imageIndex]?.name !== 'B2B Sparkle' &&
-              images[imageIndex]?.name !== 'No Data Found' && (
+              images[imageIndex]?.name !== 'No Data Found' &&
+              images[imageIndex]?.name !== '' && (
                 <Tooltip
                   tooltipTrigger={
                     <Image
