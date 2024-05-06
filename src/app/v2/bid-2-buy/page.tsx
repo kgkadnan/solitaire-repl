@@ -43,6 +43,7 @@ import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import { Toast } from '@/components/v2/common/copy-and-share/toast';
 import { loadImages } from '@/components/v2/common/detail-page/helpers/load-images';
 import { checkImage } from '@/components/v2/common/detail-page/helpers/check-image';
+import fallbackImage from '@public/v2/assets/icons/not-found.svg';
 
 const BidToBuy = () => {
   const [isDetailPage, setIsDetailPage] = useState(false);
@@ -52,6 +53,7 @@ const BidToBuy = () => {
   const [validImages, setValidImages] = useState<any>([]);
   const pathName = useSearchParams().get('path');
   const [isLoading, setIsLoading] = useState(false); // State to track loading
+  const [checkStatus, setCheckStatus] = useState(false);
 
   const handleDetailPage = ({ row }: { row: any }) => {
     setIsDetailPage(true);
@@ -114,6 +116,8 @@ const BidToBuy = () => {
           case 'original_discount':
             return { ...commonProps, Cell: DiscountWithCross };
           case 'discount':
+            return { ...commonProps, Cell: RenderDiscount };
+          case 'my_current_bid':
             return { ...commonProps, Cell: RenderDiscount };
           case 'last_bid_date':
             return { ...commonProps, Cell: RenderBidDate };
@@ -202,6 +206,8 @@ const BidToBuy = () => {
   const [activeBid, setActiveBid] = useState<any>();
   const [bid, setBid] = useState<any>();
   const [time, setTime] = useState('');
+
+  console.log('activeBid', activeBid);
   useEffect(() => {
     const currentTime: any = new Date();
     const targetTime: any = new Date(time!);
@@ -215,6 +221,8 @@ const BidToBuy = () => {
     if (authToken) useSocket(socketManager, authToken);
   }, [authToken]);
   const handleBidStones = useCallback((data: any) => {
+    console.log('hererre');
+    setCheckStatus(true);
     setActiveBid(data.activeStone);
     setBid(data.bidStone);
     setTime(data.endTime);
@@ -405,6 +413,24 @@ const BidToBuy = () => {
           </div>
         </div>
       );
+    } else if (activeTab === 2 && bidHistory?.data?.length > 0) {
+      return (
+        <div className="flex items-center justify-between px-4 py-0 border-t-[1px] border-solid border-neutral200">
+          <div className="flex gap-4 py-2">
+            <div className=" border-[1px] border-successBorder rounded-[4px] bg-successSurface text-successMain">
+              <p className="text-mMedium font-medium px-[6px] py-[4px]">Won</p>
+            </div>
+            <div className=" border-[1px] border-dangerBorder rounded-[4px] bg-dangerSurface text-dangerMain">
+              <p className="text-mMedium font-medium px-[6px] py-[4px]">
+                {' '}
+                Lost
+              </p>
+            </div>
+          </div>
+          {/* <MRT_TablePagination table={table} /> */}
+          <div></div>
+        </div>
+      );
     } else {
       return null;
     }
@@ -422,7 +448,11 @@ const BidToBuy = () => {
     },
     {
       name: 'B2B',
-      url: `${FILE_URLS.B2B.replace('***', detailImageData?.lot_id ?? '')}`
+      url: `${FILE_URLS.B2B.replace('***', detailImageData?.lot_id ?? '')}`,
+      url_check: `${FILE_URLS.B2B_CHECK.replace(
+        '***',
+        detailImageData?.lot_id ?? ''
+      )}`
     },
     {
       name: 'B2B Sparkle',
@@ -430,7 +460,11 @@ const BidToBuy = () => {
         '***',
         detailImageData?.lot_id ?? ''
       )}`,
-      isSepratorNeeded: true
+      url_check: `${FILE_URLS.B2B_SPARKLE_CHECK.replace(
+        '***',
+        detailImageData?.lot_id ?? ''
+      )}`,
+      showDivider: true
     },
 
     {
@@ -473,6 +507,18 @@ const BidToBuy = () => {
   useEffect(() => {
     loadImages(images, setValidImages, checkImage);
   }, [detailImageData]);
+  useEffect(() => {
+    if (!validImages.length) {
+      setValidImages([
+        {
+          name: '',
+          url: fallbackImage,
+          showDivider: true
+        }
+      ]);
+    }
+  }, [validImages]);
+
   return (
     <div className="mb-[20px] relative">
       {isLoading && <CustomKGKLoader />}
@@ -520,14 +566,18 @@ const BidToBuy = () => {
               <p className="text-lMedium font-medium text-neutral900">
                 Bid to Buy
               </p>
-              {time && time?.length ? (
-                <div className="text-successMain text-lMedium font-medium">
-                  ACTIVE
-                </div>
+              {checkStatus ? (
+                time && time?.length ? (
+                  <div className="text-successMain text-lMedium font-medium">
+                    ACTIVE
+                  </div>
+                ) : (
+                  <div className="text-visRed text-lMedium font-medium">
+                    INACTIVE
+                  </div>
+                )
               ) : (
-                <div className="text-visRed text-lMedium font-medium">
-                  INACTIVE
-                </div>
+                ''
               )}
             </div>
 
@@ -553,16 +603,21 @@ const BidToBuy = () => {
                   columns={
                     activeTab === 2
                       ? memoizedColumns.filter(
-                          (data: any) => data.accessorKey !== 'shape'
-                        ) // Filter out data with accessor key 'discount'
+                          (data: any) =>
+                            data.accessorKey !== 'shape' &&
+                            data.accessorKey !== 'discount'
+                        )
                       : activeTab === 1
                       ? memoizedColumns.filter(
                           (data: any) =>
                             data.accessorKey !== 'last_bid_date' &&
-                            data.accessorKey !== 'shape'
+                            data.accessorKey !== 'shape' &&
+                            data.accessorKey !== 'discount'
                         )
                       : memoizedColumns.filter(
-                          (data: any) => data.accessorKey !== 'last_bid_date'
+                          (data: any) =>
+                            data.accessorKey !== 'my_current_bid' &&
+                            data.accessorKey !== 'last_bid_date'
                         )
                   }
                   modalSetState={modalSetState}

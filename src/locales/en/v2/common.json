@@ -9,12 +9,14 @@
   "app.sideNavigationBar.search": "Search",
   "app.sideNavigationBar.dashboard": "Dashboard",
   "app.sideNavigationBar.yourOrders": "Your Orders",
+  "app.sideNavigationBar.myAppointments": "My Appointments",
   "app.sideNavigationBar.bookmark": "Saved Search ",
   "app.sideNavigationBar.appointments": "Appointments",
   "app.sideNavigationBar.myCart": "My Cart",
   "app.sideNavigationBar.settings": "Settings",
   "app.sideNavigationBar.newArrivals": "New Arrivals",
   "app.sideNavigationBar.bidToBuy": "Bid to Buy",
+  "app.sideNavigationBar.faqs": "FAQs",
 
   "app.result.headerResult": "Here are the relevant results for your search",
   "app.result.headerEdit": "You are editing your",
@@ -33,6 +35,7 @@
   "app.calculatedField.pieces": "No. of Pieces",
   "app.calculatedField.carat": "Total Carats",
   "app.calculatedField.discount": "Total Avg. Dis",
+  "app.calculatedField.maxDiscount": "Total Avg. Max Dis",
   "app.calculatedField.pr/ct": "Avg. Pr/Ct",
   "app.calculatedField.amount": "Total Amount",
   "app.calculatedField.bidDis": "Bid Dis",
@@ -178,5 +181,17 @@
   "app.kyc.footer.saveAndNext": "Save and next",
   "app.kyc.footer.submit": "Submit",
   "app.modal.kyc.emailVerification": "Email Verification",
-  "app.kyc.statusScreen.exploreWebsite": "Explore Website"
+  "app.kyc.statusScreen.exploreWebsite": "Explore Website",
+
+
+  "app.myAppointments.myAppointments" : "My Appointments",
+  "app.myAppointments.upcomingAppointments":"Upcoming Appointments",
+  "app.myAppointments.pastAppointments":"Past Appointments",
+  "app.myAppointments.bookAppointment":"Book Appointments",
+  "app.myAppointments.reschedule" : "Reschedule",
+  "app.myAppointments.cancel":"Cancel",
+  "app.myAppointments.confirmAppointments":"Confirm Appointment",
+  "app.myAppointments.rescheduleAppointments":"Reschedule Appointment"
+
+
 }

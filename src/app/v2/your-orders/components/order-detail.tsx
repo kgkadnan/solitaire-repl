@@ -23,7 +23,7 @@ import {
 import ActionButton from '@/components/v2/common/action-button';
 import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
-import { useLazyDonwloadInvoiceQuery } from '@/features/api/download-invoice';
+import fallbackImage from '@public/v2/assets/icons/not-found.svg';
 import {
   RenderMeasurements,
   RenderTracerId
@@ -296,11 +296,19 @@ const OrderDetail: React.FC<IOrderDetail> = ({
     },
     {
       name: 'B2B',
-      url: `${FILE_URLS.B2B.replace('***', detailImageData?.lot_id ?? '')}`
+      url: `${FILE_URLS.B2B.replace('***', detailImageData?.lot_id ?? '')}`,
+      url_check: `${FILE_URLS.B2B_CHECK.replace(
+        '***',
+        detailImageData?.lot_id ?? ''
+      )}`
     },
     {
       name: 'B2B Sparkle',
       url: `${FILE_URLS.B2B_SPARKLE.replace(
+        '***',
+        detailImageData?.lot_id ?? ''
+      )}`,
+      url_check: `${FILE_URLS.B2B_SPARKLE_CHECK.replace(
         '***',
         detailImageData?.lot_id ?? ''
       )}`,
@@ -335,6 +343,18 @@ const OrderDetail: React.FC<IOrderDetail> = ({
   useEffect(() => {
     loadImages(images, setValidImages, checkImage);
   }, [detailImageData]);
+
+  useEffect(() => {
+    if (!validImages.length) {
+      setValidImages([
+        {
+          name: '',
+          url: fallbackImage,
+          showDivider: true
+        }
+      ]);
+    }
+  }, [validImages]);
 
   return (
     <>

@@ -13,7 +13,7 @@ import {
   MEMO_STATUS
 } from '@/constants/business-logic';
 import confirmIcon from '@public/v2/assets/icons/modal/confirm.svg';
-
+import fallbackImage from '@public/v2/assets/icons/not-found.svg';
 import { constructUrlParams } from '@/utils/v2/construct-url-params';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ManageLocales } from '@/utils/v2/translate';
@@ -933,7 +933,11 @@ const Result = ({
     },
     {
       name: 'B2B',
-      url: `${FILE_URLS.B2B.replace('***', detailImageData?.lot_id ?? '')}`
+      url: `${FILE_URLS.B2B.replace('***', detailImageData?.lot_id ?? '')}`,
+      url_check: `${FILE_URLS.B2B_CHECK.replace(
+        '***',
+        detailImageData?.lot_id ?? ''
+      )}`
     },
     {
       name: 'B2B Sparkle',
@@ -941,9 +945,12 @@ const Result = ({
         '***',
         detailImageData?.lot_id ?? ''
       )}`,
+      url_check: `${FILE_URLS.B2B_SPARKLE_CHECK.replace(
+        '***',
+        detailImageData?.lot_id ?? ''
+      )}`,
       showDivider: true
     },
-
     {
       name: 'Heart',
       url: `${FILE_URLS.HEART.replace('***', detailImageData?.lot_id ?? '')}`
@@ -987,6 +994,18 @@ const Result = ({
   useEffect(() => {
     loadImages(images, setValidImages, checkImage);
   }, [detailImageData]);
+
+  useEffect(() => {
+    if (!validImages.length) {
+      setValidImages([
+        {
+          name: '',
+          url: fallbackImage,
+          showDivider: true
+        }
+      ]);
+    }
+  }, [validImages]);
 
   return (
     <div className="relative">

@@ -1,8 +1,5 @@
-import Image from 'next/image';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import NoImageFound from '@public/v2/assets/icons/detail-page/fall-back-img.svg';
-import { checkImage } from '../helpers/check-image';
-import { loadImages } from '../helpers/load-images';
 
 export interface ImagesType {
   name: string;
@@ -70,7 +67,7 @@ const ImageList: React.FC<ImageListProps> = ({
                   className={`cursor-pointer md:w-[74px] md:h-[60px] sm:w-[35px] sm:h-[30px] ${
                     index !== 0 ? 'mt-3' : ''
                   } ${index === selectedImageIndex ? 'bg-gray-200' : ''}`}
-                  onError={handleImageError}
+
                   // className="mr-[37px]"
                 />
 
@@ -96,7 +93,7 @@ const ImageList: React.FC<ImageListProps> = ({
                   } 
             
             `}
-                  // onError={handleImageError}
+                  onError={handleImageError}
                   onClick={() => handleClick(index)}
                 />
                 {image.showDivider && (

@@ -7,7 +7,8 @@ import Bid2BuyIcon from '@public/v2/assets/icons/sidebar-icons/bid-2-buy.svg?url
 import SearchIcon from '@public/v2/assets/icons/sidebar-icons/search.svg?url';
 import MyDaimondsIcon from '@public/v2/assets/icons/sidebar-icons/diamond.svg?url';
 import BookmarkIcon from '@public/v2/assets/icons/sidebar-icons/bookmark.svg?url';
-// import AppointmentIcon from '@public/v2/assets/icons/sidebar-icons/appointment.svg?url';
+import MyAppointments from '@public/v2/assets/icons/sidebar-icons/my-appointments.svg?url';
+import FaqsIcon from '@public/v2/assets/icons/sidebar-icons/faqs.svg?url';
 import CartIcon from '@public/v2/assets/icons/sidebar-icons/shopping-cart.svg?url';
 // import SettingIcon from '@public/v2/assets/icons/sidebar-icons/setting.svg?url';
 import styles from './side-navigation.module.scss';
@@ -72,12 +73,7 @@ const SideNavigationBar = () => {
         currentRoute === Routes.SEARCH &&
         currentSubRoute === SubRoutes.SAVED_SEARCH
     },
-    // {
-    //   src: <AppointmentIcon />,
-    //   title: ManageLocales('app.sideNavigationBar.appointments'),
-    //   link: Routes.APPOINTMENTS,
-    //   isActive: currentRoute === Routes.APPOINTMENTS
-    // },
+
     {
       src: <CartIcon />,
       title: ManageLocales('app.sideNavigationBar.myCart'),
@@ -89,7 +85,19 @@ const SideNavigationBar = () => {
       title: ManageLocales('app.sideNavigationBar.yourOrders'),
       link: Routes.YOUR_ORDERS,
       isActive: currentRoute === Routes.YOUR_ORDERS
-    }
+    },
+    // {
+    //   src: <MyAppointments />,
+    //   title: ManageLocales('app.sideNavigationBar.myAppointments'),
+    //   link: Routes.MY_APPOINTMENTS,
+    //   isActive: currentRoute === Routes.MY_APPOINTMENTS
+    // }
+    // {
+    //   src: <FaqsIcon />,
+    //   title: ManageLocales('app.sideNavigationBar.faqs'),
+    //   link: Routes.FAQS,
+    //   isActive: currentRoute === Routes.FAQS
+    // }
     // {
     //   title: 'line-separator-2'
     // },

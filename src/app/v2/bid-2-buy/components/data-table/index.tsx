@@ -31,6 +31,7 @@ import { kycStatus } from '@/constants/enums/kyc';
 import { formatNumber } from '@/utils/fix-two-digit-number';
 import { handleDecrementDiscount } from '@/utils/v2/handle-decrement-discount';
 import { handleIncrementDiscount } from '@/utils/v2/handle-increment-discount';
+import { RenderBidToBuyLotIdColor } from '@/components/v2/common/data-table/helpers/render-cell';
 
 const theme = createTheme({
   typography: {
@@ -54,6 +55,7 @@ const theme = createTheme({
             visibility: 'visible'
           },
           '&.Mui-TableBodyCell-DetailPanel': {
+            backgroundColor: 'var(--neutral-25) !important',
             borderBottom: 'none' // Customize the border as needed
           }
         }
@@ -113,6 +115,31 @@ const BidToByDataTable = ({
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [bidError, setBidError] = useState('');
 
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 20 //customize the default page size
+  });
+
+  const [paginatedData, setPaginatedData] = useState<any>([]);
+
+  useEffect(() => {
+    if (activeTab !== 2) {
+      // Calculate the start and end indices for the current page
+      const startIndex = pagination.pageIndex * pagination.pageSize;
+      const endIndex = startIndex + pagination.pageSize;
+      // Slice the data to get the current page's data
+      const newData = rows.slice(startIndex, endIndex);
+      // Update the paginated data state
+      setPaginatedData(newData);
+    } else {
+      setPaginatedData(rows);
+    }
+  }, [
+    rows,
+    pagination.pageIndex, //re-fetch when page index changes
+    pagination.pageSize, //re-fetch when page size changes
+    activeTab
+  ]);
   const toggleFullScreen = () => {
     setIsFullScreen(!isFullScreen);
   };
@@ -180,6 +207,21 @@ const BidToByDataTable = ({
       'mrt-row-select',
       'lot_id',
       'last_bid_date',
+      'details',
+      'location',
+      'lab',
+      'shape',
+      'shape_full',
+      'carats',
+      'color',
+      'clarity',
+      'cut',
+      'polish',
+      'symmetry',
+      'fluorescence',
+      'rap_value',
+      'discount',
+      'my_current_bid',
       ...columns.map((c: any) => c.accessorKey)
     ] //array of column ids (Initializing is optional as of v2.10.0)
   );
@@ -187,7 +229,7 @@ const BidToByDataTable = ({
   const renderTopToolbar = ({ table }: any) => (
     <div>
       <div
-        className={` border-neutral200 ${
+        className={`border-neutral200 ${
           (activeTab !== 2 || (activeTab === 2 && historyCount === 0)) &&
           'border-b-[1px]'
         }`}
@@ -218,7 +260,12 @@ const BidToByDataTable = ({
               sx={{
                 boxShadow: 'var(--input-shadow) inset',
                 border: 'none',
+                color: 'var(--neutral-400)',
                 borderRadius: '4px',
+
+                '& .MuiOutlinedInput-input': {
+                  color: 'var(--neutral-400)'
+                },
                 ':hover': {
                   border: 'none'
                 },
@@ -307,7 +354,11 @@ const BidToByDataTable = ({
       </div>
 
       {rows.length > 0 && activeTab !== 2 && (
-        <Bid2BuyCalculatedField rows={rows} selectedProducts={rowSelection} />
+        <Bid2BuyCalculatedField
+          rows={rows}
+          selectedProducts={rowSelection}
+          showMyCurrentBid={activeTab === 1}
+        />
       )}
     </div>
   );
@@ -341,12 +392,17 @@ const BidToByDataTable = ({
   //pass table options to useMaterialReactTable
   const table = useMaterialReactTable({
     columns,
-    data: rows, //must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
+    data: paginatedData, //must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
 
     //state
     getRowId: originalRow => originalRow.id,
     onRowSelectionChange: setRowSelection,
-    state: { columnOrder, rowSelection, isFullScreen: isFullScreen },
+    state: {
+      columnOrder,
+      rowSelection,
+      isFullScreen: isFullScreen,
+      pagination
+    },
     //filters
 
     positionToolbarAlertBanner: 'none',
@@ -355,7 +411,7 @@ const BidToByDataTable = ({
     enableDensityToggle: false,
     enableHiding: false,
     enableColumnFilters: false,
-    enablePagination: activeTab !== 2,
+    // enablePagination: activeTab !== 2,
     enableStickyHeader: true,
     enableGrouping: true,
     enableExpandAll: false,
@@ -368,6 +424,9 @@ const BidToByDataTable = ({
     renderTopToolbar,
     renderBottomToolbar,
     renderEmptyRowsFallback: NoResultsComponent,
+    manualPagination: true,
+    rowCount: rows.length,
+    onPaginationChange: setPagination, //hoist pagination state to your state when it changes internally
 
     icons: {
       SearchIcon: () => (
@@ -378,6 +437,9 @@ const BidToByDataTable = ({
     // selectAllMode: undefined,
 
     muiTableBodyRowProps: ({ row }) => {
+      console.log('row', row.getIsSelected());
+      const isHighlightBackground =
+        activeTab === 2 && RenderBidToBuyLotIdColor({ row });
       return {
         onClick: row.id.includes('shape')
           ? row.getToggleExpandedHandler()
@@ -389,15 +451,26 @@ const BidToByDataTable = ({
             // Define styles for the ::after pseudo-element of each cell within a hovered row
             '& .MuiTableCell-root::after': {
               // Maintain the default background color for non-lot_id columns
-              backgroundColor: 'var(--neutral-50) !important'
+              backgroundColor: row.getIsSelected()
+                ? 'var(--neutral-100)  !important'
+                : 'var(--neutral-50) !important'
             },
-            // Target the specific cell that matches the lot_id column within a hovered row
+
             '& .MuiTableCell-root[data-index="1"]::after': {
-              backgroundColor: 'var(--neutral-50)'
+              // Change the background color to red if isHighlightBackground is true, otherwise maintain the default hover color
+              backgroundColor: isHighlightBackground
+                ? `${isHighlightBackground.background} !important`
+                : 'var(--neutral-50)'
             }
           },
           '&.MuiTableRow-root .MuiTableCell-root::after': {
             backgroundColor: 'var(--neutral-25)'
+          },
+          '&.MuiTableRow-root.Mui-selected': {
+            backgroundColor: 'var(--neutral-100) !important'
+          },
+          '& .Mui-selected': {
+            backgroundColor: 'red !important'
           },
           '&.MuiTableRow-root .MuiTableCell-root': {
             backgroundColor: row.id.includes('shape')
@@ -461,7 +534,7 @@ const BidToByDataTable = ({
       columnPinning: {
         left: ['mrt-row-select', 'lot_id', 'mrt-row-expand']
       },
-      pagination: { pageSize: 20, pageIndex: 0 }
+      pagination: pagination
     },
 
     positionGlobalFilter: 'left',
@@ -514,18 +587,24 @@ const BidToByDataTable = ({
     },
 
     muiTableBodyCellProps: ({ cell, row }) => {
+      const isHighlightBackground =
+        activeTab === 2 &&
+        cell.column.id === 'lot_id' &&
+        RenderBidToBuyLotIdColor({ row });
       return {
         sx: {
           color: 'var(--neutral-900)',
           '&.MuiTableCell-root': {
             padding: '4px 8px',
-
-            background: 'White',
-
+            background: isHighlightBackground
+              ? `${isHighlightBackground.background} !important `
+              : 'White',
+            color: isHighlightBackground && isHighlightBackground.text,
             opacity: 1,
-
             '&:hover': {
-              background: 'White'
+              background: isHighlightBackground
+                ? isHighlightBackground.background
+                : 'White'
             },
             visibility:
               (cell.id === 'shape:RAD_lot_id' ||
@@ -563,7 +642,9 @@ const BidToByDataTable = ({
                 cell.id === 'shape:RMB_lot_id') &&
               'none'
           },
-
+          // '&.MuiTableCell-root[data-index="1"] ':{
+          //   display:'none'
+          // },
           whiteSpace: 'nowrap',
           borderBottom: '1px solid var(--neutral-50)'
         }
@@ -640,6 +721,8 @@ const BidToByDataTable = ({
         const bidValue =
           bidValues[row.id] !== undefined
             ? bidValues[row.id]
+            : activeTab === 1
+            ? row.original.my_current_bid
             : row.original.discount;
 
         // If the row is selected, return the detail panel content
@@ -694,7 +777,10 @@ const BidToByDataTable = ({
                 <div className="text-mRegular text-neutral700">Bid Disc%</div>
                 <div className="gap-6 flex">
                   <div className="h-[40px] flex gap-1">
-                    {bidValue <= row.original.discount ? (
+                    {bidValue <=
+                    (activeTab === 1
+                      ? row.original.my_current_bid
+                      : row.original.discount) ? (
                       <div className="cursor-not-allowed">
                         <DisableDecrementIcon />
                       </div>
@@ -703,7 +789,9 @@ const BidToByDataTable = ({
                         onClick={() =>
                           handleDecrementDiscount(
                             row.id,
-                            row.original.discount,
+                            activeTab === 1
+                              ? row.original.my_current_bid
+                              : row.original.discount,
                             setBidError,
                             setBidValues
                           )
@@ -736,7 +824,9 @@ const BidToByDataTable = ({
                       onClick={() =>
                         handleIncrementDiscount(
                           row.id,
-                          row.original.discount,
+                          activeTab === 1
+                            ? row.original.my_current_bid
+                            : row.original.discount,
                           setBidError,
                           setBidValues
                         )
@@ -753,7 +843,12 @@ const BidToByDataTable = ({
                           label: activeTab === 0 ? 'Add Bid' : 'Update Bid',
                           handler: () => {
                             if (!bidError) {
-                              if (bidValue < row.original.discount) {
+                              if (
+                                bidValue <
+                                (activeTab === 1
+                                  ? row.original.my_current_bid
+                                  : row.original.discount)
+                              ) {
                                 setBidError(
                                   'Bid value cannot be less than maximum discount.'
                                 );

@@ -324,11 +324,10 @@ const Search = () => {
                   let yourSelection = JSON.parse(
                     localStorage.getItem('Search')!
                   );
-                  console.log(yourSelection, 'yourSelection-----------');
                   if (!saveSearchName.length) {
                     setInputError('Please enter name');
                   } else {
-                    if (!inputError.length) {
+                    if (!inputError?.length) {
                       handleSaveSearch({
                         addSavedSearch,
                         saveSearchName,

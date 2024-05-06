@@ -19,6 +19,7 @@ export const PROFILE_ALLOWED_FILE_TYPES = {
 
 export const REPORT_BUG_MAX_CHARACTERS = 1000;
 export const CONFIRM_STONE_COMMENT_MAX_CHARACTERS = 1000;
+export const BOOK_APPOINTMENT_COMMENT_MAX_CHARACTERS = 256;
 
 export const MAX_COMPARE_STONE = 10;
 export const MIN_COMPARE_STONE = 2;
@@ -36,6 +37,9 @@ export const HOLD_STATUS = 'Hold';
 export const PENDING_INVOICE = 'pendingInvoice';
 export const ACTIVE_INVOICE = 'activeInvoice';
 export const INVOICE_HISTORY = 'invoiceHistory';
+
+export const UPCOMING_APPOINTMENTS = 'upcomingAppointments';
+export const PAST_APPOINTMENTS = 'pastAppointments';
 
 export const PENING_INVOICE_BREADCRUMB_LABEL = 'Pending Invoice';
 export const ACTIVE_INVOICE_BREADCRUMB_LABEL = 'Active Invoices';
@@ -85,3 +89,4 @@ export const LAB_LINKS = {
   IGI_LINK: 'https://www.igi.org/verify-your-report/?r=',
   HRD_LINK: 'https://my.hrdantwerp.com/?id=34&record_number='
 };
+export const VOLUME_DISCOUNT_LIMIT = 300000;

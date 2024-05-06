@@ -15,8 +15,6 @@ import { handleDownloadImage } from '@/utils/v2/detail-page';
 import downloadImg from '@public/v2/assets/icons/detail-page/download.svg';
 import forwardArrow from '@public/v2/assets/icons/arrow-forward.svg';
 import backwardArrow from '@public/v2/assets/icons/arrow-backword.svg';
-import { checkImage } from '../helpers/check-image';
-import { loadImages } from '../helpers/load-images';
 
 interface ImageSliderProps {
   images: ImagesType[];
@@ -26,7 +24,7 @@ interface ImageSliderProps {
 const ImageSlider: React.FC<ImageSliderProps> = ({ images, setIsLoading }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [showDownloadButton, setShowDownloadButton] = useState<string[]>([]);
+
   const [imageName, setImageName] = useState('');
   // const [validImages, setValidImages] = useState<ImagesType[]>([]);
 
@@ -45,10 +43,6 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images, setIsLoading }) => {
       </button>
     );
   }
-
-  useEffect(() => {
-    setShowDownloadButton([]);
-  }, []);
 
   function SamplePrevArrow(props: any) {
     const { className, currentSlide, onClick } = props;
@@ -97,104 +91,86 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images, setIsLoading }) => {
     event.target.src = NoImageFound.src; // Set the fallback image when the original image fails to load
   };
 
-  // useEffect(() => {
-  //   loadImages(images, setValidImages, checkImage);
-  // }, [images]);
-
   useEffect(() => {
     setImageName(images[0]?.name);
   }, [images]);
 
-  // console.log('validImages', validImages);
-
   return (
     <div className="details-slider">
       <div className="w-[35%]">
-        <Slider {...settings}>
-          {images.map((img, index) => {
-            return (
-              <div
-                key={index}
-                className="flex cursor-pointer flex-col items-center justify-center gap-[12px]"
-              >
-                <div className="relative w-full min-h-[328px]">
-                  <div className="absolute w-full flex justify-center inset-0 p-5">
-                    {img.name === 'B2B' ||
-                    img.name === 'B2B Sparkle' ||
-                    img.name === 'GIA Certificate' ? (
-                      <div
-                        className="relative flex justify-center overflow-hidden w-full h-full"
-                        onClick={() => {
-                          setIsModalOpen(!isModalOpen);
-                        }}
-                      >
-                        <div className="absolute top-0 left-0 right-0 bottom-0 cursor-pointer "></div>
+        {images.length > 1 ? (
+          <Slider {...settings}>
+            {images.map((img, index) => {
+              return (
+                <div
+                  key={index}
+                  className="flex cursor-pointer flex-col items-center justify-center gap-[12px]"
+                >
+                  <div className="relative w-full min-h-[328px]">
+                    <div className="absolute w-full flex justify-center inset-0 p-5">
+                      {img.name === 'B2B' ||
+                      img.name === 'B2B Sparkle' ||
+                      img.name === 'GIA Certificate' ? (
+                        <div
+                          className="relative flex justify-center overflow-hidden w-full h-full"
+                          onClick={() => {
+                            setIsModalOpen(!isModalOpen);
+                          }}
+                        >
+                          <div className="absolute top-0 left-0 right-0 bottom-0 cursor-pointer "></div>
 
-                        {img.url === 'null' ||
-                        img.url === null ||
-                        !img.url.length ? (
-                          <Image
-                            src={NoImageFound}
-                            alt="NoImageFound"
-                            className="flex justify-center"
-                            style={{
-                              height: 'auto',
-                              width: '300px',
-                              background: '#F2F4F7',
-                              objectFit: 'cover'
-                            }}
-                            onLoad={() => {
-                              setShowDownloadButton(prevState => [
-                                ...prevState,
-                                img.name
-                              ]);
-                            }}
-                          />
-                        ) : (
-                          <iframe
-                            frameBorder="0"
-                            src={img.url}
-                            // className="object-contain"
-                            style={{ width: '273px', height: '282px' }}
-                            onError={e => {
-                              handleImageError(e);
-                              setShowDownloadButton(prevState => [
-                                ...prevState,
-                                img.name
-                              ]);
-                            }}
-                          />
-                        )}
-                      </div>
-                    ) : (
-                      <img
-                        src={img?.url}
-                        className="rounded-lg"
-                        width={'100'}
-                        height={'100'}
-                        style={{
-                          height: 'auto',
-                          width: '300px',
-                          background: '#F2F4F7'
-                        }}
-                        alt="test"
-                        onError={e => {
-                          handleImageError(e);
-                          setShowDownloadButton(prevState => [
-                            ...prevState,
-                            img.name
-                          ]);
-                        }}
-                        onClick={() => {
-                          setIsModalOpen(!isModalOpen);
-                        }}
-                      />
-                    )}
+                          {img.url === 'null' ||
+                          img.url === null ||
+                          !img.url.length ? (
+                            <Image
+                              src={NoImageFound}
+                              alt="NoImageFound"
+                              className="flex justify-center"
+                              style={{
+                                height: 'auto',
+                                width: '300px',
+                                background: '#F2F4F7',
+                                objectFit: 'cover'
+                              }}
+                            />
+                          ) : (
+                            <iframe
+                              frameBorder="0"
+                              src={img.url}
+                              // className="object-contain"
+                              style={{ width: '273px', height: '282px' }}
+                              onError={e => {
+                                handleImageError(e);
+                              }}
+                            />
+                          )}
+                        </div>
+                      ) : (
+                        <img
+                          src={img?.url}
+                          className="rounded-lg"
+                          width={'100'}
+                          height={'100'}
+                          style={{
+                            height: 'auto',
+                            width: '300px',
+                            background: '#F2F4F7'
+                          }}
+                          onError={e => {
+                            handleImageError(e);
+                          }}
+                          onClick={() => {
+                            setIsModalOpen(!isModalOpen);
+                          }}
+                        />
+                      )}
 
-                    {!showDownloadButton.includes(img.name) && (
                       <>
                         {!(
-                          img.name === 'B2B' || img.name === 'B2B Sparkle'
+                          img.name === 'B2B' ||
+                          img.name === 'B2B Sparkle' ||
+                          img.name === 'No Data Found' ||
+                          img.name !== ''
                         ) && (
                           <Tooltip
                             tooltipTrigger={
@@ -218,17 +194,78 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images, setIsLoading }) => {
                           />
                         )}
                       </>
+                    </div>
+                  </div>{' '}
+                  <p className="mt-2 text-center text-[16px] font-medium">
+                    {' '}
+                    {img.name}
+                  </p>
+                </div>
+              );
+            })}
+          </Slider>
+        ) : (
+          <div className="flex cursor-pointer flex-col items-center justify-center gap-[12px]">
+            <div className="relative w-full min-h-[328px]">
+              <div className="absolute w-full flex justify-center inset-0 p-5">
+                {images[0]?.name === 'B2B' ||
+                images[0]?.name === 'B2B Sparkle' ||
+                images[0]?.name === 'GIA Certificate' ? (
+                  <div
+                    className="relative flex justify-center overflow-hidden w-full h-full"
+                    onClick={() => {
+                      setIsModalOpen(!isModalOpen);
+                    }}
+                  >
+                    <div className="absolute top-0 left-0 right-0 bottom-0 cursor-pointer "></div>
+
+                    {images[0]?.url === 'null' ||
+                    images[0]?.url === null ||
+                    !images[0]?.url.length ? (
+                      <Image
+                        src={NoImageFound}
+                        alt="NoImageFound"
+                        className="flex justify-center"
+                        style={{
+                          height: 'auto',
+                          width: '300px',
+                          background: '#F2F4F7',
+                          objectFit: 'cover'
+                        }}
+                      />
+                    ) : (
+                      <iframe
+                        frameBorder="0"
+                        src={images[0]?.url}
+                        // className="object-contain"
+                        style={{ width: '273px', height: '282px' }}
+                      />
                     )}
                   </div>
-                </div>{' '}
-                <p className="mt-2 text-center text-[16px] font-medium">
-                  {' '}
-                  {img.name}
-                </p>
+                ) : (
+                  <img
+                    src={images[0]?.url}
+                    className="rounded-lg"
+                    width={'100'}
+                    height={'100'}
+                    style={{
+                      height: 'auto',
+                      width: '300px',
+                      background: '#F2F4F7'
+                    }}
+                    onError={e => {
+                      handleImageError(e);
+                    }}
+                    onClick={() => {
+                      setIsModalOpen(!isModalOpen);
+                    }}
+                  />
+                )}
               </div>
-            );
-          })}
-        </Slider>
+            </div>{' '}
+          </div>
+        )}
+
         <p className="mt-1 text-center text-[16px] font-medium"> {imageName}</p>
         <ImageModal
           isOpen={isModalOpen}

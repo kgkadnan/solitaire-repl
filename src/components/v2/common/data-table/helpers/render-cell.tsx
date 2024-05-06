@@ -318,6 +318,23 @@ export const RenderNewArrivalLotIdColor = ({ row }: any) => {
   };
 };
 
+export const RenderBidToBuyLotIdColor = ({ row }: any) => {
+  let statusClass = '';
+  let textClass = '';
+  if (row.original.is_win) {
+    statusClass = 'var(--success-surface)';
+    textClass = 'var(--success-main)';
+  } else {
+    statusClass = 'var(--danger-surface)';
+    textClass = 'var(--danger-main)';
+  }
+
+  return {
+    background: statusClass,
+    text: textClass
+  };
+};
+
 export const RenderBidDate = ({ row }: any) => {
   const date = new Date(row.original.last_bid_date);
 
