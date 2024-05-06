@@ -54,6 +54,7 @@ const theme = createTheme({
             visibility: 'visible'
           },
           '&.Mui-TableBodyCell-DetailPanel': {
+            backgroundColor: 'var(--neutral-25) !important',
             borderBottom: 'none' // Customize the border as needed
           }
         }
@@ -258,7 +259,12 @@ const BidToByDataTable = ({
               sx={{
                 boxShadow: 'var(--input-shadow) inset',
                 border: 'none',
+                color: 'var(--neutral-400)',
                 borderRadius: '4px',
+
+                '& .MuiOutlinedInput-input': {
+                  color: 'var(--neutral-400)'
+                },
                 ':hover': {
                   border: 'none'
                 },

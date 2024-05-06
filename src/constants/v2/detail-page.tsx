@@ -149,8 +149,9 @@ export const FILE_URLS = {
     'https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/Cert/***.jpeg',
   VIDEO_FILE:
     'https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/Vision360.html?d=***&autoPlay=1',
-  B2B_SPARKLE: `${process.env.NEXT_PUBLIC_API_URL}public/proxy/files/INVENTORYDATA/V360Mini5/Vision360.html?d=***-S`,
-  B2B: `${process.env.NEXT_PUBLIC_API_URL}public/proxy/files/INVENTORYDATA/V360Mini5/Vision360.html?d=***`,
+  B2B_SPARKLE:
+    'https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/Vision360.html?d=***-S',
+  B2B: 'https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/Vision360.html?d=***',
   B2B_SPARKLE_CHECK: `${process.env.NEXT_PUBLIC_API_URL}public/proxy/files/INVENTORYDATA/V360Mini5/imaged/***-S/0.json?version=1`,
   B2B_CHECK: `${process.env.NEXT_PUBLIC_API_URL}public/proxy/files/INVENTORYDATA/V360Mini5/imaged/***/0.json?version=1`,
   HEART:
