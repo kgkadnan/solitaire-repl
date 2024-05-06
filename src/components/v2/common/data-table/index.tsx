@@ -994,8 +994,7 @@ const DataTable = ({
                     label: ManageLocales(
                       'app.search.actionButton.bookAppointment'
                     ),
-                    handler: () => {},
-                    commingSoon: true
+                    handler: () => {}
                   },
 
                   {

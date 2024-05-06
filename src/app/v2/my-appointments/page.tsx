@@ -192,27 +192,6 @@ const MyAppointments = () => {
     });
   };
 
-  function formatDateTimeForReschedule(dateString: string) {
-    const date = new Date(dateString);
-
-    // Get the date in MM/DD/YYYY format
-    const formattedDate = `${
-      date.getMonth() + 1
-    }/${date.getDate()}/${date.getFullYear()}`;
-
-    // Get the time in hh:mm:ss AM/PM format
-    const hours = date.getHours() > 12 ? date.getHours() - 12 : date.getHours();
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    const seconds = date.getSeconds().toString().padStart(2, '0');
-    const meridiem = date.getHours() >= 12 ? 'PM' : 'AM';
-    const formattedTime = `${hours}:${minutes}:${seconds} ${meridiem}`;
-
-    // Combine date and time
-    const formattedDateTime = `${formattedDate}, ${formattedTime}`;
-
-    return formattedDateTime;
-  }
-
   const handleRescheduleAppointment = ({ rescheduleData }: any) => {
     handleCreateAppointment();
     setRescheduleAppointmentData({

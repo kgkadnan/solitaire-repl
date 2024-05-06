@@ -83,6 +83,9 @@ import { statusCode } from '@/constants/enums/status-code';
 import { formatNumber } from '@/utils/fix-two-digit-number';
 import { loadImages } from '@/components/v2/common/detail-page/helpers/load-images';
 import { checkImage } from '@/components/v2/common/detail-page/helpers/check-image';
+import { useLazyGetAvailableMyAppointmentSlotsQuery } from '@/features/api/my-appointments';
+import { IAppointmentPayload } from '../../my-appointments/page';
+import BookAppointment from '../../my-appointments/components/book-appointment/book-appointment';
 
 // Column mapper outside the component to avoid re-creation on each render
 
@@ -106,6 +109,10 @@ const Result = ({
   setIsInputDialogOpen: any;
 }) => {
   const dispatch = useAppDispatch();
+
+  const [triggerAvailableSlots] = useLazyGetAvailableMyAppointmentSlotsQuery(
+    {}
+  );
 
   const { data: searchList }: { data?: IItem[] } =
     useGetSavedSearchListQuery('');
@@ -135,6 +142,14 @@ const Result = ({
   const [commentValue, setCommentValue] = useState('');
   const [textAreaValue, setTextAreaValue] = useState('');
 
+  const [showAppointmentForm, setShowAppointmentForm] = useState(false);
+  const [appointmentPayload, setAppointmentPayload] =
+    useState<IAppointmentPayload>({
+      kam: { kam_name: '' },
+      storeAddresses: [],
+      timeSlots: { dates: [{ date: '', day: '' }], slots: {} }
+    });
+
   // UseMutation to add items to the cart
   const [addCart] = useAddCartMutation();
 
@@ -142,7 +157,6 @@ const Result = ({
   const router = useRouter();
   const [searchUrl, setSearchUrl] = useState('');
 
-  const [addSavedSearch] = useAddSavedSearchMutation();
   const [downloadExcel] = useDownloadExcelMutation();
   const [confirmProduct] = useConfirmProductMutation();
 
@@ -226,7 +240,6 @@ const Result = ({
   };
 
   const handleDetailImage = ({ row }: any) => {
-    console.log('111111111111111', row);
     setDetailImageData(row);
     setIsModalOpen(true);
   };
@@ -451,6 +464,14 @@ const Result = ({
   );
   const handleNewSearch = () => {
     router.push(`${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`);
+  };
+
+  const handleCreateAppointment = () => {
+    setShowAppointmentForm(true);
+    triggerAvailableSlots({}).then(payload => {
+      let { data } = payload.data;
+      setAppointmentPayload(data);
+    });
   };
 
   const handleAddToCart = () => {
@@ -1148,6 +1169,16 @@ const Result = ({
               setConfirmStoneData={setConfirmStoneData}
               setIsDetailPage={setIsDetailPage}
               setIsCompareStone={setIsCompareStone}
+            />
+          ) : showAppointmentForm ? (
+            <BookAppointment
+              breadCrumLabel={ManageLocales(
+                'app.myAppointments.myAppointments'
+              )}
+              goBackToListView={goBackToListView}
+              appointmentPayload={appointmentPayload}
+              setIsLoading={setIsLoading}
+              modalSetState={modalSetState}
             />
           ) : (
             <div className="">
