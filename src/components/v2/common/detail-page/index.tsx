@@ -156,11 +156,12 @@ export function DiamondDetailsComponent({
   ];
 
   useEffect(() => {
-    loadImages(images, setValidImages, checkImage);
+    if (images.length > 0 && images[0].name.length)
+      loadImages(images, setValidImages, checkImage);
   }, [tableData?.lot_id, tableData?.certificate_url]);
 
   useEffect(() => {
-    if (!validImages.length) {
+    if (!validImages.length && images[0].name.length) {
       setValidImages([
         {
           name: 'No Data Found',
