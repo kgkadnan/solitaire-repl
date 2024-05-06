@@ -1688,7 +1688,7 @@ const Dashboard = () => {
                                 Bid starts on {formatDateString(data.start_at)}
                               </p>
                             </div>
-                          ) : !data.count ? (
+                          ) : data.start_at && !data.count ? (
                             <div className=" mt-1 flex items-center gap-2 rounded-[4px] px-1 h-[26px] bg-[#F1FAF8]">
                               <Image
                                 src={BidHammer}
