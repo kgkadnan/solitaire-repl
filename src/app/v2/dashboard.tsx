@@ -180,8 +180,8 @@ const Dashboard = () => {
       icon: <AppointmentIcon />,
       color: optionsClasses[3],
       count: 0,
-      isAvailable: false,
-      link: '/v2/my-cart'
+      isAvailable: true,
+      link: '/v2/my-appointments'
     }
   ];
   const handleTabs = ({ tab }: { tab: string }) => {
@@ -1657,6 +1657,7 @@ const Dashboard = () => {
                       <div className="flex justify-between items-baseline">
                         <p className="text-neutral600 text-mRegular">
                           {data.label}
+                          {data.label === 'My Appointments' && `(${0})`}
                         </p>
                         {data.label === 'Bid to Buy' &&
                           (!data?.start_at && data?.count > 0 ? (
@@ -1703,8 +1704,14 @@ const Dashboard = () => {
                             )
                           )}
                         </>
+                      ) : data.label === 'My Appointments' ? (
+                        <p className="text-headingS text-infoMain  underline">
+                          Book Now
+                        </p>
                       ) : (
-                        <p className={`text-neutral900 text-headingS medium `}>
+                        <p
+                          className={`text-neutral900 text-headingS font-medium `}
+                        >
                           {data.isAvailable
                             ? data.count === 0
                               ? '-'
