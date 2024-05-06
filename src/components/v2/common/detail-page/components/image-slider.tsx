@@ -254,7 +254,6 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images, setIsLoading }) => {
                       width: '300px',
                       background: '#F2F4F7'
                     }}
-                    alt=""
                     onError={e => {
                       handleImageError(e);
                     }}
