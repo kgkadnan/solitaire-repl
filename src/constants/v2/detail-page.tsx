@@ -152,6 +152,8 @@ export const FILE_URLS = {
   B2B_SPARKLE:
     'https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/Vision360.html?d=***-S',
   B2B: 'https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/Vision360.html?d=***',
+  B2B_SPARKLE_CHECK: `${process.env.NEXT_PUBLIC_API_URL}public/proxy/files/INVENTORYDATA/V360Mini5/imaged/***-S/0.json?version=1`,
+  B2B_CHECK: `${process.env.NEXT_PUBLIC_API_URL}public/proxy/files/INVENTORYDATA/V360Mini5/imaged/***/0.json?version=1`,
   HEART:
     'https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/***/Heart_Black_BG.jpg',
   ARROW:

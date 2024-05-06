@@ -91,13 +91,13 @@ const SideNavigationBar = () => {
       title: ManageLocales('app.sideNavigationBar.myAppointments'),
       link: Routes.MY_APPOINTMENTS,
       isActive: currentRoute === Routes.MY_APPOINTMENTS
-    },
-    {
-      src: <FaqsIcon />,
-      title: ManageLocales('app.sideNavigationBar.faqs'),
-      link: Routes.FAQS,
-      isActive: currentRoute === Routes.FAQS
     }
+    // {
+    //   src: <FaqsIcon />,
+    //   title: ManageLocales('app.sideNavigationBar.faqs'),
+    //   link: Routes.FAQS,
+    //   isActive: currentRoute === Routes.FAQS
+    // }
     // {
     //   title: 'line-separator-2'
     // },

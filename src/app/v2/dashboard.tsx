@@ -22,6 +22,7 @@ import {
   useGetProductByIdMutation,
   useLazyGetProductCountQuery
 } from '@/features/api/product';
+import fallbackImage from '@public/v2/assets/icons/not-found.svg';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import { formatCreatedAt } from '@/utils/format-date';
 import { DisplayTable } from '@/components/v2/common/display-table';
@@ -1029,13 +1030,22 @@ const Dashboard = () => {
       url: detailImageData?.certificate_url ?? '',
       showDivider: true
     },
+
     {
       name: 'B2B',
-      url: `${FILE_URLS.B2B.replace('***', detailImageData?.lot_id ?? '')}`
+      url: `${FILE_URLS.B2B.replace('***', detailImageData?.lot_id ?? '')}`,
+      url_check: `${FILE_URLS.B2B_CHECK.replace(
+        '***',
+        detailImageData?.lot_id ?? ''
+      )}`
     },
     {
       name: 'B2B Sparkle',
       url: `${FILE_URLS.B2B_SPARKLE.replace(
+        '***',
+        detailImageData?.lot_id ?? ''
+      )}`,
+      url_check: `${FILE_URLS.B2B_SPARKLE_CHECK.replace(
         '***',
         detailImageData?.lot_id ?? ''
       )}`,
@@ -1332,6 +1342,18 @@ const Dashboard = () => {
   useEffect(() => {
     loadImages(images, setValidImages, checkImage);
   }, [detailImageData]);
+
+  useEffect(() => {
+    if (!validImages.length) {
+      setValidImages([
+        {
+          name: '',
+          url: fallbackImage,
+          showDivider: true
+        }
+      ]);
+    }
+  }, [validImages]);
   return (
     <>
       {error !== '' && (
