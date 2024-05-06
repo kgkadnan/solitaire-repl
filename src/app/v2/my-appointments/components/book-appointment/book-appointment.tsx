@@ -71,14 +71,6 @@ const BookAppointment: React.FC<IBookAppointment> = ({
       : false;
   };
 
-  console.log('selectedSlot', selectedSlot);
-  console.log('slots', slots);
-
-  console.log(
-    'rescheduleAppointmentData',
-    rescheduleAppointmentData?.selectedSlot
-  );
-
   useEffect(() => {
     let { kam, storeAddresses, timeSlots } = appointmentPayload;
 
@@ -435,11 +427,11 @@ const BookAppointment: React.FC<IBookAppointment> = ({
               label: hasDataOnRescheduleAppointment()
                 ? ManageLocales('app.myAppointments.rescheduleAppointments')
                 : ManageLocales('app.myAppointments.confirmAppointments'),
+              isDisable:
+                rescheduleAppointmentData?.selectedSlot === selectedSlot,
               handler: () => {
                 hasDataOnRescheduleAppointment()
-                  ? selectedSlot.length &&
-                    rescheduleAppointmentData?.selectedSlot !== selectedSlot &&
-                    handleRescheduleAppointment()
+                  ? selectedSlot.length && handleRescheduleAppointment()
                   : selectedSlot.length && handleAddMyAppointment();
               }
             }
