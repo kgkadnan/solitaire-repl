@@ -31,6 +31,7 @@ import { kycStatus } from '@/constants/enums/kyc';
 import { formatNumber } from '@/utils/fix-two-digit-number';
 import { handleDecrementDiscount } from '@/utils/v2/handle-decrement-discount';
 import { handleIncrementDiscount } from '@/utils/v2/handle-increment-discount';
+import { RenderBidToBuyLotIdColor } from '@/components/v2/common/data-table/helpers/render-cell';
 
 const theme = createTheme({
   typography: {
@@ -436,6 +437,9 @@ const BidToByDataTable = ({
     // selectAllMode: undefined,
 
     muiTableBodyRowProps: ({ row }) => {
+      console.log('row', row.getIsSelected());
+      const isHighlightBackground =
+        activeTab === 2 && RenderBidToBuyLotIdColor({ row });
       return {
         onClick: row.id.includes('shape')
           ? row.getToggleExpandedHandler()
@@ -447,15 +451,26 @@ const BidToByDataTable = ({
             // Define styles for the ::after pseudo-element of each cell within a hovered row
             '& .MuiTableCell-root::after': {
               // Maintain the default background color for non-lot_id columns
-              backgroundColor: 'var(--neutral-50) !important'
+              backgroundColor: row.getIsSelected()
+                ? 'var(--neutral-100)  !important'
+                : 'var(--neutral-50) !important'
             },
-            // Target the specific cell that matches the lot_id column within a hovered row
+
             '& .MuiTableCell-root[data-index="1"]::after': {
-              backgroundColor: 'var(--neutral-50)'
+              // Change the background color to red if isHighlightBackground is true, otherwise maintain the default hover color
+              backgroundColor: isHighlightBackground
+                ? `${isHighlightBackground.background} !important`
+                : 'var(--neutral-50)'
             }
           },
           '&.MuiTableRow-root .MuiTableCell-root::after': {
             backgroundColor: 'var(--neutral-25)'
+          },
+          '&.MuiTableRow-root.Mui-selected': {
+            backgroundColor: 'var(--neutral-100) !important'
+          },
+          '& .Mui-selected': {
+            backgroundColor: 'red !important'
           },
           '&.MuiTableRow-root .MuiTableCell-root': {
             backgroundColor: row.id.includes('shape')
@@ -572,18 +587,24 @@ const BidToByDataTable = ({
     },
 
     muiTableBodyCellProps: ({ cell, row }) => {
+      const isHighlightBackground =
+        activeTab === 2 &&
+        cell.column.id === 'lot_id' &&
+        RenderBidToBuyLotIdColor({ row });
       return {
         sx: {
           color: 'var(--neutral-900)',
           '&.MuiTableCell-root': {
             padding: '4px 8px',
-
-            background: 'White',
-
+            background: isHighlightBackground
+              ? `${isHighlightBackground.background} !important `
+              : 'White',
+            color: isHighlightBackground && isHighlightBackground.text,
             opacity: 1,
-
             '&:hover': {
-              background: 'White'
+              background: isHighlightBackground
+                ? isHighlightBackground.background
+                : 'White'
             },
             visibility:
               (cell.id === 'shape:RAD_lot_id' ||
@@ -621,7 +642,9 @@ const BidToByDataTable = ({
                 cell.id === 'shape:RMB_lot_id') &&
               'none'
           },
-
+          // '&.MuiTableCell-root[data-index="1"] ':{
+          //   display:'none'
+          // },
           whiteSpace: 'nowrap',
           borderBottom: '1px solid var(--neutral-50)'
         }
