@@ -53,6 +53,7 @@ const BidToBuy = () => {
   const [validImages, setValidImages] = useState<any>([]);
   const pathName = useSearchParams().get('path');
   const [isLoading, setIsLoading] = useState(false); // State to track loading
+  const [checkStatus, setCheckStatus] = useState(false);
 
   const handleDetailPage = ({ row }: { row: any }) => {
     setIsDetailPage(true);
@@ -205,6 +206,8 @@ const BidToBuy = () => {
   const [activeBid, setActiveBid] = useState<any>();
   const [bid, setBid] = useState<any>();
   const [time, setTime] = useState('');
+
+  console.log('activeBid', activeBid);
   useEffect(() => {
     const currentTime: any = new Date();
     const targetTime: any = new Date(time!);
@@ -218,7 +221,8 @@ const BidToBuy = () => {
     if (authToken) useSocket(socketManager, authToken);
   }, [authToken]);
   const handleBidStones = useCallback((data: any) => {
-    console.log('data', data);
+    console.log('hererre');
+    setCheckStatus(true);
     setActiveBid(data.activeStone);
     setBid(data.bidStone);
     setTime(data.endTime);
@@ -409,8 +413,24 @@ const BidToBuy = () => {
           </div>
         </div>
       );
-    } else if (activeTab === 2) {
-      return <></>;
+    } else if (activeTab === 2 && bidHistory?.data?.length > 0) {
+      return (
+        <div className="flex items-center justify-between px-4 py-0 border-t-[1px] border-solid border-neutral200">
+          <div className="flex gap-4 py-2">
+            <div className=" border-[1px] border-successBorder rounded-[4px] bg-successSurface text-successMain">
+              <p className="text-mMedium font-medium px-[6px] py-[4px]">Won</p>
+            </div>
+            <div className=" border-[1px] border-dangerBorder rounded-[4px] bg-dangerSurface text-dangerMain">
+              <p className="text-mMedium font-medium px-[6px] py-[4px]">
+                {' '}
+                Lost
+              </p>
+            </div>
+          </div>
+          {/* <MRT_TablePagination table={table} /> */}
+          <div></div>
+        </div>
+      );
     } else {
       return null;
     }
@@ -546,14 +566,18 @@ const BidToBuy = () => {
               <p className="text-lMedium font-medium text-neutral900">
                 Bid to Buy
               </p>
-              {time && time?.length ? (
-                <div className="text-successMain text-lMedium font-medium">
-                  ACTIVE
-                </div>
+              {checkStatus ? (
+                time && time?.length ? (
+                  <div className="text-successMain text-lMedium font-medium">
+                    ACTIVE
+                  </div>
+                ) : (
+                  <div className="text-visRed text-lMedium font-medium">
+                    INACTIVE
+                  </div>
+                )
               ) : (
-                <div className="text-visRed text-lMedium font-medium">
-                  INACTIVE
-                </div>
+                ''
               )}
             </div>
 
