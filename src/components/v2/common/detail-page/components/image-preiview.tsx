@@ -24,7 +24,6 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [openDialogImageIndex, setOpenDialogImageIndex] = useState<number>(0);
 
-  console.log('images', images);
   useEffect(() => {
     if (containerRef.current) {
       const selectedImageElement = containerRef.current.children[
