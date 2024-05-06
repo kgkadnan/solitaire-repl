@@ -437,7 +437,6 @@ const BidToByDataTable = ({
     // selectAllMode: undefined,
 
     muiTableBodyRowProps: ({ row }) => {
-      console.log('row', row.getIsSelected());
       const isHighlightBackground =
         activeTab === 2 && RenderBidToBuyLotIdColor({ row });
       return {

@@ -23,5 +23,6 @@ export const dashboardApi = createApi({
 export const {
   useGetCustomerQuery,
   useGetBidHistoryQuery,
-  useGetBidToBuyHistoryQuery
+  useGetBidToBuyHistoryQuery,
+  useLazyGetBidToBuyHistoryQuery
 } = dashboardApi;

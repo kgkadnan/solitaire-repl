@@ -19,9 +19,14 @@ import backwardArrow from '@public/v2/assets/icons/arrow-backword.svg';
 interface ImageSliderProps {
   images: ImagesType[];
   setIsLoading: any;
+  setValidImages: React.Dispatch<React.SetStateAction<ImagesType[]>>;
 }
 
-const ImageSlider: React.FC<ImageSliderProps> = ({ images, setIsLoading }) => {
+const ImageSlider: React.FC<ImageSliderProps> = ({
+  images,
+  setIsLoading,
+  setValidImages
+}) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
@@ -269,7 +274,10 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images, setIsLoading }) => {
         <p className="mt-1 text-center text-[16px] font-medium"> {imageName}</p>
         <ImageModal
           isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(!isModalOpen)}
+          onClose={() => {
+            setValidImages([]);
+            setIsModalOpen(!isModalOpen);
+          }}
           selectedImageIndex={currentImageIndex}
           images={images}
           setIsLoading={setIsLoading}

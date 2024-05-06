@@ -23,7 +23,10 @@ import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
 import { columnHeaders } from './constant';
 import { SocketManager, useSocket } from '@/hooks/v2/socket-manager';
 import CountdownTimer from '@components/v2/common/timer/index';
-import { useGetBidToBuyHistoryQuery } from '@/features/api/dashboard';
+import {
+  useGetBidToBuyHistoryQuery,
+  useLazyGetBidToBuyHistoryQuery
+} from '@/features/api/dashboard';
 import InvalidCreds from '../login/component/invalid-creds';
 import { DialogComponent } from '@/components/v2/common/dialog';
 import ActionButton from '@/components/v2/common/action-button';
@@ -65,7 +68,10 @@ const BidToBuy = () => {
     setIsModalOpen(true);
   };
 
-  const { data: bidHistory } = useGetBidToBuyHistoryQuery({});
+  const [bidHistory, setBidHistory] = useState<any>({});
+
+  // const { data: bidHistory } = useGetBidToBuyHistoryQuery({});
+  const [triggerBidToBuyHistory] = useLazyGetBidToBuyHistoryQuery({});
   const mapColumns = (columns: any) =>
     columns
       ?.filter(({ is_disabled }: any) => !is_disabled)
@@ -149,7 +155,10 @@ const BidToBuy = () => {
             return {
               ...commonProps,
               Cell: ({ row }: any) => {
-                return RenderDetails({ row, handleDetailImage });
+                return RenderDetails({
+                  row,
+                  handleDetailImage
+                });
               }
             };
           case 'lab':
@@ -173,6 +182,28 @@ const BidToBuy = () => {
   const [activeTab, setActiveTab] = useState(0);
   const tabLabels = ['Bid Stone', 'Active Bid', 'Bid History'];
   const [timeDifference, setTimeDifference] = useState(null);
+
+  const getBidToBuyHistoryData = () => {
+    setIsLoading(true);
+    triggerBidToBuyHistory({})
+      .then(res => {
+        setIsLoading(false);
+        setBidHistory(res.data);
+      })
+      .catch(() => {
+        setIsLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    if (activeTab === 2) {
+      getBidToBuyHistoryData();
+    }
+  }, [activeTab]);
+
+  useEffect(() => {
+    getBidToBuyHistoryData();
+  }, []);
 
   useEffect(() => {
     if (pathName === 'bidHistory') {
@@ -207,7 +238,6 @@ const BidToBuy = () => {
   const [bid, setBid] = useState<any>();
   const [time, setTime] = useState('');
 
-  console.log('activeBid', activeBid);
   useEffect(() => {
     const currentTime: any = new Date();
     const targetTime: any = new Date(time!);
@@ -221,7 +251,6 @@ const BidToBuy = () => {
     if (authToken) useSocket(socketManager, authToken);
   }, [authToken]);
   const handleBidStones = useCallback((data: any) => {
-    console.log('hererre');
     setCheckStatus(true);
     setActiveBid(data.activeStone);
     setBid(data.bidStone);
@@ -505,10 +534,11 @@ const BidToBuy = () => {
   }, [isError]);
 
   useEffect(() => {
-    loadImages(images, setValidImages, checkImage);
+    if (images.length > 0 && images[0].name.length)
+      loadImages(images, setValidImages, checkImage);
   }, [detailImageData]);
   useEffect(() => {
-    if (!validImages.length) {
+    if (!validImages.length && images[0].name.length) {
       setValidImages([
         {
           name: '',
@@ -527,7 +557,11 @@ const BidToBuy = () => {
       )}
       <ImageModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(!isModalOpen)}
+        onClose={() => {
+          setValidImages([]);
+          setDetailImageData({});
+          setIsModalOpen(!isModalOpen);
+        }}
         selectedImageIndex={0}
         images={validImages}
         setIsLoading={setIsLoading}
@@ -552,6 +586,7 @@ const BidToBuy = () => {
             filterData={detailPageData}
             goBackToListView={goBack}
             handleDetailPage={handleDetailPage}
+            fromBid={true}
             breadCrumLabel={'Bid 2 Buy'}
             modalSetState={modalSetState}
             setIsLoading={setIsLoading}
