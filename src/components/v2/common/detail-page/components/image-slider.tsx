@@ -170,7 +170,8 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images, setIsLoading }) => {
                         {!(
                           img.name === 'B2B' ||
                           img.name === 'B2B Sparkle' ||
-                          img.name === 'No Data Found'
+                          img.name === 'No Data Found' ||
+                          img.name !== ''
                         ) && (
                           <Tooltip
                             tooltipTrigger={
