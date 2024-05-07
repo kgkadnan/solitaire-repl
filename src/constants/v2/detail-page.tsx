@@ -6,6 +6,14 @@ export const priceDetailsHead = [
   { key: 'rap', label: 'Rap ($)' }
 ];
 
+export const priceDetailsHeadForBid = [
+  { key: 'rap_value', label: 'Rap Val' }, //n
+  { key: 'original_discount', label: 'Disc %' },
+  { key: 'price_per_carat', label: 'Pr/Ct' },
+  { key: 'amount', label: 'Amt ($)' },
+  { key: 'rap', label: 'Rap ($)' }
+];
+
 export const basicDetailsHead1 = [
   { key: 'lot_id', label: 'Stock No' }, //n
   { key: 'shape', label: 'Shape' },
@@ -115,6 +123,8 @@ export const otherInformationHead1 = [
 // ];
 
 export const priceDetails = [priceDetailsHead];
+export const priceDetailsForBid = [priceDetailsHeadForBid];
+
 export const basicDetails = [
   basicDetailsHead1,
   basicDetailsHead2,

@@ -24,7 +24,8 @@ import {
   inclusionDetails,
   mesurementsDetails,
   otherInformationDetails,
-  priceDetails
+  priceDetails,
+  priceDetailsForBid
 } from '@/constants/v2/detail-page';
 import { Toast } from '../copy-and-share/toast';
 import Tooltip from '../tooltip';
@@ -54,7 +55,8 @@ export function DiamondDetailsComponent({
   breadCrumLabel,
   modalSetState,
   setIsLoading,
-  activeTab
+  activeTab,
+  fromBid
 }: {
   data: any;
   filterData: any;
@@ -64,8 +66,10 @@ export function DiamondDetailsComponent({
   modalSetState?: any;
   setIsLoading?: any;
   activeTab?: number;
+  fromBid?: boolean;
 }) {
   const [tableData, setTableData] = useState<any>([]);
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [validImages, setValidImages] = useState<ImagesType[]>([]);
   const { errorSetState } = useErrorStateManagement();
@@ -263,7 +267,11 @@ export function DiamondDetailsComponent({
           }`}
         >
           <div className="w-full 2xl:hidden">
-            <ImageSlider images={validImages} setIsLoading={setIsLoading} />
+            <ImageSlider
+              images={validImages}
+              setIsLoading={setIsLoading}
+              setValidImages={setValidImages}
+            />
           </div>
           <div
             className={`hidden 2xl:block mr-5 ${
@@ -285,6 +293,7 @@ export function DiamondDetailsComponent({
               images={validImages}
               selectedImageIndex={selectedImageIndex}
               setIsLoading={setIsLoading}
+              setValidImages={setValidImages}
             />
           </div>
         </div>
@@ -367,7 +376,11 @@ export function DiamondDetailsComponent({
 
                   {/* Additional content for backward arrow */}
                   {currentIndex > 0 && (
-                    <ShowPopups data={data} currentIndex={currentIndex - 1} />
+                    <ShowPopups
+                      data={data}
+                      currentIndex={currentIndex - 1}
+                      fromBid={fromBid}
+                    />
                   )}
                 </button>
 
@@ -393,7 +406,11 @@ export function DiamondDetailsComponent({
                   {/* Additional content for forward arrow */}
 
                   {currentIndex < data.length - 1 && (
-                    <ShowPopups data={data} currentIndex={currentIndex + 1} />
+                    <ShowPopups
+                      data={data}
+                      currentIndex={currentIndex + 1}
+                      fromBid={fromBid}
+                    />
                   )}
                 </button>
               </div>
@@ -417,7 +434,9 @@ export function DiamondDetailsComponent({
               <p
                 className={`text-successMain text-mMedium px-[8px] py-[2px] rounded-[4px]`}
               >
-                {tableData?.variants?.length > 0
+                {fromBid
+                  ? tableData.length > 0 && tableData.original_discount + '%'
+                  : tableData?.variants?.length > 0
                   ? tableData?.variants[0]?.prices[0]?.amount
                     ? tableData.length > 0 && tableData.discount + '%'
                     : ''
@@ -435,7 +454,7 @@ export function DiamondDetailsComponent({
             <div className="sm:text-[14px] 2xl:text-[16px] text-[#344054]  font-medium">
               Price Details
             </div>
-            {displayTable(priceDetails)}
+            {displayTable(fromBid ? priceDetailsForBid : priceDetails)}
           </div>
           <div className="pt-8 max-w-[100%] pr-[10px]">
             <div className="sm:text-[14px] 2xl:text-[16px] text-[#344054]  font-medium">

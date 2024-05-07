@@ -47,12 +47,12 @@ const SideNavigationBar = () => {
       link: Routes.NEW_ARRIVAL,
       isActive: currentRoute === Routes.NEW_ARRIVAL
     },
-    // {
-    //   src: <Bid2BuyIcon />,
-    //   title: ManageLocales('app.sideNavigationBar.bidToBuy'),
-    //   link: Routes.BID_2_BUY,
-    //   isActive: currentRoute === Routes.BID_2_BUY
-    // },
+    {
+      src: <Bid2BuyIcon />,
+      title: ManageLocales('app.sideNavigationBar.bidToBuy'),
+      link: Routes.BID_2_BUY,
+      isActive: currentRoute === Routes.BID_2_BUY
+    },
     {
       title: 'line-separator-1'
     },
@@ -86,18 +86,7 @@ const SideNavigationBar = () => {
       link: Routes.YOUR_ORDERS,
       isActive: currentRoute === Routes.YOUR_ORDERS
     }
-    // {
-    //   src: <MyAppointments />,
-    //   title: ManageLocales('app.sideNavigationBar.myAppointments'),
-    //   link: Routes.MY_APPOINTMENTS,
-    //   isActive: currentRoute === Routes.MY_APPOINTMENTS
-    // },
-    // {
-    //   src: <FaqsIcon />,
-    //   title: ManageLocales('app.sideNavigationBar.faqs'),
-    //   link: Routes.FAQS,
-    //   isActive: currentRoute === Routes.FAQS
-    // }
+
     // {
     //   title: 'line-separator-2'
     // },
@@ -109,6 +98,14 @@ const SideNavigationBar = () => {
     // }
   ];
 
+  const SideNavigationBottomData: ISideNavigationBar[] = [
+    // {
+    //   src: <FaqsIcon />,
+    //   title: ManageLocales('app.sideNavigationBar.faqs'),
+    //   link: Routes.FAQS,
+    //   isActive: currentRoute === Routes.FAQS
+    // }
+  ];
   const { authToken } = useUser();
 
   const socketManager = useMemo(() => new SocketManager(), []);
@@ -152,47 +149,89 @@ const SideNavigationBar = () => {
           onClick={() => router.push(Routes.DASHBOARD)}
         />
       </div>
-
-      <div className="z-50 flex flex-col gap-2">
-        {SideNavigationData.map((items: ISideNavigationBar) => {
-          return (
-            <div className={` border-neutral200 `} key={items.title}>
-              {items.link ? (
-                <Tooltip
-                  tooltipContentSide="right"
-                  tooltipTrigger={
-                    <div
-                      className={` ${
-                        items.link === Routes.BID_2_BUY &&
-                        showPulse &&
-                        styles.notification_dot
-                      } ${
-                        items.link === Routes.BID_2_BUY &&
-                        showPulse &&
-                        styles.pulse
-                      }`}
-                    >
-                      <Button
-                        onClick={() => router.push(items.link!)}
-                        className={
-                          items.isActive
-                            ? `bg-primaryMain p-[8px] rounded stroke-neutral25 `
-                            : `p-[8px] stroke-primaryIconColor rounded hover:bg-neutral50 `
-                        }
+      <div className="flex flex-col justify-between h-full">
+        <div className="z-50 flex flex-col gap-2">
+          {SideNavigationData.map((items: ISideNavigationBar) => {
+            return (
+              <div className={` border-neutral200 `} key={items.title}>
+                {items.link ? (
+                  <Tooltip
+                    tooltipContentSide="right"
+                    tooltipTrigger={
+                      <div
+                        className={` ${
+                          items.link === Routes.BID_2_BUY &&
+                          showPulse &&
+                          styles.notification_dot
+                        } ${
+                          items.link === Routes.BID_2_BUY &&
+                          showPulse &&
+                          styles.pulse
+                        }`}
                       >
-                        {items.src}
-                      </Button>
-                    </div>
-                  }
-                  tooltipContentStyles={'z-50 text-sMedium'}
-                  tooltipContent={items.title}
-                />
-              ) : (
-                <hr className="border-none h-[1px] bg-neutral200" />
-              )}
-            </div>
-          );
-        })}
+                        <Button
+                          onClick={() => router.push(items.link!)}
+                          className={
+                            items.isActive
+                              ? `bg-primaryMain p-[8px] rounded stroke-neutral25 `
+                              : `p-[8px] stroke-primaryIconColor rounded hover:bg-neutral50 `
+                          }
+                        >
+                          {items.src}
+                        </Button>
+                      </div>
+                    }
+                    tooltipContentStyles={'z-50 text-sMedium'}
+                    tooltipContent={items.title}
+                  />
+                ) : (
+                  <hr className="border-none h-[1px] bg-neutral200" />
+                )}
+              </div>
+            );
+          })}
+        </div>
+        <div className="z-50 flex flex-col gap-2 mb-[36px]">
+          {SideNavigationBottomData.map((items: ISideNavigationBar) => {
+            return (
+              <div className={` border-neutral200 `} key={items.title}>
+                {items.link ? (
+                  <Tooltip
+                    tooltipContentSide="right"
+                    tooltipTrigger={
+                      <div
+                        className={` ${
+                          items.link === Routes.BID_2_BUY &&
+                          showPulse &&
+                          styles.notification_dot
+                        } ${
+                          items.link === Routes.BID_2_BUY &&
+                          showPulse &&
+                          styles.pulse
+                        }`}
+                      >
+                        <Button
+                          onClick={() => router.push(items.link!)}
+                          className={
+                            items.isActive
+                              ? `bg-primaryMain p-[8px] rounded stroke-neutral25 `
+                              : `p-[8px] stroke-primaryIconColor rounded hover:bg-neutral50 `
+                          }
+                        >
+                          {items.src}
+                        </Button>
+                      </div>
+                    }
+                    tooltipContentStyles={'z-50 text-sMedium'}
+                    tooltipContent={items.title}
+                  />
+                ) : (
+                  <hr className="border-none h-[1px] bg-neutral200" />
+                )}
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

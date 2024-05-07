@@ -170,9 +170,7 @@ export const RenderDiscount = ({ renderedCellValue }: any) => {
       className={`text-successMain border-[1px] border-successBorder bg-successSurface px-[8px] py-[2px] w-[74px] text-end rounded-[4px]`}
     >
       {`${
-        renderedCellValue === 0
-          ? '0.00'
-          : formatNumber(renderedCellValue) ?? '0.00'
+        renderedCellValue ? formatNumber(renderedCellValue) ?? '0.00' : '0.00'
       }%`}
     </div>
   );
@@ -194,9 +192,7 @@ export const DiscountWithCross = ({ renderedCellValue }: any) => {
       }}
     >
       {`${
-        renderedCellValue === 0
-          ? '0.00'
-          : formatNumber(renderedCellValue) ?? '0.00'
+        renderedCellValue ? formatNumber(renderedCellValue) ?? '0.00' : '0.00'
       }%`}
       <span
         style={{
