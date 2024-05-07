@@ -41,7 +41,7 @@ const FAQs = () => {
               );
             })}
           </div>
-          <div className="flex justify-between">
+          <div className="flex justify-between px-[22px]">
             <div className="flex flex-col">
               <p className="text-neutral900 text-headingS">
                 Still have questions?

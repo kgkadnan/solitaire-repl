@@ -24,7 +24,6 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  console.log('images from previre', images);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [openDialogImageIndex, setOpenDialogImageIndex] = useState<number>(0);
 
@@ -158,7 +157,6 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
       <ImageModal
         isOpen={isModalOpen}
         onClose={() => {
-          setValidImages([]);
           setIsModalOpen(!isModalOpen);
         }}
         selectedImageIndex={openDialogImageIndex}

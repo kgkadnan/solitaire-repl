@@ -3,7 +3,7 @@ import NoImageFound from '@public/v2/assets/icons/detail-page/fall-back-img.svg'
 import { FILE_URLS } from '@/constants/v2/detail-page';
 import { getShapeDisplayName } from '@/utils/v2/detail-page';
 import { formatNumber } from '@/utils/fix-two-digit-number';
-const ShowPopups = ({ data, currentIndex }: any) => {
+const ShowPopups = ({ data, currentIndex, fromBid }: any) => {
   return (
     <div className="absolute top-[calc(100%+10px)]  right-[8%] opacity-0 pointer-events-none transition-opacity duration-300 group-hover:opacity-100 group-hover:pointer-events-auto">
       <div className="w-[277px] flex items-center gap-2 p-[14px] bg-neutral0 border-[1px] border-neutral-200 rounded-[8px] shadow-popupsShadow">
@@ -41,7 +41,9 @@ const ShowPopups = ({ data, currentIndex }: any) => {
             }`}
           </div>
           <div className="text-successMain text-mMedium">
-            {data[currentIndex]?.discount}
+            {fromBid
+              ? data[currentIndex]?.original_discount
+              : data[currentIndex]?.discount}
           </div>
         </div>
       </div>

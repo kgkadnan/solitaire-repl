@@ -1634,100 +1634,99 @@ const Dashboard = () => {
               </div>
             </div>
 
-            <div className="flex justify-between gap-4">
-              {options.map(data => {
-                return (
+            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-4 gap-4">
+              {options.map((data, index) => (
+                <div
+                  className={`border-[1px] border-neutral200 p-[24px] flex rounded-[8px] w-full gap-4 hover:border-accentTeal shadow-sm ${
+                    data.isAvailable ? 'cursor-pointer' : 'cursor-default'
+                  }`}
+                  key={index}
+                  onClick={
+                    data.isAvailable
+                      ? () => {
+                          router.push(data.link);
+                        }
+                      : () => {}
+                  }
+                >
                   <div
-                    className={`border-[1px] border-neutral200 p-[24px] flex rounded-[8px] w-full gap-4 hover:border-accentTeal shadow-sm ${
-                      data.isAvailable ? 'cursor-pointer' : 'cursor-default'
-                    }`}
-                    key={data.label}
-                    onClick={
-                      data.isAvailable
-                        ? () => {
-                            router.push(data.link);
-                          }
-                        : () => {}
-                    }
+                    style={{ background: data.color }}
+                    className={`${data.color} p-3 rounded-[4px] h-[48px]`}
                   >
-                    <div
-                      style={{ background: data.color }}
-                      className={`${data.color} p-3 rounded-[4px] h-[48px]`}
-                    >
-                      {' '}
-                      {data.icon}{' '}
-                    </div>
-                    <div className="w-full">
-                      <div className="flex justify-between items-baseline">
-                        <p className="text-neutral600 sm:text-sMobileRegular md:text-sMedium max-lg:text-mRegular">
-                          {data.label}
-                          {data.label === 'My Appointments' && `(${0})`}
-                        </p>
-                        {data.label === 'Bid to Buy' &&
-                          (!data?.start_at && data?.count > 0 ? (
-                            <div className="text-successMain sm:text-sMobileRegular md:text-sMobileRegular max-lg:text-sMedium ">
-                              ACTIVE
-                            </div>
-                          ) : (
-                            <div className="text-visRed  sm:text-sMobileRegular md:text-sMobileRegular max-lg:text-sMedium ">
-                              INACTIVE
-                            </div>
-                          ))}
-                      </div>
-
-                      {data.label === 'Bid to Buy' ? (
-                        <>
-                          {data.start_at && data.count ? (
-                            <div className=" mt-1 flex items-center gap-2 rounded-[4px] px-1 h-[26px] bg-[#F1FAF8]">
-                              <Image
-                                src={BidHammer}
-                                alt="Bid to Buy"
-                                className="mb-2"
-                              />
-                              <p className="m-0 p-0 text-neutral-900 sm:text-mMedium md:text-mMedium max-lg:text-lRegular">
-                                Bid starts on {formatDateString(data.start_at)}
-                              </p>
-                            </div>
-                          ) : data.start_at && !data.count ? (
-                            <div className=" mt-1 flex items-center gap-2 rounded-[4px] px-1 h-[26px] bg-[#F1FAF8]">
-                              <Image
-                                src={BidHammer}
-                                alt="Bid to Buy"
-                                className="mb-2"
-                              />
-                              <p className="m-0 p-0  text-neutral-900 sm:text-mMedium md:text-mMedium max-lg:text-lRegular">
-                                Stay tuned
-                              </p>
-                            </div>
-                          ) : (
-                            !data?.start_at &&
-                            data?.count > 0 && (
-                              <div className="text-neutral-900 text-headingS">
-                                {data?.count}
-                              </div>
-                            )
-                          )}
-                        </>
-                      ) : data.label === 'My Appointments' ? (
-                        <p className="text-headingS text-infoMain  underline">
-                          Book Now
-                        </p>
-                      ) : (
-                        <p
-                          className={`text-neutral900 text-headingS font-medium `}
-                        >
-                          {data.isAvailable
-                            ? data.count === 0
-                              ? '-'
-                              : data.count
-                            : 'Coming Soon'}
-                        </p>
-                      )}
-                    </div>
+                    {' '}
+                    {data.icon}{' '}
                   </div>
-                );
-              })}
+                  <div className="w-full">
+                    <div className="flex justify-between items-baseline">
+                      <p className="text-neutral600 text-mRegular">
+                        {data.label}
+                        {data.label === 'My Appointments' && `(${0})`}
+                      </p>
+                      {data.label === 'Bid to Buy' &&
+                        (!data?.start_at && data?.count > 0 ? (
+                          <div className="text-successMain text-sMedium ">
+                            ACTIVE
+                          </div>
+                        ) : (
+                          <div className="text-visRed  text-sMedium ">
+                            INACTIVE
+                          </div>
+                        ))}
+                    </div>
+
+                    {data.label === 'Bid to Buy' ? (
+                      <>
+                        {data.start_at && data.count ? (
+                          <div className=" mt-1 flex items-center gap-2 rounded-[4px] px-1 h-[26px] bg-[#F1FAF8]">
+                            <Image
+                              src={BidHammer}
+                              alt="Bid to Buy"
+                              className="mb-2"
+                            />
+                            <p className="m-0 p-0 text-neutral-900 text-lRegular">
+                              Bid starts on {formatDateString(data.start_at)}
+                            </p>
+                          </div>
+                        ) : data.start_at && !data.count ? (
+                          <div className=" mt-1 flex items-center gap-2 rounded-[4px] px-1 h-[26px] bg-[#F1FAF8]">
+                            <Image
+                              src={BidHammer}
+                              alt="Bid to Buy"
+                              className="mb-2"
+                            />
+                            <p className="m-0 p-0  text-neutral-900 sm:text-mMedium text-lRegular">
+                              Stay tuned
+                            </p>
+                          </div>
+                        ) : (
+                          !data.start_at &&
+                          data.count > 0 && (
+                            <div className="text-neutral-900 text-headingS">
+                              {data.count}
+                            </div>
+                          )
+                        )}
+                      </>
+                    ) : data.label === 'My Appointments' ? (
+                      <p className="text-headingS text-infoMain  underline">
+                        Book Now
+                      </p>
+                    ) : (
+                      <p
+                        className={`text-neutral900 text-headingS font-medium `}
+                      >
+                        {data.isAvailable
+                          ? data.count === 0
+                            ? '-'
+                            : data.count
+                          : 'Coming Soon'}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              ))}
             </div>
+
             <div className="flex w-full gap-4 h-[400px]">
               {' '}
               {/* Ensure the container takes up full width */}
