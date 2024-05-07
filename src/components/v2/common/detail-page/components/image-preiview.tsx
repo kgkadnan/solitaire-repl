@@ -158,7 +158,6 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
       <ImageModal
         isOpen={isModalOpen}
         onClose={() => {
-          setValidImages([]);
           setIsModalOpen(!isModalOpen);
         }}
         selectedImageIndex={openDialogImageIndex}
