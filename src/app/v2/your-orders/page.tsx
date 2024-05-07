@@ -57,8 +57,6 @@ const MyDiamonds = () => {
   const [productDetailData, setProductDetailData] = useState([]);
   const [radioState, setRadioState] = useState<string>('90days');
 
-  const subRoute = useSearchParams().get('path');
-
   // State to manage the search input value
   const [search, setSearch] = useState<string>('');
   // Query parameters for API request
@@ -179,10 +177,16 @@ const MyDiamonds = () => {
   // }, [invoiceHistoryData]);
 
   useEffect(() => {
-    if (subRoute === 'recent-confirmations') {
+    if (pathName === 'recent-confirmations') {
       setActiveTab(PENDING_INVOICE);
-    } else if (subRoute === 'active-invoice') {
+    } else if (pathName === 'active-invoice') {
       setActiveTab(ACTIVE_INVOICE);
+    } else if (pathName === ACTIVE_INVOICE) {
+      setActiveTab(ACTIVE_INVOICE);
+    } else if (pathName === PENDING_INVOICE) {
+      setActiveTab(PENDING_INVOICE);
+    } else if (pathName === INVOICE_HISTORY) {
+      setActiveTab(INVOICE_HISTORY);
     }
   }, []);
 
