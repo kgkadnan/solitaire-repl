@@ -310,7 +310,6 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
         <ImageModal
           isOpen={isModalOpen}
           onClose={() => {
-            setValidImages([]);
             setIsModalOpen(!isModalOpen);
           }}
           selectedImageIndex={currentImageIndex}
