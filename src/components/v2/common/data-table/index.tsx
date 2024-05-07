@@ -593,7 +593,7 @@ const DataTable = ({
               (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
                 isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
               ? 'calc(100vh - 440px)'
-              : 'calc(100vh - 372px)'
+              : 'calc(100vh - 362px)'
             : isNudge &&
               (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
                 isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
@@ -618,7 +618,7 @@ const DataTable = ({
               (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
                 isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
               ? 'calc(100vh - 440px)'
-              : 'calc(100vh - 372px)'
+              : 'calc(100vh - 362px)'
             : isNudge &&
               (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
                 isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
@@ -1108,9 +1108,10 @@ const DataTable = ({
                     label: ManageLocales(
                       'app.myCart.actionButton.bookAppointment'
                     ),
-                    handler: () => {},
-                    isHidden: activeTab !== AVAILABLE_STATUS,
-                    commingSoon: true
+                    handler: () => {
+                      handleCreateAppointment();
+                    },
+                    isHidden: activeTab === AVAILABLE_STATUS
                   },
                   {
                     label: ManageLocales(

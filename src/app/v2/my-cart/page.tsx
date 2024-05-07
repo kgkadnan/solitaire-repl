@@ -72,6 +72,11 @@ import { formatNumber } from '@/utils/fix-two-digit-number';
 import { loadImages } from '@/components/v2/common/detail-page/helpers/load-images';
 import { checkImage } from '@/components/v2/common/detail-page/helpers/check-image';
 import fallbackImage from '@public/v2/assets/icons/not-found.svg';
+import { IAppointmentPayload } from '../my-appointments/page';
+import { NO_STONES_AVAILABLE } from '@/constants/error-messages/compare-stone';
+import { useLazyGetAvailableMyAppointmentSlotsQuery } from '@/features/api/my-appointments';
+import { SELECT_STONE_TO_PERFORM_ACTION } from '@/constants/error-messages/confirm-stone';
+import BookAppointment from '../my-appointments/components/book-appointment/book-appointment';
 
 const MyCart = () => {
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();
@@ -99,6 +104,19 @@ const MyCart = () => {
   const [detailPageData, setDetailPageData] = useState<any>({});
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [detailImageData, setDetailImageData] = useState<any>({});
+
+  const [showAppointmentForm, setShowAppointmentForm] = useState(false);
+  const [appointmentPayload, setAppointmentPayload] =
+    useState<IAppointmentPayload>({
+      kam: { kam_name: '' },
+      storeAddresses: [],
+      timeSlots: { dates: [{ date: '', day: '' }], slots: {} }
+    });
+
+  const [triggerAvailableSlots] = useLazyGetAvailableMyAppointmentSlotsQuery(
+    {}
+  );
+  const [lotIds, setLotIds] = useState<string[]>([]);
 
   const [diamondStatusCounts, setDiamondStatusCounts] = useState({
     Available: 0,
@@ -248,8 +266,14 @@ const MyCart = () => {
 
   const goBackToListView = () => {
     setIsConfirmStone(false);
-    setIsDetailPage(true);
+    setIsDetailPage(false);
     setConfirmStoneData([]);
+    setShowAppointmentForm(false);
+    setAppointmentPayload({
+      kam: { kam_name: '' },
+      storeAddresses: [],
+      timeSlots: { dates: [{ date: '', day: '' }], slots: {} }
+    });
   };
 
   const handleTabs = ({ tab }: { tab: string }) => {
@@ -854,6 +878,41 @@ const MyCart = () => {
   //   [dataTableState.columns]
   // );
 
+  const handleCreateAppointment = () => {
+    let selectedIds = Object.keys(rowSelection);
+
+    if (selectedIds.length > 0) {
+      const hasMemoOut = selectedIds?.some((id: string) => {
+        const stone = dataTableState.rows.find(
+          (row: IProduct) => row?.id === id
+        );
+        return stone?.diamond_status === MEMO_STATUS;
+      });
+
+      setShowAppointmentForm(true);
+      triggerAvailableSlots({}).then(payload => {
+        let { data } = payload.data;
+        setAppointmentPayload(data);
+      });
+
+      const lotIds = selectedIds?.map((id: string) => {
+        const getLotIds: any =
+          dataTableState.rows.find((row: IProduct) => {
+            return row?.id === id;
+          }) ?? {};
+
+        if (getLotIds) {
+          return getLotIds?.lot_id;
+        }
+        return '';
+      });
+      setLotIds(lotIds);
+    } else {
+      setIsError(true);
+      setErrorText(SELECT_STONE_TO_PERFORM_ACTION);
+    }
+  };
+
   let isNudge = localStorage.getItem('show-nudge') === 'MINI';
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
 
@@ -902,25 +961,40 @@ const MyCart = () => {
         onClose={() => setIsAddCommentDialogOpen(false)}
         renderContent={rederAddCommentDialogs}
       />
-      {(isConfirmStone || !isDetailPage) && (
+      {!isConfirmStone && !isDetailPage && (
         <div className="flex  py-[8px] items-center ">
           <p className="text-lMedium font-medium text-neutral900">
             {ManageLocales('app.myCart.mycart')}
           </p>
         </div>
       )}
-      {isDetailPage && detailPageData?.length ? (
-        <>
-          <DiamondDetailsComponent
-            data={dataTableState.rows}
-            filterData={detailPageData}
-            goBackToListView={goBack}
-            handleDetailPage={handleDetailPage}
-            breadCrumLabel={'My Cart'}
-            modalSetState={modalSetState}
-          />
-          <div className="p-[16px] flex justify-end items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow ">
-            {/* {isError && (
+      <div
+        className={`border-[1px] border-neutral200 rounded-[8px] ${
+          showAppointmentForm && 'mb-[30px]'
+        } ${
+          isNudge &&
+          (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+            isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+            ? showAppointmentForm
+              ? 'h-[calc(100vh-52px)]'
+              : 'h-[calc(100vh-200px)]'
+            : showAppointmentForm
+            ? 'h-[calc(100vh--18px)]'
+            : 'h-[calc(100vh-132px)]'
+        }  shadow-inputShadow`}
+      >
+        {isDetailPage && detailPageData?.length ? (
+          <>
+            <DiamondDetailsComponent
+              data={dataTableState.rows}
+              filterData={detailPageData}
+              goBackToListView={goBack}
+              handleDetailPage={handleDetailPage}
+              breadCrumLabel={'My Cart'}
+              modalSetState={modalSetState}
+            />
+            <div className="p-[16px] flex justify-end items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow ">
+              {/* {isError && (
               <div>
                 <span className="hidden  text-successMain" />
                 <span
@@ -930,89 +1004,60 @@ const MyCart = () => {
                 </span>
               </div>
             )} */}
-            <ActionButton
-              actionButtonData={[
-                {
-                  variant: 'primary',
-                  label: ManageLocales('app.searchResult.confirmStone'),
-                  isHidden: isConfirmStone,
-                  handler: () => {
-                    // setIsDetailPage(false);
-                    const { id } = detailPageData;
-                    const selectedRows = { [id]: true };
-                    handleConfirmStone({
-                      selectedRows: selectedRows,
-                      rows: dataTableState.rows,
-                      setIsError,
-                      setErrorText,
-                      setIsConfirmStone,
-                      setConfirmStoneData,
-                      setIsDetailPage
-                    });
+              <ActionButton
+                actionButtonData={[
+                  {
+                    variant: 'primary',
+                    label: ManageLocales('app.searchResult.confirmStone'),
+                    isHidden: isConfirmStone,
+                    handler: () => {
+                      // setIsDetailPage(false);
+                      const { id } = detailPageData;
+                      const selectedRows = { [id]: true };
+                      handleConfirmStone({
+                        selectedRows: selectedRows,
+                        rows: dataTableState.rows,
+                        setIsError,
+                        setErrorText,
+                        setIsConfirmStone,
+                        setConfirmStoneData,
+                        setIsDetailPage
+                      });
+                    }
                   }
+                ]}
+              />
+              <Dropdown
+                dropdownTrigger={
+                  <Image
+                    src={threeDotsSvg}
+                    alt="threeDotsSvg"
+                    width={43}
+                    height={43}
+                  />
                 }
-              ]}
-            />
-            <Dropdown
-              dropdownTrigger={
-                <Image
-                  src={threeDotsSvg}
-                  alt="threeDotsSvg"
-                  width={43}
-                  height={43}
-                />
-              }
-              dropdownMenu={[
-                {
-                  label: ManageLocales(
-                    'app.search.actionButton.bookAppointment'
-                  ),
-                  handler: () => {},
-                  commingSoon: true
-                },
-                {
-                  label: ManageLocales(
-                    'app.search.actionButton.findMatchingPair'
-                  ),
-                  handler: () => {},
-                  commingSoon: true
-                }
-              ]}
-              isDisable={true}
-            />
-          </div>
-        </>
-      ) : (
-        <div
-          className={`border-[1px] border-neutral200 rounded-[8px] ${
-            isNudge &&
-            (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
-              isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-              ? 'h-[calc(100vh-200px)]'
-              : 'h-[calc(100vh-132px)]'
-          }  shadow-inputShadow`}
-        >
-          <div className="flex h-[72px] items-center border-b-[1px] border-neutral200">
-            <div className="flex border-b border-neutral200 w-full ml-3 text-mMedium font-medium">
-              {myCartTabs.map(({ label, status, count }) => {
-                return (
-                  <button
-                    className={`px-[16px] py-[8px] ${
-                      activeTab === status
-                        ? 'text-neutral900 border-b-[2px] border-primaryMain'
-                        : 'text-neutral600'
-                    }`}
-                    key={label}
-                    onClick={() => handleTabs({ tab: status })}
-                  >
-                    {label} {count > 0 && `(${count})`}
-                  </button>
-                );
-              })}
+                dropdownMenu={[
+                  {
+                    label: ManageLocales(
+                      'app.search.actionButton.bookAppointment'
+                    ),
+                    handler: () => {},
+                    commingSoon: true
+                  },
+                  {
+                    label: ManageLocales(
+                      'app.search.actionButton.findMatchingPair'
+                    ),
+                    handler: () => {},
+                    commingSoon: true
+                  }
+                ]}
+                isDisable={true}
+              />
             </div>
-          </div>
-
-          {isConfirmStone ? (
+          </>
+        ) : isConfirmStone ? (
+          <>
             <ConfirmStone
               rows={confirmStoneData}
               columns={columnData}
@@ -1022,85 +1067,114 @@ const MyCart = () => {
               handleDetailPage={handleDetailPage}
               identifier={'cart'}
             />
-          ) : (
-            <>
-              {!rows.length && !isLoading ? (
-                <EmptyScreen
-                  label={ManageLocales(
-                    'app.emptyCart.actionButton.searchDiamonds'
-                  )}
-                  message="No diamonds in your cart yet. Let’s change that!"
-                  onClickHandler={() =>
-                    router.push(`/v2/search?active-tab=${SubRoutes.NEW_SEARCH}`)
-                  }
-                  imageSrc={empty}
-                />
-              ) : (
-                dataTableState.columns.length > 0 && (
-                  <DataTable
-                    rows={rows}
-                    columns={dataTableState.columns}
-                    setRowSelection={setRowSelection}
-                    rowSelection={rowSelection}
-                    showCalculatedField={activeTab !== SOLD_STATUS}
-                    modalSetState={modalSetState}
-                    downloadExcel={downloadExcel}
-                    myCart={true}
-                    setIsError={setIsError}
-                    setErrorText={setErrorText}
-                    setIsLoading={setIsLoading}
-                    deleteCartHandler={deleteCartHandler}
-                    activeCartTab={activeTab}
-                    setIsConfirmStone={setIsConfirmStone}
-                    setConfirmStoneData={setConfirmStoneData}
-                  />
-                )
-              )}
-            </>
-          )}
+            {rows.length > 0 ? (
+              <div className="flex gap-3 justify-end items-center px-4 py-2">
+                {isConfirmStone && (
+                  <>
+                    <ActionButton
+                      actionButtonData={[
+                        {
+                          variant: 'secondary',
+                          label: ManageLocales('app.confirmStone.footer.back'),
+                          handler: () => {
+                            goBackToListView();
+                          }
+                        },
 
-          {rows.length > 0 ? (
-            <div className="flex gap-3 justify-end items-center px-4 py-2">
-              {isConfirmStone && (
-                <>
-                  <ActionButton
-                    actionButtonData={[
-                      {
-                        variant: 'secondary',
-                        label: ManageLocales('app.confirmStone.footer.back'),
-                        handler: () => {
-                          goBackToListView();
+                        {
+                          variant: 'secondary',
+                          label: ManageLocales(
+                            'app.confirmStone.footer.addComment'
+                          ),
+                          handler: () => {
+                            setCommentValue('');
+                            setIsAddCommentDialogOpen(true);
+                          }
+                        },
+
+                        {
+                          variant: 'primary',
+                          label: ManageLocales(
+                            'app.confirmStone.footer.confirmStone'
+                          ),
+                          handler: () => confirmStoneApiCall()
                         }
-                      },
-
-                      {
-                        variant: 'secondary',
-                        label: ManageLocales(
-                          'app.confirmStone.footer.addComment'
-                        ),
-                        handler: () => {
-                          setCommentValue('');
-                          setIsAddCommentDialogOpen(true);
-                        }
-                      },
-
-                      {
-                        variant: 'primary',
-                        label: ManageLocales(
-                          'app.confirmStone.footer.confirmStone'
-                        ),
-                        handler: () => confirmStoneApiCall()
-                      }
-                    ]}
-                  />
-                </>
-              )}
+                      ]}
+                    />
+                  </>
+                )}
+              </div>
+            ) : (
+              <></>
+            )}
+          </>
+        ) : showAppointmentForm ? (
+          <BookAppointment
+            breadCrumLabel={ManageLocales('app.myAppointments.myAppointments')}
+            goBackToListView={goBackToListView}
+            appointmentPayload={appointmentPayload}
+            setIsLoading={setIsLoading}
+            modalSetState={modalSetState}
+            lotIds={lotIds}
+          />
+        ) : (
+          <>
+            {' '}
+            <div className="flex h-[72px] items-center border-b-[1px] border-neutral200">
+              <div className="flex border-b border-neutral200 w-full ml-3 text-mMedium font-medium">
+                {myCartTabs.map(({ label, status, count }) => {
+                  return (
+                    <button
+                      className={`px-[16px] py-[8px] ${
+                        activeTab === status
+                          ? 'text-neutral900 border-b-[2px] border-primaryMain'
+                          : 'text-neutral600'
+                      }`}
+                      key={label}
+                      onClick={() => handleTabs({ tab: status })}
+                    >
+                      {label} {count > 0 && `(${count})`}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
-          ) : (
-            <></>
-          )}
-        </div>
-      )}
+            {!rows.length && !isLoading ? (
+              <EmptyScreen
+                label={ManageLocales(
+                  'app.emptyCart.actionButton.searchDiamonds'
+                )}
+                message="No diamonds in your cart yet. Let’s change that!"
+                onClickHandler={() =>
+                  router.push(`/v2/search?active-tab=${SubRoutes.NEW_SEARCH}`)
+                }
+                imageSrc={empty}
+              />
+            ) : (
+              dataTableState.columns.length > 0 && (
+                <DataTable
+                  rows={rows}
+                  columns={dataTableState.columns}
+                  setRowSelection={setRowSelection}
+                  rowSelection={rowSelection}
+                  showCalculatedField={activeTab !== SOLD_STATUS}
+                  modalSetState={modalSetState}
+                  downloadExcel={downloadExcel}
+                  myCart={true}
+                  setIsError={setIsError}
+                  setErrorText={setErrorText}
+                  setIsLoading={setIsLoading}
+                  deleteCartHandler={deleteCartHandler}
+                  activeCartTab={activeTab}
+                  setIsConfirmStone={setIsConfirmStone}
+                  setConfirmStoneData={setConfirmStoneData}
+                  handleCreateAppointment={handleCreateAppointment}
+                />
+              )
+            )}
+          </>
+        )}
+      </div>
     </div>
   );
 };

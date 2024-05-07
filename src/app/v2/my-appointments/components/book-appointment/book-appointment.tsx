@@ -131,7 +131,7 @@ const BookAppointment: React.FC<IBookAppointment> = ({
       .then(() => {
         setIsLoading(false);
         goBackToListView();
-        getAppointment!();
+        if (getAppointment) getAppointment!();
         modalSetState.setIsDialogOpen(true);
         modalSetState.setDialogContent(
           <>

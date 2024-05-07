@@ -184,6 +184,8 @@ const Table = ({
             ? 'calc(100vh - 240px)'
             : identifier === 'Dashboard'
             ? 'calc(100vh - 220px)'
+            : identifier === 'cart'
+            ? 'calc(100vh - 266px)'
             : 'calc(100vh - 310px)',
         maxHeight:
           isNudge &&

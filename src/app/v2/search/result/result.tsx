@@ -54,7 +54,10 @@ import {
   tableInclusionSortOrder
 } from '@/constants/v2/form';
 import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
-import { SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH } from '@/constants/error-messages/confirm-stone';
+import {
+  SELECT_STONE_TO_PERFORM_ACTION,
+  SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH
+} from '@/constants/error-messages/confirm-stone';
 import { NOT_MORE_THAN_300 } from '@/constants/error-messages/search';
 import { NO_STONES_AVAILABLE } from '@/constants/error-messages/compare-stone';
 import { NO_STONES_SELECTED } from '@/constants/error-messages/cart';
@@ -469,26 +472,40 @@ const Result = ({
 
   const handleCreateAppointment = () => {
     let selectedIds = Object.keys(rowSelection);
+
     if (selectedIds.length > 0) {
-      setShowAppointmentForm(true);
-      triggerAvailableSlots({}).then(payload => {
-        let { data } = payload.data;
-        setAppointmentPayload(data);
+      const hasMemoOut = selectedIds?.some((id: string) => {
+        const stone = dataTableState.rows.find(
+          (row: IProduct) => row?.id === id
+        );
+        return stone?.diamond_status === MEMO_STATUS;
       });
-      console.log('rowSelection', dataTableState.rows);
+      if (hasMemoOut) {
+        setErrorText(NO_STONES_AVAILABLE);
+        setIsError(true);
+      } else {
+        setShowAppointmentForm(true);
+        triggerAvailableSlots({}).then(payload => {
+          let { data } = payload.data;
+          setAppointmentPayload(data);
+        });
 
-      const lotIds = selectedIds?.map((id: string) => {
-        const getLotIds: any =
-          dataTableState.rows.find((row: IProduct) => {
-            return row?.id === id;
-          }) ?? {};
+        const lotIds = selectedIds?.map((id: string) => {
+          const getLotIds: any =
+            dataTableState.rows.find((row: IProduct) => {
+              return row?.id === id;
+            }) ?? {};
 
-        if (getLotIds) {
-          return getLotIds?.lot_id;
-        }
-        return '';
-      });
-      setLotIds(lotIds);
+          if (getLotIds) {
+            return getLotIds?.lot_id;
+          }
+          return '';
+        });
+        setLotIds(lotIds);
+      }
+    } else {
+      setIsError(true);
+      setErrorText(SELECT_STONE_TO_PERFORM_ACTION);
     }
   };
 
