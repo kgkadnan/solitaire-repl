@@ -341,11 +341,11 @@ const OrderDetail: React.FC<IOrderDetail> = ({
     }
   ];
   useEffect(() => {
-    loadImages(images, setValidImages, checkImage);
+    if (images.length > 0 && images[0].name.length)
+      loadImages(images, setValidImages, checkImage);
   }, [detailImageData]);
-
   useEffect(() => {
-    if (!validImages.length) {
+    if (!validImages.length && images[0].name.length) {
       setValidImages([
         {
           name: '',
@@ -360,7 +360,11 @@ const OrderDetail: React.FC<IOrderDetail> = ({
     <>
       <ImageModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(!isModalOpen)}
+        onClose={() => {
+          setValidImages([]);
+          setDetailImageData({});
+          setIsModalOpen(!isModalOpen);
+        }}
         selectedImageIndex={0}
         images={validImages}
         setIsLoading={setIsLoading}

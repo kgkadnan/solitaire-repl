@@ -2,7 +2,7 @@
 import Image from 'next/image';
 
 import { useEffect, useState } from 'react';
-
+import emptyImage from '@public/v2/assets/icons/detail-page/empty-image.svg';
 import NoImageFound from '@public/v2/assets/icons/detail-page/fall-back-img.svg';
 import Tooltip from '../../tooltip';
 import ImageModal from './image-modal';
@@ -15,13 +15,20 @@ import { handleDownloadImage } from '@/utils/v2/detail-page';
 import downloadImg from '@public/v2/assets/icons/detail-page/download.svg';
 import forwardArrow from '@public/v2/assets/icons/arrow-forward.svg';
 import backwardArrow from '@public/v2/assets/icons/arrow-backword.svg';
+import backWardArrowDisable from '@public/v2/assets/icons/detail-page/back-ward-arrow-disable.svg';
+import forWardAarrowDisable from '@public/v2/assets/icons/detail-page/forward-arrow-disable.svg';
 
 interface ImageSliderProps {
   images: ImagesType[];
   setIsLoading: any;
+  setValidImages: React.Dispatch<React.SetStateAction<ImagesType[]>>;
 }
 
-const ImageSlider: React.FC<ImageSliderProps> = ({ images, setIsLoading }) => {
+const ImageSlider: React.FC<ImageSliderProps> = ({
+  images,
+  setIsLoading,
+  setValidImages
+}) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
@@ -39,7 +46,18 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images, setIsLoading }) => {
         onClick={onClick}
       >
         {' '}
-        <Image src={forwardArrow} alt="forwardArrow" />
+        <Image
+          src={
+            currentSlide === slideCount - 1
+              ? forWardAarrowDisable
+              : forwardArrow
+          }
+          alt={
+            currentSlide === slideCount - 1
+              ? 'forWardAarrowDisable'
+              : 'forwardArrow'
+          }
+        />
       </button>
     );
   }
@@ -54,7 +72,10 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images, setIsLoading }) => {
         disabled={currentSlide === 0 ? true : false}
         onClick={onClick}
       >
-        <Image src={backwardArrow} alt="backwardArrow" />
+        <Image
+          src={currentSlide === 0 ? backWardArrowDisable : backwardArrow}
+          alt={currentSlide === 0 ? 'backWardArrowDisable' : 'backwardArrow'}
+        />
       </button>
     );
   }
@@ -98,178 +119,200 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images, setIsLoading }) => {
   return (
     <div className="details-slider">
       <div className="w-[35%]">
-        {images.length > 1 ? (
-          <Slider {...settings}>
-            {images.map((img, index) => {
-              return (
-                <div
-                  key={index}
-                  className="flex cursor-pointer flex-col items-center justify-center gap-[12px]"
-                >
-                  <div className="relative w-full min-h-[328px]">
-                    <div className="absolute w-full flex justify-center inset-0 p-5">
-                      {img.name === 'B2B' ||
-                      img.name === 'B2B Sparkle' ||
-                      img.name === 'GIA Certificate' ? (
-                        <div
-                          className="relative flex justify-center overflow-hidden w-full h-full"
-                          onClick={() => {
-                            setIsModalOpen(!isModalOpen);
-                          }}
-                        >
-                          <div className="absolute top-0 left-0 right-0 bottom-0 cursor-pointer "></div>
+        {images.length > 0 ? (
+          images.length > 1 ? (
+            <Slider {...settings}>
+              {images.map((img, index) => {
+                return (
+                  <div
+                    key={index}
+                    className="flex cursor-pointer flex-col items-center justify-center gap-[12px]"
+                  >
+                    <div className="relative w-full min-h-[328px]">
+                      <div className="absolute w-full flex justify-center inset-0 p-5">
+                        {img.name === 'B2B' ||
+                        img.name === 'B2B Sparkle' ||
+                        img.name === 'GIA Certificate' ? (
+                          <div
+                            className="relative flex justify-center overflow-hidden w-full h-full"
+                            onClick={() => {
+                              setIsModalOpen(!isModalOpen);
+                            }}
+                          >
+                            <div className="absolute top-0 left-0 right-0 bottom-0 cursor-pointer "></div>
 
-                          {img.url === 'null' ||
-                          img.url === null ||
-                          !img.url.length ? (
-                            <Image
-                              src={NoImageFound}
-                              alt="NoImageFound"
-                              className="flex justify-center"
-                              style={{
-                                height: 'auto',
-                                width: '300px',
-                                background: '#F2F4F7',
-                                objectFit: 'cover'
-                              }}
-                            />
-                          ) : (
-                            <iframe
-                              frameBorder="0"
-                              src={img.url}
-                              // className="object-contain"
-                              style={{ width: '273px', height: '282px' }}
-                              onError={e => {
-                                handleImageError(e);
-                              }}
-                            />
-                          )}
-                        </div>
-                      ) : (
-                        <img
-                          src={img?.url}
-                          className="rounded-lg"
-                          width={'100'}
-                          height={'100'}
+                            {img.url === 'null' ||
+                            img.url === null ||
+                            !img.url.length ? (
+                              <Image
+                                src={NoImageFound}
+                                alt="NoImageFound"
+                                className="flex justify-center"
+                                style={{
+                                  height: 'auto',
+                                  width: '300px',
+                                  background: '#F2F4F7',
+                                  objectFit: 'cover'
+                                }}
+                              />
+                            ) : (
+                              <iframe
+                                frameBorder="0"
+                                src={img.url}
+                                // className="object-contain"
+                                style={{ width: '273px', height: '282px' }}
+                                onError={e => {
+                                  handleImageError(e);
+                                }}
+                              />
+                            )}
+                          </div>
+                        ) : (
+                          <img
+                            src={img?.url}
+                            className="rounded-lg"
+                            width={'100'}
+                            height={'100'}
+                            style={{
+                              height: 'auto',
+                              width: '300px',
+                              background: '#F2F4F7'
+                            }}
+                            onError={e => {
+                              handleImageError(e);
+                            }}
+                            onClick={() => {
+                              setIsModalOpen(!isModalOpen);
+                            }}
+                          />
+                        )}
+
+                        <>
+                          {img.name !== 'B2B' &&
+                            img.name !== 'B2B Sparkle' &&
+                            img.name !== 'No Data Found' &&
+                            img.name !== '' && (
+                              <Tooltip
+                                tooltipTrigger={
+                                  <Image
+                                    className="absolute  top-[1.2rem] left-[2.3rem] p-1 cursor-pointer"
+                                    src={downloadImg}
+                                    height={40}
+                                    width={40}
+                                    alt={'Download'}
+                                    onClick={() => {
+                                      handleDownloadImage(
+                                        img?.url || '',
+                                        img.name,
+                                        setIsLoading
+                                      );
+                                    }}
+                                  />
+                                }
+                                tooltipContent={'Download'}
+                                tooltipContentStyles={'z-[1000]'}
+                              />
+                            )}
+                        </>
+                      </div>
+                    </div>{' '}
+                    <p className="mt-2 text-center text-[16px] font-medium">
+                      {' '}
+                      {img.name}
+                    </p>
+                  </div>
+                );
+              })}
+            </Slider>
+          ) : (
+            <div className="flex cursor-pointer flex-col items-center justify-center gap-[12px]">
+              <div className="relative w-full min-h-[328px]">
+                <div className="absolute w-full flex justify-center inset-0 p-5">
+                  {images[0]?.name === 'B2B' ||
+                  images[0]?.name === 'B2B Sparkle' ||
+                  images[0]?.name === 'GIA Certificate' ? (
+                    <div
+                      className="relative flex justify-center overflow-hidden w-full h-full"
+                      onClick={() => {
+                        setIsModalOpen(!isModalOpen);
+                      }}
+                    >
+                      <div className="absolute top-0 left-0 right-0 bottom-0 cursor-pointer "></div>
+
+                      {images[0]?.url === 'null' ||
+                      images[0]?.url === null ||
+                      !images[0]?.url.length ? (
+                        <Image
+                          src={NoImageFound}
+                          alt="NoImageFound"
+                          className="flex justify-center"
                           style={{
                             height: 'auto',
                             width: '300px',
-                            background: '#F2F4F7'
-                          }}
-                          onError={e => {
-                            handleImageError(e);
-                          }}
-                          onClick={() => {
-                            setIsModalOpen(!isModalOpen);
+                            background: '#F2F4F7',
+                            objectFit: 'cover'
                           }}
                         />
+                      ) : (
+                        <iframe
+                          frameBorder="0"
+                          src={images[0]?.url}
+                          // className="object-contain"
+                          style={{ width: '273px', height: '282px' }}
+                        />
                       )}
-
-                      <>
-                        {!(
-                          img.name === 'B2B' ||
-                          img.name === 'B2B Sparkle' ||
-                          img.name === 'No Data Found' ||
-                          img.name !== ''
-                        ) && (
-                          <Tooltip
-                            tooltipTrigger={
-                              <Image
-                                className="absolute  top-[1.2rem] left-[2.3rem] p-1 cursor-pointer"
-                                src={downloadImg}
-                                height={40}
-                                width={40}
-                                alt={'Download'}
-                                onClick={() => {
-                                  handleDownloadImage(
-                                    img?.url || '',
-                                    img.name,
-                                    setIsLoading
-                                  );
-                                }}
-                              />
-                            }
-                            tooltipContent={'Download'}
-                            tooltipContentStyles={'z-[1000]'}
-                          />
-                        )}
-                      </>
                     </div>
-                  </div>{' '}
-                  <p className="mt-2 text-center text-[16px] font-medium">
-                    {' '}
-                    {img.name}
-                  </p>
+                  ) : (
+                    <img
+                      src={images[0]?.url}
+                      className="rounded-lg"
+                      width={'100'}
+                      height={'100'}
+                      style={{
+                        height: 'auto',
+                        width: '300px',
+                        background: '#F2F4F7'
+                      }}
+                      onError={e => {
+                        handleImageError(e);
+                      }}
+                      onClick={() => {
+                        setIsModalOpen(!isModalOpen);
+                      }}
+                    />
+                  )}
                 </div>
-              );
-            })}
-          </Slider>
+              </div>{' '}
+            </div>
+          )
         ) : (
           <div className="flex cursor-pointer flex-col items-center justify-center gap-[12px]">
             <div className="relative w-full min-h-[328px]">
               <div className="absolute w-full flex justify-center inset-0 p-5">
-                {images[0]?.name === 'B2B' ||
-                images[0]?.name === 'B2B Sparkle' ||
-                images[0]?.name === 'GIA Certificate' ? (
-                  <div
-                    className="relative flex justify-center overflow-hidden w-full h-full"
-                    onClick={() => {
-                      setIsModalOpen(!isModalOpen);
-                    }}
-                  >
-                    <div className="absolute top-0 left-0 right-0 bottom-0 cursor-pointer "></div>
-
-                    {images[0]?.url === 'null' ||
-                    images[0]?.url === null ||
-                    !images[0]?.url.length ? (
-                      <Image
-                        src={NoImageFound}
-                        alt="NoImageFound"
-                        className="flex justify-center"
-                        style={{
-                          height: 'auto',
-                          width: '300px',
-                          background: '#F2F4F7',
-                          objectFit: 'cover'
-                        }}
-                      />
-                    ) : (
-                      <iframe
-                        frameBorder="0"
-                        src={images[0]?.url}
-                        // className="object-contain"
-                        style={{ width: '273px', height: '282px' }}
-                      />
-                    )}
-                  </div>
-                ) : (
-                  <img
-                    src={images[0]?.url}
-                    className="rounded-lg"
-                    width={'100'}
-                    height={'100'}
-                    style={{
-                      height: 'auto',
-                      width: '300px',
-                      background: '#F2F4F7'
-                    }}
-                    onError={e => {
-                      handleImageError(e);
-                    }}
-                    onClick={() => {
-                      setIsModalOpen(!isModalOpen);
-                    }}
-                  />
-                )}
+                <Image
+                  src={emptyImage}
+                  alt="empty image"
+                  className="rounded-lg"
+                  width={'100'}
+                  height={'100'}
+                  style={{
+                    height: 'auto',
+                    width: '300px',
+                    background: '#F9FAFB'
+                  }}
+                />
               </div>
-            </div>{' '}
+            </div>
           </div>
         )}
 
         <p className="mt-1 text-center text-[16px] font-medium"> {imageName}</p>
         <ImageModal
           isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(!isModalOpen)}
+          onClose={() => {
+            setValidImages([]);
+            setIsModalOpen(!isModalOpen);
+          }}
           selectedImageIndex={currentImageIndex}
           images={images}
           setIsLoading={setIsLoading}

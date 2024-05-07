@@ -13,13 +13,13 @@ const FAQs = () => {
         className={`bg-cover ml-[-20px] mr-[-16px]  bg-no-repeat flex justify-center flex-col items-center h-[220px] gap-6 w-full rounded-[8px]`}
         style={{
           background: `
-                  linear-gradient(90deg, #DBF2FC 0%, #E8E8FF 30%, #FFF4E3 100%)
+                  linear-gradient(90deg, #DBF2FC 0%, #E8E8FF 40%, #FFF4E3 100%)
                 `,
           backdropFilter: 'blur(40px)'
         }}
       >
-        <div className="flex flex-col gap-3 justify-center text-center">
-          <p className="text-lRegular font-semiBold text-neutral900">FAQs</p>
+        <div className="flex flex-col gap-3 justify-center text-center ">
+          <p className="text-lRegular font-semiBold text-primaryMain">FAQs</p>
           <p className="text-headingXL font-semiBold text-neutral900">
             Frequently Asked Questions
           </p>
@@ -28,12 +28,12 @@ const FAQs = () => {
           Have questions? We’re here to help.
         </p>
       </div>
-      <div className="w-[900px] flex flex-col">
+      <div className="w-[900px] flex flex-col ">
         <div className="flex flex-col gap-9">
-          <div>
+          <div className="flex flex-col gap-4">
             {faqData?.map((faq: any, index: number) => {
               return (
-                <div key={index}>
+                <div key={index} className="bg-neutral0 ">
                   <Collapsible title={faq?.question}>
                     <Typography>{faq?.answer}</Typography>
                   </Collapsible>

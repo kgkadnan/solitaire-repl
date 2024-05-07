@@ -90,6 +90,30 @@ const theme = createTheme({
           fontStyle: 'normal !important'
         }
       }
+    },
+    MuiMenuItem: {
+      styleOverrides: {
+        root: {
+          '&:hover': {
+            backgroundColor: 'var(--neutral-100)'
+          },
+          '&.Mui-selected': {
+            backgroundColor: 'var(--neutral-100) !important'
+          },
+          '&.Mui-selected:hover': {
+            backgroundColor: 'var(--neutral-100) !important'
+          }
+        }
+      }
+    },
+    MuiSelect: {
+      styleOverrides: {
+        select: {
+          '&:focus': {
+            background: 'none'
+          }
+        }
+      }
     }
   }
 });
@@ -122,7 +146,7 @@ const NewArrivalDataTable = ({
   const [bidError, setBidError] = useState('');
   const [pagination, setPagination] = useState({
     pageIndex: 0,
-    pageSize: 5 //customize the default page size
+    pageSize: 20 //customize the default page size
   });
 
   const [paginatedData, setPaginatedData] = useState<any>([]);

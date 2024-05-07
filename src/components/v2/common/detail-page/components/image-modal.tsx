@@ -11,6 +11,9 @@ import downloadSvg from '@public/v2/assets/icons/detail-page/download.svg';
 import linkSvg from '@public/v2/assets/icons/detail-page/link.svg';
 import forwardArrow from '@public/v2/assets/icons/arrow-forward.svg';
 import backwardArrow from '@public/v2/assets/icons/arrow-backword.svg';
+import emptyImage from '@public/v2/assets/icons/detail-page/empty-image.svg';
+import backWardArrowDisable from '@public/v2/assets/icons/detail-page/back-ward-arrow-disable.svg';
+import forWardAarrowDisable from '@public/v2/assets/icons/detail-page/forward-arrow-disable.svg';
 
 interface ModalProps {
   isOpen: boolean;
@@ -54,7 +57,6 @@ const ImageModal: React.FC<ModalProps> = ({
     });
   };
 
-  console.log('images[imageIndex]?.name', images[imageIndex]?.name);
   return (
     <div className="fixed z-[1200] inset-0 overflow-y-auto ">
       <Toast show={showToast} message="Copied Successfully" />
@@ -86,42 +88,53 @@ const ImageModal: React.FC<ModalProps> = ({
             </div>
             <div className="mt-2 ml-2 relative">
               <div className="relative">
-                {images[imageIndex]?.name === 'B2B' ||
-                images[imageIndex]?.name === 'B2B Sparkle' ||
-                images[imageIndex]?.name === 'GIA Certificate' ? (
-                  images[imageIndex]?.url === 'null' ||
-                  images[imageIndex]?.url === null ||
-                  !images[imageIndex]?.url.length ? (
+                {images.length > 0 ? (
+                  images[imageIndex]?.name === 'B2B' ||
+                  images[imageIndex]?.name === 'B2B Sparkle' ||
+                  images[imageIndex]?.name === 'GIA Certificate' ? (
+                    images[imageIndex]?.url === 'null' ||
+                    images[imageIndex]?.url === null ||
+                    !images[imageIndex]?.url.length ? (
+                      <img
+                        src={NoImageFound}
+                        className="lg:w-[662px] lg:h-[510px] sm:w-[300px] sm:h-[210px]"
+                        height={600}
+                        width={650}
+                        style={{
+                          background: '#F2F4F7'
+                        }}
+                      />
+                    ) : (
+                      <iframe
+                        frameBorder="0"
+                        src={images[imageIndex]?.url}
+                        className="lg:w-[650px] lg:h-[465px] sm:w-[300px] sm:h-[210px]"
+                      />
+                    )
+                  ) : (
                     <img
-                      src={NoImageFound}
-                      alt="NoImageFound"
-                      className="lg:w-[662px] lg:h-[510px] sm:w-[300px] sm:h-[210px]"
-                      height={600}
-                      width={650}
+                      src={images[imageIndex]?.url}
                       style={{
                         background: '#F2F4F7'
                       }}
-                    />
-                  ) : (
-                    <iframe
-                      frameBorder="0"
-                      src={images[imageIndex]?.url}
-                      className="lg:w-[650px] lg:h-[465px] sm:w-[300px] sm:h-[210px]"
+                      className="lg:w-[662px] lg:h-[510px] sm:w-[300px] sm:h-[210px]"
+                      height={600}
+                      width={650}
+                      onError={(e: any) => {
+                        e.target.onerror = null;
+                        e.target.src = NoImageFound.src;
+                      }}
                     />
                   )
                 ) : (
-                  <img
-                    src={images[imageIndex]?.url}
-                    style={{
-                      background: '#F2F4F7'
-                    }}
+                  <Image
+                    src={emptyImage}
                     className="lg:w-[662px] lg:h-[510px] sm:w-[300px] sm:h-[210px]"
-                    alt="Preview"
                     height={600}
+                    alt="empty image"
                     width={650}
-                    onError={(e: any) => {
-                      e.target.onerror = null;
-                      e.target.src = NoImageFound.src;
+                    style={{
+                      background: '#F9FAFB'
                     }}
                   />
                 )}
@@ -140,7 +153,12 @@ const ImageModal: React.FC<ModalProps> = ({
                   imageIndex <= 0 ? '!bg-neutral200' : 'bg-neutral0'
                 }`}
               >
-                <Image src={backwardArrow} alt="backwardArrow" />
+                <Image
+                  src={!(imageIndex > 0) ? backWardArrowDisable : backwardArrow}
+                  alt={
+                    !(imageIndex > 0) ? 'backWardArrowDisable' : 'backwardArrow'
+                  }
+                />
               </button>
               <button
                 onClick={() => {
@@ -159,54 +177,71 @@ const ImageModal: React.FC<ModalProps> = ({
                     : 'bg-neutral0'
                 }`}
               >
-                <Image src={forwardArrow} alt="forwardArrow" />
+                <Image
+                  src={
+                    !(imageIndex < images.length - 1)
+                      ? forWardAarrowDisable
+                      : forwardArrow
+                  }
+                  alt={
+                    !(imageIndex < images.length - 1)
+                      ? 'forWardAarrowDisable'
+                      : 'forwardArrow'
+                  }
+                />
               </button>
             </div>
           </div>
 
           <div className="flex mt-5 justify-center">
-            {images[imageIndex]?.name !== 'B2B' &&
-              images[imageIndex]?.name !== 'B2B Sparkle' &&
-              images[imageIndex]?.name !== 'No Data Found' &&
-              images[imageIndex]?.name !== '' && (
-                <Tooltip
-                  tooltipTrigger={
-                    <Image
-                      src={downloadSvg}
-                      alt={downloadSvg}
-                      height={40}
-                      width={40}
-                      className="mr-2 cursor-pointer"
-                      onClick={() => {
-                        handleDownloadImage(
-                          images[imageIndex]?.url || '',
-                          images[imageIndex]?.name,
-                          setIsLoading
-                        );
-                      }}
+            {images.length > 0 && (
+              <>
+                {images[imageIndex]?.name !== 'B2B' &&
+                  images[imageIndex]?.name !== 'B2B Sparkle' &&
+                  images[imageIndex]?.name !== 'No Data Found' &&
+                  images[imageIndex]?.name !== '' && (
+                    <Tooltip
+                      tooltipTrigger={
+                        <Image
+                          src={downloadSvg}
+                          alt={downloadSvg}
+                          height={40}
+                          width={40}
+                          className="mr-2 cursor-pointer"
+                          onClick={() => {
+                            handleDownloadImage(
+                              images[imageIndex]?.url || '',
+                              images[imageIndex]?.name,
+                              setIsLoading
+                            );
+                          }}
+                        />
+                      }
+                      tooltipContent={'Download'}
+                      tooltipContentStyles={'z-[2000]'}
                     />
-                  }
-                  tooltipContent={'Download'}
-                  tooltipContentStyles={'z-[2000]'}
-                />
-              )}
-
-            <Tooltip
-              tooltipTrigger={
-                <Image
-                  src={linkSvg}
-                  alt={linkSvg}
-                  height={40}
-                  width={40}
-                  className="mr-2 cursor-pointer"
-                  onClick={() => {
-                    copyLink({ url: images[imageIndex]?.url });
-                  }}
-                />
-              }
-              tooltipContent={'Media Link'}
-              tooltipContentStyles={'z-[2000]'}
-            />
+                  )}
+                {images[imageIndex]?.name !== 'No Data Found' &&
+                  images[imageIndex]?.name !== '' && (
+                    <Tooltip
+                      tooltipTrigger={
+                        <Image
+                          src={linkSvg}
+                          alt={linkSvg}
+                          height={40}
+                          width={40}
+                          className="mr-2 cursor-pointer"
+                          onClick={() => {
+                            copyLink({ url: images[imageIndex]?.url });
+                          }}
+                        />
+                      }
+                      tooltipContent={'Media Link'}
+                      tooltipContentStyles={'z-[2000]'}
+                    />
+                  )}
+              </>
+            )}
           </div>
         </div>
       </div>
