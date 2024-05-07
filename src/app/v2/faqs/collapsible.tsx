@@ -14,7 +14,7 @@ const Collapsible = ({ title, children }: any) => {
   return (
     <div className=" border-b-[2px] border-[#E4E7EC] p-[22px]">
       <div
-        className="flex items-center cursor-pointer justify-between"
+        className="flex items-center cursor-pointer justify-between h-10"
         onClick={handleToggle}
       >
         <div className="text-lRegular text-neutral700">{title}</div>

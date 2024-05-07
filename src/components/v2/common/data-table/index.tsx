@@ -49,8 +49,6 @@ import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
 import Share from '../copy-and-share/share';
 import Tooltip from '../tooltip';
 import { Dropdown } from '../dropdown-menu';
-import { InputDialogComponent } from '../input-dialog';
-import { InputField } from '../input-field';
 import { kycStatus } from '@/constants/enums/kyc';
 import { handleConfirmStone } from '@app/v2/search/result/helpers/handle-confirm-stone';
 import { handleCompareStone } from '@/app/v2/search/result/helpers/handle-compare-stone';
@@ -101,6 +99,30 @@ const theme = createTheme({
       defaultProps: {
         // The props to apply
         disableRipple: true // No more ripple, on the whole application 💣!
+      }
+    },
+    MuiMenuItem: {
+      styleOverrides: {
+        root: {
+          '&:hover': {
+            backgroundColor: 'var(--neutral-100)'
+          },
+          '&.Mui-selected': {
+            backgroundColor: 'var(--neutral-100) !important'
+          },
+          '&.Mui-selected:hover': {
+            backgroundColor: 'var(--neutral-100) !important'
+          }
+        }
+      }
+    },
+    MuiSelect: {
+      styleOverrides: {
+        select: {
+          '&:focus': {
+            background: 'none'
+          }
+        }
       }
     }
   }
