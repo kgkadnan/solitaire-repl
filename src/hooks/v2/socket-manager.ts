@@ -1,8 +1,6 @@
 // // // socketManager.ts
-// import { useEffect } from 'react';
-import io, { Socket } from 'socket.io-client';
 
-import { useEffect } from 'react';
+import io from 'socket.io-client';
 
 export class SocketManager {
   socket: any;
@@ -10,7 +8,14 @@ export class SocketManager {
   initializeSocket(token: string) {
     if (token) {
       this.socket = io(process.env.NEXT_PUBLIC_SOCKET_URL as string, {
-        auth: { token }
+        auth: { token },
+        transportOptions: {
+          polling: {
+            extraHeaders: {
+              'user-agent': 'website'
+            }
+          }
+        }
       });
       this.initAndConnect();
     }
