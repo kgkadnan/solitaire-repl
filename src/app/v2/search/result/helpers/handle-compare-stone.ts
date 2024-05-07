@@ -23,11 +23,10 @@ export const handleCompareStone = ({
   setIsCompareStone,
   setCompareStoneData
 }: ICompareStoneParams) => {
-  console.log('called', isCheck);
   const maxStones = MAX_COMPARE_STONE;
   const minStones = MIN_COMPARE_STONE;
   let newCheck = Object.keys(isCheck);
-  console.log(newCheck, 'newCheck');
+
   if (newCheck.length > maxStones) {
     setIsError(true);
     setErrorText(`You can compare a maximum of ${maxStones} stones`);

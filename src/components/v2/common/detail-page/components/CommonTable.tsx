@@ -33,12 +33,20 @@ const ResponsiveTable: React.FC<ResponsiveTableProps> = ({
                 key={column.key}
                 className={`p-[10px] lg:px-3 lg:py-3 text-left !font-regular whitespace-nowrap text-mRegular ${
                   column.hiddenAbove1024 ? 'lg:hidden' : ''
-                } ${column.hiddenBelow1024 ? 'hidden lg:table-cell' : ''}`}
-                style={{
-                  // outline: "1px solid #E4E7EC",
-                  borderRadius: '4px'
-                  // Adjust the min-width as needed
-                }}
+                } ${column.hiddenBelow1024 ? 'hidden lg:table-cell' : ''}
+                ${
+                  index === 0
+                    ? 'rounded-tl-[4px]'
+                    : index === tableHead.length - 1
+                    ? 'rounded-tr-[4px]'
+                    : ''
+                }`}
+                // style={{
+                //   // outline: "1px solid #E4E7EC",
+                //   borderTopRightRadius:
+                //     tableHead.length - 1 <= index ? '4px' : '0px'
+                //   // Adjust the min-width as needed
+                // }}
               >
                 {column.label}
               </th>
