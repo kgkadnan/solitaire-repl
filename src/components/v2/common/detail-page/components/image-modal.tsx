@@ -12,6 +12,8 @@ import linkSvg from '@public/v2/assets/icons/detail-page/link.svg';
 import forwardArrow from '@public/v2/assets/icons/arrow-forward.svg';
 import backwardArrow from '@public/v2/assets/icons/arrow-backword.svg';
 import emptyImage from '@public/v2/assets/icons/detail-page/empty-image.svg';
+import backWardArrowDisable from '@public/v2/assets/icons/detail-page/back-ward-arrow-disable.svg';
+import forWardAarrowDisable from '@public/v2/assets/icons/detail-page/forward-arrow-disable.svg';
 
 interface ModalProps {
   isOpen: boolean;
@@ -151,7 +153,12 @@ const ImageModal: React.FC<ModalProps> = ({
                   imageIndex <= 0 ? '!bg-neutral200' : 'bg-neutral0'
                 }`}
               >
-                <Image src={backwardArrow} alt="backwardArrow" />
+                <Image
+                  src={!(imageIndex > 0) ? backWardArrowDisable : backwardArrow}
+                  alt={
+                    !(imageIndex > 0) ? 'backWardArrowDisable' : 'backwardArrow'
+                  }
+                />
               </button>
               <button
                 onClick={() => {
@@ -170,54 +177,71 @@ const ImageModal: React.FC<ModalProps> = ({
                     : 'bg-neutral0'
                 }`}
               >
-                <Image src={forwardArrow} alt="forwardArrow" />
+                <Image
+                  src={
+                    !(imageIndex < images.length - 1)
+                      ? forWardAarrowDisable
+                      : forwardArrow
+                  }
+                  alt={
+                    !(imageIndex < images.length - 1)
+                      ? 'forWardAarrowDisable'
+                      : 'forwardArrow'
+                  }
+                />
               </button>
             </div>
           </div>
 
           <div className="flex mt-5 justify-center">
-            {images[imageIndex]?.name !== 'B2B' &&
-              images[imageIndex]?.name !== 'B2B Sparkle' &&
-              images[imageIndex]?.name !== 'No Data Found' &&
-              images[imageIndex]?.name !== '' && (
-                <Tooltip
-                  tooltipTrigger={
-                    <Image
-                      src={downloadSvg}
-                      alt={downloadSvg}
-                      height={40}
-                      width={40}
-                      className="mr-2 cursor-pointer"
-                      onClick={() => {
-                        handleDownloadImage(
-                          images[imageIndex]?.url || '',
-                          images[imageIndex]?.name,
-                          setIsLoading
-                        );
-                      }}
+            {images.length > 0 && (
+              <>
+                {images[imageIndex]?.name !== 'B2B' &&
+                  images[imageIndex]?.name !== 'B2B Sparkle' &&
+                  images[imageIndex]?.name !== 'No Data Found' &&
+                  images[imageIndex]?.name !== '' && (
+                    <Tooltip
+                      tooltipTrigger={
+                        <Image
+                          src={downloadSvg}
+                          alt={downloadSvg}
+                          height={40}
+                          width={40}
+                          className="mr-2 cursor-pointer"
+                          onClick={() => {
+                            handleDownloadImage(
+                              images[imageIndex]?.url || '',
+                              images[imageIndex]?.name,
+                              setIsLoading
+                            );
+                          }}
+                        />
+                      }
+                      tooltipContent={'Download'}
+                      tooltipContentStyles={'z-[2000]'}
                     />
-                  }
-                  tooltipContent={'Download'}
-                  tooltipContentStyles={'z-[2000]'}
-                />
-              )}
-
-            <Tooltip
-              tooltipTrigger={
-                <Image
-                  src={linkSvg}
-                  alt={linkSvg}
-                  height={40}
-                  width={40}
-                  className="mr-2 cursor-pointer"
-                  onClick={() => {
-                    copyLink({ url: images[imageIndex]?.url });
-                  }}
-                />
-              }
-              tooltipContent={'Media Link'}
-              tooltipContentStyles={'z-[2000]'}
-            />
+                  )}
+                {images[imageIndex]?.name !== 'No Data Found' &&
+                  images[imageIndex]?.name !== '' && (
+                    <Tooltip
+                      tooltipTrigger={
+                        <Image
+                          src={linkSvg}
+                          alt={linkSvg}
+                          height={40}
+                          width={40}
+                          className="mr-2 cursor-pointer"
+                          onClick={() => {
+                            copyLink({ url: images[imageIndex]?.url });
+                          }}
+                        />
+                      }
+                      tooltipContent={'Media Link'}
+                      tooltipContentStyles={'z-[2000]'}
+                    />
+                  )}
+              </>
+            )}
           </div>
         </div>
       </div>

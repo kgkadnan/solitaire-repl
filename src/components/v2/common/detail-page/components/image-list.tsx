@@ -35,12 +35,6 @@ const ImageList: React.FC<ImageListProps> = ({
     event.target.src = NoImageFound.src; // Set the fallback image when the original image fails to load
   };
 
-  // const [validImages, setValidImages] = useState<any>([]);
-
-  // useEffect(() => {
-  //   loadImages(images, setValidImages, checkImage);
-  // }, [images]);
-
   return (
     <div className="flex flex-col">
       {images.length > 0 ? (

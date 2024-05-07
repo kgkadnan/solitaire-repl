@@ -15,6 +15,8 @@ import { handleDownloadImage } from '@/utils/v2/detail-page';
 import downloadImg from '@public/v2/assets/icons/detail-page/download.svg';
 import forwardArrow from '@public/v2/assets/icons/arrow-forward.svg';
 import backwardArrow from '@public/v2/assets/icons/arrow-backword.svg';
+import backWardArrowDisable from '@public/v2/assets/icons/detail-page/back-ward-arrow-disable.svg';
+import forWardAarrowDisable from '@public/v2/assets/icons/detail-page/forward-arrow-disable.svg';
 
 interface ImageSliderProps {
   images: ImagesType[];
@@ -44,7 +46,18 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
         onClick={onClick}
       >
         {' '}
-        <Image src={forwardArrow} alt="forwardArrow" />
+        <Image
+          src={
+            currentSlide === slideCount - 1
+              ? forWardAarrowDisable
+              : forwardArrow
+          }
+          alt={
+            currentSlide === slideCount - 1
+              ? 'forWardAarrowDisable'
+              : 'forwardArrow'
+          }
+        />
       </button>
     );
   }
@@ -59,7 +72,10 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
         disabled={currentSlide === 0 ? true : false}
         onClick={onClick}
       >
-        <Image src={backwardArrow} alt="backwardArrow" />
+        <Image
+          src={currentSlide === 0 ? backWardArrowDisable : backwardArrow}
+          alt={currentSlide === 0 ? 'backWardArrowDisable' : 'backwardArrow'}
+        />
       </button>
     );
   }
@@ -172,33 +188,31 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
                         )}
 
                         <>
-                          {!(
-                            img.name === 'B2B' ||
-                            img.name === 'B2B Sparkle' ||
-                            img.name === 'No Data Found' ||
-                            img.name !== ''
-                          ) && (
-                            <Tooltip
-                              tooltipTrigger={
-                                <Image
-                                  className="absolute  top-[1.2rem] left-[2.3rem] p-1 cursor-pointer"
-                                  src={downloadImg}
-                                  height={40}
-                                  width={40}
-                                  alt={'Download'}
-                                  onClick={() => {
-                                    handleDownloadImage(
-                                      img?.url || '',
-                                      img.name,
-                                      setIsLoading
-                                    );
-                                  }}
-                                />
-                              }
-                              tooltipContent={'Download'}
-                              tooltipContentStyles={'z-[1000]'}
-                            />
-                          )}
+                          {img.name !== 'B2B' &&
+                            img.name !== 'B2B Sparkle' &&
+                            img.name !== 'No Data Found' &&
+                            img.name !== '' && (
+                              <Tooltip
+                                tooltipTrigger={
+                                  <Image
+                                    className="absolute  top-[1.2rem] left-[2.3rem] p-1 cursor-pointer"
+                                    src={downloadImg}
+                                    height={40}
+                                    width={40}
+                                    alt={'Download'}
+                                    onClick={() => {
+                                      handleDownloadImage(
+                                        img?.url || '',
+                                        img.name,
+                                        setIsLoading
+                                      );
+                                    }}
+                                  />
+                                }
+                                tooltipContent={'Download'}
+                                tooltipContentStyles={'z-[1000]'}
+                              />
+                            )}
                         </>
                       </div>
                     </div>{' '}
