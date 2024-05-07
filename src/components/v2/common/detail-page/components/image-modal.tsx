@@ -94,7 +94,6 @@ const ImageModal: React.FC<ModalProps> = ({
                   !images[imageIndex]?.url.length ? (
                     <img
                       src={NoImageFound}
-                      alt="NoImageFound"
                       className="lg:w-[662px] lg:h-[510px] sm:w-[300px] sm:h-[210px]"
                       height={600}
                       width={650}
@@ -116,7 +115,6 @@ const ImageModal: React.FC<ModalProps> = ({
                       background: '#F2F4F7'
                     }}
                     className="lg:w-[662px] lg:h-[510px] sm:w-[300px] sm:h-[210px]"
-                    alt="Preview"
                     height={600}
                     width={650}
                     onError={(e: any) => {

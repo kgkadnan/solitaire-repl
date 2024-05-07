@@ -12,12 +12,14 @@ interface ImagePreviewProps {
   images: ImagesType[];
   selectedImageIndex: number;
   setIsLoading: any;
+  setValidImages: React.Dispatch<React.SetStateAction<ImagesType[]>>;
 }
 
 const ImagePreview: React.FC<ImagePreviewProps> = ({
   images,
   selectedImageIndex,
-  setIsLoading
+  setIsLoading,
+  setValidImages
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -154,7 +156,10 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
       </div>
       <ImageModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(!isModalOpen)}
+        onClose={() => {
+          setValidImages([]);
+          setIsModalOpen(!isModalOpen);
+        }}
         selectedImageIndex={openDialogImageIndex}
         images={images}
         setIsLoading={setIsLoading}

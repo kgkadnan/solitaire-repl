@@ -1340,11 +1340,11 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    loadImages(images, setValidImages, checkImage);
+    if (images.length > 0 && images[0].name.length)
+      loadImages(images, setValidImages, checkImage);
   }, [detailImageData]);
-
   useEffect(() => {
-    if (!validImages.length) {
+    if (!validImages.length && images[0].name.length) {
       setValidImages([
         {
           name: '',
@@ -1362,7 +1362,11 @@ const Dashboard = () => {
       <ImageModal
         setIsLoading={setIsLoading}
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(!isModalOpen)}
+        onClose={() => {
+          setValidImages([]);
+          setDetailImageData({});
+          setIsModalOpen(!isModalOpen);
+        }}
         selectedImageIndex={0}
         images={validImages}
       />
@@ -1655,17 +1659,17 @@ const Dashboard = () => {
                     </div>
                     <div className="w-full">
                       <div className="flex justify-between items-baseline">
-                        <p className="text-neutral600 text-mRegular">
+                        <p className="text-neutral600 sm:text-sMobileRegular md:text-sMedium max-lg:text-mRegular">
                           {data.label}
                           {data.label === 'My Appointments' && `(${0})`}
                         </p>
                         {data.label === 'Bid to Buy' &&
                           (!data?.start_at && data?.count > 0 ? (
-                            <div className="text-successMain text-sMedium ">
+                            <div className="text-successMain sm:text-sMobileRegular md:text-sMobileRegular max-lg:text-sMedium ">
                               ACTIVE
                             </div>
                           ) : (
-                            <div className="text-visRed text-sMedium ">
+                            <div className="text-visRed  sm:text-sMobileRegular md:text-sMobileRegular max-lg:text-sMedium ">
                               INACTIVE
                             </div>
                           ))}
@@ -1680,7 +1684,7 @@ const Dashboard = () => {
                                 alt="Bid to Buy"
                                 className="mb-2"
                               />
-                              <p className="m-0 p-0 text-neutral-900 text-lRegular">
+                              <p className="m-0 p-0 text-neutral-900 sm:text-mMedium md:text-mMedium max-lg:text-lRegular">
                                 Bid starts on {formatDateString(data.start_at)}
                               </p>
                             </div>
@@ -1691,7 +1695,7 @@ const Dashboard = () => {
                                 alt="Bid to Buy"
                                 className="mb-2"
                               />
-                              <p className="m-0 p-0 text-neutral-900 text-lRegular">
+                              <p className="m-0 p-0  text-neutral-900 sm:text-mMedium md:text-mMedium max-lg:text-lRegular">
                                 Stay tuned
                               </p>
                             </div>

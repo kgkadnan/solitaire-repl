@@ -992,11 +992,11 @@ const Result = ({
   }, [isError]);
 
   useEffect(() => {
-    loadImages(images, setValidImages, checkImage);
+    if (images.length > 0 && images[0].name.length)
+      loadImages(images, setValidImages, checkImage);
   }, [detailImageData]);
-
   useEffect(() => {
-    if (!validImages.length) {
+    if (!validImages.length && images[0].name.length) {
       setValidImages([
         {
           name: '',
@@ -1015,7 +1015,11 @@ const Result = ({
       <ImageModal
         setIsLoading={setIsLoading}
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(!isModalOpen)}
+        onClose={() => {
+          setValidImages([]);
+          setDetailImageData({});
+          setIsModalOpen(!isModalOpen);
+        }}
         selectedImageIndex={0}
         images={validImages}
         fromDetailPage={true}
