@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { Collapse } from '@mui/material';
+import { Collapse, ThemeProvider, createTheme } from '@mui/material';
 import ArrowDown from '@public/v2/assets/icons/arrow-down.svg?url';
 import ArrowRight from '@public/v2/assets/icons/arrow-right.svg?url';
 
@@ -11,10 +11,15 @@ const Collapsible = ({ title, children }: any) => {
     setIsExpanded(!isExpanded);
   };
 
+  const theme = createTheme({
+    typography: {
+      fontFamily: ['inherit'].join(',')
+    }
+  });
   return (
-    <div className=" border-b-[2px] border-[#E4E7EC] px-[22px] py-[9px] min-h-[76px]">
+    <div className="border-b-[2px] border-[#E4E7EC] px-[22px] py-[9px] ">
       <div
-        className="flex items-center cursor-pointer justify-between h-10"
+        className="flex items-center cursor-pointer justify-between min-h-[76px]"
         onClick={handleToggle}
       >
         <div
@@ -28,9 +33,17 @@ const Collapsible = ({ title, children }: any) => {
         </div>
         {isExpanded ? <ArrowDown /> : <ArrowRight />}
       </div>
-      <Collapse in={isExpanded} timeout="auto" unmountOnExit>
-        <p className="text-neutral600 text-mRegular mt-4"> {children}</p>
-      </Collapse>
+      <ThemeProvider theme={theme}>
+        <Collapse in={isExpanded} timeout="auto" unmountOnExit>
+          <p
+            className="text-neutral600 text-mRegular"
+            style={{ fontFamily: 'inherit' }}
+          >
+            {' '}
+            {children}
+          </p>
+        </Collapse>
+      </ThemeProvider>
     </div>
   );
 };
