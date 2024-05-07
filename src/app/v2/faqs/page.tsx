@@ -18,7 +18,7 @@ const FAQs = () => {
           backdropFilter: 'blur(40px)'
         }}
       >
-        <div className="flex flex-col gap-3 justify-center text-center">
+        <div className="flex flex-col gap-3 justify-center text-center ">
           <p className="text-lRegular font-semiBold text-primaryMain">FAQs</p>
           <p className="text-headingXL font-semiBold text-neutral900">
             Frequently Asked Questions
@@ -28,12 +28,12 @@ const FAQs = () => {
           Have questions? We’re here to help.
         </p>
       </div>
-      <div className="w-[900px] flex flex-col">
+      <div className="w-[900px] flex flex-col ">
         <div className="flex flex-col gap-9">
-          <div>
+          <div className="flex flex-col gap-4">
             {faqData?.map((faq: any, index: number) => {
               return (
-                <div key={index}>
+                <div key={index} className="bg-neutral0 ">
                   <Collapsible title={faq?.question}>
                     <Typography>{faq?.answer}</Typography>
                   </Collapsible>
@@ -41,7 +41,7 @@ const FAQs = () => {
               );
             })}
           </div>
-          <div className="flex justify-between">
+          <div className="flex justify-between px-[22px]">
             <div className="flex flex-col">
               <p className="text-neutral900 text-headingS">
                 Still have questions?
