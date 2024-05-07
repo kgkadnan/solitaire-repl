@@ -7,6 +7,7 @@ import Tooltip from '../../tooltip';
 import { handleDownloadImage } from '@/utils/v2/detail-page';
 import downloadImg from '@public/v2/assets/icons/detail-page/download.svg';
 import ImageModal from './image-modal';
+import emptyImage from '@public/v2/assets/icons/detail-page/empty-image.svg';
 
 interface ImagePreviewProps {
   images: ImagesType[];
@@ -23,6 +24,7 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
+  console.log('images from previre', images);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [openDialogImageIndex, setOpenDialogImageIndex] = useState<number>(0);
 
@@ -138,17 +140,16 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
           })
         ) : (
           <div className="relative  cursor-pointer pb-4">
-            <img
-              src={images[0]?.url}
+            <Image
+              src={emptyImage}
+              className="rounded-lg"
+              width={'100'}
+              height={'100'}
+              alt="chllllll"
               style={{
                 height: '380px',
-                width: '485px',
-                background: '#F2F4F7'
-              }}
-              alt={`Image`}
-              onClick={() => {
-                setOpenDialogImageIndex(0);
-                setIsModalOpen(!isModalOpen);
+                width: '500px',
+                background: '#F9FAFB'
               }}
             />
           </div>

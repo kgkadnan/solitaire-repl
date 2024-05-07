@@ -11,6 +11,7 @@ import downloadSvg from '@public/v2/assets/icons/detail-page/download.svg';
 import linkSvg from '@public/v2/assets/icons/detail-page/link.svg';
 import forwardArrow from '@public/v2/assets/icons/arrow-forward.svg';
 import backwardArrow from '@public/v2/assets/icons/arrow-backword.svg';
+import emptyImage from '@public/v2/assets/icons/detail-page/empty-image.svg';
 
 interface ModalProps {
   isOpen: boolean;
@@ -54,7 +55,6 @@ const ImageModal: React.FC<ModalProps> = ({
     });
   };
 
-  console.log('images[imageIndex]?.name', images[imageIndex]?.name);
   return (
     <div className="fixed z-[1200] inset-0 overflow-y-auto ">
       <Toast show={showToast} message="Copied Successfully" />
@@ -86,40 +86,53 @@ const ImageModal: React.FC<ModalProps> = ({
             </div>
             <div className="mt-2 ml-2 relative">
               <div className="relative">
-                {images[imageIndex]?.name === 'B2B' ||
-                images[imageIndex]?.name === 'B2B Sparkle' ||
-                images[imageIndex]?.name === 'GIA Certificate' ? (
-                  images[imageIndex]?.url === 'null' ||
-                  images[imageIndex]?.url === null ||
-                  !images[imageIndex]?.url.length ? (
+                {images.length > 0 ? (
+                  images[imageIndex]?.name === 'B2B' ||
+                  images[imageIndex]?.name === 'B2B Sparkle' ||
+                  images[imageIndex]?.name === 'GIA Certificate' ? (
+                    images[imageIndex]?.url === 'null' ||
+                    images[imageIndex]?.url === null ||
+                    !images[imageIndex]?.url.length ? (
+                      <img
+                        src={NoImageFound}
+                        className="lg:w-[662px] lg:h-[510px] sm:w-[300px] sm:h-[210px]"
+                        height={600}
+                        width={650}
+                        style={{
+                          background: '#F2F4F7'
+                        }}
+                      />
+                    ) : (
+                      <iframe
+                        frameBorder="0"
+                        src={images[imageIndex]?.url}
+                        className="lg:w-[650px] lg:h-[465px] sm:w-[300px] sm:h-[210px]"
+                      />
+                    )
+                  ) : (
                     <img
-                      src={NoImageFound}
-                      className="lg:w-[662px] lg:h-[510px] sm:w-[300px] sm:h-[210px]"
-                      height={600}
-                      width={650}
+                      src={images[imageIndex]?.url}
                       style={{
                         background: '#F2F4F7'
                       }}
-                    />
-                  ) : (
-                    <iframe
-                      frameBorder="0"
-                      src={images[imageIndex]?.url}
-                      className="lg:w-[650px] lg:h-[465px] sm:w-[300px] sm:h-[210px]"
+                      className="lg:w-[662px] lg:h-[510px] sm:w-[300px] sm:h-[210px]"
+                      height={600}
+                      width={650}
+                      onError={(e: any) => {
+                        e.target.onerror = null;
+                        e.target.src = NoImageFound.src;
+                      }}
                     />
                   )
                 ) : (
-                  <img
-                    src={images[imageIndex]?.url}
-                    style={{
-                      background: '#F2F4F7'
-                    }}
+                  <Image
+                    src={emptyImage}
                     className="lg:w-[662px] lg:h-[510px] sm:w-[300px] sm:h-[210px]"
                     height={600}
+                    alt="empty image"
                     width={650}
-                    onError={(e: any) => {
-                      e.target.onerror = null;
-                      e.target.src = NoImageFound.src;
+                    style={{
+                      background: '#F9FAFB'
                     }}
                   />
                 )}
