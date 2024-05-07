@@ -85,6 +85,30 @@ const theme = createTheme({
           fontStyle: 'normal !important'
         }
       }
+    },
+    MuiMenuItem: {
+      styleOverrides: {
+        root: {
+          '&:hover': {
+            backgroundColor: 'var(--neutral-100)'
+          },
+          '&.Mui-selected': {
+            backgroundColor: 'var(--neutral-100) !important'
+          },
+          '&.Mui-selected:hover': {
+            backgroundColor: 'var(--neutral-100) !important'
+          }
+        }
+      }
+    },
+    MuiSelect: {
+      styleOverrides: {
+        select: {
+          '&:focus': {
+            background: 'none'
+          }
+        }
+      }
     }
   }
 });
