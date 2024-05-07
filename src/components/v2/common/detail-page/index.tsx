@@ -376,7 +376,11 @@ export function DiamondDetailsComponent({
 
                   {/* Additional content for backward arrow */}
                   {currentIndex > 0 && (
-                    <ShowPopups data={data} currentIndex={currentIndex - 1} />
+                    <ShowPopups
+                      data={data}
+                      currentIndex={currentIndex - 1}
+                      fromBid={fromBid}
+                    />
                   )}
                 </button>
 
@@ -402,7 +406,11 @@ export function DiamondDetailsComponent({
                   {/* Additional content for forward arrow */}
 
                   {currentIndex < data.length - 1 && (
-                    <ShowPopups data={data} currentIndex={currentIndex + 1} />
+                    <ShowPopups
+                      data={data}
+                      currentIndex={currentIndex + 1}
+                      fromBid={fromBid}
+                    />
                   )}
                 </button>
               </div>
