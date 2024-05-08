@@ -8,7 +8,7 @@ import {
 } from '@/components/v2/common/action-button/individual-button';
 
 export default {
-  title: 'Components/IndividualActionButton',
+  title: 'Components/ExpandedButton',
   component: IndividualActionButton
 } as Meta;
 
