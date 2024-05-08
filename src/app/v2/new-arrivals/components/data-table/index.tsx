@@ -566,9 +566,6 @@ const NewArrivalDataTable = ({
       pagination: pagination
     },
 
-    // renderEmptyRowsFallback: () => {
-    //   return <>no result</>;
-    // },
     positionGlobalFilter: 'left',
     //styling
 

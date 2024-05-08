@@ -592,7 +592,7 @@ const DataTable = ({
               (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
                 isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
               ? 'calc(100vh - 440px)'
-              : 'calc(100vh - 372px)'
+              : 'calc(100vh - 363px)'
             : isNudge &&
               (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
                 isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
@@ -617,7 +617,7 @@ const DataTable = ({
               (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
                 isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
               ? 'calc(100vh - 440px)'
-              : 'calc(100vh - 372px)'
+              : 'calc(100vh - 363px)'
             : isNudge &&
               (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
                 isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
@@ -1046,8 +1046,8 @@ const DataTable = ({
           </div>
         )}
         {myCart && (
-          <div className="flex items-center justify-between">
-            <div></div>
+          <div className="flex items-center  justify-between">
+            <div className=""></div>
             <MRT_TablePagination table={table} />
             <div className="flex gap-2">
               <ActionButton
