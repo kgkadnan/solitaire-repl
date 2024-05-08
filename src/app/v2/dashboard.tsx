@@ -166,24 +166,16 @@ const Dashboard = () => {
       isAvailable: true,
       link: '/v2/my-cart'
     },
-    // {
-    //   label: 'Bid to Buy',
-    //   icon: <BidToBuyIcon />,
-    //   color: optionsClasses[2],
-    //   count: customerData?.customer?.bid_to_buy?.count,
-    //   start_at: customerData?.customer?.bid_to_buy?.starts_at,
-    //   isAvailable: true,
-    //   link: '/v2/bid-2-buy'
-    // },
     {
       label: 'Bid to Buy',
       icon: <BidToBuyIcon />,
       color: optionsClasses[2],
       count: customerData?.customer?.bid_to_buy?.count,
       start_at: customerData?.customer?.bid_to_buy?.starts_at,
-      isAvailable: false,
+      isAvailable: true,
       link: '/v2/bid-2-buy'
     },
+    
 
     {
       label: 'My Appointments',
@@ -1762,7 +1754,7 @@ const Dashboard = () => {
                         {data.label}
                         {/* {data.label === 'My Appointments' && `(${0})`} */}
                       </p>
-                      {/* {data.label === 'Bid to Buy' &&
+                      {data.label === 'Bid to Buy' &&
                         (!data?.start_at && data?.count > 0 ? (
                           <div className="text-successMain text-sMedium ">
                             ACTIVE
@@ -1771,43 +1763,43 @@ const Dashboard = () => {
                           <div className="text-visRed  text-sMedium ">
                             INACTIVE
                           </div>
-                        ))} */}
+                        ))}
                     </div>
                     {
-                      // data.label === 'Bid to Buy' ? (
-                      //   <>
-                      //     {data.start_at && data.count ? (
-                      //       <div className=" mt-1 flex items-center gap-2 rounded-[4px] px-1 h-[26px] bg-[#F1FAF8]">
-                      //         <Image
-                      //           src={BidHammer}
-                      //           alt="Bid to Buy"
-                      //           className="mb-2"
-                      //         />
-                      //         <p className="m-0 p-0 text-neutral-900 text-lRegular">
-                      //           Bid starts on {formatDateString(data.start_at)}
-                      //         </p>
-                      //       </div>
-                      //     ) : data.start_at && !data.count ? (
-                      //       <div className=" mt-1 flex items-center gap-2 rounded-[4px] px-1 h-[26px] bg-[#F1FAF8]">
-                      //         <Image
-                      //           src={BidHammer}
-                      //           alt="Bid to Buy"
-                      //           className="mb-2"
-                      //         />
-                      //         <p className="m-0 p-0  text-neutral-900 sm:text-mMedium text-lRegular">
-                      //           Stay tuned
-                      //         </p>
-                      //       </div>
-                      //     ) : (
-                      //       !data.start_at &&
-                      //       data.count > 0 && (
-                      //         <div className="text-neutral-900 text-headingS">
-                      //           {data.count}
-                      //         </div>
-                      //       )
-                      //     )}
-                      //   </>
-                      // ) :
+                      data.label === 'Bid to Buy' ? (
+                        <>
+                          {data.start_at && data.count ? (
+                            <div className=" mt-1 flex items-center gap-2 rounded-[4px] px-1 h-[26px] bg-[#F1FAF8]">
+                              <Image
+                                src={BidHammer}
+                                alt="Bid to Buy"
+                                className="mb-2"
+                              />
+                              <p className="m-0 p-0 text-neutral-900 text-lRegular">
+                                Bid starts on {formatDateString(data.start_at)}
+                              </p>
+                            </div>
+                          ) : data.start_at && !data.count ? (
+                            <div className=" mt-1 flex items-center gap-2 rounded-[4px] px-1 h-[26px] bg-[#F1FAF8]">
+                              <Image
+                                src={BidHammer}
+                                alt="Bid to Buy"
+                                className="mb-2"
+                              />
+                              <p className="m-0 p-0  text-neutral-900 sm:text-mMedium text-lRegular">
+                                Stay tuned
+                              </p>
+                            </div>
+                          ) : (
+                            !data.start_at &&
+                            data.count > 0 && (
+                              <div className="text-neutral-900 text-headingS">
+                                {data.count}
+                              </div>
+                            )
+                          )}
+                        </>
+                      ) :
                       // data.label === 'My Appointments' ? (
                       //   <p className="text-headingS text-infoMain  underline">
                       //     Book Now
