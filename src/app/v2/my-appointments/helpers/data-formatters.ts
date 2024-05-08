@@ -12,16 +12,16 @@ export function formatDate(dateStr: string) {
 
 export function getTimeRange(isoTime: string): string {
   const date = new Date(isoTime);
-  const start = new Date(date.getTime() - 30 * 60000); // Subtract 30 minutes in milliseconds
-  const end = date;
+  const end = new Date(date.getTime() + 30 * 60000); // Add 30 minutes in milliseconds
+  const start = date;
   const options: Intl.DateTimeFormatOptions = {
     hour: '2-digit',
     minute: '2-digit',
     hour12: true
   };
 
-  const startTime = start.toLocaleTimeString('en-US', options);
   const endTime = end.toLocaleTimeString('en-US', options);
+  const startTime = start.toLocaleTimeString('en-US', options);
 
   return `${startTime} to ${endTime}`;
 }

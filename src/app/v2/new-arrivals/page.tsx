@@ -44,6 +44,19 @@ import { Toast } from '@/components/v2/common/copy-and-share/toast';
 import { loadImages } from '@/components/v2/common/detail-page/helpers/load-images';
 import { checkImage } from '@/components/v2/common/detail-page/helpers/check-image';
 import fallbackImage from '@public/v2/assets/icons/not-found.svg';
+import { Dropdown } from '@/components/v2/common/dropdown-menu';
+import threeDotsSvg from '@public/v2/assets/icons/threedots.svg';
+import { ManageLocales } from '@/utils/v2/translate';
+import { IAppointmentPayload } from '../my-appointments/page';
+import { useLazyGetAvailableMyAppointmentSlotsQuery } from '@/features/api/my-appointments';
+import {
+  SELECT_STONE_TO_PERFORM_ACTION,
+  SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH
+} from '@/constants/error-messages/confirm-stone';
+import BookAppointment from '../my-appointments/components/book-appointment/book-appointment';
+import { HOLD_STATUS, MEMO_STATUS } from '@/constants/business-logic';
+import { AnyAaaaRecord } from 'dns';
+import { NO_STONES_AVAILABLE } from '@/constants/error-messages/compare-stone';
 
 const NewArrivals = () => {
   const [isDetailPage, setIsDetailPage] = useState(false);
@@ -310,10 +323,76 @@ const NewArrivals = () => {
   const { errorState, errorSetState } = useErrorStateManagement();
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
 
+  const [showAppointmentForm, setShowAppointmentForm] = useState(false);
+  const [appointmentPayload, setAppointmentPayload] =
+    useState<IAppointmentPayload>({
+      kam: { kam_name: '' },
+      storeAddresses: [],
+      timeSlots: { dates: [{ date: '', day: '' }], slots: {} }
+    });
+
+  const [triggerAvailableSlots] = useLazyGetAvailableMyAppointmentSlotsQuery(
+    {}
+  );
+  const [lotIds, setLotIds] = useState<string[]>([]);
+
   const { setIsError, setErrorText } = errorSetState;
   const { isError, errorText } = errorState;
 
   const [downloadExcel] = useDownloadExcelMutation();
+
+  const handleCreateAppointment = () => {
+    let selectedIds = Object.keys(rowSelection);
+
+    let data: any;
+    if (activeTab === 1) {
+      data = activeBid;
+    } else if (activeTab === 0) {
+      data = bid;
+    }
+
+    if (selectedIds.length > 0) {
+      const hasMemoOut = selectedIds?.some((id: string) => {
+        const stone = data.find((row: any) => row?.id === id);
+        return stone?.diamond_status === MEMO_STATUS;
+      });
+
+      const hasHold = selectedIds?.some((id: string) => {
+        const stone = data.find((row: any) => row?.id === id);
+        return stone?.diamond_status === HOLD_STATUS;
+      });
+
+      setShowAppointmentForm(true);
+      triggerAvailableSlots({}).then(payload => {
+        let { data } = payload.data;
+        setAppointmentPayload(data);
+      });
+
+      if (hasMemoOut) {
+        setErrorText(NO_STONES_AVAILABLE);
+        setIsError(true);
+      } else if (hasHold) {
+        setIsError(true);
+        setErrorText(SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH);
+      } else {
+        const lotIds = selectedIds?.map((id: string) => {
+          const getLotIds: any =
+            data.find((row: any) => {
+              return row?.id === id;
+            }) ?? {};
+
+          if (getLotIds) {
+            return getLotIds?.lot_id;
+          }
+          return '';
+        });
+        setLotIds(lotIds);
+      }
+    } else {
+      setIsError(true);
+      setErrorText(SELECT_STONE_TO_PERFORM_ACTION);
+    }
+  };
 
   const renderFooter = (table: any) => {
     if (activeTab === 0 && bid?.length > 0) {
@@ -321,18 +400,40 @@ const NewArrivals = () => {
         <div className="flex items-center justify-between px-4 py-0">
           <div></div>
           <MRT_TablePagination table={table} />
-          <ActionButton
-            actionButtonData={[
-              {
-                variant: 'secondary',
-                label: 'Clear All',
-                handler: () => {
-                  setRowSelection({});
-                },
-                isDisable: !Object.keys(rowSelection).length
+          <div className="flex items-center gap-3">
+            <ActionButton
+              actionButtonData={[
+                {
+                  variant: 'secondary',
+                  label: 'Clear All',
+                  handler: () => {
+                    setRowSelection({});
+                  },
+                  isDisable: !Object.keys(rowSelection).length
+                }
+              ]}
+            />
+            <Dropdown
+              dropdownTrigger={
+                <Image
+                  src={threeDotsSvg}
+                  alt="threeDotsSvg"
+                  width={43}
+                  height={43}
+                />
               }
-            ]}
-          />
+              dropdownMenu={[
+                {
+                  label: ManageLocales(
+                    'app.search.actionButton.bookAppointment'
+                  ),
+                  handler: () => {
+                    handleCreateAppointment();
+                  }
+                }
+              ]}
+            />
+          </div>
         </div>
       );
     } else if (activeTab === 1 && activeBid?.length > 0) {
@@ -404,6 +505,26 @@ const NewArrivals = () => {
                     );
                   },
                   isDisable: !Object.keys(rowSelection).length
+                }
+              ]}
+            />
+            <Dropdown
+              dropdownTrigger={
+                <Image
+                  src={threeDotsSvg}
+                  alt="threeDotsSvg"
+                  width={43}
+                  height={43}
+                />
+              }
+              dropdownMenu={[
+                {
+                  label: ManageLocales(
+                    'app.search.actionButton.bookAppointment'
+                  ),
+                  handler: () => {
+                    handleCreateAppointment();
+                  }
                 }
               ]}
             />
@@ -493,6 +614,12 @@ const NewArrivals = () => {
   const goBack = () => {
     setIsDetailPage(false);
     setDetailPageData({});
+    setShowAppointmentForm(false);
+    setAppointmentPayload({
+      kam: { kam_name: '' },
+      storeAddresses: [],
+      timeSlots: { dates: [{ date: '', day: '' }], slots: {} }
+    });
   };
   useEffect(() => {
     isError &&
@@ -558,6 +685,27 @@ const NewArrivals = () => {
             setIsLoading={setIsLoading}
             activeTab={activeTab}
           />
+        </>
+      ) : showAppointmentForm ? (
+        <>
+          <div className="flex  py-[12px] items-center justify-between">
+            <p className="text-lMedium font-medium text-neutral900">
+              {ManageLocales('app.myAppointment.header')}
+            </p>
+          </div>
+          <div className="border-[1px] border-neutral200 rounded-[8px]">
+            <BookAppointment
+              breadCrumLabel={ManageLocales(
+                'app.myAppointments.myAppointments'
+              )}
+              goBackToListView={goBack}
+              appointmentPayload={appointmentPayload}
+              setIsLoading={setIsLoading}
+              modalSetState={modalSetState}
+              lotIds={lotIds}
+              setRowSelection={setRowSelection}
+            />
+          </div>
         </>
       ) : (
         <>

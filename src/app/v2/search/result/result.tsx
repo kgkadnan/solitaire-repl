@@ -480,9 +480,20 @@ const Result = ({
         );
         return stone?.diamond_status === MEMO_STATUS;
       });
+
+      const hasHold = selectedIds?.some((id: string) => {
+        const stone = dataTableState.rows.find(
+          (row: IProduct) => row?.id === id
+        );
+        return stone?.diamond_status === HOLD_STATUS;
+      });
+
       if (hasMemoOut) {
         setErrorText(NO_STONES_AVAILABLE);
         setIsError(true);
+      } else if (hasHold) {
+        setIsError(true);
+        setErrorText(SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH);
       } else {
         setShowAppointmentForm(true);
         triggerAvailableSlots({}).then(payload => {
@@ -1098,17 +1109,20 @@ const Result = ({
         onClose={() => setIsAddCommentDialogOpen(false)}
         renderContent={renderAddCommentDialogs}
       />
-      {!isDetailPage && (
-        <div className="flex py-[8px] items-center">
-          <p className="text-lMedium font-medium text-neutral900">
-            {editRoute
-              ? ManageLocales('app.result.headerEdit')
-              : isCompareStone
-              ? 'Diamond Comparison Overview'
-              : ManageLocales('app.result.headerResult')}
-          </p>
-        </div>
-      )}
+
+      <div className="flex py-[8px] items-center">
+        <p className="text-lMedium font-medium text-neutral900">
+          {editRoute
+            ? ManageLocales('app.result.headerEdit')
+            : isCompareStone
+            ? 'Diamond Comparison Overview'
+            : showAppointmentForm
+            ? ManageLocales('app.myAppointment.header')
+            : isDetailPage
+            ? ''
+            : ManageLocales('app.result.headerResult')}
+        </p>
+      </div>
 
       {isDetailPage && detailPageData?.length ? (
         <>
@@ -1123,7 +1137,7 @@ const Result = ({
             modalSetState={modalSetState}
             setIsLoading={setIsLoading}
           />
-          <div className="p-[16px] flex justify-end items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow mb-1">
+          <div className="p-[8px] flex justify-end items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow mb-1">
             <ActionButton
               actionButtonData={[
                 {
@@ -1225,6 +1239,7 @@ const Result = ({
               setIsLoading={setIsLoading}
               modalSetState={modalSetState}
               lotIds={lotIds}
+              setRowSelection={setRowSelection}
             />
           ) : (
             <div className="">

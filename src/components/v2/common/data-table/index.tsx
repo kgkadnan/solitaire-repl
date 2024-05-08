@@ -1101,7 +1101,7 @@ const DataTable = ({
                       'app.myCart.actionButton.findMatchingPair'
                     ),
                     handler: () => {},
-                    isHidden: activeTab !== AVAILABLE_STATUS,
+                    isHidden: activeCartTab !== AVAILABLE_STATUS,
                     commingSoon: true
                   },
                   {
@@ -1111,14 +1111,14 @@ const DataTable = ({
                     handler: () => {
                       handleCreateAppointment();
                     },
-                    isHidden: activeTab === AVAILABLE_STATUS
+                    isHidden: activeCartTab !== AVAILABLE_STATUS
                   },
                   {
                     label: ManageLocales(
                       'app.myCart.actionButton.viewSimilarStone'
                     ),
                     handler: () => {},
-                    isHidden: activeTab === AVAILABLE_STATUS,
+                    isHidden: activeCartTab === AVAILABLE_STATUS,
                     commingSoon: true
                   }
                 ]}

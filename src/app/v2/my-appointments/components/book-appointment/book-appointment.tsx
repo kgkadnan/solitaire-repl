@@ -35,6 +35,7 @@ interface IBookAppointment {
   getAppointment?: () => void;
   rescheduleAppointmentData?: IRescheduleAppointmentData;
   lotIds?: string[];
+  setRowSelection?: React.Dispatch<React.SetStateAction<{}>>;
 }
 
 interface IKam {
@@ -54,7 +55,8 @@ const BookAppointment: React.FC<IBookAppointment> = ({
   modalSetState,
   getAppointment,
   rescheduleAppointmentData,
-  lotIds
+  lotIds,
+  setRowSelection
 }) => {
   const [addMyAppointment] = useAddMyAppointmentMutation();
   const [rescheduleMyAppointment] = useRescheduleMyAppointmentMutation();
@@ -159,6 +161,7 @@ const BookAppointment: React.FC<IBookAppointment> = ({
             </div>
           </>
         );
+        setRowSelection && setRowSelection({});
       })
       .catch(error => {
         setIsLoading(false);
@@ -191,6 +194,7 @@ const BookAppointment: React.FC<IBookAppointment> = ({
             </div>
           </>
         );
+        setRowSelection && setRowSelection({});
       });
   };
 

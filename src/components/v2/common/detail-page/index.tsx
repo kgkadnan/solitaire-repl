@@ -230,7 +230,7 @@ export function DiamondDetailsComponent({
   let isNudge = localStorage.getItem('show-nudge') === 'MINI';
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   return (
-    <div className="text-black bg-white mt-2">
+    <div className="text-black bg-white rounded-[8px]">
       <Toast show={showToast} message="Copied Successfully" />
       <div className="flex items-center">
         <Image
