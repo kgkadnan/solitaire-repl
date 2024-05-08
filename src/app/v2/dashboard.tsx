@@ -175,7 +175,6 @@ const Dashboard = () => {
       isAvailable: true,
       link: '/v2/bid-2-buy'
     },
-    
 
     {
       label: 'My Appointments',
@@ -1765,41 +1764,40 @@ const Dashboard = () => {
                           </div>
                         ))}
                     </div>
-                    {
-                      data.label === 'Bid to Buy' ? (
-                        <>
-                          {data.start_at && data.count ? (
-                            <div className=" mt-1 flex items-center gap-2 rounded-[4px] px-1 h-[26px] bg-[#F1FAF8]">
-                              <Image
-                                src={BidHammer}
-                                alt="Bid to Buy"
-                                className="mb-2"
-                              />
-                              <p className="m-0 p-0 text-neutral-900 text-lRegular">
-                                Bid starts on {formatDateString(data.start_at)}
-                              </p>
+                    {data.label === 'Bid to Buy' ? (
+                      <>
+                        {data.start_at && data.count ? (
+                          <div className=" mt-1 flex items-center gap-2 rounded-[4px] px-1 h-[26px] bg-[#F1FAF8]">
+                            <Image
+                              src={BidHammer}
+                              alt="Bid to Buy"
+                              className="mb-2"
+                            />
+                            <p className="m-0 p-0 text-neutral-900 text-lRegular">
+                              Bid starts on {formatDateString(data.start_at)}
+                            </p>
+                          </div>
+                        ) : data.start_at && !data.count ? (
+                          <div className=" mt-1 flex items-center gap-2 rounded-[4px] px-1 h-[26px] bg-[#F1FAF8]">
+                            <Image
+                              src={BidHammer}
+                              alt="Bid to Buy"
+                              className="mb-2"
+                            />
+                            <p className="m-0 p-0  text-neutral-900 sm:text-mMedium text-lRegular">
+                              Stay tuned
+                            </p>
+                          </div>
+                        ) : (
+                          !data.start_at &&
+                          data.count > 0 && (
+                            <div className="text-neutral-900 text-headingS">
+                              {data.count}
                             </div>
-                          ) : data.start_at && !data.count ? (
-                            <div className=" mt-1 flex items-center gap-2 rounded-[4px] px-1 h-[26px] bg-[#F1FAF8]">
-                              <Image
-                                src={BidHammer}
-                                alt="Bid to Buy"
-                                className="mb-2"
-                              />
-                              <p className="m-0 p-0  text-neutral-900 sm:text-mMedium text-lRegular">
-                                Stay tuned
-                              </p>
-                            </div>
-                          ) : (
-                            !data.start_at &&
-                            data.count > 0 && (
-                              <div className="text-neutral-900 text-headingS">
-                                {data.count}
-                              </div>
-                            )
-                          )}
-                        </>
-                      ) :
+                          )
+                        )}
+                      </>
+                    ) : (
                       // data.label === 'My Appointments' ? (
                       //   <p className="text-headingS text-infoMain  underline">
                       //     Book Now
@@ -1815,7 +1813,7 @@ const Dashboard = () => {
                             : data.count
                           : 'Coming Soon'}
                       </p>
-                    }
+                    )}
                   </div>
                 </div>
               ))}
