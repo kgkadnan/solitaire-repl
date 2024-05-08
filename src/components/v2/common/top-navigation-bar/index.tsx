@@ -18,6 +18,7 @@ import useUser from '@/lib/use-auth';
 import Notification from './components/notification/notification';
 import { useLazyGetProfilePhotoQuery } from '@/features/api/my-account';
 import { useAppSelector } from '@/hooks/hook';
+import { useLazyGetLogoutQuery } from '@/features/api/dashboard';
 
 interface IUserAccountInfo {
   customer: {
@@ -49,6 +50,7 @@ const TopNavigationBar = () => {
     localStorage.getItem('show-nudge')
   );
   const [triggerGetProfilePhoto] = useLazyGetProfilePhotoQuery({});
+  const [triggerLogout] = useLazyGetLogoutQuery({});
   const { userLoggedOut } = useUser();
   const [userAccountInfo, setUserAccountInfo] = useState<IUserAccountInfo>();
   // const showNudge = localStorage.getItem('show-nudge'); // Replace with actual check
@@ -94,7 +96,10 @@ const TopNavigationBar = () => {
 
   const handleLogout = () => {
     userLoggedOut();
-    router.push('/v2/login');
+
+    triggerLogout({})
+      .then(res => router.push('/v2/login'))
+      .catch(err => console.log('error'));
   };
 
   return (
