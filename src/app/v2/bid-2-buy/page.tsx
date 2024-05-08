@@ -461,7 +461,7 @@ const BidToBuy = () => {
         </div>
       );
     } else {
-      return null;
+      return <></>;
     }
   };
 

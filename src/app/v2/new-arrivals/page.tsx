@@ -429,7 +429,7 @@ const NewArrivals = () => {
         </div>
       );
     } else {
-      return null;
+      return <></>;
     }
   };
 

@@ -574,12 +574,10 @@ const NewArrivalDataTable = ({
 
     muiTableContainerProps: {
       sx: {
-        // minHeight: 'calc(100vh - 399px)',
-        // maxHeight: 'calc(100vh - 399px)'
         height: isFullScreen ? '70vh' : 'calc(100vh - 399px)',
         minHeight: isFullScreen
           ? activeTab === 2
-            ? 'calc(100vh - 125px)'
+            ? 'calc(100vh - 123px)'
             : 'calc(100vh - 175px)'
           : activeTab === 2
           ? isNudge &&
@@ -591,10 +589,14 @@ const NewArrivalDataTable = ({
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
           ? 'calc(100vh - 362px)'
+          : !rows.length
+          ? 'calc(100vh - 260px)'
+          : !rows.length
+          ? 'calc(100vh - 260px)'
           : 'calc(100vh - 295px)',
         maxHeight: isFullScreen
           ? activeTab === 2
-            ? 'calc(100vh - 125px)'
+            ? 'calc(100vh - 123px)'
             : 'calc(100vh - 175px)'
           : activeTab === 2
           ? isNudge &&
@@ -606,7 +608,7 @@ const NewArrivalDataTable = ({
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
           ? 'calc(100vh - 362px)'
-          : 'calc(100vh - 295px)'
+          : 'calc(100vh - 260px)'
       }
     },
     muiTableHeadRowProps: {
