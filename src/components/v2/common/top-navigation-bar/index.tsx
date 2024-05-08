@@ -95,10 +95,11 @@ const TopNavigationBar = () => {
   }, [updatePhoto?.status]);
 
   const handleLogout = () => {
-    userLoggedOut();
-
+    // router.push('/v2/login')
     triggerLogout({})
-      .then(res => router.push('/v2/login'))
+      .then(res => {
+        router.push('/v2/login'), userLoggedOut();
+      })
       .catch(err => console.log('error'));
   };
 
