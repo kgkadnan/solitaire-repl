@@ -47,12 +47,12 @@ const SideNavigationBar = () => {
       link: Routes.NEW_ARRIVAL,
       isActive: currentRoute === Routes.NEW_ARRIVAL
     },
-    {
-      src: <Bid2BuyIcon />,
-      title: ManageLocales('app.sideNavigationBar.bidToBuy'),
-      link: Routes.BID_2_BUY,
-      isActive: currentRoute === Routes.BID_2_BUY
-    },
+    // {
+    //   src: <Bid2BuyIcon />,
+    //   title: ManageLocales('app.sideNavigationBar.bidToBuy'),
+    //   link: Routes.BID_2_BUY,
+    //   isActive: currentRoute === Routes.BID_2_BUY
+    // },
     {
       title: 'line-separator-1'
     },
