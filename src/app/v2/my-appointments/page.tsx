@@ -32,6 +32,8 @@ import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import BinIcon from '@public/v2/assets/icons/bin.svg';
 import { ITabsData } from './interface';
 import BookAppointment from './components/book-appointment/book-appointment';
+import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
+import { Toast } from '@/components/v2/common/copy-and-share/toast';
 export interface ISlot {
   datetimeString: string;
   isAvailable: boolean;
@@ -44,6 +46,7 @@ export interface ISlots {
 export interface IAppointmentPayload {
   kam: {
     kam_name: string;
+    kam_image: string;
   };
   storeAddresses: string[];
   timeSlots: {
@@ -74,12 +77,16 @@ const MyAppointments = () => {
   const [showAppointmentForm, setShowAppointmentForm] = useState(false);
   const [appointmentPayload, setAppointmentPayload] =
     useState<IAppointmentPayload>({
-      kam: { kam_name: '' },
+      kam: { kam_name: '', kam_image: '' },
       storeAddresses: [],
       timeSlots: { dates: [{ date: '', day: '' }], slots: {} }
     });
   const [rescheduleAppointmentData, setRescheduleAppointmentData] =
     useState<IRescheduleAppointmentData>();
+
+  const { errorState, errorSetState } = useErrorStateManagement();
+  const { setIsError, setErrorText } = errorSetState;
+  const { isError, errorText } = errorState;
 
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState(UPCOMING_APPOINTMENTS);
@@ -97,6 +104,13 @@ const MyAppointments = () => {
     setIsLoading(true);
     getAppointment();
   }, [myAppointmentData]);
+
+  useEffect(() => {
+    isError &&
+      setTimeout(() => {
+        setIsError(false); // Hide the toast notification after some time
+      }, 4000);
+  }, [isError]);
 
   const MyAppointmentsTabs = [
     {
@@ -192,27 +206,6 @@ const MyAppointments = () => {
     });
   };
 
-  function formatDateTimeForReschedule(dateString: string) {
-    const date = new Date(dateString);
-
-    // Get the date in MM/DD/YYYY format
-    const formattedDate = `${
-      date.getMonth() + 1
-    }/${date.getDate()}/${date.getFullYear()}`;
-
-    // Get the time in hh:mm:ss AM/PM format
-    const hours = date.getHours() > 12 ? date.getHours() - 12 : date.getHours();
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    const seconds = date.getSeconds().toString().padStart(2, '0');
-    const meridiem = date.getHours() >= 12 ? 'PM' : 'AM';
-    const formattedTime = `${hours}:${minutes}:${seconds} ${meridiem}`;
-
-    // Combine date and time
-    const formattedDateTime = `${formattedDate}, ${formattedTime}`;
-
-    return formattedDateTime;
-  }
-
   const handleRescheduleAppointment = ({ rescheduleData }: any) => {
     handleCreateAppointment();
     setRescheduleAppointmentData({
@@ -224,6 +217,8 @@ const MyAppointments = () => {
       stones: rescheduleData.stones
     });
   };
+
+  console.log('reschedule', rescheduleAppointmentData);
 
   const goBackToListView = () => {
     setRescheduleAppointmentData(undefined);
@@ -364,7 +359,7 @@ const MyAppointments = () => {
     } else {
       return (
         <span className="text-lRegular text-neutral900 font-normal">
-          {(value as any)[accessor] ?? '-'}
+          {(value as any)[accessor] || '-'}
         </span>
       );
     }
@@ -381,6 +376,7 @@ const MyAppointments = () => {
           modalSetState={modalSetState}
           getAppointment={getAppointment}
           rescheduleAppointmentData={rescheduleAppointmentData}
+          errorSetState={errorSetState}
         />
       );
     } else {
@@ -488,6 +484,9 @@ const MyAppointments = () => {
         isOpens={modalState.isDialogOpen}
         setIsOpen={modalSetState.setIsDialogOpen}
       />
+      {isError && (
+        <Toast show={isError} message={errorText} isSuccess={false} />
+      )}
       <div
         className={`relative mb-[20px] 
       ${

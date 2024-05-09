@@ -19,6 +19,7 @@ import {
 import errorSvg from '@public/v2/assets/icons/modal/error.svg';
 import confirmIcon from '@public/v2/assets/icons/modal/confirm.svg';
 import warningIcon from '@public/v2/assets/icons/modal/warning.svg';
+import { PLEASE_SELECT_A_TIME_SLOT } from '@/constants/error-messages/search';
 
 export interface IModalSetState {
   setDialogContent: React.Dispatch<React.SetStateAction<React.ReactNode>>;
@@ -26,6 +27,15 @@ export interface IModalSetState {
   setIsInputDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+function getInitials(name: string): string {
+  const salutations = ['Mr.', 'Ms.', 'Mrs.', 'Dr.', 'Prof.'];
+  const initials = name
+    .split(' ')
+    .filter(word => !salutations.includes(word)) // Exclude salutations
+    .map(word => word.charAt(0).toUpperCase())
+    .join('');
+  return initials;
+}
 interface IBookAppointment {
   goBackToListView: () => void;
   breadCrumLabel: string;
@@ -34,10 +44,14 @@ interface IBookAppointment {
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   getAppointment?: () => void;
   rescheduleAppointmentData?: IRescheduleAppointmentData;
+  lotIds?: string[];
+  setRowSelection?: React.Dispatch<React.SetStateAction<{}>>;
+  errorSetState: any;
 }
 
 interface IKam {
   kam_name: string;
+  kam_image: string;
 }
 
 interface IDates {
@@ -52,11 +66,14 @@ const BookAppointment: React.FC<IBookAppointment> = ({
   setIsLoading,
   modalSetState,
   getAppointment,
-  rescheduleAppointmentData
+  rescheduleAppointmentData,
+  lotIds,
+  setRowSelection,
+  errorSetState
 }) => {
   const [addMyAppointment] = useAddMyAppointmentMutation();
   const [rescheduleMyAppointment] = useRescheduleMyAppointmentMutation();
-  const [kam, setKam] = useState<IKam>({ kam_name: '' });
+  const [kam, setKam] = useState<IKam>({ kam_name: '', kam_image: '' });
   const [location, setLocation] = useState<string[]>([]);
   const [dates, setDates] = useState<IDates[]>([{ date: '', day: '' }]);
   const [slots, setSlots] = useState<ISlots>({});
@@ -64,6 +81,7 @@ const BookAppointment: React.FC<IBookAppointment> = ({
   const [selectedSlot, setSelectedSlot] = useState('');
   const [comment, setComment] = useState('');
   const [stones, setStones] = useState<string[]>([]);
+  const { setIsError, setErrorText } = errorSetState;
 
   const hasDataOnRescheduleAppointment = () => {
     return rescheduleAppointmentData
@@ -74,7 +92,15 @@ const BookAppointment: React.FC<IBookAppointment> = ({
   useEffect(() => {
     let { kam, storeAddresses, timeSlots } = appointmentPayload;
 
-    if (hasDataOnRescheduleAppointment() && rescheduleAppointmentData) {
+    if (lotIds?.length) {
+      setStones(lotIds);
+      let createComment = `I want to know more about ${lotIds.map(
+        lotId => lotId
+      )}`;
+      setComment(createComment);
+      setSelectedDate(Number(timeSlots.dates[0].date));
+      setLocation(storeAddresses);
+    } else if (hasDataOnRescheduleAppointment() && rescheduleAppointmentData) {
       setSelectedDate(rescheduleAppointmentData.selectedDate);
       setSelectedSlot(rescheduleAppointmentData.selectedSlot);
       setComment(rescheduleAppointmentData.comment);
@@ -109,153 +135,165 @@ const BookAppointment: React.FC<IBookAppointment> = ({
   };
 
   const handleAddMyAppointment = () => {
-    setIsLoading(true);
-    addMyAppointment({
-      stones: stones,
-      appointment_at: selectedSlot,
-      reason: comment,
-      address: location[0]
-    })
-      .unwrap()
-      .then(() => {
-        setIsLoading(false);
-        goBackToListView();
-        getAppointment!();
-        modalSetState.setIsDialogOpen(true);
-        modalSetState.setDialogContent(
-          <>
-            <div className="absolute left-[-84px] top-[-84px]">
-              <Image src={confirmIcon} alt="confirmIcon" />
-            </div>
-            <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-              <div>
-                <h1 className="text-headingS text-neutral900">
-                  Your appointment has been booked successfully
-                </h1>
-              </div>
-              <ActionButton
-                actionButtonData={[
-                  {
-                    variant: 'primary',
-                    label: ManageLocales('app.modal.okay'),
-                    handler: () => {
-                      modalSetState.setIsDialogOpen(false);
-                    },
-                    customStyle: 'w-full flex-1'
-                  }
-                ]}
-              />
-            </div>
-          </>
-        );
-      })
-      .catch(error => {
-        setIsLoading(false);
-        goBackToListView();
-        modalSetState.setIsDialogOpen(true);
-        modalSetState.setDialogContent(
-          <>
-            <div className="absolute left-[-84px] top-[-84px]">
-              <Image
-                src={error.status === 400 ? warningIcon : errorSvg}
-                alt={`${error.status === 400 ? 'warningIcon' : 'errorSvg'}`}
-              />
-            </div>
-            <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-              <p className="text-neutral600 text-mRegular">
-                {error?.data?.message}
-              </p>
-              <ActionButton
-                actionButtonData={[
-                  {
-                    variant: 'primary',
-                    label: ManageLocales('app.modal.okay'),
-                    handler: () => {
-                      modalSetState.setIsDialogOpen(false);
-                    },
-                    customStyle: 'flex-1 w-full h-10'
-                  }
-                ]}
-              />
-            </div>
-          </>
-        );
-      });
-  };
-
-  const handleRescheduleAppointment = () => {
-    setIsLoading(true);
-    rescheduleMyAppointment({
-      appointmentId: rescheduleAppointmentData?.appointmentId,
-      data: {
+    if (selectedSlot.length) {
+      setIsLoading(true);
+      addMyAppointment({
         stones: stones,
         appointment_at: selectedSlot,
         reason: comment,
         address: location[0]
-      }
-    })
-      .unwrap()
-      .then(() => {
-        setIsLoading(false);
-        goBackToListView();
-        getAppointment!();
-        modalSetState.setIsDialogOpen(true);
-        modalSetState.setDialogContent(
-          <>
-            <div className="absolute left-[-84px] top-[-84px]">
-              <Image src={confirmIcon} alt="confirmIcon" />
-            </div>
-            <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-              <div>
-                <h1 className="text-headingS text-neutral900">
-                  Your appointment has been successfully rescheduled
-                </h1>
-              </div>
-              <ActionButton
-                actionButtonData={[
-                  {
-                    variant: 'primary',
-                    label: ManageLocales('app.modal.okay'),
-                    handler: () => {
-                      modalSetState.setIsDialogOpen(false);
-                    },
-                    customStyle: 'w-full flex-1'
-                  }
-                ]}
-              />
-            </div>
-          </>
-        );
       })
-      .catch(error => {
-        setIsLoading(false);
-        goBackToListView();
-        modalSetState.setIsDialogOpen(true);
-        modalSetState.setDialogContent(
-          <>
-            <div className="absolute left-[-84px] top-[-84px]">
-              <Image src={errorSvg} alt="errorSvg" />
-            </div>
-            <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-              <p className="text-neutral600 text-mRegular">
-                {error?.data?.message}
-              </p>
-              <ActionButton
-                actionButtonData={[
-                  {
-                    variant: 'primary',
-                    label: ManageLocales('app.modal.okay'),
-                    handler: () => {
-                      modalSetState.setIsDialogOpen(false);
-                    },
-                    customStyle: 'flex-1 w-full h-10'
-                  }
-                ]}
-              />
-            </div>
-          </>
-        );
-      });
+        .unwrap()
+        .then(() => {
+          setIsLoading(false);
+          goBackToListView();
+          if (getAppointment) getAppointment!();
+          modalSetState.setIsDialogOpen(true);
+          modalSetState.setDialogContent(
+            <>
+              <div className="absolute left-[-84px] top-[-84px]">
+                <Image src={confirmIcon} alt="confirmIcon" />
+              </div>
+              <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+                <div>
+                  <h1 className="text-headingS text-neutral900">
+                    Your appointment has been booked successfully
+                  </h1>
+                </div>
+                <ActionButton
+                  actionButtonData={[
+                    {
+                      variant: 'primary',
+                      label: ManageLocales('app.modal.okay'),
+                      handler: () => {
+                        modalSetState.setIsDialogOpen(false);
+                      },
+                      customStyle: 'w-full flex-1'
+                    }
+                  ]}
+                />
+              </div>
+            </>
+          );
+          setRowSelection && setRowSelection({});
+        })
+        .catch(error => {
+          setIsLoading(false);
+          goBackToListView();
+          modalSetState.setIsDialogOpen(true);
+          modalSetState.setDialogContent(
+            <>
+              <div className="absolute left-[-84px] top-[-84px]">
+                <Image
+                  src={error.status === 400 ? warningIcon : errorSvg}
+                  alt={`${error.status === 400 ? 'warningIcon' : 'errorSvg'}`}
+                />
+              </div>
+              <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+                <p className="text-neutral600 text-mRegular">
+                  {error?.data?.message}
+                </p>
+                <ActionButton
+                  actionButtonData={[
+                    {
+                      variant: 'primary',
+                      label: ManageLocales('app.modal.okay'),
+                      handler: () => {
+                        modalSetState.setIsDialogOpen(false);
+                      },
+                      customStyle: 'flex-1 w-full h-10'
+                    }
+                  ]}
+                />
+              </div>
+            </>
+          );
+          setRowSelection && setRowSelection({});
+        });
+    } else {
+      setErrorText(PLEASE_SELECT_A_TIME_SLOT);
+      setIsError(true);
+    }
+  };
+
+  const handleRescheduleAppointment = () => {
+    if (selectedSlot.length) {
+      setIsLoading(true);
+      rescheduleMyAppointment({
+        appointmentId: rescheduleAppointmentData?.appointmentId,
+        data: {
+          stones: stones,
+          appointment_at: selectedSlot,
+          reason: comment,
+          address: location[0]
+        }
+      })
+        .unwrap()
+        .then(() => {
+          setIsLoading(false);
+          goBackToListView();
+          getAppointment!();
+          modalSetState.setIsDialogOpen(true);
+          modalSetState.setDialogContent(
+            <>
+              <div className="absolute left-[-84px] top-[-84px]">
+                <Image src={confirmIcon} alt="confirmIcon" />
+              </div>
+              <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+                <div>
+                  <h1 className="text-headingS text-neutral900">
+                    Your appointment has been successfully rescheduled
+                  </h1>
+                </div>
+                <ActionButton
+                  actionButtonData={[
+                    {
+                      variant: 'primary',
+                      label: ManageLocales('app.modal.okay'),
+                      handler: () => {
+                        modalSetState.setIsDialogOpen(false);
+                      },
+                      customStyle: 'w-full flex-1'
+                    }
+                  ]}
+                />
+              </div>
+            </>
+          );
+        })
+        .catch(error => {
+          setIsLoading(false);
+          goBackToListView();
+          modalSetState.setIsDialogOpen(true);
+          modalSetState.setDialogContent(
+            <>
+              <div className="absolute left-[-84px] top-[-84px]">
+                <Image src={errorSvg} alt="errorSvg" />
+              </div>
+              <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+                <p className="text-neutral600 text-mRegular">
+                  {error?.data?.message}
+                </p>
+                <ActionButton
+                  actionButtonData={[
+                    {
+                      variant: 'primary',
+                      label: ManageLocales('app.modal.okay'),
+                      handler: () => {
+                        modalSetState.setIsDialogOpen(false);
+                      },
+                      customStyle: 'flex-1 w-full h-10'
+                    }
+                  ]}
+                />
+              </div>
+            </>
+          );
+        });
+    } else {
+      setErrorText(PLEASE_SELECT_A_TIME_SLOT);
+      setIsError(true);
+    }
   };
 
   return (
@@ -296,8 +334,12 @@ const BookAppointment: React.FC<IBookAppointment> = ({
                 Contact & Mode
               </h3>
               <div className="flex items-center h-[72px] gap-3 border-solid border-[1px] p-[16px] border-neutral200 rounded-[4px] shadow-sm">
-                <Avatar>
-                  <Image src={avatar} alt="avatar" />
+                <Avatar className="flex items-center justify-center text-center bg-primaryMain text-mRegular text-neutral0">
+                  {kam?.kam_image ? (
+                    <Image src={avatar} alt="avatar" />
+                  ) : (
+                    getInitials(kam?.kam_name)
+                  )}
                 </Avatar>
                 <div className=" text-sRegular font-normal">
                   <h4 className="text-neutral900">
@@ -427,12 +469,10 @@ const BookAppointment: React.FC<IBookAppointment> = ({
               label: hasDataOnRescheduleAppointment()
                 ? ManageLocales('app.myAppointments.rescheduleAppointments')
                 : ManageLocales('app.myAppointments.confirmAppointments'),
-              isDisable:
-                rescheduleAppointmentData?.selectedSlot === selectedSlot,
               handler: () => {
                 hasDataOnRescheduleAppointment()
-                  ? selectedSlot.length && handleRescheduleAppointment()
-                  : selectedSlot.length && handleAddMyAppointment();
+                  ? handleRescheduleAppointment()
+                  : handleAddMyAppointment();
               }
             }
           ]}
