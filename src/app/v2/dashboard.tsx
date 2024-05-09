@@ -121,7 +121,7 @@ const Dashboard = () => {
   const dispatch = useDispatch();
 
   const { data: customerData, refetch: refetchCustomerData } =
-    useGetCustomerQuery({});
+    useGetCustomerQuery({}, { refetchOnMountOrArgChange: true });
   const [validImages, setValidImages] = useState<any>([]);
   const [activeTab, setActiveTab] = useState<string>('');
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
@@ -487,7 +487,7 @@ const Dashboard = () => {
     }
   ];
   useEffect(() => {
-    !customerData && setIsLoading(true);
+    // !customerData && setIsLoading(true);
     refetchCustomerData();
   }, []);
   useEffect(() => {
@@ -520,12 +520,12 @@ const Dashboard = () => {
       // if (customerData.customer?.orders?.length > 0) {
       const pendingInvoices =
         customerData.customer.orders
-          .filter((item: any) => item.invoice_id === null)
+          ?.filter((item: any) => item.invoice_id === null)
           .slice(0, 5) ?? [];
 
       const activeInvoices =
         customerData.customer.orders
-          .filter(
+          ?.filter(
             (item: any) => item.invoice_id !== null && item.status === 'pending'
           )
           .slice(0, 5) ?? [];

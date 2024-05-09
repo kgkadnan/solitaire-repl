@@ -34,12 +34,14 @@ const resetAllApiStates = () => {
   store.dispatch(
     manageListingSequenceApi.util.invalidateTags(['manageListingSequence'])
   );
+  store.dispatch(manageListingSequenceApi.util.resetApiState());
+
   store.dispatch(changePasswordApi.util.resetApiState());
   store.dispatch(downloadExcelApi.util.resetApiState());
   store.dispatch(cartApi.util.resetApiState());
   store.dispatch(savedSearchesApi.util.resetApiState());
-  //   store.dispatch(notificationApi.util.resetApiState());
-  store.dispatch(notificationApi.util.invalidateTags(['notification']));
+  store.dispatch(notificationApi.util.resetApiState());
+  //   store.dispatch(notificationApi.util.invalidateTags(['notification']));
 
   store.dispatch(notificationSettingApi.util.resetApiState());
   store.dispatch(productApi.util.resetApiState());
@@ -55,14 +57,17 @@ const resetAllApiStates = () => {
   store.dispatch(downloadInvoiceApi.util.resetApiState());
   store.dispatch(getAllCountryCodeApi.util.resetApiState());
   store.dispatch(dashboardApi.util.resetApiState());
+  store.dispatch(dashboardApi.util.invalidateTags(['dashboard']));
+
   store.dispatch(publicApi.util.resetApiState());
   store.dispatch(manageSubscriptionApi.util.resetApiState());
   store.dispatch(myAccountApi.util.resetApiState());
   store.dispatch(newNotificationApi.util.invalidateTags(['notification']));
 
-  //   store.dispatch(newNotificationApi.util.resetApiState());
+  // store.dispatch(newNotificationApi.util.resetApiState());
   store.dispatch(faqsApi.util.resetApiState());
   store.dispatch(myAppointmentApi.util.resetApiState());
+  console.log('enddddddddddddddddd');
 };
 
 export default resetAllApiStates;
