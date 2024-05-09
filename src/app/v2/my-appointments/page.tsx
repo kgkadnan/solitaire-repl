@@ -31,9 +31,10 @@ import { DialogComponent } from '@/components/v2/common/dialog';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import BinIcon from '@public/v2/assets/icons/bin.svg';
 import { ITabsData } from './interface';
-import BookAppointment from './components/book-appointment/book-appointment';
+
 import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
 import { Toast } from '@/components/v2/common/copy-and-share/toast';
+import BookAppointment from './components/book-appointment/book-appointment';
 export interface ISlot {
   datetimeString: string;
   isAvailable: boolean;
@@ -418,7 +419,7 @@ const MyAppointments = () => {
             />
           </div>
           {data?.length > 0 ? (
-            <table className="w-full">
+            <table className="w-full h-full">
               <thead>
                 <tr className="text-mMedium h-[47px] border-b  border-neutral200 bg-neutral50 text-neutral700">
                   {keys?.map(({ label }) => (
@@ -433,9 +434,7 @@ const MyAppointments = () => {
                   return (
                     <tr
                       key={items.id}
-                      className={`bg-neutral0 group  border-neutral200 hover:bg-neutral50 ${
-                        index >= data.length - 1 ? 'rounded-[8px]' : 'border-b'
-                      }`}
+                      className={`bg-neutral0 group border-solid border-neutral200 hover:bg-neutral50 border-b `}
                     >
                       {keys?.map(({ accessor, label }) => {
                         return (
@@ -487,37 +486,38 @@ const MyAppointments = () => {
       {isError && (
         <Toast show={isError} message={errorText} isSuccess={false} />
       )}
+      {isLoading && <CustomKGKLoader />}
+      {!showAppointmentForm && (
+        <div className="flex  py-[8px] items-center">
+          <p className="text-lMedium font-medium text-neutral900">
+            {ManageLocales('app.myAppointments.myAppointments')}
+          </p>
+        </div>
+      )}
       <div
-        className={`relative mb-[20px] 
+        className={`relative mb-[20px]  border-[1px] border-neutral200 rounded-[8px] ${
+          showAppointmentForm && 'mt-[24px]'
+        }
       ${
         isNudge &&
         (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
           isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
           ? showAppointmentForm
-            ? 'h-[calc(100vh-10px)]'
-            : 'h-[calc(100vh-144px)]'
+            ? 'h-[calc(100vh-38px)]'
+            : 'h-[calc(100vh-184px)]'
           : showAppointmentForm
-          ? 'h-[calc(100vh--50px)]'
-          : 'h-[calc(100vh-84px)]'
+          ? 'h-[calc(100vh--22px)]'
+          : 'h-[calc(100vh-124px)]'
       }
       `}
       >
-        {isLoading && <CustomKGKLoader />}
-        {!showAppointmentForm && (
-          <div className="flex  py-[8px] items-center">
-            <p className="text-lMedium font-medium text-neutral900">
-              {ManageLocales('app.myAppointments.myAppointments')}
-            </p>
-          </div>
+        <div>{renderContent()}</div>
+        {data.length > 0 && !showAppointmentForm && (
+          <div
+            className="h-[72px] border-t-[1px]  border-solid border-neutral200 bg-neutral0 rounded-b-[8px]"
+            style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}
+          ></div>
         )}
-
-        <div
-          className={`border-[1px] border-neutral200 rounded-[8px] ${
-            showAppointmentForm && 'mt-[24px]'
-          }`}
-        >
-          {renderContent()}
-        </div>
       </div>
     </>
   );
