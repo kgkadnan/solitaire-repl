@@ -44,6 +44,7 @@ export interface ISlots {
 export interface IAppointmentPayload {
   kam: {
     kam_name: string;
+    kam_image: string;
   };
   storeAddresses: string[];
   timeSlots: {
@@ -74,7 +75,7 @@ const MyAppointments = () => {
   const [showAppointmentForm, setShowAppointmentForm] = useState(false);
   const [appointmentPayload, setAppointmentPayload] =
     useState<IAppointmentPayload>({
-      kam: { kam_name: '' },
+      kam: { kam_name: '', kam_image: '' },
       storeAddresses: [],
       timeSlots: { dates: [{ date: '', day: '' }], slots: {} }
     });
@@ -192,27 +193,6 @@ const MyAppointments = () => {
     });
   };
 
-  function formatDateTimeForReschedule(dateString: string) {
-    const date = new Date(dateString);
-
-    // Get the date in MM/DD/YYYY format
-    const formattedDate = `${
-      date.getMonth() + 1
-    }/${date.getDate()}/${date.getFullYear()}`;
-
-    // Get the time in hh:mm:ss AM/PM format
-    const hours = date.getHours() > 12 ? date.getHours() - 12 : date.getHours();
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    const seconds = date.getSeconds().toString().padStart(2, '0');
-    const meridiem = date.getHours() >= 12 ? 'PM' : 'AM';
-    const formattedTime = `${hours}:${minutes}:${seconds} ${meridiem}`;
-
-    // Combine date and time
-    const formattedDateTime = `${formattedDate}, ${formattedTime}`;
-
-    return formattedDateTime;
-  }
-
   const handleRescheduleAppointment = ({ rescheduleData }: any) => {
     handleCreateAppointment();
     setRescheduleAppointmentData({
@@ -224,6 +204,8 @@ const MyAppointments = () => {
       stones: rescheduleData.stones
     });
   };
+
+  console.log('reschedule', rescheduleAppointmentData);
 
   const goBackToListView = () => {
     setRescheduleAppointmentData(undefined);

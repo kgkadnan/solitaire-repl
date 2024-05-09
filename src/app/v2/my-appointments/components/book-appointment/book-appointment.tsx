@@ -26,6 +26,15 @@ export interface IModalSetState {
   setIsInputDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+function getInitials(name: string): string {
+  const salutations = ['Mr.', 'Ms.', 'Mrs.', 'Dr.', 'Prof.'];
+  const initials = name
+    .split(' ')
+    .filter(word => !salutations.includes(word)) // Exclude salutations
+    .map(word => word.charAt(0).toUpperCase())
+    .join('');
+  return initials;
+}
 interface IBookAppointment {
   goBackToListView: () => void;
   breadCrumLabel: string;
@@ -34,10 +43,13 @@ interface IBookAppointment {
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   getAppointment?: () => void;
   rescheduleAppointmentData?: IRescheduleAppointmentData;
+  lotIds?: string[];
+  setRowSelection?: React.Dispatch<React.SetStateAction<{}>>;
 }
 
 interface IKam {
   kam_name: string;
+  kam_image: string;
 }
 
 interface IDates {
@@ -52,11 +64,13 @@ const BookAppointment: React.FC<IBookAppointment> = ({
   setIsLoading,
   modalSetState,
   getAppointment,
-  rescheduleAppointmentData
+  rescheduleAppointmentData,
+  lotIds,
+  setRowSelection
 }) => {
   const [addMyAppointment] = useAddMyAppointmentMutation();
   const [rescheduleMyAppointment] = useRescheduleMyAppointmentMutation();
-  const [kam, setKam] = useState<IKam>({ kam_name: '' });
+  const [kam, setKam] = useState<IKam>({ kam_name: '', kam_image: '' });
   const [location, setLocation] = useState<string[]>([]);
   const [dates, setDates] = useState<IDates[]>([{ date: '', day: '' }]);
   const [slots, setSlots] = useState<ISlots>({});
@@ -74,7 +88,15 @@ const BookAppointment: React.FC<IBookAppointment> = ({
   useEffect(() => {
     let { kam, storeAddresses, timeSlots } = appointmentPayload;
 
-    if (hasDataOnRescheduleAppointment() && rescheduleAppointmentData) {
+    if (lotIds?.length) {
+      setStones(lotIds);
+      let createComment = `I want to know more about ${lotIds.map(
+        lotId => lotId
+      )}`;
+      setComment(createComment);
+      setSelectedDate(Number(timeSlots.dates[0].date));
+      setLocation(storeAddresses);
+    } else if (hasDataOnRescheduleAppointment() && rescheduleAppointmentData) {
       setSelectedDate(rescheduleAppointmentData.selectedDate);
       setSelectedSlot(rescheduleAppointmentData.selectedSlot);
       setComment(rescheduleAppointmentData.comment);
@@ -98,6 +120,8 @@ const BookAppointment: React.FC<IBookAppointment> = ({
     setSelectedSlot(prevSlot => (prevSlot === slot ? '' : slot));
   };
 
+  console.log('datetimeString', selectedSlot);
+
   const handleComment = (
     event: React.ChangeEvent<HTMLTextAreaElement>,
     setCommentValue: React.Dispatch<React.SetStateAction<string>>
@@ -120,7 +144,7 @@ const BookAppointment: React.FC<IBookAppointment> = ({
       .then(() => {
         setIsLoading(false);
         goBackToListView();
-        getAppointment!();
+        if (getAppointment) getAppointment!();
         modalSetState.setIsDialogOpen(true);
         modalSetState.setDialogContent(
           <>
@@ -148,6 +172,7 @@ const BookAppointment: React.FC<IBookAppointment> = ({
             </div>
           </>
         );
+        setRowSelection && setRowSelection({});
       })
       .catch(error => {
         setIsLoading(false);
@@ -180,6 +205,7 @@ const BookAppointment: React.FC<IBookAppointment> = ({
             </div>
           </>
         );
+        setRowSelection && setRowSelection({});
       });
   };
 
@@ -296,8 +322,12 @@ const BookAppointment: React.FC<IBookAppointment> = ({
                 Contact & Mode
               </h3>
               <div className="flex items-center h-[72px] gap-3 border-solid border-[1px] p-[16px] border-neutral200 rounded-[4px] shadow-sm">
-                <Avatar>
-                  <Image src={avatar} alt="avatar" />
+                <Avatar className="flex items-center justify-center text-center bg-primaryMain text-mRegular text-neutral0">
+                  {kam?.kam_image ? (
+                    <Image src={avatar} alt="avatar" />
+                  ) : (
+                    getInitials(kam?.kam_name)
+                  )}
                 </Avatar>
                 <div className=" text-sRegular font-normal">
                   <h4 className="text-neutral900">
@@ -427,8 +457,6 @@ const BookAppointment: React.FC<IBookAppointment> = ({
               label: hasDataOnRescheduleAppointment()
                 ? ManageLocales('app.myAppointments.rescheduleAppointments')
                 : ManageLocales('app.myAppointments.confirmAppointments'),
-              isDisable:
-                rescheduleAppointmentData?.selectedSlot === selectedSlot,
               handler: () => {
                 hasDataOnRescheduleAppointment()
                   ? selectedSlot.length && handleRescheduleAppointment()

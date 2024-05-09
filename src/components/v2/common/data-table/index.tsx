@@ -160,7 +160,8 @@ const DataTable = ({
   setCompareStoneData,
   setIsInputDialogOpen,
   isDashboard,
-  setIsDetailPage
+  setIsDetailPage,
+  handleCreateAppointment
 }: any) => {
   // Fetching saved search data
   const router = useRouter();
@@ -592,7 +593,7 @@ const DataTable = ({
               (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
                 isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
               ? 'calc(100vh - 440px)'
-              : 'calc(100vh - 372px)'
+              : 'calc(100vh - 363px)'
             : isNudge &&
               (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
                 isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
@@ -617,7 +618,7 @@ const DataTable = ({
               (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
                 isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
               ? 'calc(100vh - 440px)'
-              : 'calc(100vh - 372px)'
+              : 'calc(100vh - 363px)'
             : isNudge &&
               (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
                 isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
@@ -1016,8 +1017,9 @@ const DataTable = ({
                     label: ManageLocales(
                       'app.search.actionButton.bookAppointment'
                     ),
-                    handler: () => {},
-                    commingSoon: true
+                    handler: () => {
+                      handleCreateAppointment();
+                    }
                   },
 
                   {
@@ -1046,8 +1048,8 @@ const DataTable = ({
           </div>
         )}
         {myCart && (
-          <div className="flex items-center justify-between">
-            <div></div>
+          <div className="flex items-center  justify-between">
+            <div className=""></div>
             <MRT_TablePagination table={table} />
             <div className="flex gap-2">
               <ActionButton
@@ -1099,23 +1101,24 @@ const DataTable = ({
                       'app.myCart.actionButton.findMatchingPair'
                     ),
                     handler: () => {},
-                    isHidden: activeTab !== AVAILABLE_STATUS,
+                    isHidden: activeCartTab !== AVAILABLE_STATUS,
                     commingSoon: true
                   },
                   {
                     label: ManageLocales(
                       'app.myCart.actionButton.bookAppointment'
                     ),
-                    handler: () => {},
-                    isHidden: activeTab !== AVAILABLE_STATUS,
-                    commingSoon: true
+                    handler: () => {
+                      handleCreateAppointment();
+                    },
+                    isHidden: activeCartTab !== AVAILABLE_STATUS
                   },
                   {
                     label: ManageLocales(
                       'app.myCart.actionButton.viewSimilarStone'
                     ),
                     handler: () => {},
-                    isHidden: activeTab === AVAILABLE_STATUS,
+                    isHidden: activeCartTab === AVAILABLE_STATUS,
                     commingSoon: true
                   }
                 ]}
