@@ -35,6 +35,7 @@ import { ITabsData } from './interface';
 import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
 import { Toast } from '@/components/v2/common/copy-and-share/toast';
 import BookAppointment from './components/book-appointment/book-appointment';
+
 export interface ISlot {
   datetimeString: string;
   isAvailable: boolean;
@@ -503,10 +504,10 @@ const MyAppointments = () => {
         (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
           isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
           ? showAppointmentForm
-            ? 'h-[calc(100vh-38px)]'
+            ? 'h-[calc(100vh-103px)]'
             : 'h-[calc(100vh-184px)]'
           : showAppointmentForm
-          ? 'h-[calc(100vh--22px)]'
+          ? 'h-[calc(100vh-43px)]'
           : 'h-[calc(100vh-124px)]'
       }
       `}

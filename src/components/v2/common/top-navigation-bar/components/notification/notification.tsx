@@ -93,6 +93,8 @@ const Notification = () => {
             } else if (splitData[1] === 'sold') {
               router.push(`/v2/my-cart?path=${SOLD_STATUS}`);
             }
+          } else if (splitData[0] === 'appointment') {
+            router.push('v2/my-appointments');
           } else if (splitData[0] === 'bid-to-buy') {
             if (splitData[1] === 'bidHistory') {
               router.push(`/v2/bid-2-buy?path=bidHistory`);
