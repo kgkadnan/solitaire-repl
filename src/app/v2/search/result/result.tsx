@@ -1240,6 +1240,7 @@ const Result = ({
               modalSetState={modalSetState}
               lotIds={lotIds}
               setRowSelection={setRowSelection}
+              errorSetState={errorSetState}
             />
           ) : (
             <div className="">

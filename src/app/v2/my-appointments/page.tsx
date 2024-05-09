@@ -32,6 +32,8 @@ import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import BinIcon from '@public/v2/assets/icons/bin.svg';
 import { ITabsData } from './interface';
 import BookAppointment from './components/book-appointment/book-appointment';
+import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
+import { Toast } from '@/components/v2/common/copy-and-share/toast';
 export interface ISlot {
   datetimeString: string;
   isAvailable: boolean;
@@ -82,6 +84,10 @@ const MyAppointments = () => {
   const [rescheduleAppointmentData, setRescheduleAppointmentData] =
     useState<IRescheduleAppointmentData>();
 
+  const { errorState, errorSetState } = useErrorStateManagement();
+  const { setIsError, setErrorText } = errorSetState;
+  const { isError, errorText } = errorState;
+
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState(UPCOMING_APPOINTMENTS);
 
@@ -98,6 +104,13 @@ const MyAppointments = () => {
     setIsLoading(true);
     getAppointment();
   }, [myAppointmentData]);
+
+  useEffect(() => {
+    isError &&
+      setTimeout(() => {
+        setIsError(false); // Hide the toast notification after some time
+      }, 4000);
+  }, [isError]);
 
   const MyAppointmentsTabs = [
     {
@@ -346,7 +359,7 @@ const MyAppointments = () => {
     } else {
       return (
         <span className="text-lRegular text-neutral900 font-normal">
-          {(value as any)[accessor] ?? '-'}
+          {(value as any)[accessor] || '-'}
         </span>
       );
     }
@@ -363,6 +376,7 @@ const MyAppointments = () => {
           modalSetState={modalSetState}
           getAppointment={getAppointment}
           rescheduleAppointmentData={rescheduleAppointmentData}
+          errorSetState={errorSetState}
         />
       );
     } else {
@@ -470,6 +484,9 @@ const MyAppointments = () => {
         isOpens={modalState.isDialogOpen}
         setIsOpen={modalSetState.setIsDialogOpen}
       />
+      {isError && (
+        <Toast show={isError} message={errorText} isSuccess={false} />
+      )}
       <div
         className={`relative mb-[20px] 
       ${
