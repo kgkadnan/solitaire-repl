@@ -149,13 +149,13 @@ const Notification = () => {
 
   const _handleNotification = () => {
     triggerNotification({}).then(res => {
-      setNotificationData(res.data.notices);
+      setNotificationData(res.data?.notices);
     });
   };
 
   const callNotification = () => {
     triggerNotification({}).then(res => {
-      setNotificationData(res.data.notices);
+      setNotificationData(res.data?.notices);
       let notSeenIds: number[] = [];
       res.data.notices.forEach((notification: any) => {
         if (!notification?.seen_at?.length) {

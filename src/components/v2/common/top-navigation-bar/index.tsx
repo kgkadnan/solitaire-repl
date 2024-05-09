@@ -19,6 +19,7 @@ import Notification from './components/notification/notification';
 import { useLazyGetProfilePhotoQuery } from '@/features/api/my-account';
 import { useAppSelector } from '@/hooks/hook';
 import { useLazyGetLogoutQuery } from '@/features/api/dashboard';
+import resetAllApiStates from '@/utils/reset-all-state';
 
 interface IUserAccountInfo {
   customer: {
@@ -95,7 +96,7 @@ const TopNavigationBar = () => {
   }, [updatePhoto?.status]);
 
   const handleLogout = () => {
-    // router.push('/v2/login')
+    resetAllApiStates();
     triggerLogout({})
       .then(res => {
         router.push('/v2/login'), userLoggedOut();

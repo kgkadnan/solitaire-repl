@@ -9,6 +9,7 @@ import { ManageLocales } from '@/utils/v2/translate';
 import { IndividualActionButton } from '@/components/v2/common/action-button/individual-button';
 import CheckboxComponent from '@/components/v2/common/checkbox';
 import { useRouter, useSearchParams } from 'next/navigation';
+import resetAllApiStates from '@/utils/reset-all-state';
 
 const LoginComponent = ({
   setPhoneNumber,
@@ -31,7 +32,7 @@ const LoginComponent = ({
 
   const handleSubmit = (event: any) => {
     event.preventDefault(); // Prevent default form submission behavior
-
+    resetAllApiStates();
     handleLogin(); // Your login handler
   };
 
