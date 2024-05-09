@@ -457,8 +457,6 @@ const BookAppointment: React.FC<IBookAppointment> = ({
               label: hasDataOnRescheduleAppointment()
                 ? ManageLocales('app.myAppointments.rescheduleAppointments')
                 : ManageLocales('app.myAppointments.confirmAppointments'),
-              isDisable:
-                rescheduleAppointmentData?.selectedSlot === selectedSlot,
               handler: () => {
                 hasDataOnRescheduleAppointment()
                   ? selectedSlot.length && handleRescheduleAppointment()
