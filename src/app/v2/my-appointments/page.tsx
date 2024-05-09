@@ -359,7 +359,7 @@ const MyAppointments = () => {
     } else {
       return (
         <span className="text-lRegular text-neutral900 font-normal">
-          {(value as any)[accessor] ?? '-'}
+          {(value as any)[accessor] || '-'}
         </span>
       );
     }

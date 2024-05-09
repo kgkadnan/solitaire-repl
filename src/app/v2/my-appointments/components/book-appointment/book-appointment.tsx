@@ -19,7 +19,6 @@ import {
 import errorSvg from '@public/v2/assets/icons/modal/error.svg';
 import confirmIcon from '@public/v2/assets/icons/modal/confirm.svg';
 import warningIcon from '@public/v2/assets/icons/modal/warning.svg';
-
 import { PLEASE_SELECT_A_TIME_SLOT } from '@/constants/error-messages/search';
 
 export interface IModalSetState {
