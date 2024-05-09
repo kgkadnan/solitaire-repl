@@ -44,6 +44,7 @@ export interface ISlots {
 export interface IAppointmentPayload {
   kam: {
     kam_name: string;
+    kam_image: string;
   };
   storeAddresses: string[];
   timeSlots: {
@@ -74,7 +75,7 @@ const MyAppointments = () => {
   const [showAppointmentForm, setShowAppointmentForm] = useState(false);
   const [appointmentPayload, setAppointmentPayload] =
     useState<IAppointmentPayload>({
-      kam: { kam_name: '' },
+      kam: { kam_name: '', kam_image: '' },
       storeAddresses: [],
       timeSlots: { dates: [{ date: '', day: '' }], slots: {} }
     });
@@ -203,6 +204,8 @@ const MyAppointments = () => {
       stones: rescheduleData.stones
     });
   };
+
+  console.log('reschedule', rescheduleAppointmentData);
 
   const goBackToListView = () => {
     setRescheduleAppointmentData(undefined);

@@ -108,7 +108,7 @@ const MyCart = () => {
   const [showAppointmentForm, setShowAppointmentForm] = useState(false);
   const [appointmentPayload, setAppointmentPayload] =
     useState<IAppointmentPayload>({
-      kam: { kam_name: '' },
+      kam: { kam_name: '', kam_image: '' },
       storeAddresses: [],
       timeSlots: { dates: [{ date: '', day: '' }], slots: {} }
     });
@@ -270,7 +270,7 @@ const MyCart = () => {
     setConfirmStoneData([]);
     setShowAppointmentForm(false);
     setAppointmentPayload({
-      kam: { kam_name: '' },
+      kam: { kam_name: '', kam_image: '' },
       storeAddresses: [],
       timeSlots: { dates: [{ date: '', day: '' }], slots: {} }
     });
@@ -1050,7 +1050,7 @@ const MyCart = () => {
                 isFrom={'My Cart'}
                 handleDetailImage={handleDetailImage}
                 handleDetailPage={handleDetailPage}
-                identifier={'cart'}
+                identifier={'myCart'}
               />
               {rows.length > 0 ? (
                 <div className="flex gap-3 justify-end items-center px-4 py-2">

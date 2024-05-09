@@ -26,6 +26,15 @@ export interface IModalSetState {
   setIsInputDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+function getInitials(name: string): string {
+  const salutations = ['Mr.', 'Ms.', 'Mrs.', 'Dr.', 'Prof.'];
+  const initials = name
+    .split(' ')
+    .filter(word => !salutations.includes(word)) // Exclude salutations
+    .map(word => word.charAt(0).toUpperCase())
+    .join('');
+  return initials;
+}
 interface IBookAppointment {
   goBackToListView: () => void;
   breadCrumLabel: string;
@@ -40,6 +49,7 @@ interface IBookAppointment {
 
 interface IKam {
   kam_name: string;
+  kam_image: string;
 }
 
 interface IDates {
@@ -60,7 +70,7 @@ const BookAppointment: React.FC<IBookAppointment> = ({
 }) => {
   const [addMyAppointment] = useAddMyAppointmentMutation();
   const [rescheduleMyAppointment] = useRescheduleMyAppointmentMutation();
-  const [kam, setKam] = useState<IKam>({ kam_name: '' });
+  const [kam, setKam] = useState<IKam>({ kam_name: '', kam_image: '' });
   const [location, setLocation] = useState<string[]>([]);
   const [dates, setDates] = useState<IDates[]>([{ date: '', day: '' }]);
   const [slots, setSlots] = useState<ISlots>({});
@@ -84,7 +94,6 @@ const BookAppointment: React.FC<IBookAppointment> = ({
         lotId => lotId
       )}`;
       setComment(createComment);
-      console.log('createComment', createComment);
       setSelectedDate(Number(timeSlots.dates[0].date));
       setLocation(storeAddresses);
     } else if (hasDataOnRescheduleAppointment() && rescheduleAppointmentData) {
@@ -110,6 +119,8 @@ const BookAppointment: React.FC<IBookAppointment> = ({
   const handleSelectSlot = ({ slot }: { slot: string }) => {
     setSelectedSlot(prevSlot => (prevSlot === slot ? '' : slot));
   };
+
+  console.log('datetimeString', selectedSlot);
 
   const handleComment = (
     event: React.ChangeEvent<HTMLTextAreaElement>,
@@ -311,8 +322,12 @@ const BookAppointment: React.FC<IBookAppointment> = ({
                 Contact & Mode
               </h3>
               <div className="flex items-center h-[72px] gap-3 border-solid border-[1px] p-[16px] border-neutral200 rounded-[4px] shadow-sm">
-                <Avatar>
-                  <Image src={avatar} alt="avatar" />
+                <Avatar className="flex items-center justify-center text-center bg-primaryMain text-mRegular text-neutral0">
+                  {kam?.kam_image ? (
+                    <Image src={avatar} alt="avatar" />
+                  ) : (
+                    getInitials(kam?.kam_name)
+                  )}
                 </Avatar>
                 <div className=" text-sRegular font-normal">
                   <h4 className="text-neutral900">
