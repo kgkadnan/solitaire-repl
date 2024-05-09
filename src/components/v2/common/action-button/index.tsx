@@ -55,7 +55,7 @@ const ActionButton = ({
                 ${svg ? 'p-[8px] ' : 'px-[16px] py-[8px]'}
             ${variant === 'primary' && styles.ctaPrimaryStyle} ${
               variant === 'secondary' && styles.ctaSecondaryStyle
-            }`}
+            } ${isDisable && 'bg-neutral100 text-neutral400'}`}
                 >
                   {svg && (
                     <Image
