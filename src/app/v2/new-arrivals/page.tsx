@@ -704,6 +704,7 @@ const NewArrivals = () => {
               modalSetState={modalSetState}
               lotIds={lotIds}
               setRowSelection={setRowSelection}
+              errorSetState={errorSetState}
             />
           </div>
         </>

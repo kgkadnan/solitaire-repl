@@ -1106,6 +1106,7 @@ const MyCart = () => {
               modalSetState={modalSetState}
               lotIds={lotIds}
               setRowSelection={setRowSelection}
+              errorSetState={errorSetState}
             />
           ) : (
             <>

@@ -23,10 +23,7 @@ import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
 import { columnHeaders } from './constant';
 import { SocketManager, useSocket } from '@/hooks/v2/socket-manager';
 import CountdownTimer from '@components/v2/common/timer/index';
-import {
-  useGetBidToBuyHistoryQuery,
-  useLazyGetBidToBuyHistoryQuery
-} from '@/features/api/dashboard';
+import { useLazyGetBidToBuyHistoryQuery } from '@/features/api/dashboard';
 import InvalidCreds from '../login/component/invalid-creds';
 import { DialogComponent } from '@/components/v2/common/dialog';
 import ActionButton from '@/components/v2/common/action-button';
