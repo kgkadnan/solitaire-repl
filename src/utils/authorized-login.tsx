@@ -7,9 +7,10 @@ import { v2Routes } from '@/constants/routes';
 import SideNavigationBar from '@/components/v2/common/side-navigation-bar';
 import V2TopNavigationBar from '@/components/v2/common/top-navigation-bar';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
-import { useAppSelector } from '@/hooks/hook';
+import { useAppDispatch, useAppSelector } from '@/hooks/hook';
 import { DialogComponent } from '@/components/v2/common/dialog';
 import InvalidCreds from '@/app/v2/login/component/invalid-creds';
+import { hide } from '@/features/logout/logout-slice';
 
 const authorizedLogin = (WrappedComponent: React.ComponentType) => {
   const Wrapper: React.FC<any> = props => {
@@ -23,9 +24,9 @@ const authorizedLogin = (WrappedComponent: React.ComponentType) => {
     const logoutFlag: any = useAppSelector(
       (store: any) => store.logoutAll.showModal
     );
+    const dispatch = useAppDispatch();
     const [open, setOpen] = useState(false);
 
-    console.log(logoutFlag, 'ooooo');
     useEffect(() => {
       // Check if the user is KYC verified
       const showNudge = localStorage.getItem('show-nudge') ?? 'FULL'; // Replace with actual check
@@ -42,6 +43,7 @@ const authorizedLogin = (WrappedComponent: React.ComponentType) => {
     }, []);
     useEffect(() => {
       setOpen(logoutFlag);
+      // dispatch(hide())
     }, [logoutFlag]);
     useEffect(() => {
       setIsLoading(true);
@@ -70,7 +72,10 @@ const authorizedLogin = (WrappedComponent: React.ComponentType) => {
                 header="Session expired! You have been logged out of all devices. Please log in again."
                 content={''}
                 handleClick={() => {
-                  userLoggedOut(), router.push('/v2/login'), setOpen(false);
+                  userLoggedOut(),
+                    router.push('/v2/login'),
+                    setOpen(false),
+                    dispatch(hide());
                 }}
                 buttonText="Okay"
               />

@@ -25,7 +25,7 @@ import { resetPasswordApi } from './features/api/reset-password';
 import { currentIPApi } from './features/api/current-ip';
 import { forgotPasswordApi } from './features/api/forgot-password';
 import kycReducer from './features/kyc/kyc';
-import LogoutReducer from './features/logout/logout-slice';
+import LogoutReducer, { hide } from './features/logout/logout-slice';
 
 import { kycApi } from './features/api/kyc';
 import { otpVerificationApi } from './features/api/otp-verification';
@@ -83,23 +83,11 @@ const handle410Middleware =
   (storeAPI: any) => (next: any) => async (action: any) => {
     // try {
     const result = await next(action);
-
     if (result?.payload?.status === statusCode.LOGOUT) {
-      // const state = storeAPI.getState();
-      // const showModal = state.modal?.showModal;
-      // console.log(showModal,"called",result?.payload?.status)
-
-      // // If showModal is false, dispatch the show action
-      // if (!showModal) {
-      //   storeAPI.dispatch(show());
-      // }
-      console.log('jjijij');
       storeAPI.dispatch(show()); // Dispatch action to show modal
     }
+
     return result;
-    // } catch (error) {
-    //   throw error;
-    // }
   };
 
 export default handle410Middleware;

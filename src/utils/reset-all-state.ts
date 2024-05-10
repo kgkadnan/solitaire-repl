@@ -28,7 +28,6 @@ import { setupStore } from '@/store';
 
 // Define a function to reset all API states
 const resetAllApiStates = () => {
-  console.log('called form login');
   const store = setupStore(); // Create a store instance
 
   store.dispatch(
@@ -67,7 +66,6 @@ const resetAllApiStates = () => {
   // store.dispatch(newNotificationApi.util.resetApiState());
   store.dispatch(faqsApi.util.resetApiState());
   store.dispatch(myAppointmentApi.util.resetApiState());
-  console.log('enddddddddddddddddd');
 };
 
 export default resetAllApiStates;
