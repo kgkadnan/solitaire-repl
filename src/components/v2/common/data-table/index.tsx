@@ -1116,6 +1116,11 @@ const DataTable = ({
                     handler: () => {
                       handleCreateAppointment();
                     },
+                    commingSoon:
+                      isKycVerified?.customer?.kyc?.status ===
+                        kycStatus.INPROGRESS ||
+                      isKycVerified?.customer?.kyc?.status ===
+                        kycStatus.REJECTED,
                     isHidden: activeCartTab !== AVAILABLE_STATUS
                   },
                   {
