@@ -224,6 +224,12 @@ const MyAccount = () => {
         dialogContent={dialogContent}
         isOpens={isDialogOpen}
         setIsOpen={setIsDialogOpen}
+        dialogStyle={{
+          dialogContent:
+            activeTab === myAccount.CHANGE_PASSWORD
+              ? 'min-h-[250px]'
+              : 'min-h-[222px]'
+        }}
       />
       <div
         className="border-[1px] border-solid border-neutral-200 rounded-[8px]"

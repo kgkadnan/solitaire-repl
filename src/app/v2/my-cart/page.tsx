@@ -185,29 +185,30 @@ const MyCart = () => {
         })
         .catch(error => {
           setIsLoading(false);
-          setIsDialogOpen(true);
-          setDialogContent(
-            <>
-              <div className="absolute left-[-84px] top-[-84px]">
-                <Image src={errorIcon} alt="errorIcon" />
-              </div>
-              <h1 className="text-headingS text-neutral900">
-                {error?.data?.message}
-              </h1>
-              <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                <ActionButton
-                  actionButtonData={[
-                    {
-                      variant: 'primary',
-                      label: ManageLocales('app.modal.okay'),
-                      handler: () => setIsDialogOpen(false),
-                      customStyle: 'flex-1 w-full h-10'
-                    }
-                  ]}
-                />
-              </div>
-            </>
-          );
+          error?.data?.message && setIsDialogOpen(true);
+          error?.data?.message &&
+            setDialogContent(
+              <>
+                <div className="absolute left-[-84px] top-[-84px]">
+                  <Image src={errorIcon} alt="errorIcon" />
+                </div>
+                <h1 className="text-headingS text-neutral900">
+                  {error?.data?.message}
+                </h1>
+                <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+                  <ActionButton
+                    actionButtonData={[
+                      {
+                        variant: 'primary',
+                        label: ManageLocales('app.modal.okay'),
+                        handler: () => setIsDialogOpen(false),
+                        customStyle: 'flex-1 w-full h-10'
+                      }
+                    ]}
+                  />
+                </div>
+              </>
+            );
         });
     };
 

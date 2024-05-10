@@ -48,7 +48,10 @@ const Notification = () => {
   const router = useRouter();
   const [triggerNotification] = useLazyGetNotificationQuery({});
   const [readAllNotification] = useReadAllNotificationMutation({});
-  const { data } = useGetNotificationQuery({});
+  const { data } = useGetNotificationQuery(
+    {},
+    { refetchOnMountOrArgChange: true }
+  );
   const [triggerReadNotification] = useLazyReadNotificationQuery({});
   const [seenNotification] = useSeenNotificationMutation({});
   const [notificationData, setNotificationData] = useState<INotification[]>([]);
