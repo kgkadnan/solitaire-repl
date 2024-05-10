@@ -35,6 +35,7 @@ import { ITabsData } from './interface';
 import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
 import { Toast } from '@/components/v2/common/copy-and-share/toast';
 import BookAppointment from './components/book-appointment/book-appointment';
+
 export interface ISlot {
   datetimeString: string;
   isAvailable: boolean;
@@ -413,17 +414,34 @@ const MyAppointments = () => {
                     handleCreateAppointment();
                   },
                   customStyle: 'flex-1 w-full h-10',
-                  svg: bookAppointment
+                  svg: bookAppointment,
+                  isDisable:
+                    isKycVerified?.customer?.kyc?.status ===
+                      kycStatus.INPROGRESS ||
+                    isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED
                 }
               ]}
             />
           </div>
           {data?.length > 0 ? (
-            <table className="w-full h-full">
+            <table className={styles.tableHeader}>
               <thead>
-                <tr className="text-mMedium h-[47px] border-b  border-neutral200 bg-neutral50 text-neutral700">
-                  {keys?.map(({ label }) => (
-                    <td key={label} className="p-4 text-left font-medium">
+                <tr
+                  className={`text-mMedium h-[47px] border-b  border-neutral200 bg-neutral50 text-neutral700`}
+                >
+                  {keys?.map(({ label, accessor }) => (
+                    <td
+                      key={label}
+                      className={`p-4 text-left font-medium  ${
+                        accessor === 'address' || accessor === 'reason'
+                          ? activeTab === PAST_APPOINTMENTS
+                            ? 'w-[420px]'
+                            : 'w-[360px]'
+                          : activeTab === PAST_APPOINTMENTS
+                          ? 'w-[260px]'
+                          : 'w-[240px]'
+                      }  `}
+                    >
                       {label}
                     </td>
                   ))}
@@ -442,8 +460,12 @@ const MyAppointments = () => {
                             key={accessor}
                             className={` ${
                               accessor === 'address' || accessor === 'reason'
-                                ? 'w-[25%]'
-                                : 'w-[15%]'
+                                ? activeTab === PAST_APPOINTMENTS
+                                  ? 'w-[420px]'
+                                  : 'w-[360px]'
+                                : activeTab === PAST_APPOINTMENTS
+                                ? 'w-[260px]'
+                                : 'w-[240px]'
                             } text-lRegular rounded-b-[8px] space-x-2 p-[16px] text-left text-gray-800`}
                           >
                             {renderCellContent(label, accessor, items)}
@@ -458,7 +480,14 @@ const MyAppointments = () => {
           ) : (
             !isLoading && (
               <div
-                className={`flex flex-col items-center justify-center h-[73vh] gap-5 `}
+                className={`flex flex-col items-center justify-center ${
+                  isNudge &&
+                  (isKycVerified?.customer?.kyc?.status ===
+                    kycStatus.INPROGRESS ||
+                    isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+                    ? 'h-[62vh]'
+                    : 'h-[73vh]'
+                }  gap-5 `}
               >
                 <Image src={emptyAppointmentSvg} alt={'emptyAppointmentSvg'} />
                 <p className="text-neutral900  w-[320px] text-center ">
@@ -503,15 +532,15 @@ const MyAppointments = () => {
         (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
           isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
           ? showAppointmentForm
-            ? 'h-[calc(100vh-38px)]'
+            ? 'h-[calc(100vh-103px)]'
             : 'h-[calc(100vh-184px)]'
           : showAppointmentForm
-          ? 'h-[calc(100vh--22px)]'
+          ? 'h-[calc(100vh-43px)]'
           : 'h-[calc(100vh-124px)]'
       }
       `}
       >
-        <div>{renderContent()}</div>
+        <div className="">{renderContent()}</div>
         {data.length > 0 && !showAppointmentForm && (
           <div
             className="h-[72px] border-t-[1px]  border-solid border-neutral200 bg-neutral0 rounded-b-[8px]"

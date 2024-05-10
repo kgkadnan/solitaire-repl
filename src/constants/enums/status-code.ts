@@ -3,5 +3,6 @@ export enum statusCode {
   UNAUTHORIZED = 401,
   NOT_FOUND = 404,
   NO_CONTENT = 204,
-  DUPLICATE = 409
+  DUPLICATE = 409,
+  LOGOUT = 419
 }
