@@ -96,7 +96,7 @@ const MyAppointments = () => {
   const getAppointment = () => {
     triggerMyAppointment({}).then(res => {
       setIsLoading(false);
-      let { history, upcoming } = res.data.data;
+      let { history, upcoming } = res && res.data && res.data.data;
       setUpcomingAppointments(upcoming);
       setPastAppointments(history);
     });
@@ -219,8 +219,6 @@ const MyAppointments = () => {
       stones: rescheduleData.stones
     });
   };
-
-  console.log('reschedule', rescheduleAppointmentData);
 
   const goBackToListView = () => {
     setRescheduleAppointmentData(undefined);
@@ -424,59 +422,51 @@ const MyAppointments = () => {
             />
           </div>
           {data?.length > 0 ? (
-            <table className={styles.tableHeader}>
-              <thead>
-                <tr
-                  className={`text-mMedium h-[47px] border-b  border-neutral200 bg-neutral50 text-neutral700`}
-                >
-                  {keys?.map(({ label, accessor }) => (
-                    <td
-                      key={label}
-                      className={`p-4 text-left font-medium  ${
-                        accessor === 'address' || accessor === 'reason'
-                          ? activeTab === PAST_APPOINTMENTS
-                            ? 'w-[420px]'
-                            : 'w-[360px]'
-                          : activeTab === PAST_APPOINTMENTS
-                          ? 'w-[260px]'
-                          : 'w-[240px]'
-                      }  `}
-                    >
-                      {label}
-                    </td>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="">
-                {data?.map((items, index: number) => {
-                  return (
-                    <tr
-                      key={items.id}
-                      className={`bg-neutral0 group border-solid border-neutral200 hover:bg-neutral50 border-b `}
-                    >
-                      {keys?.map(({ accessor, label }) => {
-                        return (
-                          <td
-                            key={accessor}
-                            className={` ${
-                              accessor === 'address' || accessor === 'reason'
-                                ? activeTab === PAST_APPOINTMENTS
-                                  ? 'w-[420px]'
-                                  : 'w-[360px]'
-                                : activeTab === PAST_APPOINTMENTS
-                                ? 'w-[260px]'
-                                : 'w-[240px]'
-                            } text-lRegular rounded-b-[8px] space-x-2 p-[16px] text-left text-gray-800`}
-                          >
-                            {renderCellContent(label, accessor, items)}
-                          </td>
-                        );
-                      })}
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+            <div className={'w-full'}>
+              <div className="text-mMedium w-full h-[47px] border-b border-neutral200 bg-neutral50 text-neutral700 flex">
+                {keys?.map(({ label, accessor }) => (
+                  <div
+                    key={label}
+                    className={`p-4 text-left font-medium ${
+                      accessor === 'address' || accessor === 'reason'
+                        ? activeTab === PAST_APPOINTMENTS
+                          ? 'w-[30%]'
+                          : 'w-[25%]'
+                        : activeTab === PAST_APPOINTMENTS
+                        ? 'w-[20%]'
+                        : 'w-[15%]'
+                    }`}
+                  >
+                    {label}
+                  </div>
+                ))}
+              </div>
+              <div className="max-h-[calc(100vh-318px)] w-full overflow-y-auto">
+                {data?.map((items, index: number) => (
+                  <div
+                    key={items.id}
+                    className="bg-neutral0 group border-solid border-neutral200 hover:bg-neutral50 border-b flex"
+                  >
+                    {keys?.map(({ accessor, label }) => (
+                      <div
+                        key={accessor}
+                        className={`text-lRegular items-center rounded-b-[8px] space-x-2 p-[16px] text-left text-gray-800 flex  ${
+                          accessor === 'address' || accessor === 'reason'
+                            ? activeTab === PAST_APPOINTMENTS
+                              ? 'w-[30%]'
+                              : 'w-[25%]'
+                            : activeTab === PAST_APPOINTMENTS
+                            ? 'w-[20%]'
+                            : 'w-[15%]'
+                        }`}
+                      >
+                        {renderCellContent(label, accessor, items)}
+                      </div>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </div>
           ) : (
             !isLoading && (
               <div
