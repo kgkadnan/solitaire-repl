@@ -38,6 +38,14 @@ export const productApi = createApi({
         body: data
       }),
       invalidatesTags: ['Product']
+    }),
+    addDemand: builder.mutation({
+      query: data => ({
+        url: `/store/products/add-demand`,
+        method: 'POST',
+        body: data
+      }),
+      invalidatesTags: ['Product']
     })
   })
 });
@@ -48,5 +56,6 @@ export const {
   useGetProductCountQuery,
   useLazyGetProductCountQuery,
   useConfirmProductMutation,
-  useGetProductByIdMutation
+  useGetProductByIdMutation,
+  useAddDemandMutation
 } = productApi;

@@ -6,7 +6,10 @@ import React, { Dispatch, SetStateAction, useEffect } from 'react';
 import { Shape } from './components/shape';
 import { Carat } from './components/carat';
 import { Color } from './components/color';
-import { useGetProductCountQuery } from '@/features/api/product';
+import {
+  useAddDemandMutation,
+  useGetProductCountQuery
+} from '@/features/api/product';
 import useValidationStateManagement from '../hooks/validation-state-management';
 import { generateQueryParams } from './helpers/generate-query-parameters';
 import { Clarity } from './components/clarity';
@@ -24,8 +27,7 @@ import ActionButton from '@/components/v2/common/action-button';
 import { ManageLocales } from '@/utils/v2/translate';
 import { IActionButtonDataItem } from './interface/interface';
 import { handleReset } from './helpers/reset';
-
-import { parameter } from '@/constants/v2/form';
+import confirmIcon from '@public/v2/assets/icons/modal/confirm.svg';
 
 import {
   MAX_SEARCH_FORM_COUNT,
@@ -57,7 +59,6 @@ import bookmarkIcon from '@public/v2/assets/icons/modal/bookmark.svg';
 import { InputField } from '@/components/v2/common/input-field';
 import { isSearchAlreadyExist } from '../saved-search/helpers/handle-card-click';
 import { constructUrlParams } from '@/utils/v2/construct-url-params';
-import { handleNumericRange } from './helpers/handle-input-range-validation';
 
 export interface ISavedSearch {
   saveSearchName: string;
@@ -112,6 +113,7 @@ const Form = ({
 
   const [updateSavedSearch] = useUpdateSavedSearchMutation();
   let [addSavedSearch] = useAddSavedSearchMutation();
+  const [addDemandApi] = useAddDemandMutation();
 
   const {
     caratMax,
@@ -600,7 +602,39 @@ const Form = ({
     handleReset(setState, errorSetState);
   };
   const handleAddDemand = () => {
-    logger.info('Add demand');
+    const queryParams = generateQueryParams(state);
+    addDemandApi(queryParams)
+      .then(res => {
+        setIsDialogOpen(true);
+        setDialogContent(
+          <>
+            {' '}
+            <div className="absolute left-[-84px] top-[-84px]">
+              <Image src={confirmIcon} alt="confirmIcon" />
+            </div>
+            <div className="absolute bottom-[20px] flex flex-col gap-[15px] w-[352px]">
+              <div>
+                <h1 className="text-headingS text-neutral900"> Add Demand</h1>
+                <p className="text-neutral600 text-mRegular">Add Demand</p>
+              </div>
+              <ActionButton
+                actionButtonData={[
+                  {
+                    variant: 'primary',
+                    label: 'Okay',
+                    handler: () => {
+                      // router.push(`/v2/search?active-tab=${SubRoutes.RESULT}-1`);
+                      setIsDialogOpen(false);
+                    },
+                    customStyle: 'flex-1 h-10'
+                  }
+                ]}
+              />
+            </div>
+          </>
+        );
+      })
+      .catch(err => console.log(err));
   };
 
   let actionButtonData: IActionButtonDataItem[] = [
@@ -666,7 +700,7 @@ const Form = ({
     {
       variant: 'primary',
       // svg: errorText === NO_STONE_FOUND ? addDemand : searchIcon,
-      label: `${errorText === NO_STONE_FOUND ? 'Search' : 'Search'} `,
+      label: `${errorText === NO_STONE_FOUND ? 'Add Demand' : 'Search'} `,
       handler: errorText === NO_STONE_FOUND ? handleAddDemand : handleFormSearch
     }
   ];

@@ -25,7 +25,7 @@ import { resetPasswordApi } from './features/api/reset-password';
 import { currentIPApi } from './features/api/current-ip';
 import { forgotPasswordApi } from './features/api/forgot-password';
 import kycReducer from './features/kyc/kyc';
-import LogoutReducer, { hide } from './features/logout/logout-slice';
+import LogoutReducer from './features/logout/logout-slice';
 
 import { kycApi } from './features/api/kyc';
 import { otpVerificationApi } from './features/api/otp-verification';
@@ -83,6 +83,7 @@ const handle410Middleware =
   (storeAPI: any) => (next: any) => async (action: any) => {
     // try {
     const result = await next(action);
+    console.log(result, 'iiiiiiiiiiiiiii');
     if (result?.payload?.status === statusCode.LOGOUT) {
       storeAPI.dispatch(show()); // Dispatch action to show modal
     }
