@@ -19,6 +19,7 @@ import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
 import { Button } from '../../ui/button';
 import { SocketManager, useSocket } from '@/hooks/v2/socket-manager';
 import useUser from '@/lib/use-auth';
+import { kycStatus } from '@/constants/enums/kyc';
 
 interface ISideNavigationBar {
   src?: React.ReactNode;
@@ -29,7 +30,7 @@ interface ISideNavigationBar {
 const SideNavigationBar = () => {
   const currentRoute = usePathname();
   const currentSubRoute = useSearchParams().get('active-tab');
-
+  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   const [showPulse, setShowPulse] = useState(false);
 
   const router = useRouter();
@@ -159,7 +160,17 @@ const SideNavigationBar = () => {
         <div className="z-50 flex flex-col gap-2">
           {SideNavigationData.map((items: ISideNavigationBar) => {
             return (
-              <div className={` border-neutral200 `} key={items.title}>
+              <div
+                className={` border-neutral200 ${
+                  items.link === Routes.MY_APPOINTMENTS &&
+                  (isKycVerified?.customer?.kyc?.status ===
+                    kycStatus.INPROGRESS ||
+                    isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+                    ? '!cursor-not-allowed'
+                    : 'cursor-pointer'
+                }`}
+                key={items.title}
+              >
                 {items.link ? (
                   <Tooltip
                     tooltipContentSide="right"
@@ -177,10 +188,17 @@ const SideNavigationBar = () => {
                       >
                         <Button
                           onClick={() => router.push(items.link!)}
-                          className={
+                          className={`${
                             items.isActive
                               ? `bg-primaryMain p-[8px] rounded stroke-neutral25 `
                               : `p-[8px] stroke-primaryIconColor rounded hover:bg-neutral50 `
+                          } disabled:bg-neutral100`}
+                          disabled={
+                            items.link === Routes.MY_APPOINTMENTS &&
+                            (isKycVerified?.customer?.kyc?.status ===
+                              kycStatus.INPROGRESS ||
+                              isKycVerified?.customer?.kyc?.status ===
+                                kycStatus.REJECTED)
                           }
                         >
                           {items.src}

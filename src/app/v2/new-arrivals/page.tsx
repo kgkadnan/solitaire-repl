@@ -57,6 +57,7 @@ import BookAppointment from '../my-appointments/components/book-appointment/book
 import { HOLD_STATUS, MEMO_STATUS } from '@/constants/business-logic';
 import { AnyAaaaRecord } from 'dns';
 import { NO_STONES_AVAILABLE } from '@/constants/error-messages/compare-stone';
+import { kycStatus } from '@/constants/enums/kyc';
 
 const NewArrivals = () => {
   const [isDetailPage, setIsDetailPage] = useState(false);
@@ -66,6 +67,7 @@ const NewArrivals = () => {
   const [validImages, setValidImages] = useState<any>([]);
   const pathName = useSearchParams().get('path');
   const [isLoading, setIsLoading] = useState(false); // State to track loading
+  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
 
   const handleDetailPage = ({ row }: { row: any }) => {
     setIsDetailPage(true);
@@ -429,7 +431,11 @@ const NewArrivals = () => {
                   ),
                   handler: () => {
                     handleCreateAppointment();
-                  }
+                  },
+                  commingSoon:
+                    isKycVerified?.customer?.kyc?.status ===
+                      kycStatus.INPROGRESS ||
+                    isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED
                 }
               ]}
             />
@@ -524,7 +530,11 @@ const NewArrivals = () => {
                   ),
                   handler: () => {
                     handleCreateAppointment();
-                  }
+                  },
+                  commingSoon:
+                    isKycVerified?.customer?.kyc?.status ===
+                      kycStatus.INPROGRESS ||
+                    isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED
                 }
               ]}
             />
