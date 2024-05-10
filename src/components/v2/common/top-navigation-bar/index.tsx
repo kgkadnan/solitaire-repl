@@ -25,6 +25,8 @@ import {
 import resetAllApiStates from '@/utils/reset-all-state';
 import { DialogComponent } from '../dialog';
 import confirmIcon from '@public/v2/assets/icons/modal/confirm.svg';
+import logoutConfirmIcon from '@public/v2/assets/icons/modal/logout.svg';
+import crossIcon from '@public/v2/assets/icons/modal/cross.svg';
 
 interface IUserAccountInfo {
   customer: {
@@ -281,8 +283,25 @@ const TopNavigationBar = () => {
                   setModalContent(
                     <>
                       <div className="absolute left-[-84px] top-[-84px]">
-                        <Image src={confirmIcon} alt="confirmIcon" />
+                        <Image
+                          src={logoutConfirmIcon}
+                          alt="logoutConfirmIcon"
+                        />
                       </div>
+                      <div
+                        className="cursor-pointer"
+                        onClick={() => {
+                          setIsLogout(false);
+                        }}
+                      >
+                        {' '}
+                        <Image
+                          src={crossIcon}
+                          alt="crossIcon"
+                          className="absolute left-[360px] top-[15px]"
+                        />
+                      </div>
+
                       <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
                         <h1 className="text-headingS text-neutral900 !font-medium	">
                           Do you want to log out from all devices?
@@ -291,7 +310,7 @@ const TopNavigationBar = () => {
                           actionButtonData={[
                             {
                               variant: 'secondary',
-                              label: 'Log out from this device only.',
+                              label: 'Log out this device',
                               handler: () => {
                                 handleLogout();
                               },
@@ -299,7 +318,7 @@ const TopNavigationBar = () => {
                             },
                             {
                               variant: 'primary',
-                              label: 'Yes, log out from all devices.',
+                              label: 'Log out all devices',
                               handler: () => {
                                 handleLogoutAll();
                               },
