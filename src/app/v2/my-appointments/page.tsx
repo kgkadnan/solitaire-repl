@@ -96,7 +96,7 @@ const MyAppointments = () => {
   const getAppointment = () => {
     triggerMyAppointment({}).then(res => {
       setIsLoading(false);
-      let { history, upcoming } = res.data.data;
+      let { history, upcoming } = res && res.data && res.data.data;
       setUpcomingAppointments(upcoming);
       setPastAppointments(history);
     });
@@ -219,8 +219,6 @@ const MyAppointments = () => {
       stones: rescheduleData.stones
     });
   };
-
-  console.log('reschedule', rescheduleAppointmentData);
 
   const goBackToListView = () => {
     setRescheduleAppointmentData(undefined);
@@ -424,14 +422,18 @@ const MyAppointments = () => {
             />
           </div>
           {data?.length > 0 ? (
-            <div className={''}>
-              <div className="text-mMedium h-[47px] border-b border-neutral200 bg-neutral50 text-neutral700 flex">
+            <div className={'w-full'}>
+              <div className="text-mMedium w-full h-[47px] border-b border-neutral200 bg-neutral50 text-neutral700 flex">
                 {keys?.map(({ label, accessor }) => (
                   <div
                     key={label}
-                    className={`p-4 text-left font-medium  ${
+                    className={`p-4 text-left font-medium ${
                       accessor === 'address' || accessor === 'reason'
-                        ? 'w-[25%]'
+                        ? activeTab === PAST_APPOINTMENTS
+                          ? 'w-[30%]'
+                          : 'w-[25%]'
+                        : activeTab === PAST_APPOINTMENTS
+                        ? 'w-[20%]'
                         : 'w-[15%]'
                     }`}
                   >
@@ -439,7 +441,7 @@ const MyAppointments = () => {
                   </div>
                 ))}
               </div>
-              <div className="max-h-[calc(100vh-318px)] overflow-y-auto">
+              <div className="max-h-[calc(100vh-318px)] w-full overflow-y-auto">
                 {data?.map((items, index: number) => (
                   <div
                     key={items.id}
@@ -450,7 +452,11 @@ const MyAppointments = () => {
                         key={accessor}
                         className={`text-lRegular items-center rounded-b-[8px] space-x-2 p-[16px] text-left text-gray-800 flex  ${
                           accessor === 'address' || accessor === 'reason'
-                            ? 'w-[25%]'
+                            ? activeTab === PAST_APPOINTMENTS
+                              ? 'w-[30%]'
+                              : 'w-[25%]'
+                            : activeTab === PAST_APPOINTMENTS
+                            ? 'w-[20%]'
                             : 'w-[15%]'
                         }`}
                       >
