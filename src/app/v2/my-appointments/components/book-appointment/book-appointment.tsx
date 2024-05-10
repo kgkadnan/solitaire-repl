@@ -188,7 +188,7 @@ const BookAppointment: React.FC<IBookAppointment> = ({
                 />
               </div>
               <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                <p className="text-neutral600 text-mRegular">
+                <p className="text-headingS text-neutral900">
                   {error?.data?.message}
                 </p>
                 <ActionButton

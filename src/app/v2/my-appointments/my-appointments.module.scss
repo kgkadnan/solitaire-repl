@@ -6,3 +6,29 @@
     hsla(36, 100%, 95%, 1)
   );
 }
+
+
+
+.tableHeader {
+width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+.tableHeader tbody {
+  display: block;
+  width: 100%;
+  overflow: auto;
+  height: calc(100vh - 318px);
+}
+.tableHeader thead {
+  width: 100%;
+}
+.tableHeader thead tr {
+  display: block;
+}
+
+.tableHeader th,
+  .tableHeader td {
+    text-align: left;
+  // width: 300px;
+}
