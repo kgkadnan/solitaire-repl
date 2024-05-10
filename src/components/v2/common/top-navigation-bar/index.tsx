@@ -291,7 +291,7 @@ const TopNavigationBar = () => {
                           actionButtonData={[
                             {
                               variant: 'secondary',
-                              label: 'No',
+                              label: 'Log out from this device only.',
                               handler: () => {
                                 handleLogout();
                               },
@@ -299,7 +299,7 @@ const TopNavigationBar = () => {
                             },
                             {
                               variant: 'primary',
-                              label: 'Yes',
+                              label: 'Yes, log out from all devices.',
                               handler: () => {
                                 handleLogoutAll();
                               },
