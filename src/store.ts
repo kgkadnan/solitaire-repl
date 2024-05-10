@@ -81,25 +81,25 @@ const rootReducer = combineReducers({
 
 const handle410Middleware =
   (storeAPI: any) => (next: any) => async (action: any) => {
-    try {
-      const result = await next(action);
+    // try {
+    const result = await next(action);
 
-      if (result?.payload?.status === statusCode.LOGOUT) {
-        // const state = storeAPI.getState();
-        // const showModal = state.modal?.showModal;
-        // console.log(showModal,"called",result?.payload?.status)
+    if (result?.payload?.status === statusCode.LOGOUT) {
+      // const state = storeAPI.getState();
+      // const showModal = state.modal?.showModal;
+      // console.log(showModal,"called",result?.payload?.status)
 
-        // // If showModal is false, dispatch the show action
-        // if (!showModal) {
-        //   storeAPI.dispatch(show());
-        // }
-        console.log('jjijij');
-        storeAPI.dispatch(show()); // Dispatch action to show modal
-      }
-      return result;
-    } catch (error) {
-      throw error;
+      // // If showModal is false, dispatch the show action
+      // if (!showModal) {
+      //   storeAPI.dispatch(show());
+      // }
+      console.log('jjijij');
+      storeAPI.dispatch(show()); // Dispatch action to show modal
     }
+    return result;
+    // } catch (error) {
+    //   throw error;
+    // }
   };
 
 export default handle410Middleware;

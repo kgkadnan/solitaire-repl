@@ -69,7 +69,9 @@ const authorizedLogin = (WrappedComponent: React.ComponentType) => {
               <InvalidCreds
                 header="Session expired! You have been logged out of all devices. Please log in again."
                 content={''}
-                handleClick={() => setOpen(false)}
+                handleClick={() => {
+                  userLoggedOut(), router.push('/v2/login'), setOpen(false);
+                }}
                 buttonText="Okay"
               />
             }
