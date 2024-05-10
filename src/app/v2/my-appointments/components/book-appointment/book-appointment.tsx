@@ -423,12 +423,11 @@ const BookAppointment: React.FC<IBookAppointment> = ({
                               disabled={!values[index].isAvailable}
                               className={` w-[86px] text-sMobileRegular  rounded-[4px] p-[8px]
                               ${
-                                values[index].isAvailable
-                                  ? selectedSlot ===
-                                    values[index].datetimeString
-                                    ? 'bg-primaryMain text-neutral0'
-                                    : 'bg-neutral50 text-neutral700'
-                                  : 'bg-neutral100 text-neutral400 cursor-not-allowed'
+                                selectedSlot === values[index].datetimeString
+                                  ? 'bg-primaryMain text-neutral0'
+                                  : !values[index].isAvailable
+                                  ? 'bg-neutral100 text-neutral400 cursor-not-allowed'
+                                  : 'bg-neutral50 text-neutral700'
                               }`}
                               onClick={() => {
                                 handleSelectSlot({
