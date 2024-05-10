@@ -18,6 +18,7 @@ import Head from 'next/head';
 import AppDownloadPopup from '@/components/v2/common/alert-pop-for-mobile';
 import InvalidCreds from './v2/login/component/invalid-creds';
 import { DialogComponent } from '@/components/v2/common/dialog';
+import { useAppSelector } from '@/hooks/hook';
 
 const store = setupStore();
 
