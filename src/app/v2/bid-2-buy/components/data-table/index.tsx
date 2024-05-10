@@ -396,7 +396,8 @@ const BidToByDataTable = ({
     >
       {(activeTab === 1 && activeCount === 0) ||
       (activeTab === 0 && bidCount === 0) ||
-      (activeTab === 2 && historyCount === 0) ? (
+      (activeTab === 2 && historyCount === 0) ||
+      rows.length === 0 ? (
         <>
           <Image src={empty} alt={'empty'} />
           <p className="text-neutral900  w-[350px] text-center ">
