@@ -94,9 +94,7 @@ const BookAppointment: React.FC<IBookAppointment> = ({
 
     if (lotIds?.length) {
       setStones(lotIds);
-      let createComment = `I want to know more about ${lotIds.map(
-        lotId => lotId
-      )}`;
+      let createComment = `I want to know more about ${lotIds.join(', ')}`;
       setComment(createComment);
       setSelectedDate(Number(timeSlots.dates[0].date));
       setLocation(storeAddresses);
@@ -319,7 +317,9 @@ const BookAppointment: React.FC<IBookAppointment> = ({
             </button>
             <span className="text-neutral600">/</span>
             <p className="text-neutral700 p-[8px] bg-neutral100 rounded-[4px] text-sMedium font-medium">
-              Book Appointment
+              {hasDataOnRescheduleAppointment()
+                ? ManageLocales('app.myAppointments.rescheduleAppointments')
+                : 'Book Appointment'}
             </p>
           </div>
         </div>
@@ -327,13 +327,13 @@ const BookAppointment: React.FC<IBookAppointment> = ({
       <div className="flex justify-center mt-[16px]">
         <div className="rounded-[4px] w-[571px]">
           {/* kam and location  */}
-          <div className="flex bg-neutral50 p-[16px] rounded-[4px] gap-4">
+          <div className="flex bg-neutral50 py-[8px] px-[16px] rounded-[4px] gap-4">
             {/* Contact & Mode */}
-            <div className="flex flex-col gap-1 w-[250px]">
+            <div className="flex flex-col gap-1 w-[250px] ">
               <h3 className="text-sMedium text-neutral900 font-medium">
                 Contact & Mode
               </h3>
-              <div className="flex items-center h-[72px] gap-3 border-solid border-[1px] p-[16px] border-neutral200 rounded-[4px] shadow-sm">
+              <div className="flex items-center bg-neutral0 h-[72px] gap-3 border-solid border-[1px] p-[16px] border-neutral200 rounded-[4px] shadow-sm">
                 <Avatar className="flex items-center justify-center text-center bg-primaryMain text-mRegular text-neutral0">
                   {kam?.kam_image ? (
                     <Image src={avatar} alt="avatar" />
@@ -350,11 +350,11 @@ const BookAppointment: React.FC<IBookAppointment> = ({
               </div>
             </div>
             {/* Location */}
-            <div className="flex flex-col gap-1 w-[350px]">
+            <div className="flex flex-col gap-1 w-[350px] ">
               <h3 className="text-sMedium text-neutral900 font-medium">
                 Location
               </h3>
-              <div className="flex items-center h-[72px] gap-3 border-solid border-[1px] p-[16px] border-neutral200 rounded-[4px] shadow-sm">
+              <div className="flex items-center bg-neutral0 h-[72px] gap-3 border-solid border-[1px] p-[16px] border-neutral200 rounded-[4px] shadow-sm">
                 <Image src={locationSvg} alt="locationSvg" />
                 <div className="text-neutral900 text-sRegular font-normal">
                   {location[0] ?? '-'}
@@ -363,8 +363,10 @@ const BookAppointment: React.FC<IBookAppointment> = ({
             </div>
           </div>
           {/* select data */}
-          <div className="text-neutral900 p-[16px] font-normal text-sMedium">
-            <div>Select date</div>
+          <div className=" p-[16px]">
+            <div className="text-sMedium text-neutral900 font-medium">
+              Select date*
+            </div>
             <div className="flex justify-between bg-neutral0 p-[8px] rounded-[4px]">
               {dates.map(date => {
                 return (
@@ -389,9 +391,9 @@ const BookAppointment: React.FC<IBookAppointment> = ({
             </div>
           </div>
           {/* Select Time Slot */}
-          <div className="p-[16px] flex flex-col gap-1 w-full">
-            <div className="text-neutral900  font-normal text-sMedium">
-              Select Time Slot
+          <div className="px-[16px] flex flex-col gap-1 w-full">
+            <div className="text-sMedium text-neutral900 font-medium">
+              Select time slot*
             </div>
             <div className="flex justify-between gap-[49px]">
               {slots &&
@@ -410,7 +412,7 @@ const BookAppointment: React.FC<IBookAppointment> = ({
                         key === 'Morning' ? 'w-[40%]' : 'w-[60%]'
                       }`}
                     >
-                      <div className="text-sMobileRegular text-neutral800 capitalize">
+                      <div className="text-sMobileRegular font-medium text-neutral800 capitalize">
                         {key}
                       </div>
                       <div className="flex flex-wrap gap-2 bg-neutral0 rounded-[4px] p-[8px]">
@@ -445,9 +447,9 @@ const BookAppointment: React.FC<IBookAppointment> = ({
             </div>
           </div>
           {/* Add Comment */}
-          <div className="p-[16px]">
-            <div className="text-neutral900  font-normal text-sMedium">
-              Add Comment
+          <div className="px-[16px] py-[8px]">
+            <div className="text-sMedium text-neutral900 font-medium">
+              Add comment
             </div>
             <div>
               <textarea
@@ -473,7 +475,8 @@ const BookAppointment: React.FC<IBookAppointment> = ({
                 hasDataOnRescheduleAppointment()
                   ? handleRescheduleAppointment()
                   : handleAddMyAppointment();
-              }
+              },
+              isDisable: !selectedSlot.length
             }
           ]}
         />
