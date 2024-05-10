@@ -55,7 +55,6 @@ import {
 } from '@/constants/error-messages/confirm-stone';
 import BookAppointment from '../my-appointments/components/book-appointment/book-appointment';
 import { HOLD_STATUS, MEMO_STATUS } from '@/constants/business-logic';
-import { AnyAaaaRecord } from 'dns';
 import { NO_STONES_AVAILABLE } from '@/constants/error-messages/compare-stone';
 import { kycStatus } from '@/constants/enums/kyc';
 
@@ -266,6 +265,7 @@ const NewArrivals = () => {
           buttonText="Okay"
         />
       );
+      // setIsLoading(false)
     }
   }, []);
 
