@@ -156,6 +156,9 @@ const Dashboard = () => {
   const [isDiamondDetail, setIsDiamondDetail] = useState(false);
 
   const [timeLeftForVolumeDiscount, setTimeLeftForVolumeDiscount] = useState();
+
+  let isNudge = localStorage.getItem('show-nudge') === 'MINI';
+  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   const { errorSetState } = useErrorStateManagement();
   const { setIsError } = errorSetState;
 
@@ -191,6 +194,9 @@ const Dashboard = () => {
       color: optionsClasses[3],
       count: customerData?.customer?.upcoming_appointments_count,
       isAvailable: true,
+      isKycNotVerified:
+        isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+        isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED,
       link: '/v2/my-appointments'
     }
   ];
@@ -751,8 +757,6 @@ const Dashboard = () => {
   //     });
   // };
 
-  let isNudge = localStorage.getItem('show-nudge') === 'MINI';
-  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   const [getProductById] = useGetProductByIdMutation();
   const [addCart] = useAddCartMutation();
   const [confirmProduct] = useConfirmProductMutation();
@@ -1638,11 +1642,17 @@ const Dashboard = () => {
               {options.map((data, index) => (
                 <div
                   className={`border-[1px] border-neutral200 p-[24px] flex rounded-[8px] w-full gap-4 hover:border-accentTeal shadow-sm ${
-                    data.isAvailable ? 'cursor-pointer' : 'cursor-default'
+                    data.isKycNotVerified
+                      ? 'cursor-not-allowed'
+                      : data.isAvailable
+                      ? 'cursor-pointer'
+                      : 'cursor-default'
                   }`}
                   key={index}
                   onClick={
-                    data.isAvailable
+                    data.isKycNotVerified
+                      ? () => {}
+                      : data.isAvailable
                       ? () => {
                           router.push(data.link);
                         }

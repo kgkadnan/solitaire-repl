@@ -1179,13 +1179,6 @@ const Result = ({
               dropdownMenu={[
                 {
                   label: ManageLocales(
-                    'app.search.actionButton.bookAppointment'
-                  ),
-                  handler: () => {},
-                  commingSoon: true
-                },
-                {
-                  label: ManageLocales(
                     'app.search.actionButton.findMatchingPair'
                   ),
                   handler: () => {},
