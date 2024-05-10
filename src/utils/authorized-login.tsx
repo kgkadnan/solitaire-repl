@@ -7,6 +7,9 @@ import { v2Routes } from '@/constants/routes';
 import SideNavigationBar from '@/components/v2/common/side-navigation-bar';
 import V2TopNavigationBar from '@/components/v2/common/top-navigation-bar';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
+import { useAppSelector } from '@/hooks/hook';
+import { DialogComponent } from '@/components/v2/common/dialog';
+import InvalidCreds from '@/app/v2/login/component/invalid-creds';
 
 const authorizedLogin = (WrappedComponent: React.ComponentType) => {
   const Wrapper: React.FC<any> = props => {
@@ -17,7 +20,12 @@ const authorizedLogin = (WrappedComponent: React.ComponentType) => {
     const [isAuthorized, setIsAuthorized] = useState(false);
     const [isLoading, setIsLoading] = useState(true); // New loading state
     const [showKycNudge, setShowKycNudge] = useState(false);
+    const logoutFlag: any = useAppSelector(
+      (store: any) => store.logoutAll.showModal
+    );
+    const [open, setOpen] = useState(false);
 
+    console.log(logoutFlag, 'ooooo');
     useEffect(() => {
       // Check if the user is KYC verified
       const showNudge = localStorage.getItem('show-nudge') ?? 'FULL'; // Replace with actual check
@@ -32,6 +40,9 @@ const authorizedLogin = (WrappedComponent: React.ComponentType) => {
         setShowKycNudge(true);
       }
     }, []);
+    useEffect(() => {
+      setOpen(logoutFlag);
+    }, [logoutFlag]);
     useEffect(() => {
       setIsLoading(true);
       if (authToken === null && isTokenChecked) {
@@ -53,6 +64,18 @@ const authorizedLogin = (WrappedComponent: React.ComponentType) => {
     return isAuthorized ? (
       isV2Route ? (
         <div>
+          <DialogComponent
+            dialogContent={
+              <InvalidCreds
+                header="Session expired! You have been logged out of all devices. Please log in again."
+                content={''}
+                handleClick={() => setOpen(false)}
+                buttonText="Okay"
+              />
+            }
+            isOpens={open}
+            setIsOpen={setOpen}
+          />
           <div className="flex w-full">
             <SideNavigationBar />
 

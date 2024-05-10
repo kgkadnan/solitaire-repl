@@ -18,8 +18,13 @@ import useUser from '@/lib/use-auth';
 import Notification from './components/notification/notification';
 import { useLazyGetProfilePhotoQuery } from '@/features/api/my-account';
 import { useAppSelector } from '@/hooks/hook';
-import { useLazyGetLogoutQuery } from '@/features/api/dashboard';
+import {
+  useLazyGetLogoutAllQuery,
+  useLazyGetLogoutQuery
+} from '@/features/api/dashboard';
 import resetAllApiStates from '@/utils/reset-all-state';
+import { DialogComponent } from '../dialog';
+import confirmIcon from '@public/v2/assets/icons/modal/confirm.svg';
 
 interface IUserAccountInfo {
   customer: {
@@ -50,9 +55,13 @@ const TopNavigationBar = () => {
   const [showNudge, setShowNudge] = useState(
     localStorage.getItem('show-nudge')
   );
+  const [isLogout, setIsLogout] = useState<boolean>(false);
   const [triggerGetProfilePhoto] = useLazyGetProfilePhotoQuery({});
   const [triggerLogout] = useLazyGetLogoutQuery({});
+  const [triggerLogoutAll] = useLazyGetLogoutAllQuery({});
+  const [logoutMode, setLogoutMode] = useState<string>('');
   const { userLoggedOut } = useUser();
+  const [modalContent, setModalContent] = useState<any>();
   const [userAccountInfo, setUserAccountInfo] = useState<IUserAccountInfo>();
   // const showNudge = localStorage.getItem('show-nudge'); // Replace with actual check
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
@@ -95,17 +104,84 @@ const TopNavigationBar = () => {
     getPhoto();
   }, [updatePhoto?.status]);
 
-  const handleLogout = () => {
+  const handleLogoutAll = () => {
     resetAllApiStates();
-    triggerLogout({})
+    triggerLogoutAll({})
       .then(res => {
-        router.push('/v2/login'), userLoggedOut();
+        setLogoutMode('logoutAll');
+        setModalContent(
+          <>
+            <div className="absolute left-[-84px] top-[-84px]">
+              <Image src={confirmIcon} alt="confirmIcon" />
+            </div>
+            <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+              <h1 className="text-headingS text-neutral900 !font-medium	">
+                You have been logged out from all devices successfully.
+              </h1>
+              <ActionButton
+                actionButtonData={[
+                  {
+                    variant: 'primary',
+                    label: 'Okay',
+                    handler: () => {
+                      userLoggedOut(),
+                        router.push('/v2/login'),
+                        setIsLogout(false);
+                    },
+                    customStyle: 'flex-1 w-full h-10'
+                  }
+                ]}
+              />
+            </div>
+          </>
+        );
+        //
       })
       .catch(err => console.log('error'));
   };
 
+  const handleLogout = () => {
+    resetAllApiStates();
+    triggerLogout({})
+      .then(res => {
+        setLogoutMode('logout');
+        setModalContent(
+          <>
+            <div className="absolute left-[-84px] top-[-84px]">
+              <Image src={confirmIcon} alt="confirmIcon" />
+            </div>
+            <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+              <h1 className="text-headingS text-neutral900 !font-medium	">
+                You have been logged out from this device successfully.
+              </h1>
+              <ActionButton
+                actionButtonData={[
+                  {
+                    variant: 'primary',
+                    label: 'Okay',
+                    handler: () => {
+                      userLoggedOut(),
+                        router.push('/v2/login'),
+                        setIsLogout(false);
+                    },
+                    customStyle: 'flex-1 w-full h-10'
+                  }
+                ]}
+              />
+            </div>
+          </>
+        );
+        // router.push('/v2/login'), userLoggedOut();
+      })
+      .catch(err => console.log('error'));
+  };
   return (
     <div className="min-h-[60px] border-b-[1px] border-neutral200 sticky top-0 bg-neutral0 z-[3] flex flex-col justify-end ">
+      <DialogComponent
+        dialogContent={modalContent}
+        isOpens={isLogout}
+        setIsOpen={setIsLogout}
+      />
       {showNudge === 'MINI' &&
         (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
           isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED) &&
@@ -201,7 +277,39 @@ const TopNavigationBar = () => {
               <button
                 className="flex w-full items-center border-b-[1px] border-solid border-primaryBorder p-[16px] gap-[8px] cursor-pointer hover:bg-slate-50 "
                 onClick={() => {
-                  handleLogout();
+                  setIsLogout(true);
+                  setModalContent(
+                    <>
+                      <div className="absolute left-[-84px] top-[-84px]">
+                        <Image src={confirmIcon} alt="confirmIcon" />
+                      </div>
+                      <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+                        <h1 className="text-headingS text-neutral900 !font-medium	">
+                          Do you want to log out from all devices?
+                        </h1>
+                        <ActionButton
+                          actionButtonData={[
+                            {
+                              variant: 'secondary',
+                              label: 'No',
+                              handler: () => {
+                                handleLogout();
+                              },
+                              customStyle: 'flex-1 w-full h-10'
+                            },
+                            {
+                              variant: 'primary',
+                              label: 'Yes',
+                              handler: () => {
+                                handleLogoutAll();
+                              },
+                              customStyle: 'flex-1 w-full h-10'
+                            }
+                          ]}
+                        />
+                      </div>
+                    </>
+                  );
                 }}
               >
                 <Image src={logoutIcon} alt="logoutIcon" />

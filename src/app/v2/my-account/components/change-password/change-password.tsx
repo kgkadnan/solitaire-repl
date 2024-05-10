@@ -155,15 +155,16 @@ const ChangePassword = ({ modalSetState }: any) => {
             </div>
             <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
               <div>
-                <h1 className="text-headingS text-neutral900">
-                  Your password has been changed successfully
+                <h1 className="text-headingS text-neutral900 font-medium">
+                  Password reset successful. For security, you were logged out
+                  from all devices.{' '}
                 </h1>
               </div>
               <ActionButton
                 actionButtonData={[
                   {
-                    variant: 'secondary',
-                    label: ManageLocales('app.modal.login'),
+                    variant: 'primary',
+                    label: 'Okay',
                     handler: () => {
                       router.push('/v2/login');
                     },

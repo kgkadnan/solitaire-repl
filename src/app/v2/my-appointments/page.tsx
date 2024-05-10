@@ -94,7 +94,7 @@ const MyAppointments = () => {
   const getAppointment = () => {
     triggerMyAppointment({}).then(res => {
       setIsLoading(false);
-      let { history, upcoming } = res.data.data;
+      let { history, upcoming } = res?.data?.data;
       setUpcomingAppointments(upcoming);
       setPastAppointments(history);
     });

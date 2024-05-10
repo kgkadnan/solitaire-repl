@@ -20,7 +20,7 @@ export const manageListingSequenceApi = createApi({
         url: `/store/account/customer-manage-listing-sequence`,
         method: 'GET'
       }),
-      keepUnusedDataFor: 0,
+      // keepUnusedDataFor: 0,
       providesTags: ['manageListingSequence']
     })
   })

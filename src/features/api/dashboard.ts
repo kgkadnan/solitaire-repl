@@ -19,8 +19,11 @@ export const dashboardApi = createApi({
     getBidToBuyHistory: builder.query({
       query: () => `store/customers/me/bidtobuy-history`
     }),
-    getLogout: builder.query({
+    getLogoutAll: builder.query({
       query: () => `store/customers/me/logout-all`
+    }),
+    getLogout: builder.query({
+      query: () => `store/customers/me/logout`
     })
   })
 });
@@ -29,5 +32,6 @@ export const {
   useGetBidHistoryQuery,
   useGetBidToBuyHistoryQuery,
   useLazyGetBidToBuyHistoryQuery,
+  useLazyGetLogoutAllQuery,
   useLazyGetLogoutQuery
 } = dashboardApi;
