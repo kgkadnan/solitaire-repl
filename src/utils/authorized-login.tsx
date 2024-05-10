@@ -41,6 +41,7 @@ const authorizedLogin = (WrappedComponent: React.ComponentType) => {
         setShowKycNudge(true);
       }
     }, []);
+    console.log(logoutFlag, 'logoutFlag');
     useEffect(() => {
       setOpen(logoutFlag);
       // dispatch(hide())
@@ -72,10 +73,10 @@ const authorizedLogin = (WrappedComponent: React.ComponentType) => {
                 header="Session expired! You have been logged out of all devices. Please log in again."
                 content={''}
                 handleClick={() => {
-                  userLoggedOut(),
+                  dispatch(hide()),
+                    userLoggedOut(),
                     router.push('/v2/login'),
-                    setOpen(false),
-                    dispatch(hide());
+                    setOpen(false);
                 }}
                 buttonText="Okay"
               />
