@@ -72,14 +72,41 @@ const FileAttachments: React.FC<IFileAttachments> = ({
     maxFiles: maxFile
   });
 
+  function extractBytesFromMessage(message: string) {
+    // Extract the bytes portion from the message string
+    const regex = /(\d+) bytes/;
+    const match = message.match(regex);
+    if (match && match[1]) {
+      return parseInt(match[1], 10);
+    }
+    return 0;
+  }
+
   useEffect(() => {
     if (fileRejections?.length) {
-      dispatch(
-        updateFormState({
-          name: `formErrorState.attachment[${formKey}]`,
-          value: fileRejections[0].errors[0].code
-        })
-      );
+      console.log('fileRejections', fileRejections);
+      if (fileRejections[0].errors[0].code === 'file-too-large') {
+        const bytes = extractBytesFromMessage(
+          fileRejections[0].errors[0].message
+        );
+
+        dispatch(
+          updateFormState({
+            name: `formErrorState.attachment[${formKey}]`,
+            value: `File is too big.You can upload files upto ${(
+              bytes /
+              (1024 * 1024)
+            ).toFixed(0)}MB`
+          })
+        );
+      } else {
+        dispatch(
+          updateFormState({
+            name: `formErrorState.attachment[${formKey}]`,
+            value: fileRejections[0].errors[0].code
+          })
+        );
+      }
     }
   }, [fileRejections]);
 
