@@ -83,7 +83,6 @@ const handle410Middleware =
   (storeAPI: any) => (next: any) => async (action: any) => {
     // try {
     const result = await next(action);
-    console.log(result, 'iiiiiiiiiiiiiii');
     if (result?.payload?.status === statusCode.LOGOUT) {
       storeAPI.dispatch(show()); // Dispatch action to show modal
     }
