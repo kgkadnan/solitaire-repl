@@ -43,11 +43,10 @@ const authorizedLogin = (WrappedComponent: React.ComponentType) => {
     }, []);
     console.log(logoutFlag, 'logoutFlag');
     useEffect(() => {
+      dispatch(hide()), setOpen(false);
+    }, []);
+    useEffect(() => {
       setOpen(logoutFlag);
-      // dispatch(hide())
-      return () => {
-        dispatch(hide()), setOpen(false);
-      };
     }, [logoutFlag]);
     useEffect(() => {
       setIsLoading(true);

@@ -107,7 +107,7 @@ const TopNavigationBar = () => {
   }, [updatePhoto?.status]);
 
   const handleLogoutAll = () => {
-    resetAllApiStates();
+    // resetAllApiStates();
     triggerLogoutAll({})
       .then(res => {
         setLogoutMode('logoutAll');
@@ -143,7 +143,7 @@ const TopNavigationBar = () => {
   };
 
   const handleLogout = () => {
-    resetAllApiStates();
+    // resetAllApiStates();
     triggerLogout({})
       .then(res => {
         setLogoutMode('logout');
