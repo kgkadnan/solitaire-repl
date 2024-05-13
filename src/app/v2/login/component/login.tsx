@@ -30,9 +30,9 @@ const LoginComponent = ({
   const router = useRouter();
   const pathName = useSearchParams().get('path');
 
-  const handleSubmit = async (event: any) => {
+  const handleSubmit = (event: any) => {
     event.preventDefault(); // Prevent default form submission behavior
-    await resetAllApiStates();
+    // await resetAllApiStates();
     handleLogin(); // Your login handler
   };
 
