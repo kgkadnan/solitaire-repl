@@ -178,6 +178,10 @@ const ForgotPassword = () => {
         isOpens={isDialogOpen}
         setIsOpen={setIsDialogOpen}
         data-testid={'success-indicator'}
+        dialogStyle={{
+          dialogContent:
+            currentState === 'resetPassword' ? 'min-h-[250px]' : 'min-h-[222px]'
+        }}
       />
 
       <UserAuthenticationLayout

@@ -9,3 +9,5 @@ export const SOME_STONES_NOT_AVAILABLE =
 
 export const TITLE_ALREADY_EXISTS =
   'Title already exists. Choose another title to save your search';
+
+export const PLEASE_SELECT_A_TIME_SLOT = 'Please select a time slot';

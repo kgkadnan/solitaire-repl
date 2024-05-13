@@ -100,6 +100,16 @@ interface ITabs {
   data: any;
 }
 
+function formatDate(dateString: string): string {
+  const date = new Date(dateString);
+  const options: Intl.DateTimeFormatOptions = {
+    weekday: 'long',
+    month: 'short',
+    day: 'numeric'
+  };
+  return date.toLocaleDateString('en-US', options);
+}
+
 function formatDateString(dateString: string) {
   const date = new Date(dateString);
   const day = date.getDate();
@@ -111,7 +121,7 @@ const Dashboard = () => {
   const dispatch = useDispatch();
 
   const { data: customerData, refetch: refetchCustomerData } =
-    useGetCustomerQuery({});
+    useGetCustomerQuery({}, { refetchOnMountOrArgChange: true });
   const [validImages, setValidImages] = useState<any>([]);
   const [activeTab, setActiveTab] = useState<string>('');
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
@@ -146,6 +156,9 @@ const Dashboard = () => {
   const [isDiamondDetail, setIsDiamondDetail] = useState(false);
 
   const [timeLeftForVolumeDiscount, setTimeLeftForVolumeDiscount] = useState();
+
+  let isNudge = localStorage.getItem('show-nudge') === 'MINI';
+  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   const { errorSetState } = useErrorStateManagement();
   const { setIsError } = errorSetState;
 
@@ -180,8 +193,11 @@ const Dashboard = () => {
       label: 'My Appointments',
       icon: <AppointmentIcon />,
       color: optionsClasses[3],
-      count: 0,
+      count: customerData?.customer?.upcoming_appointments_count,
       isAvailable: false,
+      isKycNotVerified:
+        isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+        isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED,
       link: '/v2/my-appointments'
     }
   ];
@@ -478,7 +494,7 @@ const Dashboard = () => {
     }
   ];
   useEffect(() => {
-    !customerData && setIsLoading(true);
+    // !customerData && setIsLoading(true);
     refetchCustomerData();
   }, []);
 
@@ -832,8 +848,6 @@ const Dashboard = () => {
   //     });
   // };
 
-  let isNudge = localStorage.getItem('show-nudge') === 'MINI';
-  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   const [getProductById] = useGetProductByIdMutation();
   const [addCart] = useAddCartMutation();
   const [confirmProduct] = useConfirmProductMutation();
@@ -1486,17 +1500,7 @@ const Dashboard = () => {
             modalSetState={modalSetState}
             setIsLoading={setIsLoading}
           />
-          <div className="p-[16px] flex justify-end items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow mb-1">
-            {/* {isError && (
-              <div>
-                <span className="hidden  text-successMain" />
-                <span
-                  className={`text-mRegular font-medium text-dangerMain pl-[8px]`}
-                >
-                  {errorText}
-                </span>
-              </div>
-            )} */}
+          <div className="p-[8px] flex justify-end items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow mb-1">
             <ActionButton
               actionButtonData={[
                 {
@@ -1729,11 +1733,17 @@ const Dashboard = () => {
               {options.map((data, index) => (
                 <div
                   className={`border-[1px] border-neutral200 p-[24px] flex rounded-[8px] w-full gap-4 hover:border-accentTeal shadow-sm ${
-                    data.isAvailable ? 'cursor-pointer' : 'cursor-default'
+                    data.isKycNotVerified
+                      ? 'cursor-not-allowed'
+                      : data.isAvailable
+                      ? 'cursor-pointer'
+                      : 'cursor-default'
                   }`}
                   key={index}
                   onClick={
-                    data.isAvailable
+                    data.isKycNotVerified
+                      ? () => {}
+                      : data.isAvailable
                       ? () => {
                           router.push(data.link);
                         }
@@ -1751,7 +1761,7 @@ const Dashboard = () => {
                     <div className="flex justify-between items-baseline">
                       <p className="text-neutral600 text-mRegular">
                         {data.label}
-                        {/* {data.label === 'My Appointments' && `(${0})`} */}
+                        {/* {data.label === 'My Appointments' && `(${data.count})`} */}
                       </p>
                       {data.label === 'Bid to Buy' &&
                         (!data?.start_at && data?.count > 0 ? (
@@ -1797,13 +1807,23 @@ const Dashboard = () => {
                           )
                         )}
                       </>
-                    ) : (
-                      // data.label === 'My Appointments' ? (
-                      //   <p className="text-headingS text-infoMain  underline">
-                      //     Book Now
-                      //   </p>
-                      // )
-                      //  :
+                    ) : 
+                    // data.label === 'My Appointments' ? (
+                    //   data.count > 0 ? (
+                    //     <p className="text-headingS text-neutral900  font-medium">
+                    //       {formatDate(
+                    //         customerData?.customer?.latest_appointment
+                    //           ?.appointment_at
+                    //       )}
+                    //     </p>
+                    //   ) : (
+                    //     <p className="text-headingS text-infoMain  underline font-medium">
+                    //       Book Now
+                    //     </p>
+                    //   )
+                    // ) : 
+                    (
+                     
                       <p
                         className={`text-neutral900 text-headingS font-medium `}
                       >

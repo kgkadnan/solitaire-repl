@@ -25,6 +25,8 @@ import { resetPasswordApi } from './features/api/reset-password';
 import { currentIPApi } from './features/api/current-ip';
 import { forgotPasswordApi } from './features/api/forgot-password';
 import kycReducer from './features/kyc/kyc';
+import LogoutReducer, { hide } from './features/logout/logout-slice';
+
 import { kycApi } from './features/api/kyc';
 import { otpVerificationApi } from './features/api/otp-verification';
 import { verifyEmailApi } from './features/api/verify-email';
@@ -37,6 +39,8 @@ import { myAccountApi } from './features/api/my-account';
 import { newNotificationApi } from './features/api/notification/notification';
 import { faqsApi } from './features/api/faqs';
 import { myAppointmentApi } from './features/api/my-appointments';
+import { statusCode } from './constants/enums/status-code';
+import { show } from './features/logout/logout-slice';
 
 const rootReducer = combineReducers({
   notificationBadge: notificationBadgeReducer,
@@ -46,6 +50,7 @@ const rootReducer = combineReducers({
   searchList: searchListReducer,
   savedSearch: savedSearchReducer,
   kyc: kycReducer,
+  logoutAll: LogoutReducer,
   [downloadExcelApi.reducerPath]: downloadExcelApi.reducer,
   [currentIPApi.reducerPath]: currentIPApi.reducer,
   [manageListingSequenceApi.reducerPath]: manageListingSequenceApi.reducer,
@@ -73,6 +78,20 @@ const rootReducer = combineReducers({
   [faqsApi.reducerPath]: faqsApi.reducer,
   [myAppointmentApi.reducerPath]: myAppointmentApi.reducer
 });
+
+const handle410Middleware =
+  (storeAPI: any) => (next: any) => async (action: any) => {
+    // try {
+    const result = await next(action);
+    console.log(result?.payload?.status, '-------------------->');
+    if (result?.payload?.status === statusCode.LOGOUT) {
+      storeAPI.dispatch(show()); // Dispatch action to show modal
+    }
+
+    return result;
+  };
+
+export default handle410Middleware;
 
 export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
   return configureStore({
@@ -105,11 +124,13 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
         myAccountApi.middleware,
         newNotificationApi.middleware,
         faqsApi.middleware,
-        myAppointmentApi.middleware
+        myAppointmentApi.middleware,
+        handle410Middleware
       ),
     preloadedState
   });
 };
+// setupListeners(store.dispatch);
 
 export type RootState = ReturnType<typeof rootReducer>;
 export type AppStore = ReturnType<typeof setupStore>;
