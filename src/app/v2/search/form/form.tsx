@@ -82,7 +82,8 @@ const Form = ({
   setDialogContent,
   addSearches,
   setAddSearches,
-  setIsLoading
+  setIsLoading,
+  setIsAddDemand
 }: {
   searchUrl: String;
   setSearchUrl: Dispatch<SetStateAction<string>>;
@@ -101,6 +102,7 @@ const Form = ({
   addSearches: any;
   setAddSearches: any;
   setIsLoading: any;
+  setIsAddDemand: Dispatch<SetStateAction<boolean>>;
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -602,9 +604,13 @@ const Form = ({
     handleReset(setState, errorSetState);
   };
   const handleAddDemand = () => {
+    setIsLoading(true);
+    setIsAddDemand(true);
     const queryParams = generateQueryParams(state);
     addDemandApi(queryParams)
       .then(res => {
+        setIsLoading(false);
+
         setIsDialogOpen(true);
         setDialogContent(
           <>
@@ -614,8 +620,11 @@ const Form = ({
             </div>
             <div className="absolute bottom-[20px] flex flex-col gap-[15px] w-[352px]">
               <div>
-                <h1 className="text-headingS text-neutral900"> Add Demand</h1>
-                <p className="text-neutral600 text-mRegular">Add Demand</p>
+                <h1 className="text-headingS text-neutral900 font-medium">
+                  {' '}
+                  Thank you for submitting your demand! Your request has been
+                  successfully received by our sales team.
+                </h1>
               </div>
               <ActionButton
                 actionButtonData={[
@@ -623,7 +632,9 @@ const Form = ({
                     variant: 'primary',
                     label: 'Okay',
                     handler: () => {
-                      // router.push(`/v2/search?active-tab=${SubRoutes.RESULT}-1`);
+                      handleFormReset();
+                      setIsAddDemand(false);
+
                       setIsDialogOpen(false);
                     },
                     customStyle: 'flex-1 h-10'
@@ -634,7 +645,7 @@ const Form = ({
           </>
         );
       })
-      .catch(err => console.log(err));
+      .catch(err => setIsLoading(false));
   };
 
   let actionButtonData: IActionButtonDataItem[] = [
