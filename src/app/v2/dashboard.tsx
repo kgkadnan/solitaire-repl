@@ -1807,23 +1807,21 @@ const Dashboard = () => {
                           )
                         )}
                       </>
-                    ) : 
-                    // data.label === 'My Appointments' ? (
-                    //   data.count > 0 ? (
-                    //     <p className="text-headingS text-neutral900  font-medium">
-                    //       {formatDate(
-                    //         customerData?.customer?.latest_appointment
-                    //           ?.appointment_at
-                    //       )}
-                    //     </p>
-                    //   ) : (
-                    //     <p className="text-headingS text-infoMain  underline font-medium">
-                    //       Book Now
-                    //     </p>
-                    //   )
-                    // ) : 
-                    (
-                     
+                    ) : (
+                      // data.label === 'My Appointments' ? (
+                      //   data.count > 0 ? (
+                      //     <p className="text-headingS text-neutral900  font-medium">
+                      //       {formatDate(
+                      //         customerData?.customer?.latest_appointment
+                      //           ?.appointment_at
+                      //       )}
+                      //     </p>
+                      //   ) : (
+                      //     <p className="text-headingS text-infoMain  underline font-medium">
+                      //       Book Now
+                      //     </p>
+                      //   )
+                      // ) :
                       <p
                         className={`text-neutral900 text-headingS font-medium `}
                       >
