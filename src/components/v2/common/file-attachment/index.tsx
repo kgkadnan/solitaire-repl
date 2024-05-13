@@ -16,6 +16,7 @@ import { updateFormState } from '@/features/kyc/kyc';
 import Loader from './component/loader';
 import { Label } from '../../ui/label';
 import { IModalSetState } from '@/app/v2/search/interface';
+import { extractBytesFromMessage } from './helpers/extract-byte-from-message';
 
 interface IFileAttachments {
   lable: string;
@@ -72,19 +73,8 @@ const FileAttachments: React.FC<IFileAttachments> = ({
     maxFiles: maxFile
   });
 
-  function extractBytesFromMessage(message: string) {
-    // Extract the bytes portion from the message string
-    const regex = /(\d+) bytes/;
-    const match = message.match(regex);
-    if (match && match[1]) {
-      return parseInt(match[1], 10);
-    }
-    return 0;
-  }
-
   useEffect(() => {
     if (fileRejections?.length) {
-      console.log('fileRejections', fileRejections);
       if (fileRejections[0].errors[0].code === 'file-too-large') {
         const bytes = extractBytesFromMessage(
           fileRejections[0].errors[0].message
