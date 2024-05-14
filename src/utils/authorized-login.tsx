@@ -41,7 +41,6 @@ const authorizedLogin = (WrappedComponent: React.ComponentType) => {
         setShowKycNudge(true);
       }
     }, []);
-    console.log(logoutFlag, 'logoutFlag');
     useEffect(() => {
       dispatch(hide()), setOpen(false);
     }, []);

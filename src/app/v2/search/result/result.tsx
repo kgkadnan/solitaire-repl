@@ -61,10 +61,7 @@ import {
 import { NOT_MORE_THAN_300 } from '@/constants/error-messages/search';
 import { NO_STONES_AVAILABLE } from '@/constants/error-messages/compare-stone';
 import { NO_STONES_SELECTED } from '@/constants/error-messages/cart';
-import {
-  useAddSavedSearchMutation,
-  useGetSavedSearchListQuery
-} from '@/features/api/saved-searches';
+import { useGetSavedSearchListQuery } from '@/features/api/saved-searches';
 import { ISavedSearch } from '../form/form';
 import ConfirmStone from './components';
 import { handleConfirmStone } from './helpers/handle-confirm-stone';
@@ -168,6 +165,7 @@ const Result = ({
   const [triggerColumn, { data: columnData }] =
     useLazyGetManageListingSequenceQuery<IManageListingSequenceResponse>();
   const [triggerProductApi] = useLazyGetAllProductQuery();
+
   // Fetch Products
 
   const fetchProducts = async () => {

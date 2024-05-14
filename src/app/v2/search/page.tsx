@@ -36,6 +36,7 @@ const Search = () => {
   const editRoute = useSearchParams().get('edit');
 
   const [activeTab, setActiveTab] = useState(0);
+  const [isAddDemand, setIsAddDemand] = useState(false);
   const [searchParameters, setSearchParameters] = useState<ISavedSearch[] | []>(
     []
   );
@@ -324,7 +325,6 @@ const Search = () => {
                   let yourSelection = JSON.parse(
                     localStorage.getItem('Search')!
                   );
-                  console.log(yourSelection, 'yourSelection-----------');
                   if (!saveSearchName.length) {
                     setInputError('Please enter name');
                   } else {
@@ -357,6 +357,7 @@ const Search = () => {
         dialogContent={dialogContent}
         isOpens={isDialogOpen}
         setIsOpen={setIsDialogOpen}
+        dialogStyle={{ dialogContent: isAddDemand ? 'min-h-[280px]' : '' }}
       />
       <InputDialogComponent
         isOpen={isInputDialogOpen}
@@ -385,6 +386,7 @@ const Search = () => {
           addSearches={addSearches}
           setAddSearches={setAddSearches}
           setIsLoading={setIsLoading}
+          setIsAddDemand={setIsAddDemand}
         />
       ) : subRoute === SubRoutes.SAVED_SEARCH ? (
         <SavedSearch setIsLoading={setIsLoading} isLoading={isLoading} />
