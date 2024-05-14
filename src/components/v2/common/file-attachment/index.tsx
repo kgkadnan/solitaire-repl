@@ -6,9 +6,6 @@ import Image from 'next/image';
 import mediaIcon from '@public/v2/assets/icons/attachment/media-icon.svg';
 import styles from './file-attachment.module.scss';
 import deleteIcon from '@public/v2/assets/icons/attachment/delete-icon.svg';
-
-// import { IModalSetState } from '@/app/search/result/result-interface';
-
 import { ALLOWED_FILE_TYPES } from '@/constants/business-logic';
 import { useAppDispatch } from '@/hooks/hook';
 import { updateFormState } from '@/features/kyc/kyc';
@@ -16,6 +13,7 @@ import { updateFormState } from '@/features/kyc/kyc';
 import Loader from './component/loader';
 import { Label } from '../../ui/label';
 import { IModalSetState } from '@/app/v2/search/interface';
+import { extractBytesFromMessage } from './helpers/extract-byte-from-message';
 
 interface IFileAttachments {
   lable: string;
@@ -74,12 +72,28 @@ const FileAttachments: React.FC<IFileAttachments> = ({
 
   useEffect(() => {
     if (fileRejections?.length) {
-      dispatch(
-        updateFormState({
-          name: `formErrorState.attachment[${formKey}]`,
-          value: fileRejections[0].errors[0].code
-        })
-      );
+      if (fileRejections[0].errors[0].code === 'file-too-large') {
+        const bytes = extractBytesFromMessage(
+          fileRejections[0].errors[0].message
+        );
+
+        dispatch(
+          updateFormState({
+            name: `formErrorState.attachment[${formKey}]`,
+            value: `File is too big.You can upload files upto ${(
+              bytes /
+              (1024 * 1024)
+            ).toFixed(0)}MB`
+          })
+        );
+      } else {
+        dispatch(
+          updateFormState({
+            name: `formErrorState.attachment[${formKey}]`,
+            value: fileRejections[0].errors[0].code
+          })
+        );
+      }
     }
   }, [fileRejections]);
 
