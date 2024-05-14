@@ -104,7 +104,11 @@ export const RenderDiscount = ({ renderedCellValue }: any) => {
     <div
       className={`text-successMain border-[1px] text-center border-successBorder bg-successSurface px-[8px] py-[2px] w-full rounded-[4px]`}
     >
-      {renderedCellValue ? formatNumber(renderedCellValue) + '%' : '-'}
+      {renderedCellValue !== null && renderedCellValue !== undefined
+        ? renderedCellValue === 0
+          ? '0.00%'
+          : formatNumber(renderedCellValue) + '%'
+        : '-'}{' '}
     </div>
   );
 };
