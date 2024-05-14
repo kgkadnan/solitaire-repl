@@ -95,6 +95,14 @@ const ResetComponent = ({ setIsDialogOpen, setDialogContent, token }: any) => {
 
     if (!PASSWORD_REGEX.test(inputValue)) {
       setPasswordError('Please enter valid password');
+      if (
+        !PASSWORD_REGEX.test(resetConfirmPassword) &&
+        resetConfirmPassword.length > 0
+      ) {
+        setConfirmPasswordError('Please enter valid password');
+      } else {
+        setConfirmPasswordError('');
+      }
     } else {
       setPasswordError('');
       setConfirmPasswordError('');
@@ -110,6 +118,14 @@ const ResetComponent = ({ setIsDialogOpen, setDialogContent, token }: any) => {
     setResetConfirmPassword(inputValue);
     if (!PASSWORD_REGEX.test(inputValue)) {
       setConfirmPasswordError('Please enter valid password');
+      if (
+        !PASSWORD_REGEX.test(resetPasswordValue) &&
+        resetPasswordValue.length > 0
+      ) {
+        setPasswordError('Please enter valid password');
+      } else {
+        setPasswordError('');
+      }
     } else {
       setConfirmPasswordError('');
       setPasswordError('');
