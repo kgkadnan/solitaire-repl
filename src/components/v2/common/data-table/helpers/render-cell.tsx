@@ -169,7 +169,11 @@ export const RenderDiscount = ({ renderedCellValue }: any) => {
     <div
       className={`text-successMain border-[1px] border-successBorder bg-successSurface px-[8px] py-[2px] w-[74px] text-center rounded-[4px]`}
     >
-      {renderedCellValue ? formatNumber(renderedCellValue) + '%' : '-'}
+      {renderedCellValue !== null && renderedCellValue !== undefined
+        ? renderedCellValue === 0
+          ? '0.00%'
+          : formatNumber(renderedCellValue) + '%'
+        : '-'}
     </div>
   );
 };
@@ -189,7 +193,11 @@ export const DiscountWithCross = ({ renderedCellValue }: any) => {
         border: '1px solid var(--neutral-200)'
       }}
     >
-      {renderedCellValue ? formatNumber(renderedCellValue) + '%' : '-'}
+      {renderedCellValue !== null && renderedCellValue !== undefined
+        ? renderedCellValue === 0
+          ? '0.00%'
+          : formatNumber(renderedCellValue) + '%'
+        : '-'}
       <span
         style={{
           position: 'absolute',
@@ -247,7 +255,11 @@ export const RenderNewArrivalBidDiscount = ({ renderedCellValue }: any) => {
       <div
         className={`text-infoMain border-[1px] border-infoBorder bg-infoSurface px-[8px] py-[2px] w-[74px] rounded-[4px] text-center`}
       >
-        {renderedCellValue ? formatNumber(renderedCellValue) + '%' : '-'}
+        {renderedCellValue !== null && renderedCellValue !== undefined
+          ? renderedCellValue === 0
+            ? '0.00%'
+            : formatNumber(renderedCellValue) + '%'
+          : '-'}
       </div>
     </div>
   );
