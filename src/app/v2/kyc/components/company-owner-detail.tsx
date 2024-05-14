@@ -2,7 +2,6 @@ import { InputField } from '@/components/v2/common/input-field';
 import { kycScreenIdentifierNames } from '@/constants/enums/kyc';
 import React, { useEffect, useState } from 'react';
 import { handleInputChange } from '../helper/handle-change';
-import { RANGE_VALIDATION } from '@/constants/error-messages/kyc';
 import { updateFormState } from '@/features/kyc/kyc';
 import { DynamicMobileInput } from '@/components/v2/common/input-field/dynamic-mobile';
 import { ManageLocales } from '@/utils/v2/translate';
