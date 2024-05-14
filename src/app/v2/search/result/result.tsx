@@ -68,7 +68,7 @@ import { handleConfirmStone } from './helpers/handle-confirm-stone';
 import { AddCommentDialog } from '@/components/v2/common/comment-dialog';
 import { handleComment } from './helpers/handle-comment';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
-
+import fireSvg from '@public/v2/assets/icons/data-table/fire-icon.svg';
 import threeDotsSvg from '@public/v2/assets/icons/threedots.svg';
 import { Dropdown } from '@/components/v2/common/dropdown-menu';
 import { IItem } from '../saved-search/saved-search';
@@ -86,6 +86,7 @@ import { checkImage } from '@/components/v2/common/detail-page/helpers/check-ima
 import { useLazyGetAvailableMyAppointmentSlotsQuery } from '@/features/api/my-appointments';
 import { IAppointmentPayload } from '../../my-appointments/page';
 import BookAppointment from '../../my-appointments/components/book-appointment/book-appointment';
+import styles from './style.module.scss';
 
 // Column mapper outside the component to avoid re-creation on each render
 
@@ -246,6 +247,23 @@ const Result = ({
     setIsModalOpen(true);
   };
 
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      document.querySelectorAll('.blink').forEach(element => {
+        element.classList.remove(styles.blink);
+      });
+    }, 4000);
+
+    return () => clearTimeout(timeout);
+  }, [
+    isDetailPage,
+    isConfirmStone,
+    showAppointmentForm,
+    isCompareStone,
+    activeTab,
+    dataTableState.rows
+  ]);
+
   const mapColumns = (columns: any) =>
     columns
       ?.filter(({ is_disabled }: any) => !is_disabled)
@@ -270,6 +288,33 @@ const Result = ({
         };
 
         switch (accessor) {
+          case 'fire_icon':
+            return {
+              accessorKey: 'fire_icon',
+              header: '',
+              minSize: 1,
+              size: 1,
+              maxSize: 2,
+              Cell: ({ row }: { row: any }) => {
+                return row.original.in_high_demand ? (
+                  <Tooltip
+                    tooltipTrigger={
+                      <Image
+                        id="blinking-image"
+                        src={fireSvg}
+                        alt="fireSvg"
+                        className={`${styles.blink} blink`}
+                      />
+                    }
+                    tooltipContent={'In High Demand Now!'}
+                    tooltipContentStyles={'z-[1000] '}
+                  />
+                ) : (
+                  ''
+                );
+              }
+            };
+
           case 'clarity':
             return {
               ...commonProps,
@@ -450,13 +495,29 @@ const Result = ({
           short_label: shapeColumn?.short_label
         };
 
-        const updatedColumns = [...response.data, additionalColumn];
+        let addFireIconCol = {
+          accessor: 'fire_icon',
+          id: 'sub_col_13a',
+          is_disabled: false,
+          is_fixed: false,
+          label: '',
+          sequence: 0,
+          short_label: ''
+        };
+
+        const updatedColumns = [
+          ...response.data,
+          additionalColumn,
+          addFireIconCol
+        ];
+
         dataTableSetState.setColumns(updatedColumns);
       }
     };
 
     fetchColumns();
-  }, []);
+  }, [dataTableState.rows]);
+
   const memoizedRows = useMemo(() => {
     return Array.isArray(dataTableState.rows) ? dataTableState.rows : [];
   }, [dataTableState.rows]);
