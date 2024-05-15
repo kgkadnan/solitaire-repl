@@ -358,6 +358,8 @@ export function DiamondDetailsComponent({
                     selectedProducts={{ [filterData.id]: true }}
                     setIsError={setIsError}
                     setErrorText={setErrorText}
+                    activeTab={activeTab}
+                    identifier={breadCrumLabel}
                   />
                 </div>
               </div>
