@@ -151,7 +151,7 @@ const Result = ({
       timeSlots: { dates: [{ date: '', day: '' }], slots: {} }
     });
   const [lotIds, setLotIds] = useState<string[]>([]);
-
+  const [hasLimitExceeded, setHasLimitExceeded] = useState(false);
   // UseMutation to add items to the cart
   const [addCart] = useAddCartMutation();
 
@@ -183,18 +183,6 @@ const Result = ({
     triggerProductApi({ url, limit: LISTING_PAGE_DATA_LIMIT, offset: 0 }).then(
       (res: any) => {
         if (columnData?.length > 0) {
-          // let newArr: any = [];
-          // res.data.products.forEach((row: any) => {
-          //   let obj: any = {};
-          //   columnData?.forEach(col => {
-          //     if (col.accessor === 'amount') {
-          //       obj[col.accessor] === row.variants[0].prices[0].amount;
-          //     } else {
-          //       obj[col.accessor] = row[col.accessor];
-          //     }
-          //   });
-          //   newArr.push(obj);
-          // });
           if (res?.error?.status === statusCode.UNAUTHORIZED) {
             setIsDialogOpen(true);
             setDialogContent(
@@ -221,9 +209,13 @@ const Result = ({
                 </div>
               </>
             );
+            setHasLimitExceeded(true);
+            dataTableSetState.setRows([]);
+          } else {
+            setHasLimitExceeded(false);
+            dataTableSetState.setRows(res.data?.products);
           }
 
-          dataTableSetState.setRows(res.data?.products);
           setRowSelection({});
           setErrorText('');
           setData(res.data);
@@ -1160,7 +1152,13 @@ const Result = ({
         dialogContent={dialogContent}
         isOpens={isDialogOpen}
         setIsOpen={setIsDialogOpen}
-        dialogStyle={{ dialogContent: isConfirmStone ? 'h-[240px]' : '' }}
+        dialogStyle={{
+          dialogContent: isConfirmStone
+            ? 'h-[240px]'
+            : hasLimitExceeded
+            ? 'h-[250px]'
+            : ''
+        }}
       />
 
       <AddCommentDialog
