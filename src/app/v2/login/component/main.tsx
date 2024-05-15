@@ -352,6 +352,8 @@ const Login = () => {
             setToken={setToken}
             setResendTimer={setResendTimer}
             role={'login'}
+            setIsLoading={setIsLoading}
+            isLoading={isLoading}
           />
         );
       case 'successfullyCreated':

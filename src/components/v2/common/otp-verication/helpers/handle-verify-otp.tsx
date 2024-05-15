@@ -12,6 +12,7 @@ interface IHandleVerifyOtp {
   role: string;
   setToken?: React.Dispatch<React.SetStateAction<IToken>>;
   setError: any;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 export const handleVerifyOtp = ({
   otpValues,
@@ -23,10 +24,11 @@ export const handleVerifyOtp = ({
   verifyOTP,
   role,
   setToken,
-  setError
+  setError,
+  setIsLoading
 }: IHandleVerifyOtp) => {
   const enteredOtp = otpValues.join('');
-
+  setIsLoading(true);
   verifyOTP({
     token: token.phoneToken,
     otp: enteredOtp,
@@ -34,6 +36,7 @@ export const handleVerifyOtp = ({
   })
     .unwrap()
     .then((res: any) => {
+      setIsLoading(false);
       if (res) {
         if (role === 'register') {
           setCurrentState('successfullyCreated');
@@ -52,6 +55,7 @@ export const handleVerifyOtp = ({
       }
     })
     .catch((e: any) => {
+      setIsLoading(false);
       setError(
         `We're sorry, but the OTP you entered is incorrect or has expired`
       );

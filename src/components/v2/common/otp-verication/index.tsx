@@ -33,6 +33,8 @@ interface IOTPVerification {
   setResendTimer: React.Dispatch<React.SetStateAction<number>>;
   sendOtp: any;
   setToken: React.Dispatch<React.SetStateAction<IToken>>;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  isLoading: boolean;
 }
 
 const OTPVerification = ({
@@ -50,7 +52,9 @@ const OTPVerification = ({
   setResendTimer,
   sendOtp,
   role = '',
-  setToken
+  setToken,
+  setIsLoading,
+  isLoading
 }: IOTPVerification) => {
   const resendLabel = resendTimer > 0 ? `(${resendTimer}Sec)` : '';
   const [error, setError] = useState('');
@@ -137,6 +141,7 @@ const OTPVerification = ({
         <IndividualActionButton
           variant={'primary'}
           size={'custom'}
+          disabled={isLoading}
           className="rounded-[4px]"
           onClick={() =>
             checkOTPEntry(otpValues)
@@ -150,7 +155,8 @@ const OTPVerification = ({
                   verifyOTP,
                   role,
                   setToken,
-                  setError
+                  setError,
+                  setIsLoading
                 }),
                 setError(''))
               : setError(
