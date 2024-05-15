@@ -59,6 +59,7 @@ import bookmarkIcon from '@public/v2/assets/icons/modal/bookmark.svg';
 import { InputField } from '@/components/v2/common/input-field';
 import { isSearchAlreadyExist } from '../saved-search/helpers/handle-card-click';
 import { constructUrlParams } from '@/utils/v2/construct-url-params';
+import { kycStatus } from '@/constants/enums/kyc';
 
 export interface ISavedSearch {
   saveSearchName: string;
@@ -647,6 +648,7 @@ const Form = ({
       })
       .catch(err => setIsLoading(false));
   };
+  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
 
   let actionButtonData: IActionButtonDataItem[] = [
     {
@@ -711,8 +713,17 @@ const Form = ({
     {
       variant: 'primary',
       // svg: errorText === NO_STONE_FOUND ? addDemand : searchIcon,
-      label: `${errorText === NO_STONE_FOUND ? 'Add Demand' : 'Search'} `,
-      handler: errorText === NO_STONE_FOUND ? handleAddDemand : handleFormSearch
+      label: `${
+        errorText === NO_STONE_FOUND &&
+        isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
+          ? 'Add Demand'
+          : 'Search'
+      } `,
+      handler:
+        errorText === NO_STONE_FOUND &&
+        isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
+          ? handleAddDemand
+          : handleFormSearch
     }
   ];
 
