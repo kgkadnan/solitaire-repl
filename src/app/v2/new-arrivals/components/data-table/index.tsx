@@ -376,7 +376,7 @@ const NewArrivalDataTable = ({
                 selectedProducts={rowSelection}
                 setErrorText={setErrorText}
                 setIsError={setIsError}
-                isNewArrival={true}
+                identifier={'New Arrival'}
                 activeTab={activeTab}
               />
             </div>
