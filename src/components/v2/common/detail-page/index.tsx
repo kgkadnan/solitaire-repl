@@ -224,7 +224,13 @@ export function DiamondDetailsComponent({
       downloadExcelApi: downloadExcel,
       modalSetState,
       setIsLoading: setIsLoading,
-      [activeTab === 2 ? 'fromNewArrivalBidHistory' : 'fromNewArrivalBid']: true
+      [activeTab === 2
+        ? breadCrumLabel === 'Bid to Buy'
+          ? 'fromBidToBuyHistory'
+          : 'fromNewArrivalBidHistory'
+        : breadCrumLabel === 'Bid to Buy'
+        ? 'fromBidToBuy'
+        : 'fromNewArrivalBid']: true
     });
   };
   let isNudge = localStorage.getItem('show-nudge') === 'MINI';
