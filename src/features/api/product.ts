@@ -12,8 +12,8 @@ export const productApi = createApi({
     getAllProduct: builder.query({
       query: ({ offset, limit, url }) => ({
         url: `/store/products?limit=${limit}&offset=${offset}&${url}`
-      }),
-      providesTags: ['Product']
+      })
+      // providesTags: ['Product']
     }),
     getProductCount: builder.query({
       query: ({ searchUrl = '' }) => ({
