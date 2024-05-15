@@ -177,6 +177,9 @@ const ResetComponent = ({ setIsDialogOpen, setDialogContent, token }: any) => {
               onClick={handleResetPassword}
               variant={'primary'}
               size={'custom'}
+              disabled={
+                passwordError.length > 0 || confirmPasswordError.length > 0
+              }
               className="rounded-[4px] w-[100%]"
             >
               {ManageLocales('app.resetPassword')}
