@@ -584,7 +584,7 @@ const BidToBuy = () => {
             goBackToListView={goBack}
             handleDetailPage={handleDetailPage}
             fromBid={true}
-            breadCrumLabel={'Bid 2 Buy'}
+            breadCrumLabel={'Bid to Buy'}
             modalSetState={modalSetState}
             setIsLoading={setIsLoading}
             activeTab={activeTab}
