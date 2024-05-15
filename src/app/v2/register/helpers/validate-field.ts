@@ -3,7 +3,7 @@ import React from 'react';
 import {
   INVALID_EMAIL_FORMAT,
   INVALID_PHONE,
-  MINIMUM_CHAR_PASSWORD,
+  PLEASE_ENTER_VALID_PASSWORD,
   PASSWORD_NOT_MATCH,
   REQUIRED_FIELD
 } from '@/constants/error-messages/register';
@@ -47,7 +47,7 @@ export const validateField = ({
       // Inside your form validation logic
       case 'password':
         if (!PASSWORD_REGEX.test(value)) {
-          error = MINIMUM_CHAR_PASSWORD;
+          error = PLEASE_ENTER_VALID_PASSWORD;
         }
         // Clear confirmPassword error if it was set
         setFormErrors(prev => ({
@@ -66,7 +66,7 @@ export const validateField = ({
 
       case 'confirmPassword':
         if (!PASSWORD_REGEX.test(value)) {
-          error = MINIMUM_CHAR_PASSWORD;
+          error = PLEASE_ENTER_VALID_PASSWORD;
         }
         // Clear password error if it was set
         setFormErrors(prev => ({
