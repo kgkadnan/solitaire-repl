@@ -369,7 +369,7 @@ const BidToByDataTable = ({
                 selectedProducts={rowSelection}
                 setErrorText={setErrorText}
                 setIsError={setIsError}
-                isNewArrival={true}
+                identifier={'Bid to Buy'}
                 activeTab={activeTab}
               />
             </div>
@@ -396,7 +396,8 @@ const BidToByDataTable = ({
     >
       {(activeTab === 1 && activeCount === 0) ||
       (activeTab === 0 && bidCount === 0) ||
-      (activeTab === 2 && historyCount === 0) ? (
+      (activeTab === 2 && historyCount === 0) ||
+      rows.length === 0 ? (
         <>
           <Image src={empty} alt={'empty'} />
           <p className="text-neutral900  w-[350px] text-center ">
@@ -574,12 +575,12 @@ const BidToByDataTable = ({
           ? isNudge &&
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-            ? 'calc(100vh - 362px)'
+            ? 'calc(100vh - 254px)'
             : 'calc(100vh - 260px)'
           : isNudge &&
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-          ? 'calc(100vh - 362px)'
+          ? 'calc(100vh - 254px)'
           : !rows.length
           ? 'calc(100vh - 260px)'
           : !rows.length

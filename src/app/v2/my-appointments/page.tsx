@@ -31,7 +31,11 @@ import { DialogComponent } from '@/components/v2/common/dialog';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import BinIcon from '@public/v2/assets/icons/bin.svg';
 import { ITabsData } from './interface';
+
+import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
+import { Toast } from '@/components/v2/common/copy-and-share/toast';
 import BookAppointment from './components/book-appointment/book-appointment';
+
 export interface ISlot {
   datetimeString: string;
   isAvailable: boolean;
@@ -44,6 +48,7 @@ export interface ISlots {
 export interface IAppointmentPayload {
   kam: {
     kam_name: string;
+    kam_image: string;
   };
   storeAddresses: string[];
   timeSlots: {
@@ -74,12 +79,16 @@ const MyAppointments = () => {
   const [showAppointmentForm, setShowAppointmentForm] = useState(false);
   const [appointmentPayload, setAppointmentPayload] =
     useState<IAppointmentPayload>({
-      kam: { kam_name: '' },
+      kam: { kam_name: '', kam_image: '' },
       storeAddresses: [],
       timeSlots: { dates: [{ date: '', day: '' }], slots: {} }
     });
   const [rescheduleAppointmentData, setRescheduleAppointmentData] =
     useState<IRescheduleAppointmentData>();
+
+  const { errorState, errorSetState } = useErrorStateManagement();
+  const { setIsError, setErrorText } = errorSetState;
+  const { isError, errorText } = errorState;
 
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState(UPCOMING_APPOINTMENTS);
@@ -87,7 +96,7 @@ const MyAppointments = () => {
   const getAppointment = () => {
     triggerMyAppointment({}).then(res => {
       setIsLoading(false);
-      let { history, upcoming } = res.data.data;
+      let { history, upcoming } = res && res.data && res.data.data;
       setUpcomingAppointments(upcoming);
       setPastAppointments(history);
     });
@@ -97,6 +106,13 @@ const MyAppointments = () => {
     setIsLoading(true);
     getAppointment();
   }, [myAppointmentData]);
+
+  useEffect(() => {
+    isError &&
+      setTimeout(() => {
+        setIsError(false); // Hide the toast notification after some time
+      }, 4000);
+  }, [isError]);
 
   const MyAppointmentsTabs = [
     {
@@ -191,27 +207,6 @@ const MyAppointments = () => {
       setAppointmentPayload(data);
     });
   };
-
-  function formatDateTimeForReschedule(dateString: string) {
-    const date = new Date(dateString);
-
-    // Get the date in MM/DD/YYYY format
-    const formattedDate = `${
-      date.getMonth() + 1
-    }/${date.getDate()}/${date.getFullYear()}`;
-
-    // Get the time in hh:mm:ss AM/PM format
-    const hours = date.getHours() > 12 ? date.getHours() - 12 : date.getHours();
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    const seconds = date.getSeconds().toString().padStart(2, '0');
-    const meridiem = date.getHours() >= 12 ? 'PM' : 'AM';
-    const formattedTime = `${hours}:${minutes}:${seconds} ${meridiem}`;
-
-    // Combine date and time
-    const formattedDateTime = `${formattedDate}, ${formattedTime}`;
-
-    return formattedDateTime;
-  }
 
   const handleRescheduleAppointment = ({ rescheduleData }: any) => {
     handleCreateAppointment();
@@ -364,7 +359,7 @@ const MyAppointments = () => {
     } else {
       return (
         <span className="text-lRegular text-neutral900 font-normal">
-          {(value as any)[accessor] ?? '-'}
+          {(value as any)[accessor] || '-'}
         </span>
       );
     }
@@ -381,6 +376,7 @@ const MyAppointments = () => {
           modalSetState={modalSetState}
           getAppointment={getAppointment}
           rescheduleAppointmentData={rescheduleAppointmentData}
+          errorSetState={errorSetState}
         />
       );
     } else {
@@ -416,54 +412,72 @@ const MyAppointments = () => {
                     handleCreateAppointment();
                   },
                   customStyle: 'flex-1 w-full h-10',
-                  svg: bookAppointment
+                  svg: bookAppointment,
+                  isDisable:
+                    isKycVerified?.customer?.kyc?.status ===
+                      kycStatus.INPROGRESS ||
+                    isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED
                 }
               ]}
             />
           </div>
           {data?.length > 0 ? (
-            <table className="w-full">
-              <thead>
-                <tr className="text-mMedium h-[47px] border-b  border-neutral200 bg-neutral50 text-neutral700">
-                  {keys?.map(({ label }) => (
-                    <td key={label} className="p-4 text-left font-medium">
-                      {label}
-                    </td>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="">
-                {data?.map((items, index: number) => {
-                  return (
-                    <tr
-                      key={items.id}
-                      className={`bg-neutral0 group  border-neutral200 hover:bg-neutral50 ${
-                        index >= data.length - 1 ? 'rounded-[8px]' : 'border-b'
-                      }`}
-                    >
-                      {keys?.map(({ accessor, label }) => {
-                        return (
-                          <td
-                            key={accessor}
-                            className={` ${
-                              accessor === 'address' || accessor === 'reason'
-                                ? 'w-[25%]'
-                                : 'w-[15%]'
-                            } text-lRegular rounded-b-[8px] space-x-2 p-[16px] text-left text-gray-800`}
-                          >
-                            {renderCellContent(label, accessor, items)}
-                          </td>
-                        );
-                      })}
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+            <div className={'w-full'}>
+              <div className="text-mMedium w-full h-[47px] border-b border-neutral200 bg-neutral50 text-neutral700 flex">
+                {keys?.map(({ label, accessor }) => (
+                  <div
+                    key={label}
+                    className={`p-4 text-left font-medium ${
+                      accessor === 'address' || accessor === 'reason'
+                        ? activeTab === PAST_APPOINTMENTS
+                          ? 'w-[30%]'
+                          : 'w-[25%]'
+                        : activeTab === PAST_APPOINTMENTS
+                        ? 'w-[20%]'
+                        : 'w-[15%]'
+                    }`}
+                  >
+                    {label}
+                  </div>
+                ))}
+              </div>
+              <div className="max-h-[calc(100vh-318px)] w-full overflow-y-auto">
+                {data?.map((items, index: number) => (
+                  <div
+                    key={items.id}
+                    className="bg-neutral0 group border-solid border-neutral200 hover:bg-neutral50 border-b flex"
+                  >
+                    {keys?.map(({ accessor, label }) => (
+                      <div
+                        key={accessor}
+                        className={`text-lRegular items-center rounded-b-[8px] space-x-2 p-[16px] text-left text-gray-800 flex  ${
+                          accessor === 'address' || accessor === 'reason'
+                            ? activeTab === PAST_APPOINTMENTS
+                              ? 'w-[30%]'
+                              : 'w-[25%]'
+                            : activeTab === PAST_APPOINTMENTS
+                            ? 'w-[20%]'
+                            : 'w-[15%]'
+                        }`}
+                      >
+                        {renderCellContent(label, accessor, items)}
+                      </div>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </div>
           ) : (
             !isLoading && (
               <div
-                className={`flex flex-col items-center justify-center h-[73vh] gap-5 `}
+                className={`flex flex-col items-center justify-center ${
+                  isNudge &&
+                  (isKycVerified?.customer?.kyc?.status ===
+                    kycStatus.INPROGRESS ||
+                    isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+                    ? 'h-[62vh]'
+                    : 'h-[73vh]'
+                }  gap-5 `}
               >
                 <Image src={emptyAppointmentSvg} alt={'emptyAppointmentSvg'} />
                 <p className="text-neutral900  w-[320px] text-center ">
@@ -488,37 +502,41 @@ const MyAppointments = () => {
         isOpens={modalState.isDialogOpen}
         setIsOpen={modalSetState.setIsDialogOpen}
       />
+      {isError && (
+        <Toast show={isError} message={errorText} isSuccess={false} />
+      )}
+      {isLoading && <CustomKGKLoader />}
+      {!showAppointmentForm && (
+        <div className="flex  py-[8px] items-center">
+          <p className="text-lMedium font-medium text-neutral900">
+            {ManageLocales('app.myAppointments.myAppointments')}
+          </p>
+        </div>
+      )}
       <div
-        className={`relative mb-[20px] 
+        className={`relative mb-[20px]  border-[1px] border-neutral200 rounded-[8px] ${
+          showAppointmentForm && 'mt-[24px]'
+        }
       ${
         isNudge &&
         (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
           isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
           ? showAppointmentForm
-            ? 'h-[calc(100vh-10px)]'
-            : 'h-[calc(100vh-144px)]'
+            ? 'h-[calc(100vh-103px)]'
+            : 'h-[calc(100vh-184px)]'
           : showAppointmentForm
-          ? 'h-[calc(100vh--50px)]'
-          : 'h-[calc(100vh-84px)]'
+          ? 'h-[calc(100vh-43px)]'
+          : 'h-[calc(100vh-124px)]'
       }
       `}
       >
-        {isLoading && <CustomKGKLoader />}
-        {!showAppointmentForm && (
-          <div className="flex  py-[8px] items-center">
-            <p className="text-lMedium font-medium text-neutral900">
-              {ManageLocales('app.myAppointments.myAppointments')}
-            </p>
-          </div>
+        <div className="">{renderContent()}</div>
+        {data.length > 0 && !showAppointmentForm && (
+          <div
+            className="h-[72px] border-t-[1px]  border-solid border-neutral200 bg-neutral0 rounded-b-[8px]"
+            style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}
+          ></div>
         )}
-
-        <div
-          className={`border-[1px] border-neutral200 rounded-[8px] ${
-            showAppointmentForm && 'mt-[24px]'
-          }`}
-        >
-          {renderContent()}
-        </div>
       </div>
     </>
   );

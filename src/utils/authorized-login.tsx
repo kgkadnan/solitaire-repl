@@ -7,6 +7,10 @@ import { v2Routes } from '@/constants/routes';
 import SideNavigationBar from '@/components/v2/common/side-navigation-bar';
 import V2TopNavigationBar from '@/components/v2/common/top-navigation-bar';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
+import { useAppDispatch, useAppSelector } from '@/hooks/hook';
+import { DialogComponent } from '@/components/v2/common/dialog';
+import InvalidCreds from '@/app/v2/login/component/invalid-creds';
+import { hide } from '@/features/logout/logout-slice';
 
 const authorizedLogin = (WrappedComponent: React.ComponentType) => {
   const Wrapper: React.FC<any> = props => {
@@ -17,6 +21,11 @@ const authorizedLogin = (WrappedComponent: React.ComponentType) => {
     const [isAuthorized, setIsAuthorized] = useState(false);
     const [isLoading, setIsLoading] = useState(true); // New loading state
     const [showKycNudge, setShowKycNudge] = useState(false);
+    const logoutFlag: any = useAppSelector(
+      (store: any) => store.logoutAll.showModal
+    );
+    const dispatch = useAppDispatch();
+    const [open, setOpen] = useState(false);
 
     useEffect(() => {
       // Check if the user is KYC verified
@@ -32,6 +41,12 @@ const authorizedLogin = (WrappedComponent: React.ComponentType) => {
         setShowKycNudge(true);
       }
     }, []);
+    useEffect(() => {
+      dispatch(hide()), setOpen(false);
+    }, []);
+    useEffect(() => {
+      setOpen(logoutFlag);
+    }, [logoutFlag]);
     useEffect(() => {
       setIsLoading(true);
       if (authToken === null && isTokenChecked) {
@@ -53,6 +68,23 @@ const authorizedLogin = (WrappedComponent: React.ComponentType) => {
     return isAuthorized ? (
       isV2Route ? (
         <div>
+          <DialogComponent
+            dialogContent={
+              <InvalidCreds
+                header="Session expired! You have been logged out of all devices. Please log in again."
+                content={''}
+                handleClick={() => {
+                  dispatch(hide()),
+                    userLoggedOut(),
+                    router.push('/v2/login'),
+                    setOpen(false);
+                }}
+                buttonText="Okay"
+              />
+            }
+            isOpens={open}
+            setIsOpen={setOpen}
+          />
           <div className="flex w-full">
             <SideNavigationBar />
 

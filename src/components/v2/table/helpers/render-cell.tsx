@@ -102,11 +102,13 @@ export const RenderLab = ({ renderedCellValue, row }: any) => {
 export const RenderDiscount = ({ renderedCellValue }: any) => {
   return (
     <div
-      className={`text-successMain border-[1px] border-successBorder bg-successSurface px-[8px] py-[2px] w-full rounded-[4px]`}
+      className={`text-successMain border-[1px] text-center border-successBorder bg-successSurface px-[8px] py-[2px] w-full rounded-[4px]`}
     >
-      {`${
-        renderedCellValue ? formatNumber(renderedCellValue) ?? '0.00' : '0.00'
-      }%`}
+      {renderedCellValue !== null && renderedCellValue !== undefined
+        ? renderedCellValue === 0
+          ? '0.00%'
+          : formatNumber(renderedCellValue) + '%'
+        : '-'}
     </div>
   );
 };

@@ -13,6 +13,7 @@ import Loader from '../file-attachment/component/loader';
 import deleteIcon from '@public/v2/assets/icons/attachment/delete-icon.svg';
 import AttachMentIcon from '@public/v2/assets/icons/attachment/attachment.svg?url';
 import { Label } from '../../ui/label';
+import { extractBytesFromMessage } from '../file-attachment/helpers/extract-byte-from-message';
 
 interface IDownloadAndUpload {
   formState: any;
@@ -59,12 +60,28 @@ export const DownloadAndUpload = ({
 
   useEffect(() => {
     if (fileRejections?.length) {
-      dispatch(
-        updateFormState({
-          name: `formErrorState.attachment.upload_form`,
-          value: fileRejections[0].errors[0].code
-        })
-      );
+      if (fileRejections[0].errors[0].code === 'file-too-large') {
+        const bytes = extractBytesFromMessage(
+          fileRejections[0].errors[0].message
+        );
+
+        dispatch(
+          updateFormState({
+            name: `formErrorState.attachment.upload_form`,
+            value: `File is too big.You can upload files upto ${(
+              bytes /
+              (1024 * 1024)
+            ).toFixed(0)}MB`
+          })
+        );
+      } else {
+        dispatch(
+          updateFormState({
+            name: `formErrorState.attachment.upload_form`,
+            value: fileRejections[0].errors[0].code
+          })
+        );
+      }
     }
   }, [fileRejections]);
 

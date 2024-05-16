@@ -40,3 +40,17 @@
   /* Adjust the angle (90deg) and color stops (0%, 50%, 100%) as needed */
   /* You can also use other angle values like 45deg, 180deg, etc. */
 }
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.blink {
+  animation: blink 1s infinite;
+}

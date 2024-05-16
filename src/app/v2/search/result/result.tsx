@@ -54,21 +54,21 @@ import {
   tableInclusionSortOrder
 } from '@/constants/v2/form';
 import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
-import { SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH } from '@/constants/error-messages/confirm-stone';
+import {
+  SELECT_STONE_TO_PERFORM_ACTION,
+  SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH
+} from '@/constants/error-messages/confirm-stone';
 import { NOT_MORE_THAN_300 } from '@/constants/error-messages/search';
 import { NO_STONES_AVAILABLE } from '@/constants/error-messages/compare-stone';
 import { NO_STONES_SELECTED } from '@/constants/error-messages/cart';
-import {
-  useAddSavedSearchMutation,
-  useGetSavedSearchListQuery
-} from '@/features/api/saved-searches';
+import { useGetSavedSearchListQuery } from '@/features/api/saved-searches';
 import { ISavedSearch } from '../form/form';
 import ConfirmStone from './components';
 import { handleConfirmStone } from './helpers/handle-confirm-stone';
 import { AddCommentDialog } from '@/components/v2/common/comment-dialog';
 import { handleComment } from './helpers/handle-comment';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
-
+import fireSvg from '@public/v2/assets/icons/data-table/fire-icon.svg';
 import threeDotsSvg from '@public/v2/assets/icons/threedots.svg';
 import { Dropdown } from '@/components/v2/common/dropdown-menu';
 import { IItem } from '../saved-search/saved-search';
@@ -83,6 +83,10 @@ import { statusCode } from '@/constants/enums/status-code';
 import { formatNumber } from '@/utils/fix-two-digit-number';
 import { loadImages } from '@/components/v2/common/detail-page/helpers/load-images';
 import { checkImage } from '@/components/v2/common/detail-page/helpers/check-image';
+import { useLazyGetAvailableMyAppointmentSlotsQuery } from '@/features/api/my-appointments';
+import { IAppointmentPayload } from '../../my-appointments/page';
+import BookAppointment from '../../my-appointments/components/book-appointment/book-appointment';
+import styles from './style.module.scss';
 
 // Column mapper outside the component to avoid re-creation on each render
 
@@ -106,6 +110,10 @@ const Result = ({
   setIsInputDialogOpen: any;
 }) => {
   const dispatch = useAppDispatch();
+
+  const [triggerAvailableSlots] = useLazyGetAvailableMyAppointmentSlotsQuery(
+    {}
+  );
 
   const { data: searchList }: { data?: IItem[] } =
     useGetSavedSearchListQuery('');
@@ -135,6 +143,15 @@ const Result = ({
   const [commentValue, setCommentValue] = useState('');
   const [textAreaValue, setTextAreaValue] = useState('');
 
+  const [showAppointmentForm, setShowAppointmentForm] = useState(false);
+  const [appointmentPayload, setAppointmentPayload] =
+    useState<IAppointmentPayload>({
+      kam: { kam_name: '', kam_image: '' },
+      storeAddresses: [],
+      timeSlots: { dates: [{ date: '', day: '' }], slots: {} }
+    });
+  const [lotIds, setLotIds] = useState<string[]>([]);
+  const [hasLimitExceeded, setHasLimitExceeded] = useState(false);
   // UseMutation to add items to the cart
   const [addCart] = useAddCartMutation();
 
@@ -142,13 +159,13 @@ const Result = ({
   const router = useRouter();
   const [searchUrl, setSearchUrl] = useState('');
 
-  const [addSavedSearch] = useAddSavedSearchMutation();
   const [downloadExcel] = useDownloadExcelMutation();
   const [confirmProduct] = useConfirmProductMutation();
 
   const [triggerColumn, { data: columnData }] =
     useLazyGetManageListingSequenceQuery<IManageListingSequenceResponse>();
   const [triggerProductApi] = useLazyGetAllProductQuery();
+
   // Fetch Products
 
   const fetchProducts = async () => {
@@ -166,18 +183,6 @@ const Result = ({
     triggerProductApi({ url, limit: LISTING_PAGE_DATA_LIMIT, offset: 0 }).then(
       (res: any) => {
         if (columnData?.length > 0) {
-          // let newArr: any = [];
-          // res.data.products.forEach((row: any) => {
-          //   let obj: any = {};
-          //   columnData?.forEach(col => {
-          //     if (col.accessor === 'amount') {
-          //       obj[col.accessor] === row.variants[0].prices[0].amount;
-          //     } else {
-          //       obj[col.accessor] = row[col.accessor];
-          //     }
-          //   });
-          //   newArr.push(obj);
-          // });
           if (res?.error?.status === statusCode.UNAUTHORIZED) {
             setIsDialogOpen(true);
             setDialogContent(
@@ -204,9 +209,13 @@ const Result = ({
                 </div>
               </>
             );
+            setHasLimitExceeded(true);
+            dataTableSetState.setRows([]);
+          } else {
+            setHasLimitExceeded(false);
+            dataTableSetState.setRows(res.data?.products);
           }
 
-          dataTableSetState.setRows(res.data?.products);
           setRowSelection({});
           setErrorText('');
           setData(res.data);
@@ -226,10 +235,26 @@ const Result = ({
   };
 
   const handleDetailImage = ({ row }: any) => {
-    console.log('111111111111111', row);
     setDetailImageData(row);
     setIsModalOpen(true);
   };
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      document.querySelectorAll('.blink').forEach(element => {
+        element.classList.remove(styles.blink);
+      });
+    }, 4000);
+
+    return () => clearTimeout(timeout);
+  }, [
+    isDetailPage,
+    isConfirmStone,
+    showAppointmentForm,
+    isCompareStone,
+    activeTab,
+    dataTableState.rows
+  ]);
 
   const mapColumns = (columns: any) =>
     columns
@@ -255,6 +280,33 @@ const Result = ({
         };
 
         switch (accessor) {
+          case 'fire_icon':
+            return {
+              accessorKey: 'fire_icon',
+              header: '',
+              minSize: 1,
+              size: 1,
+              maxSize: 2,
+              Cell: ({ row }: { row: any }) => {
+                return row.original.in_high_demand ? (
+                  <Tooltip
+                    tooltipTrigger={
+                      <Image
+                        id="blinking-image"
+                        src={fireSvg}
+                        alt="fireSvg"
+                        className={`${styles.blink} blink`}
+                      />
+                    }
+                    tooltipContent={'In High Demand Now!'}
+                    tooltipContentStyles={'z-[1000] '}
+                  />
+                ) : (
+                  ''
+                );
+              }
+            };
+
           case 'clarity':
             return {
               ...commonProps,
@@ -435,13 +487,29 @@ const Result = ({
           short_label: shapeColumn?.short_label
         };
 
-        const updatedColumns = [...response.data, additionalColumn];
+        let addFireIconCol = {
+          accessor: 'fire_icon',
+          id: 'sub_col_13a',
+          is_disabled: false,
+          is_fixed: false,
+          label: '',
+          sequence: 0,
+          short_label: ''
+        };
+
+        const updatedColumns = [
+          ...response.data,
+          additionalColumn,
+          addFireIconCol
+        ];
+
         dataTableSetState.setColumns(updatedColumns);
       }
     };
 
     fetchColumns();
-  }, []);
+  }, [dataTableState.rows]);
+
   const memoizedRows = useMemo(() => {
     return Array.isArray(dataTableState.rows) ? dataTableState.rows : [];
   }, [dataTableState.rows]);
@@ -451,6 +519,56 @@ const Result = ({
   );
   const handleNewSearch = () => {
     router.push(`${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`);
+  };
+
+  const handleCreateAppointment = () => {
+    let selectedIds = Object.keys(rowSelection);
+
+    if (selectedIds.length > 0) {
+      const hasMemoOut = selectedIds?.some((id: string) => {
+        const stone = dataTableState.rows.find(
+          (row: IProduct) => row?.id === id
+        );
+        return stone?.diamond_status === MEMO_STATUS;
+      });
+
+      const hasHold = selectedIds?.some((id: string) => {
+        const stone = dataTableState.rows.find(
+          (row: IProduct) => row?.id === id
+        );
+        return stone?.diamond_status === HOLD_STATUS;
+      });
+
+      if (hasMemoOut) {
+        setErrorText(NO_STONES_AVAILABLE);
+        setIsError(true);
+      } else if (hasHold) {
+        setIsError(true);
+        setErrorText(SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH);
+      } else {
+        setShowAppointmentForm(true);
+        triggerAvailableSlots({}).then(payload => {
+          let { data } = payload.data;
+          setAppointmentPayload(data);
+        });
+
+        const lotIds = selectedIds?.map((id: string) => {
+          const getLotIds: any =
+            dataTableState.rows.find((row: IProduct) => {
+              return row?.id === id;
+            }) ?? {};
+
+          if (getLotIds) {
+            return getLotIds?.lot_id;
+          }
+          return '';
+        });
+        setLotIds(lotIds);
+      }
+    } else {
+      setIsError(true);
+      setErrorText(SELECT_STONE_TO_PERFORM_ACTION);
+    }
   };
 
   const handleAddToCart = () => {
@@ -708,6 +826,12 @@ const Result = ({
     setConfirmStoneData([]);
     setIsCompareStone(false);
     setCompareStoneData([]);
+    setShowAppointmentForm(false);
+    setAppointmentPayload({
+      kam: { kam_name: '', kam_image: '' },
+      storeAddresses: [],
+      timeSlots: { dates: [{ date: '', day: '' }], slots: {} }
+    });
   };
 
   const renderAddCommentDialogs = () => {
@@ -1028,7 +1152,13 @@ const Result = ({
         dialogContent={dialogContent}
         isOpens={isDialogOpen}
         setIsOpen={setIsDialogOpen}
-        dialogStyle={{ dialogContent: isConfirmStone ? 'h-[240px]' : '' }}
+        dialogStyle={{
+          dialogContent: isConfirmStone
+            ? 'h-[240px]'
+            : hasLimitExceeded
+            ? 'h-[250px]'
+            : ''
+        }}
       />
 
       <AddCommentDialog
@@ -1036,17 +1166,20 @@ const Result = ({
         onClose={() => setIsAddCommentDialogOpen(false)}
         renderContent={renderAddCommentDialogs}
       />
-      {!isDetailPage && (
-        <div className="flex py-[8px] items-center">
-          <p className="text-lMedium font-medium text-neutral900">
-            {editRoute
-              ? ManageLocales('app.result.headerEdit')
-              : isCompareStone
-              ? 'Diamond Comparison Overview'
-              : ManageLocales('app.result.headerResult')}
-          </p>
-        </div>
-      )}
+
+      <div className="flex py-[8px] items-center">
+        <p className="text-lMedium font-medium text-neutral900">
+          {editRoute
+            ? ManageLocales('app.result.headerEdit')
+            : isCompareStone
+            ? 'Diamond Comparison Overview'
+            : showAppointmentForm
+            ? ManageLocales('app.myAppointment.header')
+            : isDetailPage
+            ? ''
+            : ManageLocales('app.result.headerResult')}
+        </p>
+      </div>
 
       {isDetailPage && detailPageData?.length ? (
         <>
@@ -1061,7 +1194,7 @@ const Result = ({
             modalSetState={modalSetState}
             setIsLoading={setIsLoading}
           />
-          <div className="p-[16px] flex justify-end items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow mb-1">
+          <div className="p-[8px] flex justify-end items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow mb-1">
             <ActionButton
               actionButtonData={[
                 {
@@ -1101,13 +1234,6 @@ const Result = ({
                 />
               }
               dropdownMenu={[
-                {
-                  label: ManageLocales(
-                    'app.search.actionButton.bookAppointment'
-                  ),
-                  handler: () => {},
-                  commingSoon: true
-                },
                 {
                   label: ManageLocales(
                     'app.search.actionButton.findMatchingPair'
@@ -1153,6 +1279,19 @@ const Result = ({
               setIsDetailPage={setIsDetailPage}
               setIsCompareStone={setIsCompareStone}
             />
+          ) : showAppointmentForm ? (
+            <BookAppointment
+              breadCrumLabel={ManageLocales(
+                'app.myAppointments.myAppointments'
+              )}
+              goBackToListView={goBackToListView}
+              appointmentPayload={appointmentPayload}
+              setIsLoading={setIsLoading}
+              modalSetState={modalSetState}
+              lotIds={lotIds}
+              setRowSelection={setRowSelection}
+              errorSetState={errorSetState}
+            />
           ) : (
             <div className="">
               <DataTable
@@ -1182,6 +1321,7 @@ const Result = ({
                 setIsCompareStone={setIsCompareStone}
                 setCompareStoneData={setCompareStoneData}
                 setIsInputDialogOpen={setIsInputDialogOpen}
+                handleCreateAppointment={handleCreateAppointment}
               />
             </div>
           )}

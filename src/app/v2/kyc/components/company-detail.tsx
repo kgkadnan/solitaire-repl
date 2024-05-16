@@ -13,6 +13,7 @@ import { RadioButton } from '@/components/v2/common/radio';
 import CheckboxWithInput from '@/components/v2/common/check';
 import RadioButtonWithInput from '@/components/v2/common/radio-with-input';
 import { useGetCountryCodeQuery } from '@/features/api/current-ip';
+import { useLazyGetAllCountryCodeQuery } from '@/features/api/get-country-code';
 
 const cities = [
   'AHMEDABAD',
@@ -85,19 +86,34 @@ const CompanyDetail = ({
   currentStepperStep
 }: any) => {
   const { data, error } = useGetCountryCodeQuery({});
+  const [triggerGetAllCountryCode] = useLazyGetAllCountryCodeQuery({});
   useEffect(() => {
-    if (data) {
-      dispatch(
-        updateFormState({
-          name: `formState.online.sections[${[
-            kycScreenIdentifierNames.COMPANY_DETAILS
-          ]}][company_country_code]`,
-          value: data.country_calling_code.replace('+', '')
-        })
-      );
-      setSelectedCountryIso(data?.country);
-    } else if (error) {
-      console.error('Error fetching country code', error);
+    let isCountryCodeAvbl =
+      formState.online.sections[kycScreenIdentifierNames.COMPANY_DETAILS][
+        'company_country_code'
+      ];
+
+    if (isCountryCodeAvbl?.length) {
+      triggerGetAllCountryCode({}).then(data => {
+        let getSpecificCountryData = data.data.filter((country: any) => {
+          return country.code === isCountryCodeAvbl;
+        });
+        setSelectedCountryIso(getSpecificCountryData[0].iso);
+      });
+    } else {
+      if (data) {
+        dispatch(
+          updateFormState({
+            name: `formState.online.sections[${[
+              kycScreenIdentifierNames.COMPANY_DETAILS
+            ]}][company_country_code]`,
+            value: data.country_calling_code.replace('+', '')
+          })
+        );
+        setSelectedCountryIso(data?.country);
+      } else if (error) {
+        console.error('Error fetching country code', error);
+      }
     }
   }, [data, error]);
 

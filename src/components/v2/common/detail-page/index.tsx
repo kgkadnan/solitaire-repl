@@ -224,13 +224,19 @@ export function DiamondDetailsComponent({
       downloadExcelApi: downloadExcel,
       modalSetState,
       setIsLoading: setIsLoading,
-      [activeTab === 2 ? 'fromNewArrivalBidHistory' : 'fromNewArrivalBid']: true
+      [activeTab === 2
+        ? breadCrumLabel === 'Bid to Buy'
+          ? 'fromBidToBuyHistory'
+          : 'fromNewArrivalBidHistory'
+        : breadCrumLabel === 'Bid to Buy'
+        ? 'fromBidToBuy'
+        : 'fromNewArrivalBid']: true
     });
   };
   let isNudge = localStorage.getItem('show-nudge') === 'MINI';
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   return (
-    <div className="text-black bg-white mt-2">
+    <div className="text-black bg-white rounded-[8px]">
       <Toast show={showToast} message="Copied Successfully" />
       <div className="flex items-center">
         <Image
@@ -352,6 +358,8 @@ export function DiamondDetailsComponent({
                     selectedProducts={{ [filterData.id]: true }}
                     setIsError={setIsError}
                     setErrorText={setErrorText}
+                    activeTab={activeTab}
+                    identifier={breadCrumLabel}
                   />
                 </div>
               </div>

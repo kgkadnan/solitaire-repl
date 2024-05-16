@@ -52,10 +52,7 @@ const StepperComponent: React.FC<IStepperComponentProps> = ({
 
   // Include the "Company Owner Details" only if the country is India
 
-  // console.log('rejectedSteps', rejectedSteps);
-
   const renderStepperIcon = (index: number) => {
-    // console.log('currentStepperStep', currentStepperStep, 'index', index);
     if (completedSteps.has(index)) {
       return Completed;
     } else if (rejectedSteps.has(index)) {
@@ -127,7 +124,7 @@ const StepperComponent: React.FC<IStepperComponentProps> = ({
                 filteredSteps[currentStepperStep]?.identifier ===
                 kycScreenIdentifierNames.PERSONAL_DETAILS
                   ? isEmailVerified
-                    ? 'Next'
+                    ? ManageLocales('app.kyc.footer.saveAndNext')
                     : 'Verify Email'
                   : filteredSteps[currentStepperStep]?.identifier ===
                     kycScreenIdentifierNames.ATTACHMENT

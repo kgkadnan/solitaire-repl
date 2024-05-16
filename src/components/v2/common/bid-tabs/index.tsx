@@ -13,9 +13,9 @@ const Tab: React.FC<ITabProps> = ({
   labels,
   activeIndex,
   onTabClick,
-  activeCount,
-  bidCount,
-  historyCount
+  activeCount = 0,
+  bidCount = 0,
+  historyCount = 0
 }) => {
   return (
     <div className="flex">

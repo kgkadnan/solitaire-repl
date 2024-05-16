@@ -51,19 +51,20 @@ const ResetComponent = ({ setIsDialogOpen, setDialogContent, token }: any) => {
       } else {
         setIsDialogOpen(true);
         setDialogContent(
-          <>
+          <div>
             <div className="absolute left-[-84px] top-[-84px]">
               <Image src={successIcon} alt="successIcon" />
             </div>
             <h1 className="text-headingS text-neutral900">
-              Your password has reset successfully
+              Password reset successful. For security, you were logged out from
+              all devices.
             </h1>
             <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
               <ActionButton
                 actionButtonData={[
                   {
                     variant: 'primary',
-                    label: ManageLocales('app.login'),
+                    label: 'Okay',
                     handler: () => {
                       setIsDialogOpen(false), router.push('/v2/login');
                     },
@@ -72,7 +73,7 @@ const ResetComponent = ({ setIsDialogOpen, setDialogContent, token }: any) => {
                 ]}
               />
             </div>
-          </>
+          </div>
         );
       }
     } else {
@@ -94,6 +95,14 @@ const ResetComponent = ({ setIsDialogOpen, setDialogContent, token }: any) => {
 
     if (!PASSWORD_REGEX.test(inputValue)) {
       setPasswordError('Please enter valid password');
+      if (
+        !PASSWORD_REGEX.test(resetConfirmPassword) &&
+        resetConfirmPassword.length > 0
+      ) {
+        setConfirmPasswordError('Please enter valid password');
+      } else {
+        setConfirmPasswordError('');
+      }
     } else {
       setPasswordError('');
       setConfirmPasswordError('');
@@ -109,6 +118,14 @@ const ResetComponent = ({ setIsDialogOpen, setDialogContent, token }: any) => {
     setResetConfirmPassword(inputValue);
     if (!PASSWORD_REGEX.test(inputValue)) {
       setConfirmPasswordError('Please enter valid password');
+      if (
+        !PASSWORD_REGEX.test(resetPasswordValue) &&
+        resetPasswordValue.length > 0
+      ) {
+        setPasswordError('Please enter valid password');
+      } else {
+        setPasswordError('');
+      }
     } else {
       setConfirmPasswordError('');
       setPasswordError('');
@@ -160,6 +177,9 @@ const ResetComponent = ({ setIsDialogOpen, setDialogContent, token }: any) => {
               onClick={handleResetPassword}
               variant={'primary'}
               size={'custom'}
+              disabled={
+                passwordError.length > 0 || confirmPasswordError.length > 0
+              }
               className="rounded-[4px] w-[100%]"
             >
               {ManageLocales('app.resetPassword')}

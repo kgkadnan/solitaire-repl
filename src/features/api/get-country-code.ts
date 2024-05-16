@@ -11,4 +11,5 @@ export const getAllCountryCodeApi = createApi({
   })
 });
 
-export const { useGetAllCountryCodeQuery } = getAllCountryCodeApi;
+export const { useGetAllCountryCodeQuery, useLazyGetAllCountryCodeQuery } =
+  getAllCountryCodeApi;

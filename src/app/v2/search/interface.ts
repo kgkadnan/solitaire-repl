@@ -31,6 +31,7 @@ export interface IProduct {
   weight: number | null;
   length: number | null;
   height: number | null;
+  in_high_demand?: boolean | null;
   width: number | null;
   hs_code: string | null;
   origin_country: string | null;

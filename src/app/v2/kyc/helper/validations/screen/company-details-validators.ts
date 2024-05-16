@@ -62,37 +62,6 @@ import {
 } from 'class-validator';
 
 // Custom validation constraint class
-// @ValidatorConstraint({ name: 'custom', async: false })
-// export class ArrayOfArraysValidator implements ValidatorConstraintInterface {
-//   // Validate method to check if each inner array has at least two elements and if the first element is 'Other', the second element should not be empty
-//   validate(value: any[], args: ValidationArguments) {
-//     if (!Array.isArray(value)) return false; // Not an array of arrays
-//     for (const innerArray of value) {
-//       if (!Array.isArray(innerArray) || innerArray.length < 2) return false; // Inner array doesn't have at least two elements
-//       if (innerArray[0] === 'Other' && innerArray[1] === '') return false; // If first element is 'Other', second element should not be empty
-//     }
-//     return true;
-//   }
-
-//   defaultMessage(args: ValidationArguments) {
-//     return INDUSTRY_TYPE_MANDATORY;
-//   }
-// }
-
-// // Decorator function to use the custom validation constraint
-// export function IsArrayOfArraysValid(validationOptions?: ValidationOptions) {
-//   return function (object: Object, propertyName: string) {
-//     registerDecorator({
-//       target: object.constructor,
-//       propertyName: propertyName,
-//       options: validationOptions,
-//       constraints: [],
-//       validator: ArrayOfArraysValidator, // Use the custom validator constraint
-//     });
-//   };
-// }
-
-// Custom validation constraint class
 @ValidatorConstraint({ name: 'custom', async: false })
 export class OrganisationTypeValidator implements ValidatorConstraintInterface {
   validate(value: any, args: ValidationArguments) {
@@ -160,6 +129,27 @@ export function IsArrayOfArraysValid(
   };
 }
 
+function IsNotFutureYear(validationOptions?: ValidationOptions) {
+  return function (object: Object, propertyName: string) {
+    registerDecorator({
+      name: 'isNotFutureYear',
+      target: object.constructor,
+      propertyName: propertyName,
+      options: validationOptions,
+      validator: {
+        validate(value: any, args: ValidationArguments) {
+          const currentYear = new Date().getFullYear();
+          const enteredYear = parseInt(value, 10);
+          return enteredYear <= currentYear;
+        },
+        defaultMessage(args: ValidationArguments) {
+          return `${args.property} must not be a future year`;
+        }
+      }
+    });
+  };
+}
+
 export class KycPostCompanyDetailsValidation {
   @IsNotEmpty({ message: COMPANY_NAME_MANDATORY })
   @IsString({ message: FIELD_INVALID('Company Name') })
@@ -174,6 +164,9 @@ export class KycPostCompanyDetailsValidation {
   @IsNotEmpty({ message: YEAR_OF_ESTABLISHMENT_MANDATORY })
   @IsNumberString({}, { message: FIELD_INVALID('Year of Establishment') })
   @Length(4, 4, { message: FIELD_INVALID('Year of Establishment') })
+  @IsNotFutureYear({
+    message: FIELD_INVALID('Year of Establishment')
+  })
   year_of_establishment: string;
 
   @IsNotEmpty({ message: COMPANY_PHONE_NUMBER_MANDATORY })

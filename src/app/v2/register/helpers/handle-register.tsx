@@ -70,17 +70,36 @@ export const handleRegister = async ({
     .catch((e: any) => {
       setIsLoading(false);
       setIsDialogOpen(true);
-      setDialogContent(
-        <InvalidCreds
-          content=""
-          header={e?.data?.message}
-          handleClick={() => setIsDialogOpen(false)}
-          buttonText={
-            e.status === statusCode.DUPLICATE
-              ? 'Change Number'
-              : 'Edit Selection'
-          }
-        />
-      );
+      if (e.status === statusCode.DUPLICATE && e.data.field === 'email') {
+        setDialogContent(
+          <InvalidCreds
+            content="Email already in use. Please log in with the mobile number linked to this email."
+            header={'Duplicate email.'}
+            handleClick={() => setIsDialogOpen(false)}
+            buttonText={'Okay'}
+          />
+        );
+      } else if (
+        e.status === statusCode.DUPLICATE &&
+        e.data.field === 'mobile'
+      ) {
+        setDialogContent(
+          <InvalidCreds
+            content="This mobile number is already registered. Please log in or use a different number."
+            header={'Duplicate phone no'}
+            handleClick={() => setIsDialogOpen(false)}
+            buttonText={'Okay'}
+          />
+        );
+      } else {
+        setDialogContent(
+          <InvalidCreds
+            content=""
+            header={e?.data?.message}
+            handleClick={() => setIsDialogOpen(false)}
+            buttonText={'Edit Selection'}
+          />
+        );
+      }
     });
 };

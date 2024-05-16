@@ -94,6 +94,7 @@ const MyDiamonds = () => {
         logger.error(e);
         setIsLoading(false);
       });
+    setIsLoading(false);
   }, [
     resentConfiramtionStatus,
     resentConfiramtionInvoiceStatus,
@@ -110,7 +111,13 @@ const MyDiamonds = () => {
       .unwrap()
       .then(res => {
         setActiveInvoiceDataState(res?.orders);
+        setIsLoading(false);
+      })
+      .catch((e: any) => {
+        logger.error(e);
+        setIsLoading(false);
       });
+    setIsLoading(false);
   }, [myInvoiceStatus, myInvoiceInvoiceStatus, myInvoicelimit]);
 
   useEffect(() => {
@@ -118,6 +125,11 @@ const MyDiamonds = () => {
       .unwrap()
       .then(res => {
         setInvoiceHistoryDataState(res?.orders);
+        setIsLoading(false);
+      })
+      .catch((e: any) => {
+        logger.error(e);
+        setIsLoading(false);
       });
   }, [previousConfirmStatus]);
   const [
@@ -548,9 +560,9 @@ const MyDiamonds = () => {
       </div>
       <div className="border-[1px] border-neutral200 rounded-[8px]">
         {isLoading ||
-        !isLoadingInvoiceHistory ||
-        !isLoadingPendingInvoice ||
-        !isLoadngActiveInvoice ? (
+        (isLoadingInvoiceHistory && !isLoadingInvoiceHistory) ||
+        (isLoadingPendingInvoice && !isLoadingPendingInvoice) ||
+        (isLoadngActiveInvoice && !isLoadngActiveInvoice) ? (
           <CustomKGKLoader />
         ) : (
           renderContent()

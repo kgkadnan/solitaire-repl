@@ -17,8 +17,8 @@ const Share = ({
   selectedProducts,
   setErrorText,
   setIsError,
-  isNewArrival = false,
-  activeTab
+  identifier,
+  activeTab = 0
 }: any) => {
   const [selectedRows, setSelectedRows] = useState<IProduct[]>(
     rows.filter((row: IProduct) => row.id in selectedProducts)
@@ -46,29 +46,47 @@ const Share = ({
     { name: 'Depth %', state: 'depth_percentage' },
     { name: 'Rap Val ($)', state: 'rap_value' },
     { name: 'Rap ($)', state: 'rap' },
-    { name: 'Disc%', state: 'discount' },
+    {
+      name: 'Disc%',
+      state: identifier === 'Bid to Buy' ? 'original_discount' : 'discount'
+    },
     { name: 'Pr/Ct', state: 'price_per_carat' },
     { name: 'Amt ($)', state: 'amount' },
     { name: 'Public URL', state: 'public_url' }
   ]);
 
   useEffect(() => {
-    if (isNewArrival) {
+    if (
+      identifier?.length > 0 &&
+      (identifier === 'Bid to Buy' || identifier === 'New Arrival')
+    ) {
       // Define the field to add based on activeTab
       let fieldToAdd: any;
       let fieldToRemove: any;
-
-      if (activeTab === 2) {
-        fieldToAdd = { name: 'Date', state: 'last_bid_date' };
-        fieldToRemove = { state: 'current_max_bid' };
-      } else {
-        fieldToAdd = { name: 'Current Max Bid', state: 'current_max_bid' };
-        fieldToRemove = { state: 'last_bid_date' };
+      if (identifier === 'Bid to Buy') {
+        if (activeTab === 2) {
+          fieldToAdd = { name: 'Date', state: 'last_bid_date' };
+          fieldToRemove = { state: 'my_current_bid' };
+        } else {
+          fieldToAdd = {
+            name: 'Max Disc %',
+            state: activeTab === 0 ? 'discount' : 'my_current_bid'
+          };
+          fieldToRemove = { state: 'last_bid_date' };
+        }
+      } else if (identifier === 'New Arrival') {
+        if (activeTab === 2) {
+          fieldToAdd = { name: 'Date', state: 'last_bid_date' };
+          fieldToRemove = { state: 'current_max_bid' };
+        } else {
+          fieldToAdd = { name: 'Current Max Bid', state: 'current_max_bid' };
+          fieldToRemove = { state: 'last_bid_date' };
+        }
       }
 
       // Check if the field to remove exists in shareOptions
       const isFieldToRemoveExist = shareOptions.some(
-        option => option.state === fieldToRemove.state
+        option => option?.state === fieldToRemove?.state
       );
 
       // Remove the field to remove if it exists
@@ -87,7 +105,7 @@ const Share = ({
 
       // Check if the field to add is already added to shareOptions
       const isFieldToAddAlreadyAdded = shareOptions.some(
-        option => option.state === fieldToAdd.state
+        option => option?.state === fieldToAdd?.state
       );
 
       if (!isFieldToAddAlreadyAdded) {
@@ -101,13 +119,13 @@ const Share = ({
         }));
       }
     }
-  }, [isNewArrival, activeTab, shareOptions]);
+  }, [identifier, activeTab, shareOptions]);
 
   const { setIsInputDialogOpen } = modalSetState;
 
   const [selectedAttributes, setSelectedAttributes] = useState(
     shareOptions.reduce((acc: any, option) => {
-      acc[option.state] = true; // Initialize all options as selected
+      acc[option?.state] = true; // Initialize all options as selected
       return acc;
     }, {})
   );
@@ -146,6 +164,16 @@ const Share = ({
               return `Current Max Bid: ${formatNumber(
                 product?.current_max_bid
               )}`;
+            }
+            if (
+              attribute === 'my_current_bid' &&
+              selectedAttributes['my_current_bid']
+            ) {
+              return `Max Disc %: ${formatNumber(product?.my_current_bid)}`;
+            }
+
+            if (attribute === 'discount' && selectedAttributes['discount']) {
+              return `Max Disc %: ${formatNumber(product?.discount)}`;
             }
             if (
               attribute === 'last_bid_date' &&

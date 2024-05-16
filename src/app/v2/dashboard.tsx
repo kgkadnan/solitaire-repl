@@ -9,6 +9,7 @@ import AppointmentIcon from '@public/v2/assets/icons/sidebar-icons/appointment.s
 import BidToBuyIcon from '@public/v2/assets/icons/sidebar-icons/bid-to-buy.svg?url';
 import { useRouter } from 'next/navigation';
 import { useGetCustomerQuery } from '@/features/api/dashboard';
+import fireSvg from '@public/v2/assets/icons/data-table/fire-icon.svg';
 import { useEffect, useMemo, useState } from 'react';
 import searchIcon from '@public/v2/assets/icons/data-table/search-icon.svg';
 import micIcon from '@public/v2/assets/icons/dashboard/mic.svg';
@@ -91,6 +92,7 @@ import VolumeDiscount from '@/components/v2/common/volume-discount';
 import EmptyScreen from '@/components/v2/common/empty-screen';
 import emptyOrderSvg from '@public/v2/assets/icons/empty-order.svg';
 import empty from '@public/v2/assets/icons/saved-search/empty-screen-saved-search.svg';
+import { Skeleton } from '@/components/v2/ui/skeleton';
 
 // import useUser from '@/lib/use-auth';
 
@@ -98,6 +100,16 @@ interface ITabs {
   label: string;
   link: string;
   data: any;
+}
+
+function formatDate(dateString: string): string {
+  const date = new Date(dateString);
+  const options: Intl.DateTimeFormatOptions = {
+    weekday: 'long',
+    month: 'short',
+    day: 'numeric'
+  };
+  return date.toLocaleDateString('en-US', options);
 }
 
 function formatDateString(dateString: string) {
@@ -111,7 +123,7 @@ const Dashboard = () => {
   const dispatch = useDispatch();
 
   const { data: customerData, refetch: refetchCustomerData } =
-    useGetCustomerQuery({});
+    useGetCustomerQuery({}, { refetchOnMountOrArgChange: true });
   const [validImages, setValidImages] = useState<any>([]);
   const [activeTab, setActiveTab] = useState<string>('');
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
@@ -146,6 +158,9 @@ const Dashboard = () => {
   const [isDiamondDetail, setIsDiamondDetail] = useState(false);
 
   const [timeLeftForVolumeDiscount, setTimeLeftForVolumeDiscount] = useState();
+
+  let isNudge = localStorage.getItem('show-nudge') === 'MINI';
+  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   const { errorSetState } = useErrorStateManagement();
   const { setIsError } = errorSetState;
 
@@ -179,11 +194,15 @@ const Dashboard = () => {
       label: 'My Appointments',
       icon: <AppointmentIcon />,
       color: optionsClasses[3],
-      count: 0,
+      count: customerData?.customer?.upcoming_appointments_count,
       isAvailable: true,
+      isKycNotVerified:
+        isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+        isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED,
       link: '/v2/my-appointments'
     }
   ];
+
   const handleTabs = ({ tab }: { tab: string }) => {
     setActiveTab(tab);
   };
@@ -227,13 +246,38 @@ const Dashboard = () => {
           short_label: shapeColumn?.short_label
         };
 
-        const updatedColumns = [...response.data, additionalColumn];
+        let addFireIconCol = {
+          accessor: 'fire_icon',
+          id: 'sub_col_13a',
+          is_disabled: false,
+          is_fixed: false,
+          label: '',
+          sequence: 0,
+          short_label: ''
+        };
+
+        const updatedColumns = [
+          ...response.data,
+          additionalColumn,
+          addFireIconCol
+        ];
         setSearchColumn(updatedColumns);
       }
     };
 
     fetchColumns();
   }, []);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      document.querySelectorAll('.blink').forEach(element => {
+        element.classList.remove(styles.blink);
+      });
+    }, 4000);
+
+    return () => clearTimeout(timeout);
+  }, [isDetailPage, isConfirmStone, isCompareStone, searchData?.foundProducts]);
+
   const mapColumns = (columns: any) =>
     columns
       ?.filter(({ is_disabled }: any) => !is_disabled)
@@ -258,6 +302,32 @@ const Dashboard = () => {
         };
 
         switch (accessor) {
+          case 'fire_icon':
+            return {
+              accessorKey: 'fire_icon',
+              header: '',
+              minSize: 1,
+              size: 1,
+              maxSize: 2,
+              Cell: ({ row }: { row: any }) => {
+                return row.original.in_high_demand ? (
+                  <Tooltip
+                    tooltipTrigger={
+                      <Image
+                        id="blinking-image"
+                        src={fireSvg}
+                        alt="fireSvg"
+                        className={`${styles.blink} blink`}
+                      />
+                    }
+                    tooltipContent={'In High Demand Now!'}
+                    tooltipContentStyles={'z-[1000] '}
+                  />
+                ) : (
+                  ''
+                );
+              }
+            };
           case 'clarity':
             return {
               ...commonProps,
@@ -412,6 +482,7 @@ const Dashboard = () => {
     () => mapColumns(searchColumn),
     [searchColumn]
   );
+
   const handleEdit = (stone: string) => {
     let savedSearchEditData = customerData?.customer.saved_searches.filter(
       (items: any) => {
@@ -477,7 +548,7 @@ const Dashboard = () => {
     }
   ];
   useEffect(() => {
-    !customerData && setIsLoading(true);
+    // !customerData && setIsLoading(true);
     refetchCustomerData();
   }, []);
   useEffect(() => {
@@ -510,12 +581,12 @@ const Dashboard = () => {
       // if (customerData.customer?.orders?.length > 0) {
       const pendingInvoices =
         customerData.customer.orders
-          .filter((item: any) => item.invoice_id === null)
+          ?.filter((item: any) => item.invoice_id === null)
           .slice(0, 5) ?? [];
 
       const activeInvoices =
         customerData.customer.orders
-          .filter(
+          ?.filter(
             (item: any) => item.invoice_id !== null && item.status === 'pending'
           )
           .slice(0, 5) ?? [];
@@ -741,8 +812,6 @@ const Dashboard = () => {
   //     });
   // };
 
-  let isNudge = localStorage.getItem('show-nudge') === 'MINI';
-  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   const [getProductById] = useGetProductByIdMutation();
   const [addCart] = useAddCartMutation();
   const [confirmProduct] = useConfirmProductMutation();
@@ -1354,11 +1423,65 @@ const Dashboard = () => {
       ]);
     }
   }, [validImages]);
+  const getCardContent = (data: any) => {
+    if (data.label === 'Bid to Buy') {
+      if (data.start_at && data.count) {
+        return (
+          <div className="mt-1 flex items-center gap-2 rounded-[4px] px-1 h-[26px] bg-[#F1FAF8]">
+            <Image src={BidHammer} alt="Bid to Buy" className="mb-2" />
+            <p className="m-0 p-0 text-neutral-900 text-lRegular">
+              Bid starts on {formatDateString(data.start_at)}
+            </p>
+          </div>
+        );
+      } else if (data.start_at && !data.count) {
+        return (
+          <div className="mt-1 flex items-center gap-2 rounded-[4px] px-1 h-[26px] bg-[#F1FAF8]">
+            <Image src={BidHammer} alt="Bid to Buy" className="mb-2" />
+            <p className="m-0 p-0 text-neutral-900 sm:text-mMedium text-lRegular">
+              Stay tuned
+            </p>
+          </div>
+        );
+      } else if (!data.start_at && data.count > 0) {
+        return (
+          <div className="text-neutral-900 text-headingS">{data.count}</div>
+        );
+      }
+    } else if (data.label === 'My Appointments') {
+      if (data.count > 0) {
+        return (
+          <p className="text-headingS text-neutral900 font-medium">
+            {formatDate(
+              customerData?.customer?.latest_appointment?.appointment_at
+            )}
+          </p>
+        );
+      } else {
+        return (
+          <p className="text-headingS text-infoMain underline font-medium">
+            Book Now
+          </p>
+        );
+      }
+    } else {
+      return (
+        <p className="text-neutral900 text-headingS font-medium">
+          {data.isAvailable
+            ? data.count === 0
+              ? '-'
+              : data.count
+            : 'Coming Soon'}
+        </p>
+      );
+    }
+  };
   return (
     <>
       {error !== '' && (
         <Toast show={error !== ''} message={error} isSuccess={false} />
       )}
+
       <ImageModal
         setIsLoading={setIsLoading}
         isOpen={isModalOpen}
@@ -1395,17 +1518,7 @@ const Dashboard = () => {
             modalSetState={modalSetState}
             setIsLoading={setIsLoading}
           />
-          <div className="p-[16px] flex justify-end items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow mb-1">
-            {/* {isError && (
-              <div>
-                <span className="hidden  text-successMain" />
-                <span
-                  className={`text-mRegular font-medium text-dangerMain pl-[8px]`}
-                >
-                  {errorText}
-                </span>
-              </div>
-            )} */}
+          <div className="p-[8px] flex justify-end items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow mb-1">
             <ActionButton
               actionButtonData={[
                 {
@@ -1465,7 +1578,7 @@ const Dashboard = () => {
           </div>
         </>
       ) : isCompareStone ? (
-        <div className="flex">
+        <div>
           <div className="flex py-[8px] items-center ">
             <p className="text-lMedium font-medium text-neutral900">
               Diamond Comparison Overview
@@ -1606,125 +1719,104 @@ const Dashboard = () => {
             <div
               className={`bg-cover ml-[-20px] mr-[-16px]  bg-no-repeat flex justify-center flex-col items-center h-[220px] gap-5`}
               style={{
-                backgroundImage: 'url(/gradient.png)'
+                backgroundImage:
+                  customerData === undefined ? '' : 'url(/gradient.png)'
               }}
             >
-              <p className="text-headingM medium text-neutral900">
-                Hello, {customerData?.customer.first_name}
-              </p>
-              <div className="flex items-center bg-neutral0 rounded-[4px] overflow-hidden border-[1px] border-primaryBorder w-[720px] px-4 py-2">
-                <div className="relative flex-grow items-center">
-                  <input
-                    className="px-10 py-2 w-full text-gray-600 rounded-lg focus:outline-none"
-                    type="string"
-                    placeholder="Search by stone id or certificate number"
-                    onChange={handleStoneId}
-                    onKeyDown={handleKeyDown}
-                  />
-                  <div
-                    className="absolute left-0 top-[5px]"
-                    onClick={handleInputSearch}
-                  >
-                    <Image src={searchIcon} alt={'searchIcon'} />
-                  </div>
-                  {/* <div className="absolute right-0 top-[5px]">
+              {customerData === undefined ? (
+                ''
+              ) : (
+                <p className="text-headingM medium text-neutral900">
+                  Hello, {customerData?.customer.first_name}
+                </p>
+              )}
+
+              {customerData !== undefined ? (
+                <div className="flex items-center bg-neutral0 rounded-[4px] overflow-hidden border-[1px] border-primaryBorder w-[720px] px-4 py-2">
+                  <div className="relative flex-grow items-center">
+                    <input
+                      className="px-10 py-2 w-full text-gray-600 rounded-lg focus:outline-none"
+                      type="string"
+                      placeholder="Search by stone id or certificate number"
+                      onChange={handleStoneId}
+                      onKeyDown={handleKeyDown}
+                    />
+                    <div
+                      className="absolute left-0 top-[5px]"
+                      onClick={handleInputSearch}
+                    >
+                      <Image src={searchIcon} alt={'searchIcon'} />
+                    </div>
+                    {/* <div className="absolute right-0 top-[5px]">
             <Image src={micIcon} alt={'micIcon'} />
           </div> */}
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <Skeleton className="w-[720px] h-[54px] bg-neutral50 rounded-[4px]" />
+              )}
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-4 gap-4">
-              {options.map((data, index) => (
-                <div
-                  className={`border-[1px] border-neutral200 p-[24px] flex rounded-[8px] w-full gap-4 hover:border-accentTeal shadow-sm ${
-                    data.isAvailable ? 'cursor-pointer' : 'cursor-default'
-                  }`}
-                  key={index}
-                  onClick={
-                    data.isAvailable
-                      ? () => {
-                          router.push(data.link);
-                        }
-                      : () => {}
-                  }
-                >
-                  <div
-                    style={{ background: data.color }}
-                    className={`${data.color} p-3 rounded-[4px] h-[48px]`}
-                  >
-                    {' '}
-                    {data.icon}{' '}
-                  </div>
-                  <div className="w-full">
-                    <div className="flex justify-between items-baseline">
-                      <p className="text-neutral600 text-mRegular">
-                        {data.label}
-                        {data.label === 'My Appointments' && `(${0})`}
-                      </p>
-                      {data.label === 'Bid to Buy' &&
-                        (!data?.start_at && data?.count > 0 ? (
-                          <div className="text-successMain text-sMedium ">
-                            ACTIVE
-                          </div>
-                        ) : (
-                          <div className="text-visRed  text-sMedium ">
-                            INACTIVE
-                          </div>
-                        ))}
-                    </div>
-
-                    {data.label === 'Bid to Buy' ? (
-                      <>
-                        {data.start_at && data.count ? (
-                          <div className=" mt-1 flex items-center gap-2 rounded-[4px] px-1 h-[26px] bg-[#F1FAF8]">
-                            <Image
-                              src={BidHammer}
-                              alt="Bid to Buy"
-                              className="mb-2"
-                            />
-                            <p className="m-0 p-0 text-neutral-900 text-lRegular">
-                              Bid starts on {formatDateString(data.start_at)}
-                            </p>
-                          </div>
-                        ) : data.start_at && !data.count ? (
-                          <div className=" mt-1 flex items-center gap-2 rounded-[4px] px-1 h-[26px] bg-[#F1FAF8]">
-                            <Image
-                              src={BidHammer}
-                              alt="Bid to Buy"
-                              className="mb-2"
-                            />
-                            <p className="m-0 p-0  text-neutral-900 sm:text-mMedium text-lRegular">
-                              Stay tuned
-                            </p>
-                          </div>
-                        ) : (
-                          !data.start_at &&
-                          data.count > 0 && (
-                            <div className="text-neutral-900 text-headingS">
-                              {data.count}
-                            </div>
-                          )
-                        )}
-                      </>
-                    ) : data.label === 'My Appointments' ? (
-                      <p className="text-headingS text-infoMain  underline">
-                        Book Now
-                      </p>
-                    ) : (
-                      <p
-                        className={`text-neutral900 text-headingS font-medium `}
+              {customerData === undefined
+                ? Array(4)
+                    .fill(null)
+                    .map((_, index) => (
+                      <div
+                        key={index}
+                        className="flex rounded-[8px] w-full gap-4 shadow-sm"
                       >
-                        {data.isAvailable
-                          ? data.count === 0
-                            ? '-'
-                            : data.count
-                          : 'Coming Soon'}
-                      </p>
-                    )}
-                  </div>
-                </div>
-              ))}
+                        <Skeleton className="rounded-[4px] w-full h-[97px] bg-neutral50" />
+                      </div>
+                    ))
+                : options.map((data, index) => (
+                    <div
+                      className={`border-[1px] border-neutral200 p-[24px] flex rounded-[8px] w-full gap-4 hover:border-accentTeal shadow-sm ${
+                        data.isKycNotVerified
+                          ? 'cursor-not-allowed'
+                          : data.isAvailable
+                          ? 'cursor-pointer'
+                          : 'cursor-default'
+                      }`}
+                      key={index}
+                      onClick={
+                        data.isKycNotVerified
+                          ? () => {}
+                          : data.isAvailable
+                          ? () => {
+                              router.push(data.link);
+                            }
+                          : () => {}
+                      }
+                    >
+                      <div
+                        style={{ background: data.color }}
+                        className={`${data.color} p-3 rounded-[4px] h-[48px]`}
+                      >
+                        {data.icon}
+                      </div>
+                      <div className="w-full">
+                        <div className="flex justify-between items-baseline">
+                          <p className="text-neutral600 text-mRegular">
+                            {data.label}
+                            {data.label === 'My Appointments' &&
+                              `(${data.count})`}
+                          </p>
+                          {data.label === 'Bid to Buy' &&
+                            (!data?.start_at && data?.count > 0 ? (
+                              <div className="text-successMain text-sMedium">
+                                ACTIVE
+                              </div>
+                            ) : (
+                              <div className="text-visRed text-sMedium">
+                                INACTIVE
+                              </div>
+                            ))}
+                        </div>
+                        {getCardContent(data)}
+                      </div>
+                    </div>
+                  ))}
             </div>
 
             <div className="flex w-full gap-4 h-[400px]">
@@ -1738,203 +1830,216 @@ const Dashboard = () => {
               </div>
               {/* KAMCard Container - Prevent it from shrinking and assign a max width */}
               <div className="flex-shrink-0 w-[300px] max-w-full">
-                <KAMCard
-                  name={customerData?.customer.kam?.kam_name ?? '-'}
-                  role={
-                    customerData?.customer.kam?.post ?? 'Key Account Manager'
-                  }
-                  phoneNumber={customerData?.customer.kam?.phone ?? '-'}
-                  email={customerData?.customer.kam?.email ?? '-'}
-                />
+                {customerData === undefined ? (
+                  <Skeleton className="rounded-[4px] w-full h-[400px] bg-neutral50" />
+                ) : (
+                  <KAMCard
+                    name={customerData?.customer.kam?.kam_name ?? '-'}
+                    role={
+                      customerData?.customer.kam?.post ?? 'Key Account Manager'
+                    }
+                    phoneNumber={customerData?.customer.kam?.phone ?? '-'}
+                    email={customerData?.customer.kam?.email ?? '-'}
+                  />
+                )}
               </div>
             </div>
             {tabs.length > 0 && (
               <div className="flex gap-4 ">
-                <div className="w-full border-[1px] border-neutral200 rounded-[8px] flex-1 flex-shrink min-w-0">
-                  <div className="border-b-[1px] border-neutral200 p-4">
-                    <div className="flex border-b border-neutral200 w-full ml-3 text-mMedium font-medium justify-between pr-4">
-                      <div>
-                        {tabs.map(({ label }: any) => {
-                          return (
-                            <button
-                              className={`p-2 ${
-                                activeTab === label
-                                  ? 'text-neutral900 border-b-[2px] border-primaryMain'
-                                  : 'text-neutral600 '
-                              }`}
-                              key={label}
-                              onClick={() => handleTabs({ tab: label })}
-                            >
-                              {label}
-                            </button>
-                          );
-                        })}
+                {customerData === undefined ? (
+                  <Skeleton className="rounded-[4px] w-full h-full bg-neutral50" />
+                ) : (
+                  <div className="w-full border-[1px] border-neutral200 rounded-[8px] flex-1 flex-shrink min-w-0">
+                    <div className="border-b-[1px] border-neutral200 p-4">
+                      <div className="flex border-b border-neutral200 w-full ml-3 text-mMedium font-medium justify-between pr-4">
+                        <div>
+                          {tabs.map(({ label }: any) => {
+                            return (
+                              <button
+                                className={`p-2 ${
+                                  activeTab === label
+                                    ? 'text-neutral900 border-b-[2px] border-primaryMain'
+                                    : 'text-neutral600 '
+                                }`}
+                                key={label}
+                                onClick={() => handleTabs({ tab: label })}
+                              >
+                                {label}
+                              </button>
+                            );
+                          })}
+                        </div>
+                        <Link
+                          href={redirectLink()}
+                          className="cursor-pointer text-infoMain text-sRegular flex items-center"
+                        >
+                          View All
+                        </Link>
                       </div>
-                      <Link
-                        href={redirectLink()}
-                        className="cursor-pointer text-infoMain text-sRegular flex items-center"
-                      >
-                        View All
-                      </Link>
+                    </div>
+                    <div className="p-4 ">
+                      {activeTab === 'Saved Search' &&
+                        (tabs.find(tab => tab.label === activeTab)?.data
+                          .length > 0 ? (
+                          tabs
+                            .find(tab => tab.label === activeTab)
+                            ?.data?.map((searchData: any, index: number) => {
+                              const gradientIndex =
+                                index % gradientClasses.length;
+                              // Get the gradient class for the calculated index
+                              const gradientClass =
+                                gradientClasses[gradientIndex];
+                              return (
+                                <div
+                                  className="p-[16px] flex flex-col md:flex-row w-full border-[1px] border-neutral200 cursor-pointer group hover:bg-neutral50"
+                                  key={searchData?.id}
+                                  onClick={() =>
+                                    handleCardClick({
+                                      id: searchData.id,
+                                      savedSearchData: tabs.find(
+                                        tab => tab.label === activeTab
+                                      )?.data,
+                                      router,
+                                      triggerProductCountApi,
+                                      setDialogContent,
+                                      setIsDialogOpen
+                                    })
+                                  }
+                                >
+                                  <div className="flex items-center gap-[18px] md:w-[40%]">
+                                    <div
+                                      className={` ${gradientClass} text-headingM w-[69px] h-[69px] text-neutral700 uppercase p-[14px] rounded-[4px] font-medium text-center`}
+                                    >
+                                      {searchData.name
+                                        ?.split(' ') // Split the name into words
+                                        .slice(0, 2)
+                                        .map((word: string) => word.charAt(0)) // Extract the first character of each word
+                                        .join('')}
+                                    </div>
+                                    <div className="flex flex-col gap-[18px]">
+                                      <h1 className="text-neutral900 font-medium text-mMedium capitalize">
+                                        {searchData.name}
+                                      </h1>
+                                      <div className="text-neutral700 font-regular text-sMedium">
+                                        {formatCreatedAt(searchData.created_at)}
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div className="w-full md:w-[60%] mt-4 md:mt-0">
+                                    <DisplayTable
+                                      column={column}
+                                      row={[searchData.meta_data]}
+                                    />
+                                  </div>
+                                  <button
+                                    className="w-full md:w-[10%] flex justify-end items-start opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                                    onClick={e => {
+                                      e.stopPropagation();
+                                      handleEdit(searchData.id);
+                                    }}
+                                  >
+                                    <Image src={editIcon} alt="editIcon" />
+                                  </button>
+                                </div>
+                              );
+                            })
+                        ) : (
+                          <EmptyScreen
+                            label="Search Diamonds"
+                            message="No saved searches so far. Let’s save some searches!"
+                            onClickHandler={() =>
+                              router.push(
+                                `/v2/search?active-tab=${SubRoutes.NEW_SEARCH}`
+                              )
+                            }
+                            imageSrc={empty}
+                          />
+                        ))}
+                      {(activeTab === 'Active Invoice' ||
+                        activeTab === 'Pending Invoice') && (
+                        <div className="max-w-full overflow-x-auto border-[1px] border-neutral200">
+                          {/* header */}
+                          <div className="grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] text-mMedium h-[47px] border-b border-neutral-200 bg-neutral-50 text-neutral700">
+                            {keys?.map(({ label }: any) => (
+                              <div
+                                key={label}
+                                className="p-4 text-left font-medium"
+                              >
+                                {label}
+                              </div>
+                            ))}
+                          </div>
+                          {/* rows */}
+                          <div className="">
+                            {data?.length > 0 ? (
+                              data?.map((items: any) => (
+                                <div
+                                  key={items.order_id}
+                                  onClick={() => {
+                                    if (activeTab === 'Active Invoice') {
+                                      router.push(
+                                        `/v2/your-orders?path=active&id=${items?.id}`
+                                      );
+                                    } else {
+                                      router.push(
+                                        `/v2/your-orders?id=${items?.id}`
+                                      );
+                                    }
+                                    //  handleShowDetails(items?.id);
+                                  }}
+                                  className="cursor-pointer grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] bg-neutral0 border-b border-neutral-200 hover:bg-neutral-50"
+                                >
+                                  {keys?.map(
+                                    ({ accessor }: any, index: number) => (
+                                      <div
+                                        key={index}
+                                        className="flex items-center text-lRegular space-x-2 py-3 pr-3 pl-4 text-left text-gray-800"
+                                      >
+                                        {renderCellContent(accessor, items)}
+                                      </div>
+                                    )
+                                  )}
+                                </div>
+                              ))
+                            ) : (
+                              // <> <div className="min-h-[73vh] h-[65vh]">
+                              <EmptyScreen
+                                label="Search Diamonds"
+                                message="Looks like you haven't placed any orders yet. Let’s place some orders!"
+                                onClickHandler={() =>
+                                  router.push(
+                                    `/v2/search?active-tab=${SubRoutes.NEW_SEARCH}`
+                                  )
+                                }
+                                imageSrc={emptyOrderSvg}
+                              />
+                              // </div></>
+                            )}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
-                  <div className="p-4 ">
-                    {activeTab === 'Saved Search' &&
-                      (tabs.find(tab => tab.label === activeTab)?.data.length >
-                      0 ? (
-                        tabs
-                          .find(tab => tab.label === activeTab)
-                          ?.data?.map((searchData: any, index: number) => {
-                            const gradientIndex =
-                              index % gradientClasses.length;
-                            // Get the gradient class for the calculated index
-                            const gradientClass =
-                              gradientClasses[gradientIndex];
-                            return (
-                              <div
-                                className="p-[16px] flex flex-col md:flex-row w-full border-[1px] border-neutral200 cursor-pointer group hover:bg-neutral50"
-                                key={searchData?.id}
-                                onClick={() =>
-                                  handleCardClick({
-                                    id: searchData.id,
-                                    savedSearchData: tabs.find(
-                                      tab => tab.label === activeTab
-                                    )?.data,
-                                    router,
-                                    triggerProductCountApi,
-                                    setDialogContent,
-                                    setIsDialogOpen
-                                  })
-                                }
-                              >
-                                <div className="flex items-center gap-[18px] md:w-[40%]">
-                                  <div
-                                    className={` ${gradientClass} text-headingM w-[69px] h-[69px] text-neutral700 uppercase p-[14px] rounded-[4px] font-medium text-center`}
-                                  >
-                                    {searchData.name
-                                      ?.split(' ') // Split the name into words
-                                      .slice(0, 2)
-                                      .map((word: string) => word.charAt(0)) // Extract the first character of each word
-                                      .join('')}
-                                  </div>
-                                  <div className="flex flex-col gap-[18px]">
-                                    <h1 className="text-neutral900 font-medium text-mMedium capitalize">
-                                      {searchData.name}
-                                    </h1>
-                                    <div className="text-neutral700 font-regular text-sMedium">
-                                      {formatCreatedAt(searchData.created_at)}
-                                    </div>
-                                  </div>
-                                </div>
-                                <div className="w-full md:w-[60%] mt-4 md:mt-0">
-                                  <DisplayTable
-                                    column={column}
-                                    row={[searchData.meta_data]}
-                                  />
-                                </div>
-                                <button
-                                  className="w-full md:w-[10%] flex justify-end items-start opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                                  onClick={e => {
-                                    e.stopPropagation();
-                                    handleEdit(searchData.id);
-                                  }}
-                                >
-                                  <Image src={editIcon} alt="editIcon" />
-                                </button>
-                              </div>
-                            );
-                          })
-                      ) : (
-                        <EmptyScreen
-                          label="Search Diamonds"
-                          message="No saved searches so far. Let’s save some searches!"
-                          onClickHandler={() =>
-                            router.push(
-                              `/v2/search?active-tab=${SubRoutes.NEW_SEARCH}`
-                            )
-                          }
-                          imageSrc={empty}
-                        />
-                      ))}
-                    {(activeTab === 'Active Invoice' ||
-                      activeTab === 'Pending Invoice') && (
-                      <div className="max-w-full overflow-x-auto border-[1px] border-neutral200">
-                        {/* header */}
-                        <div className="grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] text-mMedium h-[47px] border-b border-neutral-200 bg-neutral-50 text-neutral700">
-                          {keys?.map(({ label }: any) => (
-                            <div
-                              key={label}
-                              className="p-4 text-left font-medium"
-                            >
-                              {label}
-                            </div>
-                          ))}
-                        </div>
-                        {/* rows */}
-                        <div className="">
-                          {data?.length > 0 ? (
-                            data?.map((items: any) => (
-                              <div
-                                key={items.order_id}
-                                onClick={() => {
-                                  if (activeTab === 'Active Invoice') {
-                                    router.push(
-                                      `/v2/your-orders?path=active&id=${items?.id}`
-                                    );
-                                  } else {
-                                    router.push(
-                                      `/v2/your-orders?id=${items?.id}`
-                                    );
-                                  }
-                                  //  handleShowDetails(items?.id);
-                                }}
-                                className="cursor-pointer grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] bg-neutral0 border-b border-neutral-200 hover:bg-neutral-50"
-                              >
-                                {keys?.map(
-                                  ({ accessor }: any, index: number) => (
-                                    <div
-                                      key={index}
-                                      className="flex items-center text-lRegular space-x-2 py-3 pr-3 pl-4 text-left text-gray-800"
-                                    >
-                                      {renderCellContent(accessor, items)}
-                                    </div>
-                                  )
-                                )}
-                              </div>
-                            ))
-                          ) : (
-                            // <> <div className="min-h-[73vh] h-[65vh]">
-                            <EmptyScreen
-                              label="Search Diamonds"
-                              message="Looks like you haven't placed any orders yet. Let’s place some orders!"
-                              onClickHandler={() =>
-                                router.push(
-                                  `/v2/search?active-tab=${SubRoutes.NEW_SEARCH}`
-                                )
-                              }
-                              imageSrc={emptyOrderSvg}
-                            />
-                            // </div></>
-                          )}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
+                )}
+
                 <div className="w-[300px]">
-                  <VolumeDiscount
-                    totalSpent={
-                      customerData?.customer?.volumeDiscount?.totalSpent
-                    }
-                    expiryTime={
-                      // '2024-05-28T09:08:46.603Z'
-                      customerData?.customer?.volumeDiscount?.expiryTime
-                    }
-                    eligibleForDiscount={
-                      customerData?.customer?.volumeDiscount
-                        ?.eligibleForDiscount
-                    }
-                  />
+                  {customerData === undefined ? (
+                    <Skeleton className="rounded-[4px] w-full h-[420px] bg-neutral50" />
+                  ) : (
+                    <VolumeDiscount
+                      totalSpent={
+                        customerData?.customer?.volumeDiscount?.totalSpent
+                      }
+                      expiryTime={
+                        // '2024-05-28T09:08:46.603Z'
+                        customerData?.customer?.volumeDiscount?.expiryTime
+                      }
+                      eligibleForDiscount={
+                        customerData?.customer?.volumeDiscount
+                          ?.eligibleForDiscount
+                      }
+                    />
+                  )}
                 </div>
               </div>
             )}

@@ -376,7 +376,7 @@ const NewArrivalDataTable = ({
                 selectedProducts={rowSelection}
                 setErrorText={setErrorText}
                 setIsError={setIsError}
-                isNewArrival={true}
+                identifier={'New Arrival'}
                 activeTab={activeTab}
               />
             </div>
@@ -401,7 +401,8 @@ const NewArrivalDataTable = ({
     >
       {(activeTab === 1 && activeCount === 0) ||
       (activeTab === 0 && bidCount === 0) ||
-      (activeTab === 2 && historyCount === 0) ? (
+      (activeTab === 2 && historyCount === 0) ||
+      rows.length === 0 ? (
         <>
           <Image src={empty} alt={'empty'} />
           <p className="text-neutral900  w-[320px] text-center ">
@@ -566,35 +567,34 @@ const NewArrivalDataTable = ({
       pagination: pagination
     },
 
-    // renderEmptyRowsFallback: () => {
-    //   return <>no result</>;
-    // },
     positionGlobalFilter: 'left',
     //styling
 
     muiTableContainerProps: {
       sx: {
-        // minHeight: 'calc(100vh - 399px)',
-        // maxHeight: 'calc(100vh - 399px)'
         height: isFullScreen ? '70vh' : 'calc(100vh - 399px)',
         minHeight: isFullScreen
           ? activeTab === 2
-            ? 'calc(100vh - 125px)'
+            ? 'calc(100vh - 123px)'
             : 'calc(100vh - 175px)'
           : activeTab === 2
           ? isNudge &&
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-            ? 'calc(100vh - 362px)'
+            ? 'calc(100vh - 254px)'
             : 'calc(100vh - 260px)'
           : isNudge &&
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-          ? 'calc(100vh - 362px)'
+          ? 'calc(100vh - 254px)'
+          : !rows.length
+          ? 'calc(100vh - 260px)'
+          : !rows.length
+          ? 'calc(100vh - 260px)'
           : 'calc(100vh - 295px)',
         maxHeight: isFullScreen
           ? activeTab === 2
-            ? 'calc(100vh - 125px)'
+            ? 'calc(100vh - 123px)'
             : 'calc(100vh - 175px)'
           : activeTab === 2
           ? isNudge &&
@@ -606,7 +606,7 @@ const NewArrivalDataTable = ({
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
           ? 'calc(100vh - 362px)'
-          : 'calc(100vh - 295px)'
+          : 'calc(100vh - 260px)'
       }
     },
     muiTableHeadRowProps: {
