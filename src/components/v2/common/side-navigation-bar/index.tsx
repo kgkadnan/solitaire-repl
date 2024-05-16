@@ -86,6 +86,12 @@ const SideNavigationBar = () => {
       title: ManageLocales('app.sideNavigationBar.yourOrders'),
       link: Routes.YOUR_ORDERS,
       isActive: currentRoute === Routes.YOUR_ORDERS
+    },
+    {
+      src: <MyAppointments />,
+      title: ManageLocales('app.sideNavigationBar.myAppointments'),
+      link: Routes.MY_APPOINTMENTS,
+      isActive: currentRoute === Routes.MY_APPOINTMENTS
     }
 
     // {

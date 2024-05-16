@@ -1613,7 +1613,7 @@ const Dashboard = () => {
           </div>
         </>
       ) : isCompareStone ? (
-        <div className="flex">
+        <div className="">
           <div className="flex py-[8px] items-center ">
             <p className="text-lMedium font-medium text-neutral900">
               Diamond Comparison Overview
