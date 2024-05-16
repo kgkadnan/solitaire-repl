@@ -73,8 +73,8 @@ export const handleRegister = async ({
       if (e.status === statusCode.DUPLICATE && e.data.field === 'email') {
         setDialogContent(
           <InvalidCreds
-            content="Please log in with the mobile number linked to this email."
-            header={'Email already in use.'}
+            content="Email already in use. Please log in with the mobile number linked to this email."
+            header={'Duplicate email.'}
             handleClick={() => setIsDialogOpen(false)}
             buttonText={'Okay'}
           />
@@ -85,8 +85,8 @@ export const handleRegister = async ({
       ) {
         setDialogContent(
           <InvalidCreds
-            content="Please log in or use a different number."
-            header={'This mobile number is already registered.'}
+            content="This mobile number is already registered. Please log in or use a different number."
+            header={'Duplicate phone no'}
             handleClick={() => setIsDialogOpen(false)}
             buttonText={'Okay'}
           />

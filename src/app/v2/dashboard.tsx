@@ -9,6 +9,7 @@ import AppointmentIcon from '@public/v2/assets/icons/sidebar-icons/appointment.s
 import BidToBuyIcon from '@public/v2/assets/icons/sidebar-icons/bid-to-buy.svg?url';
 import { useRouter } from 'next/navigation';
 import { useGetCustomerQuery } from '@/features/api/dashboard';
+import fireSvg from '@public/v2/assets/icons/data-table/fire-icon.svg';
 import { useEffect, useMemo, useState } from 'react';
 import searchIcon from '@public/v2/assets/icons/data-table/search-icon.svg';
 import micIcon from '@public/v2/assets/icons/dashboard/mic.svg';
@@ -244,13 +245,38 @@ const Dashboard = () => {
           short_label: shapeColumn?.short_label
         };
 
-        const updatedColumns = [...response.data, additionalColumn];
+        let addFireIconCol = {
+          accessor: 'fire_icon',
+          id: 'sub_col_13a',
+          is_disabled: false,
+          is_fixed: false,
+          label: '',
+          sequence: 0,
+          short_label: ''
+        };
+
+        const updatedColumns = [
+          ...response.data,
+          additionalColumn,
+          addFireIconCol
+        ];
         setSearchColumn(updatedColumns);
       }
     };
 
     fetchColumns();
   }, []);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      document.querySelectorAll('.blink').forEach(element => {
+        element.classList.remove(styles.blink);
+      });
+    }, 4000);
+
+    return () => clearTimeout(timeout);
+  }, [isDetailPage, isConfirmStone, isCompareStone, searchData?.foundProducts]);
+
   const mapColumns = (columns: any) =>
     columns
       ?.filter(({ is_disabled }: any) => !is_disabled)
@@ -275,6 +301,32 @@ const Dashboard = () => {
         };
 
         switch (accessor) {
+          case 'fire_icon':
+            return {
+              accessorKey: 'fire_icon',
+              header: '',
+              minSize: 1,
+              size: 1,
+              maxSize: 2,
+              Cell: ({ row }: { row: any }) => {
+                return row.original.in_high_demand ? (
+                  <Tooltip
+                    tooltipTrigger={
+                      <Image
+                        id="blinking-image"
+                        src={fireSvg}
+                        alt="fireSvg"
+                        className={`${styles.blink} blink`}
+                      />
+                    }
+                    tooltipContent={'In High Demand Now!'}
+                    tooltipContentStyles={'z-[1000] '}
+                  />
+                ) : (
+                  ''
+                );
+              }
+            };
           case 'clarity':
             return {
               ...commonProps,
@@ -429,6 +481,7 @@ const Dashboard = () => {
     () => mapColumns(searchColumn),
     [searchColumn]
   );
+
   const handleEdit = (stone: string) => {
     let savedSearchEditData = customerData?.customer.saved_searches.filter(
       (items: any) => {
