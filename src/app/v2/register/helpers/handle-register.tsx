@@ -74,7 +74,7 @@ export const handleRegister = async ({
         setDialogContent(
           <InvalidCreds
             content="Please log in with the mobile number linked to this email."
-            header={'Email already in use.'}
+            header={'Duplicate email.'}
             handleClick={() => setIsDialogOpen(false)}
             buttonText={'Okay'}
           />
@@ -86,7 +86,7 @@ export const handleRegister = async ({
         setDialogContent(
           <InvalidCreds
             content="Please log in or use a different number."
-            header={'This mobile number is already registered.'}
+            header={'Duplicate phone number.'}
             handleClick={() => setIsDialogOpen(false)}
             buttonText={'Okay'}
           />
