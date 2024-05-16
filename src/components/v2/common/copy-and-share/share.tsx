@@ -56,7 +56,10 @@ const Share = ({
   ]);
 
   useEffect(() => {
-    if (identifier?.length > 0) {
+    if (
+      identifier?.length > 0 &&
+      (identifier === 'Bid to Buy' || identifier === 'New Arrival')
+    ) {
       // Define the field to add based on activeTab
       let fieldToAdd: any;
       let fieldToRemove: any;
@@ -83,7 +86,7 @@ const Share = ({
 
       // Check if the field to remove exists in shareOptions
       const isFieldToRemoveExist = shareOptions.some(
-        option => option.state === fieldToRemove.state
+        option => option?.state === fieldToRemove?.state
       );
 
       // Remove the field to remove if it exists
@@ -102,7 +105,7 @@ const Share = ({
 
       // Check if the field to add is already added to shareOptions
       const isFieldToAddAlreadyAdded = shareOptions.some(
-        option => option.state === fieldToAdd.state
+        option => option?.state === fieldToAdd?.state
       );
 
       if (!isFieldToAddAlreadyAdded) {
@@ -122,7 +125,7 @@ const Share = ({
 
   const [selectedAttributes, setSelectedAttributes] = useState(
     shareOptions.reduce((acc: any, option) => {
-      acc[option.state] = true; // Initialize all options as selected
+      acc[option?.state] = true; // Initialize all options as selected
       return acc;
     }, {})
   );
