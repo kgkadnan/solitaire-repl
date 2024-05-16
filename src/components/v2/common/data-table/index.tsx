@@ -554,6 +554,11 @@ const DataTable = ({
             </div>
           );
         }
+      },
+      'mrt-row-select': {
+        size: 1,
+        minSize: 1,
+        maxSize: 1
       }
     },
 
@@ -563,7 +568,7 @@ const DataTable = ({
       expanded: true,
       grouping: ['shape'],
       columnPinning: {
-        left: ['mrt-row-select', 'lot_id', 'mrt-row-expand']
+        left: ['mrt-row-select', 'fire_icon', 'lot_id', 'mrt-row-expand']
       },
       pagination: pagination
     },
@@ -643,7 +648,7 @@ const DataTable = ({
         sx: {
           color: 'var(--neutral-900)',
           '&.MuiTableCell-root': {
-            padding: '4px 8px',
+            padding: cell.row.id === 'fire_icon' ? '4px 2px' : '4px 8px',
             background: 'White',
             opacity: 1,
             visibility:
@@ -691,12 +696,12 @@ const DataTable = ({
       };
     },
 
-    muiTableHeadCellProps: () => {
+    muiTableHeadCellProps: ({ column }) => {
       return {
         sx: {
           color: 'var(--neutral-700)',
           '&.MuiTableCell-root': {
-            padding: '4px 8px',
+            padding: column.id === 'fire_icon' ? '4px 2px' : '4px 8px',
             background: 'var(--neutral-50)',
             opacity: 1,
             borderTop: '1px solid var(--neutral-200)'

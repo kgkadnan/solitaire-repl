@@ -229,6 +229,8 @@ const Register = () => {
             role={role}
             setResendTimer={setResendTimer}
             setToken={setToken}
+            setIsLoading={setIsLoading}
+            isLoading={isLoading}
           />
         );
 

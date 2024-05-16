@@ -194,7 +194,7 @@ const Dashboard = () => {
       icon: <AppointmentIcon />,
       color: optionsClasses[3],
       count: customerData?.customer?.upcoming_appointments_count,
-      isAvailable: false,
+      isAvailable: true,
       isKycNotVerified:
         isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
         isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED,
@@ -1761,7 +1761,7 @@ const Dashboard = () => {
                     <div className="flex justify-between items-baseline">
                       <p className="text-neutral600 text-mRegular">
                         {data.label}
-                        {/* {data.label === 'My Appointments' && `(${data.count})`} */}
+                        {data.label === 'My Appointments' && `(${data.count})`}
                       </p>
                       {data.label === 'Bid to Buy' &&
                         (!data?.start_at && data?.count > 0 ? (
@@ -1807,21 +1807,20 @@ const Dashboard = () => {
                           )
                         )}
                       </>
+                    ) : data.label === 'My Appointments' ? (
+                      data.count > 0 ? (
+                        <p className="text-headingS text-neutral900  font-medium">
+                          {formatDate(
+                            customerData?.customer?.latest_appointment
+                              ?.appointment_at
+                          )}
+                        </p>
+                      ) : (
+                        <p className="text-headingS text-infoMain  underline font-medium">
+                          Book Now
+                        </p>
+                      )
                     ) : (
-                      // data.label === 'My Appointments' ? (
-                      //   data.count > 0 ? (
-                      //     <p className="text-headingS text-neutral900  font-medium">
-                      //       {formatDate(
-                      //         customerData?.customer?.latest_appointment
-                      //           ?.appointment_at
-                      //       )}
-                      //     </p>
-                      //   ) : (
-                      //     <p className="text-headingS text-infoMain  underline font-medium">
-                      //       Book Now
-                      //     </p>
-                      //   )
-                      // ) :
                       <p
                         className={`text-neutral900 text-headingS font-medium `}
                       >

@@ -12,8 +12,8 @@ export const productApi = createApi({
     getAllProduct: builder.query({
       query: ({ offset, limit, url }) => ({
         url: `/store/products?limit=${limit}&offset=${offset}&${url}`
-      }),
-      providesTags: ['Product']
+      })
+      // providesTags: ['Product']
     }),
     getProductCount: builder.query({
       query: ({ searchUrl = '' }) => ({
@@ -38,6 +38,14 @@ export const productApi = createApi({
         body: data
       }),
       invalidatesTags: ['Product']
+    }),
+    addDemand: builder.mutation({
+      query: data => ({
+        url: `/store/products/add-demand`,
+        method: 'POST',
+        body: data
+      }),
+      invalidatesTags: ['Product']
     })
   })
 });
@@ -48,5 +56,6 @@ export const {
   useGetProductCountQuery,
   useLazyGetProductCountQuery,
   useConfirmProductMutation,
-  useGetProductByIdMutation
+  useGetProductByIdMutation,
+  useAddDemandMutation
 } = productApi;

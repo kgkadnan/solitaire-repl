@@ -376,7 +376,7 @@ const NewArrivalDataTable = ({
                 selectedProducts={rowSelection}
                 setErrorText={setErrorText}
                 setIsError={setIsError}
-                isNewArrival={true}
+                identifier={'New Arrival'}
                 activeTab={activeTab}
               />
             </div>
@@ -417,7 +417,6 @@ const NewArrivalDataTable = ({
       )}
     </div>
   );
-  console.log(rows, '[[[[[[[[[[[[[[[', activeTab, activeCount);
   let isNudge = localStorage.getItem('show-nudge') === 'MINI';
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   //pass table options to useMaterialReactTable

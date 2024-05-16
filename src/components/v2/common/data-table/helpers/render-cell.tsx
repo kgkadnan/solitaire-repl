@@ -173,7 +173,7 @@ export const RenderDiscount = ({ renderedCellValue }: any) => {
         ? renderedCellValue === 0
           ? '0.00%'
           : formatNumber(renderedCellValue) + '%'
-        : '-'}{' '}
+        : '-'}
     </div>
   );
 };
@@ -197,7 +197,7 @@ export const DiscountWithCross = ({ renderedCellValue }: any) => {
         ? renderedCellValue === 0
           ? '0.00%'
           : formatNumber(renderedCellValue) + '%'
-        : '-'}{' '}
+        : '-'}
       <span
         style={{
           position: 'absolute',
@@ -259,7 +259,7 @@ export const RenderNewArrivalBidDiscount = ({ renderedCellValue }: any) => {
           ? renderedCellValue === 0
             ? '0.00%'
             : formatNumber(renderedCellValue) + '%'
-          : '-'}{' '}
+          : '-'}
       </div>
     </div>
   );

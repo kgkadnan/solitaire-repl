@@ -369,7 +369,7 @@ const BidToByDataTable = ({
                 selectedProducts={rowSelection}
                 setErrorText={setErrorText}
                 setIsError={setIsError}
-                isNewArrival={true}
+                identifier={'Bid to Buy'}
                 activeTab={activeTab}
               />
             </div>

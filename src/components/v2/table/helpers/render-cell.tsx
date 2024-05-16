@@ -108,7 +108,7 @@ export const RenderDiscount = ({ renderedCellValue }: any) => {
         ? renderedCellValue === 0
           ? '0.00%'
           : formatNumber(renderedCellValue) + '%'
-        : '-'}{' '}
+        : '-'}
     </div>
   );
 };
