@@ -56,7 +56,10 @@ const Share = ({
   ]);
 
   useEffect(() => {
-    if (identifier?.length > 0) {
+    if (
+      identifier?.length > 0 &&
+      (identifier === 'Bid to Buy' || identifier === 'New Arrival')
+    ) {
       // Define the field to add based on activeTab
       let fieldToAdd: any;
       let fieldToRemove: any;
