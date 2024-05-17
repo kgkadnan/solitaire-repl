@@ -1035,10 +1035,10 @@ const MyCart = () => {
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
               ? showAppointmentForm
-                ? 'h-[calc(100vh-52px)]'
+                ? 'h-[calc(100vh-113px)]'
                 : 'h-[calc(100vh-200px)]'
               : showAppointmentForm
-              ? 'h-[calc(100vh--18px)]'
+              ? 'h-[calc(100vh-43px)]'
               : 'h-[calc(100vh-132px)]'
           }  shadow-inputShadow`}
         >
