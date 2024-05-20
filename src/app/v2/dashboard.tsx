@@ -93,6 +93,15 @@ import EmptyScreen from '@/components/v2/common/empty-screen';
 import emptyOrderSvg from '@public/v2/assets/icons/empty-order.svg';
 import empty from '@public/v2/assets/icons/saved-search/empty-screen-saved-search.svg';
 import { Skeleton } from '@/components/v2/ui/skeleton';
+import { NO_STONES_AVAILABLE } from '@/constants/error-messages/compare-stone';
+import { HOLD_STATUS, MEMO_STATUS } from '@/constants/business-logic';
+import {
+  SELECT_STONE_TO_PERFORM_ACTION,
+  SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH
+} from '@/constants/error-messages/confirm-stone';
+import { useLazyGetAvailableMyAppointmentSlotsQuery } from '@/features/api/my-appointments';
+import { IAppointmentPayload } from './my-appointments/page';
+import BookAppointment from './my-appointments/components/book-appointment/book-appointment';
 
 // import useUser from '@/lib/use-auth';
 
@@ -156,6 +165,19 @@ const Dashboard = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isDetailPage, setIsDetailPage] = useState(false);
   const [isDiamondDetail, setIsDiamondDetail] = useState(false);
+
+  const [showAppointmentForm, setShowAppointmentForm] = useState(false);
+  const [appointmentPayload, setAppointmentPayload] =
+    useState<IAppointmentPayload>({
+      kam: { kam_name: '', kam_image: '' },
+      storeAddresses: [],
+      timeSlots: { dates: [{ date: '', day: '' }], slots: {} }
+    });
+  const [lotIds, setLotIds] = useState<string[]>([]);
+
+  const [triggerAvailableSlots] = useLazyGetAvailableMyAppointmentSlotsQuery(
+    {}
+  );
 
   const [timeLeftForVolumeDiscount, setTimeLeftForVolumeDiscount] = useState();
 
@@ -1099,6 +1121,12 @@ const Dashboard = () => {
     setConfirmStoneData([]);
     setIsCompareStone(false);
     setCompareStoneData([]);
+    setShowAppointmentForm(false);
+    setAppointmentPayload({
+      kam: { kam_name: '', kam_image: '' },
+      storeAddresses: [],
+      timeSlots: { dates: [{ date: '', day: '' }], slots: {} }
+    });
   };
 
   const renderAddCommentDialogs = () => {
@@ -1237,6 +1265,55 @@ const Dashboard = () => {
       showDivider: true
     }
   ];
+
+  const handleCreateAppointment = () => {
+    let selectedIds = Object.keys(rowSelection);
+
+    console.log('searchData?.foundProducts', searchData?.foundProducts);
+
+    if (selectedIds.length > 0) {
+      const hasMemoOut = selectedIds?.some((id: string) => {
+        const stone = searchData?.foundProducts.find(
+          (row: IProduct) => row?.id === id
+        );
+        return stone?.diamond_status === MEMO_STATUS;
+      });
+
+      const hasHold = selectedIds?.some((id: string) => {
+        const stone = searchData?.foundProducts.find(
+          (row: IProduct) => row?.id === id
+        );
+        return stone?.diamond_status === HOLD_STATUS;
+      });
+
+      if (hasMemoOut) {
+        setError(NO_STONES_AVAILABLE);
+      } else if (hasHold) {
+        setError(SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH);
+      } else {
+        setShowAppointmentForm(true);
+        triggerAvailableSlots({}).then(payload => {
+          let { data } = payload.data;
+          setAppointmentPayload(data);
+        });
+
+        const lotIds = selectedIds?.map((id: string) => {
+          const getLotIds: any =
+            searchData?.foundProducts.find((row: IProduct) => {
+              return row?.id === id;
+            }) ?? {};
+
+          if (getLotIds) {
+            return getLotIds?.lot_id;
+          }
+          return '';
+        });
+        setLotIds(lotIds);
+      }
+    } else {
+      setError(SELECT_STONE_TO_PERFORM_ACTION);
+    }
+  };
 
   const confirmStoneApiCall = () => {
     const variantIds: string[] = [];
@@ -1695,6 +1772,28 @@ const Dashboard = () => {
             />
           </div>
         </div>
+      ) : showAppointmentForm ? (
+        <>
+          <div className="flex py-[8px] items-center ">
+            <p className="text-lMedium font-medium text-neutral900">
+              {ManageLocales('app.myAppointment.header')}
+            </p>
+          </div>
+          <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow mb-[16px]">
+            <BookAppointment
+              breadCrumLabel={ManageLocales(
+                'app.myAppointments.myAppointments'
+              )}
+              goBackToListView={goBackToListView}
+              appointmentPayload={appointmentPayload}
+              setIsLoading={setIsLoading}
+              modalSetState={modalSetState}
+              lotIds={lotIds}
+              setRowSelection={setRowSelection}
+              errorSetState={errorSetState}
+            />
+          </div>
+        </>
       ) : isDetailPage && searchData && Object.keys(searchData).length > 0 ? (
         <div className="mb-[10px]">
           <div className="flex py-[8px] items-center ">
@@ -1749,6 +1848,7 @@ const Dashboard = () => {
               setIsDetailPage={setIsDetailPage}
               setIsCompareStone={setIsCompareStone}
               setCompareStoneData={setCompareStoneData}
+              handleCreateAppointment={handleCreateAppointment}
             />
           </div>
         </div>
