@@ -1025,6 +1025,7 @@ const DataTable = ({
                     handler: () => {
                       handleCreateAppointment();
                     },
+                    isHidden: isDashboard,
                     commingSoon:
                       isKycVerified?.customer?.kyc?.status ===
                         kycStatus.INPROGRESS ||
