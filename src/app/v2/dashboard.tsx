@@ -2218,15 +2218,17 @@ const Dashboard = () => {
                   ) : (
                     <VolumeDiscount
                       totalSpent={
-                        customerData?.customer?.volumeDiscount?.totalSpent
+                        '3000'
+                        // customerData?.customer?.volumeDiscount?.totalSpent
                       }
                       expiryTime={
-                        // '2024-05-28T09:08:46.603Z'
-                        customerData?.customer?.volumeDiscount?.expiryTime
+                        '2024-05-28T09:08:46.603Z'
+                        // customerData?.customer?.volumeDiscount?.expiryTime
                       }
                       eligibleForDiscount={
-                        customerData?.customer?.volumeDiscount
-                          ?.eligibleForDiscount
+                        false
+                        // customerData?.customer?.volumeDiscount
+                        //   ?.eligibleForDiscount
                       }
                     />
                   )}

@@ -62,7 +62,9 @@ const StaticSlider = ({ totalSpent }: any) => {
                   <div className="text-center">
                     <p className="text-sRegular font-semiBold text-[#FFAD05]">
                       $
-                      {Math.floor((VOLUME_DISCOUNT_LIMIT - filledRange) / 1000)}
+                      {((VOLUME_DISCOUNT_LIMIT - filledRange) / 1000).toFixed(
+                        2
+                      )}
                       K
                     </p>
                     <div className="w-8 h-8 bg-[#FFAD05]  mx-auto transform rotate-45 rounded-t-[16px] rounded-bl-[16px]"></div>
@@ -89,13 +91,15 @@ const StaticSlider = ({ totalSpent }: any) => {
                   <div className="text-center">
                     <div className="w-8 h-8 bg-[#5995ED] transform rotate-45 rounded-b-[16px]  rounded-tr-[16px]"></div>
                     <p className="text-sRegular font-semiBold text-[#5995ED]">
-                      ${Math.floor(filledRange / 1000)}K
+                      ${(filledRange / 1000).toFixed(2)}K
                     </p>
                   </div>
                 }
-                tooltipContent={`Your Current Spending $${Math.floor(
-                  filledRange / 1000
-                )}K`}
+                tooltipContent={`Your Current Spending $${
+                  Number.isInteger(filledRange / 1000)
+                    ? filledRange / 1000
+                    : (filledRange / 1000).toFixed(2)
+                }K`}
                 tooltipContentStyles={'z-[1000]'}
               />
             </div>
