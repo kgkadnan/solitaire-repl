@@ -240,8 +240,8 @@ const Notification = ({
       {!isInMaintenanceMode && (
         <PopoverContent>
           <div className="bg-neutral25 w-[447px] border-[1px] border-solid border-primaryBorder  shadow-popupsShadow  rounded-[8px] relative top-[5px] right-[13%]">
-            <div className="border-solid border-b-[1px] border-neutral-200">
-              <h1 className="text-headingS text-neutral-900 font-medium px-[24px] py-[16px]">
+            <div className="border-solid border-b-[1px] border-neutral200">
+              <h1 className="text-headingS text-neutral900 font-medium px-[24px] py-[16px]">
                 Notifications
               </h1>
             </div>
@@ -263,7 +263,7 @@ const Notification = ({
                         }}
                         className={`${
                           !items?.read_at?.length && gradientClass
-                        } flex p-[16px] w-[100%] gap-[15px] cursor-pointer border-b-[1px] border-neutral-200 hover:bg-neutral-50 `}
+                        } flex p-[16px] w-[100%] gap-[15px] cursor-pointer border-b-[1px] border-neutral200 hover:bg-neutral50 `}
                       >
                         <div
                           className={` w-[40px] h-[40px] flex items-center justify-center rounded-[4px] ${
@@ -275,10 +275,10 @@ const Notification = ({
                           <img src={items.icon_url} alt={items.icon_url} />
                         </div>
                         <div className="flex flex-col w-[85%]">
-                          <div className="text-neutral-700 text-mMedium font-medium">
+                          <div className="text-neutral700 text-mMedium font-medium">
                             {items.message}
                           </div>
-                          <span className="text-sRegular text-neutral-600 font-regular">
+                          <span className="text-sRegular text-neutral600 font-regular">
                             {formatCreatedAt(items.created_at)}
                           </span>
                         </div>
@@ -292,13 +292,13 @@ const Notification = ({
               </div>
             )}
 
-            <div className="flex justify-between px-[16px] pb-[20px] pt-[20px] border-t-[1px] border-neutral-200">
+            <div className="flex justify-between px-[16px] pb-[20px] pt-[20px] border-t-[1px] border-neutral200">
               <Link
                 className="flex items-center gap-2 cursor-pointer"
                 href={'/v2/my-account?path=notification-preferences'}
               >
                 <Image src={prefrences} alt="prefrences" />
-                <span className="text-neutral-700 text-mRegular">
+                <span className="text-neutral700 text-mRegular">
                   Preferences
                 </span>
               </Link>
@@ -309,7 +309,7 @@ const Notification = ({
                 }}
               >
                 <Image src={markRead} alt="markRead" />
-                <span className="text-neutral-700 text-mRegular">
+                <span className="text-neutral700 text-mRegular">
                   Mark all as read
                 </span>
               </button>
