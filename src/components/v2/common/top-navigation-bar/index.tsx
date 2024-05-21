@@ -11,7 +11,7 @@ import {
   PopoverContent,
   PopoverTrigger
 } from '@radix-ui/react-popover';
-import myAccountIcon from '@public/v2/assets/icons/topbar-icons/searchIcon.svg';
+import MyAccountIcon from '@public/v2/assets/icons/topbar-icons/searchIcon.svg?url';
 import logoutIcon from '@public/v2/assets/icons/topbar-icons/logout-icon.svg';
 import Link from 'next/link';
 import useUser from '@/lib/use-auth';
@@ -51,7 +51,11 @@ interface IUserAccountInfo {
     is_phone_verified: boolean;
   };
 }
-const TopNavigationBar = () => {
+const TopNavigationBar = ({
+  isInMaintenanceMode
+}: {
+  isInMaintenanceMode: boolean;
+}) => {
   const router = useRouter();
   const currentPath = usePathname();
   const [showNudge, setShowNudge] = useState(
@@ -219,7 +223,7 @@ const TopNavigationBar = () => {
           </div>
         )}
       <div className="z-50 flex gap-[16px] justify-end px-[32px] py-[10px]">
-        <Notification />
+        <Notification isInMaintenanceMode={isInMaintenanceMode} />
 
         <Popover>
           <PopoverTrigger className="flex justify-center">
@@ -267,11 +271,25 @@ const TopNavigationBar = () => {
               </div>
 
               <Link
-                className="flex items-center border-b-[1px] border-solid border-primaryBorder p-[16px] gap-[8px] cursor-pointer hover:bg-slate-50 "
-                href={'/v2/my-account'}
+                className={`flex items-center border-b-[1px] border-solid border-primaryBorder p-[16px] gap-[8px]    ${
+                  isInMaintenanceMode
+                    ? 'cursor-not-allowed bg-neutral100'
+                    : 'cursor-pointer hover:bg-slate-50'
+                }`}
+                href={isInMaintenanceMode ? '' : '/v2/my-account'}
               >
-                <Image src={myAccountIcon} alt="myAccountIcon" />
-                <p className="text-mRegular font-regular text-neutral-900">
+                <MyAccountIcon
+                  className={`${
+                    isInMaintenanceMode
+                      ? 'stroke-neutral400'
+                      : 'stroke-neutral900'
+                  }`}
+                />
+                <p
+                  className={`text-mRegular font-regular ${
+                    isInMaintenanceMode ? 'text-neutral400' : 'text-neutral900'
+                  }`}
+                >
                   {' '}
                   My Account
                 </p>
