@@ -114,7 +114,7 @@ const authorizedLogin = (WrappedComponent: React.ComponentType) => {
                     phoneNumber={customerData?.customer.kam?.phone ?? '-'}
                     email={customerData?.customer.kam?.email ?? '-'}
                     maintenanceEndData={
-                      customerData?.maintenance_mode?.end_date
+                      customerData?.customer?.maintenance_mode?.end_date
                     }
                   />
                 ) : (
