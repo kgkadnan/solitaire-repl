@@ -33,7 +33,7 @@ const authorizedLogin = (WrappedComponent: React.ComponentType) => {
     const [open, setOpen] = useState(false);
 
     const isInMaintenanceMode: any =
-      customerData?.maintenance_mode?.end_date?.length > 0;
+      customerData?.customer?.maintenance_mode?.end_date;
 
     useEffect(() => {
       // Check if the user is KYC verified
