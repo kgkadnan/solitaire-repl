@@ -27,7 +27,11 @@ interface ISideNavigationBar {
   link?: string;
   isActive?: boolean;
 }
-const SideNavigationBar = () => {
+const SideNavigationBar = ({
+  isInMaintenanceMode
+}: {
+  isInMaintenanceMode: boolean;
+}) => {
   const currentRoute = usePathname();
   const currentSubRoute = useSearchParams().get('active-tab');
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
@@ -162,12 +166,70 @@ const SideNavigationBar = () => {
             return (
               <div
                 className={` border-neutral200 ${
-                  items.link === Routes.MY_APPOINTMENTS &&
-                  (isKycVerified?.customer?.kyc?.status ===
-                    kycStatus.INPROGRESS ||
-                    isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+                  (items.link === Routes.MY_APPOINTMENTS &&
+                    (isKycVerified?.customer?.kyc?.status ===
+                      kycStatus.INPROGRESS ||
+                      isKycVerified?.customer?.kyc?.status ===
+                        kycStatus.REJECTED)) ||
+                  isInMaintenanceMode
                     ? '!cursor-not-allowed'
                     : 'cursor-pointer'
+                }`}
+                key={items.title}
+              >
+                {items.link ? (
+                  <Tooltip
+                    tooltipContentSide="right"
+                    tooltipTrigger={
+                      <div
+                        className={` ${
+                          items.link === Routes.BID_2_BUY &&
+                          !isInMaintenanceMode &&
+                          showPulse &&
+                          styles.notification_dot
+                        } ${
+                          items.link === Routes.BID_2_BUY &&
+                          !isInMaintenanceMode &&
+                          showPulse &&
+                          styles.pulse
+                        }`}
+                      >
+                        <Button
+                          onClick={() => router.push(items.link!)}
+                          className={`${
+                            items.isActive && !isInMaintenanceMode
+                              ? `bg-primaryMain p-[8px] rounded stroke-neutral25 `
+                              : `p-[8px] stroke-primaryIconColor rounded hover:bg-neutral50 `
+                          } disabled:bg-neutral100`}
+                          disabled={
+                            (items.link === Routes.MY_APPOINTMENTS &&
+                              (isKycVerified?.customer?.kyc?.status ===
+                                kycStatus.INPROGRESS ||
+                                isKycVerified?.customer?.kyc?.status ===
+                                  kycStatus.REJECTED)) ||
+                            isInMaintenanceMode
+                          }
+                        >
+                          {items.src}
+                        </Button>
+                      </div>
+                    }
+                    tooltipContentStyles={'z-50 text-sMedium'}
+                    tooltipContent={items.title}
+                  />
+                ) : (
+                  <hr className="border-none h-[1px] bg-neutral200" />
+                )}
+              </div>
+            );
+          })}
+        </div>
+        <div className="z-50 flex flex-col gap-2 mb-[36px]">
+          {SideNavigationBottomData.map((items: ISideNavigationBar) => {
+            return (
+              <div
+                className={` border-neutral200 ${
+                  isInMaintenanceMode ? '!cursor-not-allowed' : 'cursor-pointer'
                 }`}
                 key={items.title}
               >
@@ -188,59 +250,12 @@ const SideNavigationBar = () => {
                       >
                         <Button
                           onClick={() => router.push(items.link!)}
-                          className={`${
-                            items.isActive
-                              ? `bg-primaryMain p-[8px] rounded stroke-neutral25 `
-                              : `p-[8px] stroke-primaryIconColor rounded hover:bg-neutral50 `
-                          } disabled:bg-neutral100`}
-                          disabled={
-                            items.link === Routes.MY_APPOINTMENTS &&
-                            (isKycVerified?.customer?.kyc?.status ===
-                              kycStatus.INPROGRESS ||
-                              isKycVerified?.customer?.kyc?.status ===
-                                kycStatus.REJECTED)
-                          }
-                        >
-                          {items.src}
-                        </Button>
-                      </div>
-                    }
-                    tooltipContentStyles={'z-50 text-sMedium'}
-                    tooltipContent={items.title}
-                  />
-                ) : (
-                  <hr className="border-none h-[1px] bg-neutral200" />
-                )}
-              </div>
-            );
-          })}
-        </div>
-        <div className="z-50 flex flex-col gap-2 mb-[36px]">
-          {SideNavigationBottomData.map((items: ISideNavigationBar) => {
-            return (
-              <div className={` border-neutral200 `} key={items.title}>
-                {items.link ? (
-                  <Tooltip
-                    tooltipContentSide="right"
-                    tooltipTrigger={
-                      <div
-                        className={` ${
-                          items.link === Routes.BID_2_BUY &&
-                          showPulse &&
-                          styles.notification_dot
-                        } ${
-                          items.link === Routes.BID_2_BUY &&
-                          showPulse &&
-                          styles.pulse
-                        }`}
-                      >
-                        <Button
-                          onClick={() => router.push(items.link!)}
                           className={
-                            items.isActive
-                              ? `bg-primaryMain p-[8px] rounded stroke-neutral25 `
+                            items.isActive && !isInMaintenanceMode
+                              ? `bg-primaryMain p-[8px] rounded stroke-neutral25`
                               : `p-[8px] stroke-primaryIconColor rounded hover:bg-neutral50 `
                           }
+                          disabled={isInMaintenanceMode}
                         >
                           {items.src}
                         </Button>
