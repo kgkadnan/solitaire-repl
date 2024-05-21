@@ -14,8 +14,7 @@ const UserAuthenticationLayout: React.FC<IUserAuthenticationLayoutProps> = ({
   formData,
   screen
 }) => {
-  const playerRef = useRef<YT.Player | null>(null);
-
+  const playerRef = useRef<YT.Player>();
   useEffect(() => {
     const tag = document.createElement('script');
     tag.src = 'https://www.youtube.com/iframe_api';
@@ -26,7 +25,7 @@ const UserAuthenticationLayout: React.FC<IUserAuthenticationLayoutProps> = ({
       playerRef.current = new YT.Player('youtube-player', {
         height: '550',
         width: '100%',
-        videoId: 'rXjbNpi79FI', //screen === 'register' ? 'WI_43FwleUg' : 'bqbnuuOF9cI', // 'WI_43FwleUg',bqbnuuOF9cI
+        videoId: 'rXjbNpi79FI',
         playerVars: {
           autoplay: 1,
           mute: 1,
@@ -35,33 +34,23 @@ const UserAuthenticationLayout: React.FC<IUserAuthenticationLayoutProps> = ({
           rel: 0,
           iv_load_policy: 3,
           loop: 1,
-          playlist: 'rXjbNpi79FI', // screen === 'register' ? 'WI_43FwleUg' : 'bqbnuuOF9cI', //'WI_43FwleUg',bqbnuuOF9cI
+          playlist: 'rXjbNpi79FI',
           disablekb: 1 // Disable keyboard controls
         },
         events: {
           onReady: event => {
             event.target.playVideo();
-          },
-          onStateChange: onPlayerStateChange
+          }
         }
       });
     };
   }, []);
-
-  // Handler for state changes
-  const onPlayerStateChange = (event: YT.OnStateChangeEvent) => {
-    if (event.data === YT.PlayerState.PLAYING) {
-      const duration = playerRef.current!.getDuration();
-      const currentTime = playerRef.current!.getCurrentTime();
-      const timeLeft = duration - currentTime;
-
-      // If there's less than 1 second left, seek to the beginning
-      if (timeLeft < 1) {
-        playerRef.current!.seekTo(0, true);
-        // event.target.playVideo();
-      }
+  useEffect(() => {
+    // Initialize the player when the screen changes
+    if (typeof window !== 'undefined' && window.YT && window.YT.Player) {
+      window.onYouTubeIframeAPIReady();
     }
-  };
+  }, [screen]);
 
   return (
     <div className="w-full flex">
