@@ -14,8 +14,8 @@ const UserAuthenticationLayout: React.FC<IUserAuthenticationLayoutProps> = ({
   formData,
   screen
 }) => {
-  const playerRef = useRef<YT.Player | null>(null);
-
+  const playerRef = useRef<YT.Player>();
+console.log(playerRef,"iii",screen)
   useEffect(() => {
     const tag = document.createElement('script');
     tag.src = 'https://www.youtube.com/iframe_api';
@@ -50,6 +50,7 @@ const UserAuthenticationLayout: React.FC<IUserAuthenticationLayoutProps> = ({
 
   // Handler for state changes
   const onPlayerStateChange = (event: YT.OnStateChangeEvent) => {
+    console.log("state",event)
     if (event.data === YT.PlayerState.PLAYING) {
       const duration = playerRef.current!.getDuration();
       const currentTime = playerRef.current!.getCurrentTime();
