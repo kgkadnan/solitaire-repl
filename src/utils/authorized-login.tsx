@@ -11,10 +11,15 @@ import { useAppDispatch, useAppSelector } from '@/hooks/hook';
 import { DialogComponent } from '@/components/v2/common/dialog';
 import InvalidCreds from '@/app/v2/login/component/invalid-creds';
 import { hide } from '@/features/logout/logout-slice';
+import MaintenanceMode from '@/components/v2/common/maintenace';
+import { useGetCustomerQuery } from '@/features/api/dashboard';
 
 const authorizedLogin = (WrappedComponent: React.ComponentType) => {
   const Wrapper: React.FC<any> = props => {
     const { authToken, isTokenChecked, userLoggedOut } = useUser();
+    const { data: customerData, refetch: refetchCustomerData } =
+      useGetCustomerQuery({}, { refetchOnMountOrArgChange: true });
+
     const router = useRouter();
     const currentPath = usePathname();
     const isV2Route = v2Routes.includes(currentPath);
@@ -26,6 +31,9 @@ const authorizedLogin = (WrappedComponent: React.ComponentType) => {
     );
     const dispatch = useAppDispatch();
     const [open, setOpen] = useState(false);
+
+    const isInMaintenanceMode: any =
+      customerData?.customer?.maintenance_mode?.end_date;
 
     useEffect(() => {
       // Check if the user is KYC verified
@@ -41,6 +49,12 @@ const authorizedLogin = (WrappedComponent: React.ComponentType) => {
         setShowKycNudge(true);
       }
     }, []);
+
+    useEffect(() => {
+      // !customerData && setIsLoading(true);
+      refetchCustomerData();
+    }, []);
+
     useEffect(() => {
       dispatch(hide()), setOpen(false);
     }, []);
@@ -86,12 +100,26 @@ const authorizedLogin = (WrappedComponent: React.ComponentType) => {
             setIsOpen={setOpen}
           />
           <div className="flex w-full">
-            <SideNavigationBar />
+            <SideNavigationBar isInMaintenanceMode={isInMaintenanceMode} />
 
             <div className="flex-1 flex flex-col w-[calc(100%-84px)]">
-              <V2TopNavigationBar />
+              <V2TopNavigationBar isInMaintenanceMode={isInMaintenanceMode} />
               <main className="flex-1 px-[16px] ml-[84px] bg-neutral25">
-                <WrappedComponent {...props} />{' '}
+                {isInMaintenanceMode ? (
+                  <MaintenanceMode
+                    name={customerData?.customer.kam?.kam_name ?? '-'}
+                    role={
+                      customerData?.customer.kam?.post ?? 'Key Account Manager'
+                    }
+                    phoneNumber={customerData?.customer.kam?.phone ?? '-'}
+                    email={customerData?.customer.kam?.email ?? '-'}
+                    maintenanceEndData={
+                      customerData?.customer?.maintenance_mode?.end_date
+                    }
+                  />
+                ) : (
+                  <WrappedComponent {...props} />
+                )}
               </main>
             </div>
           </div>
