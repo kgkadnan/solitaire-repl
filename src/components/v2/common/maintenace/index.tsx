@@ -103,7 +103,7 @@ const MaintenanceMode = ({
         <div className="border-t-[1px] mt-auto border-l-[1px] border-r-[1px] w-full rounded-[8px] p-4 flex justify-between border-neutral200 text-lRegular">
           {/* for fixed footer */}
           {/* fixed bottom-0 left-[84px] right-0 bg-white  */}
-          <div className="text-infoMain  flex gap-6 ">
+          <div className="text-neutral400  flex gap-6 ">
             <p className="cursor-not-allowed">Terms & Conditions</p>
             <p className="cursor-not-allowed">Privacy Policy</p>
           </div>
