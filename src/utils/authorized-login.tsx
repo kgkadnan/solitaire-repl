@@ -32,8 +32,8 @@ const authorizedLogin = (WrappedComponent: React.ComponentType) => {
     const dispatch = useAppDispatch();
     const [open, setOpen] = useState(false);
 
-    const isInMaintenanceMode: any =false
-      // customerData?.customer?.maintenance_mode?.end_date;
+    const isInMaintenanceMode: any = false;
+    // customerData?.customer?.maintenance_mode?.end_date;
 
     useEffect(() => {
       // Check if the user is KYC verified
