@@ -1,7 +1,7 @@
 import { AccordionComponent } from '@/components/v2/common/accordion';
 import React, { Dispatch, SetStateAction } from 'react';
 import { MinMaxInput } from '@/components/v2/common/min-max-input';
-import element from '@public/v2/assets/icons/elements.svg';
+import addCaratIcon from '@public/v2/assets/icons/add-carat.svg';
 import CaratTile from '@/components/v2/common/carat-tile';
 import { carat } from '@/constants/v2/form';
 import styles from '../../../../../components/v2/common/action-button/action-button.module.scss';
@@ -172,7 +172,7 @@ export const Carat = ({
              ${styles.ctaSecondaryStyle}  'px-4 py-2 flex gap-1' `}
                 >
                   <div className="pl-[16px]">
-                    <Image src={element} alt={'icon-button'} />
+                    <Image src={addCaratIcon} alt={'add carat icon button'} />
                   </div>
                   <div
                     className={`${styles.ctaLabel} px-[4px] pr-[16px] pl-[8px]`}
