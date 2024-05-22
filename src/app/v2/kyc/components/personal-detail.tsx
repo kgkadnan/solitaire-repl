@@ -104,7 +104,6 @@ const PersonalDetail = ({
                   dispatch,
                   kycScreenIdentifierNames.PERSONAL_DETAILS,
                   'first_name'
-                  // formState
                 )
               }
               type="text"
@@ -139,7 +138,6 @@ const PersonalDetail = ({
                   dispatch,
                   kycScreenIdentifierNames.PERSONAL_DETAILS,
                   'last_name'
-                  // formState
                 )
               }
               type="text"
@@ -186,7 +184,6 @@ const PersonalDetail = ({
                       dispatch,
                       kycScreenIdentifierNames.PERSONAL_DETAILS,
                       'phone'
-                      // formState
                     )
                   : dispatch(
                       updateFormState({
@@ -243,7 +240,6 @@ const PersonalDetail = ({
                   dispatch,
                   kycScreenIdentifierNames.PERSONAL_DETAILS,
                   'email'
-                  // formState
                 )
               }
               type="email"

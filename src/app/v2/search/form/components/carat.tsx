@@ -8,16 +8,6 @@ import styles from '../../../../../components/v2/common/action-button/action-but
 import Image from 'next/image';
 import { Button } from '@/components/v2/ui/button';
 
-// export const Carat = ({
-//   state,
-//   setState,
-//   errorState,
-//   errorSetState
-// }: IFormState) => {
-//   const { caratMax, caratMin, selectedCaratRange } = state;
-//   const { setCaratMin, setCaratMax, setSelectedCaratRange } = setState;
-//   const { caratError } = errorState;
-//   const { setCaratError } = errorSetState;
 interface ICaratProps {
   caratMax: string;
   setCaratMax: Dispatch<SetStateAction<string>>;

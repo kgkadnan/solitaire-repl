@@ -28,7 +28,6 @@ export const MAX_DAYS_TO_PAY = 120;
 
 export const PAGINATION_INTITAL_LIMIT = 50;
 
-//   diamond_status: 'Available' | 'Hold' | 'Memo' | 'Sold'
 export const SOLD_STATUS = 'Sold';
 export const AVAILABLE_STATUS = 'Available';
 export const MEMO_STATUS = 'Memo';

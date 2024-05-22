@@ -9,16 +9,13 @@ import { ManageLocales } from '@/utils/v2/translate';
 import { IndividualActionButton } from '@/components/v2/common/action-button/individual-button';
 import CheckboxComponent from '@/components/v2/common/checkbox';
 import { useRouter, useSearchParams } from 'next/navigation';
-import resetAllApiStates from '@/utils/reset-all-state';
 
 const LoginComponent = ({
   setPhoneNumber,
 
   setPhoneErrorText,
-  // setErrorText,
   setPasswordErrorText,
   setPassword,
-  // setIsError,
   handleKeyDown,
   phoneNumber,
   phoneErrorText,
@@ -32,7 +29,6 @@ const LoginComponent = ({
 
   const handleSubmit = (event: any) => {
     event.preventDefault(); // Prevent default form submission behavior
-    // await resetAllApiStates();
     handleLogin(); // Your login handler
   };
 
@@ -61,20 +57,14 @@ const LoginComponent = ({
                 event,
                 type: 'phone',
                 setPhoneNumber,
-
                 setPhoneErrorText,
-                // setErrorText,
                 setPasswordErrorText,
                 setPassword
-                // setIsError
               })
             }
             type="number"
             name="mobileNumber"
-            // value={registerFormState.mobileNumber}
             errorText={phoneErrorText}
-            // registerFormState={registerFormState}
-            // setRegisterFormState={setRegisterFormState}
             placeholder={ManageLocales('app.register.mobileNumber.placeholder')}
             registerFormState={phoneNumber}
             setRegisterFormState={setPhoneNumber}
@@ -88,12 +78,9 @@ const LoginComponent = ({
                 event,
                 type: 'password',
                 setPhoneNumber,
-
                 setPhoneErrorText,
-                // setErrorText,
                 setPasswordErrorText,
                 setPassword
-                // setIsError
               })
             }
             name="password"
@@ -123,7 +110,6 @@ const LoginComponent = ({
         </div>
         <div className="flex flex-col gap-1">
           <IndividualActionButton
-            // onClick={handleLogin}
             variant={'primary'}
             size={'custom'}
             className="rounded-[4px] w-[100%]"
@@ -154,7 +140,6 @@ const LoginComponent = ({
         </div>
       </div>
     </form>
-    // </div>
   );
 };
 

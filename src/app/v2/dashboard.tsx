@@ -103,8 +103,6 @@ import { useLazyGetAvailableMyAppointmentSlotsQuery } from '@/features/api/my-ap
 import { IAppointmentPayload } from './my-appointments/page';
 import BookAppointment from './my-appointments/components/book-appointment/book-appointment';
 
-// import useUser from '@/lib/use-auth';
-
 interface ITabs {
   label: string;
   link: string;

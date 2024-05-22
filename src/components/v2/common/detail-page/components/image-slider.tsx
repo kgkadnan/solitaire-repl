@@ -159,7 +159,6 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
                               <iframe
                                 frameBorder="0"
                                 src={img.url}
-                                // className="object-contain"
                                 style={{ width: '273px', height: '282px' }}
                                 onError={e => {
                                   handleImageError(e);
@@ -257,7 +256,6 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
                         <iframe
                           frameBorder="0"
                           src={images[0]?.url}
-                          // className="object-contain"
                           style={{ width: '273px', height: '282px' }}
                         />
                       )}

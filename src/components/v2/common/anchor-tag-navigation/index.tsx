@@ -17,7 +17,6 @@ const AnchorLinkNavigation: React.FC<IAnchorLinkNavigation> = ({
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
 
   const handleScroll = (scrollOffset: number) => {
-    // setActiveLink('')
     if (containerRef.current) {
       containerRef.current.scrollBy({
         left: scrollOffset,

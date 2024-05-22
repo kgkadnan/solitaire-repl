@@ -39,7 +39,6 @@ const ImageList: React.FC<ImageListProps> = ({
     <div className="flex flex-col">
       {images.length > 0 ? (
         images.map((image: any, index: number) => {
-          // const image = images[validImageIndex];
           return (
             <>
               {image.name === 'B2B' ||
@@ -67,8 +66,6 @@ const ImageList: React.FC<ImageListProps> = ({
                     className={`cursor-pointer md:w-[74px] md:h-[60px] sm:w-[35px] sm:h-[30px] ${
                       index !== 0 ? 'mt-3' : ''
                     } ${index === selectedImageIndex ? 'bg-gray-200' : ''}`}
-
-                    // className="mr-[37px]"
                   />
 
                   {image.showDivider && (

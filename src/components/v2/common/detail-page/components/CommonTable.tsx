@@ -22,7 +22,6 @@ const ResponsiveTable: React.FC<ResponsiveTableProps> = ({
   tableHead,
   tableData
 }) => {
-  // min-w-full
   return (
     <div className="overflow-x-auto" style={{ borderRadius: '4px' }}>
       <table className="divide-y divide-[#E4E7EC] border  border-[#E4E7EC] overflow-x-scroll rounded-[4px] border-separate border-spacing-0">
@@ -41,12 +40,6 @@ const ResponsiveTable: React.FC<ResponsiveTableProps> = ({
                     ? 'rounded-tr-[4px]'
                     : ''
                 }`}
-                // style={{
-                //   // outline: "1px solid #E4E7EC",
-                //   borderTopRightRadius:
-                //     tableHead.length - 1 <= index ? '4px' : '0px'
-                //   // Adjust the min-width as needed
-                // }}
               >
                 {column.label}
               </th>
@@ -68,7 +61,6 @@ const ResponsiveTable: React.FC<ResponsiveTableProps> = ({
                     key={column.key}
                     style={{
                       borderRadius: '4px'
-                      // outline: "1px solid #E4E7EC",
                     }}
                     className={`p-[9px] lg:p-3 whitespace-nowrap ${
                       column.hiddenAbove1024 ? 'lg:hidden' : ''

@@ -42,10 +42,7 @@ export const handleCompareStone = ({
     setCompareStoneData(
       compareStones.filter(value => value !== null && value !== undefined)
     );
-    // window.open(
-    //   `/v2/compare-stone${footerCheck ? '?source=' + footerCheck : ''}`,
-    //   '_blank'
-    // );
+
     setIsError(false);
     setErrorText('');
   }

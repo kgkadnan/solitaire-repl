@@ -34,7 +34,6 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
       ] as HTMLImageElement;
       if (selectedImageElement) {
         const containerRect = containerRef.current.getBoundingClientRect();
-        // const imageRect = selectedImageElement.getBoundingClientRect();
         const offsetTop = selectedImageElement.offsetTop - containerRect.top;
         containerRef.current.scrollTop = offsetTop;
       }
@@ -93,7 +92,6 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
                         background: '#F2F4F7'
                       }}
                       alt={`Image ${index + 1}`}
-                      // className={`mb-4`}
                       onError={e => {
                         handleImageError(e);
                       }}

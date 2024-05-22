@@ -180,8 +180,7 @@ export const DownloadAndUpload = ({
                 <div className="flex flex-col items-end w-[10%]">
                   {uploadProgress > 0 ? (
                     <Loader />
-                  ) : // <p className="text-[14px]">{`${uploadProgress}%`}</p>
-                  !Object.keys(selectedFile).length ? (
+                  ) : !Object.keys(selectedFile).length ? (
                     <AttachMentIcon
                       className={
                         error?.length ? styles.errorStroke : styles.stroke

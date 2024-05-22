@@ -133,7 +133,6 @@ export const PasswordField = ({
       </div>
       <div className="mt-2">
         {!isConfirmPassword ? (
-          // errorText !== PASSWORD_NOT_MATCH &&
           isInputFocused ? (
             !allRulesValid &&
             Object.entries(passwordRules).map(([rule, isValid]) => (

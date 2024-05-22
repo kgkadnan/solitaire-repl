@@ -24,10 +24,8 @@ export const KycStatusScreen: React.FC<IKycStatusScreen> = ({ status }) => {
   const [showToast, setShowToast] = useState(false);
   const handleCopy = (email: string) => {
     navigator.clipboard.writeText(email);
-    // setCopied(true);
     setShowToast(true); // Show the toast notification
     setTimeout(() => {
-      // setCopied(false);
       setShowToast(false); // Hide the toast notification after some time
     }, 4000);
   };
