@@ -72,7 +72,7 @@ const authorizedLogin = (WrappedComponent: React.ComponentType) => {
       setIsLoading(false);
     }, [authToken, userLoggedOut, router]);
 
-    if (isLoading) {
+    if (isLoading && currentPath !== '/v2') {
       return <CustomKGKLoader />; // Or any other loading indicator
     }
     const handleNudgeClose = () => {
