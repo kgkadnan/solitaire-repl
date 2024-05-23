@@ -167,11 +167,7 @@ const Form = ({
     setSelectionChecked
   } = setState;
 
-  // const modifySearchFrom = searchParams.get('edit');
-
   const {
-    // setSearchUrl,
-    // searchUrl,
     isValidationError,
     isError,
     errorText,
@@ -448,10 +444,8 @@ const Form = ({
             }`
           );
         }
-        // return;
       } else {
         setIsError(true);
-        // setErrorText(EXCEEDS_LIMITS);
       }
     } else {
       setIsError(true);
@@ -668,14 +662,12 @@ const Form = ({
     },
     {
       variant: 'secondary',
-      // svg: arrowIcon,
       label: ManageLocales('app.advanceSearch.reset'),
       handler: handleFormReset
     },
 
     {
       variant: 'secondary',
-      // svg: bookmarkAddIcon,
       label: `${ManageLocales('app.advanceSearch.saveSearch')}`,
       handler: () => {
         if (searchUrl) {

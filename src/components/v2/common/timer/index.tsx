@@ -1,4 +1,3 @@
-// components/CountdownTimer.js
 import { useEffect, useState } from 'react';
 
 const CountdownTimer = ({

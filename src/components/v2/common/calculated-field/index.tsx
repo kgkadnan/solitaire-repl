@@ -12,7 +12,6 @@ const CalculatedField = ({ rows, selectedProducts }: ICalculatedField) => {
   );
 
   useEffect(() => {
-    // if (Object.keys(selectedProducts).length > 0)
     setSelectedRows(rows.filter((row: IProduct) => row.id in selectedProducts));
   }, [selectedProducts]);
 

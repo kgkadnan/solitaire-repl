@@ -38,9 +38,6 @@ export const otpVerificationApi = createApi({
         url: `/store/customers/sms/password-reset-otp/verify`,
         method: 'POST',
         body: filter
-        // headers: {
-        //   Authorization: `Bearer ${filter.resend_token}`
-        // }
       }),
 
       invalidatesTags: ['OtpVerification']

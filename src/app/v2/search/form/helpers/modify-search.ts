@@ -72,7 +72,6 @@ export const setModifySearch = (data: any, setState: any, carat: any) => {
   } = setState;
   data?.shape && setSelectedShape(data?.shape);
   data?.carats && setSelectedCaratRange(data?.carats);
-  // data?.carats && setCaratRangeData;
   data?.clarity && setSelectedClarity(data?.clarity);
   data?.cut && setSelectedCut(data?.cut);
   data?.lab && setSelectedLab(data?.lab);
@@ -122,7 +121,6 @@ export const setModifySearch = (data: any, setState: any, carat: any) => {
   data?.pavilion_angle && setPavilionAngleMax(data?.pavilion_angle?.lte);
   data?.pavilion_height && setPavilionHeightMin(data?.pavilion_height?.gte);
   data?.pavilion_height && setPavilionHeightMax(data?.pavilion_height?.lte);
-  //inclusion_details States
   data?.milky && setMilky(data?.milky);
   data?.luster && setLuster(data?.luster);
   data?.eye_clean && setEyeClean(data?.eye_clean);
@@ -138,7 +136,6 @@ export const setModifySearch = (data: any, setState: any, carat: any) => {
   data?.natural_pavilion && setNaturalPavilion(data?.natural_pavilion);
   data?.surface_graining && setSurfaceGraining(data?.surface_graining);
   data?.internal_graining && setInternalGraining(data?.internal_graining);
-  //other_information States
   let minIndex = girdleSortedArray.indexOf(data?.girdle?.gte);
   let maxIndex = girdleSortedArray.indexOf(data?.girdle?.lte);
   const girdleData = girdleSortedArray.slice(minIndex, maxIndex + 1);

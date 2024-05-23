@@ -37,7 +37,6 @@ const BankingDetails = ({
                   dispatch,
                   kycScreenIdentifierNames.BANKING_DETAILS,
                   'bank_name'
-                  // formState
                 )
               }
               type="text"
@@ -72,7 +71,6 @@ const BankingDetails = ({
                   dispatch,
                   kycScreenIdentifierNames.BANKING_DETAILS,
                   'account_holder_name'
-                  // formState
                 )
               }
               type="text"
@@ -113,7 +111,6 @@ const BankingDetails = ({
                   dispatch,
                   kycScreenIdentifierNames.BANKING_DETAILS,
                   'account_number'
-                  // formState
                 )
               }
               type="number"
@@ -158,7 +155,6 @@ const BankingDetails = ({
                   dispatch,
                   kycScreenIdentifierNames.BANKING_DETAILS,
                   `${country === countries.INDIA ? 'ifsc_code' : 'swift_code'}`
-                  // formState
                 )
               }
               type="email"
@@ -206,7 +202,6 @@ const BankingDetails = ({
                     dispatch,
                     kycScreenIdentifierNames.BANKING_DETAILS,
                     'bank_address'
-                    // formState
                   )
                 }
                 type="text"

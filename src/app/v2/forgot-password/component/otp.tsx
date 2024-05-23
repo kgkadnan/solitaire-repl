@@ -139,7 +139,6 @@ const OTPComponent = ({
         </div>
       </div>
     </div>
-    // </div>
   );
 };
 

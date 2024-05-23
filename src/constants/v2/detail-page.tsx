@@ -26,7 +26,6 @@ export const basicDetailsHead1 = [
 ];
 
 export const basicDetailsHead2 = [
-  // { key: 'polish', label: 'Polish', hiddenAbove1024: true },
   { key: 'fluorescence', label: 'Fluorescence' },
   { key: 'lab', label: 'Lab' },
   { key: 'location', label: 'Location' },
@@ -34,14 +33,9 @@ export const basicDetailsHead2 = [
 ];
 
 export const basicDetailsHead3 = [
-  // { key: 'origin_country', label: 'Country of Origin', hiddenAbove1024: true },
   { key: 'shade', label: 'Shade' },
   { key: 'inscription', label: 'Laser Inscription', hiddenBelow1024: true } //n
 ];
-
-// export const basicDetailsHead4 = [
-//   { key: 'inscription', label: 'Laser Inscription', hiddenAbove1024: true } //n
-// ];
 
 export const mesurementsHead1 = [
   { key: 'table_percentage', label: 'Table%' }, //n
@@ -53,7 +47,6 @@ export const mesurementsHead1 = [
 ];
 
 export const mesurementsHead2 = [
-  // { key: 'crown_angle', label: 'Crown Angle', hiddenAbove1024: true },
   { key: 'girdle_percentage', label: 'Girdle%' }, //n
   { key: 'pavilion_angle', label: 'Pavilion Angle' },
   { key: 'pavilion_height', label: 'Pavilion Height' },
@@ -61,8 +54,6 @@ export const mesurementsHead2 = [
 ];
 
 export const mesurementsHead3 = [
-  // { key: 'pavilion_height', label: 'Pavilion Height', hiddenAbove1024: true },
-  // { key: 'lower_half', label: 'Lower Half', hiddenAbove1024: true },
   { key: 'star_length', label: 'Star Length' },
   { key: 'girdle', label: 'Girdle' },
   { key: 'culet', label: 'Culet' }
@@ -86,24 +77,14 @@ export const inclusionDetailsHead2 = [
 ];
 
 export const inclusionDetailsHead3 = [
-  // { key: 'natural_crown', label: 'Natural Crown', hiddenAbove1024: true },
   { key: 'natural_girdle', label: 'Natural Girdle' },
   { key: 'natural_pavilion', label: 'Natural Pavilion' },
   { key: 'surface_graining', label: 'Surface Graining' },
   {
     key: 'internal_graining',
     label: 'Internal Graining'
-    // hiddenBelow1024: true
   }
 ];
-
-// export const inclusionDetailsHead4 = [
-//   {
-//     key: 'internal_graining',
-//     label: 'Internal Graining',
-//     hiddenAbove1024: true
-//   }
-// ];
 
 export const otherInformationHead1 = [
   { key: 'key_to_symbol', label: 'Key to Symbol' },
@@ -112,16 +93,6 @@ export const otherInformationHead1 = [
   { key: 'total_grade', label: 'Total Grade' }
 ];
 
-// export const otherInformationHead2 = [
-//   { key: 'tracr_id', label: 'Tracr ID', hiddenAbove1024: true },
-//   { key: 'total_grade', label: 'Total Grade', hiddenAbove1024: true },
-//   { key: 'disclosed_source', label: 'Disclosed Source', hiddenBelow1024: true }
-// ];
-
-// export const otherInformationHead3 = [
-//   { key: 'disclosed_source', label: 'Disclosed Source', hiddenAbove1024: true }
-// ];
-
 export const priceDetails = [priceDetailsHead];
 export const priceDetailsForBid = [priceDetailsHeadForBid];
 
@@ -129,7 +100,6 @@ export const basicDetails = [
   basicDetailsHead1,
   basicDetailsHead2,
   basicDetailsHead3
-  // basicDetailsHead4
 ];
 export const mesurementsDetails = [
   mesurementsHead1,
@@ -140,13 +110,8 @@ export const inclusionDetails = [
   inclusionDetailsHead1,
   inclusionDetailsHead2,
   inclusionDetailsHead3
-  // inclusionDetailsHead4
 ];
-export const otherInformationDetails = [
-  otherInformationHead1
-  // otherInformationHead2,
-  // otherInformationHead3
-];
+export const otherInformationDetails = [otherInformationHead1];
 
 export const commonImages = [
   { imageName: '/Download.png', alt: 'download' },

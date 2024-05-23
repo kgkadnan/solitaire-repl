@@ -299,13 +299,6 @@ class ValidationCountryCodeCriteria {
 
 class ValidationPhoneCriteria {
   @MinLength(3, { message: FIELD_INVALID('Phone') })
-  //   @IsMobilePhone(
-  //     undefined,
-  //     {},
-  //     {
-  //       message: FIELD_INVALID('Phone')
-  //     }
-  //   )
   @Matches(PHONE_REG, {
     message: RANGE_VALIDATION('Phone', 0, 15)
   })
@@ -398,9 +391,6 @@ class ValidationSwitfCriteria {
   @Matches(SWIFT_CODE_REGEX, {
     message: FIELD_INVALID('Swift code')
   })
-  // @Length(8, 11, {
-  //   message: FIELD_INVALID('Swift code')
-  // })
   swift_code: string;
 
   constructor(swift_code: string) {
@@ -440,7 +430,6 @@ class ValidationOwnerLastNameCriteria {
   }
 }
 class ValidationPanCriteria {
-  // @Matches(PAN_MATCH, { message: FIELD_INVALID('PAN Number') })
   @IsNotEmpty({ message: OWNER_PAN_NUMBER_OR_ADHAAR_MANDATORY })
   @IsAlphanumeric(undefined, { message: FIELD_INVALID('PAN Or Adhaar Number') })
   @MinLength(10, { message: FIELD_INVALID('PAN Or Adhaar Number') })
@@ -587,8 +576,6 @@ class ValidationUltimateBeneficiaryNameCriteria {
 
 class ValidationCityCriteria {
   @IsNotEmpty({ message: CITY_MANDATORY })
-  // @IsString({ message: FIELD_INVALID('City') })
-  // @Length(1, 140, { message: FIELD_INVALID('City Name') })
   city: string;
 
   constructor(city: string) {
@@ -609,8 +596,6 @@ class ValidationStateCriteria {
 
 class ValidationPincodeCriteria {
   // TODO: commenting the extra condition will take decision in future if we required them
-  // @IsNumberString({}, { message: 'Pincode must be a valid number' })
-  // @Length(6, 6, { message: 'Pincode must be 6 digits long' })
   @IsNotEmpty({ message: PINCODE_MANDATORY })
   pincode: string;
 

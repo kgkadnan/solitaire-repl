@@ -52,7 +52,6 @@ export const MEMBER_NAME_MANDATORY = MANDATORY_ERROR(
 export const ULTIMATE_BENEFICIARY_NAME_MANDATORY = MANDATORY_ERROR(
   'Ultimate Beneficiary Name'
 );
-// ... (repeat for other fields)
 
 // For IndiaKycPostCompanyDetailsValidation
 export const CITY_MANDATORY = MANDATORY_ERROR('City');
@@ -65,11 +64,9 @@ export const MSME_TYPE_MANDATORY = MANDATORY_ERROR('MSME type');
 export const MSME_REGISTRATION_NUMBER_MANDATORY = MANDATORY_ERROR(
   'MSME registration number'
 );
-// ... (repeat for other fields)
 
 // For BelgiumKycPostCompanyDetailsValidation
 export const VAT_NUMBER_MANDATORY = MANDATORY_ERROR('VAT number');
-// ... (repeat for other fields)
 
 // For UsaKycPostCompanyDetailsValidation
 export const FEDERAL_TAX_ID_MANDATORY = MANDATORY_ERROR('Federal tax ID');
@@ -79,7 +76,6 @@ export const IS_ANTI_MONEY_LAUNDERING = MANDATORY_ERROR(
 export const ANTI_MONEY_LAUNDERING_POLICY_NAME_MANDATORY = MANDATORY_ERROR(
   'Anti-money laundering policy name'
 );
-// ... (repeat for other fields)
 
 // For company owner details
 export const OWNER_FIRST_NAME_MANDATORY = MANDATORY_ERROR('Owner First Name');
@@ -92,7 +88,6 @@ export const OWNER_PAN_NUMBER_MANDATORY = MANDATORY_ERROR('Owner PAN Number');
 export const OWNER_PAN_NUMBER_OR_ADHAAR_MANDATORY = MANDATORY_ERROR(
   'Owner PAN Or Adhaar Number'
 );
-// ... (repeat for other fields)d
 
 // For PersonalDetails
 export const FIRST_NAME_MANDATORY = MANDATORY_ERROR('First Name');
@@ -100,7 +95,6 @@ export const LAST_NAME_MANDATORY = MANDATORY_ERROR('Last Name');
 export const EMAIL_MANDATORY = MANDATORY_ERROR('Email');
 export const COUNTRY_CODE_MANDATORY = MANDATORY_ERROR('Country Code');
 export const PHONE_NUMBER_MANDATORY = MANDATORY_ERROR('Phone Number');
-// ... (repeat for other fields)
 
 export const MAX_CHARACTER_LIMIT_EXCEEDED = (field: string, max: number) =>
   `${field} should not exceed ${max} characters`;
@@ -123,12 +117,10 @@ export const GOVERMENT_REGISTRATION_CERTIFICATE = MANDATORY_ERROR(
 export const COMPANY_OWNER_PASSPORT = MANDATORY_ERROR('Company Owner Passport');
 export const COMPANY_OWNER_PAN_CARD = MANDATORY_ERROR('Company Owner Pan Card');
 
-//
 export const REGISTRATION_NUMBER = MANDATORY_ERROR('Registration Number');
 export const ID_COPY = MANDATORY_ERROR('Id Copy');
 export const PASSPORT = MANDATORY_ERROR('Passport');
 
-//
 export const INCUMBENCY_CERTIFICATE = MANDATORY_ERROR('Incumbency Certificate');
 export const TRADE_LICENSE = MANDATORY_ERROR('Trade License');
 export const MOA = MANDATORY_ERROR('MOA');

@@ -103,8 +103,6 @@ import { IAppointmentPayload } from './my-appointments/page';
 import BookAppointment from './my-appointments/components/book-appointment/book-appointment';
 import { Skeleton } from '@mui/material';
 
-// import useUser from '@/lib/use-auth';
-
 interface ITabs {
   label: string;
   link: string;

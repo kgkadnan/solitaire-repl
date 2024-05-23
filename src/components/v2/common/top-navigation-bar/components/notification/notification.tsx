@@ -258,7 +258,6 @@ const Notification = ({
                       <div
                         key={items.id}
                         onClick={() => {
-                          // !items.read_at.length &&
                           handleReadNotification(items.id);
                         }}
                         className={`${

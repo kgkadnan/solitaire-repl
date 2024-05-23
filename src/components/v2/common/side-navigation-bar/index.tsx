@@ -97,16 +97,6 @@ const SideNavigationBar = ({
       link: Routes.MY_APPOINTMENTS,
       isActive: currentRoute === Routes.MY_APPOINTMENTS
     }
-
-    // {
-    //   title: 'line-separator-2'
-    // },
-    // {
-    //   src: <SettingIcon />,
-    //   title: ManageLocales('app.sideNavigationBar.settings'),
-    //   link: Routes.SETTINGS,
-    //   isActive: currentRoute === Routes.SETTINGS
-    // }
   ];
 
   const SideNavigationBottomData: ISideNavigationBar[] = [

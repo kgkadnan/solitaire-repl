@@ -14,7 +14,6 @@ import saveIcon from '@public/v2/assets/icons/data-table/bookmark.svg';
 import BinIcon from '@public/v2/assets/icons/bin.svg';
 import DownloadAllIcon from '@public/v2/assets/icons/download-all.svg';
 import NewSearchIcon from '@public/v2/assets/icons/new-search.svg';
-// import shareButtonSvg from '@public/v2/assets/icons/data-table/share-button.svg';
 import chevronDown from '@public/v2/assets/icons/save-search-dropdown/chevronDown.svg';
 import Image from 'next/image';
 import warningIcon from '@public/v2/assets/icons/modal/warning.svg';
@@ -454,7 +453,6 @@ const DataTable = ({
     columns,
     data: paginatedData, //must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
 
-    //state
     getRowId: originalRow => originalRow?.id,
     onRowSelectionChange: setRowSelection,
     state: {
@@ -462,14 +460,12 @@ const DataTable = ({
       isFullScreen: JSON.parse(localStorage.getItem('isFullScreen')!),
       pagination
     },
-    //filters
     positionToolbarAlertBanner: 'none',
     enableFilters: true,
     enableColumnActions: false,
     enableDensityToggle: false,
     enableHiding: false,
     enableColumnFilters: false,
-    // enablePagination: true,
     enableStickyHeader: true,
     enableBottomToolbar: true,
     enableGrouping: true,
@@ -489,7 +485,6 @@ const DataTable = ({
         <Image src={searchIcon} alt={'searchIcon'} className="mr-[6px]" />
       )
     },
-    // selectAllMode: undefined,
 
     muiTableBodyRowProps: ({ row }) => {
       return {
@@ -513,9 +508,6 @@ const DataTable = ({
           '&.MuiTableRow-root:active .MuiTableCell-root::after': {
             backgroundColor: 'var(--neutral-100)'
           }
-          // '&.MuiTableCell-root[data-index="1"] ':{
-          //     display: 'none'
-          //   },
         }
       };
     },
@@ -573,16 +565,10 @@ const DataTable = ({
       pagination: pagination
     },
 
-    // renderEmptyRowsFallback: () => {
-    //   return <>no result</>;
-    // },
     positionGlobalFilter: 'left',
-    //styling
 
     muiTableContainerProps: {
       sx: {
-        // minHeight: 'calc(100vh - 399px)',
-        // maxHeight: 'calc(100vh - 399px)'
         height: isFullScreen ? '70vh' : 'calc(100vh - 330px)',
         minHeight: isFullScreen
           ? myCart
@@ -687,9 +673,7 @@ const DataTable = ({
                 cell.id === 'shape:RMB_lot_id') &&
               'none'
           },
-          //      '&.MuiTableCell-root[data-index="1"] ':{
-          //   display:'none'
-          // },
+
           whiteSpace: 'nowrap',
           borderBottom: '1px solid var(--neutral-50)'
         }
@@ -736,7 +720,6 @@ const DataTable = ({
         '& .MuiSvgIcon-root': {
           fontSize: '26px',
           fontWeight: 100
-          // fill: 'var(--neutral-200)'
         },
         '& .MuiCheckbox-indeterminate': {
           display: 'none'
@@ -1099,13 +1082,6 @@ const DataTable = ({
                   />
                 }
                 dropdownMenu={[
-                  // {
-                  //   label: ManageLocales(
-                  //     'app.myCart.actionButton.compareStone'
-                  //   ),
-                  //   handler: () => {},
-                  //   isHidden: activeTab === SOLD_STATUS
-                  // },
                   {
                     label: ManageLocales(
                       'app.myCart.actionButton.findMatchingPair'
