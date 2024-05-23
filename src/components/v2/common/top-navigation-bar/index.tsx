@@ -64,7 +64,6 @@ const TopNavigationBar = ({
   const [triggerGetProfilePhoto] = useLazyGetProfilePhotoQuery({});
   const [triggerLogout] = useLazyGetLogoutQuery({});
   const [triggerLogoutAll] = useLazyGetLogoutAllQuery({});
-  const [logoutMode, setLogoutMode] = useState<string>('');
   const { userLoggedOut } = useUser();
   const [modalContent, setModalContent] = useState<any>();
   const [userAccountInfo, setUserAccountInfo] = useState<IUserAccountInfo>();
@@ -110,8 +109,7 @@ const TopNavigationBar = ({
 
   const handleLogoutAll = () => {
     triggerLogoutAll({})
-      .then(res => {
-        setLogoutMode('logoutAll');
+      .then(_res => {
         setModalContent(
           <>
             <div className="absolute left-[-84px] top-[-84px]">
@@ -139,13 +137,12 @@ const TopNavigationBar = ({
           </>
         );
       })
-      .catch(err => console.log('error'));
+      .catch(_err => console.log('error'));
   };
 
   const handleLogout = () => {
     triggerLogout({})
-      .then(res => {
-        setLogoutMode('logout');
+      .then(_res => {
         setModalContent(
           <>
             <div className="absolute left-[-84px] top-[-84px]">
@@ -173,7 +170,7 @@ const TopNavigationBar = ({
           </>
         );
       })
-      .catch(err => console.log('error'));
+      .catch(_err => console.log('error'));
   };
   return (
     <div className="min-h-[60px] border-b-[1px] border-neutral200 sticky top-0 bg-neutral0 z-[3] flex flex-col justify-end ">

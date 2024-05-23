@@ -12,7 +12,6 @@ import { useGetCustomerQuery } from '@/features/api/dashboard';
 import fireSvg from '@public/v2/assets/icons/data-table/fire-icon.svg';
 import { useEffect, useMemo, useState } from 'react';
 import searchIcon from '@public/v2/assets/icons/data-table/search-icon.svg';
-import micIcon from '@public/v2/assets/icons/dashboard/mic.svg';
 import editIcon from '@public/v2/assets/icons/saved-search/edit-button.svg';
 import threeDotsSvg from '@public/v2/assets/icons/threedots.svg';
 import BidHammer from '@public/v2/assets/icons/dashboard/bid-hammer.svg';
@@ -176,8 +175,6 @@ const Dashboard = () => {
   const [triggerAvailableSlots] = useLazyGetAvailableMyAppointmentSlotsQuery(
     {}
   );
-
-  const [timeLeftForVolumeDiscount, setTimeLeftForVolumeDiscount] = useState();
 
   let isNudge = localStorage.getItem('show-nudge') === 'MINI';
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
@@ -1934,9 +1931,7 @@ const Dashboard = () => {
                     >
                       <Image src={searchIcon} alt={'searchIcon'} />
                     </div>
-                    {/* <div className="absolute right-0 top-[5px]">
-            <Image src={micIcon} alt={'micIcon'} />
-          </div> */}
+                    
                   </div>
                 </div>
               ) : (

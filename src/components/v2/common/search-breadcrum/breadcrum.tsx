@@ -15,7 +15,7 @@ const Breadcrum = ({
   searchParameters: any;
   activeTab: number;
   setActiveTab: Dispatch<SetStateAction<number>>;
-  handleCloseSpecificTab: (id: number) => void;
+  handleCloseSpecificTab: (_id: number) => void;
   setIsLoading?: any;
 }) => {
   const router = useRouter();

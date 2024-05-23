@@ -9,10 +9,10 @@ interface ISearchInputProps {
   value?: string;
   name: string;
   placeholder?: string;
-  onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (_event: ChangeEvent<HTMLInputElement>) => void;
   suggestions?: any[];
-  handleSuggestionClick?: (suggestion: string) => void;
-  handleKeyPress?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  handleSuggestionClick?: (_suggestion: string) => void;
+  handleKeyPress?: (_e: React.KeyboardEvent<HTMLInputElement>) => void;
   setShowSuggestions?: any;
   showSuggestions?: boolean;
 }
