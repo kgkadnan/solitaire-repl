@@ -12,9 +12,7 @@ const SavedSearchSkeleton = () => {
         className="rounded-[4px]"
       />
       <div className="border-[1px] border-neutral200 flex flex-col rounded-[8px]">
-        {/* <div></div> */}
         <Skeleton
-          //  width={350}
           variant="rectangular"
           height={60}
           animation="wave"
@@ -22,7 +20,10 @@ const SavedSearchSkeleton = () => {
         />
         {[1, 2, 3, 4].map(data => {
           return (
-            <div className="h-[120px] w-full border-t-[1px] border-b-[1px] border-neutral200 p-4">
+            <div
+              className="h-[120px] w-full border-t-[1px] border-b-[1px] border-neutral200 p-4"
+              key={data}
+            >
               <div className="flex   justify-between">
                 <div className="flex gap-4 items-center">
                   <Checkbox
