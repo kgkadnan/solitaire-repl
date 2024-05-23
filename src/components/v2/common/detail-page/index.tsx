@@ -45,6 +45,7 @@ import { loadImages } from './helpers/load-images';
 import { checkImage } from './helpers/check-image';
 import { ImagesType } from './interfrace';
 import fallbackImage from '@public/v2/assets/icons/not-found.svg';
+import { Skeleton } from '@mui/material';
 
 export function DiamondDetailsComponent({
   data,
@@ -101,7 +102,11 @@ export function DiamondDetailsComponent({
       <div>
         {tableHeadArray.map((item: TableColumn[], index: any) => (
           <div key={`item-${index}`} className="mt-4">
-            <ResponsiveTable tableHead={item} tableData={[tableData]} />
+            <ResponsiveTable
+              tableHead={item}
+              tableData={[tableData]}
+              validImages={validImages}
+            />
           </div>
         ))}
       </div>
@@ -256,9 +261,20 @@ export function DiamondDetailsComponent({
             {breadCrumLabel}
           </button>
           <span className="text-neutral600">/</span>
-          <p className="text-neutral700 p-[8px] bg-neutral100 rounded-[4px] text-sMedium font-medium">
-            Stock No:{tableData.lot_id}
-          </p>
+
+          {validImages.length > 0 ? (
+            <p className="text-neutral700 p-[8px] bg-neutral100 rounded-[4px] text-sMedium font-medium">
+              Stock No:{tableData.lot_id}
+            </p>
+          ) : (
+            <Skeleton
+              width={134}
+              height={34}
+              variant="rectangular"
+              animation="wave"
+              className="rounded-[4px]"
+            />
+          )}
         </div>
       </div>
       <div className="2xl:flex pt-5">
@@ -312,12 +328,22 @@ export function DiamondDetailsComponent({
           }`}
         >
           <div className="flex 2xl:justify-start  2xl:justify-between mt-4 2xl:mt-0 2xl:w-full">
-            <p
-              className="sm:text-[22px] 2xl:text-[28px] text-[#344054] font-medium mr-5 "
-              style={{ alignSelf: 'center' }}
-            >
-              Stock No: {tableData?.lot_id ?? '-'}
-            </p>
+            {validImages.length > 0 ? (
+              <p
+                className="sm:text-[22px] 2xl:text-[28px] text-[#344054] font-medium mr-5 "
+                style={{ alignSelf: 'center' }}
+              >
+                Stock No: {tableData?.lot_id ?? '-'}
+              </p>
+            ) : (
+              <Skeleton
+                width={284}
+                height={42}
+                variant="rectangular"
+                animation="wave"
+                className="rounded-[4px]"
+              />
+            )}
 
             <div className="flex lg:w-[30%]  2xl:w-[40%] justify-around items-center">
               <div className="flex gap-3 items-center">
@@ -424,70 +450,136 @@ export function DiamondDetailsComponent({
             </div>
           </div>
           <div className="flex items-center mt-4">
-            <div className="flex items-center">
-              <div className="text-headingS font-medium text-neutral-900 ">
-                {tableData?.variants?.length > 0
-                  ? tableData?.variants[0]?.prices[0]?.amount
-                    ? `$${
-                        formatNumber(
-                          tableData?.variants[0]?.prices[0]?.amount
-                        ) ?? ''
-                      }`
-                    : ''
-                  : tableData?.amount
-                  ? `$${formatNumber(tableData?.amount) ?? ''}`
-                  : ''}
-              </div>
-              <p
-                className={`text-successMain text-mMedium px-[8px] py-[2px] rounded-[4px]`}
-              >
-                {fromBid
-                  ? tableData.length > 0 && tableData.original_discount + '%'
-                  : tableData?.variants?.length > 0
-                  ? tableData?.variants[0]?.prices[0]?.amount
-                    ? tableData.length > 0 && tableData.discount + '%'
-                    : ''
-                  : ''}
-              </p>
-            </div>
-
-            {statusValue.length > 0 && (
-              <div className="border-r-[1px] border-neutral-200 h-[20px]"></div>
+            {validImages.length > 0 ? (
+              <>
+                <div className="flex items-center">
+                  <div className="text-headingS font-medium text-neutral-900 ">
+                    {tableData?.variants?.length > 0
+                      ? tableData?.variants[0]?.prices[0]?.amount
+                        ? `$${
+                            formatNumber(
+                              tableData?.variants[0]?.prices[0]?.amount
+                            ) ?? ''
+                          }`
+                        : ''
+                      : tableData?.amount
+                      ? `$${formatNumber(tableData?.amount) ?? ''}`
+                      : ''}
+                  </div>
+                  <p
+                    className={`text-successMain text-mMedium px-[8px] py-[2px] rounded-[4px]`}
+                  >
+                    {fromBid
+                      ? tableData.length > 0 &&
+                        tableData.original_discount + '%'
+                      : tableData?.variants?.length > 0
+                      ? tableData?.variants[0]?.prices[0]?.amount
+                        ? tableData.length > 0 && tableData.discount + '%'
+                        : ''
+                      : ''}
+                  </p>
+                </div>
+                {statusValue.length > 0 && (
+                  <div className="border-r-[1px] border-neutral-200 h-[20px]"></div>
+                )}
+                {RenderNewArrivalLotId({ tableData })}
+              </>
+            ) : (
+              <Skeleton
+                width={150}
+                height={30}
+                className="rounded-[4px]"
+                variant="rectangular"
+                animation="wave"
+              />
             )}
-
-            {RenderNewArrivalLotId({ tableData })}
           </div>
           <div className="pt-8 max-w-[100%] pr-[10px]">
-            <div className="sm:text-[14px] 2xl:text-[16px] text-[#344054]  font-medium">
-              Price Details
-            </div>
+            {validImages.length > 0 ? (
+              <div className="sm:text-[14px] 2xl:text-[16px] text-[#344054]  font-medium">
+                Price Details
+              </div>
+            ) : (
+              <Skeleton
+                width={100}
+                height={25}
+                className="rounded-[4px]"
+                variant="rectangular"
+                animation="wave"
+              />
+            )}
+
             {displayTable(fromBid ? priceDetailsForBid : priceDetails)}
           </div>
           <div className="pt-8 max-w-[100%] pr-[10px]">
-            <div className="sm:text-[14px] 2xl:text-[16px] text-[#344054]  font-medium">
-              Basic Details
-            </div>
+            {validImages.length > 0 ? (
+              <div className="sm:text-[14px] 2xl:text-[16px] text-[#344054]  font-medium">
+                Basic Details
+              </div>
+            ) : (
+              <Skeleton
+                width={100}
+                height={25}
+                className="rounded-[4px]"
+                variant="rectangular"
+                animation="wave"
+              />
+            )}
+
             {displayTable(basicDetails)}
           </div>
 
           <div className="mt-6 max-w-[100%] pr-[10px]">
-            <div className="sm:text-[14px] 2xl:text-[16px]  font-medium text-[#344054]">
-              Measurements
-            </div>
+            {validImages.length > 0 ? (
+              <div className="sm:text-[14px] 2xl:text-[16px]  font-medium text-[#344054]">
+                Measurements
+              </div>
+            ) : (
+              <Skeleton
+                width={100}
+                height={25}
+                className="rounded-[4px]"
+                variant="rectangular"
+                animation="wave"
+              />
+            )}
+
             {displayTable(mesurementsDetails)}
           </div>
 
           <div className="mt-6 max-w-[100%] pr-[10px]">
-            <div className="sm:text-[14px] 2xl:text-[16px] font-medium text-[#344054]">
-              Inclusion Details
-            </div>
+            {validImages.length > 0 ? (
+              <div className="sm:text-[14px] 2xl:text-[16px] font-medium text-[#344054]">
+                Inclusion Details
+              </div>
+            ) : (
+              <Skeleton
+                width={100}
+                height={25}
+                className="rounded-[4px]"
+                variant="rectangular"
+                animation="wave"
+              />
+            )}
+
             {displayTable(inclusionDetails)}
           </div>
 
           <div className="mt-6 max-w-[100%] pr-[10px] mb-5">
-            <div className="sm:text-[14px] 2xl:text-[16px] font-medium text-[#344054]">
-              Other Information
-            </div>
+            {validImages.length > 0 ? (
+              <div className="sm:text-[14px] 2xl:text-[16px] font-medium text-[#344054]">
+                Other Information
+              </div>
+            ) : (
+              <Skeleton
+                width={100}
+                height={25}
+                className="rounded-[4px]"
+                variant="rectangular"
+                animation="wave"
+              />
+            )}
+
             {displayTable(otherInformationDetails)}
           </div>
         </div>

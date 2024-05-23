@@ -6,7 +6,7 @@ import './carousel.css'; // Import your custom CSS file for React Slick
 import NoImageFound from '@public/v2/assets/images/carousel/fallback.svg';
 
 import ActionButton from '../action-button';
-import { Skeleton } from '../../ui/skeleton';
+import { Skeleton } from '@mui/material';
 interface ImageData {
   link: string;
   image_app?: string;
@@ -140,7 +140,12 @@ const DashboardCarousel: React.FC<DashboardCarouselProps> = ({ images }) => {
           </div>
         )
       ) : (
-        <Skeleton className="rounded-[4px] w-full h-[400px] bg-neutral50" />
+        <Skeleton
+          width={'100%'}
+          height={400}
+          className="rounded-[4px]"
+          variant="rectangular"
+        />
       )}
     </div>
   );
