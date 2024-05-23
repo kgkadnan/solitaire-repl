@@ -7,7 +7,6 @@ import Tooltip from '../../tooltip';
 import { handleDownloadImage } from '@/utils/v2/detail-page';
 import downloadImg from '@public/v2/assets/icons/detail-page/download.svg';
 import ImageModal from './image-modal';
-import emptyImage from '@public/v2/assets/icons/detail-page/empty-image.svg';
 import { Skeleton } from '@mui/material';
 
 interface ImagePreviewProps {
