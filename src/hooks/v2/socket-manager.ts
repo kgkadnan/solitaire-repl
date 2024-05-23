@@ -30,10 +30,10 @@ export class SocketManager {
     this.socket.emit(event, data);
   }
 
-  on(event: string, handler: (data: any) => void) {
+  on(event: string, handler: (_data: any) => void) {
     this.socket?.on(event, handler);
   }
-  off(event: string, handler: (data: any) => void) {
+  off(event: string, handler: (_data: any) => void) {
     this.socket?.off(event, handler);
   }
   disconnect() {

@@ -4,11 +4,6 @@ interface IUserAuthenticationLayoutProps {
   formData: ReactNode;
   screen: string;
 }
-declare global {
-  interface Window {
-    onYouTubeIframeAPIReady: () => void;
-  }
-}
 
 const UserAuthenticationLayout: React.FC<IUserAuthenticationLayoutProps> = ({
   formData,

@@ -1,12 +1,7 @@
 import Image from 'next/image';
 import Media from '@public/v2/assets/icons/data-table/Media.svg';
 import Link from 'next/link';
-import {
-  GIA_LINK,
-  HOLD_STATUS,
-  LAB_LINKS,
-  MEMO_STATUS
-} from '@/constants/business-logic';
+import { LAB_LINKS } from '@/constants/business-logic';
 import Ind from '@public/v2/assets/png/data-table/IND.png';
 import Usa from '@public/v2/assets/png/data-table/USA.png';
 import Isr from '@public/v2/assets/png/data-table/ISR.png';

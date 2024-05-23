@@ -1,25 +1,3 @@
-export enum fieldType {
-  FLOATING_INPUT = 'floatingInput',
-  PHONE_NUMBER = 'phoneNumber',
-  CHECKBOX = 'checkbox',
-  RADIO = 'radio',
-  ATTACHMENT = 'attachment'
-}
-
-export enum supportedMediaUnit {
-  MB = 'MB',
-  KB = 'KB'
-}
-
-export enum supportedMediaFormat {
-  JPEG = 'JPEG',
-  PNG = 'PNG',
-  JPG = 'JPG',
-  PDF = 'PDF',
-  DOC = 'DOC',
-  DOCX = 'DOCX'
-}
-
 export enum supportedCountries {
   INDIA = 'India',
   BELGIUM = 'Belgium',
