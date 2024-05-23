@@ -17,6 +17,7 @@ import forwardArrow from '@public/v2/assets/icons/arrow-forward.svg';
 import backwardArrow from '@public/v2/assets/icons/arrow-backword.svg';
 import backWardArrowDisable from '@public/v2/assets/icons/detail-page/back-ward-arrow-disable.svg';
 import forWardAarrowDisable from '@public/v2/assets/icons/detail-page/forward-arrow-disable.svg';
+import { Skeleton } from '@mui/material';
 
 interface ImageSliderProps {
   images: ImagesType[];
@@ -287,17 +288,11 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
           <div className="flex cursor-pointer flex-col items-center justify-center gap-[12px]">
             <div className="relative w-full min-h-[328px]">
               <div className="absolute w-full flex justify-center inset-0 p-5">
-                <Image
-                  src={emptyImage}
-                  alt="empty image"
-                  className="rounded-lg"
-                  width={'100'}
-                  height={'100'}
-                  style={{
-                    height: 'auto',
-                    width: '300px',
-                    background: '#F9FAFB'
-                  }}
+                <Skeleton
+                  width={300}
+                  height={288}
+                  variant="rectangular"
+                  animation="wave"
                 />
               </div>
             </div>
