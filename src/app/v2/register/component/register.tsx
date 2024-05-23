@@ -190,20 +190,6 @@ const RegisterComponent = ({
             {/* </div> */}
             <div className="flex flex-col gap-1">
               <IndividualActionButton
-                // onClick={() =>
-                //   handleRegister({
-                //     role: 'register',
-                //     registerFormState,
-                //     setRegisterFormErrors,
-                //     register,
-                //     setCurrentState,
-                //     setRole,
-                //     setToken,
-                //     setIsDialogOpen,
-                //     setDialogContent,
-                //     setOTPVerificationFormState
-                //   })
-                // }
                 variant={'primary'}
                 size={'custom'}
                 className="rounded-[4px] w-[100%]"

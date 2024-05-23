@@ -57,13 +57,7 @@ const ActionButton = ({
               variant === 'secondary' && styles.ctaSecondaryStyle
             } ${isDisable && 'bg-neutral100 text-neutral400'}`}
                 >
-                  {svg && (
-                    <Image
-                      src={svg}
-                      alt={label ?? 'icon-button'}
-                      // className="ml-[4px]"
-                    />
-                  )}
+                  {svg && <Image src={svg} alt={label ?? 'icon-button'} />}
                   <div className={styles.ctaLabel}>{label}</div>
                 </Button>
               ) : (
@@ -79,11 +73,7 @@ const ActionButton = ({
               variant === 'secondary' && styles.ctaSecondaryStyle
             }`}
                     >
-                      <Image
-                        src={svg}
-                        alt={label ?? 'icon-button'}
-                        // className="ml-[4px]"
-                      />
+                      <Image src={svg} alt={label ?? 'icon-button'} />
                     </Button>
                   }
                   tooltipContent={tooltip}

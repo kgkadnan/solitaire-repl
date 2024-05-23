@@ -162,8 +162,6 @@ const Search = () => {
     removeDataIndex: number,
     yourSelection: ISavedSearch[]
   ) => {
-    // setIsLoading(false)
-
     let closeSpecificSearch = yourSelection.filter(
       (_items: ISavedSearch, index: number) => {
         return index !== removeDataIndex - 1;
@@ -235,7 +233,6 @@ const Search = () => {
                         updateSavedSearch(updateSaveSearchData)
                           .unwrap()
                           .then(() => {
-                            // setIsInputDialogOpen(true);
                             setIsDialogOpen(false);
                             closeSearch(id, yourSelection);
                           })
@@ -245,7 +242,6 @@ const Search = () => {
                       } else {
                         setIsInputDialogOpen(true);
                         setIsDialogOpen(false);
-                        // closeSearch(id, yourSelection);
                       }
                     },
                     customStyle: 'flex-1 h-10'
@@ -339,7 +335,6 @@ const Search = () => {
                         setSaveSearchName,
                         setInputError
                       });
-                      // closeSearch(id, yourSelection);
                     }
                   }
                 },

@@ -55,8 +55,6 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
         disableMenu: true,
         ondevtoolopen(type: any, next: any) {
           setOpen(true);
-          // You may choose to call next() if you want to allow the default behavior
-          // next();
         },
         ignore: () => {
           return process.env.NEXT_PUBLIC_ENV !== 'production';

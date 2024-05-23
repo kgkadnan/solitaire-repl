@@ -7,7 +7,6 @@ import linkSvg from '@public/v2/assets/icons/detail-page/link.svg';
 import downloadImg from '@public/v2/assets/icons/detail-page/download.svg';
 import forwardArrow from '@public/v2/assets/icons/detail-page/forward-arrow.svg';
 import backwardArrow from '@public/v2/assets/icons/detail-page/back-ward-arrow.svg';
-// import { AppDispatch } from '@/redux/store';
 
 export interface TableColumn {
   key: string;

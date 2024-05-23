@@ -1,7 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { createBaseQuery } from './base-query';
 
-// const header =
 export const resetPasswordApi = createApi({
   reducerPath: 'resetPasswordReducer',
   baseQuery: createBaseQuery(),

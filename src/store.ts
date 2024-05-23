@@ -81,7 +81,6 @@ const rootReducer = combineReducers({
 
 const handle410Middleware =
   (storeAPI: any) => (next: any) => async (action: any) => {
-    // try {
     const result = await next(action);
     if (result?.payload?.status === statusCode.LOGOUT) {
       storeAPI.dispatch(show()); // Dispatch action to show modal
@@ -129,7 +128,6 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
     preloadedState
   });
 };
-// setupListeners(store.dispatch);
 
 export type RootState = ReturnType<typeof rootReducer>;
 export type AppStore = ReturnType<typeof setupStore>;

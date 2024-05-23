@@ -12,9 +12,7 @@ export const colourStyles: StylesConfig<IColourOption, true> = {
 
     backgroundColor: 'var(--neutral-0)',
     borderRadius: '4px',
-    // border: 'none',
     border: '1px solid var(--neutral-200)',
-    // borderBottom: '1px solid hsl(var(--solitaire-quaternary))',
     outline: '1px solid var(--neutral-200)',
     width: '100%',
     boxShadow: state.menuIsOpen ? 'var(--input-shadow) inset' : '',
@@ -22,10 +20,6 @@ export const colourStyles: StylesConfig<IColourOption, true> = {
     '&:hover': {
       border: '1px solid var(--neutral-200) !important'
     }
-    // ':hover': {
-    //   border: 'none',
-    //   borderBottom: '1px solid var(--neutral-200)'
-    // }
   }),
   singleValue: styles => ({
     ...styles,

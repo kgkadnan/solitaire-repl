@@ -44,12 +44,6 @@ const TermAndCondtions = () => {
       }
     };
     callAPi();
-    // t({ query: 'terms-and-condition-kgk-website' })
-    //   .unwrap()
-    //   .then(res => {
-    //     console.log(res);
-    //     setData(data);
-    //   });
   }, []);
 
   let styling = `<style>
