@@ -2244,17 +2244,14 @@ const Dashboard = () => {
                   ) : (
                     <VolumeDiscount
                       totalSpent={
-                        '3000'
-                        // customerData?.customer?.volumeDiscount?.totalSpent
+                        customerData?.customer?.volumeDiscount?.totalSpent
                       }
                       expiryTime={
-                        '2024-05-28T09:08:46.603Z'
-                        // customerData?.customer?.volumeDiscount?.expiryTime
+                        customerData?.customer?.volumeDiscount?.expiryTime
                       }
                       eligibleForDiscount={
-                        false
-                        // customerData?.customer?.volumeDiscount
-                        //   ?.eligibleForDiscount
+                        customerData?.customer?.volumeDiscount
+                          ?.eligibleForDiscount
                       }
                     />
                   )}

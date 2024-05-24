@@ -81,7 +81,7 @@ const VolumeDiscount: React.FC<any> = ({
               <div className="text-sMedium text-neutral600 font-medium bg-[#F1FAF8] rounded-[4px] p-[6px]">
                 You can utilize current volume discount within &nbsp;
                 <span className="font-semiBold">
-                  {(timeDifference! / (1000 * 60 * 60)).toFixed(2)}
+                  {Math.floor(timeDifference! / (1000 * 60 * 60))}
                 </span>{' '}
                 hours.
               </div>
@@ -96,7 +96,7 @@ const VolumeDiscount: React.FC<any> = ({
                 </span>{' '}
                 more within{' '}
                 <span className="font-semiBold">
-                  {(timeDifference! / (1000 * 60 * 60)).toFixed(2)}
+                  {Math.floor(timeDifference! / (1000 * 60 * 60))}
                 </span>{' '}
                 hours to get a 2% volume discount
               </div>
