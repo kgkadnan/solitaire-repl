@@ -145,48 +145,12 @@ const MyDiamonds = () => {
     triggerInvoiceHistory,
     { data: invoiceHistoryData, isSuccess: isLoadingInvoiceHistory }
   ] = useLazyCardPreviousConfirmationQuery({});
-  // Fetch recent confirmation data
-  // const { data: pendingInvoicesData, isSuccess: isLoadingPendingInvoice } =
-  //   useCardRecentConfirmationQuery({
-  //     resentConfiramtionStatus,
-  //     resentConfiramtionInvoiceStatus,
-  //     expand,
-  //     recentConfirmlimit
-  //   });
-
-  // Fetch my-invoice data
-  // const { data: activeInvoicesData, isSuccess: isLoadngActiveInvoice } =
-  //   useCardMyInvoiceQuery({
-  //     myInvoiceStatus,
-  //     myInvoiceInvoiceStatus,
-  //     myInvoicelimit
-  //   });
-
-  // Fetch previous-confiramtion-data
-  // const { data: invoiceHistoryData, isSuccess: isLoadingInvoiceHistory } =
-  //   useCardPreviousConfirmationQuery({
-  //     previousConfirmStatus
-  //   });
-
-  // useEffect to update recentConfirmData when myDiamondRecentConfirmData changes
-  // useEffect(() => {
-  //   setPendingInvoiceDataState(pendingInvoicesData?.orders);
-  // }, [pendingInvoicesData]);
 
   useEffect(() => {
     if (detailId) {
       handleShowDetails(detailId);
     }
   }, [detailId]);
-
-  // useEffect to update recentConfirmData when myDiamondRecentConfirmData changes
-  // useEffect(() => {
-  //   setActiveInvoiceDataState(activeInvoicesData?.orders);
-  // }, [activeInvoicesData]);
-
-  // useEffect(() => {
-  //   setInvoiceHistoryDataState(invoiceHistoryData?.orders);
-  // }, [invoiceHistoryData]);
 
   useEffect(() => {
     if (pathName === 'recent-confirmations') {
@@ -242,7 +206,6 @@ const MyDiamonds = () => {
       keys: [
         { label: 'Invoice Number', accessor: 'invoice_id' },
         { label: 'Invoice Date', accessor: 'created_at' },
-        // { label: 'Tracking Details', accessor: 'delivery' },
         { label: 'Details', accessor: 'details' }
       ],
       data: activeInvoiceDataState
@@ -251,12 +214,10 @@ const MyDiamonds = () => {
       keys: [
         { label: 'Invoice Number', accessor: 'invoice_id' },
         { label: 'Invoice Date', accessor: 'created_at' },
-        // { label: 'Tracking Details', accessor: 'delivery' },
         { label: 'Details', accessor: 'details' }
       ],
       data: invoiceHistoryDataState
     }
-    // Add similar structures for other tabs here
   };
 
   // Get the keys and data for the active tab
@@ -375,16 +336,7 @@ const MyDiamonds = () => {
             <span>{formatNumberWithLeadingZeros(value[accessor])}</span>
           </>
         );
-      // case 'delivery':
-      //   return (
-      //     <Link
-      //       href={value[accessor]?.link}
-      //       target="_blank"
-      //       className="pl-1 text-infoMain cursor-pointer"
-      //     >
-      //       Track Order
-      //     </Link>
-      //   );
+
       case 'invoice_id':
         return (
           <>

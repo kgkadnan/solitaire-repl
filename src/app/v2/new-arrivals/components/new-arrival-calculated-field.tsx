@@ -17,7 +17,6 @@ const NewArrivalCalculatedField = ({
   );
 
   useEffect(() => {
-    // if (Object.keys(selectedProducts).length > 0)
     setSelectedRows(rows.filter((row: any) => row.id in selectedProducts));
   }, [selectedProducts]);
 
@@ -84,19 +83,6 @@ const NewArrivalCalculatedField = ({
         label: ManageLocales('app.calculatedField.amount'),
         value: `$${computeTotal('amount')}`
       }
-
-      // {
-      //   label: ManageLocales('app.calculatedField.bidDis'),
-      //   value: `$${computeTotal('amount')}`
-      // },
-      // {
-      //   label: ManageLocales('app.calculatedField.bidprct'),
-      //   value: `$${computeTotal('amount')}`
-      // },
-      // {
-      //   label: ManageLocales('app.calculatedField.bidAmt'),
-      //   value: `$${computeTotal('amount')}`
-      // }
     ];
 
     return informativeData;

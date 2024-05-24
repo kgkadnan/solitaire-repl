@@ -778,8 +778,6 @@ const Result = ({
               setData(res.data);
             });
             dispatch(notificationBadge(true));
-
-            // refetchRow();
           })
           .catch(error => {
             setIsLoading(false);
@@ -862,7 +860,6 @@ const Result = ({
               value={textAreaValue}
               name="textarea"
               rows={10}
-              // placeholder='Write Description'
               className="w-full bg-neutral0 text-neutral900 rounded-[4px] resize-none focus:outline-none p-2 border-neutral-200 border-[1px] mt-2"
               style={{ boxShadow: 'var(--input-shadow) inset' }}
               onChange={e => handleComment(e, setTextAreaValue)}

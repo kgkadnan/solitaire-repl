@@ -1,7 +1,4 @@
 import React, { useState } from 'react';
-// import pendingIcon from '@public/v2/assets/icons/kyc/pending.svg';
-// import rejectedIcon from '@public/v2/assets/icons/kyc/rejected.svg';
-// import approvedIcon from '@public/v2/assets/icons/kyc/approved.svg';
 import phoneIcon from '@public/v2/assets/icons/kyc/phone.svg';
 import whatsappIcon from '@public/v2/assets/icons/kyc/whatsapp.svg';
 import copyIcon from '@public/v2/assets/icons/kyc/copy.svg';
@@ -27,10 +24,8 @@ export const KycStatusScreen: React.FC<IKycStatusScreen> = ({ status }) => {
   const [showToast, setShowToast] = useState(false);
   const handleCopy = (email: string) => {
     navigator.clipboard.writeText(email);
-    // setCopied(true);
     setShowToast(true); // Show the toast notification
     setTimeout(() => {
-      // setCopied(false);
       setShowToast(false); // Hide the toast notification after some time
     }, 4000);
   };

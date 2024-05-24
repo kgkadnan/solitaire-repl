@@ -14,6 +14,7 @@ import backwardArrow from '@public/v2/assets/icons/arrow-backword.svg';
 import emptyImage from '@public/v2/assets/icons/detail-page/empty-image.svg';
 import backWardArrowDisable from '@public/v2/assets/icons/detail-page/back-ward-arrow-disable.svg';
 import forWardAarrowDisable from '@public/v2/assets/icons/detail-page/forward-arrow-disable.svg';
+import { Skeleton } from '@mui/material';
 
 interface ModalProps {
   isOpen: boolean;
@@ -127,16 +128,14 @@ const ImageModal: React.FC<ModalProps> = ({
                     />
                   )
                 ) : (
-                  <Image
-                    src={emptyImage}
-                    className="lg:w-[662px] lg:h-[510px] sm:w-[300px] sm:h-[210px]"
-                    height={600}
-                    alt="empty image"
-                    width={650}
-                    style={{
-                      background: '#F9FAFB'
-                    }}
-                  />
+                  <div className="lg:w-[662px] lg:h-[510px] sm:w-[300px] sm:h-[210px]">
+                    <Skeleton
+                      width={'100%'}
+                      height={'100%'}
+                      variant="rectangular"
+                      animation="wave"
+                    />
+                  </div>
                 )}
               </div>
               <button

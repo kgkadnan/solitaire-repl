@@ -81,14 +81,6 @@ const Register = () => {
   const { setIsDialogOpen, setDialogContent, setIsInputDialogOpen } =
     modalSetState;
 
-  // const { data: verifyNumber } = useVerifyPhoneQuery({
-  //   country_code: otpVerificationFormState.countryCode,
-  //   phone_number: otpVerificationFormState.otpMobileNumber
-  // },
-  // {
-  //   skip:true
-  // });
-
   const [token, setToken] = useState(initialTokenState);
 
   const { userLoggedIn } = useUser();

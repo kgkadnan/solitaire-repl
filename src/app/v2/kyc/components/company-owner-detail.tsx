@@ -23,8 +23,6 @@ const CompanyOwnerDetail = ({
         'owner_country_code'
       ];
 
-    console.log('isCountryCodeAvbl', isCountryCodeAvbl);
-
     if (isCountryCodeAvbl?.length) {
       triggerGetAllCountryCode({}).then(data => {
         let getSpecificCountryData = data.data.filter((country: any) => {
@@ -75,7 +73,6 @@ const CompanyOwnerDetail = ({
                   dispatch,
                   kycScreenIdentifierNames.COMPANY_OWNER_DETAILS,
                   'owner_first_name'
-                  // formState
                 )
               }
               type="text"
@@ -112,7 +109,6 @@ const CompanyOwnerDetail = ({
                   dispatch,
                   kycScreenIdentifierNames.COMPANY_OWNER_DETAILS,
                   'owner_last_name'
-                  // formState
                 )
               }
               type="text"
@@ -149,7 +145,6 @@ const CompanyOwnerDetail = ({
                   dispatch,
                   kycScreenIdentifierNames.COMPANY_OWNER_DETAILS,
                   'owner_pan_or_aadhaar_number'
-                  // formState
                 )
               }
               type="text"
@@ -187,7 +182,6 @@ const CompanyOwnerDetail = ({
                   dispatch,
                   kycScreenIdentifierNames.COMPANY_OWNER_DETAILS,
                   'owner_phone'
-                  // formState
                 )
               }
               handleSelectChange={({ value, iso }: any) => {
@@ -238,7 +232,6 @@ const CompanyOwnerDetail = ({
                   dispatch,
                   kycScreenIdentifierNames.COMPANY_OWNER_DETAILS,
                   'owner_email'
-                  // formState
                 )
               }
               type="email"

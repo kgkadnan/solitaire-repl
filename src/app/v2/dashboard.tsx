@@ -92,9 +92,16 @@ import VolumeDiscount from '@/components/v2/common/volume-discount';
 import EmptyScreen from '@/components/v2/common/empty-screen';
 import emptyOrderSvg from '@public/v2/assets/icons/empty-order.svg';
 import empty from '@public/v2/assets/icons/saved-search/empty-screen-saved-search.svg';
-import { Skeleton } from '@/components/v2/ui/skeleton';
-
-// import useUser from '@/lib/use-auth';
+import { NO_STONES_AVAILABLE } from '@/constants/error-messages/compare-stone';
+import { HOLD_STATUS, MEMO_STATUS } from '@/constants/business-logic';
+import {
+  SELECT_STONE_TO_PERFORM_ACTION,
+  SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH
+} from '@/constants/error-messages/confirm-stone';
+import { useLazyGetAvailableMyAppointmentSlotsQuery } from '@/features/api/my-appointments';
+import { IAppointmentPayload } from './my-appointments/page';
+import BookAppointment from './my-appointments/components/book-appointment/book-appointment';
+import { Skeleton } from '@mui/material';
 
 interface ITabs {
   label: string;
@@ -157,6 +164,19 @@ const Dashboard = () => {
   const [isDetailPage, setIsDetailPage] = useState(false);
   const [isDiamondDetail, setIsDiamondDetail] = useState(false);
 
+  const [showAppointmentForm, setShowAppointmentForm] = useState(false);
+  const [appointmentPayload, setAppointmentPayload] =
+    useState<IAppointmentPayload>({
+      kam: { kam_name: '', kam_image: '' },
+      storeAddresses: [],
+      timeSlots: { dates: [{ date: '', day: '' }], slots: {} }
+    });
+  const [lotIds, setLotIds] = useState<string[]>([]);
+
+  const [triggerAvailableSlots] = useLazyGetAvailableMyAppointmentSlotsQuery(
+    {}
+  );
+
   const [timeLeftForVolumeDiscount, setTimeLeftForVolumeDiscount] = useState();
 
   let isNudge = localStorage.getItem('show-nudge') === 'MINI';
@@ -190,6 +210,7 @@ const Dashboard = () => {
       isAvailable: true,
       link: '/v2/bid-2-buy'
     },
+
     {
       label: 'My Appointments',
       icon: <AppointmentIcon />,
@@ -551,98 +572,188 @@ const Dashboard = () => {
     // !customerData && setIsLoading(true);
     refetchCustomerData();
   }, []);
+
+  //Uncomment this when volume discount to be released and comment below useEffect ---Jyoti  DONOT REMOVE THIS CODE
+  // useEffect(() => {
+  //   if (customerData) {
+  //     setIsLoading(false);
+
+  //     const tabsCopy: ITabs[] = []; // Make a copy of the current tabs
+  //     // const tabsCopy = [...tabs]; // Make a copy of the current tabs
+
+  //     // Check if there are saved searches and add the "Saved Search" tab
+  //     // if (customerData.customer.saved_searches?.length > 0) {
+  //     tabsCopy.push({
+  //       label: 'Saved Search',
+  //       link: '/v2/search?active-tab=saved-search',
+  //       data: customerData.customer?.saved_searches?.slice(0, 5) ?? []
+  //     });
+  //     // } else {
+  //     //   // Remove the "Saved Search" tab if there are no saved searches
+  //     //   const index = tabsCopy?.findIndex(tab => tab.label === 'Saved Search');
+  //     //   if (index !== -1) {
+  //     //     tabsCopy?.splice(index, 1);
+  //     //   }
+  //     // }
+
+  //     // Update the tabs state
+  //     // setTabs(tabsCopy);
+  //     // setActiveTab(tabsCopy[0]?.label);
+
+  //     // Check for pending and active invoices
+  //     // if (customerData.customer?.orders?.length > 0) {
+  //     const pendingInvoices =
+  //       customerData.customer.orders
+  //         .filter((item: any) => item.invoice_id === null)
+  //         .slice(0, 5) ?? [];
+
+  //     const activeInvoices =
+  //       customerData.customer.orders
+  //         .filter(
+  //           (item: any) => item.invoice_id !== null && item.status === 'pending'
+  //         )
+  //         .slice(0, 5) ?? [];
+
+  //     // Update or add "Pending Invoice" tab
+  //     // const pendingTab = tabsCopy.find(
+  //     //   tab => tab.label === 'Pending Invoice'
+  //     // );
+  //     // if (pendingInvoices.length > 0) {
+  //     //   if (pendingTab) {
+  //     //     pendingTab.data = pendingInvoices;
+  //     //   } else {
+  //     tabsCopy.push({
+  //       label: 'Pending Invoice',
+  //       link: '/v2/your-orders',
+  //       data: pendingInvoices
+  //     });
+  //     //   }
+  //     // } else {
+  //     //   // Remove "Pending Invoice" tab if there are no pending invoices
+  //     //   const index = tabsCopy.findIndex(
+  //     //     tab => tab.label === 'Pending Invoice'
+  //     //   );
+  //     //   if (index !== -1) {
+  //     //     tabsCopy.splice(index, 1);
+  //     //   }
+  //     // }
+
+  //     // Update or add "Active Invoice" tab
+  //     // const activeTab = tabsCopy.find(tab => tab.label === 'Active Invoice');
+  //     // if (activeInvoices.length > 0) {
+  //     //   if (activeTab) {
+  //     //     activeTab.data = activeInvoices;
+  //     //   } else {
+  //     tabsCopy.push({
+  //       label: 'Active Invoice',
+  //       link: '/v2/your-orders',
+  //       data: activeInvoices
+  //     });
+  //     //   }
+  //     // } else {
+  //     //   // Remove "Active Invoice" tab if there are no active invoices
+  //     //   const index = tabsCopy.findIndex(
+  //     //     tab => tab.label === 'Active Invoice'
+  //     //   );
+  //     //   if (index !== -1) {
+  //     //     tabsCopy.splice(index, 1);
+  //     //   }
+  //     // }
+  //     // Update the tabs state
+  //     setTabs(tabsCopy);
+  //     setActiveTab(tabsCopy[0].label);
+  //     // }
+  //   }
+  // }, [customerData]);
+
   useEffect(() => {
     if (customerData) {
-      setIsLoading(false);
-
+      // setIsLoading(false);
       const tabsCopy: ITabs[] = []; // Make a copy of the current tabs
       // const tabsCopy = [...tabs]; // Make a copy of the current tabs
 
       // Check if there are saved searches and add the "Saved Search" tab
-      // if (customerData.customer.saved_searches?.length > 0) {
-      tabsCopy.push({
-        label: 'Saved Search',
-        link: '/v2/search?active-tab=saved-search',
-        data: customerData.customer?.saved_searches?.slice(0, 5) ?? []
-      });
-      // } else {
-      //   // Remove the "Saved Search" tab if there are no saved searches
-      //   const index = tabsCopy?.findIndex(tab => tab.label === 'Saved Search');
-      //   if (index !== -1) {
-      //     tabsCopy?.splice(index, 1);
-      //   }
-      // }
+      if (customerData.customer.saved_searches?.length > 0) {
+        tabsCopy.push({
+          label: 'Saved Search',
+          link: '/v2/search?active-tab=saved-search',
+          data: customerData.customer.saved_searches.slice(0, 5)
+        });
+      } else {
+        // Remove the "Saved Search" tab if there are no saved searches
+        const index = tabsCopy?.findIndex(tab => tab.label === 'Saved Search');
+        if (index !== -1) {
+          tabsCopy?.splice(index, 1);
+        }
+      }
 
-      // Update the tabs state
-      // setTabs(tabsCopy);
-      // setActiveTab(tabsCopy[0]?.label);
-
-      // Check for pending and active invoices
-      // if (customerData.customer?.orders?.length > 0) {
-      const pendingInvoices =
-        customerData.customer.orders
-          ?.filter((item: any) => item.invoice_id === null)
-          .slice(0, 5) ?? [];
-
-      const activeInvoices =
-        customerData.customer.orders
-          ?.filter(
-            (item: any) => item.invoice_id !== null && item.status === 'pending'
-          )
-          .slice(0, 5) ?? [];
-
-      // Update or add "Pending Invoice" tab
-      // const pendingTab = tabsCopy.find(
-      //   tab => tab.label === 'Pending Invoice'
-      // );
-      // if (pendingInvoices.length > 0) {
-      //   if (pendingTab) {
-      //     pendingTab.data = pendingInvoices;
-      //   } else {
-      tabsCopy.push({
-        label: 'Pending Invoice',
-        link: '/v2/your-orders',
-        data: pendingInvoices
-      });
-      //   }
-      // } else {
-      //   // Remove "Pending Invoice" tab if there are no pending invoices
-      //   const index = tabsCopy.findIndex(
-      //     tab => tab.label === 'Pending Invoice'
-      //   );
-      //   if (index !== -1) {
-      //     tabsCopy.splice(index, 1);
-      //   }
-      // }
-
-      // Update or add "Active Invoice" tab
-      // const activeTab = tabsCopy.find(tab => tab.label === 'Active Invoice');
-      // if (activeInvoices.length > 0) {
-      //   if (activeTab) {
-      //     activeTab.data = activeInvoices;
-      //   } else {
-      tabsCopy.push({
-        label: 'Active Invoice',
-        link: '/v2/your-orders',
-        data: activeInvoices
-      });
-      //   }
-      // } else {
-      //   // Remove "Active Invoice" tab if there are no active invoices
-      //   const index = tabsCopy.findIndex(
-      //     tab => tab.label === 'Active Invoice'
-      //   );
-      //   if (index !== -1) {
-      //     tabsCopy.splice(index, 1);
-      //   }
-      // }
       // Update the tabs state
       setTabs(tabsCopy);
-      setActiveTab(tabsCopy[0].label);
-      // }
+      setActiveTab(tabsCopy[0]?.label);
+
+      // Check for pending and active invoices
+      if (customerData.customer?.orders?.length > 0) {
+        const pendingInvoices = customerData.customer.orders
+          .filter((item: any) => item.invoice_id === null)
+          .slice(0, 5);
+
+        const activeInvoices = customerData.customer.orders
+          .filter(
+            (item: any) => item.invoice_id !== null && item.status === 'pending'
+          )
+          .slice(0, 5);
+
+        // Update or add "Pending Invoice" tab
+        const pendingTab = tabsCopy.find(
+          tab => tab.label === 'Pending Invoice'
+        );
+        if (pendingInvoices.length > 0) {
+          if (pendingTab) {
+            pendingTab.data = pendingInvoices;
+          } else {
+            tabsCopy.push({
+              label: 'Pending Invoice',
+              link: '/v2/your-orders',
+              data: pendingInvoices
+            });
+          }
+        } else {
+          // Remove "Pending Invoice" tab if there are no pending invoices
+          const index = tabsCopy.findIndex(
+            tab => tab.label === 'Pending Invoice'
+          );
+          if (index !== -1) {
+            tabsCopy.splice(index, 1);
+          }
+        }
+
+        // Update or add "Active Invoice" tab
+        const activeTab = tabsCopy.find(tab => tab.label === 'Active Invoice');
+        if (activeInvoices.length > 0) {
+          if (activeTab) {
+            activeTab.data = activeInvoices;
+          } else {
+            tabsCopy.push({
+              label: 'Active Invoice',
+              link: '/v2/your-orders',
+              data: activeInvoices
+            });
+          }
+        } else {
+          // Remove "Active Invoice" tab if there are no active invoices
+          const index = tabsCopy.findIndex(
+            tab => tab.label === 'Active Invoice'
+          );
+          if (index !== -1) {
+            tabsCopy.splice(index, 1);
+          }
+        }
+        // Update the tabs state
+        setTabs(tabsCopy);
+        setActiveTab(tabsCopy[0].label);
+      }
     }
   }, [customerData]);
-
   useEffect(() => {
     if (tabs.length > 0) {
       if (activeTab === '') {
@@ -849,12 +960,12 @@ const Dashboard = () => {
   };
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      setIsLoading(true);
+      // setIsLoading(true);
       getProductById({
         search_keyword: stoneId
       })
         .then((res: any) => {
-          setIsLoading(false);
+          // setIsLoading(false);
           if (res?.error?.status === statusCode.NOT_FOUND) {
             setError(`We couldn't find any results for this search`);
           } else {
@@ -864,19 +975,19 @@ const Dashboard = () => {
           }
         })
         .catch((e: any) => {
-          setIsLoading(false);
+          // setIsLoading(false);
           setError('Something went wrong');
         });
     }
   };
   const handleInputSearch = () => {
     if (stoneId.length > 0) {
-      setIsLoading(true);
+      // setIsLoading(true);
       getProductById({
         search_keyword: stoneId
       })
         .then((res: any) => {
-          setIsLoading(false);
+          // setIsLoading(false);
           if (res?.error?.status === statusCode.NOT_FOUND) {
             setError(`We couldn't find any results for this search`);
           } else {
@@ -886,7 +997,7 @@ const Dashboard = () => {
           }
         })
         .catch((e: any) => {
-          setIsLoading(false);
+          // setIsLoading(false);
           setError('Something went wrong');
         });
     } else {
@@ -907,7 +1018,7 @@ const Dashboard = () => {
   };
 
   const handleAddToCartDetailPage = () => {
-    setIsLoading(true);
+    // setIsLoading(true);
     // Extract variant IDs for selected stones
     const variantIds = [searchData?.id]
       ?.map((id: string) => {
@@ -925,7 +1036,7 @@ const Dashboard = () => {
       })
         .unwrap()
         .then((res: any) => {
-          setIsLoading(false);
+          // setIsLoading(false);
           setIsDialogOpen(true);
           setDialogContent(
             <>
@@ -965,7 +1076,7 @@ const Dashboard = () => {
           setError('');
         })
         .catch((error: any) => {
-          setIsLoading(false);
+          // setIsLoading(false);
           // On error, set error state and error message
 
           setIsDialogOpen(true);
@@ -1008,6 +1119,12 @@ const Dashboard = () => {
     setConfirmStoneData([]);
     setIsCompareStone(false);
     setCompareStoneData([]);
+    setShowAppointmentForm(false);
+    setAppointmentPayload({
+      kam: { kam_name: '', kam_image: '' },
+      storeAddresses: [],
+      timeSlots: { dates: [{ date: '', day: '' }], slots: {} }
+    });
   };
 
   const renderAddCommentDialogs = () => {
@@ -1147,6 +1264,53 @@ const Dashboard = () => {
     }
   ];
 
+  const handleCreateAppointment = () => {
+    let selectedIds = Object.keys(rowSelection);
+
+    if (selectedIds.length > 0) {
+      const hasMemoOut = selectedIds?.some((id: string) => {
+        const stone = searchData?.foundProducts.find(
+          (row: IProduct) => row?.id === id
+        );
+        return stone?.diamond_status === MEMO_STATUS;
+      });
+
+      const hasHold = selectedIds?.some((id: string) => {
+        const stone = searchData?.foundProducts.find(
+          (row: IProduct) => row?.id === id
+        );
+        return stone?.diamond_status === HOLD_STATUS;
+      });
+
+      if (hasMemoOut) {
+        setError(NO_STONES_AVAILABLE);
+      } else if (hasHold) {
+        setError(SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH);
+      } else {
+        setShowAppointmentForm(true);
+        triggerAvailableSlots({}).then(payload => {
+          let { data } = payload.data;
+          setAppointmentPayload(data);
+        });
+
+        const lotIds = selectedIds?.map((id: string) => {
+          const getLotIds: any =
+            searchData?.foundProducts.find((row: IProduct) => {
+              return row?.id === id;
+            }) ?? {};
+
+          if (getLotIds) {
+            return getLotIds?.lot_id;
+          }
+          return '';
+        });
+        setLotIds(lotIds);
+      }
+    } else {
+      setError(SELECT_STONE_TO_PERFORM_ACTION);
+    }
+  };
+
   const confirmStoneApiCall = () => {
     const variantIds: string[] = [];
 
@@ -1155,7 +1319,7 @@ const Dashboard = () => {
     });
 
     if (variantIds.length) {
-      setIsLoading(true);
+      // setIsLoading(true);
       confirmProduct({
         variants: variantIds,
         comments: commentValue
@@ -1163,7 +1327,7 @@ const Dashboard = () => {
         .unwrap()
         .then(res => {
           if (res) {
-            setIsLoading(false);
+            // setIsLoading(false);
             setCommentValue('');
             setIsDialogOpen(true);
 
@@ -1208,7 +1372,7 @@ const Dashboard = () => {
           }
         })
         .catch(e => {
-          setIsLoading(false);
+          // setIsLoading(false);
           setCommentValue('');
 
           if (e.data.type === 'unauthorized') {
@@ -1291,7 +1455,7 @@ const Dashboard = () => {
       setIsError(true);
       setError(NO_STONES_SELECTED);
     } else {
-      setIsLoading(true);
+      // setIsLoading(true);
       const variantIds = selectedIds
         ?.map((id: string) => {
           const myCartCheck: IProduct | object =
@@ -1313,7 +1477,7 @@ const Dashboard = () => {
         })
           .unwrap()
           .then((res: any) => {
-            setIsLoading(false);
+            // setIsLoading(false);
             setIsDialogOpen(true);
             setDialogContent(
               <>
@@ -1354,7 +1518,7 @@ const Dashboard = () => {
               search_keyword: stoneId
             })
               .then((res: any) => {
-                setIsLoading(false);
+                // setIsLoading(false);
                 if (res?.error?.status === statusCode.NOT_FOUND) {
                   setError(`We couldn't find any results for this search`);
                 } else {
@@ -1364,7 +1528,7 @@ const Dashboard = () => {
                 }
               })
               .catch((e: any) => {
-                setIsLoading(false);
+                // setIsLoading(false);
                 setError('Something went wrong');
               });
             dispatch(notificationBadge(true));
@@ -1372,7 +1536,7 @@ const Dashboard = () => {
             // refetchRow();
           })
           .catch(error => {
-            setIsLoading(false);
+            // setIsLoading(false);
             // On error, set error state and error message
 
             setIsDialogOpen(true);
@@ -1459,9 +1623,7 @@ const Dashboard = () => {
         );
       } else {
         return (
-          <p className="text-headingS text-infoMain underline font-medium">
-            Book Now
-          </p>
+          <p className="text-headingS text-infoMain font-normal">Book Now</p>
         );
       }
     } else {
@@ -1606,6 +1768,28 @@ const Dashboard = () => {
             />
           </div>
         </div>
+      ) : showAppointmentForm ? (
+        <>
+          <div className="flex py-[8px] items-center ">
+            <p className="text-lMedium font-medium text-neutral900">
+              {ManageLocales('app.myAppointment.header')}
+            </p>
+          </div>
+          <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow mb-[16px]">
+            <BookAppointment
+              breadCrumLabel={ManageLocales(
+                'app.myAppointments.myAppointments'
+              )}
+              goBackToListView={goBackToListView}
+              appointmentPayload={appointmentPayload}
+              setIsLoading={setIsLoading}
+              modalSetState={modalSetState}
+              lotIds={lotIds}
+              setRowSelection={setRowSelection}
+              errorSetState={errorSetState}
+            />
+          </div>
+        </>
       ) : isDetailPage && searchData && Object.keys(searchData).length > 0 ? (
         <div className="mb-[10px]">
           <div className="flex py-[8px] items-center ">
@@ -1660,6 +1844,7 @@ const Dashboard = () => {
               setIsDetailPage={setIsDetailPage}
               setIsCompareStone={setIsCompareStone}
               setCompareStoneData={setCompareStoneData}
+              handleCreateAppointment={handleCreateAppointment}
             />
           </div>
         </div>
@@ -1753,7 +1938,13 @@ const Dashboard = () => {
                   </div>
                 </div>
               ) : (
-                <Skeleton className="w-[720px] h-[54px] bg-neutral50 rounded-[4px]" />
+                <Skeleton
+                  width={720}
+                  variant="rectangular"
+                  height={54}
+                  animation="wave"
+                  className="rounded-[4px]"
+                />
               )}
             </div>
 
@@ -1766,7 +1957,13 @@ const Dashboard = () => {
                         key={index}
                         className="flex rounded-[8px] w-full gap-4 shadow-sm"
                       >
-                        <Skeleton className="rounded-[4px] w-full h-[97px] bg-neutral50" />
+                        <Skeleton
+                          width={'100%'}
+                          height={97}
+                          variant="rectangular"
+                          animation="wave"
+                          className="rounded-[4px]"
+                        />
                       </div>
                     ))
                 : options.map((data, index) => (
@@ -1800,6 +1997,7 @@ const Dashboard = () => {
                           <p className="text-neutral600 text-mRegular">
                             {data.label}
                             {data.label === 'My Appointments' &&
+                              data.count > 0 &&
                               `(${data.count})`}
                           </p>
                           {data.label === 'Bid to Buy' &&
@@ -1831,7 +2029,13 @@ const Dashboard = () => {
               {/* KAMCard Container - Prevent it from shrinking and assign a max width */}
               <div className="flex-shrink-0 w-[300px] max-w-full">
                 {customerData === undefined ? (
-                  <Skeleton className="rounded-[4px] w-full h-[400px] bg-neutral50" />
+                  <Skeleton
+                    animation="wave"
+                    width={'100%'}
+                    variant="rectangular"
+                    height={400}
+                    className="rounded-[4px]"
+                  />
                 ) : (
                   <KAMCard
                     name={customerData?.customer.kam?.kam_name ?? '-'}
@@ -1847,7 +2051,13 @@ const Dashboard = () => {
             {tabs.length > 0 && (
               <div className="flex gap-4 ">
                 {customerData === undefined ? (
-                  <Skeleton className="rounded-[4px] w-full h-full bg-neutral50" />
+                  <Skeleton
+                    height={'100%'}
+                    width={'100%'}
+                    animation="wave"
+                    variant="rectangular"
+                    className="rounded-[4px]"
+                  />
                 ) : (
                   <div className="w-full border-[1px] border-neutral200 rounded-[8px] flex-1 flex-shrink min-w-0">
                     <div className="border-b-[1px] border-neutral200 p-4">
@@ -2024,7 +2234,13 @@ const Dashboard = () => {
 
                 <div className="w-[300px]">
                   {customerData === undefined ? (
-                    <Skeleton className="rounded-[4px] w-full h-[420px] bg-neutral50" />
+                    <Skeleton
+                      height={420}
+                      width={'100%'}
+                      animation="wave"
+                      variant="rectangular"
+                      className="rounded-[4px]"
+                    />
                   ) : (
                     <VolumeDiscount
                       totalSpent={

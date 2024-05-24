@@ -9,23 +9,6 @@
   width: 231px;
   border: 1px solid var(--neutral-200);
   box-shadow: 0px 1px 2px 0px hsla(220, 43%, 11%, 0.12);
-  /* Larger screens */
-
-  // /* Large devices such as laptops (1024px and up) */
-  // @media only screen and (min-width: 64em) {
-  //   width: 250px;
-  // }
-  // /* Largest devices such as desktops (1280px and up) */
-  // @media only screen and (min-width: 80em) {
-  //   width: 250px;
-  // }
-  // @media only screen and (max-width: 80em) {
-  //   width: 250px;
-  // }
-
-  // @media only screen and (min-width: 100em) {
-  //   width: 300px;
-  // }
 }
 
 .lableManageListingSequence {
@@ -36,43 +19,6 @@
   align-items: center;
   color: var(--neutral-900);
 }
-
-//   /* Media queries */
-//   @media (max-width: 1200px) {
-//     .cardManageListingSequence {
-//       width: 180px; /* Adjust the width as needed */
-//       font-size: 13px;
-//     }
-
-//     .lableManageListingSequence {
-//       width: 70%; /* Adjust the width as needed */
-//       font-size: 13px;
-//     }
-//   }
-
-//   @media (max-width: 1024px) {
-//     .cardManageListingSequence {
-//       width: 150px; /* Adjust the width as needed */
-//       font-size: 12px;
-//     }
-
-//     .lableManageListingSequence {
-//       width: 70%; /* Adjust the width as needed */
-//       font-size: 12px;
-//     }
-//   }
-
-//   @media (max-width: 768px) {
-//     .cardManageListingSequence {
-//       width: 100px; /* Adjust the width as needed */
-//       font-size: 11px;
-//     }
-
-//     .lableManageListingSequence {
-//       width: 60%; /* Adjust the width as needed */
-//       font-size: 11px;
-//     }
-//   }
 
 //Footer Button
 .transparent {

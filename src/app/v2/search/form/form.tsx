@@ -167,11 +167,7 @@ const Form = ({
     setSelectionChecked
   } = setState;
 
-  // const modifySearchFrom = searchParams.get('edit');
-
   const {
-    // setSearchUrl,
-    // searchUrl,
     isValidationError,
     isError,
     errorText,
@@ -448,10 +444,8 @@ const Form = ({
             }`
           );
         }
-        // return;
       } else {
         setIsError(true);
-        // setErrorText(EXCEEDS_LIMITS);
       }
     } else {
       setIsError(true);
@@ -668,14 +662,12 @@ const Form = ({
     },
     {
       variant: 'secondary',
-      // svg: arrowIcon,
       label: ManageLocales('app.advanceSearch.reset'),
       handler: handleFormReset
     },
 
     {
       variant: 'secondary',
-      // svg: bookmarkAddIcon,
       label: `${ManageLocales('app.advanceSearch.saveSearch')}`,
       handler: () => {
         if (searchUrl) {
@@ -713,17 +705,19 @@ const Form = ({
     {
       variant: 'primary',
       // svg: errorText === NO_STONE_FOUND ? addDemand : searchIcon,
-      label: `${
-        errorText === NO_STONE_FOUND &&
-        isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
-          ? 'Add Demand'
-          : 'Search'
-      } `,
-      handler:
-        errorText === NO_STONE_FOUND &&
-        isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
-          ? handleAddDemand
-          : handleFormSearch
+      label: 'Search',
+      // `${
+      //   errorText === NO_STONE_FOUND &&
+      //   isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
+      //     ? 'Add Demand'
+      //     : 'Search'
+      // } `,
+      handler: errorText === NO_STONE_FOUND ? () => {} : handleFormSearch
+
+      // errorText === NO_STONE_FOUND &&
+      // isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
+      //   ? handleAddDemand
+      //   : handleFormSearch
     }
   ];
 

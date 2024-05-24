@@ -85,7 +85,6 @@ const ForgotPassword = () => {
         countryCode: `${phoneNumber.countryCode}`,
         codeAndNumber: `${phoneNumber.countryCode} ${phoneNumber.phoneNumber}`
       }));
-      // setIsConfirmed(true);
 
       if (res?.data?.statusCode === statusCode.SUCCESS) {
         setToken((prev: any) => ({
@@ -111,18 +110,10 @@ const ForgotPassword = () => {
   };
   const { otpVericationState, otpVerificationSetState } =
     useOtpVerificationStateManagement();
-  const {
-    otpValues,
-    resendTimer,
-    otpVerificationFormState
-    // otpVerificationFormErrors
-  } = otpVericationState;
-  const {
-    setOtpValues,
-    setResendTimer,
-    setOTPVerificationFormState
-    // setOTPVerificationFormErrors
-  } = otpVerificationSetState;
+  const { otpValues, resendTimer, otpVerificationFormState } =
+    otpVericationState;
+  const { setOtpValues, setResendTimer, setOTPVerificationFormState } =
+    otpVerificationSetState;
 
   const renderForgotPasswordContent = () => {
     switch (currentState) {
@@ -145,7 +136,6 @@ const ForgotPassword = () => {
             otpVerificationFormState={otpVerificationFormState}
             setOtpValues={setOtpValues}
             otpValues={otpValues}
-            // sendOtp={sendOtp}
             sendOtp={sendResetOtp}
             resendTimer={resendTimer}
             setCurrentState={setCurrentState}

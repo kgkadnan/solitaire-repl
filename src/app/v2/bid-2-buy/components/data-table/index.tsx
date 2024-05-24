@@ -11,7 +11,6 @@ import downloadIcon from '@public/v2/assets/icons/data-table/download.svg';
 import Image from 'next/image';
 import searchIcon from '@public/v2/assets/icons/data-table/search-icon.svg';
 
-// theme.js
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 import { useEffect, useState } from 'react';

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import NotificationIcon from '@public/v2/assets/icons/topbar-icons/notification.svg';
+import NotificationIcon from '@public/v2/assets/icons/topbar-icons/notification.svg?url';
 import prefrences from '@public/v2/assets/icons/my-account/prefrences.svg';
 import markRead from '@public/v2/assets/icons/my-account/mark-read.svg';
 import emptyNotification from '@public/v2/assets/icons/empty-notification.svg';
@@ -44,7 +44,11 @@ interface INotification {
   target_page: string;
   title: string;
 }
-const Notification = () => {
+const Notification = ({
+  isInMaintenanceMode
+}: {
+  isInMaintenanceMode: boolean;
+}) => {
   const router = useRouter();
   const [triggerNotification] = useLazyGetNotificationQuery({});
   const [readAllNotification] = useReadAllNotificationMutation({});
@@ -201,14 +205,22 @@ const Notification = () => {
   return (
     <Popover>
       <PopoverTrigger
-        className="flex justify-center items-center"
-        onClick={() => {
+        className={`flex justify-center items-center ${
+          isInMaintenanceMode &&
+          'bg-neutral100 cursor-not-allowed w-[40px] rounded-[4px]'
+        }`}
+        onClick={e => {
           callNotification();
         }}
       >
         {
           <div style={{ position: 'relative', display: 'inline-block' }}>
-            <Image src={NotificationIcon} alt="Notification Icon" />
+            {/* <Image src={NotificationIcon} alt="Notification Icon" /> */}
+            <NotificationIcon
+              className={`${
+                isInMaintenanceMode ? 'stroke-neutral400' : 'stroke-neutral900'
+              }`}
+            />
             {notificationData?.some(notification => !notification.seen_at) && (
               <div
                 style={{
@@ -225,84 +237,85 @@ const Notification = () => {
         }
       </PopoverTrigger>
       {/* Popover content with radio buttons */}
-      <PopoverContent>
-        <div className="bg-neutral25 w-[447px] border-[1px] border-solid border-primaryBorder  shadow-popupsShadow  rounded-[8px] relative top-[5px] right-[13%]">
-          <div className="border-solid border-b-[1px] border-neutral-200">
-            <h1 className="text-headingS text-neutral-900 font-medium px-[24px] py-[16px]">
-              Notifications
-            </h1>
-          </div>
+      {!isInMaintenanceMode && (
+        <PopoverContent>
+          <div className="bg-neutral25 w-[447px] border-[1px] border-solid border-primaryBorder  shadow-popupsShadow  rounded-[8px] relative top-[5px] right-[13%]">
+            <div className="border-solid border-b-[1px] border-neutral200">
+              <h1 className="text-headingS text-neutral900 font-medium px-[24px] py-[16px]">
+                Notifications
+              </h1>
+            </div>
 
-          {notificationData?.length > 0 ? (
-            <div className="max-h-[70vh] overflow-y-scroll">
-              {notificationData?.length > 0 &&
-                notificationData?.map((items: any, index: number) => {
-                  // Calculate the gradient index based on the item's index
-                  const gradientIndex = index % gradientClasses.length;
-                  // Get the gradient class for the calculated index
-                  const gradientClass = gradientClasses[gradientIndex];
-                  return (
-                    <div
-                      key={items.id}
-                      onClick={() => {
-                        // !items.read_at.length &&
-                        handleReadNotification(items.id);
-                      }}
-                      className={`${
-                        !items?.read_at?.length && gradientClass
-                      } flex p-[16px] w-[100%] gap-[15px] cursor-pointer border-b-[1px] border-neutral-200 hover:bg-neutral-50 `}
-                    >
+            {notificationData?.length > 0 ? (
+              <div className="max-h-[70vh] overflow-y-scroll">
+                {notificationData?.length > 0 &&
+                  notificationData?.map((items: any, index: number) => {
+                    // Calculate the gradient index based on the item's index
+                    const gradientIndex = index % gradientClasses.length;
+                    // Get the gradient class for the calculated index
+                    const gradientClass = gradientClasses[gradientIndex];
+                    return (
                       <div
-                        className={` w-[40px] h-[40px] flex items-center justify-center rounded-[4px] ${
-                          !items?.read_at?.length
-                            ? 'bg-neutral0'
-                            : 'bg-neutral100'
-                        }`}
+                        key={items.id}
+                        onClick={() => {
+                          handleReadNotification(items.id);
+                        }}
+                        className={`${
+                          !items?.read_at?.length && gradientClass
+                        } flex p-[16px] w-[100%] gap-[15px] cursor-pointer border-b-[1px] border-neutral200 hover:bg-neutral50 `}
                       >
-                        <img src={items.icon_url} alt={items.icon_url} />
-                      </div>
-                      <div className="flex flex-col w-[85%]">
-                        <div className="text-neutral-700 text-mMedium font-medium">
-                          {items.message}
+                        <div
+                          className={` w-[40px] h-[40px] flex items-center justify-center rounded-[4px] ${
+                            !items?.read_at?.length
+                              ? 'bg-neutral0'
+                              : 'bg-neutral100'
+                          }`}
+                        >
+                          <img src={items.icon_url} alt={items.icon_url} />
                         </div>
-                        <span className="text-sRegular text-neutral-600 font-regular">
-                          {formatCreatedAt(items.created_at)}
-                        </span>
+                        <div className="flex flex-col w-[85%]">
+                          <div className="text-neutral700 text-mMedium font-medium">
+                            {items.message}
+                          </div>
+                          <span className="text-sRegular text-neutral600 font-regular">
+                            {formatCreatedAt(items.created_at)}
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                  );
-                })}
-            </div>
-          ) : (
-            <div className="flex items-center justify-center py-5">
-              <Image src={emptyNotification} alt="emptyNotification" />
-            </div>
-          )}
+                    );
+                  })}
+              </div>
+            ) : (
+              <div className="flex items-center justify-center py-5">
+                <Image src={emptyNotification} alt="emptyNotification" />
+              </div>
+            )}
 
-          <div className="flex justify-between px-[16px] pb-[20px] pt-[20px] border-t-[1px] border-neutral-200">
-            <Link
-              className="flex items-center gap-2 cursor-pointer"
-              href={'/v2/my-account?path=notification-preferences'}
-            >
-              <Image src={prefrences} alt="prefrences" />
-              <span className="text-neutral-700 text-mRegular">
-                Preferences
-              </span>
-            </Link>
-            <button
-              className="flex items-center gap-2 cursor-pointer"
-              onClick={() => {
-                readAllNotificationHandler();
-              }}
-            >
-              <Image src={markRead} alt="markRead" />
-              <span className="text-neutral-700 text-mRegular">
-                Mark all as read
-              </span>
-            </button>
+            <div className="flex justify-between px-[16px] pb-[20px] pt-[20px] border-t-[1px] border-neutral200">
+              <Link
+                className="flex items-center gap-2 cursor-pointer"
+                href={'/v2/my-account?path=notification-preferences'}
+              >
+                <Image src={prefrences} alt="prefrences" />
+                <span className="text-neutral700 text-mRegular">
+                  Preferences
+                </span>
+              </Link>
+              <button
+                className="flex items-center gap-2 cursor-pointer"
+                onClick={() => {
+                  readAllNotificationHandler();
+                }}
+              >
+                <Image src={markRead} alt="markRead" />
+                <span className="text-neutral700 text-mRegular">
+                  Mark all as read
+                </span>
+              </button>
+            </div>
           </div>
-        </div>
-      </PopoverContent>
+        </PopoverContent>
+      )}
     </Popover>
   );
 };

@@ -67,12 +67,10 @@ const BidToBuy = () => {
 
   const [bidHistory, setBidHistory] = useState<any>({});
 
-  // const { data: bidHistory } = useGetBidToBuyHistoryQuery({});
   const [triggerBidToBuyHistory] = useLazyGetBidToBuyHistoryQuery({});
   const mapColumns = (columns: any) =>
     columns
       ?.filter(({ is_disabled }: any) => !is_disabled)
-      // ?.sort(({ sequence: a }: any, { sequence: b }: any) => a - b)
       .map(({ accessor, short_label, label }: any) => {
         const commonProps = {
           accessorKey: accessor,
