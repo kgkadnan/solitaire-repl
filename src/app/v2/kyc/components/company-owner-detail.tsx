@@ -23,7 +23,6 @@ const CompanyOwnerDetail = ({
         'owner_country_code'
       ];
 
-
     if (isCountryCodeAvbl?.length) {
       triggerGetAllCountryCode({}).then(data => {
         let getSpecificCountryData = data.data.filter((country: any) => {

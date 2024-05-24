@@ -1267,7 +1267,6 @@ const Dashboard = () => {
   const handleCreateAppointment = () => {
     let selectedIds = Object.keys(rowSelection);
 
-
     if (selectedIds.length > 0) {
       const hasMemoOut = selectedIds?.some((id: string) => {
         const stone = searchData?.foundProducts.find(
