@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { Button } from '../../ui/button';
 import Tooltip from '../tooltip';
 
-interface IActionButtonData {
+export interface IActionButtonData {
   actionButtonData: {
     variant: 'secondary' | 'primary' | 'disable';
     svg?: any; // Assuming the type of 'svg' is string, update it accordingly
