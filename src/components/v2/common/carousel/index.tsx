@@ -15,7 +15,7 @@ interface ImageData {
   description_line: string;
   cta: string;
 }
-interface DashboardCarouselProps {
+export interface DashboardCarouselProps {
   images: ImageData[];
 }
 const DashboardCarousel: React.FC<DashboardCarouselProps> = ({ images }) => {
