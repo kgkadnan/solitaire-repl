@@ -6,12 +6,10 @@ export const colourStyles = (error: any, isDisabled?: boolean) => {
 
       backgroundColor: 'var(--neutral-0)',
       borderRadius: '4px 0px 0px 4px',
-      // border: 'none',
       border: error.length
         ? '1px solid var(--danger-main)'
         : '1px solid var(--neutral-200)',
       borderRight: 'none',
-      // outline: '1px solid var(--neutral-200)',
       width: '110px',
       boxShadow: 'var(--input-shadow) inset',
 

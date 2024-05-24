@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -6,7 +6,7 @@ import './carousel.css'; // Import your custom CSS file for React Slick
 import NoImageFound from '@public/v2/assets/images/carousel/fallback.svg';
 
 import ActionButton from '../action-button';
-import { Skeleton } from '../../ui/skeleton';
+import { Skeleton } from '@mui/material';
 interface ImageData {
   link: string;
   image_app?: string;
@@ -25,8 +25,6 @@ const DashboardCarousel: React.FC<DashboardCarouselProps> = ({ images }) => {
     speed: 500, // Transition speed
     slidesToShow: 1, // Number of slides to show at once
     slidesToScroll: 1, // Number of slides to scroll
-    // autoplay: true, // Enable autoplay
-    // autoplaySpeed: 2000, // Delay between each auto-scroll
     appendDots: (dots: any) => (
       <div
         style={{
@@ -41,9 +39,40 @@ const DashboardCarousel: React.FC<DashboardCarouselProps> = ({ images }) => {
     )
   };
 
+  const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => setViewportWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const getSuitableImageUrl = (imageSet: any) => {
+    // Validate the input
+    if (!imageSet || typeof imageSet !== 'object' || Array.isArray(imageSet)) {
+      return null;
+    }
+
+    const sortedKeys = Object.keys(imageSet).sort((a: any, b: any) => b - a);
+
+    for (const key of sortedKeys) {
+      if (parseInt(key, 10) <= viewportWidth) {
+        const selectedImageUrl = imageSet[key];
+        return selectedImageUrl;
+      }
+    }
+
+    const fallbackUrl = imageSet[sortedKeys[sortedKeys.length - 1]];
+    return fallbackUrl;
+  };
+
   const handleImageError = (event: any) => {
     event.target.src = NoImageFound.src; // Set the fallback image when the original image fails to load
   };
+
+  const imageUrl = images && getSuitableImageUrl(images[0].image_web);
+
   return (
     <div className="dashboard-carousel">
       {images !== undefined ? (
@@ -51,6 +80,7 @@ const DashboardCarousel: React.FC<DashboardCarouselProps> = ({ images }) => {
           images.length > 1 ? (
             <Slider {...settings}>
               {images?.map((data: any, index: number) => {
+                const imageUrl = getSuitableImageUrl(data.image_web);
                 return (
                   <div
                     className="relative w-full h-[400px] rounded-[8px] overflow-hidden bg-neutral50"
@@ -65,7 +95,7 @@ const DashboardCarousel: React.FC<DashboardCarouselProps> = ({ images }) => {
                       className="h-[400px]"
                     >
                       <img
-                        src={data.image_web ?? NoImageFound.src}
+                        src={imageUrl ?? NoImageFound.src}
                         alt={`banner-${index}`}
                         className="w-full h-[400px] rounded-[8px]"
                         onError={handleImageError}
@@ -103,7 +133,7 @@ const DashboardCarousel: React.FC<DashboardCarouselProps> = ({ images }) => {
               {/* Container with relative positioning */}
               <a href={images[0].link} target="_blank" className="h-[400px]">
                 <img
-                  src={images[0].image_web ?? NoImageFound.src}
+                  src={imageUrl ?? NoImageFound.src}
                   alt={`banner-${1}`}
                   className="w-full h-[400px] rounded-[8px]"
                   onError={handleImageError}
@@ -142,7 +172,12 @@ const DashboardCarousel: React.FC<DashboardCarouselProps> = ({ images }) => {
           </div>
         )
       ) : (
-        <Skeleton className="rounded-[4px] w-full h-[400px] bg-neutral50" />
+        <Skeleton
+          width={'100%'}
+          height={400}
+          className="rounded-[4px]"
+          variant="rectangular"
+        />
       )}
     </div>
   );

@@ -153,7 +153,6 @@ const CompanyDetail = ({
               dispatch,
               kycScreenIdentifierNames.COMPANY_DETAILS,
               'member_of_business_name'
-              // formState
             );
           },
           error:
@@ -204,7 +203,6 @@ const CompanyDetail = ({
               dispatch,
               kycScreenIdentifierNames.COMPANY_DETAILS,
               'msme_type'
-              // formState
             );
           },
           error:
@@ -230,7 +228,6 @@ const CompanyDetail = ({
               dispatch,
               kycScreenIdentifierNames.COMPANY_DETAILS,
               'msme_registration_number'
-              // formState
             );
           },
           error:
@@ -291,7 +288,6 @@ const CompanyDetail = ({
               dispatch,
               kycScreenIdentifierNames.COMPANY_DETAILS,
               'no_anti_money_laundering_policy_reason'
-              // formState
             );
           },
           error:
@@ -331,8 +327,6 @@ const CompanyDetail = ({
 
   const handleSelect = (value: any, formKey: string, setState: any) => {
     setState(value);
-    // Update the data array to include only the selected option, removing any previous selections
-    // setData([value]);
 
     handleInputChange(
       `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][${formKey}]`,
@@ -462,7 +456,6 @@ const CompanyDetail = ({
                     dispatch,
                     kycScreenIdentifierNames.COMPANY_DETAILS,
                     'company_name'
-                    // formState
                   )
                 }
                 type="text"
@@ -502,7 +495,6 @@ const CompanyDetail = ({
                     dispatch,
                     kycScreenIdentifierNames.COMPANY_DETAILS,
                     'year_of_establishment'
-                    // formState
                   )
                 }
                 type="number"
@@ -543,7 +535,6 @@ const CompanyDetail = ({
                       dispatch,
                       kycScreenIdentifierNames.COMPANY_DETAILS,
                       'address'
-                      // formState
                     )
                   }
                   type="text"
@@ -584,7 +575,6 @@ const CompanyDetail = ({
                       dispatch,
                       kycScreenIdentifierNames.COMPANY_DETAILS,
                       'address_line_1'
-                      // formState
                     )
                   }
                   type="text"
@@ -687,7 +677,6 @@ const CompanyDetail = ({
                       dispatch,
                       kycScreenIdentifierNames.COMPANY_DETAILS,
                       'address_line_2'
-                      // formState
                     )
                   }
                   type="text"
@@ -729,7 +718,6 @@ const CompanyDetail = ({
                       dispatch,
                       kycScreenIdentifierNames.COMPANY_DETAILS,
                       'state'
-                      // formState
                     )
                   }
                   type="text"
@@ -773,7 +761,6 @@ const CompanyDetail = ({
                       dispatch,
                       kycScreenIdentifierNames.COMPANY_DETAILS,
                       'company_phone_number'
-                      // formState
                     )
                   }
                   handleSelectChange={({ value, iso }: any) => {
@@ -830,7 +817,6 @@ const CompanyDetail = ({
                       dispatch,
                       kycScreenIdentifierNames.COMPANY_DETAILS,
                       'pincode'
-                      // formState
                     )
                   }
                   type="number"
@@ -872,7 +858,6 @@ const CompanyDetail = ({
                       dispatch,
                       kycScreenIdentifierNames.COMPANY_DETAILS,
                       'company_email'
-                      // formState
                     )
                   }
                   type="text"
@@ -914,7 +899,6 @@ const CompanyDetail = ({
                       dispatch,
                       kycScreenIdentifierNames.COMPANY_DETAILS,
                       'company_phone_number'
-                      // formState
                     )
                   }
                   handleSelectChange={({ value, iso }: any) => {
@@ -2122,7 +2106,6 @@ const CompanyDetail = ({
                       dispatch,
                       kycScreenIdentifierNames.COMPANY_DETAILS,
                       'company_email'
-                      // formState
                     )
                   }
                   type="email"
@@ -2162,7 +2145,6 @@ const CompanyDetail = ({
                       dispatch,
                       kycScreenIdentifierNames.COMPANY_DETAILS,
                       'business_registration_number'
-                      // formState
                     )
                   }
                   type="text"
@@ -2204,7 +2186,6 @@ const CompanyDetail = ({
                       dispatch,
                       kycScreenIdentifierNames.COMPANY_DETAILS,
                       'company_pan_number'
-                      // formState
                     )
                   }
                   type="text"
@@ -2246,7 +2227,6 @@ const CompanyDetail = ({
                       dispatch,
                       kycScreenIdentifierNames.COMPANY_DETAILS,
                       'vat_number'
-                      // formState
                     )
                   }
                   type="text"
@@ -2288,7 +2268,6 @@ const CompanyDetail = ({
                       dispatch,
                       kycScreenIdentifierNames.COMPANY_DETAILS,
                       'federal_tax_id'
-                      // formState
                     )
                   }
                   type="text"
@@ -2330,7 +2309,6 @@ const CompanyDetail = ({
                       dispatch,
                       kycScreenIdentifierNames.COMPANY_DETAILS,
                       'gst_number'
-                      // formState
                     )
                   }
                   type="text"
@@ -2372,7 +2350,6 @@ const CompanyDetail = ({
                       dispatch,
                       kycScreenIdentifierNames.COMPANY_DETAILS,
                       'fax_number'
-                      // formState
                     )
                   }
                   type="text"
@@ -2413,7 +2390,6 @@ const CompanyDetail = ({
                       dispatch,
                       kycScreenIdentifierNames.COMPANY_DETAILS,
                       'business_registration_number'
-                      // formState
                     )
                   }
                   type="text"
@@ -2453,7 +2429,6 @@ const CompanyDetail = ({
                     dispatch,
                     kycScreenIdentifierNames.COMPANY_DETAILS,
                     'subsidiary_company'
-                    // formState
                   )
                 }
                 type="text"
@@ -2492,7 +2467,6 @@ const CompanyDetail = ({
                     dispatch,
                     kycScreenIdentifierNames.COMPANY_DETAILS,
                     'ultimate_beneficiary_name'
-                    // formState
                   )
                 }
                 type="text"
@@ -2533,7 +2507,6 @@ const CompanyDetail = ({
                       dispatch,
                       kycScreenIdentifierNames.COMPANY_DETAILS,
                       'ownership_percentage'
-                      // formState
                     )
                   }
                   type="text"

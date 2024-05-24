@@ -22,7 +22,6 @@ import {
   useLazyGetLogoutAllQuery,
   useLazyGetLogoutQuery
 } from '@/features/api/dashboard';
-import resetAllApiStates from '@/utils/reset-all-state';
 import { DialogComponent } from '../dialog';
 import confirmIcon from '@public/v2/assets/icons/modal/confirm.svg';
 import logoutConfirmIcon from '@public/v2/assets/icons/modal/logout.svg';
@@ -69,7 +68,6 @@ const TopNavigationBar = ({
   const { userLoggedOut } = useUser();
   const [modalContent, setModalContent] = useState<any>();
   const [userAccountInfo, setUserAccountInfo] = useState<IUserAccountInfo>();
-  // const showNudge = localStorage.getItem('show-nudge'); // Replace with actual check
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   useEffect(() => {
     const fetchMyAPI = async () => {
@@ -111,7 +109,6 @@ const TopNavigationBar = ({
   }, [updatePhoto?.status]);
 
   const handleLogoutAll = () => {
-    // resetAllApiStates();
     triggerLogoutAll({})
       .then(res => {
         setLogoutMode('logoutAll');
@@ -141,13 +138,11 @@ const TopNavigationBar = ({
             </div>
           </>
         );
-        //
       })
       .catch(err => console.log('error'));
   };
 
   const handleLogout = () => {
-    // resetAllApiStates();
     triggerLogout({})
       .then(res => {
         setLogoutMode('logout');
@@ -177,7 +172,6 @@ const TopNavigationBar = ({
             </div>
           </>
         );
-        // router.push('/v2/login'), userLoggedOut();
       })
       .catch(err => console.log('error'));
   };

@@ -92,7 +92,6 @@ import VolumeDiscount from '@/components/v2/common/volume-discount';
 import EmptyScreen from '@/components/v2/common/empty-screen';
 import emptyOrderSvg from '@public/v2/assets/icons/empty-order.svg';
 import empty from '@public/v2/assets/icons/saved-search/empty-screen-saved-search.svg';
-import { Skeleton } from '@/components/v2/ui/skeleton';
 import { NO_STONES_AVAILABLE } from '@/constants/error-messages/compare-stone';
 import { HOLD_STATUS, MEMO_STATUS } from '@/constants/business-logic';
 import {
@@ -102,8 +101,7 @@ import {
 import { useLazyGetAvailableMyAppointmentSlotsQuery } from '@/features/api/my-appointments';
 import { IAppointmentPayload } from './my-appointments/page';
 import BookAppointment from './my-appointments/components/book-appointment/book-appointment';
-
-// import useUser from '@/lib/use-auth';
+import { Skeleton } from '@mui/material';
 
 interface ITabs {
   label: string;
@@ -670,7 +668,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (customerData) {
-      setIsLoading(false);
+      // setIsLoading(false);
       const tabsCopy: ITabs[] = []; // Make a copy of the current tabs
       // const tabsCopy = [...tabs]; // Make a copy of the current tabs
 
@@ -962,12 +960,12 @@ const Dashboard = () => {
   };
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      setIsLoading(true);
+      // setIsLoading(true);
       getProductById({
         search_keyword: stoneId
       })
         .then((res: any) => {
-          setIsLoading(false);
+          // setIsLoading(false);
           if (res?.error?.status === statusCode.NOT_FOUND) {
             setError(`We couldn't find any results for this search`);
           } else {
@@ -977,19 +975,19 @@ const Dashboard = () => {
           }
         })
         .catch((e: any) => {
-          setIsLoading(false);
+          // setIsLoading(false);
           setError('Something went wrong');
         });
     }
   };
   const handleInputSearch = () => {
     if (stoneId.length > 0) {
-      setIsLoading(true);
+      // setIsLoading(true);
       getProductById({
         search_keyword: stoneId
       })
         .then((res: any) => {
-          setIsLoading(false);
+          // setIsLoading(false);
           if (res?.error?.status === statusCode.NOT_FOUND) {
             setError(`We couldn't find any results for this search`);
           } else {
@@ -999,7 +997,7 @@ const Dashboard = () => {
           }
         })
         .catch((e: any) => {
-          setIsLoading(false);
+          // setIsLoading(false);
           setError('Something went wrong');
         });
     } else {
@@ -1020,7 +1018,7 @@ const Dashboard = () => {
   };
 
   const handleAddToCartDetailPage = () => {
-    setIsLoading(true);
+    // setIsLoading(true);
     // Extract variant IDs for selected stones
     const variantIds = [searchData?.id]
       ?.map((id: string) => {
@@ -1038,7 +1036,7 @@ const Dashboard = () => {
       })
         .unwrap()
         .then((res: any) => {
-          setIsLoading(false);
+          // setIsLoading(false);
           setIsDialogOpen(true);
           setDialogContent(
             <>
@@ -1078,7 +1076,7 @@ const Dashboard = () => {
           setError('');
         })
         .catch((error: any) => {
-          setIsLoading(false);
+          // setIsLoading(false);
           // On error, set error state and error message
 
           setIsDialogOpen(true);
@@ -1269,8 +1267,6 @@ const Dashboard = () => {
   const handleCreateAppointment = () => {
     let selectedIds = Object.keys(rowSelection);
 
-    console.log('searchData?.foundProducts', searchData?.foundProducts);
-
     if (selectedIds.length > 0) {
       const hasMemoOut = selectedIds?.some((id: string) => {
         const stone = searchData?.foundProducts.find(
@@ -1323,7 +1319,7 @@ const Dashboard = () => {
     });
 
     if (variantIds.length) {
-      setIsLoading(true);
+      // setIsLoading(true);
       confirmProduct({
         variants: variantIds,
         comments: commentValue
@@ -1331,7 +1327,7 @@ const Dashboard = () => {
         .unwrap()
         .then(res => {
           if (res) {
-            setIsLoading(false);
+            // setIsLoading(false);
             setCommentValue('');
             setIsDialogOpen(true);
 
@@ -1376,7 +1372,7 @@ const Dashboard = () => {
           }
         })
         .catch(e => {
-          setIsLoading(false);
+          // setIsLoading(false);
           setCommentValue('');
 
           if (e.data.type === 'unauthorized') {
@@ -1459,7 +1455,7 @@ const Dashboard = () => {
       setIsError(true);
       setError(NO_STONES_SELECTED);
     } else {
-      setIsLoading(true);
+      // setIsLoading(true);
       const variantIds = selectedIds
         ?.map((id: string) => {
           const myCartCheck: IProduct | object =
@@ -1481,7 +1477,7 @@ const Dashboard = () => {
         })
           .unwrap()
           .then((res: any) => {
-            setIsLoading(false);
+            // setIsLoading(false);
             setIsDialogOpen(true);
             setDialogContent(
               <>
@@ -1522,7 +1518,7 @@ const Dashboard = () => {
               search_keyword: stoneId
             })
               .then((res: any) => {
-                setIsLoading(false);
+                // setIsLoading(false);
                 if (res?.error?.status === statusCode.NOT_FOUND) {
                   setError(`We couldn't find any results for this search`);
                 } else {
@@ -1532,7 +1528,7 @@ const Dashboard = () => {
                 }
               })
               .catch((e: any) => {
-                setIsLoading(false);
+                // setIsLoading(false);
                 setError('Something went wrong');
               });
             dispatch(notificationBadge(true));
@@ -1540,7 +1536,7 @@ const Dashboard = () => {
             // refetchRow();
           })
           .catch(error => {
-            setIsLoading(false);
+            // setIsLoading(false);
             // On error, set error state and error message
 
             setIsDialogOpen(true);
@@ -1942,7 +1938,13 @@ const Dashboard = () => {
                   </div>
                 </div>
               ) : (
-                <Skeleton className="w-[720px] h-[54px] bg-neutral50 rounded-[4px]" />
+                <Skeleton
+                  width={720}
+                  variant="rectangular"
+                  height={54}
+                  animation="wave"
+                  className="rounded-[4px]"
+                />
               )}
             </div>
 
@@ -1955,7 +1957,13 @@ const Dashboard = () => {
                         key={index}
                         className="flex rounded-[8px] w-full gap-4 shadow-sm"
                       >
-                        <Skeleton className="rounded-[4px] w-full h-[97px] bg-neutral50" />
+                        <Skeleton
+                          width={'100%'}
+                          height={97}
+                          variant="rectangular"
+                          animation="wave"
+                          className="rounded-[4px]"
+                        />
                       </div>
                     ))
                 : options.map((data, index) => (
@@ -2021,7 +2029,13 @@ const Dashboard = () => {
               {/* KAMCard Container - Prevent it from shrinking and assign a max width */}
               <div className="flex-shrink-0 w-[300px] max-w-full">
                 {customerData === undefined ? (
-                  <Skeleton className="rounded-[4px] w-full h-[400px] bg-neutral50" />
+                  <Skeleton
+                    animation="wave"
+                    width={'100%'}
+                    variant="rectangular"
+                    height={400}
+                    className="rounded-[4px]"
+                  />
                 ) : (
                   <KAMCard
                     name={customerData?.customer.kam?.kam_name ?? '-'}
@@ -2037,7 +2051,13 @@ const Dashboard = () => {
             {tabs.length > 0 && (
               <div className="flex gap-4 ">
                 {customerData === undefined ? (
-                  <Skeleton className="rounded-[4px] w-full h-full bg-neutral50" />
+                  <Skeleton
+                    height={'100%'}
+                    width={'100%'}
+                    animation="wave"
+                    variant="rectangular"
+                    className="rounded-[4px]"
+                  />
                 ) : (
                   <div className="w-full border-[1px] border-neutral200 rounded-[8px] flex-1 flex-shrink min-w-0">
                     <div className="border-b-[1px] border-neutral200 p-4">
@@ -2214,7 +2234,13 @@ const Dashboard = () => {
 
                 <div className="w-[300px]">
                   {customerData === undefined ? (
-                    <Skeleton className="rounded-[4px] w-full h-[420px] bg-neutral50" />
+                    <Skeleton
+                      height={420}
+                      width={'100%'}
+                      animation="wave"
+                      variant="rectangular"
+                      className="rounded-[4px]"
+                    />
                   ) : (
                     <VolumeDiscount
                       totalSpent={

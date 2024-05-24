@@ -1,7 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { createBaseQuery } from './base-query';
 
-// const header =
 export const myAccountApi = createApi({
   reducerPath: 'myAccountReducer',
   baseQuery: createBaseQuery(),

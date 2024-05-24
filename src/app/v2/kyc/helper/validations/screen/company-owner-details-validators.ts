@@ -52,7 +52,6 @@ export class IndiaKycPostCompanyOwnerInformation {
   })
   owner_phone: string;
 
-  // @Matches(PAN_MATCH, { message: FIELD_INVALID('PAN Number') })
   @IsNotEmpty({ message: OWNER_PAN_NUMBER_OR_ADHAAR_MANDATORY })
   @IsAlphanumeric(undefined, { message: FIELD_INVALID('PAN Or Adhaar Number') })
   @MinLength(10, { message: FIELD_INVALID('PAN Or Adhaar Number') })

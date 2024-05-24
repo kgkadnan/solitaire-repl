@@ -118,11 +118,6 @@ const Login = () => {
     setOTPVerificationFormErrors
   } = otpVerificationSetState;
 
-  // const { data: verifyNumber } = useVerifyPhoneQuery({
-  //   country_code: otpVerificationFormState.countryCode,
-  //   phone_number: otpVerificationFormState.otpMobileNumber
-  // });
-
   useEffect(() => {
     if (isTokenChecked) {
       authToken && router.push('/v2/');
@@ -319,19 +314,14 @@ const Login = () => {
           <LoginComponent
             setPhoneNumber={setPhoneNumber}
             setPhoneErrorText={setPhoneErrorText}
-            // setErrorText={setErrorText}
             setPasswordErrorText={setPasswordErrorText}
             setPassword={setPassword}
-            // setIsError={setIsError}
             handleKeyDown={handleKeyDown}
             phoneNumber={phoneNumber}
             phoneErrorText={phoneErrorText}
             password={password}
             passwordErrorText={passwordErrorText}
             handleLogin={handleLogin}
-            // setIsLoading={setIsLoading}
-            // isError={isError}
-            // errorText={errorText}
           />
         );
       case 'otpVerification':

@@ -48,7 +48,6 @@ export const RenderLotId = ({
     borderClass = 'border-lengendInCardBorder';
   } else {
     statusClass = 'border-none';
-    // borderClass = 'border-neutral0';
   }
 
   return (
@@ -283,7 +282,6 @@ export const RenderNewArrivalLotId = ({ renderedCellValue, row }: any) => {
     textClass = 'text-successMain';
   } else {
     statusClass = 'border-none';
-    // borderClass = 'border-neutral0';
   }
 
   return (
@@ -309,7 +307,6 @@ export const RenderNewArrivalLotIdColor = ({ row }: any) => {
     textClass = 'var(--success-main)';
   } else {
     statusClass = 'border-none';
-    // borderClass = 'border-neutral0';
   }
 
   return {

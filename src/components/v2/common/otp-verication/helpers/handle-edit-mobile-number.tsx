@@ -14,13 +14,11 @@ interface IHandleEditMobileNumber {
   setIsInputDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setDialogContent: React.Dispatch<React.SetStateAction<React.ReactNode>>;
-  // verifyNumber: any;
   sendOtp: any;
   setToken: React.Dispatch<React.SetStateAction<IToken>>;
   token?: any;
 }
 export const handleEditMobileNumber = ({
-  // verifyNumber,
   otpVerificationFormState,
   setOTPVerificationFormErrors,
   setOTPVerificationFormState,
@@ -45,8 +43,6 @@ export const handleEditMobileNumber = ({
       otpMobileNumber: INVALID_PHONE
     }));
   } else {
-    // if (verifyNumber?.exists === false) {
-
     sendOtp({
       phone: otpVerificationFormState.otpMobileNumber,
       country_code: otpVerificationFormState.countryCode,
@@ -87,7 +83,6 @@ export const handleEditMobileNumber = ({
             </div>
           </>
         );
-        // setResendTimer(60);
       })
       .catch((e: any) => {
         setIsDialogOpen(true);
@@ -100,16 +95,6 @@ export const handleEditMobileNumber = ({
         );
         logger.error(`something went wrong while sending OTP ${e}`);
       });
-    // } else {
-    //   setIsDialogOpen(true);
-
-    //   setDialogContent(
-    //     <InvalidCreds
-    //       content={'Mobile number already exists'}
-    //       handleClick={() => setIsDialogOpen(false)}
-    //     />
-    //   );
-    // }
 
     setIsInputDialogOpen(false);
   }

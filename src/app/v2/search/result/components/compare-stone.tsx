@@ -170,17 +170,6 @@ const CompareStone = ({
             // On success, show confirmation dialog and update badge
             setIsError(false);
             setErrorText('');
-            // triggerProductApi({
-            //   url: searchUrl,
-            //   limit: LISTING_PAGE_DATA_LIMIT,
-            //   offset: 0
-            // }).then(res => {
-            //   dataTableSetState.setRows(res.data?.products);
-            //   setRowSelection({});
-            //   setErrorText('');
-            //   setData(res.data);
-            // });
-            // dispatch(notificationBadge(true));
           })
           .catch(error => {
             setIsLoading(false);
@@ -213,7 +202,6 @@ const CompareStone = ({
             );
           });
         // Clear the selected checkboxes
-        // setRowSelection({});
         setSelectedCheckboxes([]);
       }
       // }
