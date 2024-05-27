@@ -54,7 +54,7 @@ const StaticSlider = ({ totalSpent }: any) => {
         {filledRange < VOLUME_DISCOUNT_LIMIT ? (
           <>
             <div
-              className="absolute bottom-9 text-center w-16 mx-auto left-0 right-0"
+              className="absolute bottom-8 text-center w-16 mx-auto left-0 right-0"
               style={{ left: `calc(${100}% - 100px)` }}
             >
               <Tooltip
@@ -78,7 +78,7 @@ const StaticSlider = ({ totalSpent }: any) => {
             </div>
 
             <div
-              className="absolute top-9  mx-auto"
+              className="absolute top-8  mx-auto"
               style={{
                 left: `calc(${(filledRange / VOLUME_DISCOUNT_LIMIT) * 100}% - ${
                   (filledRange / 50000) * 6 -
@@ -106,7 +106,7 @@ const StaticSlider = ({ totalSpent }: any) => {
           </>
         ) : (
           <div
-            className="absolute top-9 text-center w-16 mx-auto left-0 right-0"
+            className="absolute top-8 text-center w-16 mx-auto left-0 right-0"
             style={{ left: `calc(${100}% - 110px)` }}
           >
             <div className="text-center">
