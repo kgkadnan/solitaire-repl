@@ -95,7 +95,6 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
               `
           }}
         />
-        x
       </head>
       <Head>
         <link
