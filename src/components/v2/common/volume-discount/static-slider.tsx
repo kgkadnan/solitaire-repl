@@ -14,7 +14,7 @@ const StaticSlider = ({ totalSpent }: any) => {
           totalSpent >= VOLUME_DISCOUNT_LIMIT && 'mb-[60px]'
         }`}
       >
-        <div className="absolute top-[17px] left-[34px] transform -translate-y-1/2 -translate-x-1/2 w-2 h-2 bg-[#5995ED] rounded-full"></div>
+        <div className="absolute top-[17px] left-[38px] transform -translate-y-1/2 -translate-x-1/2 w-2 h-2 bg-[#5995ED] rounded-full"></div>
 
         <span className="text-sRegular text-neutral900">$0K</span>
         <input
@@ -55,7 +55,7 @@ const StaticSlider = ({ totalSpent }: any) => {
           <>
             <div
               className="absolute bottom-9 text-center w-16 mx-auto left-0 right-0"
-              style={{ left: `calc(${100}% - 110px)` }}
+              style={{ left: `calc(${100}% - 100px)` }}
             >
               <Tooltip
                 tooltipTrigger={
@@ -67,7 +67,7 @@ const StaticSlider = ({ totalSpent }: any) => {
                       )}
                       K
                     </p>
-                    <div className="w-8 h-8 bg-[#FFAD05]  mx-auto transform rotate-45 rounded-t-[16px] rounded-bl-[16px]"></div>
+                    <div className="w-5 h-5 bg-[#FFAD05]  mx-auto transform rotate-45 rounded-t-[16px] rounded-bl-[16px]"></div>
                   </div>
                 }
                 tooltipContent={`Need to Spend $${Math.floor(
@@ -78,18 +78,18 @@ const StaticSlider = ({ totalSpent }: any) => {
             </div>
 
             <div
-              className="absolute top-9 text-center"
+              className="absolute top-9  mx-auto"
               style={{
                 left: `calc(${(filledRange / VOLUME_DISCOUNT_LIMIT) * 100}% - ${
                   (filledRange / 50000) * 6 -
-                  (filledRange > VOLUME_DISCOUNT_LIMIT / 2 ? 10 : 8)
+                  (filledRange > VOLUME_DISCOUNT_LIMIT / 2 ? 7 : 5)
                 }%)`
               }}
             >
               <Tooltip
                 tooltipTrigger={
-                  <div className="text-center">
-                    <div className="w-8 h-8 bg-[#5995ED] transform rotate-45 rounded-b-[16px]  rounded-tr-[16px]"></div>
+                  <div className="text-center items-center flex flex-col w-[50px]">
+                    <div className="w-5 h-5 bg-[#5995ED] transform rotate-45 rounded-b-[16px]  rounded-tr-[16px]"></div>
                     <p className="text-sRegular font-semiBold text-[#5995ED]">
                       ${(filledRange / 1000).toFixed(2)}K
                     </p>
@@ -110,7 +110,7 @@ const StaticSlider = ({ totalSpent }: any) => {
             style={{ left: `calc(${100}% - 110px)` }}
           >
             <div className="text-center">
-              <div className="w-8 h-8 bg-[#FFAD05]  mx-auto transform rotate-45 rounded-b-[16px]  rounded-tr-[16px]"></div>
+              <div className="w-5 h-5 bg-[#FFAD05]  mx-auto transform rotate-45 rounded-b-[16px]  rounded-tr-[16px]"></div>
               <div className="flex  left-[-110px] absolute">
                 {' '}
                 <span className="text-[#98A2B3] text-[10px] font-medium pt-[2px]">
