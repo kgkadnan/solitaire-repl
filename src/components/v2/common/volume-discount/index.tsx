@@ -53,7 +53,7 @@ const VolumeDiscount: React.FC<any> = ({
                   </div>
                   <p>
                     Eligibility for a volume discount requires the sum of your
-                    pending invoices in the last 48 hours to exceed $300K
+                    pending invoices in the last 48 hours to exceed $300.00K
                   </p>
                 </div>
               </div>
