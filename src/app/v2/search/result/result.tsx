@@ -87,6 +87,8 @@ import { useLazyGetAvailableMyAppointmentSlotsQuery } from '@/features/api/my-ap
 import { IAppointmentPayload } from '../../my-appointments/page';
 import BookAppointment from '../../my-appointments/components/book-appointment/book-appointment';
 import styles from './style.module.scss';
+import DataTableSkeleton from '@/components/v2/skeleton/data-table';
+import { Skeleton } from '@mui/material';
 
 // Column mapper outside the component to avoid re-creation on each render
 
@@ -164,12 +166,13 @@ const Result = ({
 
   const [triggerColumn, { data: columnData }] =
     useLazyGetManageListingSequenceQuery<IManageListingSequenceResponse>();
-  const [triggerProductApi] = useLazyGetAllProductQuery();
+  const [triggerProductApi, { data: productData }] =
+    useLazyGetAllProductQuery();
 
   // Fetch Products
 
   const fetchProducts = async () => {
-    setIsLoading(true);
+    // setIsLoading(true);
     const storedSelection = localStorage.getItem('Search');
 
     if (!storedSelection) return;
@@ -219,7 +222,8 @@ const Result = ({
           setRowSelection({});
           setErrorText('');
           setData(res.data);
-          setIsLoading(false);
+          console.log('herererereee');
+          // setIsLoading(false);
         }
       }
     );
@@ -1166,15 +1170,24 @@ const Result = ({
 
       <div className="flex py-[8px] items-center">
         <p className="text-lMedium font-medium text-neutral900">
-          {editRoute
-            ? ManageLocales('app.result.headerEdit')
-            : isCompareStone
-            ? 'Diamond Comparison Overview'
-            : showAppointmentForm
-            ? ManageLocales('app.myAppointment.header')
-            : isDetailPage
-            ? ''
-            : ManageLocales('app.result.headerResult')}
+          {editRoute ? (
+            ManageLocales('app.result.headerEdit')
+          ) : isCompareStone ? (
+            'Diamond Comparison Overview'
+          ) : showAppointmentForm ? (
+            ManageLocales('app.myAppointment.header')
+          ) : isDetailPage ? (
+            ''
+          ) : productData === undefined ? (
+            <Skeleton
+              variant="rectangular"
+              height={'24px'}
+              width={'336px'}
+              animation="wave"
+            />
+          ) : (
+            ManageLocales('app.result.headerResult')
+          )}
         </p>
       </div>
 
@@ -1291,35 +1304,41 @@ const Result = ({
             />
           ) : (
             <div className="">
-              <DataTable
-                rows={memoizedRows}
-                columns={memoizedColumns}
-                setRowSelection={setRowSelection}
-                rowSelection={rowSelection}
-                showCalculatedField={true}
-                isResult={true}
-                activeTab={activeTab}
-                searchParameters={searchParameters}
-                setActiveTab={setActiveTab}
-                handleCloseAllTabs={handleCloseAllTabs}
-                handleCloseSpecificTab={handleCloseSpecificTab}
-                handleNewSearch={handleNewSearch}
-                setSearchParameters={setSearchParameters}
-                modalSetState={modalSetState}
-                data={data}
-                setErrorText={setErrorText}
-                downloadExcel={downloadExcel}
-                setIsError={setIsError}
-                searchList={searchList}
-                setIsLoading={setIsLoading}
-                handleAddToCart={handleAddToCart}
-                setIsConfirmStone={setIsConfirmStone}
-                setConfirmStoneData={setConfirmStoneData}
-                setIsCompareStone={setIsCompareStone}
-                setCompareStoneData={setCompareStoneData}
-                setIsInputDialogOpen={setIsInputDialogOpen}
-                handleCreateAppointment={handleCreateAppointment}
-              />
+              {productData === undefined &&
+              !memoizedRows.length &&
+              !data.length ? (
+                <DataTableSkeleton />
+              ) : (
+                <DataTable
+                  rows={memoizedRows}
+                  columns={memoizedColumns}
+                  setRowSelection={setRowSelection}
+                  rowSelection={rowSelection}
+                  showCalculatedField={true}
+                  isResult={true}
+                  activeTab={activeTab}
+                  searchParameters={searchParameters}
+                  setActiveTab={setActiveTab}
+                  handleCloseAllTabs={handleCloseAllTabs}
+                  handleCloseSpecificTab={handleCloseSpecificTab}
+                  handleNewSearch={handleNewSearch}
+                  setSearchParameters={setSearchParameters}
+                  modalSetState={modalSetState}
+                  data={data}
+                  setErrorText={setErrorText}
+                  downloadExcel={downloadExcel}
+                  setIsError={setIsError}
+                  searchList={searchList}
+                  setIsLoading={setIsLoading}
+                  handleAddToCart={handleAddToCart}
+                  setIsConfirmStone={setIsConfirmStone}
+                  setConfirmStoneData={setConfirmStoneData}
+                  setIsCompareStone={setIsCompareStone}
+                  setCompareStoneData={setCompareStoneData}
+                  setIsInputDialogOpen={setIsInputDialogOpen}
+                  handleCreateAppointment={handleCreateAppointment}
+                />
+              )}
             </div>
           )}
           {/* <div className="p-[16px] rounded-b-[8px] shadow-inputShadow "> */}
