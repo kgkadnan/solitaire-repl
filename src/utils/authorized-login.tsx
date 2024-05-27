@@ -72,9 +72,10 @@ const authorizedLogin = (WrappedComponent: React.ComponentType) => {
       setIsLoading(false);
     }, [authToken, userLoggedOut, router]);
 
-    if (isLoading && currentPath !== '/v2') {
+    if (isLoading && currentPath !== '/v2' && currentPath !== '/v2/search') {
       return <CustomKGKLoader />; // Or any other loading indicator
     }
+
     const handleNudgeClose = () => {
       setShowKycNudge(false);
       localStorage.setItem('show-nudge', 'MINI');
