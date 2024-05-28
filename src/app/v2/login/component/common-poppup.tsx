@@ -6,6 +6,8 @@ import successIcon from '@public/v2/assets/icons/modal/confirm.svg';
 
 import { IndividualActionButton } from '@/components/v2/common/action-button/individual-button';
 import { ManageLocales } from '@/utils/v2/translate';
+import ActionButton from '@/components/v2/common/action-button';
+import warningIcon from '@public/v2/assets/icons/modal/warning.svg';
 
 interface ICommonPoppupProps {
   content: React.ReactNode;
@@ -13,6 +15,17 @@ interface ICommonPoppupProps {
   header?: string;
   buttonText?: string;
   status?: string;
+  actionButtonData?: {
+    variant: 'secondary' | 'primary' | 'disable';
+    svg?: any; // Assuming the type of 'svg' is string, update it accordingly
+    label?: string;
+    isDisable?: boolean;
+    handler: () => void;
+    isHidden?: boolean;
+    customStyle?: string;
+    tooltip?: string;
+  }[];
+  customPoppupBodyStyle?: string;
 }
 
 const CommonPoppup: React.FC<ICommonPoppupProps> = ({
@@ -20,17 +33,27 @@ const CommonPoppup: React.FC<ICommonPoppupProps> = ({
   handleClick,
   header,
   buttonText,
-  status
+  status,
+  actionButtonData,
+  customPoppupBodyStyle
 }) => {
   return (
     <div className="flex gap-[12px] flex-col items-center">
       <div className="absolute left-[-84px] top-[-84px]">
         <Image
-          src={status === 'success' ? successIcon : errorIcon}
+          src={
+            status === 'success'
+              ? successIcon
+              : status === 'warning'
+              ? warningIcon
+              : errorIcon
+          }
           alt="errorIcon"
         />
       </div>
-      <div className="flex gap-[12px] flex-col mt-[80px] w-[100%]">
+      <div
+        className={`flex gap-[12px] flex-col mt-[80px] w-[100%] ${customPoppupBodyStyle}`}
+      >
         {header && (
           <p className="text-headingS text-neutral900 font-medium">{header}</p>
         )}
@@ -48,6 +71,10 @@ const CommonPoppup: React.FC<ICommonPoppupProps> = ({
           >
             {buttonText ?? ManageLocales('app.modal.editSelection')}
           </IndividualActionButton>
+        )}
+
+        {actionButtonData && actionButtonData.length > 0 && (
+          <ActionButton actionButtonData={actionButtonData} />
         )}
       </div>
     </div>

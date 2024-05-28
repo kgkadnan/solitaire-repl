@@ -396,41 +396,36 @@ const BidToBuy = () => {
                   handler: () => {
                     modalSetState.setIsDialogOpen(true);
                     modalSetState.setDialogContent(
-                      <>
-                        <div className="absolute left-[-84px] top-[-84px]">
-                          <Image src={warningIcon} alt="warning" />
-                        </div>
-                        <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[357px]">
-                          <h1 className="text-headingS text-neutral900">
-                            Are you sure you want to cancel this bid?
-                          </h1>
-                          <ActionButton
-                            actionButtonData={[
-                              {
-                                variant: 'secondary',
-                                label: 'Go Back',
-                                handler: () => {
-                                  modalSetState.setIsDialogOpen(false);
-                                },
-                                customStyle: 'flex-1 w-full'
-                              },
-                              {
-                                variant: 'primary',
-                                label: 'Cancel Bid',
-                                handler: () => {
-                                  socketManager.emit('cancel_bidtobuy', {
-                                    product_ids: Object.keys(rowSelection)
-                                  });
-                                  modalSetState.setIsDialogOpen(false);
-                                },
-                                customStyle: 'flex-1 w-full'
-                              }
-                            ]}
-                          />
-                        </div>
-                      </>
+                      <CommonPoppup
+                        content=""
+                        status="warning"
+                        customPoppupBodyStyle="mt-[70px]"
+                        header={'Are you sure you want to cancel this bid?'}
+                        actionButtonData={[
+                          {
+                            variant: 'secondary',
+                            label: 'Go Back',
+                            handler: () => {
+                              modalSetState.setIsDialogOpen(false);
+                            },
+                            customStyle: 'flex-1 w-full'
+                          },
+                          {
+                            variant: 'primary',
+                            label: 'Cancel Bid',
+                            handler: () => {
+                              socketManager.emit('cancel_bidtobuy', {
+                                product_ids: Object.keys(rowSelection)
+                              });
+                              modalSetState.setIsDialogOpen(false);
+                            },
+                            customStyle: 'flex-1 w-full'
+                          }
+                        ]}
+                      />
                     );
                   },
+
                   isDisable: !Object.keys(rowSelection).length
                 }
               ]}

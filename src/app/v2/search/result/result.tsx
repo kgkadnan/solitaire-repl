@@ -222,8 +222,7 @@ const Result = ({
           setRowSelection({});
           setErrorText('');
           setData(res.data);
-          console.log('herererereee');
-          // setIsLoading(false);
+          setIsLoading(false);
         }
       }
     );

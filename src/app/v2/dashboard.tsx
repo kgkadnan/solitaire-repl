@@ -102,6 +102,7 @@ import { useLazyGetAvailableMyAppointmentSlotsQuery } from '@/features/api/my-ap
 import { IAppointmentPayload } from './my-appointments/page';
 import BookAppointment from './my-appointments/components/book-appointment/book-appointment';
 import { Skeleton } from '@mui/material';
+import CommonPoppup from './login/component/common-poppup';
 
 interface ITabs {
   label: string;
@@ -1039,39 +1040,34 @@ const Dashboard = () => {
           // setIsLoading(false);
           setIsDialogOpen(true);
           setDialogContent(
-            <>
-              <div className="absolute left-[-84px] top-[-84px]">
-                <Image src={confirmIcon} alt="confirmIcon" />
-              </div>
-              <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                <h1 className="text-headingS text-neutral900 !font-medium	">
-                  {res?.message}
-                </h1>
-                <ActionButton
-                  actionButtonData={[
-                    {
-                      variant: 'secondary',
-                      label: ManageLocales('app.modal.continue'),
-                      handler: () => {
-                        setIsDialogOpen(false);
-                        setIsDetailPage(false);
-                        setSearchData({});
-                      },
-                      customStyle: 'flex-1 w-full h-10'
-                    },
-                    {
-                      variant: 'primary',
-                      label: 'Go to "My Cart"',
-                      handler: () => {
-                        router.push('/v2/my-cart');
-                      },
-                      customStyle: 'flex-1 w-full h-10'
-                    }
-                  ]}
-                />
-              </div>
-            </>
+            <CommonPoppup
+              content=""
+              status="success"
+              customPoppupBodyStyle="mt-[70px]"
+              header={res?.message}
+              actionButtonData={[
+                {
+                  variant: 'secondary',
+                  label: ManageLocales('app.modal.continue'),
+                  handler: () => {
+                    setIsDialogOpen(false);
+                    setIsDetailPage(false);
+                    setSearchData({});
+                  },
+                  customStyle: 'flex-1 w-full h-10'
+                },
+                {
+                  variant: 'primary',
+                  label: 'Go to "My Cart"',
+                  handler: () => {
+                    router.push('/v2/my-cart');
+                  },
+                  customStyle: 'flex-1 w-full h-10'
+                }
+              ]}
+            />
           );
+
           // On success, show confirmation dialog and update badge
           setError('');
         })
@@ -1081,28 +1077,21 @@ const Dashboard = () => {
 
           setIsDialogOpen(true);
           setDialogContent(
-            <>
-              <div className="absolute left-[-84px] top-[-84px]">
-                <Image src={errorSvg} alt="errorSvg" />
-              </div>
-              <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                <p className="text-neutral600 text-mRegular">
-                  {error?.data?.message}
-                </p>
-                <ActionButton
-                  actionButtonData={[
-                    {
-                      variant: 'primary',
-                      label: ManageLocales('app.modal.okay'),
-                      handler: () => {
-                        setIsDialogOpen(false);
-                      },
-                      customStyle: 'flex-1 w-full h-10'
-                    }
-                  ]}
-                />
-              </div>
-            </>
+            <CommonPoppup
+              content=""
+              customPoppupBodyStyle="mt-[70px]"
+              header={error?.data?.message}
+              actionButtonData={[
+                {
+                  variant: 'primary',
+                  label: ManageLocales('app.modal.okay'),
+                  handler: () => {
+                    setIsDialogOpen(false);
+                  },
+                  customStyle: 'flex-1 w-full h-10'
+                }
+              ]}
+            />
           );
         });
       // Clear the selected checkboxes
@@ -1333,41 +1322,34 @@ const Dashboard = () => {
 
             // setRowSelection({});
             setDialogContent(
-              <>
-                {' '}
-                <div className="absolute left-[-84px] top-[-84px]">
-                  <Image src={confirmIcon} alt="confirmIcon" />
-                </div>
-                <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                  <h1 className="text-headingS text-neutral900">
-                    {variantIds.length} stones have been successfully added to
-                    &quot;My Diamond&quot;
-                  </h1>
-                  <ActionButton
-                    actionButtonData={[
-                      {
-                        variant: 'secondary',
-                        label: ManageLocales('app.modal.continue'),
-                        handler: () => {
-                          goBackToListView();
-                          setIsAddCommentDialogOpen(false);
-                          setIsDialogOpen(false);
-                        },
-                        customStyle: 'flex-1 w-full h-10'
-                      },
-                      {
-                        variant: 'primary',
-                        label: ManageLocales('app.modal.goToYourOrder'),
-                        handler: () => {
-                          router.push('/v2/your-orders');
-                        },
-                        customStyle: 'flex-1 w-full h-10'
-                      }
-                    ]}
-                  />
-                </div>
-              </>
+              <CommonPoppup
+                content=""
+                status="success"
+                customPoppupBodyStyle="mt-[70px]"
+                header={`${variantIds.length} stones have been successfully added to "My Diamond"`}
+                actionButtonData={[
+                  {
+                    variant: 'secondary',
+                    label: ManageLocales('app.modal.continue'),
+                    handler: () => {
+                      goBackToListView();
+                      setIsAddCommentDialogOpen(false);
+                      setIsDialogOpen(false);
+                    },
+                    customStyle: 'flex-1 w-full h-10'
+                  },
+                  {
+                    variant: 'primary',
+                    label: ManageLocales('app.modal.goToYourOrder'),
+                    handler: () => {
+                      router.push('/v2/your-orders');
+                    },
+                    customStyle: 'flex-1 w-full h-10'
+                  }
+                ]}
+              />
             );
+
             setCommentValue('');
           }
         })
