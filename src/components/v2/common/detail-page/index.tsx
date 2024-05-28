@@ -231,10 +231,14 @@ export function DiamondDetailsComponent({
       [activeTab === 2
         ? breadCrumLabel === 'Bid to Buy'
           ? 'fromBidToBuyHistory'
-          : 'fromNewArrivalBidHistory'
+          : breadCrumLabel === 'New Arrival'
+          ? 'fromNewArrivalBidHistory'
+          : ''
         : breadCrumLabel === 'Bid to Buy'
         ? 'fromBidToBuy'
-        : 'fromNewArrivalBid']: true
+        : breadCrumLabel === 'New Arrival'
+        ? 'fromNewArrivalBid'
+        : '']: true
     });
   };
   let isNudge = localStorage.getItem('show-nudge') === 'MINI';
