@@ -38,8 +38,7 @@ const CompareStone = ({
   setDialogContent,
   setIsConfirmStone,
   setConfirmStoneData,
-  setIsDetailPage,
-  setIsCompareStone
+  setIsDetailPage
 }: any) => {
   const [mappingColumn, setMappingColumn] = useState<any>({});
 

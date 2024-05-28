@@ -1,7 +1,6 @@
 import { girdleSortedArray } from '@/constants/v2/form';
 
 export const setModifySearch = (data: any, setState: any, carat: any) => {
-  const { setCaratRangeData } = carat;
   const {
     setSelectedShape,
     setSelectedWhiteColor,

@@ -2,7 +2,6 @@
 import Image from 'next/image';
 
 import { useEffect, useState } from 'react';
-import emptyImage from '@public/v2/assets/icons/detail-page/empty-image.svg';
 import NoImageFound from '@public/v2/assets/icons/detail-page/fall-back-img.svg';
 import Tooltip from '../../tooltip';
 import ImageModal from './image-modal';
@@ -22,14 +21,9 @@ import { Skeleton } from '@mui/material';
 interface ImageSliderProps {
   images: ImagesType[];
   setIsLoading: any;
-  setValidImages: React.Dispatch<React.SetStateAction<ImagesType[]>>;
 }
 
-const ImageSlider: React.FC<ImageSliderProps> = ({
-  images,
-  setIsLoading,
-  setValidImages
-}) => {
+const ImageSlider: React.FC<ImageSliderProps> = ({ images, setIsLoading }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 

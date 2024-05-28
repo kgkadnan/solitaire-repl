@@ -12,9 +12,6 @@ import {
 
 import emptyOrderSvg from '@public/v2/assets/icons/empty-order.svg';
 import {
-  useCardMyInvoiceQuery,
-  useCardPreviousConfirmationQuery,
-  useCardRecentConfirmationQuery,
   useLazyCardMyInvoiceQuery,
   useLazyCardPreviousConfirmationQuery,
   useLazyCardRecentConfirmationQuery,
@@ -29,7 +26,6 @@ import Image from 'next/image';
 import { formatNumberWithLeadingZeros } from '@/utils/format-number-withLeadingZeros';
 import { formatCreatedAt } from '@/utils/format-date';
 import arrow from '@public/v2/assets/icons/my-diamonds/Arrow.svg';
-import Link from 'next/link';
 import OrderDetail from './components/order-detail';
 import EmptyScreen from '@/components/v2/common/empty-screen';
 import { useRouter, useSearchParams } from 'next/navigation';

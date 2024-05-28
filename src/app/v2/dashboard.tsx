@@ -1649,7 +1649,6 @@ const Dashboard = () => {
               setIsConfirmStone={setIsConfirmStone}
               setConfirmStoneData={setConfirmStoneData}
               setIsDetailPage={setIsDetailPage}
-              setIsCompareStone={setIsCompareStone}
             />
           </div>
         </div>

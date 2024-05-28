@@ -180,9 +180,8 @@ export const RenderOffline = ({
                           }: any) => (
                             <FileAttachments
                               key={id}
-                              lable={label}
+                              label={label}
                               formKey={formKey}
-                              isRequired={isRequired}
                               formErrorState={formErrorState}
                               formState={formState}
                               modalSetState={modalSetState}
@@ -201,9 +200,8 @@ export const RenderOffline = ({
                     <div key={attch.id} className=" w-[50%]">
                       <FileAttachments
                         key={attch.id}
-                        lable={attch.label}
+                        label={attch.label}
                         formKey={attch.formKey}
-                        isRequired={attch.isRequired}
                         formErrorState={formErrorState}
                         formState={formState}
                         modalSetState={modalSetState}

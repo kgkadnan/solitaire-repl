@@ -87,7 +87,7 @@ const MyAppointments = () => {
     useState<IRescheduleAppointmentData>();
 
   const { errorState, errorSetState } = useErrorStateManagement();
-  const { setIsError, setErrorText } = errorSetState;
+  const { setIsError } = errorSetState;
   const { isError, errorText } = errorState;
 
   const [isLoading, setIsLoading] = useState(false);
@@ -442,7 +442,7 @@ const MyAppointments = () => {
                 ))}
               </div>
               <div className="max-h-[calc(100vh-318px)] w-full overflow-y-auto">
-                {data?.map((items, index: number) => (
+                {data?.map(items => (
                   <div
                     key={items.id}
                     className="bg-neutral0 group border-solid border-neutral200 hover:bg-neutral50 border-b flex"

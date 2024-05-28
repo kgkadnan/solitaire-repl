@@ -54,7 +54,6 @@ SingleImage.args = {
   images: [sampleImages[0]]
 };
 
-const handleImageClick = action('Image clicked');
 const handleActionButtonClick = action('Action button clicked');
 
 const TemplateWithActions: Story<DashboardCarouselProps> = args => (

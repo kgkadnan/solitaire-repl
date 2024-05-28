@@ -135,7 +135,7 @@ const MyAccount = () => {
   }: any) => {
     deleteProfile({})
       .unwrap()
-      .then(res => {
+      .then(_res => {
         setSelectedFile({});
         setIsFileUploaded(false);
         setImageUrl('');

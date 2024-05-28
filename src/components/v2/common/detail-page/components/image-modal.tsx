@@ -11,7 +11,6 @@ import downloadSvg from '@public/v2/assets/icons/detail-page/download.svg';
 import linkSvg from '@public/v2/assets/icons/detail-page/link.svg';
 import forwardArrow from '@public/v2/assets/icons/arrow-forward.svg';
 import backwardArrow from '@public/v2/assets/icons/arrow-backword.svg';
-import emptyImage from '@public/v2/assets/icons/detail-page/empty-image.svg';
 import backWardArrowDisable from '@public/v2/assets/icons/detail-page/back-ward-arrow-disable.svg';
 import forWardAarrowDisable from '@public/v2/assets/icons/detail-page/forward-arrow-disable.svg';
 import { Skeleton } from '@mui/material';

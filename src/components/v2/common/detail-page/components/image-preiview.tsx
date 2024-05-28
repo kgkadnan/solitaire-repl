@@ -13,14 +13,12 @@ interface ImagePreviewProps {
   images: ImagesType[];
   selectedImageIndex: number;
   setIsLoading: any;
-  setValidImages: React.Dispatch<React.SetStateAction<ImagesType[]>>;
 }
 
 const ImagePreview: React.FC<ImagePreviewProps> = ({
   images,
   selectedImageIndex,
-  setIsLoading,
-  setValidImages
+  setIsLoading
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 

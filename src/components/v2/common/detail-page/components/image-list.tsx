@@ -12,7 +12,7 @@ export interface ImagesType {
 interface ImageListProps {
   images: ImagesType[];
   selectedImageIndex: number;
-  onImageClick: (index: number) => void;
+  onImageClick: (_index: number) => void;
 }
 
 const ImageList: React.FC<ImageListProps> = ({

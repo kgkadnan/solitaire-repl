@@ -4,7 +4,7 @@ import { InputField } from '../input-field';
 
 interface ICheckboxComponentProps {
   isChecked: boolean;
-  onClick?: (evt: any) => void;
+  onClick?: (_evt: any) => void;
   styles?: any;
   showInput?: boolean;
   onInputChange?: any;

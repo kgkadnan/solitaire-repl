@@ -59,7 +59,6 @@ import bookmarkIcon from '@public/v2/assets/icons/modal/bookmark.svg';
 import { InputField } from '@/components/v2/common/input-field';
 import { isSearchAlreadyExist } from '../saved-search/helpers/handle-card-click';
 import { constructUrlParams } from '@/utils/v2/construct-url-params';
-import { kycStatus } from '@/constants/enums/kyc';
 
 export interface ISavedSearch {
   saveSearchName: string;
@@ -92,7 +91,7 @@ const Form = ({
   setActiveTab: Dispatch<SetStateAction<number>>;
   searchParameters: any;
   handleCloseAllTabs: () => void;
-  handleCloseSpecificTab: (id: number) => void;
+  handleCloseSpecificTab: (_id: number) => void;
   state: any;
   setState: any;
   carat: any;
@@ -598,56 +597,55 @@ const Form = ({
     setValidationError('');
     handleReset(setState, errorSetState);
   };
-  const handleAddDemand = () => {
-    setIsLoading(true);
-    setIsAddDemand(true);
-    const queryParams = generateQueryParams(state);
-    addDemandApi(queryParams)
-      .then(res => {
-        setIsLoading(false);
+  // const handleAddDemand = () => {
+  //   setIsLoading(true);
+  //   setIsAddDemand(true);
+  //   const queryParams = generateQueryParams(state);
+  //   addDemandApi(queryParams)
+  //     .then(_res => {
+  //       setIsLoading(false);
 
-        setIsDialogOpen(true);
-        setDialogContent(
-          <>
-            {' '}
-            <div className="absolute left-[-84px] top-[-84px]">
-              <Image src={confirmIcon} alt="confirmIcon" />
-            </div>
-            <div className="absolute bottom-[20px] flex flex-col gap-[15px] w-[352px]">
-              <div>
-                <h1 className="text-headingS text-neutral900 font-medium">
-                  {' '}
-                  Thank you for submitting your demand! Your request has been
-                  successfully received by our sales team.
-                </h1>
-              </div>
-              <ActionButton
-                actionButtonData={[
-                  {
-                    variant: 'primary',
-                    label: 'Okay',
-                    handler: () => {
-                      handleFormReset();
-                      setIsAddDemand(false);
+  //       setIsDialogOpen(true);
+  //       setDialogContent(
+  //         <>
+  //           {' '}
+  //           <div className="absolute left-[-84px] top-[-84px]">
+  //             <Image src={confirmIcon} alt="confirmIcon" />
+  //           </div>
+  //           <div className="absolute bottom-[20px] flex flex-col gap-[15px] w-[352px]">
+  //             <div>
+  //               <h1 className="text-headingS text-neutral900 font-medium">
+  //                 {' '}
+  //                 Thank you for submitting your demand! Your request has been
+  //                 successfully received by our sales team.
+  //               </h1>
+  //             </div>
+  //             <ActionButton
+  //               actionButtonData={[
+  //                 {
+  //                   variant: 'primary',
+  //                   label: 'Okay',
+  //                   handler: () => {
+  //                     handleFormReset();
+  //                     setIsAddDemand(false);
 
-                      setIsDialogOpen(false);
-                    },
-                    customStyle: 'flex-1 h-10'
-                  }
-                ]}
-              />
-            </div>
-          </>
-        );
-      })
-      .catch(err => setIsLoading(false));
-  };
-  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
+  //                     setIsDialogOpen(false);
+  //                   },
+  //                   customStyle: 'flex-1 h-10'
+  //                 }
+  //               ]}
+  //             />
+  //           </div>
+  //         </>
+  //       );
+  //     })
+  //     .catch(_err => setIsLoading(false));
+  // };
+  // const isKycVerified = JSON.parse(localStorage.getItem('user')!);
 
   let actionButtonData: IActionButtonDataItem[] = [
     {
       variant: 'secondary',
-      // svg: arrowIcon,
       label: ManageLocales('app.advanceSearch.cancel'),
       handler: () => {
         if (modifySearchFrom === `${SubRoutes.SAVED_SEARCH}`) {

@@ -107,7 +107,7 @@ const Result = ({
   setSearchParameters: Dispatch<SetStateAction<ISavedSearch[]>>;
   setActiveTab: Dispatch<SetStateAction<number>>;
   handleCloseAllTabs: () => void;
-  handleCloseSpecificTab: (id: number) => void;
+  handleCloseSpecificTab: (_id: number) => void;
   setIsLoading: any;
   setIsInputDialogOpen: any;
 }) => {
@@ -713,7 +713,7 @@ const Result = ({
       setIsLoading(true);
       // Extract variant IDs for selected stones
       const variantIds = [detailPageData.id]
-        ?.map((id: string) => {
+        ?.map((_id: string) => {
           const myCartCheck: IProduct | object =
             dataTableState.rows.find((row: IProduct) => {
               return row?.id === detailPageData.id;
@@ -1287,7 +1287,6 @@ const Result = ({
               setIsConfirmStone={setIsConfirmStone}
               setConfirmStoneData={setConfirmStoneData}
               setIsDetailPage={setIsDetailPage}
-              setIsCompareStone={setIsCompareStone}
             />
           ) : showAppointmentForm ? (
             <BookAppointment

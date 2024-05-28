@@ -288,11 +288,7 @@ export function DiamondDetailsComponent({
           }`}
         >
           <div className="w-full 2xl:hidden">
-            <ImageSlider
-              images={validImages}
-              setIsLoading={setIsLoading}
-              setValidImages={setValidImages}
-            />
+            <ImageSlider images={validImages} setIsLoading={setIsLoading} />
           </div>
           <div
             className={`hidden 2xl:block mr-5 ${
@@ -314,7 +310,6 @@ export function DiamondDetailsComponent({
               images={validImages}
               selectedImageIndex={selectedImageIndex}
               setIsLoading={setIsLoading}
-              setValidImages={setValidImages}
             />
           </div>
         </div>
