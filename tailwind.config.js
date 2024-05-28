@@ -55,16 +55,11 @@ module.exports = {
         sans: ['Inter', 'sans-serif']
       },
       colors: {
-        //*********Customize**************
-        solitaireSecondary: 'hsl(var(--solitaire-secondary))', // dark - Emerald 7 / light- white
-        solitaireQuaternary: 'hsl(var(--solitaire-quaternary))', // dark - shadow / light- shadow
-        solitaireSenary: 'hsl(var(--solitaire-senary))', // dark -Emerald 4 / light- Carbon 3
         //********************* */
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
         background: 'hsl(var(--background))',
-        backgroundDark: 'hsl(var(--background-dark))',
         foreground: 'hsl(var(--foreground))',
         primary: {
           DEFAULT: 'hsl(var(--primary))',

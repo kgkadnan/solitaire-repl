@@ -6,15 +6,7 @@ import { Button } from '../../ui/button';
 
 export interface ICaratTileProps {
   caratTileData: string[];
-  handlecaratTileClick: ({
-    data,
-    selectedcaratTile,
-    setSelectedcaratTile
-  }: {
-    data: string;
-    selectedcaratTile: string[];
-    setSelectedcaratTile: React.Dispatch<React.SetStateAction<string[]>>;
-  }) => void;
+  handlecaratTileClick: (_data: any) => void;
   selectedcaratTile: string[];
   setSelectedcaratTile: React.Dispatch<React.SetStateAction<string[]>>;
 }
@@ -35,8 +27,8 @@ const CaratTile = ({
               onClick={() =>
                 handlecaratTileClick({
                   data: caratTile,
-                  selectedcaratTile,
-                  setSelectedcaratTile
+                  selectedcaratTile: selectedcaratTile,
+                  setSelectedcaratTile: setSelectedcaratTile
                 })
               }
             >

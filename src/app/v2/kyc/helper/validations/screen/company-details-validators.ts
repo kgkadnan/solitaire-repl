@@ -64,12 +64,12 @@ import {
 // Custom validation constraint class
 @ValidatorConstraint({ name: 'custom', async: false })
 export class OrganisationTypeValidator implements ValidatorConstraintInterface {
-  validate(value: any, args: ValidationArguments) {
+  validate(value: any, _args: ValidationArguments) {
     // Check if the value is exactly 'Other'
     return value !== 'Other';
   }
 
-  defaultMessage(args: ValidationArguments) {
+  defaultMessage(_args: ValidationArguments) {
     return ORGANISATION_TYPE_MANDATORY;
   }
 }
@@ -96,7 +96,7 @@ export class ArrayOfArraysValidator implements ValidatorConstraintInterface {
   }
 
   // Validate method remains the same
-  validate(value: any[], args: ValidationArguments) {
+  validate(value: any[], _args: ValidationArguments) {
     // if (!Array.isArray(value) || value.some(item => !Array.isArray(item))) return false; // Not an array of arrays
 
     // if (value.some(innerArray => innerArray.length < 2)) return false; // If any inner array doesn't have at least two elements, return false/
@@ -137,7 +137,7 @@ function IsNotFutureYear(validationOptions?: ValidationOptions) {
       propertyName: propertyName,
       options: validationOptions,
       validator: {
-        validate(value: any, args: ValidationArguments) {
+        validate(value: any, _args: ValidationArguments) {
           const currentYear = new Date().getFullYear();
           const enteredYear = parseInt(value, 10);
           return enteredYear <= currentYear;

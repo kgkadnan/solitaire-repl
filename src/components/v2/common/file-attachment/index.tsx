@@ -16,8 +16,7 @@ import { IModalSetState } from '@/app/v2/search/interface';
 import { extractBytesFromMessage } from './helpers/extract-byte-from-message';
 
 interface IFileAttachments {
-  lable: string;
-  isRequired: boolean;
+  label: string;
   formState: any;
   formKey: string;
   maxFile: number;
@@ -26,13 +25,12 @@ interface IFileAttachments {
   formErrorState: any;
   modalState: any;
   modalSetState: IModalSetState;
-  fileUpload: ({ acceptedFiles, key }: any) => void;
+  fileUpload: ({ _acceptedFiles, _key }: any) => void;
   handleDeleteAttachment: any;
 }
 
 const FileAttachments: React.FC<IFileAttachments> = ({
-  lable,
-  isRequired,
+  label,
   formState,
   formKey,
   maxFile,
@@ -41,8 +39,6 @@ const FileAttachments: React.FC<IFileAttachments> = ({
   fileSize,
   fileUpload,
   handleDeleteAttachment
-  // modalState,
-  // fileUpload
 }) => {
   const dispatch = useAppDispatch();
   const dropzoneStyle = {
@@ -128,7 +124,7 @@ const FileAttachments: React.FC<IFileAttachments> = ({
             )}
             <div className=" flex flex-col w-[100%] text-left ">
               <div className="flex ">
-                <Label className={` ${styles.label} `}>{lable}</Label>
+                <Label className={` ${styles.label} `}>{label}</Label>
 
                 <p className={styles.label}></p>
               </div>
@@ -154,7 +150,9 @@ const FileAttachments: React.FC<IFileAttachments> = ({
               ) : // <p className="text-[14px]">{`${uploadProgress}%`}</p>
               !Object.keys(selectedFile).length ? (
                 <AttachMentIcon
-                  className={error?.length ? styles.errorStroke : styles.stroke}
+                  className={
+                    error?.length ? 'stroke-dangerMain' : 'stroke-neutral500'
+                  }
                 />
               ) : (
                 <div onClick={e => e.stopPropagation()}>
@@ -172,7 +170,7 @@ const FileAttachments: React.FC<IFileAttachments> = ({
             </div>
           </div>
         </div>
-        <p className={styles.errorFormat}>{error}</p>
+        <p className={'text-dangerMain text-sRegular font-normal'}>{error}</p>
       </div>
     </>
   );

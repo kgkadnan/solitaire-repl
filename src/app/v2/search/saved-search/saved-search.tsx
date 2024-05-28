@@ -53,13 +53,9 @@ import { modifySavedSearch } from '@/features/saved-search/saved-search';
 import EmptyScreen from '@/components/v2/common/empty-screen';
 import { kycStatus } from '@/constants/enums/kyc';
 import { Toast } from '@/components/v2/common/copy-and-share/toast';
-import { Skeleton } from '@mui/material';
 import SavedSearchSkeleton from '@/components/v2/skeleton/saved-search';
 
-const SavedSearch = ({ setIsLoading, isLoading }: any) => {
-  // useEffect(() => {
-  //   setIsLoading(true);
-  // }, []);
+const SavedSearch = ({ setIsLoading }: any) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { savedSearchSetState, savedSearchState } =
@@ -70,7 +66,6 @@ const SavedSearch = ({ setIsLoading, isLoading }: any) => {
   const { data, isLoading: isDataLoading } = useGetAllSavedSearchesQuery({
     searchByName: savedSearchState.searchByName
   });
-  console.log(isDataLoading, 'isDataLoading');
   const { data: searchList }: { data?: IItem[] } = useGetSavedSearchListQuery(
     savedSearchState.search
   );
@@ -208,11 +203,7 @@ const SavedSearch = ({ setIsLoading, isLoading }: any) => {
       {isError && (
         <Toast show={isError} message={errorText} isSuccess={false} />
       )}
-      <DialogComponent
-        dialogContent={dialogContent}
-        isOpens={isDialogOpen}
-        setIsOpen={setIsDialogOpen}
-      />
+      <DialogComponent dialogContent={dialogContent} isOpens={isDialogOpen} />
       {isDataLoading ? ( // Show skeleton if data is loading
         <SavedSearchSkeleton />
       ) : (
@@ -285,7 +276,6 @@ const SavedSearch = ({ setIsLoading, isLoading }: any) => {
             >
               {!savedSearchState?.savedSearchData?.length ? (
                 <>
-                  {/* {setIsLoading(false)} */}
                   <EmptyScreen
                     label="Search Diamonds"
                     message="No saved searches so far. Let’s save some searches!"
@@ -303,7 +293,6 @@ const SavedSearch = ({ setIsLoading, isLoading }: any) => {
                     { id, name, meta_data, created_at }: ISavedSearches,
                     index
                   ) => {
-                    // setIsLoading(false);
                     // Calculate the gradient index based on the item's index
                     const gradientIndex = index % gradientClasses.length;
                     // Get the gradient class for the calculated index

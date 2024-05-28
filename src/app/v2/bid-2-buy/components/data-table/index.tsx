@@ -112,7 +112,7 @@ const theme = createTheme({
   }
 });
 
-export interface BidValues {
+export interface IBidValues {
   [key: string]: number;
 }
 const BidToByDataTable = ({
@@ -224,8 +224,8 @@ const BidToByDataTable = ({
     });
   };
 
-  const [bidValues, setBidValues] = useState<BidValues>({});
-  const [columnOrder, setColumnOrder] = useState(
+  const [bidValues, setBidValues] = useState<IBidValues>({});
+  const [columnOrder] = useState(
     [
       'mrt-row-select',
       'lot_id',

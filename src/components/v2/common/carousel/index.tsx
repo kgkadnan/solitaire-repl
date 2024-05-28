@@ -7,7 +7,7 @@ import NoImageFound from '@public/v2/assets/images/carousel/fallback.svg';
 
 import ActionButton from '../action-button';
 import { Skeleton } from '@mui/material';
-interface ImageData {
+interface IImageData {
   link: string;
   image_app?: string;
   image_web?: string;
@@ -15,10 +15,10 @@ interface ImageData {
   description_line: string;
   cta: string;
 }
-export interface DashboardCarouselProps {
-  images: ImageData[];
+export interface IDashboardCarouselProps {
+  images: IImageData[];
 }
-const DashboardCarousel: React.FC<DashboardCarouselProps> = ({ images }) => {
+const DashboardCarousel: React.FC<IDashboardCarouselProps> = ({ images }) => {
   const settings = {
     dots: true, // Show dot indicators
     infinite: true, // Infinite looping

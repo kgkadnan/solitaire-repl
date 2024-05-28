@@ -234,7 +234,6 @@ export const DiscountPrice = ({
                     rangeMax={items.rangeMax}
                     rangeMin={items.rangeMin}
                     steps={items.step}
-                    setMinMaxError={setMinMaxError}
                   />
                 </div>
               );

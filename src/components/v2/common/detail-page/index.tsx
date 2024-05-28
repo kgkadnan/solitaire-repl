@@ -8,7 +8,7 @@ import downloadImg from '@public/v2/assets/icons/detail-page/download.svg';
 import forwardArrow from '@public/v2/assets/icons/detail-page/forward-arrow.svg';
 import backwardArrow from '@public/v2/assets/icons/detail-page/back-ward-arrow.svg';
 
-export interface TableColumn {
+export interface ITableColumn {
   key: string;
   label: string;
   hiddenBelow1024?: boolean;
@@ -43,7 +43,7 @@ import { kycStatus } from '@/constants/enums/kyc';
 import { formatNumber } from '@/utils/fix-two-digit-number';
 import { loadImages } from './helpers/load-images';
 import { checkImage } from './helpers/check-image';
-import { ImagesType } from './interfrace';
+import { IImagesType } from './interface';
 import fallbackImage from '@public/v2/assets/icons/not-found.svg';
 import { Skeleton } from '@mui/material';
 
@@ -71,7 +71,7 @@ export function DiamondDetailsComponent({
   const [tableData, setTableData] = useState<any>([]);
 
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [validImages, setValidImages] = useState<ImagesType[]>([]);
+  const [validImages, setValidImages] = useState<IImagesType[]>([]);
   const { errorSetState } = useErrorStateManagement();
 
   const { setIsError, setErrorText } = errorSetState;
@@ -100,7 +100,7 @@ export function DiamondDetailsComponent({
   const displayTable = (tableHeadArray: any) => {
     return (
       <div>
-        {tableHeadArray.map((item: TableColumn[], index: any) => (
+        {tableHeadArray.map((item: ITableColumn[], index: any) => (
           <div key={`item-${index}`} className="mt-4">
             <ResponsiveTable
               tableHead={item}
@@ -231,10 +231,14 @@ export function DiamondDetailsComponent({
       [activeTab === 2
         ? breadCrumLabel === 'Bid to Buy'
           ? 'fromBidToBuyHistory'
-          : 'fromNewArrivalBidHistory'
+          : breadCrumLabel === 'New Arrival'
+          ? 'fromNewArrivalBidHistory'
+          : ''
         : breadCrumLabel === 'Bid to Buy'
         ? 'fromBidToBuy'
-        : 'fromNewArrivalBid']: true
+        : breadCrumLabel === 'New Arrival'
+        ? 'fromNewArrivalBid'
+        : '']: true
     });
   };
   let isNudge = localStorage.getItem('show-nudge') === 'MINI';
@@ -288,11 +292,7 @@ export function DiamondDetailsComponent({
           }`}
         >
           <div className="w-full 2xl:hidden">
-            <ImageSlider
-              images={validImages}
-              setIsLoading={setIsLoading}
-              setValidImages={setValidImages}
-            />
+            <ImageSlider images={validImages} setIsLoading={setIsLoading} />
           </div>
           <div
             className={`hidden 2xl:block mr-5 ${
@@ -314,7 +314,6 @@ export function DiamondDetailsComponent({
               images={validImages}
               selectedImageIndex={selectedImageIndex}
               setIsLoading={setIsLoading}
-              setValidImages={setValidImages}
             />
           </div>
         </div>

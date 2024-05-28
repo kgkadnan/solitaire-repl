@@ -173,11 +173,7 @@ and `nonManageableListings` whenever the `data` variable changes. */
 
   return (
     <>
-      <DialogComponent
-        dialogContent={dialogContent}
-        isOpens={isDialogOpen}
-        setIsOpen={setIsDialogOpen}
-      />
+      <DialogComponent dialogContent={dialogContent} isOpens={isDialogOpen} />
 
       <div className="w-full flex flex-col items-center justify-center mt-[16px]  min-h-[71vh]">
         {nonManageableListings?.length || manageableListings?.length ? (
@@ -212,7 +208,6 @@ and `nonManageableListings` whenever the `data` variable changes. */
                         )}
                       </div>
                     </div>
-                    {/* <hr className=" border-solitaireSenary mx-2 my-3" /> */}
                   </>
                 )}
 

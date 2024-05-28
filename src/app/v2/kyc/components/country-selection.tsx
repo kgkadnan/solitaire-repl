@@ -9,7 +9,7 @@ import { ManageLocales } from '@/utils/v2/translate';
 import { countries } from '@/constants/enums/kyc';
 
 interface ICountrySelectionProps {
-  handleCountrySelection: (country: string) => void;
+  handleCountrySelection: (_country: string) => void;
   selectedCountry: string;
 }
 const CountrySelection = ({

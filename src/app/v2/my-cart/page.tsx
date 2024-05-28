@@ -13,7 +13,7 @@ import { MRT_RowSelectionState } from 'material-react-table';
 import crossIcon from '@public/v2/assets/icons/modal/cross.svg';
 import Image from 'next/image';
 import Tooltip from '@/components/v2/common/tooltip';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   useDeleteCartMutation,
   useLazyGetCartQuery
@@ -936,7 +936,6 @@ const MyCart = () => {
       <DialogComponent
         dialogContent={dialogContent}
         isOpens={isDialogOpen}
-        setIsOpen={setIsDialogOpen}
         dialogStyle={{ dialogContent: isConfirmStone ? 'h-[240px]' : '' }}
       />
       <AddCommentDialog
