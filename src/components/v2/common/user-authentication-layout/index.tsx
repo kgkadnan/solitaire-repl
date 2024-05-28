@@ -1,5 +1,6 @@
 import React, { ReactNode, useEffect, useRef } from 'react';
 import './style.css';
+
 interface IUserAuthenticationLayoutProps {
   formData: ReactNode;
   screen: string;
@@ -10,6 +11,7 @@ const UserAuthenticationLayout: React.FC<IUserAuthenticationLayoutProps> = ({
   screen
 }) => {
   const playerRef = useRef<YT.Player>();
+
   useEffect(() => {
     const tag = document.createElement('script');
     tag.src = 'https://www.youtube.com/iframe_api';
@@ -17,7 +19,9 @@ const UserAuthenticationLayout: React.FC<IUserAuthenticationLayoutProps> = ({
     firstScriptTag.parentNode!.insertBefore(tag, firstScriptTag);
 
     window.onYouTubeIframeAPIReady = () => {
-      playerRef.current = new YT.Player('youtube-player', {
+      if (playerRef.current) return; // Prevent re-initialization
+
+      playerRef.current = new window.YT.Player('youtube-player', {
         height: '550',
         width: '100%',
         videoId: 'rXjbNpi79FI',
@@ -40,25 +44,25 @@ const UserAuthenticationLayout: React.FC<IUserAuthenticationLayoutProps> = ({
       });
     };
   }, []);
+
   useEffect(() => {
     // Initialize the player when the screen changes
-    if (typeof window !== 'undefined' && window.YT && window.YT.Player) {
+    if (window.YT && window.YT.Player) {
       window.onYouTubeIframeAPIReady();
     }
   }, [screen]);
 
   return (
     <div className="w-full flex">
-      <div className="w-[60%] h-[100vh] flex items-center bg-black  ">
+      <div className="w-[60%] h-[100vh] flex items-center bg-black">
         <div className="h-full w-full flex items-center">
           <div className="youtube-container">
             <div className="youtube-overlay"></div>
-
             <div id="youtube-player"></div>
           </div>
         </div>
       </div>
-      <div className="w-[40%] flex justify-center text-center h-[100vh]  overflow-y-scroll">
+      <div className="w-[40%] flex justify-center text-center h-[100vh] overflow-y-scroll">
         {formData}
       </div>
     </div>

@@ -13,7 +13,6 @@
     "no-undef": "off",
     "react-hooks/exhaustive-deps": "off",
     "no-case-declarations": "off",
-    // "no-unused-vars": "off",
     "no-unescaped-entities": "off",
     "react/no-unescaped-entities": "off",
     "react-hooks/rules-of-hooks": "off",
