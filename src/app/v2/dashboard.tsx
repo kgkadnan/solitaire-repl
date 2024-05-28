@@ -2212,7 +2212,7 @@ const Dashboard = () => {
                   </div>
                 )}
 
-                <div className="w-[300px]">
+                {/* <div className="w-[300px]">
                   {customerData === undefined ? (
                     <Skeleton className="rounded-[4px] w-full h-[420px] bg-neutral50" />
                   ) : (
@@ -2230,7 +2230,7 @@ const Dashboard = () => {
                       }
                     />
                   )}
-                </div>
+                </div> */}
               </div>
             )}
           </div>
