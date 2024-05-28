@@ -1540,11 +1540,7 @@ const Dashboard = () => {
         selectedImageIndex={0}
         images={validImages}
       />
-      <DialogComponent
-        dialogContent={dialogContent}
-        isOpens={isDialogOpen}
-        setIsOpen={setIsDialogOpen}
-      />
+      <DialogComponent dialogContent={dialogContent} isOpens={isDialogOpen} />
       {isLoading && <CustomKGKLoader />}
       <AddCommentDialog
         isOpen={isAddCommentDialogOpen}

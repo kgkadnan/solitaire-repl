@@ -174,11 +174,7 @@ const TopNavigationBar = ({
   };
   return (
     <div className="min-h-[60px] border-b-[1px] border-neutral200 sticky top-0 bg-neutral0 z-[3] flex flex-col justify-end ">
-      <DialogComponent
-        dialogContent={modalContent}
-        isOpens={isLogout}
-        setIsOpen={setIsLogout}
-      />
+      <DialogComponent dialogContent={modalContent} isOpens={isLogout} />
       {showNudge === 'MINI' &&
         (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
           isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED) &&

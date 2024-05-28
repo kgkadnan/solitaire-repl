@@ -223,7 +223,6 @@ const MyAccount = () => {
       <DialogComponent
         dialogContent={dialogContent}
         isOpens={isDialogOpen}
-        setIsOpen={setIsDialogOpen}
         dialogStyle={{
           dialogContent:
             activeTab === myAccount.CHANGE_PASSWORD

@@ -203,11 +203,7 @@ const SavedSearch = ({ setIsLoading }: any) => {
       {isError && (
         <Toast show={isError} message={errorText} isSuccess={false} />
       )}
-      <DialogComponent
-        dialogContent={dialogContent}
-        isOpens={isDialogOpen}
-        setIsOpen={setIsDialogOpen}
-      />
+      <DialogComponent dialogContent={dialogContent} isOpens={isDialogOpen} />
       {isDataLoading ? ( // Show skeleton if data is loading
         <SavedSearchSkeleton />
       ) : (

@@ -489,11 +489,7 @@ const MyDiamonds = () => {
 
   return (
     <div className="relative mb-[20px]">
-      <DialogComponent
-        dialogContent={dialogContent}
-        isOpens={isDialogOpen}
-        setIsOpen={setIsDialogOpen}
-      />
+      <DialogComponent dialogContent={dialogContent} isOpens={isDialogOpen} />
       <div className="flex  py-[8px] items-center">
         <p className="text-lMedium font-medium text-neutral900">
           {showDetail

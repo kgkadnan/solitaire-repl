@@ -348,7 +348,6 @@ const Search = () => {
       <DialogComponent
         dialogContent={dialogContent}
         isOpens={isDialogOpen}
-        setIsOpen={setIsDialogOpen}
         dialogStyle={{ dialogContent: isAddDemand ? 'min-h-[280px]' : '' }}
       />
       <InputDialogComponent

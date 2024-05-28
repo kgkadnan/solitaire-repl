@@ -936,7 +936,6 @@ const MyCart = () => {
       <DialogComponent
         dialogContent={dialogContent}
         isOpens={isDialogOpen}
-        setIsOpen={setIsDialogOpen}
         dialogStyle={{ dialogContent: isConfirmStone ? 'h-[240px]' : '' }}
       />
       <AddCommentDialog

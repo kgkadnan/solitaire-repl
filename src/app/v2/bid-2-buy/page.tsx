@@ -565,7 +565,6 @@ const BidToBuy = () => {
       <DialogComponent
         dialogContent={modalState.dialogContent}
         isOpens={modalState.isDialogOpen}
-        setIsOpen={modalSetState.setIsDialogOpen}
       />
 
       {isDetailPage ? (

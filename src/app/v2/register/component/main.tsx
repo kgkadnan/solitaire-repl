@@ -240,11 +240,7 @@ const Register = () => {
         renderContent={renderContentWithInput}
         dialogStyle="min-h-[280px]"
       />
-      <DialogComponent
-        dialogContent={dialogContent}
-        isOpens={isDialogOpen}
-        setIsOpen={setIsDialogOpen}
-      />
+      <DialogComponent dialogContent={dialogContent} isOpens={isDialogOpen} />
       <UserAuthenticationLayout
         formData={renderContent()}
         screen={currentState}

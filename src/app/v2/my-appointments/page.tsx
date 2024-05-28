@@ -500,7 +500,6 @@ const MyAppointments = () => {
       <DialogComponent
         dialogContent={modalState.dialogContent}
         isOpens={modalState.isDialogOpen}
-        setIsOpen={modalSetState.setIsDialogOpen}
       />
       {isError && (
         <Toast show={isError} message={errorText} isSuccess={false} />

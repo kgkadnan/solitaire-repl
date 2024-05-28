@@ -127,7 +127,6 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
             />
           }
           isOpens={open}
-          setIsOpen={setOpen}
         />
         <noscript>
           <iframe

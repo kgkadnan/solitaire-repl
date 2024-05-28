@@ -166,7 +166,6 @@ const ForgotPassword = () => {
       <DialogComponent
         dialogContent={dialogContent}
         isOpens={isDialogOpen}
-        setIsOpen={setIsDialogOpen}
         data-testid={'success-indicator'}
         dialogStyle={{
           dialogContent:
