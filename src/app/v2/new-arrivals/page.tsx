@@ -296,7 +296,7 @@ const NewArrivals = () => {
     }
   }, []);
   useEffect(() => {
-    const handleRequestGetBidStones = (data: any) => {
+    const handleRequestGetBidStones = (_data: any) => {
       socketManager.emit('get_bid_stones');
     };
     socketManager.on('bid_stones', handleBidStones);
@@ -672,7 +672,6 @@ const NewArrivals = () => {
       <DialogComponent
         dialogContent={modalState.dialogContent}
         isOpens={modalState.isDialogOpen}
-        setIsOpen={modalSetState.setIsDialogOpen}
       />
 
       {isDetailPage ? (

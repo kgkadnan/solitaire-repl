@@ -98,7 +98,6 @@ const authorizedLogin = (WrappedComponent: React.ComponentType) => {
               />
             }
             isOpens={open}
-            setIsOpen={setOpen}
           />
           <div className="flex w-full">
             <SideNavigationBar isInMaintenanceMode={isInMaintenanceMode} />

@@ -3,7 +3,7 @@ import { Meta, Story } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import '../components/carousel.css'; // Ensure this path is correct for your custom CSS
 import DashboardCarousel, {
-  DashboardCarouselProps
+  IDashboardCarouselProps
 } from '@/components/v2/common/carousel';
 
 export default {
@@ -35,7 +35,7 @@ const sampleImages = [
   }
 ];
 
-const Template: Story<DashboardCarouselProps> = args => (
+const Template: Story<IDashboardCarouselProps> = args => (
   <DashboardCarousel {...args} />
 );
 
@@ -54,10 +54,9 @@ SingleImage.args = {
   images: [sampleImages[0]]
 };
 
-const handleImageClick = action('Image clicked');
 const handleActionButtonClick = action('Action button clicked');
 
-const TemplateWithActions: Story<DashboardCarouselProps> = args => (
+const TemplateWithActions: Story<IDashboardCarouselProps> = args => (
   <DashboardCarousel
     {...args}
     images={args.images.map(image => ({

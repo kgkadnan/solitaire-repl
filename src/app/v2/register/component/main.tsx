@@ -29,7 +29,6 @@ import {
 import { handleOTPChange } from '@/components/v2/common/otp-verication/helpers/handle-otp-change';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
-import Head from 'next/head';
 import { useRegisterStateManagement } from '../hooks/register-state-management';
 
 export interface IOtp {
@@ -241,11 +240,7 @@ const Register = () => {
         renderContent={renderContentWithInput}
         dialogStyle="min-h-[280px]"
       />
-      <DialogComponent
-        dialogContent={dialogContent}
-        isOpens={isDialogOpen}
-        setIsOpen={setIsDialogOpen}
-      />
+      <DialogComponent dialogContent={dialogContent} isOpens={isDialogOpen} />
       <UserAuthenticationLayout
         formData={renderContent()}
         screen={currentState}

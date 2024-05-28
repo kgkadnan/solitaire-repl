@@ -14,11 +14,11 @@ export interface IInputFieldProps {
   errorText?: string;
   styles?: IInputStyles;
   placeholder?: string;
-  onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (_event: ChangeEvent<HTMLInputElement>) => void;
   disabled?: boolean;
-  onBlur?: (event: ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (_event: ChangeEvent<HTMLInputElement>) => void;
   maxLength?: number;
-  onFocus?: (event: ChangeEvent<HTMLInputElement>) => void;
+  onFocus?: (_event: ChangeEvent<HTMLInputElement>) => void;
   onKeyDown?: KeyboardEventHandler<HTMLInputElement>;
   autoComplete?: string;
   showError?: boolean;
@@ -34,13 +34,13 @@ export interface IDynamicInputFieldProps {
   styles?: IInputStyles;
   placeholder?: string;
   handleSelectChange: (
-    newValue: SingleValue<string | number>,
-    actionMeta: ActionMeta<string | number>
+    _newValue: SingleValue<string | number>,
+    _actionMeta: ActionMeta<string | number>
   ) => void;
-  handleInputChange?: (event: ChangeEvent<HTMLInputElement>) => void;
+  handleInputChange?: (_event: ChangeEvent<HTMLInputElement>) => void;
   disabled?: boolean;
-  onBlur?: (event: ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (_event: ChangeEvent<HTMLInputElement>) => void;
   maxLength?: number;
-  onFocus?: (event: ChangeEvent<HTMLInputElement>) => void;
+  onFocus?: (_event: ChangeEvent<HTMLInputElement>) => void;
   onKeyDown?: KeyboardEventHandler<HTMLInputElement>;
 }

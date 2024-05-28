@@ -8,7 +8,7 @@ export enum Routes {
   SETTINGS = '/v2/setting',
   KYC = '/v2/kyc',
   NEW_ARRIVAL = '/v2/new-arrivals',
-  BID_2_BUY = '/v2/bid-2-buy',
+  BID_TO_BUY = '/v2/bid-2-buy',
   MY_APPOINTMENTS = '/v2/my-appointments',
   MY_ACCOUNT = '/v2/my-account',
   FAQS = '/v2/faqs'

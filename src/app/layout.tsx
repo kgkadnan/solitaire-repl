@@ -53,7 +53,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
       const disableDevtool = require('disable-devtool');
       disableDevtool({
         disableMenu: true,
-        ondevtoolopen(type: any, next: any) {
+        ondevtoolopen(_type: any, _next: any) {
           setOpen(true);
         },
         ignore: () => {
@@ -127,7 +127,6 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
             />
           }
           isOpens={open}
-          setIsOpen={setOpen}
         />
         <noscript>
           <iframe

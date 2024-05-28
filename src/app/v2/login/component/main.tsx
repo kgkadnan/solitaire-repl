@@ -37,7 +37,6 @@ import {
 } from '@/components/v2/common/otp-verication/hooks/otp-verification-state-management';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
-import Head from 'next/head';
 import { IAuthDataResponse } from '../interface';
 import CommonPoppup from './common-poppup';
 import LoginComponent from './login';
@@ -356,11 +355,7 @@ const Login = () => {
     <>
       {isLoading && <CustomKGKLoader />}
 
-      <DialogComponent
-        dialogContent={dialogContent}
-        isOpens={isDialogOpen}
-        setIsOpen={setIsDialogOpen}
-      />
+      <DialogComponent dialogContent={dialogContent} isOpens={isDialogOpen} />
       <InputDialogComponent
         isOpen={isInputDialogOpen}
         onClose={() => setIsInputDialogOpen(false)}
