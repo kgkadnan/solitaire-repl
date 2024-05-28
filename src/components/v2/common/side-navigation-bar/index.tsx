@@ -55,8 +55,8 @@ const SideNavigationBar = ({
     {
       src: <Bid2BuyIcon />,
       title: ManageLocales('app.sideNavigationBar.bidToBuy'),
-      link: Routes.BID_2_BUY,
-      isActive: currentRoute === Routes.BID_2_BUY
+      link: Routes.BID_TO_BUY,
+      isActive: currentRoute === Routes.BID_TO_BUY
     },
     {
       title: 'line-separator-1'
@@ -123,7 +123,7 @@ const SideNavigationBar = ({
     // Set other related state here
   }, []);
   useEffect(() => {
-    const handleRequestGetBidStones = (data: any) => {
+    const handleRequestGetBidStones = (_data: any) => {
       socketManager.emit('get_bidtobuy_stones');
     };
     socketManager.on('bidtobuy_stones', handleBidStones);
@@ -173,12 +173,12 @@ const SideNavigationBar = ({
                     tooltipTrigger={
                       <div
                         className={` ${
-                          items.link === Routes.BID_2_BUY &&
+                          items.link === Routes.BID_TO_BUY &&
                           !isInMaintenanceMode &&
                           showPulse &&
                           styles.notification_dot
                         } ${
-                          items.link === Routes.BID_2_BUY &&
+                          items.link === Routes.BID_TO_BUY &&
                           !isInMaintenanceMode &&
                           showPulse &&
                           styles.pulse
@@ -229,11 +229,11 @@ const SideNavigationBar = ({
                     tooltipTrigger={
                       <div
                         className={` ${
-                          items.link === Routes.BID_2_BUY &&
+                          items.link === Routes.BID_TO_BUY &&
                           showPulse &&
                           styles.notification_dot
                         } ${
-                          items.link === Routes.BID_2_BUY &&
+                          items.link === Routes.BID_TO_BUY &&
                           showPulse &&
                           styles.pulse
                         }`}

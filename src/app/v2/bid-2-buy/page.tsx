@@ -310,7 +310,7 @@ const BidToBuy = () => {
     }
   }, []);
   useEffect(() => {
-    const handleRequestGetBidStones = (data: any) => {
+    const handleRequestGetBidStones = (_data: any) => {
       socketManager.emit('get_bidtobuy_stones');
     };
     socketManager.on('bidtobuy_stones', handleBidStones);
@@ -565,7 +565,6 @@ const BidToBuy = () => {
       <DialogComponent
         dialogContent={modalState.dialogContent}
         isOpens={modalState.isDialogOpen}
-        setIsOpen={modalSetState.setIsDialogOpen}
       />
 
       {isDetailPage ? (

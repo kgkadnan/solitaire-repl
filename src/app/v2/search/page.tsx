@@ -318,9 +318,6 @@ const Search = () => {
                 variant: 'primary',
                 label: ManageLocales('app.modal.save'),
                 handler: () => {
-                  let yourSelection = JSON.parse(
-                    localStorage.getItem('Search')!
-                  );
                   if (!saveSearchName.length) {
                     setInputError('Please enter name');
                   } else {
@@ -351,7 +348,6 @@ const Search = () => {
       <DialogComponent
         dialogContent={dialogContent}
         isOpens={isDialogOpen}
-        setIsOpen={setIsDialogOpen}
         dialogStyle={{ dialogContent: isAddDemand ? 'min-h-[280px]' : '' }}
       />
       <InputDialogComponent
@@ -384,7 +380,7 @@ const Search = () => {
           setIsAddDemand={setIsAddDemand}
         />
       ) : subRoute === SubRoutes.SAVED_SEARCH ? (
-        <SavedSearch setIsLoading={setIsLoading} isLoading={isLoading} />
+        <SavedSearch setIsLoading={setIsLoading} />
       ) : activeTab === -1 ? (
         <div className="h-screen">
           {' '}

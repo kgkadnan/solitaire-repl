@@ -12,9 +12,6 @@ import {
 
 import emptyOrderSvg from '@public/v2/assets/icons/empty-order.svg';
 import {
-  useCardMyInvoiceQuery,
-  useCardPreviousConfirmationQuery,
-  useCardRecentConfirmationQuery,
   useLazyCardMyInvoiceQuery,
   useLazyCardPreviousConfirmationQuery,
   useLazyCardRecentConfirmationQuery,
@@ -29,7 +26,6 @@ import Image from 'next/image';
 import { formatNumberWithLeadingZeros } from '@/utils/format-number-withLeadingZeros';
 import { formatCreatedAt } from '@/utils/format-date';
 import arrow from '@public/v2/assets/icons/my-diamonds/Arrow.svg';
-import Link from 'next/link';
 import OrderDetail from './components/order-detail';
 import EmptyScreen from '@/components/v2/common/empty-screen';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -76,7 +72,6 @@ const MyDiamonds = () => {
 
   const { modalState, modalSetState } = useModalStateManagement();
   const { isDialogOpen, dialogContent } = modalState;
-  const { setIsDialogOpen } = modalSetState;
   useEffect(() => {
     setIsLoading(true);
     triggerPendingInvoiceData({
@@ -493,11 +488,7 @@ const MyDiamonds = () => {
 
   return (
     <div className="relative mb-[20px]">
-      <DialogComponent
-        dialogContent={dialogContent}
-        isOpens={isDialogOpen}
-        setIsOpen={setIsDialogOpen}
-      />
+      <DialogComponent dialogContent={dialogContent} isOpens={isDialogOpen} />
       <div className="flex  py-[8px] items-center">
         <p className="text-lMedium font-medium text-neutral900">
           {showDetail

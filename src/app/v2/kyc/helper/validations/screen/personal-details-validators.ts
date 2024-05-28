@@ -7,14 +7,9 @@ import {
   PHONE_NUMBER_MANDATORY,
   RANGE_VALIDATION
 } from '@/constants/error-messages/kyc';
-import {
-  NAME_REGEX,
-  PHONE_REG,
-  PHONE_REGEX
-} from '@/constants/validation-regex/regex';
+import { NAME_REGEX, PHONE_REG } from '@/constants/validation-regex/regex';
 import {
   IsEmail,
-  IsMobilePhone,
   IsNotEmpty,
   Length,
   Matches,

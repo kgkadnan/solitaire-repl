@@ -11,7 +11,7 @@ export interface IHeaderSearchBarProps {
 
 export interface ITabsProps {
   activeTab: string;
-  setActiveTab: (tab: string) => void;
+  setActiveTab: (_tab: string) => void;
   recentConfirmCount: number;
   myInvoiceDataCount: number;
   previousConfirmCount: number;
@@ -28,11 +28,11 @@ export interface IPageTitles {
 
 export interface IMyDiamondsProps {
   data: any;
-  handleCardClick: (id: string) => void;
+  handleCardClick: (_id: string) => void;
   productPageDetail?: any;
   check?: string;
-  setOffset?: (offset: number) => void;
-  setLimit?: (limit: number) => void;
+  setOffset?: (_offset: number) => void;
+  setLimit?: (_limit: number) => void;
   limit?: number;
   modalSetState: IModalSetState;
 }

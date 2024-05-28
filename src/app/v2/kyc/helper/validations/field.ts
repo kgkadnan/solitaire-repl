@@ -54,7 +54,6 @@ import {
   IsAlphanumeric,
   IsBoolean,
   IsEmail,
-  IsMobilePhone,
   IsNotEmpty,
   IsNumber,
   IsNumberString,
@@ -68,10 +67,6 @@ import {
   ValidateIf,
   validate
 } from 'class-validator';
-import {
-  IsArrayOfArraysValid,
-  IsNotOther
-} from './screen/company-details-validators';
 
 export async function validateKYCField(fieldType: string, fieldValue: any) {
   let instance;

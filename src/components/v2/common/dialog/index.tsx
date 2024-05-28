@@ -1,10 +1,9 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import { Dialog, DialogContent } from '../../ui/dialog';
 
 export interface IDialog {
   dialogContent: React.ReactNode;
   isOpens: boolean;
-  setIsOpen?: Dispatch<SetStateAction<boolean>>;
   dialogStyle?: {
     dialogContent?: string;
   };
@@ -13,7 +12,6 @@ export interface IDialog {
 export const DialogComponent: React.FC<IDialog> = ({
   dialogContent,
   isOpens,
-  setIsOpen,
   dialogStyle
 }) => {
   return (

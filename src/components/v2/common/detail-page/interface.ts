@@ -1,4 +1,4 @@
-export interface ImagesType {
+export interface IImagesType {
   name: string;
   url: string;
   showDivider?: boolean;

@@ -2,7 +2,6 @@ import { Box, Stack } from '@mui/material';
 import {
   MRT_ExpandButton,
   MRT_GlobalFilterTextField,
-  MRT_ToggleFullScreenButton,
   MaterialReactTable,
   useMaterialReactTable
 } from 'material-react-table';
@@ -14,8 +13,7 @@ import DisableDecrementIcon from '@public/v2/assets/icons/new-arrivals/disable-d
 import searchIcon from '@public/v2/assets/icons/data-table/search-icon.svg';
 
 // theme.js
-import { ThemeProvider, createTheme, styled } from '@mui/material/styles';
-import { ManageLocales } from '@/utils/v2/translate';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 import { useEffect, useState } from 'react';
 
@@ -115,7 +113,7 @@ const theme = createTheme({
   }
 });
 
-interface BidValues {
+interface IBidValues {
   [key: string]: number;
 }
 const NewArrivalDataTable = ({
@@ -227,8 +225,8 @@ const NewArrivalDataTable = ({
     });
   };
 
-  const [bidValues, setBidValues] = useState<BidValues>({});
-  const [columnOrder, setColumnOrder] = useState(
+  const [bidValues, setBidValues] = useState<IBidValues>({});
+  const [columnOrder] = useState(
     [
       'mrt-row-select',
       'lot_id',
