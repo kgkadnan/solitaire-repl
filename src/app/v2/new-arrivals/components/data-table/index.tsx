@@ -113,7 +113,7 @@ const theme = createTheme({
   }
 });
 
-interface BidValues {
+interface IBidValues {
   [key: string]: number;
 }
 const NewArrivalDataTable = ({
@@ -225,7 +225,7 @@ const NewArrivalDataTable = ({
     });
   };
 
-  const [bidValues, setBidValues] = useState<BidValues>({});
+  const [bidValues, setBidValues] = useState<IBidValues>({});
   const [columnOrder] = useState(
     [
       'mrt-row-select',

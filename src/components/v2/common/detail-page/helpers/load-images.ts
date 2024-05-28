@@ -1,8 +1,8 @@
-import { ImagesType } from '../interfrace';
+import { IImagesType } from '../interface';
 
 export async function loadImages(
-  images: ImagesType[],
-  setValidImages: React.Dispatch<React.SetStateAction<ImagesType[]>>,
+  images: IImagesType[],
+  setValidImages: React.Dispatch<React.SetStateAction<IImagesType[]>>,
   checkImage: any
 ) {
   const validImageIndexes = await Promise.all(

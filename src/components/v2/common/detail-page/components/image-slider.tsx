@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import NoImageFound from '@public/v2/assets/icons/detail-page/fall-back-img.svg';
 import Tooltip from '../../tooltip';
 import ImageModal from './image-modal';
-import { ImagesType } from '../interfrace';
+import { IImagesType } from '../interface';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import './carousel.css'; // Import your custom CSS file for React Slick
@@ -18,17 +18,17 @@ import backWardArrowDisable from '@public/v2/assets/icons/detail-page/back-ward-
 import forWardAarrowDisable from '@public/v2/assets/icons/detail-page/forward-arrow-disable.svg';
 import { Skeleton } from '@mui/material';
 
-interface ImageSliderProps {
-  images: ImagesType[];
+interface IImageSliderProps {
+  images: IImagesType[];
   setIsLoading: any;
 }
 
-const ImageSlider: React.FC<ImageSliderProps> = ({ images, setIsLoading }) => {
+const ImageSlider: React.FC<IImageSliderProps> = ({ images, setIsLoading }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const [imageName, setImageName] = useState('');
-  // const [validImages, setValidImages] = useState<ImagesType[]>([]);
+  // const [validImages, setValidImages] = useState<IImagesType[]>([]);
 
   function SampleNextArrow(props: any) {
     const { className, onClick, currentSlide, slideCount } = props;

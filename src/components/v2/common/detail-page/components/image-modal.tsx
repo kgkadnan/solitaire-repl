@@ -5,7 +5,7 @@ import closeSvg from '@public/v2/assets/icons/detail-page/close.svg';
 import { Toast } from '../../copy-and-share/toast';
 import Tooltip from '../../tooltip';
 import { handleDownloadImage } from '@/utils/v2/detail-page';
-import { ImagesType } from '../interfrace';
+import { IImagesType } from '../interface';
 import ImageList from './image-list';
 import downloadSvg from '@public/v2/assets/icons/detail-page/download.svg';
 import linkSvg from '@public/v2/assets/icons/detail-page/link.svg';
@@ -15,16 +15,16 @@ import backWardArrowDisable from '@public/v2/assets/icons/detail-page/back-ward-
 import forWardAarrowDisable from '@public/v2/assets/icons/detail-page/forward-arrow-disable.svg';
 import { Skeleton } from '@mui/material';
 
-interface ModalProps {
+interface IModalProps {
   isOpen: boolean;
   onClose: () => void;
   selectedImageIndex: number;
-  images: ImagesType[];
+  images: IImagesType[];
   setIsLoading?: any;
   fromDetailPage?: boolean;
 }
 
-const ImageModal: React.FC<ModalProps> = ({
+const ImageModal: React.FC<IModalProps> = ({
   isOpen,
   onClose,
   images,

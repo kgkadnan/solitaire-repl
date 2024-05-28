@@ -2,20 +2,20 @@
 import Image from 'next/image';
 import React, { useRef, useEffect, useState } from 'react';
 import NoImageFound from '@public/v2/assets/icons/detail-page/fall-back-img.svg';
-import { ImagesType } from '../interfrace';
+import { IImagesType } from '../interface';
 import Tooltip from '../../tooltip';
 import { handleDownloadImage } from '@/utils/v2/detail-page';
 import downloadImg from '@public/v2/assets/icons/detail-page/download.svg';
 import ImageModal from './image-modal';
 import { Skeleton } from '@mui/material';
 
-interface ImagePreviewProps {
-  images: ImagesType[];
+interface IImagePreviewProps {
+  images: IImagesType[];
   selectedImageIndex: number;
   setIsLoading: any;
 }
 
-const ImagePreview: React.FC<ImagePreviewProps> = ({
+const ImagePreview: React.FC<IImagePreviewProps> = ({
   images,
   selectedImageIndex,
   setIsLoading

@@ -3,19 +3,19 @@ import NoImageFound from '@public/v2/assets/icons/detail-page/fall-back-img.svg'
 
 import { Skeleton } from '@mui/material';
 
-export interface ImagesType {
+export interface IImagesType {
   name: string;
   url: string;
   showDivider?: boolean;
 }
 
-interface ImageListProps {
-  images: ImagesType[];
+interface IImageListProps {
+  images: IImagesType[];
   selectedImageIndex: number;
   onImageClick: (_index: number) => void;
 }
 
-const ImageList: React.FC<ImageListProps> = ({
+const ImageList: React.FC<IImageListProps> = ({
   images,
   selectedImageIndex,
   onImageClick
