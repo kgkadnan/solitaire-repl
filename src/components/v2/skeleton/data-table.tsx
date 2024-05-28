@@ -10,13 +10,7 @@ const DataTableSkeleton = () => {
     <div className="rounded-[4px]">
       <div className="h-[58px] bg-neutral0 border-b border-neutral200 rounded-t-[8px]"></div>
       <div>
-        <div className="bg-[#E3E3E3] flex items-center h-[35px] px-2">
-          <Checkbox
-            className="rounded-[4px] bg-neutral-50 border-neutral200"
-            onClick={() => {}}
-            checked={false}
-          />
-        </div>
+        <div className="bg-[#E3E3E3] flex items-center h-[35px] px-2"></div>
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-transparent">
             <tbody className="divide-y divide-transparent">
