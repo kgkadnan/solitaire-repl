@@ -183,7 +183,9 @@ export const DownloadAndUpload = ({
                   ) : !Object.keys(selectedFile).length ? (
                     <AttachMentIcon
                       className={
-                        error?.length ? styles.errorStroke : styles.stroke
+                        error?.length
+                          ? 'stroke-dangerMain'
+                          : 'stroke-neutral500'
                       }
                     />
                   ) : (
@@ -203,7 +205,9 @@ export const DownloadAndUpload = ({
               </div>
 
               {error?.length > 0 && (
-                <p className={styles.errorFormat}>{error}</p>
+                <p className={'text-dangerMain text-sRegular font-normal'}>
+                  {error}
+                </p>
               )}
             </div>
           </div>
