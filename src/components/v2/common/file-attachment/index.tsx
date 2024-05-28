@@ -154,7 +154,9 @@ const FileAttachments: React.FC<IFileAttachments> = ({
               ) : // <p className="text-[14px]">{`${uploadProgress}%`}</p>
               !Object.keys(selectedFile).length ? (
                 <AttachMentIcon
-                  className={error?.length ? styles.errorStroke : styles.stroke}
+                  className={
+                    error?.length ? 'stroke-dangerMain' : 'stroke-neutral500'
+                  }
                 />
               ) : (
                 <div onClick={e => e.stopPropagation()}>
@@ -172,7 +174,7 @@ const FileAttachments: React.FC<IFileAttachments> = ({
             </div>
           </div>
         </div>
-        <p className={styles.errorFormat}>{error}</p>
+        <p className={'text-dangerMain text-sRegular font-normal'}>{error}</p>
       </div>
     </>
   );

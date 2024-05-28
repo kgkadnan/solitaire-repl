@@ -212,7 +212,6 @@ and `nonManageableListings` whenever the `data` variable changes. */
                         )}
                       </div>
                     </div>
-                    {/* <hr className=" border-solitaireSenary mx-2 my-3" /> */}
                   </>
                 )}
 

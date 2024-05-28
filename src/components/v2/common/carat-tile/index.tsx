@@ -4,7 +4,7 @@ import mathAndFin from '@public/v2/assets/icons/Math&Finance.svg';
 import Image from 'next/image';
 import { Button } from '../../ui/button';
 
-interface ICaratTileProps {
+export interface ICaratTileProps {
   caratTileData: string[];
   handlecaratTileClick: ({
     data,

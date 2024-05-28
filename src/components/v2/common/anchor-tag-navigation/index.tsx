@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { Link } from 'react-scroll';
 import { kycStatus } from '@/constants/enums/kyc';
 
-interface IAnchorLinkNavigation {
+export interface IAnchorLinkNavigation {
   anchorNavigations: string[];
 }
 const AnchorLinkNavigation: React.FC<IAnchorLinkNavigation> = ({

@@ -6,7 +6,7 @@ import {
 } from '@/components/v2/ui/accordion';
 import styles from './accordion.module.scss';
 
-interface IAccordionCompProps {
+export interface IAccordionCompProps {
   isDisable?: boolean;
   accordionContent: React.ReactNode;
   accordionTrigger: string;

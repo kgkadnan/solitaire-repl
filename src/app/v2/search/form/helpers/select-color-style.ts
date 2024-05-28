@@ -8,7 +8,7 @@ interface IColourOption {
 export const colourStyles: StylesConfig<IColourOption, true> = {
   control: (styles, state) => ({
     ...styles,
-    color: 'hsl(var(--solitaire-tertiary))',
+    color: 'var(--neutral-900)',
 
     backgroundColor: 'var(--neutral-0)',
     borderRadius: '4px',
