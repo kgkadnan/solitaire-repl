@@ -8,7 +8,7 @@ interface IColourOption {
 export const savedSearchDropDownStyle: StylesConfig<IColourOption, true> = {
   control: styles => ({
     ...styles,
-    color: 'hsl(var(--solitaire-tertiary))',
+    color: 'var(--neutral-900)',
 
     backgroundColor: 'var(--neutral-0)',
     borderRadius: '4px',
