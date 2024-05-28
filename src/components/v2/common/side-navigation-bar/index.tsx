@@ -44,7 +44,7 @@ const SideNavigationBar = ({
       src: <DashboardIcon />,
       title: ManageLocales('app.sideNavigationBar.dashboard'),
       link: Routes.DASHBOARD,
-      isActive: currentRoute === Routes.DASHBOARD
+      isActive: currentRoute === Routes.DASHBOARD || currentRoute === '/'
     },
     {
       src: <ArrivalIcon />,
