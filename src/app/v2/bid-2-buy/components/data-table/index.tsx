@@ -225,7 +225,7 @@ const BidToByDataTable = ({
   };
 
   const [bidValues, setBidValues] = useState<BidValues>({});
-  const [columnOrder,] = useState(
+  const [columnOrder] = useState(
     [
       'mrt-row-select',
       'lot_id',

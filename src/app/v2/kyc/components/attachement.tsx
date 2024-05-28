@@ -88,7 +88,7 @@ export const RenderAttachment = ({
     );
     uploadDocument(buildFormData({ acceptedFiles, key }))
       .unwrap()
-      .then(res => {})
+      .then(_res => {})
       .catch(error => {
         console.log('Error', error);
       });

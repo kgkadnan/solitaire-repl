@@ -19,7 +19,7 @@ import OTPComponent from './component/otp';
 import ResetComponent from './component/reset-password';
 import { useGetCountryCodeQuery } from '@/features/api/current-ip';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
-import AppDownloadPopup from '@/components/v2/common/alert-pop-for-mobile';
+
 const initialTokenState = {
   token: '',
   phoneToken: '',

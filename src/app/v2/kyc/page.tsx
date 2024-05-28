@@ -1285,8 +1285,6 @@ const KYC = () => {
             modalState={modalState}
             country={selectedCountry ?? formState.country}
             handleTermAndCondition={handleTermAndCondition}
-            handleBack={handleBack}
-            handleSubmit={handleSubmit}
           />
         );
     }

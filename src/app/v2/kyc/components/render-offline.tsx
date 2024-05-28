@@ -22,8 +22,6 @@ export const RenderOffline = ({
   country,
   handleTermAndCondition,
   selectedSubmissionOption,
-  handleBack,
-  handleSubmit,
   fromWhere
 }: any) => {
   const [uploadDocument] = useUploadDocumentMutation({});
@@ -271,32 +269,6 @@ export const RenderOffline = ({
           </div>
         </div>
       </div>
-
-      {/* {country !== countries.INDIA && (
-        <div className="h-[72px] bg-neutral0 sticky bottom-0 border-[1px] border-solid border-neutral200 w-[1136px] rounded-t-[8px] mt-auto p-[16px]">
-          {' '}
-          <ActionButton
-            actionButtonData={[
-              {
-                variant: 'secondary',
-                label: ManageLocales('app.kyc.footer.back'),
-                handler: () =>
-                  fromWhere === countries.OTHER
-                    ? handleBack('country_selection')
-                    : handleBack('submission_option')
-              },
-              {
-                variant: 'primary',
-                label: ManageLocales('app.kyc.footer.submit'),
-                handler: () => {
-                  handleSubmit();
-                }
-              }
-            ]}
-            containerStyle="!justify-between"
-          />
-        </div>
-      )} */}
     </div>
   );
 };

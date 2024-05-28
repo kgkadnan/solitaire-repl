@@ -810,16 +810,7 @@ const Dashboard = () => {
             <span>{formatNumberWithLeadingZeros(value[accessor])}</span>
           </>
         );
-      // case 'delivery':
-      //   return (
-      //     <Link
-      //       href={value[accessor]?.link}
-      //       target="_blank"
-      //       className="pl-1 text-infoMain cursor-pointer"
-      //     >
-      //       Track Order
-      //     </Link>
-      //   );
+
       case 'invoice_id':
         return (
           <>
@@ -831,94 +822,16 @@ const Dashboard = () => {
         return <span>{formatCreatedAt(value[accessor])}</span>;
       case 'details':
         return (
-          <button
-            className="flex items-center cursor-pointer"
-            // onClick={() => handleShowDetails(value?.id)}
-          >
+          <button className="flex items-center cursor-pointer">
             <span>Show Details</span>
             <Image src={arrow} alt="arrow" />
           </button>
         );
-      // case 'download_invoice':
-      //   return (
-      //     <button
-      //       className="flex items-center cursor-pointer"
-      //       onClick={() => handleDownloadInvoice(value?.invoice_id)}
-      //     >
-      //       <Image src={downloadIcon} alt="downloadExcelIcon" />
-      //     </button>
-      //   );
+
       default:
         return <span>{value[accessor]}</span>;
     }
   };
-  // const [triggerDownloadInvoice] = useLazyDonwloadInvoiceQuery();
-
-  // const handleDownloadInvoice = (downloadInvoiceId: string) => {
-  //   triggerDownloadInvoice({ invoiceId: downloadInvoiceId })
-  //     .then((res: any) => {
-  //       const { data, fileName } = res?.data || {};
-  //       downloadPdfFromBase64(data, fileName, {
-  //         onSave: () => {
-  //           // Handle any post-download actions here
-  //           if (modalSetState.setIsDialogOpen)
-  //             modalSetState.setIsDialogOpen(true);
-
-  //           if (modalSetState.setDialogContent) {
-  //             modalSetState.setDialogContent(
-  //               <>
-  //                 <div className="absolute left-[-84px] top-[-84px]">
-  //                   <Image src={confirmIcon} alt="confirmIcon" />
-  //                 </div>
-  //                 <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-  //                   <h1 className="text-headingS text-neutral900">
-  //                     Download Invoice Successfully
-  //                   </h1>
-  //                   <ActionButton
-  //                     actionButtonData={[
-  //                       {
-  //                         variant: 'primary',
-  //                         label: ManageLocales('app.modal.okay'),
-  //                         handler: () => modalSetState.setIsDialogOpen(false),
-  //                         customStyle: 'flex-1 w-full h-10'
-  //                       }
-  //                     ]}
-  //                   />
-  //                 </div>
-  //               </>
-  //             );
-  //           }
-  //         }
-  //       });
-  //     })
-  //     .catch((error: any) => {
-  //       if (modalSetState.setIsDialogOpen) modalSetState.setIsDialogOpen(true);
-  //       if (modalSetState.setDialogContent) {
-  //         modalSetState.setDialogContent(
-  //           <>
-  //             <div className="absolute left-[-84px] top-[-84px]">
-  //               <Image src={errorIcon} alt="errorIcon" />
-  //             </div>
-  //             <h1 className="text-headingS text-neutral900">
-  //               {error?.data?.message}
-  //             </h1>
-  //             <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-  //               <ActionButton
-  //                 actionButtonData={[
-  //                   {
-  //                     variant: 'primary',
-  //                     label: ManageLocales('app.modal.okay'),
-  //                     handler: () => modalSetState.setIsDialogOpen(false),
-  //                     customStyle: 'flex-1 w-full h-10'
-  //                   }
-  //                 ]}
-  //               />
-  //             </div>
-  //           </>
-  //         );
-  //       }
-  //     });
-  // };
 
   const [getProductById] = useGetProductByIdMutation();
   const [addCart] = useAddCartMutation();
@@ -926,31 +839,6 @@ const Dashboard = () => {
 
   const [triggerColumn, { data: columnData }] =
     useLazyGetManageListingSequenceQuery<IManageListingSequenceResponse>();
-  useEffect(() => {
-    const fetchColumns = async () => {
-      const response = await triggerColumn({});
-      const shapeColumn = response.data?.find(
-        (column: any) => column.accessor === 'shape'
-      );
-
-      if (response.data?.length) {
-        let additionalColumn = {
-          accessor: 'shape_full',
-          id: shapeColumn?.id,
-          is_disabled: shapeColumn?.is_disabled,
-          is_fixed: shapeColumn?.is_fixed,
-          label: shapeColumn?.label,
-          sequence: shapeColumn?.sequence,
-          short_label: shapeColumn?.short_label
-        };
-
-        // const updatedColumns = [...response.data, additionalColumn];
-        // dataTableSetState.setColumns(updatedColumns);
-      }
-    };
-
-    fetchColumns();
-  }, []);
 
   const handleStoneId = (e: any) => {
     setStoneId(e.target.value);
@@ -971,7 +859,7 @@ const Dashboard = () => {
             setIsDetailPage(true);
           }
         })
-        .catch((e: any) => {
+        .catch((_e: any) => {
           // setIsLoading(false);
           setError('Something went wrong');
         });
@@ -993,7 +881,7 @@ const Dashboard = () => {
             setIsDetailPage(true);
           }
         })
-        .catch((e: any) => {
+        .catch((_e: any) => {
           // setIsLoading(false);
           setError('Something went wrong');
         });
@@ -1018,7 +906,7 @@ const Dashboard = () => {
     // setIsLoading(true);
     // Extract variant IDs for selected stones
     const variantIds = [searchData?.id]
-      ?.map((id: string) => {
+      ?.map((_id: string) => {
         if (searchData && 'variants' in searchData) {
           return searchData.variants[0]?.id;
         }
@@ -1524,7 +1412,7 @@ const Dashboard = () => {
                   setIsDetailPage(true);
                 }
               })
-              .catch((e: any) => {
+              .catch((_e: any) => {
                 // setIsLoading(false);
                 setError('Something went wrong');
               });
@@ -1929,7 +1817,6 @@ const Dashboard = () => {
                     >
                       <Image src={searchIcon} alt={'searchIcon'} />
                     </div>
-                    
                   </div>
                 </div>
               ) : (
