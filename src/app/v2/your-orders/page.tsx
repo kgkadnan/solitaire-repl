@@ -72,7 +72,6 @@ const MyDiamonds = () => {
 
   const { modalState, modalSetState } = useModalStateManagement();
   const { isDialogOpen, dialogContent } = modalState;
-  const { setIsDialogOpen } = modalSetState;
   useEffect(() => {
     setIsLoading(true);
     triggerPendingInvoiceData({

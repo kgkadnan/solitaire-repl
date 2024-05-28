@@ -138,7 +138,7 @@ export const RenderAttachment = ({
                           ({
                             id,
                             label,
-                            isRequired,
+                            // isRequired,
                             formKey,
                             maxFile,
                             minFile,

@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import { Dialog, DialogContent } from '../../ui/dialog';
 
 export interface IDialog {

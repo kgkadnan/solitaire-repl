@@ -54,3 +54,11 @@ export enum kycOption {
   OFFLINE = 'offline',
   ONLINE = 'online'
 }
+export enum myAccount {
+  TABLE_PREFRENCES = 'table prefrences',
+  CHANGE_PASSWORD = 'change password',
+  NOTIFICATION_PREFRENCES = 'notification preferences',
+  TERM_AND_CONDITION = 'term & condition',
+  PRIVACY_POLICY = 'privacy policy',
+  PROFILE_UPDATE = 'profile update'
+}

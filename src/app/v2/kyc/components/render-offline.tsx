@@ -172,7 +172,6 @@ export const RenderOffline = ({
                           ({
                             id,
                             label,
-                            isRequired,
                             formKey,
                             maxFile,
                             minFile,

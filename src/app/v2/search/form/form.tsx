@@ -7,7 +7,7 @@ import { Shape } from './components/shape';
 import { Carat } from './components/carat';
 import { Color } from './components/color';
 import {
-  useAddDemandMutation,
+  // useAddDemandMutation,
   useGetProductCountQuery
 } from '@/features/api/product';
 import useValidationStateManagement from '../hooks/validation-state-management';
@@ -27,7 +27,7 @@ import ActionButton from '@/components/v2/common/action-button';
 import { ManageLocales } from '@/utils/v2/translate';
 import { IActionButtonDataItem } from './interface/interface';
 import { handleReset } from './helpers/reset';
-import confirmIcon from '@public/v2/assets/icons/modal/confirm.svg';
+// import confirmIcon from '@public/v2/assets/icons/modal/confirm.svg';
 
 import {
   MAX_SEARCH_FORM_COUNT,
@@ -75,15 +75,14 @@ const Form = ({
   handleCloseSpecificTab,
   state,
   setState,
-  carat,
+  // carat,
   errorState,
   errorSetState,
   setIsDialogOpen,
   setDialogContent,
   addSearches,
   setAddSearches,
-  setIsLoading,
-  setIsAddDemand
+  setIsLoading // setIsAddDemand
 }: {
   searchUrl: String;
   setSearchUrl: Dispatch<SetStateAction<string>>;
@@ -115,7 +114,7 @@ const Form = ({
 
   const [updateSavedSearch] = useUpdateSavedSearchMutation();
   let [addSavedSearch] = useAddSavedSearchMutation();
-  const [addDemandApi] = useAddDemandMutation();
+  // const [addDemandApi] = useAddDemandMutation();
 
   const {
     caratMax,
@@ -270,7 +269,7 @@ const Form = ({
       modifySearchFrom === `${SubRoutes.SAVED_SEARCH}` &&
       modifysavedSearchData
     ) {
-      setModifySearch(modifysavedSearchData, setState, carat);
+      setModifySearch(modifysavedSearchData, setState);
     } else if (
       modifySearchFrom === `${SubRoutes.RESULT}` &&
       modifySearchResult
@@ -283,8 +282,7 @@ const Form = ({
       setModifySearch(
         modifySearchResult[parseInt(replaceSubrouteWithSearchResult!) - 1]
           ?.queryParams,
-        setState,
-        carat
+        setState
       );
     }
   }, [modifySearchFrom]);
