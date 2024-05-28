@@ -1,27 +1,27 @@
 // components/ResponsiveTable.tsx
 import { formatNumber } from '@/utils/fix-two-digit-number';
 import React from 'react';
-import { ImagesType } from '../interfrace';
+import { IImagesType } from '../interface';
 import { Skeleton } from '@mui/material';
 
-export interface TableColumn {
+export interface ITableColumn {
   key: string;
   label: string;
   hiddenBelow1024?: boolean;
   hiddenAbove1024?: boolean;
 }
 
-export interface TableData {
+export interface ITableData {
   [key: string]: string | number;
 }
 
-interface ResponsiveTableProps {
-  tableHead: TableColumn[];
-  tableData: TableData[];
-  validImages: ImagesType[];
+interface IResponsiveTableProps {
+  tableHead: ITableColumn[];
+  tableData: ITableData[];
+  validImages: IImagesType[];
 }
 
-const ResponsiveTable: React.FC<ResponsiveTableProps> = ({
+const ResponsiveTable: React.FC<IResponsiveTableProps> = ({
   tableHead,
   tableData,
   validImages

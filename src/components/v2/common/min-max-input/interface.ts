@@ -1,13 +1,13 @@
 interface IMinInputData {
   minValue: string;
   minPlaceHolder: string;
-  minOnchange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  minOnchange: (_event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 interface IMaxInputData {
   maxValue: string;
   maxPlaceHolder: string;
-  maxOnchange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  maxOnchange: (_event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export interface IMinMaxInput {

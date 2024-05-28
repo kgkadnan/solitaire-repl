@@ -20,7 +20,7 @@ export interface IImageTileProps {
 
 export interface IImageContainerProps {
   imageTileData: IImageTileProps[];
-  handleSelectTile: (shape: string) => void;
+  handleSelectTile: (_shape: string) => void;
   selectedTile: string[];
 }
 

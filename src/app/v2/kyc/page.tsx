@@ -1285,8 +1285,6 @@ const KYC = () => {
             modalState={modalState}
             country={selectedCountry ?? formState.country}
             handleTermAndCondition={handleTermAndCondition}
-            handleBack={handleBack}
-            handleSubmit={handleSubmit}
           />
         );
     }
@@ -1503,11 +1501,7 @@ const KYC = () => {
     <div className="relative">
       {' '}
       {isLoading && <CustomKGKLoader />}
-      <DialogComponent
-        dialogContent={dialogContent}
-        isOpens={isDialogOpen}
-        setIsOpen={setIsDialogOpen}
-      />
+      <DialogComponent dialogContent={dialogContent} isOpens={isDialogOpen} />
       <InputDialogComponent
         isOpen={isInputDialogOpen}
         onClose={() => setIsInputDialogOpen(false)}

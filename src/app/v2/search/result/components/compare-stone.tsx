@@ -38,8 +38,7 @@ const CompareStone = ({
   setDialogContent,
   setIsConfirmStone,
   setConfirmStoneData,
-  setIsDetailPage,
-  setIsCompareStone
+  setIsDetailPage
 }: any) => {
   const [mappingColumn, setMappingColumn] = useState<any>({});
 
@@ -88,7 +87,7 @@ const CompareStone = ({
     setMappingColumn(updatedObj); // Update the state with the updated object
   }
 
-  type HandleCloseType = (event: React.MouseEvent, id: string) => void;
+  type HandleCloseType = (_event: React.MouseEvent, _id: string) => void;
 
   const handleClick = (id: string) => {
     let updatedIsCheck = [...selectedCheckboxes];

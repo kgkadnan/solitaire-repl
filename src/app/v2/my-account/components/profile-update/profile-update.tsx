@@ -8,12 +8,10 @@ import AttachMentIcon from '@public/v2/assets/icons/attachment/attachment.svg?ur
 import Loader from '@/components/v2/common/file-attachment/component/loader';
 import styles from './profile-update.module.scss';
 import {
-  useDeleteProfileMutation,
   useLazyGetProfilePhotoQuery,
   useUpdateProfilePhotoMutation
 } from '@/features/api/my-account';
 import deleteIcon from '@public/v2/assets/icons/attachment/delete-icon.svg';
-import logger from 'logging/log-util';
 import { Label } from '@/components/v2/ui/label';
 import { extractBytesFromMessage } from '@/components/v2/common/file-attachment/helpers/extract-byte-from-message';
 

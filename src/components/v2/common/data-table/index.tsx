@@ -21,7 +21,7 @@ import searchIcon from '@public/v2/assets/icons/data-table/search-icon.svg';
 import threeDotsSvg from '@public/v2/assets/icons/threedots.svg';
 
 // theme.js
-import { ThemeProvider, createTheme, styled } from '@mui/material/styles';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CalculatedField from '../calculated-field';
 import ActionButton from '../action-button';
 import { ManageLocales } from '@/utils/v2/translate';

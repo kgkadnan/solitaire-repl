@@ -7,9 +7,9 @@ import computer from '@public/v2/assets/icons/kyc/computer.svg';
 import ActionButton from '@/components/v2/common/action-button';
 
 interface ISubmissionOptionProps {
-  handleSubmissionOptionClick: (option: string) => void;
+  handleSubmissionOptionClick: (_option: string) => void;
   selectedSubmissionOption: string;
-  handleBack: (currentState: string) => void;
+  handleBack: (_currentState: string) => void;
 }
 const SubmissionOption = ({
   handleSubmissionOptionClick,

@@ -1,6 +1,5 @@
 import { ManageLocales } from '@/utils/v2/translate';
 import React, { useEffect, useState } from 'react';
-import { IProduct } from '../../search/interface';
 interface INewArrivalCalculatedField {
   rows: any[];
   selectedProducts: Record<string, boolean>;

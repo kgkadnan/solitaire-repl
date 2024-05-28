@@ -1,5 +1,4 @@
 import { updateFormState } from '@/features/kyc/kyc';
-import { validateKYCField } from './validations/field';
 import { isEditingKYC } from '@/features/kyc/is-editing-kyc';
 import { kycScreenIdentifierNames } from '@/constants/enums/kyc';
 

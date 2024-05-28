@@ -5,15 +5,7 @@ import { Button } from '../../ui/button';
 
 interface ITileProps {
   tileData: string[] | { title: string; short_name: string }[];
-  handleTileClick: ({
-    data,
-    selectedTile,
-    setSelectedTile
-  }: {
-    data: string;
-    selectedTile: string[];
-    setSelectedTile: React.Dispatch<React.SetStateAction<string[]>>;
-  }) => void;
+  handleTileClick: (_data: any) => void;
   selectedTile: string[];
   setSelectedTile: React.Dispatch<React.SetStateAction<string[]>>;
 }
@@ -33,7 +25,11 @@ const Tile = ({
               <Button
                 key={tile}
                 onClick={() =>
-                  handleTileClick({ data: tile, selectedTile, setSelectedTile })
+                  handleTileClick({
+                    data: tile,
+                    selectedTile: selectedTile,
+                    setSelectedTile: setSelectedTile
+                  })
                 }
                 className={` ${styles.tileDefaultStyles}   ${
                   selectedTile.includes(tile)
