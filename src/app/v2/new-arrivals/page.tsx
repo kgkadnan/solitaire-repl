@@ -24,7 +24,7 @@ import { columnHeaders } from './constant';
 import { SocketManager, useSocket } from '@/hooks/v2/socket-manager';
 import CountdownTimer from '@components/v2/common/timer/index';
 import { useGetBidHistoryQuery } from '@/features/api/dashboard';
-import InvalidCreds from '../login/component/invalid-creds';
+import CommonPoppup from '../login/component/common-poppup';
 import { DialogComponent } from '@/components/v2/common/dialog';
 import ActionButton from '@/components/v2/common/action-button';
 import {
@@ -256,7 +256,7 @@ const NewArrivals = () => {
     if (data) {
       modalSetState.setIsDialogOpen(true);
       modalSetState.setDialogContent(
-        <InvalidCreds
+        <CommonPoppup
           content=""
           header={data}
           handleClick={() => modalSetState.setIsDialogOpen(false)}
@@ -271,7 +271,7 @@ const NewArrivals = () => {
     if (data && data['status'] === 'success') {
       modalSetState.setIsDialogOpen(true);
       modalSetState.setDialogContent(
-        <InvalidCreds
+        <CommonPoppup
           content=""
           header={'Bid Placed Successfully'}
           handleClick={() => modalSetState.setIsDialogOpen(false)}
@@ -285,7 +285,7 @@ const NewArrivals = () => {
     if (data && data['status'] === 'success') {
       modalSetState.setIsDialogOpen(true);
       modalSetState.setDialogContent(
-        <InvalidCreds
+        <CommonPoppup
           content=""
           header={'Bid Canceled Successfully'}
           handleClick={() => modalSetState.setIsDialogOpen(false)}

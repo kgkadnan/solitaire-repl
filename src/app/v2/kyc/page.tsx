@@ -39,7 +39,7 @@ import {
 } from '@/constants/enums/kyc';
 import ActionButton from '@/components/v2/common/action-button';
 import { DialogComponent } from '@/components/v2/common/dialog';
-import InvalidCreds from '../login/component/invalid-creds';
+import CommonPoppup from '../login/component/common-poppup';
 import CompanyDetail from './components/company-detail';
 import { RenderAttachment } from './components/attachement';
 import { RenderOffline } from './components/render-offline';
@@ -1394,7 +1394,7 @@ const KYC = () => {
                     .catch((e: any) => {
                       setIsDialogOpen(true);
                       setDialogContent(
-                        <InvalidCreds
+                        <CommonPoppup
                           content=""
                           header={e?.data?.message}
                           handleClick={() => setIsDialogOpen(false)}
@@ -1462,7 +1462,7 @@ const KYC = () => {
                     .catch((e: any) => {
                       setIsDialogOpen(true);
                       setDialogContent(
-                        <InvalidCreds
+                        <CommonPoppup
                           content=""
                           header={e?.data?.message}
                           handleClick={() => setIsDialogOpen(false)}

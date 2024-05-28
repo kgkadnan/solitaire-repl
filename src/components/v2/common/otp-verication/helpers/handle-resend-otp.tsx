@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import successIcon from '@public/v2/assets/icons/modal/confirm.svg';
-import InvalidCreds from '@/app/v2/login/component/invalid-creds';
+import CommonPoppup from '@/app/v2/login/component/common-poppup';
 import { IOtp } from '..';
 import ActionButton from '../../action-button';
 import { IToken } from '@/app/v2/register/component/main';
@@ -60,7 +60,7 @@ export const handleResendOTP = ({
     .catch((e: any) => {
       setIsDialogOpen(true);
       setDialogContent(
-        <InvalidCreds
+        <CommonPoppup
           content=""
           header={e?.data?.message}
           handleClick={() => setIsDialogOpen(false)}

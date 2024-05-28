@@ -8,7 +8,7 @@ import { IndividualActionButton } from '@/components/v2/common/action-button/ind
 import { useRouter } from 'next/navigation';
 import { PasswordField } from '@/components/v2/common/input-field/password';
 import { PASSWORD_REGEX } from '@/constants/validation-regex/regex';
-import InvalidCreds from '../../login/component/invalid-creds';
+import CommonPoppup from '../../login/component/common-poppup';
 import { useChangePasswordMutation } from '@/features/api/change-password';
 import successIcon from '@public/v2/assets/icons/modal/confirm.svg';
 import ActionButton from '@/components/v2/common/action-button';
@@ -41,7 +41,7 @@ const ResetComponent = ({ setIsDialogOpen, setDialogContent, token }: any) => {
         setIsDialogOpen(true);
         setDialogContent(
           <div>
-            <InvalidCreds
+            <CommonPoppup
               content=""
               header={res.error.data.message}
               handleClick={() => setIsDialogOpen(false)}

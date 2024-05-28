@@ -1,5 +1,4 @@
 import React from 'react';
-import { Checkbox } from '@components/v2/ui/checkbox';
 import { Skeleton } from '@mui/material';
 
 const DataTableSkeleton = () => {

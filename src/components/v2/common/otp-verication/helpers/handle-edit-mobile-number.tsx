@@ -1,6 +1,6 @@
 import { IOtp } from '..';
 import logger from 'logging/log-util';
-import InvalidCreds from '@/app/v2/login/component/invalid-creds';
+import CommonPoppup from '@/app/v2/login/component/common-poppup';
 import ActionButton from '../../action-button';
 import Image from 'next/image';
 import successIcon from '@public/v2/assets/icons/modal/confirm.svg';
@@ -87,7 +87,7 @@ export const handleEditMobileNumber = ({
       .catch((e: any) => {
         setIsDialogOpen(true);
         setDialogContent(
-          <InvalidCreds
+          <CommonPoppup
             content=""
             header={e?.data?.message}
             handleClick={() => setIsDialogOpen(false)}

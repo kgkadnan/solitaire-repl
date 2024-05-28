@@ -24,7 +24,7 @@ import { columnHeaders } from './constant';
 import { SocketManager, useSocket } from '@/hooks/v2/socket-manager';
 import CountdownTimer from '@components/v2/common/timer/index';
 import { useLazyGetBidToBuyHistoryQuery } from '@/features/api/dashboard';
-import InvalidCreds from '../login/component/invalid-creds';
+
 import { DialogComponent } from '@/components/v2/common/dialog';
 import ActionButton from '@/components/v2/common/action-button';
 import {
@@ -44,6 +44,7 @@ import { Toast } from '@/components/v2/common/copy-and-share/toast';
 import { loadImages } from '@/components/v2/common/detail-page/helpers/load-images';
 import { checkImage } from '@/components/v2/common/detail-page/helpers/check-image';
 import fallbackImage from '@public/v2/assets/icons/not-found.svg';
+import CommonPoppup from '../login/component/common-poppup';
 
 const BidToBuy = () => {
   const [isDetailPage, setIsDetailPage] = useState(false);
@@ -271,7 +272,7 @@ const BidToBuy = () => {
     if (data) {
       modalSetState.setIsDialogOpen(true);
       modalSetState.setDialogContent(
-        <InvalidCreds
+        <CommonPoppup
           content=""
           header={data}
           handleClick={() => modalSetState.setIsDialogOpen(false)}
@@ -285,7 +286,7 @@ const BidToBuy = () => {
     if (data && data['status'] === 'success') {
       modalSetState.setIsDialogOpen(true);
       modalSetState.setDialogContent(
-        <InvalidCreds
+        <CommonPoppup
           content=""
           header={'Bid Placed Successfully'}
           handleClick={() => modalSetState.setIsDialogOpen(false)}
@@ -299,7 +300,7 @@ const BidToBuy = () => {
     if (data && data['status'] === 'success') {
       modalSetState.setIsDialogOpen(true);
       modalSetState.setDialogContent(
-        <InvalidCreds
+        <CommonPoppup
           content=""
           header={'Bid Canceled Successfully'}
           handleClick={() => modalSetState.setIsDialogOpen(false)}

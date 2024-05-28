@@ -7,7 +7,7 @@ import successIcon from '@public/v2/assets/icons/modal/confirm.svg';
 import { IndividualActionButton } from '@/components/v2/common/action-button/individual-button';
 import { ManageLocales } from '@/utils/v2/translate';
 
-interface IInvalidCredsProps {
+interface ICommonPoppupProps {
   content: React.ReactNode;
   handleClick?: () => void;
   header?: string;
@@ -15,7 +15,7 @@ interface IInvalidCredsProps {
   status?: string;
 }
 
-const InvalidCreds: React.FC<IInvalidCredsProps> = ({
+const CommonPoppup: React.FC<ICommonPoppupProps> = ({
   content,
   handleClick,
   header,
@@ -54,4 +54,4 @@ const InvalidCreds: React.FC<IInvalidCredsProps> = ({
   );
 };
 
-export default InvalidCreds;
+export default CommonPoppup;

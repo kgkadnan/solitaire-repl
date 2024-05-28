@@ -1,4 +1,4 @@
-import InvalidCreds from '@/app/v2/login/component/invalid-creds';
+import CommonPoppup from '@/app/v2/login/component/common-poppup';
 import { IToken } from '../../register/interface';
 
 interface IHandleResetOTP {
@@ -42,7 +42,7 @@ export const handleResetOTP = ({
     .catch((e: any) => {
       setIsDialogOpen(true);
       setDialogContent(
-        <InvalidCreds
+        <CommonPoppup
           content=""
           header={e?.data?.message}
           handleClick={() => setIsDialogOpen(false)}

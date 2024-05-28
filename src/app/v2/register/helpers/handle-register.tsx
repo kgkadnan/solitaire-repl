@@ -1,7 +1,7 @@
 import { validateAllFields } from './handle-validate-all-fields';
 
 import { IRegister } from '../interface';
-import InvalidCreds from '../../login/component/invalid-creds';
+import CommonPoppup from '../../login/component/common-poppup';
 import { statusCode } from '@/constants/enums/status-code';
 import { IOtp, IToken } from '../component/main';
 
@@ -72,7 +72,7 @@ export const handleRegister = async ({
       setIsDialogOpen(true);
       if (e.status === statusCode.DUPLICATE && e.data.field === 'email') {
         setDialogContent(
-          <InvalidCreds
+          <CommonPoppup
             content="Email already in use. Please log in with the mobile number linked to this email."
             header={'Duplicate email.'}
             handleClick={() => setIsDialogOpen(false)}
@@ -84,7 +84,7 @@ export const handleRegister = async ({
         e.data.field === 'mobile'
       ) {
         setDialogContent(
-          <InvalidCreds
+          <CommonPoppup
             content="This mobile number is already registered. Please log in or use a different number."
             header={'Duplicate phone no'}
             handleClick={() => setIsDialogOpen(false)}
@@ -93,7 +93,7 @@ export const handleRegister = async ({
         );
       } else {
         setDialogContent(
-          <InvalidCreds
+          <CommonPoppup
             content=""
             header={e?.data?.message}
             handleClick={() => setIsDialogOpen(false)}
