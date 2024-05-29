@@ -1,7 +1,7 @@
 import React from 'react';
 import * as RadixTooltip from '@radix-ui/react-tooltip';
 
-interface ITooltip {
+export interface ITooltip {
   tooltipTrigger: React.ReactNode;
   tooltipContent: React.ReactNode;
   tooltipContentStyles?: string;

@@ -27,7 +27,7 @@ import confirmIcon from '@public/v2/assets/icons/modal/confirm.svg';
 import logoutConfirmIcon from '@public/v2/assets/icons/modal/logout.svg';
 import crossIcon from '@public/v2/assets/icons/modal/cross.svg';
 
-interface IUserAccountInfo {
+export interface IUserAccountInfo {
   customer: {
     billing_address_id: string | null;
     cart_id: string;
