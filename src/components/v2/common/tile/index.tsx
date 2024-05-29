@@ -3,7 +3,7 @@ import styles from './tile.module.scss';
 import Tooltip from '../tooltip';
 import { Button } from '../../ui/button';
 
-interface ITileProps {
+export interface ITileProps {
   tileData: string[] | { title: string; short_name: string }[];
   handleTileClick: (_data: any) => void;
   selectedTile: string[];
