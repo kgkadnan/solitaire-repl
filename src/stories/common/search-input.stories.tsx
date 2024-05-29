@@ -24,7 +24,7 @@ const Template: Story<ISearchInputProps> = args => {
   const [showSuggestions, setShowSuggestions] = useState(
     args.showSuggestions || false
   );
-  const [suggestions, setSuggestions] = useState(args.suggestions || []);
+  const [suggestions] = useState(args.suggestions || []);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value);
