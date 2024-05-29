@@ -7,7 +7,7 @@ const DataTableSkeleton = () => {
   const skeletonCols = Array.from({ length: 15 });
   return (
     <div className="rounded-[4px]">
-      <div className="h-[58px] bg-neutral0 flex justify-between items-center px-3 border-b border-neutral200 rounded-t-[8px]">
+      <div className="h-[58px] bg-neutral0 flex justify-between items-center px-2 border-b border-neutral200 rounded-t-[8px]">
         <div>
           <Skeleton
             variant="rectangular"
@@ -40,7 +40,7 @@ const DataTableSkeleton = () => {
       <div>
         <div className="bg-[#E3E3E3] flex items-center h-[35px] px-2"></div>
         <div className="h-[7px]"></div>
-        <div className="h-[51px] bg-neutral0 flex justify-between items-center px-3 border-y border-neutral200 ">
+        <div className="h-[51px] bg-neutral0 flex justify-between items-center px-2 border-y border-neutral200 ">
           <div>
             <Skeleton
               variant="rectangular"
@@ -77,7 +77,7 @@ const DataTableSkeleton = () => {
                 <tr key={rowIndex} className="overflow-hidden">
                   {skeletonCols.map((_, colIndex) => (
                     <td
-                      className="py-1 px-1 whitespace-nowrap hidden sm:table-cell"
+                      className="py-1 px-2 whitespace-nowrap hidden sm:table-cell"
                       key={colIndex}
                     >
                       <Skeleton
