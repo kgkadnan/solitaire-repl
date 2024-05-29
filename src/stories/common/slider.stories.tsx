@@ -15,7 +15,7 @@ export default {
   }
 } as Meta;
 
-const Template: Story<IRangeSliderProps> = (args) => {
+const Template: Story<IRangeSliderProps> = args => {
   const [sliderValue, setSliderValue] = useState<string[]>(args.sliderValue);
 
   const handleSliderChange = (newValue: string[]) => {
@@ -23,7 +23,13 @@ const Template: Story<IRangeSliderProps> = (args) => {
     args.handleSliderChange(newValue);
   };
 
-  return <RangeSlider {...args} sliderValue={sliderValue} handleSliderChange={handleSliderChange} />;
+  return (
+    <RangeSlider
+      {...args}
+      sliderValue={sliderValue}
+      handleSliderChange={handleSliderChange}
+    />
+  );
 };
 
 export const Default = Template.bind({});

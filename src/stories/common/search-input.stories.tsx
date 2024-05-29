@@ -2,7 +2,9 @@
 
 import React, { useState } from 'react';
 import { Meta, Story } from '@storybook/react';
-import SearchInputField,{ISearchInputProps} from '@/components/v2/common/search-input/search-input';
+import SearchInputField, {
+  ISearchInputProps
+} from '@/components/v2/common/search-input/search-input';
 
 export default {
   title: 'Components/SearchInputField',
@@ -13,15 +15,17 @@ export default {
     name: { control: 'text' },
     placeholder: { control: 'text' },
     suggestions: { control: 'array' },
-    showSuggestions: { control: 'boolean' },
-  },
+    showSuggestions: { control: 'boolean' }
+  }
 } as Meta;
 
-const Template: Story<ISearchInputProps> = (args) => {
+const Template: Story<ISearchInputProps> = args => {
   const [value, setValue] = useState(args.value || '');
-  const [showSuggestions, setShowSuggestions] = useState(args.showSuggestions || false);
+  const [showSuggestions, setShowSuggestions] = useState(
+    args.showSuggestions || false
+  );
   const [suggestions, setSuggestions] = useState(args.suggestions || []);
-  
+
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value);
     args.onChange?.(event);
@@ -54,7 +58,7 @@ Default.args = {
   name: 'search',
   placeholder: 'Search...',
   suggestions: ['Apple', 'Banana', 'Cherry'],
-  showSuggestions: false,
+  showSuggestions: false
 };
 
 export const WithSuggestions = Template.bind({});
@@ -63,7 +67,7 @@ WithSuggestions.args = {
   name: 'search',
   placeholder: 'Search...',
   suggestions: ['Apple', 'Banana', 'Cherry'],
-  showSuggestions: true,
+  showSuggestions: true
 };
 
 export const NoSuggestions = Template.bind({});
@@ -72,7 +76,7 @@ NoSuggestions.args = {
   name: 'search',
   placeholder: 'Search...',
   suggestions: [],
-  showSuggestions: false,
+  showSuggestions: false
 };
 
 export const CustomSuggestions = Template.bind({});
@@ -81,5 +85,5 @@ CustomSuggestions.args = {
   name: 'search',
   placeholder: 'Search for fruits...',
   suggestions: ['Apple', 'Banana', 'Cherry', 'Date', 'Fig', 'Grape'],
-  showSuggestions: true,
+  showSuggestions: true
 };
