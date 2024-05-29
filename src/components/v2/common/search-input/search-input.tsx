@@ -4,7 +4,7 @@ import searchIcon from '@public/v2/assets/icons/saved-search/search-icon.svg';
 import Image from 'next/image';
 import { Input } from '../../ui/input';
 
-interface ISearchInputProps {
+export interface ISearchInputProps {
   type: string;
   value?: string;
   name: string;
