@@ -1,7 +1,7 @@
 import React, { ReactNode, useEffect, useRef } from 'react';
 import './style.css';
 
-interface IUserAuthenticationLayoutProps {
+export interface IUserAuthenticationLayoutProps {
   formData: ReactNode;
   screen: string;
 }
