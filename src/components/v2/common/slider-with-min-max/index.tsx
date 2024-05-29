@@ -3,7 +3,7 @@ import { MinMaxInput } from '../min-max-input';
 import { RangeSlider } from '../slider';
 import { InputLabel } from '../input-label';
 
-interface ISliderWithMinMaxInputProps {
+export interface ISliderWithMinMaxInputProps {
   minValue: string;
   maxValue: string;
   sliderValue: string[];
