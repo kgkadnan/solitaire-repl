@@ -16,7 +16,7 @@ const SalesIQWidget = () => {
           s.id = 'zsiqscript';
           s.defer = true;
           s.src = 'https://salesiq.zoho.com/widget';
-          t = d.getElementsByTagName('script')[8];
+          t = d.getElementsByTagName('script')[0];
           t.parentNode.insertBefore(s, t);
         `
       }}
