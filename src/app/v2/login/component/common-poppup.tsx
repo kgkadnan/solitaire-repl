@@ -3,7 +3,7 @@ import Image from 'next/image';
 import React from 'react';
 import errorIcon from '@public/v2/assets/icons/modal/error.svg';
 import successIcon from '@public/v2/assets/icons/modal/confirm.svg';
-
+import deleteIcon from '@public/v2/assets/icons/modal/bin.svg';
 import { IndividualActionButton } from '@/components/v2/common/action-button/individual-button';
 import { ManageLocales } from '@/utils/v2/translate';
 import ActionButton from '@/components/v2/common/action-button';
@@ -50,6 +50,8 @@ const CommonPoppup: React.FC<ICommonPoppupProps> = ({
               ? successIcon
               : status === 'warning'
               ? warningIcon
+              : status === 'delete'
+              ? deleteIcon
               : errorIcon
           }
           alt={
@@ -57,6 +59,8 @@ const CommonPoppup: React.FC<ICommonPoppupProps> = ({
               ? 'successIcon'
               : status === 'warning'
               ? 'warningIcon'
+              : status === 'delete'
+              ? 'deleteIcon'
               : 'errorIcon'
           }
         />

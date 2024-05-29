@@ -51,7 +51,6 @@ import {
 import Breadcrum from '@/components/v2/common/search-breadcrum/breadcrum';
 import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
 import BinIcon from '@public/v2/assets/icons/bin.svg';
-import warningIcon from '@public/v2/assets/icons/modal/warning.svg';
 import Image from 'next/image';
 import { InputDialogComponent } from '@/components/v2/common/input-dialog';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
@@ -59,6 +58,7 @@ import bookmarkIcon from '@public/v2/assets/icons/modal/bookmark.svg';
 import { InputField } from '@/components/v2/common/input-field';
 import { isSearchAlreadyExist } from '../saved-search/helpers/handle-card-click';
 import { constructUrlParams } from '@/utils/v2/construct-url-params';
+import CommonPoppup from '../../login/component/common-poppup';
 
 export interface ISavedSearch {
   saveSearchName: string;
@@ -312,45 +312,33 @@ const Form = ({
       modifySearchFrom !== `${SubRoutes.RESULT}`
     ) {
       setDialogContent(
-        <>
-          {' '}
-          <div className="absolute left-[-84px] top-[-84px]">
-            <Image src={warningIcon} alt="warningIcon" />
-          </div>
-          <div className="absolute bottom-[20px] flex flex-col gap-[15px] w-[352px]">
-            <div>
-              <h1 className="text-headingS text-neutral900">
-                {' '}
-                {ManageLocales('app.search.maxTabReached')}
-              </h1>
-              <p className="text-neutral600 text-mRegular">
-                {ManageLocales('app.search.maxTabReached.content')}
-              </p>
-            </div>
-            <ActionButton
-              actionButtonData={[
-                {
-                  variant: 'secondary',
-                  label: ManageLocales('app.modal.cancel'),
-                  handler: () => {
-                    setIsDialogOpen(false);
-                  },
-                  customStyle: 'flex-1 h-10'
-                },
-                {
-                  variant: 'primary',
-                  label: ManageLocales('app.modal.manageTabs'),
-                  handler: () => {
-                    router.push(`/v2/search?active-tab=${SubRoutes.RESULT}-1`);
-                    setIsDialogOpen(false);
-                  },
-                  customStyle: 'flex-1 h-10'
-                }
-              ]}
-            />
-          </div>
-        </>
+        <CommonPoppup
+          content={ManageLocales('app.search.maxTabReached.content')}
+          status="warning"
+          customPoppupBodyStyle="!mt-[70px]"
+          header={ManageLocales('app.search.maxTabReached')}
+          actionButtonData={[
+            {
+              variant: 'secondary',
+              label: ManageLocales('app.modal.cancel'),
+              handler: () => {
+                setIsDialogOpen(false);
+              },
+              customStyle: 'flex-1 h-10'
+            },
+            {
+              variant: 'primary',
+              label: ManageLocales('app.modal.manageTabs'),
+              handler: () => {
+                router.push(`/v2/search?active-tab=${SubRoutes.RESULT}-1`);
+                setIsDialogOpen(false);
+              },
+              customStyle: 'flex-1 h-10'
+            }
+          ]}
+        />
       );
+
       setIsDialogOpen(true);
     } else if (searchUrl && data?.count > MIN_SEARCH_FORM_COUNT) {
       if (
@@ -459,44 +447,31 @@ const Form = ({
       modifySearchFrom !== `${SubRoutes.SAVED_SEARCH}`
     ) {
       setDialogContent(
-        <>
-          {' '}
-          <div className="absolute left-[-84px] top-[-84px]">
-            <Image src={warningIcon} alt="warningIcon" />
-          </div>
-          <div className="absolute bottom-[20px] flex flex-col gap-[15px] w-[352px]">
-            <div>
-              <h1 className="text-headingS text-neutral900">
-                {' '}
-                {ManageLocales('app.search.maxTabReached')}
-              </h1>
-              <p className="text-neutral600 text-mRegular">
-                {ManageLocales('app.search.maxTabReached.content')}
-              </p>
-            </div>
-            <ActionButton
-              actionButtonData={[
-                {
-                  variant: 'secondary',
-                  label: ManageLocales('app.modal.cancel'),
-                  handler: () => {
-                    setIsDialogOpen(false);
-                  },
-                  customStyle: 'flex-1 h-10'
-                },
-                {
-                  variant: 'primary',
-                  label: ManageLocales('app.modal.manageTabs'),
-                  handler: () => {
-                    router.push(`/v2/search?active-tab=${SubRoutes.RESULT}-1`);
-                    setIsDialogOpen(false);
-                  },
-                  customStyle: 'flex-1 h-10'
-                }
-              ]}
-            />
-          </div>
-        </>
+        <CommonPoppup
+          content={ManageLocales('app.search.maxTabReached.content')}
+          status="warning"
+          customPoppupBodyStyle="!mt-[70px]"
+          header={ManageLocales('app.search.maxTabReached')}
+          actionButtonData={[
+            {
+              variant: 'secondary',
+              label: ManageLocales('app.modal.cancel'),
+              handler: () => {
+                setIsDialogOpen(false);
+              },
+              customStyle: 'flex-1 h-10'
+            },
+            {
+              variant: 'primary',
+              label: ManageLocales('app.modal.manageTabs'),
+              handler: () => {
+                router.push(`/v2/search?active-tab=${SubRoutes.RESULT}-1`);
+                setIsDialogOpen(false);
+              },
+              customStyle: 'flex-1 h-10'
+            }
+          ]}
+        />
       );
       setIsDialogOpen(true);
     } else if (searchUrl && data?.count > MIN_SEARCH_FORM_COUNT) {

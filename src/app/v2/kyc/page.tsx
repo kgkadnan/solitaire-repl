@@ -13,9 +13,6 @@ import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import { ManageLocales } from '@/utils/v2/translate';
 import OtpInput from '@/components/v2/common/otp';
 import { useOtpVerificationStateManagement } from '@/components/v2/common/otp-verication/hooks/otp-verification-state-management';
-import errorSvg from '@public/v2/assets/icons/modal/error.svg';
-import confirmIcon from '@public/v2/assets/icons/modal/confirm.svg';
-import warningIcon from 'public/v2/assets/icons/modal/warning.svg';
 import {
   useVerifyEmailOTPMutation,
   useResendEmailOTPMutation,
@@ -37,7 +34,6 @@ import {
   kycScreenIdentifierNames,
   kycStatus
 } from '@/constants/enums/kyc';
-import ActionButton from '@/components/v2/common/action-button';
 import { DialogComponent } from '@/components/v2/common/dialog';
 import CommonPoppup from '../login/component/common-poppup';
 import CompanyDetail from './components/company-detail';
@@ -292,39 +288,28 @@ const KYC = () => {
   const handleResetButton = () => {
     setIsDialogOpen(true);
     setDialogContent(
-      <>
-        <div className="absolute left-[-84px] top-[-84px]">
-          <Image src={warningIcon} alt="warningIcon" />
-        </div>
-        <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-          <div>
-            <h1 className="text-headingS text-neutral900 font-medium">
-              Are you sure?
-            </h1>
-            <p className="text-neutral600 text-mRegular">
-              Do you want to restart KYC process
-            </p>
-          </div>
-          <ActionButton
-            actionButtonData={[
-              {
-                variant: 'secondary',
-                label: ManageLocales('app.modal.yes'),
-                handler: () => handleConfirmRestartKyc(),
-                customStyle: 'flex-1 w-full h-10'
-              },
-              {
-                variant: 'primary',
-                label: ManageLocales('app.modal.no'),
-                handler: () => {
-                  setIsDialogOpen(false);
-                },
-                customStyle: 'flex-1 w-full h-10'
-              }
-            ]}
-          />
-        </div>
-      </>
+      <CommonPoppup
+        content={'Do you want to restart KYC process'}
+        status="warning"
+        customPoppupBodyStyle="!mt-[70px]"
+        header={'Are you sure?'}
+        actionButtonData={[
+          {
+            variant: 'secondary',
+            label: ManageLocales('app.modal.yes'),
+            handler: () => handleConfirmRestartKyc(),
+            customStyle: 'flex-1 w-full h-10'
+          },
+          {
+            variant: 'primary',
+            label: ManageLocales('app.modal.no'),
+            handler: () => {
+              setIsDialogOpen(false);
+            },
+            customStyle: 'flex-1 w-full h-10'
+          }
+        ]}
+      />
     );
   };
 
@@ -361,36 +346,30 @@ const KYC = () => {
 
                     setIsDialogOpen(true);
                     setDialogContent(
-                      <>
-                        <div className="absolute left-[-84px] top-[-84px]">
-                          <Image src={warningIcon} alt="warningIcon" />
-                        </div>
-                        <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                          <div>
-                            <h1 className="text-headingS text-neutral900 font-medium">
-                              Do you want to resume KYC process or restart it?
-                            </h1>
-                          </div>
-                          <ActionButton
-                            actionButtonData={[
-                              {
-                                variant: 'secondary',
-                                label: ManageLocales('app.modal.no'),
-                                handler: () => handleResetButton(),
-                                customStyle: 'flex-1 w-full h-10'
-                              },
-                              {
-                                variant: 'primary',
-                                label: ManageLocales('app.modal.yes'),
-                                handler: () => {
-                                  setIsDialogOpen(false);
-                                },
-                                customStyle: 'flex-1 w-full h-10'
-                              }
-                            ]}
-                          />
-                        </div>
-                      </>
+                      <CommonPoppup
+                        content={''}
+                        status="warning"
+                        customPoppupBodyStyle="!mt-[70px]"
+                        header={
+                          'Do you want to resume KYC process or restart it?'
+                        }
+                        actionButtonData={[
+                          {
+                            variant: 'secondary',
+                            label: ManageLocales('app.modal.no'),
+                            handler: () => handleResetButton(),
+                            customStyle: 'flex-1 w-full h-10'
+                          },
+                          {
+                            variant: 'primary',
+                            label: ManageLocales('app.modal.yes'),
+                            handler: () => {
+                              setIsDialogOpen(false);
+                            },
+                            customStyle: 'flex-1 w-full h-10'
+                          }
+                        ]}
+                      />
                     );
                   }
                 }
@@ -882,28 +861,21 @@ const KYC = () => {
 
           setIsDialogOpen(true); // Show error dialog
           setDialogContent(
-            <>
-              <div className="absolute left-[-84px] top-[-84px]">
-                <Image src={errorSvg} alt="errorSvg" />
-              </div>
-              <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                <p className="text-neutral600 text-mRegular">
-                  {response?.error?.data?.message}
-                </p>
-                <ActionButton
-                  actionButtonData={[
-                    {
-                      variant: 'primary',
-                      label: ManageLocales('app.modal.okay'),
-                      handler: () => {
-                        setIsDialogOpen(false);
-                      },
-                      customStyle: 'flex-1 w-full h-10'
-                    }
-                  ]}
-                />
-              </div>
-            </>
+            <CommonPoppup
+              content={response?.error?.data?.message}
+              customPoppupBodyStyle="!mt-[70px]"
+              header={''}
+              actionButtonData={[
+                {
+                  variant: 'primary',
+                  label: ManageLocales('app.modal.okay'),
+                  handler: () => {
+                    setIsDialogOpen(false);
+                  },
+                  customStyle: 'flex-1 w-full h-10'
+                }
+              ]}
+            />
           );
         }
       })
@@ -912,28 +884,21 @@ const KYC = () => {
         setRejectedSteps(new Set(rejectedSteps));
         setIsDialogOpen(true); // Show error dialog
         setDialogContent(
-          <>
-            <div className="absolute left-[-84px] top-[-84px]">
-              <Image src={errorSvg} alt="errorSvg" />
-            </div>
-            <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-              <p className="text-neutral600 text-mRegular">
-                {error?.data?.message}
-              </p>
-              <ActionButton
-                actionButtonData={[
-                  {
-                    variant: 'primary',
-                    label: ManageLocales('app.modal.okay'),
-                    handler: () => {
-                      setIsDialogOpen(false);
-                    },
-                    customStyle: 'flex-1 w-full h-10'
-                  }
-                ]}
-              />
-            </div>
-          </>
+          <CommonPoppup
+            content={error?.data?.message}
+            customPoppupBodyStyle="!mt-[70px]"
+            header={''}
+            actionButtonData={[
+              {
+                variant: 'primary',
+                label: ManageLocales('app.modal.okay'),
+                handler: () => {
+                  setIsDialogOpen(false);
+                },
+                customStyle: 'flex-1 w-full h-10'
+              }
+            ]}
+          />
         );
       });
   };
@@ -970,56 +935,41 @@ const KYC = () => {
         dispatch(isEditingKYC(false));
         setIsDialogOpen(true);
         setDialogContent(
-          <>
-            <div className="absolute left-[-84px] top-[-84px]">
-              <Image src={confirmIcon} alt="confirmIcon" />
-            </div>
-            <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-              <div>
-                <h1 className="text-headingS text-neutral900">
-                  Your KYC has been submitted for approval
-                </h1>
-              </div>
-              <ActionButton
-                actionButtonData={[
-                  {
-                    variant: 'secondary',
-                    label: ManageLocales('app.modal.browseWebsite'),
-                    handler: () => router.push('/v2'),
-                    customStyle: 'w-full flex-1'
-                  }
-                ]}
-              />
-            </div>
-          </>
+          <CommonPoppup
+            content={''}
+            customPoppupBodyStyle="!mt-[70px]"
+            status="success"
+            header={'Your KYC has been submitted for approval'}
+            actionButtonData={[
+              {
+                variant: 'secondary',
+                label: ManageLocales('app.modal.browseWebsite'),
+                handler: () => router.push('/v2'),
+                customStyle: 'w-full flex-1'
+              }
+            ]}
+          />
         );
       })
       .catch(e => {
         setIsLoading(false);
         setIsDialogOpen(true); // Show error dialog
         setDialogContent(
-          <>
-            <div className="absolute left-[-84px] top-[-84px]">
-              <Image src={errorSvg} alt="errorSvg" />
-            </div>
-            <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-              <p className="text-neutral600 text-mRegular">
-                {e?.data?.message}
-              </p>
-              <ActionButton
-                actionButtonData={[
-                  {
-                    variant: 'primary',
-                    label: ManageLocales('app.modal.okay'),
-                    handler: () => {
-                      setIsDialogOpen(false);
-                    },
-                    customStyle: 'flex-1 w-full h-10'
-                  }
-                ]}
-              />
-            </div>
-          </>
+          <CommonPoppup
+            content={e?.data?.message}
+            customPoppupBodyStyle="!mt-[70px]"
+            header={''}
+            actionButtonData={[
+              {
+                variant: 'primary',
+                label: ManageLocales('app.modal.okay'),
+                handler: () => {
+                  setIsDialogOpen(false);
+                },
+                customStyle: 'flex-1 w-full h-10'
+              }
+            ]}
+          />
         );
       });
   };
@@ -1118,38 +1068,31 @@ const KYC = () => {
       } else {
         setIsDialogOpen(true);
         setDialogContent(
-          <div className="h-[200px]">
-            <div className="absolute left-[-84px] top-[-84px]">
-              <Image src={confirmIcon} alt="confirmIcon" />
-            </div>
-            <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-              <div>
-                <h1 className="text-headingS text-neutral900">Confirmation</h1>
-                <p className="text-neutral600 text-mRegular">
-                  Please review all the information you have entered before
-                  submitting the form!
-                </p>
-              </div>
-              <ActionButton
-                actionButtonData={[
-                  {
-                    variant: 'secondary',
-                    label: ManageLocales('app.modal.cancel'),
-                    handler: () => setIsDialogOpen(false),
-                    customStyle: 'w-full flex-1'
-                  },
-                  {
-                    variant: 'primary',
-                    label: ManageLocales('app.modal.submit'),
-                    handler: () => {
-                      kycSubmitted();
-                    },
-                    customStyle: 'w-full flex-1'
-                  }
-                ]}
-              />
-            </div>
-          </div>
+          <CommonPoppup
+            content={
+              'Please review all the information you have entered before submitting the form!'
+            }
+            status="success"
+            customPoppupBodyStyle="!mt-[65px]"
+            customPoppupStyle="h-[200px]"
+            header={'Confirmation'}
+            actionButtonData={[
+              {
+                variant: 'secondary',
+                label: ManageLocales('app.modal.cancel'),
+                handler: () => setIsDialogOpen(false),
+                customStyle: 'w-full flex-1'
+              },
+              {
+                variant: 'primary',
+                label: ManageLocales('app.modal.submit'),
+                handler: () => {
+                  kycSubmitted();
+                },
+                customStyle: 'w-full flex-1'
+              }
+            ]}
+          />
         );
       }
     }
@@ -1425,35 +1368,30 @@ const KYC = () => {
                         setIsInputDialogOpen(false);
                         setIsDialogOpen(true);
                         setDialogContent(
-                          <>
-                            <div className="absolute left-[-84px] top-[-84px]">
-                              <Image src={confirmIcon} alt="confirmIcon" />
-                            </div>
-                            <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                              <h1 className="text-headingS text-neutral900 font-medium">
-                                Your email has been verified successfully
-                              </h1>
-                              <ActionButton
-                                actionButtonData={[
-                                  {
-                                    variant: 'primary',
-                                    label: 'Next',
-                                    handler: () => {
-                                      handleStepperNext({
-                                        screenName:
-                                          filteredSteps[currentStepperStep]
-                                            ?.identifier,
-                                        currentState: currentStepperStep,
-                                        emailVerified: true
-                                      });
-                                      setIsDialogOpen(false);
-                                    },
-                                    customStyle: 'flex-1 w-full h-10'
-                                  }
-                                ]}
-                              />
-                            </div>
-                          </>
+                          <CommonPoppup
+                            content={''}
+                            status="success"
+                            customPoppupBodyStyle="!mt-[65px]"
+                            customPoppupStyle="h-[200px]"
+                            header={'Your email has been verified successfully'}
+                            actionButtonData={[
+                              {
+                                variant: 'primary',
+                                label: 'Next',
+                                handler: () => {
+                                  handleStepperNext({
+                                    screenName:
+                                      filteredSteps[currentStepperStep]
+                                        ?.identifier,
+                                    currentState: currentStepperStep,
+                                    emailVerified: true
+                                  });
+                                  setIsDialogOpen(false);
+                                },
+                                customStyle: 'flex-1 w-full h-10'
+                              }
+                            ]}
+                          />
                         );
                       }
                     })

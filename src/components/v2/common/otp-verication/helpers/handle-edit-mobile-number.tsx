@@ -1,9 +1,6 @@
 import { IOtp } from '..';
 import logger from 'logging/log-util';
 import CommonPoppup from '@/app/v2/login/component/common-poppup';
-import ActionButton from '../../action-button';
-import Image from 'next/image';
-import successIcon from '@public/v2/assets/icons/modal/confirm.svg';
 import { IToken } from '@/app/v2/register/interface';
 import { INVALID_PHONE } from '@/constants/error-messages/register';
 import { PHONE_REGEX } from '@/constants/validation-regex/regex';
@@ -60,28 +57,22 @@ export const handleEditMobileNumber = ({
         }));
         setIsDialogOpen(true);
         setDialogContent(
-          <>
-            <div className="absolute left-[-84px] top-[-84px]">
-              <Image src={successIcon} alt="successIcon" />
-            </div>
-            <h1 className="text-headingS text-neutral900">
-              OTP sent successfully
-            </h1>
-            <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-              <ActionButton
-                actionButtonData={[
-                  {
-                    variant: 'primary',
-                    label: 'Okay',
-                    handler: () => {
-                      setIsDialogOpen(false);
-                    },
-                    customStyle: 'flex-1 w-full h-10'
-                  }
-                ]}
-              />
-            </div>
-          </>
+          <CommonPoppup
+            content={''}
+            status="success"
+            customPoppupBodyStyle="!mt-[70px]"
+            header={'OTP sent successfully'}
+            actionButtonData={[
+              {
+                variant: 'primary',
+                label: 'Okay',
+                handler: () => {
+                  setIsDialogOpen(false);
+                },
+                customStyle: 'flex-1 w-full h-10'
+              }
+            ]}
+          />
         );
       })
       .catch((e: any) => {

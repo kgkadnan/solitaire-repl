@@ -1,10 +1,7 @@
 import React from 'react';
 import { NO_STONES_PICKED } from '@/constants/error-messages/saved';
-import ActionButton from '@/components/v2/common/action-button';
 import { ManageLocales } from '@/utils/v2/translate';
-import Image from 'next/image';
-import deleteIcon from '@public/v2/assets/icons/modal/bin.svg';
-import errorIcon from '@public/v2/assets/icons/modal/error.svg';
+import CommonPoppup from '@/app/v2/login/component/common-poppup';
 
 interface IDeleteSavedSearchHandler {
   selectedCheckboxes: string[];
@@ -63,63 +60,46 @@ export const deleteSavedSearchHandler = ({
               ', '
             )}. Please close the tab and then try deleting it.`;
       setDialogContent(
-        <>
-          {' '}
-          <div className="absolute left-[-84px] top-[-84px]">
-            <Image src={errorIcon} alt="errorIcon" />
-          </div>
-          <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-            <p className="text-neutral600 text-mRegular">{errorMessage}</p>
-
-            <ActionButton
-              actionButtonData={[
-                {
-                  variant: 'primary',
-                  label: ManageLocales('app.modal.okay'),
-                  handler: () => setIsDialogOpen(false),
-                  customStyle: 'flex-1 h-10'
-                }
-              ]}
-            />
-          </div>
-        </>
+        <CommonPoppup
+          content={errorMessage}
+          customPoppupBodyStyle="!mt-[70px]"
+          header={''}
+          actionButtonData={[
+            {
+              variant: 'primary',
+              label: ManageLocales('app.modal.okay'),
+              handler: () => setIsDialogOpen(false),
+              customStyle: 'flex-1 h-10'
+            }
+          ]}
+        />
       );
       setIsDialogOpen(true);
     } else {
       setDialogContent(
-        <>
-          {' '}
-          <div className="absolute left-[-84px] top-[-84px]">
-            <Image src={deleteIcon} alt="deleteIcon" />
-          </div>
-          <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-            <div>
-              <h1 className="text-headingS text-neutral900">Are you sure?</h1>
-              <p className="text-neutral600 text-mRegular">
-                {ManageLocales('app.savedSearch.deleteConfirmation')}
-              </p>
-            </div>
-            <ActionButton
-              actionButtonData={[
-                {
-                  variant: 'secondary',
-                  label: ManageLocales('app.modal.no'),
-                  handler: () => setIsDialogOpen(false),
-                  customStyle: 'flex-1 h-10'
-                },
-                {
-                  variant: 'primary',
-                  label: ManageLocales('app.modal.yes'),
-                  handler: () => {
-                    setIsDialogOpen(false);
-                    handleDelete();
-                  },
-                  customStyle: 'flex-1 h-10'
-                }
-              ]}
-            />
-          </div>
-        </>
+        <CommonPoppup
+          status="delete"
+          content={ManageLocales('app.savedSearch.deleteConfirmation')}
+          customPoppupBodyStyle="!mt-[70px]"
+          header={'Are you sure?'}
+          actionButtonData={[
+            {
+              variant: 'secondary',
+              label: ManageLocales('app.modal.no'),
+              handler: () => setIsDialogOpen(false),
+              customStyle: 'flex-1 h-10'
+            },
+            {
+              variant: 'primary',
+              label: ManageLocales('app.modal.yes'),
+              handler: () => {
+                setIsDialogOpen(false);
+                handleDelete();
+              },
+              customStyle: 'flex-1 h-10'
+            }
+          ]}
+        />
       );
       setIsDialogOpen(true);
     }
