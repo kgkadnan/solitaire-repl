@@ -3,14 +3,74 @@ import { Skeleton } from '@mui/material';
 
 const DataTableSkeleton = () => {
   // Adjust the number of rows and columns as needed or make them dynamic
-  const skeletonRows = Array.from({ length: 11 });
+  const skeletonRows = Array.from({ length: 10 });
   const skeletonCols = Array.from({ length: 15 });
   return (
     <div className="rounded-[4px]">
-      <div className="h-[58px] bg-neutral0 border-b border-neutral200 rounded-t-[8px]"></div>
+      <div className="h-[58px] bg-neutral0 flex justify-between items-center px-3 border-b border-neutral200 rounded-t-[8px]">
+        <div>
+          <Skeleton
+            variant="rectangular"
+            height={'19px'}
+            width={'137px'}
+            animation="wave"
+          />
+        </div>
+        <div className="flex gap-3">
+          <Skeleton
+            variant="rectangular"
+            height={'19px'}
+            width={'137px'}
+            animation="wave"
+          />
+          <Skeleton
+            variant="rectangular"
+            height={'19px'}
+            width={'137px'}
+            animation="wave"
+          />
+          <Skeleton
+            variant="rectangular"
+            height={'19px'}
+            width={'137px'}
+            animation="wave"
+          />
+        </div>
+      </div>
       <div>
         <div className="bg-[#E3E3E3] flex items-center h-[35px] px-2"></div>
-        <div className="overflow-x-auto">
+        <div className="h-[7px]"></div>
+        <div className="h-[51px] bg-neutral0 flex justify-between items-center px-3 border-y border-neutral200 ">
+          <div>
+            <Skeleton
+              variant="rectangular"
+              height={'19px'}
+              width={'137px'}
+              animation="wave"
+            />
+          </div>
+          <div className="flex gap-3">
+            <Skeleton
+              variant="rectangular"
+              height={'19px'}
+              width={'137px'}
+              animation="wave"
+            />
+            <Skeleton
+              variant="rectangular"
+              height={'19px'}
+              width={'137px'}
+              animation="wave"
+            />
+            <Skeleton
+              variant="rectangular"
+              height={'19px'}
+              width={'137px'}
+              animation="wave"
+            />
+          </div>
+        </div>
+        <div className="overflow-auto h-[56vh]">
           <table className="min-w-full divide-y divide-transparent">
             <tbody className="divide-y divide-transparent">
               {skeletonRows.map((_, rowIndex) => (
@@ -25,7 +85,7 @@ const DataTableSkeleton = () => {
                         height={'32px'}
                         width={'73px'}
                         animation="wave"
-                        className="w-full border-b-[1px] border-neutral200"
+                        className="w-full"
                       />
                     </td>
                   ))}
@@ -36,7 +96,7 @@ const DataTableSkeleton = () => {
                       height={'32px'}
                       width={'32px'}
                       animation="wave"
-                      className="w-full border-b-[1px] border-neutral200"
+                      className="w-full"
                     />
                   </td>
                 </tr>
