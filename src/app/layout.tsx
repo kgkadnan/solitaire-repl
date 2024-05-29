@@ -147,7 +147,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
                 s.id = 'zsiqscript';
                 s.defer = true;
                 s.src = 'https://salesiq.zoho.com/widget';
-                t = d.getElementsByTagName('script')[0];
+                t = d.getElementsByTagName('script')[3];
                 t.parentNode.insertBefore(s, t);
               `
           }}
