@@ -18,6 +18,7 @@ import Head from 'next/head';
 import AppDownloadPopup from '@/components/v2/common/alert-pop-for-mobile';
 import InvalidCreds from './v2/login/component/invalid-creds';
 import { DialogComponent } from '@/components/v2/common/dialog';
+// import SalesIQWidget from '@/components/v2/common/sales-iq';
 
 const store = setupStore();
 
@@ -134,7 +135,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
           </ThemeProviders>
         </Provider>
         <SpeedInsights />
-        <script
+        {/* <script
           dangerouslySetInnerHTML={{
             __html: `
                 window.$zoho = window.$zoho || {};
@@ -151,7 +152,29 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
                 t.parentNode.insertBefore(s, t);
               `
           }}
+        /> */}
+        {/* <script id="salesIQScript" data-nscript="afterInteractive">
+                    var $zoho=$zoho || {};$zoho.salesiq = $zoho.salesiq || {widgetcode:'43ee9060e96f7e50cae7a67c8d0218b72e02ccde1e6b322c35e87a3bde010eb4', values:{},ready:function(){}};var d=document;s=d.createElement("script");s.type="text/javascript";s.id="zsiqscript";s.defer=true;s.src='https://salesiq.zoho.com/widget';t=d.getElementsByTagName("script")[0];t.parentNode.insertBefore(s,t);
+                </script> */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+                window.$zoho = window.$zoho || {};
+                window.$zoho.salesiq = window.$zoho.salesiq || {
+                  widgetcode: 'siq7b5017d0f4306a5933c325124d7b63bc87c3e317b901fc901e55322d5f5b8f6a'
+                };
+                var d = document;
+                s = d.createElement('script');
+                s.type = 'text/javascript';
+                s.id = 'zsiqscript';
+                s.defer = true;
+                s.src = 'https://salesiq.zoho.com/widget';
+                t = d.getElementsByTagName('script')[0];
+                t.parentNode.insertBefore(s, t);
+              `
+          }}
         />
+        {/* <SalesIQWidget /> */}
       </body>
     </html>
   );
