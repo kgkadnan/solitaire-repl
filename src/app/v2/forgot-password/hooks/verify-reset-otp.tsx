@@ -1,5 +1,6 @@
 import CommonPoppup from '@/app/v2/login/component/common-poppup';
 import { IToken } from '../../register/interface';
+import { ManageLocales } from '@/utils/v2/translate';
 
 interface IHandleResetOTP {
   otpValues: string[];
@@ -45,7 +46,16 @@ export const handleResetOTP = ({
         <CommonPoppup
           content=""
           header={e?.data?.message}
-          handleClick={() => setIsDialogOpen(false)}
+          actionButtonData={[
+            {
+              variant: 'primary',
+              label: ManageLocales('app.modal.okay'),
+              handler: () => {
+                setIsDialogOpen(false);
+              },
+              customStyle: 'flex-1 w-full h-10'
+            }
+          ]}
         />
       );
     });

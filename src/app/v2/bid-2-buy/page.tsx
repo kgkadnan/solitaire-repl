@@ -31,8 +31,6 @@ import {
   MRT_RowSelectionState,
   MRT_TablePagination
 } from 'material-react-table';
-import warningIcon from '@public/v2/assets/icons/modal/warning.svg';
-import Image from 'next/image';
 import useUser from '@/lib/use-auth';
 import { DiamondDetailsComponent } from '@/components/v2/common/detail-page';
 import { getShapeDisplayName } from '@/utils/v2/detail-page';

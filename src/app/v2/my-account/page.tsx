@@ -5,7 +5,7 @@ import kamPhoto from '@public/v2/assets/icons/my-account/KAM- Photo.svg';
 import uploadIcon from '@public/v2/assets/icons/my-account/uploadIcon.svg';
 import blueTickIcon from '@public/v2/assets/icons/my-account/blue-tick-icon.svg';
 import greyTickIcon from '@public/v2/assets/icons/my-account/grey-tick-icon.svg';
-import { kycStatus } from '@/constants/enums/kyc';
+import { kycStatus, myAccount } from '@/constants/enums/kyc';
 import Mail from '@public/v2/assets/icons/my-account/mail.svg?url';
 import Phone from '@public/v2/assets/icons/my-account/phone.svg?url';
 import { ManageLocales } from '@/utils/v2/translate';
@@ -29,7 +29,6 @@ import {
   deleteProfileStore
 } from '@/features/profile/profile-update-slice';
 import logger from 'logging/log-util';
-import { myAccount } from '@/constants/enums/kyc';
 
 interface IUserAccountInfo {
   customer: {

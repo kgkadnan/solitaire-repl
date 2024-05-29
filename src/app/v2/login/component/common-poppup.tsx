@@ -26,6 +26,7 @@ interface ICommonPoppupProps {
     tooltip?: string;
   }[];
   customPoppupBodyStyle?: string;
+  customPoppupStyle?: string;
 }
 
 const CommonPoppup: React.FC<ICommonPoppupProps> = ({
@@ -35,10 +36,13 @@ const CommonPoppup: React.FC<ICommonPoppupProps> = ({
   buttonText,
   status,
   actionButtonData,
+  customPoppupStyle,
   customPoppupBodyStyle
 }) => {
   return (
-    <div className="flex gap-[12px] flex-col items-center">
+    <div
+      className={`flex gap-[12px] flex-col items-center ${customPoppupStyle}`}
+    >
       <div className="absolute left-[-84px] top-[-84px]">
         <Image
           src={
@@ -48,7 +52,13 @@ const CommonPoppup: React.FC<ICommonPoppupProps> = ({
               ? warningIcon
               : errorIcon
           }
-          alt="errorIcon"
+          alt={
+            status === 'success'
+              ? 'successIcon'
+              : status === 'warning'
+              ? 'warningIcon'
+              : 'errorIcon'
+          }
         />
       </div>
       <div
@@ -74,7 +84,10 @@ const CommonPoppup: React.FC<ICommonPoppupProps> = ({
         )}
 
         {actionButtonData && actionButtonData.length > 0 && (
-          <ActionButton actionButtonData={actionButtonData} />
+          <ActionButton
+            actionButtonData={actionButtonData}
+            containerStyle="z-[1000]"
+          />
         )}
       </div>
     </div>

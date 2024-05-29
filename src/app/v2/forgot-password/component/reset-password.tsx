@@ -10,8 +10,6 @@ import { PasswordField } from '@/components/v2/common/input-field/password';
 import { PASSWORD_REGEX } from '@/constants/validation-regex/regex';
 import CommonPoppup from '../../login/component/common-poppup';
 import { useChangePasswordMutation } from '@/features/api/change-password';
-import successIcon from '@public/v2/assets/icons/modal/confirm.svg';
-import ActionButton from '@/components/v2/common/action-button';
 import useUser from '@/lib/use-auth';
 
 const ResetComponent = ({ setIsDialogOpen, setDialogContent, token }: any) => {
@@ -40,40 +38,42 @@ const ResetComponent = ({ setIsDialogOpen, setDialogContent, token }: any) => {
       if (res.error) {
         setIsDialogOpen(true);
         setDialogContent(
-          <div>
-            <CommonPoppup
-              content=""
-              header={res.error.data.message}
-              handleClick={() => setIsDialogOpen(false)}
-            />
-          </div>
+          <CommonPoppup
+            content=""
+            header={res?.error.data.message}
+            actionButtonData={[
+              {
+                variant: 'primary',
+                label: ManageLocales('app.modal.okay'),
+                handler: () => {
+                  setIsDialogOpen(false);
+                },
+                customStyle: 'flex-1 w-full h-10'
+              }
+            ]}
+          />
         );
       } else {
         setIsDialogOpen(true);
         setDialogContent(
-          <div>
-            <div className="absolute left-[-84px] top-[-84px]">
-              <Image src={successIcon} alt="successIcon" />
-            </div>
-            <h1 className="text-headingS text-neutral900">
-              Password reset successful. For security, you were logged out from
-              all devices.
-            </h1>
-            <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-              <ActionButton
-                actionButtonData={[
-                  {
-                    variant: 'primary',
-                    label: 'Okay',
-                    handler: () => {
-                      setIsDialogOpen(false), router.push('/v2/login');
-                    },
-                    customStyle: 'flex-1 w-full h-10'
-                  }
-                ]}
-              />
-            </div>
-          </div>
+          <CommonPoppup
+            status="success"
+            content={''}
+            customPoppupBodyStyle="mt-[70px]"
+            header={
+              'Password reset successful. For security, you were logged out from all devices.'
+            }
+            actionButtonData={[
+              {
+                variant: 'primary',
+                label: 'Okay',
+                handler: () => {
+                  setIsDialogOpen(false), router.push('/v2/login');
+                },
+                customStyle: 'flex-1 w-full h-10'
+              }
+            ]}
+          />
         );
       }
     } else {
