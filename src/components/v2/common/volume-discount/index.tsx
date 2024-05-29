@@ -18,8 +18,11 @@ const VolumeDiscount: React.FC<any> = ({
     if (expiryTime) {
       const currentTime: any = new Date();
       const targetTime: any = new Date(expiryTime!);
-      const timeDiff: any = targetTime - currentTime;
-
+      let timeDiff: any = targetTime - currentTime;
+      if (timeDiff <= 0) {
+        // If the expiry time has passed, set the time difference to 48 hours
+        timeDiff = 48 * 60 * 60 * 1000;
+      }
       setTimeDifference(timeDiff);
     }
   }, [expiryTime]);
