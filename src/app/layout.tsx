@@ -18,6 +18,7 @@ import Head from 'next/head';
 import AppDownloadPopup from '@/components/v2/common/alert-pop-for-mobile';
 import InvalidCreds from './v2/login/component/invalid-creds';
 import { DialogComponent } from '@/components/v2/common/dialog';
+import SalesIQWidget from '@/components/v2/common/sales-iq';
 
 const store = setupStore();
 
@@ -134,7 +135,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
           </ThemeProviders>
         </Provider>
         <SpeedInsights />
-        <script
+        {/* <script
           dangerouslySetInnerHTML={{
             __html: `
                 window.$zoho = window.$zoho || {};
@@ -151,7 +152,8 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
                 t.parentNode.insertBefore(s, t);
               `
           }}
-        />
+        /> */}
+        <SalesIQWidget />
       </body>
     </html>
   );

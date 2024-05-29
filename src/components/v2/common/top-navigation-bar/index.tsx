@@ -215,7 +215,7 @@ const TopNavigationBar = ({
         <Popover>
           <PopoverTrigger className="flex justify-center">
             <Avatar className="bg-primaryMain flex items-center justify-center">
-              {imageUrl.length ? (
+              {imageUrl?.length ? (
                 <img src={imageUrl} alt="profile" />
               ) : (
                 <p className="text-center text-mRegular text-neutral0">
