@@ -1,62 +1,51 @@
 import React, { useState } from 'react';
-import { Meta, Story } from '@storybook/react';
-import { action } from '@storybook/addon-actions';
-import '../components/carat-tile.module.scss'; // Ensure this path is correct for your styles
+import { Story, Meta } from '@storybook/react';
 import CaratTile, { ICaratTileProps } from '@/components/v2/common/carat-tile';
 
+// This is the metadata for your story
 export default {
   title: 'Components/CaratTile',
   component: CaratTile
 } as Meta;
 
-const caratTileData = ['1.0', '1.5', '2.0', '2.5', '3.0'];
-
+// This is the template for your story
 const Template: Story<ICaratTileProps> = args => {
+  // We'll use useState to simulate the state changes
   const [selectedcaratTile, setSelectedcaratTile] = useState<string[]>([]);
-
-  const handlecaratTileClick = ({
-    data,
-    selectedcaratTile,
-    setSelectedcaratTile
-  }: {
-    data: string;
-    selectedcaratTile: string[];
-    setSelectedcaratTile: React.Dispatch<React.SetStateAction<string[]>>;
-  }) => {
-    const newSelectedTiles = selectedcaratTile.includes(data)
-      ? selectedcaratTile.filter(item => item !== data)
-      : [...selectedcaratTile, data];
-    setSelectedcaratTile(newSelectedTiles);
-    action('CaratTile clicked')({ data, newSelectedTiles });
-  };
 
   return (
     <CaratTile
       {...args}
       selectedcaratTile={selectedcaratTile}
       setSelectedcaratTile={setSelectedcaratTile}
-      handlecaratTileClick={handlecaratTileClick}
     />
   );
 };
 
+// This is the default story
 export const Default = Template.bind({});
 Default.args = {
-  caratTileData
+  caratTileData: ['Option 1', 'Option 2', 'Option 3'],
+  handlecaratTileClick: (data: any) => {
+    console.log('Clicked on:', data);
+  }
 };
 
-export const SomeTilesSelected = Template.bind({});
-SomeTilesSelected.args = {
-  caratTileData,
-  selectedcaratTile: ['1.0', '2.5'],
-  setSelectedcaratTile: action('setSelectedcaratTile'),
-  handlecaratTileClick: action('handlecaratTileClick')
+// Additional stories can be added to simulate different scenarios or actions
+export const WithSelectedOption = Template.bind({});
+WithSelectedOption.args = {
+  ...Default.args,
+  selectedcaratTile: ['Option 2'] // Simulating one option already selected
 };
 
-export const AllTilesSelected = Template.bind({});
-AllTilesSelected.args = {
-  caratTileData,
-  selectedcaratTile: ['1.0', '1.5', '2.0', '2.5', '3.0'],
-  setSelectedcaratTile: action('setSelectedcaratTile'),
-  handlecaratTileClick: action('handlecaratTileClick')
+export const WithNoOptions = Template.bind({});
+WithNoOptions.args = {
+  ...Default.args,
+  caratTileData: [] // Simulating no options available
+};
+
+export const WithLongList = Template.bind({});
+WithLongList.args = {
+  ...Default.args,
+  caratTileData: Array.from({ length: 10 }, (_, i) => `Option ${i + 1}`) // Simulating a long list of options
 };

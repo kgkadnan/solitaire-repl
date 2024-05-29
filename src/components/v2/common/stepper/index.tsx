@@ -9,7 +9,7 @@ import Rejected from '@public/v2/assets/icons/stepper/rejected.svg';
 import ActionButton from '../action-button';
 import { ManageLocales } from '@/utils/v2/translate';
 
-interface IStepperComponentProps {
+export interface IStepperComponentProps {
   currentStepperStep: number;
   setCurrentStepperStep: any;
   completedSteps: any;

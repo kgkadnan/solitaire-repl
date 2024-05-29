@@ -1,7 +1,7 @@
 import React from 'react';
 import ActionButton from '../action-button';
 import Image, { StaticImageData } from 'next/image';
-interface IEmptyScreenProps {
+export interface IEmptyScreenProps {
   message: string;
   label: string;
   imageSrc: string | StaticImageData;
