@@ -170,7 +170,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
                 s.defer = true;
                 s.src = 'https://salesiq.zoho.com/widget';
                 t = d.getElementsByTagName('script')[0];
-                t.parentNode.insertBefore(s, t);
+                t.parentNode.insertBefore(s,t);
               `
           }}
         />
