@@ -87,7 +87,7 @@ import { notificationBadge } from '@/features/notification/notification-slice';
 import { loadImages } from '@/components/v2/common/detail-page/helpers/load-images';
 import { checkImage } from '@/components/v2/common/detail-page/helpers/check-image';
 import CompareStone from './search/result/components/compare-stone';
-import VolumeDiscount from '@/components/v2/common/volume-discount';
+// import VolumeDiscount from '@/components/v2/common/volume-discount';
 import EmptyScreen from '@/components/v2/common/empty-screen';
 import emptyOrderSvg from '@public/v2/assets/icons/empty-order.svg';
 import empty from '@public/v2/assets/icons/saved-search/empty-screen-saved-search.svg';
