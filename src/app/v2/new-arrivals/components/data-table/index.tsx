@@ -145,7 +145,10 @@ const NewArrivalDataTable = ({
   });
 
   const [paginatedData, setPaginatedData] = useState<any>([]);
-
+  const [globalFilter, setGlobalFilter] = useState('');
+  useEffect(() => {
+    console.log(rows, 'data', globalFilter);
+  }, [globalFilter]);
   useEffect(() => {
     if (activeTab !== 2) {
       // Calculate the start and end indices for the current page
@@ -426,7 +429,8 @@ const NewArrivalDataTable = ({
     manualPagination: true,
     rowCount: rows.length,
     onPaginationChange: setPagination, //hoist pagination state to your state when it changes internally
-
+    manualFiltering: true,
+    onGlobalFilterChange: setGlobalFilter,
     icons: {
       SearchIcon: () => (
         <Image src={searchIcon} alt={'searchIcon'} className="mr-[6px]" />
@@ -517,6 +521,7 @@ const NewArrivalDataTable = ({
 
     sortDescFirst: false,
     initialState: {
+      globalFilter,
       showGlobalFilter: true,
       expanded: true,
       grouping: ['shape'],
