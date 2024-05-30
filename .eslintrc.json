@@ -13,12 +13,14 @@
     "no-undef": "off",
     "react-hooks/exhaustive-deps": "off",
     "no-case-declarations": "off",
-    "no-unused-vars": "off",
     "no-unescaped-entities": "off",
     "react/no-unescaped-entities": "off",
     "react-hooks/rules-of-hooks": "off",
     //  Avoid Unused Variables and Imports
-    // "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
+    "no-unused-vars": [
+      "error",
+      { "argsIgnorePattern": "^_", "varsIgnorePattern": "^[A-Z_]+$" }
+    ],
 
     // // Nullish Coalescing and Optional Chaining
     // "@typescript-eslint/no-non-null-assertion": "error",
@@ -34,17 +36,17 @@
     "eqeqeq": ["error", "always", { "null": "ignore" }],
 
     //  Interface Naming Conventions
-    // "@typescript-eslint/naming-convention": [
-    //   "error",
-    //   {
-    //     "selector": "interface",
-    //     "format": ["PascalCase"],
-    //     "custom": {
-    //       "regex": "^I[A-Z]",
-    //       "match": true
-    //     }
-    //   }
-    // ],
+    "@typescript-eslint/naming-convention": [
+      "error",
+      {
+        "selector": "interface",
+        "format": ["PascalCase"],
+        "custom": {
+          "regex": "^I[A-Z]",
+          "match": true
+        }
+      }
+    ],
 
     //Prettier formatting
     "prettier/prettier": [

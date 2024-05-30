@@ -1,10 +1,10 @@
-import { BidValues } from '@/app/v2/bid-2-buy/components/data-table';
+import { IBidValues } from '@/app/v2/bid-2-buy/components/data-table';
 
 export const handleIncrementDiscount = (
   rowId: string,
   currentMaxBid: any,
   setBidError: React.Dispatch<React.SetStateAction<string>>,
-  setBidValues: React.Dispatch<React.SetStateAction<BidValues>>
+  setBidValues: React.Dispatch<React.SetStateAction<IBidValues>>
 ) => {
   // Retrieve the current_max_bid for the row from the rows data
   setBidError('');

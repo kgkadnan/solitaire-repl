@@ -72,9 +72,10 @@ const authorizedLogin = (WrappedComponent: React.ComponentType) => {
       setIsLoading(false);
     }, [authToken, userLoggedOut, router]);
 
-    if (isLoading) {
+    if (isLoading && currentPath !== '/v2' && currentPath !== '/v2/search') {
       return <CustomKGKLoader />; // Or any other loading indicator
     }
+
     const handleNudgeClose = () => {
       setShowKycNudge(false);
       localStorage.setItem('show-nudge', 'MINI');
@@ -97,7 +98,6 @@ const authorizedLogin = (WrappedComponent: React.ComponentType) => {
               />
             }
             isOpens={open}
-            setIsOpen={setOpen}
           />
           <div className="flex w-full">
             <SideNavigationBar isInMaintenanceMode={isInMaintenanceMode} />

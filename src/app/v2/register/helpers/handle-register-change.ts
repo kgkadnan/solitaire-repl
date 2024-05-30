@@ -1,5 +1,4 @@
 import { IRegister } from '../interface';
-import { validateField } from './validate-field';
 
 interface IHandleChange {
   event:

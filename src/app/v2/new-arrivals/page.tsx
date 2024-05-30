@@ -82,7 +82,6 @@ const NewArrivals = () => {
   const mapColumns = (columns: any) =>
     columns
       ?.filter(({ is_disabled }: any) => !is_disabled)
-      // ?.sort(({ sequence: a }: any, { sequence: b }: any) => a - b)
       .map(({ accessor, short_label, label }: any) => {
         const commonProps = {
           accessorKey: accessor,
@@ -167,8 +166,7 @@ const NewArrivals = () => {
             return { ...commonProps, Cell: RenderLab };
           case 'location':
             return { ...commonProps, Cell: RednderLocation };
-          // case 'lot_id':
-          //   return { ...commonProps, Cell: RenderNewArrivalLotId };
+
           case 'price_per_carat':
             return { ...commonProps, Cell: RenderNewArrivalPricePerCarat };
 
@@ -298,7 +296,7 @@ const NewArrivals = () => {
     }
   }, []);
   useEffect(() => {
-    const handleRequestGetBidStones = (data: any) => {
+    const handleRequestGetBidStones = (_data: any) => {
       socketManager.emit('get_bid_stones');
     };
     socketManager.on('bid_stones', handleBidStones);
@@ -674,7 +672,6 @@ const NewArrivals = () => {
       <DialogComponent
         dialogContent={modalState.dialogContent}
         isOpens={modalState.isDialogOpen}
-        setIsOpen={modalSetState.setIsDialogOpen}
       />
 
       {isDetailPage ? (

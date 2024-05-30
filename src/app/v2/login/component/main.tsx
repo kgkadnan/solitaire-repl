@@ -37,7 +37,6 @@ import {
 } from '@/components/v2/common/otp-verication/hooks/otp-verification-state-management';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
-import Head from 'next/head';
 import { IAuthDataResponse } from '../interface';
 import InvalidCreds from './invalid-creds';
 import LoginComponent from './login';
@@ -117,11 +116,6 @@ const Login = () => {
     setOTPVerificationFormState,
     setOTPVerificationFormErrors
   } = otpVerificationSetState;
-
-  // const { data: verifyNumber } = useVerifyPhoneQuery({
-  //   country_code: otpVerificationFormState.countryCode,
-  //   phone_number: otpVerificationFormState.otpMobileNumber
-  // });
 
   useEffect(() => {
     if (isTokenChecked) {
@@ -319,19 +313,14 @@ const Login = () => {
           <LoginComponent
             setPhoneNumber={setPhoneNumber}
             setPhoneErrorText={setPhoneErrorText}
-            // setErrorText={setErrorText}
             setPasswordErrorText={setPasswordErrorText}
             setPassword={setPassword}
-            // setIsError={setIsError}
             handleKeyDown={handleKeyDown}
             phoneNumber={phoneNumber}
             phoneErrorText={phoneErrorText}
             password={password}
             passwordErrorText={passwordErrorText}
             handleLogin={handleLogin}
-            // setIsLoading={setIsLoading}
-            // isError={isError}
-            // errorText={errorText}
           />
         );
       case 'otpVerification':
@@ -366,11 +355,7 @@ const Login = () => {
     <>
       {isLoading && <CustomKGKLoader />}
 
-      <DialogComponent
-        dialogContent={dialogContent}
-        isOpens={isDialogOpen}
-        setIsOpen={setIsDialogOpen}
-      />
+      <DialogComponent dialogContent={dialogContent} isOpens={isDialogOpen} />
       <InputDialogComponent
         isOpen={isInputDialogOpen}
         onClose={() => setIsInputDialogOpen(false)}

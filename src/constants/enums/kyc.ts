@@ -1,25 +1,3 @@
-export enum fieldType {
-  FLOATING_INPUT = 'floatingInput',
-  PHONE_NUMBER = 'phoneNumber',
-  CHECKBOX = 'checkbox',
-  RADIO = 'radio',
-  ATTACHMENT = 'attachment'
-}
-
-export enum supportedMediaUnit {
-  MB = 'MB',
-  KB = 'KB'
-}
-
-export enum supportedMediaFormat {
-  JPEG = 'JPEG',
-  PNG = 'PNG',
-  JPG = 'JPG',
-  PDF = 'PDF',
-  DOC = 'DOC',
-  DOCX = 'DOCX'
-}
-
 export enum supportedCountries {
   INDIA = 'India',
   BELGIUM = 'Belgium',
@@ -75,4 +53,12 @@ export enum kycAttachmentIdentifierNames {
 export enum kycOption {
   OFFLINE = 'offline',
   ONLINE = 'online'
+}
+export enum myAccount {
+  TABLE_PREFRENCES = 'table prefrences',
+  CHANGE_PASSWORD = 'change password',
+  NOTIFICATION_PREFRENCES = 'notification preferences',
+  TERM_AND_CONDITION = 'term & condition',
+  PRIVACY_POLICY = 'privacy policy',
+  PROFILE_UPDATE = 'profile update'
 }

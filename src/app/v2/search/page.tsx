@@ -162,8 +162,6 @@ const Search = () => {
     removeDataIndex: number,
     yourSelection: ISavedSearch[]
   ) => {
-    // setIsLoading(false)
-
     let closeSpecificSearch = yourSelection.filter(
       (_items: ISavedSearch, index: number) => {
         return index !== removeDataIndex - 1;
@@ -235,7 +233,6 @@ const Search = () => {
                         updateSavedSearch(updateSaveSearchData)
                           .unwrap()
                           .then(() => {
-                            // setIsInputDialogOpen(true);
                             setIsDialogOpen(false);
                             closeSearch(id, yourSelection);
                           })
@@ -245,7 +242,6 @@ const Search = () => {
                       } else {
                         setIsInputDialogOpen(true);
                         setIsDialogOpen(false);
-                        // closeSearch(id, yourSelection);
                       }
                     },
                     customStyle: 'flex-1 h-10'
@@ -322,9 +318,6 @@ const Search = () => {
                 variant: 'primary',
                 label: ManageLocales('app.modal.save'),
                 handler: () => {
-                  let yourSelection = JSON.parse(
-                    localStorage.getItem('Search')!
-                  );
                   if (!saveSearchName.length) {
                     setInputError('Please enter name');
                   } else {
@@ -339,7 +332,6 @@ const Search = () => {
                         setSaveSearchName,
                         setInputError
                       });
-                      // closeSearch(id, yourSelection);
                     }
                   }
                 },
@@ -356,7 +348,6 @@ const Search = () => {
       <DialogComponent
         dialogContent={dialogContent}
         isOpens={isDialogOpen}
-        setIsOpen={setIsDialogOpen}
         dialogStyle={{ dialogContent: isAddDemand ? 'min-h-[280px]' : '' }}
       />
       <InputDialogComponent
@@ -389,7 +380,7 @@ const Search = () => {
           setIsAddDemand={setIsAddDemand}
         />
       ) : subRoute === SubRoutes.SAVED_SEARCH ? (
-        <SavedSearch setIsLoading={setIsLoading} isLoading={isLoading} />
+        <SavedSearch setIsLoading={setIsLoading} />
       ) : activeTab === -1 ? (
         <div className="h-screen">
           {' '}

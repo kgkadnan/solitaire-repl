@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { Link } from 'react-scroll';
 import { kycStatus } from '@/constants/enums/kyc';
 
-interface IAnchorLinkNavigation {
+export interface IAnchorLinkNavigation {
   anchorNavigations: string[];
 }
 const AnchorLinkNavigation: React.FC<IAnchorLinkNavigation> = ({
@@ -17,7 +17,6 @@ const AnchorLinkNavigation: React.FC<IAnchorLinkNavigation> = ({
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
 
   const handleScroll = (scrollOffset: number) => {
-    // setActiveLink('')
     if (containerRef.current) {
       containerRef.current.scrollBy({
         left: scrollOffset,

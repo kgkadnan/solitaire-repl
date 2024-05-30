@@ -145,7 +145,7 @@ const Notification = ({
   }, [authToken, socketManager]);
 
   useEffect(() => {
-    socketManager.on('notification', data => _handleNotification());
+    socketManager.on('notification', _data => _handleNotification());
 
     // Cleanup on component unmount
     return () => {
@@ -184,7 +184,7 @@ const Notification = ({
   const readAllNotificationHandler = () => {
     readAllNotification({})
       .unwrap()
-      .then(res => {
+      .then(_res => {
         setNotificationData(prevData =>
           prevData.map(notification => {
             if (!notification.read_at) {
@@ -209,7 +209,7 @@ const Notification = ({
           isInMaintenanceMode &&
           'bg-neutral100 cursor-not-allowed w-[40px] rounded-[4px]'
         }`}
-        onClick={e => {
+        onClick={_e => {
           callNotification();
         }}
       >
@@ -258,7 +258,6 @@ const Notification = ({
                       <div
                         key={items.id}
                         onClick={() => {
-                          // !items.read_at.length &&
                           handleReadNotification(items.id);
                         }}
                         className={`${

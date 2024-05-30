@@ -1,7 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { createBaseQuery } from './base-query';
 
-// const header =
 export const dashboardApi = createApi({
   reducerPath: 'dashboardReducer',
   baseQuery: createBaseQuery(),
@@ -11,7 +10,6 @@ export const dashboardApi = createApi({
     getCustomer: builder.query({
       query: () => `store/customers/me`,
       providesTags: ['dashboard']
-      // keepUnusedDataFor:0
     }),
     getBidHistory: builder.query({
       query: () => `store/customers/me/bid-history`

@@ -12,7 +12,6 @@ import { useGetCustomerQuery } from '@/features/api/dashboard';
 import fireSvg from '@public/v2/assets/icons/data-table/fire-icon.svg';
 import { useEffect, useMemo, useState } from 'react';
 import searchIcon from '@public/v2/assets/icons/data-table/search-icon.svg';
-import micIcon from '@public/v2/assets/icons/dashboard/mic.svg';
 import editIcon from '@public/v2/assets/icons/saved-search/edit-button.svg';
 import threeDotsSvg from '@public/v2/assets/icons/threedots.svg';
 import BidHammer from '@public/v2/assets/icons/dashboard/bid-hammer.svg';
@@ -92,7 +91,6 @@ import VolumeDiscount from '@/components/v2/common/volume-discount';
 import EmptyScreen from '@/components/v2/common/empty-screen';
 import emptyOrderSvg from '@public/v2/assets/icons/empty-order.svg';
 import empty from '@public/v2/assets/icons/saved-search/empty-screen-saved-search.svg';
-import { Skeleton } from '@/components/v2/ui/skeleton';
 import { NO_STONES_AVAILABLE } from '@/constants/error-messages/compare-stone';
 import { HOLD_STATUS, MEMO_STATUS } from '@/constants/business-logic';
 import {
@@ -102,8 +100,7 @@ import {
 import { useLazyGetAvailableMyAppointmentSlotsQuery } from '@/features/api/my-appointments';
 import { IAppointmentPayload } from './my-appointments/page';
 import BookAppointment from './my-appointments/components/book-appointment/book-appointment';
-
-// import useUser from '@/lib/use-auth';
+import { Skeleton } from '@mui/material';
 
 interface ITabs {
   label: string;
@@ -178,8 +175,6 @@ const Dashboard = () => {
   const [triggerAvailableSlots] = useLazyGetAvailableMyAppointmentSlotsQuery(
     {}
   );
-
-  const [timeLeftForVolumeDiscount, setTimeLeftForVolumeDiscount] = useState();
 
   let isNudge = localStorage.getItem('show-nudge') === 'MINI';
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
@@ -670,7 +665,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (customerData) {
-      setIsLoading(false);
+      // setIsLoading(false);
       const tabsCopy: ITabs[] = []; // Make a copy of the current tabs
       // const tabsCopy = [...tabs]; // Make a copy of the current tabs
 
@@ -815,16 +810,7 @@ const Dashboard = () => {
             <span>{formatNumberWithLeadingZeros(value[accessor])}</span>
           </>
         );
-      // case 'delivery':
-      //   return (
-      //     <Link
-      //       href={value[accessor]?.link}
-      //       target="_blank"
-      //       className="pl-1 text-infoMain cursor-pointer"
-      //     >
-      //       Track Order
-      //     </Link>
-      //   );
+
       case 'invoice_id':
         return (
           <>
@@ -836,94 +822,16 @@ const Dashboard = () => {
         return <span>{formatCreatedAt(value[accessor])}</span>;
       case 'details':
         return (
-          <button
-            className="flex items-center cursor-pointer"
-            // onClick={() => handleShowDetails(value?.id)}
-          >
+          <button className="flex items-center cursor-pointer">
             <span>Show Details</span>
             <Image src={arrow} alt="arrow" />
           </button>
         );
-      // case 'download_invoice':
-      //   return (
-      //     <button
-      //       className="flex items-center cursor-pointer"
-      //       onClick={() => handleDownloadInvoice(value?.invoice_id)}
-      //     >
-      //       <Image src={downloadIcon} alt="downloadExcelIcon" />
-      //     </button>
-      //   );
+
       default:
         return <span>{value[accessor]}</span>;
     }
   };
-  // const [triggerDownloadInvoice] = useLazyDonwloadInvoiceQuery();
-
-  // const handleDownloadInvoice = (downloadInvoiceId: string) => {
-  //   triggerDownloadInvoice({ invoiceId: downloadInvoiceId })
-  //     .then((res: any) => {
-  //       const { data, fileName } = res?.data || {};
-  //       downloadPdfFromBase64(data, fileName, {
-  //         onSave: () => {
-  //           // Handle any post-download actions here
-  //           if (modalSetState.setIsDialogOpen)
-  //             modalSetState.setIsDialogOpen(true);
-
-  //           if (modalSetState.setDialogContent) {
-  //             modalSetState.setDialogContent(
-  //               <>
-  //                 <div className="absolute left-[-84px] top-[-84px]">
-  //                   <Image src={confirmIcon} alt="confirmIcon" />
-  //                 </div>
-  //                 <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-  //                   <h1 className="text-headingS text-neutral900">
-  //                     Download Invoice Successfully
-  //                   </h1>
-  //                   <ActionButton
-  //                     actionButtonData={[
-  //                       {
-  //                         variant: 'primary',
-  //                         label: ManageLocales('app.modal.okay'),
-  //                         handler: () => modalSetState.setIsDialogOpen(false),
-  //                         customStyle: 'flex-1 w-full h-10'
-  //                       }
-  //                     ]}
-  //                   />
-  //                 </div>
-  //               </>
-  //             );
-  //           }
-  //         }
-  //       });
-  //     })
-  //     .catch((error: any) => {
-  //       if (modalSetState.setIsDialogOpen) modalSetState.setIsDialogOpen(true);
-  //       if (modalSetState.setDialogContent) {
-  //         modalSetState.setDialogContent(
-  //           <>
-  //             <div className="absolute left-[-84px] top-[-84px]">
-  //               <Image src={errorIcon} alt="errorIcon" />
-  //             </div>
-  //             <h1 className="text-headingS text-neutral900">
-  //               {error?.data?.message}
-  //             </h1>
-  //             <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-  //               <ActionButton
-  //                 actionButtonData={[
-  //                   {
-  //                     variant: 'primary',
-  //                     label: ManageLocales('app.modal.okay'),
-  //                     handler: () => modalSetState.setIsDialogOpen(false),
-  //                     customStyle: 'flex-1 w-full h-10'
-  //                   }
-  //                 ]}
-  //               />
-  //             </div>
-  //           </>
-  //         );
-  //       }
-  //     });
-  // };
 
   const [getProductById] = useGetProductByIdMutation();
   const [addCart] = useAddCartMutation();
@@ -931,43 +839,18 @@ const Dashboard = () => {
 
   const [triggerColumn, { data: columnData }] =
     useLazyGetManageListingSequenceQuery<IManageListingSequenceResponse>();
-  useEffect(() => {
-    const fetchColumns = async () => {
-      const response = await triggerColumn({});
-      const shapeColumn = response.data?.find(
-        (column: any) => column.accessor === 'shape'
-      );
-
-      if (response.data?.length) {
-        let additionalColumn = {
-          accessor: 'shape_full',
-          id: shapeColumn?.id,
-          is_disabled: shapeColumn?.is_disabled,
-          is_fixed: shapeColumn?.is_fixed,
-          label: shapeColumn?.label,
-          sequence: shapeColumn?.sequence,
-          short_label: shapeColumn?.short_label
-        };
-
-        // const updatedColumns = [...response.data, additionalColumn];
-        // dataTableSetState.setColumns(updatedColumns);
-      }
-    };
-
-    fetchColumns();
-  }, []);
 
   const handleStoneId = (e: any) => {
     setStoneId(e.target.value);
   };
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      setIsLoading(true);
+      // setIsLoading(true);
       getProductById({
         search_keyword: stoneId
       })
         .then((res: any) => {
-          setIsLoading(false);
+          // setIsLoading(false);
           if (res?.error?.status === statusCode.NOT_FOUND) {
             setError(`We couldn't find any results for this search`);
           } else {
@@ -976,20 +859,20 @@ const Dashboard = () => {
             setIsDetailPage(true);
           }
         })
-        .catch((e: any) => {
-          setIsLoading(false);
+        .catch((_e: any) => {
+          // setIsLoading(false);
           setError('Something went wrong');
         });
     }
   };
   const handleInputSearch = () => {
     if (stoneId.length > 0) {
-      setIsLoading(true);
+      // setIsLoading(true);
       getProductById({
         search_keyword: stoneId
       })
         .then((res: any) => {
-          setIsLoading(false);
+          // setIsLoading(false);
           if (res?.error?.status === statusCode.NOT_FOUND) {
             setError(`We couldn't find any results for this search`);
           } else {
@@ -998,8 +881,8 @@ const Dashboard = () => {
             setIsDetailPage(true);
           }
         })
-        .catch((e: any) => {
-          setIsLoading(false);
+        .catch((_e: any) => {
+          // setIsLoading(false);
           setError('Something went wrong');
         });
     } else {
@@ -1020,10 +903,10 @@ const Dashboard = () => {
   };
 
   const handleAddToCartDetailPage = () => {
-    setIsLoading(true);
+    // setIsLoading(true);
     // Extract variant IDs for selected stones
     const variantIds = [searchData?.id]
-      ?.map((id: string) => {
+      ?.map((_id: string) => {
         if (searchData && 'variants' in searchData) {
           return searchData.variants[0]?.id;
         }
@@ -1038,7 +921,7 @@ const Dashboard = () => {
       })
         .unwrap()
         .then((res: any) => {
-          setIsLoading(false);
+          // setIsLoading(false);
           setIsDialogOpen(true);
           setDialogContent(
             <>
@@ -1078,7 +961,7 @@ const Dashboard = () => {
           setError('');
         })
         .catch((error: any) => {
-          setIsLoading(false);
+          // setIsLoading(false);
           // On error, set error state and error message
 
           setIsDialogOpen(true);
@@ -1269,8 +1152,6 @@ const Dashboard = () => {
   const handleCreateAppointment = () => {
     let selectedIds = Object.keys(rowSelection);
 
-    console.log('searchData?.foundProducts', searchData?.foundProducts);
-
     if (selectedIds.length > 0) {
       const hasMemoOut = selectedIds?.some((id: string) => {
         const stone = searchData?.foundProducts.find(
@@ -1323,7 +1204,7 @@ const Dashboard = () => {
     });
 
     if (variantIds.length) {
-      setIsLoading(true);
+      // setIsLoading(true);
       confirmProduct({
         variants: variantIds,
         comments: commentValue
@@ -1331,7 +1212,7 @@ const Dashboard = () => {
         .unwrap()
         .then(res => {
           if (res) {
-            setIsLoading(false);
+            // setIsLoading(false);
             setCommentValue('');
             setIsDialogOpen(true);
 
@@ -1376,7 +1257,7 @@ const Dashboard = () => {
           }
         })
         .catch(e => {
-          setIsLoading(false);
+          // setIsLoading(false);
           setCommentValue('');
 
           if (e.data.type === 'unauthorized') {
@@ -1459,7 +1340,7 @@ const Dashboard = () => {
       setIsError(true);
       setError(NO_STONES_SELECTED);
     } else {
-      setIsLoading(true);
+      // setIsLoading(true);
       const variantIds = selectedIds
         ?.map((id: string) => {
           const myCartCheck: IProduct | object =
@@ -1481,7 +1362,7 @@ const Dashboard = () => {
         })
           .unwrap()
           .then((res: any) => {
-            setIsLoading(false);
+            // setIsLoading(false);
             setIsDialogOpen(true);
             setDialogContent(
               <>
@@ -1522,7 +1403,7 @@ const Dashboard = () => {
               search_keyword: stoneId
             })
               .then((res: any) => {
-                setIsLoading(false);
+                // setIsLoading(false);
                 if (res?.error?.status === statusCode.NOT_FOUND) {
                   setError(`We couldn't find any results for this search`);
                 } else {
@@ -1531,8 +1412,8 @@ const Dashboard = () => {
                   setIsDetailPage(true);
                 }
               })
-              .catch((e: any) => {
-                setIsLoading(false);
+              .catch((_e: any) => {
+                // setIsLoading(false);
                 setError('Something went wrong');
               });
             dispatch(notificationBadge(true));
@@ -1540,7 +1421,7 @@ const Dashboard = () => {
             // refetchRow();
           })
           .catch(error => {
-            setIsLoading(false);
+            // setIsLoading(false);
             // On error, set error state and error message
 
             setIsDialogOpen(true);
@@ -1659,11 +1540,7 @@ const Dashboard = () => {
         selectedImageIndex={0}
         images={validImages}
       />
-      <DialogComponent
-        dialogContent={dialogContent}
-        isOpens={isDialogOpen}
-        setIsOpen={setIsDialogOpen}
-      />
+      <DialogComponent dialogContent={dialogContent} isOpens={isDialogOpen} />
       {isLoading && <CustomKGKLoader />}
       <AddCommentDialog
         isOpen={isAddCommentDialogOpen}
@@ -1768,7 +1645,6 @@ const Dashboard = () => {
               setIsConfirmStone={setIsConfirmStone}
               setConfirmStoneData={setConfirmStoneData}
               setIsDetailPage={setIsDetailPage}
-              setIsCompareStone={setIsCompareStone}
             />
           </div>
         </div>
@@ -1936,13 +1812,16 @@ const Dashboard = () => {
                     >
                       <Image src={searchIcon} alt={'searchIcon'} />
                     </div>
-                    {/* <div className="absolute right-0 top-[5px]">
-            <Image src={micIcon} alt={'micIcon'} />
-          </div> */}
                   </div>
                 </div>
               ) : (
-                <Skeleton className="w-[720px] h-[54px] bg-neutral50 rounded-[4px]" />
+                <Skeleton
+                  width={720}
+                  variant="rectangular"
+                  height={54}
+                  animation="wave"
+                  className="rounded-[4px]"
+                />
               )}
             </div>
 
@@ -1955,7 +1834,13 @@ const Dashboard = () => {
                         key={index}
                         className="flex rounded-[8px] w-full gap-4 shadow-sm"
                       >
-                        <Skeleton className="rounded-[4px] w-full h-[97px] bg-neutral50" />
+                        <Skeleton
+                          width={'100%'}
+                          height={97}
+                          variant="rectangular"
+                          animation="wave"
+                          className="rounded-[4px]"
+                        />
                       </div>
                     ))
                 : options.map((data, index) => (
@@ -2021,7 +1906,13 @@ const Dashboard = () => {
               {/* KAMCard Container - Prevent it from shrinking and assign a max width */}
               <div className="flex-shrink-0 w-[300px] max-w-full">
                 {customerData === undefined ? (
-                  <Skeleton className="rounded-[4px] w-full h-[400px] bg-neutral50" />
+                  <Skeleton
+                    animation="wave"
+                    width={'100%'}
+                    variant="rectangular"
+                    height={400}
+                    className="rounded-[4px]"
+                  />
                 ) : (
                   <KAMCard
                     name={customerData?.customer.kam?.kam_name ?? '-'}
@@ -2037,7 +1928,13 @@ const Dashboard = () => {
             {tabs.length > 0 && (
               <div className="flex gap-4 ">
                 {customerData === undefined ? (
-                  <Skeleton className="rounded-[4px] w-full h-full bg-neutral50" />
+                  <Skeleton
+                    height={'100%'}
+                    width={'100%'}
+                    animation="wave"
+                    variant="rectangular"
+                    className="rounded-[4px]"
+                  />
                 ) : (
                   <div className="w-full border-[1px] border-neutral200 rounded-[8px] flex-1 flex-shrink min-w-0">
                     <div className="border-b-[1px] border-neutral200 p-4">
@@ -2214,14 +2111,19 @@ const Dashboard = () => {
 
                 {/* <div className="w-[300px]">
                   {customerData === undefined ? (
-                    <Skeleton className="rounded-[4px] w-full h-[420px] bg-neutral50" />
+                    <Skeleton
+                      height={420}
+                      width={'100%'}
+                      animation="wave"
+                      variant="rectangular"
+                      className="rounded-[4px]"
+                    />
                   ) : (
                     <VolumeDiscount
                       totalSpent={
                         customerData?.customer?.volumeDiscount?.totalSpent
                       }
                       expiryTime={
-                        // '2024-05-28T09:08:46.603Z'
                         customerData?.customer?.volumeDiscount?.expiryTime
                       }
                       eligibleForDiscount={

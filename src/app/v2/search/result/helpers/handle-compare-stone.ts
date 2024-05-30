@@ -6,8 +6,8 @@ import {
 // Define an interface for the function parameters
 interface ICompareStoneParams {
   isCheck: string[];
-  setIsError: (value: boolean) => void;
-  setErrorText: (text: string) => void;
+  setIsError: (_value: boolean) => void;
+  setErrorText: (_text: string) => void;
   activeCartRows: any;
   footerCheck?: string;
   setIsCompareStone: any;
@@ -19,7 +19,6 @@ export const handleCompareStone = ({
   setIsError,
   setErrorText,
   activeCartRows,
-  footerCheck,
   setIsCompareStone,
   setCompareStoneData
 }: ICompareStoneParams) => {
@@ -42,10 +41,7 @@ export const handleCompareStone = ({
     setCompareStoneData(
       compareStones.filter(value => value !== null && value !== undefined)
     );
-    // window.open(
-    //   `/v2/compare-stone${footerCheck ? '?source=' + footerCheck : ''}`,
-    //   '_blank'
-    // );
+
     setIsError(false);
     setErrorText('');
   }

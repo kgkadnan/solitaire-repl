@@ -22,13 +22,12 @@ import {
   useLazyGetLogoutAllQuery,
   useLazyGetLogoutQuery
 } from '@/features/api/dashboard';
-import resetAllApiStates from '@/utils/reset-all-state';
 import { DialogComponent } from '../dialog';
 import confirmIcon from '@public/v2/assets/icons/modal/confirm.svg';
 import logoutConfirmIcon from '@public/v2/assets/icons/modal/logout.svg';
 import crossIcon from '@public/v2/assets/icons/modal/cross.svg';
 
-interface IUserAccountInfo {
+export interface IUserAccountInfo {
   customer: {
     billing_address_id: string | null;
     cart_id: string;
@@ -65,11 +64,9 @@ const TopNavigationBar = ({
   const [triggerGetProfilePhoto] = useLazyGetProfilePhotoQuery({});
   const [triggerLogout] = useLazyGetLogoutQuery({});
   const [triggerLogoutAll] = useLazyGetLogoutAllQuery({});
-  const [logoutMode, setLogoutMode] = useState<string>('');
   const { userLoggedOut } = useUser();
   const [modalContent, setModalContent] = useState<any>();
   const [userAccountInfo, setUserAccountInfo] = useState<IUserAccountInfo>();
-  // const showNudge = localStorage.getItem('show-nudge'); // Replace with actual check
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   useEffect(() => {
     const fetchMyAPI = async () => {
@@ -111,10 +108,8 @@ const TopNavigationBar = ({
   }, [updatePhoto?.status]);
 
   const handleLogoutAll = () => {
-    // resetAllApiStates();
     triggerLogoutAll({})
-      .then(res => {
-        setLogoutMode('logoutAll');
+      .then(_res => {
         setModalContent(
           <>
             <div className="absolute left-[-84px] top-[-84px]">
@@ -141,16 +136,13 @@ const TopNavigationBar = ({
             </div>
           </>
         );
-        //
       })
-      .catch(err => console.log('error'));
+      .catch(_err => console.log('error'));
   };
 
   const handleLogout = () => {
-    // resetAllApiStates();
     triggerLogout({})
-      .then(res => {
-        setLogoutMode('logout');
+      .then(_res => {
         setModalContent(
           <>
             <div className="absolute left-[-84px] top-[-84px]">
@@ -177,17 +169,12 @@ const TopNavigationBar = ({
             </div>
           </>
         );
-        // router.push('/v2/login'), userLoggedOut();
       })
-      .catch(err => console.log('error'));
+      .catch(_err => console.log('error'));
   };
   return (
     <div className="min-h-[60px] border-b-[1px] border-neutral200 sticky top-0 bg-neutral0 z-[3] flex flex-col justify-end ">
-      <DialogComponent
-        dialogContent={modalContent}
-        isOpens={isLogout}
-        setIsOpen={setIsLogout}
-      />
+      <DialogComponent dialogContent={modalContent} isOpens={isLogout} />
       {showNudge === 'MINI' &&
         (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
           isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED) &&
@@ -228,7 +215,7 @@ const TopNavigationBar = ({
         <Popover>
           <PopoverTrigger className="flex justify-center">
             <Avatar className="bg-primaryMain flex items-center justify-center">
-              {imageUrl.length ? (
+              {imageUrl?.length ? (
                 <img src={imageUrl} alt="profile" />
               ) : (
                 <p className="text-center text-mRegular text-neutral0">

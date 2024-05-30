@@ -23,10 +23,4 @@ export const handleDeleteAttachment = ({
       value: {}
     })
   );
-  // dispatch(
-  //   updateFormState({
-  //     name: setIsFileUploaded,
-  //     value: false
-  //   })
-  // );
 };

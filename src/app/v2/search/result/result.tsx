@@ -87,6 +87,8 @@ import { useLazyGetAvailableMyAppointmentSlotsQuery } from '@/features/api/my-ap
 import { IAppointmentPayload } from '../../my-appointments/page';
 import BookAppointment from '../../my-appointments/components/book-appointment/book-appointment';
 import styles from './style.module.scss';
+import DataTableSkeleton from '@/components/v2/skeleton/data-table';
+import { Skeleton } from '@mui/material';
 
 // Column mapper outside the component to avoid re-creation on each render
 
@@ -105,7 +107,7 @@ const Result = ({
   setSearchParameters: Dispatch<SetStateAction<ISavedSearch[]>>;
   setActiveTab: Dispatch<SetStateAction<number>>;
   handleCloseAllTabs: () => void;
-  handleCloseSpecificTab: (id: number) => void;
+  handleCloseSpecificTab: (_id: number) => void;
   setIsLoading: any;
   setIsInputDialogOpen: any;
 }) => {
@@ -164,12 +166,13 @@ const Result = ({
 
   const [triggerColumn, { data: columnData }] =
     useLazyGetManageListingSequenceQuery<IManageListingSequenceResponse>();
-  const [triggerProductApi] = useLazyGetAllProductQuery();
+  const [triggerProductApi, { data: productData }] =
+    useLazyGetAllProductQuery();
 
   // Fetch Products
 
   const fetchProducts = async () => {
-    setIsLoading(true);
+    // setIsLoading(true);
     const storedSelection = localStorage.getItem('Search');
 
     if (!storedSelection) return;
@@ -709,7 +712,7 @@ const Result = ({
       setIsLoading(true);
       // Extract variant IDs for selected stones
       const variantIds = [detailPageData.id]
-        ?.map((id: string) => {
+        ?.map((_id: string) => {
           const myCartCheck: IProduct | object =
             dataTableState.rows.find((row: IProduct) => {
               return row?.id === detailPageData.id;
@@ -778,8 +781,6 @@ const Result = ({
               setData(res.data);
             });
             dispatch(notificationBadge(true));
-
-            // refetchRow();
           })
           .catch(error => {
             setIsLoading(false);
@@ -862,7 +863,6 @@ const Result = ({
               value={textAreaValue}
               name="textarea"
               rows={10}
-              // placeholder='Write Description'
               className="w-full bg-neutral0 text-neutral900 rounded-[4px] resize-none focus:outline-none p-2 border-neutral-200 border-[1px] mt-2"
               style={{ boxShadow: 'var(--input-shadow) inset' }}
               onChange={e => handleComment(e, setTextAreaValue)}
@@ -1151,7 +1151,6 @@ const Result = ({
       <DialogComponent
         dialogContent={dialogContent}
         isOpens={isDialogOpen}
-        setIsOpen={setIsDialogOpen}
         dialogStyle={{
           dialogContent: isConfirmStone
             ? 'h-[240px]'
@@ -1169,15 +1168,24 @@ const Result = ({
 
       <div className="flex py-[8px] items-center">
         <p className="text-lMedium font-medium text-neutral900">
-          {editRoute
-            ? ManageLocales('app.result.headerEdit')
-            : isCompareStone
-            ? 'Diamond Comparison Overview'
-            : showAppointmentForm
-            ? ManageLocales('app.myAppointment.header')
-            : isDetailPage
-            ? ''
-            : ManageLocales('app.result.headerResult')}
+          {editRoute ? (
+            ManageLocales('app.result.headerEdit')
+          ) : isCompareStone ? (
+            'Diamond Comparison Overview'
+          ) : showAppointmentForm ? (
+            ManageLocales('app.myAppointment.header')
+          ) : isDetailPage ? (
+            ''
+          ) : productData === undefined ? (
+            <Skeleton
+              variant="rectangular"
+              height={'24px'}
+              width={'336px'}
+              animation="wave"
+            />
+          ) : (
+            ManageLocales('app.result.headerResult')
+          )}
         </p>
       </div>
 
@@ -1277,7 +1285,6 @@ const Result = ({
               setIsConfirmStone={setIsConfirmStone}
               setConfirmStoneData={setConfirmStoneData}
               setIsDetailPage={setIsDetailPage}
-              setIsCompareStone={setIsCompareStone}
             />
           ) : showAppointmentForm ? (
             <BookAppointment
@@ -1294,35 +1301,41 @@ const Result = ({
             />
           ) : (
             <div className="">
-              <DataTable
-                rows={memoizedRows}
-                columns={memoizedColumns}
-                setRowSelection={setRowSelection}
-                rowSelection={rowSelection}
-                showCalculatedField={true}
-                isResult={true}
-                activeTab={activeTab}
-                searchParameters={searchParameters}
-                setActiveTab={setActiveTab}
-                handleCloseAllTabs={handleCloseAllTabs}
-                handleCloseSpecificTab={handleCloseSpecificTab}
-                handleNewSearch={handleNewSearch}
-                setSearchParameters={setSearchParameters}
-                modalSetState={modalSetState}
-                data={data}
-                setErrorText={setErrorText}
-                downloadExcel={downloadExcel}
-                setIsError={setIsError}
-                searchList={searchList}
-                setIsLoading={setIsLoading}
-                handleAddToCart={handleAddToCart}
-                setIsConfirmStone={setIsConfirmStone}
-                setConfirmStoneData={setConfirmStoneData}
-                setIsCompareStone={setIsCompareStone}
-                setCompareStoneData={setCompareStoneData}
-                setIsInputDialogOpen={setIsInputDialogOpen}
-                handleCreateAppointment={handleCreateAppointment}
-              />
+              {productData === undefined &&
+              !memoizedRows.length &&
+              !data.length ? (
+                <DataTableSkeleton />
+              ) : (
+                <DataTable
+                  rows={memoizedRows}
+                  columns={memoizedColumns}
+                  setRowSelection={setRowSelection}
+                  rowSelection={rowSelection}
+                  showCalculatedField={true}
+                  isResult={true}
+                  activeTab={activeTab}
+                  searchParameters={searchParameters}
+                  setActiveTab={setActiveTab}
+                  handleCloseAllTabs={handleCloseAllTabs}
+                  handleCloseSpecificTab={handleCloseSpecificTab}
+                  handleNewSearch={handleNewSearch}
+                  setSearchParameters={setSearchParameters}
+                  modalSetState={modalSetState}
+                  data={data}
+                  setErrorText={setErrorText}
+                  downloadExcel={downloadExcel}
+                  setIsError={setIsError}
+                  searchList={searchList}
+                  setIsLoading={setIsLoading}
+                  handleAddToCart={handleAddToCart}
+                  setIsConfirmStone={setIsConfirmStone}
+                  setConfirmStoneData={setConfirmStoneData}
+                  setIsCompareStone={setIsCompareStone}
+                  setCompareStoneData={setCompareStoneData}
+                  setIsInputDialogOpen={setIsInputDialogOpen}
+                  handleCreateAppointment={handleCreateAppointment}
+                />
+              )}
             </div>
           )}
           {/* <div className="p-[16px] rounded-b-[8px] shadow-inputShadow "> */}

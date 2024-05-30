@@ -102,11 +102,9 @@ const Table = ({
     columns,
     data: rows, //must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
 
-    //state
     getRowId: originalRow => originalRow?.id,
     onRowSelectionChange: setRowSelection,
     state: { rowSelection },
-    //filters
     positionToolbarAlertBanner: 'none',
     enableFilters: showGloablFilter,
     enableColumnActions: false,
@@ -128,12 +126,8 @@ const Table = ({
     },
     muiTablePaperProps: {
       elevation: 0, //change the mui box shadow
-      //customize paper styles
 
       sx: {
-        // '&.MuiPaper-root': {
-        //   borderRadius: '8px !important'
-        // },
         borderRadius: '8px 8px 0px 0px ',
         border: 'none'
       }
@@ -166,8 +160,6 @@ const Table = ({
         left: ['mrt-row-select', 'lot_id']
       }
     },
-
-    //styling
 
     muiTableContainerProps: {
       sx: {
@@ -260,7 +252,6 @@ const Table = ({
         '& .MuiSvgIcon-root': {
           fontSize: '26px',
           fontWeight: 100
-          // fill: 'var(--neutral-200)'
         },
         '& .MuiCheckbox-indeterminate': {
           display: 'none'

@@ -24,12 +24,10 @@ const Share = ({
     rows.filter((row: IProduct) => row.id in selectedProducts)
   );
   useEffect(() => {
-    // if (Object.keys(selectedProducts).length > 0)
     setSelectedRows(rows.filter((row: IProduct) => row.id in selectedProducts));
   }, [selectedProducts]);
   const { modalState, modalSetState } = useModalStateManagement();
   const { isInputDialogOpen } = modalState;
-  // const [copied, setCopied] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [shareOptions, setShareOptions] = useState([
     { name: 'Stock No', state: 'lot_id' },
@@ -207,10 +205,8 @@ const Share = ({
 
     try {
       await navigator.clipboard.writeText(selectedData);
-      // setCopied(true);
       setShowToast(true); // Show the toast notification
       setTimeout(() => {
-        // setCopied(false);
         setShowToast(false); // Hide the toast notification after some time
       }, 4000);
     } catch (err) {

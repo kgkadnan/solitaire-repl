@@ -1,8 +1,4 @@
-export const handleReset = (
-  setState: any,
-  errorSetState: any
-  // setValidationError: any
-) => {
+export const handleReset = (setState: any, errorSetState: any) => {
   const {
     setSelectedShape,
     setSelectedWhiteColor,
@@ -74,7 +70,6 @@ export const handleReset = (
     setPavilionAngleMin,
     setStarLengthMax,
     setStarLengthMin,
-    // setSelectedColor,
     setSelectedGirdle
   } = setState;
 
@@ -101,7 +96,6 @@ export const handleReset = (
 
   setSelectedShape([]);
   setSelectedWhiteColor([]);
-  // setSelectedColor('');
   setSelectedFancyColor('');
   setSelectedIntensity('');
   setSelectedOvertone('');
@@ -191,5 +185,4 @@ export const handleReset = (
   setDiscountError('');
   setPricePerCaratError('');
   setAmountRangeError('');
-  // setValidationError('');
 };

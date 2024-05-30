@@ -19,13 +19,6 @@ export const RadioButton: React.FC<any> = ({
     }
   };
 
-  // const handleInputClick = () => {
-  //   if (inputRef.current) {
-  //     onChange(value);
-  //     inputRef.current.focus();
-  //   }
-  // };
-
   return (
     <div className="flex flex-col gap-[10px] relative">
       <label

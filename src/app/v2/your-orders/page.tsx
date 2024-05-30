@@ -12,9 +12,6 @@ import {
 
 import emptyOrderSvg from '@public/v2/assets/icons/empty-order.svg';
 import {
-  useCardMyInvoiceQuery,
-  useCardPreviousConfirmationQuery,
-  useCardRecentConfirmationQuery,
   useLazyCardMyInvoiceQuery,
   useLazyCardPreviousConfirmationQuery,
   useLazyCardRecentConfirmationQuery,
@@ -29,7 +26,6 @@ import Image from 'next/image';
 import { formatNumberWithLeadingZeros } from '@/utils/format-number-withLeadingZeros';
 import { formatCreatedAt } from '@/utils/format-date';
 import arrow from '@public/v2/assets/icons/my-diamonds/Arrow.svg';
-import Link from 'next/link';
 import OrderDetail from './components/order-detail';
 import EmptyScreen from '@/components/v2/common/empty-screen';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -76,7 +72,6 @@ const MyDiamonds = () => {
 
   const { modalState, modalSetState } = useModalStateManagement();
   const { isDialogOpen, dialogContent } = modalState;
-  const { setIsDialogOpen } = modalSetState;
   useEffect(() => {
     setIsLoading(true);
     triggerPendingInvoiceData({
@@ -145,48 +140,12 @@ const MyDiamonds = () => {
     triggerInvoiceHistory,
     { data: invoiceHistoryData, isSuccess: isLoadingInvoiceHistory }
   ] = useLazyCardPreviousConfirmationQuery({});
-  // Fetch recent confirmation data
-  // const { data: pendingInvoicesData, isSuccess: isLoadingPendingInvoice } =
-  //   useCardRecentConfirmationQuery({
-  //     resentConfiramtionStatus,
-  //     resentConfiramtionInvoiceStatus,
-  //     expand,
-  //     recentConfirmlimit
-  //   });
-
-  // Fetch my-invoice data
-  // const { data: activeInvoicesData, isSuccess: isLoadngActiveInvoice } =
-  //   useCardMyInvoiceQuery({
-  //     myInvoiceStatus,
-  //     myInvoiceInvoiceStatus,
-  //     myInvoicelimit
-  //   });
-
-  // Fetch previous-confiramtion-data
-  // const { data: invoiceHistoryData, isSuccess: isLoadingInvoiceHistory } =
-  //   useCardPreviousConfirmationQuery({
-  //     previousConfirmStatus
-  //   });
-
-  // useEffect to update recentConfirmData when myDiamondRecentConfirmData changes
-  // useEffect(() => {
-  //   setPendingInvoiceDataState(pendingInvoicesData?.orders);
-  // }, [pendingInvoicesData]);
 
   useEffect(() => {
     if (detailId) {
       handleShowDetails(detailId);
     }
   }, [detailId]);
-
-  // useEffect to update recentConfirmData when myDiamondRecentConfirmData changes
-  // useEffect(() => {
-  //   setActiveInvoiceDataState(activeInvoicesData?.orders);
-  // }, [activeInvoicesData]);
-
-  // useEffect(() => {
-  //   setInvoiceHistoryDataState(invoiceHistoryData?.orders);
-  // }, [invoiceHistoryData]);
 
   useEffect(() => {
     if (pathName === 'recent-confirmations') {
@@ -242,7 +201,6 @@ const MyDiamonds = () => {
       keys: [
         { label: 'Invoice Number', accessor: 'invoice_id' },
         { label: 'Invoice Date', accessor: 'created_at' },
-        // { label: 'Tracking Details', accessor: 'delivery' },
         { label: 'Details', accessor: 'details' }
       ],
       data: activeInvoiceDataState
@@ -251,12 +209,10 @@ const MyDiamonds = () => {
       keys: [
         { label: 'Invoice Number', accessor: 'invoice_id' },
         { label: 'Invoice Date', accessor: 'created_at' },
-        // { label: 'Tracking Details', accessor: 'delivery' },
         { label: 'Details', accessor: 'details' }
       ],
       data: invoiceHistoryDataState
     }
-    // Add similar structures for other tabs here
   };
 
   // Get the keys and data for the active tab
@@ -375,16 +331,7 @@ const MyDiamonds = () => {
             <span>{formatNumberWithLeadingZeros(value[accessor])}</span>
           </>
         );
-      // case 'delivery':
-      //   return (
-      //     <Link
-      //       href={value[accessor]?.link}
-      //       target="_blank"
-      //       className="pl-1 text-infoMain cursor-pointer"
-      //     >
-      //       Track Order
-      //     </Link>
-      //   );
+
       case 'invoice_id':
         return (
           <>
@@ -541,11 +488,7 @@ const MyDiamonds = () => {
 
   return (
     <div className="relative mb-[20px]">
-      <DialogComponent
-        dialogContent={dialogContent}
-        isOpens={isDialogOpen}
-        setIsOpen={setIsDialogOpen}
-      />
+      <DialogComponent dialogContent={dialogContent} isOpens={isDialogOpen} />
       <div className="flex  py-[8px] items-center">
         <p className="text-lMedium font-medium text-neutral900">
           {showDetail

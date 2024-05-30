@@ -11,7 +11,6 @@ import downloadIcon from '@public/v2/assets/icons/data-table/download.svg';
 import Image from 'next/image';
 import searchIcon from '@public/v2/assets/icons/data-table/search-icon.svg';
 
-// theme.js
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 import { useEffect, useState } from 'react';
@@ -113,7 +112,7 @@ const theme = createTheme({
   }
 });
 
-export interface BidValues {
+export interface IBidValues {
   [key: string]: number;
 }
 const BidToByDataTable = ({
@@ -225,8 +224,8 @@ const BidToByDataTable = ({
     });
   };
 
-  const [bidValues, setBidValues] = useState<BidValues>({});
-  const [columnOrder, setColumnOrder] = useState(
+  const [bidValues, setBidValues] = useState<IBidValues>({});
+  const [columnOrder] = useState(
     [
       'mrt-row-select',
       'lot_id',

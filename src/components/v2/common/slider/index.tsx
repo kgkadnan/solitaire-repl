@@ -5,9 +5,9 @@ import {
   TrackComponent
 } from './styled-slider';
 
-interface IRangeSliderProps {
+export interface IRangeSliderProps {
   sliderValue: string[];
-  handleSliderChange: (newValue: string[]) => void;
+  handleSliderChange: (_newValue: string[]) => void;
   rangeMin?: number;
   rangeMax?: number;
   steps?: number;

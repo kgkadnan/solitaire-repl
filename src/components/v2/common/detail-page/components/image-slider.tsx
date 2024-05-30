@@ -2,11 +2,10 @@
 import Image from 'next/image';
 
 import { useEffect, useState } from 'react';
-import emptyImage from '@public/v2/assets/icons/detail-page/empty-image.svg';
 import NoImageFound from '@public/v2/assets/icons/detail-page/fall-back-img.svg';
 import Tooltip from '../../tooltip';
 import ImageModal from './image-modal';
-import { ImagesType } from '../interfrace';
+import { IImagesType } from '../interface';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import './carousel.css'; // Import your custom CSS file for React Slick
@@ -17,23 +16,19 @@ import forwardArrow from '@public/v2/assets/icons/arrow-forward.svg';
 import backwardArrow from '@public/v2/assets/icons/arrow-backword.svg';
 import backWardArrowDisable from '@public/v2/assets/icons/detail-page/back-ward-arrow-disable.svg';
 import forWardAarrowDisable from '@public/v2/assets/icons/detail-page/forward-arrow-disable.svg';
+import { Skeleton } from '@mui/material';
 
-interface ImageSliderProps {
-  images: ImagesType[];
+interface IImageSliderProps {
+  images: IImagesType[];
   setIsLoading: any;
-  setValidImages: React.Dispatch<React.SetStateAction<ImagesType[]>>;
 }
 
-const ImageSlider: React.FC<ImageSliderProps> = ({
-  images,
-  setIsLoading,
-  setValidImages
-}) => {
+const ImageSlider: React.FC<IImageSliderProps> = ({ images, setIsLoading }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const [imageName, setImageName] = useState('');
-  // const [validImages, setValidImages] = useState<ImagesType[]>([]);
+  // const [validImages, setValidImages] = useState<IImagesType[]>([]);
 
   function SampleNextArrow(props: any) {
     const { className, onClick, currentSlide, slideCount } = props;
@@ -159,7 +154,6 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
                               <iframe
                                 frameBorder="0"
                                 src={img.url}
-                                // className="object-contain"
                                 style={{ width: '273px', height: '282px' }}
                                 onError={e => {
                                   handleImageError(e);
@@ -257,7 +251,6 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
                         <iframe
                           frameBorder="0"
                           src={images[0]?.url}
-                          // className="object-contain"
                           style={{ width: '273px', height: '282px' }}
                         />
                       )}
@@ -289,17 +282,11 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
           <div className="flex cursor-pointer flex-col items-center justify-center gap-[12px]">
             <div className="relative w-full min-h-[328px]">
               <div className="absolute w-full flex justify-center inset-0 p-5">
-                <Image
-                  src={emptyImage}
-                  alt="empty image"
-                  className="rounded-lg"
-                  width={'100'}
-                  height={'100'}
-                  style={{
-                    height: 'auto',
-                    width: '300px',
-                    background: '#F9FAFB'
-                  }}
+                <Skeleton
+                  width={300}
+                  height={288}
+                  variant="rectangular"
+                  animation="wave"
                 />
               </div>
             </div>

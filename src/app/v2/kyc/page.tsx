@@ -80,9 +80,6 @@ const KYC = () => {
   const [completedSteps, setCompletedSteps] = useState(new Set());
   const [rejectedSteps, setRejectedSteps] = useState(new Set<number>());
 
-  // const [completedSteps] = useState(new Set());
-  // const [rejectedSteps] = useState(new Set<number>());
-
   const [isResumeCalled, setIsResumeCalled] = useState<boolean>(false);
 
   const [token, setToken] = useState(initialTokenState);
@@ -344,15 +341,11 @@ const KYC = () => {
               kycDetails?.kyc?.profile_data?.online &&
               typeof kycDetails?.kyc?.profile_data?.online['2'] === 'object' &&
               Object.keys(kycDetails?.kyc?.profile_data?.online['2']).length > 1
-              // &&Object?.keys(kycDetails?.kyc?.profile_data?.offline).length === 0
             ) {
               setIsResumeCalled(true);
               const { online, offline, country } = kycDetails.kyc.profile_data;
 
               const onlineData = online || {};
-
-              // =
-              // findFirstNonFilledScreens(onlineData, country)[0] - 1;
 
               findFirstNonFilledScreens(onlineData, country).then(
                 nonFilledScreens => {
@@ -1199,18 +1192,10 @@ const KYC = () => {
       // Set currentStep to the next element in the array
 
       setCurrentStepperStep(currentIndex + 1);
-      // currentStep = steps[currentIndex + 1];
     } else {
       console.log('You are on the last step or current step was not found.');
     }
   }
-  // const completeStepperStep = (stepIndex: number) => {
-  //   setCompletedSteps(prevCompletedSteps => {
-  //     const newCompletedSteps = new Set(prevCompletedSteps);
-  //     newCompletedSteps.add(stepIndex);
-  //     return newCompletedSteps;
-  //   });
-  // };
 
   const renderStepperComponent = (state: string) => {
     switch (state) {
@@ -1300,8 +1285,6 @@ const KYC = () => {
             modalState={modalState}
             country={selectedCountry ?? formState.country}
             handleTermAndCondition={handleTermAndCondition}
-            handleBack={handleBack}
-            handleSubmit={handleSubmit}
           />
         );
     }
@@ -1363,22 +1346,6 @@ const KYC = () => {
         />
       );
     }
-    // else if (currentState === countries.OTHER || currentState === 'offline') {
-    //   return (
-    //     <RenderOffline
-    //       formErrorState={formErrorState}
-    //       formState={formState}
-    //       fromWhere={currentState}
-    //       selectedSubmissionOption={selectedSubmissionOption}
-    //       modalSetState={modalSetState}
-    //       modalState={modalState}
-    //       country={selectedCountry ?? formState.country}
-    //       handleTermAndCondition={handleTermAndCondition}
-    //       handleBack={handleBack}
-    //       handleSubmit={handleSubmit}
-    //     />
-    //   );
-    // }
   };
 
   const renderContentWithInput = () => {
@@ -1534,11 +1501,7 @@ const KYC = () => {
     <div className="relative">
       {' '}
       {isLoading && <CustomKGKLoader />}
-      <DialogComponent
-        dialogContent={dialogContent}
-        isOpens={isDialogOpen}
-        setIsOpen={setIsDialogOpen}
-      />
+      <DialogComponent dialogContent={dialogContent} isOpens={isDialogOpen} />
       <InputDialogComponent
         isOpen={isInputDialogOpen}
         onClose={() => setIsInputDialogOpen(false)}

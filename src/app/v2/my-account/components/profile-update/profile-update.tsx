@@ -8,13 +8,12 @@ import AttachMentIcon from '@public/v2/assets/icons/attachment/attachment.svg?ur
 import Loader from '@/components/v2/common/file-attachment/component/loader';
 import styles from './profile-update.module.scss';
 import {
-  useDeleteProfileMutation,
   useLazyGetProfilePhotoQuery,
   useUpdateProfilePhotoMutation
 } from '@/features/api/my-account';
 import deleteIcon from '@public/v2/assets/icons/attachment/delete-icon.svg';
-import logger from 'logging/log-util';
 import { Label } from '@/components/v2/ui/label';
+import { extractBytesFromMessage } from '@/components/v2/common/file-attachment/helpers/extract-byte-from-message';
 
 const ProfileUpdate = ({ handleFileUpload, handleDeleteAttachment }: any) => {
   const [updateProfilePhoto] = useUpdateProfilePhotoMutation({});
@@ -82,7 +81,19 @@ const ProfileUpdate = ({ handleFileUpload, handleDeleteAttachment }: any) => {
   });
   useEffect(() => {
     if (fileRejections?.length) {
-      setError(fileRejections[0].errors[0].code);
+      if (fileRejections[0].errors[0].code === 'file-too-large') {
+        const bytes = extractBytesFromMessage(
+          fileRejections[0].errors[0].message
+        );
+        setError(
+          `File is too big.You can upload files upto ${(
+            bytes /
+            (1024 * 1024)
+          ).toFixed(0)}MB`
+        );
+      } else {
+        setError(fileRejections[0].errors[0].code);
+      }
     }
   }, [fileRejections]);
 
@@ -97,7 +108,7 @@ const ProfileUpdate = ({ handleFileUpload, handleDeleteAttachment }: any) => {
             {...getRootProps()}
             style={dropzoneStyle}
             className={`flex items-center bg-neutral0  rounded-[10px]  border-[1px] ${
-              error.length ? 'border-dangerMain' : 'border-neutral-200'
+              error.length ? 'border-dangerMain' : 'border-neutral200'
             } ${
               isFileUploaded || error.length
                 ? 'border-solid shadow-sm'
@@ -145,10 +156,11 @@ const ProfileUpdate = ({ handleFileUpload, handleDeleteAttachment }: any) => {
             <div className="flex flex-col items-end w-[10%]">
               {uploadProgress > 0 ? (
                 <Loader />
-              ) : // <p className="text-[14px]">{`${uploadProgress}%`}</p>
-              !Object.keys(selectedFile).length ? (
+              ) : !Object.keys(selectedFile).length ? (
                 <AttachMentIcon
-                  className={error?.length ? styles.errorStroke : styles.stroke}
+                  className={
+                    error?.length ? 'stroke-dangerMain' : 'stroke-neutral500'
+                  }
                 />
               ) : (
                 <div onClick={e => e.stopPropagation()}>
@@ -169,7 +181,11 @@ const ProfileUpdate = ({ handleFileUpload, handleDeleteAttachment }: any) => {
             </div>
           </div>
 
-          {error?.length > 0 && <p className={styles.errorFormat}>{error}</p>}
+          {error?.length > 0 && (
+            <p className={'text-dangerMain text-sRegular font-normal'}>
+              {error}
+            </p>
+          )}
         </div>
       </div>
     </div>

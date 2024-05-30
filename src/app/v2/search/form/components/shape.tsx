@@ -37,31 +37,6 @@ export const Shape = ({ selectedShape, setSelectedShape }: IShapeProps) => {
     }
   };
 
-  // const handleShapeChange = (shapeData: string) => {
-  //   const filteredShape: string[] = shape.map(data => data.short_name);
-  //   if (shapeData === 'All') {
-  //     setSelectedShape(filteredShape);
-  //     if (selectedShape.includes('All')) {
-  //       setSelectedShape([]);
-  //     }
-  //   } else {
-  //     if (selectedShape.includes('All')) {
-  //       const filteredSelectedShape: string[] = selectedShape.filter(
-  //         (data: any) => data !== 'All' && data !== shape
-  //       );
-  //       setSelectedShape(filteredSelectedShape);
-  //     } else if (
-  //       compareArrays(
-  //         selectedShape.filter((data: any) => data !== 'All'),
-  //         filteredShape.filter(data => data !== 'All' && data !== shapeData)
-  //       )
-  //     ) {
-  //       setSelectedShape(filteredShape);
-  //     } else {
-  //       handleFilterChange(shapeData, selectedShape, setSelectedShape);
-  //     }
-  //   }
-  // };
   return (
     <div id="Shape">
       <AccordionComponent

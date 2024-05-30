@@ -18,6 +18,7 @@ import Head from 'next/head';
 import AppDownloadPopup from '@/components/v2/common/alert-pop-for-mobile';
 import InvalidCreds from './v2/login/component/invalid-creds';
 import { DialogComponent } from '@/components/v2/common/dialog';
+// import Salesiq from '@/components/v2/common/sales-iq';
 
 const store = setupStore();
 
@@ -53,10 +54,8 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
       const disableDevtool = require('disable-devtool');
       disableDevtool({
         disableMenu: true,
-        ondevtoolopen(type: any, next: any) {
+        ondevtoolopen(_type: any, _next: any) {
           setOpen(true);
-          // You may choose to call next() if you want to allow the default behavior
-          // next();
         },
         ignore: () => {
           return process.env.NEXT_PUBLIC_ENV !== 'production';
@@ -111,7 +110,6 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
             />
           }
           isOpens={open}
-          setIsOpen={setOpen}
         />
         <noscript>
           <iframe
@@ -137,6 +135,8 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
           </ThemeProviders>
         </Provider>
         <SpeedInsights />
+
+        {/* <Salesiq /> */}
       </body>
     </html>
   );

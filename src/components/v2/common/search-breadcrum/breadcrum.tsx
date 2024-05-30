@@ -9,14 +9,13 @@ import Link from 'next/link';
 const Breadcrum = ({
   searchParameters,
   activeTab,
-  // setActiveTab,
   handleCloseSpecificTab,
   setIsLoading
 }: {
   searchParameters: any;
   activeTab: number;
   setActiveTab: Dispatch<SetStateAction<number>>;
-  handleCloseSpecificTab: (id: number) => void;
+  handleCloseSpecificTab: (_id: number) => void;
   setIsLoading?: any;
 }) => {
   const router = useRouter();
@@ -45,7 +44,6 @@ const Breadcrum = ({
                   : `Result ${index + 1}`
               }
               handlePillClick={() => {
-                // setActiveTab(index + 1);
                 setIsLoading(true);
                 router.push(
                   `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${index + 1}`
@@ -60,7 +58,6 @@ const Breadcrum = ({
                 );
               }}
               handlePillDelete={() => {
-                // setIsLoading(true)
                 handleCloseSpecificTab(index + 1);
               }}
             />

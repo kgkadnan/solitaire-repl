@@ -53,11 +53,9 @@ import { modifySavedSearch } from '@/features/saved-search/saved-search';
 import EmptyScreen from '@/components/v2/common/empty-screen';
 import { kycStatus } from '@/constants/enums/kyc';
 import { Toast } from '@/components/v2/common/copy-and-share/toast';
+import SavedSearchSkeleton from '@/components/v2/skeleton/saved-search';
 
-const SavedSearch = ({ setIsLoading, isLoading }: any) => {
-  useEffect(() => {
-    setIsLoading(true);
-  }, []);
+const SavedSearch = ({ setIsLoading }: any) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { savedSearchSetState, savedSearchState } =
@@ -65,10 +63,9 @@ const SavedSearch = ({ setIsLoading, isLoading }: any) => {
 
   let [triggerProductCountApi] = useLazyGetProductCountQuery();
   // Fetching saved search data
-  const { data } = useGetAllSavedSearchesQuery({
+  const { data, isLoading: isDataLoading } = useGetAllSavedSearchesQuery({
     searchByName: savedSearchState.searchByName
   });
-
   const { data: searchList }: { data?: IItem[] } = useGetSavedSearchListQuery(
     savedSearchState.search
   );
@@ -141,7 +138,6 @@ const SavedSearch = ({ setIsLoading, isLoading }: any) => {
     savedSearchSetState.setSavedSearchData(data?.savedSearches);
   }, [data]);
 
-  // useEffect(()=>{setIsLoading(true)},[])
   // Debounced search function
   const debouncedSave = useCallback(
     (inputValue: string) => {
@@ -201,201 +197,208 @@ const SavedSearch = ({ setIsLoading, isLoading }: any) => {
         setIsError(false); // Hide the toast notification after some time
       }, 4000);
   }, [isError]);
+  console.log(savedSearchState, 'savedSearchState');
   return (
     <div className="mb-[20px]">
       {isError && (
         <Toast show={isError} message={errorText} isSuccess={false} />
       )}
-      <DialogComponent
-        dialogContent={dialogContent}
-        isOpens={isDialogOpen}
-        setIsOpen={setIsDialogOpen}
-      />
-      <div className="flex  py-[8px] items-center">
-        <p className="text-lMedium font-medium text-neutral900">
-          {ManageLocales('app.savedSearch.header')}
-        </p>
-      </div>
-      <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow">
-        <div className="flex items-center gap-5 rounded-t-[8px] py-[12px] bg-neutral50 border-b-[1px] border-neutral200 px-[16px]">
-          <div className="flex items-center gap-3">
-            <CheckboxComponent
-              onClick={() => {
-                handleSelectAll({
-                  selectAllChecked,
-                  setSelectedCheckboxes,
-                  setSelectAllChecked,
-                  data: savedSearchState.savedSearchData
-                });
-              }}
-              isChecked={selectAllChecked}
-            />
-            <button
-              className="text-lRegular text-neutral900 font-medium cursor-pointer"
-              onClick={() => {
-                handleSelectAll({
-                  selectAllChecked,
-                  setSelectedCheckboxes,
-                  setSelectAllChecked,
-                  data: savedSearchState.savedSearchData
-                });
-              }}
+      <DialogComponent dialogContent={dialogContent} isOpens={isDialogOpen} />
+      {isDataLoading ? ( // Show skeleton if data is loading
+        <SavedSearchSkeleton />
+      ) : (
+        <>
+          <div className="flex  py-[8px] items-center">
+            <p className="text-lMedium font-medium text-neutral900">
+              {ManageLocales('app.savedSearch.header')}
+            </p>
+          </div>
+          <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow">
+            <div className="flex items-center gap-5 rounded-t-[8px] py-[12px] bg-neutral50 border-b-[1px] border-neutral200 px-[16px]">
+              <div className="flex items-center gap-3">
+                <CheckboxComponent
+                  onClick={() => {
+                    handleSelectAll({
+                      selectAllChecked,
+                      setSelectedCheckboxes,
+                      setSelectAllChecked,
+                      data: savedSearchState.savedSearchData
+                    });
+                  }}
+                  isChecked={selectAllChecked}
+                />
+                <button
+                  className="text-lRegular text-neutral900 font-medium cursor-pointer"
+                  onClick={() => {
+                    handleSelectAll({
+                      selectAllChecked,
+                      setSelectedCheckboxes,
+                      setSelectAllChecked,
+                      data: savedSearchState.savedSearchData
+                    });
+                  }}
+                >
+                  {ManageLocales('app.savedSearch.selectAll')}
+                </button>
+              </div>
+              <div>
+                <SearchInputField
+                  type="text"
+                  name="Search"
+                  value={savedSearchState.search}
+                  onChange={e =>
+                    handleSearch({
+                      e,
+                      setSearch: savedSearchSetState.setSearch,
+                      debouncedSave,
+                      setSearchByName: savedSearchSetState.setSearchByName,
+                      setSelectedCheckboxes,
+                      setSelectAllChecked,
+                      setShowSuggestions
+                    })
+                  }
+                  setShowSuggestions={setShowSuggestions}
+                  showSuggestions={showSuggestions}
+                  handleSuggestionClick={handleSuggestionClick}
+                  suggestions={savedSearchState.suggestions}
+                />
+              </div>
+            </div>
+            <div
+              className={` overflow-auto ${
+                isNudge &&
+                (isKycVerified?.customer?.kyc?.status ===
+                  kycStatus.INPROGRESS ||
+                  isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+                  ? 'h-[calc(100vh-315px)]'
+                  : 'h-[calc(100vh-245px)]'
+              }`}
             >
-              {ManageLocales('app.savedSearch.selectAll')}
-            </button>
-          </div>
-          <div>
-            <SearchInputField
-              type="text"
-              name="Search"
-              value={savedSearchState.search}
-              onChange={e =>
-                handleSearch({
-                  e,
-                  setSearch: savedSearchSetState.setSearch,
-                  debouncedSave,
-                  setSearchByName: savedSearchSetState.setSearchByName,
-                  setSelectedCheckboxes,
-                  setSelectAllChecked,
-                  setShowSuggestions
-                })
-              }
-              setShowSuggestions={setShowSuggestions}
-              showSuggestions={showSuggestions}
-              handleSuggestionClick={handleSuggestionClick}
-              suggestions={savedSearchState.suggestions}
-            />
-          </div>
-        </div>
-        <div
-          className={` overflow-auto ${
-            isNudge &&
-            (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
-              isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-              ? 'h-[calc(100vh-315px)]'
-              : 'h-[calc(100vh-245px)]'
-          }`}
-        >
-          {!savedSearchState?.savedSearchData?.length ? (
-            <>
-              {setIsLoading(false)}
-              <EmptyScreen
-                label="Search Diamonds"
-                message="No saved searches so far. Let’s save some searches!"
-                onClickHandler={() =>
-                  router.push(`/v2/search?active-tab=${SubRoutes.NEW_SEARCH}`)
-                }
-                imageSrc={empty}
-              />
-            </>
-          ) : (
-            savedSearchState?.savedSearchData?.map(
-              ({ id, name, meta_data, created_at }: ISavedSearches, index) => {
-                setIsLoading(false);
-                // Calculate the gradient index based on the item's index
-                const gradientIndex = index % gradientClasses.length;
-                // Get the gradient class for the calculated index
-                const gradientClass = gradientClasses[gradientIndex];
-
-                return (
-                  <div
-                    className="p-[16px] flex flex-col md:flex-row w-full border-b-[1px] border-neutral200 cursor-pointer group hover:bg-neutral50"
-                    key={id}
-                    onClick={() =>
-                      handleCardClick({
-                        id,
-                        savedSearchData: savedSearchState.savedSearchData,
-                        router,
-                        triggerProductCountApi,
-                        setDialogContent,
-                        setIsDialogOpen
-                      })
+              {!savedSearchState?.savedSearchData?.length ? (
+                <>
+                  <EmptyScreen
+                    label="Search Diamonds"
+                    message="No saved searches so far. Let’s save some searches!"
+                    onClickHandler={() =>
+                      router.push(
+                        `/v2/search?active-tab=${SubRoutes.NEW_SEARCH}`
+                      )
                     }
-                  >
-                    <div className="flex items-center gap-[18px] md:w-[40%]">
-                      <CheckboxComponent
-                        onClick={e => {
-                          e.stopPropagation();
-                          handleCheckbox({
+                    imageSrc={empty}
+                  />
+                </>
+              ) : (
+                savedSearchState?.savedSearchData?.map(
+                  (
+                    { id, name, meta_data, created_at }: ISavedSearches,
+                    index
+                  ) => {
+                    // Calculate the gradient index based on the item's index
+                    const gradientIndex = index % gradientClasses.length;
+                    // Get the gradient class for the calculated index
+                    const gradientClass = gradientClasses[gradientIndex];
+
+                    return (
+                      <div
+                        className="p-[16px] flex flex-col md:flex-row w-full border-b-[1px] border-neutral200 cursor-pointer group hover:bg-neutral50"
+                        key={id}
+                        onClick={() =>
+                          handleCardClick({
                             id,
+                            savedSearchData: savedSearchState.savedSearchData,
+                            router,
+                            triggerProductCountApi,
+                            setDialogContent,
+                            setIsDialogOpen
+                          })
+                        }
+                      >
+                        <div className="flex items-center gap-[18px] md:w-[40%]">
+                          <CheckboxComponent
+                            onClick={e => {
+                              e.stopPropagation();
+                              handleCheckbox({
+                                id,
+                                selectedCheckboxes,
+                                setSelectedCheckboxes,
+                                setSelectAllChecked,
+                                selectAllChecked,
+                                data: savedSearchState.savedSearchData
+                              });
+                            }}
+                            isChecked={selectedCheckboxes.includes(id)}
+                          />
+                          <div
+                            className={` ${gradientClass} text-headingM w-[69px] h-[69px] text-neutral700 uppercase p-[14px] rounded-[4px] font-medium text-center`}
+                          >
+                            {name
+                              .split(' ') // Split the name into words
+                              .slice(0, 2) // Take only the first two words
+                              .map(word => word.charAt(0)) // Extract the first character of each word
+                              .join('')}
+                          </div>
+                          <div className="flex flex-col gap-[18px]">
+                            <h1 className="text-neutral900 font-medium text-mMedium capitalize">
+                              {name}
+                            </h1>
+                            <div className="text-neutral700 font-regular text-sMedium">
+                              {formatCreatedAt(created_at)}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="w-full md:w-[50%] mt-4 md:mt-0">
+                          <DisplayTable column={coloumn} row={[meta_data]} />
+                        </div>
+                        <button
+                          className="w-full md:w-[10%] flex justify-end items-start opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                          onClick={e => {
+                            e.stopPropagation();
+                            handleEdit(id);
+                          }}
+                        >
+                          <Image src={editIcon} alt="editIcon" />
+                        </button>
+                      </div>
+                    );
+                  }
+                )
+              )}
+            </div>
+            <div className="px-[16px] py-2 flex items-center justify-end border-t-[1px] border-neutral200">
+              <ActionButton
+                actionButtonData={[
+                  {
+                    variant: 'secondary',
+                    isDisable: !savedSearchState?.savedSearchData?.length,
+                    label: ManageLocales('app.savedSearch.delete'),
+                    svg: BinIcon,
+
+                    handler: () =>
+                      deleteSavedSearchHandler({
+                        selectedCheckboxes,
+                        setIsError,
+                        setErrorText,
+                        setIsDialogOpen,
+                        setDialogContent,
+                        handleDelete: () =>
+                          handleDelete({
+                            deleteSavedSearch,
                             selectedCheckboxes,
+                            setDialogContent,
+                            setIsDialogOpen,
                             setSelectedCheckboxes,
                             setSelectAllChecked,
-                            selectAllChecked,
-                            data: savedSearchState.savedSearchData
-                          });
-                        }}
-                        isChecked={selectedCheckboxes.includes(id)}
-                      />
-                      <div
-                        className={` ${gradientClass} text-headingM w-[69px] h-[69px] text-neutral700 uppercase p-[14px] rounded-[4px] font-medium text-center`}
-                      >
-                        {name
-                          .split(' ') // Split the name into words
-                          .slice(0, 2) // Take only the first two words
-                          .map(word => word.charAt(0)) // Extract the first character of each word
-                          .join('')}
-                      </div>
-                      <div className="flex flex-col gap-[18px]">
-                        <h1 className="text-neutral900 font-medium text-mMedium capitalize">
-                          {name}
-                        </h1>
-                        <div className="text-neutral700 font-regular text-sMedium">
-                          {formatCreatedAt(created_at)}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="w-full md:w-[50%] mt-4 md:mt-0">
-                      <DisplayTable column={coloumn} row={[meta_data]} />
-                    </div>
-                    <button
-                      className="w-full md:w-[10%] flex justify-end items-start opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                      onClick={e => {
-                        e.stopPropagation();
-                        handleEdit(id);
-                      }}
-                    >
-                      <Image src={editIcon} alt="editIcon" />
-                    </button>
-                  </div>
-                );
-              }
-            )
-          )}
-        </div>
-        <div className="px-[16px] py-2 flex items-center justify-end border-t-[1px] border-neutral200">
-          <ActionButton
-            actionButtonData={[
-              {
-                variant: 'secondary',
-                isDisable: !savedSearchState?.savedSearchData?.length,
-                label: ManageLocales('app.savedSearch.delete'),
-                svg: BinIcon,
-
-                handler: () =>
-                  deleteSavedSearchHandler({
-                    selectedCheckboxes,
-                    setIsError,
-                    setErrorText,
-                    setIsDialogOpen,
-                    setDialogContent,
-                    handleDelete: () =>
-                      handleDelete({
-                        deleteSavedSearch,
-                        selectedCheckboxes,
-                        setDialogContent,
-                        setIsDialogOpen,
-                        setSelectedCheckboxes,
-                        setSelectAllChecked,
-                        setIsError,
-                        setIsLoading
+                            setIsError,
+                            setIsLoading
+                          })
                       })
-                  })
-              }
-            ]}
-          />
-        </div>
-      </div>
+                  }
+                ]}
+              />
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

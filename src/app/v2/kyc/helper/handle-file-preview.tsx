@@ -33,7 +33,6 @@ export const handlePreview = ({
               ) : (
                 <Image
                   key={file.name}
-                  // src={file.preview}
                   src={URL.createObjectURL(file)}
                   alt={file.name}
                   width="0"

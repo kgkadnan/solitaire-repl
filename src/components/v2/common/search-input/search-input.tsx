@@ -4,15 +4,15 @@ import searchIcon from '@public/v2/assets/icons/saved-search/search-icon.svg';
 import Image from 'next/image';
 import { Input } from '../../ui/input';
 
-interface ISearchInputProps {
+export interface ISearchInputProps {
   type: string;
   value?: string;
   name: string;
   placeholder?: string;
-  onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (_event: ChangeEvent<HTMLInputElement>) => void;
   suggestions?: any[];
-  handleSuggestionClick?: (suggestion: string) => void;
-  handleKeyPress?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  handleSuggestionClick?: (_suggestion: string) => void;
+  handleKeyPress?: (_e: React.KeyboardEvent<HTMLInputElement>) => void;
   setShowSuggestions?: any;
   showSuggestions?: boolean;
 }

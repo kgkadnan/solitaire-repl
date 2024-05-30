@@ -12,13 +12,17 @@ const VolumeDiscount: React.FC<any> = ({
 }) => {
   const [timeDifference, setTimeDifference] = useState(null);
   const [isHovered, setIsHovered] = useState(false);
+  const [isInfoHovered, setIsInfoHovered] = useState(false);
 
   useEffect(() => {
     if (expiryTime) {
       const currentTime: any = new Date();
       const targetTime: any = new Date(expiryTime!);
-      const timeDiff: any = targetTime - currentTime;
-
+      let timeDiff: any = targetTime - currentTime;
+      if (timeDiff <= 0) {
+        // If the expiry time has passed, set the time difference to 48 hours
+        timeDiff = 48 * 60 * 60 * 1000;
+      }
       setTimeDifference(timeDiff);
     }
   }, [expiryTime]);
@@ -28,9 +32,35 @@ const VolumeDiscount: React.FC<any> = ({
         className="w-[300px] h-[420px] rounded-[8px] border-[1px] border-primaryBorder flex flex-col gap-[20px]"
         style={{ boxShadow: 'var(--input-shadow)' }}
       >
-        <div className="px-4 py-6 flex justify-between border-b-[1px] border-neutral200">
-          <div className="font-medium text-[18px] text-neutral900">
-            Volume Discount
+        <div
+          className="px-4 py-6 flex justify-between border-b-[1px] border-neutral200 relative"
+          onMouseEnter={() => setIsInfoHovered(true)}
+          onMouseLeave={() => setIsInfoHovered(false)}
+        >
+          <div className=" flex">
+            <p className="font-medium text-[18px] text-neutral900">
+              Volume Discount
+            </p>
+            <div className="pl-[6px] flex">
+              {' '}
+              <Image src={infoSvg} alt="volume discount info" />
+            </div>
+            {isInfoHovered && (
+              <div className="absolute bg-[#ECF2FC] w-[320px] border-[1px] border-[#B6CFF3] rounded-[8px] p-4 text-[#475467] top-[-100px] gap-2 right-[0px]">
+                <div className="flex flex-col gap-2">
+                  <div className="flex gap-1">
+                    <Image src={infoSvg} alt="volume discount info" />{' '}
+                    <p className="text-neutral900 font-medium text-mMedium">
+                      Information
+                    </p>
+                  </div>
+                  <p>
+                    Eligibility for a volume discount requires the sum of your
+                    pending invoices in the last 48 hours to exceed $300.00K
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
           <div
             className={`border-[1px]  px-[6px] py-1  rounded-[4px] ${
@@ -48,7 +78,7 @@ const VolumeDiscount: React.FC<any> = ({
           {eligibleForDiscount ? (
             <div>
               <p className="text-successHover text-sRegular font-medium">
-                You are eligible for a volume discount of 2.0%
+                You are eligible for a volume discount of <strong>2.0%</strong>
               </p>
               <StaticSlider totalSpent={totalSpent} />
               <div className="text-sMedium text-neutral600 font-medium bg-[#F1FAF8] rounded-[4px] p-[6px]">
@@ -65,7 +95,7 @@ const VolumeDiscount: React.FC<any> = ({
               <div className="text-sMedium text-neutral600 font-medium bg-[#F1FAF8] rounded-[4px] p-[6px]">
                 Spend{' '}
                 <span className="font-semiBold">
-                  ${Math.floor((VOLUME_DISCOUNT_LIMIT - totalSpent) / 1000)}K
+                  ${((VOLUME_DISCOUNT_LIMIT - totalSpent) / 1000).toFixed(2)}K
                 </span>{' '}
                 more within{' '}
                 <span className="font-semiBold">
@@ -96,8 +126,8 @@ const VolumeDiscount: React.FC<any> = ({
             <Image src={infoSvg} alt="volume discount info" />
           </div>
           {isHovered && (
-            <div className="absolute bg-[#ECF2FC] border-[1px] border-[#B6CFF3] rounded-[8px] p-4 text-[#475467] top-0 gap-2">
-              <div>
+            <div className="absolute bg-[#ECF2FC] w-[320px] border-[1px] border-[#B6CFF3] rounded-[8px] p-4 text-[#475467] top-[-100px] gap-2 right-0">
+              <div className="flex flex-col gap-2">
                 <div className="flex gap-1">
                   <Image src={infoSvg} alt="volume discount info" />{' '}
                   <p className="text-neutral900 font-medium text-mMedium">
@@ -105,9 +135,8 @@ const VolumeDiscount: React.FC<any> = ({
                   </p>
                 </div>
                 <p>
-                  {eligibleForDiscount
-                    ? 'Timer indicates the time remained to utilize their current volume discount.'
-                    : 'Timer indicates the time remaining to make additional purchases to reach the volume discount threshold'}
+                  Timer indicates the time remained to utilize their current
+                  volume discount.
                 </p>
               </div>
             </div>

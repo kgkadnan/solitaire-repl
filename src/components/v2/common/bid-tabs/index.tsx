@@ -1,9 +1,9 @@
 import React from 'react';
 
-interface ITabProps {
+export interface ITabProps {
   labels: string[]; // Array of labels for the tabs
   activeIndex: number; // Index of the currently active tab
-  onTabClick: (index: number) => void; // Function to handle tab click
+  onTabClick: (_index: number) => void; // Function to handle tab click
   activeCount: number;
   bidCount: number;
   historyCount: number;

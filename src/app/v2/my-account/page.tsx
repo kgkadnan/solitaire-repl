@@ -29,6 +29,7 @@ import {
   deleteProfileStore
 } from '@/features/profile/profile-update-slice';
 import logger from 'logging/log-util';
+import { myAccount } from '@/constants/enums/kyc';
 
 interface IUserAccountInfo {
   customer: {
@@ -54,14 +55,6 @@ interface IUserAccountInfo {
   };
 }
 
-enum myAccount {
-  TABLE_PREFRENCES = 'table prefrences',
-  CHANGE_PASSWORD = 'change password',
-  NOTIFICATION_PREFRENCES = 'notification preferences',
-  TERM_AND_CONDITION = 'term & condition',
-  PRIVACY_POLICY = 'privacy policy',
-  PROFILE_UPDATE = 'profile update'
-}
 const MyAccount = () => {
   const dispatch = useAppDispatch();
   const [deleteProfile] = useDeleteProfileMutation({});
@@ -72,7 +65,6 @@ const MyAccount = () => {
   const [triggerAuth] = useLazyGetAuthDataQuery();
   const { modalState, modalSetState } = useModalStateManagement();
   const { isDialogOpen, dialogContent } = modalState;
-  const { setIsDialogOpen } = modalSetState;
   const [userAccountInfo, setUserAccountInfo] = useState<IUserAccountInfo>();
   const [activeTab, setActiveTab] = useState<string>(
     myAccount.TABLE_PREFRENCES
@@ -135,7 +127,7 @@ const MyAccount = () => {
   }: any) => {
     deleteProfile({})
       .unwrap()
-      .then(res => {
+      .then(_res => {
         setSelectedFile({});
         setIsFileUploaded(false);
         setImageUrl('');
@@ -223,7 +215,6 @@ const MyAccount = () => {
       <DialogComponent
         dialogContent={dialogContent}
         isOpens={isDialogOpen}
-        setIsOpen={setIsDialogOpen}
         dialogStyle={{
           dialogContent:
             activeTab === myAccount.CHANGE_PASSWORD

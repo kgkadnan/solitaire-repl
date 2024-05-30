@@ -76,7 +76,7 @@ const Form = ({
   handleCloseSpecificTab,
   state,
   setState,
-  carat,
+  // carat,
   errorState,
   errorSetState,
   setIsDialogOpen,
@@ -92,7 +92,7 @@ const Form = ({
   setActiveTab: Dispatch<SetStateAction<number>>;
   searchParameters: any;
   handleCloseAllTabs: () => void;
-  handleCloseSpecificTab: (id: number) => void;
+  handleCloseSpecificTab: (_id: number) => void;
   state: any;
   setState: any;
   carat: any;
@@ -167,11 +167,7 @@ const Form = ({
     setSelectionChecked
   } = setState;
 
-  // const modifySearchFrom = searchParams.get('edit');
-
   const {
-    // setSearchUrl,
-    // searchUrl,
     isValidationError,
     isError,
     errorText,
@@ -275,7 +271,7 @@ const Form = ({
       modifySearchFrom === `${SubRoutes.SAVED_SEARCH}` &&
       modifysavedSearchData
     ) {
-      setModifySearch(modifysavedSearchData, setState, carat);
+      setModifySearch(modifysavedSearchData, setState);
     } else if (
       modifySearchFrom === `${SubRoutes.RESULT}` &&
       modifySearchResult
@@ -288,8 +284,7 @@ const Form = ({
       setModifySearch(
         modifySearchResult[parseInt(replaceSubrouteWithSearchResult!) - 1]
           ?.queryParams,
-        setState,
-        carat
+        setState
       );
     }
   }, [modifySearchFrom]);
@@ -448,10 +443,8 @@ const Form = ({
             }`
           );
         }
-        // return;
       } else {
         setIsError(true);
-        // setErrorText(EXCEEDS_LIMITS);
       }
     } else {
       setIsError(true);
@@ -609,7 +602,7 @@ const Form = ({
     setIsAddDemand(true);
     const queryParams = generateQueryParams(state);
     addDemandApi(queryParams)
-      .then(res => {
+      .then(_res => {
         setIsLoading(false);
 
         setIsDialogOpen(true);
@@ -646,14 +639,13 @@ const Form = ({
           </>
         );
       })
-      .catch(err => setIsLoading(false));
+      .catch(_err => setIsLoading(false));
   };
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
 
   let actionButtonData: IActionButtonDataItem[] = [
     {
       variant: 'secondary',
-      // svg: arrowIcon,
       label: ManageLocales('app.advanceSearch.cancel'),
       handler: () => {
         if (modifySearchFrom === `${SubRoutes.SAVED_SEARCH}`) {
@@ -668,14 +660,12 @@ const Form = ({
     },
     {
       variant: 'secondary',
-      // svg: arrowIcon,
       label: ManageLocales('app.advanceSearch.reset'),
       handler: handleFormReset
     },
 
     {
       variant: 'secondary',
-      // svg: bookmarkAddIcon,
       label: `${ManageLocales('app.advanceSearch.saveSearch')}`,
       handler: () => {
         if (searchUrl) {
@@ -712,20 +702,21 @@ const Form = ({
     },
     {
       variant: 'primary',
-      // svg: errorText === NO_STONE_FOUND ? addDemand : searchIcon,
-      label: 'Search',
-      // `${
-      //   errorText === NO_STONE_FOUND &&
-      //   isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
-      //     ? 'Add Demand'
-      //     : 'Search'
-      // } `,
-      handler: errorText === NO_STONE_FOUND ? () => {} : handleFormSearch
+      label:
+        // 'Search',
+        `${
+          errorText === NO_STONE_FOUND &&
+          isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
+            ? 'Add Demand'
+            : 'Search'
+        } `,
+      handler:
+        // errorText === NO_STONE_FOUND ? () => {} : handleFormSearch
 
-      // errorText === NO_STONE_FOUND &&
-      // isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
-      //   ? handleAddDemand
-      //   : handleFormSearch
+        errorText === NO_STONE_FOUND &&
+        isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
+          ? handleAddDemand
+          : handleFormSearch
     }
   ];
 

@@ -67,12 +67,10 @@ const BidToBuy = () => {
 
   const [bidHistory, setBidHistory] = useState<any>({});
 
-  // const { data: bidHistory } = useGetBidToBuyHistoryQuery({});
   const [triggerBidToBuyHistory] = useLazyGetBidToBuyHistoryQuery({});
   const mapColumns = (columns: any) =>
     columns
       ?.filter(({ is_disabled }: any) => !is_disabled)
-      // ?.sort(({ sequence: a }: any, { sequence: b }: any) => a - b)
       .map(({ accessor, short_label, label }: any) => {
         const commonProps = {
           accessorKey: accessor,
@@ -312,7 +310,7 @@ const BidToBuy = () => {
     }
   }, []);
   useEffect(() => {
-    const handleRequestGetBidStones = (data: any) => {
+    const handleRequestGetBidStones = (_data: any) => {
       socketManager.emit('get_bidtobuy_stones');
     };
     socketManager.on('bidtobuy_stones', handleBidStones);
@@ -567,7 +565,6 @@ const BidToBuy = () => {
       <DialogComponent
         dialogContent={modalState.dialogContent}
         isOpens={modalState.isDialogOpen}
-        setIsOpen={modalSetState.setIsDialogOpen}
       />
 
       {isDetailPage ? (
