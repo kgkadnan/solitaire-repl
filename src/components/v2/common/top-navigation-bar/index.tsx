@@ -27,7 +27,7 @@ import confirmIcon from '@public/v2/assets/icons/modal/confirm.svg';
 import logoutConfirmIcon from '@public/v2/assets/icons/modal/logout.svg';
 import crossIcon from '@public/v2/assets/icons/modal/cross.svg';
 
-interface IUserAccountInfo {
+export interface IUserAccountInfo {
   customer: {
     billing_address_id: string | null;
     cart_id: string;
@@ -215,7 +215,7 @@ const TopNavigationBar = ({
         <Popover>
           <PopoverTrigger className="flex justify-center">
             <Avatar className="bg-primaryMain flex items-center justify-center">
-              {imageUrl.length ? (
+              {imageUrl?.length ? (
                 <img src={imageUrl} alt="profile" />
               ) : (
                 <p className="text-center text-mRegular text-neutral0">

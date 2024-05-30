@@ -18,6 +18,7 @@ import Head from 'next/head';
 import AppDownloadPopup from '@/components/v2/common/alert-pop-for-mobile';
 import CommonPoppup from './v2/login/component/common-poppup';
 import { DialogComponent } from '@/components/v2/common/dialog';
+// import Salesiq from '@/components/v2/common/sales-iq';
 
 const store = setupStore();
 
@@ -97,24 +98,6 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
         />
       </Head>
       <body className={inter.className}>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-                window.$zoho = window.$zoho || {};
-                window.$zoho.salesiq = window.$zoho.salesiq || {
-                  widgetcode: 'siq7b5017d0f4306a5933c325124d7b63bc87c3e317b901fc901e55322d5f5b8f6a'
-                };
-                var d = document;
-                s = d.createElement('script');
-                s.type = 'text/javascript';
-                s.id = 'zsiqscript';
-                s.defer = true;
-                s.src = 'https://salesiq.zoho.com/widget';
-                t = d.getElementsByTagName('script')[0];
-                t.parentNode.insertBefore(s, t);
-              `
-          }}
-        />
         <DialogComponent
           dialogContent={
             <CommonPoppup
@@ -152,6 +135,8 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
           </ThemeProviders>
         </Provider>
         <SpeedInsights />
+
+        {/* <Salesiq /> */}
       </body>
     </html>
   );
