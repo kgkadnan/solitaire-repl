@@ -170,10 +170,10 @@ const BookAppointment: React.FC<IBookAppointment> = ({
           modalSetState.setIsDialogOpen(true);
           modalSetState.setDialogContent(
             <CommonPoppup
-              content={error?.data?.message}
+              content={''}
               status={error.status === 400 ? 'warning' : ''}
               customPoppupBodyStyle="!mt-[70px]"
-              header={''}
+              header={error?.data?.message}
               actionButtonData={[
                 {
                   variant: 'primary',
@@ -238,9 +238,9 @@ const BookAppointment: React.FC<IBookAppointment> = ({
           modalSetState.setIsDialogOpen(true);
           modalSetState.setDialogContent(
             <CommonPoppup
-              content={error?.data?.message}
+              content={''}
               customPoppupBodyStyle="!mt-[70px]"
-              header={''}
+              header={error?.data?.message}
               actionButtonData={[
                 {
                   variant: 'primary',
