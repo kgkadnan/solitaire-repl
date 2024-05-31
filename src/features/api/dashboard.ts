@@ -8,7 +8,7 @@ export const dashboardApi = createApi({
 
   endpoints: builder => ({
     getCustomer: builder.query({
-      query: () => `store/customers/me`,
+      query: () => `store/customers/me?dashboard=new`,
       providesTags: ['dashboard']
     }),
     getBidHistory: builder.query({
