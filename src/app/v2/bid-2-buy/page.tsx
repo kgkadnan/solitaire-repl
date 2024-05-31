@@ -24,15 +24,13 @@ import { columnHeaders } from './constant';
 import { SocketManager, useSocket } from '@/hooks/v2/socket-manager';
 import CountdownTimer from '@components/v2/common/timer/index';
 import { useLazyGetBidToBuyHistoryQuery } from '@/features/api/dashboard';
-import InvalidCreds from '../login/component/invalid-creds';
+
 import { DialogComponent } from '@/components/v2/common/dialog';
 import ActionButton from '@/components/v2/common/action-button';
 import {
   MRT_RowSelectionState,
   MRT_TablePagination
 } from 'material-react-table';
-import warningIcon from '@public/v2/assets/icons/modal/warning.svg';
-import Image from 'next/image';
 import useUser from '@/lib/use-auth';
 import { DiamondDetailsComponent } from '@/components/v2/common/detail-page';
 import { getShapeDisplayName } from '@/utils/v2/detail-page';
@@ -44,6 +42,7 @@ import { Toast } from '@/components/v2/common/copy-and-share/toast';
 import { loadImages } from '@/components/v2/common/detail-page/helpers/load-images';
 import { checkImage } from '@/components/v2/common/detail-page/helpers/check-image';
 import fallbackImage from '@public/v2/assets/icons/not-found.svg';
+import CommonPoppup from '../login/component/common-poppup';
 
 const BidToBuy = () => {
   const [isDetailPage, setIsDetailPage] = useState(false);
@@ -271,7 +270,7 @@ const BidToBuy = () => {
     if (data) {
       modalSetState.setIsDialogOpen(true);
       modalSetState.setDialogContent(
-        <InvalidCreds
+        <CommonPoppup
           content=""
           header={data}
           handleClick={() => modalSetState.setIsDialogOpen(false)}
@@ -285,7 +284,7 @@ const BidToBuy = () => {
     if (data && data['status'] === 'success') {
       modalSetState.setIsDialogOpen(true);
       modalSetState.setDialogContent(
-        <InvalidCreds
+        <CommonPoppup
           content=""
           header={'Bid Placed Successfully'}
           handleClick={() => modalSetState.setIsDialogOpen(false)}
@@ -299,7 +298,7 @@ const BidToBuy = () => {
     if (data && data['status'] === 'success') {
       modalSetState.setIsDialogOpen(true);
       modalSetState.setDialogContent(
-        <InvalidCreds
+        <CommonPoppup
           content=""
           header={'Bid Canceled Successfully'}
           handleClick={() => modalSetState.setIsDialogOpen(false)}
@@ -395,41 +394,36 @@ const BidToBuy = () => {
                   handler: () => {
                     modalSetState.setIsDialogOpen(true);
                     modalSetState.setDialogContent(
-                      <>
-                        <div className="absolute left-[-84px] top-[-84px]">
-                          <Image src={warningIcon} alt="warning" />
-                        </div>
-                        <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[357px]">
-                          <h1 className="text-headingS text-neutral900">
-                            Are you sure you want to cancel this bid?
-                          </h1>
-                          <ActionButton
-                            actionButtonData={[
-                              {
-                                variant: 'secondary',
-                                label: 'Go Back',
-                                handler: () => {
-                                  modalSetState.setIsDialogOpen(false);
-                                },
-                                customStyle: 'flex-1 w-full'
-                              },
-                              {
-                                variant: 'primary',
-                                label: 'Cancel Bid',
-                                handler: () => {
-                                  socketManager.emit('cancel_bidtobuy', {
-                                    product_ids: Object.keys(rowSelection)
-                                  });
-                                  modalSetState.setIsDialogOpen(false);
-                                },
-                                customStyle: 'flex-1 w-full'
-                              }
-                            ]}
-                          />
-                        </div>
-                      </>
+                      <CommonPoppup
+                        content=""
+                        status="warning"
+                        customPoppupBodyStyle="mt-[70px]"
+                        header={'Are you sure you want to cancel this bid?'}
+                        actionButtonData={[
+                          {
+                            variant: 'secondary',
+                            label: 'Go Back',
+                            handler: () => {
+                              modalSetState.setIsDialogOpen(false);
+                            },
+                            customStyle: 'flex-1 w-full'
+                          },
+                          {
+                            variant: 'primary',
+                            label: 'Cancel Bid',
+                            handler: () => {
+                              socketManager.emit('cancel_bidtobuy', {
+                                product_ids: Object.keys(rowSelection)
+                              });
+                              modalSetState.setIsDialogOpen(false);
+                            },
+                            customStyle: 'flex-1 w-full'
+                          }
+                        ]}
+                      />
                     );
                   },
+
                   isDisable: !Object.keys(rowSelection).length
                 }
               ]}

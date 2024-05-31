@@ -15,9 +15,6 @@ import { ListManager } from 'react-beautiful-dnd-grid';
 import { ITablePrefrences } from './interface';
 import styles from './table-prefrences.module.scss';
 
-import Image from 'next/image';
-import confirmIcon from '@public/v2/assets/icons/modal/confirm.svg';
-
 import logger from 'logging/log-util';
 
 import ActionButton from '@/components/v2/common/action-button';
@@ -26,6 +23,7 @@ import CheckboxComponent from '@/components/v2/common/checkbox';
 import { DialogComponent } from '@/components/v2/common/dialog';
 import { ITableColumn } from '@/app/v2/search/interface';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
+import CommonPoppup from '@/app/v2/login/component/common-poppup';
 
 const TablePrefrences = () => {
   /* The code is using two custom hooks `useGetManageListingSequenceQuery` and
@@ -141,27 +139,22 @@ and `nonManageableListings` whenever the `data` variable changes. */
         .unwrap()
         .then(() => {
           setDialogContent(
-            <>
-              <div className="absolute left-[-84px] top-[-84px]">
-                <Image src={confirmIcon} alt="confirmIcon" />
-              </div>
-              <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                <h1 className="text-headingS text-neutral900">
-                  Updated Successfully
-                </h1>
-                <ActionButton
-                  actionButtonData={[
-                    {
-                      variant: 'primary',
-                      label: ManageLocales('app.modal.okay'),
-                      handler: () => setIsDialogOpen(false),
-                      customStyle: 'flex-1 w-full h-10'
-                    }
-                  ]}
-                />
-              </div>
-            </>
+            <CommonPoppup
+              content=""
+              status="success"
+              customPoppupBodyStyle="!mt-[70px]"
+              header={'Updated Successfully'}
+              actionButtonData={[
+                {
+                  variant: 'primary',
+                  label: ManageLocales('app.modal.okay'),
+                  handler: () => setIsDialogOpen(false),
+                  customStyle: 'flex-1 w-full h-10'
+                }
+              ]}
+            />
           );
+
           setIsDialogOpen(true);
         })
         .catch(error => {

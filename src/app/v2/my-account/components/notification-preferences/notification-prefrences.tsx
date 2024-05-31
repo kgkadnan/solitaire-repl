@@ -5,11 +5,9 @@ import {
   useManageSubscriptionMutation
 } from '@/features/api/manage-subscription';
 import { ManageLocales } from '@/utils/v2/translate';
-import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
-import warningIcon from 'public/v2/assets/icons/modal/warning.svg';
-import confirmIcon from '@public/v2/assets/icons/modal/confirm.svg';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
+import CommonPoppup from '@/app/v2/login/component/common-poppup';
 
 const NotificationPrefrences = ({ modalSetState }: any) => {
   const [triggerGetSubscription, { data }] = useLazyGetSubscriptionQuery({});
@@ -28,47 +26,36 @@ const NotificationPrefrences = ({ modalSetState }: any) => {
       if (value.includes('Email')) {
         setIsDialogOpen(true);
         setDialogContent(
-          <div className="h-[270px]">
-            <div className="absolute left-[-84px] top-[-84px]">
-              <Image src={warningIcon} alt="warningIcon" />
-            </div>
-            <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-              <div>
-                <h1 className="text-headingS text-neutral900">Warning</h1>
-                <p className="text-neutral600 text-mRegular">
-                  Disabling email notifications may result in missed updates.
-                  Consider selecting &ldquo;Important Only&ldquo; notifications
-                  to continue receiving critical information on the platform.
-                  Are you sure you want to turn off all email notifications?
-                </p>
-              </div>
-              <ActionButton
-                actionButtonData={[
-                  {
-                    variant: 'secondary',
-                    label: ManageLocales('app.modal.no'),
-                    handler: () => {
-                      setIsDialogOpen(false);
-                    },
-                    customStyle: 'flex-1 w-full h-10'
-                  },
-                  {
-                    variant: 'primary',
-                    label: ManageLocales('app.modal.yes'),
-                    handler: () => {
-                      setSelectedOptions(
-                        selectedOptions.filter(
-                          (option: any) => option !== value
-                        )
-                      );
-                      setIsDialogOpen(false);
-                    },
-                    customStyle: 'flex-1 w-full h-10'
-                  }
-                ]}
-              />
-            </div>
-          </div>
+          <CommonPoppup
+            customPoppupStyle="h-[270px]"
+            status="warning"
+            content={
+              ' Disabling email notifications may result in missed updates.Consider selecting "Important Only" notifications to continue receiving critical information on the platform. Are you sure you want to turn off all email notifications?'
+            }
+            customPoppupBodyStyle="!mt-[62px]"
+            header={'Warning'}
+            actionButtonData={[
+              {
+                variant: 'secondary',
+                label: ManageLocales('app.modal.no'),
+                handler: () => {
+                  setIsDialogOpen(false);
+                },
+                customStyle: 'flex-1 w-full h-10'
+              },
+              {
+                variant: 'primary',
+                label: ManageLocales('app.modal.yes'),
+                handler: () => {
+                  setSelectedOptions(
+                    selectedOptions.filter((option: any) => option !== value)
+                  );
+                  setIsDialogOpen(false);
+                },
+                customStyle: 'flex-1 w-full h-10'
+              }
+            ]}
+          />
         );
       } else {
         setSelectedOptions(
@@ -178,30 +165,24 @@ const NotificationPrefrences = ({ modalSetState }: any) => {
       .then(() => {
         setIsDialogOpen(true);
         setDialogContent(
-          <>
-            <div className="absolute left-[-84px] top-[-84px]">
-              <Image src={confirmIcon} alt="confirmIcon" />
-            </div>
-            <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-              <div>
-                <h1 className="text-headingS text-neutral900">
-                  Your notification preferences have been successfully saved
-                </h1>
-              </div>
-              <ActionButton
-                actionButtonData={[
-                  {
-                    variant: 'primary',
-                    label: ManageLocales('app.modal.okay'),
-                    handler: () => {
-                      setIsDialogOpen(false);
-                    },
-                    customStyle: 'w-full flex-1'
-                  }
-                ]}
-              />
-            </div>
-          </>
+          <CommonPoppup
+            content=""
+            status="success"
+            customPoppupBodyStyle="!mt-[70px]"
+            header={
+              'Your notification preferences have been successfully saved'
+            }
+            actionButtonData={[
+              {
+                variant: 'primary',
+                label: ManageLocales('app.modal.okay'),
+                handler: () => {
+                  setIsDialogOpen(false);
+                },
+                customStyle: 'w-full flex-1'
+              }
+            ]}
+          />
         );
       })
       .catch(e => {
@@ -213,41 +194,33 @@ const NotificationPrefrences = ({ modalSetState }: any) => {
     if (value.includes('Important')) {
       setIsDialogOpen(true);
       setDialogContent(
-        <div className="h-[210px]">
-          <div className="absolute left-[-84px] top-[-84px]">
-            <Image src={warningIcon} alt="warningIcon" />
-          </div>
-          <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-            <div>
-              <h1 className="text-headingS text-neutral900">Are you sure?</h1>
-              <p className="text-neutral600 text-mRegular">
-                Are you sure you want to turn off the “Important Only”
-                notifications as you might miss some important notifications
-              </p>
-            </div>
-            <ActionButton
-              actionButtonData={[
-                {
-                  variant: 'secondary',
-                  label: ManageLocales('app.modal.no'),
-                  handler: () => {
-                    setIsDialogOpen(false);
-                  },
-                  customStyle: 'flex-1 w-full h-10'
-                },
-                {
-                  variant: 'primary',
-                  label: ManageLocales('app.modal.yes'),
-                  handler: () => {
-                    setAllNotification(value);
-                    setIsDialogOpen(false);
-                  },
-                  customStyle: 'flex-1 w-full h-10'
-                }
-              ]}
-            />
-          </div>
-        </div>
+        <CommonPoppup
+          customPoppupStyle="h-[210px]"
+          content="Are you sure you want to turn off the “Important Only”
+      notifications as you might miss some important notifications"
+          status="warning"
+          customPoppupBodyStyle="!mt-[60px]"
+          header={'Are you sure?'}
+          actionButtonData={[
+            {
+              variant: 'secondary',
+              label: ManageLocales('app.modal.no'),
+              handler: () => {
+                setIsDialogOpen(false);
+              },
+              customStyle: 'flex-1 w-full h-10'
+            },
+            {
+              variant: 'primary',
+              label: ManageLocales('app.modal.yes'),
+              handler: () => {
+                setAllNotification(value);
+                setIsDialogOpen(false);
+              },
+              customStyle: 'flex-1 w-full h-10'
+            }
+          ]}
+        />
       );
     } else {
       setAllNotification(value);

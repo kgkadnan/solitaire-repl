@@ -1,4 +1,4 @@
-import InvalidCreds from '@/app/v2/login/component/invalid-creds';
+import CommonPoppup from '@/app/v2/login/component/common-poppup';
 import { IToken } from '@/app/v2/register/interface';
 
 interface IHandleVerifyOtp {
@@ -61,7 +61,7 @@ export const handleVerifyOtp = ({
       );
       setIsDialogOpen(true);
       setDialogContent(
-        <InvalidCreds
+        <CommonPoppup
           content=""
           header={e?.data?.message}
           handleClick={() => setIsDialogOpen(false)}

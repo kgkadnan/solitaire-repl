@@ -16,7 +16,6 @@ import DownloadAllIcon from '@public/v2/assets/icons/download-all.svg';
 import NewSearchIcon from '@public/v2/assets/icons/new-search.svg';
 import chevronDown from '@public/v2/assets/icons/save-search-dropdown/chevronDown.svg';
 import Image from 'next/image';
-import warningIcon from '@public/v2/assets/icons/modal/warning.svg';
 import searchIcon from '@public/v2/assets/icons/data-table/search-icon.svg';
 import threeDotsSvg from '@public/v2/assets/icons/threedots.svg';
 
@@ -51,6 +50,7 @@ import { Dropdown } from '../dropdown-menu';
 import { kycStatus } from '@/constants/enums/kyc';
 import { handleConfirmStone } from '@app/v2/search/result/helpers/handle-confirm-stone';
 import { handleCompareStone } from '@/app/v2/search/result/helpers/handle-compare-stone';
+import CommonPoppup from '@/app/v2/login/component/common-poppup';
 
 const theme = createTheme({
   typography: {
@@ -262,31 +262,22 @@ const DataTable = ({
               setIsLoading(false);
               modalSetState.setIsDialogOpen(true);
               modalSetState.setDialogContent(
-                <>
-                  {' '}
-                  <div className="absolute left-[-84px] top-[-84px]">
-                    <Image src={warningIcon} alt="warningIcon" />
-                  </div>
-                  <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                    <div>
-                      <h1 className="text-headingS text-neutral900">
-                        {MODIFY_SEARCH_STONES_EXCEEDS_LIMIT}
-                      </h1>
-                    </div>
-                    <ActionButton
-                      actionButtonData={[
-                        {
-                          variant: 'primary',
-                          label: ManageLocales('app.modal.okay'),
-                          handler: () => {
-                            modalSetState.setIsDialogOpen(false);
-                          },
-                          customStyle: 'flex-1'
-                        }
-                      ]}
-                    />
-                  </div>
-                </>
+                <CommonPoppup
+                  content={''}
+                  status="warning"
+                  customPoppupBodyStyle="!mt-[70px]"
+                  header={MODIFY_SEARCH_STONES_EXCEEDS_LIMIT}
+                  actionButtonData={[
+                    {
+                      variant: 'primary',
+                      label: ManageLocales('app.modal.okay'),
+                      handler: () => {
+                        modalSetState.setIsDialogOpen(false);
+                      },
+                      customStyle: 'flex-1'
+                    }
+                  ]}
+                />
               );
             } else {
               const data: any = JSON.parse(localStorage.getItem('Search')!);
@@ -306,47 +297,35 @@ const DataTable = ({
                   return;
                 } else if (data?.length >= MAX_SEARCH_TAB_LIMIT) {
                   modalSetState.setDialogContent(
-                    <>
-                      <div className="absolute left-[-84px] top-[-84px]">
-                        <Image src={warningIcon} alt="warningIcon" />
-                      </div>
-                      <div className="absolute bottom-[20px] flex flex-col gap-[15px] w-[352px]">
-                        <div>
-                          <h1 className="text-headingS text-neutral900">
-                            {' '}
-                            {ManageLocales('app.savedSearch.maxTabReached')}
-                          </h1>
-                          <p className="text-neutral600 text-mRegular">
-                            {ManageLocales(
-                              'app.savedSearch.maxTabReached.content'
-                            )}
-                          </p>
-                        </div>
-                        <ActionButton
-                          actionButtonData={[
-                            {
-                              variant: 'secondary',
-                              label: ManageLocales('app.modal.cancel'),
-                              handler: () => {
-                                modalSetState.setIsDialogOpen(false);
-                              },
-                              customStyle: 'flex-1'
-                            },
-                            {
-                              variant: 'primary',
-                              label: ManageLocales('app.modal.manageTabs'),
-                              handler: () => {
-                                router.push(
-                                  `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-1`
-                                );
-                                modalSetState.setIsDialogOpen(false);
-                              },
-                              customStyle: 'flex-1'
-                            }
-                          ]}
-                        />
-                      </div>
-                    </>
+                    <CommonPoppup
+                      content={ManageLocales(
+                        'app.savedSearch.maxTabReached.content'
+                      )}
+                      status="warning"
+                      customPoppupBodyStyle="!mt-[70px]"
+                      header={ManageLocales('app.savedSearch.maxTabReached')}
+                      actionButtonData={[
+                        {
+                          variant: 'secondary',
+                          label: ManageLocales('app.modal.cancel'),
+                          handler: () => {
+                            modalSetState.setIsDialogOpen(false);
+                          },
+                          customStyle: 'flex-1'
+                        },
+                        {
+                          variant: 'primary',
+                          label: ManageLocales('app.modal.manageTabs'),
+                          handler: () => {
+                            router.push(
+                              `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-1`
+                            );
+                            modalSetState.setIsDialogOpen(false);
+                          },
+                          customStyle: 'flex-1'
+                        }
+                      ]}
+                    />
                   );
                   modalSetState.setIsDialogOpen(true);
                 } else {
