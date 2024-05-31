@@ -862,9 +862,9 @@ const KYC = () => {
           setIsDialogOpen(true); // Show error dialog
           setDialogContent(
             <CommonPoppup
-              content={response?.error?.data?.message}
+              content={''}
               customPoppupBodyStyle="!mt-[70px]"
-              header={''}
+              header={response?.error?.data?.message}
               actionButtonData={[
                 {
                   variant: 'primary',
@@ -885,9 +885,9 @@ const KYC = () => {
         setIsDialogOpen(true); // Show error dialog
         setDialogContent(
           <CommonPoppup
-            content={error?.data?.message}
+            content={''}
             customPoppupBodyStyle="!mt-[70px]"
-            header={''}
+            header={error?.data?.message}
             actionButtonData={[
               {
                 variant: 'primary',
@@ -956,9 +956,9 @@ const KYC = () => {
         setIsDialogOpen(true); // Show error dialog
         setDialogContent(
           <CommonPoppup
-            content={e?.data?.message}
+            content={''}
             customPoppupBodyStyle="!mt-[70px]"
-            header={''}
+            header={e?.data?.message}
             actionButtonData={[
               {
                 variant: 'primary',

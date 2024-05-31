@@ -171,7 +171,8 @@ const ChangePassword = ({ modalSetState }: any) => {
         setIsDialogOpen(true); // Show error dialog
         setDialogContent(
           <CommonPoppup
-            content={error?.data?.message}
+            content={''}
+            header={error?.data?.message}
             customPoppupBodyStyle="mt-[70px]"
             actionButtonData={[
               {
