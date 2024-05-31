@@ -16,7 +16,7 @@ import logoutIcon from '@public/v2/assets/icons/topbar-icons/logout-icon.svg';
 import Link from 'next/link';
 import useUser from '@/lib/use-auth';
 import Notification from './components/notification/notification';
-import { useLazyGetProfilePhotoQuery } from '@/features/api/my-account';
+import { useLazyGetProfilePhotoQuery } from '@/features/api/my-profile';
 import { useAppSelector } from '@/hooks/hook';
 import {
   useLazyGetLogoutAllQuery,

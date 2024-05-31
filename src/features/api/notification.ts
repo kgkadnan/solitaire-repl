@@ -2,29 +2,42 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import { createBaseQuery } from './base-query';
 
 export const notificationApi = createApi({
-  reducerPath: 'notificationReducer',
+  reducerPath: 'noitificationReducer',
   baseQuery: createBaseQuery(),
   tagTypes: ['notification'],
 
   endpoints: builder => ({
-    getAllNotification: builder.query({
-      query: args => ({
-        url: `store/all-notification`,
-        method: 'GET',
-        params: { ...args }
+    seenNotification: builder.mutation({
+      query: data => ({
+        url: `store/customers/me/notices/seen`,
+        method: 'POST',
+        body: data
       }),
+      invalidatesTags: ['notification']
+    }),
+
+    getNotification: builder.query({
+      query: () => `store/customers/me/notices`,
       providesTags: ['notification']
     }),
-    updateNotification: builder.mutation({
-      query: filter => ({
-        url: `store/notification`,
-        method: 'PUT', // Use the appropriate HTTP method
-        body: filter // Modify this to match your API's payload
+    readNotification: builder.query({
+      query: ({ noticeId }) => `/store/customers/me/notices/read/${noticeId}`,
+      providesTags: ['notification']
+    }),
+    readAllNotification: builder.mutation({
+      query: () => ({
+        url: `/store/customers/me/notices/read-all`,
+        method: 'PUT'
       }),
       invalidatesTags: ['notification']
     })
   })
 });
 
-export const { useGetAllNotificationQuery, useUpdateNotificationMutation } =
-  notificationApi;
+export const {
+  useSeenNotificationMutation,
+  useLazyGetNotificationQuery,
+  useGetNotificationQuery,
+  useReadAllNotificationMutation,
+  useLazyReadNotificationQuery
+} = notificationApi;
