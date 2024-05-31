@@ -10,7 +10,7 @@ import styles from './profile-update.module.scss';
 import {
   useLazyGetProfilePhotoQuery,
   useUpdateProfilePhotoMutation
-} from '@/features/api/my-account';
+} from '@/features/api/my-profile';
 import deleteIcon from '@public/v2/assets/icons/attachment/delete-icon.svg';
 import { Label } from '@/components/v2/ui/label';
 import { extractBytesFromMessage } from '@/components/v2/common/file-attachment/helpers/extract-byte-from-message';

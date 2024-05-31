@@ -1,10 +1,10 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { createBaseQuery } from './base-query';
 
-export const myAccountApi = createApi({
-  reducerPath: 'myAccountReducer',
+export const myProfileApi = createApi({
+  reducerPath: 'myProfileReducer',
   baseQuery: createBaseQuery(),
-  tagTypes: ['myAccount'],
+  tagTypes: ['myProfile'],
 
   endpoints: builder => ({
     updateProfilePhoto: builder.mutation({
@@ -13,11 +13,11 @@ export const myAccountApi = createApi({
         method: 'POST',
         body: data
       }),
-      invalidatesTags: ['myAccount']
+      invalidatesTags: ['myProfile']
     }),
     getProfilePhoto: builder.query({
       query: ({ size }) => `store/account/profile/${size}?redirect=true`,
-      providesTags: ['myAccount']
+      providesTags: ['myProfile']
     }),
     deleteProfile: builder.mutation({
       query: data => ({
@@ -25,7 +25,7 @@ export const myAccountApi = createApi({
         method: 'DELETE',
         body: data
       }),
-      invalidatesTags: ['myAccount']
+      invalidatesTags: ['myProfile']
     })
   })
 });
@@ -34,4 +34,4 @@ export const {
   useLazyGetProfilePhotoQuery,
   useUpdateProfilePhotoMutation,
   useDeleteProfileMutation
-} = myAccountApi;
+} = myProfileApi;
