@@ -183,7 +183,22 @@ const DataTable = ({
   });
 
   const [paginatedData, setPaginatedData] = useState<any>([]);
-
+  const [globalFilter, setGlobalFilter] = useState('');
+  useEffect(() => {
+    if (globalFilter !== '') {
+      let data = rows.filter(
+        (data: any) => data?.lot_id?.startsWith(globalFilter)
+      );
+      const startIndex = pagination.pageIndex * pagination.pageSize;
+      const endIndex = startIndex + pagination.pageSize;
+      // Slice the data to get the current page's data
+      const newData = data.slice(startIndex, endIndex);
+      // Update the paginated data state
+      setPaginatedData(newData);
+    } else {
+      setPaginatedData(rows);
+    }
+  }, [globalFilter]);
   useEffect(() => {
     // Calculate the start and end indices for the current page
     const startIndex = pagination.pageIndex * pagination.pageSize;
@@ -458,10 +473,10 @@ const DataTable = ({
     state: {
       rowSelection,
       isFullScreen: JSON.parse(localStorage.getItem('isFullScreen')!),
-      pagination
+      pagination,
+      globalFilter
     },
     positionToolbarAlertBanner: 'none',
-    enableFilters: true,
     enableColumnActions: false,
     enableDensityToggle: false,
     enableHiding: false,
@@ -480,6 +495,8 @@ const DataTable = ({
     manualPagination: true,
     rowCount: rows.length,
     onPaginationChange: setPagination, //hoist pagination state to your state when it changes internally
+    manualFiltering: true,
+    onGlobalFilterChange: setGlobalFilter,
     icons: {
       SearchIcon: () => (
         <Image src={searchIcon} alt={'searchIcon'} className="mr-[6px]" />
