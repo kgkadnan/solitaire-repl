@@ -10,7 +10,7 @@ export default {
 
 const Template: Story<any> = args => {
   const [activeTab, setActiveTab] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
+  const [_isLoading, setIsLoading] = useState(false);
 
   return (
     <Breadcrum
