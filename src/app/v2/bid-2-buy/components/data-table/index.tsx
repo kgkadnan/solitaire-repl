@@ -846,16 +846,28 @@ const BidToByDataTable = ({
                         styles={{ inputMain: 'h-[64px]' }}
                         value={bidValue}
                         onChange={e => {
-                          setBidError('');
-                          setBidValues((prevValues: any) => {
-                            // If there's already a bid value for this row, increment it
-                            return {
-                              ...prevValues,
-                              [row.id]: e.target.value
-                            };
-
-                            // If no bid value for this row yet, start from discount and add 0.5
-                          });
+                          const newValue = e.target.value;
+                          if (newValue < row.original.discount) {
+                            setBidError(
+                              'Bid value cannot be less than maximum discount.'
+                            );
+                            setBidValues((prevValues: any) => {
+                              // If there's already a bid value for this row, increment it
+                              return {
+                                ...prevValues,
+                                [row.id]: newValue
+                              };
+                            });
+                          } else {
+                            setBidError('');
+                            setBidValues((prevValues: any) => {
+                              // If there's already a bid value for this row, increment it
+                              return {
+                                ...prevValues,
+                                [row.id]: newValue
+                              };
+                            });
+                          }
                         }}
                       />
                     </div>
