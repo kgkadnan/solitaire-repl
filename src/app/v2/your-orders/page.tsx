@@ -16,7 +16,7 @@ import {
   useLazyCardPreviousConfirmationQuery,
   useLazyCardRecentConfirmationQuery,
   useLazyGetProductDetailsQuery
-} from '@/features/api/my-diamonds/my-diamond';
+} from '@/features/api/your-order';
 import { ManageLocales } from '@/utils/v2/translate';
 import React, { useEffect, useState } from 'react';
 import { HeaderSearchBar } from './components/search-bar';

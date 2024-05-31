@@ -21,7 +21,7 @@ import ProfileUpdate from './components/profile-update/profile-update';
 import {
   useDeleteProfileMutation,
   useLazyGetProfilePhotoQuery
-} from '@/features/api/my-account';
+} from '@/features/api/my-profile';
 import { useLazyGetAuthDataQuery } from '@/features/api/login';
 import { useAppDispatch, useAppSelector } from '@/hooks/hook';
 import {
