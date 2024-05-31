@@ -160,7 +160,6 @@ const NewArrivalDataTable = ({
     } else {
       setPaginatedData(rows);
     }
-    // console.log(rows, 'data', globalFilter,data);
   }, [globalFilter]);
   useEffect(() => {
     if (activeTab !== 2) {
