@@ -1273,9 +1273,9 @@ const Dashboard = () => {
             setIsDialogOpen(true);
             setDialogContent(
               <CommonPoppup
-                content={e?.data?.message}
+                content={''}
                 customPoppupBodyStyle="mt-[70px]"
-                header={''}
+                header={e?.data?.message}
                 actionButtonData={[
                   {
                     variant: 'primary',
@@ -1384,9 +1384,9 @@ const Dashboard = () => {
             setIsDialogOpen(true);
             setDialogContent(
               <CommonPoppup
-                content={error?.data?.message}
+                content={''}
                 customPoppupBodyStyle="mt-[70px]"
-                header={''}
+                header={error?.data?.message}
                 actionButtonData={[
                   {
                     variant: 'primary',

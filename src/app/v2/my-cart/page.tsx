@@ -551,9 +551,9 @@ const MyCart = () => {
             setIsDialogOpen(true);
             setDialogContent(
               <CommonPoppup
-                content={e?.data?.message}
+                content={''}
                 customPoppupBodyStyle="!mt-[70px]"
-                header={''}
+                header={e?.data?.message}
                 actionButtonData={[
                   {
                     variant: 'primary',

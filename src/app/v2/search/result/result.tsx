@@ -189,9 +189,9 @@ const Result = ({
             setIsDialogOpen(true);
             setDialogContent(
               <CommonPoppup
-                content={res?.error?.data?.message}
+                content={''}
                 customPoppupBodyStyle="!mt-[70px]"
-                header={''}
+                header={res?.error?.data?.message}
                 actionButtonData={[
                   {
                     variant: 'primary',
@@ -649,9 +649,9 @@ const Result = ({
             setIsDialogOpen(true);
             setDialogContent(
               <CommonPoppup
-                content={error?.data?.message}
+                content={''}
                 customPoppupBodyStyle="!mt-[70px]"
-                header={''}
+                header={error?.data?.message}
                 actionButtonData={[
                   {
                     variant: 'primary',
@@ -764,9 +764,9 @@ const Result = ({
             setIsDialogOpen(true);
             setDialogContent(
               <CommonPoppup
-                content={error?.data?.message}
+                content={''}
                 customPoppupBodyStyle="!mt-[70px]"
-                header={''}
+                header={error?.data?.message}
                 actionButtonData={[
                   {
                     variant: 'primary',
