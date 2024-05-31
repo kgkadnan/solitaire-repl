@@ -4,7 +4,7 @@ import { useForgotPasswordMutation } from '@/features/api/forgot-password';
 import { INVALID_PHONE } from '@/constants/error-messages/register';
 import { Events } from '@/constants/enums/event';
 import { statusCode } from '@/constants/enums/status-code';
-import InvalidCreds from '../login/component/invalid-creds';
+import CommonPoppup from '../login/component/common-poppup';
 import UserAuthenticationLayout from '@/components/v2/common/user-authentication-layout';
 import { DialogComponent } from '@/components/v2/common/dialog';
 import ForgotComponent from './component/forgot-password';
@@ -19,6 +19,7 @@ import OTPComponent from './component/otp';
 import ResetComponent from './component/reset-password';
 import { useGetCountryCodeQuery } from '@/features/api/current-ip';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
+import { ManageLocales } from '@/utils/v2/translate';
 
 const initialTokenState = {
   token: '',
@@ -97,10 +98,19 @@ const ForgotPassword = () => {
       } else if (res.error) {
         setIsDialogOpen(true);
         setDialogContent(
-          <InvalidCreds
+          <CommonPoppup
             content=""
             header={res?.error.data.message}
-            handleClick={() => setIsDialogOpen(false)}
+            actionButtonData={[
+              {
+                variant: 'primary',
+                label: ManageLocales('app.modal.okay'),
+                handler: () => {
+                  setIsDialogOpen(false);
+                },
+                customStyle: 'flex-1 w-full h-10'
+              }
+            ]}
           />
         );
       }

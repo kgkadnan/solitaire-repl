@@ -9,7 +9,7 @@ import V2TopNavigationBar from '@/components/v2/common/top-navigation-bar';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import { useAppDispatch, useAppSelector } from '@/hooks/hook';
 import { DialogComponent } from '@/components/v2/common/dialog';
-import InvalidCreds from '@/app/v2/login/component/invalid-creds';
+import CommonPoppup from '@/app/v2/login/component/common-poppup';
 import { hide } from '@/features/logout/logout-slice';
 import MaintenanceMode from '@/components/v2/common/maintenace';
 import { useGetCustomerQuery } from '@/features/api/dashboard';
@@ -85,7 +85,7 @@ const authorizedLogin = (WrappedComponent: React.ComponentType) => {
         <div>
           <DialogComponent
             dialogContent={
-              <InvalidCreds
+              <CommonPoppup
                 header="Session expired! You have been logged out of all devices. Please log in again."
                 content={''}
                 handleClick={() => {

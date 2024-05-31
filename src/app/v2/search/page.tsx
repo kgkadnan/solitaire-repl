@@ -9,7 +9,6 @@ import EmptyScreen from '@/components/v2/common/empty-screen';
 import empty from '@public/v2/assets/icons/data-table/empty-cart.svg';
 import Image from 'next/image';
 import ActionButton from '@/components/v2/common/action-button';
-import warningIcon from '@public/v2/assets/icons/modal/warning.svg';
 import { ManageLocales } from '@/utils/v2/translate';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import { DialogComponent } from '@/components/v2/common/dialog';
@@ -30,6 +29,7 @@ import { InputField } from '@/components/v2/common/input-field';
 import bookmarkIcon from '@public/v2/assets/icons/modal/bookmark.svg';
 import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
 import { handleSaveSearch } from './result/helpers/handle-save-search';
+import CommonPoppup from '../login/component/common-poppup';
 
 const Search = () => {
   const subRoute = useSearchParams().get('active-tab');
@@ -111,50 +111,37 @@ const Search = () => {
 
   const handleCloseAllTabs = () => {
     setDialogContent(
-      <>
-        {' '}
-        <div className="h-[200px]">
-          <div className="absolute left-[-84px] top-[-84px]">
-            <Image src={warningIcon} alt="warningIcon" />
-          </div>
-          <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-            <div>
-              <h1 className="text-headingS text-neutral900">
-                {' '}
-                {ManageLocales('app.search.confirmHeader')}
-              </h1>
-              <p className="text-neutral600 text-mRegular">
-                {ManageLocales('app.search.closeTabs')}
-              </p>
-            </div>
-            <ActionButton
-              actionButtonData={[
-                {
-                  variant: 'secondary',
-                  label: ManageLocales('app.modal.no'),
-                  handler: () => setIsDialogOpen(false),
-                  customStyle: 'flex-1 h-10'
-                },
-                {
-                  variant: 'primary',
-                  label: ManageLocales('app.modal.yes'),
-                  handler: () => {
-                    localStorage.removeItem('Search'),
-                      setIsDialogOpen(false),
-                      router.push(
-                        `${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`
-                      ),
-                      setSearchParameters([]);
-                    setAddSearches([]);
-                  },
-                  customStyle: 'flex-1 h-10'
-                }
-              ]}
-            />
-          </div>
-        </div>
-      </>
+      <CommonPoppup
+        content={ManageLocales('app.search.closeTabs')}
+        status="warning"
+        customPoppupStyle="h-[200px]"
+        customPoppupBodyStyle="!mt-[65px]"
+        header={ManageLocales('app.search.confirmHeader')}
+        actionButtonData={[
+          {
+            variant: 'secondary',
+            label: ManageLocales('app.modal.no'),
+            handler: () => setIsDialogOpen(false),
+            customStyle: 'flex-1 h-10'
+          },
+          {
+            variant: 'primary',
+            label: ManageLocales('app.modal.yes'),
+            handler: () => {
+              localStorage.removeItem('Search'),
+                setIsDialogOpen(false),
+                router.push(
+                  `${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`
+                ),
+                setSearchParameters([]);
+              setAddSearches([]);
+            },
+            customStyle: 'flex-1 h-10'
+          }
+        ]}
+      />
     );
+
     setIsDialogOpen(true);
   };
 
@@ -191,66 +178,51 @@ const Search = () => {
     if (!yourSelection[id - 1]?.isSavedSearch) {
       setIsDialogOpen(true);
       setDialogContent(
-        <>
-          {' '}
-          <div className="h-[200px]">
-            <div className="absolute left-[-84px] top-[-84px]">
-              <Image src={warningIcon} alt="warningIcon" />
-            </div>
-            <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-              <div>
-                <h1 className="text-headingS text-neutral900">
-                  {' '}
-                  {ManageLocales('app.search.confirmHeader')}
-                </h1>
-                <p className="text-neutral600 text-mRegular">
-                  Do you want to save your &quot;Search Result&quot; for this
-                  session?
-                </p>
-              </div>
-              <ActionButton
-                actionButtonData={[
-                  {
-                    variant: 'secondary',
-                    label: ManageLocales('app.modal.no'),
-                    handler: () => {
+        <CommonPoppup
+          content={`Do you want to save your "Search Result" for this session?`}
+          status="warning"
+          customPoppupStyle="h-[200px]"
+          customPoppupBodyStyle="!mt-[65px]"
+          header={ManageLocales('app.search.confirmHeader')}
+          actionButtonData={[
+            {
+              variant: 'secondary',
+              label: ManageLocales('app.modal.no'),
+              handler: () => {
+                setIsDialogOpen(false);
+                closeSearch(id, yourSelection);
+              },
+              customStyle: 'flex-1 h-10'
+            },
+            {
+              variant: 'primary',
+              label: ManageLocales('app.modal.yes'),
+              handler: () => {
+                if (yourSelection[id - 1]?.saveSearchName.length) {
+                  //update logic comes here
+                  const updateSaveSearchData = {
+                    id: yourSelection[id - 1]?.id,
+                    meta_data: yourSelection[id - 1]?.queryParams,
+                    diamond_count: data?.count
+                  };
+                  updateSavedSearch(updateSaveSearchData)
+                    .unwrap()
+                    .then(() => {
                       setIsDialogOpen(false);
                       closeSearch(id, yourSelection);
-                    },
-                    customStyle: 'flex-1 h-10'
-                  },
-                  {
-                    variant: 'primary',
-                    label: ManageLocales('app.modal.yes'),
-                    handler: () => {
-                      if (yourSelection[id - 1]?.saveSearchName.length) {
-                        //update logic comes here
-                        const updateSaveSearchData = {
-                          id: yourSelection[id - 1]?.id,
-                          meta_data: yourSelection[id - 1]?.queryParams,
-                          diamond_count: data?.count
-                        };
-                        updateSavedSearch(updateSaveSearchData)
-                          .unwrap()
-                          .then(() => {
-                            setIsDialogOpen(false);
-                            closeSearch(id, yourSelection);
-                          })
-                          .catch((error: any) => {
-                            logger.error(error);
-                          });
-                      } else {
-                        setIsInputDialogOpen(true);
-                        setIsDialogOpen(false);
-                      }
-                    },
-                    customStyle: 'flex-1 h-10'
-                  }
-                ]}
-              />
-            </div>
-          </div>
-        </>
+                    })
+                    .catch((error: any) => {
+                      logger.error(error);
+                    });
+                } else {
+                  setIsInputDialogOpen(true);
+                  setIsDialogOpen(false);
+                }
+              },
+              customStyle: 'flex-1 h-10'
+            }
+          ]}
+        />
       );
     } else {
       closeSearch(id, yourSelection);

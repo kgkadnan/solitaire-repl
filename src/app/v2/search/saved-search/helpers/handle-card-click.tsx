@@ -5,12 +5,10 @@ import {
   MAX_SEARCH_TAB_LIMIT
 } from '@/constants/business-logic';
 import { MODIFY_SEARCH_STONES_EXCEEDS_LIMIT } from '@/constants/error-messages/saved';
-import warningIcon from '@public/v2/assets/icons/modal/warning.svg';
 import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
-import ActionButton from '@/components/v2/common/action-button';
-import Image from 'next/image';
 import { ManageLocales } from '@/utils/v2/translate';
 import { ReactNode } from 'react';
+import CommonPoppup from '@/app/v2/login/component/common-poppup';
 
 export const isSearchAlreadyExist = (data: any, nameToFind: string) => {
   const foundSearch = data.find(
@@ -58,32 +56,22 @@ export const handleCardClick = ({
       if (response?.data?.count > MAX_SAVED_SEARCH_COUNT) {
         setIsDialogOpen(true);
         setDialogContent(
-          <>
-            {' '}
-            <div className="absolute left-[-84px] top-[-84px]">
-              <Image src={warningIcon} alt="warningIcon" />
-            </div>
-            <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-              <div>
-                <h1 className="text-headingS text-neutral900">
-                  {' '}
-                  {MODIFY_SEARCH_STONES_EXCEEDS_LIMIT}
-                </h1>
-              </div>
-              <ActionButton
-                actionButtonData={[
-                  {
-                    variant: 'primary',
-                    label: ManageLocales('app.modal.okay'),
-                    handler: () => {
-                      setIsDialogOpen(false);
-                    },
-                    customStyle: 'flex-1 h-10'
-                  }
-                ]}
-              />
-            </div>
-          </>
+          <CommonPoppup
+            status="warning"
+            content={''}
+            customPoppupBodyStyle="!mt-[70px]"
+            header={MODIFY_SEARCH_STONES_EXCEEDS_LIMIT}
+            actionButtonData={[
+              {
+                variant: 'primary',
+                label: ManageLocales('app.modal.okay'),
+                handler: () => {
+                  setIsDialogOpen(false);
+                },
+                customStyle: 'flex-1 h-10'
+              }
+            ]}
+          />
         );
       } else {
         const data: any = JSON.parse(localStorage.getItem('Search')!);
@@ -104,47 +92,32 @@ export const handleCardClick = ({
           // Check if the maximum search tab limit is reached
           else if (data?.length >= MAX_SEARCH_TAB_LIMIT) {
             setDialogContent(
-              <>
-                {' '}
-                <div className="absolute left-[-84px] top-[-84px]">
-                  <Image src={warningIcon} alt="warningIcon" />
-                </div>
-                <div className="absolute bottom-[20px] flex flex-col gap-[15px] w-[352px]">
-                  <div>
-                    <h1 className="text-headingS text-neutral900">
-                      {' '}
-                      {ManageLocales('app.savedSearch.maxTabReached')}
-                    </h1>
-                    <p className="text-neutral600 text-mRegular">
-                      {ManageLocales('app.savedSearch.maxTabReached.content')}
-                    </p>
-                  </div>
-                  <ActionButton
-                    actionButtonData={[
-                      {
-                        variant: 'secondary',
-                        label: ManageLocales('app.modal.cancel'),
-                        handler: () => {
-                          setIsDialogOpen(false);
-                        },
-                        customStyle: 'flex-1 h-10'
-                      },
-                      {
-                        variant: 'primary',
-                        label: ManageLocales('app.modal.manageTabs'),
-                        handler: () => {
-                          router.push(
-                            `${Routes.SEARCH}?active-tab=${
-                              SubRoutes.RESULT
-                            }-${1}`
-                          );
-                        },
-                        customStyle: 'flex-1 h-10'
-                      }
-                    ]}
-                  />
-                </div>
-              </>
+              <CommonPoppup
+                status="warning"
+                content={ManageLocales('app.savedSearch.maxTabReached.content')}
+                customPoppupBodyStyle="!mt-[70px]"
+                header={ManageLocales('app.savedSearch.maxTabReached')}
+                actionButtonData={[
+                  {
+                    variant: 'secondary',
+                    label: ManageLocales('app.modal.cancel'),
+                    handler: () => {
+                      setIsDialogOpen(false);
+                    },
+                    customStyle: 'flex-1 h-10'
+                  },
+                  {
+                    variant: 'primary',
+                    label: ManageLocales('app.modal.manageTabs'),
+                    handler: () => {
+                      router.push(
+                        `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${1}`
+                      );
+                    },
+                    customStyle: 'flex-1 h-10'
+                  }
+                ]}
+              />
             );
             setIsDialogOpen(true);
           } else {

@@ -16,10 +16,8 @@ import {
   useAddMyAppointmentMutation,
   useRescheduleMyAppointmentMutation
 } from '@/features/api/my-appointments';
-import errorSvg from '@public/v2/assets/icons/modal/error.svg';
-import confirmIcon from '@public/v2/assets/icons/modal/confirm.svg';
-import warningIcon from '@public/v2/assets/icons/modal/warning.svg';
 import { PLEASE_SELECT_A_TIME_SLOT } from '@/constants/error-messages/search';
+import CommonPoppup from '@/app/v2/login/component/common-poppup';
 
 export interface IModalSetState {
   setDialogContent: React.Dispatch<React.SetStateAction<React.ReactNode>>;
@@ -148,31 +146,22 @@ const BookAppointment: React.FC<IBookAppointment> = ({
           if (getAppointment) getAppointment!();
           modalSetState.setIsDialogOpen(true);
           modalSetState.setDialogContent(
-            <>
-              <div className="absolute left-[-84px] top-[-84px]">
-                <Image src={confirmIcon} alt="confirmIcon" />
-              </div>
-              <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                <div>
-                  <h1 className="text-headingS text-neutral900">
-                    Your appointment has been booked successfully
-                  </h1>
-                </div>
-                <ActionButton
-                  actionButtonData={[
-                    {
-                      variant: 'primary',
-                      label: ManageLocales('app.modal.okay'),
-                      handler: () => {
-                        modalSetState.setIsDialogOpen(false);
-                      },
-                      customStyle: 'w-full flex-1'
-                    }
-                  ]}
-                />
-              </div>
-            </>
+            <CommonPoppup
+              content=""
+              status="success"
+              customPoppupBodyStyle="!mt-[70px]"
+              header={'Your appointment has been booked successfully'}
+              actionButtonData={[
+                {
+                  variant: 'primary',
+                  label: ManageLocales('app.modal.okay'),
+                  handler: () => modalSetState.setIsDialogOpen(false),
+                  customStyle: 'flex-1 w-full h-10'
+                }
+              ]}
+            />
           );
+
           setRowSelection && setRowSelection({});
         })
         .catch(error => {
@@ -180,32 +169,24 @@ const BookAppointment: React.FC<IBookAppointment> = ({
           goBackToListView();
           modalSetState.setIsDialogOpen(true);
           modalSetState.setDialogContent(
-            <>
-              <div className="absolute left-[-84px] top-[-84px]">
-                <Image
-                  src={error.status === 400 ? warningIcon : errorSvg}
-                  alt={`${error.status === 400 ? 'warningIcon' : 'errorSvg'}`}
-                />
-              </div>
-              <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                <p className="text-headingS text-neutral900">
-                  {error?.data?.message}
-                </p>
-                <ActionButton
-                  actionButtonData={[
-                    {
-                      variant: 'primary',
-                      label: ManageLocales('app.modal.okay'),
-                      handler: () => {
-                        modalSetState.setIsDialogOpen(false);
-                      },
-                      customStyle: 'flex-1 w-full h-10'
-                    }
-                  ]}
-                />
-              </div>
-            </>
+            <CommonPoppup
+              content={error?.data?.message}
+              status={error.status === 400 ? 'warning' : ''}
+              customPoppupBodyStyle="!mt-[70px]"
+              header={''}
+              actionButtonData={[
+                {
+                  variant: 'primary',
+                  label: ManageLocales('app.modal.okay'),
+                  handler: () => {
+                    modalSetState.setIsDialogOpen(false);
+                  },
+                  customStyle: 'flex-1 w-full h-10'
+                }
+              ]}
+            />
           );
+
           setRowSelection && setRowSelection({});
         });
     } else {
@@ -233,30 +214,22 @@ const BookAppointment: React.FC<IBookAppointment> = ({
           getAppointment!();
           modalSetState.setIsDialogOpen(true);
           modalSetState.setDialogContent(
-            <>
-              <div className="absolute left-[-84px] top-[-84px]">
-                <Image src={confirmIcon} alt="confirmIcon" />
-              </div>
-              <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                <div>
-                  <h1 className="text-headingS text-neutral900">
-                    Your appointment has been successfully rescheduled
-                  </h1>
-                </div>
-                <ActionButton
-                  actionButtonData={[
-                    {
-                      variant: 'primary',
-                      label: ManageLocales('app.modal.okay'),
-                      handler: () => {
-                        modalSetState.setIsDialogOpen(false);
-                      },
-                      customStyle: 'w-full flex-1'
-                    }
-                  ]}
-                />
-              </div>
-            </>
+            <CommonPoppup
+              content={''}
+              status={'success'}
+              customPoppupBodyStyle="!mt-[70px]"
+              header={'Your appointment has been successfully rescheduled'}
+              actionButtonData={[
+                {
+                  variant: 'primary',
+                  label: ManageLocales('app.modal.okay'),
+                  handler: () => {
+                    modalSetState.setIsDialogOpen(false);
+                  },
+                  customStyle: 'w-full flex-1'
+                }
+              ]}
+            />
           );
         })
         .catch(error => {
@@ -264,28 +237,21 @@ const BookAppointment: React.FC<IBookAppointment> = ({
           goBackToListView();
           modalSetState.setIsDialogOpen(true);
           modalSetState.setDialogContent(
-            <>
-              <div className="absolute left-[-84px] top-[-84px]">
-                <Image src={errorSvg} alt="errorSvg" />
-              </div>
-              <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                <p className="text-neutral600 text-mRegular">
-                  {error?.data?.message}
-                </p>
-                <ActionButton
-                  actionButtonData={[
-                    {
-                      variant: 'primary',
-                      label: ManageLocales('app.modal.okay'),
-                      handler: () => {
-                        modalSetState.setIsDialogOpen(false);
-                      },
-                      customStyle: 'flex-1 w-full h-10'
-                    }
-                  ]}
-                />
-              </div>
-            </>
+            <CommonPoppup
+              content={error?.data?.message}
+              customPoppupBodyStyle="!mt-[70px]"
+              header={''}
+              actionButtonData={[
+                {
+                  variant: 'primary',
+                  label: ManageLocales('app.modal.okay'),
+                  handler: () => {
+                    modalSetState.setIsDialogOpen(false);
+                  },
+                  customStyle: 'flex-1 w-full h-10'
+                }
+              ]}
+            />
           );
         });
     } else {

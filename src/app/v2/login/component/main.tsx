@@ -38,7 +38,7 @@ import {
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import { IAuthDataResponse } from '../interface';
-import InvalidCreds from './invalid-creds';
+import CommonPoppup from './common-poppup';
 import LoginComponent from './login';
 import ConfirmScreen from '../../register/component/confirmation-screen';
 
@@ -151,7 +151,7 @@ const Login = () => {
           .catch(_e => {
             setIsDialogOpen(true);
             setDialogContent(
-              <InvalidCreds
+              <CommonPoppup
                 header={_e.data.message}
                 handleClick={() => setIsDialogOpen(false)}
                 content={''}
@@ -187,7 +187,7 @@ const Login = () => {
         // Display error message if login fails
         setIsDialogOpen(true);
         setDialogContent(
-          <InvalidCreds
+          <CommonPoppup
             content={INCORRECT_LOGIN_CREDENTIALS}
             handleClick={() => setIsDialogOpen(false)}
             header="Login Failed"
@@ -197,7 +197,7 @@ const Login = () => {
       } else if (res.error) {
         setIsDialogOpen(true);
         setDialogContent(
-          <InvalidCreds
+          <CommonPoppup
             content=""
             header={res.error.data.message}
             handleClick={() => setIsDialogOpen(false)}
