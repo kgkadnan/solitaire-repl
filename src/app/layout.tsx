@@ -16,9 +16,9 @@ import {
 import { ThemeProviders } from './theme-providers';
 import Head from 'next/head';
 import AppDownloadPopup from '@/components/v2/common/alert-pop-for-mobile';
-import InvalidCreds from './v2/login/component/invalid-creds';
+import CommonPoppup from './v2/login/component/common-poppup';
 import { DialogComponent } from '@/components/v2/common/dialog';
-import Salesiq from '@/components/v2/common/sales-iq';
+// import Salesiq from '@/components/v2/common/sales-iq';
 
 const store = setupStore();
 
@@ -100,7 +100,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
       <body className={inter.className}>
         <DialogComponent
           dialogContent={
-            <InvalidCreds
+            <CommonPoppup
               header="Warning"
               content={
                 'Please first close developer tool window and then access website'
@@ -136,7 +136,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
         </Provider>
         <SpeedInsights />
 
-        <Salesiq />
+        {/* <Salesiq /> */}
       </body>
     </html>
   );

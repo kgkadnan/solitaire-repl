@@ -8,13 +8,11 @@ import {
 import { PASSWORD_REGEX } from '@/constants/validation-regex/regex';
 import { useChangePasswordMutation } from '@/features/api/change-password';
 import { ManageLocales } from '@/utils/v2/translate';
-import Image from 'next/image';
 import React, { useState } from 'react';
-import confirmIcon from '@public/v2/assets/icons/modal/confirm.svg';
 import useUser from '@/lib/use-auth';
 import { useRouter } from 'next/navigation';
-import errorSvg from '@public/v2/assets/icons/modal/error.svg';
 import { kycStatus } from '@/constants/enums/kyc';
+import CommonPoppup from '@/app/v2/login/component/common-poppup';
 const initialFormState = {
   password: '',
   newPassword: '',
@@ -149,58 +147,43 @@ const ChangePassword = ({ modalSetState }: any) => {
         userLoggedOut();
         setIsDialogOpen(true);
         setDialogContent(
-          <>
-            <div className="absolute left-[-84px] top-[-84px]">
-              <Image src={confirmIcon} alt="confirmIcon" />
-            </div>
-            <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-              <div>
-                <h1 className="text-headingS text-neutral900 font-medium">
-                  Password reset successful. For security, you were logged out
-                  from all devices.{' '}
-                </h1>
-              </div>
-              <ActionButton
-                actionButtonData={[
-                  {
-                    variant: 'primary',
-                    label: 'Okay',
-                    handler: () => {
-                      router.push('/v2/login');
-                    },
-                    customStyle: 'w-full flex-1'
-                  }
-                ]}
-              />
-            </div>
-          </>
+          <CommonPoppup
+            status="success"
+            content={''}
+            customPoppupBodyStyle="mt-[70px]"
+            header={
+              'Password reset successful. For security, you were logged out from all devices.'
+            }
+            actionButtonData={[
+              {
+                variant: 'primary',
+                label: 'Okay',
+                handler: () => {
+                  setIsDialogOpen(false), router.push('/v2/login');
+                },
+                customStyle: 'flex-1 w-full h-10'
+              }
+            ]}
+          />
         );
       })
       .catch(error => {
         setIsDialogOpen(true); // Show error dialog
         setDialogContent(
-          <>
-            <div className="absolute left-[-84px] top-[-84px]">
-              <Image src={errorSvg} alt="errorSvg" />
-            </div>
-            <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-              <p className="text-neutral600 text-mRegular">
-                {error?.data?.message}
-              </p>
-              <ActionButton
-                actionButtonData={[
-                  {
-                    variant: 'secondary',
-                    label: ManageLocales('app.modal.okay'),
-                    handler: () => {
-                      setIsDialogOpen(false);
-                    },
-                    customStyle: 'flex-1 w-full h-10'
-                  }
-                ]}
-              />
-            </div>
-          </>
+          <CommonPoppup
+            content={error?.data?.message}
+            customPoppupBodyStyle="mt-[70px]"
+            actionButtonData={[
+              {
+                variant: 'secondary',
+                label: ManageLocales('app.modal.okay'),
+                handler: () => {
+                  setIsDialogOpen(false);
+                },
+                customStyle: 'flex-1 w-full h-10'
+              }
+            ]}
+          />
         );
       });
     setChangePasswordState(initialFormState);

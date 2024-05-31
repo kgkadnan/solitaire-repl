@@ -41,8 +41,7 @@ import ActionButton from '@/components/v2/common/action-button';
 import { ManageLocales } from '@/utils/v2/translate';
 import { Dropdown } from '@/components/v2/common/dropdown-menu';
 import { statusCode } from '@/constants/enums/status-code';
-import errorSvg from '@public/v2/assets/icons/modal/error.svg';
-import confirmIcon from '@public/v2/assets/icons/modal/confirm.svg';
+
 import { useAddCartMutation } from '@/features/api/cart';
 import { DialogComponent } from '@/components/v2/common/dialog';
 import { handleConfirmStone } from './search/result/helpers/handle-confirm-stone';
@@ -101,6 +100,7 @@ import { useLazyGetAvailableMyAppointmentSlotsQuery } from '@/features/api/my-ap
 import { IAppointmentPayload } from './my-appointments/page';
 import BookAppointment from './my-appointments/components/book-appointment/book-appointment';
 import { Skeleton } from '@mui/material';
+import CommonPoppup from './login/component/common-poppup';
 
 interface ITabs {
   label: string;
@@ -924,39 +924,34 @@ const Dashboard = () => {
           // setIsLoading(false);
           setIsDialogOpen(true);
           setDialogContent(
-            <>
-              <div className="absolute left-[-84px] top-[-84px]">
-                <Image src={confirmIcon} alt="confirmIcon" />
-              </div>
-              <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                <h1 className="text-headingS text-neutral900 !font-medium	">
-                  {res?.message}
-                </h1>
-                <ActionButton
-                  actionButtonData={[
-                    {
-                      variant: 'secondary',
-                      label: ManageLocales('app.modal.continue'),
-                      handler: () => {
-                        setIsDialogOpen(false);
-                        setIsDetailPage(false);
-                        setSearchData({});
-                      },
-                      customStyle: 'flex-1 w-full h-10'
-                    },
-                    {
-                      variant: 'primary',
-                      label: 'Go to "My Cart"',
-                      handler: () => {
-                        router.push('/v2/my-cart');
-                      },
-                      customStyle: 'flex-1 w-full h-10'
-                    }
-                  ]}
-                />
-              </div>
-            </>
+            <CommonPoppup
+              content=""
+              status="success"
+              customPoppupBodyStyle="mt-[70px]"
+              header={res?.message}
+              actionButtonData={[
+                {
+                  variant: 'secondary',
+                  label: ManageLocales('app.modal.continue'),
+                  handler: () => {
+                    setIsDialogOpen(false);
+                    setIsDetailPage(false);
+                    setSearchData({});
+                  },
+                  customStyle: 'flex-1 w-full h-10'
+                },
+                {
+                  variant: 'primary',
+                  label: 'Go to "My Cart"',
+                  handler: () => {
+                    router.push('/v2/my-cart');
+                  },
+                  customStyle: 'flex-1 w-full h-10'
+                }
+              ]}
+            />
           );
+
           // On success, show confirmation dialog and update badge
           setError('');
         })
@@ -966,28 +961,21 @@ const Dashboard = () => {
 
           setIsDialogOpen(true);
           setDialogContent(
-            <>
-              <div className="absolute left-[-84px] top-[-84px]">
-                <Image src={errorSvg} alt="errorSvg" />
-              </div>
-              <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                <p className="text-neutral600 text-mRegular">
-                  {error?.data?.message}
-                </p>
-                <ActionButton
-                  actionButtonData={[
-                    {
-                      variant: 'primary',
-                      label: ManageLocales('app.modal.okay'),
-                      handler: () => {
-                        setIsDialogOpen(false);
-                      },
-                      customStyle: 'flex-1 w-full h-10'
-                    }
-                  ]}
-                />
-              </div>
-            </>
+            <CommonPoppup
+              content=""
+              customPoppupBodyStyle="mt-[70px]"
+              header={error?.data?.message}
+              actionButtonData={[
+                {
+                  variant: 'primary',
+                  label: ManageLocales('app.modal.okay'),
+                  handler: () => {
+                    setIsDialogOpen(false);
+                  },
+                  customStyle: 'flex-1 w-full h-10'
+                }
+              ]}
+            />
           );
         });
       // Clear the selected checkboxes
@@ -1218,41 +1206,34 @@ const Dashboard = () => {
 
             // setRowSelection({});
             setDialogContent(
-              <>
-                {' '}
-                <div className="absolute left-[-84px] top-[-84px]">
-                  <Image src={confirmIcon} alt="confirmIcon" />
-                </div>
-                <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                  <h1 className="text-headingS text-neutral900">
-                    {variantIds.length} stones have been successfully added to
-                    &quot;My Diamond&quot;
-                  </h1>
-                  <ActionButton
-                    actionButtonData={[
-                      {
-                        variant: 'secondary',
-                        label: ManageLocales('app.modal.continue'),
-                        handler: () => {
-                          goBackToListView();
-                          setIsAddCommentDialogOpen(false);
-                          setIsDialogOpen(false);
-                        },
-                        customStyle: 'flex-1 w-full h-10'
-                      },
-                      {
-                        variant: 'primary',
-                        label: ManageLocales('app.modal.goToYourOrder'),
-                        handler: () => {
-                          router.push('/v2/your-orders');
-                        },
-                        customStyle: 'flex-1 w-full h-10'
-                      }
-                    ]}
-                  />
-                </div>
-              </>
+              <CommonPoppup
+                content=""
+                status="success"
+                customPoppupBodyStyle="mt-[70px]"
+                header={`${variantIds.length} stones have been successfully added to "My Diamond"`}
+                actionButtonData={[
+                  {
+                    variant: 'secondary',
+                    label: ManageLocales('app.modal.continue'),
+                    handler: () => {
+                      goBackToListView();
+                      setIsAddCommentDialogOpen(false);
+                      setIsDialogOpen(false);
+                    },
+                    customStyle: 'flex-1 w-full h-10'
+                  },
+                  {
+                    variant: 'primary',
+                    label: ManageLocales('app.modal.goToYourOrder'),
+                    handler: () => {
+                      router.push('/v2/your-orders');
+                    },
+                    customStyle: 'flex-1 w-full h-10'
+                  }
+                ]}
+              />
             );
+
             setCommentValue('');
           }
         })
@@ -1263,68 +1244,49 @@ const Dashboard = () => {
           if (e.data.type === 'unauthorized') {
             setIsDialogOpen(true);
             setDialogContent(
-              <div className="h-[270px]">
-                <div className="absolute left-[-84px] top-[-84px]">
-                  <Image src={errorSvg} alt="errorSvg" />
-                </div>
-                <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                  <div>
-                    <h1 className="text-headingS text-neutral900">
-                      Important KYC Verification Required!
-                    </h1>
-                    <p className="text-neutral600 text-mRegular">
-                      To confirm a stone or make a purchase, KYC verification is
-                      mandatory. Without verification, access to certain
-                      features is restricted.
-                    </p>
-                  </div>
-                  <ActionButton
-                    actionButtonData={[
-                      {
-                        variant: 'secondary',
-                        label: ManageLocales('app.modal.cancel'),
-                        handler: () => setIsDialogOpen(false),
-                        customStyle: 'w-full flex-1'
-                      },
-                      {
-                        variant: 'primary',
-                        label: ManageLocales('app.modal.verifyMyKYCNow'),
-                        handler: () => {
-                          router.push('/v2/kyc');
-                        },
-                        customStyle: 'w-full flex-1'
-                      }
-                    ]}
-                  />
-                </div>
-              </div>
+              <CommonPoppup
+                content="To confirm a stone or make a purchase, KYC verification is
+              mandatory. Without verification, access to certain
+              features is restricted."
+                customPoppupBodyStyle="!mt-[62px]"
+                customPoppupStyle="h-[270px]"
+                header={'Important KYC Verification Required!'}
+                actionButtonData={[
+                  {
+                    variant: 'secondary',
+                    label: ManageLocales('app.modal.cancel'),
+                    handler: () => setIsDialogOpen(false),
+                    customStyle: 'w-full flex-1'
+                  },
+                  {
+                    variant: 'primary',
+                    label: ManageLocales('app.modal.verifyMyKYCNow'),
+                    handler: () => {
+                      router.push('/v2/kyc');
+                    },
+                    customStyle: 'w-full flex-1'
+                  }
+                ]}
+              />
             );
           } else {
             setIsDialogOpen(true);
             setDialogContent(
-              <>
-                {' '}
-                <div className="absolute left-[-84px] top-[-84px]">
-                  <Image src={errorSvg} alt="errorSvg" />
-                </div>
-                <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                  <p className="text-headingS text-neutral900 font-medium">
-                    {e?.data?.message}
-                  </p>
-                  <ActionButton
-                    actionButtonData={[
-                      {
-                        variant: 'primary',
-                        label: ManageLocales('app.modal.okay'),
-                        handler: () => {
-                          setIsDialogOpen(false);
-                        },
-                        customStyle: 'flex-1 w-full h-10'
-                      }
-                    ]}
-                  />
-                </div>
-              </>
+              <CommonPoppup
+                content={e?.data?.message}
+                customPoppupBodyStyle="mt-[70px]"
+                header={''}
+                actionButtonData={[
+                  {
+                    variant: 'primary',
+                    label: ManageLocales('app.modal.okay'),
+                    handler: () => {
+                      setIsDialogOpen(false);
+                    },
+                    customStyle: 'flex-1 w-full h-10'
+                  }
+                ]}
+              />
             );
           }
         });
@@ -1365,37 +1327,32 @@ const Dashboard = () => {
             // setIsLoading(false);
             setIsDialogOpen(true);
             setDialogContent(
-              <>
-                <div className="absolute left-[-84px] top-[-84px]">
-                  <Image src={confirmIcon} alt="confirmIcon" />
-                </div>
-                <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                  <h1 className="text-headingS text-neutral900 !font-medium	">
-                    {res?.message}
-                  </h1>
-                  <ActionButton
-                    actionButtonData={[
-                      {
-                        variant: 'secondary',
-                        label: ManageLocales('app.modal.continue'),
-                        handler: () => {
-                          setIsDialogOpen(false), setIsDetailPage(true);
-                        },
-                        customStyle: 'flex-1 w-full h-10'
-                      },
-                      {
-                        variant: 'primary',
-                        label: 'Go to "My Cart"',
-                        handler: () => {
-                          router.push('/v2/my-cart');
-                        },
-                        customStyle: 'flex-1 w-full h-10'
-                      }
-                    ]}
-                  />
-                </div>
-              </>
+              <CommonPoppup
+                content={''}
+                status="success"
+                customPoppupBodyStyle="mt-[70px]"
+                header={res?.message}
+                actionButtonData={[
+                  {
+                    variant: 'secondary',
+                    label: ManageLocales('app.modal.continue'),
+                    handler: () => {
+                      setIsDialogOpen(false), setIsDetailPage(true);
+                    },
+                    customStyle: 'flex-1 w-full h-10'
+                  },
+                  {
+                    variant: 'primary',
+                    label: 'Go to "My Cart"',
+                    handler: () => {
+                      router.push('/v2/my-cart');
+                    },
+                    customStyle: 'flex-1 w-full h-10'
+                  }
+                ]}
+              />
             );
+
             // On success, show confirmation dialog and update badge
             setIsError(false);
             setError('');
@@ -1426,28 +1383,21 @@ const Dashboard = () => {
 
             setIsDialogOpen(true);
             setDialogContent(
-              <>
-                <div className="absolute left-[-84px] top-[-84px]">
-                  <Image src={errorSvg} alt="errorSvg" />
-                </div>
-                <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                  <p className="text-neutral600 text-mRegular">
-                    {error?.data?.message}
-                  </p>
-                  <ActionButton
-                    actionButtonData={[
-                      {
-                        variant: 'primary',
-                        label: ManageLocales('app.modal.okay'),
-                        handler: () => {
-                          setIsDialogOpen(false);
-                        },
-                        customStyle: 'flex-1 w-full h-10'
-                      }
-                    ]}
-                  />
-                </div>
-              </>
+              <CommonPoppup
+                content={error?.data?.message}
+                customPoppupBodyStyle="mt-[70px]"
+                header={''}
+                actionButtonData={[
+                  {
+                    variant: 'primary',
+                    label: ManageLocales('app.modal.okay'),
+                    handler: () => {
+                      setIsDialogOpen(false);
+                    },
+                    customStyle: 'flex-1 w-full h-10'
+                  }
+                ]}
+              />
             );
           });
         // Clear the selected checkboxes

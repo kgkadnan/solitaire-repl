@@ -7,8 +7,6 @@ import {
 import { ManageLocales } from '@/utils/v2/translate';
 import React, { useEffect, useState } from 'react';
 import bookAppointment from '@public/v2/assets/icons/my-appointments/book-appointments.svg';
-import confirmIcon from '@public/v2/assets/icons/modal/confirm.svg';
-import errorSvg from '@public/v2/assets/icons/modal/error.svg';
 import {
   useDeleteMyAppointmentMutation,
   useLazyGetAvailableMyAppointmentSlotsQuery,
@@ -20,7 +18,6 @@ import Image from 'next/image';
 import { kycStatus } from '@/constants/enums/kyc';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import emptyAppointmentSvg from '@public/v2/assets/icons/my-appointments/empty-appointment.svg';
-import warningIcon from '@public/v2/assets/icons/modal/warning.svg';
 import {
   formatDate,
   formatDateForMonth,
@@ -35,6 +32,7 @@ import { ITabsData } from './interface';
 import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
 import { Toast } from '@/components/v2/common/copy-and-share/toast';
 import BookAppointment from './components/book-appointment/book-appointment';
+import CommonPoppup from '../login/component/common-poppup';
 
 export interface ISlot {
   datetimeString: string;
@@ -143,59 +141,41 @@ const MyAppointments = () => {
         setIsLoading(false);
         modalSetState.setIsDialogOpen(true);
         modalSetState.setDialogContent(
-          <>
-            <div className="absolute left-[-84px] top-[-84px]">
-              <Image src={confirmIcon} alt="confirmIcon" />
-            </div>
-            <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-              <div>
-                <h1 className="text-headingS text-neutral900">
-                  Appointment cancelled successfully
-                </h1>
-              </div>
-              <ActionButton
-                actionButtonData={[
-                  {
-                    variant: 'primary',
-                    label: ManageLocales('app.modal.okay'),
-                    handler: () => {
-                      modalSetState.setIsDialogOpen(false);
-                    },
-                    customStyle: 'w-full flex-1'
-                  }
-                ]}
-              />
-            </div>
-          </>
+          <CommonPoppup
+            content=""
+            status="success"
+            customPoppupBodyStyle="!mt-[70px]"
+            header={'Appointment cancelled successfully'}
+            actionButtonData={[
+              {
+                variant: 'primary',
+                label: ManageLocales('app.modal.okay'),
+                handler: () => modalSetState.setIsDialogOpen(false),
+                customStyle: 'flex-1 w-full h-10'
+              }
+            ]}
+          />
         );
+
         getAppointment();
       })
       .catch((error: any) => {
         setIsLoading(false);
         modalSetState.setIsDialogOpen(true);
         modalSetState.setDialogContent(
-          <>
-            <div className="absolute left-[-84px] top-[-84px]">
-              <Image src={errorSvg} alt="errorSvg" />
-            </div>
-            <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-              <p className="text-neutral600 text-mRegular">
-                {error?.data?.message}
-              </p>
-              <ActionButton
-                actionButtonData={[
-                  {
-                    variant: 'primary',
-                    label: ManageLocales('app.modal.okay'),
-                    handler: () => {
-                      modalSetState.setIsDialogOpen(false);
-                    },
-                    customStyle: 'flex-1 w-full h-10'
-                  }
-                ]}
-              />
-            </div>
-          </>
+          <CommonPoppup
+            content={error?.data?.message}
+            customPoppupBodyStyle="!mt-[70px]"
+            header={''}
+            actionButtonData={[
+              {
+                variant: 'primary',
+                label: ManageLocales('app.modal.okay'),
+                handler: () => modalSetState.setIsDialogOpen(false),
+                customStyle: 'flex-1 w-full h-10'
+              }
+            ]}
+          />
         );
       });
   };
@@ -313,40 +293,34 @@ const MyAppointments = () => {
                 handler: () => {
                   modalSetState.setIsDialogOpen(true);
                   modalSetState.setDialogContent(
-                    <>
-                      <div className="absolute left-[-84px] top-[-84px]">
-                        <Image src={warningIcon} alt="warning" />
-                      </div>
-                      <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[357px]">
-                        <h1 className="text-headingS text-neutral900">
-                          Do you want to cancel this appointment?
-                        </h1>
-                        <ActionButton
-                          actionButtonData={[
-                            {
-                              variant: 'secondary',
-                              label: 'No',
-                              handler: () => {
-                                modalSetState.setIsDialogOpen(false);
-                              },
-                              customStyle: 'flex-1 w-full'
-                            },
-                            {
-                              variant: 'primary',
-                              label: 'Yes',
-                              handler: () => {
-                                setIsLoading(true);
-                                modalSetState.setIsDialogOpen(false);
-                                handleDeleteAppointment({
-                                  appointmentId: value.id
-                                });
-                              },
-                              customStyle: 'flex-1 w-full'
-                            }
-                          ]}
-                        />
-                      </div>
-                    </>
+                    <CommonPoppup
+                      content={''}
+                      status="warning"
+                      customPoppupBodyStyle="!mt-[70px]"
+                      header={'Do you want to cancel this appointment?'}
+                      actionButtonData={[
+                        {
+                          variant: 'secondary',
+                          label: 'No',
+                          handler: () => {
+                            modalSetState.setIsDialogOpen(false);
+                          },
+                          customStyle: 'flex-1 w-full'
+                        },
+                        {
+                          variant: 'primary',
+                          label: 'Yes',
+                          handler: () => {
+                            setIsLoading(true);
+                            modalSetState.setIsDialogOpen(false);
+                            handleDeleteAppointment({
+                              appointmentId: value.id
+                            });
+                          },
+                          customStyle: 'flex-1 w-full'
+                        }
+                      ]}
+                    />
                   );
                 },
                 customStyle: 'w-[40px] h-[40px]',

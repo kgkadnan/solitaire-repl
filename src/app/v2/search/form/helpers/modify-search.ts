@@ -125,7 +125,7 @@ export const setModifySearch = (data: any, setState: any) => {
   data?.eye_clean && setEyeClean(data?.eye_clean);
   data?.crown_open && setOpenCrown(data?.crown_open);
   data?.table_open && setOpenTable(data?.table_open);
-  data?.side_table && setSideBlack(data?.side_table);
+  data?.side_black && setSideBlack(data?.side_black);
   data?.table_black && setBlackTable(data?.table_black);
   data?.natural_crown && setNaturalCrown(data?.natural_crown);
   data?.pavilion_open && setOpenPavilion(data?.pavilion_open);

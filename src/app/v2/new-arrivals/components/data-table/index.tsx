@@ -145,7 +145,22 @@ const NewArrivalDataTable = ({
   });
 
   const [paginatedData, setPaginatedData] = useState<any>([]);
-
+  const [globalFilter, setGlobalFilter] = useState('');
+  useEffect(() => {
+    if (globalFilter !== '') {
+      let data = rows.filter(
+        (data: any) => data?.lot_id?.startsWith(globalFilter)
+      );
+      const startIndex = pagination.pageIndex * pagination.pageSize;
+      const endIndex = startIndex + pagination.pageSize;
+      // Slice the data to get the current page's data
+      const newData = data.slice(startIndex, endIndex);
+      // Update the paginated data state
+      setPaginatedData(newData);
+    } else {
+      setPaginatedData(rows);
+    }
+  }, [globalFilter]);
   useEffect(() => {
     if (activeTab !== 2) {
       // Calculate the start and end indices for the current page
@@ -272,6 +287,9 @@ const NewArrivalDataTable = ({
                 borderRadius: '4px',
                 ':hover': {
                   border: 'none'
+                },
+                '& .MuiOutlinedInput-input': {
+                  color: 'var(--neutral-900)'
                 },
                 '& .MuiOutlinedInput-notchedOutline': {
                   borderColor: 'var(--neutral-200) !important'
@@ -403,10 +421,11 @@ const NewArrivalDataTable = ({
       columnOrder,
       rowSelection,
       isFullScreen: isFullScreen,
-      pagination
+      pagination,
+      globalFilter
     },
     positionToolbarAlertBanner: 'none',
-    enableFilters: true,
+    // enableFilters: true,
     enableColumnActions: false,
     enableDensityToggle: false,
     enableHiding: false,
@@ -426,7 +445,9 @@ const NewArrivalDataTable = ({
     manualPagination: true,
     rowCount: rows.length,
     onPaginationChange: setPagination, //hoist pagination state to your state when it changes internally
-
+    manualFiltering: true,
+    onGlobalFilterChange: setGlobalFilter,
+    // enableFilterMatchHighlighting:true,
     icons: {
       SearchIcon: () => (
         <Image src={searchIcon} alt={'searchIcon'} className="mr-[6px]" />
@@ -517,6 +538,7 @@ const NewArrivalDataTable = ({
 
     sortDescFirst: false,
     initialState: {
+      // globalFilter,
       showGlobalFilter: true,
       expanded: true,
       grouping: ['shape'],
@@ -799,16 +821,40 @@ const NewArrivalDataTable = ({
                         styles={{ inputMain: 'h-[64px]' }}
                         value={bidValue}
                         onChange={e => {
-                          setBidValues((prevValues: any) => {
-                            // If there's already a bid value for this row, increment it
-                            return {
-                              ...prevValues,
-                              [row.id]: e.target.value
-                            };
-
-                            // If no bid value for this row yet, start from current_max_bid and add 0.5
-                          });
+                          const newValue = e.target.value;
+                          if (newValue < row.original.current_max_bid) {
+                            setBidError(
+                              'Bid value cannot be less than current maximum bid.'
+                            );
+                            setBidValues((prevValues: any) => {
+                              // If there's already a bid value for this row, increment it
+                              return {
+                                ...prevValues,
+                                [row.id]: newValue
+                              };
+                            });
+                          } else {
+                            setBidError('');
+                            setBidValues((prevValues: any) => {
+                              // If there's already a bid value for this row, increment it
+                              return {
+                                ...prevValues,
+                                [row.id]: newValue
+                              };
+                            });
+                          }
                         }}
+                        // onChange={e => {
+                        //   setBidValues((prevValues: any) => {
+                        //     // If there's already a bid value for this row, increment it
+                        //     return {
+                        //       ...prevValues,
+                        //       [row.id]: e.target.value
+                        //     };
+
+                        //     // If no bid value for this row yet, start from current_max_bid and add 0.5
+                        //   });
+                        // }}
                       />
                     </div>
                     <div

@@ -17,7 +17,7 @@ import {
   useLazyReadNotificationQuery,
   useReadAllNotificationMutation,
   useSeenNotificationMutation
-} from '@/features/api/notification/notification';
+} from '@/features/api/notification';
 import { formatDistanceToNow } from 'date-fns';
 import Link from 'next/link';
 import logger from 'logging/log-util';

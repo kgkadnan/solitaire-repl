@@ -22,7 +22,7 @@ export interface IInclusionDetails {
   eye_clean: string[];
   crown_open: string[];
   table_open: string[];
-  side_table: string[];
+  side_black: string[];
   table_black: string[];
   natural_crown: string[];
   pavilion_open: string[];
