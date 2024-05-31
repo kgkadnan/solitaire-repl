@@ -61,9 +61,9 @@ export const deleteSavedSearchHandler = ({
             )}. Please close the tab and then try deleting it.`;
       setDialogContent(
         <CommonPoppup
-          content={errorMessage}
+          content={''}
           customPoppupBodyStyle="!mt-[70px]"
-          header={''}
+          header={errorMessage}
           actionButtonData={[
             {
               variant: 'primary',

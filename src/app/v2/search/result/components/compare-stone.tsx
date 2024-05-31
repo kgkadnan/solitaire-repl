@@ -170,9 +170,9 @@ const CompareStone = ({
             setIsDialogOpen(true);
             setDialogContent(
               <CommonPoppup
-                content={error?.data?.message}
+                content={''}
                 customPoppupBodyStyle="!mt-[70px]"
-                header={''}
+                header={error?.data?.message}
                 actionButtonData={[
                   {
                     variant: 'primary',
