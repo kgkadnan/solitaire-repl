@@ -839,6 +839,9 @@ const DataTable = ({
                 ':hover': {
                   border: 'none'
                 },
+                '& .MuiOutlinedInput-input': {
+                  color: 'var(--neutral-900)'
+                },
                 '& .MuiOutlinedInput-notchedOutline': {
                   borderColor: 'var(--neutral-200) !important'
                 },
