@@ -283,6 +283,7 @@ const Result = ({
         switch (accessor) {
           case 'fire_icon':
             return {
+              enableSorting: false,
               accessorKey: 'fire_icon',
               header: '',
               minSize: 1,
