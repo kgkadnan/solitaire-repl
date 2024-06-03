@@ -88,6 +88,7 @@ import styles from './style.module.scss';
 import DataTableSkeleton from '@/components/v2/skeleton/data-table';
 import { Skeleton } from '@mui/material';
 import CommonPoppup from '../../login/component/common-poppup';
+import { access } from 'fs';
 
 // Column mapper outside the component to avoid re-creation on each render
 
@@ -262,7 +263,11 @@ const Result = ({
           header: short_label,
           enableGlobalFilter: accessor === 'lot_id',
           enableGrouping: accessor === 'shape',
-          enableSorting: accessor !== 'shape_full' && accessor !== 'details',
+          enableSorting:
+            accessor !== 'shape_full' &&
+            accessor !== 'details' &&
+            accessor !== 'fire_icon' &&
+            accessor !== 'location',
           minSize: 5,
           maxSize: accessor === 'details' ? 100 : 200,
           size: 5,

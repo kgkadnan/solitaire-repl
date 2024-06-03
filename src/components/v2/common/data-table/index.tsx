@@ -489,6 +489,7 @@ const DataTable = ({
           : row.getToggleSelectedHandler(),
 
         sx: {
+          height:'20px',
           cursor: 'pointer',
           '&.MuiTableRow-root:hover .MuiTableCell-root::after': {
             backgroundColor: 'var(--neutral-50)'
@@ -565,7 +566,7 @@ const DataTable = ({
 
     muiTableContainerProps: {
       sx: {
-        height: isFullScreen ? '70vh' : 'calc(100vh - 330px)',
+        height: isFullScreen ? '70vh' : 'calc(100vh - 305px)',
         minHeight: isFullScreen
           ? myCart
             ? showCalculatedField
@@ -590,7 +591,7 @@ const DataTable = ({
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
           ? 'calc(100vh - 405px)'
-          : 'calc(100vh - 330px)',
+          : 'calc(100vh - 305px)',
         maxHeight: isFullScreen
           ? myCart
             ? showCalculatedField
@@ -615,7 +616,7 @@ const DataTable = ({
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
           ? 'calc(100vh - 405px)'
-          : 'calc(100vh - 330px)'
+          : 'calc(100vh - 305px)'
       }
     },
     muiTableHeadRowProps: {
@@ -624,13 +625,13 @@ const DataTable = ({
         boxShadow: 'none'
       }
     },
-    // muiTableBodyCellProps: ({ cell }) => {
     muiTableBodyCellProps: ({ cell }) => {
       return {
         sx: {
           color: 'var(--neutral-900)',
           '&.MuiTableCell-root': {
-            padding: cell.row.id === 'fire_icon' ? '4px 2px' : '4px 8px',
+            padding: '0px 2px',
+            height: '20px',
             background: 'White',
             opacity: 1,
             visibility:
@@ -681,7 +682,8 @@ const DataTable = ({
         sx: {
           color: 'var(--neutral-700)',
           '&.MuiTableCell-root': {
-            padding: column.id === 'fire_icon' ? '4px 2px' : '4px 8px',
+            padding: '0px 2px',
+            height: '20px',
             background: 'var(--neutral-50)',
             opacity: 1,
             borderTop: '1px solid var(--neutral-200)'
