@@ -489,7 +489,7 @@ const DataTable = ({
           : row.getToggleSelectedHandler(),
 
         sx: {
-          height:'20px',
+          height: '20px',
           cursor: 'pointer',
           '&.MuiTableRow-root:hover .MuiTableCell-root::after': {
             backgroundColor: 'var(--neutral-50)'

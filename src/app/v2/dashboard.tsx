@@ -578,29 +578,14 @@ const Dashboard = () => {
       setIsLoading(false);
 
       const tabsCopy: ITabs[] = []; // Make a copy of the current tabs
-      // const tabsCopy = [...tabs]; // Make a copy of the current tabs
 
       // Check if there are saved searches and add the "Saved Search" tab
-      // if (customerData.customer.saved_searches?.length > 0) {
       tabsCopy.push({
         label: 'Saved Search',
         link: '/v2/search?active-tab=saved-search',
         data: customerData.customer?.saved_searches?.slice(0, 5) ?? []
       });
-      // } else {
-      //   // Remove the "Saved Search" tab if there are no saved searches
-      //   const index = tabsCopy?.findIndex(tab => tab.label === 'Saved Search');
-      //   if (index !== -1) {
-      //     tabsCopy?.splice(index, 1);
-      //   }
-      // }
 
-      // Update the tabs state
-      // setTabs(tabsCopy);
-      // setActiveTab(tabsCopy[0]?.label);
-
-      // Check for pending and active invoices
-      // if (customerData.customer?.orders?.length > 0) {
       const pendingInvoices =
         customerData.customer.orders
           .filter((item: any) => item.invoice_id === null)
@@ -613,146 +598,24 @@ const Dashboard = () => {
           )
           .slice(0, 5) ?? [];
 
-      // Update or add "Pending Invoice" tab
-      // const pendingTab = tabsCopy.find(
-      //   tab => tab.label === 'Pending Invoice'
-      // );
-      // if (pendingInvoices.length > 0) {
-      //   if (pendingTab) {
-      //     pendingTab.data = pendingInvoices;
-      //   } else {
       tabsCopy.push({
         label: 'Pending Invoice',
         link: '/v2/your-orders',
         data: pendingInvoices
       });
-      //   }
-      // } else {
-      //   // Remove "Pending Invoice" tab if there are no pending invoices
-      //   const index = tabsCopy.findIndex(
-      //     tab => tab.label === 'Pending Invoice'
-      //   );
-      //   if (index !== -1) {
-      //     tabsCopy.splice(index, 1);
-      //   }
-      // }
 
-      // Update or add "Active Invoice" tab
-      // const activeTab = tabsCopy.find(tab => tab.label === 'Active Invoice');
-      // if (activeInvoices.length > 0) {
-      //   if (activeTab) {
-      //     activeTab.data = activeInvoices;
-      //   } else {
       tabsCopy.push({
         label: 'Active Invoice',
         link: '/v2/your-orders',
         data: activeInvoices
       });
-      //   }
-      // } else {
-      //   // Remove "Active Invoice" tab if there are no active invoices
-      //   const index = tabsCopy.findIndex(
-      //     tab => tab.label === 'Active Invoice'
-      //   );
-      //   if (index !== -1) {
-      //     tabsCopy.splice(index, 1);
-      //   }
-      // }
+
       // Update the tabs state
       setTabs(tabsCopy);
       setActiveTab(tabsCopy[0].label);
-      // }
     }
   }, [customerData]);
 
-  // useEffect(() => {
-  //   if (customerData) {
-  //     // setIsLoading(false);
-  //     const tabsCopy: ITabs[] = []; // Make a copy of the current tabs
-  //     // const tabsCopy = [...tabs]; // Make a copy of the current tabs
-
-  //     // Check if there are saved searches and add the "Saved Search" tab
-  //     if (customerData.customer.saved_searches?.length > 0) {
-  //       tabsCopy.push({
-  //         label: 'Saved Search',
-  //         link: '/v2/search?active-tab=saved-search',
-  //         data: customerData.customer.saved_searches.slice(0, 5)
-  //       });
-  //     } else {
-  //       // Remove the "Saved Search" tab if there are no saved searches
-  //       const index = tabsCopy?.findIndex(tab => tab.label === 'Saved Search');
-  //       if (index !== -1) {
-  //         tabsCopy?.splice(index, 1);
-  //       }
-  //     }
-
-  //     // Update the tabs state
-  //     setTabs(tabsCopy);
-  //     setActiveTab(tabsCopy[0]?.label);
-
-  //     // Check for pending and active invoices
-  //     if (customerData.customer?.orders?.length > 0) {
-  //       const pendingInvoices = customerData.customer.orders
-  //         .filter((item: any) => item.invoice_id === null)
-  //         .slice(0, 5);
-
-  //       const activeInvoices = customerData.customer.orders
-  //         .filter(
-  //           (item: any) => item.invoice_id !== null && item.status === 'pending'
-  //         )
-  //         .slice(0, 5);
-
-  //       // Update or add "Pending Invoice" tab
-  //       const pendingTab = tabsCopy.find(
-  //         tab => tab.label === 'Pending Invoice'
-  //       );
-  //       if (pendingInvoices.length > 0) {
-  //         if (pendingTab) {
-  //           pendingTab.data = pendingInvoices;
-  //         } else {
-  //           tabsCopy.push({
-  //             label: 'Pending Invoice',
-  //             link: '/v2/your-orders',
-  //             data: pendingInvoices
-  //           });
-  //         }
-  //       } else {
-  //         // Remove "Pending Invoice" tab if there are no pending invoices
-  //         const index = tabsCopy.findIndex(
-  //           tab => tab.label === 'Pending Invoice'
-  //         );
-  //         if (index !== -1) {
-  //           tabsCopy.splice(index, 1);
-  //         }
-  //       }
-
-  //       // Update or add "Active Invoice" tab
-  //       const activeTab = tabsCopy.find(tab => tab.label === 'Active Invoice');
-  //       if (activeInvoices.length > 0) {
-  //         if (activeTab) {
-  //           activeTab.data = activeInvoices;
-  //         } else {
-  //           tabsCopy.push({
-  //             label: 'Active Invoice',
-  //             link: '/v2/your-orders',
-  //             data: activeInvoices
-  //           });
-  //         }
-  //       } else {
-  //         // Remove "Active Invoice" tab if there are no active invoices
-  //         const index = tabsCopy.findIndex(
-  //           tab => tab.label === 'Active Invoice'
-  //         );
-  //         if (index !== -1) {
-  //           tabsCopy.splice(index, 1);
-  //         }
-  //       }
-  //       // Update the tabs state
-  //       setTabs(tabsCopy);
-  //       setActiveTab(tabsCopy[0].label);
-  //     }
-  //   }
-  // }, [customerData]);
   useEffect(() => {
     if (tabs.length > 0) {
       if (activeTab === '') {
@@ -774,9 +637,7 @@ const Dashboard = () => {
       keys: [
         { label: 'Invoice Number', accessor: 'invoice_id' },
         { label: 'Invoice Date', accessor: 'created_at' },
-        // { label: 'Tracking Details', accessor: 'delivery' },
         { label: 'Details', accessor: 'details' }
-        // { label: 'Download Invoice', accessor: 'download_invoice' }
       ],
       data: tabs.find(tab => tab.label === activeTab)?.data
     }
@@ -847,12 +708,10 @@ const Dashboard = () => {
   };
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      // setIsLoading(true);
       getProductById({
         search_keyword: stoneId
       })
         .then((res: any) => {
-          // setIsLoading(false);
           if (res?.error?.status === statusCode.NOT_FOUND) {
             setError(`We couldn't find any results for this search`);
           } else {
@@ -862,14 +721,12 @@ const Dashboard = () => {
           }
         })
         .catch((_e: any) => {
-          // setIsLoading(false);
           setError('Something went wrong');
         });
     }
   };
   const handleInputSearch = () => {
     if (stoneId.length > 0) {
-      // setIsLoading(true);
       getProductById({
         search_keyword: stoneId
       })
@@ -884,7 +741,6 @@ const Dashboard = () => {
           }
         })
         .catch((_e: any) => {
-          // setIsLoading(false);
           setError('Something went wrong');
         });
     } else {
@@ -900,12 +756,9 @@ const Dashboard = () => {
 
   const goBack = () => {
     setIsDiamondDetail(false);
-    // setBreadCrumLabel('Search Results');
-    // setSearchData({});
   };
 
   const handleAddToCartDetailPage = () => {
-    // setIsLoading(true);
     // Extract variant IDs for selected stones
     const variantIds = [searchData?.id]
       ?.map((_id: string) => {
@@ -923,7 +776,6 @@ const Dashboard = () => {
       })
         .unwrap()
         .then((res: any) => {
-          // setIsLoading(false);
           setIsDialogOpen(true);
           setDialogContent(
             <CommonPoppup
@@ -958,7 +810,6 @@ const Dashboard = () => {
           setError('');
         })
         .catch((error: any) => {
-          // setIsLoading(false);
           // On error, set error state and error message
 
           setIsDialogOpen(true);
@@ -1194,7 +1045,6 @@ const Dashboard = () => {
     });
 
     if (variantIds.length) {
-      // setIsLoading(true);
       confirmProduct({
         variants: variantIds,
         comments: commentValue
@@ -1202,11 +1052,9 @@ const Dashboard = () => {
         .unwrap()
         .then(res => {
           if (res) {
-            // setIsLoading(false);
             setCommentValue('');
             setIsDialogOpen(true);
 
-            // setRowSelection({});
             setDialogContent(
               <CommonPoppup
                 content=""
@@ -2052,7 +1900,6 @@ const Dashboard = () => {
                                 }
                                 imageSrc={emptyOrderSvg}
                               />
-                              // </div></>
                             )}
                           </div>
                         </div>
@@ -2060,7 +1907,6 @@ const Dashboard = () => {
                     </div>
                   </div>
                 )}
-                {/* )} */}
                 <div className="w-[300px]">
                   {customerData === undefined ? (
                     <Skeleton
