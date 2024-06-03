@@ -46,6 +46,7 @@ import { checkImage } from './helpers/check-image';
 import { IImagesType } from './interface';
 import fallbackImage from '@public/v2/assets/icons/not-found.svg';
 import { Skeleton } from '@mui/material';
+import { useLazyTrackCopyUrlEventQuery } from '@/features/api/track-public-url-copy';
 
 export function DiamondDetailsComponent({
   data,
@@ -79,6 +80,7 @@ export function DiamondDetailsComponent({
   const [showToast, setShowToast] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
   const [downloadExcel] = useDownloadExcelMutation();
+  const [trackCopyUrlEvent] = useLazyTrackCopyUrlEventQuery({});
 
   useEffect(() => {
     let copyData = filterData ? { ...filterData } : {};
@@ -190,6 +192,7 @@ export function DiamondDetailsComponent({
         setShowToast(false); // Hide the toast notification after some time
       }, 4000);
     });
+    trackCopyUrlEvent({ url: filterData?.public_url.split('/').pop() });
   };
   let statusValue = '';
   const RenderNewArrivalLotId = ({ tableData }: any) => {
