@@ -5,7 +5,7 @@ import cross from '@public/v2/assets/icons/data-table/cross.svg';
 import searchIcon from '@public/v2/assets/icons/save-search-dropdown/Essentials.svg';
 import Image from 'next/image';
 
-interface ISavedSearchDropDownProps {
+export interface ISavedSearchDropDownProps {
   handleClose: () => void;
   isOpen: boolean;
   options: any;
