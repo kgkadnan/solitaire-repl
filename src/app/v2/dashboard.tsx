@@ -2058,33 +2058,32 @@ const Dashboard = () => {
                     </div>
                   </div>
                 )}
-
-                <div className="w-[300px]">
-                  {customerData === undefined ? (
-                    <Skeleton
-                      height={420}
-                      width={'100%'}
-                      animation="wave"
-                      variant="rectangular"
-                      className="rounded-[4px]"
-                    />
-                  ) : (
-                    <VolumeDiscount
-                      totalSpent={
-                        customerData?.customer?.volumeDiscount?.totalSpent
-                      }
-                      expiryTime={
-                        customerData?.customer?.volumeDiscount?.expiryTime
-                      }
-                      eligibleForDiscount={
-                        customerData?.customer?.volumeDiscount
-                          ?.eligibleForDiscount
-                      }
-                    />
-                  )}
-                </div>
+                {/* )} */}
               </div>
             )}
+            <div className="w-[300px]">
+              {customerData === undefined ? (
+                <Skeleton
+                  height={420}
+                  width={'100%'}
+                  animation="wave"
+                  variant="rectangular"
+                  className="rounded-[4px]"
+                />
+              ) : (
+                <VolumeDiscount
+                  totalSpent={
+                    customerData?.customer?.volumeDiscount?.totalSpent
+                  }
+                  expiryTime={
+                    customerData?.customer?.volumeDiscount?.expiryTime
+                  }
+                  eligibleForDiscount={
+                    customerData?.customer?.volumeDiscount?.eligibleForDiscount
+                  }
+                />
+              )}
+            </div>
           </div>
           <div className="border-t-[1px] mt-auto border-l-[1px] border-r-[1px] rounded-[8px] p-4 flex justify-between border-neutral200 text-lRegular">
             {/* for fixed footer */}
