@@ -677,19 +677,17 @@ const DataTable = ({
       };
     },
 
-    muiTableHeadCellProps: ({ column }) => {
-      return {
-        sx: {
-          color: 'var(--neutral-700)',
-          '&.MuiTableCell-root': {
-            padding: '0px 2px',
-            height: '20px',
-            background: 'var(--neutral-50)',
-            opacity: 1,
-            borderTop: '1px solid var(--neutral-200)'
-          }
+    muiTableHeadCellProps: {
+      sx: {
+        color: 'var(--neutral-700)',
+        '&.MuiTableCell-root': {
+          padding: '0px 2px',
+          height: '20px',
+          background: 'var(--neutral-50)',
+          opacity: 1,
+          borderTop: '1px solid var(--neutral-200)'
         }
-      };
+      }
     },
     muiSelectAllCheckboxProps: {
       sx: {

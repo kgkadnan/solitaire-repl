@@ -88,7 +88,6 @@ import styles from './style.module.scss';
 import DataTableSkeleton from '@/components/v2/skeleton/data-table';
 import { Skeleton } from '@mui/material';
 import CommonPoppup from '../../login/component/common-poppup';
-import { access } from 'fs';
 
 // Column mapper outside the component to avoid re-creation on each render
 
