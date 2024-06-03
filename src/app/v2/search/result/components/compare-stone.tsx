@@ -15,12 +15,11 @@ import CloseButton from '@public/v2/assets/icons/close.svg';
 import CheckboxComponent from '@/components/v2/common/checkbox';
 import Media from '@public/v2/assets/icons/data-table/Media.svg';
 import { NOT_MORE_THAN_300 } from '@/constants/error-messages/search';
-import confirmIcon from '@public/v2/assets/icons/modal/confirm.svg';
 import { useAddCartMutation } from '@/features/api/cart';
 import { useRouter } from 'next/navigation';
-import errorSvg from '@public/v2/assets/icons/modal/error.svg';
 import { handleConfirmStone } from '../helpers/handle-confirm-stone';
 import NoImageFound from '@public/v2/assets/icons/compare-stone/fallback.svg';
+import CommonPoppup from '@/app/v2/login/component/common-poppup';
 
 const CompareStone = ({
   rows,
@@ -137,34 +136,28 @@ const CompareStone = ({
             setIsLoading(false);
             setIsDialogOpen(true);
             setDialogContent(
-              <>
-                <div className="absolute left-[-84px] top-[-84px]">
-                  <Image src={confirmIcon} alt="confirmIcon" />
-                </div>
-                <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                  <h1 className="text-headingS text-neutral900 !font-medium	">
-                    {res?.message}
-                  </h1>
-                  <ActionButton
-                    actionButtonData={[
-                      {
-                        variant: 'secondary',
-                        label: ManageLocales('app.modal.continue'),
-                        handler: () => setIsDialogOpen(false),
-                        customStyle: 'flex-1 w-full h-10'
-                      },
-                      {
-                        variant: 'primary',
-                        label: 'Go to "My Cart"',
-                        handler: () => {
-                          router.push('/v2/my-cart');
-                        },
-                        customStyle: 'flex-1 w-full h-10'
-                      }
-                    ]}
-                  />
-                </div>
-              </>
+              <CommonPoppup
+                content={''}
+                status="success"
+                customPoppupBodyStyle="!mt-[70px]"
+                header={res?.message}
+                actionButtonData={[
+                  {
+                    variant: 'secondary',
+                    label: ManageLocales('app.modal.continue'),
+                    handler: () => setIsDialogOpen(false),
+                    customStyle: 'flex-1 w-full h-10'
+                  },
+                  {
+                    variant: 'primary',
+                    label: 'Go to "My Cart"',
+                    handler: () => {
+                      router.push('/v2/my-cart');
+                    },
+                    customStyle: 'flex-1 w-full h-10'
+                  }
+                ]}
+              />
             );
             // On success, show confirmation dialog and update badge
             setIsError(false);
@@ -176,28 +169,21 @@ const CompareStone = ({
 
             setIsDialogOpen(true);
             setDialogContent(
-              <>
-                <div className="absolute left-[-84px] top-[-84px]">
-                  <Image src={errorSvg} alt="errorSvg" />
-                </div>
-                <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                  <p className="text-neutral600 text-mRegular">
-                    {error?.data?.message}
-                  </p>
-                  <ActionButton
-                    actionButtonData={[
-                      {
-                        variant: 'primary',
-                        label: ManageLocales('app.modal.okay'),
-                        handler: () => {
-                          setIsDialogOpen(false);
-                        },
-                        customStyle: 'flex-1 w-full h-10'
-                      }
-                    ]}
-                  />
-                </div>
-              </>
+              <CommonPoppup
+                content={''}
+                customPoppupBodyStyle="!mt-[70px]"
+                header={error?.data?.message}
+                actionButtonData={[
+                  {
+                    variant: 'primary',
+                    label: ManageLocales('app.modal.okay'),
+                    handler: () => {
+                      setIsDialogOpen(false);
+                    },
+                    customStyle: 'flex-1 w-full h-10'
+                  }
+                ]}
+              />
             );
           });
         // Clear the selected checkboxes

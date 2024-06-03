@@ -1,8 +1,5 @@
-import ActionButton from '@/components/v2/common/action-button';
 import { ManageLocales } from '@/utils/v2/translate';
-import Image from 'next/image';
-import errorSvg from '@public/v2/assets/icons/modal/error.svg';
-import confirmIcon from '@public/v2/assets/icons/modal/confirm.svg';
+import CommonPoppup from '@/app/v2/login/component/common-poppup';
 
 export const handleDelete = async ({
   deleteSavedSearch,
@@ -20,56 +17,43 @@ export const handleDelete = async ({
     .then(() => {
       setIsLoading(false);
       setDialogContent(
-        <>
-          <div className="absolute left-[-84px] top-[-84px]">
-            <Image src={confirmIcon} alt="confirmIcon" />
-          </div>
-          <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-            <h1 className="text-headingS text-neutral900">
-              {ManageLocales('app.savedSearch.successfully.deleted')}
-            </h1>
-            <ActionButton
-              actionButtonData={[
-                {
-                  variant: 'primary',
-                  label: ManageLocales('app.modal.okay'),
-                  handler: () => {
-                    setIsDialogOpen(false);
-                  },
-                  customStyle: 'flex-1 w-full h-10'
-                }
-              ]}
-            />
-          </div>
-        </>
+        <CommonPoppup
+          status="success"
+          content={''}
+          customPoppupBodyStyle="!mt-[70px]"
+          header={ManageLocales('app.savedSearch.successfully.deleted')}
+          actionButtonData={[
+            {
+              variant: 'primary',
+              label: ManageLocales('app.modal.okay'),
+              handler: () => {
+                setIsDialogOpen(false);
+              },
+              customStyle: 'flex-1 w-full h-10'
+            }
+          ]}
+        />
       );
       setIsDialogOpen(true);
     })
     .catch((error: any) => {
       setIsLoading(false);
       setDialogContent(
-        <>
-          <div className="absolute left-[-84px] top-[-84px]">
-            <Image src={errorSvg} alt="errorSvg" />
-          </div>
-          <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-            <h1 className="text-headingS text-neutral900">
-              {error?.data?.message}
-            </h1>
-            <ActionButton
-              actionButtonData={[
-                {
-                  variant: 'primary',
-                  label: ManageLocales('app.modal.editSelection'),
-                  handler: () => {
-                    setIsDialogOpen(false);
-                  },
-                  customStyle: 'flex-1 w-full h-10'
-                }
-              ]}
-            />
-          </div>
-        </>
+        <CommonPoppup
+          content={''}
+          customPoppupBodyStyle="!mt-[70px]"
+          header={error?.data?.message}
+          actionButtonData={[
+            {
+              variant: 'primary',
+              label: ManageLocales('app.modal.editSelection'),
+              handler: () => {
+                setIsDialogOpen(false);
+              },
+              customStyle: 'flex-1 w-full h-10'
+            }
+          ]}
+        />
       );
     });
   setSelectedCheckboxes([]);

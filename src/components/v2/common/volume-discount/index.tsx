@@ -13,15 +13,16 @@ const VolumeDiscount: React.FC<any> = ({
   const [timeDifference, setTimeDifference] = useState(null);
   const [isHovered, setIsHovered] = useState(false);
   const [isInfoHovered, setIsInfoHovered] = useState(false);
-
   useEffect(() => {
+    let defaultTimer: any = 48 * 60 * 60 * 1000;
+    if (expiryTime === null) setTimeDifference(defaultTimer);
     if (expiryTime) {
       const currentTime: any = new Date();
       const targetTime: any = new Date(expiryTime!);
       let timeDiff: any = targetTime - currentTime;
       if (timeDiff <= 0) {
         // If the expiry time has passed, set the time difference to 48 hours
-        timeDiff = 48 * 60 * 60 * 1000;
+        timeDiff = defaultTimer;
       }
       setTimeDifference(timeDiff);
     }

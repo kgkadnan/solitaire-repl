@@ -144,7 +144,22 @@ const BidToByDataTable = ({
   });
 
   const [paginatedData, setPaginatedData] = useState<any>([]);
-
+  const [globalFilter, setGlobalFilter] = useState('');
+  useEffect(() => {
+    if (globalFilter !== '') {
+      let data = rows.filter(
+        (data: any) => data?.lot_id?.startsWith(globalFilter)
+      );
+      const startIndex = pagination.pageIndex * pagination.pageSize;
+      const endIndex = startIndex + pagination.pageSize;
+      // Slice the data to get the current page's data
+      const newData = data.slice(startIndex, endIndex);
+      // Update the paginated data state
+      setPaginatedData(newData);
+    } else {
+      setPaginatedData(rows);
+    }
+  }, [globalFilter]);
   useEffect(() => {
     if (activeTab !== 2) {
       // Calculate the start and end indices for the current page
@@ -287,7 +302,7 @@ const BidToByDataTable = ({
                 borderRadius: '4px',
 
                 '& .MuiOutlinedInput-input': {
-                  color: 'var(--neutral-400)'
+                  color: 'var(--neutral-900)'
                 },
                 ':hover': {
                   border: 'none'
@@ -425,12 +440,12 @@ const BidToByDataTable = ({
       columnOrder,
       rowSelection,
       isFullScreen: isFullScreen,
-      pagination
+      pagination,
+      globalFilter
     },
     //filters
 
     positionToolbarAlertBanner: 'none',
-    enableFilters: true,
     enableColumnActions: false,
     enableDensityToggle: false,
     enableHiding: false,
@@ -451,7 +466,8 @@ const BidToByDataTable = ({
     manualPagination: true,
     rowCount: rows.length,
     onPaginationChange: setPagination, //hoist pagination state to your state when it changes internally
-
+    manualFiltering: true,
+    onGlobalFilterChange: setGlobalFilter,
     icons: {
       SearchIcon: () => (
         <Image src={searchIcon} alt={'searchIcon'} className="mr-[6px]" />
@@ -830,16 +846,28 @@ const BidToByDataTable = ({
                         styles={{ inputMain: 'h-[64px]' }}
                         value={bidValue}
                         onChange={e => {
-                          setBidError('');
-                          setBidValues((prevValues: any) => {
-                            // If there's already a bid value for this row, increment it
-                            return {
-                              ...prevValues,
-                              [row.id]: e.target.value
-                            };
-
-                            // If no bid value for this row yet, start from discount and add 0.5
-                          });
+                          const newValue = e.target.value;
+                          if (newValue < row.original.discount) {
+                            setBidError(
+                              'Bid value cannot be less than maximum discount.'
+                            );
+                            setBidValues((prevValues: any) => {
+                              // If there's already a bid value for this row, increment it
+                              return {
+                                ...prevValues,
+                                [row.id]: newValue
+                              };
+                            });
+                          } else {
+                            setBidError('');
+                            setBidValues((prevValues: any) => {
+                              // If there's already a bid value for this row, increment it
+                              return {
+                                ...prevValues,
+                                [row.id]: newValue
+                              };
+                            });
+                          }
                         }}
                       />
                     </div>

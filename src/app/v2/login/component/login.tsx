@@ -52,7 +52,7 @@ const LoginComponent = ({
         <div className="flex flex-col gap-5">
           <MobileInput
             label={ManageLocales('app.register.mobileNumber')}
-            onChange={event =>
+            onChange={event => {
               handleLoginInputChange({
                 event,
                 type: 'phone',
@@ -60,8 +60,8 @@ const LoginComponent = ({
                 setPhoneErrorText,
                 setPasswordErrorText,
                 setPassword
-              })
-            }
+              });
+            }}
             type="number"
             name="mobileNumber"
             errorText={phoneErrorText}

@@ -1,10 +1,10 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { createBaseQuery } from '../base-query';
+import { createBaseQuery } from './base-query';
 
-export const myDiamondApi = createApi({
-  reducerPath: 'recentConfirmationReducer',
+export const yourOrderApi = createApi({
+  reducerPath: 'yourOrderReducer',
   baseQuery: createBaseQuery(),
-  tagTypes: ['myDiamond'],
+  tagTypes: ['yourOrder'],
   endpoints: builder => ({
     cardRecentConfirmation: builder.query({
       query: ({
@@ -22,12 +22,12 @@ export const myDiamondApi = createApi({
             ? `created_at[gte]=${recentConfirmationSelectedDays}`
             : ''
         }`,
-      providesTags: ['myDiamond']
+      providesTags: ['yourOrder']
     }),
     getProductDetails: builder.query({
       query: ({ id, singleExpand }) =>
         `/store/orders/${id}?expand=${singleExpand}`,
-      providesTags: ['myDiamond']
+      providesTags: ['yourOrder']
     }),
     cardMyInvoice: builder.query({
       query: ({
@@ -44,7 +44,7 @@ export const myDiamondApi = createApi({
             ? `created_at[gte]=${myInvoiceSelectedDays}`
             : ''
         }`,
-      providesTags: ['myDiamond']
+      providesTags: ['yourOrder']
     }),
     cardPreviousConfirmation: builder.query({
       query: ({
@@ -63,7 +63,7 @@ export const myDiamondApi = createApi({
             ? `created_at[gte]=${previousConfirmationSelectedDays}`
             : ''
         }`,
-      providesTags: ['myDiamond']
+      providesTags: ['yourOrder']
     })
   })
 });
@@ -77,4 +77,4 @@ export const {
   useCardPreviousConfirmationQuery,
   useGetProductDetailsQuery,
   useLazyGetProductDetailsQuery
-} = myDiamondApi;
+} = yourOrderApi;

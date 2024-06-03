@@ -4,15 +4,7 @@ import { Button } from '../../ui/button';
 
 interface ITileProps {
   tileData: string[];
-  handleTileClick: ({
-    _data,
-    _selectedTile,
-    _setSelectedTile
-  }: {
-    _data: string;
-    _selectedTile: string;
-    _setSelectedTile: React.Dispatch<React.SetStateAction<string>>;
-  }) => void;
+  handleTileClick: ({ data, selectedTile, setSelectedTile }: any) => void;
   selectedTile: string;
   setSelectedTile: React.Dispatch<React.SetStateAction<string>>;
 }
@@ -31,9 +23,9 @@ const SingleTile = ({
             <Button
               onClick={() =>
                 handleTileClick({
-                  _data: tile,
-                  _selectedTile: selectedTile,
-                  _setSelectedTile: setSelectedTile
+                  data: tile,
+                  selectedTile: selectedTile,
+                  setSelectedTile: setSelectedTile
                 })
               }
               className={` ${styles.tileDefaultStyles}   ${

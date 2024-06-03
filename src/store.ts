@@ -4,9 +4,8 @@ import {
   configureStore
 } from '@reduxjs/toolkit';
 
-import { notificationSettingApi } from './features/api/notification-setting';
 import { savedSearchesApi } from './features/api/saved-searches';
-import { notificationApi } from './features/api/notification';
+
 import { productApi } from './features/api/product';
 import { loginApi } from './features/api/login';
 import { cartApi } from './features/api/cart';
@@ -19,7 +18,7 @@ import searchListReducer from './features/search/search-list';
 import savedSearchReducer from './features/saved-search/saved-search';
 import { changePasswordApi } from './features/api/change-password';
 import { manageListingSequenceApi } from './features/api/manage-listing-sequence';
-import { myDiamondApi } from './features/api/my-diamonds/my-diamond';
+import { yourOrderApi } from './features/api/your-order';
 import { registerApi } from './features/api/register';
 import { resetPasswordApi } from './features/api/reset-password';
 import { currentIPApi } from './features/api/current-ip';
@@ -35,12 +34,13 @@ import { getAllCountryCodeApi } from './features/api/get-country-code';
 import { dashboardApi } from './features/api/dashboard';
 import { publicApi } from './features/api/public';
 import { manageSubscriptionApi } from './features/api/manage-subscription';
-import { myAccountApi } from './features/api/my-account';
-import { newNotificationApi } from './features/api/notification/notification';
+import { myProfileApi } from './features/api/my-profile';
+import { notificationApi } from './features/api/notification';
 import { faqsApi } from './features/api/faqs';
 import { myAppointmentApi } from './features/api/my-appointments';
 import { statusCode } from './constants/enums/status-code';
 import { show } from './features/logout/logout-slice';
+import { copyURLApi } from './features/api/track-public-url-copy';
 
 const rootReducer = combineReducers({
   notificationBadge: notificationBadgeReducer,
@@ -57,13 +57,11 @@ const rootReducer = combineReducers({
   [savedSearchesApi.reducerPath]: savedSearchesApi.reducer,
   [cartApi.reducerPath]: cartApi.reducer,
   [changePasswordApi.reducerPath]: changePasswordApi.reducer,
-  [notificationApi.reducerPath]: notificationApi.reducer,
-  [notificationSettingApi.reducerPath]: notificationSettingApi.reducer,
   [productApi.reducerPath]: productApi.reducer,
   [loginApi.reducerPath]: loginApi.reducer,
   [forgotPasswordApi.reducerPath]: forgotPasswordApi.reducer,
   [registerApi.reducerPath]: registerApi.reducer,
-  [myDiamondApi.reducerPath]: myDiamondApi.reducer,
+  [yourOrderApi.reducerPath]: yourOrderApi.reducer,
   [kycApi.reducerPath]: kycApi.reducer,
   [resetPasswordApi.reducerPath]: resetPasswordApi.reducer,
   [verifyEmailApi.reducerPath]: verifyEmailApi.reducer,
@@ -73,10 +71,11 @@ const rootReducer = combineReducers({
   [dashboardApi.reducerPath]: dashboardApi.reducer,
   [publicApi.reducerPath]: publicApi.reducer,
   [manageSubscriptionApi.reducerPath]: manageSubscriptionApi.reducer,
-  [myAccountApi.reducerPath]: myAccountApi.reducer,
-  [newNotificationApi.reducerPath]: newNotificationApi.reducer,
+  [myProfileApi.reducerPath]: myProfileApi.reducer,
+  [notificationApi.reducerPath]: notificationApi.reducer,
   [faqsApi.reducerPath]: faqsApi.reducer,
-  [myAppointmentApi.reducerPath]: myAppointmentApi.reducer
+  [myAppointmentApi.reducerPath]: myAppointmentApi.reducer,
+  [copyURLApi.reducerPath]: copyURLApi.reducer
 });
 
 const handle410Middleware =
@@ -102,11 +101,9 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
         downloadExcelApi.middleware,
         cartApi.middleware,
         savedSearchesApi.middleware,
-        notificationApi.middleware,
-        notificationSettingApi.middleware,
         productApi.middleware,
         loginApi.middleware,
-        myDiamondApi.middleware,
+        yourOrderApi.middleware,
         registerApi.middleware,
         resetPasswordApi.middleware,
         verifyEmailApi.middleware,
@@ -119,10 +116,11 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
         dashboardApi.middleware,
         publicApi.middleware,
         manageSubscriptionApi.middleware,
-        myAccountApi.middleware,
-        newNotificationApi.middleware,
+        myProfileApi.middleware,
+        notificationApi.middleware,
         faqsApi.middleware,
         myAppointmentApi.middleware,
+        copyURLApi.middleware,
         handle410Middleware
       ),
     preloadedState

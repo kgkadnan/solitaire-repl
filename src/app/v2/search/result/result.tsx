@@ -12,7 +12,6 @@ import {
   LISTING_PAGE_DATA_LIMIT,
   MEMO_STATUS
 } from '@/constants/business-logic';
-import confirmIcon from '@public/v2/assets/icons/modal/confirm.svg';
 import fallbackImage from '@public/v2/assets/icons/not-found.svg';
 import { constructUrlParams } from '@/utils/v2/construct-url-params';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -43,7 +42,6 @@ import { notificationBadge } from '@/features/notification/notification-slice';
 import { useAddCartMutation } from '@/features/api/cart';
 import { useAppDispatch } from '@/hooks/hook';
 import Image from 'next/image';
-import errorSvg from '@public/v2/assets/icons/modal/error.svg';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import { DialogComponent } from '@/components/v2/common/dialog';
 import {
@@ -89,6 +87,7 @@ import BookAppointment from '../../my-appointments/components/book-appointment/b
 import styles from './style.module.scss';
 import DataTableSkeleton from '@/components/v2/skeleton/data-table';
 import { Skeleton } from '@mui/material';
+import CommonPoppup from '../../login/component/common-poppup';
 
 // Column mapper outside the component to avoid re-creation on each render
 
@@ -189,29 +188,23 @@ const Result = ({
           if (res?.error?.status === statusCode.UNAUTHORIZED) {
             setIsDialogOpen(true);
             setDialogContent(
-              <>
-                <div className="absolute left-[-84px] top-[-84px]">
-                  <Image src={errorSvg} alt="errorSvg" />
-                </div>
-                <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                  <p className="text-neutral900 text-headingS font-medium">
-                    {res?.error?.data?.message}
-                  </p>
-                  <ActionButton
-                    actionButtonData={[
-                      {
-                        variant: 'primary',
-                        label: ManageLocales('app.modal.okay'),
-                        handler: () => {
-                          setIsDialogOpen(false);
-                        },
-                        customStyle: 'flex-1 w-full h-10'
-                      }
-                    ]}
-                  />
-                </div>
-              </>
+              <CommonPoppup
+                content={''}
+                customPoppupBodyStyle="!mt-[70px]"
+                header={res?.error?.data?.message}
+                actionButtonData={[
+                  {
+                    variant: 'primary',
+                    label: ManageLocales('app.modal.okay'),
+                    handler: () => {
+                      setIsDialogOpen(false);
+                    },
+                    customStyle: 'flex-1 w-full h-10'
+                  }
+                ]}
+              />
             );
+
             setHasLimitExceeded(true);
             dataTableSetState.setRows([]);
           } else {
@@ -285,6 +278,7 @@ const Result = ({
         switch (accessor) {
           case 'fire_icon':
             return {
+              enableSorting: false,
               accessorKey: 'fire_icon',
               header: '',
               minSize: 1,
@@ -609,34 +603,28 @@ const Result = ({
             setIsLoading(false);
             setIsDialogOpen(true);
             setDialogContent(
-              <>
-                <div className="absolute left-[-84px] top-[-84px]">
-                  <Image src={confirmIcon} alt="confirmIcon" />
-                </div>
-                <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                  <h1 className="text-headingS text-neutral900 !font-medium	">
-                    {res?.message}
-                  </h1>
-                  <ActionButton
-                    actionButtonData={[
-                      {
-                        variant: 'secondary',
-                        label: ManageLocales('app.modal.continue'),
-                        handler: () => setIsDialogOpen(false),
-                        customStyle: 'flex-1 w-full h-10'
-                      },
-                      {
-                        variant: 'primary',
-                        label: 'Go to "My Cart"',
-                        handler: () => {
-                          router.push('/v2/my-cart');
-                        },
-                        customStyle: 'flex-1 w-full h-10'
-                      }
-                    ]}
-                  />
-                </div>
-              </>
+              <CommonPoppup
+                content={''}
+                status="success"
+                customPoppupBodyStyle="!mt-[70px]"
+                header={res?.message}
+                actionButtonData={[
+                  {
+                    variant: 'secondary',
+                    label: ManageLocales('app.modal.continue'),
+                    handler: () => setIsDialogOpen(false),
+                    customStyle: 'flex-1 w-full h-10'
+                  },
+                  {
+                    variant: 'primary',
+                    label: 'Go to "My Cart"',
+                    handler: () => {
+                      router.push('/v2/my-cart');
+                    },
+                    customStyle: 'flex-1 w-full h-10'
+                  }
+                ]}
+              />
             );
             // On success, show confirmation dialog and update badge
             setIsError(false);
@@ -661,28 +649,21 @@ const Result = ({
 
             setIsDialogOpen(true);
             setDialogContent(
-              <>
-                <div className="absolute left-[-84px] top-[-84px]">
-                  <Image src={errorSvg} alt="errorSvg" />
-                </div>
-                <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                  <p className="text-neutral600 text-mRegular">
-                    {error?.data?.message}
-                  </p>
-                  <ActionButton
-                    actionButtonData={[
-                      {
-                        variant: 'primary',
-                        label: ManageLocales('app.modal.okay'),
-                        handler: () => {
-                          setIsDialogOpen(false);
-                        },
-                        customStyle: 'flex-1 w-full h-10'
-                      }
-                    ]}
-                  />
-                </div>
-              </>
+              <CommonPoppup
+                content={''}
+                customPoppupBodyStyle="!mt-[70px]"
+                header={error?.data?.message}
+                actionButtonData={[
+                  {
+                    variant: 'primary',
+                    label: ManageLocales('app.modal.okay'),
+                    handler: () => {
+                      setIsDialogOpen(false);
+                    },
+                    customStyle: 'flex-1 w-full h-10'
+                  }
+                ]}
+              />
             );
           });
         // Clear the selected checkboxes
@@ -735,38 +716,33 @@ const Result = ({
             setIsLoading(false);
             setIsDialogOpen(true);
             setDialogContent(
-              <>
-                <div className="absolute left-[-84px] top-[-84px]">
-                  <Image src={confirmIcon} alt="confirmIcon" />
-                </div>
-                <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                  <h1 className="text-headingS text-neutral900 !font-medium	">
-                    {res?.message}
-                  </h1>
-                  <ActionButton
-                    actionButtonData={[
-                      {
-                        variant: 'secondary',
-                        label: ManageLocales('app.modal.continue'),
-                        handler: () => {
-                          setIsDialogOpen(false);
-                          setIsDetailPage(false);
-                        },
-                        customStyle: 'flex-1 w-full h-10'
-                      },
-                      {
-                        variant: 'primary',
-                        label: 'Go to "My Cart"',
-                        handler: () => {
-                          router.push('/v2/my-cart');
-                        },
-                        customStyle: 'flex-1 w-full h-10'
-                      }
-                    ]}
-                  />
-                </div>
-              </>
+              <CommonPoppup
+                content={''}
+                status="success"
+                customPoppupBodyStyle="!mt-[70px]"
+                header={res?.message}
+                actionButtonData={[
+                  {
+                    variant: 'secondary',
+                    label: ManageLocales('app.modal.continue'),
+                    handler: () => {
+                      setIsDialogOpen(false);
+                      setIsDetailPage(false);
+                    },
+                    customStyle: 'flex-1 w-full h-10'
+                  },
+                  {
+                    variant: 'primary',
+                    label: 'Go to "My Cart"',
+                    handler: () => {
+                      router.push('/v2/my-cart');
+                    },
+                    customStyle: 'flex-1 w-full h-10'
+                  }
+                ]}
+              />
             );
+
             // On success, show confirmation dialog and update badge
             setIsError(false);
             setErrorText('');
@@ -788,28 +764,21 @@ const Result = ({
 
             setIsDialogOpen(true);
             setDialogContent(
-              <>
-                <div className="absolute left-[-84px] top-[-84px]">
-                  <Image src={errorSvg} alt="errorSvg" />
-                </div>
-                <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                  <p className="text-neutral600 text-mRegular">
-                    {error?.data?.message}
-                  </p>
-                  <ActionButton
-                    actionButtonData={[
-                      {
-                        variant: 'primary',
-                        label: ManageLocales('app.modal.okay'),
-                        handler: () => {
-                          setIsDialogOpen(false);
-                        },
-                        customStyle: 'flex-1 w-full h-10'
-                      }
-                    ]}
-                  />
-                </div>
-              </>
+              <CommonPoppup
+                content={''}
+                customPoppupBodyStyle="!mt-[70px]"
+                header={error?.data?.message}
+                actionButtonData={[
+                  {
+                    variant: 'primary',
+                    label: ManageLocales('app.modal.okay'),
+                    handler: () => {
+                      setIsDialogOpen(false);
+                    },
+                    customStyle: 'flex-1 w-full h-10'
+                  }
+                ]}
+              />
             );
           });
         // Clear the selected checkboxes
@@ -921,41 +890,35 @@ const Result = ({
 
             setRowSelection({});
             setDialogContent(
-              <>
-                {' '}
-                <div className="absolute left-[-84px] top-[-84px]">
-                  <Image src={confirmIcon} alt="confirmIcon" />
-                </div>
-                <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                  <h1 className="text-headingS text-neutral900">
-                    {variantIds.length} stones have been successfully added to
-                    &quot;My Diamond&quot;
-                  </h1>
-                  <ActionButton
-                    actionButtonData={[
-                      {
-                        variant: 'secondary',
-                        label: ManageLocales('app.modal.continue'),
-                        handler: () => {
-                          goBackToListView();
-                          setIsAddCommentDialogOpen(false);
-                          setIsDialogOpen(false);
-                        },
-                        customStyle: 'flex-1 w-full h-10'
-                      },
-                      {
-                        variant: 'primary',
-                        label: ManageLocales('app.modal.goToYourOrder'),
-                        handler: () => {
-                          router.push('/v2/your-orders');
-                        },
-                        customStyle: 'flex-1 w-full h-10'
-                      }
-                    ]}
-                  />
-                </div>
-              </>
+              <CommonPoppup
+                content={''}
+                status="success"
+                customPoppupBodyStyle="!mt-[70px]"
+                header={`${variantIds.length} stones have been successfully added to
+            "My Diamond"`}
+                actionButtonData={[
+                  {
+                    variant: 'secondary',
+                    label: ManageLocales('app.modal.continue'),
+                    handler: () => {
+                      goBackToListView();
+                      setIsAddCommentDialogOpen(false);
+                      setIsDialogOpen(false);
+                    },
+                    customStyle: 'flex-1 w-full h-10'
+                  },
+                  {
+                    variant: 'primary',
+                    label: ManageLocales('app.modal.goToYourOrder'),
+                    handler: () => {
+                      router.push('/v2/your-orders');
+                    },
+                    customStyle: 'flex-1 w-full h-10'
+                  }
+                ]}
+              />
             );
+
             setCommentValue('');
 
             triggerProductApi({
@@ -977,68 +940,49 @@ const Result = ({
           if (e.data.type === 'unauthorized') {
             setIsDialogOpen(true);
             setDialogContent(
-              <div className="h-[270px]">
-                <div className="absolute left-[-84px] top-[-84px]">
-                  <Image src={errorSvg} alt="errorSvg" />
-                </div>
-                <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                  <div>
-                    <h1 className="text-headingS text-neutral900">
-                      Important KYC Verification Required!
-                    </h1>
-                    <p className="text-neutral600 text-mRegular">
-                      To confirm a stone or make a purchase, KYC verification is
-                      mandatory. Without verification, access to certain
-                      features is restricted.
-                    </p>
-                  </div>
-                  <ActionButton
-                    actionButtonData={[
-                      {
-                        variant: 'secondary',
-                        label: ManageLocales('app.modal.cancel'),
-                        handler: () => setIsDialogOpen(false),
-                        customStyle: 'w-full flex-1'
-                      },
-                      {
-                        variant: 'primary',
-                        label: ManageLocales('app.modal.verifyMyKYCNow'),
-                        handler: () => {
-                          router.push('/v2/kyc');
-                        },
-                        customStyle: 'w-full flex-1'
-                      }
-                    ]}
-                  />
-                </div>
-              </div>
+              <CommonPoppup
+                content={
+                  'To confirm a stone or make a purchase, KYC verification is mandatory. Without verification, access to certain features is restricted.'
+                }
+                customPoppupStyle="h-[270px]"
+                customPoppupBodyStyle="!mt-[62px]"
+                header={`Important KYC Verification Required!`}
+                actionButtonData={[
+                  {
+                    variant: 'secondary',
+                    label: ManageLocales('app.modal.cancel'),
+                    handler: () => setIsDialogOpen(false),
+                    customStyle: 'w-full flex-1'
+                  },
+                  {
+                    variant: 'primary',
+                    label: ManageLocales('app.modal.verifyMyKYCNow'),
+                    handler: () => {
+                      router.push('/v2/kyc');
+                    },
+                    customStyle: 'w-full flex-1'
+                  }
+                ]}
+              />
             );
           } else {
             setIsDialogOpen(true);
             setDialogContent(
-              <>
-                {' '}
-                <div className="absolute left-[-84px] top-[-84px]">
-                  <Image src={errorSvg} alt="errorSvg" />
-                </div>
-                <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                  <p className="text-headingS text-neutral900 font-medium">
-                    {e?.data?.message}
-                  </p>
-                  <ActionButton
-                    actionButtonData={[
-                      {
-                        variant: 'primary',
-                        label: ManageLocales('app.modal.okay'),
-                        handler: () => {
-                          setIsDialogOpen(false);
-                        },
-                        customStyle: 'flex-1 w-full h-10'
-                      }
-                    ]}
-                  />
-                </div>
-              </>
+              <CommonPoppup
+                content={e?.data?.message}
+                customPoppupBodyStyle="!mt-[70px]"
+                header={``}
+                actionButtonData={[
+                  {
+                    variant: 'primary',
+                    label: ManageLocales('app.modal.okay'),
+                    handler: () => {
+                      setIsDialogOpen(false);
+                    },
+                    customStyle: 'flex-1 w-full h-10'
+                  }
+                ]}
+              />
             );
           }
         });

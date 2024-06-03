@@ -41,8 +41,7 @@ import ActionButton from '@/components/v2/common/action-button';
 import { ManageLocales } from '@/utils/v2/translate';
 import { Dropdown } from '@/components/v2/common/dropdown-menu';
 import { statusCode } from '@/constants/enums/status-code';
-import errorSvg from '@public/v2/assets/icons/modal/error.svg';
-import confirmIcon from '@public/v2/assets/icons/modal/confirm.svg';
+
 import { useAddCartMutation } from '@/features/api/cart';
 import { DialogComponent } from '@/components/v2/common/dialog';
 import { handleConfirmStone } from './search/result/helpers/handle-confirm-stone';
@@ -87,7 +86,7 @@ import { notificationBadge } from '@/features/notification/notification-slice';
 import { loadImages } from '@/components/v2/common/detail-page/helpers/load-images';
 import { checkImage } from '@/components/v2/common/detail-page/helpers/check-image';
 import CompareStone from './search/result/components/compare-stone';
-// import VolumeDiscount from '@/components/v2/common/volume-discount';
+import VolumeDiscount from '@/components/v2/common/volume-discount';
 import EmptyScreen from '@/components/v2/common/empty-screen';
 import emptyOrderSvg from '@public/v2/assets/icons/empty-order.svg';
 import empty from '@public/v2/assets/icons/saved-search/empty-screen-saved-search.svg';
@@ -101,6 +100,7 @@ import { useLazyGetAvailableMyAppointmentSlotsQuery } from '@/features/api/my-ap
 import { IAppointmentPayload } from './my-appointments/page';
 import BookAppointment from './my-appointments/components/book-appointment/book-appointment';
 import { Skeleton } from '@mui/material';
+import CommonPoppup from './login/component/common-poppup';
 
 interface ITabs {
   label: string;
@@ -322,6 +322,8 @@ const Dashboard = () => {
         switch (accessor) {
           case 'fire_icon':
             return {
+              enableSorting: false,
+
               accessorKey: 'fire_icon',
               header: '',
               minSize: 1,
@@ -571,186 +573,186 @@ const Dashboard = () => {
   }, []);
 
   //Uncomment this when volume discount to be released and comment below useEffect ---Jyoti  DONOT REMOVE THIS CODE
-  // useEffect(() => {
-  //   if (customerData) {
-  //     setIsLoading(false);
-
-  //     const tabsCopy: ITabs[] = []; // Make a copy of the current tabs
-  //     // const tabsCopy = [...tabs]; // Make a copy of the current tabs
-
-  //     // Check if there are saved searches and add the "Saved Search" tab
-  //     // if (customerData.customer.saved_searches?.length > 0) {
-  //     tabsCopy.push({
-  //       label: 'Saved Search',
-  //       link: '/v2/search?active-tab=saved-search',
-  //       data: customerData.customer?.saved_searches?.slice(0, 5) ?? []
-  //     });
-  //     // } else {
-  //     //   // Remove the "Saved Search" tab if there are no saved searches
-  //     //   const index = tabsCopy?.findIndex(tab => tab.label === 'Saved Search');
-  //     //   if (index !== -1) {
-  //     //     tabsCopy?.splice(index, 1);
-  //     //   }
-  //     // }
-
-  //     // Update the tabs state
-  //     // setTabs(tabsCopy);
-  //     // setActiveTab(tabsCopy[0]?.label);
-
-  //     // Check for pending and active invoices
-  //     // if (customerData.customer?.orders?.length > 0) {
-  //     const pendingInvoices =
-  //       customerData.customer.orders
-  //         .filter((item: any) => item.invoice_id === null)
-  //         .slice(0, 5) ?? [];
-
-  //     const activeInvoices =
-  //       customerData.customer.orders
-  //         .filter(
-  //           (item: any) => item.invoice_id !== null && item.status === 'pending'
-  //         )
-  //         .slice(0, 5) ?? [];
-
-  //     // Update or add "Pending Invoice" tab
-  //     // const pendingTab = tabsCopy.find(
-  //     //   tab => tab.label === 'Pending Invoice'
-  //     // );
-  //     // if (pendingInvoices.length > 0) {
-  //     //   if (pendingTab) {
-  //     //     pendingTab.data = pendingInvoices;
-  //     //   } else {
-  //     tabsCopy.push({
-  //       label: 'Pending Invoice',
-  //       link: '/v2/your-orders',
-  //       data: pendingInvoices
-  //     });
-  //     //   }
-  //     // } else {
-  //     //   // Remove "Pending Invoice" tab if there are no pending invoices
-  //     //   const index = tabsCopy.findIndex(
-  //     //     tab => tab.label === 'Pending Invoice'
-  //     //   );
-  //     //   if (index !== -1) {
-  //     //     tabsCopy.splice(index, 1);
-  //     //   }
-  //     // }
-
-  //     // Update or add "Active Invoice" tab
-  //     // const activeTab = tabsCopy.find(tab => tab.label === 'Active Invoice');
-  //     // if (activeInvoices.length > 0) {
-  //     //   if (activeTab) {
-  //     //     activeTab.data = activeInvoices;
-  //     //   } else {
-  //     tabsCopy.push({
-  //       label: 'Active Invoice',
-  //       link: '/v2/your-orders',
-  //       data: activeInvoices
-  //     });
-  //     //   }
-  //     // } else {
-  //     //   // Remove "Active Invoice" tab if there are no active invoices
-  //     //   const index = tabsCopy.findIndex(
-  //     //     tab => tab.label === 'Active Invoice'
-  //     //   );
-  //     //   if (index !== -1) {
-  //     //     tabsCopy.splice(index, 1);
-  //     //   }
-  //     // }
-  //     // Update the tabs state
-  //     setTabs(tabsCopy);
-  //     setActiveTab(tabsCopy[0].label);
-  //     // }
-  //   }
-  // }, [customerData]);
-
   useEffect(() => {
     if (customerData) {
-      // setIsLoading(false);
+      setIsLoading(false);
+
       const tabsCopy: ITabs[] = []; // Make a copy of the current tabs
       // const tabsCopy = [...tabs]; // Make a copy of the current tabs
 
       // Check if there are saved searches and add the "Saved Search" tab
-      if (customerData.customer.saved_searches?.length > 0) {
-        tabsCopy.push({
-          label: 'Saved Search',
-          link: '/v2/search?active-tab=saved-search',
-          data: customerData.customer.saved_searches.slice(0, 5)
-        });
-      } else {
-        // Remove the "Saved Search" tab if there are no saved searches
-        const index = tabsCopy?.findIndex(tab => tab.label === 'Saved Search');
-        if (index !== -1) {
-          tabsCopy?.splice(index, 1);
-        }
-      }
+      // if (customerData.customer.saved_searches?.length > 0) {
+      tabsCopy.push({
+        label: 'Saved Search',
+        link: '/v2/search?active-tab=saved-search',
+        data: customerData.customer?.saved_searches?.slice(0, 5) ?? []
+      });
+      // } else {
+      //   // Remove the "Saved Search" tab if there are no saved searches
+      //   const index = tabsCopy?.findIndex(tab => tab.label === 'Saved Search');
+      //   if (index !== -1) {
+      //     tabsCopy?.splice(index, 1);
+      //   }
+      // }
 
       // Update the tabs state
-      setTabs(tabsCopy);
-      setActiveTab(tabsCopy[0]?.label);
+      // setTabs(tabsCopy);
+      // setActiveTab(tabsCopy[0]?.label);
 
       // Check for pending and active invoices
-      if (customerData.customer?.orders?.length > 0) {
-        const pendingInvoices = customerData.customer.orders
+      // if (customerData.customer?.orders?.length > 0) {
+      const pendingInvoices =
+        customerData.customer.orders
           .filter((item: any) => item.invoice_id === null)
-          .slice(0, 5);
+          .slice(0, 5) ?? [];
 
-        const activeInvoices = customerData.customer.orders
+      const activeInvoices =
+        customerData.customer.orders
           .filter(
             (item: any) => item.invoice_id !== null && item.status === 'pending'
           )
-          .slice(0, 5);
+          .slice(0, 5) ?? [];
 
-        // Update or add "Pending Invoice" tab
-        const pendingTab = tabsCopy.find(
-          tab => tab.label === 'Pending Invoice'
-        );
-        if (pendingInvoices.length > 0) {
-          if (pendingTab) {
-            pendingTab.data = pendingInvoices;
-          } else {
-            tabsCopy.push({
-              label: 'Pending Invoice',
-              link: '/v2/your-orders',
-              data: pendingInvoices
-            });
-          }
-        } else {
-          // Remove "Pending Invoice" tab if there are no pending invoices
-          const index = tabsCopy.findIndex(
-            tab => tab.label === 'Pending Invoice'
-          );
-          if (index !== -1) {
-            tabsCopy.splice(index, 1);
-          }
-        }
+      // Update or add "Pending Invoice" tab
+      // const pendingTab = tabsCopy.find(
+      //   tab => tab.label === 'Pending Invoice'
+      // );
+      // if (pendingInvoices.length > 0) {
+      //   if (pendingTab) {
+      //     pendingTab.data = pendingInvoices;
+      //   } else {
+      tabsCopy.push({
+        label: 'Pending Invoice',
+        link: '/v2/your-orders',
+        data: pendingInvoices
+      });
+      //   }
+      // } else {
+      //   // Remove "Pending Invoice" tab if there are no pending invoices
+      //   const index = tabsCopy.findIndex(
+      //     tab => tab.label === 'Pending Invoice'
+      //   );
+      //   if (index !== -1) {
+      //     tabsCopy.splice(index, 1);
+      //   }
+      // }
 
-        // Update or add "Active Invoice" tab
-        const activeTab = tabsCopy.find(tab => tab.label === 'Active Invoice');
-        if (activeInvoices.length > 0) {
-          if (activeTab) {
-            activeTab.data = activeInvoices;
-          } else {
-            tabsCopy.push({
-              label: 'Active Invoice',
-              link: '/v2/your-orders',
-              data: activeInvoices
-            });
-          }
-        } else {
-          // Remove "Active Invoice" tab if there are no active invoices
-          const index = tabsCopy.findIndex(
-            tab => tab.label === 'Active Invoice'
-          );
-          if (index !== -1) {
-            tabsCopy.splice(index, 1);
-          }
-        }
-        // Update the tabs state
-        setTabs(tabsCopy);
-        setActiveTab(tabsCopy[0].label);
-      }
+      // Update or add "Active Invoice" tab
+      // const activeTab = tabsCopy.find(tab => tab.label === 'Active Invoice');
+      // if (activeInvoices.length > 0) {
+      //   if (activeTab) {
+      //     activeTab.data = activeInvoices;
+      //   } else {
+      tabsCopy.push({
+        label: 'Active Invoice',
+        link: '/v2/your-orders',
+        data: activeInvoices
+      });
+      //   }
+      // } else {
+      //   // Remove "Active Invoice" tab if there are no active invoices
+      //   const index = tabsCopy.findIndex(
+      //     tab => tab.label === 'Active Invoice'
+      //   );
+      //   if (index !== -1) {
+      //     tabsCopy.splice(index, 1);
+      //   }
+      // }
+      // Update the tabs state
+      setTabs(tabsCopy);
+      setActiveTab(tabsCopy[0].label);
+      // }
     }
   }, [customerData]);
+
+  // useEffect(() => {
+  //   if (customerData) {
+  //     // setIsLoading(false);
+  //     const tabsCopy: ITabs[] = []; // Make a copy of the current tabs
+  //     // const tabsCopy = [...tabs]; // Make a copy of the current tabs
+
+  //     // Check if there are saved searches and add the "Saved Search" tab
+  //     if (customerData.customer.saved_searches?.length > 0) {
+  //       tabsCopy.push({
+  //         label: 'Saved Search',
+  //         link: '/v2/search?active-tab=saved-search',
+  //         data: customerData.customer.saved_searches.slice(0, 5)
+  //       });
+  //     } else {
+  //       // Remove the "Saved Search" tab if there are no saved searches
+  //       const index = tabsCopy?.findIndex(tab => tab.label === 'Saved Search');
+  //       if (index !== -1) {
+  //         tabsCopy?.splice(index, 1);
+  //       }
+  //     }
+
+  //     // Update the tabs state
+  //     setTabs(tabsCopy);
+  //     setActiveTab(tabsCopy[0]?.label);
+
+  //     // Check for pending and active invoices
+  //     if (customerData.customer?.orders?.length > 0) {
+  //       const pendingInvoices = customerData.customer.orders
+  //         .filter((item: any) => item.invoice_id === null)
+  //         .slice(0, 5);
+
+  //       const activeInvoices = customerData.customer.orders
+  //         .filter(
+  //           (item: any) => item.invoice_id !== null && item.status === 'pending'
+  //         )
+  //         .slice(0, 5);
+
+  //       // Update or add "Pending Invoice" tab
+  //       const pendingTab = tabsCopy.find(
+  //         tab => tab.label === 'Pending Invoice'
+  //       );
+  //       if (pendingInvoices.length > 0) {
+  //         if (pendingTab) {
+  //           pendingTab.data = pendingInvoices;
+  //         } else {
+  //           tabsCopy.push({
+  //             label: 'Pending Invoice',
+  //             link: '/v2/your-orders',
+  //             data: pendingInvoices
+  //           });
+  //         }
+  //       } else {
+  //         // Remove "Pending Invoice" tab if there are no pending invoices
+  //         const index = tabsCopy.findIndex(
+  //           tab => tab.label === 'Pending Invoice'
+  //         );
+  //         if (index !== -1) {
+  //           tabsCopy.splice(index, 1);
+  //         }
+  //       }
+
+  //       // Update or add "Active Invoice" tab
+  //       const activeTab = tabsCopy.find(tab => tab.label === 'Active Invoice');
+  //       if (activeInvoices.length > 0) {
+  //         if (activeTab) {
+  //           activeTab.data = activeInvoices;
+  //         } else {
+  //           tabsCopy.push({
+  //             label: 'Active Invoice',
+  //             link: '/v2/your-orders',
+  //             data: activeInvoices
+  //           });
+  //         }
+  //       } else {
+  //         // Remove "Active Invoice" tab if there are no active invoices
+  //         const index = tabsCopy.findIndex(
+  //           tab => tab.label === 'Active Invoice'
+  //         );
+  //         if (index !== -1) {
+  //           tabsCopy.splice(index, 1);
+  //         }
+  //       }
+  //       // Update the tabs state
+  //       setTabs(tabsCopy);
+  //       setActiveTab(tabsCopy[0].label);
+  //     }
+  //   }
+  // }, [customerData]);
   useEffect(() => {
     if (tabs.length > 0) {
       if (activeTab === '') {
@@ -924,39 +926,34 @@ const Dashboard = () => {
           // setIsLoading(false);
           setIsDialogOpen(true);
           setDialogContent(
-            <>
-              <div className="absolute left-[-84px] top-[-84px]">
-                <Image src={confirmIcon} alt="confirmIcon" />
-              </div>
-              <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                <h1 className="text-headingS text-neutral900 !font-medium	">
-                  {res?.message}
-                </h1>
-                <ActionButton
-                  actionButtonData={[
-                    {
-                      variant: 'secondary',
-                      label: ManageLocales('app.modal.continue'),
-                      handler: () => {
-                        setIsDialogOpen(false);
-                        setIsDetailPage(false);
-                        setSearchData({});
-                      },
-                      customStyle: 'flex-1 w-full h-10'
-                    },
-                    {
-                      variant: 'primary',
-                      label: 'Go to "My Cart"',
-                      handler: () => {
-                        router.push('/v2/my-cart');
-                      },
-                      customStyle: 'flex-1 w-full h-10'
-                    }
-                  ]}
-                />
-              </div>
-            </>
+            <CommonPoppup
+              content=""
+              status="success"
+              customPoppupBodyStyle="mt-[70px]"
+              header={res?.message}
+              actionButtonData={[
+                {
+                  variant: 'secondary',
+                  label: ManageLocales('app.modal.continue'),
+                  handler: () => {
+                    setIsDialogOpen(false);
+                    setIsDetailPage(false);
+                    setSearchData({});
+                  },
+                  customStyle: 'flex-1 w-full h-10'
+                },
+                {
+                  variant: 'primary',
+                  label: 'Go to "My Cart"',
+                  handler: () => {
+                    router.push('/v2/my-cart');
+                  },
+                  customStyle: 'flex-1 w-full h-10'
+                }
+              ]}
+            />
           );
+
           // On success, show confirmation dialog and update badge
           setError('');
         })
@@ -966,28 +963,21 @@ const Dashboard = () => {
 
           setIsDialogOpen(true);
           setDialogContent(
-            <>
-              <div className="absolute left-[-84px] top-[-84px]">
-                <Image src={errorSvg} alt="errorSvg" />
-              </div>
-              <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                <p className="text-neutral600 text-mRegular">
-                  {error?.data?.message}
-                </p>
-                <ActionButton
-                  actionButtonData={[
-                    {
-                      variant: 'primary',
-                      label: ManageLocales('app.modal.okay'),
-                      handler: () => {
-                        setIsDialogOpen(false);
-                      },
-                      customStyle: 'flex-1 w-full h-10'
-                    }
-                  ]}
-                />
-              </div>
-            </>
+            <CommonPoppup
+              content=""
+              customPoppupBodyStyle="mt-[70px]"
+              header={error?.data?.message}
+              actionButtonData={[
+                {
+                  variant: 'primary',
+                  label: ManageLocales('app.modal.okay'),
+                  handler: () => {
+                    setIsDialogOpen(false);
+                  },
+                  customStyle: 'flex-1 w-full h-10'
+                }
+              ]}
+            />
           );
         });
       // Clear the selected checkboxes
@@ -1218,41 +1208,34 @@ const Dashboard = () => {
 
             // setRowSelection({});
             setDialogContent(
-              <>
-                {' '}
-                <div className="absolute left-[-84px] top-[-84px]">
-                  <Image src={confirmIcon} alt="confirmIcon" />
-                </div>
-                <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                  <h1 className="text-headingS text-neutral900">
-                    {variantIds.length} stones have been successfully added to
-                    &quot;My Diamond&quot;
-                  </h1>
-                  <ActionButton
-                    actionButtonData={[
-                      {
-                        variant: 'secondary',
-                        label: ManageLocales('app.modal.continue'),
-                        handler: () => {
-                          goBackToListView();
-                          setIsAddCommentDialogOpen(false);
-                          setIsDialogOpen(false);
-                        },
-                        customStyle: 'flex-1 w-full h-10'
-                      },
-                      {
-                        variant: 'primary',
-                        label: ManageLocales('app.modal.goToYourOrder'),
-                        handler: () => {
-                          router.push('/v2/your-orders');
-                        },
-                        customStyle: 'flex-1 w-full h-10'
-                      }
-                    ]}
-                  />
-                </div>
-              </>
+              <CommonPoppup
+                content=""
+                status="success"
+                customPoppupBodyStyle="mt-[70px]"
+                header={`${variantIds.length} stones have been successfully added to "My Diamond"`}
+                actionButtonData={[
+                  {
+                    variant: 'secondary',
+                    label: ManageLocales('app.modal.continue'),
+                    handler: () => {
+                      goBackToListView();
+                      setIsAddCommentDialogOpen(false);
+                      setIsDialogOpen(false);
+                    },
+                    customStyle: 'flex-1 w-full h-10'
+                  },
+                  {
+                    variant: 'primary',
+                    label: ManageLocales('app.modal.goToYourOrder'),
+                    handler: () => {
+                      router.push('/v2/your-orders');
+                    },
+                    customStyle: 'flex-1 w-full h-10'
+                  }
+                ]}
+              />
             );
+
             setCommentValue('');
           }
         })
@@ -1263,68 +1246,49 @@ const Dashboard = () => {
           if (e.data.type === 'unauthorized') {
             setIsDialogOpen(true);
             setDialogContent(
-              <div className="h-[270px]">
-                <div className="absolute left-[-84px] top-[-84px]">
-                  <Image src={errorSvg} alt="errorSvg" />
-                </div>
-                <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                  <div>
-                    <h1 className="text-headingS text-neutral900">
-                      Important KYC Verification Required!
-                    </h1>
-                    <p className="text-neutral600 text-mRegular">
-                      To confirm a stone or make a purchase, KYC verification is
-                      mandatory. Without verification, access to certain
-                      features is restricted.
-                    </p>
-                  </div>
-                  <ActionButton
-                    actionButtonData={[
-                      {
-                        variant: 'secondary',
-                        label: ManageLocales('app.modal.cancel'),
-                        handler: () => setIsDialogOpen(false),
-                        customStyle: 'w-full flex-1'
-                      },
-                      {
-                        variant: 'primary',
-                        label: ManageLocales('app.modal.verifyMyKYCNow'),
-                        handler: () => {
-                          router.push('/v2/kyc');
-                        },
-                        customStyle: 'w-full flex-1'
-                      }
-                    ]}
-                  />
-                </div>
-              </div>
+              <CommonPoppup
+                content="To confirm a stone or make a purchase, KYC verification is
+              mandatory. Without verification, access to certain
+              features is restricted."
+                customPoppupBodyStyle="!mt-[62px]"
+                customPoppupStyle="h-[270px]"
+                header={'Important KYC Verification Required!'}
+                actionButtonData={[
+                  {
+                    variant: 'secondary',
+                    label: ManageLocales('app.modal.cancel'),
+                    handler: () => setIsDialogOpen(false),
+                    customStyle: 'w-full flex-1'
+                  },
+                  {
+                    variant: 'primary',
+                    label: ManageLocales('app.modal.verifyMyKYCNow'),
+                    handler: () => {
+                      router.push('/v2/kyc');
+                    },
+                    customStyle: 'w-full flex-1'
+                  }
+                ]}
+              />
             );
           } else {
             setIsDialogOpen(true);
             setDialogContent(
-              <>
-                {' '}
-                <div className="absolute left-[-84px] top-[-84px]">
-                  <Image src={errorSvg} alt="errorSvg" />
-                </div>
-                <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                  <p className="text-headingS text-neutral900 font-medium">
-                    {e?.data?.message}
-                  </p>
-                  <ActionButton
-                    actionButtonData={[
-                      {
-                        variant: 'primary',
-                        label: ManageLocales('app.modal.okay'),
-                        handler: () => {
-                          setIsDialogOpen(false);
-                        },
-                        customStyle: 'flex-1 w-full h-10'
-                      }
-                    ]}
-                  />
-                </div>
-              </>
+              <CommonPoppup
+                content={''}
+                customPoppupBodyStyle="mt-[70px]"
+                header={e?.data?.message}
+                actionButtonData={[
+                  {
+                    variant: 'primary',
+                    label: ManageLocales('app.modal.okay'),
+                    handler: () => {
+                      setIsDialogOpen(false);
+                    },
+                    customStyle: 'flex-1 w-full h-10'
+                  }
+                ]}
+              />
             );
           }
         });
@@ -1365,37 +1329,32 @@ const Dashboard = () => {
             // setIsLoading(false);
             setIsDialogOpen(true);
             setDialogContent(
-              <>
-                <div className="absolute left-[-84px] top-[-84px]">
-                  <Image src={confirmIcon} alt="confirmIcon" />
-                </div>
-                <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                  <h1 className="text-headingS text-neutral900 !font-medium	">
-                    {res?.message}
-                  </h1>
-                  <ActionButton
-                    actionButtonData={[
-                      {
-                        variant: 'secondary',
-                        label: ManageLocales('app.modal.continue'),
-                        handler: () => {
-                          setIsDialogOpen(false), setIsDetailPage(true);
-                        },
-                        customStyle: 'flex-1 w-full h-10'
-                      },
-                      {
-                        variant: 'primary',
-                        label: 'Go to "My Cart"',
-                        handler: () => {
-                          router.push('/v2/my-cart');
-                        },
-                        customStyle: 'flex-1 w-full h-10'
-                      }
-                    ]}
-                  />
-                </div>
-              </>
+              <CommonPoppup
+                content={''}
+                status="success"
+                customPoppupBodyStyle="mt-[70px]"
+                header={res?.message}
+                actionButtonData={[
+                  {
+                    variant: 'secondary',
+                    label: ManageLocales('app.modal.continue'),
+                    handler: () => {
+                      setIsDialogOpen(false), setIsDetailPage(true);
+                    },
+                    customStyle: 'flex-1 w-full h-10'
+                  },
+                  {
+                    variant: 'primary',
+                    label: 'Go to "My Cart"',
+                    handler: () => {
+                      router.push('/v2/my-cart');
+                    },
+                    customStyle: 'flex-1 w-full h-10'
+                  }
+                ]}
+              />
             );
+
             // On success, show confirmation dialog and update badge
             setIsError(false);
             setError('');
@@ -1426,28 +1385,21 @@ const Dashboard = () => {
 
             setIsDialogOpen(true);
             setDialogContent(
-              <>
-                <div className="absolute left-[-84px] top-[-84px]">
-                  <Image src={errorSvg} alt="errorSvg" />
-                </div>
-                <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                  <p className="text-neutral600 text-mRegular">
-                    {error?.data?.message}
-                  </p>
-                  <ActionButton
-                    actionButtonData={[
-                      {
-                        variant: 'primary',
-                        label: ManageLocales('app.modal.okay'),
-                        handler: () => {
-                          setIsDialogOpen(false);
-                        },
-                        customStyle: 'flex-1 w-full h-10'
-                      }
-                    ]}
-                  />
-                </div>
-              </>
+              <CommonPoppup
+                content={''}
+                customPoppupBodyStyle="mt-[70px]"
+                header={error?.data?.message}
+                actionButtonData={[
+                  {
+                    variant: 'primary',
+                    label: ManageLocales('app.modal.okay'),
+                    handler: () => {
+                      setIsDialogOpen(false);
+                    },
+                    customStyle: 'flex-1 w-full h-10'
+                  }
+                ]}
+              />
             );
           });
         // Clear the selected checkboxes
@@ -2108,8 +2060,8 @@ const Dashboard = () => {
                     </div>
                   </div>
                 )}
-
-                {/* <div className="w-[300px]">
+                {/* )} */}
+                <div className="w-[300px]">
                   {customerData === undefined ? (
                     <Skeleton
                       height={420}
@@ -2132,7 +2084,7 @@ const Dashboard = () => {
                       }
                     />
                   )}
-                </div> */}
+                </div>
               </div>
             )}
           </div>
