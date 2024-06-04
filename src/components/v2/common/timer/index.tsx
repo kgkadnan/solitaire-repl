@@ -4,30 +4,30 @@ const CountdownTimer = ({
   initialHours = 0,
   initialMinutes = 0,
   initialSeconds = 0,
-  customize = false
+  customize = false,
+  pauseTimer = false
 }) => {
   const [time, setTime] = useState({
     hours: initialHours,
     minutes: initialMinutes,
     seconds: initialSeconds
   });
-
   useEffect(() => {
     const timerId = setInterval(() => {
       setTime(currentTime => {
         let { hours, minutes, seconds } = currentTime;
-
-        if (seconds > 0) {
-          seconds--;
-        } else if (minutes > 0) {
-          minutes--;
-          seconds = 59;
-        } else if (hours > 0) {
-          hours--;
-          minutes = 59;
-          seconds = 59;
+        if (!pauseTimer) {
+          if (seconds > 0) {
+            seconds--;
+          } else if (minutes > 0) {
+            minutes--;
+            seconds = 59;
+          } else if (hours > 0) {
+            hours--;
+            minutes = 59;
+            seconds = 59;
+          }
         }
-
         return { hours, minutes, seconds };
       });
     }, 1000);
