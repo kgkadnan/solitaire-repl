@@ -58,7 +58,10 @@ export const Carat = ({
       return;
     }
 
-    if (Number(caratRange[0]) < 0 || Number(caratRange[1]) > carat.range.lte) {
+    if (
+      Number(caratRange[0]) < carat.range.gte ||
+      Number(caratRange[1]) > carat.range.lte
+    ) {
       setCaratError(
         `Please enter a range between ${carat.range.gte} to ${carat.range.lte} only`
       );
