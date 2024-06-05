@@ -19,13 +19,11 @@ interface IDropdownMenu {
 export interface IDropdownData {
   dropdownTrigger: React.ReactNode;
   dropdownMenu: IDropdownMenu[];
-  isDisable?: boolean;
 }
 
 export const Dropdown: React.FC<IDropdownData> = ({
   dropdownTrigger,
-  dropdownMenu,
-  isDisable = false
+  dropdownMenu
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 

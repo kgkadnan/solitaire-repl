@@ -1194,7 +1194,6 @@ const Result = ({
                   commingSoon: true
                 }
               ]}
-              isDisable={true}
             />
           </div>
         </>

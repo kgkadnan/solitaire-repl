@@ -1034,7 +1034,6 @@ const DataTable = ({
                       })
                   }
                 ]}
-                isDisable={true}
               />
             </div>
           </div>
@@ -1112,7 +1111,6 @@ const DataTable = ({
                     commingSoon: true
                   }
                 ]}
-                isDisable={true}
               />
             </div>
           </div>
