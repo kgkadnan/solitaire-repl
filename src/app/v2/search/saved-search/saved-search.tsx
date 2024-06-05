@@ -197,7 +197,6 @@ const SavedSearch = ({ setIsLoading }: any) => {
         setIsError(false); // Hide the toast notification after some time
       }, 4000);
   }, [isError]);
-  console.log(savedSearchState, 'savedSearchState');
   return (
     <div className="mb-[20px]">
       {isError && (
