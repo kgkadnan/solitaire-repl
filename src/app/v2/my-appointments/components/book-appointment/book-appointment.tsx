@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import backWardArrow from '@public/v2/assets/icons/my-diamonds/backwardArrow.svg';
 import Image from 'next/image';
 import { Avatar } from '@/components/v2/ui/avatar';
-import avatar from '@public/v2/assets/icons/my-appointments/Avatar.svg';
 import locationSvg from '@public/v2/assets/icons/my-appointments/location.svg';
 import {
   IRescheduleAppointmentData,
