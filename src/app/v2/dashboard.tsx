@@ -1873,6 +1873,7 @@ const Dashboard = () => {
                     }
                     phoneNumber={customerData?.customer.kam?.phone ?? '-'}
                     email={customerData?.customer.kam?.email ?? '-'}
+                    image={customerData?.customer.kam?.image ?? ''}
                   />
                 )}
               </div>

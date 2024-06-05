@@ -12,6 +12,7 @@ interface IKAMCardProps {
   role: string;
   phoneNumber: string;
   email: string;
+  image?: string;
 }
 
 const styles = {
@@ -26,15 +27,14 @@ const KAMCard: React.FC<IKAMCardProps> = ({
   name,
   role,
   phoneNumber,
-  email
+  email,
+  image
 }) => {
   const [showToast, setShowToast] = useState(false);
   const handleCopy = (email: string) => {
     navigator.clipboard.writeText(email);
-    // setCopied(true);
     setShowToast(true); // Show the toast notification
     setTimeout(() => {
-      // setCopied(false);
       setShowToast(false); // Hide the toast notification after some time
     }, 4000);
   };
@@ -50,9 +50,7 @@ const KAMCard: React.FC<IKAMCardProps> = ({
           style={styles}
           className="w-[100%]  rounded-[8px] flex justify-center"
         >
-          <div className="mt-[24px]">
-            <Avatar />
-          </div>
+          <div className="mt-[24px]">{/* <Avatar /> */} hi</div>
         </div>
         <div className="flex flex-col items-center gap-3">
           <h3 className="text-headingM medium text-neutral900">{name}</h3>
