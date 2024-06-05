@@ -43,11 +43,6 @@ export const Dropdown: React.FC<IDropdownData> = ({
         <DropdownMenuContent
           className={`border-[1px] items-center border-solid border-neutral200  text-neutral900 rounded-[8px] relative `}
         >
-          {isDisable && (
-            <div className="flex justify-center border-b-[1px] border-solid border-neutral200 bg-neutral0 py-[8px]">
-              <Image src={comingSoon} alt="comingSoon" />
-            </div>
-          )}
           {dropdownMenu.map(items => {
             if (items.isHidden) {
               return null;
@@ -62,7 +57,14 @@ export const Dropdown: React.FC<IDropdownData> = ({
                   items?.commingSoon ? 'text-neutral400' : 'text-neutral900'
                 }  ${items?.commingSoon ? 'bg-neutral100' : 'bg-neutral0'}`}
               >
-                <DropdownMenuLabel>{items.label}</DropdownMenuLabel>
+                <DropdownMenuLabel>
+                  <div className="flex justify-between items-center">
+                    {items.label}{' '}
+                    {items?.commingSoon && (
+                      <Image src={comingSoon} alt="comming soon" />
+                    )}{' '}
+                  </div>
+                </DropdownMenuLabel>
               </div>
             );
           })}
