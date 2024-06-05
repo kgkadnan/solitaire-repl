@@ -100,6 +100,13 @@ const theme = createTheme({
         disableRipple: true // No more ripple, on the whole application 💣!
       }
     },
+    MuiIconButton: {
+      styleOverrides: {
+        root: {
+          height: '30px !important'
+        }
+      }
+    },
     MuiMenuItem: {
       styleOverrides: {
         root: {
@@ -516,7 +523,8 @@ const DataTable = ({
         muiTableHeadCellProps: {
           sx: {
             display: 'none',
-            whiteSpace: 'nowrap'
+            whiteSpace: 'nowrap',
+            fontSize: '12px'
           }
         },
 
@@ -566,7 +574,7 @@ const DataTable = ({
 
     muiTableContainerProps: {
       sx: {
-        height: isFullScreen ? '70vh' : 'calc(100vh - 305px)',
+        height: isFullScreen ? '70vh' : 'calc(100vh - 300px)',
         minHeight: isFullScreen
           ? myCart
             ? showCalculatedField
@@ -591,7 +599,7 @@ const DataTable = ({
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
           ? 'calc(100vh - 405px)'
-          : 'calc(100vh - 305px)',
+          : 'calc(100vh - 300px)',
         maxHeight: isFullScreen
           ? myCart
             ? showCalculatedField
@@ -616,7 +624,7 @@ const DataTable = ({
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
           ? 'calc(100vh - 405px)'
-          : 'calc(100vh - 305px)'
+          : 'calc(100vh - 300px)'
       }
     },
     muiTableHeadRowProps: {
@@ -631,9 +639,11 @@ const DataTable = ({
           color: 'var(--neutral-900)',
           '&.MuiTableCell-root': {
             padding: '0px 2px',
-            height: '20px',
+            height: '20px !important',
             background: 'White',
             opacity: 1,
+            fontSize: '12px !important',
+            fontWeight: 400,
             visibility:
               (cell.id === 'shape:RAD_lot_id' ||
                 cell.id === 'shape:EM_lot_id' ||
@@ -685,7 +695,9 @@ const DataTable = ({
           height: '20px',
           background: 'var(--neutral-50)',
           opacity: 1,
-          borderTop: '1px solid var(--neutral-200)'
+          borderTop: '1px solid var(--neutral-200)',
+          fontSize: '12px !important',
+          fontWeight: 500
         }
       }
     },
