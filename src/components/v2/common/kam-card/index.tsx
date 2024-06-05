@@ -13,7 +13,7 @@ interface IKAMCardProps {
   role: string;
   phoneNumber: string;
   email: string;
-  image?: string|null;
+  image?: string | null;
 }
 
 const styles = {
