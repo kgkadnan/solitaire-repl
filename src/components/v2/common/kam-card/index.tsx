@@ -1,4 +1,5 @@
 import Avatar from '@public/v2/assets/icons/dashboard/avatar.svg?url';
+import Image from 'next/image';
 
 import Phone from '@public/v2/assets/icons/dashboard/phone.svg?url';
 import WhatsApp from '@public/v2/assets/icons/dashboard/whatsapp.svg?url';
@@ -12,6 +13,7 @@ interface IKAMCardProps {
   role: string;
   phoneNumber: string;
   email: string;
+  image?: string | null;
 }
 
 const styles = {
@@ -26,15 +28,14 @@ const KAMCard: React.FC<IKAMCardProps> = ({
   name,
   role,
   phoneNumber,
-  email
+  email,
+  image
 }) => {
   const [showToast, setShowToast] = useState(false);
   const handleCopy = (email: string) => {
     navigator.clipboard.writeText(email);
-    // setCopied(true);
     setShowToast(true); // Show the toast notification
     setTimeout(() => {
-      // setCopied(false);
       setShowToast(false); // Hide the toast notification after some time
     }, 4000);
   };
@@ -51,7 +52,21 @@ const KAMCard: React.FC<IKAMCardProps> = ({
           className="w-[100%]  rounded-[8px] flex justify-center"
         >
           <div className="mt-[24px]">
-            <Avatar />
+            {image && image !== null && image !== '' ? (
+              <div
+                className="h-30 w-30 relative"
+                style={{ width: '120px', height: '120px' }}
+              >
+                <Image
+                  src={image}
+                  alt="kam image"
+                  className="object-cover rounded-[8px]"
+                  layout="fill"
+                />
+              </div>
+            ) : (
+              <Avatar />
+            )}{' '}
           </div>
         </div>
         <div className="flex flex-col items-center gap-3">

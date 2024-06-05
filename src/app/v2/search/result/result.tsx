@@ -147,7 +147,7 @@ const Result = ({
   const [showAppointmentForm, setShowAppointmentForm] = useState(false);
   const [appointmentPayload, setAppointmentPayload] =
     useState<IAppointmentPayload>({
-      kam: { kam_name: '', kam_image: '' },
+      kam: { kam_name: '', image: '' },
       storeAddresses: [],
       timeSlots: { dates: [{ date: '', day: '' }], slots: {} }
     });
@@ -798,7 +798,7 @@ const Result = ({
     setCompareStoneData([]);
     setShowAppointmentForm(false);
     setAppointmentPayload({
-      kam: { kam_name: '', kam_image: '' },
+      kam: { kam_name: '', image: '' },
       storeAddresses: [],
       timeSlots: { dates: [{ date: '', day: '' }], slots: {} }
     });
