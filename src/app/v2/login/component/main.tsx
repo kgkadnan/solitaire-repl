@@ -127,6 +127,7 @@ const Login = () => {
     if (data) {
       localStorage.setItem('user', JSON.stringify(data));
       if (data.customer.is_phone_verified) {
+        localStorage.removeItem('Search');
         userLoggedIn(token.token);
         router.push('/v2/');
       } else {
