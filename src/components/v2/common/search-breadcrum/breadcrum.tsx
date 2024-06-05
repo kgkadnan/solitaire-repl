@@ -35,6 +35,7 @@ const Breadcrum = ({
       )}
       {searchParameters.map((result: any, index: number) => {
         return (
+          // Object.keys(result).length > 0 && (
           <div key={`breadcrum-${index}`} className="flex items-center">
             <Pill
               isActive={activeTab === index + 1}
@@ -63,6 +64,7 @@ const Breadcrum = ({
             />
           </div>
         );
+        // );
       })}
     </>
   );
