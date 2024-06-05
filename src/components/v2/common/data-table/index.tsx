@@ -51,6 +51,11 @@ import { kycStatus } from '@/constants/enums/kyc';
 import { handleConfirmStone } from '@app/v2/search/result/helpers/handle-confirm-stone';
 import { handleCompareStone } from '@/app/v2/search/result/helpers/handle-compare-stone';
 import CommonPoppup from '@/app/v2/login/component/common-poppup';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faArrowDownWideShort,
+  faSortDown
+} from '@fortawesome/free-solid-svg-icons';
 
 const theme = createTheme({
   typography: {
@@ -65,9 +70,12 @@ const theme = createTheme({
     MuiTableCell: {
       styleOverrides: {
         root: {
-          // Default state for the badge inside the cell
+          // Default state for the badge inside the cell - sorting icon not visible by default
           '& .MuiBadge-root': {
-            visibility: 'hidden'
+            marginLeft: '-3px'
+            // paddingLeft:'-3px'
+            // display:'none'
+            // visibility: 'hidden'
           },
           // Hover state for the cell
           '&:hover .MuiBadge-root': {
@@ -103,7 +111,26 @@ const theme = createTheme({
     MuiIconButton: {
       styleOverrides: {
         root: {
-          height: '30px !important'
+          height: '30px !important',
+          '&:hover': {
+            background: 'none'
+          }
+        }
+      }
+    },
+    MuiCheckbox: {
+      styleOverrides: {
+        root: {
+          '&:hover': {
+            background: 'none'
+          }
+        }
+      }
+    },
+    MuiStack: {
+      styleOverrides: {
+        root: {
+          fontSize: '12px !important'
         }
       }
     },
@@ -486,6 +513,18 @@ const DataTable = ({
     icons: {
       SearchIcon: () => (
         <Image src={searchIcon} alt={'searchIcon'} className="mr-[6px]" />
+      ),
+      SortIcon: (props: any) => (
+        <FontAwesomeIcon
+          icon={faArrowDownWideShort}
+          width={8}
+          height={8}
+          {...props}
+        />
+      ), //best practice
+
+      ArrowDownwardIcon: (props: any) => (
+        <FontAwesomeIcon icon={faSortDown} {...props} width={8} height={8} />
       )
     },
 
@@ -633,7 +672,8 @@ const DataTable = ({
         boxShadow: 'none'
       }
     },
-    muiTableBodyCellProps: ({ cell }) => {
+    muiTableBodyCellProps: ({ cell, row }) => {
+      console.log(row, 'row', rowSelection);
       return {
         sx: {
           color: 'var(--neutral-900)',
@@ -643,7 +683,7 @@ const DataTable = ({
             background: 'White',
             opacity: 1,
             fontSize: '12px !important',
-            fontWeight: 400,
+            fontWeight: rowSelection[row.id] ? 500 : 400,
             visibility:
               (cell.id === 'shape:RAD_lot_id' ||
                 cell.id === 'shape:EM_lot_id' ||
