@@ -15,7 +15,7 @@ const Pill = (props: {
     props;
   return (
     <>
-      {label.length > BREADCRUM_CHARACTER_LIMIT ? (
+      {label?.length > BREADCRUM_CHARACTER_LIMIT ? (
         <Tooltip
           tooltipTrigger={
             <div
@@ -73,7 +73,7 @@ const Pill = (props: {
           )}
           <p
             className={`w-[61px] ${
-              label.length > BREADCRUM_CHARACTER_LIMIT && ' truncate'
+              label?.length > BREADCRUM_CHARACTER_LIMIT && ' truncate'
             }`}
             onClick={handlePillClick}
           >
