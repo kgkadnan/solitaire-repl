@@ -28,8 +28,6 @@ import {
 } from '@/constants/v2/detail-page';
 import { Toast } from '../copy-and-share/toast';
 import Tooltip from '../tooltip';
-import ImageSlider from './components/image-slider';
-import ImageList from './components/image-list';
 import ImagePreview from './components/image-preiview';
 import { getShapeDisplayName } from '@/utils/v2/detail-page';
 import ResponsiveTable from './components/CommonTable';
@@ -44,9 +42,10 @@ import { formatNumber } from '@/utils/fix-two-digit-number';
 import { loadImages } from './helpers/load-images';
 import { checkImage } from './helpers/check-image';
 import { IImagesType } from './interface';
-import fallbackImage from '@public/v2/assets/icons/not-found.svg';
 import { Skeleton } from '@mui/material';
 import { useLazyTrackCopyUrlEventQuery } from '@/features/api/track-public-url-copy';
+
+import DetailPageTabs from './components/tabs';
 
 export function DiamondDetailsComponent({
   data,
@@ -70,7 +69,8 @@ export function DiamondDetailsComponent({
   fromBid?: boolean;
 }) {
   const [tableData, setTableData] = useState<any>([]);
-
+  const [activePreviewTab, setActivePreviewTab] = useState('Image');
+  const [imageIndex, setImageIndex] = useState<number>(0);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [validImages, setValidImages] = useState<IImagesType[]>([]);
   const { errorSetState } = useErrorStateManagement();
@@ -78,7 +78,6 @@ export function DiamondDetailsComponent({
   const { setIsError, setErrorText } = errorSetState;
 
   const [showToast, setShowToast] = useState(false);
-  const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
   const [downloadExcel] = useDownloadExcelMutation();
   const [trackCopyUrlEvent] = useLazyTrackCopyUrlEventQuery({});
 
@@ -94,10 +93,6 @@ export function DiamondDetailsComponent({
 
     setTableData(copyData);
   }, [filterData, data]);
-
-  const handleImageClick = (index: number) => {
-    setSelectedImageIndex(index);
-  };
 
   const displayTable = (tableHeadArray: any) => {
     return (
@@ -117,12 +112,13 @@ export function DiamondDetailsComponent({
   const images = [
     {
       name: getShapeDisplayName(tableData?.shape ?? ''),
-      url: `${FILE_URLS.IMG.replace('***', tableData?.lot_id ?? '')}`
+      url: `${FILE_URLS.IMG.replace('***', tableData?.lot_id ?? '')}`,
+      category: 'Image'
     },
     {
       name: 'GIA Certificate',
       url: `${tableData?.certificate_url}`,
-      showDivider: true
+      category: 'Certificate'
     },
     {
       name: 'B2B',
@@ -130,7 +126,8 @@ export function DiamondDetailsComponent({
       url_check: `${FILE_URLS.B2B_CHECK.replace(
         '***',
         tableData?.lot_id ?? ''
-      )}`
+      )}`,
+      category: 'Video'
     },
     {
       name: 'B2B Sparkle',
@@ -139,29 +136,33 @@ export function DiamondDetailsComponent({
         '***',
         tableData?.lot_id ?? ''
       )}`,
-      showDivider: true
+      category: 'B2B Sparkle'
     },
 
     {
       name: 'Heart',
-      url: `${FILE_URLS.HEART.replace('***', tableData?.lot_id ?? '')}`
+      url: `${FILE_URLS.HEART.replace('***', tableData?.lot_id ?? '')}`,
+      category: 'Image'
     },
     {
       name: 'Arrow',
-      url: `${FILE_URLS.ARROW.replace('***', tableData?.lot_id ?? '')}`
+      url: `${FILE_URLS.ARROW.replace('***', tableData?.lot_id ?? '')}`,
+      category: 'Image'
     },
     {
       name: 'Aset',
-      url: `${FILE_URLS.ASET.replace('***', tableData?.lot_id ?? '')}`
+      url: `${FILE_URLS.ASET.replace('***', tableData?.lot_id ?? '')}`,
+      category: 'Image'
     },
     {
       name: 'Ideal',
-      url: `${FILE_URLS.IDEAL.replace('***', tableData?.lot_id ?? '')}`
+      url: `${FILE_URLS.IDEAL.replace('***', tableData?.lot_id ?? '')}`,
+      category: 'Image'
     },
     {
       name: 'Fluorescence',
       url: `${FILE_URLS.FLUORESCENCE.replace('***', tableData?.lot_id ?? '')}`,
-      showDivider: true
+      category: 'Image'
     }
   ];
 
@@ -169,18 +170,6 @@ export function DiamondDetailsComponent({
     if (images.length > 0 && images[0].name.length)
       loadImages(images, setValidImages, checkImage);
   }, [tableData?.lot_id, tableData?.certificate_url]);
-
-  useEffect(() => {
-    if (!validImages.length && images[0].name.length) {
-      setValidImages([
-        {
-          name: 'No Data Found',
-          url: fallbackImage,
-          showDivider: true
-        }
-      ]);
-    }
-  }, [validImages]);
 
   const copyLink = () => {
     const link = `${process.env.NEXT_PUBLIC_DNA_URL}${filterData?.public_url
@@ -244,6 +233,7 @@ export function DiamondDetailsComponent({
         : '']: true
     });
   };
+
   let isNudge = localStorage.getItem('show-nudge') === 'MINI';
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   return (
@@ -284,55 +274,49 @@ export function DiamondDetailsComponent({
           )}
         </div>
       </div>
-      <div className="2xl:flex pt-5">
-        <div
-          className={`flex ${
-            isNudge &&
-            (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
-              isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-              ? '2xl:h-[calc(70vh-60px)]'
-              : '2xl:h-[70vh]'
-          }`}
-        >
-          <div className="w-full 2xl:hidden">
-            <ImageSlider images={validImages} setIsLoading={setIsLoading} />
-          </div>
-          <div
-            className={`hidden 2xl:block mr-5 ${
-              isNudge &&
-              (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
-                isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-                ? 'h-[calc(70vh-60px)]'
-                : 'h-[70vh]'
-            } overflow-y-scroll`}
-          >
-            <ImageList
-              images={validImages}
-              selectedImageIndex={selectedImageIndex}
-              onImageClick={handleImageClick}
+      <div className="lg:flex pt-[16px]">
+        <div className={`flex lg:w-[40%] justify-center`}>
+          <div className={`mr-5 flex flex-col gap-[16px]`}>
+            <DetailPageTabs
+              validImages={validImages}
+              setActivePreviewTab={setActivePreviewTab}
+              activePreviewTab={activePreviewTab}
+              setImageIndex={setImageIndex}
             />
-          </div>
-          <div className="hidden 2xl:block">
-            <ImagePreview
-              images={validImages}
-              selectedImageIndex={selectedImageIndex}
-              setIsLoading={setIsLoading}
-            />
+            <div
+              className={`lg:overflow-y-auto ${
+                isNudge &&
+                (isKycVerified?.customer?.kyc?.status ===
+                  kycStatus.INPROGRESS ||
+                  isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+                  ? 'lg:h-[calc(65vh-60px)]'
+                  : 'lg:h-[65vh]'
+              }`}
+            >
+              <ImagePreview
+                imageIndex={imageIndex}
+                setImageIndex={setImageIndex}
+                images={validImages}
+                setIsLoading={setIsLoading}
+                activePreviewTab={activePreviewTab}
+              />
+            </div>
           </div>
         </div>
+
         <div
-          className={`2xl:w-2/3 2xl:ml-10 mb-[12px] scroll-adjust-custom 2xl:overflow-y-scroll ${
+          className={`lg:w-[60%]  mb-[12px] scroll-adjust-custom lg:overflow-y-scroll ${
             isNudge &&
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-              ? '2xl:h-[calc(70vh-60px)]'
-              : '2xl:h-[70vh]'
+              ? 'lg:h-[calc(70vh-60px)]'
+              : 'lg:h-[70vh]'
           }`}
         >
-          <div className="flex 2xl:justify-start  2xl:justify-between mt-4 2xl:mt-0 2xl:w-full">
+          <div className="flex lg:justify-start  lg:justify-between mt-4 lg:mt-0 lg:w-full">
             {validImages.length > 0 ? (
               <p
-                className="sm:text-[22px] 2xl:text-[28px] text-[#344054] font-medium mr-5 "
+                className="sm:text-[22px] lg:text-[28px] text-[#344054] font-medium mr-5 "
                 style={{ alignSelf: 'center' }}
               >
                 Stock No: {tableData?.lot_id ?? '-'}
@@ -347,7 +331,7 @@ export function DiamondDetailsComponent({
               />
             )}
 
-            <div className="flex lg:w-[30%]  2xl:w-[40%] justify-around items-center">
+            <div className="flex w-[40%] justify-around items-center">
               <div className="flex gap-3 items-center">
                 <Tooltip
                   tooltipTrigger={
@@ -390,12 +374,12 @@ export function DiamondDetailsComponent({
                   />
                 </div>
               </div>
-              <div className="border-r-[1px] h-[40px] border-neutral-200"></div>
+              <div className="border-r-[1px] h-[40px] border-neutral200"></div>
               <div className="flex gap-3 items-center relative justify-center">
                 {/* Backward Arrow */}
                 <button
-                  className={`relative group  h-[35px] w-[37px] shadow-sm flex items-center justify-center rounded-[4px] hover:bg-neutral-50 border-[1px] border-neutral-200 ${
-                    currentIndex <= 0 ? 'bg-neutral-50' : 'bg-neutral0 '
+                  className={`relative group  h-[35px] w-[37px] shadow-sm flex items-center justify-center rounded-[4px] hover:bg-neutral50 border-[1px] border-neutral-200 ${
+                    currentIndex <= 0 ? 'bg-neutral50' : 'bg-neutral0 '
                   } `}
                   disabled={currentIndex <= 0}
                   onClick={() => {
@@ -421,9 +405,9 @@ export function DiamondDetailsComponent({
 
                 {/* Forward Arrow */}
                 <button
-                  className={`relative group  h-[35px] w-[37px] shadow-sm flex items-center justify-center rounded-[4px] hover:bg-neutral-50 border-[1px] border-neutral-200 ${
+                  className={`relative group  h-[35px] w-[37px] shadow-sm flex items-center justify-center rounded-[4px] hover:bg-neutral50 border-[1px] border-neutral200 ${
                     currentIndex >= data.length - 1
-                      ? 'bg-neutral-50'
+                      ? 'bg-neutral50'
                       : 'bg-neutral0'
                   }`}
                   disabled={currentIndex >= data.length - 1}
@@ -498,7 +482,7 @@ export function DiamondDetailsComponent({
           </div>
           <div className="pt-8 max-w-[100%] pr-[10px]">
             {validImages.length > 0 ? (
-              <div className="sm:text-[14px] 2xl:text-[16px] text-[#344054]  font-medium">
+              <div className="sm:text-[14px] lg:text-[16px] text-[#344054]  font-medium">
                 Price Details
               </div>
             ) : (
@@ -515,7 +499,7 @@ export function DiamondDetailsComponent({
           </div>
           <div className="pt-8 max-w-[100%] pr-[10px]">
             {validImages.length > 0 ? (
-              <div className="sm:text-[14px] 2xl:text-[16px] text-[#344054]  font-medium">
+              <div className="sm:text-[14px] lg:text-[16px] text-[#344054]  font-medium">
                 Basic Details
               </div>
             ) : (
@@ -533,7 +517,7 @@ export function DiamondDetailsComponent({
 
           <div className="mt-6 max-w-[100%] pr-[10px]">
             {validImages.length > 0 ? (
-              <div className="sm:text-[14px] 2xl:text-[16px]  font-medium text-[#344054]">
+              <div className="sm:text-[14px] lg:text-[16px]  font-medium text-[#344054]">
                 Measurements
               </div>
             ) : (
@@ -551,7 +535,7 @@ export function DiamondDetailsComponent({
 
           <div className="mt-6 max-w-[100%] pr-[10px]">
             {validImages.length > 0 ? (
-              <div className="sm:text-[14px] 2xl:text-[16px] font-medium text-[#344054]">
+              <div className="sm:text-[14px] lg:text-[16px] font-medium text-[#344054]">
                 Inclusion Details
               </div>
             ) : (
@@ -569,7 +553,7 @@ export function DiamondDetailsComponent({
 
           <div className="mt-6 max-w-[100%] pr-[10px] mb-5">
             {validImages.length > 0 ? (
-              <div className="sm:text-[14px] 2xl:text-[16px] font-medium text-[#344054]">
+              <div className="sm:text-[14px] lg:text-[16px] font-medium text-[#344054]">
                 Other Information
               </div>
             ) : (

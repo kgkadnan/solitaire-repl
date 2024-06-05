@@ -1,27 +1,27 @@
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
-import NoImageFound from '@public/v2/assets/icons/detail-page/fall-back-img.svg';
+import noImageFound from '@public/v2/assets/icons/detail-page/fall-back-img.svg';
 import closeSvg from '@public/v2/assets/icons/detail-page/close.svg';
 import { Toast } from '../../copy-and-share/toast';
 import Tooltip from '../../tooltip';
 import { handleDownloadImage } from '@/utils/v2/detail-page';
 import { IImagesType } from '../interface';
-import ImageList from './image-list';
-import downloadSvg from '@public/v2/assets/icons/detail-page/download.svg';
+import downloadImg from '@public/v2/assets/icons/detail-page/download.svg';
 import linkSvg from '@public/v2/assets/icons/detail-page/link.svg';
 import forwardArrow from '@public/v2/assets/icons/arrow-forward.svg';
 import backwardArrow from '@public/v2/assets/icons/arrow-backword.svg';
 import backWardArrowDisable from '@public/v2/assets/icons/detail-page/back-ward-arrow-disable.svg';
 import forWardAarrowDisable from '@public/v2/assets/icons/detail-page/forward-arrow-disable.svg';
 import { Skeleton } from '@mui/material';
+import DetailPageTabs from './tabs';
 
 interface IModalProps {
   isOpen: boolean;
   onClose: () => void;
-  selectedImageIndex: number;
+  selectedImageIndex?: number;
   images: IImagesType[];
   setIsLoading?: any;
-  fromDetailPage?: boolean;
+  activeTab?: string;
 }
 
 const ImageModal: React.FC<IModalProps> = ({
@@ -30,21 +30,47 @@ const ImageModal: React.FC<IModalProps> = ({
   images,
   selectedImageIndex,
   setIsLoading,
-  fromDetailPage = false
+  activeTab
 }) => {
   const [imageIndex, setImageIndex] = useState<number>(0);
   const [showToast, setShowToast] = useState(false);
+  const [activePreviewTab, setActivePreviewTab] = useState('Image');
+  const [showMagnifier, setShowMagnifier] = useState(false);
+  const [[imgWidth, imgHeight], setSize] = useState([0, 0]);
+  const [[x, y], setXY] = useState([0, 0]);
 
-  const handleImageClick = (index: number) => {
-    setImageIndex(index);
-  };
+  const filteredImages = images.filter(image => {
+    if (activePreviewTab === 'Video' && image.category === 'Video') return true;
+    if (activePreviewTab === 'Certificate' && image.category === 'Certificate')
+      return true;
+    if (activePreviewTab === 'B2B Sparkle' && image.category === 'B2B Sparkle')
+      return true;
+    if (activePreviewTab === 'Image' && image.category === 'Image') return true;
+    return false;
+  });
 
   useEffect(() => {
-    fromDetailPage && setImageIndex(0);
-  }, [isOpen]);
+    const handleKeyDown = (event: any) => {
+      if (event.key === 'ArrowLeft') {
+        setImageIndex(prevIndex => (prevIndex > 0 ? prevIndex - 1 : prevIndex));
+      } else if (event.key === 'ArrowRight') {
+        setImageIndex(prevIndex =>
+          prevIndex < filteredImages.length - 1 ? prevIndex + 1 : prevIndex
+        );
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [filteredImages.length]);
+
   useEffect(() => {
-    setImageIndex(selectedImageIndex || 0);
-  }, [selectedImageIndex]);
+    activeTab && setActivePreviewTab(activeTab);
+    selectedImageIndex && setImageIndex(selectedImageIndex);
+  }, [activeTab, selectedImageIndex]);
 
   if (!isOpen) return null;
 
@@ -63,183 +89,239 @@ const ImageModal: React.FC<IModalProps> = ({
       <div className="flex items-center justify-center min-h-screen">
         {/* Background overlay */}
         <div className="fixed inset-0 bg-[#101828] opacity-40"></div>
-        <div className="bg-white p-2 rounded-[4px] sm:min-h-[350px] sm:min-w-[340px] lg:p-6 z-20 lg:min-h-[700px] lg:min-w-[800px] relative">
-          <div className="flex justify-between">
-            <div className="w-full flex justify-center">
-              <p className="flex items-center font-medium text-neutral-900">
-                {images[imageIndex]?.name}
-              </p>
+        <div className="bg-neutral0 p-2 rounded-[4px] sm:min-w-[340px] lg:p-6 z-20   lg:min-w-[630px] relative">
+          <div className="flex flex-col  gap-4 ">
+            <div className="w-full flex justify-end">
+              <div className="flex justify-between w-[630px]">
+                <DetailPageTabs
+                  validImages={images}
+                  setActivePreviewTab={setActivePreviewTab}
+                  activePreviewTab={activePreviewTab}
+                  setImageIndex={setImageIndex}
+                />
+                <button
+                  onClick={() => {
+                    onClose();
+                    setActivePreviewTab('Image');
+                  }}
+                  className="text-gray-500 hover:text-gray-800 focus:outline-none"
+                >
+                  <Image src={closeSvg} alt="Preview" height={40} width={40} />
+                </button>
+              </div>
             </div>
-
-            <button
-              onClick={onClose}
-              className="text-gray-500 hover:text-gray-800 focus:outline-none"
-            >
-              <Image src={closeSvg} alt="Preview" height={40} width={40} />
-            </button>
-          </div>
-          <div className="flex w-[100%]">
-            <div className="mt-2 sm:max-h-[210px] overflow-auto lg:max-h-[510px] w-[12%]">
-              <ImageList
-                images={images}
-                selectedImageIndex={imageIndex}
-                onImageClick={handleImageClick}
-              />
-            </div>
-            <div className="mt-2 ml-2 relative">
-              <div className="relative">
+            <div className="flex flex-col items-center  gap-4">
+              <div
+                className="flex justify-center"
+                style={{
+                  position: 'relative'
+                }}
+              >
                 {images.length > 0 ? (
-                  images[imageIndex]?.name === 'B2B' ||
-                  images[imageIndex]?.name === 'B2B Sparkle' ||
-                  images[imageIndex]?.name === 'GIA Certificate' ? (
-                    images[imageIndex]?.url === 'null' ||
-                    images[imageIndex]?.url === null ||
-                    !images[imageIndex]?.url.length ? (
-                      <img
-                        src={NoImageFound}
-                        className="lg:w-[662px] lg:h-[510px] sm:w-[300px] sm:h-[210px]"
-                        height={600}
-                        width={650}
-                        style={{
-                          background: '#F2F4F7'
-                        }}
+                  filteredImages.length > 0 ? (
+                    filteredImages[imageIndex]?.category === 'Video' ||
+                    filteredImages[imageIndex]?.category === 'Certificate' ||
+                    filteredImages[imageIndex]?.category === 'B2B Sparkle' ? (
+                      <iframe
+                        src={filteredImages[0]?.url}
+                        className="w-[520px] h-[520px]"
                       />
                     ) : (
-                      <iframe
-                        frameBorder="0"
-                        src={images[imageIndex]?.url}
-                        className="lg:w-[650px] lg:h-[465px] sm:w-[300px] sm:h-[210px]"
+                      <Image
+                        src={filteredImages[imageIndex]?.url}
+                        alt={filteredImages[imageIndex]?.name}
+                        width={650}
+                        height={600}
+                        className="w-[625px] h-[520px]"
+                        onMouseEnter={e => {
+                          // update image size and turn-on magnifier
+                          const elem = e.currentTarget;
+                          const { width, height } =
+                            elem.getBoundingClientRect();
+                          setSize([width, height]);
+                          setShowMagnifier(true);
+                        }}
+                        onMouseLeave={() => {
+                          setShowMagnifier(false);
+                        }}
+                        onMouseMove={e => {
+                          // update cursor position
+                          const elem = e.currentTarget;
+                          const { top, left } = elem.getBoundingClientRect();
+
+                          // calculate cursor position on the image
+                          const x = e.pageX - left - window.pageXOffset;
+                          const y = e.pageY - top - window.pageYOffset;
+                          setXY([x, y]);
+                        }}
                       />
                     )
                   ) : (
-                    <img
-                      src={images[imageIndex]?.url}
-                      style={{
-                        background: '#F2F4F7'
-                      }}
-                      className="lg:w-[662px] lg:h-[510px] sm:w-[300px] sm:h-[210px]"
-                      height={600}
+                    <Image
+                      src={noImageFound}
+                      alt="noImageFound"
                       width={650}
-                      onError={(e: any) => {
-                        e.target.onerror = null;
-                        e.target.src = NoImageFound.src;
-                      }}
+                      height={600}
+                      className="w-[625px] h-[520px]"
                     />
                   )
                 ) : (
-                  <div className="lg:w-[662px] lg:h-[510px] sm:w-[300px] sm:h-[210px]">
-                    <Skeleton
-                      width={'100%'}
-                      height={'100%'}
-                      variant="rectangular"
-                      animation="wave"
-                    />
-                  </div>
+                  <Skeleton
+                    width={625}
+                    variant="rectangular"
+                    height={520}
+                    animation="wave"
+                  />
                 )}
-              </div>
-              <button
-                onClick={() => {
-                  imageIndex > 0 && handleImageClick(imageIndex - 1);
-                }}
-                disabled={!(imageIndex > 0)}
-                className={`absolute ${
-                  images[imageIndex]?.name === 'B2B' ||
-                  images[imageIndex]?.name === 'B2B Sparkle'
-                    ? 'top-[54.8%]'
-                    : 'top-1/2'
-                }  left-4 transform -translate-y-1/2  rounded-[4px] hover:bg-neutral-50  p-2 border-solid border-neutral-200 shadow-sm ${
-                  imageIndex <= 0 ? '!bg-neutral200' : 'bg-neutral0'
-                }`}
-              >
-                <Image
-                  src={!(imageIndex > 0) ? backWardArrowDisable : backwardArrow}
-                  alt={
-                    !(imageIndex > 0) ? 'backWardArrowDisable' : 'backwardArrow'
-                  }
-                />
-              </button>
-              <button
-                onClick={() => {
-                  imageIndex < images.length - 1 &&
-                    handleImageClick(imageIndex + 1);
-                }}
-                disabled={!(imageIndex < images.length - 1)}
-                className={`absolute ${
-                  images[imageIndex]?.name === 'B2B' ||
-                  images[imageIndex]?.name === 'B2B Sparkle'
-                    ? 'top-[54.8%]'
-                    : 'top-1/2'
-                }   right-4 transform -translate-y-1/2  rounded-[4px] hover:bg-neutral-50  p-2 border-solid border-neutral-200 shadow-sm ${
-                  imageIndex >= images.length - 1
-                    ? '!bg-neutral200'
-                    : 'bg-neutral0'
-                }`}
-              >
-                <Image
-                  src={
-                    !(imageIndex < images.length - 1)
-                      ? forWardAarrowDisable
-                      : forwardArrow
-                  }
-                  alt={
-                    !(imageIndex < images.length - 1)
-                      ? 'forWardAarrowDisable'
-                      : 'forwardArrow'
-                  }
-                />
-              </button>
-            </div>
-          </div>
+                <div
+                  style={{
+                    display: showMagnifier ? '' : 'none',
+                    position: 'absolute',
 
-          <div className="flex mt-5 justify-center">
-            {images.length > 0 && (
-              <>
-                {images[imageIndex]?.name !== 'B2B' &&
-                  images[imageIndex]?.name !== 'B2B Sparkle' &&
-                  images[imageIndex]?.name !== 'No Data Found' &&
-                  images[imageIndex]?.name !== '' && (
+                    // prevent magnifier blocks the mousemove event of img
+                    pointerEvents: 'none',
+                    // set size of magnifier
+                    height: `${130}px`,
+                    width: `${130}px`,
+                    borderRadius: '50%',
+                    // move element center to cursor pos
+                    top: `${y - 130 / 2}px`,
+                    left: `${x - 130 / 2}px`,
+                    opacity: '1', // reduce opacity so you can verify position
+                    backgroundColor: 'white',
+                    backgroundImage: `url('${filteredImages[imageIndex]?.url}')`,
+                    backgroundRepeat: 'no-repeat',
+                    boxShadow: 'var(--popups-shadow)',
+
+                    //calculate zoomed image size
+                    backgroundSize: `${imgWidth * 1.5}px ${imgHeight * 1.5}px`,
+
+                    //calculate position of zoomed image.
+                    backgroundPositionX: `${-x * 1.5 + 130 / 2}px`,
+                    backgroundPositionY: `${-y * 1.5 + 130 / 2}px`
+                  }}
+                ></div>
+              </div>
+
+              <div className="flex justify-between items-center w-[625px]">
+                {filteredImages.length > 0 ? (
+                  <div className="text-headingS font-medium text-neutral900">
+                    {filteredImages[imageIndex]?.name}
+                  </div>
+                ) : (
+                  <Skeleton
+                    width={88}
+                    variant="rectangular"
+                    height={30}
+                    animation="wave"
+                  />
+                )}
+                <div className="flex gap-6">
+                  {filteredImages.length > 0 &&
+                    filteredImages[imageIndex]?.category === 'Image' && (
+                      <>
+                        <div className="flex gap-1">
+                          <button
+                            onClick={() => {
+                              setImageIndex(imageIndex - 1);
+                            }}
+                            disabled={!(imageIndex > 0)}
+                            className={` rounded-[4px]  hover:bg-neutral50 w-[38px] h-[38px] text-center px-2 border-[1px] border-solid border-neutral200 shadow-sm ${
+                              imageIndex <= 0 ? '!bg-neutral200' : 'bg-neutral0'
+                            }`}
+                          >
+                            <Image
+                              src={
+                                !(imageIndex > 0)
+                                  ? backWardArrowDisable
+                                  : backwardArrow
+                              }
+                              alt={
+                                !(imageIndex > 0)
+                                  ? 'backWardArrowDisable'
+                                  : 'backwardArrow'
+                              }
+                            />
+                          </button>
+                          <button
+                            onClick={() => {
+                              setImageIndex(imageIndex + 1);
+                            }}
+                            disabled={!(imageIndex < filteredImages.length - 1)}
+                            className={`rounded-[4px] hover:bg-neutral50 w-[38px] h-[38px] text-center px-2 border-[1px] border-solid border-neutral200 shadow-sm ${
+                              imageIndex >= filteredImages.length - 1
+                                ? '!bg-neutral200'
+                                : 'bg-neutral0'
+                            }`}
+                          >
+                            <Image
+                              src={
+                                !(imageIndex < filteredImages.length - 1)
+                                  ? forWardAarrowDisable
+                                  : forwardArrow
+                              }
+                              alt={
+                                !(imageIndex < filteredImages.length - 1)
+                                  ? 'forWardAarrowDisable'
+                                  : 'forwardArrow'
+                              }
+                            />
+                          </button>
+                        </div>
+                        <div className="border-r-[1px] h-[40px] border-neutral200"></div>
+                      </>
+                    )}
+                  <div className="flex gap-1">
+                    {!(
+                      activePreviewTab === 'Video' ||
+                      activePreviewTab === 'B2B Sparkle'
+                    ) && (
+                      <Tooltip
+                        tooltipTrigger={
+                          <Image
+                            className="cursor-pointer"
+                            src={downloadImg}
+                            height={40}
+                            width={40}
+                            alt={'Download'}
+                            onClick={() => {
+                              handleDownloadImage(
+                                filteredImages[imageIndex].url || '',
+                                filteredImages[imageIndex].name,
+                                setIsLoading
+                              );
+                            }}
+                          />
+                        }
+                        tooltipContent={
+                          activePreviewTab === 'Certificate'
+                            ? 'Download Certificate'
+                            : 'Download Image'
+                        }
+                        tooltipContentStyles={'z-[1000]'}
+                      />
+                    )}
+
                     <Tooltip
                       tooltipTrigger={
                         <Image
-                          src={downloadSvg}
-                          alt={downloadSvg}
-                          height={40}
-                          width={40}
-                          className="mr-2 cursor-pointer"
-                          onClick={() => {
-                            handleDownloadImage(
-                              images[imageIndex]?.url || '',
-                              images[imageIndex]?.name,
-                              setIsLoading
-                            );
-                          }}
-                        />
-                      }
-                      tooltipContent={'Download'}
-                      tooltipContentStyles={'z-[2000]'}
-                    />
-                  )}
-                {images[imageIndex]?.name !== 'No Data Found' &&
-                  images[imageIndex]?.name !== '' && (
-                    <Tooltip
-                      tooltipTrigger={
-                        <Image
+                          className="cursor-pointer"
                           src={linkSvg}
-                          alt={linkSvg}
                           height={40}
                           width={40}
-                          className="mr-2 cursor-pointer"
+                          alt={'linkSvg'}
                           onClick={() => {
-                            copyLink({ url: images[imageIndex]?.url });
+                            copyLink({ url: filteredImages[imageIndex]?.url });
                           }}
                         />
                       }
                       tooltipContent={'Media Link'}
-                      tooltipContentStyles={'z-[2000]'}
+                      tooltipContentStyles={'z-[1000]'}
                     />
-                  )}
-              </>
-            )}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

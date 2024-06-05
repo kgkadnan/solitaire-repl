@@ -22,7 +22,6 @@ import {
   useGetProductByIdMutation,
   useLazyGetProductCountQuery
 } from '@/features/api/product';
-import fallbackImage from '@public/v2/assets/icons/not-found.svg';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import { formatCreatedAt } from '@/utils/format-date';
 import { DisplayTable } from '@/components/v2/common/display-table';
@@ -322,11 +321,12 @@ const Dashboard = () => {
         switch (accessor) {
           case 'fire_icon':
             return {
+              enableSorting: false,
               accessorKey: 'fire_icon',
               header: '',
-              minSize: 1,
-              size: 1,
-              maxSize: 2,
+              minSize: 35,
+              size: 35,
+              maxSize: 35,
               Cell: ({ row }: { row: any }) => {
                 return row.original.in_high_demand ? (
                   <Tooltip
@@ -1082,12 +1082,13 @@ const Dashboard = () => {
   const images = [
     {
       name: getShapeDisplayName(detailImageData?.shape ?? ''),
-      url: `${FILE_URLS.IMG.replace('***', detailImageData?.lot_id ?? '')}`
+      url: `${FILE_URLS.IMG.replace('***', detailImageData?.lot_id ?? '')}`,
+      category: 'Image'
     },
     {
       name: 'GIA Certificate',
       url: detailImageData?.certificate_url ?? '',
-      showDivider: true
+      category: 'Certificate'
     },
 
     {
@@ -1096,7 +1097,8 @@ const Dashboard = () => {
       url_check: `${FILE_URLS.B2B_CHECK.replace(
         '***',
         detailImageData?.lot_id ?? ''
-      )}`
+      )}`,
+      category: 'Video'
     },
     {
       name: 'B2B Sparkle',
@@ -1108,32 +1110,35 @@ const Dashboard = () => {
         '***',
         detailImageData?.lot_id ?? ''
       )}`,
-      showDivider: true
+      category: 'B2B Sparkle'
     },
 
     {
       name: 'Heart',
-      url: `${FILE_URLS.HEART.replace('***', detailImageData?.lot_id ?? '')}`
+      url: `${FILE_URLS.HEART.replace('***', detailImageData?.lot_id ?? '')}`,
+      category: 'Image'
     },
     {
       name: 'Arrow',
-      url: `${FILE_URLS.ARROW.replace('***', detailImageData?.lot_id ?? '')}`
+      url: `${FILE_URLS.ARROW.replace('***', detailImageData?.lot_id ?? '')}`,
+      category: 'Image'
     },
     {
       name: 'Aset',
-      url: `${FILE_URLS.ASET.replace('***', detailImageData?.lot_id ?? '')}`
+      url: `${FILE_URLS.ASET.replace('***', detailImageData?.lot_id ?? '')}`,
+      category: 'Image'
     },
     {
       name: 'Ideal',
-      url: `${FILE_URLS.IDEAL.replace('***', detailImageData?.lot_id ?? '')}`
+      url: `${FILE_URLS.IDEAL.replace('***', detailImageData?.lot_id ?? '')}`,
+      category: 'Image'
     },
     {
       name: 'Fluorescence',
       url: `${FILE_URLS.FLUORESCENCE.replace(
         '***',
         detailImageData?.lot_id ?? ''
-      )}`,
-      showDivider: true
+      )}`
     }
   ];
 
@@ -1411,17 +1416,7 @@ const Dashboard = () => {
     if (images.length > 0 && images[0].name.length)
       loadImages(images, setValidImages, checkImage);
   }, [detailImageData]);
-  useEffect(() => {
-    if (!validImages.length && images[0].name.length) {
-      setValidImages([
-        {
-          name: '',
-          url: fallbackImage,
-          showDivider: true
-        }
-      ]);
-    }
-  }, [validImages]);
+
   const getCardContent = (data: any) => {
     if (data.label === 'Bid to Buy') {
       if (data.start_at && data.count) {
@@ -1487,7 +1482,6 @@ const Dashboard = () => {
           setDetailImageData({});
           setIsModalOpen(!isModalOpen);
         }}
-        selectedImageIndex={0}
         images={validImages}
       />
       <DialogComponent dialogContent={dialogContent} isOpens={isDialogOpen} />

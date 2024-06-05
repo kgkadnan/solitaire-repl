@@ -32,7 +32,7 @@ import { verifyEmailApi } from './features/api/verify-email';
 import { downloadInvoiceApi } from './features/api/download-invoice';
 import { getAllCountryCodeApi } from './features/api/get-country-code';
 import { dashboardApi } from './features/api/dashboard';
-import { publicApi } from './features/api/public';
+
 import { manageSubscriptionApi } from './features/api/manage-subscription';
 import { myProfileApi } from './features/api/my-profile';
 import { notificationApi } from './features/api/notification';
@@ -69,7 +69,6 @@ const rootReducer = combineReducers({
   [downloadInvoiceApi.reducerPath]: downloadInvoiceApi.reducer,
   [getAllCountryCodeApi.reducerPath]: getAllCountryCodeApi.reducer,
   [dashboardApi.reducerPath]: dashboardApi.reducer,
-  [publicApi.reducerPath]: publicApi.reducer,
   [manageSubscriptionApi.reducerPath]: manageSubscriptionApi.reducer,
   [myProfileApi.reducerPath]: myProfileApi.reducer,
   [notificationApi.reducerPath]: notificationApi.reducer,
@@ -114,7 +113,6 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
         downloadInvoiceApi.middleware,
         getAllCountryCodeApi.middleware,
         dashboardApi.middleware,
-        publicApi.middleware,
         manageSubscriptionApi.middleware,
         myProfileApi.middleware,
         notificationApi.middleware,
