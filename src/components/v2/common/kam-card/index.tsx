@@ -1,4 +1,5 @@
 import Avatar from '@public/v2/assets/icons/dashboard/avatar.svg?url';
+import Image from 'next/image';
 
 import Phone from '@public/v2/assets/icons/dashboard/phone.svg?url';
 import WhatsApp from '@public/v2/assets/icons/dashboard/whatsapp.svg?url';
@@ -50,7 +51,23 @@ const KAMCard: React.FC<IKAMCardProps> = ({
           style={styles}
           className="w-[100%]  rounded-[8px] flex justify-center"
         >
-          <div className="mt-[24px]">{/* <Avatar /> */} hi</div>
+          <div className="mt-[24px]">
+            {image && image !== null && image !== '' ? (
+              <div
+                className="h-30 w-30 relative"
+                style={{ width: '120px', height: '120px' }}
+              >
+                <Image
+                  src={image}
+                  alt="kam image"
+                  className="object-cover rounded-[8px]"
+                  layout="fill"
+                />
+              </div>
+            ) : (
+              <Avatar />
+            )}{' '}
+          </div>
         </div>
         <div className="flex flex-col items-center gap-3">
           <h3 className="text-headingM medium text-neutral900">{name}</h3>
