@@ -49,7 +49,7 @@ interface IBookAppointment {
 
 interface IKam {
   kam_name: string;
-  kam_image: string;
+  image: string | null;
 }
 
 interface IDates {
@@ -71,7 +71,7 @@ const BookAppointment: React.FC<IBookAppointment> = ({
 }) => {
   const [addMyAppointment] = useAddMyAppointmentMutation();
   const [rescheduleMyAppointment] = useRescheduleMyAppointmentMutation();
-  const [kam, setKam] = useState<IKam>({ kam_name: '', kam_image: '' });
+  const [kam, setKam] = useState<IKam>({ kam_name: '', image: '' });
   const [location, setLocation] = useState<string[]>([]);
   const [dates, setDates] = useState<IDates[]>([{ date: '', day: '' }]);
   const [slots, setSlots] = useState<ISlots>({});
@@ -106,8 +106,7 @@ const BookAppointment: React.FC<IBookAppointment> = ({
       setSelectedDate(Number(timeSlots.dates[0].date));
       setLocation(storeAddresses);
     }
-
-    setKam(kam);
+    setKam({ kam_name: kam?.kam_name, image: kam?.image });
     setDates(timeSlots.dates);
     setSlots(timeSlots.slots);
   }, [appointmentPayload]);
@@ -301,8 +300,18 @@ const BookAppointment: React.FC<IBookAppointment> = ({
               </h3>
               <div className="flex items-center bg-neutral0 h-[72px] gap-3 border-solid border-[1px] p-[16px] border-neutral200 rounded-[4px] shadow-sm">
                 <Avatar className="flex items-center justify-center text-center bg-primaryMain text-mRegular text-neutral0">
-                  {kam?.kam_image ? (
-                    <Image src={avatar} alt="avatar" />
+                  {kam?.image ? (
+                    <div
+                      className="h-10 10 relative"
+                      style={{ width: '40px', height: '40px' }}
+                    >
+                      <Image
+                        src={kam?.image}
+                        alt="kam image"
+                        className="object-cover "
+                        layout="fill"
+                      />
+                    </div>
                   ) : (
                     getInitials(kam?.kam_name)
                   )}
