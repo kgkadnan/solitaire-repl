@@ -155,6 +155,8 @@ const ImagePreview: React.FC<IImagePreviewProps> = ({
                   <div className="flex gap-2">
                     <button
                       onClick={() => {
+                        setZoomPosition({ x: 0, y: 0 });
+                        setZoomLevel(1);
                         setImageIndex(imageIndex - 1);
                       }}
                       disabled={!(imageIndex > 0)}
@@ -177,6 +179,8 @@ const ImagePreview: React.FC<IImagePreviewProps> = ({
                     </button>
                     <button
                       onClick={() => {
+                        setZoomPosition({ x: 0, y: 0 });
+                        setZoomLevel(1);
                         setImageIndex(imageIndex + 1);
                       }}
                       disabled={!(imageIndex < filteredImages.length - 1)}

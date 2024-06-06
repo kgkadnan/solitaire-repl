@@ -275,7 +275,8 @@ const OrderDetail: React.FC<IOrderDetail> = ({
       url: `${FILE_URLS.FLUORESCENCE.replace(
         '***',
         detailImageData?.lot_id ?? ''
-      )}`
+      )}`,
+      category: 'Image'
     }
   ];
   useEffect(() => {
