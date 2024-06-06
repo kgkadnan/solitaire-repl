@@ -175,7 +175,7 @@ const Dashboard = () => {
     {}
   );
 
-  let isNudge = localStorage.getItem('show-nudge') === 'MINI';
+  let isNudge = localStorage.getItem('show-nudge')! === 'MINI';
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   const { errorSetState } = useErrorStateManagement();
   const { setIsError } = errorSetState;
@@ -185,7 +185,7 @@ const Dashboard = () => {
       label: 'New Arrivals',
       icon: <ArrivalIcon stroke="#101828" />,
       color: optionsClasses[0],
-      count: customerData?.customer.new_arrivals_count ?? 0,
+      count: customerData?.customer?.new_arrivals_count ?? 0,
       isAvailable: true,
       link: '/v2/new-arrivals'
     },
@@ -193,7 +193,7 @@ const Dashboard = () => {
       label: 'My Cart',
       icon: <CartIcon />,
       color: optionsClasses[1],
-      count: customerData?.customer?.cart?.items.length ?? 0,
+      count: customerData?.customer?.cart?.items?.length ?? 0,
       isAvailable: true,
       link: '/v2/my-cart'
     },
@@ -502,7 +502,7 @@ const Dashboard = () => {
   );
 
   const handleEdit = (stone: string) => {
-    let savedSearchEditData = customerData?.customer.saved_searches.filter(
+    let savedSearchEditData = customerData?.customer?.saved_searches?.filter(
       (items: any) => {
         return items.id === stone;
       }
@@ -585,13 +585,13 @@ const Dashboard = () => {
       });
 
       const pendingInvoices =
-        customerData.customer.orders
-          .filter((item: any) => item.invoice_id === null)
+        customerData.customer?.orders
+          ?.filter((item: any) => item.invoice_id === null)
           .slice(0, 5) ?? [];
 
       const activeInvoices =
-        customerData.customer.orders
-          .filter(
+        customerData.customer?.orders
+          ?.filter(
             (item: any) => item.invoice_id !== null && item.status === 'pending'
           )
           .slice(0, 5) ?? [];
@@ -765,7 +765,7 @@ const Dashboard = () => {
         }
         return '';
       })
-      .filter(Boolean);
+      ?.filter(Boolean);
 
     // If there are variant IDs, add to the cart
     if (variantIds.length) {
@@ -1170,7 +1170,7 @@ const Dashboard = () => {
           }
           return '';
         })
-        .filter(Boolean);
+        ?.filter(Boolean);
 
       // If there are variant IDs, add to the cart
       if (variantIds.length) {
@@ -1263,7 +1263,7 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    if (images.length > 0 && images[0].name.length)
+    if (images?.length > 0 && images[0]?.name?.length)
       loadImages(images, setValidImages, checkImage);
   }, [detailImageData]);
 
@@ -1694,7 +1694,7 @@ const Dashboard = () => {
               {/* Carousel Container - Allow it to shrink if necessary but also give it an initial width */}
               <div className="flex-1 flex-shrink min-w-0 border-[1px] border-neutral50">
                 <DashboardCarousel
-                  images={customerData?.customer.carousel_items}
+                  images={customerData?.customer?.carousel_items}
                 />
               </div>
               {/* KAMCard Container - Prevent it from shrinking and assign a max width */}
