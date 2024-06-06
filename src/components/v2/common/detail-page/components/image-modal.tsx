@@ -228,7 +228,9 @@ const ImageModal: React.FC<IModalProps> = ({
                             }}
                             disabled={!(imageIndex > 0)}
                             className={` rounded-[4px]  hover:bg-neutral50 w-[37px] h-[37px] text-center px-2 border-[1px] border-solid border-neutral200 shadow-sm ${
-                              imageIndex <= 0 ? '!bg-neutral100' : 'bg-neutral0'
+                              imageIndex <= 0
+                                ? '!bg-neutral100 cursor-not-allowed'
+                                : 'bg-neutral0'
                             }`}
                           >
                             <Image
@@ -251,7 +253,7 @@ const ImageModal: React.FC<IModalProps> = ({
                             disabled={!(imageIndex < filteredImages.length - 1)}
                             className={`rounded-[4px] hover:bg-neutral50 w-[37px] h-[37px] text-center px-2 border-[1px] border-solid border-neutral200 shadow-sm ${
                               imageIndex >= filteredImages.length - 1
-                                ? '!bg-neutral100'
+                                ? '!bg-neutral100 cursor-not-allowed'
                                 : 'bg-neutral0'
                             }`}
                           >
@@ -291,7 +293,7 @@ const ImageModal: React.FC<IModalProps> = ({
                             className={`rounded-[4px] hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm ${
                               filteredImages.length > 0
                                 ? 'bg-neutral0'
-                                : '!bg-neutral100'
+                                : '!bg-neutral100 cursor-not-allowed'
                             }`}
                           >
                             <DownloadImg
@@ -322,7 +324,7 @@ const ImageModal: React.FC<IModalProps> = ({
                           className={`rounded-[4px] hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm ${
                             filteredImages.length > 0
                               ? 'bg-neutral0'
-                              : '!bg-neutral100'
+                              : '!bg-neutral100 cursor-not-allowed'
                           }`}
                         >
                           <LinkSvg
