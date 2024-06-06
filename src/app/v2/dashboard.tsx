@@ -186,7 +186,7 @@ const Dashboard = () => {
       label: 'New Arrivals',
       icon: <ArrivalIcon stroke="#101828" />,
       color: optionsClasses[0],
-      count: customerData?.customer.new_arrivals_count ?? 0,
+      count: customerData?.customer?.new_arrivals_count ?? 0,
       isAvailable: true,
       link: '/v2/new-arrivals'
     },
@@ -194,7 +194,7 @@ const Dashboard = () => {
       label: 'My Cart',
       icon: <CartIcon />,
       color: optionsClasses[1],
-      count: customerData?.customer?.cart?.items.length ?? 0,
+      count: customerData?.customer?.cart?.items?.length ?? 0,
       isAvailable: true,
       link: '/v2/my-cart'
     },
@@ -504,7 +504,7 @@ const Dashboard = () => {
   );
 
   const handleEdit = (stone: string) => {
-    let savedSearchEditData = customerData?.customer.saved_searches.filter(
+    let savedSearchEditData = customerData?.customer?.saved_searches.filter(
       (items: any) => {
         return items.id === stone;
       }
@@ -602,12 +602,12 @@ const Dashboard = () => {
       // Check for pending and active invoices
       // if (customerData.customer?.orders?.length > 0) {
       const pendingInvoices =
-        customerData.customer.orders
+        customerData.customer?.orders
           .filter((item: any) => item.invoice_id === null)
           .slice(0, 5) ?? [];
 
       const activeInvoices =
-        customerData.customer.orders
+        customerData.customer?.orders
           .filter(
             (item: any) => item.invoice_id !== null && item.status === 'pending'
           )
