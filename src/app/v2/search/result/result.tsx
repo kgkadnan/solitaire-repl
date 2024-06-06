@@ -147,7 +147,7 @@ const Result = ({
   const [showAppointmentForm, setShowAppointmentForm] = useState(false);
   const [appointmentPayload, setAppointmentPayload] =
     useState<IAppointmentPayload>({
-      kam: { kam_name: '', kam_image: '' },
+      kam: { kam_name: '', image: '' },
       storeAddresses: [],
       timeSlots: { dates: [{ date: '', day: '' }], slots: {} }
     });
@@ -281,9 +281,9 @@ const Result = ({
               enableSorting: false,
               accessorKey: 'fire_icon',
               header: '',
-              minSize: 1,
-              size: 1,
-              maxSize: 2,
+              minSize: 35,
+              size: 35,
+              maxSize: 35,
               Cell: ({ row }: { row: any }) => {
                 return row.original.in_high_demand ? (
                   <Tooltip
@@ -798,7 +798,7 @@ const Result = ({
     setCompareStoneData([]);
     setShowAppointmentForm(false);
     setAppointmentPayload({
-      kam: { kam_name: '', kam_image: '' },
+      kam: { kam_name: '', image: '' },
       storeAddresses: [],
       timeSlots: { dates: [{ date: '', day: '' }], slots: {} }
     });

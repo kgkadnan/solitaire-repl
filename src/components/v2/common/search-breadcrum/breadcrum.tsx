@@ -9,8 +9,7 @@ import Link from 'next/link';
 const Breadcrum = ({
   searchParameters,
   activeTab,
-  handleCloseSpecificTab,
-  setIsLoading
+  handleCloseSpecificTab
 }: {
   searchParameters: any;
   activeTab: number;
@@ -35,6 +34,7 @@ const Breadcrum = ({
       )}
       {searchParameters.map((result: any, index: number) => {
         return (
+          // Object.keys(result).length > 0 && (
           <div key={`breadcrum-${index}`} className="flex items-center">
             <Pill
               isActive={activeTab === index + 1}
@@ -50,7 +50,7 @@ const Breadcrum = ({
                 );
               }}
               handlePillEdit={() => {
-                setIsLoading(true);
+                // setIsLoading(true);
                 router.push(
                   `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
                     index + 1
@@ -63,6 +63,7 @@ const Breadcrum = ({
             />
           </div>
         );
+        // );
       })}
     </>
   );
