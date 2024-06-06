@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ImageSvg from '@public/v2/assets/icons/detail-page/image.svg?url';
 import VideoSvg from '@public/v2/assets/icons/detail-page/video.svg?url';
 import PdfSvg from '@public/v2/assets/icons/detail-page/pdf.svg?url';
@@ -45,6 +45,34 @@ const DetailPageTabs = ({
     setImageIndex(0);
   };
 
+  // Find the next enabled tab
+  const getNextEnabledTab = () => {
+    const currentIndex = TabsData.findIndex(
+      tab => tab.label === activePreviewTab
+    );
+
+    for (let i = currentIndex + 1; i < TabsData.length; i++) {
+      if (!TabsData[i].isDisable) {
+        return TabsData[i].label;
+      }
+    }
+    for (let i = 0; i < currentIndex; i++) {
+      if (!TabsData[i].isDisable) {
+        return TabsData[i].label;
+      }
+    }
+    return activePreviewTab; // No enabled tab found, keep the current tab
+  };
+
+  useEffect(() => {
+    const currentTab = TabsData.find(tab => tab.label === activePreviewTab);
+
+    if (currentTab?.isDisable) {
+      const nextTab = getNextEnabledTab();
+      setActivePreviewTab(nextTab);
+    }
+  }, [activePreviewTab, TabsData]);
+
   return (
     <div className="flex items-center ">
       {TabsData.map((tab, index) => {
@@ -57,10 +85,10 @@ const DetailPageTabs = ({
                 ? 'rounded-r-[8px]'
                 : ''
             } ${
-              activePreviewTab === tab.label
+              tab.isDisable
+                ? 'bg-neutral100 cursor-not-allowed text-neutral400 stroke-neutral400'
+                : activePreviewTab === tab.label
                 ? 'bg-primaryMain text-neutral0 stroke-neutral0'
-                : tab.isDisable
-                ? 'bg-neutral100 text-neutral400 stroke-neutral400'
                 : 'bg-neutral0 text-neutral900 stroke-neutral900'
             } `}
             disabled={tab.isDisable}

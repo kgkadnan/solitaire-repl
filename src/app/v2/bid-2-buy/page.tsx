@@ -511,7 +511,8 @@ const BidToBuy = () => {
       url: `${FILE_URLS.FLUORESCENCE.replace(
         '***',
         detailImageData?.lot_id ?? ''
-      )}`
+      )}`,
+      category: 'Image'
     }
   ];
   const goBack = () => {

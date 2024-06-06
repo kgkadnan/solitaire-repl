@@ -274,8 +274,8 @@ export function DiamondDetailsComponent({
           )}
         </div>
       </div>
-      <div className="xl:flex pt-[16px]">
-        <div className={`flex xl:w-[40%]`}>
+      <div className="xl:flex pt-[16px] pl-[16px]">
+        <div className={`flex xl:w-[40%] `}>
           <div className={`mr-5 flex flex-col gap-[16px]`}>
             <DetailPageTabs
               validImages={validImages}

@@ -28,7 +28,7 @@ const ImageModal: React.FC<IModalProps> = ({
   isOpen,
   onClose,
   images,
-  selectedImageIndex,
+  selectedImageIndex = 0,
   setIsLoading,
   activeTab
 }) => {
@@ -69,8 +69,9 @@ const ImageModal: React.FC<IModalProps> = ({
 
   useEffect(() => {
     activeTab && setActivePreviewTab(activeTab);
+
     setImageIndex(selectedImageIndex!);
-  }, [activeTab, selectedImageIndex]);
+  }, [activeTab, selectedImageIndex, isOpen]);
 
   if (!isOpen) return null;
 
@@ -89,7 +90,7 @@ const ImageModal: React.FC<IModalProps> = ({
       <div className="flex items-center justify-center min-h-screen">
         {/* Background overlay */}
         <div className="fixed inset-0 bg-[#101828] opacity-40"></div>
-        <div className="bg-neutral0 p-2 rounded-[4px] sm:min-w-[340px] lg:p-6 z-20   lg:min-w-[630px] relative">
+        <div className="bg-neutral0 p-2 rounded-[4px] sm:min-w-[340px] lg:p-6 z-20 h-[681px]   lg:min-w-[630px] relative">
           <div className="flex flex-col  gap-4 ">
             <div className="w-full flex justify-end">
               <div className="flex justify-between w-[630px]">
@@ -124,7 +125,7 @@ const ImageModal: React.FC<IModalProps> = ({
                     filteredImages[imageIndex]?.category === 'B2B Sparkle' ? (
                       <iframe
                         src={filteredImages[0]?.url}
-                        className="w-[520px] h-[520px]"
+                        className="w-[527px] h-[527px]"
                       />
                     ) : (
                       <Image
@@ -204,10 +205,14 @@ const ImageModal: React.FC<IModalProps> = ({
               </div>
 
               <div className="flex justify-between items-center w-[625px]">
-                {filteredImages.length > 0 ? (
-                  <div className="text-headingS font-medium text-neutral900">
-                    {filteredImages[imageIndex]?.name}
-                  </div>
+                {images.length > 0 ? (
+                  filteredImages.length > 0 ? (
+                    <div className="text-headingS font-medium text-neutral900">
+                      {filteredImages[imageIndex]?.name}
+                    </div>
+                  ) : (
+                    ''
+                  )
                 ) : (
                   <Skeleton
                     width={88}
@@ -216,128 +221,139 @@ const ImageModal: React.FC<IModalProps> = ({
                     animation="wave"
                   />
                 )}
-                <div className="flex gap-6">
-                  {filteredImages.length > 0 &&
-                    filteredImages[imageIndex]?.category === 'Image' && (
-                      <>
-                        <div className="flex gap-2">
-                          <button
-                            onClick={() => {
-                              setImageIndex(imageIndex - 1);
-                            }}
-                            disabled={!(imageIndex > 0)}
-                            className={` rounded-[4px]  hover:bg-neutral50 w-[37px] h-[37px] text-center px-2 border-[1px] border-solid border-neutral200 shadow-sm ${
-                              imageIndex <= 0 ? '!bg-neutral100' : 'bg-neutral0'
-                            }`}
-                          >
-                            <Image
-                              src={
-                                !(imageIndex > 0)
-                                  ? backWardArrowDisable
-                                  : backwardArrow
-                              }
-                              alt={
-                                !(imageIndex > 0)
-                                  ? 'backWardArrowDisable'
-                                  : 'backwardArrow'
-                              }
-                            />
-                          </button>
-                          <button
-                            onClick={() => {
-                              setImageIndex(imageIndex + 1);
-                            }}
-                            disabled={!(imageIndex < filteredImages.length - 1)}
-                            className={`rounded-[4px] hover:bg-neutral50 w-[37px] h-[37px] text-center px-2 border-[1px] border-solid border-neutral200 shadow-sm ${
-                              imageIndex >= filteredImages.length - 1
-                                ? '!bg-neutral100'
-                                : 'bg-neutral0'
-                            }`}
-                          >
-                            <Image
-                              src={
+
+                {filteredImages.length > 0 ? (
+                  <div className="flex gap-6">
+                    {filteredImages.length > 0 &&
+                      filteredImages[imageIndex]?.category === 'Image' && (
+                        <>
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => {
+                                setImageIndex(imageIndex - 1);
+                              }}
+                              disabled={!(imageIndex > 0)}
+                              className={` rounded-[4px]  hover:bg-neutral50 w-[37px] h-[37px] text-center px-2 border-[1px] border-solid border-neutral200 shadow-sm ${
+                                imageIndex <= 0
+                                  ? '!bg-neutral100 cursor-not-allowed'
+                                  : 'bg-neutral0'
+                              }`}
+                            >
+                              <Image
+                                src={
+                                  !(imageIndex > 0)
+                                    ? backWardArrowDisable
+                                    : backwardArrow
+                                }
+                                alt={
+                                  !(imageIndex > 0)
+                                    ? 'backWardArrowDisable'
+                                    : 'backwardArrow'
+                                }
+                              />
+                            </button>
+                            <button
+                              onClick={() => {
+                                setImageIndex(imageIndex + 1);
+                              }}
+                              disabled={
                                 !(imageIndex < filteredImages.length - 1)
-                                  ? forWardAarrowDisable
-                                  : forwardArrow
                               }
-                              alt={
-                                !(imageIndex < filteredImages.length - 1)
-                                  ? 'forWardAarrowDisable'
-                                  : 'forwardArrow'
-                              }
-                            />
-                          </button>
-                        </div>
-                        <div className="border-r-[1px] h-[40px] border-neutral200"></div>
-                      </>
-                    )}
-                  <div className="flex gap-2">
-                    {!(
-                      activePreviewTab === 'Video' ||
-                      activePreviewTab === 'B2B Sparkle'
-                    ) && (
+                              className={`rounded-[4px] hover:bg-neutral50 w-[37px] h-[37px] text-center px-2 border-[1px] border-solid border-neutral200 shadow-sm ${
+                                imageIndex >= filteredImages.length - 1
+                                  ? '!bg-neutral100 cursor-not-allowed'
+                                  : 'bg-neutral0'
+                              }`}
+                            >
+                              <Image
+                                src={
+                                  !(imageIndex < filteredImages.length - 1)
+                                    ? forWardAarrowDisable
+                                    : forwardArrow
+                                }
+                                alt={
+                                  !(imageIndex < filteredImages.length - 1)
+                                    ? 'forWardAarrowDisable'
+                                    : 'forwardArrow'
+                                }
+                              />
+                            </button>
+                          </div>
+                          <div className="border-r-[1px] h-[40px] border-neutral200"></div>
+                        </>
+                      )}
+                    <div className="flex gap-2">
+                      {!(
+                        activePreviewTab === 'Video' ||
+                        activePreviewTab === 'B2B Sparkle'
+                      ) && (
+                        <Tooltip
+                          tooltipTrigger={
+                            <button
+                              onClick={() => {
+                                handleDownloadImage(
+                                  filteredImages[imageIndex].url || '',
+                                  filteredImages[imageIndex].name,
+                                  setIsLoading
+                                );
+                              }}
+                              disabled={!(filteredImages.length > 0)}
+                              className={`rounded-[4px] hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm ${
+                                filteredImages.length > 0
+                                  ? 'bg-neutral0'
+                                  : '!bg-neutral100 cursor-not-allowed'
+                              }`}
+                            >
+                              <DownloadImg
+                                className={`stroke-[1.5] ${
+                                  filteredImages.length > 0
+                                    ? 'stroke-neutral900'
+                                    : 'stroke-neutral400'
+                                }`}
+                              />
+                            </button>
+                          }
+                          tooltipContent={
+                            activePreviewTab === 'Certificate'
+                              ? 'Download Certificate'
+                              : 'Download Image'
+                          }
+                          tooltipContentStyles={'z-[2000]'}
+                        />
+                      )}
+
                       <Tooltip
                         tooltipTrigger={
                           <button
                             onClick={() => {
-                              handleDownloadImage(
-                                filteredImages[imageIndex].url || '',
-                                filteredImages[imageIndex].name,
-                                setIsLoading
-                              );
+                              copyLink({
+                                url: filteredImages[imageIndex]?.url
+                              });
                             }}
                             disabled={!(filteredImages.length > 0)}
                             className={`rounded-[4px] hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm ${
                               filteredImages.length > 0
                                 ? 'bg-neutral0'
-                                : '!bg-neutral100'
+                                : '!bg-neutral100 cursor-not-allowed'
                             }`}
                           >
-                            <DownloadImg
+                            <LinkSvg
                               className={`stroke-[1.5] ${
                                 filteredImages.length > 0
-                                  ? 'stroke-neutral900'
-                                  : 'stroke-neutral400'
+                                  ? '!stroke-neutral900'
+                                  : '!stroke-neutral400'
                               }`}
                             />
                           </button>
                         }
-                        tooltipContent={
-                          activePreviewTab === 'Certificate'
-                            ? 'Download Certificate'
-                            : 'Download Image'
-                        }
+                        tooltipContent={'Media Link'}
                         tooltipContentStyles={'z-[2000]'}
                       />
-                    )}
-
-                    <Tooltip
-                      tooltipTrigger={
-                        <button
-                          onClick={() => {
-                            copyLink({ url: filteredImages[imageIndex]?.url });
-                          }}
-                          disabled={!(filteredImages.length > 0)}
-                          className={`rounded-[4px] hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm ${
-                            filteredImages.length > 0
-                              ? 'bg-neutral0'
-                              : '!bg-neutral100'
-                          }`}
-                        >
-                          <LinkSvg
-                            className={`stroke-[1.5] ${
-                              filteredImages.length > 0
-                                ? '!stroke-neutral900'
-                                : '!stroke-neutral400'
-                            }`}
-                          />
-                        </button>
-                      }
-                      tooltipContent={'Media Link'}
-                      tooltipContentStyles={'z-[2000]'}
-                    />
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  ''
+                )}
               </div>
             </div>
           </div>
