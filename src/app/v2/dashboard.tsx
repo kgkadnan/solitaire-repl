@@ -1410,11 +1410,11 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    if (images.length > 0 && images[0].name.length)
+    if (images?.length > 0 && images[0]?.name?.length)
       loadImages(images, setValidImages, checkImage);
   }, [detailImageData]);
   useEffect(() => {
-    if (!validImages.length && images[0].name.length) {
+    if (!validImages?.length && images[0]?.name?.length) {
       setValidImages([
         {
           name: '',
@@ -1852,7 +1852,7 @@ const Dashboard = () => {
               {/* Carousel Container - Allow it to shrink if necessary but also give it an initial width */}
               <div className="flex-1 flex-shrink min-w-0 border-[1px] border-neutral50">
                 <DashboardCarousel
-                  images={customerData?.customer.carousel_items}
+                  images={customerData?.customer?.carousel_items}
                 />
               </div>
               {/* KAMCard Container - Prevent it from shrinking and assign a max width */}
