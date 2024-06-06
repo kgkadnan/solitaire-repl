@@ -176,7 +176,7 @@ const Dashboard = () => {
     {}
   );
 
-  let isNudge = localStorage.getItem('show-nudge') === 'MINI';
+  let isNudge = localStorage.getItem('show-nudge')! === 'MINI';
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   const { errorSetState } = useErrorStateManagement();
   const { setIsError } = errorSetState;
