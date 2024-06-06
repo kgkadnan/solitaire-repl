@@ -61,7 +61,7 @@ const DetailPageTabs = ({
         return TabsData[i].label;
       }
     }
-    return ''; // No enabled tab found, keep the current tab
+    return activePreviewTab; // No enabled tab found, keep the current tab
   };
 
   useEffect(() => {
@@ -85,10 +85,10 @@ const DetailPageTabs = ({
                 ? 'rounded-r-[8px]'
                 : ''
             } ${
-              activePreviewTab === tab.label
-                ? 'bg-primaryMain text-neutral0 stroke-neutral0'
-                : tab.isDisable
+              tab.isDisable
                 ? 'bg-neutral100 cursor-not-allowed text-neutral400 stroke-neutral400'
+                : activePreviewTab === tab.label
+                ? 'bg-primaryMain text-neutral0 stroke-neutral0'
                 : 'bg-neutral0 text-neutral900 stroke-neutral900'
             } `}
             disabled={tab.isDisable}
