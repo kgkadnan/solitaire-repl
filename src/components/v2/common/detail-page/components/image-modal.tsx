@@ -28,7 +28,7 @@ const ImageModal: React.FC<IModalProps> = ({
   isOpen,
   onClose,
   images,
-  selectedImageIndex,
+  selectedImageIndex = 0,
   setIsLoading,
   activeTab
 }) => {
@@ -69,8 +69,9 @@ const ImageModal: React.FC<IModalProps> = ({
 
   useEffect(() => {
     activeTab && setActivePreviewTab(activeTab);
+
     setImageIndex(selectedImageIndex!);
-  }, [activeTab, selectedImageIndex]);
+  }, [activeTab, selectedImageIndex, isOpen]);
 
   if (!isOpen) return null;
 
@@ -89,7 +90,7 @@ const ImageModal: React.FC<IModalProps> = ({
       <div className="flex items-center justify-center min-h-screen">
         {/* Background overlay */}
         <div className="fixed inset-0 bg-[#101828] opacity-40"></div>
-        <div className="bg-neutral0 p-2 rounded-[4px] sm:min-w-[340px] lg:p-6 z-20   lg:min-w-[630px] relative">
+        <div className="bg-neutral0 p-2 rounded-[4px] sm:min-w-[340px] lg:p-6 z-20 h-[681px]   lg:min-w-[630px] relative">
           <div className="flex flex-col  gap-4 ">
             <div className="w-full flex justify-end">
               <div className="flex justify-between w-[630px]">
@@ -124,7 +125,7 @@ const ImageModal: React.FC<IModalProps> = ({
                     filteredImages[imageIndex]?.category === 'B2B Sparkle' ? (
                       <iframe
                         src={filteredImages[0]?.url}
-                        className="w-[520px] h-[520px]"
+                        className="w-[527px] h-[527px]"
                       />
                     ) : (
                       <Image
