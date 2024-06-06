@@ -281,9 +281,9 @@ const Result = ({
               enableSorting: false,
               accessorKey: 'fire_icon',
               header: '',
-              minSize: 1,
-              size: 1,
-              maxSize: 2,
+              minSize: 35,
+              size: 35,
+              maxSize: 35,
               Cell: ({ row }: { row: any }) => {
                 return row.original.in_high_demand ? (
                   <Tooltip
