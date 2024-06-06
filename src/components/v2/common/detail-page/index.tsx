@@ -3,10 +3,10 @@
 
 import { useEffect, useState } from 'react';
 import backWardArrow from '@public/v2/assets/icons/my-diamonds/backwardArrow.svg';
-import linkSvg from '@public/v2/assets/icons/detail-page/link.svg';
-import downloadImg from '@public/v2/assets/icons/detail-page/download.svg';
-import forwardArrow from '@public/v2/assets/icons/detail-page/forward-arrow.svg';
-import backwardArrow from '@public/v2/assets/icons/detail-page/back-ward-arrow.svg';
+import LinkSvg from '@public/v2/assets/icons/detail-page/link.svg?url';
+import ExportExcel from '@public/v2/assets/icons/detail-page/export-excel.svg?url';
+// import forwardArrow from '@public/v2/assets/icons/detail-page/forward-arrow.svg';
+// import backwardArrow from '@public/v2/assets/icons/detail-page/back-ward-arrow.svg';
 
 export interface ITableColumn {
   key: string;
@@ -32,7 +32,7 @@ import ImagePreview from './components/image-preiview';
 import { getShapeDisplayName } from '@/utils/v2/detail-page';
 import ResponsiveTable from './components/CommonTable';
 import { HOLD_STATUS, MEMO_STATUS } from '@/constants/business-logic';
-import ShowPopups from './components/popup';
+// import ShowPopups from './components/popup';
 import Share from '../copy-and-share/share';
 import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
@@ -51,7 +51,7 @@ export function DiamondDetailsComponent({
   data,
   filterData,
   goBackToListView,
-  handleDetailPage,
+  // handleDetailPage,
   breadCrumLabel,
   modalSetState,
   setIsLoading,
@@ -71,7 +71,7 @@ export function DiamondDetailsComponent({
   const [tableData, setTableData] = useState<any>([]);
   const [activePreviewTab, setActivePreviewTab] = useState('Image');
   const [imageIndex, setImageIndex] = useState<number>(0);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  // const [currentIndex, setCurrentIndex] = useState(0);
   const [validImages, setValidImages] = useState<IImagesType[]>([]);
   const { errorSetState } = useErrorStateManagement();
 
@@ -274,8 +274,8 @@ export function DiamondDetailsComponent({
           )}
         </div>
       </div>
-      <div className="lg:flex pt-[16px]">
-        <div className={`flex lg:w-[40%] justify-center`}>
+      <div className="xl:flex pt-[16px]">
+        <div className={`flex xl:w-[40%]`}>
           <div className={`mr-5 flex flex-col gap-[16px]`}>
             <DetailPageTabs
               validImages={validImages}
@@ -284,13 +284,13 @@ export function DiamondDetailsComponent({
               setImageIndex={setImageIndex}
             />
             <div
-              className={`lg:overflow-y-auto ${
+              className={`xl:overflow-y-auto ${
                 isNudge &&
                 (isKycVerified?.customer?.kyc?.status ===
                   kycStatus.INPROGRESS ||
                   isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-                  ? 'lg:h-[calc(65vh-60px)]'
-                  : 'lg:h-[65vh]'
+                  ? 'xl:h-[calc(65vh-60px)]'
+                  : 'xl:h-[65vh]'
               }`}
             >
               <ImagePreview
@@ -305,18 +305,18 @@ export function DiamondDetailsComponent({
         </div>
 
         <div
-          className={`lg:w-[60%]  mb-[12px] scroll-adjust-custom lg:overflow-y-scroll ${
+          className={`xl:w-[60%]  mb-[12px] scroll-adjust-custom xl:overflow-y-scroll ${
             isNudge &&
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-              ? 'lg:h-[calc(70vh-60px)]'
-              : 'lg:h-[70vh]'
+              ? 'xl:h-[calc(70vh-60px)]'
+              : 'xl:h-[70vh]'
           }`}
         >
-          <div className="flex lg:justify-start  lg:justify-between mt-4 lg:mt-0 lg:w-full">
+          <div className="flex xl:justify-start  xl:justify-between mt-4 xl:mt-0 xl:w-full">
             {validImages.length > 0 ? (
               <p
-                className="sm:text-[22px] lg:text-[28px] text-[#344054] font-medium mr-5 "
+                className="text-[28px] text-[#344054] font-medium mr-5 "
                 style={{ alignSelf: 'center' }}
               >
                 Stock No: {tableData?.lot_id ?? '-'}
@@ -331,18 +331,16 @@ export function DiamondDetailsComponent({
               />
             )}
 
-            <div className="flex w-[40%] justify-around items-center">
+            <div className="flex w-[22%] xl:w-[40%] justify-center xl:justify-end mr-[10px] items-center">
               <div className="flex gap-3 items-center">
                 <Tooltip
                   tooltipTrigger={
-                    <Image
-                      className="cursor-pointer"
-                      src={downloadImg}
-                      alt={'Download'}
-                      height={40}
-                      width={40}
+                    <button
                       onClick={handleDownloadExcel}
-                    />
+                      className={`rounded-[4px] hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm ${'bg-neutral0'}`}
+                    >
+                      <ExportExcel className={`${'stroke-neutral900'}`} />
+                    </button>
                   }
                   tooltipContent={'Download Excel'}
                   tooltipContentStyles={'z-[1000]'}
@@ -350,14 +348,14 @@ export function DiamondDetailsComponent({
 
                 <Tooltip
                   tooltipTrigger={
-                    <Image
-                      className="cursor-pointer"
-                      src={linkSvg}
-                      alt={'media'}
-                      height={40}
-                      width={40}
+                    <button
                       onClick={copyLink}
-                    />
+                      className={`rounded-[4px] hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm ${'bg-neutral0'}`}
+                    >
+                      <LinkSvg
+                        className={`${'stroke-neutral900 stroke-[1.5]'}`}
+                      />
+                    </button>
                   }
                   tooltipContent={'Media Link'}
                   tooltipContentStyles={'z-[1000]'}
@@ -374,10 +372,10 @@ export function DiamondDetailsComponent({
                   />
                 </div>
               </div>
-              <div className="border-r-[1px] h-[40px] border-neutral200"></div>
-              <div className="flex gap-3 items-center relative justify-center">
-                {/* Backward Arrow */}
-                <button
+              {/* <div className="border-r-[1px] h-[40px] border-neutral200"></div> */}
+              {/* <div className="flex gap-3 items-center relative justify-center"> */}
+              {/* Backward Arrow */}
+              {/* <button
                   className={`relative group  h-[35px] w-[37px] shadow-sm flex items-center justify-center rounded-[4px] hover:bg-neutral50 border-[1px] border-neutral-200 ${
                     currentIndex <= 0 ? 'bg-neutral50' : 'bg-neutral0 '
                   } `}
@@ -393,7 +391,6 @@ export function DiamondDetailsComponent({
                     alt={'backWardArrow'}
                   />
 
-                  {/* Additional content for backward arrow */}
                   {currentIndex > 0 && (
                     <ShowPopups
                       data={data}
@@ -401,10 +398,10 @@ export function DiamondDetailsComponent({
                       fromBid={fromBid}
                     />
                   )}
-                </button>
+                </button> */}
 
-                {/* Forward Arrow */}
-                <button
+              {/* Forward Arrow */}
+              {/* <button
                   className={`relative group  h-[35px] w-[37px] shadow-sm flex items-center justify-center rounded-[4px] hover:bg-neutral50 border-[1px] border-neutral200 ${
                     currentIndex >= data.length - 1
                       ? 'bg-neutral50'
@@ -422,7 +419,6 @@ export function DiamondDetailsComponent({
                     alt={'forwardArrow'}
                   />
 
-                  {/* Additional content for forward arrow */}
 
                   {currentIndex < data.length - 1 && (
                     <ShowPopups
@@ -431,8 +427,8 @@ export function DiamondDetailsComponent({
                       fromBid={fromBid}
                     />
                   )}
-                </button>
-              </div>
+                </button> */}
+              {/* </div> */}
             </div>
           </div>
           <div className="flex items-center mt-4">
@@ -482,7 +478,7 @@ export function DiamondDetailsComponent({
           </div>
           <div className="pt-8 max-w-[100%] pr-[10px]">
             {validImages.length > 0 ? (
-              <div className="sm:text-[14px] lg:text-[16px] text-[#344054]  font-medium">
+              <div className="sm:text-[14px] xl:text-[16px] text-[#344054]  font-medium">
                 Price Details
               </div>
             ) : (
@@ -499,7 +495,7 @@ export function DiamondDetailsComponent({
           </div>
           <div className="pt-8 max-w-[100%] pr-[10px]">
             {validImages.length > 0 ? (
-              <div className="sm:text-[14px] lg:text-[16px] text-[#344054]  font-medium">
+              <div className="sm:text-[14px] xl:text-[16px] text-[#344054]  font-medium">
                 Basic Details
               </div>
             ) : (
@@ -517,7 +513,7 @@ export function DiamondDetailsComponent({
 
           <div className="mt-6 max-w-[100%] pr-[10px]">
             {validImages.length > 0 ? (
-              <div className="sm:text-[14px] lg:text-[16px]  font-medium text-[#344054]">
+              <div className="sm:text-[14px] xl:text-[16px]  font-medium text-[#344054]">
                 Measurements
               </div>
             ) : (
@@ -535,7 +531,7 @@ export function DiamondDetailsComponent({
 
           <div className="mt-6 max-w-[100%] pr-[10px]">
             {validImages.length > 0 ? (
-              <div className="sm:text-[14px] lg:text-[16px] font-medium text-[#344054]">
+              <div className="sm:text-[14px] xl:text-[16px] font-medium text-[#344054]">
                 Inclusion Details
               </div>
             ) : (
@@ -553,7 +549,7 @@ export function DiamondDetailsComponent({
 
           <div className="mt-6 max-w-[100%] pr-[10px] mb-5">
             {validImages.length > 0 ? (
-              <div className="sm:text-[14px] lg:text-[16px] font-medium text-[#344054]">
+              <div className="sm:text-[14px] xl:text-[16px] font-medium text-[#344054]">
                 Other Information
               </div>
             ) : (

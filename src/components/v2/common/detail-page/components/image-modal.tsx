@@ -6,8 +6,8 @@ import { Toast } from '../../copy-and-share/toast';
 import Tooltip from '../../tooltip';
 import { handleDownloadImage } from '@/utils/v2/detail-page';
 import { IImagesType } from '../interface';
-import downloadImg from '@public/v2/assets/icons/detail-page/download.svg';
-import linkSvg from '@public/v2/assets/icons/detail-page/link.svg';
+import DownloadImg from '@public/v2/assets/icons/detail-page/download.svg?url';
+import LinkSvg from '@public/v2/assets/icons/detail-page/link.svg?url';
 import forwardArrow from '@public/v2/assets/icons/arrow-forward.svg';
 import backwardArrow from '@public/v2/assets/icons/arrow-backword.svg';
 import backWardArrowDisable from '@public/v2/assets/icons/detail-page/back-ward-arrow-disable.svg';
@@ -69,7 +69,7 @@ const ImageModal: React.FC<IModalProps> = ({
 
   useEffect(() => {
     activeTab && setActivePreviewTab(activeTab);
-    selectedImageIndex && setImageIndex(selectedImageIndex);
+    setImageIndex(selectedImageIndex!);
   }, [activeTab, selectedImageIndex]);
 
   if (!isOpen) return null;
@@ -162,7 +162,7 @@ const ImageModal: React.FC<IModalProps> = ({
                       alt="noImageFound"
                       width={650}
                       height={600}
-                      className="w-[625px] h-[520px]"
+                      className="w-[625px] h-[520px] bg-[#F2F4F7]"
                     />
                   )
                 ) : (
@@ -194,11 +194,11 @@ const ImageModal: React.FC<IModalProps> = ({
                     boxShadow: 'var(--popups-shadow)',
 
                     //calculate zoomed image size
-                    backgroundSize: `${imgWidth * 1.5}px ${imgHeight * 1.5}px`,
+                    backgroundSize: `${imgWidth * 2}px ${imgHeight * 2}px`,
 
                     //calculate position of zoomed image.
-                    backgroundPositionX: `${-x * 1.5 + 130 / 2}px`,
-                    backgroundPositionY: `${-y * 1.5 + 130 / 2}px`
+                    backgroundPositionX: `${-x * 2 + 130 / 2}px`,
+                    backgroundPositionY: `${-y * 2 + 130 / 2}px`
                   }}
                 ></div>
               </div>
@@ -220,14 +220,14 @@ const ImageModal: React.FC<IModalProps> = ({
                   {filteredImages.length > 0 &&
                     filteredImages[imageIndex]?.category === 'Image' && (
                       <>
-                        <div className="flex gap-1">
+                        <div className="flex gap-2">
                           <button
                             onClick={() => {
                               setImageIndex(imageIndex - 1);
                             }}
                             disabled={!(imageIndex > 0)}
-                            className={` rounded-[4px]  hover:bg-neutral50 w-[38px] h-[38px] text-center px-2 border-[1px] border-solid border-neutral200 shadow-sm ${
-                              imageIndex <= 0 ? '!bg-neutral200' : 'bg-neutral0'
+                            className={` rounded-[4px]  hover:bg-neutral50 w-[37px] h-[37px] text-center px-2 border-[1px] border-solid border-neutral200 shadow-sm ${
+                              imageIndex <= 0 ? '!bg-neutral100' : 'bg-neutral0'
                             }`}
                           >
                             <Image
@@ -248,9 +248,9 @@ const ImageModal: React.FC<IModalProps> = ({
                               setImageIndex(imageIndex + 1);
                             }}
                             disabled={!(imageIndex < filteredImages.length - 1)}
-                            className={`rounded-[4px] hover:bg-neutral50 w-[38px] h-[38px] text-center px-2 border-[1px] border-solid border-neutral200 shadow-sm ${
+                            className={`rounded-[4px] hover:bg-neutral50 w-[37px] h-[37px] text-center px-2 border-[1px] border-solid border-neutral200 shadow-sm ${
                               imageIndex >= filteredImages.length - 1
-                                ? '!bg-neutral200'
+                                ? '!bg-neutral100'
                                 : 'bg-neutral0'
                             }`}
                           >
@@ -271,19 +271,14 @@ const ImageModal: React.FC<IModalProps> = ({
                         <div className="border-r-[1px] h-[40px] border-neutral200"></div>
                       </>
                     )}
-                  <div className="flex gap-1">
+                  <div className="flex gap-2">
                     {!(
                       activePreviewTab === 'Video' ||
                       activePreviewTab === 'B2B Sparkle'
                     ) && (
                       <Tooltip
                         tooltipTrigger={
-                          <Image
-                            className="cursor-pointer"
-                            src={downloadImg}
-                            height={40}
-                            width={40}
-                            alt={'Download'}
+                          <button
                             onClick={() => {
                               handleDownloadImage(
                                 filteredImages[imageIndex].url || '',
@@ -291,32 +286,55 @@ const ImageModal: React.FC<IModalProps> = ({
                                 setIsLoading
                               );
                             }}
-                          />
+                            disabled={!(filteredImages.length > 0)}
+                            className={`rounded-[4px] hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm ${
+                              filteredImages.length > 0
+                                ? 'bg-neutral0'
+                                : '!bg-neutral100'
+                            }`}
+                          >
+                            <DownloadImg
+                              className={`stroke-[1.5] ${
+                                filteredImages.length > 0
+                                  ? 'stroke-neutral900'
+                                  : 'stroke-neutral400'
+                              }`}
+                            />
+                          </button>
                         }
                         tooltipContent={
                           activePreviewTab === 'Certificate'
                             ? 'Download Certificate'
                             : 'Download Image'
                         }
-                        tooltipContentStyles={'z-[1000]'}
+                        tooltipContentStyles={'z-[2000]'}
                       />
                     )}
 
                     <Tooltip
                       tooltipTrigger={
-                        <Image
-                          className="cursor-pointer"
-                          src={linkSvg}
-                          height={40}
-                          width={40}
-                          alt={'linkSvg'}
+                        <button
                           onClick={() => {
                             copyLink({ url: filteredImages[imageIndex]?.url });
                           }}
-                        />
+                          disabled={!(filteredImages.length > 0)}
+                          className={`rounded-[4px] hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm ${
+                            filteredImages.length > 0
+                              ? 'bg-neutral0'
+                              : '!bg-neutral100'
+                          }`}
+                        >
+                          <LinkSvg
+                            className={`stroke-[1.5] ${
+                              filteredImages.length > 0
+                                ? '!stroke-neutral900'
+                                : '!stroke-neutral400'
+                            }`}
+                          />
+                        </button>
                       }
                       tooltipContent={'Media Link'}
-                      tooltipContentStyles={'z-[1000]'}
+                      tooltipContentStyles={'z-[2000]'}
                     />
                   </div>
                 </div>
