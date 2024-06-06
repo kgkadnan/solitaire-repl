@@ -42,7 +42,6 @@ import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import { Toast } from '@/components/v2/common/copy-and-share/toast';
 import { loadImages } from '@/components/v2/common/detail-page/helpers/load-images';
 import { checkImage } from '@/components/v2/common/detail-page/helpers/check-image';
-import fallbackImage from '@public/v2/assets/icons/not-found.svg';
 import { Dropdown } from '@/components/v2/common/dropdown-menu';
 import threeDotsSvg from '@public/v2/assets/icons/threedots.svg';
 import { ManageLocales } from '@/utils/v2/translate';
@@ -558,20 +557,23 @@ const NewArrivals = () => {
   const images = [
     {
       name: getShapeDisplayName(detailImageData?.shape ?? ''),
-      url: `${FILE_URLS.IMG.replace('***', detailImageData?.lot_id ?? '')}`
+      url: `${FILE_URLS.IMG.replace('***', detailImageData?.lot_id ?? '')}`,
+      category: 'Image'
     },
     {
       name: 'GIA Certificate',
       url: detailImageData?.certificate_url ?? '',
-      showDivider: true
+      category: 'Certificate'
     },
+
     {
       name: 'B2B',
       url: `${FILE_URLS.B2B.replace('***', detailImageData?.lot_id ?? '')}`,
       url_check: `${FILE_URLS.B2B_CHECK.replace(
         '***',
         detailImageData?.lot_id ?? ''
-      )}`
+      )}`,
+      category: 'Video'
     },
     {
       name: 'B2B Sparkle',
@@ -583,32 +585,35 @@ const NewArrivals = () => {
         '***',
         detailImageData?.lot_id ?? ''
       )}`,
-      showDivider: true
+      category: 'B2B Sparkle'
     },
 
     {
       name: 'Heart',
-      url: `${FILE_URLS.HEART.replace('***', detailImageData?.lot_id ?? '')}`
+      url: `${FILE_URLS.HEART.replace('***', detailImageData?.lot_id ?? '')}`,
+      category: 'Image'
     },
     {
       name: 'Arrow',
-      url: `${FILE_URLS.ARROW.replace('***', detailImageData?.lot_id ?? '')}`
+      url: `${FILE_URLS.ARROW.replace('***', detailImageData?.lot_id ?? '')}`,
+      category: 'Image'
     },
     {
       name: 'Aset',
-      url: `${FILE_URLS.ASET.replace('***', detailImageData?.lot_id ?? '')}`
+      url: `${FILE_URLS.ASET.replace('***', detailImageData?.lot_id ?? '')}`,
+      category: 'Image'
     },
     {
       name: 'Ideal',
-      url: `${FILE_URLS.IDEAL.replace('***', detailImageData?.lot_id ?? '')}`
+      url: `${FILE_URLS.IDEAL.replace('***', detailImageData?.lot_id ?? '')}`,
+      category: 'Image'
     },
     {
       name: 'Fluorescence',
       url: `${FILE_URLS.FLUORESCENCE.replace(
         '***',
         detailImageData?.lot_id ?? ''
-      )}`,
-      showDivider: true
+      )}`
     }
   ];
 
@@ -633,17 +638,7 @@ const NewArrivals = () => {
     if (images.length > 0 && images[0].name.length)
       loadImages(images, setValidImages, checkImage);
   }, [detailImageData]);
-  useEffect(() => {
-    if (!validImages.length && images[0].name.length) {
-      setValidImages([
-        {
-          name: '',
-          url: fallbackImage,
-          showDivider: true
-        }
-      ]);
-    }
-  }, [validImages]);
+
   return (
     <div className="mb-[20px] relative">
       {isLoading && <CustomKGKLoader />}
@@ -657,10 +652,8 @@ const NewArrivals = () => {
           setDetailImageData({});
           setIsModalOpen(!isModalOpen);
         }}
-        selectedImageIndex={0}
         images={validImages}
         setIsLoading={setIsLoading}
-        fromDetailPage={true}
       />
       <DialogComponent
         dialogContent={modalState.dialogContent}

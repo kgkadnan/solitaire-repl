@@ -1,9 +1,9 @@
 export const priceDetailsHead = [
-  { key: 'rap_value', label: 'Rap Val' }, //n
+  { key: 'rap', label: 'Rap ($)' },
+  { key: 'rap_value', label: 'Total Rap' }, //n
   { key: 'discount', label: 'Disc %' },
   { key: 'price_per_carat', label: 'Pr/Ct' },
-  { key: 'amount', label: 'Amt ($)' },
-  { key: 'rap', label: 'Rap ($)' }
+  { key: 'amount', label: 'Amt ($)' }
 ];
 
 export const priceDetailsHeadForBid = [
@@ -16,16 +16,16 @@ export const priceDetailsHeadForBid = [
 
 export const basicDetailsHead1 = [
   { key: 'lot_id', label: 'Stock No' }, //n
-  { key: 'shape', label: 'Shape' },
   { key: 'carats', label: 'Carats' },
-  { key: 'clarity', label: 'Clarity' },
+  { key: 'shape', label: 'Shape' },
   { key: 'color', label: 'Color' },
+  { key: 'clarity', label: 'Clarity' },
   { key: 'cut', label: 'Cut' },
-  { key: 'polish', label: 'Polish' },
-  { key: 'symmetry', label: 'Symmetry' }
+  { key: 'polish', label: 'Polish' }
 ];
 
 export const basicDetailsHead2 = [
+  { key: 'symmetry', label: 'Symmetry' },
   { key: 'fluorescence', label: 'Fluorescence' },
   { key: 'lab', label: 'Lab' },
   { key: 'location', label: 'Location' },
@@ -38,18 +38,18 @@ export const basicDetailsHead3 = [
 ];
 
 export const mesurementsHead1 = [
+  { key: 'measurement', label: 'Measurements' }, //n
   { key: 'table_percentage', label: 'Table%' }, //n
   { key: 'depth_percentage', label: 'Depth%' }, //n
   { key: 'ratio', label: 'Ratio' },
-  { key: 'measurement', label: 'Measurements' }, //n
   { key: 'crown_angle', label: 'Crown Angle' },
   { key: 'crown_height', label: 'Crown Height' }
 ];
 
 export const mesurementsHead2 = [
-  { key: 'girdle_percentage', label: 'Girdle%' }, //n
   { key: 'pavilion_angle', label: 'Pavilion Angle' },
   { key: 'pavilion_height', label: 'Pavilion Height' },
+  { key: 'girdle_percentage', label: 'Girdle%' }, //n
   { key: 'lower_half', label: 'Lower Half' }
 ];
 
@@ -62,8 +62,8 @@ export const mesurementsHead3 = [
 export const inclusionDetailsHead1 = [
   { key: 'table_black', label: 'Black Table' },
   { key: 'side_black', label: 'Side Black' },
-  { key: 'crown_open', label: 'Open Crown' },
   { key: 'table_open', label: 'Open Table' },
+  { key: 'crown_open', label: 'Open Crown' },
   { key: 'pavilion_open', label: 'Open Pavilion' },
   { key: 'milky', label: 'Milky' }
 ];

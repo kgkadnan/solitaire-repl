@@ -12,7 +12,6 @@ import {
   LISTING_PAGE_DATA_LIMIT,
   MEMO_STATUS
 } from '@/constants/business-logic';
-import fallbackImage from '@public/v2/assets/icons/not-found.svg';
 import { constructUrlParams } from '@/utils/v2/construct-url-params';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ManageLocales } from '@/utils/v2/translate';
@@ -281,9 +280,9 @@ const Result = ({
               enableSorting: false,
               accessorKey: 'fire_icon',
               header: '',
-              minSize: 1,
-              size: 1,
-              maxSize: 2,
+              minSize: 35,
+              size: 35,
+              maxSize: 35,
               Cell: ({ row }: { row: any }) => {
                 return row.original.in_high_demand ? (
                   <Tooltip
@@ -992,20 +991,23 @@ const Result = ({
   const images = [
     {
       name: getShapeDisplayName(detailImageData?.shape ?? ''),
-      url: `${FILE_URLS.IMG.replace('***', detailImageData?.lot_id ?? '')}`
+      url: `${FILE_URLS.IMG.replace('***', detailImageData?.lot_id ?? '')}`,
+      category: 'Image'
     },
     {
       name: 'GIA Certificate',
       url: detailImageData?.certificate_url ?? '',
-      showDivider: true
+      category: 'Certificate'
     },
+
     {
       name: 'B2B',
       url: `${FILE_URLS.B2B.replace('***', detailImageData?.lot_id ?? '')}`,
       url_check: `${FILE_URLS.B2B_CHECK.replace(
         '***',
         detailImageData?.lot_id ?? ''
-      )}`
+      )}`,
+      category: 'Video'
     },
     {
       name: 'B2B Sparkle',
@@ -1017,31 +1019,35 @@ const Result = ({
         '***',
         detailImageData?.lot_id ?? ''
       )}`,
-      showDivider: true
+      category: 'B2B Sparkle'
     },
+
     {
       name: 'Heart',
-      url: `${FILE_URLS.HEART.replace('***', detailImageData?.lot_id ?? '')}`
+      url: `${FILE_URLS.HEART.replace('***', detailImageData?.lot_id ?? '')}`,
+      category: 'Image'
     },
     {
       name: 'Arrow',
-      url: `${FILE_URLS.ARROW.replace('***', detailImageData?.lot_id ?? '')}`
+      url: `${FILE_URLS.ARROW.replace('***', detailImageData?.lot_id ?? '')}`,
+      category: 'Image'
     },
     {
       name: 'Aset',
-      url: `${FILE_URLS.ASET.replace('***', detailImageData?.lot_id ?? '')}`
+      url: `${FILE_URLS.ASET.replace('***', detailImageData?.lot_id ?? '')}`,
+      category: 'Image'
     },
     {
       name: 'Ideal',
-      url: `${FILE_URLS.IDEAL.replace('***', detailImageData?.lot_id ?? '')}`
+      url: `${FILE_URLS.IDEAL.replace('***', detailImageData?.lot_id ?? '')}`,
+      category: 'Image'
     },
     {
       name: 'Fluorescence',
       url: `${FILE_URLS.FLUORESCENCE.replace(
         '***',
         detailImageData?.lot_id ?? ''
-      )}`,
-      showDivider: true
+      )}`
     }
   ];
 
@@ -1063,17 +1069,6 @@ const Result = ({
     if (images.length > 0 && images[0].name.length)
       loadImages(images, setValidImages, checkImage);
   }, [detailImageData]);
-  useEffect(() => {
-    if (!validImages.length && images[0].name.length) {
-      setValidImages([
-        {
-          name: '',
-          url: fallbackImage,
-          showDivider: true
-        }
-      ]);
-    }
-  }, [validImages]);
 
   return (
     <div className="relative">
@@ -1088,9 +1083,7 @@ const Result = ({
           setDetailImageData({});
           setIsModalOpen(!isModalOpen);
         }}
-        selectedImageIndex={0}
         images={validImages}
-        fromDetailPage={true}
       />
       <DialogComponent
         dialogContent={dialogContent}
