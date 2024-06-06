@@ -13,15 +13,24 @@ const VolumeDiscount: React.FC<any> = ({
   const [timeDifference, setTimeDifference] = useState(null);
   const [isHovered, setIsHovered] = useState(false);
   const [isInfoHovered, setIsInfoHovered] = useState(false);
+  const [pauseTimer, setPauseTimer] = useState(false);
 
   useEffect(() => {
+    let defaultTimer: any = 48 * 60 * 60 * 1000;
+    if (expiryTime === null) {
+      setTimeDifference(defaultTimer);
+      setPauseTimer(true);
+    }
     if (expiryTime) {
       const currentTime: any = new Date();
       const targetTime: any = new Date(expiryTime!);
       let timeDiff: any = targetTime - currentTime;
       if (timeDiff <= 0) {
         // If the expiry time has passed, set the time difference to 48 hours
-        timeDiff = 48 * 60 * 60 * 1000;
+        timeDiff = defaultTimer;
+        setPauseTimer(true);
+      } else {
+        setPauseTimer(false);
       }
       setTimeDifference(timeDiff);
     }
@@ -119,6 +128,7 @@ const VolumeDiscount: React.FC<any> = ({
               )}
               initialSeconds={Math.floor((timeDifference % (1000 * 60)) / 1000)}
               customize={true}
+              pauseTimer={pauseTimer}
             />
           )}
           <div className="absolute top-0 right-0 pr-[12px]">

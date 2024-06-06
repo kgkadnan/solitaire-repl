@@ -72,6 +72,9 @@ const Search = () => {
   );
   useEffect(() => {
     let selection = JSON.parse(localStorage.getItem('Search')!) || [];
+    const filteredSelection = selection.filter(
+      (obj: any) => Object.keys(obj).length !== 0
+    );
     if (
       subRoute !== SubRoutes.NEW_SEARCH &&
       subRoute !== SubRoutes.SAVED_SEARCH
@@ -82,7 +85,7 @@ const Search = () => {
       );
       if (
         parseInt(replaceSubrouteWithSearchResult!) &&
-        parseInt(replaceSubrouteWithSearchResult!) <= selection.length
+        parseInt(replaceSubrouteWithSearchResult!) <= filteredSelection.length
       ) {
         setActiveTab(parseInt(replaceSubrouteWithSearchResult!));
       } else setActiveTab(-1);
@@ -95,14 +98,27 @@ const Search = () => {
       const yourSelection = localStorage.getItem('Search');
 
       if (yourSelection) {
-        const parseYourSelection = JSON.parse(yourSelection);
+        let parseYourSelection = JSON.parse(yourSelection);
 
-        //   // Always fetch data, even on initial load
-        const url = constructUrlParams(
-          parseYourSelection[activeTab]?.queryParams
+        // Filter out empty objects
+        const filteredSelection = parseYourSelection.filter(
+          (obj: any) => Object.keys(obj).length !== 0
         );
-        setSearchUrl(url);
-        setSearchParameters(parseYourSelection);
+
+        // Update local storage only if empty objects were found and removed
+        if (filteredSelection.length !== parseYourSelection.length) {
+          localStorage.setItem('Search', JSON.stringify(filteredSelection));
+        }
+
+        // Check if there are valid entries after filtering
+        if (filteredSelection.length > 0) {
+          // Always fetch data, even on initial load
+          const url = constructUrlParams(
+            filteredSelection[activeTab]?.queryParams
+          );
+          setSearchUrl(url);
+          setSearchParameters(filteredSelection);
+        }
       }
     };
 
