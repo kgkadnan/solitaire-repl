@@ -504,7 +504,7 @@ const Dashboard = () => {
   );
 
   const handleEdit = (stone: string) => {
-    let savedSearchEditData = customerData?.customer?.saved_searches.filter(
+    let savedSearchEditData = customerData?.customer?.saved_searches?.filter(
       (items: any) => {
         return items.id === stone;
       }
@@ -603,12 +603,12 @@ const Dashboard = () => {
       // if (customerData.customer?.orders?.length > 0) {
       const pendingInvoices =
         customerData.customer?.orders
-          .filter((item: any) => item.invoice_id === null)
+          ?.filter((item: any) => item.invoice_id === null)
           .slice(0, 5) ?? [];
 
       const activeInvoices =
         customerData.customer?.orders
-          .filter(
+          ?.filter(
             (item: any) => item.invoice_id !== null && item.status === 'pending'
           )
           .slice(0, 5) ?? [];
@@ -914,7 +914,7 @@ const Dashboard = () => {
         }
         return '';
       })
-      .filter(Boolean);
+      ?.filter(Boolean);
 
     // If there are variant IDs, add to the cart
     if (variantIds.length) {
@@ -1317,7 +1317,7 @@ const Dashboard = () => {
           }
           return '';
         })
-        .filter(Boolean);
+        ?.filter(Boolean);
 
       // If there are variant IDs, add to the cart
       if (variantIds.length) {
