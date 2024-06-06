@@ -136,10 +136,14 @@ const ImagePreview: React.FC<IImagePreviewProps> = ({
         </div>
 
         <div className="flex justify-between items-center">
-          {filteredImages.length > 0 ? (
-            <div className="text-headingS font-medium text-neutral900">
-              {filteredImages[imageIndex]?.name}
-            </div>
+          {images.length > 0 ? (
+            filteredImages.length > 0 ? (
+              <div className="text-headingS font-medium text-neutral900">
+                {filteredImages[imageIndex]?.name}
+              </div>
+            ) : (
+              ''
+            )
           ) : (
             <Skeleton
               width={88}
@@ -148,88 +152,122 @@ const ImagePreview: React.FC<IImagePreviewProps> = ({
               animation="wave"
             />
           )}
-          <div className="flex gap-6">
-            {filteredImages.length > 0 &&
-              filteredImages[imageIndex].category === 'Image' && (
-                <>
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => {
-                        setZoomPosition({ x: 0, y: 0 });
-                        setZoomLevel(1);
-                        setImageIndex(imageIndex - 1);
-                      }}
-                      disabled={!(imageIndex > 0)}
-                      className={` rounded-[4px]  hover:bg-neutral50 w-[37px] h-[37px] text-center px-2 border-[1px] border-solid border-neutral200 shadow-sm ${
-                        imageIndex <= 0 ? '!bg-neutral100' : 'bg-neutral0'
-                      }`}
-                    >
-                      <Image
-                        src={
-                          !(imageIndex > 0)
-                            ? backWardArrowDisable
-                            : backwardArrow
-                        }
-                        alt={
-                          !(imageIndex > 0)
-                            ? 'backWardArrowDisable'
-                            : 'backwardArrow'
-                        }
-                      />
-                    </button>
-                    <button
-                      onClick={() => {
-                        setZoomPosition({ x: 0, y: 0 });
-                        setZoomLevel(1);
-                        setImageIndex(imageIndex + 1);
-                      }}
-                      disabled={!(imageIndex < filteredImages.length - 1)}
-                      className={`rounded-[4px] hover:bg-neutral50 w-[37px] h-[37px] text-center px-2 border-[1px] border-solid border-neutral200 shadow-sm ${
-                        imageIndex >= filteredImages.length - 1
-                          ? '!bg-neutral100'
-                          : 'bg-neutral0'
-                      }`}
-                    >
-                      <Image
-                        src={
-                          !(imageIndex < filteredImages.length - 1)
-                            ? forWardAarrowDisable
-                            : forwardArrow
-                        }
-                        alt={
-                          !(imageIndex < filteredImages.length - 1)
-                            ? 'forWardAarrowDisable'
-                            : 'forwardArrow'
-                        }
-                      />
-                    </button>
-                  </div>
-                  <div className="border-r-[1px] h-[40px] border-neutral200"></div>
-                </>
-              )}
-            <div className="flex gap-2">
-              {!(
-                activePreviewTab === 'Video' ||
-                activePreviewTab === 'B2B Sparkle'
-              ) && (
+          {filteredImages.length > 0 ? (
+            <div className="flex gap-6">
+              {filteredImages.length > 0 &&
+                filteredImages[imageIndex].category === 'Image' && (
+                  <>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => {
+                          setZoomPosition({ x: 0, y: 0 });
+                          setZoomLevel(1);
+                          setImageIndex(imageIndex - 1);
+                        }}
+                        disabled={!(imageIndex > 0)}
+                        className={` rounded-[4px]  hover:bg-neutral50 w-[37px] h-[37px] text-center px-2 border-[1px] border-solid border-neutral200 shadow-sm ${
+                          imageIndex <= 0
+                            ? '!bg-neutral100 cursor-not-allowed'
+                            : 'bg-neutral0'
+                        }`}
+                      >
+                        <Image
+                          src={
+                            !(imageIndex > 0)
+                              ? backWardArrowDisable
+                              : backwardArrow
+                          }
+                          alt={
+                            !(imageIndex > 0)
+                              ? 'backWardArrowDisable'
+                              : 'backwardArrow'
+                          }
+                        />
+                      </button>
+                      <button
+                        onClick={() => {
+                          setZoomPosition({ x: 0, y: 0 });
+                          setZoomLevel(1);
+                          setImageIndex(imageIndex + 1);
+                        }}
+                        disabled={!(imageIndex < filteredImages.length - 1)}
+                        className={`rounded-[4px] hover:bg-neutral50 w-[37px] h-[37px] text-center px-2 border-[1px] border-solid border-neutral200 shadow-sm ${
+                          imageIndex >= filteredImages.length - 1
+                            ? '!bg-neutral100 cursor-not-allowed'
+                            : 'bg-neutral0'
+                        }`}
+                      >
+                        <Image
+                          src={
+                            !(imageIndex < filteredImages.length - 1)
+                              ? forWardAarrowDisable
+                              : forwardArrow
+                          }
+                          alt={
+                            !(imageIndex < filteredImages.length - 1)
+                              ? 'forWardAarrowDisable'
+                              : 'forwardArrow'
+                          }
+                        />
+                      </button>
+                    </div>
+                    <div className="border-r-[1px] h-[40px] border-neutral200"></div>
+                  </>
+                )}
+              <div className="flex gap-2">
+                {!(
+                  activePreviewTab === 'Video' ||
+                  activePreviewTab === 'B2B Sparkle'
+                ) && (
+                  <Tooltip
+                    tooltipTrigger={
+                      <button
+                        onClick={() => {
+                          handleDownloadImage(
+                            filteredImages[imageIndex].url || '',
+                            filteredImages[imageIndex].name,
+                            setIsLoading
+                          );
+                        }}
+                        disabled={!(filteredImages.length > 0)}
+                        className={`rounded-[4px] hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm ${
+                          filteredImages.length > 0
+                            ? 'bg-neutral0'
+                            : '!bg-neutral100 cursor-not-allowed'
+                        }`}
+                      >
+                        <DownloadImg
+                          className={`stroke-[1.5] ${
+                            filteredImages.length > 0
+                              ? 'stroke-neutral900'
+                              : 'stroke-neutral400'
+                          }`}
+                        />
+                      </button>
+                    }
+                    tooltipContent={
+                      activePreviewTab === 'Certificate'
+                        ? 'Download Certificate'
+                        : 'Download Image'
+                    }
+                    tooltipContentStyles={'z-[1000]'}
+                  />
+                )}
+
                 <Tooltip
                   tooltipTrigger={
                     <button
                       onClick={() => {
-                        handleDownloadImage(
-                          filteredImages[imageIndex].url || '',
-                          filteredImages[imageIndex].name,
-                          setIsLoading
-                        );
+                        setIsModalOpen(!isModalOpen);
                       }}
                       disabled={!(filteredImages.length > 0)}
                       className={`rounded-[4px] hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm ${
                         filteredImages.length > 0
                           ? 'bg-neutral0'
-                          : '!bg-neutral100'
+                          : '!bg-neutral100 cursor-not-allowed'
                       }`}
                     >
-                      <DownloadImg
+                      <ExpandImg
                         className={`stroke-[1.5] ${
                           filteredImages.length > 0
                             ? 'stroke-neutral900'
@@ -238,42 +276,14 @@ const ImagePreview: React.FC<IImagePreviewProps> = ({
                       />
                     </button>
                   }
-                  tooltipContent={
-                    activePreviewTab === 'Certificate'
-                      ? 'Download Certificate'
-                      : 'Download Image'
-                  }
+                  tooltipContent={'Expand'}
                   tooltipContentStyles={'z-[1000]'}
                 />
-              )}
-
-              <Tooltip
-                tooltipTrigger={
-                  <button
-                    onClick={() => {
-                      setIsModalOpen(!isModalOpen);
-                    }}
-                    disabled={!(filteredImages.length > 0)}
-                    className={`rounded-[4px] hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm ${
-                      filteredImages.length > 0
-                        ? 'bg-neutral0'
-                        : '!bg-neutral100'
-                    }`}
-                  >
-                    <ExpandImg
-                      className={`stroke-[1.5] ${
-                        filteredImages.length > 0
-                          ? 'stroke-neutral900'
-                          : 'stroke-neutral400'
-                      }`}
-                    />
-                  </button>
-                }
-                tooltipContent={'Expand'}
-                tooltipContentStyles={'z-[1000]'}
-              />
+              </div>
             </div>
-          </div>
+          ) : (
+            ''
+          )}
         </div>
       </div>
 
