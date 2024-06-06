@@ -71,7 +71,7 @@ const DashboardCarousel: React.FC<IDashboardCarouselProps> = ({ images }) => {
     event.target.src = NoImageFound.src; // Set the fallback image when the original image fails to load
   };
 
-  const imageUrl = images && getSuitableImageUrl(images[0].image_web);
+  const imageUrl = images && getSuitableImageUrl(images[0]?.image_web);
 
   return (
     <div className="dashboard-carousel">
@@ -80,7 +80,7 @@ const DashboardCarousel: React.FC<IDashboardCarouselProps> = ({ images }) => {
           images.length > 1 ? (
             <Slider {...settings}>
               {images?.map((data: any, index: number) => {
-                const imageUrl = getSuitableImageUrl(data.image_web);
+                const imageUrl = getSuitableImageUrl(data?.image_web);
                 return (
                   <div
                     className="relative w-full h-[400px] rounded-[8px] overflow-hidden bg-neutral50"
