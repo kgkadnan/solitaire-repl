@@ -72,10 +72,10 @@ const theme = createTheme({
         root: {
           // Default state for the badge inside the cell - sorting icon not visible by default
           '& .MuiBadge-root': {
-            marginLeft: '-3px'
+            marginLeft: '-3px',
             // paddingLeft:'-3px'
             // display:'none'
-            // visibility: 'hidden'
+            visibility: 'hidden'
           },
           // Hover state for the cell
           '&:hover .MuiBadge-root': {
