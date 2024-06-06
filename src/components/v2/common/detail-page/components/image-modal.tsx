@@ -49,8 +49,6 @@ const ImageModal: React.FC<IModalProps> = ({
     return false;
   });
 
-  console.log('filteredImages', filteredImages);
-
   useEffect(() => {
     const handleKeyDown = (event: any) => {
       if (event.key === 'ArrowLeft') {
@@ -71,8 +69,9 @@ const ImageModal: React.FC<IModalProps> = ({
 
   useEffect(() => {
     activeTab && setActivePreviewTab(activeTab);
+
     setImageIndex(selectedImageIndex!);
-  }, [activeTab, selectedImageIndex]);
+  }, [activeTab, selectedImageIndex, isOpen]);
 
   if (!isOpen) return null;
 
