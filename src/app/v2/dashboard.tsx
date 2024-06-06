@@ -324,9 +324,9 @@ const Dashboard = () => {
               enableSorting: false,
               accessorKey: 'fire_icon',
               header: '',
-              minSize: 35,
-              size: 35,
-              maxSize: 35,
+              minSize: 20,
+              size: 20,
+              maxSize: 20,
               Cell: ({ row }: { row: any }) => {
                 return row.original.in_high_demand ? (
                   <Tooltip

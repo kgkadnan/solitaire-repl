@@ -53,8 +53,9 @@ import { handleCompareStone } from '@/app/v2/search/result/helpers/handle-compar
 import CommonPoppup from '@/app/v2/login/component/common-poppup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faArrowDownWideShort,
-  faSortDown
+  faSort,
+  faSortDown,
+  faAnglesUp
 } from '@fortawesome/free-solid-svg-icons';
 
 const theme = createTheme({
@@ -72,14 +73,14 @@ const theme = createTheme({
         root: {
           // Default state for the badge inside the cell - sorting icon not visible by default
           '& .MuiBadge-root': {
-            marginLeft: '-3px',
-            // paddingLeft:'-3px'
-            // display:'none'
-            visibility: 'hidden'
+            width: '15px !important',
+            marginLeft: '-3px'
+            // visibility: 'hidden',
           },
           // Hover state for the cell
           '&:hover .MuiBadge-root': {
-            visibility: 'visible'
+            visibility: 'visible',
+            color: 'red !important'
           }
         }
       }
@@ -91,6 +92,9 @@ const theme = createTheme({
             whiteSpace: 'nowrap',
             color: 'var(--neutral-700)',
             fontWeight: 500
+          },
+          '&.Mui-active': {
+            color: 'red !important' // Change this to your desired color
           }
         }
       }
@@ -102,6 +106,7 @@ const theme = createTheme({
         }
       }
     },
+
     MuiButtonBase: {
       defaultProps: {
         // The props to apply
@@ -515,19 +520,22 @@ const DataTable = ({
         <Image src={searchIcon} alt={'searchIcon'} className="mr-[6px]" />
       ),
       SortIcon: (props: any) => (
-        <FontAwesomeIcon
-          icon={faArrowDownWideShort}
-          width={8}
-          height={8}
-          {...props}
-        />
+        <FontAwesomeIcon icon={faSort} width={8} height={8} {...props} />
       ), //best practice
-
+      SyncAltIcon: (props: any) => (
+        <FontAwesomeIcon
+          icon={faSort}
+          {...props}
+          // width={8} height={8}
+          style={{ color: 'neutral400' }}
+          className="transform !rotate-0 !pl-1"
+        />
+      ),
       ArrowDownwardIcon: (props: any) => (
         <FontAwesomeIcon icon={faSortDown} {...props} width={8} height={8} />
       )
     },
-
+    // headerSortico
     muiTableBodyRowProps: ({ row }) => {
       return {
         onClick: row.id.includes('shape')
@@ -557,7 +565,7 @@ const DataTable = ({
 
     displayColumnDefOptions: {
       'mrt-row-expand': {
-        size: 110,
+        size: 100,
 
         muiTableHeadCellProps: {
           sx: {
@@ -627,8 +635,8 @@ const DataTable = ({
             ? isNudge &&
               (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
                 isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-              ? 'calc(100vh - 440px)'
-              : 'calc(100vh - 363px)'
+              ? 'calc(100vh - 420px)'
+              : 'calc(100vh - 343px)'
             : isNudge &&
               (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
                 isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
@@ -652,8 +660,8 @@ const DataTable = ({
             ? isNudge &&
               (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
                 isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-              ? 'calc(100vh - 440px)'
-              : 'calc(100vh - 363px)'
+              ? 'calc(100vh - 420px)'
+              : 'calc(100vh - 343px)'
             : isNudge &&
               (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
                 isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
@@ -673,12 +681,15 @@ const DataTable = ({
       }
     },
     muiTableBodyCellProps: ({ cell, row }) => {
-      console.log(row, 'row', rowSelection);
       return {
         sx: {
           color: 'var(--neutral-900)',
           '&.MuiTableCell-root': {
-            padding: '0px 2px',
+            padding: ['discount', 'price_per_carat', 'rap'].includes(
+              cell.column.id
+            )
+              ? '0px 6px'
+              : '0px 2px',
             height: '20px !important',
             background: 'White',
             opacity: 1,
@@ -727,19 +738,29 @@ const DataTable = ({
       };
     },
 
-    muiTableHeadCellProps: {
-      sx: {
-        color: 'var(--neutral-700)',
-        '&.MuiTableCell-root': {
-          padding: '0px 2px',
-          height: '20px',
-          background: 'var(--neutral-50)',
-          opacity: 1,
-          borderTop: '1px solid var(--neutral-200)',
-          fontSize: '12px !important',
-          fontWeight: 500
+    muiTableHeadCellProps: ({ column }) => {
+      return {
+        sx: {
+          color: 'var(--neutral-700)',
+          '&.MuiTableCell-root': {
+            padding: '0px 2px',
+            height: '20px',
+            background: 'var(--neutral-50)',
+            opacity: 1,
+            borderTop: '1px solid var(--neutral-200)',
+            fontSize: '12px !important',
+            fontWeight: 500,
+            paddingRight: ['shape_full', 'location', 'details'].includes(
+              column.id
+            )
+              ? '12px'
+              : '0px',
+            '&.Mui-active': {
+              color: 'red !important' // Change this to your desired color
+            }
+          }
         }
-      }
+      };
     },
     muiSelectAllCheckboxProps: {
       sx: {
