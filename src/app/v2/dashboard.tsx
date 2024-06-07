@@ -581,20 +581,20 @@ const Dashboard = () => {
       tabsCopy.push({
         label: 'Saved Search',
         link: '/v2/search?active-tab=saved-search',
-        data: customerData.customer?.saved_searches?.slice(0, 5) ?? []
+        data: customerData.customer?.saved_searches?.slice(0, 3) ?? []
       });
 
       const pendingInvoices =
         customerData.customer?.orders
           ?.filter((item: any) => item.invoice_id === null)
-          .slice(0, 5) ?? [];
+          .slice(0, 3) ?? [];
 
       const activeInvoices =
         customerData.customer?.orders
           ?.filter(
             (item: any) => item.invoice_id !== null && item.status === 'pending'
           )
-          .slice(0, 5) ?? [];
+          .slice(0, 3) ?? [];
 
       tabsCopy.push({
         label: 'Pending Invoice',
@@ -1576,20 +1576,12 @@ const Dashboard = () => {
           {' '}
           <div className="flex flex-col gap-4 mb-[20px]">
             <div
-              className={`bg-cover ml-[-20px] mr-[-16px]  bg-no-repeat flex justify-center flex-col items-center h-[220px] gap-5`}
+              className={`bg-cover ml-[-20px] mr-[-16px]  bg-no-repeat flex justify-center flex-col items-center h-[126px] gap-5`}
               style={{
                 backgroundImage:
                   customerData === undefined ? '' : 'url(/gradient.png)'
               }}
             >
-              {/* {customerData === undefined ? (
-                ''
-              ) : (
-                <p className="text-headingM medium text-neutral900">
-                  Hello, {customerData?.customer.first_name}
-                </p>
-              )} */}
-
               {customerData !== undefined ? (
                 <div className="flex items-center bg-neutral0 rounded-[4px] overflow-hidden border-[1px] border-primaryBorder w-[720px] px-4 py-2">
                   <div className="relative flex-grow items-center">
@@ -1688,38 +1680,6 @@ const Dashboard = () => {
                   ))}
             </div>
 
-            <div className="flex w-full gap-4 h-[400px]">
-              {' '}
-              {/* Ensure the container takes up full width */}
-              {/* Carousel Container - Allow it to shrink if necessary but also give it an initial width */}
-              <div className="flex-1 flex-shrink min-w-0 border-[1px] border-neutral50">
-                <DashboardCarousel
-                  images={customerData?.customer?.carousel_items}
-                />
-              </div>
-              {/* KAMCard Container - Prevent it from shrinking and assign a max width */}
-              <div className="flex-shrink-0 w-[300px] max-w-full">
-                {customerData === undefined ? (
-                  <Skeleton
-                    animation="wave"
-                    width={'100%'}
-                    variant="rectangular"
-                    height={400}
-                    className="rounded-[4px]"
-                  />
-                ) : (
-                  <KAMCard
-                    name={customerData?.customer.kam?.kam_name ?? '-'}
-                    role={
-                      customerData?.customer.kam?.post ?? 'Key Account Manager'
-                    }
-                    phoneNumber={customerData?.customer.kam?.phone ?? '-'}
-                    email={customerData?.customer.kam?.email ?? '-'}
-                    image={customerData?.customer.kam?.image ?? ''}
-                  />
-                )}
-              </div>
-            </div>
             {tabs.length > 0 && (
               <div className="flex gap-4 ">
                 {customerData === undefined ? (
@@ -1731,25 +1691,16 @@ const Dashboard = () => {
                     className="rounded-[4px]"
                   />
                 ) : (
-                  <div className="w-full border-[1px] border-neutral200 rounded-[8px] flex-1 flex-shrink min-w-0">
-                    <div className="border-b-[1px] border-neutral200 p-4">
-                      <div className="flex border-b border-neutral200 w-full ml-3 text-mMedium font-medium justify-between pr-4">
+                  <div className="w-full h-[420px] overflow-auto border-[1px] border-neutral200 rounded-[8px] flex-1 flex-shrink min-w-0">
+                    <div className="border-b-[1px] border-neutral200 p-3">
+                      <div className="flex  w-full ml-1 text-mMedium font-medium justify-between pr-4">
                         <div>
-                          {tabs.map(({ label }: any) => {
-                            return (
-                              <button
-                                className={`p-2 ${
-                                  activeTab === label
-                                    ? 'text-neutral900 border-b-[2px] border-primaryMain'
-                                    : 'text-neutral600 '
-                                }`}
-                                key={label}
-                                onClick={() => handleTabs({ tab: label })}
-                              >
-                                {label}
-                              </button>
-                            );
-                          })}
+                          <button
+                            className={`${'text-neutral900 border-primaryMain'}`}
+                            key={'Saved Search'}
+                          >
+                            Saved Search{' '}
+                          </button>
                         </div>
                         <Link
                           href={redirectLink()}
@@ -1773,7 +1724,7 @@ const Dashboard = () => {
                                 gradientClasses[gradientIndex];
                               return (
                                 <div
-                                  className="p-[16px] flex flex-col md:flex-row w-full border-[1px] border-neutral200 cursor-pointer group hover:bg-neutral50"
+                                  className="p-[10px] flex flex-col md:flex-row w-full border-[1px] border-neutral200 cursor-pointer group hover:bg-neutral50"
                                   key={searchData?.id}
                                   onClick={() =>
                                     handleCardClick({
@@ -1837,68 +1788,6 @@ const Dashboard = () => {
                             imageSrc={empty}
                           />
                         ))}
-                      {(activeTab === 'Active Invoice' ||
-                        activeTab === 'Pending Invoice') && (
-                        <div className="max-w-full overflow-x-auto border-[1px] border-neutral200">
-                          {/* header */}
-                          <div className="grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] text-mMedium h-[47px] border-b border-neutral-200 bg-neutral-50 text-neutral700">
-                            {keys?.map(({ label }: any) => (
-                              <div
-                                key={label}
-                                className="p-4 text-left font-medium"
-                              >
-                                {label}
-                              </div>
-                            ))}
-                          </div>
-                          {/* rows */}
-                          <div className="">
-                            {data?.length > 0 ? (
-                              data?.map((items: any) => (
-                                <div
-                                  key={items.order_id}
-                                  onClick={() => {
-                                    if (activeTab === 'Active Invoice') {
-                                      router.push(
-                                        `/v2/your-orders?path=active&id=${items?.id}`
-                                      );
-                                    } else {
-                                      router.push(
-                                        `/v2/your-orders?id=${items?.id}`
-                                      );
-                                    }
-                                    //  handleShowDetails(items?.id);
-                                  }}
-                                  className="cursor-pointer grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] bg-neutral0 border-b border-neutral-200 hover:bg-neutral-50"
-                                >
-                                  {keys?.map(
-                                    ({ accessor }: any, index: number) => (
-                                      <div
-                                        key={index}
-                                        className="flex items-center text-lRegular space-x-2 py-3 pr-3 pl-4 text-left text-gray-800"
-                                      >
-                                        {renderCellContent(accessor, items)}
-                                      </div>
-                                    )
-                                  )}
-                                </div>
-                              ))
-                            ) : (
-                              // <> <div className="min-h-[73vh] h-[65vh]">
-                              <EmptyScreen
-                                label="Search Diamonds"
-                                message="Looks like you haven't placed any orders yet. Let’s place some orders!"
-                                onClickHandler={() =>
-                                  router.push(
-                                    `/v2/search?active-tab=${SubRoutes.NEW_SEARCH}`
-                                  )
-                                }
-                                imageSrc={emptyOrderSvg}
-                              />
-                            )}
-                          </div>
-                        </div>
-                      )}
                     </div>
                   </div>
                 )}
@@ -1929,6 +1818,38 @@ const Dashboard = () => {
                 </div>
               </div>
             )}
+            <div className="flex w-full gap-4 h-[400px]">
+              {' '}
+              {/* Ensure the container takes up full width */}
+              {/* Carousel Container - Allow it to shrink if necessary but also give it an initial width */}
+              <div className="flex-1 flex-shrink min-w-0 border-[1px] border-neutral50">
+                <DashboardCarousel
+                  images={customerData?.customer?.carousel_items}
+                />
+              </div>
+              {/* KAMCard Container - Prevent it from shrinking and assign a max width */}
+              <div className="flex-shrink-0 w-[300px] max-w-full">
+                {customerData === undefined ? (
+                  <Skeleton
+                    animation="wave"
+                    width={'100%'}
+                    variant="rectangular"
+                    height={400}
+                    className="rounded-[4px]"
+                  />
+                ) : (
+                  <KAMCard
+                    name={customerData?.customer.kam?.kam_name ?? '-'}
+                    role={
+                      customerData?.customer.kam?.post ?? 'Key Account Manager'
+                    }
+                    phoneNumber={customerData?.customer.kam?.phone ?? '-'}
+                    email={customerData?.customer.kam?.email ?? '-'}
+                    image={customerData?.customer.kam?.image ?? ''}
+                  />
+                )}
+              </div>
+            </div>
           </div>
           <div className="border-t-[1px] mt-auto border-l-[1px] border-r-[1px] rounded-[8px] p-4 flex justify-between border-neutral200 text-lRegular">
             {/* for fixed footer */}
