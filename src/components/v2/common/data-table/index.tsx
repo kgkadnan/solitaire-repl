@@ -54,8 +54,7 @@ import CommonPoppup from '@/app/v2/login/component/common-poppup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faSort,
-  faSortDown,
-  faAnglesUp
+  faSortDown
 } from '@fortawesome/free-solid-svg-icons';
 
 const theme = createTheme({
