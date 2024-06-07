@@ -313,7 +313,9 @@ const Table = ({
                   },
 
                   '& .MuiOutlinedInput-input': {
-                    color: 'var(--neutral-900)'
+                    color: 'var(--neutral-900)',
+                    fontSize: '14px !important',
+                    paddingTop: '10px'
                   },
                   '& .MuiOutlinedInput-notchedOutline': {
                     borderColor: 'var(--neutral-200) !important'

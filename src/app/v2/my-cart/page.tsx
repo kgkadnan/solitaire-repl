@@ -959,7 +959,6 @@ const MyCart = () => {
                   commingSoon: true
                 }
               ]}
-              isDisable={true}
             />
           </div>
         </>
