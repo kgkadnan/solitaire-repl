@@ -1679,7 +1679,116 @@ const Dashboard = () => {
                     </div>
                   ))}
             </div>
-
+            {tabs.length > 0 && (
+              <div className="flex gap-4 ">
+                {customerData === undefined ? (
+                  <Skeleton
+                    height={'100%'}
+                    width={'100%'}
+                    animation="wave"
+                    variant="rectangular"
+                    className="rounded-[4px]"
+                  />
+                ) : (
+                  <div className="w-full h-[420px] overflow-auto border-[1px] border-neutral200 rounded-[8px] flex-1 flex-shrink min-w-0">
+                    <div className="border-b-[1px] border-neutral200 p-3">
+                      <div className="flex  w-full ml-1 text-mMedium font-medium justify-between pr-4">
+                        <div>
+                          {tabs.map(({ label }: any) => {
+                            return (
+                              label !== 'Saved Search' && (
+                                <button
+                                  className={`p-2 ${
+                                    activeTab === label
+                                      ? 'text-neutral900 border-b-[2px] border-primaryMain'
+                                      : 'text-neutral600 '
+                                  }`}
+                                  key={label}
+                                  onClick={() => handleTabs({ tab: label })}
+                                >
+                                  {label}
+                                </button>
+                              )
+                            );
+                          })}
+                        </div>
+                        <Link
+                          href={redirectLink()}
+                          className="cursor-pointer text-infoMain text-sRegular flex items-center"
+                        >
+                          View All
+                        </Link>
+                      </div>
+                    </div>
+                    <div className="p-4 ">
+                      {(activeTab === 'Active Invoice' ||
+                        activeTab === 'Pending Invoice') && (
+                        <div className="max-w-full overflow-x-auto border-[1px] border-neutral200">
+                          {/* header */}
+                          <div className="grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] text-mMedium h-[47px] border-b border-neutral-200 bg-neutral-50 text-neutral700">
+                            {keys?.map(({ label }: any) => (
+                              <div
+                                key={label}
+                                className="p-4 text-left font-medium"
+                              >
+                                {label}
+                              </div>
+                            ))}
+                          </div>
+                          {/* rows */}
+                          <div className="">
+                            {data?.length > 0 ? (
+                              data?.map((items: any) => (
+                                <div
+                                  key={items.order_id}
+                                  onClick={() => {
+                                    if (activeTab === 'Active Invoice') {
+                                      router.push(
+                                        `/v2/your-orders?path=active&id=${items?.id}`
+                                      );
+                                    } else {
+                                      router.push(
+                                        `/v2/your-orders?id=${items?.id}`
+                                      );
+                                    }
+                                    //  handleShowDetails(items?.id);
+                                  }}
+                                  className="cursor-pointer grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] bg-neutral0 border-b border-neutral-200 hover:bg-neutral-50"
+                                >
+                                  {keys?.map(
+                                    ({ accessor }: any, index: number) => (
+                                      <div
+                                        key={index}
+                                        className="flex items-center text-lRegular space-x-2 py-3 pr-3 pl-4 text-left text-gray-800"
+                                      >
+                                        {renderCellContent(accessor, items)}
+                                      </div>
+                                    )
+                                  )}
+                                </div>
+                              ))
+                            ) : (
+                              // <> <div className="min-h-[73vh] h-[65vh]">
+                              <EmptyScreen
+                                label="Search Diamonds"
+                                message="Looks like you haven't placed any orders yet. Let’s place some orders!"
+                                onClickHandler={() =>
+                                  router.push(
+                                    `/v2/search?active-tab=${SubRoutes.NEW_SEARCH}`
+                                  )
+                                }
+                                imageSrc={emptyOrderSvg}
+                              />
+                            )}
+                          </div>
+                        </div>
+                      )}
+                      {/* </div> */}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
             {tabs.length > 0 && (
               <div className="flex gap-4 ">
                 {customerData === undefined ? (
@@ -1711,11 +1820,12 @@ const Dashboard = () => {
                       </div>
                     </div>
                     <div className="p-4 ">
-                      {activeTab === 'Saved Search' &&
-                        (tabs.find(tab => tab.label === activeTab)?.data
+                      {
+                        // activeTab === 'Saved Search' &&
+                        tabs.find(tab => tab.label === 'Saved Search')?.data
                           .length > 0 ? (
                           tabs
-                            .find(tab => tab.label === activeTab)
+                            .find(tab => tab.label === 'Saved Search')
                             ?.data?.map((searchData: any, index: number) => {
                               const gradientIndex =
                                 index % gradientClasses.length;
@@ -1787,7 +1897,8 @@ const Dashboard = () => {
                             }
                             imageSrc={empty}
                           />
-                        ))}
+                        )
+                      }
                     </div>
                   </div>
                 )}
