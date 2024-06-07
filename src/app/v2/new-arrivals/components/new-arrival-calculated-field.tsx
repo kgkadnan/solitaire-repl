@@ -23,37 +23,49 @@ const NewArrivalCalculatedField = ({
     let total = 0;
     if (selectedRows?.length > 0) {
       selectedRows.forEach(row => {
-        if (type === 'amount' && row.price !== null) {
-          total += row.price;
+        if (type === 'amount') {
+          const variant = row.variants.find(
+            (variant: any) => variant.prices.length > 0
+          );
+          if (variant) {
+            total += variant.prices[0].amount;
+          }
         } else if (type === 'carats' && row.carats !== null) {
           total += row.carats;
+        } else if (type === 'rap_value' && row.rap_value !== null) {
+          total += row.rap_value;
         }
       });
     }
     return total.toFixed(2);
   };
 
-  let calculateAverage = (type: string) => {
-    let data = selectedRows;
-    let sum = 0;
-    let average = 0;
-    if (data?.length > 0) {
-      selectedRows.forEach(row => {
-        if (
-          type === (showMyCurrentBid ? 'my_current_bid' : 'discount') &&
-          (showMyCurrentBid ? row.my_current_bid : row.discount) !== null
-        ) {
-          sum += showMyCurrentBid ? row.my_current_bid : row.discount;
-        } else if (type === 'pr/ct' && row.price_per_carat !== null) {
-          sum += row.price_per_carat;
-        }
-      });
-      average = sum / selectedRows.length;
+  let calculateDiscountAverage = () => {
+    let sumAmount = Number(computeTotal('amount')); // Convert to number
+    let sumRapVal = Number(computeTotal('rap_value')); // Convert to number
+
+    // Check for division by zero
+    if (sumRapVal === 0) {
+      return '0.00'; // or some appropriate value or error message
     }
+
+    let average = (sumAmount / sumRapVal - 1) * 100;
 
     return average.toFixed(2);
   };
+  let calculatePRCTAverage = () => {
+    let sumAmount = Number(computeTotal('amount')); // Convert to number
+    let sumCarats = Number(computeTotal('carats')); // Convert to number
 
+    // Check for division by zero
+    if (sumCarats === 0) {
+      return '0.00'; // or some appropriate value or error message
+    }
+
+    let average = sumAmount / sumCarats;
+
+    return average.toFixed(2); // Format to two decimal places
+  };
   let computeField = () => {
     let informativeData = [
       {
@@ -70,13 +82,14 @@ const NewArrivalCalculatedField = ({
             ? 'app.calculatedField.maxDiscount'
             : 'app.calculatedField.discount'
         ),
-        value: calculateAverage(
-          showMyCurrentBid ? 'my_current_bid' : 'discount'
-        )
+        value: calculateDiscountAverage()
+        // calculateAverage(
+        //   showMyCurrentBid ? 'my_current_bid' : 'discount'
+        // )
       },
       {
         label: ManageLocales('app.calculatedField.pr/ct'),
-        value: `$${calculateAverage('pr/ct')}`
+        value: `$${calculatePRCTAverage()}`
       },
       {
         label: ManageLocales('app.calculatedField.amount'),
