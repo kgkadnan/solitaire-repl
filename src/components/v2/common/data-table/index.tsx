@@ -93,8 +93,8 @@ const theme = createTheme({
             color: 'var(--neutral-700)',
             fontWeight: 500
           },
-          '&.Mui-active': {
-            color: 'red !important' // Change this to your desired color
+          '& .Mui-active': {
+            color: 'var(--neutral-400) !important' // Change this to your desired color
           }
         }
       }
