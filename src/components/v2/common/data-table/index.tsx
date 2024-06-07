@@ -680,7 +680,7 @@ const DataTable = ({
         sx: {
           color: 'var(--neutral-900)',
           '&.MuiTableCell-root': {
-            padding: ['discount', 'price_per_carat', 'rap'].includes(
+            padding: ['discount', 'price_per_carat', 'rap', 'amount'].includes(
               cell.column.id
             )
               ? '0px 6px'
