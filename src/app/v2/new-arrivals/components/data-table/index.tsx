@@ -5,9 +5,9 @@ import {
   MaterialReactTable,
   useMaterialReactTable
 } from 'material-react-table';
-import expandIcon from '@public/v2/assets/icons/expand-icon.svg';
-import collapsIcon from '@public/v2/assets/icons/collapse-icon.svg';
-import downloadIcon from '@public/v2/assets/icons/data-table/download.svg';
+import ExpandImg from '@public/v2/assets/icons/detail-page/expand.svg?url';
+import CollapsIcon from '@public/v2/assets/icons/collapse-icon.svg?url';
+import ExportExcel from '@public/v2/assets/icons/detail-page/export-excel.svg?url';
 import Image from 'next/image';
 import DisableDecrementIcon from '@public/v2/assets/icons/new-arrivals/disable-decrement.svg?url';
 import searchIcon from '@public/v2/assets/icons/data-table/search-icon.svg';
@@ -321,12 +321,11 @@ const NewArrivalDataTable = ({
             >
               <Tooltip
                 tooltipTrigger={
-                  <Image
-                    src={downloadIcon}
-                    alt={'download'}
-                    width={38}
-                    height={38}
-                  />
+                  <button
+                    className={`rounded-[4px] hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm ${'bg-neutral0'}`}
+                  >
+                    <ExportExcel className={`${'stroke-neutral900'}`} />
+                  </button>
                 }
                 tooltipContent={'Download Excel'}
                 tooltipContentStyles={'z-[1000]'}
@@ -339,19 +338,23 @@ const NewArrivalDataTable = ({
                   <div onClick={toggleFullScreen}>
                     {/* <StyledToggleFullScreenButton table={table} title="" />{' '} */}
                     {isFullScreen ? (
-                      <Image
-                        src={collapsIcon}
-                        alt={'collapsIcon'}
-                        width={39}
-                        height={39}
-                      />
+                      <button
+                        className={`rounded-[4px] hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm bg-neutral0`}
+                      >
+                        <CollapsIcon
+                          className={`stroke-[1.5] stroke-neutral900
+                       `}
+                        />
+                      </button>
                     ) : (
-                      <Image
-                        src={expandIcon}
-                        alt={'expandIcon'}
-                        width={39}
-                        height={39}
-                      />
+                      <button
+                        className={`rounded-[4px] hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm bg-neutral0`}
+                      >
+                        <ExpandImg
+                          className={`stroke-[1.5] stroke-neutral900
+                           `}
+                        />
+                      </button>
                     )}
                   </div>
                 }
