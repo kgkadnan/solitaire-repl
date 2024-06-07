@@ -23,7 +23,6 @@ import {
 import ActionButton from '@/components/v2/common/action-button';
 import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
-import fallbackImage from '@public/v2/assets/icons/not-found.svg';
 import {
   RenderMeasurements,
   RenderTracerId
@@ -220,20 +219,23 @@ const OrderDetail: React.FC<IOrderDetail> = ({
   const images = [
     {
       name: getShapeDisplayName(detailImageData?.shape ?? ''),
-      url: `${FILE_URLS.IMG.replace('***', detailImageData?.lot_id ?? '')}`
+      url: `${FILE_URLS.IMG.replace('***', detailImageData?.lot_id ?? '')}`,
+      category: 'Image'
     },
     {
       name: 'GIA Certificate',
       url: detailImageData?.certificate_url ?? '',
-      showDivider: true
+      category: 'Certificate'
     },
+
     {
       name: 'B2B',
       url: `${FILE_URLS.B2B.replace('***', detailImageData?.lot_id ?? '')}`,
       url_check: `${FILE_URLS.B2B_CHECK.replace(
         '***',
         detailImageData?.lot_id ?? ''
-      )}`
+      )}`,
+      category: 'Video'
     },
     {
       name: 'B2B Sparkle',
@@ -245,24 +247,28 @@ const OrderDetail: React.FC<IOrderDetail> = ({
         '***',
         detailImageData?.lot_id ?? ''
       )}`,
-      showDivider: true
+      category: 'B2B Sparkle'
     },
 
     {
       name: 'Heart',
-      url: `${FILE_URLS.HEART.replace('***', detailImageData?.lot_id ?? '')}`
+      url: `${FILE_URLS.HEART.replace('***', detailImageData?.lot_id ?? '')}`,
+      category: 'Image'
     },
     {
       name: 'Arrow',
-      url: `${FILE_URLS.ARROW.replace('***', detailImageData?.lot_id ?? '')}`
+      url: `${FILE_URLS.ARROW.replace('***', detailImageData?.lot_id ?? '')}`,
+      category: 'Image'
     },
     {
       name: 'Aset',
-      url: `${FILE_URLS.ASET.replace('***', detailImageData?.lot_id ?? '')}`
+      url: `${FILE_URLS.ASET.replace('***', detailImageData?.lot_id ?? '')}`,
+      category: 'Image'
     },
     {
       name: 'Ideal',
-      url: `${FILE_URLS.IDEAL.replace('***', detailImageData?.lot_id ?? '')}`
+      url: `${FILE_URLS.IDEAL.replace('***', detailImageData?.lot_id ?? '')}`,
+      category: 'Image'
     },
     {
       name: 'Fluorescence',
@@ -270,24 +276,13 @@ const OrderDetail: React.FC<IOrderDetail> = ({
         '***',
         detailImageData?.lot_id ?? ''
       )}`,
-      showDivider: true
+      category: 'Image'
     }
   ];
   useEffect(() => {
     if (images.length > 0 && images[0].name.length)
       loadImages(images, setValidImages, checkImage);
   }, [detailImageData]);
-  useEffect(() => {
-    if (!validImages.length && images[0].name.length) {
-      setValidImages([
-        {
-          name: '',
-          url: fallbackImage,
-          showDivider: true
-        }
-      ]);
-    }
-  }, [validImages]);
 
   return (
     <>
@@ -298,10 +293,8 @@ const OrderDetail: React.FC<IOrderDetail> = ({
           setDetailImageData({});
           setIsModalOpen(!isModalOpen);
         }}
-        selectedImageIndex={0}
         images={validImages}
         setIsLoading={setIsLoading}
-        fromDetailPage={true}
       />{' '}
       {productDetailData && Object.keys(productDetailData).length > 0 && (
         <div>

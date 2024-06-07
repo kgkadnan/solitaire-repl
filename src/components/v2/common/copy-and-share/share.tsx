@@ -3,7 +3,7 @@ import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import { ShareDialog } from './share-dialog';
 import { IndividualActionButton } from '../action-button/individual-button';
 import CheckboxComponent from '../checkbox';
-import shareButtonSvg from '@public/v2/assets/icons/data-table/share-button.svg';
+import ShareButtonSvg from '@public/v2/assets/icons/data-table/share-button.svg?url';
 import Image from 'next/image';
 import crossIcon from '@public/v2/assets/icons/modal/cross.svg';
 import { SELECT_STONE_TO_PERFORM_ACTION } from '@/constants/error-messages/search';
@@ -315,13 +315,11 @@ const Share = ({
       >
         <Tooltip
           tooltipTrigger={
-            <Image
-              className="cursor-pointer"
-              src={shareButtonSvg}
-              alt={'share'}
-              height={39}
-              width={39}
-            />
+            <button
+              className={`rounded-[4px] hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm ${'bg-neutral0'}`}
+            >
+              <ShareButtonSvg className={`${'stroke-neutral900'}`} />
+            </button>
           }
           tooltipContent={'Share'}
           tooltipContentStyles={'z-[1000]'}

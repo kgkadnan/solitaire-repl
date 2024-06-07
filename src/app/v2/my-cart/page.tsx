@@ -68,7 +68,6 @@ import { kycStatus } from '@/constants/enums/kyc';
 import { formatNumber } from '@/utils/fix-two-digit-number';
 import { loadImages } from '@/components/v2/common/detail-page/helpers/load-images';
 import { checkImage } from '@/components/v2/common/detail-page/helpers/check-image';
-import fallbackImage from '@public/v2/assets/icons/not-found.svg';
 import { IAppointmentPayload } from '../my-appointments/page';
 import { NO_STONES_AVAILABLE } from '@/constants/error-messages/compare-stone';
 import { useLazyGetAvailableMyAppointmentSlotsQuery } from '@/features/api/my-appointments';
@@ -578,20 +577,23 @@ const MyCart = () => {
   const images = [
     {
       name: getShapeDisplayName(detailImageData?.shape ?? ''),
-      url: `${FILE_URLS.IMG.replace('***', detailImageData?.lot_id ?? '')}`
+      url: `${FILE_URLS.IMG.replace('***', detailImageData?.lot_id ?? '')}`,
+      category: 'Image'
     },
     {
       name: 'GIA Certificate',
       url: detailImageData?.certificate_url ?? '',
-      showDivider: true
+      category: 'Certificate'
     },
+
     {
       name: 'B2B',
       url: `${FILE_URLS.B2B.replace('***', detailImageData?.lot_id ?? '')}`,
       url_check: `${FILE_URLS.B2B_CHECK.replace(
         '***',
         detailImageData?.lot_id ?? ''
-      )}`
+      )}`,
+      category: 'Video'
     },
     {
       name: 'B2B Sparkle',
@@ -603,24 +605,28 @@ const MyCart = () => {
         '***',
         detailImageData?.lot_id ?? ''
       )}`,
-      showDivider: true
+      category: 'B2B Sparkle'
     },
 
     {
       name: 'Heart',
-      url: `${FILE_URLS.HEART.replace('***', detailImageData?.lot_id ?? '')}`
+      url: `${FILE_URLS.HEART.replace('***', detailImageData?.lot_id ?? '')}`,
+      category: 'Image'
     },
     {
       name: 'Arrow',
-      url: `${FILE_URLS.ARROW.replace('***', detailImageData?.lot_id ?? '')}`
+      url: `${FILE_URLS.ARROW.replace('***', detailImageData?.lot_id ?? '')}`,
+      category: 'Image'
     },
     {
       name: 'Aset',
-      url: `${FILE_URLS.ASET.replace('***', detailImageData?.lot_id ?? '')}`
+      url: `${FILE_URLS.ASET.replace('***', detailImageData?.lot_id ?? '')}`,
+      category: 'Image'
     },
     {
       name: 'Ideal',
-      url: `${FILE_URLS.IDEAL.replace('***', detailImageData?.lot_id ?? '')}`
+      url: `${FILE_URLS.IDEAL.replace('***', detailImageData?.lot_id ?? '')}`,
+      category: 'Image'
     },
     {
       name: 'Fluorescence',
@@ -628,7 +634,7 @@ const MyCart = () => {
         '***',
         detailImageData?.lot_id ?? ''
       )}`,
-      showDivider: true
+      category: 'Image'
     }
   ];
 
@@ -855,17 +861,6 @@ const MyCart = () => {
     if (images.length > 0 && images[0].name.length)
       loadImages(images, setValidImages, checkImage);
   }, [detailImageData]);
-  useEffect(() => {
-    if (!validImages.length && images[0].name.length) {
-      setValidImages([
-        {
-          name: '',
-          url: fallbackImage,
-          showDivider: true
-        }
-      ]);
-    }
-  }, [validImages]);
 
   return (
     <div className="relative">
@@ -880,10 +875,8 @@ const MyCart = () => {
           setDetailImageData({});
           setIsModalOpen(!isModalOpen);
         }}
-        selectedImageIndex={0}
         images={validImages}
         setIsLoading={setIsLoading}
-        fromDetailPage={true}
       />
       <DialogComponent
         dialogContent={dialogContent}
@@ -966,7 +959,6 @@ const MyCart = () => {
                   commingSoon: true
                 }
               ]}
-              isDisable={true}
             />
           </div>
         </>
