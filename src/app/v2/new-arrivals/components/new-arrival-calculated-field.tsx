@@ -23,13 +23,8 @@ const NewArrivalCalculatedField = ({
     let total = 0;
     if (selectedRows?.length > 0) {
       selectedRows.forEach(row => {
-        if (type === 'amount') {
-          const variant = row.variants.find(
-            (variant: any) => variant.prices.length > 0
-          );
-          if (variant) {
-            total += variant.prices[0].amount;
-          }
+        if (type === 'amount' && row.price !== null) {
+          total += row.price;
         } else if (type === 'carats' && row.carats !== null) {
           total += row.carats;
         } else if (type === 'rap_value' && row.rap_value !== null) {
