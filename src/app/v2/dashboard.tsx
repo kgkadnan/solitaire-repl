@@ -1410,7 +1410,6 @@ const Dashboard = () => {
                   commingSoon: true
                 }
               ]}
-              isDisable={true}
             />
           </div>
         </>
