@@ -806,7 +806,7 @@ const DataTable = ({
     renderTopToolbar: ({ table }) => (
       <div>
         {isResult && (
-          <div className=" min-h-[55px] items-start justify-between border-b-[1px] border-neutral200 flex px-[16px] py-[8px]">
+          <div className="flex min-h-[55px] items-center justify-between border-b-[1px] border-neutral200 flex px-[16px] py-[8px]">
             <div className="flex lg-w-[calc(100%-500px)] gap-[12px] flex-wrap">
               <Breadcrum
                 searchParameters={searchParameters}
@@ -884,7 +884,9 @@ const DataTable = ({
                   border: 'none'
                 },
                 '& .MuiOutlinedInput-input': {
-                  color: 'var(--neutral-900)'
+                  color: 'var(--neutral-900)',
+                  fontSize: '14px !important',
+                  paddingTop: '10px'
                 },
                 '& .MuiOutlinedInput-notchedOutline': {
                   borderColor: 'var(--neutral-200) !important'

@@ -302,7 +302,9 @@ const BidToByDataTable = ({
                 borderRadius: '4px',
 
                 '& .MuiOutlinedInput-input': {
-                  color: 'var(--neutral-900)'
+                  color: 'var(--neutral-900)',
+                  fontSize: '14px !important',
+                  paddingTop: '10px'
                 },
                 ':hover': {
                   border: 'none'
