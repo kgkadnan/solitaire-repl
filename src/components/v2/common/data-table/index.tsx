@@ -51,6 +51,8 @@ import { kycStatus } from '@/constants/enums/kyc';
 import { handleConfirmStone } from '@app/v2/search/result/helpers/handle-confirm-stone';
 import { handleCompareStone } from '@/app/v2/search/result/helpers/handle-compare-stone';
 import CommonPoppup from '@/app/v2/login/component/common-poppup';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSort, faSortDown } from '@fortawesome/free-solid-svg-icons';
 
 const theme = createTheme({
   typography: {
@@ -65,13 +67,16 @@ const theme = createTheme({
     MuiTableCell: {
       styleOverrides: {
         root: {
-          // Default state for the badge inside the cell
+          // Default state for the badge inside the cell - sorting icon not visible by default
           '& .MuiBadge-root': {
-            visibility: 'hidden'
+            width: '15px !important',
+            marginLeft: '-3px'
+            // visibility: 'hidden',
           },
           // Hover state for the cell
           '&:hover .MuiBadge-root': {
-            visibility: 'visible'
+            visibility: 'visible',
+            color: 'red !important'
           }
         }
       }
@@ -83,6 +88,9 @@ const theme = createTheme({
             whiteSpace: 'nowrap',
             color: 'var(--neutral-700)',
             fontWeight: 500
+          },
+          '& .Mui-active': {
+            color: 'var(--neutral-400) !important' // Change this to your desired color
           }
         }
       }
@@ -94,10 +102,37 @@ const theme = createTheme({
         }
       }
     },
+
     MuiButtonBase: {
       defaultProps: {
         // The props to apply
         disableRipple: true // No more ripple, on the whole application 💣!
+      }
+    },
+    MuiIconButton: {
+      styleOverrides: {
+        root: {
+          height: '30px !important',
+          '&:hover': {
+            background: 'none'
+          }
+        }
+      }
+    },
+    MuiCheckbox: {
+      styleOverrides: {
+        root: {
+          '&:hover': {
+            background: 'none'
+          }
+        }
+      }
+    },
+    MuiStack: {
+      styleOverrides: {
+        root: {
+          fontSize: '12px !important'
+        }
       }
     },
     MuiMenuItem: {
@@ -479,9 +514,24 @@ const DataTable = ({
     icons: {
       SearchIcon: () => (
         <Image src={searchIcon} alt={'searchIcon'} className="mr-[6px]" />
+      ),
+      SortIcon: (props: any) => (
+        <FontAwesomeIcon icon={faSort} width={8} height={8} {...props} />
+      ), //best practice
+      SyncAltIcon: (props: any) => (
+        <FontAwesomeIcon
+          icon={faSort}
+          {...props}
+          // width={8} height={8}
+          style={{ color: 'neutral400' }}
+          className="transform !rotate-0 !pl-1"
+        />
+      ),
+      ArrowDownwardIcon: (props: any) => (
+        <FontAwesomeIcon icon={faSortDown} {...props} width={8} height={8} />
       )
     },
-
+    // headerSortico
     muiTableBodyRowProps: ({ row }) => {
       return {
         onClick: row.id.includes('shape')
@@ -489,6 +539,7 @@ const DataTable = ({
           : row.getToggleSelectedHandler(),
 
         sx: {
+          height: '20px',
           cursor: 'pointer',
           '&.MuiTableRow-root:hover .MuiTableCell-root::after': {
             backgroundColor: 'var(--neutral-50)'
@@ -510,12 +561,13 @@ const DataTable = ({
 
     displayColumnDefOptions: {
       'mrt-row-expand': {
-        size: 110,
+        size: 100,
 
         muiTableHeadCellProps: {
           sx: {
             display: 'none',
-            whiteSpace: 'nowrap'
+            whiteSpace: 'nowrap',
+            fontSize: '12px'
           }
         },
 
@@ -565,7 +617,7 @@ const DataTable = ({
 
     muiTableContainerProps: {
       sx: {
-        height: isFullScreen ? '70vh' : 'calc(100vh - 330px)',
+        height: isFullScreen ? '70vh' : 'calc(100vh - 300px)',
         minHeight: isFullScreen
           ? myCart
             ? showCalculatedField
@@ -579,8 +631,8 @@ const DataTable = ({
             ? isNudge &&
               (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
                 isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-              ? 'calc(100vh - 440px)'
-              : 'calc(100vh - 363px)'
+              ? 'calc(100vh - 420px)'
+              : 'calc(100vh - 343px)'
             : isNudge &&
               (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
                 isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
@@ -590,7 +642,7 @@ const DataTable = ({
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
           ? 'calc(100vh - 405px)'
-          : 'calc(100vh - 330px)',
+          : 'calc(100vh - 300px)',
         maxHeight: isFullScreen
           ? myCart
             ? showCalculatedField
@@ -604,8 +656,8 @@ const DataTable = ({
             ? isNudge &&
               (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
                 isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-              ? 'calc(100vh - 440px)'
-              : 'calc(100vh - 363px)'
+              ? 'calc(100vh - 420px)'
+              : 'calc(100vh - 343px)'
             : isNudge &&
               (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
                 isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
@@ -615,7 +667,7 @@ const DataTable = ({
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
           ? 'calc(100vh - 405px)'
-          : 'calc(100vh - 330px)'
+          : 'calc(100vh - 300px)'
       }
     },
     muiTableHeadRowProps: {
@@ -624,15 +676,21 @@ const DataTable = ({
         boxShadow: 'none'
       }
     },
-    // muiTableBodyCellProps: ({ cell }) => {
-    muiTableBodyCellProps: ({ cell }) => {
+    muiTableBodyCellProps: ({ cell, row }) => {
       return {
         sx: {
           color: 'var(--neutral-900)',
           '&.MuiTableCell-root': {
-            padding: cell.row.id === 'fire_icon' ? '4px 2px' : '4px 8px',
+            padding: ['discount', 'price_per_carat', 'rap'].includes(
+              cell.column.id
+            )
+              ? '0px 6px'
+              : '0px 2px',
+            height: '20px !important',
             background: 'White',
             opacity: 1,
+            fontSize: '12px !important',
+            fontWeight: rowSelection[row.id] ? 500 : 400,
             visibility:
               (cell.id === 'shape:RAD_lot_id' ||
                 cell.id === 'shape:EM_lot_id' ||
@@ -681,10 +739,21 @@ const DataTable = ({
         sx: {
           color: 'var(--neutral-700)',
           '&.MuiTableCell-root': {
-            padding: column.id === 'fire_icon' ? '4px 2px' : '4px 8px',
+            padding: '0px 2px',
+            height: '20px',
             background: 'var(--neutral-50)',
             opacity: 1,
-            borderTop: '1px solid var(--neutral-200)'
+            borderTop: '1px solid var(--neutral-200)',
+            fontSize: '12px !important',
+            fontWeight: 500,
+            paddingRight: ['shape_full', 'location', 'details'].includes(
+              column.id
+            )
+              ? '12px'
+              : '0px',
+            '&.Mui-active': {
+              color: 'red !important' // Change this to your desired color
+            }
           }
         }
       };

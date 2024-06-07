@@ -261,7 +261,11 @@ const Result = ({
           header: short_label,
           enableGlobalFilter: accessor === 'lot_id',
           enableGrouping: accessor === 'shape',
-          enableSorting: accessor !== 'shape_full' && accessor !== 'details',
+          enableSorting:
+            accessor !== 'shape_full' &&
+            accessor !== 'details' &&
+            accessor !== 'fire_icon' &&
+            accessor !== 'location',
           minSize: 5,
           maxSize: accessor === 'details' ? 100 : 200,
           size: 5,
@@ -280,9 +284,9 @@ const Result = ({
               enableSorting: false,
               accessorKey: 'fire_icon',
               header: '',
-              minSize: 35,
-              size: 35,
-              maxSize: 35,
+              minSize: 20,
+              size: 20,
+              maxSize: 20,
               Cell: ({ row }: { row: any }) => {
                 return row.original.in_high_demand ? (
                   <Tooltip
