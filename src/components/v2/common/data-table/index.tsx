@@ -71,12 +71,11 @@ const theme = createTheme({
           '& .MuiBadge-root': {
             width: '15px !important',
             marginLeft: '-3px',
-            visibility: 'hidden',
+            visibility: 'hidden'
           },
           // Hover state for the cell
           '&:hover .MuiBadge-root': {
-            visibility: 'visible',
-            color: 'red !important'
+            visibility: 'visible'
           }
         }
       }
@@ -750,10 +749,7 @@ const DataTable = ({
               column.id
             )
               ? '12px'
-              : '0px',
-            '&.Mui-active': {
-              color: 'red !important' // Change this to your desired color
-            }
+              : '0px'
           }
         }
       };
