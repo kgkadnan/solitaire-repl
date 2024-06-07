@@ -40,6 +40,7 @@ import ActionButton from '@/components/v2/common/action-button';
 import { ManageLocales } from '@/utils/v2/translate';
 import { Dropdown } from '@/components/v2/common/dropdown-menu';
 import { statusCode } from '@/constants/enums/status-code';
+import infoSvg from '@public/v2/assets/icons/info.svg';
 
 import { useAddCartMutation } from '@/features/api/cart';
 import { DialogComponent } from '@/components/v2/common/dialog';
@@ -104,6 +105,7 @@ import CommonPoppup from './login/component/common-poppup';
 interface ITabs {
   label: string;
   link: string;
+  count: number;
   data: any;
 }
 
@@ -588,46 +590,47 @@ const Dashboard = () => {
           .slice(0, 3);
 
         // Update or add "Pending Invoice" tab
-        const pendingTab = tabsCopy.find(
-          tab => tab.label === 'Pending Invoice'
-        );
+        const pendingTab = tabsCopy.find(tab => tab.label === 'Pending');
         if (pendingInvoices.length > 0) {
           if (pendingTab) {
             pendingTab.data = pendingInvoices;
           } else {
             tabsCopy.push({
-              label: 'Pending Invoice',
+              label: 'Pending',
               link: '/v2/your-orders',
+              count: customerData.customer.orders.filter(
+                (item: any) =>
+                  item.invoice_id !== null && item.status === 'pending'
+              ).length,
               data: pendingInvoices
             });
           }
         } else {
           // Remove "Pending Invoice" tab if there are no pending invoices
-          const index = tabsCopy.findIndex(
-            tab => tab.label === 'Pending Invoice'
-          );
+          const index = tabsCopy.findIndex(tab => tab.label === 'Pending');
           if (index !== -1) {
             tabsCopy.splice(index, 1);
           }
         }
 
         // Update or add "Active Invoice" tab
-        const activeTab = tabsCopy.find(tab => tab.label === 'Active Invoice');
+        const activeTab = tabsCopy.find(tab => tab.label === 'In-transit');
         if (activeInvoices.length > 0) {
           if (activeTab) {
             activeTab.data = activeInvoices;
           } else {
             tabsCopy.push({
-              label: 'Active Invoice',
+              label: 'In-transit',
               link: '/v2/your-orders',
+              count: customerData.customer.orders.filter(
+                (item: any) => item.invoice_id === null
+              ).length,
               data: activeInvoices
             });
           }
         } else {
           // Remove "Active Invoice" tab if there are no active invoices
-          const index = tabsCopy.findIndex(
-            tab => tab.label === 'Active Invoice'
-          );
+          const index = tabsCopy.findIndex(tab => tab.label === 'In-transit');
           if (index !== -1) {
             tabsCopy.splice(index, 1);
           }
@@ -674,9 +677,9 @@ const Dashboard = () => {
 
   // Get the keys and data for the active tab
   const { keys, data } = tabsData[
-    activeTab === 'Active Invoice'
+    activeTab === 'In-transit'
       ? 'activeInvoice'
-      : activeTab === 'Pending Invoice'
+      : activeTab === 'Pending'
       ? 'pendingInvoice'
       : ''
   ] || { keys: [], data: [] };
@@ -684,9 +687,9 @@ const Dashboard = () => {
   const redirectLink = () => {
     let link = '/';
 
-    if (activeTab === 'Active Invoice') {
+    if (activeTab === 'In-transit') {
       return (link = '/v2/your-orders?path=active');
-    } else if (activeTab === 'Pending Invoice') {
+    } else if (activeTab === 'Pending') {
       return (link = '/v2/your-orders');
     }
     return link;
@@ -1723,7 +1726,7 @@ const Dashboard = () => {
                     <div className="border-b-[1px] border-neutral200 p-3">
                       <div className="flex border-b-[1px] border-neutral200 w-full ml-1 text-mMedium font-medium justify-between pr-4">
                         <div>
-                          {tabs.map(({ label }: any) => {
+                          {tabs.map(({ label, count }: any) => {
                             return (
                               <button
                                 className={`p-2 ${
@@ -1734,7 +1737,15 @@ const Dashboard = () => {
                                 key={label}
                                 onClick={() => handleTabs({ tab: label })}
                               >
-                                {label}
+                                <div className="flex gap-1">
+                                  {' '}
+                                  {label}
+                                  <p>{'(' + count + ')'}</p>{' '}
+                                  <Image
+                                    src={infoSvg}
+                                    alt="volume discount info"
+                                  />
+                                </div>
                               </button>
                             );
                           })}
@@ -1748,8 +1759,8 @@ const Dashboard = () => {
                       </div>
                     </div>
                     <div className="p-4 ">
-                      {(activeTab === 'Active Invoice' ||
-                        activeTab === 'Pending Invoice') && (
+                      {(activeTab === 'In-transit' ||
+                        activeTab === 'Pending') && (
                         <div className="max-w-full overflow-x-auto border-[1px] border-neutral200">
                           {/* header */}
                           <div className="grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] text-mMedium h-[47px] border-b border-neutral-200 bg-neutral-50 text-neutral700">
@@ -1769,7 +1780,7 @@ const Dashboard = () => {
                                 <div
                                   key={items.order_id}
                                   onClick={() => {
-                                    if (activeTab === 'Active Invoice') {
+                                    if (activeTab === 'In-transit') {
                                       router.push(
                                         `/v2/your-orders?path=active&id=${items?.id}`
                                       );
