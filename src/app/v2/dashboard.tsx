@@ -324,9 +324,9 @@ const Dashboard = () => {
               enableSorting: false,
               accessorKey: 'fire_icon',
               header: '',
-              minSize: 20,
-              size: 20,
-              maxSize: 20,
+              minSize: 26,
+              size: 26,
+              maxSize: 26,
               Cell: ({ row }: { row: any }) => {
                 return row.original.in_high_demand ? (
                   <Tooltip
@@ -1582,13 +1582,13 @@ const Dashboard = () => {
                   customerData === undefined ? '' : 'url(/gradient.png)'
               }}
             >
-              {customerData === undefined ? (
+              {/* {customerData === undefined ? (
                 ''
               ) : (
                 <p className="text-headingM medium text-neutral900">
                   Hello, {customerData?.customer.first_name}
                 </p>
-              )}
+              )} */}
 
               {customerData !== undefined ? (
                 <div className="flex items-center bg-neutral0 rounded-[4px] overflow-hidden border-[1px] border-primaryBorder w-[720px] px-4 py-2">
