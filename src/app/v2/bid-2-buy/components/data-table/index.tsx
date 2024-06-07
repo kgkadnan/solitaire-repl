@@ -55,7 +55,7 @@ const theme = createTheme({
           },
           '&.Mui-TableBodyCell-DetailPanel': {
             backgroundColor: 'var(--neutral-25) !important',
-            borderBottom: 'none' // Customize the border as needed
+            borderBottom: '1px solid var(--neutral-50)' // Customize the border as needed
           }
         }
       }
