@@ -133,7 +133,7 @@ export const RenderAttachment = ({
                       <h1 className="text-neutral900 text-mRegular py-3 capitalize ">
                         {attch.key}
                       </h1>
-                      <div className="flex flex-col gap-[20px]">
+                      <div className="flex flex-col ">
                         {attch.value.map(
                           ({
                             id,
