@@ -594,6 +594,11 @@ const BidToByDataTable = ({
             </div>
           );
         }
+      },
+      'mrt-row-select': {
+        size: 1,
+        minSize: 1,
+        maxSize: 1
       }
     },
 
