@@ -641,7 +641,7 @@ const NewArrivals = () => {
   }, [detailImageData]);
 
   return (
-    <div className="mb-[20px] relative">
+    <div className="mb-[10px] relative">
       {isLoading && <CustomKGKLoader />}
       {isError && (
         <Toast show={isError} message={errorText} isSuccess={false} />

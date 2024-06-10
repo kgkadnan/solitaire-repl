@@ -88,11 +88,11 @@ const NewArrivalCalculatedField = ({
   };
 
   return (
-    <div className="flex bg-primarySurface flex-wrap  border-neutral200 items-center h-[40px]">
+    <div className="flex bg-primarySurface flex-wrap  border-neutral200 items-center h-[24px]">
       {computeField().map(element => {
         return (
           <div
-            className="text-mMedium font-medium text-neutral900 px-[16px]"
+            className="text-sRegular text-neutral900 px-[16px]"
             key={element.label}
           >
             {element.label}: {element.value}

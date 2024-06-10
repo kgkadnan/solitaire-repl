@@ -49,7 +49,9 @@ const theme = createTheme({
         root: {
           // Default state for the badge inside the cell
           '& .MuiBadge-root': {
-            visibility: 'hidden'
+            visibility: 'hidden',
+            width: '15px !important',
+            marginLeft: '-3px'
           },
           // Hover state for the cell
           '&:hover .MuiBadge-root': {
@@ -108,6 +110,32 @@ const theme = createTheme({
           '&:focus': {
             background: 'none'
           }
+        }
+      }
+    },
+    MuiIconButton: {
+      styleOverrides: {
+        root: {
+          height: '30px !important',
+          '&:hover': {
+            background: 'none'
+          }
+        }
+      }
+    },
+    MuiCheckbox: {
+      styleOverrides: {
+        root: {
+          '&:hover': {
+            background: 'none'
+          }
+        }
+      }
+    },
+    MuiStack: {
+      styleOverrides: {
+        root: {
+          fontSize: '12px !important'
         }
       }
     }
@@ -470,7 +498,7 @@ const NewArrivalDataTable = ({
           : row.getToggleSelectedHandler(),
         sx: {
           cursor: 'pointer',
-
+          // height: '20px',
           '&.MuiTableRow-root': {
             // Define styles for the ::after pseudo-element of each cell within a hovered row
             '& .MuiTableCell-root::after': {
@@ -502,21 +530,28 @@ const NewArrivalDataTable = ({
 
     displayColumnDefOptions: {
       'mrt-row-expand': {
-        size: 110,
+        size: 100,
 
         muiTableHeadCellProps: {
           sx: {
             display: 'none',
-            whiteSpace: 'nowrap'
+            whiteSpace: 'nowrap',
+            fontSize: '12px'
           }
         },
 
-        muiTableBodyCellProps: ({ cell }) => {
+        muiTableBodyCellProps: ({ cell, row }) => {
           return {
             sx: {
               display: !cell.id.includes('shape') ? 'none' : 'flex',
               borderBottom: '1px solid var(--neutral-50)',
-              padding: '0px',
+              padding: ['discount', 'price_per_carat', 'rap'].includes(
+                cell.column.id
+              )
+                ? '0px 6px'
+                : '0px 2px',
+              // height: '20px !important',
+              fontSize: '12px !important',
               ':hover': {
                 border: 'none',
                 background: 'red'
@@ -578,7 +613,7 @@ const NewArrivalDataTable = ({
           ? 'calc(100vh - 260px)'
           : !rows.length
           ? 'calc(100vh - 260px)'
-          : 'calc(100vh - 295px)',
+          : 'calc(100vh - 265px)',
         maxHeight: isFullScreen
           ? activeTab === 2
             ? 'calc(100vh - 123px)'
@@ -611,7 +646,10 @@ const NewArrivalDataTable = ({
         sx: {
           color: 'var(--neutral-900)',
           '&.MuiTableCell-root': {
-            padding: '4px 8px',
+            padding: '0px 2px',
+            fontSize: '12px !important',
+            fontWeight: rowSelection[row.id] ? 500 : 400,
+
             background: isHighlightBackground
               ? `${isHighlightBackground.background} !important `
               : 'White',
@@ -665,15 +703,23 @@ const NewArrivalDataTable = ({
       };
     },
 
-    muiTableHeadCellProps: () => {
+    muiTableHeadCellProps: ({ column }) => {
       return {
         sx: {
           color: 'var(--neutral-700)',
           '&.MuiTableCell-root': {
-            padding: '4px 8px',
+            padding: '0px 2px',
+            height: '20px',
             background: 'var(--neutral-50)',
             opacity: 1,
-            borderTop: '1px solid var(--neutral-200)'
+            borderTop: '1px solid var(--neutral-200)',
+            fontSize: '12px !important',
+            fontWeight: 500,
+            paddingRight: ['shape_full', 'location', 'details'].includes(
+              column.id
+            )
+              ? '12px'
+              : '0px'
           }
         }
       };
@@ -683,7 +729,7 @@ const NewArrivalDataTable = ({
         color: 'var(--neutral-200)',
         '& .MuiSvgIcon-root': {
           fontWeight: 100,
-          fontSize: '26px'
+          fontSize: '26px !important'
         },
         '&.Mui-checked': {
           color: 'var(--primary-main)'
@@ -703,7 +749,7 @@ const NewArrivalDataTable = ({
         color: 'var(--neutral-200)',
 
         '& .MuiSvgIcon-root': {
-          fontSize: '26px',
+          fontSize: '26px !important',
           fontWeight: 100
         },
         '& .MuiCheckbox-indeterminate': {

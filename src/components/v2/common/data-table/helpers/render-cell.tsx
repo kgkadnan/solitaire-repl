@@ -183,8 +183,8 @@ export const DiscountWithCross = ({ renderedCellValue }: any) => {
       style={{
         position: 'relative',
         display: 'inline-block',
-        padding: '2px 8px',
-        width: '74px',
+        padding: '2px 4px',
+        width: '65px',
         textAlign: 'center',
         borderRadius: '4px',
         background: 'var(--neutral-100)',
@@ -252,7 +252,7 @@ export const RenderNewArrivalBidDiscount = ({ renderedCellValue }: any) => {
   return (
     <div className="w-full flex justify-center items-center">
       <div
-        className={`text-infoMain border-[1px] border-infoBorder bg-infoSurface px-[8px] py-[2px] w-[74px] rounded-[4px] text-center`}
+        className={`text-infoMain border-[1px] border-infoBorder bg-infoSurface px-[4px] py-[2px] w-[65px] rounded-[4px] text-center`}
       >
         {renderedCellValue !== null && renderedCellValue !== undefined
           ? renderedCellValue === 0
