@@ -644,7 +644,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     setSavedSearchData(
-      customerData.customer?.saved_searches?.slice(0, 3) ?? []
+      customerData?.customer?.saved_searches?.slice(0, 3) ?? []
     );
   }, [customerData]);
 
