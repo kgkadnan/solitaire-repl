@@ -2,6 +2,7 @@ export interface IRegister {
   firstName: string;
   lastName: string;
   email: string;
+  companyName: string;
   mobileNumber: string;
   countryCode: string;
   password: string;
@@ -13,6 +14,7 @@ export const initialFormState: IRegister = {
   firstName: '',
   lastName: '',
   email: '',
+  companyName: '',
   mobileNumber: '',
   countryCode: '',
   password: '',

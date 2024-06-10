@@ -15,6 +15,7 @@ interface IDropdownMenu {
   handler: any;
   isHidden?: any;
   commingSoon?: boolean;
+  isDisable?: boolean;
 }
 export interface IDropdownData {
   dropdownTrigger: React.ReactNode;
@@ -49,11 +50,19 @@ export const Dropdown: React.FC<IDropdownData> = ({
               <div
                 key={items.label}
                 onClick={() => {
-                  items?.commingSoon ? null : handleItemClick(items.handler);
+                  items?.commingSoon || items?.isDisable
+                    ? null
+                    : handleItemClick(items.handler);
                 }}
                 className={`cursor-pointer hover:bg-neutral-100  p-[6px] ${
-                  items?.commingSoon ? 'text-neutral400' : 'text-neutral900'
-                }  ${items?.commingSoon ? 'bg-neutral100' : 'bg-neutral0'}`}
+                  items?.commingSoon || items?.isDisable
+                    ? 'text-neutral400'
+                    : 'text-neutral900'
+                }  ${
+                  items?.commingSoon || items?.isDisable
+                    ? 'bg-neutral100'
+                    : 'bg-neutral0'
+                }`}
               >
                 <DropdownMenuLabel>
                   <div className="flex justify-between items-center">
