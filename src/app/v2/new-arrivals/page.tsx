@@ -722,9 +722,6 @@ const NewArrivals = () => {
             )}
           </div>
           <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow">
-            {/* <div className="w-[450px]">
-    
-    </div> */}
             <div className="border-b-[1px] border-neutral200">
               {
                 <NewArrivalDataTable
