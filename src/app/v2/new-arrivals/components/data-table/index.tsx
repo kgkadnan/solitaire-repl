@@ -708,18 +708,18 @@ const NewArrivalDataTable = ({
         sx: {
           color: 'var(--neutral-700)',
           '&.MuiTableCell-root': {
-            padding: '0px 2px',
+            padding: '0px 4px',
             height: '20px',
             background: 'var(--neutral-50)',
             opacity: 1,
             borderTop: '1px solid var(--neutral-200)',
             fontSize: '12px !important',
-            fontWeight: 500,
-            paddingRight: ['shape_full', 'location', 'details'].includes(
-              column.id
-            )
-              ? '12px'
-              : '0px'
+            fontWeight: 500
+            // paddingRight: ['shape_full', 'location', 'details'].includes(
+            //   column.id
+            // )
+            //   ? '12px'
+            //   : '0px'
           }
         }
       };
