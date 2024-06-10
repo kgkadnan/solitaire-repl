@@ -45,7 +45,8 @@ export const handleRegister = async ({
     email: registerFormState.email,
     password: registerFormState.password,
     country_code: registerFormState.countryCode,
-    phone: registerFormState.mobileNumber
+    phone: registerFormState.mobileNumber,
+    company_name: registerFormState.companyName
   })
     .unwrap()
     .then((res: any) => {

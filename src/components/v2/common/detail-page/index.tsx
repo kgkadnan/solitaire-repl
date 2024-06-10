@@ -453,10 +453,11 @@ export function DiamondDetailsComponent({
                   >
                     {fromBid
                       ? tableData.length > 0 &&
-                        tableData.original_discount + '%'
+                        formatNumber(tableData.original_discount) + '%'
                       : tableData?.variants?.length > 0
                       ? tableData?.variants[0]?.prices[0]?.amount
-                        ? tableData.length > 0 && tableData.discount + '%'
+                        ? tableData.length > 0 &&
+                          formatNumber(tableData.discount) + '%'
                         : ''
                       : ''}
                   </p>
