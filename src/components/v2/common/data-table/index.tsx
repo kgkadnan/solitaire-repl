@@ -1085,13 +1085,6 @@ const DataTable = ({
                   },
 
                   {
-                    label: ManageLocales(
-                      'app.search.actionButton.findMatchingPair'
-                    ),
-                    handler: () => {},
-                    commingSoon: true
-                  },
-                  {
                     label: 'Compare Stone',
                     handler: () =>
                       handleCompareStone({
@@ -1102,6 +1095,13 @@ const DataTable = ({
                         setIsCompareStone,
                         setCompareStoneData
                       })
+                  },
+                  {
+                    label: ManageLocales(
+                      'app.search.actionButton.findMatchingPair'
+                    ),
+                    handler: () => {},
+                    commingSoon: true
                   }
                 ]}
               />
