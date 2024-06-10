@@ -158,6 +158,13 @@ const Table = ({
         border: 'none'
       }
     },
+    displayColumnDefOptions: {
+      'mrt-row-select': {
+        size: 1,
+        minSize: 1,
+        maxSize: 1
+      }
+    },
     muiTableBodyRowProps: ({ row }) => ({
       onClick: row.getToggleSelectedHandler(),
       sx: {
