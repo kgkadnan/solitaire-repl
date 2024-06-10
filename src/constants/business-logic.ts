@@ -33,9 +33,9 @@ export const AVAILABLE_STATUS = 'Available';
 export const MEMO_STATUS = 'Memo';
 export const HOLD_STATUS = 'Hold';
 
-export const PENDING_INVOICE = 'pendingInvoice';
-export const ACTIVE_INVOICE = 'activeInvoice';
-export const INVOICE_HISTORY = 'invoiceHistory';
+export const PENDING = 'pending';
+export const IN_TRANSIT = 'inTransit';
+export const PAST = 'past';
 
 export const UPCOMING_APPOINTMENTS = 'upcomingAppointments';
 export const PAST_APPOINTMENTS = 'pastAppointments';
