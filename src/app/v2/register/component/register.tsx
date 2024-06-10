@@ -130,6 +130,24 @@ const RegisterComponent = ({
               styles={{ inputMain: 'h-[64px]' }}
               autoComplete="none"
             />
+
+            <InputField
+              label="Company Name*"
+              onChange={event =>
+                handleRegisterChange({
+                  event,
+                  setRegisterFormState,
+                  setRegisterFormErrors
+                })
+              }
+              type="text"
+              name="companyName"
+              value={registerFormState.companyName}
+              errorText={registerFormErrors.companyName}
+              placeholder={'Enter name'}
+              styles={{ inputMain: 'h-[64px]' }}
+              autoComplete="none"
+            />
             {/* Input field for mobile Number */}
             <MobileInput
               label={ManageLocales('app.register.mobileNumber')}
