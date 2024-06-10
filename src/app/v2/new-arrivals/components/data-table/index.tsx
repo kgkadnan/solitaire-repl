@@ -703,7 +703,7 @@ const NewArrivalDataTable = ({
       };
     },
 
-    muiTableHeadCellProps: ({ column }) => {
+    muiTableHeadCellProps: () => {
       return {
         sx: {
           color: 'var(--neutral-700)',
@@ -715,11 +715,6 @@ const NewArrivalDataTable = ({
             borderTop: '1px solid var(--neutral-200)',
             fontSize: '12px !important',
             fontWeight: 500
-            // paddingRight: ['shape_full', 'location', 'details'].includes(
-            //   column.id
-            // )
-            //   ? '12px'
-            //   : '0px'
           }
         }
       };
