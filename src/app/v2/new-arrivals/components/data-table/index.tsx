@@ -576,9 +576,9 @@ const NewArrivalDataTable = ({
         }
       },
       'mrt-row-select': {
-        size: 1,
-        minSize: 1,
-        maxSize: 1
+        size: 40,
+        minSize: 40,
+        maxSize: 40
       }
     },
 
