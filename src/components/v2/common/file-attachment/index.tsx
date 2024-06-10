@@ -170,7 +170,9 @@ const FileAttachments: React.FC<IFileAttachments> = ({
             </div>
           </div>
         </div>
-        <p className={'text-dangerMain text-sRegular font-normal'}>{error}</p>
+        <p className={'text-dangerMain h-[3vh] text-sRegular font-normal'}>
+          {error}
+        </p>
       </div>
     </>
   );
