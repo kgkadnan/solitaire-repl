@@ -1761,7 +1761,7 @@ const Dashboard = () => {
                                 </button>
                               );
                             })}
-                            {isHovered != '' && (
+                            {isHovered !== '' && (
                               <div className="absolute bg-[#ECF2FC] w-[320px] border-[1px] border-[#B6CFF3] rounded-[8px] p-4 text-[#475467] left-0  gap-2 right-[0px] ">
                                 <div className="flex flex-col gap-2">
                                   <div className="flex gap-1 items-center">
