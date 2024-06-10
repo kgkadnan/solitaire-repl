@@ -540,7 +540,7 @@ const NewArrivalDataTable = ({
           }
         },
 
-        muiTableBodyCellProps: ({ cell, row }) => {
+        muiTableBodyCellProps: ({ cell }) => {
           return {
             sx: {
               display: !cell.id.includes('shape') ? 'none' : 'flex',
