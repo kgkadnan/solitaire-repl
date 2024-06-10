@@ -1071,20 +1071,6 @@ const DataTable = ({
                 }
                 dropdownMenu={[
                   {
-                    label: ManageLocales(
-                      'app.search.actionButton.bookAppointment'
-                    ),
-                    handler: () => {
-                      handleCreateAppointment();
-                    },
-                    commingSoon:
-                      isKycVerified?.customer?.kyc?.status ===
-                        kycStatus.INPROGRESS ||
-                      isKycVerified?.customer?.kyc?.status ===
-                        kycStatus.REJECTED
-                  },
-
-                  {
                     label: 'Compare Stone',
                     handler: () =>
                       handleCompareStone({
@@ -1095,6 +1081,19 @@ const DataTable = ({
                         setIsCompareStone,
                         setCompareStoneData
                       })
+                  },
+                  {
+                    label: ManageLocales(
+                      'app.search.actionButton.bookAppointment'
+                    ),
+                    handler: () => {
+                      handleCreateAppointment();
+                    },
+                    isDisable:
+                      isKycVerified?.customer?.kyc?.status ===
+                        kycStatus.INPROGRESS ||
+                      isKycVerified?.customer?.kyc?.status ===
+                        kycStatus.REJECTED
                   },
                   {
                     label: ManageLocales(
