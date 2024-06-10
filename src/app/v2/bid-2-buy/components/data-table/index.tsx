@@ -78,6 +78,32 @@ const theme = createTheme({
         disableRipple: true // No more ripple, on the whole application 💣!
       }
     },
+    MuiIconButton: {
+      styleOverrides: {
+        root: {
+          height: '30px !important',
+          '&:hover': {
+            background: 'none'
+          }
+        }
+      }
+    },
+    MuiCheckbox: {
+      styleOverrides: {
+        root: {
+          '&:hover': {
+            background: 'none'
+          }
+        }
+      }
+    },
+    MuiStack: {
+      styleOverrides: {
+        root: {
+          fontSize: '12px !important'
+        }
+      }
+    },
     MuiTypography: {
       styleOverrides: {
         root: {
@@ -530,12 +556,13 @@ const BidToByDataTable = ({
 
     displayColumnDefOptions: {
       'mrt-row-expand': {
-        size: 110,
+        size: 100,
 
         muiTableHeadCellProps: {
           sx: {
             display: 'none',
-            whiteSpace: 'nowrap'
+            whiteSpace: 'nowrap',
+            fontSize: '12px'
           }
         },
 
@@ -605,7 +632,7 @@ const BidToByDataTable = ({
           ? 'calc(100vh - 260px)'
           : !rows.length
           ? 'calc(100vh - 260px)'
-          : 'calc(100vh - 295px)',
+          : 'calc(100vh - 265px)',
         maxHeight: isFullScreen
           ? activeTab === 2
             ? 'calc(100vh - 123px)'
@@ -639,7 +666,14 @@ const BidToByDataTable = ({
         sx: {
           color: 'var(--neutral-900)',
           '&.MuiTableCell-root': {
-            padding: '4px 8px',
+            padding: ['discount', 'price_per_carat', 'rap'].includes(
+              cell.column.id
+            )
+              ? '0px 6px'
+              : '0px 2px',
+            height: '20px !important',
+            fontSize: '12px !important',
+            fontWeight: rowSelection[row.id] ? 500 : 400,
             background: isHighlightBackground
               ? `${isHighlightBackground.background} !important `
               : 'White',
@@ -700,10 +734,12 @@ const BidToByDataTable = ({
         sx: {
           color: 'var(--neutral-700)',
           '&.MuiTableCell-root': {
-            padding: '4px 8px',
+            padding: '0px 4px',
             background: 'var(--neutral-50)',
             opacity: 1,
-            borderTop: '1px solid var(--neutral-200)'
+            borderTop: '1px solid var(--neutral-200)',
+            fontSize: '12px !important',
+            fontWeight: 500
           }
         }
       };

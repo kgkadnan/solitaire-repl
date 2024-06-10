@@ -84,6 +84,32 @@ const Table = ({
           }
         }
       },
+      MuiIconButton: {
+        styleOverrides: {
+          root: {
+            height: '30px !important',
+            '&:hover': {
+              background: 'none'
+            }
+          }
+        }
+      },
+      MuiCheckbox: {
+        styleOverrides: {
+          root: {
+            '&:hover': {
+              background: 'none'
+            }
+          }
+        }
+      },
+      MuiStack: {
+        styleOverrides: {
+          root: {
+            fontSize: '12px !important'
+          }
+        }
+      },
       MuiTypography: {
         styleOverrides: {
           root: {
@@ -201,25 +227,32 @@ const Table = ({
         boxShadow: 'none'
       }
     },
-    muiTableBodyCellProps: {
-      sx: {
-        color: 'var(--neutral-900)',
-        '&.MuiTableCell-root': {
-          padding: '4px 8px'
-        },
-        whiteSpace: 'nowrap',
-        borderBottom: '1px solid var(--neutral-50)'
-      }
+    muiTableBodyCellProps: ({ row }) => {
+      return {
+        sx: {
+          color: 'var(--neutral-900)',
+          '&.MuiTableCell-root': {
+            padding: '0px 4px'
+          },
+          whiteSpace: 'nowrap',
+          borderBottom: '1px solid var(--neutral-50)',
+          fontSize: '12px !important',
+          fontWeight: rowSelection[row.id] ? 500 : 400
+        }
+      };
     },
     muiTableHeadCellProps: () => {
       return {
         sx: {
           color: 'var(--neutral-700)',
           '&.MuiTableCell-root': {
-            padding: '4px 8px',
             background: 'var(--neutral-50)',
             opacity: 1,
-            borderTop: '1px solid var(--neutral-200)'
+            borderTop: '1px solid var(--neutral-200)',
+            padding: '0px 4px',
+            height: '20px',
+            fontSize: '12px !important',
+            fontWeight: 500
           }
         }
       };
