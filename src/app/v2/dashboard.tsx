@@ -601,8 +601,7 @@ const Dashboard = () => {
               label: 'Pending',
               link: '/v2/your-orders',
               count: customerData.customer.orders.filter(
-                (item: any) =>
-                  item.invoice_id !== null && item.status === 'pending'
+                (item: any) => item.invoice_id === null
               ).length,
               data: pendingInvoices
             });
@@ -625,7 +624,8 @@ const Dashboard = () => {
               label: 'In-transit',
               link: '/v2/your-orders',
               count: customerData.customer.orders.filter(
-                (item: any) => item.invoice_id === null
+                (item: any) =>
+                  item.invoice_id !== null && item.status === 'pending'
               ).length,
               data: activeInvoices
             });
