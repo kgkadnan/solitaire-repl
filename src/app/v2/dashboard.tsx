@@ -1267,6 +1267,17 @@ const Dashboard = () => {
       loadImages(images, setValidImages, checkImage);
   }, [detailImageData]);
 
+  useEffect(() => {
+    if (!validImages.length && images[0].name.length) {
+      setValidImages([
+        {
+          name: 'No Data Found',
+          url: ''
+        }
+      ]);
+    }
+  }, [validImages]);
+
   const getCardContent = (data: any) => {
     if (data.label === 'Bid to Buy') {
       if (data.start_at && data.count) {
