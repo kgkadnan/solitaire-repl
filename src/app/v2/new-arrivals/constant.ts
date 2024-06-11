@@ -149,7 +149,7 @@ export const columnHeaders = [
     accessor: 'current_max_bid',
     sequence: 16,
     is_fixed: false,
-    short_label: 'Current Max. Bid%',
+    short_label: 'Curr Max. Bid%',
     is_disabled: false,
     id: 'cus_ma-lis-seq_01HQSNF0TT2MZS9M0YHPDH3E8F'
   },

@@ -335,7 +335,7 @@ const Dashboard = () => {
                         id="blinking-image"
                         src={fireSvg}
                         alt="fireSvg"
-                        className={`${styles.blink} blink`}
+                        className={`${styles.blink} blink ml-[-5px]`}
                       />
                     }
                     tooltipContent={'In High Demand Now!'}
