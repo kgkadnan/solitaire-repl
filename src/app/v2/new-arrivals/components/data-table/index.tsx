@@ -546,13 +546,14 @@ const NewArrivalDataTable = ({
               display: !cell.id.includes('shape') ? 'none' : 'flex',
               // marginLeft:!cell.id.includes('shape') && '-12px',
               borderBottom: '1px solid var(--neutral-50)',
-              padding: ['discount', 'price_per_carat', 'rap'].includes(
-                cell.column.id
-              )
-                ? '0px 6px'
-                : '0px 2px',
+              padding: '0px',
+              // padding: ['discount', 'price_per_carat', 'rap'].includes(
+              //   cell.column.id
+              // )
+              //   ? '0px 6px'
+              //   : '0px 2px',
               // height: '20px !important',
-              fontSize: '12px !important',
+              // fontSize: '12px !important',
               ':hover': {
                 border: 'none',
                 background: 'red'
@@ -567,7 +568,7 @@ const NewArrivalDataTable = ({
 
         Cell: ({ row, table }) => {
           return (
-            <div className="flex items-center">
+            <div className="flex items-center ml-[-10px]">
               <MRT_ExpandButton row={row} table={table} />
               <Stack>
                 {getShapeDisplayName({ value: row.original.shape })}

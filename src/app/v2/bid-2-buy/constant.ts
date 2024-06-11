@@ -218,6 +218,15 @@ export const columnHeaders = [
     id: 'cus_ma-lis-seq_01HQSNF0TTB6GCN1MCTRYDED8J'
   },
   {
+    label: 'Certificate Number',
+    accessor: 'certificate_number',
+    sequence: 21,
+    is_fixed: false,
+    short_label: 'Cert No',
+    is_disabled: false,
+    id: 'cus_ma-lis-seq_01HS8MZ2R4C2KC09GJ2NE6FGJK'
+  },
+  {
     label: 'Ratio',
     accessor: 'ratio',
     sequence: 23,
