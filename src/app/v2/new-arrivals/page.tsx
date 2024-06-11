@@ -640,6 +640,16 @@ const NewArrivals = () => {
       loadImages(images, setValidImages, checkImage);
   }, [detailImageData]);
 
+  useEffect(() => {
+    if (!validImages.length && images[0].name.length) {
+      setValidImages([
+        {
+          name: 'No Data Found',
+          url: ''
+        }
+      ]);
+    }
+  }, [validImages]);
   return (
     <div className="mb-[10px] relative">
       {isLoading && <CustomKGKLoader />}
