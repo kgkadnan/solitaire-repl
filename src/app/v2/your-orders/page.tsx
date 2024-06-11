@@ -34,6 +34,12 @@ import { DialogComponent } from '@/components/v2/common/dialog';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import logger from 'logging/log-util';
+import { DatePickerWithRange } from '@/components/v2/common/date-picker';
+
+interface IDataItem {
+  id: number;
+  created_at: string; // Assuming created_at is a string in ISO format
+}
 
 const MyDiamonds = () => {
   const router = useRouter();
@@ -56,7 +62,6 @@ const MyDiamonds = () => {
 
   const [showDetail, setShowDetail] = useState(false);
   const [productDetailData, setProductDetailData] = useState([]);
-  const [radioState, setRadioState] = useState<string>('90days');
 
   // State to manage the search input value
   const [search, setSearch] = useState<string>('');
@@ -191,7 +196,6 @@ const MyDiamonds = () => {
     setPendingDataState(pendingInvoicesData?.orders);
     setPastDataState(invoiceHistoryData?.orders);
     setInTransitDataState(activeInvoicesData?.orders);
-    setRadioState('90days');
     setShowSuggestions(false);
   };
 
@@ -278,50 +282,36 @@ const MyDiamonds = () => {
     setInTransitDataState(activeInvoicesData?.orders);
   };
 
-  const filterByDate = (
-    data: any[],
-    filterOption: '7days' | '30days' | '90days'
-  ): any => {
-    const currentDate = new Date();
-    let startDate: Date;
-
-    switch (filterOption) {
-      case '7days':
-        startDate = new Date(currentDate.getTime() - 7 * 24 * 60 * 60 * 1000);
-        break;
-      case '30days':
-        startDate = new Date(currentDate.getTime() - 30 * 24 * 60 * 60 * 1000);
-        break;
-      case '90days':
-        startDate = new Date(currentDate.getTime() - 90 * 24 * 60 * 60 * 1000);
-        break;
-      default:
-        startDate = new Date(0); // Default to epoch date if filter option is invalid
-    }
-
-    return data.filter((item: any) => {
-      const itemDate = new Date(item.created_at);
-      return itemDate >= startDate && itemDate <= currentDate;
+  const filterDataByDate = (
+    data: IDataItem[],
+    fromDate: Date,
+    toDate: Date
+  ): IDataItem[] => {
+    return data.filter((item: IDataItem) => {
+      const itemDate: Date = new Date(item.created_at);
+      return itemDate >= fromDate && itemDate <= toDate;
     });
   };
-
-  const filterFunction = (value: '7days' | '30days' | '90days') => {
-    setRadioState(value);
+  const handleApplyFilter = (date: any) => {
+    const fromDate = new Date(date.from);
+    const toDate = new Date(date.to);
     switch (activeTab) {
       case PENDING:
         setPendingDataState(
           pendingInvoicesData &&
-            filterByDate(pendingInvoicesData?.orders, value)
+            filterDataByDate(pendingInvoicesData?.orders, fromDate, toDate)
         );
         break;
       case IN_TRANSIT:
         setInTransitDataState(
-          activeInvoicesData && filterByDate(activeInvoicesData?.orders, value)
+          activeInvoicesData &&
+            filterDataByDate(activeInvoicesData?.orders, fromDate, toDate)
         );
         break;
       case PAST:
         setPastDataState(
-          invoiceHistoryData && filterByDate(invoiceHistoryData?.orders, value)
+          invoiceHistoryData &&
+            filterDataByDate(invoiceHistoryData?.orders, fromDate, toDate)
         );
         break;
       default:
@@ -478,10 +468,11 @@ const MyDiamonds = () => {
                 setShowSuggestions={setShowSuggestions}
                 showSuggestions={showSuggestions}
               />
-              <FilterByDays
+              {/* <FilterByDays
                 filterFunction={filterFunction}
                 radioState={radioState}
-              />
+              /> */}
+              <DatePickerWithRange handleApplyFilter={handleApplyFilter} />
             </div>
           </div>
           {data?.length > 0 ? (
