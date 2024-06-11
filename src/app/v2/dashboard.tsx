@@ -340,7 +340,7 @@ const Dashboard = () => {
                         id="blinking-image"
                         src={fireSvg}
                         alt="fireSvg"
-                        className={`${styles.blink} blink`}
+                        className={`${styles.blink} blink ml-[-5px]`}
                       />
                     }
                     tooltipContent={'In High Demand Now!'}
@@ -1301,6 +1301,17 @@ const Dashboard = () => {
     if (images?.length > 0 && images[0]?.name?.length)
       loadImages(images, setValidImages, checkImage);
   }, [detailImageData]);
+
+  useEffect(() => {
+    if (!validImages.length && images[0].name.length) {
+      setValidImages([
+        {
+          name: 'No Data Found',
+          url: ''
+        }
+      ]);
+    }
+  }, [validImages]);
 
   const getCardContent = (data: any) => {
     if (data.label === 'Bid to Buy') {
