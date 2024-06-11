@@ -943,7 +943,7 @@ const Dashboard = () => {
     },
 
     {
-      name: 'B2B',
+      name: 'Video',
       url: `${FILE_URLS.B2B.replace('***', detailImageData?.lot_id ?? '')}`,
       url_check: `${FILE_URLS.B2B_CHECK.replace(
         '***',

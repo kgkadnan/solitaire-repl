@@ -121,7 +121,7 @@ export function DiamondDetailsComponent({
       category: 'Certificate'
     },
     {
-      name: 'B2B',
+      name: 'Video',
       url: `${FILE_URLS.B2B.replace('***', tableData?.lot_id ?? '')}`,
       url_check: `${FILE_URLS.B2B_CHECK.replace(
         '***',
