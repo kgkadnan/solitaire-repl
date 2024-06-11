@@ -20,7 +20,6 @@ import {
 import { ManageLocales } from '@/utils/v2/translate';
 import React, { useEffect, useState } from 'react';
 import { HeaderSearchBar } from './components/search-bar';
-import { FilterByDays } from './components/filter-by-days';
 import icon from '@public/v2/assets/icons/my-diamonds/avatar.svg';
 import Image from 'next/image';
 import { formatNumberWithLeadingZeros } from '@/utils/format-number-withLeadingZeros';
@@ -35,6 +34,7 @@ import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import logger from 'logging/log-util';
 import { DatePickerWithRange } from '@/components/v2/common/date-picker';
+import { DateRange } from 'react-day-picker';
 
 interface IDataItem {
   id: number;
@@ -59,6 +59,8 @@ const MyDiamonds = () => {
   const [pendingDataState, setPendingDataState] = useState([]);
   const [inTransitDataState, setInTransitDataState] = useState([]);
   const [pastDataState, setPastDataState] = useState([]);
+
+  const [date, setDate] = useState<DateRange | undefined>();
 
   const [showDetail, setShowDetail] = useState(false);
   const [productDetailData, setProductDetailData] = useState([]);
@@ -193,6 +195,7 @@ const MyDiamonds = () => {
   const handleTabs = ({ tab }: { tab: string }) => {
     setActiveTab(tab);
     setSearch('');
+    setDate(undefined);
     setPendingDataState(pendingInvoicesData?.orders);
     setPastDataState(invoiceHistoryData?.orders);
     setInTransitDataState(activeInvoicesData?.orders);
@@ -292,27 +295,42 @@ const MyDiamonds = () => {
       return itemDate >= fromDate && itemDate <= toDate;
     });
   };
-  const handleApplyFilter = (date: any) => {
+  const handleApplyFilter = (date: any, reset: string) => {
     const fromDate = new Date(date.from);
     const toDate = new Date(date.to);
     switch (activeTab) {
       case PENDING:
-        setPendingDataState(
-          pendingInvoicesData &&
-            filterDataByDate(pendingInvoicesData?.orders, fromDate, toDate)
-        );
+        if (reset.length > 0) {
+          setPendingDataState(pendingInvoicesData?.orders);
+        } else {
+          setPendingDataState(
+            pendingInvoicesData &&
+              filterDataByDate(pendingInvoicesData?.orders, fromDate, toDate)
+          );
+        }
+
         break;
       case IN_TRANSIT:
-        setInTransitDataState(
-          activeInvoicesData &&
-            filterDataByDate(activeInvoicesData?.orders, fromDate, toDate)
-        );
+        if (reset.length > 0) {
+          setInTransitDataState(activeInvoicesData?.orders);
+        } else {
+          setInTransitDataState(
+            activeInvoicesData &&
+              filterDataByDate(activeInvoicesData?.orders, fromDate, toDate)
+          );
+        }
+
         break;
       case PAST:
-        setPastDataState(
-          invoiceHistoryData &&
-            filterDataByDate(invoiceHistoryData?.orders, fromDate, toDate)
-        );
+        if (reset.length > 0) {
+          setPastDataState(invoiceHistoryData?.orders);
+        } else {
+          setPastDataState(
+            invoiceHistoryData &&
+              filterDataByDate(invoiceHistoryData?.orders, fromDate, toDate)
+          );
+        }
+
         break;
       default:
         break;
@@ -468,11 +486,12 @@ const MyDiamonds = () => {
                 setShowSuggestions={setShowSuggestions}
                 showSuggestions={showSuggestions}
               />
-              {/* <FilterByDays
-                filterFunction={filterFunction}
-                radioState={radioState}
-              /> */}
-              <DatePickerWithRange handleApplyFilter={handleApplyFilter} />
+
+              <DatePickerWithRange
+                handleApplyFilter={handleApplyFilter}
+                setDate={setDate}
+                date={date}
+              />
             </div>
           </div>
           {data?.length > 0 ? (
