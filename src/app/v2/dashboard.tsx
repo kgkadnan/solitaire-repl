@@ -1581,13 +1581,13 @@ const Dashboard = () => {
                   customerData === undefined ? '' : 'url(/gradient.png)'
               }}
             >
-              {/* {customerData === undefined ? (
+              {customerData === undefined ? (
                 ''
               ) : (
                 <p className="text-headingM medium text-neutral900">
                   Hello, {customerData?.customer.first_name}
                 </p>
-              )} */}
+              )}
 
               {customerData !== undefined ? (
                 <div className="flex items-center bg-neutral0 rounded-[4px] overflow-hidden border-[1px] border-primaryBorder w-[720px] px-4 py-2">
