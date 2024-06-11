@@ -585,7 +585,7 @@ const DataTable = ({
 
         Cell: ({ row, table }) => {
           return (
-            <div className="flex items-center">
+            <div className="flex items-center ml-[-10px]">
               <MRT_ExpandButton row={row} table={table} />
               <Stack>
                 {getShapeDisplayName({ value: row.original.shape })}
