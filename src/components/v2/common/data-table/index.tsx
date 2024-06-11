@@ -595,9 +595,9 @@ const DataTable = ({
         }
       },
       'mrt-row-select': {
-        size: 1,
-        minSize: 1,
-        maxSize: 1
+        size: 40,
+        minSize: 40,
+        maxSize: 40
       }
     },
 
@@ -1071,27 +1071,6 @@ const DataTable = ({
                 }
                 dropdownMenu={[
                   {
-                    label: ManageLocales(
-                      'app.search.actionButton.bookAppointment'
-                    ),
-                    handler: () => {
-                      handleCreateAppointment();
-                    },
-                    commingSoon:
-                      isKycVerified?.customer?.kyc?.status ===
-                        kycStatus.INPROGRESS ||
-                      isKycVerified?.customer?.kyc?.status ===
-                        kycStatus.REJECTED
-                  },
-
-                  {
-                    label: ManageLocales(
-                      'app.search.actionButton.findMatchingPair'
-                    ),
-                    handler: () => {},
-                    commingSoon: true
-                  },
-                  {
                     label: 'Compare Stone',
                     handler: () =>
                       handleCompareStone({
@@ -1102,6 +1081,26 @@ const DataTable = ({
                         setIsCompareStone,
                         setCompareStoneData
                       })
+                  },
+                  {
+                    label: ManageLocales(
+                      'app.search.actionButton.bookAppointment'
+                    ),
+                    handler: () => {
+                      handleCreateAppointment();
+                    },
+                    isDisable:
+                      isKycVerified?.customer?.kyc?.status ===
+                        kycStatus.INPROGRESS ||
+                      isKycVerified?.customer?.kyc?.status ===
+                        kycStatus.REJECTED
+                  },
+                  {
+                    label: ManageLocales(
+                      'app.search.actionButton.findMatchingPair'
+                    ),
+                    handler: () => {},
+                    commingSoon: true
                   }
                 ]}
               />
