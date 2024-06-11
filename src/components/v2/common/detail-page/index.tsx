@@ -171,6 +171,17 @@ export function DiamondDetailsComponent({
       loadImages(images, setValidImages, checkImage);
   }, [tableData?.lot_id, tableData?.certificate_url]);
 
+  useEffect(() => {
+    if (!validImages.length && images[0].name.length) {
+      setValidImages([
+        {
+          name: 'No Data Found',
+          url: ''
+        }
+      ]);
+    }
+  }, [validImages]);
+
   const copyLink = () => {
     const link = `${process.env.NEXT_PUBLIC_DNA_URL}${filterData?.public_url
       .split('/')
