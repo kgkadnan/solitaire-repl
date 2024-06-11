@@ -52,7 +52,7 @@ export const RenderLotId = ({
 
   return (
     <span
-      className={`rounded-[4px] ${statusClass} border-[1px] px-[8px] py-[3px] ${borderClass}`}
+      className={`rounded-[4px] ${statusClass} border-[1px] px-[8px] py-[3px] ${borderClass} flex !w-[85px]`}
       onClick={e => {
         e.stopPropagation();
         handleDetailPage({ row: row.original });
@@ -131,7 +131,15 @@ export const RednderLocation = ({ renderedCellValue }: any) => {
       return null; // or any other fallback JSX
   }
 
-  return <Image src={imageSrc} alt={renderedCellValue} />;
+  return (
+    <Image
+      src={imageSrc}
+      alt={renderedCellValue}
+      width={24}
+      height={16}
+      className="!w-[24px] !h-[16px]"
+    />
+  );
 };
 
 export const RenderLab = ({ renderedCellValue, row }: any) => {
@@ -183,8 +191,8 @@ export const DiscountWithCross = ({ renderedCellValue }: any) => {
       style={{
         position: 'relative',
         display: 'inline-block',
-        padding: '2px 8px',
-        width: '74px',
+        padding: '2px 4px',
+        width: '65px',
         textAlign: 'center',
         borderRadius: '4px',
         background: 'var(--neutral-100)',
@@ -252,7 +260,7 @@ export const RenderNewArrivalBidDiscount = ({ renderedCellValue }: any) => {
   return (
     <div className="w-full flex justify-center items-center">
       <div
-        className={`text-infoMain border-[1px] border-infoBorder bg-infoSurface px-[8px] py-[2px] w-[74px] rounded-[4px] text-center`}
+        className={`text-infoMain border-[1px] border-infoBorder bg-infoSurface px-[4px] py-[2px] w-[65px] rounded-[4px] text-center`}
       >
         {renderedCellValue !== null && renderedCellValue !== undefined
           ? renderedCellValue === 0

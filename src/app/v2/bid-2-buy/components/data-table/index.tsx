@@ -78,6 +78,32 @@ const theme = createTheme({
         disableRipple: true // No more ripple, on the whole application 💣!
       }
     },
+    MuiIconButton: {
+      styleOverrides: {
+        root: {
+          height: '30px !important',
+          '&:hover': {
+            background: 'none'
+          }
+        }
+      }
+    },
+    MuiCheckbox: {
+      styleOverrides: {
+        root: {
+          '&:hover': {
+            background: 'none'
+          }
+        }
+      }
+    },
+    MuiStack: {
+      styleOverrides: {
+        root: {
+          fontSize: '12px !important'
+        }
+      }
+    },
     MuiTypography: {
       styleOverrides: {
         root: {
@@ -530,12 +556,13 @@ const BidToByDataTable = ({
 
     displayColumnDefOptions: {
       'mrt-row-expand': {
-        size: 110,
+        size: 100,
 
         muiTableHeadCellProps: {
           sx: {
             display: 'none',
-            whiteSpace: 'nowrap'
+            whiteSpace: 'nowrap',
+            fontSize: '12px'
           }
         },
 
@@ -559,7 +586,7 @@ const BidToByDataTable = ({
 
         Cell: ({ row, table }) => {
           return (
-            <div className="flex items-center">
+            <div className="flex items-center ml-[-10px]">
               <MRT_ExpandButton row={row} table={table} />
               <Stack>
                 {getShapeDisplayName({ value: row.original.shape })}
@@ -567,6 +594,11 @@ const BidToByDataTable = ({
             </div>
           );
         }
+      },
+      'mrt-row-select': {
+        size: 40,
+        minSize: 40,
+        maxSize: 40
       }
     },
 
@@ -605,7 +637,7 @@ const BidToByDataTable = ({
           ? 'calc(100vh - 260px)'
           : !rows.length
           ? 'calc(100vh - 260px)'
-          : 'calc(100vh - 295px)',
+          : 'calc(100vh - 255px)',
         maxHeight: isFullScreen
           ? activeTab === 2
             ? 'calc(100vh - 123px)'
@@ -639,7 +671,14 @@ const BidToByDataTable = ({
         sx: {
           color: 'var(--neutral-900)',
           '&.MuiTableCell-root': {
-            padding: '4px 8px',
+            padding: ['discount', 'price_per_carat', 'rap'].includes(
+              cell.column.id
+            )
+              ? '0px 6px'
+              : '0px 4px',
+            height: '20px !important',
+            fontSize: '12px !important',
+            fontWeight: rowSelection[row.id] ? 500 : 400,
             background: isHighlightBackground
               ? `${isHighlightBackground.background} !important `
               : 'White',
@@ -695,15 +734,18 @@ const BidToByDataTable = ({
       };
     },
 
-    muiTableHeadCellProps: () => {
+    muiTableHeadCellProps: ({ column }) => {
       return {
         sx: {
           color: 'var(--neutral-700)',
           '&.MuiTableCell-root': {
-            padding: '4px 8px',
+            padding: '0px 4px',
             background: 'var(--neutral-50)',
             opacity: 1,
-            borderTop: '1px solid var(--neutral-200)'
+            borderTop: '1px solid var(--neutral-200)',
+            fontSize: '12px !important',
+            fontWeight: 500,
+            paddingRight: ['location', 'lab'].includes(column.id) && '12px'
           }
         }
       };
@@ -776,8 +818,8 @@ const BidToByDataTable = ({
               className="flex gap-6"
               onClick={event => event.stopPropagation()}
             >
-              <div className="w-[120px] ml-10">
-                <div className="!text-mRegular !text-neutral500">Bid Pr/Ct</div>
+              <div className="w-[110px] ml-7">
+                <div className="text-sRegular text-neutral700">Bid Pr/Ct</div>
 
                 <InputField
                   // label={'Bid Pr/Ct'}
@@ -790,20 +832,22 @@ const BidToByDataTable = ({
                       : formatNumber(row.original.price_per_carat)
                   }
                   styles={{
-                    inputMain: 'h-[40px]',
-                    input: '!bg-neutral100 !border-neutral200 !text-neutral700'
+                    inputMain: 'h-[30px]',
+                    input:
+                      '!bg-neutral100 !border-neutral200 !text-neutral700 !h-[30px]  text-sMedium'
                   }}
                   disabled
                 />
               </div>
-              <div className="w-[120px]">
-                <div className="!text-mRegular !text-neutral700">Bid Amt $</div>
+              <div className="w-[110px]">
+                <div className="text-sRegular text-neutral700">Bid Amt $</div>
 
                 <InputField
                   type="text"
                   styles={{
-                    inputMain: 'h-[40px]',
-                    input: '!bg-neutral100 !border-neutral200 !text-neutral700'
+                    inputMain: 'h-[30px]',
+                    input:
+                      '!bg-neutral100 !border-neutral200 !text-neutral700 !h-[30px]  text-sMedium'
                   }}
                   value={
                     bidValues[row.id] !== undefined
@@ -818,9 +862,9 @@ const BidToByDataTable = ({
                 />
               </div>
               <div className="">
-                <div className="text-mRegular text-neutral700">Bid Disc%</div>
+                <div className="text-sRegular text-neutral700">Bid Disc%</div>
                 <div className="gap-6 flex">
-                  <div className="h-[40px] flex gap-1">
+                  <div className="h-[30px] flex gap-1">
                     {bidValue <=
                     (activeTab === 1
                       ? row.original.my_current_bid
@@ -845,10 +889,13 @@ const BidToByDataTable = ({
                       </div>
                     )}
 
-                    <div className="w-[120px]">
+                    <div className="w-[110px]">
                       <InputField
                         type="number"
-                        styles={{ inputMain: 'h-[64px]' }}
+                        styles={{
+                          inputMain: 'h-[54px]',
+                          input: '!h-[30px]  text-sMedium'
+                        }}
                         value={bidValue}
                         onChange={e => {
                           const newValue = e.target.value;
@@ -923,7 +970,9 @@ const BidToByDataTable = ({
                               setBidError('');
                             }
                           },
-                          customStyle: 'flex-1 w-full h-10'
+                          customCtaStyle: '!h-[30px] !text-[12px]',
+
+                          customStyle: 'flex-1 w-full h-[30px]'
                         }
                       ]}
                     />

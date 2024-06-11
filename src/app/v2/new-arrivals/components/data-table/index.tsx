@@ -49,7 +49,9 @@ const theme = createTheme({
         root: {
           // Default state for the badge inside the cell
           '& .MuiBadge-root': {
-            visibility: 'hidden'
+            visibility: 'hidden',
+            width: '15px !important',
+            marginLeft: '-3px'
           },
           // Hover state for the cell
           '&:hover .MuiBadge-root': {
@@ -108,6 +110,32 @@ const theme = createTheme({
           '&:focus': {
             background: 'none'
           }
+        }
+      }
+    },
+    MuiIconButton: {
+      styleOverrides: {
+        root: {
+          height: '30px !important',
+          '&:hover': {
+            background: 'none'
+          }
+        }
+      }
+    },
+    MuiCheckbox: {
+      styleOverrides: {
+        root: {
+          '&:hover': {
+            background: 'none'
+          }
+        }
+      }
+    },
+    MuiStack: {
+      styleOverrides: {
+        root: {
+          fontSize: '12px !important'
         }
       }
     }
@@ -470,7 +498,7 @@ const NewArrivalDataTable = ({
           : row.getToggleSelectedHandler(),
         sx: {
           cursor: 'pointer',
-
+          // height: '20px',
           '&.MuiTableRow-root': {
             // Define styles for the ::after pseudo-element of each cell within a hovered row
             '& .MuiTableCell-root::after': {
@@ -502,21 +530,30 @@ const NewArrivalDataTable = ({
 
     displayColumnDefOptions: {
       'mrt-row-expand': {
-        size: 110,
+        size: 100,
 
         muiTableHeadCellProps: {
           sx: {
             display: 'none',
-            whiteSpace: 'nowrap'
+            whiteSpace: 'nowrap',
+            fontSize: '12px'
           }
         },
-
+        // muitablerow
         muiTableBodyCellProps: ({ cell }) => {
           return {
             sx: {
               display: !cell.id.includes('shape') ? 'none' : 'flex',
+              // marginLeft:!cell.id.includes('shape') && '-12px',
               borderBottom: '1px solid var(--neutral-50)',
               padding: '0px',
+              // padding: ['discount', 'price_per_carat', 'rap'].includes(
+              //   cell.column.id
+              // )
+              //   ? '0px 6px'
+              //   : '0px 2px',
+              // height: '20px !important',
+              // fontSize: '12px !important',
               ':hover': {
                 border: 'none',
                 background: 'red'
@@ -531,7 +568,7 @@ const NewArrivalDataTable = ({
 
         Cell: ({ row, table }) => {
           return (
-            <div className="flex items-center">
+            <div className="flex items-center ml-[-10px]">
               <MRT_ExpandButton row={row} table={table} />
               <Stack>
                 {getShapeDisplayName({ value: row.original.shape })}
@@ -539,6 +576,11 @@ const NewArrivalDataTable = ({
             </div>
           );
         }
+      },
+      'mrt-row-select': {
+        size: 40,
+        minSize: 40,
+        maxSize: 40
       }
     },
 
@@ -578,7 +620,7 @@ const NewArrivalDataTable = ({
           ? 'calc(100vh - 260px)'
           : !rows.length
           ? 'calc(100vh - 260px)'
-          : 'calc(100vh - 295px)',
+          : 'calc(100vh - 255px)',
         maxHeight: isFullScreen
           ? activeTab === 2
             ? 'calc(100vh - 123px)'
@@ -611,7 +653,10 @@ const NewArrivalDataTable = ({
         sx: {
           color: 'var(--neutral-900)',
           '&.MuiTableCell-root': {
-            padding: '4px 8px',
+            padding: '0px 4px',
+            fontSize: '12px !important',
+            fontWeight: rowSelection[row.id] ? 500 : 400,
+
             background: isHighlightBackground
               ? `${isHighlightBackground.background} !important `
               : 'White',
@@ -665,15 +710,19 @@ const NewArrivalDataTable = ({
       };
     },
 
-    muiTableHeadCellProps: () => {
+    muiTableHeadCellProps: ({ column }) => {
       return {
         sx: {
           color: 'var(--neutral-700)',
           '&.MuiTableCell-root': {
-            padding: '4px 8px',
+            padding: '0px 4px 0px 4px',
+            height: '20px',
             background: 'var(--neutral-50)',
             opacity: 1,
-            borderTop: '1px solid var(--neutral-200)'
+            borderTop: '1px solid var(--neutral-200)',
+            fontSize: '12px !important',
+            fontWeight: 500,
+            paddingRight: ['location', 'lab'].includes(column.id) && '12px'
           }
         }
       };
@@ -683,7 +732,7 @@ const NewArrivalDataTable = ({
         color: 'var(--neutral-200)',
         '& .MuiSvgIcon-root': {
           fontWeight: 100,
-          fontSize: '26px'
+          fontSize: '26px !important'
         },
         '&.Mui-checked': {
           color: 'var(--primary-main)'
@@ -703,7 +752,7 @@ const NewArrivalDataTable = ({
         color: 'var(--neutral-200)',
 
         '& .MuiSvgIcon-root': {
-          fontSize: '26px',
+          fontSize: '26px !important',
           fontWeight: 100
         },
         '& .MuiCheckbox-indeterminate': {
@@ -744,23 +793,24 @@ const NewArrivalDataTable = ({
               className="flex gap-6"
               onClick={event => event.stopPropagation()}
             >
-              <div className="w-[120px] ml-10">
-                <div className="text-mRegular text-neutral700">
+              <div className="w-[110px] ml-7">
+                <div className="text-sRegular text-neutral700">
                   Current Max Bid%
                 </div>
 
                 <InputField
                   type="text"
                   styles={{
-                    inputMain: 'h-[40px]',
-                    input: '!bg-infoSurface !border-infoBorder !text-infoMain'
+                    inputMain: 'h-[30px]',
+                    input:
+                      '!bg-infoSurface !border-infoBorder !text-infoMain !h-[30px]  text-sMedium'
                   }}
                   value={`${row.original.current_max_bid}%`}
                   disabled
                 />
               </div>
-              <div className="w-[120px]">
-                <div className="!text-mRegular !text-neutral500">Bid Pr/Ct</div>
+              <div className="w-[110px]">
+                <div className="text-sRegular text-neutral700">Bid Pr/Ct</div>
 
                 <InputField
                   type="text"
@@ -772,20 +822,22 @@ const NewArrivalDataTable = ({
                       : formatNumber(row.original.price_per_carat)
                   }
                   styles={{
-                    inputMain: 'h-[40px]',
-                    input: '!bg-neutral100 !border-neutral200 !text-neutral700'
+                    inputMain: 'h-[30px]',
+                    input:
+                      '!bg-neutral100 !border-neutral200 !text-neutral700 !h-[30px]  text-sMedium'
                   }}
                   disabled
                 />
               </div>
-              <div className="w-[120px]">
-                <div className="!text-mRegular !text-neutral700">Bid Amt $</div>
+              <div className="w-[110px]">
+                <div className="text-sRegular text-neutral700">Bid Amt $</div>
 
                 <InputField
                   type="text"
                   styles={{
-                    inputMain: 'h-[40px]',
-                    input: '!bg-neutral100 !border-neutral200 !text-neutral700'
+                    inputMain: '!h-[30px]  text-sMedium',
+                    input:
+                      '!bg-neutral100 !border-neutral200 !text-neutral700 !h-[30px]  text-sMedium'
                   }}
                   value={
                     bidValues[row.id] !== undefined
@@ -800,9 +852,9 @@ const NewArrivalDataTable = ({
                 />
               </div>
               <div className="">
-                <div className="text-mRegular text-neutral700">Bid Disc%</div>
+                <div className="text-sRegular text-neutral700">Bid Disc%</div>
                 <div className="gap-6 flex">
-                  <div className="h-[40px] flex gap-1">
+                  <div className="h-[30px] flex gap-1">
                     {bidValue <= row.original.current_max_bid ? (
                       <div className="cursor-not-allowed">
                         <DisableDecrementIcon />
@@ -821,10 +873,13 @@ const NewArrivalDataTable = ({
                         <DecrementIcon />
                       </div>
                     )}
-                    <div className="w-[120px]">
+                    <div className="w-[110px]">
                       <InputField
                         type="number"
-                        styles={{ inputMain: 'h-[64px]' }}
+                        styles={{
+                          inputMain: 'h-[54px]',
+                          input: '!h-[30px]  text-sMedium'
+                        }}
                         value={bidValue}
                         onChange={e => {
                           const newValue = e.target.value;
@@ -903,7 +958,8 @@ const NewArrivalDataTable = ({
                               setBidError('');
                             }
                           },
-                          customStyle: 'flex-1 w-full h-10'
+                          customStyle: 'flex-1 w-full h-[30px] text-sMedium',
+                          customCtaStyle: '!h-[30px] !text-[12px]'
                         }
                       ]}
                     />

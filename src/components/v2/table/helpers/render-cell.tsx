@@ -62,7 +62,15 @@ export const RednderLocation = ({ renderedCellValue }: any) => {
       return null; // or any other fallback JSX
   }
 
-  return <Image src={imageSrc} alt={renderedCellValue} />;
+  return (
+    <Image
+      src={imageSrc}
+      alt={renderedCellValue}
+      width={24}
+      height={16}
+      className="!w-[24px] !h-[16px]"
+    />
+  );
 };
 
 export const RenderLab = ({ renderedCellValue, row }: any) => {

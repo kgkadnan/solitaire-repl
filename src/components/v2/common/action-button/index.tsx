@@ -14,6 +14,7 @@ export interface IActionButtonData {
     isHidden?: boolean;
     customStyle?: string;
     tooltip?: string;
+    customCtaStyle?: string;
   }[];
   containerStyle?: string;
 }
@@ -34,7 +35,8 @@ const ActionButton = ({
             handler,
             isHidden,
             customStyle,
-            tooltip
+            tooltip,
+            customCtaStyle
           },
           index
         ) => {
@@ -55,7 +57,9 @@ const ActionButton = ({
                 ${svg ? 'p-[8px] ' : 'px-[16px] py-[8px]'}
             ${variant === 'primary' && styles.ctaPrimaryStyle} ${
               variant === 'secondary' && styles.ctaSecondaryStyle
-            } ${isDisable && 'bg-neutral100 text-neutral400'}`}
+            } ${
+              isDisable && 'bg-neutral100 text-neutral400'
+            } ${customCtaStyle}`}
                 >
                   {svg && <Image src={svg} alt={label ?? 'icon-button'} />}
                   <div className={styles.ctaLabel}>{label}</div>

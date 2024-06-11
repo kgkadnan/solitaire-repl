@@ -335,7 +335,7 @@ const Dashboard = () => {
                         id="blinking-image"
                         src={fireSvg}
                         alt="fireSvg"
-                        className={`${styles.blink} blink`}
+                        className={`${styles.blink} blink ml-[-5px]`}
                       />
                     }
                     tooltipContent={'In High Demand Now!'}
@@ -1267,6 +1267,17 @@ const Dashboard = () => {
       loadImages(images, setValidImages, checkImage);
   }, [detailImageData]);
 
+  useEffect(() => {
+    if (!validImages.length && images[0].name.length) {
+      setValidImages([
+        {
+          name: 'No Data Found',
+          url: ''
+        }
+      ]);
+    }
+  }, [validImages]);
+
   const getCardContent = (data: any) => {
     if (data.label === 'Bid to Buy') {
       if (data.start_at && data.count) {
@@ -1581,13 +1592,13 @@ const Dashboard = () => {
                   customerData === undefined ? '' : 'url(/gradient.png)'
               }}
             >
-              {/* {customerData === undefined ? (
+              {customerData === undefined ? (
                 ''
               ) : (
                 <p className="text-headingM medium text-neutral900">
                   Hello, {customerData?.customer.first_name}
                 </p>
-              )} */}
+              )}
 
               {customerData !== undefined ? (
                 <div className="flex items-center bg-neutral0 rounded-[4px] overflow-hidden border-[1px] border-primaryBorder w-[720px] px-4 py-2">

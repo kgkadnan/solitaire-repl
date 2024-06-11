@@ -531,8 +531,19 @@ const BidToBuy = () => {
       loadImages(images, setValidImages, checkImage);
   }, [detailImageData]);
 
+  useEffect(() => {
+    if (!validImages.length && images[0].name.length) {
+      setValidImages([
+        {
+          name: 'No Data Found',
+          url: ''
+        }
+      ]);
+    }
+  }, [validImages]);
+
   return (
-    <div className="mb-[20px] relative">
+    <div className="mb-[4px] relative">
       {isLoading && <CustomKGKLoader />}
       {isError && (
         <Toast show={isError} message={errorText} isSuccess={false} />

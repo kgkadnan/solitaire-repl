@@ -284,6 +284,17 @@ const OrderDetail: React.FC<IOrderDetail> = ({
       loadImages(images, setValidImages, checkImage);
   }, [detailImageData]);
 
+  useEffect(() => {
+    if (!validImages.length && images[0].name.length) {
+      setValidImages([
+        {
+          name: 'No Data Found',
+          url: ''
+        }
+      ]);
+    }
+  }, [validImages]);
+
   return (
     <>
       <ImageModal
