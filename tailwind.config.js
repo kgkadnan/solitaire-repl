@@ -12,7 +12,8 @@ module.exports = {
       center: true,
       // padding: "2rem",
       screens: {
-        // "2xl": "1400px",
+        // "2xl": "1400 px",
+        
       }
     },
     extend: {
@@ -157,6 +158,11 @@ module.exports = {
 
         gradientStart: 'hsla(198, 85%, 92%, 1)',
         gradientEnd: 'hsla(240, 100%, 95%, 1)'
+      },
+      screens: {
+        // "2xl": "1400 px",
+        xl : "1380px"
+        
       },
       borderRadius: {
         lg: 'var(--radius)',
