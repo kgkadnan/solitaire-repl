@@ -50,6 +50,10 @@ const Share = ({
     },
     { name: 'Pr/Ct', state: 'price_per_carat' },
     { name: 'Amt ($)', state: 'amount' },
+    {
+      name: 'Certificate Number',
+      state: 'certificate_number'
+    },
     { name: 'Public URL', state: 'public_url' }
   ]);
 
