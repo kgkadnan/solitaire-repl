@@ -42,6 +42,10 @@ const Share = ({
     { name: 'Measurements', state: 'measurements' },
     { name: 'Table %', state: 'table_percentage' },
     { name: 'Depth %', state: 'depth_percentage' },
+    {
+      name: 'Certificate Number',
+      state: 'certificate_number'
+    },
     { name: 'Rap Val ($)', state: 'rap_value' },
     { name: 'Rap ($)', state: 'rap' },
     {
@@ -50,10 +54,7 @@ const Share = ({
     },
     { name: 'Pr/Ct', state: 'price_per_carat' },
     { name: 'Amt ($)', state: 'amount' },
-    {
-      name: 'Certificate Number',
-      state: 'certificate_number'
-    },
+
     { name: 'Public URL', state: 'public_url' }
   ]);
 
