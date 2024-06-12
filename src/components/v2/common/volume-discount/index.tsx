@@ -106,7 +106,7 @@ const VolumeDiscount: React.FC<any> = ({
                 <span className="font-semiBold">
                   ${((VOLUME_DISCOUNT_LIMIT - totalSpent) / 1000).toFixed(2)}K
                 </span>{' '}
-                more within{' '}
+                {eligibleForDiscount && 'more'} within{' '}
                 <span className="font-semiBold">
                   {Math.floor(timeDifference! / (1000 * 60 * 60))}
                 </span>{' '}
@@ -145,8 +145,8 @@ const VolumeDiscount: React.FC<any> = ({
                   </p>
                 </div>
                 <p>
-                  Timer indicates the time remained to utilize their current
-                  volume discount.
+                  Timer indicates the time remaining to make additional
+                  purchases to reach the volume discount threshold
                 </p>
               </div>
             </div>
