@@ -12,6 +12,7 @@ import {
   LISTING_PAGE_DATA_LIMIT,
   MEMO_STATUS
 } from '@/constants/business-logic';
+import unAuthorizedSvg from '@public/v2/assets/icons/data-table/unauthorized.svg';
 import { constructUrlParams } from '@/utils/v2/construct-url-params';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ManageLocales } from '@/utils/v2/translate';
@@ -87,6 +88,7 @@ import styles from './style.module.scss';
 import DataTableSkeleton from '@/components/v2/skeleton/data-table';
 import { Skeleton } from '@mui/material';
 import CommonPoppup from '../../login/component/common-poppup';
+import EmptyScreen from '@/components/v2/common/empty-screen';
 
 // Column mapper outside the component to avoid re-creation on each render
 
@@ -185,25 +187,6 @@ const Result = ({
       (res: any) => {
         if (columnData?.length > 0) {
           if (res?.error?.status === statusCode.UNAUTHORIZED) {
-            setIsDialogOpen(true);
-            setDialogContent(
-              <CommonPoppup
-                content={''}
-                customPoppupBodyStyle="!mt-[70px]"
-                header={res?.error?.data?.message}
-                actionButtonData={[
-                  {
-                    variant: 'primary',
-                    label: ManageLocales('app.modal.okay'),
-                    handler: () => {
-                      setIsDialogOpen(false);
-                    },
-                    customStyle: 'flex-1 w-full h-10'
-                  }
-                ]}
-              />
-            );
-
             setHasLimitExceeded(true);
             dataTableSetState.setRows([]);
           } else {
@@ -1105,11 +1088,7 @@ const Result = ({
         dialogContent={dialogContent}
         isOpens={isDialogOpen}
         dialogStyle={{
-          dialogContent: isConfirmStone
-            ? 'h-[240px]'
-            : hasLimitExceeded
-            ? 'h-[250px]'
-            : ''
+          dialogContent: isConfirmStone ? 'h-[240px]' : ''
         }}
       />
 
@@ -1128,6 +1107,8 @@ const Result = ({
           ) : showAppointmentForm ? (
             ManageLocales('app.myAppointment.header')
           ) : isDetailPage ? (
+            ''
+          ) : hasLimitExceeded ? (
             ''
           ) : productData === undefined ? (
             <Skeleton
@@ -1251,11 +1232,32 @@ const Result = ({
               setRowSelection={setRowSelection}
               errorSetState={errorSetState}
             />
+          ) : hasLimitExceeded ? (
+            <div className="h-[78vh]">
+              <EmptyScreen
+                label={'Complete KYC Now'}
+                onClickHandler={() => {
+                  router.push('/v2/kyc');
+                }}
+                isPrimary={true}
+                imageSrc={unAuthorizedSvg}
+                contentReactNode={
+                  <div className="flex flex-col justify-center items-center">
+                    <h1 className="text-neutral600 font-medium text-headingM">
+                      Your daily limit has been exceeded.
+                    </h1>
+                    <p className="text-lMedium font-medium text-neutral600">
+                      Please complete your KYC for unlimited searches.
+                    </p>
+                  </div>
+                }
+              />
+            </div>
           ) : (
             <div className="">
               {productData === undefined &&
               !memoizedRows.length &&
-              !data.length ? (
+              !data?.length ? (
                 <DataTableSkeleton />
               ) : (
                 <DataTable
