@@ -472,9 +472,14 @@ const MyDiamonds = () => {
               <div className="min-h-[73vh] h-[65vh]">
                 <EmptyScreen
                   label="Search Diamonds"
-                  message="Looks like you haven't placed any orders yet. Let’s place some orders!"
                   onClickHandler={() =>
                     router.push(`/v2/search?active-tab=${SubRoutes.NEW_SEARCH}`)
+                  }
+                  contentReactNode={
+                    <p className="text-neutral900  w-[17%] text-center">
+                      Looks like you haven't placed any orders yet. Let’s place
+                      some orders!
+                    </p>
                   }
                   imageSrc={emptyOrderSvg}
                 />
