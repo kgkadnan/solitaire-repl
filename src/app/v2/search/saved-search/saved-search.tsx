@@ -277,11 +277,15 @@ const SavedSearch = ({ setIsLoading }: any) => {
                 <>
                   <EmptyScreen
                     label="Search Diamonds"
-                    message="No saved searches so far. Let’s save some searches!"
                     onClickHandler={() =>
                       router.push(
                         `/v2/search?active-tab=${SubRoutes.NEW_SEARCH}`
                       )
+                    }
+                    contentReactNode={
+                      <p className="text-neutral900  w-[17%] text-center">
+                        No saved searches so far. Let’s save some searches!
+                      </p>
                     }
                     imageSrc={empty}
                   />
