@@ -543,7 +543,7 @@ const BidToBuy = () => {
   }, [validImages]);
 
   return (
-    <div className="mb-[20px] relative">
+    <div className="mb-[4px] relative">
       {isLoading && <CustomKGKLoader />}
       {isError && (
         <Toast show={isError} message={errorText} isSuccess={false} />

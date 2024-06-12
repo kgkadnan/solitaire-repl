@@ -651,7 +651,7 @@ const NewArrivals = () => {
     }
   }, [validImages]);
   return (
-    <div className="mb-[10px] relative">
+    <div className="mb-[4px] relative">
       {isLoading && <CustomKGKLoader />}
       {isError && (
         <Toast show={isError} message={errorText} isSuccess={false} />
@@ -715,7 +715,7 @@ const NewArrivals = () => {
       ) : (
         <>
           {' '}
-          <div className="flex  py-[4px] items-center justify-between">
+          <div className="flex py-[4px] items-center justify-between">
             <p className="text-lMedium font-medium text-neutral900">
               New Arrivals
             </p>
