@@ -374,7 +374,11 @@ const Search = () => {
           {' '}
           <EmptyScreen
             label="Page not found"
-            message="Page you are looking for doesnot exists"
+            contentReactNode={
+              <p className="text-neutral900  w-[17%] text-center">
+                Page you are looking for doesnot exists
+              </p>
+            }
             onClickHandler={() => {}}
             imageSrc={empty}
           />
