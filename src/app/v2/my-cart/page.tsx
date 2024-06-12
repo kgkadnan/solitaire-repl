@@ -1083,7 +1083,11 @@ const MyCart = () => {
                   label={ManageLocales(
                     'app.emptyCart.actionButton.searchDiamonds'
                   )}
-                  message="No diamonds in your cart yet. Let’s change that!"
+                  contentReactNode={
+                    <p className="text-neutral900  w-[17%] text-center">
+                      No diamonds in your cart yet. Let’s change that!
+                    </p>
+                  }
                   onClickHandler={() =>
                     router.push(`/v2/search?active-tab=${SubRoutes.NEW_SEARCH}`)
                   }
