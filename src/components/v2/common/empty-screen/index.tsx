@@ -2,7 +2,6 @@ import React from 'react';
 import ActionButton from '../action-button';
 import Image, { StaticImageData } from 'next/image';
 export interface IEmptyScreenProps {
-  message?: string;
   label: string;
   imageSrc: string | StaticImageData;
   onClickHandler: () => void;
@@ -10,7 +9,6 @@ export interface IEmptyScreenProps {
   isPrimary?: boolean;
 }
 const EmptyScreen: React.FC<IEmptyScreenProps> = ({
-  message,
   label,
   onClickHandler,
   isPrimary,
@@ -20,11 +18,8 @@ const EmptyScreen: React.FC<IEmptyScreenProps> = ({
   return (
     <div className="flex flex-col items-center justify-center gap-5 h-[90%]">
       <Image src={imageSrc} alt={'empty'} />
-      {contentReactNode ? (
-        contentReactNode
-      ) : (
-        <p className="text-neutral900  w-[17%] text-center">{message}</p>
-      )}
+
+      {contentReactNode}
 
       <ActionButton
         actionButtonData={[

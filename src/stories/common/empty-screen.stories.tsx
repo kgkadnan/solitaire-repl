@@ -17,7 +17,9 @@ const Template: Story<IEmptyScreenProps> = args => <EmptyScreen {...args} />;
 // This is the default story
 export const Default = Template.bind({});
 Default.args = {
-  message: 'No items found.',
+  contentReactNode: (
+    <p className="text-neutral900  w-[17%] text-center">No items found.</p>
+  ),
   label: 'Retry',
   imageSrc: empty,
   onClickHandler: () => {
