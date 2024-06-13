@@ -36,9 +36,10 @@ export function DatePickerWithRange({
           <Button
             id="date"
             className={
-              'w-[220px] rounded-[4px] gap-2 shadow-inner bg-neutral0 border-[1px] border-solid border-neutral200 items-center !text-neutral400 text-mRegular justify-center text-left font-normal'
+              'w-[185px] px-[4px] rounded-[4px] gap-2 shadow-inner bg-neutral0 border-[1px] border-solid border-neutral200  !text-neutral400 text-mRegular justify-start text-left font-normal'
             }
           >
+            <CalendarIcon />
             {date?.from ? (
               date.to ? (
                 <>
@@ -50,11 +51,10 @@ export function DatePickerWithRange({
             ) : (
               <span className="text-neutral400">Pick a date</span>
             )}
-            <CalendarIcon />
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="start">
-          <div className="bg-neutral0 border-[1px] border-solid border-neutral200 rounded-[8px]">
+          <div className="bg-neutral0 border-[1px] border-solid border-neutral200 rounded-[8px] absolute top-[4px] right-[-186px]">
             <Calendar
               initialFocus
               mode="range"
@@ -62,7 +62,7 @@ export function DatePickerWithRange({
               selected={date}
               onSelect={setDate}
               numberOfMonths={2}
-              className="bg-neutral0 rounded-t-[8px] border-b-[1px] border-solid border-neutral200"
+              className="bg-neutral0 rounded-t-[8px] border-b-[1px] border-solid border-neutral200 "
             />
             <div className="p-[16px]">
               <ActionButton

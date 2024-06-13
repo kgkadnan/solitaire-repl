@@ -31,10 +31,12 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { SubRoutes } from '@/constants/v2/enums/routes';
 import { DialogComponent } from '@/components/v2/common/dialog';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
-import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import logger from 'logging/log-util';
 import { DatePickerWithRange } from '@/components/v2/common/date-picker';
 import { DateRange } from 'react-day-picker';
+import YourOrderSkeleton from '@/components/v2/skeleton/your-order';
+import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
+import { Skeleton } from '@mui/material';
 
 interface IDataItem {
   id: number;
@@ -85,7 +87,6 @@ const MyDiamonds = () => {
   const { modalState, modalSetState } = useModalStateManagement();
   const { isDialogOpen, dialogContent } = modalState;
   useEffect(() => {
-    setIsLoading(true);
     triggerPendingInvoiceData({
       resentConfiramtionStatus,
       resentConfiramtionInvoiceStatus,
@@ -139,19 +140,13 @@ const MyDiamonds = () => {
         setIsLoading(false);
       });
   }, [previousConfirmStatus]);
-  const [
-    triggerPendingInvoiceData,
-    { data: pendingInvoicesData, isSuccess: isLoadingPendingInvoice }
-  ] = useLazyCardRecentConfirmationQuery({});
-  const [
-    triggerActiveInvoice,
-    { data: activeInvoicesData, isSuccess: isLoadngActiveInvoice }
-  ] = useLazyCardMyInvoiceQuery({});
+  const [triggerPendingInvoiceData, { data: pendingInvoicesData }] =
+    useLazyCardRecentConfirmationQuery({});
+  const [triggerActiveInvoice, { data: activeInvoicesData }] =
+    useLazyCardMyInvoiceQuery({});
 
-  const [
-    triggerInvoiceHistory,
-    { data: invoiceHistoryData, isSuccess: isLoadingInvoiceHistory }
-  ] = useLazyCardPreviousConfirmationQuery({});
+  const [triggerInvoiceHistory, { data: invoiceHistoryData }] =
+    useLazyCardPreviousConfirmationQuery({});
 
   useEffect(() => {
     if (detailId) {
@@ -413,7 +408,7 @@ const MyDiamonds = () => {
         <>
           {' '}
           <div className="flex pr-[16px] py-[16px] justify-between items-center border-b-[1px] border-neutral200">
-            <div className="flex relative w-[50%]  text-mMedium font-medium h-[40px]">
+            <div className="flex relative w-[50%]   text-mMedium font-medium h-[40px]">
               {myDiamondsTabs.map(({ label, count, status, info }) => {
                 return (
                   <div
@@ -421,7 +416,7 @@ const MyDiamonds = () => {
                     className={`flex gap-1 items-center px-[12px] py-[8px] relative  ${
                       activeTab === status
                         ? 'text-neutral900 border-b-[2px] border-primaryMain'
-                        : 'text-neutral600 border-b-[1px] border-neutral200'
+                        : 'text-neutral600 border-b-[2px] border-neutral200'
                     }`}
                   >
                     <button
@@ -528,26 +523,21 @@ const MyDiamonds = () => {
               ))}
             </div>
           ) : (
-            (!isLoading ||
-              isLoadingInvoiceHistory ||
-              isLoadingPendingInvoice ||
-              isLoadngActiveInvoice) && (
-              <div className="min-h-[73vh] h-[65vh]">
-                <EmptyScreen
-                  label="Search Diamonds"
-                  onClickHandler={() =>
-                    router.push(`/v2/search?active-tab=${SubRoutes.NEW_SEARCH}`)
-                  }
-                  contentReactNode={
-                    <p className="text-neutral900  w-[17%] text-center">
-                      Looks like you haven't placed any orders yet. Let’s place
-                      some orders!
-                    </p>
-                  }
-                  imageSrc={emptyOrderSvg}
-                />
-              </div>
-            )
+            <div className="min-h-[73vh] h-[65vh]">
+              <EmptyScreen
+                label="Search Diamonds"
+                onClickHandler={() =>
+                  router.push(`/v2/search?active-tab=${SubRoutes.NEW_SEARCH}`)
+                }
+                contentReactNode={
+                  <p className="text-neutral900  w-[17%] text-center">
+                    Looks like you haven't placed any orders yet. Let’s place
+                    some orders!
+                  </p>
+                }
+                imageSrc={emptyOrderSvg}
+              />
+            </div>
           )}
         </>
       );
@@ -557,24 +547,37 @@ const MyDiamonds = () => {
   return (
     <div className="relative mb-[20px]">
       <DialogComponent dialogContent={dialogContent} isOpens={isDialogOpen} />
+      {isLoading && <CustomKGKLoader />}
       <div className="flex  py-[8px] items-center">
         <p className="text-lMedium font-medium text-neutral900">
-          {showDetail
-            ? activeTab === PENDING
-              ? ManageLocales('app.yourOrder.header.pendingInvoiceDetails')
-              : activeTab === IN_TRANSIT
-              ? ManageLocales('app.yourOrder.header.activeInvoiceDetails')
-              : activeTab === PAST &&
-                ManageLocales('app.yourOrder.header.invoicesHistoryDetails')
-            : ManageLocales('app.myDiamonds.yourOrders')}
+          {showDetail ? (
+            activeTab === PENDING ? (
+              ManageLocales('app.yourOrder.header.pendingInvoiceDetails')
+            ) : activeTab === IN_TRANSIT ? (
+              ManageLocales('app.yourOrder.header.activeInvoiceDetails')
+            ) : (
+              activeTab === PAST &&
+              ManageLocales('app.yourOrder.header.invoicesHistoryDetails')
+            )
+          ) : pendingInvoicesData === undefined &&
+            activeInvoicesData === undefined &&
+            invoiceHistoryData === undefined ? (
+            <Skeleton
+              variant="rectangular"
+              height={'24px'}
+              width={'92px'}
+              animation="wave"
+            />
+          ) : (
+            ManageLocales('app.myDiamonds.yourOrders')
+          )}
         </p>
       </div>
       <div className="border-[1px] border-neutral200 rounded-[8px]">
-        {isLoading ||
-        (isLoadingInvoiceHistory && !isLoadingInvoiceHistory) ||
-        (isLoadingPendingInvoice && !isLoadingPendingInvoice) ||
-        (isLoadngActiveInvoice && !isLoadngActiveInvoice) ? (
-          <CustomKGKLoader />
+        {pendingInvoicesData === undefined &&
+        activeInvoicesData === undefined &&
+        invoiceHistoryData === undefined ? (
+          <YourOrderSkeleton />
         ) : (
           renderContent()
         )}
