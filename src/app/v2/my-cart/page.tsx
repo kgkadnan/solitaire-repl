@@ -529,20 +529,21 @@ const MyCart = () => {
           setCommentValue('');
 
           if (e.data.type === 'unauthorized') {
+            console.log('sdsdsdsdsdssss');
             setIsDialogOpen(true);
             setDialogContent(
               <CommonPoppup
                 content={
                   'To confirm a stone or make a purchase, KYC verification is mandatory. Without verification, access to certain features is restricted.'
                 }
-                customPoppupStyle="h-[260px]"
-                customPoppupBodyStyle="!mt-[55px]"
+                customPoppupStyle="!h-[220px]"
+                customPoppupBodyStyle="!mt-[62px]"
                 header={`Important KYC Verification Required!`}
                 actionButtonData={[
                   {
                     variant: 'secondary',
                     label: ManageLocales('app.modal.cancel'),
-                    handler: () => setIsDialogOpen(false),
+                    handler: () => modalSetState.setIsDialogOpen(false),
                     customStyle: 'w-full flex-1'
                   },
                   {
@@ -899,11 +900,7 @@ const MyCart = () => {
         images={validImages}
         setIsLoading={setIsLoading}
       />
-      <DialogComponent
-        dialogContent={dialogContent}
-        isOpens={isDialogOpen}
-        dialogStyle={{ dialogContent: isConfirmStone ? 'h-[240px]' : '' }}
-      />
+      <DialogComponent dialogContent={dialogContent} isOpens={isDialogOpen} />
       <AddCommentDialog
         isOpen={isAddCommentDialogOpen}
         onClose={() => setIsAddCommentDialogOpen(false)}

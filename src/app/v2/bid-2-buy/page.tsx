@@ -36,7 +36,7 @@ import { DiamondDetailsComponent } from '@/components/v2/common/detail-page';
 import { getShapeDisplayName } from '@/utils/v2/detail-page';
 import ImageModal from '@/components/v2/common/detail-page/components/image-modal';
 import { FILE_URLS } from '@/constants/v2/detail-page';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import { Toast } from '@/components/v2/common/copy-and-share/toast';
 import { loadImages } from '@/components/v2/common/detail-page/helpers/load-images';
@@ -44,6 +44,8 @@ import { checkImage } from '@/components/v2/common/detail-page/helpers/check-ima
 import CommonPoppup from '../login/component/common-poppup';
 
 const BidToBuy = () => {
+  const router = useRouter();
+
   const [isDetailPage, setIsDetailPage] = useState(false);
   const [detailPageData, setDetailPageData] = useState<any>({});
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -667,6 +669,7 @@ const BidToBuy = () => {
                   setRowSelection={setRowSelection}
                   setIsLoading={setIsLoading}
                   renderFooter={renderFooter}
+                  router={router}
                 />
               }
             </div>
