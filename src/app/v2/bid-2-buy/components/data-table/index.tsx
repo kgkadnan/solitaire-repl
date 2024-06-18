@@ -805,7 +805,14 @@ const BidToByDataTable = ({
 
     renderDetailPanel: ({ row }) => {
       // Check if the current row's ID is in the rowSelection state
-      if (activeTab !== 2 && rowSelection[row.id]) {
+      if (
+        activeTab !== 2 &&
+        rowSelection[row.id] &&
+        !(
+          isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+          isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED
+        )
+      ) {
         const bidValue =
           bidValues[row.id] !== undefined
             ? bidValues[row.id]
