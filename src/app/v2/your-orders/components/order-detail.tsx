@@ -35,12 +35,14 @@ import { getShapeDisplayName } from '@/utils/v2/detail-page';
 import { formatNumber } from '@/utils/fix-two-digit-number';
 import { loadImages } from '@/components/v2/common/detail-page/helpers/load-images';
 import { checkImage } from '@/components/v2/common/detail-page/helpers/check-image';
+
 interface IOrderDetail {
   productDetailData: any;
   goBackToListView: () => void;
   breadCrumLabel: string;
   modalSetState: any;
   setIsLoading: any;
+  router: any;
 }
 
 const OrderDetail: React.FC<IOrderDetail> = ({
@@ -48,7 +50,8 @@ const OrderDetail: React.FC<IOrderDetail> = ({
   productDetailData,
   breadCrumLabel,
   modalSetState,
-  setIsLoading
+  setIsLoading,
+  router
 }) => {
   const [triggerColumn] =
     useLazyGetManageListingSequenceQuery<IManageListingSequenceResponse>();
@@ -207,6 +210,7 @@ const OrderDetail: React.FC<IOrderDetail> = ({
       downloadExcelApi: downloadExcel,
       modalSetState,
       setRowSelection,
+      router,
       setIsLoading: setIsLoading
     });
   };

@@ -37,7 +37,7 @@ import { DiamondDetailsComponent } from '@/components/v2/common/detail-page';
 import { getShapeDisplayName } from '@/utils/v2/detail-page';
 import ImageModal from '@/components/v2/common/detail-page/components/image-modal';
 import { FILE_URLS } from '@/constants/v2/detail-page';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import { Toast } from '@/components/v2/common/copy-and-share/toast';
 import { loadImages } from '@/components/v2/common/detail-page/helpers/load-images';
@@ -57,6 +57,7 @@ import { NO_STONES_AVAILABLE } from '@/constants/error-messages/compare-stone';
 import { kycStatus } from '@/constants/enums/kyc';
 
 const NewArrivals = () => {
+  const router = useRouter();
   const [isDetailPage, setIsDetailPage] = useState(false);
   const [detailPageData, setDetailPageData] = useState<any>({});
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -774,6 +775,7 @@ const NewArrivals = () => {
                   setRowSelection={setRowSelection}
                   setIsLoading={setIsLoading}
                   renderFooter={renderFooter}
+                  router={router}
                 />
               }
             </div>

@@ -1,15 +1,15 @@
 'use client';
 import {
-  ACTIVE_INVOICE,
+  IN_TRANSIT,
   ACTIVE_INVOICE_BREADCRUMB_LABEL,
-  INVOICE_HISTORY,
+  PAST,
   INVOICE_HISTORY_BREADCRUMB_LABEL,
   MAX_MY_INVOICE_LIMIT_COUNT,
   MAX_RECENT_CONFIRMATION_COUNT,
-  PENDING_INVOICE,
+  PENDING,
   PENING_INVOICE_BREADCRUMB_LABEL
 } from '@/constants/business-logic';
-
+import infoIcon from '@public/v2/assets/icons/info-icon.svg';
 import emptyOrderSvg from '@public/v2/assets/icons/empty-order.svg';
 import {
   useLazyCardMyInvoiceQuery,
@@ -20,7 +20,6 @@ import {
 import { ManageLocales } from '@/utils/v2/translate';
 import React, { useEffect, useState } from 'react';
 import { HeaderSearchBar } from './components/search-bar';
-import { FilterByDays } from './components/filter-by-days';
 import icon from '@public/v2/assets/icons/my-diamonds/avatar.svg';
 import Image from 'next/image';
 import { formatNumberWithLeadingZeros } from '@/utils/format-number-withLeadingZeros';
@@ -32,26 +31,41 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { SubRoutes } from '@/constants/v2/enums/routes';
 import { DialogComponent } from '@/components/v2/common/dialog';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
-import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import logger from 'logging/log-util';
+import { DatePickerWithRange } from '@/components/v2/common/date-picker';
+import { DateRange } from 'react-day-picker';
+import YourOrderSkeleton from '@/components/v2/skeleton/your-order';
+import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
+import { Skeleton } from '@mui/material';
+
+interface IDataItem {
+  id: number;
+  created_at: string; // Assuming created_at is a string in ISO format
+}
 
 const MyDiamonds = () => {
   const router = useRouter();
   const pathName = useSearchParams().get('path');
   const detailId = useSearchParams().get('id');
+  const [tooltip, setTooltip] = useState({
+    show: false,
+    content: '',
+    position: { left: 0 }
+  });
 
   const [activeTab, setActiveTab] = useState(
-    pathName === 'active' ? ACTIVE_INVOICE : PENDING_INVOICE
+    pathName === 'inTransit' ? IN_TRANSIT : PENDING
   );
   const [isLoading, setIsLoading] = useState(false); // State to track loading
 
-  const [pendingInvoiceDataState, setPendingInvoiceDataState] = useState([]);
-  const [activeInvoiceDataState, setActiveInvoiceDataState] = useState([]);
-  const [invoiceHistoryDataState, setInvoiceHistoryDataState] = useState([]);
+  const [pendingDataState, setPendingDataState] = useState([]);
+  const [inTransitDataState, setInTransitDataState] = useState([]);
+  const [pastDataState, setPastDataState] = useState([]);
+
+  const [date, setDate] = useState<DateRange | undefined>();
 
   const [showDetail, setShowDetail] = useState(false);
   const [productDetailData, setProductDetailData] = useState([]);
-  const [radioState, setRadioState] = useState<string>('90days');
 
   // State to manage the search input value
   const [search, setSearch] = useState<string>('');
@@ -73,7 +87,6 @@ const MyDiamonds = () => {
   const { modalState, modalSetState } = useModalStateManagement();
   const { isDialogOpen, dialogContent } = modalState;
   useEffect(() => {
-    setIsLoading(true);
     triggerPendingInvoiceData({
       resentConfiramtionStatus,
       resentConfiramtionInvoiceStatus,
@@ -82,7 +95,7 @@ const MyDiamonds = () => {
     })
       .unwrap()
       .then(res => {
-        setPendingInvoiceDataState(res?.orders);
+        setPendingDataState(res?.orders);
         setIsLoading(false);
       })
       .catch((e: any) => {
@@ -105,7 +118,7 @@ const MyDiamonds = () => {
     })
       .unwrap()
       .then(res => {
-        setActiveInvoiceDataState(res?.orders);
+        setInTransitDataState(res?.orders);
         setIsLoading(false);
       })
       .catch((e: any) => {
@@ -119,7 +132,7 @@ const MyDiamonds = () => {
     triggerInvoiceHistory({ previousConfirmStatus })
       .unwrap()
       .then(res => {
-        setInvoiceHistoryDataState(res?.orders);
+        setPastDataState(res?.orders);
         setIsLoading(false);
       })
       .catch((e: any) => {
@@ -127,19 +140,13 @@ const MyDiamonds = () => {
         setIsLoading(false);
       });
   }, [previousConfirmStatus]);
-  const [
-    triggerPendingInvoiceData,
-    { data: pendingInvoicesData, isSuccess: isLoadingPendingInvoice }
-  ] = useLazyCardRecentConfirmationQuery({});
-  const [
-    triggerActiveInvoice,
-    { data: activeInvoicesData, isSuccess: isLoadngActiveInvoice }
-  ] = useLazyCardMyInvoiceQuery({});
+  const [triggerPendingInvoiceData, { data: pendingInvoicesData }] =
+    useLazyCardRecentConfirmationQuery({});
+  const [triggerActiveInvoice, { data: activeInvoicesData }] =
+    useLazyCardMyInvoiceQuery({});
 
-  const [
-    triggerInvoiceHistory,
-    { data: invoiceHistoryData, isSuccess: isLoadingInvoiceHistory }
-  ] = useLazyCardPreviousConfirmationQuery({});
+  const [triggerInvoiceHistory, { data: invoiceHistoryData }] =
+    useLazyCardPreviousConfirmationQuery({});
 
   useEffect(() => {
     if (detailId) {
@@ -149,69 +156,71 @@ const MyDiamonds = () => {
 
   useEffect(() => {
     if (pathName === 'recent-confirmations') {
-      setActiveTab(PENDING_INVOICE);
+      setActiveTab(PENDING);
     } else if (pathName === 'active-invoice') {
-      setActiveTab(ACTIVE_INVOICE);
-    } else if (pathName === ACTIVE_INVOICE) {
-      setActiveTab(ACTIVE_INVOICE);
-    } else if (pathName === PENDING_INVOICE) {
-      setActiveTab(PENDING_INVOICE);
-    } else if (pathName === INVOICE_HISTORY) {
-      setActiveTab(INVOICE_HISTORY);
+      setActiveTab(IN_TRANSIT);
+    } else if (pathName === IN_TRANSIT) {
+      setActiveTab(IN_TRANSIT);
+    } else if (pathName === PENDING) {
+      setActiveTab(PENDING);
+    } else if (pathName === PAST) {
+      setActiveTab(PAST);
     }
   }, []);
 
   const myDiamondsTabs = [
     {
-      label: ManageLocales('app.myDiamonds.tabs.pendingInvoice'),
-      status: PENDING_INVOICE,
-      count: pendingInvoiceDataState?.length
+      label: ManageLocales('app.myDiamonds.tabs.pending'),
+      status: PENDING,
+      count: pendingDataState?.length,
+      info: 'Your order is being processed by the sales team.'
     },
     {
-      label: ManageLocales('app.myDiamonds.tabs.activeInvoice'),
-      status: ACTIVE_INVOICE,
-      count: activeInvoiceDataState?.length
+      label: ManageLocales('app.myDiamonds.tabs.inTransit'),
+      status: IN_TRANSIT,
+      count: inTransitDataState?.length,
+      info: 'Your order has been confirmed and your invoice has been generated by the sales team.'
     },
     {
-      label: ManageLocales('app.myDiamonds.tabs.invoiceHistory'),
-      status: INVOICE_HISTORY,
-      count: invoiceHistoryDataState?.length
+      label: ManageLocales('app.myDiamonds.tabs.past'),
+      status: PAST,
+      count: pastDataState?.length
     }
   ];
   const handleTabs = ({ tab }: { tab: string }) => {
     setActiveTab(tab);
     setSearch('');
-    setPendingInvoiceDataState(pendingInvoicesData?.orders);
-    setInvoiceHistoryDataState(invoiceHistoryData?.orders);
-    setActiveInvoiceDataState(activeInvoicesData?.orders);
-    setRadioState('90days');
+    setDate(undefined);
+    setPendingDataState(pendingInvoicesData?.orders);
+    setPastDataState(invoiceHistoryData?.orders);
+    setInTransitDataState(activeInvoicesData?.orders);
     setShowSuggestions(false);
   };
 
   const tabsData: any = {
-    pendingInvoice: {
+    pending: {
       keys: [
         { label: 'Order ID', accessor: 'display_id' },
         { label: 'Confirmation Date', accessor: 'created_at' },
         { label: 'Details', accessor: 'details' }
       ],
-      data: pendingInvoiceDataState
+      data: pendingDataState
     },
-    activeInvoice: {
+    inTransit: {
       keys: [
         { label: 'Invoice Number', accessor: 'invoice_id' },
         { label: 'Invoice Date', accessor: 'created_at' },
         { label: 'Details', accessor: 'details' }
       ],
-      data: activeInvoiceDataState
+      data: inTransitDataState
     },
-    invoiceHistory: {
+    past: {
       keys: [
         { label: 'Invoice Number', accessor: 'invoice_id' },
         { label: 'Invoice Date', accessor: 'created_at' },
         { label: 'Details', accessor: 'details' }
       ],
-      data: invoiceHistoryDataState
+      data: pastDataState
     }
   };
 
@@ -236,86 +245,87 @@ const MyDiamonds = () => {
     setShowSuggestions(true);
     setSearch(inputValue);
 
-    if (activeTab === PENDING_INVOICE) {
-      const filteredData = pendingInvoiceDataState.filter((item: any) => {
+    if (activeTab === PENDING) {
+      const filteredData = pendingDataState.filter((item: any) => {
         const formattedValue = formatNumberWithLeadingZeros(item.display_id);
         return (
           String(item.display_id).includes(inputValue) ||
           formattedValue.includes(inputValue)
         );
       });
-      setPendingInvoiceDataState(filteredData);
-    } else if (activeTab === ACTIVE_INVOICE) {
-      const filteredData = activeInvoiceDataState.filter((item: any) =>
+      setPendingDataState(filteredData);
+    } else if (activeTab === IN_TRANSIT) {
+      const filteredData = inTransitDataState.filter((item: any) =>
         String(item.invoice_id).toLowerCase().includes(inputValue)
       );
-      setActiveInvoiceDataState(filteredData);
+      setInTransitDataState(filteredData);
     } else {
-      const filteredData = invoiceHistoryDataState.filter((item: any) =>
+      const filteredData = pastDataState.filter((item: any) =>
         String(item.invoice_id).toLowerCase().includes(inputValue)
       );
-      setInvoiceHistoryDataState(filteredData);
+      setPastDataState(filteredData);
     }
 
     if (!inputValue) {
-      setPendingInvoiceDataState(pendingInvoicesData?.orders);
-      setInvoiceHistoryDataState(invoiceHistoryData?.orders);
-      setActiveInvoiceDataState(activeInvoicesData?.orders);
+      setPendingDataState(pendingInvoicesData?.orders);
+      setPastDataState(invoiceHistoryData?.orders);
+      setInTransitDataState(activeInvoicesData?.orders);
     }
   };
 
   const handleClearInput = () => {
     setSearch('');
-    setPendingInvoiceDataState(pendingInvoicesData?.orders);
-    setInvoiceHistoryDataState(invoiceHistoryData?.orders);
-    setActiveInvoiceDataState(activeInvoicesData?.orders);
+    setPendingDataState(pendingInvoicesData?.orders);
+    setPastDataState(invoiceHistoryData?.orders);
+    setInTransitDataState(activeInvoicesData?.orders);
   };
 
-  const filterByDate = (
-    data: any[],
-    filterOption: '7days' | '30days' | '90days'
-  ): any => {
-    const currentDate = new Date();
-    let startDate: Date;
-
-    switch (filterOption) {
-      case '7days':
-        startDate = new Date(currentDate.getTime() - 7 * 24 * 60 * 60 * 1000);
-        break;
-      case '30days':
-        startDate = new Date(currentDate.getTime() - 30 * 24 * 60 * 60 * 1000);
-        break;
-      case '90days':
-        startDate = new Date(currentDate.getTime() - 90 * 24 * 60 * 60 * 1000);
-        break;
-      default:
-        startDate = new Date(0); // Default to epoch date if filter option is invalid
-    }
-
-    return data.filter((item: any) => {
-      const itemDate = new Date(item.created_at);
-      return itemDate >= startDate && itemDate <= currentDate;
+  const filterDataByDate = (
+    data: IDataItem[],
+    fromDate: Date,
+    toDate: Date
+  ): IDataItem[] => {
+    return data.filter((item: IDataItem) => {
+      const itemDate: Date = new Date(item.created_at);
+      return itemDate >= fromDate && itemDate <= toDate;
     });
   };
-
-  const filterFunction = (value: '7days' | '30days' | '90days') => {
-    setRadioState(value);
+  const handleApplyFilter = (date: any, reset: string) => {
+    const fromDate = new Date(date.from);
+    const toDate = new Date(date.to);
     switch (activeTab) {
-      case PENDING_INVOICE:
-        setPendingInvoiceDataState(
-          pendingInvoicesData &&
-            filterByDate(pendingInvoicesData?.orders, value)
-        );
+      case PENDING:
+        if (reset.length > 0) {
+          setPendingDataState(pendingInvoicesData?.orders);
+        } else {
+          setPendingDataState(
+            pendingInvoicesData &&
+              filterDataByDate(pendingInvoicesData?.orders, fromDate, toDate)
+          );
+        }
+
         break;
-      case ACTIVE_INVOICE:
-        setActiveInvoiceDataState(
-          activeInvoicesData && filterByDate(activeInvoicesData?.orders, value)
-        );
+      case IN_TRANSIT:
+        if (reset.length > 0) {
+          setInTransitDataState(activeInvoicesData?.orders);
+        } else {
+          setInTransitDataState(
+            activeInvoicesData &&
+              filterDataByDate(activeInvoicesData?.orders, fromDate, toDate)
+          );
+        }
+
         break;
-      case INVOICE_HISTORY:
-        setInvoiceHistoryDataState(
-          invoiceHistoryData && filterByDate(invoiceHistoryData?.orders, value)
-        );
+      case PAST:
+        if (reset.length > 0) {
+          setPastDataState(invoiceHistoryData?.orders);
+        } else {
+          setPastDataState(
+            invoiceHistoryData &&
+              filterDataByDate(invoiceHistoryData?.orders, fromDate, toDate)
+          );
+        }
+
         break;
       default:
         break;
@@ -355,11 +365,10 @@ const MyDiamonds = () => {
         return <span>{value[accessor]}</span>;
     }
   };
-
   const renderContent = () => {
     if (showDetail) {
       switch (activeTab) {
-        case PENDING_INVOICE:
+        case PENDING:
           return (
             <OrderDetail
               productDetailData={productDetailData}
@@ -367,9 +376,10 @@ const MyDiamonds = () => {
               breadCrumLabel={PENING_INVOICE_BREADCRUMB_LABEL}
               modalSetState={modalSetState}
               setIsLoading={setIsLoading}
+              router={router}
             />
           );
-        case ACTIVE_INVOICE:
+        case IN_TRANSIT:
           return (
             <OrderDetail
               productDetailData={productDetailData}
@@ -377,9 +387,10 @@ const MyDiamonds = () => {
               breadCrumLabel={ACTIVE_INVOICE_BREADCRUMB_LABEL}
               modalSetState={modalSetState}
               setIsLoading={setIsLoading}
+              router={router}
             />
           );
-        case INVOICE_HISTORY:
+        case PAST:
           return (
             <OrderDetail
               productDetailData={productDetailData}
@@ -387,6 +398,7 @@ const MyDiamonds = () => {
               breadCrumLabel={INVOICE_HISTORY_BREADCRUMB_LABEL}
               modalSetState={modalSetState}
               setIsLoading={setIsLoading}
+              router={router}
             />
           );
         // Add more cases as needed for other tabs
@@ -399,22 +411,69 @@ const MyDiamonds = () => {
         <>
           {' '}
           <div className="flex pr-[16px] py-[16px] justify-between items-center border-b-[1px] border-neutral200">
-            <div className="flex  w-[50%]  text-mMedium font-medium h-[40px]">
-              {myDiamondsTabs.map(({ label, count, status }) => {
+            <div className="flex relative w-[50%]   text-mMedium font-medium h-[40px]">
+              {myDiamondsTabs.map(({ label, count, status, info }) => {
                 return (
-                  <button
-                    className={`px-[16px] py-[8px] ${
+                  <div
+                    key={label}
+                    className={`flex gap-1 items-center px-[12px] py-[8px] relative  ${
                       activeTab === status
                         ? 'text-neutral900 border-b-[2px] border-primaryMain'
-                        : 'text-neutral600 border-b-[1px] border-neutral200'
+                        : 'text-neutral600 border-b-[2px] border-neutral200'
                     }`}
-                    key={label}
-                    onClick={() => handleTabs({ tab: status })}
                   >
-                    {label} {count > 0 && `(${count})`}
-                  </button>
+                    <button
+                      className={``}
+                      onClick={() => handleTabs({ tab: status })}
+                    >
+                      {label} {count > 0 && `(${count})`}
+                    </button>
+                    {info && info?.length > 0 && (
+                      <button
+                        onMouseEnter={e => {
+                          const rect = e.currentTarget.getBoundingClientRect();
+                          setTooltip({
+                            show: true,
+                            content: info,
+                            position: {
+                              left:
+                                rect.left + window.scrollX + rect.width / 300 // Adjust left position to center above the element
+                            }
+                          });
+                        }}
+                        onMouseLeave={() => {
+                          setTooltip({
+                            show: false,
+                            content: '',
+                            position: { left: 0 }
+                          });
+                        }}
+                      >
+                        <Image src={infoIcon} alt="infoIcon" />
+                      </button>
+                    )}
+                  </div>
                 );
               })}
+              {tooltip.show && (
+                <div
+                  className={`absolute bg-[#ECF2FC] w-[320px] border-[1px] border-[#B6CFF3] rounded-[8px] p-4 text-[#475467] top-[35px] gap-2 `}
+                  style={{
+                    left: `${tooltip.position.left}px`,
+                    transform: 'translateX(-30%)' // Center the tooltip above the element
+                  }}
+                >
+                  <div className="flex flex-col gap-2">
+                    <div className="flex gap-1">
+                      <Image src={infoIcon} alt="volume discount info" />{' '}
+                      <p className="text-neutral900 font-medium text-mMedium">
+                        Information
+                      </p>
+                    </div>
+                    <p>{tooltip.content}</p>
+                  </div>
+                </div>
+              )}
             </div>
             <div className="flex items-center gap-2">
               <HeaderSearchBar
@@ -425,9 +484,11 @@ const MyDiamonds = () => {
                 setShowSuggestions={setShowSuggestions}
                 showSuggestions={showSuggestions}
               />
-              <FilterByDays
-                filterFunction={filterFunction}
-                radioState={radioState}
+
+              <DatePickerWithRange
+                handleApplyFilter={handleApplyFilter}
+                setDate={setDate}
+                date={date}
               />
             </div>
           </div>
@@ -465,26 +526,21 @@ const MyDiamonds = () => {
               ))}
             </div>
           ) : (
-            (!isLoading ||
-              isLoadingInvoiceHistory ||
-              isLoadingPendingInvoice ||
-              isLoadngActiveInvoice) && (
-              <div className="min-h-[73vh] h-[65vh]">
-                <EmptyScreen
-                  label="Search Diamonds"
-                  onClickHandler={() =>
-                    router.push(`/v2/search?active-tab=${SubRoutes.NEW_SEARCH}`)
-                  }
-                  contentReactNode={
-                    <p className="text-neutral900  w-[17%] text-center">
-                      Looks like you haven't placed any orders yet. Let’s place
-                      some orders!
-                    </p>
-                  }
-                  imageSrc={emptyOrderSvg}
-                />
-              </div>
-            )
+            <div className="min-h-[73vh] h-[65vh]">
+              <EmptyScreen
+                label="Search Diamonds"
+                onClickHandler={() =>
+                  router.push(`/v2/search?active-tab=${SubRoutes.NEW_SEARCH}`)
+                }
+                contentReactNode={
+                  <p className="text-neutral900  w-[17%] text-center">
+                    Looks like you haven't placed any orders yet. Let’s place
+                    some orders!
+                  </p>
+                }
+                imageSrc={emptyOrderSvg}
+              />
+            </div>
           )}
         </>
       );
@@ -494,24 +550,37 @@ const MyDiamonds = () => {
   return (
     <div className="relative mb-[20px]">
       <DialogComponent dialogContent={dialogContent} isOpens={isDialogOpen} />
+      {isLoading && <CustomKGKLoader />}
       <div className="flex  py-[8px] items-center">
         <p className="text-lMedium font-medium text-neutral900">
-          {showDetail
-            ? activeTab === PENDING_INVOICE
-              ? ManageLocales('app.yourOrder.header.pendingInvoiceDetails')
-              : activeTab === ACTIVE_INVOICE
-              ? ManageLocales('app.yourOrder.header.activeInvoiceDetails')
-              : activeTab === INVOICE_HISTORY &&
-                ManageLocales('app.yourOrder.header.invoicesHistoryDetails')
-            : ManageLocales('app.myDiamonds.yourOrders')}
+          {showDetail ? (
+            activeTab === PENDING ? (
+              ManageLocales('app.yourOrder.header.pendingInvoiceDetails')
+            ) : activeTab === IN_TRANSIT ? (
+              ManageLocales('app.yourOrder.header.activeInvoiceDetails')
+            ) : (
+              activeTab === PAST &&
+              ManageLocales('app.yourOrder.header.invoicesHistoryDetails')
+            )
+          ) : pendingInvoicesData === undefined &&
+            activeInvoicesData === undefined &&
+            invoiceHistoryData === undefined ? (
+            <Skeleton
+              variant="rectangular"
+              height={'24px'}
+              width={'92px'}
+              animation="wave"
+            />
+          ) : (
+            ManageLocales('app.myDiamonds.yourOrders')
+          )}
         </p>
       </div>
       <div className="border-[1px] border-neutral200 rounded-[8px]">
-        {isLoading ||
-        (isLoadingInvoiceHistory && !isLoadingInvoiceHistory) ||
-        (isLoadingPendingInvoice && !isLoadingPendingInvoice) ||
-        (isLoadngActiveInvoice && !isLoadngActiveInvoice) ? (
-          <CustomKGKLoader />
+        {pendingInvoicesData === undefined &&
+        activeInvoicesData === undefined &&
+        invoiceHistoryData === undefined ? (
+          <YourOrderSkeleton />
         ) : (
           renderContent()
         )}

@@ -2,6 +2,7 @@ import { Dispatch, SetStateAction } from 'react';
 import { downloadExcelFromBase64 } from '../download-excel-from-base64';
 import { ManageLocales } from '../v2/translate';
 import CommonPoppup from '@/app/v2/login/component/common-poppup';
+
 interface IDownloadExcelApiResponse {
   fileName: string;
   data: string;
@@ -16,6 +17,7 @@ interface IDownloadExcelFunctionProps {
   setIsError?: Dispatch<SetStateAction<boolean>>;
   orderId?: string;
   setIsLoading?: any;
+  router: any;
   fromNewArrivalBid?: boolean;
   fromNewArrivalBidHistory?: boolean;
   fromBidToBuyHistory?: boolean;
@@ -24,6 +26,7 @@ interface IDownloadExcelFunctionProps {
 
 export const downloadExcelHandler = async ({
   products,
+  router,
   previousSearch,
   downloadExcelApi,
   modalSetState,
@@ -86,7 +89,34 @@ export const downloadExcelHandler = async ({
       setIsLoading(false);
       if (modalSetState.setIsDialogOpen) modalSetState.setIsDialogOpen(true);
       if (modalSetState.setDialogContent) {
-        if (error.data.type === 'not_allowed') {
+        if (error.data.type === 'unauthorized') {
+          modalSetState.setDialogContent(
+            <CommonPoppup
+              content={
+                'To download excel, KYC verification is required. Without verification, access to certain features is restricted.'
+              }
+              customPoppupStyle="!h-[220px]"
+              customPoppupBodyStyle="!mt-[62px]"
+              header={`Important KYC Verification Required!`}
+              actionButtonData={[
+                {
+                  variant: 'secondary',
+                  label: ManageLocales('app.modal.cancel'),
+                  handler: () => modalSetState.setIsDialogOpen(false),
+                  customStyle: 'w-full flex-1'
+                },
+                {
+                  variant: 'primary',
+                  label: ManageLocales('app.modal.verifyMyKYCNow'),
+                  handler: () => {
+                    router.push('/v2/kyc');
+                  },
+                  customStyle: 'w-full flex-1'
+                }
+              ]}
+            />
+          );
+        } else if (error.data.type === 'not_allowed') {
           modalSetState.setDialogContent(
             <CommonPoppup
               content={error?.data?.message}

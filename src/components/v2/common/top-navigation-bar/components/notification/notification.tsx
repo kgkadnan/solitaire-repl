@@ -25,12 +25,12 @@ import { SocketManager, useSocket } from '@/hooks/v2/socket-manager';
 import useUser from '@/lib/use-auth';
 import { useRouter } from 'next/navigation';
 import {
-  ACTIVE_INVOICE,
+  IN_TRANSIT,
   AVAILABLE_STATUS,
   HOLD_STATUS,
-  INVOICE_HISTORY,
+  PAST,
   MEMO_STATUS,
-  PENDING_INVOICE,
+  PENDING,
   SOLD_STATUS
 } from '@/constants/business-logic';
 
@@ -117,11 +117,11 @@ const Notification = ({
             }
           } else if (splitData[0] === 'your-orders') {
             if (splitData[1] === 'pendingInvoices') {
-              router.push(`/v2/${splitData[0]}?path=${PENDING_INVOICE}`);
+              router.push(`/v2/${splitData[0]}?path=${PENDING}`);
             } else if (splitData[1] === 'activeInvoices') {
-              router.push(`/v2/${splitData[0]}?path=${ACTIVE_INVOICE}`);
+              router.push(`/v2/${splitData[0]}?path=${IN_TRANSIT}`);
             } else if (splitData[1] === 'invoicesHistory') {
-              router.push(`/v2/${splitData[0]}?path=${INVOICE_HISTORY}`);
+              router.push(`/v2/${splitData[0]}?path=${PAST}`);
             }
           } else if (splitData[0] === 'my-account') {
             router.push(`/v2/my-account`);

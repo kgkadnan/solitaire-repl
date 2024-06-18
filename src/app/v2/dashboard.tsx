@@ -1136,10 +1136,10 @@ const Dashboard = () => {
             setDialogContent(
               <CommonPoppup
                 content="To confirm a stone or make a purchase, KYC verification is
-              mandatory. Without verification, access to certain
-              features is restricted."
+                required. Without verification, access to certain
+                features is restricted."
+                customPoppupStyle="!h-[220px]"
                 customPoppupBodyStyle="!mt-[62px]"
-                customPoppupStyle="h-[270px]"
                 header={'Important KYC Verification Required!'}
                 actionButtonData={[
                   {
@@ -1728,7 +1728,7 @@ const Dashboard = () => {
               <div className="flex gap-4 ">
                 {customerData === undefined ? (
                   <Skeleton
-                    height={'100%'}
+                    height={400}
                     width={'100%'}
                     animation="wave"
                     variant="rectangular"
@@ -1875,7 +1875,7 @@ const Dashboard = () => {
             <div className="flex gap-4 ">
               {customerData === undefined ? (
                 <Skeleton
-                  height={'100%'}
+                  height={420}
                   width={'100%'}
                   animation="wave"
                   variant="rectangular"
@@ -2012,9 +2012,19 @@ const Dashboard = () => {
               {/* Ensure the container takes up full width */}
               {/* Carousel Container - Allow it to shrink if necessary but also give it an initial width */}
               <div className="flex-1 flex-shrink min-w-0 border-[1px] border-neutral50">
-                <DashboardCarousel
-                  images={customerData?.customer?.carousel_items}
-                />
+                {customerData !== undefined ? (
+                  <DashboardCarousel
+                    images={customerData?.customer?.carousel_items}
+                  />
+                ) : (
+                  <Skeleton
+                    animation="wave"
+                    width={'100%'}
+                    variant="rectangular"
+                    height={400}
+                    className="rounded-[4px]"
+                  />
+                )}
               </div>
               {/* KAMCard Container - Prevent it from shrinking and assign a max width */}
               <div className="flex-shrink-0 w-[300px] max-w-full">

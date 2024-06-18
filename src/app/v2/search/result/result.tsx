@@ -928,9 +928,9 @@ const Result = ({
             setDialogContent(
               <CommonPoppup
                 content={
-                  'To confirm a stone or make a purchase, KYC verification is mandatory. Without verification, access to certain features is restricted.'
+                  'To confirm a stone or make a purchase, KYC verification is required. Without verification, access to certain features is restricted.'
                 }
-                customPoppupStyle="h-[270px]"
+                customPoppupStyle="h-[260px]"
                 customPoppupBodyStyle="!mt-[62px]"
                 header={`Important KYC Verification Required!`}
                 actionButtonData={[
