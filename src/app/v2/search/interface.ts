@@ -107,7 +107,7 @@ export interface IProduct {
   disclosed_source: string | null;
   is_memo_out: string | null;
   lot_id: string | null;
-  diamond_status: 'Available' | 'Hold' | 'Memo' | 'Sold';
+  diamond_status: 'Available' | 'Hold' | 'Memo' | 'Sold' | 'BidToBuy';
   collection: string | null;
   images:
     | {

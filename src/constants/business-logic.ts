@@ -32,7 +32,7 @@ export const SOLD_STATUS = 'Sold';
 export const AVAILABLE_STATUS = 'Available';
 export const MEMO_STATUS = 'Memo';
 export const HOLD_STATUS = 'Hold';
-
+export const BID_TO_BUY_STATUS = 'BidToBuy';
 export const PENDING = 'pending';
 export const IN_TRANSIT = 'inTransit';
 export const PAST = 'past';
