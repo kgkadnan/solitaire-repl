@@ -62,7 +62,7 @@ const ActionButton = ({
             } ${customCtaStyle}`}
                 >
                   {svg && <Image src={svg} alt={label ?? 'icon-button'} />}
-                  <div className={styles.ctaLabel}>{label}</div>
+                  <div>{label}</div>
                 </Button>
               ) : (
                 <Tooltip
