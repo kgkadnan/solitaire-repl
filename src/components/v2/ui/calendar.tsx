@@ -35,14 +35,15 @@ function Calendar({
         head_row: 'flex',
         head_cell: 'text-neutral400 rounded-md w-9 font-normal text-[0.8rem]',
         row: 'flex w-full mt-2',
-        cell: 'h-9 w-9 bg-red text-center text-sm p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-md  first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20',
+        cell: 'h-9 w-9 bg-red text-center disabled text-sm p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-md  first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20',
         day: cn(
           'h-9 w-9  p-0 font-normal  rounded-[4px] text-lMedium font-medium'
         ),
         day_range_end: 'day-range-end',
         day_selected:
           'bg-primaryMain text-neutral0 hover:bg-primaryMain hover:text-neutral0 focus:bg-primaryMain focus:text-neutral0',
-        day_today: 'bg-primaryMain text-neutral0',
+        day_today:
+          'border-[2px] border-solid border-primaryMain text-neutral900',
         day_outside:
           'day-outside text-neutral400 opacity-50  aria-selected:text-neutral400',
         day_disabled: 'text-neutral400 opacity-50',
@@ -53,7 +54,8 @@ function Calendar({
       }}
       components={{
         IconLeft: () => <ChevronLeft className="h-4 w-4" />,
-        IconRight: () => <ChevronRight className="h-4 w-4" />
+        IconRight: () =>
+          props.disabled ? <></> : <ChevronRight className="h-4 w-4" />
       }}
       {...props}
     />
