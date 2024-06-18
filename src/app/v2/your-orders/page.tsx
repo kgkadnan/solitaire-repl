@@ -37,6 +37,7 @@ import { DateRange } from 'react-day-picker';
 import YourOrderSkeleton from '@/components/v2/skeleton/your-order';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import { Skeleton } from '@mui/material';
+import { kycStatus } from '@/constants/enums/kyc';
 
 interface IDataItem {
   id: number;
@@ -66,6 +67,9 @@ const MyDiamonds = () => {
 
   const [showDetail, setShowDetail] = useState(false);
   const [productDetailData, setProductDetailData] = useState([]);
+
+  let isNudge = localStorage.getItem('show-nudge')! === 'MINI';
+  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
 
   // State to manage the search input value
   const [search, setSearch] = useState<string>('');
@@ -548,7 +552,15 @@ const MyDiamonds = () => {
   };
 
   return (
-    <div className="relative mb-[20px]">
+    <div
+      className={`relative mb-[20px] ${
+        isNudge &&
+        (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+          isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+          ? ''
+          : 'h-[89vh]'
+      } `}
+    >
       <DialogComponent dialogContent={dialogContent} isOpens={isDialogOpen} />
       {isLoading && <CustomKGKLoader />}
       <div className="flex  py-[8px] items-center">
