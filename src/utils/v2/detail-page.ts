@@ -2,8 +2,8 @@ export const getShapeDisplayName = (value = '') => {
   const shapesMapping: Record<string, string> = {
     EM: 'Emerald',
     BR: 'Round',
-    PR: 'Pear',
-    PS: 'Princess',
+    PR: 'Princess',
+    PS: 'Pear',
     AS: 'Asscher',
     RAD: 'Radiant',
     OV: 'Oval',
