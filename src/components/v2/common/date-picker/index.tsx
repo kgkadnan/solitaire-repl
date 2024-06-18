@@ -25,6 +25,12 @@ export function DatePickerWithRange({
 }: any) {
   const [isOpen, setOpen] = React.useState(false);
 
+  // Get today's date
+  const today = new Date();
+
+  // Define the DateBefore matcher to disable future dates
+  const disableFutureDates = { after: today };
+
   const handleOpen = () => {
     setOpen(!isOpen);
   };
@@ -58,10 +64,9 @@ export function DatePickerWithRange({
             <Calendar
               initialFocus
               mode="range"
-              defaultMonth={date?.from}
               selected={date}
               onSelect={setDate}
-              numberOfMonths={2}
+              disabled={disableFutureDates}
               className="bg-neutral0 rounded-t-[8px] border-b-[1px] border-solid border-neutral200 "
             />
             <div className="p-[16px]">

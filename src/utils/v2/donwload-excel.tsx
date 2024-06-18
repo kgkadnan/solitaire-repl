@@ -93,7 +93,7 @@ export const downloadExcelHandler = async ({
           modalSetState.setDialogContent(
             <CommonPoppup
               content={
-                'To download excel, KYC verification is required. Without verification, access to certain features is restricted.'
+                'To download excel, KYC verification is mandatory. Without verification, access to certain features is restricted.'
               }
               customPoppupStyle="!h-[220px]"
               customPoppupBodyStyle="!mt-[62px]"
