@@ -43,9 +43,9 @@
   "app.calculatedField.bidAmt": "Bid Amt",
 
   "app.myDiamonds.yourOrders": "Your Orders",
-  "app.myDiamonds.tabs.pendingInvoice": "Pending Invoice",
-  "app.myDiamonds.tabs.activeInvoice": "Active Invoice",
-  "app.myDiamonds.tabs.invoiceHistory": "Invoice History",
+  "app.myDiamonds.tabs.pending": "Pending",
+  "app.myDiamonds.tabs.inTransit": "In-transit",
+  "app.myDiamonds.tabs.past": "Past",
   "app.myDiamonds.pendingInvoice.searchByOrderId": "Search by Order ID",
   "app.myDiamonds.activeInvoice.searchByInvoiceId": "Search by Invoice ID",
 
@@ -58,6 +58,9 @@
   "app.yourOrder.header.pendingInvoiceDetails": "Pending Invoice Details",
   "app.yourOrder.header.activeInvoiceDetails": "Active Invoices Details",
   "app.yourOrder.header.invoicesHistoryDetails": "Invoices History Details",
+  "app.yourOrder.datePicker.apply": "Apply",
+  "app.yourOrder.datePicker.cancel": "Cancel",
+
 
   "app.myAccount.tabs.tablePrefrences": "Table Preferences",
   "app.myAccount.tabs.changePassword": "Change Password",
