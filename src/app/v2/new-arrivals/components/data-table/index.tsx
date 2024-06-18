@@ -162,7 +162,8 @@ const NewArrivalDataTable = ({
   rowSelection,
   setRowSelection,
   setIsLoading,
-  renderFooter
+  renderFooter,
+  router
 }: any) => {
   // Fetching saved search data
 
@@ -264,6 +265,7 @@ const NewArrivalDataTable = ({
       downloadExcelApi: downloadExcel,
       modalSetState,
       setRowSelection,
+      router,
       setIsLoading: setIsLoading,
       [activeTab === 2 ? 'fromNewArrivalBidHistory' : 'fromNewArrivalBid']: true
     });

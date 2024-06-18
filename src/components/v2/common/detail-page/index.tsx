@@ -46,6 +46,7 @@ import { Skeleton } from '@mui/material';
 import { useLazyTrackCopyUrlEventQuery } from '@/features/api/track-public-url-copy';
 
 import DetailPageTabs from './components/tabs';
+import { useRouter } from 'next/navigation';
 
 export function DiamondDetailsComponent({
   data,
@@ -68,6 +69,8 @@ export function DiamondDetailsComponent({
   activeTab?: number;
   fromBid?: boolean;
 }) {
+  const router = useRouter();
+
   const [tableData, setTableData] = useState<any>([]);
   const [activePreviewTab, setActivePreviewTab] = useState('Image');
   const [imageIndex, setImageIndex] = useState<number>(0);
@@ -230,6 +233,7 @@ export function DiamondDetailsComponent({
       products: [filterData.id],
       downloadExcelApi: downloadExcel,
       modalSetState,
+      router,
       setIsLoading: setIsLoading,
       [activeTab === 2
         ? breadCrumLabel === 'Bid to Buy'

@@ -376,6 +376,7 @@ const MyDiamonds = () => {
               breadCrumLabel={PENING_INVOICE_BREADCRUMB_LABEL}
               modalSetState={modalSetState}
               setIsLoading={setIsLoading}
+              router={router}
             />
           );
         case IN_TRANSIT:
@@ -386,6 +387,7 @@ const MyDiamonds = () => {
               breadCrumLabel={ACTIVE_INVOICE_BREADCRUMB_LABEL}
               modalSetState={modalSetState}
               setIsLoading={setIsLoading}
+              router={router}
             />
           );
         case PAST:
@@ -396,6 +398,7 @@ const MyDiamonds = () => {
               breadCrumLabel={INVOICE_HISTORY_BREADCRUMB_LABEL}
               modalSetState={modalSetState}
               setIsLoading={setIsLoading}
+              router={router}
             />
           );
         // Add more cases as needed for other tabs

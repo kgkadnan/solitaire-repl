@@ -158,7 +158,8 @@ const BidToByDataTable = ({
   rowSelection,
   setRowSelection,
   setIsLoading,
-  renderFooter
+  renderFooter,
+  router
 }: any) => {
   // Fetching saved search data
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -261,6 +262,7 @@ const BidToByDataTable = ({
       modalSetState,
       setRowSelection,
       setIsLoading: setIsLoading,
+      router,
       [activeTab === 2 ? 'fromBidToBuyHistory' : 'fromBidToBuy']: true
     });
   };
