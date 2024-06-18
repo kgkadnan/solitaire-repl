@@ -457,7 +457,8 @@ const DataTable = ({
       downloadExcelApi: downloadExcel,
       modalSetState,
       setRowSelection,
-      setIsLoading: setIsLoading
+      setIsLoading: setIsLoading,
+      router
     });
   };
 
@@ -469,6 +470,7 @@ const DataTable = ({
       downloadExcelApi: downloadExcel,
       modalSetState,
       setRowSelection,
+      router,
       setIsLoading: setIsLoading
     });
   };

@@ -40,6 +40,8 @@ import ActionButton from '@/components/v2/common/action-button';
 import { ManageLocales } from '@/utils/v2/translate';
 import { Dropdown } from '@/components/v2/common/dropdown-menu';
 import { statusCode } from '@/constants/enums/status-code';
+import infoSvg from '@public/v2/assets/icons/dashboard/info.svg';
+import infoHover from '@public/v2/assets/icons/info.svg';
 
 import { useAddCartMutation } from '@/features/api/cart';
 import { DialogComponent } from '@/components/v2/common/dialog';
@@ -104,6 +106,7 @@ import CommonPoppup from './login/component/common-poppup';
 interface ITabs {
   label: string;
   link: string;
+  count: number;
   data: any;
 }
 
@@ -135,6 +138,7 @@ const Dashboard = () => {
   const [downloadExcel] = useDownloadExcelMutation();
 
   const [tabs, setTabs] = useState<ITabs[]>([]);
+  const [savedSearchData, setSavedSearchData] = useState([]);
   const optionsClasses = [
     'linear-gradient(90deg, #DBF2FC 0%, #E8E8FF 30%, #FFF4E3 100%)',
     'linear-gradient(90deg, #FFF4E3 0%, #E8E8FF 50%, #DBF2FC 100%)',
@@ -170,6 +174,7 @@ const Dashboard = () => {
       timeSlots: { dates: [{ date: '', day: '' }], slots: {} }
     });
   const [lotIds, setLotIds] = useState<string[]>([]);
+  const [isHovered, setIsHovered] = useState('');
 
   const [triggerAvailableSlots] = useLazyGetAvailableMyAppointmentSlotsQuery(
     {}
@@ -566,52 +571,83 @@ const Dashboard = () => {
     }
   ];
   useEffect(() => {
-    // !customerData && setIsLoading(true);
     refetchCustomerData();
   }, []);
 
-  //Uncomment this when volume discount to be released and comment below useEffect ---Jyoti  DONOT REMOVE THIS CODE
   useEffect(() => {
     if (customerData) {
-      setIsLoading(false);
-
+      // setIsLoading(false);
       const tabsCopy: ITabs[] = []; // Make a copy of the current tabs
 
-      // Check if there are saved searches and add the "Saved Search" tab
-      tabsCopy.push({
-        label: 'Saved Search',
-        link: '/v2/search?active-tab=saved-search',
-        data: customerData.customer?.saved_searches?.slice(0, 5) ?? []
-      });
+      // Check for pending and active invoices
+      if (customerData.customer?.orders?.length > 0) {
+        const pendingInvoices = customerData.customer.orders
+          .filter((item: any) => item.invoice_id === null)
+          .slice(0, 3);
 
-      const pendingInvoices =
-        customerData.customer?.orders
-          ?.filter((item: any) => item.invoice_id === null)
-          .slice(0, 5) ?? [];
-
-      const activeInvoices =
-        customerData.customer?.orders
-          ?.filter(
+        const activeInvoices = customerData.customer.orders
+          .filter(
             (item: any) => item.invoice_id !== null && item.status === 'pending'
           )
-          .slice(0, 5) ?? [];
+          .slice(0, 3);
 
-      tabsCopy.push({
-        label: 'Pending Invoice',
-        link: '/v2/your-orders',
-        data: pendingInvoices
-      });
+        // Update or add "Pending Invoice" tab
+        const pendingTab = tabsCopy.find(tab => tab.label === 'Pending');
+        if (pendingInvoices.length > 0) {
+          if (pendingTab) {
+            pendingTab.data = pendingInvoices;
+          } else {
+            tabsCopy.push({
+              label: 'Pending',
+              link: '/v2/your-orders',
+              count: customerData.customer.orders.filter(
+                (item: any) => item.invoice_id === null
+              ).length,
+              data: pendingInvoices
+            });
+          }
+        } else {
+          // Remove "Pending Invoice" tab if there are no pending invoices
+          const index = tabsCopy.findIndex(tab => tab.label === 'Pending');
+          if (index !== -1) {
+            tabsCopy.splice(index, 1);
+          }
+        }
 
-      tabsCopy.push({
-        label: 'Active Invoice',
-        link: '/v2/your-orders',
-        data: activeInvoices
-      });
-
-      // Update the tabs state
-      setTabs(tabsCopy);
-      setActiveTab(tabsCopy[0].label);
+        // Update or add "Active Invoice" tab
+        const activeTab = tabsCopy.find(tab => tab.label === 'In-transit');
+        if (activeInvoices.length > 0) {
+          if (activeTab) {
+            activeTab.data = activeInvoices;
+          } else {
+            tabsCopy.push({
+              label: 'In-transit',
+              link: '/v2/your-orders',
+              count: customerData.customer.orders.filter(
+                (item: any) =>
+                  item.invoice_id !== null && item.status === 'pending'
+              ).length,
+              data: activeInvoices
+            });
+          }
+        } else {
+          // Remove "Active Invoice" tab if there are no active invoices
+          const index = tabsCopy.findIndex(tab => tab.label === 'In-transit');
+          if (index !== -1) {
+            tabsCopy.splice(index, 1);
+          }
+        }
+        // Update the tabs state
+        setTabs(tabsCopy);
+        setActiveTab(tabsCopy[0].label);
+      }
     }
+  }, [customerData]);
+
+  useEffect(() => {
+    setSavedSearchData(
+      customerData?.customer?.saved_searches?.slice(0, 3) ?? []
+    );
   }, [customerData]);
 
   useEffect(() => {
@@ -643,20 +679,19 @@ const Dashboard = () => {
 
   // Get the keys and data for the active tab
   const { keys, data } = tabsData[
-    activeTab === 'Active Invoice'
+    activeTab === 'In-transit'
       ? 'activeInvoice'
-      : activeTab === 'Pending Invoice'
+      : activeTab === 'Pending'
       ? 'pendingInvoice'
       : ''
   ] || { keys: [], data: [] };
 
   const redirectLink = () => {
     let link = '/';
-    if (activeTab === 'Saved Search') {
-      return (link = 'v2/search?active-tab=saved-search');
-    } else if (activeTab === 'Active Invoice') {
+
+    if (activeTab === 'In-transit') {
       return (link = '/v2/your-orders?path=active');
-    } else if (activeTab === 'Pending Invoice') {
+    } else if (activeTab === 'Pending') {
       return (link = '/v2/your-orders');
     }
     return link;
@@ -1101,10 +1136,10 @@ const Dashboard = () => {
             setDialogContent(
               <CommonPoppup
                 content="To confirm a stone or make a purchase, KYC verification is
-              mandatory. Without verification, access to certain
-              features is restricted."
+                mandatory. Without verification, access to certain
+                features is restricted."
+                customPoppupStyle="!h-[220px]"
                 customPoppupBodyStyle="!mt-[62px]"
-                customPoppupStyle="h-[270px]"
                 header={'Important KYC Verification Required!'}
                 actionButtonData={[
                   {
@@ -1586,20 +1621,12 @@ const Dashboard = () => {
           {' '}
           <div className="flex flex-col gap-4 mb-[20px]">
             <div
-              className={`bg-cover ml-[-20px] mr-[-16px]  bg-no-repeat flex justify-center flex-col items-center h-[220px] gap-5`}
+              className={`bg-cover ml-[-20px] mr-[-16px]  bg-no-repeat flex justify-center flex-col items-center h-[126px] gap-5`}
               style={{
                 backgroundImage:
                   customerData === undefined ? '' : 'url(/gradient.png)'
               }}
             >
-              {customerData === undefined ? (
-                ''
-              ) : (
-                <p className="text-headingM medium text-neutral900">
-                  Hello, {customerData?.customer.first_name}
-                </p>
-              )}
-
               {customerData !== undefined ? (
                 <div className="flex items-center bg-neutral0 rounded-[4px] overflow-hidden border-[1px] border-primaryBorder w-[720px] px-4 py-2">
                   <div className="relative flex-grow items-center">
@@ -1697,69 +1724,70 @@ const Dashboard = () => {
                     </div>
                   ))}
             </div>
-
-            <div className="flex w-full gap-4 h-[400px]">
-              {' '}
-              {/* Ensure the container takes up full width */}
-              {/* Carousel Container - Allow it to shrink if necessary but also give it an initial width */}
-              <div className="flex-1 flex-shrink min-w-0 border-[1px] border-neutral50">
-                <DashboardCarousel
-                  images={customerData?.customer?.carousel_items}
-                />
-              </div>
-              {/* KAMCard Container - Prevent it from shrinking and assign a max width */}
-              <div className="flex-shrink-0 w-[300px] max-w-full">
-                {customerData === undefined ? (
-                  <Skeleton
-                    animation="wave"
-                    width={'100%'}
-                    variant="rectangular"
-                    height={400}
-                    className="rounded-[4px]"
-                  />
-                ) : (
-                  <KAMCard
-                    name={customerData?.customer.kam?.kam_name ?? '-'}
-                    role={
-                      customerData?.customer.kam?.post ?? 'Key Account Manager'
-                    }
-                    phoneNumber={customerData?.customer.kam?.phone ?? '-'}
-                    email={customerData?.customer.kam?.email ?? '-'}
-                    image={customerData?.customer.kam?.image ?? ''}
-                  />
-                )}
-              </div>
-            </div>
             {tabs.length > 0 && (
               <div className="flex gap-4 ">
                 {customerData === undefined ? (
                   <Skeleton
-                    height={'100%'}
+                    height={400}
                     width={'100%'}
                     animation="wave"
                     variant="rectangular"
                     className="rounded-[4px]"
                   />
                 ) : (
-                  <div className="w-full border-[1px] border-neutral200 rounded-[8px] flex-1 flex-shrink min-w-0">
-                    <div className="border-b-[1px] border-neutral200 p-4">
-                      <div className="flex border-b border-neutral200 w-full ml-3 text-mMedium font-medium justify-between pr-4">
+                  <div className="w-full overflow-auto border-[1px] border-neutral200 rounded-[8px] flex-1 flex-shrink min-w-0">
+                    <div className="border-b-[1px] border-neutral200 p-3">
+                      <div className="flex border-b-[1px] border-neutral200 w-full ml-1 text-mMedium font-medium justify-between pr-4">
                         <div>
-                          {tabs.map(({ label }: any) => {
-                            return (
-                              <button
-                                className={`p-2 ${
-                                  activeTab === label
-                                    ? 'text-neutral900 border-b-[2px] border-primaryMain'
-                                    : 'text-neutral600 '
-                                }`}
-                                key={label}
-                                onClick={() => handleTabs({ tab: label })}
-                              >
-                                {label}
-                              </button>
-                            );
-                          })}
+                          <div className="relative inline-block">
+                            {tabs.map(({ label, count }: any) => {
+                              return (
+                                <button
+                                  className={`p-2 ${
+                                    activeTab === label
+                                      ? 'text-neutral900 border-b-[2px] border-primaryMain'
+                                      : 'text-neutral600 '
+                                  }`}
+                                  key={label}
+                                  onClick={() => handleTabs({ tab: label })}
+                                  onMouseEnter={() =>
+                                    label === 'Pending'
+                                      ? setIsHovered(
+                                          'Your order is being processed by the sales team.'
+                                        )
+                                      : setIsHovered(
+                                          'Your order has been confirmed and your invoice has been generated by the sales team.'
+                                        )
+                                  }
+                                  onMouseLeave={() => setIsHovered('')}
+                                >
+                                  <div className="flex gap-1">
+                                    {label}
+                                    <p>{'(' + count + ')'}</p>
+                                    <Image
+                                      src={infoSvg}
+                                      alt="order meta data"
+                                    />
+                                  </div>
+                                </button>
+                              );
+                            })}
+                            {isHovered !== '' && (
+                              <div className="absolute bg-[#ECF2FC] w-[320px] border-[1px] border-[#B6CFF3] rounded-[8px] p-4 text-[#475467] left-0  gap-2 right-[0px] ">
+                                <div className="flex flex-col gap-2">
+                                  <div className="flex gap-1 items-center">
+                                    <Image src={infoHover} alt="your orders" />{' '}
+                                    <p className="text-neutral900 font-medium text-mMedium">
+                                      Information
+                                    </p>
+                                  </div>
+                                  <p className="text-neutral600 text-[14px]">
+                                    {isHovered}
+                                  </p>
+                                </div>
+                              </div>
+                            )}
+                          </div>
                         </div>
                         <Link
                           href={redirectLink()}
@@ -1770,90 +1798,8 @@ const Dashboard = () => {
                       </div>
                     </div>
                     <div className="p-4 ">
-                      {activeTab === 'Saved Search' &&
-                        (tabs.find(tab => tab.label === activeTab)?.data
-                          .length > 0 ? (
-                          tabs
-                            .find(tab => tab.label === activeTab)
-                            ?.data?.map((searchData: any, index: number) => {
-                              const gradientIndex =
-                                index % gradientClasses.length;
-                              // Get the gradient class for the calculated index
-                              const gradientClass =
-                                gradientClasses[gradientIndex];
-                              return (
-                                <div
-                                  className="p-[16px] flex flex-col md:flex-row w-full border-[1px] border-neutral200 cursor-pointer group hover:bg-neutral50"
-                                  key={searchData?.id}
-                                  onClick={() =>
-                                    handleCardClick({
-                                      id: searchData.id,
-                                      savedSearchData: tabs.find(
-                                        tab => tab.label === activeTab
-                                      )?.data,
-                                      router,
-                                      triggerProductCountApi,
-                                      setDialogContent,
-                                      setIsDialogOpen
-                                    })
-                                  }
-                                >
-                                  <div className="flex items-center gap-[18px] md:w-[40%]">
-                                    <div
-                                      className={` ${gradientClass} text-headingM w-[69px] h-[69px] text-neutral700 uppercase p-[14px] rounded-[4px] font-medium text-center`}
-                                    >
-                                      {searchData.name
-                                        ?.split(' ') // Split the name into words
-                                        .slice(0, 2)
-                                        .map((word: string) => word.charAt(0)) // Extract the first character of each word
-                                        .join('')}
-                                    </div>
-                                    <div className="flex flex-col gap-[18px]">
-                                      <h1 className="text-neutral900 font-medium text-mMedium capitalize">
-                                        {searchData.name}
-                                      </h1>
-                                      <div className="text-neutral700 font-regular text-sMedium">
-                                        {formatCreatedAt(searchData.created_at)}
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div className="w-full md:w-[60%] mt-4 md:mt-0">
-                                    <DisplayTable
-                                      column={column}
-                                      row={[searchData.meta_data]}
-                                    />
-                                  </div>
-                                  <button
-                                    className="w-full md:w-[10%] flex justify-end items-start opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                                    onClick={e => {
-                                      e.stopPropagation();
-                                      handleEdit(searchData.id);
-                                    }}
-                                  >
-                                    <Image src={editIcon} alt="editIcon" />
-                                  </button>
-                                </div>
-                              );
-                            })
-                        ) : (
-                          <EmptyScreen
-                            label="Search Diamonds"
-                            onClickHandler={() =>
-                              router.push(
-                                `/v2/search?active-tab=${SubRoutes.NEW_SEARCH}`
-                              )
-                            }
-                            contentReactNode={
-                              <p className="text-neutral900  w-[17%] text-center">
-                                No saved searches so far. Let’s save some
-                                searches!
-                              </p>
-                            }
-                            imageSrc={empty}
-                          />
-                        ))}
-                      {(activeTab === 'Active Invoice' ||
-                        activeTab === 'Pending Invoice') && (
+                      {(activeTab === 'In-transit' ||
+                        activeTab === 'Pending') && (
                         <div className="max-w-full overflow-x-auto border-[1px] border-neutral200">
                           {/* header */}
                           <div className="grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] text-mMedium h-[47px] border-b border-neutral-200 bg-neutral-50 text-neutral700">
@@ -1873,7 +1819,7 @@ const Dashboard = () => {
                                 <div
                                   key={items.order_id}
                                   onClick={() => {
-                                    if (activeTab === 'Active Invoice') {
+                                    if (activeTab === 'In-transit') {
                                       router.push(
                                         `/v2/your-orders?path=active&id=${items?.id}`
                                       );
@@ -1919,36 +1865,190 @@ const Dashboard = () => {
                           </div>
                         </div>
                       )}
+                      {/* </div> */}
                     </div>
                   </div>
                 )}
-                <div className="w-[300px]">
-                  {customerData === undefined ? (
-                    <Skeleton
-                      height={420}
-                      width={'100%'}
-                      animation="wave"
-                      variant="rectangular"
-                      className="rounded-[4px]"
-                    />
-                  ) : (
-                    <VolumeDiscount
-                      totalSpent={
-                        customerData?.customer?.volumeDiscount?.totalSpent
-                      }
-                      expiryTime={
-                        // '2024-06-05T08:36:00.118Z'
-                        customerData?.customer?.volumeDiscount?.expiryTime
-                      }
-                      eligibleForDiscount={
-                        customerData?.customer?.volumeDiscount
-                          ?.eligibleForDiscount
-                      }
-                    />
-                  )}
-                </div>
               </div>
             )}
+
+            <div className="flex gap-4 ">
+              {customerData === undefined ? (
+                <Skeleton
+                  height={420}
+                  width={'100%'}
+                  animation="wave"
+                  variant="rectangular"
+                  className="rounded-[4px]"
+                />
+              ) : (
+                <div className="w-full h-[420px] overflow-auto border-[1px] border-neutral200 rounded-[8px] flex-1 flex-shrink min-w-0">
+                  <div className="border-b-[1px] border-neutral200 p-3">
+                    <div className="flex  w-full ml-1 text-mMedium font-medium justify-between pr-4">
+                      <div>
+                        <button
+                          className={`${'text-neutral900 border-primaryMain'}`}
+                          key={'Saved Search'}
+                        >
+                          Saved Search{' '}
+                        </button>
+                      </div>
+                      <Link
+                        href={'v2/search?active-tab=saved-search'}
+                        className="cursor-pointer text-infoMain text-sRegular flex items-center"
+                      >
+                        View All
+                      </Link>
+                    </div>
+                  </div>
+                  <div className="p-4 ">
+                    {savedSearchData.length > 0 ? (
+                      savedSearchData?.map((searchData: any, index: number) => {
+                        const gradientIndex = index % gradientClasses.length;
+                        // Get the gradient class for the calculated index
+                        const gradientClass = gradientClasses[gradientIndex];
+                        return (
+                          <div
+                            className="p-[10px] flex flex-col md:flex-row w-full border-[1px] border-neutral200 cursor-pointer group hover:bg-neutral50"
+                            key={searchData?.id}
+                            onClick={() =>
+                              handleCardClick({
+                                id: searchData.id,
+                                savedSearchData: tabs.find(
+                                  tab => tab.label === activeTab
+                                )?.data,
+                                router,
+                                triggerProductCountApi,
+                                setDialogContent,
+                                setIsDialogOpen
+                              })
+                            }
+                          >
+                            <div className="flex items-center gap-[18px] md:w-[40%]">
+                              <div
+                                className={` ${gradientClass} text-headingM w-[69px] h-[69px] text-neutral700 uppercase p-[14px] rounded-[4px] font-medium text-center`}
+                              >
+                                {searchData.name
+                                  ?.split(' ') // Split the name into words
+                                  .slice(0, 2)
+                                  .map((word: string) => word.charAt(0)) // Extract the first character of each word
+                                  .join('')}
+                              </div>
+                              <div className="flex flex-col gap-[18px]">
+                                <h1 className="text-neutral900 font-medium text-mMedium capitalize">
+                                  {searchData.name}
+                                </h1>
+                                <div className="text-neutral700 font-regular text-sMedium">
+                                  {formatCreatedAt(searchData.created_at)}
+                                </div>
+                              </div>
+                            </div>
+                            <div className="w-full md:w-[60%] mt-4 md:mt-0">
+                              <DisplayTable
+                                column={column}
+                                row={[searchData.meta_data]}
+                              />
+                            </div>
+                            <button
+                              className="w-full md:w-[10%] flex justify-end items-start opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                              onClick={e => {
+                                e.stopPropagation();
+                                handleEdit(searchData.id);
+                              }}
+                            >
+                              <Image src={editIcon} alt="editIcon" />
+                            </button>
+                          </div>
+                        );
+                      })
+                    ) : (
+                      <EmptyScreen
+                        label="Search Diamonds"
+                        contentReactNode={
+                          <p className="text-neutral900  w-[17%] text-center">
+                            No saved searches so far. Let’s save some searches!
+                          </p>
+                        }
+                        onClickHandler={() =>
+                          router.push(
+                            `/v2/search?active-tab=${SubRoutes.NEW_SEARCH}`
+                          )
+                        }
+                        imageSrc={empty}
+                      />
+                    )}
+                  </div>
+                </div>
+              )}
+              <div className="w-[300px]">
+                {customerData === undefined ? (
+                  <Skeleton
+                    height={420}
+                    width={'100%'}
+                    animation="wave"
+                    variant="rectangular"
+                    className="rounded-[4px]"
+                  />
+                ) : (
+                  <VolumeDiscount
+                    totalSpent={
+                      customerData?.customer?.volumeDiscount?.totalSpent
+                    }
+                    expiryTime={
+                      // '2024-06-05T08:36:00.118Z'
+                      customerData?.customer?.volumeDiscount?.expiryTime
+                    }
+                    eligibleForDiscount={
+                      customerData?.customer?.volumeDiscount
+                        ?.eligibleForDiscount
+                    }
+                  />
+                )}
+              </div>
+            </div>
+
+            <div className="flex w-full gap-4 h-[400px]">
+              {' '}
+              {/* Ensure the container takes up full width */}
+              {/* Carousel Container - Allow it to shrink if necessary but also give it an initial width */}
+              <div className="flex-1 flex-shrink min-w-0 border-[1px] border-neutral50">
+                {customerData !== undefined ? (
+                  <DashboardCarousel
+                    images={customerData?.customer?.carousel_items}
+                  />
+                ) : (
+                  <Skeleton
+                    animation="wave"
+                    width={'100%'}
+                    variant="rectangular"
+                    height={400}
+                    className="rounded-[4px]"
+                  />
+                )}
+              </div>
+              {/* KAMCard Container - Prevent it from shrinking and assign a max width */}
+              <div className="flex-shrink-0 w-[300px] max-w-full">
+                {customerData === undefined ? (
+                  <Skeleton
+                    animation="wave"
+                    width={'100%'}
+                    variant="rectangular"
+                    height={400}
+                    className="rounded-[4px]"
+                  />
+                ) : (
+                  <KAMCard
+                    name={customerData?.customer.kam?.kam_name ?? '-'}
+                    role={
+                      customerData?.customer.kam?.post ?? 'Key Account Manager'
+                    }
+                    phoneNumber={customerData?.customer.kam?.phone ?? '-'}
+                    email={customerData?.customer.kam?.email ?? '-'}
+                    image={customerData?.customer.kam?.image ?? ''}
+                  />
+                )}
+              </div>
+            </div>
           </div>
           <div className="border-t-[1px] mt-auto border-l-[1px] border-r-[1px] rounded-[8px] p-4 flex justify-between border-neutral200 text-lRegular">
             {/* for fixed footer */}
