@@ -3,5 +3,6 @@ export interface IImagesType {
   url: string;
   showDivider?: boolean;
   url_check?: string;
+  downloadUrl?: string;
   category?: string;
 }
