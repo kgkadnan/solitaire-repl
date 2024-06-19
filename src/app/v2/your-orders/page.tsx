@@ -37,6 +37,7 @@ import { DateRange } from 'react-day-picker';
 import YourOrderSkeleton from '@/components/v2/skeleton/your-order';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import { Skeleton } from '@mui/material';
+import { kycStatus } from '@/constants/enums/kyc';
 
 interface IDataItem {
   id: number;
@@ -66,6 +67,9 @@ const MyDiamonds = () => {
 
   const [showDetail, setShowDetail] = useState(false);
   const [productDetailData, setProductDetailData] = useState([]);
+
+  let isNudge = localStorage.getItem('show-nudge')! === 'MINI';
+  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
 
   // State to manage the search input value
   const [search, setSearch] = useState<string>('');
@@ -283,11 +287,16 @@ const MyDiamonds = () => {
   const filterDataByDate = (
     data: IDataItem[],
     fromDate: Date,
-    toDate: Date
+    toDate?: Date
   ): IDataItem[] => {
     return data.filter((item: IDataItem) => {
       const itemDate: Date = new Date(item.created_at);
-      return itemDate >= fromDate && itemDate <= toDate;
+
+      if (toDate) {
+        return itemDate >= fromDate && itemDate <= toDate;
+      } else {
+        return itemDate <= fromDate;
+      }
     });
   };
   const handleApplyFilter = (date: any, reset: string) => {
@@ -300,7 +309,11 @@ const MyDiamonds = () => {
         } else {
           setPendingDataState(
             pendingInvoicesData &&
-              filterDataByDate(pendingInvoicesData?.orders, fromDate, toDate)
+              filterDataByDate(
+                pendingInvoicesData?.orders,
+                fromDate,
+                date.to ? toDate : undefined
+              )
           );
         }
 
@@ -311,7 +324,11 @@ const MyDiamonds = () => {
         } else {
           setInTransitDataState(
             activeInvoicesData &&
-              filterDataByDate(activeInvoicesData?.orders, fromDate, toDate)
+              filterDataByDate(
+                activeInvoicesData?.orders,
+                fromDate,
+                date.to ? toDate : undefined
+              )
           );
         }
 
@@ -322,7 +339,11 @@ const MyDiamonds = () => {
         } else {
           setPastDataState(
             invoiceHistoryData &&
-              filterDataByDate(invoiceHistoryData?.orders, fromDate, toDate)
+              filterDataByDate(
+                invoiceHistoryData?.orders,
+                fromDate,
+                date.to ? toDate : undefined
+              )
           );
         }
 
@@ -548,7 +569,15 @@ const MyDiamonds = () => {
   };
 
   return (
-    <div className="relative mb-[20px]">
+    <div
+      className={`relative mb-[20px] ${
+        isNudge &&
+        (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+          isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+          ? ''
+          : 'h-[89vh]'
+      } `}
+    >
       <DialogComponent dialogContent={dialogContent} isOpens={isDialogOpen} />
       {isLoading && <CustomKGKLoader />}
       <div className="flex  py-[8px] items-center">
