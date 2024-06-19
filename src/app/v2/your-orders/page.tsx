@@ -287,11 +287,16 @@ const MyDiamonds = () => {
   const filterDataByDate = (
     data: IDataItem[],
     fromDate: Date,
-    toDate: Date
+    toDate?: Date
   ): IDataItem[] => {
     return data.filter((item: IDataItem) => {
       const itemDate: Date = new Date(item.created_at);
-      return itemDate >= fromDate && itemDate <= toDate;
+
+      if (toDate) {
+        return itemDate >= fromDate && itemDate <= toDate;
+      } else {
+        return itemDate <= fromDate;
+      }
     });
   };
   const handleApplyFilter = (date: any, reset: string) => {
@@ -304,7 +309,11 @@ const MyDiamonds = () => {
         } else {
           setPendingDataState(
             pendingInvoicesData &&
-              filterDataByDate(pendingInvoicesData?.orders, fromDate, toDate)
+              filterDataByDate(
+                pendingInvoicesData?.orders,
+                fromDate,
+                date.to ? toDate : undefined
+              )
           );
         }
 
@@ -315,7 +324,11 @@ const MyDiamonds = () => {
         } else {
           setInTransitDataState(
             activeInvoicesData &&
-              filterDataByDate(activeInvoicesData?.orders, fromDate, toDate)
+              filterDataByDate(
+                activeInvoicesData?.orders,
+                fromDate,
+                date.to ? toDate : undefined
+              )
           );
         }
 
@@ -326,7 +339,11 @@ const MyDiamonds = () => {
         } else {
           setPastDataState(
             invoiceHistoryData &&
-              filterDataByDate(invoiceHistoryData?.orders, fromDate, toDate)
+              filterDataByDate(
+                invoiceHistoryData?.orders,
+                fromDate,
+                date.to ? toDate : undefined
+              )
           );
         }
 

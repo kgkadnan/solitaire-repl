@@ -1984,7 +1984,7 @@ const Dashboard = () => {
                 {customerData === undefined ? (
                   <Skeleton
                     height={420}
-                    width={'100%'}
+                    width={300}
                     animation="wave"
                     variant="rectangular"
                     className="rounded-[4px]"
