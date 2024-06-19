@@ -116,55 +116,63 @@ export function DiamondDetailsComponent({
     {
       name: getShapeDisplayName(tableData?.shape ?? ''),
       url: `${FILE_URLS.IMG.replace('***', tableData?.lot_id ?? '')}`,
+      downloadUrl: `${FILE_URLS.IMG.replace('***', tableData?.lot_id ?? '')}`,
       category: 'Image'
     },
     {
       name: 'GIA Certificate',
-      url: `${tableData?.certificate_url}`,
-      category: 'Certificate'
+      url: `${FILE_URLS.CERT_FILE.replace(
+        '***',
+        tableData?.certificate_number ?? ''
+      )}`,
+      category: 'Certificate',
+      downloadUrl: tableData?.certificate_url,
+      url_check: tableData?.assets_pre_check?.CERT_FILE
     },
     {
       name: 'B2B',
       url: `${FILE_URLS.B2B.replace('***', tableData?.lot_id ?? '')}`,
-      url_check: `${FILE_URLS.B2B_CHECK.replace(
-        '***',
-        tableData?.lot_id ?? ''
-      )}`,
+      url_check: tableData?.assets_pre_check?.B2B_CHECK,
       category: 'Video'
     },
     {
       name: 'B2B Sparkle',
       url: `${FILE_URLS.B2B_SPARKLE.replace('***', tableData?.lot_id ?? '')}`,
-      url_check: `${FILE_URLS.B2B_SPARKLE_CHECK.replace(
-        '***',
-        tableData?.lot_id ?? ''
-      )}`,
+      url_check: tableData?.assets_pre_check?.B2B_SPARKLE_CHECK,
       category: 'B2B Sparkle'
     },
 
     {
       name: 'Heart',
       url: `${FILE_URLS.HEART.replace('***', tableData?.lot_id ?? '')}`,
+      downloadUrl: `${FILE_URLS.HEART.replace('***', tableData?.lot_id ?? '')}`,
       category: 'Image'
     },
     {
       name: 'Arrow',
       url: `${FILE_URLS.ARROW.replace('***', tableData?.lot_id ?? '')}`,
+      downloadUrl: `${FILE_URLS.ARROW.replace('***', tableData?.lot_id ?? '')}`,
       category: 'Image'
     },
     {
       name: 'Aset',
       url: `${FILE_URLS.ASET.replace('***', tableData?.lot_id ?? '')}`,
+      downloadUrl: `${FILE_URLS.ASET.replace('***', tableData?.lot_id ?? '')}`,
       category: 'Image'
     },
     {
       name: 'Ideal',
       url: `${FILE_URLS.IDEAL.replace('***', tableData?.lot_id ?? '')}`,
+      downloadUrl: `${FILE_URLS.IDEAL.replace('***', tableData?.lot_id ?? '')}`,
       category: 'Image'
     },
     {
       name: 'Fluorescence',
       url: `${FILE_URLS.FLUORESCENCE.replace('***', tableData?.lot_id ?? '')}`,
+      downloadUrl: `${FILE_URLS.FLUORESCENCE.replace(
+        '***',
+        tableData?.lot_id ?? ''
+      )}`,
       category: 'Image'
     }
   ];
