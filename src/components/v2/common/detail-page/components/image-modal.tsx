@@ -121,7 +121,6 @@ const ImageModal: React.FC<IModalProps> = ({
                 {images.length > 0 ? (
                   filteredImages.length > 0 ? (
                     filteredImages[imageIndex]?.category === 'Video' ||
-                    filteredImages[imageIndex]?.category === 'Certificate' ||
                     filteredImages[imageIndex]?.category === 'B2B Sparkle' ? (
                       <iframe
                         src={filteredImages[0]?.url}
@@ -292,7 +291,7 @@ const ImageModal: React.FC<IModalProps> = ({
                             <button
                               onClick={() => {
                                 handleDownloadImage(
-                                  filteredImages[imageIndex].url || '',
+                                  filteredImages[imageIndex].downloadUrl || '',
                                   filteredImages[imageIndex].name,
                                   setIsLoading
                                 );
