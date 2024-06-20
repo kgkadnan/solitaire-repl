@@ -205,7 +205,11 @@ const Form = ({
     setAmountRangeError
   } = errorSetState;
 
-  const { data, error } = useGetProductCountQuery(
+  const {
+    data,
+    error,
+    isLoading: isFormLoading
+  } = useGetProductCountQuery(
     {
       searchUrl
     },
@@ -213,14 +217,18 @@ const Form = ({
       skip: !searchUrl
     }
   );
-
+  // useEffect(()=>{
+  //   setIsLoading(isFormLoading)
+  // },[isFormLoading])
   // Update search URL when form state changes
   useEffect(() => {
+    // setIsLoading(true)
     const queryParams = generateQueryParams(state);
     // Construct your search URL here
     if (!isValidationError) {
       setSearchUrl(constructUrlParams(queryParams));
     }
+    // setIsLoading(false)
   }, [state]);
 
   //Handle search count and errors
