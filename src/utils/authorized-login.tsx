@@ -72,7 +72,6 @@ const authorizedLogin = (WrappedComponent: React.ComponentType) => {
       setIsAuthorized(true);
       setIsLoading(false);
     }, [authToken, userLoggedOut, router]);
-    console.log(currentPath, 'jyoti');
     if (
       isLoading &&
       currentPath !== '/v2' &&

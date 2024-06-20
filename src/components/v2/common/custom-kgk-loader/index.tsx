@@ -1,7 +1,6 @@
 import React from 'react';
 
 const CustomKGKLoader = () => {
-  console.log('loader called');
   return (
     <div
       className="fixed inset-0  flex justify-center items-center z-[1600]"
