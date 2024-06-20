@@ -744,17 +744,20 @@ const Dashboard = () => {
       getProductById({
         search_keyword: stoneId
       })
+        .unwrap()
         .then((res: any) => {
-          if (res?.error?.status === statusCode.NOT_FOUND) {
-            setError(`We couldn't find any results for this search`);
-          } else {
-            setSearchData(res?.data);
-            setError('');
-            setIsDetailPage(true);
-          }
+          setSearchData(res);
+          setError('');
+          setIsDetailPage(true);
         })
         .catch((_e: any) => {
-          setError('Something went wrong');
+          if (_e?.status === statusCode.NOT_FOUND) {
+            setError(`We couldn't find any results for this search`);
+          } else if (_e?.status === statusCode.UNAUTHORIZED) {
+            setError(_e?.data?.message?.message);
+          } else {
+            setError('Something went wrong');
+          }
         });
     }
   };
@@ -763,18 +766,22 @@ const Dashboard = () => {
       getProductById({
         search_keyword: stoneId
       })
+        .unwrap()
         .then((res: any) => {
           // setIsLoading(false);
-          if (res?.error?.status === statusCode.NOT_FOUND) {
-            setError(`We couldn't find any results for this search`);
-          } else {
-            setSearchData(res?.data);
-            setError('');
-            setIsDetailPage(true);
-          }
+
+          setSearchData(res);
+          setError('');
+          setIsDetailPage(true);
         })
         .catch((_e: any) => {
-          setError('Something went wrong');
+          if (_e?.status === statusCode.NOT_FOUND) {
+            setError(`We couldn't find any results for this search`);
+          } else if (_e?.status === statusCode.UNAUTHORIZED) {
+            setError(_e?.data?.message?.message);
+          } else {
+            setError('Something went wrong');
+          }
         });
     } else {
       setError('Please enter stone id or certificate number');
@@ -1251,7 +1258,7 @@ const Dashboard = () => {
                     handler: () => {
                       setIsDialogOpen(false), setIsDetailPage(true);
                     },
-                    customStyle: 'flex-1 w-full h-10'
+                    customStyle: 'flex-1 w-full h-10 '
                   },
                   {
                     variant: 'primary',
@@ -1271,19 +1278,22 @@ const Dashboard = () => {
             getProductById({
               search_keyword: stoneId
             })
+              .unwrap()
               .then((res: any) => {
                 // setIsLoading(false);
-                if (res?.error?.status === statusCode.NOT_FOUND) {
-                  setError(`We couldn't find any results for this search`);
-                } else {
-                  setSearchData(res?.data);
-                  setError('');
-                  setIsDetailPage(true);
-                }
+
+                setSearchData(res);
+                setError('');
+                setIsDetailPage(true);
               })
               .catch((_e: any) => {
-                // setIsLoading(false);
-                setError('Something went wrong');
+                if (_e?.status === statusCode.NOT_FOUND) {
+                  setError(`We couldn't find any results for this search`);
+                } else if (_e?.status === statusCode.UNAUTHORIZED) {
+                  setError(_e?.data?.message?.message);
+                } else {
+                  setError('Something went wrong');
+                }
               });
             dispatch(notificationBadge(true));
 
@@ -1348,7 +1358,7 @@ const Dashboard = () => {
         );
       } else if (data.start_at && !data.count) {
         return (
-          <div className="mt-1 flex items-center gap-2 rounded-[4px] px-1 h-[26px] bg-[#F1FAF8]">
+          <div className="mt-1 flex items-center  gap-2 rounded-[4px] px-1 h-[26px] bg-[#F1FAF8]">
             <Image src={BidHammer} alt="Bid to Buy" className="mb-2" />
             <p className="m-0 p-0 text-neutral-900 sm:text-mMedium text-lRegular">
               Stay tuned
