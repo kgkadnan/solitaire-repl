@@ -1325,7 +1325,6 @@ const Dashboard = () => {
             })
               .unwrap()
               .then((res: any) => {
-                // setIsLoading(false);
                 setSearchData(res);
                 setError('');
                 setIsDetailPage(true);
