@@ -2,13 +2,13 @@
 
 import AnchorLinkNavigation from '@/components/v2/common/anchor-tag-navigation';
 import { anchor } from '@/constants/v2/form';
-import React, { Dispatch, SetStateAction, useEffect } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Shape } from './components/shape';
 import { Carat } from './components/carat';
 import { Color } from './components/color';
 import {
   useAddDemandMutation,
-  useGetProductCountQuery
+  useLazyGetProductCountQuery
 } from '@/features/api/product';
 import useValidationStateManagement from '../hooks/validation-state-management';
 import { generateQueryParams } from './helpers/generate-query-parameters';
@@ -193,7 +193,9 @@ const Form = ({
   const { isInputDialogOpen } = modalState;
 
   const { setIsInputDialogOpen } = modalSetState;
-
+  const [data, setData] = useState<any>();
+  const [error, setError] = useState<any>();
+  let [triggerProductCountApi] = useLazyGetProductCountQuery();
   // const { errorState, errorSetState } = useNumericFieldValidation();
 
   const { caratError, discountError, pricePerCaratError, amountRangeError } =
@@ -205,14 +207,30 @@ const Form = ({
     setAmountRangeError
   } = errorSetState;
 
-  const { data, error } = useGetProductCountQuery(
-    {
-      searchUrl
-    },
-    {
-      skip: !searchUrl
-    }
-  );
+  useEffect(() => {
+    setIsLoading(true);
+    triggerProductCountApi({ searchUrl })
+      .unwrap()
+      .then((response: any) => {
+        setData(response), setIsLoading(false);
+      })
+      .catch(e => {
+        setError(e), setIsLoading(false);
+      });
+  }, [searchUrl]);
+  console.log(data);
+  // const {
+  //   data,
+  //   error,
+  //   isLoading: isFormLoading
+  // } = useGetProductCountQuery(
+  //   {
+  //     searchUrl
+  //   },
+  //   {
+  //     skip: !searchUrl
+  //   }
+  // );
 
   // Update search URL when form state changes
   useEffect(() => {
