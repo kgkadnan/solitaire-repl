@@ -42,6 +42,7 @@ import { Toast } from '@/components/v2/common/copy-and-share/toast';
 import { loadImages } from '@/components/v2/common/detail-page/helpers/load-images';
 import { checkImage } from '@/components/v2/common/detail-page/helpers/check-image';
 import CommonPoppup from '../login/component/common-poppup';
+import BiddingSkeleton from '@/components/v2/skeleton/bidding';
 
 const BidToBuy = () => {
   const router = useRouter();
@@ -67,7 +68,8 @@ const BidToBuy = () => {
 
   const [bidHistory, setBidHistory] = useState<any>({});
 
-  const [triggerBidToBuyHistory] = useLazyGetBidToBuyHistoryQuery({});
+  const [triggerBidToBuyHistory, { data: historyData }] =
+    useLazyGetBidToBuyHistoryQuery({});
   const mapColumns = (columns: any) =>
     columns
       ?.filter(({ is_disabled }: any) => !is_disabled)
@@ -179,7 +181,6 @@ const BidToBuy = () => {
   const [timeDifference, setTimeDifference] = useState(null);
 
   const getBidToBuyHistoryData = () => {
-    setIsLoading(true);
     triggerBidToBuyHistory({})
       .then(res => {
         setIsLoading(false);
@@ -232,6 +233,9 @@ const BidToBuy = () => {
   const [activeBid, setActiveBid] = useState<any>();
   const [bid, setBid] = useState<any>();
   const [time, setTime] = useState('');
+
+  console.log('bidHistory', historyData);
+  console.log('bid', bid);
 
   useEffect(() => {
     const currentTime: any = new Date();
@@ -567,6 +571,8 @@ const BidToBuy = () => {
     }
   }, [validImages]);
 
+  console.log('activeTab', activeTab);
+
   return (
     <div className="mb-[4px] relative">
       {isLoading && <CustomKGKLoader />}
@@ -608,9 +614,12 @@ const BidToBuy = () => {
             activeTab={activeTab}
           />
         </>
+      ) : bid === undefined ||
+        historyData === undefined ||
+        activeBid === undefined ? (
+        <BiddingSkeleton />
       ) : (
         <>
-          {' '}
           <div className="flex  py-[4px] items-center justify-between">
             <div className="flex gap-3 items-center">
               <p className="text-lMedium font-medium text-neutral900">
@@ -631,22 +640,21 @@ const BidToBuy = () => {
               )}
             </div>
 
-            {timeDifference !== null && timeDifference >= 0 && (
-              <CountdownTimer
-                initialHours={Math.floor(timeDifference / (1000 * 60 * 60))}
-                initialMinutes={Math.floor(
-                  (timeDifference % (1000 * 60 * 60)) / (1000 * 60)
-                )}
-                initialSeconds={Math.floor(
-                  (timeDifference % (1000 * 60)) / 1000
-                )}
-              />
-            )}
+            <div className="h-[38px]">
+              {timeDifference !== null && timeDifference >= 0 && (
+                <CountdownTimer
+                  initialHours={Math.floor(timeDifference / (1000 * 60 * 60))}
+                  initialMinutes={Math.floor(
+                    (timeDifference % (1000 * 60 * 60)) / (1000 * 60)
+                  )}
+                  initialSeconds={Math.floor(
+                    (timeDifference % (1000 * 60)) / 1000
+                  )}
+                />
+              )}
+            </div>
           </div>
           <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow">
-            {/* <div className="w-[450px]">
-    
-    </div> */}
             <div className="border-b-[1px] border-neutral200">
               {
                 <BidToByDataTable
@@ -696,7 +704,6 @@ const BidToBuy = () => {
                 />
               }
             </div>
-            {/* {renderFooter()} */}
           </div>
         </>
       )}

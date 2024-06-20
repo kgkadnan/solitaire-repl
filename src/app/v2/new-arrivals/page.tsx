@@ -55,6 +55,7 @@ import BookAppointment from '../my-appointments/components/book-appointment/book
 import { HOLD_STATUS, MEMO_STATUS } from '@/constants/business-logic';
 import { NO_STONES_AVAILABLE } from '@/constants/error-messages/compare-stone';
 import { kycStatus } from '@/constants/enums/kyc';
+import BiddingSkeleton from '@/components/v2/skeleton/bidding';
 
 const NewArrivals = () => {
   const router = useRouter();
@@ -736,6 +737,10 @@ const NewArrivals = () => {
             />
           </div>
         </>
+      ) : bid === undefined ||
+        bidHistory === undefined ||
+        activeBid === undefined ? (
+        <BiddingSkeleton />
       ) : (
         <>
           {' '}
@@ -743,17 +748,19 @@ const NewArrivals = () => {
             <p className="text-lMedium font-medium text-neutral900">
               New Arrivals
             </p>
-            {timeDifference !== null && timeDifference >= 0 && (
-              <CountdownTimer
-                initialHours={Math.floor(timeDifference / (1000 * 60 * 60))}
-                initialMinutes={Math.floor(
-                  (timeDifference % (1000 * 60 * 60)) / (1000 * 60)
-                )}
-                initialSeconds={Math.floor(
-                  (timeDifference % (1000 * 60)) / 1000
-                )}
-              />
-            )}
+            <div className="h-[40px]">
+              {timeDifference !== null && timeDifference >= 0 && (
+                <CountdownTimer
+                  initialHours={Math.floor(timeDifference / (1000 * 60 * 60))}
+                  initialMinutes={Math.floor(
+                    (timeDifference % (1000 * 60 * 60)) / (1000 * 60)
+                  )}
+                  initialSeconds={Math.floor(
+                    (timeDifference % (1000 * 60)) / 1000
+                  )}
+                />
+              )}
+            </div>
           </div>
           <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow">
             <div className="border-b-[1px] border-neutral200">
