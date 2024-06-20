@@ -8,7 +8,6 @@ import { Carat } from './components/carat';
 import { Color } from './components/color';
 import {
   useAddDemandMutation,
-  useGetProductCountQuery,
   useLazyGetProductCountQuery
 } from '@/features/api/product';
 import useValidationStateManagement from '../hooks/validation-state-management';
