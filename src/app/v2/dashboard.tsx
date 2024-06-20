@@ -836,7 +836,7 @@ const Dashboard = () => {
                   handler: () => {
                     setIsDialogOpen(false);
                     setIsDetailPage(false);
-                    setSearchData({});
+                    // setSearchData({});
                   },
                   customStyle: 'flex-1 w-full h-10'
                 },
@@ -851,7 +851,25 @@ const Dashboard = () => {
               ]}
             />
           );
-
+          getProductById({
+            search_keyword: stoneId
+          })
+            .unwrap()
+            .then((res: any) => {
+              // setIsLoading(false);
+              setSearchData(res);
+              setError('');
+              setIsDetailPage(true);
+            })
+            .catch((_e: any) => {
+              if (_e?.status === statusCode.NOT_FOUND) {
+                setError(`We couldn't find any results for this search`);
+              } else if (_e?.status === statusCode.UNAUTHORIZED) {
+                setError(_e?.data?.message?.message);
+              } else {
+                setError('Something went wrong');
+              }
+            });
           // On success, show confirmation dialog and update badge
           setError('');
         })
