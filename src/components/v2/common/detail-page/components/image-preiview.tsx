@@ -228,16 +228,14 @@ const ImagePreview: React.FC<IImagePreviewProps> = ({
                             setIsLoading
                           );
                         }}
-                        disabled={!(filteredImages.length > 0)}
-                        className={`rounded-[4px] hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm ${
-                          filteredImages.length > 0
-                            ? 'bg-neutral0'
-                            : '!bg-neutral100 cursor-not-allowed'
-                        }`}
+                        disabled={
+                          !filteredImages[imageIndex].downloadUrl?.length
+                        }
+                        className={`rounded-[4px] bg-neutral0 disabled:!bg-neutral100 disabled:cursor-not-allowed hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm`}
                       >
                         <DownloadImg
                           className={`stroke-[1.5] ${
-                            filteredImages.length > 0
+                            filteredImages[imageIndex].downloadUrl?.length
                               ? 'stroke-neutral900'
                               : 'stroke-neutral400'
                           }`}

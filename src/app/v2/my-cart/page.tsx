@@ -602,8 +602,10 @@ const MyCart = () => {
         detailImageData?.certificate_number ?? ''
       )}`,
       category: 'Certificate',
-      downloadUrl: detailImageData?.certificate_url,
-      url_check: detailImageData?.assets_pre_check?.CERT_FILE
+      downloadUrl: detailImageData?.assets_pre_check?.CERT_FILE
+        ? detailImageData?.certificate_url
+        : '',
+      url_check: detailImageData?.assets_pre_check?.CERT_IMG
     },
 
     {
