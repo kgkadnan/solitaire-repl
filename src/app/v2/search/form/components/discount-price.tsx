@@ -66,7 +66,7 @@ export const DiscountPrice = ({
         }
       },
       handleMinChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (/^\d*\.?\d{0,2}$/.test(event.target.value)) {
+        if (/^-?\d*\.?\d{0,2}$/.test(event.target.value)) {
           setDiscountMin(event.target.value);
           handleNumericRange({
             min: event.target.value,

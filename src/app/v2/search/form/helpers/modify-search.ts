@@ -69,6 +69,7 @@ export const setModifySearch = (data: any, setState: any) => {
     setSelectedGirdle,
     setSelectionChecked
   } = setState;
+
   data?.shape && setSelectedShape(data?.shape);
   data?.carats && setSelectedCaratRange(data?.carats);
   data?.clarity && setSelectedClarity(data?.clarity);
@@ -78,7 +79,7 @@ export const setModifySearch = (data: any, setState: any) => {
   data?.polish && setSelectedPolish(data?.polish);
   data?.location && setSelectedLocation(data?.location);
   data?.symmetry && setSelectedSymmetry(data?.symmetry);
-  data?.fluoroscence && setSelectedFluorescence(data?.fluoroscence);
+  data?.fluorescence && setSelectedFluorescence(data?.fluorescence);
   data?.origin_country && setSelectedOrigin(data?.origin_country);
   data?.shade && setSelectedShade(data?.shade);
   data?.color && setSelectedWhiteColor(data?.color);

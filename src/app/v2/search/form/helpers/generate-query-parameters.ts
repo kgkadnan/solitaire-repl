@@ -208,14 +208,14 @@ export const generateQueryParams = (state: IState) => {
   discountMin?.length !== 0 &&
     discountMax?.length !== 0 &&
     (queryParams['discount'] = {
-      lte: discountMin,
-      gte: discountMax
+      lte: discountMax,
+      gte: discountMin
     });
   pricePerCaratMin?.length !== 0 &&
     pricePerCaratMax?.length !== 0 &&
     (queryParams['price_per_carat'] = {
-      lte: pricePerCaratMin,
-      gte: pricePerCaratMax
+      lte: pricePerCaratMax,
+      gte: pricePerCaratMin
     });
   blackTable?.length !== 0 && (queryParams['table_black'] = blackTable);
   sideBlack?.length !== 0 && (queryParams['side_black'] = sideBlack);
