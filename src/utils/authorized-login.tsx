@@ -75,6 +75,9 @@ const authorizedLogin = (WrappedComponent: React.ComponentType) => {
     if (
       isLoading &&
       currentPath !== '/v2' &&
+      currentPath !== '/v2/bid-2-buy' &&
+      currentPath !== '/v2/new-arrivals' &&
+      currentPath !== '/v2/my-cart' &&
       !(currentPath === '/v2/search' && searchParams !== 'new-search') &&
       currentPath !== '/v2/your-orders'
     ) {
