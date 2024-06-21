@@ -126,8 +126,10 @@ export function DiamondDetailsComponent({
         tableData?.certificate_number ?? ''
       )}`,
       category: 'Certificate',
-      downloadUrl: tableData?.certificate_url,
-      url_check: tableData?.assets_pre_check?.CERT_FILE
+      downloadUrl: tableData?.assets_pre_check?.CERT_FILE
+        ? tableData?.certificate_url
+        : '',
+      url_check: tableData?.assets_pre_check?.CERT_IMG
     },
     {
       name: 'B2B',
