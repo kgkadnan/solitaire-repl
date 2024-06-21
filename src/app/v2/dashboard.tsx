@@ -741,16 +741,20 @@ const Dashboard = () => {
   };
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
+      setIsLoading(true);
       getProductById({
         search_keyword: stoneId
       })
         .unwrap()
         .then((res: any) => {
+          setIsLoading(false);
           setSearchData(res);
           setError('');
           setIsDetailPage(true);
         })
         .catch((_e: any) => {
+          setIsLoading(false);
+
           if (_e?.status === statusCode.NOT_FOUND) {
             setError(`We couldn't find any results for this search`);
           } else if (_e?.status === statusCode.UNAUTHORIZED) {
@@ -763,18 +767,19 @@ const Dashboard = () => {
   };
   const handleInputSearch = () => {
     if (stoneId.length > 0) {
+      setIsLoading(true);
       getProductById({
         search_keyword: stoneId
       })
         .unwrap()
         .then((res: any) => {
-          // setIsLoading(false);
-
+          setIsLoading(false);
           setSearchData(res);
           setError('');
           setIsDetailPage(true);
         })
         .catch((_e: any) => {
+          setIsLoading(false);
           if (_e?.status === statusCode.NOT_FOUND) {
             setError(`We couldn't find any results for this search`);
           } else if (_e?.status === statusCode.UNAUTHORIZED) {
@@ -799,16 +804,16 @@ const Dashboard = () => {
   };
 
   const handleAddToCartDetailPage = () => {
+    setIsLoading(true);
     // Extract variant IDs for selected stones
-    const variantIds = [searchData?.id]
+    const variantIds = [detailPageData?.id]
       ?.map((_id: string) => {
-        if (searchData && 'variants' in searchData) {
-          return searchData.variants[0]?.id;
+        if (detailPageData && 'variants' in detailPageData) {
+          return detailPageData.variants[0]?.id;
         }
         return '';
       })
       ?.filter(Boolean);
-
     // If there are variant IDs, add to the cart
     if (variantIds.length) {
       addCart({
@@ -816,6 +821,7 @@ const Dashboard = () => {
       })
         .unwrap()
         .then((res: any) => {
+          setIsLoading(false);
           setIsDialogOpen(true);
           setDialogContent(
             <CommonPoppup
@@ -830,7 +836,7 @@ const Dashboard = () => {
                   handler: () => {
                     setIsDialogOpen(false);
                     setIsDetailPage(false);
-                    setSearchData({});
+                    // setSearchData({});
                   },
                   customStyle: 'flex-1 w-full h-10'
                 },
@@ -845,13 +851,31 @@ const Dashboard = () => {
               ]}
             />
           );
-
+          getProductById({
+            search_keyword: stoneId
+          })
+            .unwrap()
+            .then((res: any) => {
+              // setIsLoading(false);
+              setSearchData(res);
+              setError('');
+              setIsDetailPage(true);
+            })
+            .catch((_e: any) => {
+              if (_e?.status === statusCode.NOT_FOUND) {
+                setError(`We couldn't find any results for this search`);
+              } else if (_e?.status === statusCode.UNAUTHORIZED) {
+                setError(_e?.data?.message?.message);
+              } else {
+                setError('Something went wrong');
+              }
+            });
           // On success, show confirmation dialog and update badge
           setError('');
         })
         .catch((error: any) => {
           // On error, set error state and error message
-
+          setIsLoading(false);
           setIsDialogOpen(true);
           setDialogContent(
             <CommonPoppup
@@ -1108,7 +1132,7 @@ const Dashboard = () => {
 
   const confirmStoneApiCall = () => {
     const variantIds: string[] = [];
-
+    setIsLoading(true);
     confirmStoneData.forEach((ids: any) => {
       variantIds.push(ids.variants[0].id);
     });
@@ -1121,6 +1145,8 @@ const Dashboard = () => {
         .unwrap()
         .then(res => {
           if (res) {
+            setIsLoading(false);
+
             setCommentValue('');
             setIsDialogOpen(true);
 
@@ -1154,10 +1180,29 @@ const Dashboard = () => {
             );
 
             setCommentValue('');
+            getProductById({
+              search_keyword: stoneId
+            })
+              .unwrap()
+              .then((res: any) => {
+                // setIsLoading(false);
+                setSearchData(res);
+                setError('');
+                setIsDetailPage(true);
+              })
+              .catch((_e: any) => {
+                if (_e?.status === statusCode.NOT_FOUND) {
+                  setError(`We couldn't find any results for this search`);
+                } else if (_e?.status === statusCode.UNAUTHORIZED) {
+                  setError(_e?.data?.message?.message);
+                } else {
+                  setError('Something went wrong');
+                }
+              });
           }
         })
         .catch(e => {
-          // setIsLoading(false);
+          setIsLoading(false);
           setCommentValue('');
 
           if (e.data.type === 'unauthorized') {
@@ -1221,7 +1266,7 @@ const Dashboard = () => {
       setIsError(true);
       setError(NO_STONES_SELECTED);
     } else {
-      // setIsLoading(true);
+      setIsLoading(true);
       const variantIds = selectedIds
         ?.map((id: string) => {
           const myCartCheck: IProduct | object =
@@ -1243,7 +1288,7 @@ const Dashboard = () => {
         })
           .unwrap()
           .then((res: any) => {
-            // setIsLoading(false);
+            setIsLoading(false);
             setIsDialogOpen(true);
             setDialogContent(
               <CommonPoppup
@@ -1280,8 +1325,6 @@ const Dashboard = () => {
             })
               .unwrap()
               .then((res: any) => {
-                // setIsLoading(false);
-
                 setSearchData(res);
                 setError('');
                 setIsDetailPage(true);
@@ -1300,7 +1343,7 @@ const Dashboard = () => {
             // refetchRow();
           })
           .catch(error => {
-            // setIsLoading(false);
+            setIsLoading(false);
             // On error, set error state and error message
 
             setIsDialogOpen(true);
@@ -1437,7 +1480,8 @@ const Dashboard = () => {
             <ActionButton
               actionButtonData={[
                 {
-                  variant: isConfirmStone ? 'primary' : 'secondary',
+                  variant: 'secondary',
+                  // variant: isConfirmStone ? 'primary' : 'secondary',
                   label: ManageLocales('app.searchResult.addToCart'),
                   handler: handleAddToCartDetailPage
                 },
@@ -1445,19 +1489,20 @@ const Dashboard = () => {
                 {
                   variant: 'primary',
                   label: ManageLocales('app.searchResult.confirmStone'),
-                  isHidden: isConfirmStone,
+                  // isHidden: isConfirmStone,
                   handler: () => {
                     setBreadCrumLabel('Detail Page');
+                    setIsDetailPage(false);
                     const { id } = detailPageData;
                     const selectedRows = { [id]: true };
                     handleConfirmStone({
                       selectedRows: selectedRows,
-                      rows: searchData,
+                      rows: searchData?.foundProducts,
                       setIsError,
                       setErrorText: setError,
                       setIsConfirmStone,
                       setConfirmStoneData,
-                      setIsDetailPage
+                      setIsDetailPage: setIsDiamondDetail
                     });
                   }
                 }
