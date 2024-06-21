@@ -234,9 +234,6 @@ const BidToBuy = () => {
   const [bid, setBid] = useState<any>();
   const [time, setTime] = useState('');
 
-  console.log('bidHistory', historyData);
-  console.log('bid', bid);
-
   useEffect(() => {
     const currentTime: any = new Date();
     const targetTime: any = new Date(time!);
@@ -572,8 +569,6 @@ const BidToBuy = () => {
       ]);
     }
   }, [validImages]);
-
-  console.log('activeTab', activeTab);
 
   return (
     <div className="mb-[4px] relative">
