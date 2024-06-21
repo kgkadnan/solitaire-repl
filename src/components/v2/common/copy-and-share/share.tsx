@@ -21,10 +21,12 @@ const Share = ({
   activeTab = 0
 }: any) => {
   const [selectedRows, setSelectedRows] = useState<IProduct[]>(
-    rows.filter((row: IProduct) => row.id in selectedProducts)
+    rows?.filter((row: IProduct) => row.id in selectedProducts)
   );
   useEffect(() => {
-    setSelectedRows(rows.filter((row: IProduct) => row.id in selectedProducts));
+    setSelectedRows(
+      rows?.filter((row: IProduct) => row.id in selectedProducts)
+    );
   }, [selectedProducts]);
   const { modalState, modalSetState } = useModalStateManagement();
   const { isInputDialogOpen } = modalState;

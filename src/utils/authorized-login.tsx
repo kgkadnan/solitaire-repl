@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { usePathname, useRouter } from 'next/navigation'; // Correct import for useRouter
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'; // Correct import for useRouter
 import useUser from '../lib/use-auth';
 import KycNudgeModal from '@/components/v2/common/kyc-nudge';
 import { kycStatus } from '@/constants/enums/kyc';
@@ -22,6 +22,7 @@ const authorizedLogin = (WrappedComponent: React.ComponentType) => {
 
     const router = useRouter();
     const currentPath = usePathname();
+    const searchParams = useSearchParams().get('active-tab');
     const isV2Route = v2Routes.includes(currentPath);
     const [isAuthorized, setIsAuthorized] = useState(false);
     const [isLoading, setIsLoading] = useState(true); // New loading state
@@ -71,15 +72,14 @@ const authorizedLogin = (WrappedComponent: React.ComponentType) => {
       setIsAuthorized(true);
       setIsLoading(false);
     }, [authToken, userLoggedOut, router]);
-
     if (
       isLoading &&
       currentPath !== '/v2' &&
-      currentPath !== '/v2/search' &&
-      currentPath !== '/v2/your-orders' &&
       currentPath !== '/v2/bid-2-buy' &&
       currentPath !== '/v2/new-arrivals' &&
-      currentPath !== '/v2/my-cart'
+      currentPath !== '/v2/my-cart' &&
+      !(currentPath === '/v2/search' && searchParams !== 'new-search') &&
+      currentPath !== '/v2/your-orders'
     ) {
       return <CustomKGKLoader />; // Or any other loading indicator
     }
