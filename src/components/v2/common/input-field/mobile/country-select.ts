@@ -3,21 +3,21 @@ export const colourStyles = (error: any) => {
     control: (styles: any) => ({
       ...styles,
       color: 'var(--neutral-500)',
-
+      alignItem: 'center',
       backgroundColor: 'var(--neutral-0)',
-      borderRadius: '4px 0px 0px 4px',
+      borderRadius: '4px',
       border: error.length
         ? '1px solid var(--danger-main)'
         : '1px solid var(--neutral-200)',
-      borderRight: 'none',
-      width: '110px',
+      // borderRight: 'none',
+      width: '250px',
       boxShadow: 'var(--input-shadow) inset',
       // This line disable the blue border
       '&:hover': {
         border: error.length
           ? '1px solid var(--danger-main)'
-          : '1px solid var(--neutral-200)',
-        borderRight: 'none'
+          : '1px solid var(--neutral-200)'
+        // borderRight: 'none'
       },
       height: '40px'
     }),
@@ -27,7 +27,7 @@ export const colourStyles = (error: any) => {
     }),
     dropdownIndicator: (styles: any) => ({
       ...styles,
-      padding: '8px 2px 8px 0px'
+      padding: '8px 8px 8px 0px'
     }),
     singleValue: (styles: any) => ({
       ...styles,
@@ -39,19 +39,20 @@ export const colourStyles = (error: any) => {
       ...styles,
       color: 'var(--neutral-500)',
       border: 'none',
-      height: '38px'
+      height: '38px',
+      paddingTop: '8px'
     }),
     menuList: (styles: any) => ({
       ...styles,
       backgroundColor: 'var(--neutral-0)',
-      minHeight: '10vh',
+      minHeight: '28vh',
       height: '17vh',
       borderRadius: '6px'
     }),
     menu: (styles: any) => ({
       ...styles,
 
-      marginTop: '2px !important'
+      marginTop: '12px !important'
     }),
     option: (styles: { [x: string]: any }) => {
       return {

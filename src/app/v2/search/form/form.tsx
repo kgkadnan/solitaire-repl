@@ -225,19 +225,6 @@ const Form = ({
     }
   }, [searchUrl]);
 
-  // const {
-  //   data,
-  //   error,
-  //   isLoading: isFormLoading
-  // } = useGetProductCountQuery(
-  //   {
-  //     searchUrl
-  //   },
-  //   {
-  //     skip: !searchUrl
-  //   }
-  // );
-
   // Update search URL when form state changes
   useEffect(() => {
     const queryParams = generateQueryParams(state);
