@@ -328,7 +328,7 @@ export const Carat = ({
                     }}
                     maxInputData={{
                       maxValue: caratMax,
-                      maxPlaceHolder: '50',
+                      maxPlaceHolder: '50.00',
                       maxOnchange: e => {
                         handleMaxChange(e);
                       }
