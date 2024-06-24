@@ -212,15 +212,17 @@ const Form = ({
   } = errorSetState;
 
   useEffect(() => {
-    setIsLoading(true);
-    triggerProductCountApi({ searchUrl })
-      .unwrap()
-      .then((response: any) => {
-        setData(response), setError(''), setIsLoading(false);
-      })
-      .catch(e => {
-        setError(e), setIsLoading(false);
-      });
+    if (searchUrl.length > 0) {
+      setIsLoading(true);
+      triggerProductCountApi({ searchUrl })
+        .unwrap()
+        .then((response: any) => {
+          setData(response), setError(''), setIsLoading(false);
+        })
+        .catch(e => {
+          setError(e), setIsLoading(false);
+        });
+    }
   }, [searchUrl]);
 
   // const {
