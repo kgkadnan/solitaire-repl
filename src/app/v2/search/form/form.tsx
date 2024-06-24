@@ -353,7 +353,11 @@ const Form = ({
       );
 
       setIsDialogOpen(true);
-    } else if (searchUrl && data?.count > MIN_SEARCH_FORM_COUNT) {
+    } else if (
+      searchUrl &&
+      data?.count > MIN_SEARCH_FORM_COUNT &&
+      minMaxError.length === 0
+    ) {
       if (
         data?.count < MAX_SEARCH_FORM_COUNT &&
         data?.count > MIN_SEARCH_FORM_COUNT
@@ -692,6 +696,7 @@ const Form = ({
       label:
         // 'Search',
         `${
+          minMaxError.length === 0 &&
           errorText === NO_STONE_FOUND &&
           isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
             ? 'Add Demand'
@@ -700,6 +705,7 @@ const Form = ({
       handler:
         // errorText === NO_STONE_FOUND ? () => {} : handleFormSearch
 
+        minMaxError.length === 0 &&
         errorText === NO_STONE_FOUND &&
         isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
           ? handleAddDemand
@@ -942,7 +948,9 @@ const Form = ({
             <div>
               <span className="hidden  text-successMain" />
               <span
-                className={`text-mRegular font-medium text-${messageColor} pl-[8px]`}
+                className={`text-mRegular font-medium text-${
+                  minMaxError.length > 0 ? 'dangerMain' : messageColor
+                } pl-[8px]`}
               >
                 {minMaxError.length
                   ? minMaxError
