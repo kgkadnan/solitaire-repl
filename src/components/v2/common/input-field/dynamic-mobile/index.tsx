@@ -11,7 +11,7 @@ interface IDynamicMobileInputField extends IDynamicInputFieldProps {
   isNotEditable?: boolean;
   selectedCountryIso?: string;
 }
-interface DropdownProps {
+interface IDropdownProps {
   children: React.ReactNode;
   isOpen: boolean;
   target: React.ReactNode;

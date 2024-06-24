@@ -10,7 +10,7 @@ interface IMobileInputField extends IInputFieldProps {
   registerFormState: any;
   setRegisterFormState: any;
 }
-interface DropdownProps {
+interface IDropdownProps {
   children: React.ReactNode;
   isOpen: boolean;
   target: React.ReactNode;
