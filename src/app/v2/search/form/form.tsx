@@ -218,7 +218,6 @@ const Form = ({
         setError(e), setIsLoading(false);
       });
   }, [searchUrl]);
-  console.log(data);
   // const {
   //   data,
   //   error,
