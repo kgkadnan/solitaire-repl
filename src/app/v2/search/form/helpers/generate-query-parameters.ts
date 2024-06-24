@@ -18,6 +18,7 @@ interface IState {
   selectedClarity: string[];
   selectedGirdleStep?: string;
   selectedCaratRange: string[];
+  caratRangeSelection: string[];
   selectedMake: string;
   selectedCut: string[];
   selectedPolish: string[];
@@ -95,6 +96,7 @@ export const generateQueryParams = (state: IState) => {
     selectedShade,
     selectedClarity,
     selectedCaratRange,
+    caratRangeSelection,
     selectedCut,
     selectedPolish,
     selectedSymmetry,
@@ -179,8 +181,12 @@ export const generateQueryParams = (state: IState) => {
     ));
   selectedShade?.length !== 0 && (queryParams['shade'] = selectedShade);
   selectedClarity?.length !== 0 && (queryParams['clarity'] = selectedClarity);
-  if (selectedCaratRange && selectedCaratRange.length > 0) {
-    queryParams['carats'] = selectedCaratRange;
+
+  if (
+    (selectedCaratRange && selectedCaratRange.length > 0) ||
+    (caratRangeSelection && caratRangeSelection.length > 0)
+  ) {
+    queryParams['carats'] = [...selectedCaratRange, ...caratRangeSelection];
   }
 
   selectedCut?.length !== 0 && (queryParams['cut'] = selectedCut);
