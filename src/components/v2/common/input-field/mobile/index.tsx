@@ -37,6 +37,10 @@ export const MobileInput = ({
       setCountryOption(countryCode?.countries);
     }
   }, [getAllCountryCode]);
+
+  useEffect(() => {
+    setIsOpen(false);
+  }, [registerFormState]);
   const computeCountryDropdownField = (countryCode: any) => {
     return countryCode?.map(({ code, iso, country }: any) => ({
       label: code,
