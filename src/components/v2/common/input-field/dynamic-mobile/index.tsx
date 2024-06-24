@@ -191,7 +191,7 @@ const Blanket: React.FC<React.HTMLAttributes<HTMLDivElement>> = props => (
   />
 );
 
-const Dropdown: React.FC<DropdownProps> = ({
+const Dropdown: React.FC<IDropdownProps> = ({
   children,
   isOpen,
   target,
