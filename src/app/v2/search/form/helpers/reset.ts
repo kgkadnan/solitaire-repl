@@ -6,6 +6,8 @@ export const handleReset = (setState: any, errorSetState: any) => {
     setSelectedIntensity,
     setSelectedOvertone,
     setSelectedShade,
+    setCaratRangeSelectionTemp,
+    setCaratRangeSelection,
     setSelectedClarity,
     setSelectedGirdleStep,
     setSelectedCaratRange,
@@ -108,6 +110,8 @@ export const handleReset = (setState: any, errorSetState: any) => {
   setSelectedSymmetry([]);
   setSelectedFluorescence([]);
   setSelectedLab([]);
+  setCaratRangeSelectionTemp([]);
+  setCaratRangeSelection([]);
   setAmountRangeMin('');
   setAmountRangeMax('');
   setDiscountMin('');

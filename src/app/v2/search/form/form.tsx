@@ -120,6 +120,8 @@ const Form = ({
 
   const {
     caratMax,
+    caratRangeSelectionTemp,
+    caratRangeSelection,
     caratMin,
     selectedClarity,
     selectedShape,
@@ -148,6 +150,8 @@ const Form = ({
     setSelectedClarity,
     setSelectedShape,
     setSelectedColor,
+    setCaratRangeSelectionTemp,
+    setCaratRangeSelection,
     setSelectedWhiteColor,
     setSelectedFancyColor,
     setSelectedIntensity,
@@ -212,13 +216,13 @@ const Form = ({
     triggerProductCountApi({ searchUrl })
       .unwrap()
       .then((response: any) => {
-        setData(response), setIsLoading(false);
+        setData(response), setError(''), setIsLoading(false);
       })
       .catch(e => {
         setError(e), setIsLoading(false);
       });
   }, [searchUrl]);
-  console.log(data);
+
   // const {
   //   data,
   //   error,
@@ -588,6 +592,7 @@ const Form = ({
     setErrorText('');
     setMinMaxError('');
     setValidationError('');
+
     handleReset(setState, errorSetState);
   };
   const handleAddDemand = () => {
@@ -840,19 +845,23 @@ const Form = ({
             selectedShape={selectedShape}
           />
 
+          <Carat
+            caratMax={caratMax}
+            caratMin={caratMin}
+            caratRangeSelectionTemp={caratRangeSelectionTemp}
+            setCaratRangeSelectionTemp={setCaratRangeSelectionTemp}
+            setCaratRangeSelection={setCaratRangeSelection}
+            caratRangeSelection={caratRangeSelection}
+            setCaratMin={setCaratMin}
+            setCaratMax={setCaratMax}
+            selectedCaratRange={selectedCaratRange}
+            setSelectedCaratRange={setSelectedCaratRange}
+            caratError={caratError}
+            setCaratError={setCaratError}
+            setValidationError={setValidationError}
+            validationError={validationError}
+          />
           <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px]">
-            <Carat
-              caratMax={caratMax}
-              caratMin={caratMin}
-              setCaratMin={setCaratMin}
-              setCaratMax={setCaratMax}
-              selectedCaratRange={selectedCaratRange}
-              setSelectedCaratRange={setSelectedCaratRange}
-              caratError={caratError}
-              setCaratError={setCaratError}
-              setValidationError={setValidationError}
-              validationError={validationError}
-            />
             <Color
               selectedColor={selectedColor}
               selectedFancyColor={selectedFancyColor}
@@ -865,11 +874,12 @@ const Form = ({
               setSelectedIntensity={setSelectedIntensity}
               setSelectedOvertone={setSelectedOvertone}
             />
+
+            <Clarity
+              setSelectedClarity={setSelectedClarity}
+              selectedClarity={selectedClarity}
+            />
           </div>
-          <Clarity
-            setSelectedClarity={setSelectedClarity}
-            selectedClarity={selectedClarity}
-          />
           <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px]">
             <MakeCutPolishSymmetry state={state} setState={setState} />
             <div className="flex flex-col gap-[16px]">
