@@ -67,9 +67,13 @@ export const setModifySearch = (data: any, setState: any) => {
     setStarLengthMax,
     setStarLengthMin,
     setSelectedGirdle,
-    setSelectionChecked
+    setSelectionChecked,
+    setCaratRangeSelection,
+    setCaratRangeSelectionTemp
   } = setState;
 
+  setCaratRangeSelection([]);
+  setCaratRangeSelectionTemp([]);
   data?.shape && setSelectedShape(data?.shape);
   data?.carats && setSelectedCaratRange(data?.carats);
   data?.clarity && setSelectedClarity(data?.clarity);
@@ -86,8 +90,8 @@ export const setModifySearch = (data: any, setState: any) => {
   data?.fancy_overtone && setSelectedOvertone(data?.fancy_overtone);
   data?.fancy_intensity && setSelectedIntensity(data?.fancy_intensity);
   data?.fancy_color && setSelectedFancyColor(data?.fancy_color);
-  data?.priceRange && setAmountRangeMin(data?.priceRange?.gte);
-  data?.priceRange && setAmountRangeMax(data?.priceRange?.lte);
+  data?.price_range && setAmountRangeMin(data?.price_range?.gte);
+  data?.price_range && setAmountRangeMax(data?.price_range?.lte);
   data?.discount && setDiscountMin(data?.discount?.gte);
   data?.discount && setDiscountMax(data?.discount?.lte);
   data?.price_per_carat && setPricePerCaratMin(data?.price_per_carat?.gte);

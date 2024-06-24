@@ -17,28 +17,54 @@ const BiddingSkeleton = () => {
         />
       </div>
       <div className="rounded-[4px] border-[1px] border-solid border-neutral200">
-        <div className="h-[58px] bg-neutral0 flex  items-center px-2 border-b border-neutral200 rounded-t-[8px]">
+        <div className="h-[58px] bg-neutral0 justify-between flex  items-center px-2 border-b border-neutral200 rounded-t-[8px]">
           <div className="flex gap-1">
             <Skeleton
               variant="rectangular"
               height={'40px'}
-              width={'138px'}
+              width={'129px'}
               animation="wave"
               className="rounded-l-[4px]"
             />
             <Skeleton
               variant="rectangular"
               height={'40px'}
-              width={'138px'}
+              width={'129px'}
               animation="wave"
               className=""
             />
             <Skeleton
               variant="rectangular"
               height={'40px'}
-              width={'138px'}
+              width={'129px'}
               animation="wave"
               className="rounded-r-[4px]"
+            />
+          </div>
+          <div className="flex gap-2">
+            <Skeleton
+              variant="rectangular"
+              height={'28px'}
+              width={'137px'}
+              animation="wave"
+            />
+            <Skeleton
+              variant="rectangular"
+              height={'28px'}
+              width={'31px'}
+              animation="wave"
+            />
+            <Skeleton
+              variant="rectangular"
+              height={'28px'}
+              width={'31px'}
+              animation="wave"
+            />
+            <Skeleton
+              variant="rectangular"
+              height={'28px'}
+              width={'31px'}
+              animation="wave"
             />
           </div>
         </div>

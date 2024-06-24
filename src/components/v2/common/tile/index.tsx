@@ -8,16 +8,20 @@ export interface ITileProps {
   handleTileClick: (_data: any) => void;
   selectedTile: string[];
   setSelectedTile: React.Dispatch<React.SetStateAction<string[]>>;
+  tileContainerStyle?: string;
+  tileStyle?: string;
 }
 
 const Tile = ({
   tileData,
   handleTileClick,
   selectedTile,
+  tileStyle,
+  tileContainerStyle,
   setSelectedTile
 }: ITileProps) => {
   return (
-    <div className={styles.tileContainer}>
+    <div className={`${styles.tileContainer} ${tileContainerStyle}`}>
       {tileData.map((tile: string | { title: string; short_name: string }) => {
         return (
           <div key={`${typeof tile === 'string' ? tile : tile.short_name}`}>
@@ -35,7 +39,7 @@ const Tile = ({
                   selectedTile.includes(tile)
                     ? styles.tileActiveStyle
                     : `${styles.tileDisableStyle} ${styles.tileStyles}`
-                }`}
+                }  ${tileStyle}`}
               >
                 {tile}
               </Button>
@@ -53,7 +57,7 @@ const Tile = ({
                     className={` ${styles.tileDefaultStyles}   ${
                       selectedTile.includes(tile.short_name)
                         ? styles.tileActiveStyle
-                        : `${styles.tileDisableStyle} ${styles.tileStyles}`
+                        : `${styles.tileDisableStyle} ${styles.tileStyles} `
                     }`}
                   >
                     {tile.short_name}
