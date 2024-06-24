@@ -42,6 +42,7 @@ export const InputField = ({
           value={value}
           onChange={onChange}
           placeholder={placeholder}
+          title=""
           disabled={disabled}
           onBlur={onBlur}
           maxLength={maxLength}

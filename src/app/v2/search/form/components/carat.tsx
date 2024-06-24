@@ -72,8 +72,10 @@ export const Carat = ({
         )} to ${formatNumber(carat.range.lte)} only`
       );
       return;
-    }
-    if (
+    } else if (caratRange[0] === '') {
+      setCaratError(`"From" field cannot be empty`);
+      return;
+    } else if (
       Number(caratRange[0]) < carat.range.gte ||
       Number(caratRange[1]) > carat.range.lte
     ) {
@@ -82,9 +84,6 @@ export const Carat = ({
           carat.range.gte
         )} to ${formatNumber(carat.range.lte)} only`
       );
-      return;
-    } else if (caratRange[0] === '') {
-      setCaratError(`"From" field cannot be empty`);
       return;
     } else if (caratRange[1] === '') {
       setCaratError(`"To" field cannot be empty`);
