@@ -130,7 +130,7 @@ export const RenderCarat = ({ renderedCellValue }: any) => {
 
 export const RenderAmount = ({ row }: any) => {
   return (
-    <span>{`${
+    <span>{`$${
       formatNumber(row.original.variants[0].prices[0]?.amount) ?? '-'
     }`}</span>
   );

@@ -3,6 +3,7 @@ import { formatNumber } from '@/utils/fix-two-digit-number';
 import React from 'react';
 import { IImagesType } from '../interface';
 import { Skeleton } from '@mui/material';
+import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
 
 export interface ITableColumn {
   key: string;
@@ -64,6 +65,7 @@ const ResponsiveTable: React.FC<IResponsiveTableProps> = ({
               className="font-medium sm:text-10px lg:text-[14px] leading-5 text-left text-rgba-101828"
             >
               {tableHead.map(column => {
+                console.log('row', column.key);
                 return (
                   <td
                     key={column.key}
@@ -78,19 +80,36 @@ const ResponsiveTable: React.FC<IResponsiveTableProps> = ({
                       column.key === 'amount' ? (
                         row?.variants?.length > 0 ? (
                           row?.variants[0]?.prices[0]?.amount ? (
-                            `${
-                              formatNumber(
-                                row?.variants[0]?.prices[0]?.amount
-                              ) ?? ''
+                            `$${
+                              formatNumberWithCommas(
+                                formatNumber(
+                                  row?.variants[0]?.prices[0]?.amount
+                                )
+                              ) ?? '-'
                             }`
                           ) : (
-                            ''
+                            '-'
                           )
                         ) : row?.amount ? (
-                          `${formatNumber(row?.amount) ?? ''}`
+                          `$${
+                            formatNumberWithCommas(formatNumber(row?.amount)) ??
+                            '-'
+                          }`
                         ) : (
-                          ''
+                          '-'
                         )
+                      ) : column.key === 'rap' ? (
+                        `$${formatNumberWithCommas(
+                          formatNumber(row[column.key])
+                        )}`
+                      ) : column.key === 'rap_value' ? (
+                        `$${formatNumberWithCommas(
+                          formatNumber(row[column.key])
+                        )}`
+                      ) : column.key === 'price_per_carat' ? (
+                        `$${formatNumberWithCommas(
+                          formatNumber(row[column.key])
+                        )}`
                       ) : typeof row[column.key] === 'number' ? (
                         formatNumber(row[column.key]) ?? '-'
                       ) : typeof row[column.key] === 'string' ? (

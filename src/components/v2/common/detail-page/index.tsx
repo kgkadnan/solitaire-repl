@@ -47,6 +47,7 @@ import { useLazyTrackCopyUrlEventQuery } from '@/features/api/track-public-url-c
 
 import DetailPageTabs from './components/tabs';
 import { useRouter } from 'next/navigation';
+import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
 
 export function DiamondDetailsComponent({
   data,
@@ -464,13 +465,19 @@ export function DiamondDetailsComponent({
                     {tableData?.variants?.length > 0
                       ? tableData?.variants[0]?.prices[0]?.amount
                         ? `$${
-                            formatNumber(
-                              tableData?.variants[0]?.prices[0]?.amount
+                            formatNumberWithCommas(
+                              formatNumber(
+                                tableData?.variants[0]?.prices[0]?.amount
+                              )
                             ) ?? ''
                           }`
                         : ''
                       : tableData?.amount
-                      ? `$${formatNumber(tableData?.amount) ?? ''}`
+                      ? `$${
+                          formatNumberWithCommas(
+                            formatNumber(tableData?.amount)
+                          ) ?? ''
+                        }`
                       : ''}
                   </div>
                   <p
