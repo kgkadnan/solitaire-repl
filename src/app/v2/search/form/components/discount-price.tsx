@@ -138,7 +138,7 @@ export const DiscountPrice = ({
           setPricePerCaratMax('');
         } else {
           setPricePerCaratMin(newValue[0]);
-          setPricePerCaratMax(newValue[1]);
+          setPricePerCaratMax(formatNumber(Number(newValue[1])));
         }
 
         handleNumericRange({
@@ -191,7 +191,7 @@ export const DiscountPrice = ({
           setAmountRangeMax('');
         } else {
           setAmountRangeMin(newValue[0]);
-          setAmountRangeMax(newValue[1]);
+          setAmountRangeMax(formatNumber(Number(newValue[1])));
         }
         handleNumericRange({
           min: newValue[0],
