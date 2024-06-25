@@ -106,7 +106,6 @@ export const setModifySearch = (data: any, setState: any) => {
     setSelectedOvertone(transformColorData(data?.fancy_overtone));
   data?.fancy_intensity &&
     setSelectedIntensity(transformColorData(data?.fancy_intensity));
-
   data?.fancy_color &&
     setSelectedFancyColor(transformColorData(data?.fancy_color));
   data?.price_range && setAmountRangeMin(data?.price_range?.gte);

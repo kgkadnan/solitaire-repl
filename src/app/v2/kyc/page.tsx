@@ -140,17 +140,18 @@ const KYC = () => {
 
   const resendLabel = resendTimer > 0 ? `(${resendTimer}Sec)` : '';
   useEffect(() => {
-    let countdownInterval: NodeJS.Timeout;
+    if (isInputDialogOpen) {
+      let countdownInterval: NodeJS.Timeout;
 
-    if (resendTimer > 0) {
-      countdownInterval = setInterval(() => {
-        setResendTimer((prevTimer: number) => prevTimer - 1);
-      }, 1000);
+      if (resendTimer > 0) {
+        countdownInterval = setInterval(() => {
+          setResendTimer((prevTimer: number) => prevTimer - 1);
+        }, 1000);
+      }
+
+      return () => clearInterval(countdownInterval);
     }
-
-    return () => clearInterval(countdownInterval);
-  }, [resendTimer]);
-
+  }, [resendTimer, isInputDialogOpen]);
   async function findFirstNonFilledScreens(data: any, country: string) {
     let sectionKeys: string[] =
       country === 'India'
