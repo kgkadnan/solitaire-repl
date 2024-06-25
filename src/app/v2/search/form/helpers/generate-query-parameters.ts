@@ -18,6 +18,7 @@ interface IState {
   selectedClarity: string[];
   selectedGirdleStep?: string;
   selectedCaratRange: string[];
+  caratRangeSelection: string[];
   selectedMake: string;
   selectedCut: string[];
   selectedPolish: string[];
@@ -95,6 +96,7 @@ export const generateQueryParams = (state: IState) => {
     selectedShade,
     selectedClarity,
     selectedCaratRange,
+    caratRangeSelection,
     selectedCut,
     selectedPolish,
     selectedSymmetry,
@@ -179,8 +181,12 @@ export const generateQueryParams = (state: IState) => {
     ));
   selectedShade?.length !== 0 && (queryParams['shade'] = selectedShade);
   selectedClarity?.length !== 0 && (queryParams['clarity'] = selectedClarity);
-  if (selectedCaratRange && selectedCaratRange.length > 0) {
-    queryParams['carats'] = selectedCaratRange;
+
+  if (
+    (selectedCaratRange && selectedCaratRange.length > 0) ||
+    (caratRangeSelection && caratRangeSelection.length > 0)
+  ) {
+    queryParams['carats'] = [...selectedCaratRange, ...caratRangeSelection];
   }
 
   selectedCut?.length !== 0 && (queryParams['cut'] = selectedCut);
@@ -208,14 +214,14 @@ export const generateQueryParams = (state: IState) => {
   discountMin?.length !== 0 &&
     discountMax?.length !== 0 &&
     (queryParams['discount'] = {
-      lte: discountMin,
-      gte: discountMax
+      lte: discountMax,
+      gte: discountMin
     });
   pricePerCaratMin?.length !== 0 &&
     pricePerCaratMax?.length !== 0 &&
     (queryParams['price_per_carat'] = {
-      lte: pricePerCaratMin,
-      gte: pricePerCaratMax
+      lte: pricePerCaratMax,
+      gte: pricePerCaratMin
     });
   blackTable?.length !== 0 && (queryParams['table_black'] = blackTable);
   sideBlack?.length !== 0 && (queryParams['side_black'] = sideBlack);

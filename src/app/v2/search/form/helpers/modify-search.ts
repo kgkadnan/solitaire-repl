@@ -1,4 +1,12 @@
 import { girdleSortedArray } from '@/constants/v2/form';
+import { checkCaratRange } from './check-carat-range';
+
+const transformColorData = (colorArray: string[]) => {
+  return colorArray.map(color => ({
+    value: color,
+    label: color
+  }));
+};
 
 export const setModifySearch = (data: any, setState: any) => {
   const {
@@ -67,10 +75,22 @@ export const setModifySearch = (data: any, setState: any) => {
     setStarLengthMax,
     setStarLengthMin,
     setSelectedGirdle,
-    setSelectionChecked
+    setSelectionChecked,
+    setCaratRangeSelection,
+    setCaratRangeSelectionTemp
   } = setState;
+
   data?.shape && setSelectedShape(data?.shape);
-  data?.carats && setSelectedCaratRange(data?.carats);
+
+  data?.carats &&
+    data.carats.forEach((carat: any) => {
+      checkCaratRange(
+        carat,
+        setCaratRangeSelectionTemp,
+        setCaratRangeSelection,
+        setSelectedCaratRange
+      );
+    });
   data?.clarity && setSelectedClarity(data?.clarity);
   data?.cut && setSelectedCut(data?.cut);
   data?.lab && setSelectedLab(data?.lab);
@@ -78,15 +98,18 @@ export const setModifySearch = (data: any, setState: any) => {
   data?.polish && setSelectedPolish(data?.polish);
   data?.location && setSelectedLocation(data?.location);
   data?.symmetry && setSelectedSymmetry(data?.symmetry);
-  data?.fluoroscence && setSelectedFluorescence(data?.fluoroscence);
+  data?.fluorescence && setSelectedFluorescence(data?.fluorescence);
   data?.origin_country && setSelectedOrigin(data?.origin_country);
   data?.shade && setSelectedShade(data?.shade);
   data?.color && setSelectedWhiteColor(data?.color);
-  data?.fancy_overtone && setSelectedOvertone(data?.fancy_overtone);
-  data?.fancy_intensity && setSelectedIntensity(data?.fancy_intensity);
-  data?.fancy_color && setSelectedFancyColor(data?.fancy_color);
-  data?.priceRange && setAmountRangeMin(data?.priceRange?.gte);
-  data?.priceRange && setAmountRangeMax(data?.priceRange?.lte);
+  data?.fancy_overtone &&
+    setSelectedOvertone(transformColorData(data?.fancy_overtone));
+  data?.fancy_intensity &&
+    setSelectedIntensity(transformColorData(data?.fancy_intensity));
+  data?.fancy_color &&
+    setSelectedFancyColor(transformColorData(data?.fancy_color));
+  data?.price_range && setAmountRangeMin(data?.price_range?.gte);
+  data?.price_range && setAmountRangeMax(data?.price_range?.lte);
   data?.discount && setDiscountMin(data?.discount?.gte);
   data?.discount && setDiscountMax(data?.discount?.lte);
   data?.price_per_carat && setPricePerCaratMin(data?.price_per_carat?.gte);

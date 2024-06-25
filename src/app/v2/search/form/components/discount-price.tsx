@@ -4,6 +4,7 @@ import { handleNumericRange } from '../helpers/handle-input-range-validation';
 import { amountRange, discount, pricePerCarat } from '@/constants/v2/form';
 import { SliderWithMinMaxInput } from '@/components/v2/common/slider-with-min-max';
 import { AccordionComponent } from '@/components/v2/common/accordion';
+import { formatNumber } from '@/utils/fix-two-digit-number';
 
 interface IShapeProps {
   setDiscountMin: Dispatch<SetStateAction<string>>;
@@ -66,7 +67,7 @@ export const DiscountPrice = ({
         }
       },
       handleMinChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (/^\d*\.?\d{0,2}$/.test(event.target.value)) {
+        if (/^-?\d*\.?\d{0,2}$/.test(event.target.value)) {
           setDiscountMin(event.target.value);
           handleNumericRange({
             min: event.target.value,
@@ -106,7 +107,7 @@ export const DiscountPrice = ({
     {
       label: 'Price/Ct',
       minPlaceHolder: `${pricePerCarat.range.gte}`,
-      maxPlaceHolder: `${pricePerCarat.range.lte}`,
+      maxPlaceHolder: `${formatNumber(pricePerCarat.range.lte)}`,
       handleMaxChange: (event: React.ChangeEvent<HTMLInputElement>) => {
         if (/^\d*\.?\d{0,2}$/.test(event.target.value)) {
           setPricePerCaratMax(event.target.value);
@@ -137,7 +138,7 @@ export const DiscountPrice = ({
           setPricePerCaratMax('');
         } else {
           setPricePerCaratMin(newValue[0]);
-          setPricePerCaratMax(newValue[1]);
+          setPricePerCaratMax(formatNumber(Number(newValue[1])));
         }
 
         handleNumericRange({
@@ -159,7 +160,7 @@ export const DiscountPrice = ({
     {
       label: 'Amount Range',
       minPlaceHolder: `${amountRange.range.gte}`,
-      maxPlaceHolder: `${amountRange.range.lte}`,
+      maxPlaceHolder: `${formatNumber(amountRange.range.lte)}`,
       handleMaxChange: (event: React.ChangeEvent<HTMLInputElement>) => {
         if (/^\d*\.?\d{0,2}$/.test(event.target.value)) {
           setAmountRangeMax(event.target.value);
@@ -190,7 +191,7 @@ export const DiscountPrice = ({
           setAmountRangeMax('');
         } else {
           setAmountRangeMin(newValue[0]);
-          setAmountRangeMax(newValue[1]);
+          setAmountRangeMax(formatNumber(Number(newValue[1])));
         }
         handleNumericRange({
           min: newValue[0],

@@ -741,40 +741,52 @@ const Dashboard = () => {
   };
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
+      setIsLoading(true);
       getProductById({
         search_keyword: stoneId
       })
+        .unwrap()
         .then((res: any) => {
-          if (res?.error?.status === statusCode.NOT_FOUND) {
-            setError(`We couldn't find any results for this search`);
-          } else {
-            setSearchData(res?.data);
-            setError('');
-            setIsDetailPage(true);
-          }
+          setIsLoading(false);
+          setSearchData(res);
+          setError('');
+          setIsDetailPage(true);
         })
         .catch((_e: any) => {
-          setError('Something went wrong');
+          setIsLoading(false);
+
+          if (_e?.status === statusCode.NOT_FOUND) {
+            setError(`We couldn't find any results for this search`);
+          } else if (_e?.status === statusCode.UNAUTHORIZED) {
+            setError(_e?.data?.message?.message);
+          } else {
+            setError('Something went wrong');
+          }
         });
     }
   };
   const handleInputSearch = () => {
     if (stoneId.length > 0) {
+      setIsLoading(true);
       getProductById({
         search_keyword: stoneId
       })
+        .unwrap()
         .then((res: any) => {
-          // setIsLoading(false);
-          if (res?.error?.status === statusCode.NOT_FOUND) {
-            setError(`We couldn't find any results for this search`);
-          } else {
-            setSearchData(res?.data);
-            setError('');
-            setIsDetailPage(true);
-          }
+          setIsLoading(false);
+          setSearchData(res);
+          setError('');
+          setIsDetailPage(true);
         })
         .catch((_e: any) => {
-          setError('Something went wrong');
+          setIsLoading(false);
+          if (_e?.status === statusCode.NOT_FOUND) {
+            setError(`We couldn't find any results for this search`);
+          } else if (_e?.status === statusCode.UNAUTHORIZED) {
+            setError(_e?.data?.message?.message);
+          } else {
+            setError('Something went wrong');
+          }
         });
     } else {
       setError('Please enter stone id or certificate number');
@@ -792,16 +804,16 @@ const Dashboard = () => {
   };
 
   const handleAddToCartDetailPage = () => {
+    setIsLoading(true);
     // Extract variant IDs for selected stones
-    const variantIds = [searchData?.id]
+    const variantIds = [detailPageData?.id]
       ?.map((_id: string) => {
-        if (searchData && 'variants' in searchData) {
-          return searchData.variants[0]?.id;
+        if (detailPageData && 'variants' in detailPageData) {
+          return detailPageData.variants[0]?.id;
         }
         return '';
       })
       ?.filter(Boolean);
-
     // If there are variant IDs, add to the cart
     if (variantIds.length) {
       addCart({
@@ -809,6 +821,7 @@ const Dashboard = () => {
       })
         .unwrap()
         .then((res: any) => {
+          setIsLoading(false);
           setIsDialogOpen(true);
           setDialogContent(
             <CommonPoppup
@@ -823,7 +836,7 @@ const Dashboard = () => {
                   handler: () => {
                     setIsDialogOpen(false);
                     setIsDetailPage(false);
-                    setSearchData({});
+                    // setSearchData({});
                   },
                   customStyle: 'flex-1 w-full h-10'
                 },
@@ -838,13 +851,31 @@ const Dashboard = () => {
               ]}
             />
           );
-
+          getProductById({
+            search_keyword: stoneId
+          })
+            .unwrap()
+            .then((res: any) => {
+              // setIsLoading(false);
+              setSearchData(res);
+              setError('');
+              setIsDetailPage(true);
+            })
+            .catch((_e: any) => {
+              if (_e?.status === statusCode.NOT_FOUND) {
+                setError(`We couldn't find any results for this search`);
+              } else if (_e?.status === statusCode.UNAUTHORIZED) {
+                setError(_e?.data?.message?.message);
+              } else {
+                setError('Something went wrong');
+              }
+            });
           // On success, show confirmation dialog and update badge
           setError('');
         })
         .catch((error: any) => {
           // On error, set error state and error message
-
+          setIsLoading(false);
           setIsDialogOpen(true);
           setDialogContent(
             <CommonPoppup
@@ -969,21 +1000,29 @@ const Dashboard = () => {
     {
       name: getShapeDisplayName(detailImageData?.shape ?? ''),
       url: `${FILE_URLS.IMG.replace('***', detailImageData?.lot_id ?? '')}`,
+      downloadUrl: `${FILE_URLS.IMG.replace(
+        '***',
+        detailImageData?.lot_id ?? ''
+      )}`,
       category: 'Image'
     },
     {
       name: 'GIA Certificate',
-      url: detailImageData?.certificate_url ?? '',
-      category: 'Certificate'
+      url: `${FILE_URLS.CERT_FILE.replace(
+        '***',
+        detailImageData?.certificate_number ?? ''
+      )}`,
+      category: 'Certificate',
+      downloadUrl: detailImageData?.assets_pre_check?.CERT_FILE
+        ? detailImageData?.certificate_url
+        : '',
+      url_check: detailImageData?.assets_pre_check?.CERT_IMG
     },
 
     {
       name: 'B2B',
       url: `${FILE_URLS.B2B.replace('***', detailImageData?.lot_id ?? '')}`,
-      url_check: `${FILE_URLS.B2B_CHECK.replace(
-        '***',
-        detailImageData?.lot_id ?? ''
-      )}`,
+      url_check: detailImageData?.assets_pre_check?.B2B_CHECK,
       category: 'Video'
     },
     {
@@ -992,31 +1031,44 @@ const Dashboard = () => {
         '***',
         detailImageData?.lot_id ?? ''
       )}`,
-      url_check: `${FILE_URLS.B2B_SPARKLE_CHECK.replace(
-        '***',
-        detailImageData?.lot_id ?? ''
-      )}`,
+      url_check: detailImageData?.assets_pre_check?.B2B_SPARKLE_CHECK,
       category: 'B2B Sparkle'
     },
 
     {
       name: 'Heart',
       url: `${FILE_URLS.HEART.replace('***', detailImageData?.lot_id ?? '')}`,
+      downloadUrl: `${FILE_URLS.HEART.replace(
+        '***',
+        detailImageData?.lot_id ?? ''
+      )}`,
       category: 'Image'
     },
     {
       name: 'Arrow',
       url: `${FILE_URLS.ARROW.replace('***', detailImageData?.lot_id ?? '')}`,
+      downloadUrl: `${FILE_URLS.ARROW.replace(
+        '***',
+        detailImageData?.lot_id ?? ''
+      )}`,
       category: 'Image'
     },
     {
       name: 'Aset',
       url: `${FILE_URLS.ASET.replace('***', detailImageData?.lot_id ?? '')}`,
+      downloadUrl: `${FILE_URLS.ASET.replace(
+        '***',
+        detailImageData?.lot_id ?? ''
+      )}`,
       category: 'Image'
     },
     {
       name: 'Ideal',
       url: `${FILE_URLS.IDEAL.replace('***', detailImageData?.lot_id ?? '')}`,
+      downloadUrl: `${FILE_URLS.IDEAL.replace(
+        '***',
+        detailImageData?.lot_id ?? ''
+      )}`,
       category: 'Image'
     },
     {
@@ -1025,7 +1077,10 @@ const Dashboard = () => {
         '***',
         detailImageData?.lot_id ?? ''
       )}`,
-
+      downloadUrl: `${FILE_URLS.FLUORESCENCE.replace(
+        '***',
+        detailImageData?.lot_id ?? ''
+      )}`,
       category: 'Image'
     }
   ];
@@ -1079,7 +1134,7 @@ const Dashboard = () => {
 
   const confirmStoneApiCall = () => {
     const variantIds: string[] = [];
-
+    setIsLoading(true);
     confirmStoneData.forEach((ids: any) => {
       variantIds.push(ids.variants[0].id);
     });
@@ -1092,6 +1147,8 @@ const Dashboard = () => {
         .unwrap()
         .then(res => {
           if (res) {
+            setIsLoading(false);
+
             setCommentValue('');
             setIsDialogOpen(true);
 
@@ -1125,10 +1182,29 @@ const Dashboard = () => {
             );
 
             setCommentValue('');
+            getProductById({
+              search_keyword: stoneId
+            })
+              .unwrap()
+              .then((res: any) => {
+                // setIsLoading(false);
+                setSearchData(res);
+                setError('');
+                setIsDetailPage(true);
+              })
+              .catch((_e: any) => {
+                if (_e?.status === statusCode.NOT_FOUND) {
+                  setError(`We couldn't find any results for this search`);
+                } else if (_e?.status === statusCode.UNAUTHORIZED) {
+                  setError(_e?.data?.message?.message);
+                } else {
+                  setError('Something went wrong');
+                }
+              });
           }
         })
         .catch(e => {
-          // setIsLoading(false);
+          setIsLoading(false);
           setCommentValue('');
 
           if (e.data.type === 'unauthorized') {
@@ -1192,7 +1268,7 @@ const Dashboard = () => {
       setIsError(true);
       setError(NO_STONES_SELECTED);
     } else {
-      // setIsLoading(true);
+      setIsLoading(true);
       const variantIds = selectedIds
         ?.map((id: string) => {
           const myCartCheck: IProduct | object =
@@ -1214,7 +1290,7 @@ const Dashboard = () => {
         })
           .unwrap()
           .then((res: any) => {
-            // setIsLoading(false);
+            setIsLoading(false);
             setIsDialogOpen(true);
             setDialogContent(
               <CommonPoppup
@@ -1229,7 +1305,7 @@ const Dashboard = () => {
                     handler: () => {
                       setIsDialogOpen(false), setIsDetailPage(true);
                     },
-                    customStyle: 'flex-1 w-full h-10'
+                    customStyle: 'flex-1 w-full h-10 '
                   },
                   {
                     variant: 'primary',
@@ -1249,26 +1325,27 @@ const Dashboard = () => {
             getProductById({
               search_keyword: stoneId
             })
+              .unwrap()
               .then((res: any) => {
-                // setIsLoading(false);
-                if (res?.error?.status === statusCode.NOT_FOUND) {
-                  setError(`We couldn't find any results for this search`);
-                } else {
-                  setSearchData(res?.data);
-                  setError('');
-                  setIsDetailPage(true);
-                }
+                setSearchData(res);
+                setError('');
+                setIsDetailPage(true);
               })
               .catch((_e: any) => {
-                // setIsLoading(false);
-                setError('Something went wrong');
+                if (_e?.status === statusCode.NOT_FOUND) {
+                  setError(`We couldn't find any results for this search`);
+                } else if (_e?.status === statusCode.UNAUTHORIZED) {
+                  setError(_e?.data?.message?.message);
+                } else {
+                  setError('Something went wrong');
+                }
               });
             dispatch(notificationBadge(true));
 
             // refetchRow();
           })
           .catch(error => {
-            // setIsLoading(false);
+            setIsLoading(false);
             // On error, set error state and error message
 
             setIsDialogOpen(true);
@@ -1326,7 +1403,7 @@ const Dashboard = () => {
         );
       } else if (data.start_at && !data.count) {
         return (
-          <div className="mt-1 flex items-center gap-2 rounded-[4px] px-1 h-[26px] bg-[#F1FAF8]">
+          <div className="mt-1 flex items-center  gap-2 rounded-[4px] px-1 h-[26px] bg-[#F1FAF8]">
             <Image src={BidHammer} alt="Bid to Buy" className="mb-2" />
             <p className="m-0 p-0 text-neutral-900 sm:text-mMedium text-lRegular">
               Stay tuned
@@ -1405,7 +1482,8 @@ const Dashboard = () => {
             <ActionButton
               actionButtonData={[
                 {
-                  variant: isConfirmStone ? 'primary' : 'secondary',
+                  variant: 'secondary',
+                  // variant: isConfirmStone ? 'primary' : 'secondary',
                   label: ManageLocales('app.searchResult.addToCart'),
                   handler: handleAddToCartDetailPage
                 },
@@ -1413,19 +1491,20 @@ const Dashboard = () => {
                 {
                   variant: 'primary',
                   label: ManageLocales('app.searchResult.confirmStone'),
-                  isHidden: isConfirmStone,
+                  // isHidden: isConfirmStone,
                   handler: () => {
                     setBreadCrumLabel('Detail Page');
+                    setIsDetailPage(false);
                     const { id } = detailPageData;
                     const selectedRows = { [id]: true };
                     handleConfirmStone({
                       selectedRows: selectedRows,
-                      rows: searchData,
+                      rows: searchData?.foundProducts,
                       setIsError,
                       setErrorText: setError,
                       setIsConfirmStone,
                       setConfirmStoneData,
-                      setIsDetailPage
+                      setIsDetailPage: setIsDiamondDetail
                     });
                   }
                 }
@@ -1984,7 +2063,7 @@ const Dashboard = () => {
                 {customerData === undefined ? (
                   <Skeleton
                     height={420}
-                    width={'100%'}
+                    width={300}
                     animation="wave"
                     variant="rectangular"
                     className="rounded-[4px]"

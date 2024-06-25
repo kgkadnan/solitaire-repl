@@ -100,6 +100,7 @@ export const Color = ({
               selectedFontColor={'var(--neutral-25)'}
               selectedBackgroundColor={'var(--primary-main)'}
               border={'1px solid var(--neutral-200)'}
+              initialSelectedIndex={selectedColor === 'white' ? 0 : 1}
               wrapperBorderRadius={'8px'}
               optionBorderRadius={
                 selectedColor === 'white'
