@@ -278,6 +278,7 @@ const Form = ({
     let modifySearchResult = JSON.parse(localStorage.getItem('Search')!);
 
     let modifysavedSearchData = savedSearch?.savedSearch?.meta_data;
+    setSelectedCaratRange([]);
     if (
       modifySearchFrom === `${SubRoutes.SAVED_SEARCH}` &&
       modifysavedSearchData
