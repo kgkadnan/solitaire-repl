@@ -3,7 +3,7 @@ import React, { Dispatch, SetStateAction, useState } from 'react';
 import { MinMaxInput } from '@/components/v2/common/min-max-input';
 import addCaratIcon from '@public/v2/assets/icons/add-carat.svg';
 import CaratTile from '@/components/v2/common/carat-tile';
-import { carat } from '@/constants/v2/form';
+import { carat, preDefineCarats } from '@/constants/v2/form';
 import styles from '../../../../../components/v2/common/action-button/action-button.module.scss';
 import Image from 'next/image';
 import { Button } from '@/components/v2/ui/button';
@@ -15,6 +15,7 @@ import {
 } from '@/components/v2/ui/accordion';
 import Tile from '@/components/v2/common/tile';
 import { formatNumber } from '@/utils/fix-two-digit-number';
+import { handleCaratRange } from '../helpers/handle-carat-range';
 
 interface ICaratProps {
   caratMax: string;
@@ -145,166 +146,6 @@ export const Carat = ({
     }
   };
 
-  const handleCaratRange = ({
-    data,
-    selectedTile,
-    setSelectedTile
-  }: {
-    data: string;
-    selectedTile: string[];
-    setSelectedTile: React.Dispatch<React.SetStateAction<string[]>>;
-  }) => {
-    const preDefineIndex = preDefineCarats.findIndex(item =>
-      item.data.includes(data)
-    );
-
-    if (preDefineIndex !== -1) {
-      const parentCategory = preDefineCarats[preDefineIndex].data[0];
-      const subCategories = preDefineCarats[preDefineIndex].data.slice(1);
-
-      if (subCategories.includes(data)) {
-        const updatedTiles = selectedTile.includes(data)
-          ? selectedTile.filter(tile => tile !== data)
-          : [...selectedTile, data];
-
-        if (
-          !updatedTiles.includes(parentCategory) &&
-          subCategories.every(subCat => updatedTiles.includes(subCat))
-        ) {
-          updatedTiles.push(parentCategory);
-        } else if (
-          updatedTiles.includes(parentCategory) &&
-          !subCategories.every(subCat => updatedTiles.includes(subCat))
-        ) {
-          updatedTiles.splice(updatedTiles.indexOf(parentCategory), 1);
-        }
-
-        setSelectedTile(updatedTiles);
-
-        const filterOutSpecificValues = (updatedTiles: string[]) => {
-          const specificValues = ['1ct', '1.5ct', '2ct', '3ct', '4ct', '5ct+'];
-
-          return updatedTiles.filter(tile => !specificValues.includes(tile));
-        };
-
-        setCaratRangeSelection(filterOutSpecificValues(updatedTiles));
-      } else {
-        let updatedTiles;
-
-        if (selectedTile.includes(parentCategory)) {
-          updatedTiles = selectedTile.filter(
-            tile => ![parentCategory, ...subCategories].includes(tile)
-          );
-        } else {
-          updatedTiles = [
-            ...selectedTile.filter(tile => !subCategories.includes(tile)),
-            parentCategory,
-            ...subCategories
-          ];
-        }
-
-        setSelectedTile(updatedTiles);
-
-        const filterOutSpecificValues = (updatedTiles: string[]) => {
-          const specificValues = ['1ct', '1.5ct', '2ct', '3ct', '4ct', '5ct+'];
-
-          return updatedTiles.filter(tile => !specificValues.includes(tile));
-        };
-
-        setCaratRangeSelection(filterOutSpecificValues(updatedTiles));
-      }
-    }
-  };
-
-  let preDefineCarats = [
-    {
-      data: ['0.30-0.39'],
-      selected: caratRangeSelectionTemp,
-      setSelected: setCaratRangeSelectionTemp,
-      handleChange: handleCaratRange
-    },
-    {
-      data: ['0.40-0.49'],
-      selected: caratRangeSelectionTemp,
-      setSelected: setCaratRangeSelectionTemp,
-      handleChange: handleCaratRange
-    },
-    {
-      data: ['0.50-0.59'],
-      selected: caratRangeSelectionTemp,
-      setSelected: setCaratRangeSelectionTemp,
-      handleChange: handleCaratRange
-    },
-    {
-      data: ['0.60-0.69'],
-      selected: caratRangeSelectionTemp,
-      setSelected: setCaratRangeSelectionTemp,
-      handleChange: handleCaratRange
-    },
-    {
-      data: ['0.70-0.79'],
-      selected: caratRangeSelectionTemp,
-      setSelected: setCaratRangeSelectionTemp,
-      handleChange: handleCaratRange
-    },
-    {
-      data: ['0.80-0.89'],
-      selected: caratRangeSelectionTemp,
-      setSelected: setCaratRangeSelectionTemp,
-      handleChange: handleCaratRange
-    },
-    {
-      data: ['0.90-0.99'],
-      selected: caratRangeSelectionTemp,
-      setSelected: setCaratRangeSelectionTemp,
-      handleChange: handleCaratRange
-    },
-    {
-      data: ['1ct', '1.00-1.19', '1.20-1.49'],
-      selected: caratRangeSelectionTemp,
-      setSelected: setCaratRangeSelectionTemp,
-      handleChange: handleCaratRange
-    },
-    {
-      data: ['1.5ct', '1.50-1.69', '1.70-1.99'],
-      selected: caratRangeSelectionTemp,
-      setSelected: setCaratRangeSelectionTemp,
-      handleChange: handleCaratRange
-    },
-    {
-      data: ['2ct', '2.00-2.49', '2.50-2.99'],
-      selected: caratRangeSelectionTemp,
-      setSelected: setCaratRangeSelectionTemp,
-      handleChange: handleCaratRange
-    },
-    {
-      data: ['3ct', '3.00-3.49', '3.50-3.99'],
-      selected: caratRangeSelectionTemp,
-      setSelected: setCaratRangeSelectionTemp,
-      handleChange: handleCaratRange
-    },
-    {
-      data: ['4ct', '4.00-4.49', '4.50-4.99'],
-      selected: caratRangeSelectionTemp,
-      setSelected: setCaratRangeSelectionTemp,
-      handleChange: handleCaratRange
-    },
-    {
-      data: [
-        '5ct+',
-        '5.00-5.49',
-        '5.50-5.99',
-        '6.00-6.99',
-        '7.00-7.99',
-        '8.00-9.99',
-        '10.00-50.00'
-      ],
-      selected: caratRangeSelectionTemp,
-      setSelected: setCaratRangeSelectionTemp,
-      handleChange: handleCaratRange
-    }
-  ];
-
   const [accordionValue, setAccordionValue] = useState('');
 
   return (
@@ -405,7 +246,19 @@ export const Carat = ({
                         ]}
                         selectedTile={caratRangeSelectionTemp}
                         setSelectedTile={setCaratRangeSelectionTemp}
-                        handleTileClick={handleCaratRange}
+                        handleTileClick={({
+                          data,
+                          selectedTile,
+                          setSelectedTile
+                        }) => {
+                          handleCaratRange({
+                            data,
+                            selectedTile,
+                            setSelectedTile,
+                            preDefineCarats,
+                            setCaratRangeSelection
+                          });
+                        }}
                       />
                     )}
 
@@ -425,9 +278,21 @@ export const Carat = ({
                             tileContainerStyle="flex-col  justify-center items-center "
                             tileStyle="w-[79px] !text-sMedium !p-0 !py-[8px]"
                             tileData={preDefineCarat.data}
-                            selectedTile={preDefineCarat.selected}
-                            setSelectedTile={preDefineCarat.setSelected}
-                            handleTileClick={preDefineCarat.handleChange}
+                            selectedTile={caratRangeSelectionTemp}
+                            setSelectedTile={setCaratRangeSelectionTemp}
+                            handleTileClick={({
+                              data,
+                              selectedTile,
+                              setSelectedTile
+                            }) => {
+                              handleCaratRange({
+                                data,
+                                selectedTile,
+                                setSelectedTile,
+                                preDefineCarats,
+                                setCaratRangeSelection
+                              });
+                            }}
                           />
                         </div>
                       );
