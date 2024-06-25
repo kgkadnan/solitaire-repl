@@ -588,6 +588,7 @@ const Form = ({
 
     handleReset(setState, errorSetState);
   };
+
   const handleAddDemand = () => {
     setIsLoading(true);
     setIsAddDemand(true);
