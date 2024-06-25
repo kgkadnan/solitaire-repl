@@ -224,21 +224,29 @@ const OrderDetail: React.FC<IOrderDetail> = ({
     {
       name: getShapeDisplayName(detailImageData?.shape ?? ''),
       url: `${FILE_URLS.IMG.replace('***', detailImageData?.lot_id ?? '')}`,
+      downloadUrl: `${FILE_URLS.IMG.replace(
+        '***',
+        detailImageData?.lot_id ?? ''
+      )}`,
       category: 'Image'
     },
     {
       name: 'GIA Certificate',
-      url: detailImageData?.certificate_url ?? '',
-      category: 'Certificate'
+      url: `${FILE_URLS.CERT_FILE.replace(
+        '***',
+        detailImageData?.certificate_number ?? ''
+      )}`,
+      category: 'Certificate',
+      downloadUrl: detailImageData?.assets_pre_check?.CERT_FILE
+        ? detailImageData?.certificate_url
+        : '',
+      url_check: detailImageData?.assets_pre_check?.CERT_IMG
     },
 
     {
       name: 'B2B',
       url: `${FILE_URLS.B2B.replace('***', detailImageData?.lot_id ?? '')}`,
-      url_check: `${FILE_URLS.B2B_CHECK.replace(
-        '***',
-        detailImageData?.lot_id ?? ''
-      )}`,
+      url_check: detailImageData?.assets_pre_check?.B2B_CHECK,
       category: 'Video'
     },
     {
@@ -247,36 +255,53 @@ const OrderDetail: React.FC<IOrderDetail> = ({
         '***',
         detailImageData?.lot_id ?? ''
       )}`,
-      url_check: `${FILE_URLS.B2B_SPARKLE_CHECK.replace(
-        '***',
-        detailImageData?.lot_id ?? ''
-      )}`,
+      url_check: detailImageData?.assets_pre_check?.B2B_SPARKLE_CHECK,
       category: 'B2B Sparkle'
     },
 
     {
       name: 'Heart',
       url: `${FILE_URLS.HEART.replace('***', detailImageData?.lot_id ?? '')}`,
+      downloadUrl: `${FILE_URLS.HEART.replace(
+        '***',
+        detailImageData?.lot_id ?? ''
+      )}`,
       category: 'Image'
     },
     {
       name: 'Arrow',
       url: `${FILE_URLS.ARROW.replace('***', detailImageData?.lot_id ?? '')}`,
+      downloadUrl: `${FILE_URLS.ARROW.replace(
+        '***',
+        detailImageData?.lot_id ?? ''
+      )}`,
       category: 'Image'
     },
     {
       name: 'Aset',
       url: `${FILE_URLS.ASET.replace('***', detailImageData?.lot_id ?? '')}`,
+      downloadUrl: `${FILE_URLS.ASET.replace(
+        '***',
+        detailImageData?.lot_id ?? ''
+      )}`,
       category: 'Image'
     },
     {
       name: 'Ideal',
       url: `${FILE_URLS.IDEAL.replace('***', detailImageData?.lot_id ?? '')}`,
+      downloadUrl: `${FILE_URLS.IDEAL.replace(
+        '***',
+        detailImageData?.lot_id ?? ''
+      )}`,
       category: 'Image'
     },
     {
       name: 'Fluorescence',
       url: `${FILE_URLS.FLUORESCENCE.replace(
+        '***',
+        detailImageData?.lot_id ?? ''
+      )}`,
+      downloadUrl: `${FILE_URLS.FLUORESCENCE.replace(
         '***',
         detailImageData?.lot_id ?? ''
       )}`,

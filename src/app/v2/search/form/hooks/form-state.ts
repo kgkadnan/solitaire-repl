@@ -12,6 +12,10 @@ const useFormStateManagement = () => {
   const [selectedClarity, setSelectedClarity] = useState<string[]>([]);
   const [, setSelectedGirdleStep] = useState<string>();
   const [selectedCaratRange, setSelectedCaratRange] = useState<string[]>([]);
+  const [caratRangeSelectionTemp, setCaratRangeSelectionTemp] = useState<
+    string[]
+  >([]);
+  const [caratRangeSelection, setCaratRangeSelection] = useState<string[]>([]);
   const [selectedMake, setSelectedMake] = useState<string>('');
   const [selectedCut, setSelectedCut] = useState<string[]>([]);
   const [selectedPolish, setSelectedPolish] = useState<string[]>([]);
@@ -109,6 +113,8 @@ const useFormStateManagement = () => {
       discountMax,
       caratMax,
       caratMin,
+      caratRangeSelectionTemp,
+      caratRangeSelection,
       pricePerCaratMin,
       pricePerCaratMax,
       caratRangeFrom,
@@ -184,6 +190,8 @@ const useFormStateManagement = () => {
       setDiscountMax,
       setCaratMin,
       setCaratMax,
+      setCaratRangeSelectionTemp,
+      setCaratRangeSelection,
       setPricePerCaratMin,
       setPricePerCaratMax,
       setCaratRangeFrom,

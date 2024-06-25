@@ -25,12 +25,14 @@ function Calendar({
           'space-y-4 border-solid  border-r-[1px]  px-3 !m-[0px] border-neutral200 ',
         caption: 'flex justify-center pt-3 relative items-center',
         caption_label: 'text-sm font-medium',
-        nav: 'space-x-1 flex items-center',
-        nav_button: cn('h-7 w-7 bg-transparent p-0 '),
+        nav: 'space-x-1 flex items-center  disabled:cursor-not-allowed disabled:text-neutral400',
+        nav_button: cn(
+          'h-7 w-7 bg-transparent p-0 disabled:text-neutral400 disabled:cursor-not-allowed'
+        ),
         nav_button_previous:
           'absolute left-1 border-none outline-none text-neutral900',
         nav_button_next:
-          'absolute right-1 border-none outline-none text-neutral900',
+          'absolute right-1 border-none outline-none text-neutral900 disabled:text-neutral400 disabled:cursor-not-allowed',
         table: 'w-full border-collapse space-y-1',
         head_row: 'flex',
         head_cell: 'text-neutral400 rounded-md w-9 font-normal text-[0.8rem]',
@@ -54,8 +56,7 @@ function Calendar({
       }}
       components={{
         IconLeft: () => <ChevronLeft className="h-4 w-4" />,
-        IconRight: () =>
-          props.disabled ? <></> : <ChevronRight className="h-4 w-4" />
+        IconRight: () => <ChevronRight className="h-4 w-4" />
       }}
       {...props}
     />

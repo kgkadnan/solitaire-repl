@@ -42,6 +42,7 @@ import { Toast } from '@/components/v2/common/copy-and-share/toast';
 import { loadImages } from '@/components/v2/common/detail-page/helpers/load-images';
 import { checkImage } from '@/components/v2/common/detail-page/helpers/check-image';
 import CommonPoppup from '../login/component/common-poppup';
+import BiddingSkeleton from '@/components/v2/skeleton/bidding';
 
 const BidToBuy = () => {
   const router = useRouter();
@@ -67,7 +68,8 @@ const BidToBuy = () => {
 
   const [bidHistory, setBidHistory] = useState<any>({});
 
-  const [triggerBidToBuyHistory] = useLazyGetBidToBuyHistoryQuery({});
+  const [triggerBidToBuyHistory, { data: historyData }] =
+    useLazyGetBidToBuyHistoryQuery({});
   const mapColumns = (columns: any) =>
     columns
       ?.filter(({ is_disabled }: any) => !is_disabled)
@@ -179,7 +181,6 @@ const BidToBuy = () => {
   const [timeDifference, setTimeDifference] = useState(null);
 
   const getBidToBuyHistoryData = () => {
-    setIsLoading(true);
     triggerBidToBuyHistory({})
       .then(res => {
         setIsLoading(false);
@@ -458,21 +459,29 @@ const BidToBuy = () => {
     {
       name: getShapeDisplayName(detailImageData?.shape ?? ''),
       url: `${FILE_URLS.IMG.replace('***', detailImageData?.lot_id ?? '')}`,
+      downloadUrl: `${FILE_URLS.IMG.replace(
+        '***',
+        detailImageData?.lot_id ?? ''
+      )}`,
       category: 'Image'
     },
     {
       name: 'GIA Certificate',
-      url: detailImageData?.certificate_url ?? '',
-      category: 'Certificate'
+      url: `${FILE_URLS.CERT_FILE.replace(
+        '***',
+        detailImageData?.certificate_number ?? ''
+      )}`,
+      category: 'Certificate',
+      downloadUrl: detailImageData?.assets_pre_check?.CERT_FILE
+        ? detailImageData?.certificate_url
+        : '',
+      url_check: detailImageData?.assets_pre_check?.CERT_IMG
     },
 
     {
       name: 'B2B',
       url: `${FILE_URLS.B2B.replace('***', detailImageData?.lot_id ?? '')}`,
-      url_check: `${FILE_URLS.B2B_CHECK.replace(
-        '***',
-        detailImageData?.lot_id ?? ''
-      )}`,
+      url_check: detailImageData?.assets_pre_check?.B2B_CHECK,
       category: 'Video'
     },
     {
@@ -481,36 +490,53 @@ const BidToBuy = () => {
         '***',
         detailImageData?.lot_id ?? ''
       )}`,
-      url_check: `${FILE_URLS.B2B_SPARKLE_CHECK.replace(
-        '***',
-        detailImageData?.lot_id ?? ''
-      )}`,
+      url_check: detailImageData?.assets_pre_check?.B2B_SPARKLE_CHECK,
       category: 'B2B Sparkle'
     },
 
     {
       name: 'Heart',
       url: `${FILE_URLS.HEART.replace('***', detailImageData?.lot_id ?? '')}`,
+      downloadUrl: `${FILE_URLS.HEART.replace(
+        '***',
+        detailImageData?.lot_id ?? ''
+      )}`,
       category: 'Image'
     },
     {
       name: 'Arrow',
       url: `${FILE_URLS.ARROW.replace('***', detailImageData?.lot_id ?? '')}`,
+      downloadUrl: `${FILE_URLS.ARROW.replace(
+        '***',
+        detailImageData?.lot_id ?? ''
+      )}`,
       category: 'Image'
     },
     {
       name: 'Aset',
       url: `${FILE_URLS.ASET.replace('***', detailImageData?.lot_id ?? '')}`,
+      downloadUrl: `${FILE_URLS.ASET.replace(
+        '***',
+        detailImageData?.lot_id ?? ''
+      )}`,
       category: 'Image'
     },
     {
       name: 'Ideal',
       url: `${FILE_URLS.IDEAL.replace('***', detailImageData?.lot_id ?? '')}`,
+      downloadUrl: `${FILE_URLS.IDEAL.replace(
+        '***',
+        detailImageData?.lot_id ?? ''
+      )}`,
       category: 'Image'
     },
     {
       name: 'Fluorescence',
       url: `${FILE_URLS.FLUORESCENCE.replace(
+        '***',
+        detailImageData?.lot_id ?? ''
+      )}`,
+      downloadUrl: `${FILE_URLS.FLUORESCENCE.replace(
         '***',
         detailImageData?.lot_id ?? ''
       )}`,
@@ -585,9 +611,12 @@ const BidToBuy = () => {
             activeTab={activeTab}
           />
         </>
+      ) : bid === undefined ||
+        historyData === undefined ||
+        activeBid === undefined ? (
+        <BiddingSkeleton />
       ) : (
         <>
-          {' '}
           <div className="flex  py-[4px] items-center justify-between">
             <div className="flex gap-3 items-center">
               <p className="text-lMedium font-medium text-neutral900">
@@ -608,22 +637,21 @@ const BidToBuy = () => {
               )}
             </div>
 
-            {timeDifference !== null && timeDifference >= 0 && (
-              <CountdownTimer
-                initialHours={Math.floor(timeDifference / (1000 * 60 * 60))}
-                initialMinutes={Math.floor(
-                  (timeDifference % (1000 * 60 * 60)) / (1000 * 60)
-                )}
-                initialSeconds={Math.floor(
-                  (timeDifference % (1000 * 60)) / 1000
-                )}
-              />
-            )}
+            <div className="h-[38px]">
+              {timeDifference !== null && timeDifference >= 0 && (
+                <CountdownTimer
+                  initialHours={Math.floor(timeDifference / (1000 * 60 * 60))}
+                  initialMinutes={Math.floor(
+                    (timeDifference % (1000 * 60 * 60)) / (1000 * 60)
+                  )}
+                  initialSeconds={Math.floor(
+                    (timeDifference % (1000 * 60)) / 1000
+                  )}
+                />
+              )}
+            </div>
           </div>
           <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow">
-            {/* <div className="w-[450px]">
-    
-    </div> */}
             <div className="border-b-[1px] border-neutral200">
               {
                 <BidToByDataTable
@@ -673,7 +701,6 @@ const BidToBuy = () => {
                 />
               }
             </div>
-            {/* {renderFooter()} */}
           </div>
         </>
       )}

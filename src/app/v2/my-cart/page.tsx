@@ -75,6 +75,8 @@ import { useLazyGetAvailableMyAppointmentSlotsQuery } from '@/features/api/my-ap
 import { SELECT_STONE_TO_PERFORM_ACTION } from '@/constants/error-messages/confirm-stone';
 import BookAppointment from '../my-appointments/components/book-appointment/book-appointment';
 import CommonPoppup from '../login/component/common-poppup';
+import DataTableSkeleton from '@/components/v2/skeleton/data-table';
+import { Skeleton } from '@mui/material';
 
 const MyCart = () => {
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();
@@ -92,7 +94,7 @@ const MyCart = () => {
   const [textAreaValue, setTextAreaValue] = useState('');
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
   const [downloadExcel] = useDownloadExcelMutation();
-  const [cartItems, setCartItems] = useState<any>([]);
+  const [cartItems, setCartItems] = useState<any>(undefined);
   const [isConfirmStone, setIsConfirmStone] = useState(false);
   const [confirmStoneData, setConfirmStoneData] = useState<IProduct[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -123,7 +125,7 @@ const MyCart = () => {
     Sold: 0,
     BidToBuy: 0
   });
-  const [tiggerCart] = useLazyGetCartQuery();
+  const [tiggerCart, { data: cartdata }] = useLazyGetCartQuery();
   const subRoute = useSearchParams().get('path');
   // Mutation for deleting items from the cart
   const [deleteCart] = useDeleteCartMutation();
@@ -176,7 +178,6 @@ const MyCart = () => {
   };
 
   useEffect(() => {
-    setIsLoading(true);
     const fetchMyAPI = async () => {
       await tiggerCart({})
         .then((response: any) => {
@@ -588,21 +589,29 @@ const MyCart = () => {
     {
       name: getShapeDisplayName(detailImageData?.shape ?? ''),
       url: `${FILE_URLS.IMG.replace('***', detailImageData?.lot_id ?? '')}`,
+      downloadUrl: `${FILE_URLS.IMG.replace(
+        '***',
+        detailImageData?.lot_id ?? ''
+      )}`,
       category: 'Image'
     },
     {
       name: 'GIA Certificate',
-      url: detailImageData?.certificate_url ?? '',
-      category: 'Certificate'
+      url: `${FILE_URLS.CERT_FILE.replace(
+        '***',
+        detailImageData?.certificate_number ?? ''
+      )}`,
+      category: 'Certificate',
+      downloadUrl: detailImageData?.assets_pre_check?.CERT_FILE
+        ? detailImageData?.certificate_url
+        : '',
+      url_check: detailImageData?.assets_pre_check?.CERT_IMG
     },
 
     {
       name: 'B2B',
       url: `${FILE_URLS.B2B.replace('***', detailImageData?.lot_id ?? '')}`,
-      url_check: `${FILE_URLS.B2B_CHECK.replace(
-        '***',
-        detailImageData?.lot_id ?? ''
-      )}`,
+      url_check: detailImageData?.assets_pre_check?.B2B_CHECK,
       category: 'Video'
     },
     {
@@ -611,36 +620,53 @@ const MyCart = () => {
         '***',
         detailImageData?.lot_id ?? ''
       )}`,
-      url_check: `${FILE_URLS.B2B_SPARKLE_CHECK.replace(
-        '***',
-        detailImageData?.lot_id ?? ''
-      )}`,
+      url_check: detailImageData?.assets_pre_check?.B2B_SPARKLE_CHECK,
       category: 'B2B Sparkle'
     },
 
     {
       name: 'Heart',
       url: `${FILE_URLS.HEART.replace('***', detailImageData?.lot_id ?? '')}`,
+      downloadUrl: `${FILE_URLS.HEART.replace(
+        '***',
+        detailImageData?.lot_id ?? ''
+      )}`,
       category: 'Image'
     },
     {
       name: 'Arrow',
       url: `${FILE_URLS.ARROW.replace('***', detailImageData?.lot_id ?? '')}`,
+      downloadUrl: `${FILE_URLS.ARROW.replace(
+        '***',
+        detailImageData?.lot_id ?? ''
+      )}`,
       category: 'Image'
     },
     {
       name: 'Aset',
       url: `${FILE_URLS.ASET.replace('***', detailImageData?.lot_id ?? '')}`,
+      downloadUrl: `${FILE_URLS.ASET.replace(
+        '***',
+        detailImageData?.lot_id ?? ''
+      )}`,
       category: 'Image'
     },
     {
       name: 'Ideal',
       url: `${FILE_URLS.IDEAL.replace('***', detailImageData?.lot_id ?? '')}`,
+      downloadUrl: `${FILE_URLS.IDEAL.replace(
+        '***',
+        detailImageData?.lot_id ?? ''
+      )}`,
       category: 'Image'
     },
     {
       name: 'Fluorescence',
       url: `${FILE_URLS.FLUORESCENCE.replace(
+        '***',
+        detailImageData?.lot_id ?? ''
+      )}`,
+      downloadUrl: `${FILE_URLS.FLUORESCENCE.replace(
         '***',
         detailImageData?.lot_id ?? ''
       )}`,
@@ -908,13 +934,22 @@ const MyCart = () => {
 
       <div className="flex  py-[8px] items-center ">
         <p className="text-lMedium font-medium text-neutral900">
-          {showAppointmentForm
-            ? ManageLocales('app.myAppointment.header')
-            : isConfirmStone
-            ? ''
-            : isDetailPage
-            ? ''
-            : ManageLocales('app.myCart.mycart')}
+          {showAppointmentForm ? (
+            ManageLocales('app.myAppointment.header')
+          ) : isConfirmStone ? (
+            ''
+          ) : isDetailPage ? (
+            ''
+          ) : cartItems === undefined || cartdata === undefined ? (
+            <Skeleton
+              variant="rectangular"
+              height={'21px'}
+              width={'61px'}
+              animation="wave"
+            />
+          ) : (
+            ManageLocales('app.myCart.mycart')
+          )}
         </p>
       </div>
 
@@ -1064,9 +1099,10 @@ const MyCart = () => {
               setRowSelection={setRowSelection}
               errorSetState={errorSetState}
             />
+          ) : cartItems === undefined || cartdata === undefined ? (
+            <DataTableSkeleton identifier="myCart" />
           ) : (
             <>
-              {' '}
               <div className="flex h-[72px] items-center border-b-[1px] border-neutral200">
                 <div className="flex border-b border-neutral200 w-full ml-3 text-mMedium font-medium">
                   {myCartTabs.map(({ label, status, count }) => {
@@ -1086,7 +1122,7 @@ const MyCart = () => {
                   })}
                 </div>
               </div>
-              {!rows.length && !isLoading ? (
+              {!rows.length ? (
                 <EmptyScreen
                   label={ManageLocales(
                     'app.emptyCart.actionButton.searchDiamonds'
