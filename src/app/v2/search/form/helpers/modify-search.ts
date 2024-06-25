@@ -1,6 +1,13 @@
 import { girdleSortedArray } from '@/constants/v2/form';
 import { checkCaratRange } from './check-carat-range';
 
+const transformColorData = (colorArray: string[]) => {
+  return colorArray.map(color => ({
+    value: color,
+    label: color
+  }));
+};
+
 export const setModifySearch = (data: any, setState: any) => {
   const {
     setSelectedShape,
@@ -95,9 +102,12 @@ export const setModifySearch = (data: any, setState: any) => {
   data?.origin_country && setSelectedOrigin(data?.origin_country);
   data?.shade && setSelectedShade(data?.shade);
   data?.color && setSelectedWhiteColor(data?.color);
-  data?.fancy_overtone && setSelectedOvertone(data?.fancy_overtone);
-  data?.fancy_intensity && setSelectedIntensity(data?.fancy_intensity);
-  data?.fancy_color && setSelectedFancyColor(data?.fancy_color);
+  data?.fancy_overtone &&
+    setSelectedOvertone(transformColorData(data?.fancy_overtone));
+  data?.fancy_intensity &&
+    setSelectedIntensity(transformColorData(data?.fancy_intensity));
+  data?.fancy_color &&
+    setSelectedFancyColor(transformColorData(data?.fancy_color));
   data?.price_range && setAmountRangeMin(data?.price_range?.gte);
   data?.price_range && setAmountRangeMax(data?.price_range?.lte);
   data?.discount && setDiscountMin(data?.discount?.gte);

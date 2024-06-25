@@ -27,7 +27,8 @@ export const colourStyles = (error: any) => {
     }),
     dropdownIndicator: (styles: any) => ({
       ...styles,
-      padding: '8px 8px 8px 0px'
+      padding: '8px 8px 8px 0px',
+      height: '20px'
     }),
     singleValue: (styles: any) => ({
       ...styles,
@@ -77,7 +78,8 @@ export const colourStyles = (error: any) => {
     valueContainer: (styles: any) => {
       return {
         ...styles,
-        padding: '2px 0px 2px 8px'
+        paddingLeft: '8px',
+        height: '40px'
       };
     },
     multiValue: (styles: any) => {
