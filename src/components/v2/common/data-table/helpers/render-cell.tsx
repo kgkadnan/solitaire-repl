@@ -52,7 +52,7 @@ export const RenderLotId = ({
 
   return (
     <span
-      className={`rounded-[4px] ${statusClass} border-[1px] px-[8px] py-[3px] ${borderClass}`}
+      className={`rounded-[4px] ${statusClass} border-[1px] px-[8px] py-[3px] ${borderClass} flex !w-[85px]`}
       onClick={e => {
         e.stopPropagation();
         handleDetailPage({ row: row.original });
@@ -131,7 +131,15 @@ export const RednderLocation = ({ renderedCellValue }: any) => {
       return null; // or any other fallback JSX
   }
 
-  return <Image src={imageSrc} alt={renderedCellValue} />;
+  return (
+    <Image
+      src={imageSrc}
+      alt={renderedCellValue}
+      width={24}
+      height={16}
+      className="!w-[24px] !h-[16px]"
+    />
+  );
 };
 
 export const RenderLab = ({ renderedCellValue, row }: any) => {
@@ -166,7 +174,11 @@ export const RenderLab = ({ renderedCellValue, row }: any) => {
 export const RenderDiscount = ({ renderedCellValue }: any) => {
   return (
     <div
-      className={`text-successMain border-[1px] border-successBorder bg-successSurface px-[4px] py-[2px] w-[65px] text-center rounded-[4px]`}
+      className={`${
+        renderedCellValue !== null && renderedCellValue !== undefined
+          ? 'text-successMain border-[1px] border-successBorder bg-successSurface '
+          : ''
+      } px-[4px] py-[2px] w-[65px] text-center rounded-[4px]`}
     >
       {renderedCellValue !== null && renderedCellValue !== undefined
         ? renderedCellValue === 0
@@ -187,9 +199,18 @@ export const DiscountWithCross = ({ renderedCellValue }: any) => {
         width: '65px',
         textAlign: 'center',
         borderRadius: '4px',
-        background: 'var(--neutral-100)',
-        color: 'var(--neutral-500)',
-        border: '1px solid var(--neutral-200)'
+        background:
+          renderedCellValue !== null && renderedCellValue !== undefined
+            ? 'var(--neutral-100)'
+            : '',
+        color:
+          renderedCellValue !== null && renderedCellValue !== undefined
+            ? 'var(--neutral-500)'
+            : '',
+        border:
+          renderedCellValue !== null && renderedCellValue !== undefined
+            ? '1px solid var(--neutral-200)'
+            : ''
       }}
     >
       {renderedCellValue !== null && renderedCellValue !== undefined
@@ -197,17 +218,21 @@ export const DiscountWithCross = ({ renderedCellValue }: any) => {
           ? '0.00%'
           : formatNumber(renderedCellValue) + '%'
         : '-'}
-      <span
-        style={{
-          position: 'absolute',
-          top: '50%',
-          right: '6px',
-          width: '85%',
-          height: '1px',
-          backgroundColor: 'black',
-          transform: 'translateY(-50%) rotate(-15deg)'
-        }}
-      ></span>
+      {renderedCellValue !== null && renderedCellValue !== undefined ? (
+        <span
+          style={{
+            position: 'absolute',
+            top: '50%',
+            right: '6px',
+            width: '85%',
+            height: '1px',
+            backgroundColor: 'black',
+            transform: 'translateY(-50%) rotate(-15deg)'
+          }}
+        ></span>
+      ) : (
+        ''
+      )}
     </span>
   );
 };
@@ -252,7 +277,11 @@ export const RenderNewArrivalBidDiscount = ({ renderedCellValue }: any) => {
   return (
     <div className="w-full flex justify-center items-center">
       <div
-        className={`text-infoMain border-[1px] border-infoBorder bg-infoSurface px-[4px] py-[2px] w-[65px] rounded-[4px] text-center`}
+        className={`${
+          renderedCellValue !== null && renderedCellValue !== undefined
+            ? 'text-infoMain border-[1px] border-infoBorder bg-infoSurface'
+            : ''
+        }  px-[4px] py-[2px] w-[65px] rounded-[4px] text-center`}
       >
         {renderedCellValue !== null && renderedCellValue !== undefined
           ? renderedCellValue === 0

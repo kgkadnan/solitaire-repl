@@ -62,7 +62,15 @@ export const RednderLocation = ({ renderedCellValue }: any) => {
       return null; // or any other fallback JSX
   }
 
-  return <Image src={imageSrc} alt={renderedCellValue} />;
+  return (
+    <Image
+      src={imageSrc}
+      alt={renderedCellValue}
+      width={24}
+      height={16}
+      className="!w-[24px] !h-[16px]"
+    />
+  );
 };
 
 export const RenderLab = ({ renderedCellValue, row }: any) => {
@@ -97,7 +105,11 @@ export const RenderLab = ({ renderedCellValue, row }: any) => {
 export const RenderDiscount = ({ renderedCellValue }: any) => {
   return (
     <div
-      className={`text-successMain border-[1px] text-center border-successBorder bg-successSurface px-[8px] py-[2px] w-full rounded-[4px]`}
+      className={`${
+        renderedCellValue !== null && renderedCellValue !== undefined
+          ? 'text-successMain border-[1px] border-successBorder bg-successSurface '
+          : ''
+      } px-[4px] py-[2px] w-[65px] text-center rounded-[4px]`}
     >
       {renderedCellValue !== null && renderedCellValue !== undefined
         ? renderedCellValue === 0

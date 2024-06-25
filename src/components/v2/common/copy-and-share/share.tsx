@@ -21,10 +21,12 @@ const Share = ({
   activeTab = 0
 }: any) => {
   const [selectedRows, setSelectedRows] = useState<IProduct[]>(
-    rows.filter((row: IProduct) => row.id in selectedProducts)
+    rows?.filter((row: IProduct) => row.id in selectedProducts)
   );
   useEffect(() => {
-    setSelectedRows(rows.filter((row: IProduct) => row.id in selectedProducts));
+    setSelectedRows(
+      rows?.filter((row: IProduct) => row.id in selectedProducts)
+    );
   }, [selectedProducts]);
   const { modalState, modalSetState } = useModalStateManagement();
   const { isInputDialogOpen } = modalState;
@@ -42,6 +44,10 @@ const Share = ({
     { name: 'Measurements', state: 'measurements' },
     { name: 'Table %', state: 'table_percentage' },
     { name: 'Depth %', state: 'depth_percentage' },
+    {
+      name: 'Certificate Number',
+      state: 'certificate_number'
+    },
     { name: 'Rap Val ($)', state: 'rap_value' },
     { name: 'Rap ($)', state: 'rap' },
     {
@@ -50,6 +56,7 @@ const Share = ({
     },
     { name: 'Pr/Ct', state: 'price_per_carat' },
     { name: 'Amt ($)', state: 'amount' },
+
     { name: 'Public URL', state: 'public_url' }
   ]);
 

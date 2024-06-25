@@ -13,7 +13,6 @@ module.exports = {
       // padding: "2rem",
       screens: {
         // "2xl": "1400 px",
-        
       }
     },
     extend: {
@@ -161,8 +160,7 @@ module.exports = {
       },
       screens: {
         // "2xl": "1400 px",
-        xl : "1380px"
-        
+        xl: '1380px'
       },
       borderRadius: {
         lg: 'var(--radius)',

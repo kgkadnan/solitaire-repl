@@ -158,7 +158,8 @@ const BidToByDataTable = ({
   rowSelection,
   setRowSelection,
   setIsLoading,
-  renderFooter
+  renderFooter,
+  router
 }: any) => {
   // Fetching saved search data
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -261,6 +262,7 @@ const BidToByDataTable = ({
       modalSetState,
       setRowSelection,
       setIsLoading: setIsLoading,
+      router,
       [activeTab === 2 ? 'fromBidToBuyHistory' : 'fromBidToBuy']: true
     });
   };
@@ -586,7 +588,7 @@ const BidToByDataTable = ({
 
         Cell: ({ row, table }) => {
           return (
-            <div className="flex items-center">
+            <div className="flex items-center ml-[-10px]">
               <MRT_ExpandButton row={row} table={table} />
               <Stack>
                 {getShapeDisplayName({ value: row.original.shape })}
@@ -637,7 +639,7 @@ const BidToByDataTable = ({
           ? 'calc(100vh - 260px)'
           : !rows.length
           ? 'calc(100vh - 260px)'
-          : 'calc(100vh - 265px)',
+          : 'calc(100vh - 255px)',
         maxHeight: isFullScreen
           ? activeTab === 2
             ? 'calc(100vh - 123px)'
@@ -675,7 +677,7 @@ const BidToByDataTable = ({
               cell.column.id
             )
               ? '0px 6px'
-              : '0px 2px',
+              : '0px 4px',
             height: '20px !important',
             fontSize: '12px !important',
             fontWeight: rowSelection[row.id] ? 500 : 400,
@@ -734,7 +736,7 @@ const BidToByDataTable = ({
       };
     },
 
-    muiTableHeadCellProps: () => {
+    muiTableHeadCellProps: ({ column }) => {
       return {
         sx: {
           color: 'var(--neutral-700)',
@@ -744,7 +746,8 @@ const BidToByDataTable = ({
             opacity: 1,
             borderTop: '1px solid var(--neutral-200)',
             fontSize: '12px !important',
-            fontWeight: 500
+            fontWeight: 500,
+            paddingRight: ['location', 'lab'].includes(column.id) && '12px'
           }
         }
       };
@@ -802,7 +805,14 @@ const BidToByDataTable = ({
 
     renderDetailPanel: ({ row }) => {
       // Check if the current row's ID is in the rowSelection state
-      if (activeTab !== 2 && rowSelection[row.id]) {
+      if (
+        activeTab !== 2 &&
+        rowSelection[row.id] &&
+        !(
+          isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+          isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED
+        )
+      ) {
         const bidValue =
           bidValues[row.id] !== undefined
             ? bidValues[row.id]
@@ -817,8 +827,8 @@ const BidToByDataTable = ({
               className="flex gap-6"
               onClick={event => event.stopPropagation()}
             >
-              <div className="w-[120px] ml-10">
-                <div className="!text-mRegular !text-neutral500">Bid Pr/Ct</div>
+              <div className="w-[110px] ml-7">
+                <div className="text-sRegular text-neutral700">Bid Pr/Ct</div>
 
                 <InputField
                   // label={'Bid Pr/Ct'}
@@ -831,20 +841,22 @@ const BidToByDataTable = ({
                       : formatNumber(row.original.price_per_carat)
                   }
                   styles={{
-                    inputMain: 'h-[40px]',
-                    input: '!bg-neutral100 !border-neutral200 !text-neutral700'
+                    inputMain: 'h-[30px]',
+                    input:
+                      '!bg-neutral100 !border-neutral200 !text-neutral700 !h-[30px]  text-sMedium'
                   }}
                   disabled
                 />
               </div>
-              <div className="w-[120px]">
-                <div className="!text-mRegular !text-neutral700">Bid Amt $</div>
+              <div className="w-[110px]">
+                <div className="text-sRegular text-neutral700">Bid Amt $</div>
 
                 <InputField
                   type="text"
                   styles={{
-                    inputMain: 'h-[40px]',
-                    input: '!bg-neutral100 !border-neutral200 !text-neutral700'
+                    inputMain: 'h-[30px]',
+                    input:
+                      '!bg-neutral100 !border-neutral200 !text-neutral700 !h-[30px]  text-sMedium'
                   }}
                   value={
                     bidValues[row.id] !== undefined
@@ -859,9 +871,9 @@ const BidToByDataTable = ({
                 />
               </div>
               <div className="">
-                <div className="text-mRegular text-neutral700">Bid Disc%</div>
+                <div className="text-sRegular text-neutral700">Bid Disc%</div>
                 <div className="gap-6 flex">
-                  <div className="h-[40px] flex gap-1">
+                  <div className="h-[30px] flex gap-1">
                     {bidValue <=
                     (activeTab === 1
                       ? row.original.my_current_bid
@@ -886,10 +898,13 @@ const BidToByDataTable = ({
                       </div>
                     )}
 
-                    <div className="w-[120px]">
+                    <div className="w-[110px]">
                       <InputField
                         type="number"
-                        styles={{ inputMain: 'h-[64px]' }}
+                        styles={{
+                          inputMain: 'h-[54px]',
+                          input: '!h-[30px]  text-sMedium'
+                        }}
                         value={bidValue}
                         onChange={e => {
                           const newValue = e.target.value;
@@ -964,7 +979,9 @@ const BidToByDataTable = ({
                               setBidError('');
                             }
                           },
-                          customStyle: 'flex-1 w-full h-10'
+                          customCtaStyle: '!h-[30px] !text-[12px]',
+
+                          customStyle: 'flex-1 w-full h-[30px]'
                         }
                       ]}
                     />

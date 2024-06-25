@@ -502,7 +502,7 @@ export const otherParameter = [
 
 export const discount = {
   range: {
-    gte: 0,
+    gte: -100,
     lte: 100
   }
 };

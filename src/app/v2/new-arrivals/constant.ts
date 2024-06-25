@@ -149,7 +149,7 @@ export const columnHeaders = [
     accessor: 'current_max_bid',
     sequence: 16,
     is_fixed: false,
-    short_label: 'Current Max. Bid%',
+    short_label: 'Curr Max. Bid%',
     is_disabled: false,
     id: 'cus_ma-lis-seq_01HQSNF0TT2MZS9M0YHPDH3E8F'
   },
@@ -206,6 +206,15 @@ export const columnHeaders = [
     short_label: 'Depth%',
     is_disabled: false,
     id: 'cus_ma-lis-seq_01HQSNF0TTB6GCN1MCTRYDED8J'
+  },
+  {
+    label: 'Certificate Number',
+    accessor: 'certificate_number',
+    sequence: 21,
+    is_fixed: false,
+    short_label: 'Cert No',
+    is_disabled: false,
+    id: 'cus_ma-lis-seq_01HS8MZ2R4C2KC09GJ2NE6FGJK'
   },
   {
     label: 'Ratio',

@@ -38,13 +38,13 @@ export const handleConfirmStone = ({
 }: IHandleConfirmStone) => {
   let selectedIds = Object.keys(selectedRows);
   const hasMemoOut = selectedIds?.some(id => {
-    return rows.some(
+    return rows?.some(
       row => row.id === id && row.diamond_status === MEMO_STATUS
     );
   });
 
   const hasHold = selectedIds?.some(id => {
-    return rows.some(
+    return rows?.some(
       row => row.id === id && row.diamond_status === HOLD_STATUS
     );
   });
@@ -58,7 +58,7 @@ export const handleConfirmStone = ({
   } else if (selectedIds?.length) {
     setIsError(false);
     setIsConfirmStone(true);
-    const confirmStone = rows.filter(item => selectedIds?.includes(item.id));
+    const confirmStone = rows?.filter(item => selectedIds?.includes(item.id));
     setConfirmStoneData(confirmStone);
     setIsDetailPage && setIsDetailPage(false);
   } else {

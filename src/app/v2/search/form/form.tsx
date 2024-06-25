@@ -2,13 +2,13 @@
 
 import AnchorLinkNavigation from '@/components/v2/common/anchor-tag-navigation';
 import { anchor } from '@/constants/v2/form';
-import React, { Dispatch, SetStateAction, useEffect } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Shape } from './components/shape';
 import { Carat } from './components/carat';
 import { Color } from './components/color';
 import {
   useAddDemandMutation,
-  useGetProductCountQuery
+  useLazyGetProductCountQuery
 } from '@/features/api/product';
 import useValidationStateManagement from '../hooks/validation-state-management';
 import { generateQueryParams } from './helpers/generate-query-parameters';
@@ -120,6 +120,8 @@ const Form = ({
 
   const {
     caratMax,
+    caratRangeSelectionTemp,
+    caratRangeSelection,
     caratMin,
     selectedClarity,
     selectedShape,
@@ -148,6 +150,8 @@ const Form = ({
     setSelectedClarity,
     setSelectedShape,
     setSelectedColor,
+    setCaratRangeSelectionTemp,
+    setCaratRangeSelection,
     setSelectedWhiteColor,
     setSelectedFancyColor,
     setSelectedIntensity,
@@ -193,7 +197,9 @@ const Form = ({
   const { isInputDialogOpen } = modalState;
 
   const { setIsInputDialogOpen } = modalSetState;
-
+  const [data, setData] = useState<any>();
+  const [error, setError] = useState<any>();
+  let [triggerProductCountApi] = useLazyGetProductCountQuery();
   // const { errorState, errorSetState } = useNumericFieldValidation();
 
   const { caratError, discountError, pricePerCaratError, amountRangeError } =
@@ -205,14 +211,19 @@ const Form = ({
     setAmountRangeError
   } = errorSetState;
 
-  const { data, error } = useGetProductCountQuery(
-    {
-      searchUrl
-    },
-    {
-      skip: !searchUrl
+  useEffect(() => {
+    if (searchUrl.length > 0) {
+      setIsLoading(true);
+      triggerProductCountApi({ searchUrl })
+        .unwrap()
+        .then((response: any) => {
+          setData(response), setError(''), setIsLoading(false);
+        })
+        .catch(e => {
+          setError(e), setIsLoading(false);
+        });
     }
-  );
+  }, [searchUrl]);
 
   // Update search URL when form state changes
   useEffect(() => {
@@ -342,7 +353,11 @@ const Form = ({
       );
 
       setIsDialogOpen(true);
-    } else if (searchUrl && data?.count > MIN_SEARCH_FORM_COUNT) {
+    } else if (
+      searchUrl &&
+      data?.count > MIN_SEARCH_FORM_COUNT &&
+      minMaxError.length === 0
+    ) {
       if (
         data?.count < MAX_SEARCH_FORM_COUNT &&
         data?.count > MIN_SEARCH_FORM_COUNT
@@ -570,6 +585,7 @@ const Form = ({
     setErrorText('');
     setMinMaxError('');
     setValidationError('');
+
     handleReset(setState, errorSetState);
   };
   const handleAddDemand = () => {
@@ -680,6 +696,7 @@ const Form = ({
       label:
         // 'Search',
         `${
+          minMaxError.length === 0 &&
           errorText === NO_STONE_FOUND &&
           isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
             ? 'Add Demand'
@@ -688,6 +705,7 @@ const Form = ({
       handler:
         // errorText === NO_STONE_FOUND ? () => {} : handleFormSearch
 
+        minMaxError.length === 0 &&
         errorText === NO_STONE_FOUND &&
         isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
           ? handleAddDemand
@@ -822,19 +840,23 @@ const Form = ({
             selectedShape={selectedShape}
           />
 
+          <Carat
+            caratMax={caratMax}
+            caratMin={caratMin}
+            caratRangeSelectionTemp={caratRangeSelectionTemp}
+            setCaratRangeSelectionTemp={setCaratRangeSelectionTemp}
+            setCaratRangeSelection={setCaratRangeSelection}
+            caratRangeSelection={caratRangeSelection}
+            setCaratMin={setCaratMin}
+            setCaratMax={setCaratMax}
+            selectedCaratRange={selectedCaratRange}
+            setSelectedCaratRange={setSelectedCaratRange}
+            caratError={caratError}
+            setCaratError={setCaratError}
+            setValidationError={setValidationError}
+            validationError={validationError}
+          />
           <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px]">
-            <Carat
-              caratMax={caratMax}
-              caratMin={caratMin}
-              setCaratMin={setCaratMin}
-              setCaratMax={setCaratMax}
-              selectedCaratRange={selectedCaratRange}
-              setSelectedCaratRange={setSelectedCaratRange}
-              caratError={caratError}
-              setCaratError={setCaratError}
-              setValidationError={setValidationError}
-              validationError={validationError}
-            />
             <Color
               selectedColor={selectedColor}
               selectedFancyColor={selectedFancyColor}
@@ -847,11 +869,12 @@ const Form = ({
               setSelectedIntensity={setSelectedIntensity}
               setSelectedOvertone={setSelectedOvertone}
             />
+
+            <Clarity
+              setSelectedClarity={setSelectedClarity}
+              selectedClarity={selectedClarity}
+            />
           </div>
-          <Clarity
-            setSelectedClarity={setSelectedClarity}
-            selectedClarity={selectedClarity}
-          />
           <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px]">
             <MakeCutPolishSymmetry state={state} setState={setState} />
             <div className="flex flex-col gap-[16px]">
@@ -925,7 +948,9 @@ const Form = ({
             <div>
               <span className="hidden  text-successMain" />
               <span
-                className={`text-mRegular font-medium text-${messageColor} pl-[8px]`}
+                className={`text-mRegular font-medium text-${
+                  minMaxError.length > 0 ? 'dangerMain' : messageColor
+                } pl-[8px]`}
               >
                 {minMaxError.length
                   ? minMaxError
