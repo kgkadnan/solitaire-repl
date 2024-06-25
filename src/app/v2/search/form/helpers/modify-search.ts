@@ -1,4 +1,5 @@
 import { girdleSortedArray } from '@/constants/v2/form';
+import { checkCaratRange } from './check-carat-range';
 
 export const setModifySearch = (data: any, setState: any) => {
   const {
@@ -72,10 +73,17 @@ export const setModifySearch = (data: any, setState: any) => {
     setCaratRangeSelectionTemp
   } = setState;
 
-  setCaratRangeSelection([]);
-  setCaratRangeSelectionTemp([]);
   data?.shape && setSelectedShape(data?.shape);
-  data?.carats && setSelectedCaratRange(data?.carats);
+
+  data?.carats &&
+    data.carats.forEach((carat: any) => {
+      checkCaratRange(
+        carat,
+        setCaratRangeSelectionTemp,
+        setCaratRangeSelection,
+        setSelectedCaratRange
+      );
+    });
   data?.clarity && setSelectedClarity(data?.clarity);
   data?.cut && setSelectedCut(data?.cut);
   data?.lab && setSelectedLab(data?.lab);
