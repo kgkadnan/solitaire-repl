@@ -97,6 +97,7 @@ export const Color = ({
               backgroundColor={'var(--neutral-0)'}
               fontColor={'var(--neutral-900)'}
               fontSize="10"
+              initialSelectedIndex={selectedColor === 'white' ? 0 : 1}
               selectedFontColor={'var(--neutral-25)'}
               selectedBackgroundColor={'var(--primary-main)'}
               border={'1px solid var(--neutral-200)'}
