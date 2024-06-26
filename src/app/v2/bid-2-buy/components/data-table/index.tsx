@@ -418,6 +418,7 @@ const BidToByDataTable = ({
                 setIsError={setIsError}
                 identifier={'Bid to Buy'}
                 activeTab={activeTab}
+                shareTrackIdentifier={'Bid to Buy'}
               />
             </div>
           </div>

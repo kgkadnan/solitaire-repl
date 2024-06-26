@@ -993,6 +993,7 @@ const DataTable = ({
                 selectedProducts={rowSelection}
                 setErrorText={setErrorText}
                 setIsError={setIsError}
+                shareTrackIdentifier={myCart ? 'Cart' : 'Search Results'}
               />
             </div>
           </div>
