@@ -258,9 +258,12 @@ export const RenderNumericFields = ({ renderedCellValue }: any) => {
 export const RenderAmount = ({ row }: any) => {
   return (
     <span>{`${
-      `$${formatNumberWithCommas(
-        row.original.variants[0].prices[0]?.amount
-      )}` ?? '-'
+      row.original.variants[0].prices[0]?.amount === null ||
+      row.original.variants[0].prices[0]?.amount === undefined
+        ? '-'
+        : `$${formatNumberWithCommas(
+            row.original.variants[0].prices[0]?.amount
+          )}`
     }`}</span>
   );
 };
@@ -278,7 +281,9 @@ export const RenderMeasurements = ({ row }: any) => {
 export const RenderNewArrivalPrice = ({ row }: any) => {
   return (
     <span>{`${
-      `$${formatNumberWithCommas(row?.original?.price)}` ?? '-'
+      row?.original?.price === null || row?.original?.price === undefined
+        ? '-'
+        : `$${formatNumberWithCommas(row?.original?.price)}`
     }`}</span>
   );
 };
@@ -286,7 +291,10 @@ export const RenderNewArrivalPrice = ({ row }: any) => {
 export const RenderNewArrivalPricePerCarat = ({ row }: any) => {
   return (
     <span>{`${
-      `$${formatNumberWithCommas(row?.original?.price_per_carat)}` ?? '$0.00'
+      row?.original?.price_per_carat === null ||
+      row?.original?.price_per_carat === undefined
+        ? '-'
+        : `$${formatNumberWithCommas(row?.original?.price_per_carat)}`
     }`}</span>
   );
 };
