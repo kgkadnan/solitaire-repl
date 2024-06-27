@@ -405,6 +405,7 @@ const NewArrivalDataTable = ({
                 setIsError={setIsError}
                 identifier={'New Arrival'}
                 activeTab={activeTab}
+                shareTrackIdentifier={'New Arrival'}
               />
             </div>
           </div>

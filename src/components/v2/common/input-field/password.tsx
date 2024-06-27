@@ -6,10 +6,7 @@ import PasswordSuccess from '@public/v2/assets/icons/password/password-success.s
 import PasswordFail from '@public/v2/assets/icons/password/password-fail.svg?url';
 import PasswordDefault from '@public/v2/assets/icons/password/password-default.svg?url'; // Default check icon, replace with your icon
 import { Input } from '../../ui/input';
-import {
-  MINIMUM_CHAR_PASSWORD,
-  REQUIRED_FIELD
-} from '@/constants/error-messages/change-password';
+import { MINIMUM_CHAR_PASSWORD } from '@/constants/error-messages/change-password';
 
 type IPasswordInputProps = Omit<IInputFieldProps, 'type'>;
 interface IPasswordProps extends IPasswordInputProps {
@@ -131,7 +128,7 @@ export const PasswordField = ({
           {isPasswordVisible ? <Eye /> : <EyeSlash />}
         </div>
       </div>
-      <div className="mt-2">
+      <div className="mt-1">
         {!isConfirmPassword ? (
           isInputFocused ? (
             !allRulesValid &&
