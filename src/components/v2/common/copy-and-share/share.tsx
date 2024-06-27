@@ -194,6 +194,21 @@ const Share = ({
               )}`;
             }
             if (
+              attribute === 'table_percentage' &&
+              selectedAttributes['table_percentage']
+            ) {
+              return `Table %: ${formatNumber(product?.table_percentage)}`;
+            }
+            if (
+              attribute === 'depth_percentage' &&
+              selectedAttributes['depth_percentage']
+            ) {
+              return `Depth %: ${formatNumber(product?.depth_percentage)}`;
+            }
+            if (attribute === 'carats' && selectedAttributes['carats']) {
+              return `Carats: ${formatNumber(product?.carats)}`;
+            }
+            if (
               attribute === 'my_current_bid' &&
               selectedAttributes['my_current_bid']
             ) {
