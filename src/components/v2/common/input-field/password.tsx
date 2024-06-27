@@ -131,7 +131,7 @@ export const PasswordField = ({
           {isPasswordVisible ? <Eye /> : <EyeSlash />}
         </div>
       </div>
-      <div className="mt-2">
+      <div className="mt-1">
         {!isConfirmPassword ? (
           isInputFocused ? (
             !allRulesValid &&
