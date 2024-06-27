@@ -42,6 +42,7 @@ import { statusCode } from './constants/enums/status-code';
 import { show } from './features/logout/logout-slice';
 import { copyURLApi } from './features/api/track-public-url-copy';
 import { trackApi } from './features/api/track-interaction';
+import { matchingPairApi } from './features/api/match-pair';
 
 const rootReducer = combineReducers({
   notificationBadge: notificationBadgeReducer,
@@ -76,7 +77,8 @@ const rootReducer = combineReducers({
   [faqsApi.reducerPath]: faqsApi.reducer,
   [myAppointmentApi.reducerPath]: myAppointmentApi.reducer,
   [copyURLApi.reducerPath]: copyURLApi.reducer,
-  [trackApi.reducerPath]: trackApi.reducer
+  [trackApi.reducerPath]: trackApi.reducer,
+  [matchingPairApi.reducerPath]: matchingPairApi.reducer
 });
 
 const handle410Middleware =
@@ -122,6 +124,7 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
         myAppointmentApi.middleware,
         copyURLApi.middleware,
         trackApi.middleware,
+        matchingPairApi.middleware,
         handle410Middleware
       ),
     preloadedState

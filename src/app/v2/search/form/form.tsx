@@ -84,7 +84,8 @@ const Form = ({
   addSearches,
   setAddSearches,
   setIsLoading,
-  setIsAddDemand
+  setIsAddDemand,
+  isMatchingPair = false
 }: {
   searchUrl: String;
   setSearchUrl: Dispatch<SetStateAction<string>>;
@@ -104,6 +105,7 @@ const Form = ({
   setAddSearches: any;
   setIsLoading: any;
   setIsAddDemand: Dispatch<SetStateAction<boolean>>;
+  isMatchingPair: boolean;
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -802,7 +804,7 @@ const Form = ({
       <div>
         <div className="py-2">
           <span className="text-neutral900 text-lRegular font-medium grid gap-[24px]">
-            Search for Diamonds
+            Search for {isMatchingPair ? 'Matching Pair' : 'Diamonds'}
           </span>
         </div>
         <div className="flex flex-col gap-[16px]">
