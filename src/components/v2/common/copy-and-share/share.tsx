@@ -11,6 +11,7 @@ import { Toast } from './toast';
 import { IProduct } from '@/app/v2/search/interface';
 import Tooltip from '../tooltip';
 import { formatNumber } from '@/utils/fix-two-digit-number';
+import { useLazyShareEventQuery } from '@/features/api/track-interaction';
 
 const Share = ({
   rows,
@@ -18,7 +19,8 @@ const Share = ({
   setErrorText,
   setIsError,
   identifier,
-  activeTab = 0
+  activeTab = 0,
+  shareTrackIdentifier
 }: any) => {
   const [selectedRows, setSelectedRows] = useState<IProduct[]>(
     rows?.filter((row: IProduct) => row.id in selectedProducts)
@@ -31,6 +33,9 @@ const Share = ({
   const { modalState, modalSetState } = useModalStateManagement();
   const { isInputDialogOpen } = modalState;
   const [showToast, setShowToast] = useState(false);
+
+  const [trackShareEvent] = useLazyShareEventQuery({});
+
   const [shareOptions, setShareOptions] = useState([
     { name: 'Stock No', state: 'lot_id' },
     { name: 'Shape', state: 'shape' },
@@ -154,8 +159,8 @@ const Share = ({
             ) {
               const length = product.length || 0;
               const width = product.width || 0;
-              const height = product.height || 0;
-              return `Measurements: ${length} x ${width} x ${height}`;
+              const depth = product.depth || 0;
+              return `Measurements: ${length} x ${width} x ${depth}`;
             }
             // Handle amount separately if it's selected
             if (attribute === 'amount' && selectedAttributes['amount']) {
@@ -212,6 +217,14 @@ const Share = ({
 
     try {
       await navigator.clipboard.writeText(selectedData);
+      ///Track event
+      trackShareEvent({
+        page: shareTrackIdentifier,
+        lot_ids: selectedRows.map(data => data['lot_id']),
+        stone_fields: Object.keys(selectedAttributes).filter(
+          key => selectedAttributes[key] === true
+        )
+      });
       setShowToast(true); // Show the toast notification
       setTimeout(() => {
         setShowToast(false); // Hide the toast notification after some time

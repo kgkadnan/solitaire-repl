@@ -395,6 +395,7 @@ export function DiamondDetailsComponent({
                     setErrorText={setErrorText}
                     activeTab={activeTab}
                     identifier={breadCrumLabel}
+                    shareTrackIdentifier="Details"
                   />
                 </div>
               </div>
