@@ -91,7 +91,7 @@ export function DiamondDetailsComponent({
     if (copyData) {
       copyData['measurement'] = `${copyData?.length ?? 0}*${
         copyData?.width ?? 0
-      }*${copyData?.height ?? 0}`;
+      }*${copyData?.depth ?? 0}`;
       copyData['shape'] = getShapeDisplayName(copyData?.shape ?? '');
     }
 
