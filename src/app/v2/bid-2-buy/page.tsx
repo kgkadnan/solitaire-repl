@@ -14,7 +14,8 @@ import {
   RenderNewArrivalPricePerCarat,
   RenderCartLotId,
   RenderBidDate,
-  DiscountWithCross
+  DiscountWithCross,
+  RenderNumericFields
 } from '@/components/v2/common/data-table/helpers/render-cell';
 import Tooltip from '@/components/v2/common/tooltip';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
@@ -99,9 +100,10 @@ const BidToBuy = () => {
             return { ...commonProps, Cell: RenderMeasurements };
           case 'shape_full':
             return { ...commonProps, Cell: RenderShape };
-          case 'carats':
           case 'rap':
           case 'rap_value':
+            return { ...commonProps, Cell: RenderNumericFields };
+          case 'carats':
           case 'table_percentage':
           case 'depth_percentage':
           case 'ratio':
@@ -592,7 +594,7 @@ const BidToBuy = () => {
       />
 
       {isDetailPage ? (
-        <>
+        <div className="mt-[16px]">
           <DiamondDetailsComponent
             data={
               activeTab === 0
@@ -610,7 +612,7 @@ const BidToBuy = () => {
             setIsLoading={setIsLoading}
             activeTab={activeTab}
           />
-        </>
+        </div>
       ) : bid === undefined ||
         historyData === undefined ||
         activeBid === undefined ? (

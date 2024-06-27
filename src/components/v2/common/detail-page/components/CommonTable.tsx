@@ -65,7 +65,6 @@ const ResponsiveTable: React.FC<IResponsiveTableProps> = ({
               className="font-medium sm:text-10px lg:text-[14px] leading-5 text-left text-rgba-101828"
             >
               {tableHead.map(column => {
-                console.log('row', column.key);
                 return (
                   <td
                     key={column.key}
@@ -82,34 +81,23 @@ const ResponsiveTable: React.FC<IResponsiveTableProps> = ({
                           row?.variants[0]?.prices[0]?.amount ? (
                             `$${
                               formatNumberWithCommas(
-                                formatNumber(
-                                  row?.variants[0]?.prices[0]?.amount
-                                )
+                                row?.variants[0]?.prices[0]?.amount
                               ) ?? '-'
                             }`
                           ) : (
                             '-'
                           )
                         ) : row?.amount ? (
-                          `$${
-                            formatNumberWithCommas(formatNumber(row?.amount)) ??
-                            '-'
-                          }`
+                          `$${formatNumberWithCommas(row?.amount) ?? '-'}`
                         ) : (
                           '-'
                         )
                       ) : column.key === 'rap' ? (
-                        `$${formatNumberWithCommas(
-                          formatNumber(row[column.key])
-                        )}`
+                        `$${formatNumberWithCommas(row[column.key])}`
                       ) : column.key === 'rap_value' ? (
-                        `$${formatNumberWithCommas(
-                          formatNumber(row[column.key])
-                        )}`
+                        `$${formatNumberWithCommas(row[column.key])}`
                       ) : column.key === 'price_per_carat' ? (
-                        `$${formatNumberWithCommas(
-                          formatNumber(row[column.key])
-                        )}`
+                        `$${formatNumberWithCommas(row[column.key])}`
                       ) : typeof row[column.key] === 'number' ? (
                         formatNumber(row[column.key]) ?? '-'
                       ) : typeof row[column.key] === 'string' ? (

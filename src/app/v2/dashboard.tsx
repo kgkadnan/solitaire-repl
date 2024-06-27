@@ -57,7 +57,7 @@ import ImageModal from '@/components/v2/common/detail-page/components/image-moda
 import { FILE_URLS } from '@/constants/v2/detail-page';
 import { getShapeDisplayName } from '@/utils/v2/detail-page';
 import DataTable from '@/components/v2/common/data-table';
-import { formatNumber } from '@/utils/fix-two-digit-number';
+
 import Tooltip from '@/components/v2/common/tooltip';
 import {
   clarity,
@@ -75,6 +75,7 @@ import {
   RenderLab,
   RenderLotId,
   RenderMeasurements,
+  RenderNumericFields,
   RenderShape,
   RenderTracerId
 } from '@/components/v2/common/data-table/helpers/render-cell';
@@ -102,6 +103,7 @@ import { IAppointmentPayload } from './my-appointments/page';
 import BookAppointment from './my-appointments/components/book-appointment/book-appointment';
 import { Skeleton } from '@mui/material';
 import CommonPoppup from './login/component/common-poppup';
+import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
 
 interface ITabs {
   label: string;
@@ -424,9 +426,10 @@ const Dashboard = () => {
             return { ...commonProps, Cell: RenderMeasurements };
           case 'shape_full':
             return { ...commonProps, Cell: RenderShape };
-          case 'carats':
           case 'rap':
           case 'rap_value':
+            return { ...commonProps, Cell: RenderNumericFields };
+          case 'carats':
           case 'table_percentage':
           case 'depth_percentage':
           case 'ratio':
@@ -469,8 +472,8 @@ const Dashboard = () => {
               Cell: ({ renderedCellValue }: { renderedCellValue: any }) => (
                 <span>{`${
                   renderedCellValue === 0
-                    ? '0.00'
-                    : formatNumber(renderedCellValue) ?? '0.00'
+                    ? '$0.00'
+                    : `$${formatNumberWithCommas(renderedCellValue)}` ?? '$0.00'
                 }`}</span>
               )
             };
@@ -1466,7 +1469,7 @@ const Dashboard = () => {
       />
 
       {isDiamondDetail && detailPageData?.length ? (
-        <>
+        <div className="mt-[16px]">
           <DiamondDetailsComponent
             data={searchData?.foundProducts}
             filterData={detailPageData}
@@ -1537,7 +1540,7 @@ const Dashboard = () => {
               ]}
             />
           </div>
-        </>
+        </div>
       ) : isCompareStone ? (
         <div>
           <div className="flex py-[8px] items-center ">

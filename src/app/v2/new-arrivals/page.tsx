@@ -14,7 +14,8 @@ import {
   RenderNewArrivalBidDiscount,
   RenderNewArrivalPricePerCarat,
   RenderCartLotId,
-  RenderBidDate
+  RenderBidDate,
+  RenderNumericFields
 } from '@/components/v2/common/data-table/helpers/render-cell';
 import Tooltip from '@/components/v2/common/tooltip';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
@@ -102,6 +103,9 @@ const NewArrivals = () => {
         };
 
         switch (accessor) {
+          case 'rap':
+          case 'rap_value':
+            return { ...commonProps, Cell: RenderNumericFields };
           case 'amount':
             return { ...commonProps, Cell: RenderNewArrivalPrice };
           case 'measurements':
@@ -109,8 +113,6 @@ const NewArrivals = () => {
           case 'shape_full':
             return { ...commonProps, Cell: RenderShape };
           case 'carats':
-          case 'rap':
-          case 'rap_value':
           case 'table_percentage':
           case 'depth_percentage':
           case 'ratio':
@@ -699,7 +701,7 @@ const NewArrivals = () => {
       />
 
       {isDetailPage ? (
-        <>
+        <div className="mt-[16px]">
           <DiamondDetailsComponent
             data={
               activeTab === 0
@@ -716,7 +718,7 @@ const NewArrivals = () => {
             setIsLoading={setIsLoading}
             activeTab={activeTab}
           />
-        </>
+        </div>
       ) : showAppointmentForm ? (
         <>
           <div className="flex  py-[12px] items-center justify-between">

@@ -25,6 +25,7 @@ import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import {
   RenderMeasurements,
+  RenderNumericFields,
   RenderTracerId
 } from '@/components/v2/common/data-table/helpers/render-cell';
 import { IManageListingSequenceResponse } from '../../search/interface';
@@ -35,6 +36,7 @@ import { getShapeDisplayName } from '@/utils/v2/detail-page';
 import { formatNumber } from '@/utils/fix-two-digit-number';
 import { loadImages } from '@/components/v2/common/detail-page/helpers/load-images';
 import { checkImage } from '@/components/v2/common/detail-page/helpers/check-image';
+import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
 
 interface IOrderDetail {
   productDetailData: any;
@@ -94,11 +96,12 @@ const OrderDetail: React.FC<IOrderDetail> = ({
         };
 
         switch (accessor) {
+          case 'rap':
+          case 'rap_value':
+            return { ...commonProps, Cell: RenderNumericFields };
           case 'amount':
             return { ...commonProps, Cell: RenderAmount };
           case 'carats':
-          case 'rap':
-          case 'rap_value':
           case 'table_percentage':
           case 'depth_percentage':
           case 'ratio':
@@ -161,8 +164,8 @@ const OrderDetail: React.FC<IOrderDetail> = ({
               Cell: ({ renderedCellValue }: { renderedCellValue: any }) => (
                 <span>{`${
                   renderedCellValue === 0
-                    ? '0.00'
-                    : formatNumber(renderedCellValue) ?? '0.00'
+                    ? '$0.00'
+                    : `$${formatNumberWithCommas(renderedCellValue)}` ?? '$0.00'
                 }`}</span>
               )
             };

@@ -466,31 +466,29 @@ export function DiamondDetailsComponent({
                       ? tableData?.variants[0]?.prices[0]?.amount
                         ? `$${
                             formatNumberWithCommas(
-                              formatNumber(
-                                tableData?.variants[0]?.prices[0]?.amount
-                              )
+                              tableData?.variants[0]?.prices[0]?.amount
                             ) ?? ''
                           }`
                         : ''
                       : tableData?.amount
-                      ? `$${
-                          formatNumberWithCommas(
-                            formatNumber(tableData?.amount)
-                          ) ?? ''
-                        }`
+                      ? `$${formatNumberWithCommas(tableData?.amount) ?? ''}`
                       : ''}
                   </div>
                   <p
                     className={`text-successMain text-mMedium px-[8px] py-[2px] rounded-[4px]`}
                   >
                     {fromBid
-                      ? tableData.length > 0 &&
-                        formatNumber(tableData.original_discount) + '%'
-                      : tableData?.variants?.length > 0
-                      ? tableData?.variants[0]?.prices[0]?.amount
-                        ? tableData.length > 0 &&
-                          formatNumber(tableData.discount) + '%'
+                      ? tableData.original_discount !== null &&
+                        tableData.original_discount !== undefined
+                        ? tableData.original_discount === 0
+                          ? '0.00%'
+                          : formatNumber(tableData.original_discount) + '%'
                         : ''
+                      : tableData.discount !== null &&
+                        tableData.discount !== undefined
+                      ? tableData.discount === 0
+                        ? '0.00%'
+                        : formatNumber(tableData.discount) + '%'
                       : ''}
                   </p>
                 </div>
