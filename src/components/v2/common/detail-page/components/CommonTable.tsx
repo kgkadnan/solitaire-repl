@@ -93,11 +93,26 @@ const ResponsiveTable: React.FC<IResponsiveTableProps> = ({
                           '-'
                         )
                       ) : column.key === 'rap' ? (
-                        `$${formatNumberWithCommas(row[column.key])}`
+                        row[column.key] === undefined ||
+                        row[column.key] === null ? (
+                          '-'
+                        ) : (
+                          `$${formatNumberWithCommas(row[column.key])}`
+                        )
                       ) : column.key === 'rap_value' ? (
-                        `$${formatNumberWithCommas(row[column.key])}`
+                        row[column.key] === undefined ||
+                        row[column.key] === null ? (
+                          '-'
+                        ) : (
+                          `$${formatNumberWithCommas(row[column.key])}`
+                        )
                       ) : column.key === 'price_per_carat' ? (
-                        `$${formatNumberWithCommas(row[column.key])}`
+                        `${
+                          row[column.key] === undefined ||
+                          row[column.key] === null
+                            ? '-'
+                            : `$${formatNumberWithCommas(row[column.key])}`
+                        }`
                       ) : typeof row[column.key] === 'number' ? (
                         formatNumber(row[column.key]) ?? '-'
                       ) : typeof row[column.key] === 'string' ? (

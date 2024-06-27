@@ -410,9 +410,9 @@ const Result = ({
               ...commonProps,
               Cell: ({ renderedCellValue }: { renderedCellValue: any }) => (
                 <span>{`${
-                  renderedCellValue === 0
-                    ? '$0.00'
-                    : `$${formatNumberWithCommas(renderedCellValue)}` ?? '$0.00'
+                  renderedCellValue === null || renderedCellValue === undefined
+                    ? '-'
+                    : `$${formatNumberWithCommas(renderedCellValue)}`
                 }`}</span>
               )
             };

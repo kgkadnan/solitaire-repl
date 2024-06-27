@@ -168,22 +168,38 @@ const Share = ({
               const amount = product?.variants[0]?.prices[0]?.amount
                 ? product?.variants[0]?.prices[0]?.amount
                 : product?.amount;
-              return `Amt ($): $${formatNumberWithCommas(amount)}`;
+              return `Amt ($): ${
+                amount === undefined || amount === null
+                  ? '-'
+                  : `$${formatNumberWithCommas(amount)}`
+              }`;
             }
             if (attribute === 'rap_value' && selectedAttributes['rap_value']) {
               const rapValue = product.rap_value;
-              return `Rap Val ($): $${formatNumberWithCommas(rapValue)}`;
+              return `Rap Val ($):  ${
+                rapValue === undefined || rapValue === null
+                  ? '-'
+                  : `$${formatNumberWithCommas(rapValue)}`
+              }`;
             }
             if (attribute === 'rap' && selectedAttributes['rap']) {
               const rap = product.rap;
-              return `Rap ($): $${formatNumberWithCommas(rap)}`;
+              return `Rap ($): ${
+                rap === undefined || rap === null
+                  ? '-'
+                  : `$${formatNumberWithCommas(rap)}`
+              } `;
             }
             if (
               attribute === 'price_per_carat' &&
               selectedAttributes['price_per_carat']
             ) {
-              const pricePerCarat = product.price_per_carat || 0;
-              return `Pr/Ct: $${formatNumberWithCommas(pricePerCarat)}`;
+              const pricePerCarat = product.price_per_carat;
+              return `Pr/Ct: ${
+                pricePerCarat === undefined || pricePerCarat === null
+                  ? '-'
+                  : `$${formatNumberWithCommas(pricePerCarat)}`
+              }`;
             }
             if (
               attribute === 'current_max_bid' &&
