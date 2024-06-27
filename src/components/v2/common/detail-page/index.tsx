@@ -47,6 +47,7 @@ import { useLazyTrackCopyUrlEventQuery } from '@/features/api/track-public-url-c
 
 import DetailPageTabs from './components/tabs';
 import { useRouter } from 'next/navigation';
+import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
 
 export function DiamondDetailsComponent({
   data,
@@ -132,7 +133,7 @@ export function DiamondDetailsComponent({
       url_check: tableData?.assets_pre_check?.CERT_IMG
     },
     {
-      name: 'B2B',
+      name: 'Video',
       url: `${FILE_URLS.B2B.replace('***', tableData?.lot_id ?? '')}`,
       url_check: tableData?.assets_pre_check?.B2B_CHECK,
       category: 'Video'
@@ -465,26 +466,30 @@ export function DiamondDetailsComponent({
                     {tableData?.variants?.length > 0
                       ? tableData?.variants[0]?.prices[0]?.amount
                         ? `$${
-                            formatNumber(
+                            formatNumberWithCommas(
                               tableData?.variants[0]?.prices[0]?.amount
                             ) ?? ''
                           }`
                         : ''
                       : tableData?.amount
-                      ? `$${formatNumber(tableData?.amount) ?? ''}`
+                      ? `$${formatNumberWithCommas(tableData?.amount) ?? ''}`
                       : ''}
                   </div>
                   <p
                     className={`text-successMain text-mMedium px-[8px] py-[2px] rounded-[4px]`}
                   >
                     {fromBid
-                      ? tableData.length > 0 &&
-                        formatNumber(tableData.original_discount) + '%'
-                      : tableData?.variants?.length > 0
-                      ? tableData?.variants[0]?.prices[0]?.amount
-                        ? tableData.length > 0 &&
-                          formatNumber(tableData.discount) + '%'
+                      ? tableData.original_discount !== null &&
+                        tableData.original_discount !== undefined
+                        ? tableData.original_discount === 0
+                          ? '0.00%'
+                          : formatNumber(tableData.original_discount) + '%'
                         : ''
+                      : tableData.discount !== null &&
+                        tableData.discount !== undefined
+                      ? tableData.discount === 0
+                        ? '0.00%'
+                        : formatNumber(tableData.discount) + '%'
                       : ''}
                   </p>
                 </div>

@@ -1,3 +1,4 @@
+import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
 import { ManageLocales } from '@/utils/v2/translate';
 import React, { useEffect, useState } from 'react';
 interface INewArrivalCalculatedField {
@@ -46,7 +47,7 @@ const NewArrivalCalculatedField = ({
 
     let average = (sumAmount / sumRapVal - 1) * 100;
 
-    return average.toFixed(2);
+    return `${average.toFixed(2)}%`;
   };
   let calculatePRCTAverage = () => {
     let sumAmount = Number(computeTotal('amount')); // Convert to number
@@ -84,11 +85,11 @@ const NewArrivalCalculatedField = ({
       },
       {
         label: ManageLocales('app.calculatedField.pr/ct'),
-        value: `$${calculatePRCTAverage()}`
+        value: `$${formatNumberWithCommas(calculatePRCTAverage())}`
       },
       {
         label: ManageLocales('app.calculatedField.amount'),
-        value: `$${computeTotal('amount')}`
+        value: `$${formatNumberWithCommas(computeTotal('amount'))}`
       }
     ];
 

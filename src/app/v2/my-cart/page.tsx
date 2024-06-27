@@ -36,6 +36,7 @@ import {
   RenderDiscount,
   RenderLab,
   RenderMeasurements,
+  RenderNumericFields,
   RenderShape,
   RenderTracerId
 } from '@/components/v2/common/data-table/helpers/render-cell';
@@ -66,7 +67,6 @@ import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import { SubRoutes } from '@/constants/v2/enums/routes';
 import { Toast } from '@/components/v2/common/copy-and-share/toast';
 import { kycStatus } from '@/constants/enums/kyc';
-import { formatNumber } from '@/utils/fix-two-digit-number';
 import { loadImages } from '@/components/v2/common/detail-page/helpers/load-images';
 import { checkImage } from '@/components/v2/common/detail-page/helpers/check-image';
 import { IAppointmentPayload } from '../my-appointments/page';
@@ -77,6 +77,7 @@ import BookAppointment from '../my-appointments/components/book-appointment/book
 import CommonPoppup from '../login/component/common-poppup';
 import DataTableSkeleton from '@/components/v2/skeleton/data-table';
 import { Skeleton } from '@mui/material';
+import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
 
 const MyCart = () => {
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();
@@ -609,7 +610,7 @@ const MyCart = () => {
     },
 
     {
-      name: 'B2B',
+      name: 'Video',
       url: `${FILE_URLS.B2B.replace('***', detailImageData?.lot_id ?? '')}`,
       url_check: detailImageData?.assets_pre_check?.B2B_CHECK,
       category: 'Video'
@@ -801,13 +802,14 @@ const MyCart = () => {
               )
             };
 
+          case 'rap':
+          case 'rap_value':
+            return { ...commonProps, Cell: RenderNumericFields };
           case 'amount':
             return { ...commonProps, Cell: RenderAmount };
           case 'measurements':
             return { ...commonProps, Cell: RenderMeasurements };
           case 'carats':
-          case 'rap':
-          case 'rap_value':
           case 'table_percentage':
           case 'depth_percentage':
           case 'ratio':
@@ -840,8 +842,8 @@ const MyCart = () => {
               Cell: ({ renderedCellValue }: { renderedCellValue: any }) => (
                 <span>{`${
                   renderedCellValue === 0
-                    ? '0.00'
-                    : formatNumber(renderedCellValue) ?? '0.00'
+                    ? '$0.00'
+                    : `$${formatNumberWithCommas(renderedCellValue)}` ?? '$0.00'
                 }`}</span>
               )
             };
@@ -909,6 +911,7 @@ const MyCart = () => {
     }
   }, [validImages]);
 
+  console.log('detailPageData', detailPageData);
   return (
     <div className="relative">
       {isLoading && <CustomKGKLoader />}

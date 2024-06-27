@@ -1,5 +1,6 @@
 import {
   RenderMeasurements,
+  RenderNumericFields,
   RenderTracerId
 } from '@/components/v2/common/data-table/helpers/render-cell';
 import Tooltip from '@/components/v2/common/tooltip';
@@ -13,7 +14,7 @@ import {
   RenderDiscount,
   RenderLab
 } from '@/components/v2/table/helpers/render-cell';
-import { formatNumber } from '@/utils/fix-two-digit-number';
+import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
 
 import React, { useEffect, useMemo, useState } from 'react';
 
@@ -80,9 +81,10 @@ const ConfirmStone = ({
         switch (accessor) {
           case 'amount':
             return { ...commonProps, Cell: RenderAmount };
-          case 'carats':
           case 'rap':
           case 'rap_value':
+            return { ...commonProps, Cell: RenderNumericFields };
+          case 'carats':
           case 'table_percentage':
           case 'depth_percentage':
           case 'ratio':
@@ -137,8 +139,8 @@ const ConfirmStone = ({
               Cell: ({ renderedCellValue }: { renderedCellValue: any }) => (
                 <span>{`${
                   renderedCellValue === 0
-                    ? '0.00'
-                    : formatNumber(renderedCellValue) ?? '0.00'
+                    ? '$0.00'
+                    : `$${formatNumberWithCommas(renderedCellValue)}` ?? '$0.00'
                 }`}</span>
               )
             };

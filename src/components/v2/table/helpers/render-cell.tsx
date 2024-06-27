@@ -8,6 +8,7 @@ import Isr from '@public/v2/assets/png/data-table/ISR.png';
 import Bel from '@public/v2/assets/png/data-table/BEL.png';
 import Dub from '@public/v2/assets/png/data-table/DUB.png';
 import { formatNumber } from '@/utils/fix-two-digit-number';
+import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
 
 export const RenderDetails = ({ row, handleDetailImage }: any) => {
   return (
@@ -131,7 +132,9 @@ export const RenderCarat = ({ renderedCellValue }: any) => {
 export const RenderAmount = ({ row }: any) => {
   return (
     <span>{`${
-      formatNumber(row.original.variants[0].prices[0]?.amount) ?? '-'
+      `$${formatNumberWithCommas(
+        row.original.variants[0].prices[0]?.amount
+      )}` ?? '-'
     }`}</span>
   );
 };
