@@ -10,7 +10,7 @@ export async function loadImages(
       let isValid;
       if (
         image.name === 'GIA Certificate' ||
-        image.name === 'B2B' ||
+        image.name === 'Video' ||
         image.name === 'B2B Sparkle'
       ) {
         isValid = image.url_check;

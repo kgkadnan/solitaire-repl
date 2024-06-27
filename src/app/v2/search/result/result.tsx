@@ -30,7 +30,8 @@ import {
   RenderAmount,
   RenderShape,
   RenderMeasurements,
-  RenderTracerId
+  RenderTracerId,
+  RenderNumericFields
 } from '@/components/v2/common/data-table/helpers/render-cell';
 import {
   useConfirmProductMutation,
@@ -78,7 +79,6 @@ import { FILE_URLS } from '@/constants/v2/detail-page';
 import { Toast } from '@/components/v2/common/copy-and-share/toast';
 import CompareStone from './components/compare-stone';
 import { statusCode } from '@/constants/enums/status-code';
-import { formatNumber } from '@/utils/fix-two-digit-number';
 import { loadImages } from '@/components/v2/common/detail-page/helpers/load-images';
 import { checkImage } from '@/components/v2/common/detail-page/helpers/check-image';
 import { useLazyGetAvailableMyAppointmentSlotsQuery } from '@/features/api/my-appointments';
@@ -89,6 +89,7 @@ import DataTableSkeleton from '@/components/v2/skeleton/data-table';
 import { Skeleton } from '@mui/material';
 import CommonPoppup from '../../login/component/common-poppup';
 import EmptyScreen from '@/components/v2/common/empty-screen';
+import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
 
 // Column mapper outside the component to avoid re-creation on each render
 
@@ -359,13 +360,15 @@ const Result = ({
             };
           case 'amount':
             return { ...commonProps, Cell: RenderAmount };
+
+          case 'rap':
+          case 'rap_value':
+            return { ...commonProps, Cell: RenderNumericFields };
           case 'measurements':
             return { ...commonProps, Cell: RenderMeasurements };
           case 'shape_full':
             return { ...commonProps, Cell: RenderShape };
           case 'carats':
-          case 'rap':
-          case 'rap_value':
           case 'table_percentage':
           case 'depth_percentage':
           case 'ratio':
@@ -408,8 +411,8 @@ const Result = ({
               Cell: ({ renderedCellValue }: { renderedCellValue: any }) => (
                 <span>{`${
                   renderedCellValue === 0
-                    ? '0.00'
-                    : formatNumber(renderedCellValue) ?? '0.00'
+                    ? '$0.00'
+                    : `$${formatNumberWithCommas(renderedCellValue)}` ?? '$0.00'
                 }`}</span>
               )
             };
@@ -999,7 +1002,7 @@ const Result = ({
     },
 
     {
-      name: 'B2B',
+      name: 'Video',
       url: `${FILE_URLS.B2B.replace('***', detailImageData?.lot_id ?? '')}`,
       url_check: detailImageData?.assets_pre_check?.B2B_CHECK,
       category: 'Video'
