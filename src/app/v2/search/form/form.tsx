@@ -247,7 +247,7 @@ const Form = ({
         dispatch(setEndTime(dropEndTime));
         dispatch(setIsSuccess(false));
         try {
-          await await sharePageEvent({
+          await sharePageEvent({
             startTime,
             endTime: dropEndTime,
             page: 'search',
@@ -256,7 +256,7 @@ const Form = ({
 
           dispatch(resetTimeTracking());
         } catch (error) {
-          console.error('Error logging time on drop-off:', error);
+          logger.error(`Error logging time on drop-off: ${error}`);
         }
       }
     };
