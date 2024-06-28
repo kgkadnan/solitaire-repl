@@ -110,6 +110,7 @@ const TopNavigationBar = ({
     triggerLogoutAll({})
       .then(_res => {
         userLoggedOut();
+        setIsLogout(false);
         router.push('/v2/login');
       })
       .catch(_err => console.log('error'));
@@ -120,6 +121,7 @@ const TopNavigationBar = ({
       .then(_res => {
         userLoggedOut();
         router.push('/v2/login');
+        setIsLogout(false);
       })
       .catch(_err => console.log('error'));
   };
