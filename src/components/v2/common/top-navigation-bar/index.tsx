@@ -23,7 +23,6 @@ import {
   useLazyGetLogoutQuery
 } from '@/features/api/dashboard';
 import { DialogComponent } from '../dialog';
-import confirmIcon from '@public/v2/assets/icons/modal/confirm.svg';
 import logoutConfirmIcon from '@public/v2/assets/icons/modal/logout.svg';
 import crossIcon from '@public/v2/assets/icons/modal/cross.svg';
 
@@ -110,32 +109,9 @@ const TopNavigationBar = ({
   const handleLogoutAll = () => {
     triggerLogoutAll({})
       .then(_res => {
-        setModalContent(
-          <>
-            <div className="absolute left-[-84px] top-[-84px]">
-              <Image src={confirmIcon} alt="confirmIcon" />
-            </div>
-            <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-              <h1 className="text-headingS text-neutral900 !font-medium	">
-                You have been logged out from all devices successfully.
-              </h1>
-              <ActionButton
-                actionButtonData={[
-                  {
-                    variant: 'primary',
-                    label: 'Okay',
-                    handler: () => {
-                      userLoggedOut(),
-                        router.push('/v2/login'),
-                        setIsLogout(false);
-                    },
-                    customStyle: 'flex-1 w-full h-10'
-                  }
-                ]}
-              />
-            </div>
-          </>
-        );
+        userLoggedOut();
+        setIsLogout(false);
+        router.push('/v2/login');
       })
       .catch(_err => console.log('error'));
   };
@@ -143,32 +119,9 @@ const TopNavigationBar = ({
   const handleLogout = () => {
     triggerLogout({})
       .then(_res => {
-        setModalContent(
-          <>
-            <div className="absolute left-[-84px] top-[-84px]">
-              <Image src={confirmIcon} alt="confirmIcon" />
-            </div>
-            <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-              <h1 className="text-headingS text-neutral900 !font-medium	">
-                You have been logged out from this device successfully.
-              </h1>
-              <ActionButton
-                actionButtonData={[
-                  {
-                    variant: 'primary',
-                    label: 'Okay',
-                    handler: () => {
-                      userLoggedOut(),
-                        router.push('/v2/login'),
-                        setIsLogout(false);
-                    },
-                    customStyle: 'flex-1 w-full h-10'
-                  }
-                ]}
-              />
-            </div>
-          </>
-        );
+        userLoggedOut();
+        router.push('/v2/login');
+        setIsLogout(false);
       })
       .catch(_err => console.log('error'));
   };

@@ -50,11 +50,10 @@ import { IAppointmentPayload } from '../my-appointments/page';
 import { useLazyGetAvailableMyAppointmentSlotsQuery } from '@/features/api/my-appointments';
 import {
   SELECT_STONE_TO_PERFORM_ACTION,
-  SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH
+  SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH
 } from '@/constants/error-messages/confirm-stone';
 import BookAppointment from '../my-appointments/components/book-appointment/book-appointment';
 import { HOLD_STATUS, MEMO_STATUS } from '@/constants/business-logic';
-import { NO_STONES_AVAILABLE } from '@/constants/error-messages/compare-stone';
 import { kycStatus } from '@/constants/enums/kyc';
 import BiddingSkeleton from '@/components/v2/skeleton/bidding';
 
@@ -371,11 +370,11 @@ const NewArrivals = () => {
       });
 
       if (hasMemoOut) {
-        setErrorText(NO_STONES_AVAILABLE);
+        setErrorText(SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH);
         setIsError(true);
       } else if (hasHold) {
         setIsError(true);
-        setErrorText(SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH);
+        setErrorText(SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH);
       } else {
         const lotIds = selectedIds?.map((id: string) => {
           const getLotIds: any =

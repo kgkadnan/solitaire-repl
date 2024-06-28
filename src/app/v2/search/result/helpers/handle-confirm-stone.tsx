@@ -1,9 +1,9 @@
 import { HOLD_STATUS, MEMO_STATUS } from '@/constants/business-logic';
+
 import {
-  SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH,
+  SELECT_STONE_TO_PERFORM_ACTION,
   SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH
 } from '@/constants/error-messages/confirm-stone';
-import { SELECT_STONE_TO_PERFORM_ACTION } from '@/constants/error-messages/confirm-stone';
 import { Dispatch, SetStateAction } from 'react';
 import { IProduct } from '../../interface';
 
@@ -54,7 +54,7 @@ export const handleConfirmStone = ({
     setIsError(true);
   } else if (hasHold) {
     setIsError(true);
-    setErrorText(SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH);
+    setErrorText(SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH);
   } else if (selectedIds?.length) {
     setIsError(false);
     setIsConfirmStone(true);
