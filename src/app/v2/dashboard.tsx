@@ -1506,7 +1506,8 @@ const Dashboard = () => {
                       setErrorText: setError,
                       setIsConfirmStone,
                       setConfirmStoneData,
-                      setIsDetailPage: setIsDiamondDetail
+                      setIsDetailPage: setIsDiamondDetail,
+                      identifier: 'detailPage'
                     });
                   }
                 }

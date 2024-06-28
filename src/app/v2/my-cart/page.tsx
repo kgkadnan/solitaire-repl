@@ -982,7 +982,8 @@ const MyCart = () => {
                       setErrorText,
                       setIsConfirmStone,
                       setConfirmStoneData,
-                      setIsDetailPage
+                      setIsDetailPage,
+                      identifier: 'detailPage'
                     });
                   }
                 }
