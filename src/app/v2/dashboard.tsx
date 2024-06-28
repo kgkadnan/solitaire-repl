@@ -1506,7 +1506,8 @@ const Dashboard = () => {
                       setErrorText: setError,
                       setIsConfirmStone,
                       setConfirmStoneData,
-                      setIsDetailPage: setIsDiamondDetail
+                      setIsDetailPage: setIsDiamondDetail,
+                      identifier: 'detailPage'
                     });
                   }
                 }
@@ -1995,9 +1996,7 @@ const Dashboard = () => {
                             onClick={() =>
                               handleCardClick({
                                 id: searchData.id,
-                                savedSearchData: tabs.find(
-                                  tab => tab.label === activeTab
-                                )?.data,
+                                savedSearchData: [searchData],
                                 router,
                                 triggerProductCountApi,
                                 setDialogContent,

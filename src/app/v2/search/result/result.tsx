@@ -662,116 +662,99 @@ const Result = ({
   };
 
   const handleAddToCartDetailPage = () => {
-    const hasMemoOut = dataTableState.rows.some(
-      (row: IProduct) =>
-        row.id === detailPageData.id && row.diamond_status === MEMO_STATUS
-    );
-    const hasHold = dataTableState.rows.some(
-      (row: IProduct) =>
-        row.id === detailPageData.id && row.diamond_status === HOLD_STATUS
-    );
+    setIsLoading(true);
+    // Extract variant IDs for selected stones
+    const variantIds = [detailPageData.id]
+      ?.map((_id: string) => {
+        const myCartCheck: IProduct | object =
+          dataTableState.rows.find((row: IProduct) => {
+            return row?.id === detailPageData.id;
+          }) ?? {};
 
-    if (hasMemoOut) {
-      setErrorText(SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH);
-      setIsError(true);
-    } else if (hasHold) {
-      setIsError(true);
-      setErrorText(SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH);
-    } else {
-      setIsLoading(true);
-      // Extract variant IDs for selected stones
-      const variantIds = [detailPageData.id]
-        ?.map((_id: string) => {
-          const myCartCheck: IProduct | object =
-            dataTableState.rows.find((row: IProduct) => {
-              return row?.id === detailPageData.id;
-            }) ?? {};
+        if (myCartCheck && 'variants' in myCartCheck) {
+          return myCartCheck.variants[0]?.id;
+        }
+        return '';
+      })
+      .filter(Boolean);
 
-          if (myCartCheck && 'variants' in myCartCheck) {
-            return myCartCheck.variants[0]?.id;
-          }
-          return '';
-        })
-        .filter(Boolean);
-
-      // If there are variant IDs, add to the cart
-      if (variantIds.length) {
-        addCart({
-          variants: variantIds
-        })
-          .unwrap()
-          .then((res: any) => {
-            setIsLoading(false);
-            setIsDialogOpen(true);
-            setDialogContent(
-              <CommonPoppup
-                content={''}
-                status="success"
-                customPoppupBodyStyle="!mt-[70px]"
-                header={res?.message}
-                actionButtonData={[
-                  {
-                    variant: 'secondary',
-                    label: ManageLocales('app.modal.continue'),
-                    handler: () => {
-                      setIsDialogOpen(false);
-                      setIsDetailPage(false);
-                    },
-                    customStyle: 'flex-1 w-full h-10'
+    // If there are variant IDs, add to the cart
+    if (variantIds.length) {
+      addCart({
+        variants: variantIds
+      })
+        .unwrap()
+        .then((res: any) => {
+          setIsLoading(false);
+          setIsDialogOpen(true);
+          setDialogContent(
+            <CommonPoppup
+              content={''}
+              status="success"
+              customPoppupBodyStyle="!mt-[70px]"
+              header={res?.message}
+              actionButtonData={[
+                {
+                  variant: 'secondary',
+                  label: ManageLocales('app.modal.continue'),
+                  handler: () => {
+                    setIsDialogOpen(false);
+                    setIsDetailPage(false);
                   },
-                  {
-                    variant: 'primary',
-                    label: 'Go to "My Cart"',
-                    handler: () => {
-                      router.push('/v2/my-cart');
-                    },
-                    customStyle: 'flex-1 w-full h-10'
-                  }
-                ]}
-              />
-            );
+                  customStyle: 'flex-1 w-full h-10'
+                },
+                {
+                  variant: 'primary',
+                  label: 'Go to "My Cart"',
+                  handler: () => {
+                    router.push('/v2/my-cart');
+                  },
+                  customStyle: 'flex-1 w-full h-10'
+                }
+              ]}
+            />
+          );
 
-            // On success, show confirmation dialog and update badge
-            setIsError(false);
+          // On success, show confirmation dialog and update badge
+          setIsError(false);
+          setErrorText('');
+          triggerProductApi({
+            url: searchUrl,
+            limit: LISTING_PAGE_DATA_LIMIT,
+            offset: 0
+          }).then(res => {
+            dataTableSetState.setRows(res.data?.products);
+            setRowSelection({});
             setErrorText('');
-            triggerProductApi({
-              url: searchUrl,
-              limit: LISTING_PAGE_DATA_LIMIT,
-              offset: 0
-            }).then(res => {
-              dataTableSetState.setRows(res.data?.products);
-              setRowSelection({});
-              setErrorText('');
-              setData(res.data);
-            });
-            dispatch(notificationBadge(true));
-          })
-          .catch(error => {
-            setIsLoading(false);
-            // On error, set error state and error message
-
-            setIsDialogOpen(true);
-            setDialogContent(
-              <CommonPoppup
-                content={''}
-                customPoppupBodyStyle="!mt-[70px]"
-                header={error?.data?.message}
-                actionButtonData={[
-                  {
-                    variant: 'primary',
-                    label: ManageLocales('app.modal.okay'),
-                    handler: () => {
-                      setIsDialogOpen(false);
-                    },
-                    customStyle: 'flex-1 w-full h-10'
-                  }
-                ]}
-              />
-            );
+            setData(res.data);
           });
-        // Clear the selected checkboxes
-        setRowSelection({});
-      }
+          dispatch(notificationBadge(true));
+        })
+        .catch(error => {
+          setIsLoading(false);
+          // On error, set error state and error message
+
+          setIsDialogOpen(true);
+          setDialogContent(
+            <CommonPoppup
+              content={''}
+              customPoppupBodyStyle="!mt-[70px]"
+              header={error?.data?.message}
+              actionButtonData={[
+                {
+                  variant: 'primary',
+                  label: ManageLocales('app.modal.okay'),
+                  handler: () => {
+                    setIsDialogOpen(false);
+                  },
+                  customStyle: 'flex-1 w-full h-10'
+                }
+              ]}
+            />
+          );
+        });
+      // Clear the selected checkboxes
+      setRowSelection({});
     }
   };
 
@@ -1187,7 +1170,8 @@ const Result = ({
                       setErrorText,
                       setIsConfirmStone,
                       setConfirmStoneData,
-                      setIsDetailPage
+                      setIsDetailPage,
+                      identifier: 'detailPage'
                     });
                   }
                 }
