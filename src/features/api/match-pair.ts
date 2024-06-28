@@ -11,7 +11,10 @@ export const matchingPairApi = createApi({
   endpoints: builder => ({
     getAllMatchingPair: builder.query({
       query: ({ offset, limit, url }) => ({
-        url: `/store/products-matching-pair?limit=${limit}&offset=${offset}&${url}`
+        // url: `/store/products-matching-pair?limit=${limit}&offset=${offset}&expand=variants&${url}`
+        url: `/store/products-matching-pair?limit=1&expand=variants&fields=id${
+          url !== '' ? '&' + url : ''
+        }`
       })
     }),
     getMatchingPairCount: builder.query({
@@ -27,5 +30,6 @@ export const matchingPairApi = createApi({
 
 export const {
   useLazyGetAllMatchingPairQuery,
+  useGetMatchingPairCountQuery,
   useLazyGetMatchingPairCountQuery
 } = matchingPairApi;

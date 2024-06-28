@@ -32,6 +32,7 @@ import useValidationStateManagement from '../search/hooks/validation-state-manag
 import Result from '../search/result/result';
 import SavedSearch from '../search/saved-search/saved-search';
 import MatchingPairResult from './result';
+import { useGetMatchingPairCountQuery } from '@/features/api/match-pair';
 
 const MatchingPair = () => {
   const subRoute = useSearchParams().get('active-tab');
@@ -64,7 +65,7 @@ const MatchingPair = () => {
   const [saveSearchName, setSaveSearchName] = useState('');
   const [addSavedSearch] = useAddSavedSearchMutation();
 
-  const { data } = useGetProductCountQuery(
+  const { data } = useGetMatchingPairCountQuery(
     {
       searchUrl
     },
@@ -353,7 +354,7 @@ const MatchingPair = () => {
       />
       {isLoading && <CustomKGKLoader />}
       {subRoute === MatchSubRoutes.NEW_SEARCH ||
-      currentPath === Routes.MATCHING_PAIR ||
+      // currentPath === Routes.MATCHING_PAIR ||
       editRoute === MatchSubRoutes.SAVED_SEARCH ||
       editRoute === MatchSubRoutes.RESULT ? (
         <Form

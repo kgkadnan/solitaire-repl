@@ -5,11 +5,10 @@ import React, {
   SetStateAction,
   Dispatch
 } from 'react';
-import DataTable from '@/components/v2/common/data-table';
 import { useDataTableStateManagement } from '@/components/v2/common/data-table/hooks/data-table-state-management';
 import {
   HOLD_STATUS,
-  LISTING_PAGE_DATA_LIMIT,
+  MATCHING_PAIR_DATA_LIMIT,
   MEMO_STATUS
 } from '@/constants/business-logic';
 import unAuthorizedSvg from '@public/v2/assets/icons/data-table/unauthorized.svg';
@@ -33,10 +32,7 @@ import {
   RenderTracerId,
   RenderNumericFields
 } from '@/components/v2/common/data-table/helpers/render-cell';
-import {
-  useConfirmProductMutation,
-  useLazyGetAllProductQuery
-} from '@/features/api/product';
+import { useConfirmProductMutation } from '@/features/api/product';
 import { useLazyGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
 import { MRT_RowSelectionState } from 'material-react-table';
 import { notificationBadge } from '@/features/notification/notification-slice';
@@ -91,6 +87,8 @@ import CompareStone from '../search/result/components/compare-stone';
 import { handleComment } from '../search/result/helpers/handle-comment';
 import { handleConfirmStone } from '../search/result/helpers/handle-confirm-stone';
 import { IItem } from '../search/saved-search/saved-search';
+import { useLazyGetAllMatchingPairQuery } from '@/features/api/match-pair';
+import MatchPairTable from './match-pair-table';
 
 // Column mapper outside the component to avoid re-creation on each render
 
@@ -118,7 +116,7 @@ const MatchingPairResult = ({
   const [triggerAvailableSlots] = useLazyGetAvailableMyAppointmentSlotsQuery(
     {}
   );
-
+  console.log('data----------------------->');
   const { data: searchList }: { data?: IItem[] } =
     useGetSavedSearchListQuery('');
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();
@@ -168,8 +166,8 @@ const MatchingPairResult = ({
 
   const [triggerColumn, { data: columnData }] =
     useLazyGetManageListingSequenceQuery<IManageListingSequenceResponse>();
-  const [triggerProductApi, { data: productData }] =
-    useLazyGetAllProductQuery();
+  const [triggerMatchingPairApi, { data: matchingPairData }] =
+    useLazyGetAllMatchingPairQuery();
 
   // Fetch Products
 
@@ -185,25 +183,29 @@ const MatchingPairResult = ({
 
     const url = constructUrlParams(selections[activeTab - 1]?.queryParams);
     setSearchUrl(url);
-    triggerProductApi({ url, limit: LISTING_PAGE_DATA_LIMIT, offset: 0 }).then(
-      (res: any) => {
-        if (columnData?.length > 0) {
-          if (res?.error?.status === statusCode.UNAUTHORIZED) {
-            setHasLimitExceeded(true);
-            dataTableSetState.setRows([]);
-          } else {
-            setHasLimitExceeded(false);
-            dataTableSetState.setRows(res.data?.products);
-          }
-
-          setRowSelection({});
-          setErrorText('');
-          setData(res.data);
-          setIsLoading(false);
+    triggerMatchingPairApi({
+      url,
+      limit: MATCHING_PAIR_DATA_LIMIT,
+      offset: 0
+    }).then((res: any) => {
+      if (columnData?.length > 0) {
+        if (res?.error?.status === statusCode.UNAUTHORIZED) {
+          setHasLimitExceeded(true);
+          dataTableSetState.setRows([]);
+        } else {
+          setHasLimitExceeded(false);
+          dataTableSetState.setRows(res.data?.products);
         }
+
+        setRowSelection({});
+        setErrorText('');
+        setData(res.data);
+        console.log('tettete', res.data);
+        setIsLoading(false);
       }
-    );
+    });
   };
+  console.log('jjjjjjjj', data);
   const handleDetailPage = ({ row }: { row: any }) => {
     if (isConfirmStone) {
       setBreadCrumLabel('Confirm Stone');
@@ -619,9 +621,9 @@ const MatchingPairResult = ({
             // On success, show confirmation dialog and update badge
             setIsError(false);
             setErrorText('');
-            triggerProductApi({
+            triggerMatchingPairApi({
               url: searchUrl,
-              limit: LISTING_PAGE_DATA_LIMIT,
+              limit: MATCHING_PAIR_DATA_LIMIT,
               offset: 0
             }).then(res => {
               dataTableSetState.setRows(res.data?.products);
@@ -736,9 +738,9 @@ const MatchingPairResult = ({
             // On success, show confirmation dialog and update badge
             setIsError(false);
             setErrorText('');
-            triggerProductApi({
+            triggerMatchingPairApi({
               url: searchUrl,
-              limit: LISTING_PAGE_DATA_LIMIT,
+              limit: MATCHING_PAIR_DATA_LIMIT,
               offset: 0
             }).then(res => {
               dataTableSetState.setRows(res.data?.products);
@@ -911,9 +913,9 @@ const MatchingPairResult = ({
 
             setCommentValue('');
 
-            triggerProductApi({
+            triggerMatchingPairApi({
               url: searchUrl,
-              limit: LISTING_PAGE_DATA_LIMIT,
+              limit: MATCHING_PAIR_DATA_LIMIT,
               offset: 0
             }).then(res => {
               dataTableSetState.setRows(res.data?.products);
@@ -1139,7 +1141,7 @@ const MatchingPairResult = ({
             ''
           ) : hasLimitExceeded ? (
             ''
-          ) : productData === undefined ? (
+          ) : matchingPairData === undefined ? (
             <Skeleton
               variant="rectangular"
               height={'24px'}
@@ -1284,12 +1286,12 @@ const MatchingPairResult = ({
             </div>
           ) : (
             <div className="">
-              {productData === undefined &&
+              {matchingPairData === undefined &&
               !memoizedRows.length &&
               !data?.length ? (
                 <DataTableSkeleton />
               ) : (
-                <DataTable
+                <MatchPairTable
                   rows={memoizedRows}
                   columns={memoizedColumns}
                   setRowSelection={setRowSelection}
@@ -1304,7 +1306,7 @@ const MatchingPairResult = ({
                   handleNewSearch={handleNewSearch}
                   setSearchParameters={setSearchParameters}
                   modalSetState={modalSetState}
-                  data={data}
+                  matchingPairData={data}
                   setErrorText={setErrorText}
                   downloadExcel={downloadExcel}
                   setIsError={setIsError}
