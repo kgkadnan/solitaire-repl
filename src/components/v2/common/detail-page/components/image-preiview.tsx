@@ -104,7 +104,7 @@ const ImagePreview: React.FC<IImagePreviewProps> = ({
                     alt={filteredImages[imageIndex]?.name}
                     width={650}
                     height={600}
-                    className="w-[475px] h-[370px]"
+                    className="w-[475px] h-[370px] object-contain"
                     onClick={handleImageClick}
                     style={{
                       transform: `scale(${zoomLevel})`,

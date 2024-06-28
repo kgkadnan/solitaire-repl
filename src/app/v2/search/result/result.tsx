@@ -55,10 +55,9 @@ import {
 import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
 import {
   SELECT_STONE_TO_PERFORM_ACTION,
-  SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH
+  SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH
 } from '@/constants/error-messages/confirm-stone';
 import { NOT_MORE_THAN_300 } from '@/constants/error-messages/search';
-import { NO_STONES_AVAILABLE } from '@/constants/error-messages/compare-stone';
 import { NO_STONES_SELECTED } from '@/constants/error-messages/cart';
 import { useGetSavedSearchListQuery } from '@/features/api/saved-searches';
 import { ISavedSearch } from '../form/form';
@@ -410,9 +409,9 @@ const Result = ({
               ...commonProps,
               Cell: ({ renderedCellValue }: { renderedCellValue: any }) => (
                 <span>{`${
-                  renderedCellValue === 0
-                    ? '$0.00'
-                    : `$${formatNumberWithCommas(renderedCellValue)}` ?? '$0.00'
+                  renderedCellValue === null || renderedCellValue === undefined
+                    ? '-'
+                    : `$${formatNumberWithCommas(renderedCellValue)}`
                 }`}</span>
               )
             };
@@ -526,11 +525,11 @@ const Result = ({
       });
 
       if (hasMemoOut) {
-        setErrorText(NO_STONES_AVAILABLE);
+        setErrorText(SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH);
         setIsError(true);
       } else if (hasHold) {
         setIsError(true);
-        setErrorText(SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH);
+        setErrorText(SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH);
       } else {
         setShowAppointmentForm(true);
         triggerAvailableSlots({}).then(payload => {
@@ -673,11 +672,11 @@ const Result = ({
     );
 
     if (hasMemoOut) {
-      setErrorText(NO_STONES_AVAILABLE);
+      setErrorText(SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH);
       setIsError(true);
     } else if (hasHold) {
       setIsError(true);
-      setErrorText(SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH);
+      setErrorText(SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH);
     } else {
       setIsLoading(true);
       // Extract variant IDs for selected stones

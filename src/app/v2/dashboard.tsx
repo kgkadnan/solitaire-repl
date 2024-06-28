@@ -92,11 +92,10 @@ import VolumeDiscount from '@/components/v2/common/volume-discount';
 import EmptyScreen from '@/components/v2/common/empty-screen';
 import emptyOrderSvg from '@public/v2/assets/icons/empty-order.svg';
 import empty from '@public/v2/assets/icons/saved-search/empty-screen-saved-search.svg';
-import { NO_STONES_AVAILABLE } from '@/constants/error-messages/compare-stone';
 import { HOLD_STATUS, MEMO_STATUS } from '@/constants/business-logic';
 import {
   SELECT_STONE_TO_PERFORM_ACTION,
-  SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH
+  SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH
 } from '@/constants/error-messages/confirm-stone';
 import { useLazyGetAvailableMyAppointmentSlotsQuery } from '@/features/api/my-appointments';
 import { IAppointmentPayload } from './my-appointments/page';
@@ -471,9 +470,9 @@ const Dashboard = () => {
               ...commonProps,
               Cell: ({ renderedCellValue }: { renderedCellValue: any }) => (
                 <span>{`${
-                  renderedCellValue === 0
-                    ? '$0.00'
-                    : `$${formatNumberWithCommas(renderedCellValue)}` ?? '$0.00'
+                  renderedCellValue === null || renderedCellValue === undefined
+                    ? '-'
+                    : `$${formatNumberWithCommas(renderedCellValue)}`
                 }`}</span>
               )
             };
@@ -1107,9 +1106,9 @@ const Dashboard = () => {
       });
 
       if (hasMemoOut) {
-        setError(NO_STONES_AVAILABLE);
+        setError(SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH);
       } else if (hasHold) {
-        setError(SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH);
+        setError(SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH);
       } else {
         setShowAppointmentForm(true);
         triggerAvailableSlots({}).then(payload => {
