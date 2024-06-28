@@ -173,7 +173,6 @@ export const RenderLab = ({ renderedCellValue, row }: any) => {
 };
 
 export const RenderDiscount = ({ renderedCellValue }: any) => {
-  console.log('renderedCellValue', renderedCellValue);
   return (
     <div
       className={`${
