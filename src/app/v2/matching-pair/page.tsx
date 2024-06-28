@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { MatchSubRoutes, Routes, SubRoutes } from '@/constants/v2/enums/routes';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { MatchSubRoutes, Routes } from '@/constants/v2/enums/routes';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { constructUrlParams } from '@/utils/v2/construct-url-params';
 import EmptyScreen from '@/components/v2/common/empty-screen';
 import empty from '@public/v2/assets/icons/data-table/empty-cart.svg';
@@ -17,7 +17,6 @@ import {
   useAddSavedSearchMutation,
   useUpdateSavedSearchMutation
 } from '@/features/api/saved-searches';
-import { useGetProductCountQuery } from '@/features/api/product';
 import { InputDialogComponent } from '@/components/v2/common/input-dialog';
 import { InputField } from '@/components/v2/common/input-field';
 import bookmarkIcon from '@public/v2/assets/icons/modal/bookmark.svg';
@@ -29,7 +28,6 @@ import { handleReset } from '../search/form/helpers/reset';
 import useFormStateManagement from '../search/form/hooks/form-state';
 import useNumericFieldValidation from '../search/form/hooks/numeric-field-validation-management';
 import useValidationStateManagement from '../search/hooks/validation-state-management';
-import Result from '../search/result/result';
 import SavedSearch from '../search/saved-search/saved-search';
 import MatchingPairResult from './result';
 import { useGetMatchingPairCountQuery } from '@/features/api/match-pair';
@@ -37,7 +35,7 @@ import { useGetMatchingPairCountQuery } from '@/features/api/match-pair';
 const MatchingPair = () => {
   const subRoute = useSearchParams().get('active-tab');
   const editRoute = useSearchParams().get('edit');
-  const currentPath = usePathname();
+  // const currentPath = usePathname();
   const [activeTab, setActiveTab] = useState(0);
   const [isAddDemand, setIsAddDemand] = useState(false);
   const [searchParameters, setSearchParameters] = useState<ISavedSearch[] | []>(

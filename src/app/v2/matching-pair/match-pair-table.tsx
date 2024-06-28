@@ -200,7 +200,7 @@ const MatchPairTable = ({
 }: any) => {
   // Fetching saved search data
   const router = useRouter();
-console.log("rows----------->",rows)
+  console.log('rows----------->', rows);
   const [triggerSavedSearch] = useLazyGetAllSavedSearchesQuery({});
   let [triggerProductCountApi] = useLazyGetProductCountQuery();
   const [isDropDownOpen, setIsDropDownOpen] = useState(false);
