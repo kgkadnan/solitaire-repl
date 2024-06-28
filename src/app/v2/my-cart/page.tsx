@@ -70,7 +70,6 @@ import { kycStatus } from '@/constants/enums/kyc';
 import { loadImages } from '@/components/v2/common/detail-page/helpers/load-images';
 import { checkImage } from '@/components/v2/common/detail-page/helpers/check-image';
 import { IAppointmentPayload } from '../my-appointments/page';
-import { NO_STONES_AVAILABLE } from '@/constants/error-messages/compare-stone';
 import { useLazyGetAvailableMyAppointmentSlotsQuery } from '@/features/api/my-appointments';
 import { SELECT_STONE_TO_PERFORM_ACTION } from '@/constants/error-messages/confirm-stone';
 import BookAppointment from '../my-appointments/components/book-appointment/book-appointment';
