@@ -44,6 +44,7 @@ export const InputField = ({
           placeholder={placeholder}
           disabled={disabled}
           onBlur={onBlur}
+          title=""
           maxLength={maxLength}
           onFocus={() => {
             if (inputRef.current) {
