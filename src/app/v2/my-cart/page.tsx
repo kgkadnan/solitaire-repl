@@ -910,7 +910,6 @@ const MyCart = () => {
     }
   }, [validImages]);
 
-  console.log('detailPageData', detailPageData);
   return (
     <div className="relative">
       {isLoading && <CustomKGKLoader />}

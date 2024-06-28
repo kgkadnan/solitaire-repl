@@ -2,7 +2,13 @@
 
 import AnchorLinkNavigation from '@/components/v2/common/anchor-tag-navigation';
 import { anchor } from '@/constants/v2/form';
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import React, {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState
+} from 'react';
 import { Shape } from './components/shape';
 import { Carat } from './components/carat';
 import { Color } from './components/color';
@@ -60,6 +66,13 @@ import { isSearchAlreadyExist } from '../saved-search/helpers/handle-card-click'
 import { constructUrlParams } from '@/utils/v2/construct-url-params';
 import CommonPoppup from '../../login/component/common-poppup';
 import { kycStatus } from '@/constants/enums/kyc';
+import { useAppDispatch } from '@/hooks/hook';
+import { useSharePageEventMutation } from '@/features/api/track-page';
+import {
+  resetTimeTracking,
+  setEndTime,
+  setIsSuccess
+} from '@/features/track-page-event/track-page-event-slice';
 
 export interface ISavedSearch {
   saveSearchName: string;
@@ -113,6 +126,17 @@ const Form = ({
   const savedSearch: any = useAppSelector(
     (store: { savedSearch: any }) => store.savedSearch
   );
+
+  const { startTime, endTime } = useAppSelector(
+    state => state.pageTimeTracking
+  );
+
+  const [isAllowedToUnload, setIsAllowedToUnload] = useState(true);
+  const isAllowedToUnloadRef = useRef(isAllowedToUnload);
+
+  const dispatch = useAppDispatch();
+
+  const [sharePageEvent] = useSharePageEventMutation();
 
   const [updateSavedSearch] = useUpdateSavedSearchMutation();
   let [addSavedSearch] = useAddSavedSearchMutation();
@@ -210,6 +234,37 @@ const Form = ({
     setPricePerCaratError,
     setAmountRangeError
   } = errorSetState;
+
+  // Sync useRef with useState
+  useEffect(() => {
+    isAllowedToUnloadRef.current = isAllowedToUnload;
+  }, [isAllowedToUnload]);
+
+  useEffect(() => {
+    const handleBeforeUnload = async () => {
+      if (isAllowedToUnloadRef.current && startTime && !endTime) {
+        const dropEndTime = new Date().toISOString();
+        dispatch(setEndTime(dropEndTime));
+        dispatch(setIsSuccess(false));
+        try {
+          await sharePageEvent({
+            startTime,
+            endTime: dropEndTime,
+            page: 'search',
+            is_success: false
+          });
+
+          dispatch(resetTimeTracking());
+        } catch (error) {
+          logger.error(`Error logging time on drop-off: ${error}`);
+        }
+      }
+    };
+
+    return () => {
+      handleBeforeUnload();
+    };
+  }, [startTime]);
 
   useEffect(() => {
     if (searchUrl.length > 0) {
@@ -429,6 +484,7 @@ const Form = ({
           }
           router.push(`/v2/search?active-tab=${SubRoutes.RESULT}-${activeTab}`);
         } else {
+          setIsAllowedToUnload(false);
           let setDataOnLocalStorage = {
             id: id,
             saveSearchName: saveSearchName,
@@ -436,6 +492,20 @@ const Form = ({
             isSavedSearch: isSavedParams,
             queryParams
           };
+
+          if (startTime && !endTime) {
+            const endTime = new Date().toISOString();
+            dispatch(setEndTime(endTime));
+            dispatch(setIsSuccess(true));
+            await sharePageEvent({
+              startTime,
+              endTime,
+              page: 'search',
+              is_success: true
+            });
+
+            dispatch(resetTimeTracking());
+          }
 
           localStorage.setItem(
             'Search',

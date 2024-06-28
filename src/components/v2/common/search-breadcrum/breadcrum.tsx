@@ -5,6 +5,8 @@ import Arrow from '@public/v2/assets/icons/chevron.svg';
 import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { setStartTime } from '@/features/track-page-event/track-page-event-slice';
+import { useAppDispatch } from '@/hooks/hook';
 
 const Breadcrum = ({
   searchParameters,
@@ -18,7 +20,7 @@ const Breadcrum = ({
   setIsLoading?: any;
 }) => {
   const router = useRouter();
-
+  const dispatch = useAppDispatch();
   return (
     <>
       {searchParameters.length > 0 && (
@@ -26,6 +28,9 @@ const Breadcrum = ({
           <Link
             className={'flex items-center cursor-pointer'}
             href={`${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`}
+            onClick={() => {
+              dispatch(setStartTime(new Date().toISOString()));
+            }}
           >
             Search
           </Link>

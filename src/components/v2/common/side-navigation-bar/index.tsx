@@ -20,6 +20,8 @@ import { Button } from '../../ui/button';
 import { SocketManager, useSocket } from '@/hooks/v2/socket-manager';
 import useUser from '@/lib/use-auth';
 import { kycStatus } from '@/constants/enums/kyc';
+import { useAppDispatch } from '@/hooks/hook';
+import { setStartTime } from '@/features/track-page-event/track-page-event-slice';
 
 interface ISideNavigationBar {
   src?: React.ReactNode;
@@ -32,6 +34,8 @@ const SideNavigationBar = ({
 }: {
   isInMaintenanceMode: boolean;
 }) => {
+  const dispatch = useAppDispatch();
+
   const currentRoute = usePathname();
   const currentSubRoute = useSearchParams().get('active-tab');
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
@@ -185,7 +189,16 @@ const SideNavigationBar = ({
                         }`}
                       >
                         <Button
-                          onClick={() => router.push(items.link!)}
+                          onClick={() => {
+                            if (
+                              items.link ===
+                              `${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`
+                            ) {
+                              dispatch(setStartTime(new Date().toISOString()));
+                            }
+
+                            router.push(items.link!);
+                          }}
                           className={`${
                             items.isActive && !isInMaintenanceMode
                               ? `bg-primaryMain p-[8px] rounded stroke-neutral25 `
