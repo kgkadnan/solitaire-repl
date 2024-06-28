@@ -40,7 +40,7 @@ const SideNavigationBar = ({
   const [showPulse, setShowPulse] = useState(false);
 
   const router = useRouter();
-
+console.log(MatchSubRoutes,"MatchSubRoutes")
   const SideNavigationData: ISideNavigationBar[] = [
     {
       src: <DashboardIcon />,
