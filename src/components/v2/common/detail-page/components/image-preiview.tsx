@@ -96,7 +96,11 @@ const ImagePreview: React.FC<IImagePreviewProps> = ({
               ) : (
                 <div
                   className={`${
-                    zoomLevel === 2 ? 'cursor-zoom-out' : 'cursor-zoom-in'
+                    activePreviewTab !== 'Certificate'
+                      ? zoomLevel === 2
+                        ? 'cursor-zoom-out'
+                        : 'cursor-zoom-in'
+                      : ''
                   }`}
                 >
                   <Image
@@ -105,7 +109,11 @@ const ImagePreview: React.FC<IImagePreviewProps> = ({
                     width={650}
                     height={600}
                     className="w-[475px] h-[370px] object-contain"
-                    onClick={handleImageClick}
+                    onClick={
+                      activePreviewTab !== 'Certificate'
+                        ? handleImageClick
+                        : () => {}
+                    }
                     style={{
                       transform: `scale(${zoomLevel})`,
                       transformOrigin: `${zoomPosition.x * 100}% ${
@@ -129,6 +137,7 @@ const ImagePreview: React.FC<IImagePreviewProps> = ({
               width={475}
               variant="rectangular"
               height={370}
+              sx={{ bgcolor: 'var(--neutral-200)' }}
               animation="wave"
             />
           )}
@@ -149,6 +158,7 @@ const ImagePreview: React.FC<IImagePreviewProps> = ({
               variant="rectangular"
               height={30}
               animation="wave"
+              sx={{ bgcolor: 'var(--neutral-200)' }}
             />
           )}
           {filteredImages.length > 0 ? (
