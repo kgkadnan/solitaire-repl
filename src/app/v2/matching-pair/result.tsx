@@ -238,6 +238,11 @@ const MatchingPairResult = ({
     dataTableState.rows
   ]);
 
+  const RenderMatchPairData = ({ row, renderedCellValue }: any) => {
+    console.log('----------------------------->', row.original);
+    return <div>{row.original[0].lot_id}</div>;
+  };
+
   const mapColumns = (columns: any) =>
     columns
       ?.filter(({ is_disabled }: any) => !is_disabled)
@@ -264,187 +269,187 @@ const MatchingPairResult = ({
             />
           )
         };
+        return { ...commonProps, Cell: RenderMatchPairData };
+        // switch (accessor) {
+        //   case 'fire_icon':
+        //     return {
+        //       enableSorting: false,
+        //       accessorKey: 'fire_icon',
+        //       header: '',
+        //       minSize: 26,
+        //       size: 26,
+        //       maxSize: 26,
+        //       Cell: ({ row }: { row: any }) => {
+        //         return row.original.in_high_demand ? (
+        //           <Tooltip
+        //             tooltipTrigger={
+        //               <Image
+        //                 id="blinking-image"
+        //                 src={fireSvg}
+        //                 alt="fireSvg"
+        //                 className={`${styles.blink} blink ml-[-5px]`}
+        //               />
+        //             }
+        //             tooltipContent={'In High Demand Now!'}
+        //             tooltipContentStyles={'z-[1000] '}
+        //           />
+        //         ) : (
+        //           ''
+        //         );
+        //       }
+        //     };
 
-        switch (accessor) {
-          case 'fire_icon':
-            return {
-              enableSorting: false,
-              accessorKey: 'fire_icon',
-              header: '',
-              minSize: 26,
-              size: 26,
-              maxSize: 26,
-              Cell: ({ row }: { row: any }) => {
-                return row.original.in_high_demand ? (
-                  <Tooltip
-                    tooltipTrigger={
-                      <Image
-                        id="blinking-image"
-                        src={fireSvg}
-                        alt="fireSvg"
-                        className={`${styles.blink} blink ml-[-5px]`}
-                      />
-                    }
-                    tooltipContent={'In High Demand Now!'}
-                    tooltipContentStyles={'z-[1000] '}
-                  />
-                ) : (
-                  ''
-                );
-              }
-            };
+        //   case 'clarity':
+        //     return {
+        //       ...commonProps,
+        //       sortingFn: (rowA: any, rowB: any, columnId: string) => {
+        //         const indexA = clarity.indexOf(rowA.original[columnId]);
+        //         const indexB = clarity.indexOf(rowB.original[columnId]);
+        //         return indexA - indexB;
+        //       }
+        //     };
+        //   case 'table_inclusion':
+        //     return {
+        //       ...commonProps,
+        //       Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-',
+        //       sortingFn: (rowA: any, rowB: any, columnId: string) => {
+        //         const indexA = tableInclusionSortOrder.indexOf(
+        //           rowA.original[columnId]
+        //         );
+        //         const indexB = tableInclusionSortOrder.indexOf(
+        //           rowB.original[columnId]
+        //         );
+        //         return indexA - indexB;
+        //       }
+        //     };
+        //   case 'table_black':
+        //     return {
+        //       ...commonProps,
+        //       Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-',
+        //       sortingFn: (rowA: any, rowB: any, columnId: string) => {
+        //         const indexA = tableBlackSortOrder.indexOf(
+        //           rowA.original[columnId]
+        //         );
+        //         const indexB = tableBlackSortOrder.indexOf(
+        //           rowB.original[columnId]
+        //         );
+        //         return indexA - indexB;
+        //       }
+        //     };
 
-          case 'clarity':
-            return {
-              ...commonProps,
-              sortingFn: (rowA: any, rowB: any, columnId: string) => {
-                const indexA = clarity.indexOf(rowA.original[columnId]);
-                const indexB = clarity.indexOf(rowB.original[columnId]);
-                return indexA - indexB;
-              }
-            };
-          case 'table_inclusion':
-            return {
-              ...commonProps,
-              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-',
-              sortingFn: (rowA: any, rowB: any, columnId: string) => {
-                const indexA = tableInclusionSortOrder.indexOf(
-                  rowA.original[columnId]
-                );
-                const indexB = tableInclusionSortOrder.indexOf(
-                  rowB.original[columnId]
-                );
-                return indexA - indexB;
-              }
-            };
-          case 'table_black':
-            return {
-              ...commonProps,
-              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-',
-              sortingFn: (rowA: any, rowB: any, columnId: string) => {
-                const indexA = tableBlackSortOrder.indexOf(
-                  rowA.original[columnId]
-                );
-                const indexB = tableBlackSortOrder.indexOf(
-                  rowB.original[columnId]
-                );
-                return indexA - indexB;
-              }
-            };
+        //   case 'side_black':
+        //     return {
+        //       ...commonProps,
+        //       Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-',
+        //       sortingFn: (rowA: any, rowB: any, columnId: string) => {
+        //         const indexA = sideBlackSortOrder.indexOf(
+        //           rowA.original[columnId]
+        //         );
+        //         const indexB = sideBlackSortOrder.indexOf(
+        //           rowB.original[columnId]
+        //         );
+        //         return indexA - indexB;
+        //       }
+        //     };
 
-          case 'side_black':
-            return {
-              ...commonProps,
-              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-',
-              sortingFn: (rowA: any, rowB: any, columnId: string) => {
-                const indexA = sideBlackSortOrder.indexOf(
-                  rowA.original[columnId]
-                );
-                const indexB = sideBlackSortOrder.indexOf(
-                  rowB.original[columnId]
-                );
-                return indexA - indexB;
-              }
-            };
+        //   case 'fluorescence':
+        //     return {
+        //       ...commonProps,
+        //       Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-',
+        //       sortingFn: (rowA: any, rowB: any, columnId: string) => {
+        //         const indexA = fluorescenceSortOrder.indexOf(
+        //           rowA.original[columnId]
+        //         );
+        //         const indexB = fluorescenceSortOrder.indexOf(
+        //           rowB.original[columnId]
+        //         );
+        //         return indexA - indexB;
+        //       }
+        //     };
+        //   case 'amount':
+        //     return { ...commonProps, Cell: RenderAmount };
 
-          case 'fluorescence':
-            return {
-              ...commonProps,
-              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-',
-              sortingFn: (rowA: any, rowB: any, columnId: string) => {
-                const indexA = fluorescenceSortOrder.indexOf(
-                  rowA.original[columnId]
-                );
-                const indexB = fluorescenceSortOrder.indexOf(
-                  rowB.original[columnId]
-                );
-                return indexA - indexB;
-              }
-            };
-          case 'amount':
-            return { ...commonProps, Cell: RenderAmount };
+        //   case 'rap':
+        //   case 'rap_value':
+        //     return { ...commonProps, Cell: RenderNumericFields };
+        //   case 'measurements':
+        //     return { ...commonProps, Cell: RenderMeasurements };
+        //   case 'shape_full':
+        //     return { ...commonProps, Cell: RenderShape };
+        //   case 'carats':
+        //   case 'table_percentage':
+        //   case 'depth_percentage':
+        //   case 'ratio':
+        //   case 'length':
+        //   case 'width':
+        //   case 'depth':
+        //   case 'crown_angle':
+        //   case 'crown_height':
+        //   case 'girdle_percentage':
+        //   case 'pavilion_angle':
+        //   case 'pavilion_height':
+        //   case 'lower_half':
+        //   case 'star_length':
+        //     return { ...commonProps, Cell: RenderCarat };
+        //   case 'discount':
+        //     return { ...commonProps, Cell: RenderDiscount };
+        //   case 'details':
+        //     return {
+        //       ...commonProps,
+        //       Cell: ({ row }: any) => {
+        //         return RenderDetails({ row, handleDetailImage });
+        //       }
+        //     };
 
-          case 'rap':
-          case 'rap_value':
-            return { ...commonProps, Cell: RenderNumericFields };
-          case 'measurements':
-            return { ...commonProps, Cell: RenderMeasurements };
-          case 'shape_full':
-            return { ...commonProps, Cell: RenderShape };
-          case 'carats':
-          case 'table_percentage':
-          case 'depth_percentage':
-          case 'ratio':
-          case 'length':
-          case 'width':
-          case 'depth':
-          case 'crown_angle':
-          case 'crown_height':
-          case 'girdle_percentage':
-          case 'pavilion_angle':
-          case 'pavilion_height':
-          case 'lower_half':
-          case 'star_length':
-            return { ...commonProps, Cell: RenderCarat };
-          case 'discount':
-            return { ...commonProps, Cell: RenderDiscount };
-          case 'details':
-            return {
-              ...commonProps,
-              Cell: ({ row }: any) => {
-                return RenderDetails({ row, handleDetailImage });
-              }
-            };
+        //   case 'key_to_symbol':
+        //   case 'report_comments':
+        //     return {
+        //       ...commonProps,
+        //       Cell: ({ renderedCellValue }: { renderedCellValue: any }) => (
+        //         <span>{`${
+        //           renderedCellValue?.length > 0
+        //             ? renderedCellValue?.toString()
+        //             : '-'
+        //         }`}</span>
+        //       )
+        //     };
+        //   case 'price_per_carat':
+        //     return {
+        //       ...commonProps,
+        //       Cell: ({ renderedCellValue }: { renderedCellValue: any }) => (
+        //         <span>{`${
+        //           renderedCellValue === 0
+        //             ? '$0.00'
+        //             : `$${formatNumberWithCommas(renderedCellValue)}` ?? '$0.00'
+        //         }`}</span>
+        //       )
+        //     };
+        //   case 'lab':
+        //     return { ...commonProps, Cell: RenderLab };
+        //   case 'location':
+        //     return { ...commonProps, Cell: RednderLocation };
+        //   case 'lot_id':
+        //     return {
+        //       ...commonProps,
+        //       Cell: ({ renderedCellValue, row }: any) => {
+        //         return RenderLotId({
+        //           renderedCellValue,
+        //           row,
+        //           handleDetailPage
+        //         });
+        //       }
+        //     };
 
-          case 'key_to_symbol':
-          case 'report_comments':
-            return {
-              ...commonProps,
-              Cell: ({ renderedCellValue }: { renderedCellValue: any }) => (
-                <span>{`${
-                  renderedCellValue?.length > 0
-                    ? renderedCellValue?.toString()
-                    : '-'
-                }`}</span>
-              )
-            };
-          case 'price_per_carat':
-            return {
-              ...commonProps,
-              Cell: ({ renderedCellValue }: { renderedCellValue: any }) => (
-                <span>{`${
-                  renderedCellValue === 0
-                    ? '$0.00'
-                    : `$${formatNumberWithCommas(renderedCellValue)}` ?? '$0.00'
-                }`}</span>
-              )
-            };
-          case 'lab':
-            return { ...commonProps, Cell: RenderLab };
-          case 'location':
-            return { ...commonProps, Cell: RednderLocation };
-          case 'lot_id':
-            return {
-              ...commonProps,
-              Cell: ({ renderedCellValue, row }: any) => {
-                return RenderLotId({
-                  renderedCellValue,
-                  row,
-                  handleDetailPage
-                });
-              }
-            };
-
-          case 'tracr_id':
-            return { ...commonProps, Cell: RenderTracerId };
-          default:
-            return {
-              ...commonProps,
-              Cell: ({ renderedCellValue }: { renderedCellValue: string }) => (
-                <span>{renderedCellValue ?? '-'}</span>
-              )
-            };
-        }
+        //   case 'tracr_id':
+        //     return { ...commonProps, Cell: RenderTracerId };
+        //   default:
+        //     return {
+        //       ...commonProps,
+        //       Cell: ({ renderedCellValue }: { renderedCellValue: string }) => (
+        //         <span>{renderedCellValue ?? '-'}</span>
+        //       )
+        //     };
+        // }
       });
 
   useEffect(() => {
@@ -506,6 +511,7 @@ const MatchingPairResult = ({
     () => mapColumns(dataTableState.columns),
     [dataTableState.columns]
   );
+  console.log(memoizedColumns, 'memoizedColumns');
   const handleNewSearch = () => {
     router.push(`${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`);
   };
