@@ -138,7 +138,7 @@ const ImagePreview: React.FC<IImagePreviewProps> = ({
               variant="rectangular"
               height={370}
               animation="wave"
-              sx={{ bgcolor: 'var(--neutral-200)' }}
+              // sx={{ bgcolor: 'var(--neutral-200)' }}
             />
           )}
         </div>
@@ -158,7 +158,7 @@ const ImagePreview: React.FC<IImagePreviewProps> = ({
               variant="rectangular"
               height={30}
               animation="wave"
-              sx={{ bgcolor: 'var(--neutral-200)' }}
+              // sx={{ bgcolor: 'var(--neutral-200)' }}
             />
           )}
           {filteredImages.length > 0 ? (
