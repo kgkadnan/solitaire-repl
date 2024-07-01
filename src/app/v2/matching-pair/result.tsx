@@ -19,19 +19,19 @@ import ActionButton from '@/components/v2/common/action-button';
 import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
 import Tooltip from '@/components/v2/common/tooltip';
 import crossIcon from '@public/v2/assets/icons/modal/cross.svg';
-import {
-  RenderCarat,
-  RenderDiscount,
-  RenderDetails,
-  RenderLab,
-  RenderLotId,
-  RednderLocation,
-  RenderAmount,
-  RenderShape,
-  RenderMeasurements,
-  RenderTracerId,
-  RenderNumericFields
-} from '@/components/v2/common/data-table/helpers/render-cell';
+// import {
+//   RenderCarat,
+//   RenderDiscount,
+//   RenderDetails,
+//   RenderLab,
+//   RenderLotId,
+//   RednderLocation,
+//   RenderAmount,
+//   RenderShape,
+//   RenderMeasurements,
+//   RenderTracerId,
+//   RenderNumericFields
+// } from '@/components/v2/common/data-table/helpers/render-cell';
 import { useConfirmProductMutation } from '@/features/api/product';
 import { useLazyGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
 import { MRT_RowSelectionState } from 'material-react-table';
@@ -41,13 +41,13 @@ import { useAppDispatch } from '@/hooks/hook';
 import Image from 'next/image';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import { DialogComponent } from '@/components/v2/common/dialog';
-import {
-  clarity,
-  fluorescenceSortOrder,
-  sideBlackSortOrder,
-  tableBlackSortOrder,
-  tableInclusionSortOrder
-} from '@/constants/v2/form';
+// import {
+//   clarity,
+//   fluorescenceSortOrder,
+//   sideBlackSortOrder,
+//   tableBlackSortOrder,
+//   tableInclusionSortOrder
+// } from '@/constants/v2/form';
 import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
 import {
   SELECT_STONE_TO_PERFORM_ACTION,
@@ -60,7 +60,7 @@ import { useGetSavedSearchListQuery } from '@/features/api/saved-searches';
 
 import { AddCommentDialog } from '@/components/v2/common/comment-dialog';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
-import fireSvg from '@public/v2/assets/icons/data-table/fire-icon.svg';
+// import fireSvg from '@public/v2/assets/icons/data-table/fire-icon.svg';
 import threeDotsSvg from '@public/v2/assets/icons/threedots.svg';
 import { Dropdown } from '@/components/v2/common/dropdown-menu';
 import { DiamondDetailsComponent } from '@/components/v2/common/detail-page';
@@ -76,7 +76,7 @@ import styles from '../search/result/style.module.scss';
 import DataTableSkeleton from '@/components/v2/skeleton/data-table';
 import { Skeleton } from '@mui/material';
 import EmptyScreen from '@/components/v2/common/empty-screen';
-import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
+// import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
 import CommonPoppup from '../login/component/common-poppup';
 import BookAppointment from '../my-appointments/components/book-appointment/book-appointment';
 import { IAppointmentPayload } from '../my-appointments/page';
