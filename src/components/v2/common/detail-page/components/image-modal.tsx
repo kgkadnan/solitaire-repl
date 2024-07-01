@@ -132,7 +132,7 @@ const ImageModal: React.FC<IModalProps> = ({
                         alt={filteredImages[imageIndex]?.name}
                         width={650}
                         height={600}
-                        className="w-[625px] h-[520px]"
+                        className="w-[625px] h-[520px] object-contain"
                         onMouseEnter={e => {
                           // update image size and turn-on magnifier
                           const elem = e.currentTarget;

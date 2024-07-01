@@ -14,6 +14,16 @@ import {
 } from '@/constants/validation-regex/regex';
 import { IRegister } from '../interface';
 
+const formatFieldName = (fieldName: string): string => {
+  // Split the field name by uppercase letters and join with a space
+  const formatted = fieldName
+    .split(/(?=[A-Z])/)
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ');
+
+  return formatted;
+};
+
 interface IValidateField {
   name: string;
   value: string;
@@ -30,7 +40,7 @@ export const validateField = ({
 
   // Validation logic
   if (value.trim() === '') {
-    error = REQUIRED_FIELD;
+    error = `${formatFieldName(name)} is mandatory`;
   } else {
     switch (name) {
       case 'email':

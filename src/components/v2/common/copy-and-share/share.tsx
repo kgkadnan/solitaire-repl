@@ -11,6 +11,8 @@ import { Toast } from './toast';
 import { IProduct } from '@/app/v2/search/interface';
 import Tooltip from '../tooltip';
 import { formatNumber } from '@/utils/fix-two-digit-number';
+import { useLazyShareEventQuery } from '@/features/api/track-interaction';
+import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
 
 const Share = ({
   rows,
@@ -18,7 +20,8 @@ const Share = ({
   setErrorText,
   setIsError,
   identifier,
-  activeTab = 0
+  activeTab = 0,
+  shareTrackIdentifier
 }: any) => {
   const [selectedRows, setSelectedRows] = useState<IProduct[]>(
     rows?.filter((row: IProduct) => row.id in selectedProducts)
@@ -31,6 +34,9 @@ const Share = ({
   const { modalState, modalSetState } = useModalStateManagement();
   const { isInputDialogOpen } = modalState;
   const [showToast, setShowToast] = useState(false);
+
+  const [trackShareEvent] = useLazyShareEventQuery({});
+
   const [shareOptions, setShareOptions] = useState([
     { name: 'Stock No', state: 'lot_id' },
     { name: 'Shape', state: 'shape' },
@@ -154,13 +160,46 @@ const Share = ({
             ) {
               const length = product.length || 0;
               const width = product.width || 0;
-              const height = product.height || 0;
-              return `Measurements: ${length} x ${width} x ${height}`;
+              const depth = product.depth || 0;
+              return `Measurements: ${length} x ${width} x ${depth}`;
             }
             // Handle amount separately if it's selected
             if (attribute === 'amount' && selectedAttributes['amount']) {
-              const amount = product.amount || 0; // Or however you calculate amount
-              return `Amt ($): ${amount}`;
+              const amount = product?.variants[0]?.prices[0]?.amount
+                ? product?.variants[0]?.prices[0]?.amount
+                : product?.amount;
+              return `Amt ($): ${
+                amount === undefined || amount === null
+                  ? '-'
+                  : `$${formatNumberWithCommas(amount)}`
+              }`;
+            }
+            if (attribute === 'rap_value' && selectedAttributes['rap_value']) {
+              const rapValue = product.rap_value;
+              return `Rap Val ($):  ${
+                rapValue === undefined || rapValue === null
+                  ? '-'
+                  : `$${formatNumberWithCommas(rapValue)}`
+              }`;
+            }
+            if (attribute === 'rap' && selectedAttributes['rap']) {
+              const rap = product.rap;
+              return `Rap ($): ${
+                rap === undefined || rap === null
+                  ? '-'
+                  : `$${formatNumberWithCommas(rap)}`
+              } `;
+            }
+            if (
+              attribute === 'price_per_carat' &&
+              selectedAttributes['price_per_carat']
+            ) {
+              const pricePerCarat = product.price_per_carat;
+              return `Pr/Ct: ${
+                pricePerCarat === undefined || pricePerCarat === null
+                  ? '-'
+                  : `$${formatNumberWithCommas(pricePerCarat)}`
+              }`;
             }
             if (
               attribute === 'current_max_bid' &&
@@ -169,6 +208,21 @@ const Share = ({
               return `Current Max Bid: ${formatNumber(
                 product?.current_max_bid
               )}`;
+            }
+            if (
+              attribute === 'table_percentage' &&
+              selectedAttributes['table_percentage']
+            ) {
+              return `Table %: ${formatNumber(product?.table_percentage)}`;
+            }
+            if (
+              attribute === 'depth_percentage' &&
+              selectedAttributes['depth_percentage']
+            ) {
+              return `Depth %: ${formatNumber(product?.depth_percentage)}`;
+            }
+            if (attribute === 'carats' && selectedAttributes['carats']) {
+              return `Carats: ${formatNumber(product?.carats)}`;
             }
             if (
               attribute === 'my_current_bid' &&
@@ -203,7 +257,7 @@ const Share = ({
             }
             // For other attributes, continue as before
             const option = shareOptions.find(opt => opt.state === attribute);
-            return option ? `${option.name}: ${product[attribute]}` : '';
+            return option ? `${option.name}: ${product[attribute] ?? '-'}` : '';
           })
           .filter(line => line) // Remove any undefined entries
           .join('\n');
@@ -212,6 +266,14 @@ const Share = ({
 
     try {
       await navigator.clipboard.writeText(selectedData);
+      ///Track event
+      trackShareEvent({
+        page: shareTrackIdentifier,
+        lot_ids: selectedRows.map(data => data['lot_id']),
+        stone_fields: Object.keys(selectedAttributes).filter(
+          key => selectedAttributes[key] === true
+        )
+      });
       setShowToast(true); // Show the toast notification
       setTimeout(() => {
         setShowToast(false); // Hide the toast notification after some time
