@@ -7,12 +7,14 @@ const SavedSearchSkeleton = () => {
       <Skeleton
         width={350}
         variant="rectangular"
+        sx={{ bgcolor: 'var(--neutral-200)' }}
         height={20}
         animation="wave"
         className="rounded-[4px]"
       />
       <div className="border-[1px] border-neutral200 flex flex-col rounded-[8px]">
         <Skeleton
+          sx={{ bgcolor: 'var(--neutral-200)' }}
           variant="rectangular"
           height={60}
           animation="wave"
@@ -33,6 +35,7 @@ const SavedSearchSkeleton = () => {
                   />
 
                   <Skeleton
+                    sx={{ bgcolor: 'var(--neutral-200)' }}
                     width={84}
                     variant="rectangular"
                     height={84}
@@ -41,6 +44,7 @@ const SavedSearchSkeleton = () => {
                   />
                   <div className="flex flex-col gap-4">
                     <Skeleton
+                      sx={{ bgcolor: 'var(--neutral-200)' }}
                       width={100}
                       variant="rectangular"
                       height={20}
@@ -48,6 +52,7 @@ const SavedSearchSkeleton = () => {
                       className="rounded-[4px]"
                     />
                     <Skeleton
+                      sx={{ bgcolor: 'var(--neutral-200)' }}
                       width={150}
                       variant="rectangular"
                       height={20}
@@ -58,6 +63,7 @@ const SavedSearchSkeleton = () => {
                 </div>
                 <div>
                   <Skeleton
+                    sx={{ bgcolor: 'var(--neutral-200)' }}
                     width={600}
                     variant="rectangular"
                     height={84}

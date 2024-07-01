@@ -292,6 +292,7 @@ export function DiamondDetailsComponent({
           ) : (
             <Skeleton
               width={134}
+              sx={{ bgcolor: 'var(--neutral-200)' }}
               height={34}
               variant="rectangular"
               animation="wave"
@@ -350,6 +351,7 @@ export function DiamondDetailsComponent({
             ) : (
               <Skeleton
                 width={284}
+                sx={{ bgcolor: 'var(--neutral-200)' }}
                 height={42}
                 variant="rectangular"
                 animation="wave"
@@ -502,6 +504,7 @@ export function DiamondDetailsComponent({
               <Skeleton
                 width={150}
                 height={30}
+                sx={{ bgcolor: 'var(--neutral-200)' }}
                 className="rounded-[4px]"
                 variant="rectangular"
                 animation="wave"
@@ -516,6 +519,7 @@ export function DiamondDetailsComponent({
             ) : (
               <Skeleton
                 width={100}
+                sx={{ bgcolor: 'var(--neutral-200)' }}
                 height={25}
                 className="rounded-[4px]"
                 variant="rectangular"
@@ -533,6 +537,7 @@ export function DiamondDetailsComponent({
             ) : (
               <Skeleton
                 width={100}
+                sx={{ bgcolor: 'var(--neutral-200)' }}
                 height={25}
                 className="rounded-[4px]"
                 variant="rectangular"
@@ -552,6 +557,7 @@ export function DiamondDetailsComponent({
               <Skeleton
                 width={100}
                 height={25}
+                sx={{ bgcolor: 'var(--neutral-200)' }}
                 className="rounded-[4px]"
                 variant="rectangular"
                 animation="wave"
@@ -570,6 +576,7 @@ export function DiamondDetailsComponent({
               <Skeleton
                 width={100}
                 height={25}
+                sx={{ bgcolor: 'var(--neutral-200)' }}
                 className="rounded-[4px]"
                 variant="rectangular"
                 animation="wave"
@@ -588,6 +595,7 @@ export function DiamondDetailsComponent({
               <Skeleton
                 width={100}
                 height={25}
+                sx={{ bgcolor: 'var(--neutral-200)' }}
                 className="rounded-[4px]"
                 variant="rectangular"
                 animation="wave"
