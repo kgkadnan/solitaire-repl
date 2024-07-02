@@ -366,6 +366,7 @@ const Search = () => {
           setAddSearches={setAddSearches}
           setIsLoading={setIsLoading}
           setIsAddDemand={setIsAddDemand}
+          isMatchingPair={false}
         />
       ) : subRoute === SubRoutes.SAVED_SEARCH ? (
         <SavedSearch setIsLoading={setIsLoading} />
