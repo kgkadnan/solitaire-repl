@@ -1730,6 +1730,7 @@ const Dashboard = () => {
               ) : (
                 <Skeleton
                   width={720}
+                  sx={{ bgcolor: 'var(--neutral-200)' }}
                   variant="rectangular"
                   height={54}
                   animation="wave"
@@ -1749,6 +1750,7 @@ const Dashboard = () => {
                       >
                         <Skeleton
                           width={'100%'}
+                          sx={{ bgcolor: 'var(--neutral-200)' }}
                           height={97}
                           variant="rectangular"
                           animation="wave"
@@ -1812,6 +1814,7 @@ const Dashboard = () => {
                   <Skeleton
                     height={400}
                     width={'100%'}
+                    sx={{ bgcolor: 'var(--neutral-200)' }}
                     animation="wave"
                     variant="rectangular"
                     className="rounded-[4px]"
@@ -1959,6 +1962,7 @@ const Dashboard = () => {
                 <Skeleton
                   height={420}
                   width={'100%'}
+                  sx={{ bgcolor: 'var(--neutral-200)' }}
                   animation="wave"
                   variant="rectangular"
                   className="rounded-[4px]"
@@ -2066,6 +2070,7 @@ const Dashboard = () => {
                     height={420}
                     width={300}
                     animation="wave"
+                    sx={{ bgcolor: 'var(--neutral-200)' }}
                     variant="rectangular"
                     className="rounded-[4px]"
                   />
@@ -2102,6 +2107,7 @@ const Dashboard = () => {
                     width={'100%'}
                     variant="rectangular"
                     height={400}
+                    sx={{ bgcolor: 'var(--neutral-200)' }}
                     className="rounded-[4px]"
                   />
                 )}
@@ -2114,6 +2120,7 @@ const Dashboard = () => {
                     width={'100%'}
                     variant="rectangular"
                     height={400}
+                    sx={{ bgcolor: 'var(--neutral-200)' }}
                     className="rounded-[4px]"
                   />
                 ) : (

@@ -177,6 +177,7 @@ const DashboardCarousel: React.FC<IDashboardCarouselProps> = ({ images }) => {
           height={400}
           className="rounded-[4px]"
           variant="rectangular"
+          sx={{ bgcolor: 'var(--neutral-200)' }}
         />
       )}
     </div>

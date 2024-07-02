@@ -1126,6 +1126,7 @@ const Result = ({
               height={'24px'}
               width={'336px'}
               animation="wave"
+              sx={{ bgcolor: 'var(--neutral-200)' }}
             />
           ) : (
             ManageLocales('app.result.headerResult')
