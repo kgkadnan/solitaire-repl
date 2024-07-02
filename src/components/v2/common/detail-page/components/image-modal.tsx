@@ -169,6 +169,7 @@ const ImageModal: React.FC<IModalProps> = ({
                   <Skeleton
                     width={625}
                     variant="rectangular"
+                    sx={{ bgcolor: 'var(--neutral-200)' }}
                     height={520}
                     animation="wave"
                   />
@@ -217,6 +218,7 @@ const ImageModal: React.FC<IModalProps> = ({
                     width={88}
                     variant="rectangular"
                     height={30}
+                    sx={{ bgcolor: 'var(--neutral-200)' }}
                     animation="wave"
                   />
                 )}

@@ -947,6 +947,7 @@ const MyCart = () => {
               height={'21px'}
               width={'61px'}
               animation="wave"
+              sx={{ bgcolor: 'var(--neutral-200)' }}
             />
           ) : (
             ManageLocales('app.myCart.mycart')
