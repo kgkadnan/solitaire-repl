@@ -63,7 +63,6 @@ import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import fireSvg from '@public/v2/assets/icons/data-table/fire-icon.svg';
 import threeDotsSvg from '@public/v2/assets/icons/threedots.svg';
 import { Dropdown } from '@/components/v2/common/dropdown-menu';
-import { DiamondDetailsComponent } from '@/components/v2/common/detail-page';
 import ImageModal from '@/components/v2/common/detail-page/components/image-modal';
 import { getShapeDisplayName } from '@/utils/v2/detail-page';
 import { FILE_URLS } from '@/constants/v2/detail-page';
@@ -88,7 +87,8 @@ import { handleComment } from '../search/result/helpers/handle-comment';
 import { handleConfirmStone } from '../search/result/helpers/handle-confirm-stone';
 import { IItem } from '../search/saved-search/saved-search';
 import { useLazyGetAllMatchingPairQuery } from '@/features/api/match-pair';
-import MatchPairTable from './match-pair-table';
+import MatchPairTable from './components/table';
+import { MatchPairDetails } from './components/details';
 
 // Column mapper outside the component to avoid re-creation on each render
 
@@ -143,7 +143,7 @@ const MatchingPairResult = ({
 
   const [commentValue, setCommentValue] = useState('');
   const [textAreaValue, setTextAreaValue] = useState('');
-
+  const [originalData, setOriginalData] = useState();
   const [showAppointmentForm, setShowAppointmentForm] = useState(false);
   const [appointmentPayload, setAppointmentPayload] =
     useState<IAppointmentPayload>({
@@ -195,6 +195,7 @@ const MatchingPairResult = ({
           setHasLimitExceeded(false);
           let matchingPair = res.data?.products.flat();
           dataTableSetState.setRows(matchingPair);
+          setOriginalData(res.data?.products);
         }
 
         setRowSelection({});
@@ -627,6 +628,8 @@ const MatchingPairResult = ({
             }).then(res => {
               let matchingPair = res.data?.products.flat();
               dataTableSetState.setRows(matchingPair);
+              setOriginalData(res.data?.products);
+
               setRowSelection({});
               setErrorText('');
               setData(res.data);
@@ -746,6 +749,8 @@ const MatchingPairResult = ({
               let matchingPair = res.data?.products.flat();
 
               dataTableSetState.setRows(matchingPair);
+              setOriginalData(res.data?.products);
+
               setRowSelection({});
               setErrorText('');
               setData(res.data);
@@ -923,6 +928,8 @@ const MatchingPairResult = ({
               let matchingPair = res.data?.products.flat();
 
               dataTableSetState.setRows(matchingPair);
+              setOriginalData(res.data?.products);
+
               setRowSelection({});
               setErrorText('');
               setData(res.data);
@@ -1151,15 +1158,15 @@ const MatchingPairResult = ({
               animation="wave"
             />
           ) : (
-            <div>Matching Pair {matchingPairData.length}</div>
+            <div>Matching Pair ({dataTableState.rows.length / 2})</div>
           )}
         </p>
       </div>
 
       {isDetailPage && detailPageData?.length ? (
         <>
-          <DiamondDetailsComponent
-            data={dataTableState.rows}
+          <MatchPairDetails
+            data={originalData}
             filterData={detailPageData}
             goBackToListView={goBack}
             handleDetailPage={handleDetailPage}

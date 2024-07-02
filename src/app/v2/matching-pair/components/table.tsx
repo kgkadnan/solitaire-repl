@@ -1,5 +1,5 @@
 import { Box, Stack } from '@mui/material';
-import styles from '../../../components/v2/common/data-table/data-table.module.scss';
+import styles from '../../../../components/v2/common/data-table/data-table.module.scss';
 import {
   MRT_ExpandButton,
   MRT_GlobalFilterTextField,
