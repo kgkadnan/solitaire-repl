@@ -941,6 +941,7 @@ const Form = ({
                   setActiveTab={setActiveTab}
                   handleCloseSpecificTab={handleCloseSpecificTab}
                   setIsLoading={setIsLoading}
+                  isMatchingPair={isMatchingPair}
                 />
               </div>
               <div className="pr-[2px] flex gap-[12px]  justify-end flex-wrap">

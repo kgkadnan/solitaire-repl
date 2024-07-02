@@ -11,13 +11,15 @@ import { useAppDispatch } from '@/hooks/hook';
 const Breadcrum = ({
   searchParameters,
   activeTab,
-  handleCloseSpecificTab
+  handleCloseSpecificTab,
+  isMatchingPair
 }: {
   searchParameters: any;
   activeTab: number;
   setActiveTab: Dispatch<SetStateAction<number>>;
   handleCloseSpecificTab: (_id: number) => void;
   setIsLoading?: any;
+  isMatchingPair?: boolean;
 }) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -27,7 +29,9 @@ const Breadcrum = ({
         <div className=" text-neutral600 text-mMedium flex gap-[8px] ">
           <Link
             className={'flex items-center cursor-pointer'}
-            href={`${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`}
+            href={`${
+              isMatchingPair ? Routes.MATCHING_PAIR : Routes.SEARCH
+            }?active-tab=${SubRoutes.NEW_SEARCH}`}
             onClick={() => {
               dispatch(setStartTime(new Date().toISOString()));
             }}
@@ -51,15 +55,19 @@ const Breadcrum = ({
               handlePillClick={() => {
                 // setIsLoading(true);
                 router.push(
-                  `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${index + 1}`
+                  `${
+                    isMatchingPair ? Routes.MATCHING_PAIR : Routes.SEARCH
+                  }?active-tab=${SubRoutes.RESULT}-${index + 1}`
                 );
               }}
               handlePillEdit={() => {
                 // setIsLoading(true);
                 router.push(
-                  `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
-                    index + 1
-                  }&edit=${SubRoutes.RESULT}`
+                  `${
+                    isMatchingPair ? Routes.MATCHING_PAIR : Routes.SEARCH
+                  }?active-tab=${SubRoutes.RESULT}-${index + 1}&edit=${
+                    SubRoutes.RESULT
+                  }`
                 );
               }}
               handlePillDelete={() => {

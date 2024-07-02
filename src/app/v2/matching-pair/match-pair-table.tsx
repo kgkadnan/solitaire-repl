@@ -773,6 +773,7 @@ const MatchPairTable = ({
                 setActiveTab={setActiveTab}
                 handleCloseSpecificTab={handleCloseSpecificTab}
                 setIsLoading={setIsLoading}
+                isMatchingPair={true}
               />
             </div>
             <div className="pr-[2px] flex gap-[12px] w-[500px]  justify-end flex-wrap relative">
