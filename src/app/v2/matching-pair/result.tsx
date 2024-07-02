@@ -239,15 +239,6 @@ const MatchingPairResult = ({
     dataTableState.rows
   ]);
 
-  const RenderMatchPairData = ({ row, renderedCellValue }: any) => {
-    console.log(
-      renderedCellValue,
-      '----------------------------->',
-      row.original
-    );
-    return <div>{row.original.lot_id}</div>;
-  };
-
   const mapColumns = (columns: any) =>
     columns
       ?.filter(({ is_disabled }: any) => !is_disabled)

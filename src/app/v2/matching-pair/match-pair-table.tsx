@@ -189,13 +189,13 @@ const MatchPairTable = ({
   // handleConfirmStone,
   setIsConfirmStone,
   setConfirmStoneData,
-  deleteCartHandler,
-  activeCartTab,
+  // deleteCartHandler,
+  // activeCartTab,
   setIsCompareStone,
   setCompareStoneData,
   setIsInputDialogOpen,
   // isDashboard,
-  setIsDetailPage,
+  // setIsDetailPage,
   handleCreateAppointment
 }: any) => {
   // Fetching saved search data
