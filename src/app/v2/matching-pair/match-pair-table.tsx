@@ -168,8 +168,8 @@ const MatchPairTable = ({
   columns,
   setRowSelection,
   rowSelection,
-  showCalculatedField = false,
-  isResult = false,
+  // showCalculatedField = false,
+  // isResult = false,
   myCart = false,
   activeTab,
   searchParameters,
@@ -194,7 +194,7 @@ const MatchPairTable = ({
   setIsCompareStone,
   setCompareStoneData,
   setIsInputDialogOpen,
-  isDashboard,
+  // isDashboard,
   setIsDetailPage,
   handleCreateAppointment
 }: any) => {
@@ -623,24 +623,14 @@ const MatchPairTable = ({
         height: isFullScreen ? '70vh' : 'calc(100vh - 300px)',
         minHeight: isFullScreen
           ? myCart
-            ? showCalculatedField
-              ? 'calc(100vh - 130px)'
-              : 'calc(100vh - 90px)'
-            : isDashboard
-            ? 'calc(100vh - 180px)'
+            ? 'calc(100vh - 130px)'
             : 'calc(100vh - 230px)'
           : myCart
-          ? showCalculatedField
-            ? isNudge &&
-              (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
-                isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-              ? 'calc(100vh - 420px)'
-              : 'calc(100vh - 343px)'
-            : isNudge &&
-              (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
-                isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-            ? 'calc(100vh - 380px)'
-            : 'calc(100vh - 303px)'
+          ? isNudge &&
+            (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+              isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+            ? 'calc(100vh - 420px)'
+            : 'calc(100vh - 343px)'
           : isNudge &&
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
@@ -648,24 +638,14 @@ const MatchPairTable = ({
           : 'calc(100vh - 300px)',
         maxHeight: isFullScreen
           ? myCart
-            ? showCalculatedField
-              ? 'calc(100vh - 130px)'
-              : 'calc(100vh - 90px)'
-            : isDashboard
-            ? 'calc(100vh - 180px)'
+            ? 'calc(100vh - 130px)'
             : 'calc(100vh - 230px)'
           : myCart
-          ? showCalculatedField
-            ? isNudge &&
-              (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
-                isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-              ? 'calc(100vh - 420px)'
-              : 'calc(100vh - 343px)'
-            : isNudge &&
-              (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
-                isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-            ? 'calc(100vh - 380px)'
-            : 'calc(100vh - 303px)'
+          ? isNudge &&
+            (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+              isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+            ? 'calc(100vh - 420px)'
+            : 'calc(100vh - 343px)'
           : isNudge &&
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
@@ -809,7 +789,7 @@ const MatchPairTable = ({
     },
     renderTopToolbar: ({ table }) => (
       <div>
-        {isResult && (
+        {
           <div className="flex min-h-[55px] items-center justify-between border-b-[1px] border-neutral200 flex px-[16px] py-[8px]">
             <div className="flex lg-w-[calc(100%-500px)] gap-[12px] flex-wrap">
               <Breadcrum
@@ -864,10 +844,9 @@ const MatchPairTable = ({
               />
             </div>
           </div>
-        )}
-        {showCalculatedField && (
-          <CalculatedField rows={rows} selectedProducts={rowSelection} />
-        )}
+        }
+        <CalculatedField rows={rows} selectedProducts={rowSelection} />
+
         <Box
           sx={{
             display: 'flex',
@@ -919,8 +898,9 @@ const MatchPairTable = ({
           </div>
 
           <div className="flex gap-[12px]" style={{ alignItems: 'inherit' }}>
-            {isResult &&
-              (searchParameters &&
+            {
+              // isResult &&
+              searchParameters &&
               !searchParameters[activeTab - 1]?.isSavedSearch ? (
                 <button
                   className=" flex border-[1px] border-neutral200 rounded-[4px] px-2 py-1 shadow-sm bg-neutral0 items-center cursor-pointer h-[37px]"
@@ -937,7 +917,8 @@ const MatchPairTable = ({
                 </button>
               ) : (
                 ''
-              ))}
+              )
+            }
 
             <div
               className=" rounded-[4px] cursor-pointer"
@@ -995,9 +976,7 @@ const MatchPairTable = ({
                 selectedProducts={rowSelection}
                 setErrorText={setErrorText}
                 setIsError={setIsError}
-                shareTrackIdentifier={
-                  myCart ? 'Cart' : isDashboard ? 'Dashboard' : 'Search Results'
-                }
+                shareTrackIdentifier={'Matching Pair'}
               />
             </div>
           </div>
@@ -1006,11 +985,12 @@ const MatchPairTable = ({
     ),
     renderBottomToolbar: ({ table }) => (
       <div
-        className={`px-[16px] border-t-[1px] border-neutral200 ${
-          isDashboard && 'border-b-[1px]'
-        }`}
+        className={`px-[16px] border-t-[1px] border-neutral200 
+       
+        `}
       >
-        {(isResult || isDashboard) && (
+        {
+          // (isResult || isDashboard) && (
           <div className="flex items-center justify-between">
             <div className="flex gap-4 h-[30px]">
               <div className=" border-[1px] border-lengendInCardBorder rounded-[4px] bg-legendInCartFill text-legendInCart">
@@ -1045,24 +1025,14 @@ const MatchPairTable = ({
                     variant: 'primary',
                     label: ManageLocales('app.searchResult.confirmStone'),
                     handler: () => {
-                      isDashboard
-                        ? handleConfirmStone({
-                            selectedRows: rowSelection,
-                            rows: rows,
-                            setIsError,
-                            setErrorText,
-                            setIsConfirmStone,
-                            setConfirmStoneData,
-                            setIsDetailPage
-                          })
-                        : handleConfirmStone({
-                            selectedRows: rowSelection,
-                            rows: rows,
-                            setIsError,
-                            setErrorText,
-                            setIsConfirmStone,
-                            setConfirmStoneData
-                          });
+                      handleConfirmStone({
+                        selectedRows: rowSelection,
+                        rows: rows,
+                        setIsError,
+                        setErrorText,
+                        setIsConfirmStone,
+                        setConfirmStoneData
+                      });
                     }
                   }
                 ]}
@@ -1113,84 +1083,8 @@ const MatchPairTable = ({
               />
             </div>
           </div>
-        )}
-        {myCart && (
-          <div className="flex items-center  justify-between">
-            <div className=""></div>
-            <MRT_TablePagination table={table} />
-            <div className="flex gap-2">
-              <ActionButton
-                actionButtonData={[
-                  {
-                    variant: 'secondary',
-                    label: ManageLocales('app.myCart.actionButton.delete'),
-                    handler: deleteCartHandler
-                  },
-
-                  {
-                    variant: 'primary',
-                    label: ManageLocales(
-                      'app.myCart.actionButton.confirmStone'
-                    ),
-                    handler: () => {
-                      handleConfirmStone({
-                        selectedRows: rowSelection,
-                        rows: rows,
-                        setIsError,
-                        setErrorText,
-                        setIsConfirmStone,
-                        setConfirmStoneData
-                      });
-                    },
-                    isHidden: activeCartTab !== AVAILABLE_STATUS
-                  }
-                ]}
-              />
-              <Dropdown
-                dropdownTrigger={
-                  <Image
-                    src={threeDotsSvg}
-                    alt="threeDotsSvg"
-                    width={43}
-                    height={43}
-                  />
-                }
-                dropdownMenu={[
-                  {
-                    label: ManageLocales(
-                      'app.myCart.actionButton.findMatchingPair'
-                    ),
-                    handler: () => {},
-                    isHidden: activeCartTab !== AVAILABLE_STATUS,
-                    commingSoon: true
-                  },
-                  {
-                    label: ManageLocales(
-                      'app.myCart.actionButton.bookAppointment'
-                    ),
-                    handler: () => {
-                      handleCreateAppointment();
-                    },
-                    commingSoon:
-                      isKycVerified?.customer?.kyc?.status ===
-                        kycStatus.INPROGRESS ||
-                      isKycVerified?.customer?.kyc?.status ===
-                        kycStatus.REJECTED,
-                    isHidden: activeCartTab !== AVAILABLE_STATUS
-                  },
-                  {
-                    label: ManageLocales(
-                      'app.myCart.actionButton.viewSimilarStone'
-                    ),
-                    handler: () => {},
-                    isHidden: activeCartTab === AVAILABLE_STATUS,
-                    commingSoon: true
-                  }
-                ]}
-              />
-            </div>
-          </div>
-        )}
+          // )
+        }
       </div>
     )
   });
