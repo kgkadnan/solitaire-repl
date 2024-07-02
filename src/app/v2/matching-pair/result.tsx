@@ -116,7 +116,6 @@ const MatchingPairResult = ({
   const [triggerAvailableSlots] = useLazyGetAvailableMyAppointmentSlotsQuery(
     {}
   );
-  console.log('data----------------------->');
   const { data: searchList }: { data?: IItem[] } =
     useGetSavedSearchListQuery('');
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();
@@ -201,12 +200,10 @@ const MatchingPairResult = ({
         setRowSelection({});
         setErrorText('');
         setData(res.data);
-        console.log('tettete', res.data);
         setIsLoading(false);
       }
     });
   };
-  console.log('jjjjjjjj', data);
   const handleDetailPage = ({ row }: { row: any }) => {
     if (isConfirmStone) {
       setBreadCrumLabel('Confirm Stone');
@@ -508,7 +505,6 @@ const MatchingPairResult = ({
     () => mapColumns(dataTableState.columns),
     [dataTableState.columns]
   );
-  console.log(memoizedColumns, 'memoizedColumns');
   const handleNewSearch = () => {
     router.push(`${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`);
   };
@@ -629,7 +625,8 @@ const MatchingPairResult = ({
               limit: MATCHING_PAIR_DATA_LIMIT,
               offset: 0
             }).then(res => {
-              dataTableSetState.setRows(res.data?.products);
+              let matchingPair = res.data?.products.flat();
+              dataTableSetState.setRows(matchingPair);
               setRowSelection({});
               setErrorText('');
               setData(res.data);
@@ -746,7 +743,9 @@ const MatchingPairResult = ({
               limit: MATCHING_PAIR_DATA_LIMIT,
               offset: 0
             }).then(res => {
-              dataTableSetState.setRows(res.data?.products);
+              let matchingPair = res.data?.products.flat();
+
+              dataTableSetState.setRows(matchingPair);
               setRowSelection({});
               setErrorText('');
               setData(res.data);
@@ -921,7 +920,9 @@ const MatchingPairResult = ({
               limit: MATCHING_PAIR_DATA_LIMIT,
               offset: 0
             }).then(res => {
-              dataTableSetState.setRows(res.data?.products);
+              let matchingPair = res.data?.products.flat();
+
+              dataTableSetState.setRows(matchingPair);
               setRowSelection({});
               setErrorText('');
               setData(res.data);
@@ -1136,8 +1137,6 @@ const MatchingPairResult = ({
         <p className="text-lMedium font-medium text-neutral900">
           {editRoute ? (
             ManageLocales('app.result.headerEdit')
-          ) : isCompareStone ? (
-            'Diamond Comparison Overview'
           ) : showAppointmentForm ? (
             ManageLocales('app.myAppointment.header')
           ) : isDetailPage ? (

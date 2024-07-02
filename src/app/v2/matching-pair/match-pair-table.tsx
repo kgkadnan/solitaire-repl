@@ -182,21 +182,15 @@ const MatchPairTable = ({
   searchList,
   setIsLoading,
   handleAddToCart,
-  // handleConfirmStone,
   setIsConfirmStone,
   setConfirmStoneData,
-  // deleteCartHandler,
-  // activeCartTab,
   setIsCompareStone,
   setCompareStoneData,
   setIsInputDialogOpen,
-  // isDashboard,
-  // setIsDetailPage,
   handleCreateAppointment
 }: any) => {
   // Fetching saved search data
   const router = useRouter();
-  console.log('rows----------->', rows);
   const [triggerSavedSearch] = useLazyGetAllSavedSearchesQuery({});
   let [triggerProductCountApi] = useLazyGetProductCountQuery();
   const [isDropDownOpen, setIsDropDownOpen] = useState(false);
