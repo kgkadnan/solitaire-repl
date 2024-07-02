@@ -30,10 +30,8 @@ import { useEffect, useState } from 'react';
 import { useLazyGetProductCountQuery } from '@/features/api/product';
 import { constructUrlParams } from '@/utils/v2/construct-url-params';
 import {
-  AVAILABLE_STATUS,
   MAX_SAVED_SEARCH_COUNT,
-  MAX_SEARCH_TAB_LIMIT,
-  SOLD_STATUS
+  MAX_SEARCH_TAB_LIMIT
 } from '@/constants/business-logic';
 import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
 import { useRouter } from 'next/navigation';
@@ -45,8 +43,6 @@ import { kycStatus } from '@/constants/enums/kyc';
 import { handleConfirmStone } from '@app/v2/search/result/helpers/handle-confirm-stone';
 import { handleCompareStone } from '@/app/v2/search/result/helpers/handle-compare-stone';
 import CommonPoppup from '@/app/v2/login/component/common-poppup';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSort, faSortDown } from '@fortawesome/free-solid-svg-icons';
 import { ManageLocales } from '@/utils/v2/translate';
 import ActionButton from '@/components/v2/common/action-button';
 import CalculatedField from '@/components/v2/common/calculated-field';
@@ -500,10 +496,11 @@ const MatchPairTable = ({
     enableColumnFilters: false,
     enableStickyHeader: true,
     enableBottomToolbar: true,
-    enableGrouping: true,
+    enableGrouping: false,
     enableExpandAll: false,
     enableColumnDragging: false,
     groupedColumnMode: 'remove',
+    enableSorting: false,
     enableRowSelection: true,
     enableToolbarInternalActions: true,
     globalFilterFn: 'startsWith',
@@ -517,24 +514,8 @@ const MatchPairTable = ({
     icons: {
       SearchIcon: () => (
         <Image src={searchIcon} alt={'searchIcon'} className="mr-[6px]" />
-      ),
-      SortIcon: (props: any) => (
-        <FontAwesomeIcon icon={faSort} width={8} height={8} {...props} />
-      ), //best practice
-      SyncAltIcon: (props: any) => (
-        <FontAwesomeIcon
-          icon={faSort}
-          {...props}
-          // width={8} height={8}
-          style={{ color: 'neutral400' }}
-          className="transform !rotate-0 !pl-1"
-        />
-      ),
-      ArrowDownwardIcon: (props: any) => (
-        <FontAwesomeIcon icon={faSortDown} {...props} width={8} height={8} />
       )
     },
-    // headerSortico
     muiTableBodyRowProps: ({ row }) => {
       return {
         onClick: row.id.includes('shape')
@@ -1071,13 +1052,6 @@ const MatchPairTable = ({
                         kycStatus.INPROGRESS ||
                       isKycVerified?.customer?.kyc?.status ===
                         kycStatus.REJECTED
-                  },
-                  {
-                    label: ManageLocales(
-                      'app.search.actionButton.findMatchingPair'
-                    ),
-                    handler: () => {},
-                    commingSoon: true
                   }
                 ]}
               />

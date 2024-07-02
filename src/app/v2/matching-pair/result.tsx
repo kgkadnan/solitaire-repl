@@ -249,11 +249,11 @@ const MatchingPairResult = ({
           header: short_label,
           enableGlobalFilter: accessor === 'lot_id',
           enableGrouping: accessor === 'shape',
-          enableSorting:
-            accessor !== 'shape_full' &&
-            accessor !== 'details' &&
-            accessor !== 'fire_icon' &&
-            accessor !== 'location',
+          // enableSorting:
+          //   accessor !== 'shape_full' &&
+          //   accessor !== 'details' &&
+          //   accessor !== 'fire_icon' &&
+          //   accessor !== 'location',
           minSize: 5,
           maxSize: accessor === 'details' ? 100 : 200,
           size: 5,
@@ -275,6 +275,7 @@ const MatchingPairResult = ({
               minSize: 26,
               size: 26,
               maxSize: 26,
+
               Cell: ({ row }: { row: any }) => {
                 return row.original.in_high_demand ? (
                   <Tooltip
@@ -1298,8 +1299,6 @@ const MatchingPairResult = ({
                   columns={memoizedColumns}
                   setRowSelection={setRowSelection}
                   rowSelection={rowSelection}
-                  // showCalculatedField={true}
-                  // isResult={true}
                   activeTab={activeTab}
                   searchParameters={searchParameters}
                   setActiveTab={setActiveTab}
