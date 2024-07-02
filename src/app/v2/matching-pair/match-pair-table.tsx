@@ -306,7 +306,9 @@ const MatchPairTable = ({
                 />
               );
             } else {
-              const data: any = JSON.parse(localStorage.getItem('Search')!);
+              const data: any = JSON.parse(
+                localStorage.getItem('MatchingPair')!
+              );
 
               if (data?.length) {
                 let isAlreadyOpenIndex = isSearchAlreadyExist(
@@ -419,7 +421,7 @@ const MatchPairTable = ({
   const [updateSavedSearch] = useUpdateSavedSearchMutation();
 
   const handleUpdateSaveSearch = () => {
-    const yourSelection = JSON.parse(localStorage.getItem('Search')!);
+    const yourSelection = JSON.parse(localStorage.getItem('MatchingPair')!);
     const updateSaveSearchData = {
       id: yourSelection[activeTab - 1]?.id,
       meta_data: yourSelection[activeTab - 1]?.queryParams,
@@ -455,7 +457,7 @@ const MatchPairTable = ({
   };
 
   const downloadAllSearchTabsExcelHandler = () => {
-    const searchTabsData = JSON.parse(localStorage.getItem('Search')!);
+    const searchTabsData = JSON.parse(localStorage.getItem('MatchingPair')!);
     const allTabsIds = searchTabsData.map((tab: any) => tab.searchId);
     downloadExcelHandler({
       previousSearch: allTabsIds,

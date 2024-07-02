@@ -343,7 +343,11 @@ const Form = ({
   // Load saved search data when component mounts
   useEffect(() => {
     setIsLoading(false);
-    let modifySearchResult = JSON.parse(localStorage.getItem('Search')!);
+    let modifySearchResult = JSON.parse(
+      isMatchingPair
+        ? localStorage.getItem('MatchingPair')!
+        : localStorage.getItem('Search')!
+    );
 
     let modifysavedSearchData = savedSearch?.savedSearch?.meta_data;
     setSelectedCaratRange([]);
@@ -371,7 +375,11 @@ const Form = ({
 
   useEffect(() => {
     let data: ISavedSearch[] | [] =
-      JSON.parse(localStorage.getItem('Search')!) || [];
+      JSON.parse(
+        isMatchingPair
+          ? localStorage.getItem('MatchingPair')!
+          : localStorage.getItem('Search')!
+      ) || [];
     if (data?.length > 0 && data[data?.length - 1]) {
       setAddSearches(data);
     }
@@ -635,7 +643,11 @@ const Form = ({
             };
             updateSavedSearch(updateSavedData);
 
-            let localStorageData = JSON.parse(localStorage.getItem('Search')!);
+            let localStorageData = JSON.parse(
+              isMatchingPair
+                ? localStorage.getItem('MatchingPair')!
+                : localStorage.getItem('Search')!
+            );
 
             let isAlreadyOpenIndex = isSearchAlreadyExist(
               localStorageData,
@@ -671,7 +683,9 @@ const Form = ({
           updateSavedSearch(updateSaveSearchData)
             .unwrap()
             .then(() => {
-              handleFormSearch(true);
+              isMatchingPair
+                ? handleFormSearch(true, '', 'MatchingPair')
+                : handleFormSearch(true);
             })
             .catch((error: any) => {
               logger.error(error);
@@ -685,7 +699,9 @@ const Form = ({
           })
             .unwrap()
             .then((res: any) => {
-              handleFormSearch(true, res.id);
+              isMatchingPair
+                ? handleFormSearch(true, res.id, 'MatchingPair')
+                : handleFormSearch(true, res.id);
             })
             .catch((error: any) => {
               setInputError(error.data.message);

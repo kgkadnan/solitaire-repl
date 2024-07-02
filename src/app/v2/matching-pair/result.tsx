@@ -1151,7 +1151,7 @@ const MatchingPairResult = ({
               animation="wave"
             />
           ) : (
-            ManageLocales('app.result.headerResult')
+            <div>Matching Pair {matchingPairData.length}</div>
           )}
         </p>
       </div>
@@ -1231,7 +1231,8 @@ const MatchingPairResult = ({
               isFrom={breadCrumLabel}
               handleDetailImage={handleDetailImage}
               handleDetailPage={handleDetailPage}
-              identifier={'result'}
+              identifier={'Matching Pair'}
+              isMatchingPair={true}
             />
           ) : isCompareStone ? (
             <CompareStone
@@ -1251,6 +1252,7 @@ const MatchingPairResult = ({
               setIsConfirmStone={setIsConfirmStone}
               setConfirmStoneData={setConfirmStoneData}
               setIsDetailPage={setIsDetailPage}
+              isMatchingPair={true}
             />
           ) : showAppointmentForm ? (
             <BookAppointment

@@ -10,6 +10,7 @@ interface IDeleteSavedSearchHandler {
   setDialogContent: React.Dispatch<React.SetStateAction<React.ReactNode>>;
   setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
   handleDelete: () => void;
+  isMatchingPair?: boolean;
 }
 
 // Handles the deletion of selected stones.
@@ -19,10 +20,13 @@ export const deleteSavedSearchHandler = ({
   setErrorText,
   setIsDialogOpen,
   setDialogContent,
-  handleDelete
+  handleDelete,
+  isMatchingPair
 }: IDeleteSavedSearchHandler) => {
   // Get saved search data from local storage
-  const searchTabData = JSON.parse(localStorage.getItem('Search') ?? '[]');
+  const searchTabData = isMatchingPair
+    ? JSON.parse(localStorage.getItem('MatchingPair') ?? '[]')
+    : JSON.parse(localStorage.getItem('Search') ?? '[]');
 
   // Check if stones are selected for deletion
   if (selectedCheckboxes?.length) {

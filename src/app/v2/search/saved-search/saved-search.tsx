@@ -313,6 +313,7 @@ const SavedSearch = ({ setIsLoading }: any) => {
                             triggerProductCountApi,
                             setDialogContent,
                             setIsDialogOpen
+                            // isMatchingPair={true}
                           })
                         }
                       >
@@ -394,6 +395,7 @@ const SavedSearch = ({ setIsLoading }: any) => {
                             setIsError,
                             setIsLoading
                           })
+                        // isMatchingPair={true}
                       })
                   }
                 ]}

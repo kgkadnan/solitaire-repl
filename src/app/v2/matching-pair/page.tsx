@@ -179,7 +179,9 @@ const MatchingPair = () => {
       setSearchParameters([]);
       setAddSearches([]);
       handleReset(setState, errorSetState);
-      router.push(`${Routes.MATCHING_PAIR}?active-tab=${MatchSubRoutes.NEW_SEARCH}`);
+      router.push(
+        `${Routes.MATCHING_PAIR}?active-tab=${MatchSubRoutes.NEW_SEARCH}`
+      );
     } else {
       setSearchParameters(closeSpecificSearch);
       setAddSearches(closeSpecificSearch);
@@ -325,7 +327,7 @@ const MatchingPair = () => {
                         setStoredSelection: setSearchParameters,
                         setSaveSearchName,
                         setInputError,
-                        isMatchingPair:true
+                        isMatchingPair: true
                       });
                     }
                   }
