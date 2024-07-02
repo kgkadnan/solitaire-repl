@@ -123,6 +123,7 @@ const ResponsiveTable: React.FC<IResponsiveTableProps> = ({
                     ) : (
                       <Skeleton
                         width={60}
+                        sx={{ bgcolor: 'var(--neutral-200)' }}
                         variant="rectangular"
                         animation="wave"
                         className="rounded-[4px]"
