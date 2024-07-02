@@ -31,7 +31,7 @@ const MyAppointmentSkeleton = () => {
             height={'40px'}
             width={'185px'}
             animation="wave"
-            className=""
+            className="rounded-r-[4px]"
           />
         </div>
       </div>
@@ -42,13 +42,15 @@ const MyAppointmentSkeleton = () => {
               <div
                 className={`py-4 flex   items-center  ${
                   data === 2
-                    ? 'w-[24%]'
+                    ? 'w-[25%]'
                     : data === 3
-                    ? 'w-[30%]'
+                    ? 'w-[31%]'
+                    : data === 4
+                    ? 'w-[27%] pl-[17px]'
                     : data === 5
                     ? 'w-[20%]'
                     : 'w-[25%]'
-                }  px-3 `}
+                }  px-4 `}
                 key={data}
               >
                 <Skeleton
@@ -79,7 +81,6 @@ const MyAppointmentSkeleton = () => {
                   height={'64px'}
                   width={'64px'}
                   animation="wave"
-                  className="rounded-l-[4px]"
                 />
                 <Skeleton
                   variant="rectangular"
@@ -98,7 +99,6 @@ const MyAppointmentSkeleton = () => {
                   height={'19px'}
                   width={'170px'}
                   animation="wave"
-                  className="rounded-l-[4px]"
                 />
               </div>
               <div className=" w-[25%]">
@@ -108,7 +108,6 @@ const MyAppointmentSkeleton = () => {
                   height={'19px'}
                   width={'248px'}
                   animation="wave"
-                  className="rounded-l-[4px]"
                 />
               </div>
               <div className=" w-[20%]">
@@ -118,7 +117,6 @@ const MyAppointmentSkeleton = () => {
                   height={'19px'}
                   width={'248px'}
                   animation="wave"
-                  className="rounded-l-[4px]"
                 />
               </div>
             </div>
