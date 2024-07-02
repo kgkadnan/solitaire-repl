@@ -79,7 +79,8 @@ const authorizedLogin = (WrappedComponent: React.ComponentType) => {
       currentPath !== '/v2/new-arrivals' &&
       currentPath !== '/v2/my-cart' &&
       !(currentPath === '/v2/search' && searchParams !== 'new-search') &&
-      currentPath !== '/v2/your-orders'
+      currentPath !== '/v2/your-orders' &&
+      currentPath !== '/v2/my-appointments'
     ) {
       return <CustomKGKLoader />; // Or any other loading indicator
     }
