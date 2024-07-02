@@ -3,8 +3,11 @@
 import * as React from 'react';
 import * as AccordionPrimitive from '@radix-ui/react-accordion';
 import { ChevronDown } from 'lucide-react';
-
+import addIcon from '@public/v2/assets/icons/add-carat.svg';
+import lessIcon from '@public/v2/assets/icons/less-icon.svg';
 import { cn } from '@lib/utils';
+import { ManageLocales } from '@/utils/v2/translate';
+import Image from 'next/image';
 
 const Accordion = AccordionPrimitive.Root;
 
@@ -38,6 +41,39 @@ const AccordionTrigger = React.forwardRef<
 ));
 AccordionTrigger.displayName = AccordionPrimitive.Trigger.displayName;
 
+const CustomAccordionTrigger = React.forwardRef<
+  React.ElementRef<typeof AccordionPrimitive.Trigger>,
+  React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger>
+>(({ className, children, ...props }, ref) => (
+  <AccordionPrimitive.Header className="flex">
+    <AccordionPrimitive.Trigger
+      ref={ref}
+      className={cn(
+        'flex flex-1 items-center justify-between font-medium transition-all [&[data-state=open]>svg]:rotate-180',
+        className
+      )}
+      {...props}
+    >
+      {children}
+      <button className="flex justify-center items-center font-medium w-[92px] py-[8px] rounded-[4px] gap-1 bg-neutral0 border-[1px] border-solid border-neutral200  h-[30px] text-sMedium cursor-pointer hover:bg-neutral50">
+        {props?.value ? (
+          <>
+            <Image src={lessIcon} alt="lessIcon" width={12} height={12} />
+            <span>{ManageLocales('app.advanceSearch.viewLess')}</span>
+          </>
+        ) : (
+          <>
+            <Image src={addIcon} alt="addIcon" width={12} height={12} />
+            <span>{ManageLocales('app.advanceSearch.viewMore')}</span>
+          </>
+        )}
+      </button>
+    </AccordionPrimitive.Trigger>
+  </AccordionPrimitive.Header>
+));
+
+CustomAccordionTrigger.displayName = AccordionPrimitive.Trigger.displayName;
+
 const AccordionContent = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Content>
@@ -53,4 +89,10 @@ const AccordionContent = React.forwardRef<
 
 AccordionContent.displayName = AccordionPrimitive.Content.displayName;
 
-export { Accordion, AccordionItem, AccordionTrigger, AccordionContent };
+export {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  CustomAccordionTrigger,
+  AccordionContent
+};
