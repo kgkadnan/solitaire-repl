@@ -151,7 +151,7 @@ const MatchingPair = () => {
               localStorage.removeItem('MatchingPair');
               setIsDialogOpen(false),
                 router.push(
-                  `${Routes.SEARCH}?active-tab=${MatchSubRoutes.NEW_SEARCH}`
+                  `${Routes.MATCHING_PAIR}?active-tab=${MatchSubRoutes.NEW_SEARCH}`
                 ),
                 setSearchParameters([]);
               setAddSearches([]);
@@ -179,13 +179,13 @@ const MatchingPair = () => {
       setSearchParameters([]);
       setAddSearches([]);
       handleReset(setState, errorSetState);
-      router.push(`${Routes.SEARCH}?active-tab=${MatchSubRoutes.NEW_SEARCH}`);
+      router.push(`${Routes.MATCHING_PAIR}?active-tab=${MatchSubRoutes.NEW_SEARCH}`);
     } else {
       setSearchParameters(closeSpecificSearch);
       setAddSearches(closeSpecificSearch);
       setActiveTab(removeDataIndex);
       router.push(
-        `${Routes.SEARCH}?active-tab=${MatchSubRoutes.RESULT}-${
+        `${Routes.MATCHING_PAIR}?active-tab=${MatchSubRoutes.RESULT}-${
           removeDataIndex - 1
         }`
       );
@@ -324,7 +324,8 @@ const MatchingPair = () => {
                         setIsInputDialogOpen,
                         setStoredSelection: setSearchParameters,
                         setSaveSearchName,
-                        setInputError
+                        setInputError,
+                        isMatchingPair:true
                       });
                     }
                   }

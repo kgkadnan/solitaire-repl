@@ -506,7 +506,7 @@ const MatchingPairResult = ({
     [dataTableState.columns]
   );
   const handleNewSearch = () => {
-    router.push(`${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`);
+    router.push(`${Routes.MATCHING_PAIR}?active-tab=${SubRoutes.NEW_SEARCH}`);
   };
 
   const handleCreateAppointment = () => {
