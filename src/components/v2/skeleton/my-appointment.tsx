@@ -31,7 +31,7 @@ const MyAppointmentSkeleton = () => {
             height={'40px'}
             width={'185px'}
             animation="wave"
-            className="rounded-r-[4px]"
+            className="rounded-[4px]"
           />
         </div>
       </div>
