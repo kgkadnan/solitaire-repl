@@ -1,6 +1,8 @@
 {
   "app.search.savedSearchesRoute": "saved-searches",
   "app.advanceSearch.cancel": "Cancel",
+  "app.advanceSearch.viewMore": "View More",
+  "app.advanceSearch.viewLess": "View Less",
   "app.advanceSearch.reset": "Reset",
   "app.advanceSearch.saveSearch": "Save Search",
   "app.advanceSearch.savedSearch.input.header": "Save search parameters",

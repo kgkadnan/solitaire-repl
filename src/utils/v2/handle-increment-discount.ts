@@ -14,14 +14,14 @@ export const handleIncrementDiscount = (
     if (currentBidValue !== undefined) {
       return {
         ...prevValues,
-        [rowId]: Number(currentBidValue) + 0.5
+        [rowId]: Number(currentBidValue) + 0.25
       };
     }
-    // If no bid value for this row yet, start from current_max_bid and add 0.5
+    // If no bid value for this row yet, start from current_max_bid and add 0.25
     else {
       return {
         ...prevValues,
-        [rowId]: Number(currentMaxBid) + 0.5
+        [rowId]: Number(currentMaxBid) + 0.25
       };
     }
   });
