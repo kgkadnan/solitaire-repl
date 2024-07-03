@@ -5,8 +5,9 @@ import { useEffect, useState } from 'react';
 import backWardArrow from '@public/v2/assets/icons/my-diamonds/backwardArrow.svg';
 import LinkSvg from '@public/v2/assets/icons/detail-page/link.svg?url';
 import ExportExcel from '@public/v2/assets/icons/detail-page/export-excel.svg?url';
-// import forwardArrow from '@public/v2/assets/icons/detail-page/forward-arrow.svg';
-// import backwardArrow from '@public/v2/assets/icons/detail-page/back-ward-arrow.svg';
+import NoImageFound from '@public/v2/assets/icons/compare-stone/fallback.svg';
+import styles from '../../search/result/components/compare.module.scss';
+import CloseButton from '@public/v2/assets/icons/close.svg';
 
 export interface ITableColumn {
   key: string;
@@ -50,6 +51,15 @@ import DetailPageTabs from '@/components/v2/common/detail-page/components/tabs';
 import { Toast } from '@/components/v2/common/copy-and-share/toast';
 import { loadImages } from '@/components/v2/common/detail-page/helpers/load-images';
 import { checkImage } from '@/components/v2/common/detail-page/helpers/check-image';
+import {
+  IManageListingSequenceResponse,
+  IProduct
+} from '../../search/interface';
+import { useLazyGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
+import CheckboxComponent from '@/components/v2/common/checkbox';
+import { useCheckboxStateManagement } from '@/components/v2/common/checkbox/hooks/checkbox-state-management';
+import { MINIMUM_STONES } from '@/constants/error-messages/compare-stone';
+import Media from '@public/v2/assets/icons/data-table/Media.svg';
 
 export function MatchPairDetails({
   data,
@@ -86,7 +96,38 @@ export function MatchPairDetails({
   const [showToast, setShowToast] = useState(false);
   const [downloadExcel] = useDownloadExcelMutation();
   const [trackCopyUrlEvent] = useLazyTrackCopyUrlEventQuery({});
-
+  const [originalData, setOriginalData] = useState([]);
+  const [mappingColumn, setMappingColumn] = useState<any>({});
+  const { checkboxState, checkboxSetState } = useCheckboxStateManagement();
+  const { selectedCheckboxes } = checkboxState;
+  const { setSelectedCheckboxes } = checkboxSetState;
+  const [triggerColumn] =
+    useLazyGetManageListingSequenceQuery<IManageListingSequenceResponse>();
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await triggerColumn({});
+      console.log(response, 'columnData');
+      updateState(response);
+    };
+    fetchData();
+  }, []);
+  function updateState(column: any) {
+    const updatedObj: any = { ...mappingColumn }; // Create a copy of newObj
+    column?.forEach((obj: any) => {
+      // Check if the key already exists in updatedObj
+      if (!(obj.accessor in updatedObj)) {
+        updatedObj[obj.accessor] = obj.short_label; // Use the dynamic key to update the object
+      }
+    });
+    setMappingColumn(updatedObj); // Update the state with the updated object
+  }
+  useEffect(() => {
+    const result = data.filter((subArray: any) =>
+      subArray.some((obj: any) => obj.lot_id === filterData.lot_id)
+    );
+    console.log('------------', result);
+    setOriginalData(result);
+  }, [filterData, data]);
   useEffect(() => {
     let copyData = filterData ? { ...filterData } : {};
 
@@ -260,6 +301,27 @@ export function MatchPairDetails({
         ? 'fromNewArrivalBid'
         : '']: true
     });
+  };
+  const handleImageError = (event: any) => {
+    event.target.src = NoImageFound.src; // Set the fallback image when the original image fails to load
+  };
+  const handleClick = (id: string) => {
+    let updatedIsCheck = [...selectedCheckboxes];
+
+    if (updatedIsCheck.includes(id)) {
+      updatedIsCheck = updatedIsCheck.filter(item => item !== id);
+    } else {
+      updatedIsCheck.push(id);
+    }
+    setSelectedCheckboxes(updatedIsCheck);
+    setIsError(false);
+  };
+  type HandleCloseType = (_event: React.MouseEvent, _id: string) => void;
+
+  const handleClose: HandleCloseType = (event, id) => {
+    const filterData = originalData.filter((item: IProduct) => item.id !== id);
+    // setCompareStoneData(filterData);
+    console.log(filterData, 'filterData');
   };
 
   let isNudge = localStorage.getItem('show-nudge') === 'MINI';
@@ -605,6 +667,114 @@ export function MatchPairDetails({
             )}
 
             {displayTable(otherInformationDetails)}
+          </div>
+        </div>
+      </div>
+      <div className="flex  h-[calc(100%-120px)] overflow-auto border-t-[1px] border-b-[1px] border-neutral200">
+        <div className="flex ">
+          <div
+            className="sticky left-0  min-h-[2080px] text-neutral700 text-mMedium font-medium w-[150px] !z-5"
+            style={{ zIndex: 5 }}
+          >
+            <div className="h-[234px] sticky top-0  items-center flex px-4 border-[0.5px] border-neutral200 bg-neutral50">
+              Media
+            </div>
+            <div className=" flex flex-col">
+              {Object.keys(mappingColumn).map(key => (
+                <div
+                  key={key}
+                  className="py-2 px-4 border-[1px] border-neutral200 h-[38px] bg-neutral50"
+                >
+                  {key !== 'id' && mappingColumn[key]}
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className=" bg-neutral0 text-neutral900 text-mMedium font-medium min-h-[2080px] !z-2">
+            <div className="flex h-[234px] sticky top-0 ">
+              {originalData !== undefined &&
+                originalData.length > 0 &&
+                originalData.map((items: IProduct) => (
+                  <div key={items.id} className="w-[198px]">
+                    <div
+                      className={`h-[234px] flex flex-col border-[0.5px] border-neutral200 bg-neutral0 p-2 gap-[10px]`}
+                    >
+                      <div className="w-[180px] h-[175px]">
+                        <img
+                          // className="!h-[175px] !w-[180px]"
+                          src={`${FILE_URLS.IMG.replace(
+                            '***',
+                            items?.lot_id ?? ''
+                          )}`}
+                          alt="Diamond Image"
+                          width={180}
+                          height={175}
+                          onClick={
+                            () => {}
+                            // handleCheckboxClick(items.id)
+                          }
+                          onError={e => {
+                            handleImageError(e);
+                          }}
+                        />
+                      </div>
+                      <div className="flex justify-between">
+                        <div>
+                          <CheckboxComponent
+                            onClick={() => handleClick(items.id)}
+                            data-testid={'compare stone checkbox'}
+                            isChecked={
+                              selectedCheckboxes.includes(items.id) || false
+                            }
+                          />
+                        </div>
+                        <div>
+                          <button
+                            onClick={e => {
+                              e.stopPropagation();
+                              // handleDetailImage({ row: items });
+                            }}
+                          >
+                            <Image src={Media} alt="Media" />
+                          </button>
+                        </div>
+                        <div
+                          className={`${styles.closeButton} cursor-pointer`}
+                          data-testid={'Remove Stone'}
+                          onClick={event =>
+                            originalData.length > 2
+                              ? handleClose(event, items.id)
+                              : (setIsError(true), setErrorText(MINIMUM_STONES))
+                          }
+                        >
+                          <Image
+                            src={CloseButton}
+                            alt="Preview"
+                            height={24}
+                            width={24}
+                          />
+
+                          {/* <CloseButton /> */}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+            </div>
+            <div className={`flex `}>
+              {originalData.map((diamond: any) => (
+                <div className={`w-[198px] `} key={diamond.id}>
+                  {Object.keys(mappingColumn).map(key => (
+                    <div
+                      key={key}
+                      className="py-2 px-4 border-[1px] border-neutral200 h-[38px] whitespace-nowrap overflow-hidden overflow-ellipsis  bg-neutral0"
+                    >
+                      {key !== 'id' ? diamond[key] || '-' : ''}
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
