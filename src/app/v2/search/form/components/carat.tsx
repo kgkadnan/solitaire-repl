@@ -11,7 +11,7 @@ import {
   Accordion,
   AccordionContent,
   AccordionItem,
-  AccordionTrigger
+  CustomAccordionTrigger
 } from '@/components/v2/ui/accordion';
 import Tile from '@/components/v2/common/tile';
 import { formatNumber } from '@/utils/fix-two-digit-number';
@@ -223,11 +223,12 @@ export const Carat = ({
                 value={accordionValue}
               >
                 <AccordionItem value={'Carats'}>
-                  <div className="flex justify-between">
+                  <div className="flex ">
                     {accordionValue.length > 0 ? (
                       ''
                     ) : (
                       <Tile
+                        tileContainerStyle="w-[84%]"
                         tileStyle="w-[79px] !text-sMedium !p-0 !py-[8px]"
                         tileData={[
                           '0.30-0.39',
@@ -262,20 +263,21 @@ export const Carat = ({
                       />
                     )}
 
-                    <div className="absolute top-[6px] right-[0px]">
-                      <AccordionTrigger
+                    <div className="absolute top-[0px] right-[105px]">
+                      <CustomAccordionTrigger
+                        value={accordionValue}
                         className={` ${styles.accordionTriggerStyle}`}
-                      ></AccordionTrigger>
+                      ></CustomAccordionTrigger>
                     </div>
                   </div>
                   <AccordionContent
-                    className={`flex flex-wrap gap-[8px]  ${styles.accordionSuccessStyle} ${styles.accordionContentStyle}`}
+                    className={`flex flex-wrap gap-[8px] w-[84%]  ${styles.accordionSuccessStyle} ${styles.accordionContentStyle}`}
                   >
                     {preDefineCarats.map((preDefineCarat, index) => {
                       return (
                         <div key={index} className="">
                           <Tile
-                            tileContainerStyle="flex-col  justify-center items-center "
+                            tileContainerStyle="flex-col   justify-center items-center "
                             tileStyle="w-[79px] !text-sMedium !p-0 !py-[8px]"
                             tileData={preDefineCarat.data}
                             selectedTile={caratRangeSelectionTemp}
