@@ -223,47 +223,49 @@ export const Carat = ({
                 value={accordionValue}
               >
                 <AccordionItem value={'Carats'}>
-                  <div className="flex ">
-                    {accordionValue.length > 0 ? (
-                      ''
-                    ) : (
-                      <Tile
-                        tileContainerStyle="w-[84%]"
-                        tileStyle="w-[79px] !text-sMedium !p-0 !py-[8px]"
-                        tileData={[
-                          '0.30-0.39',
-                          '0.40-0.49',
-                          '0.50-0.59',
-                          '0.60-0.69',
-                          '0.70-0.79',
-                          '0.80-0.89',
-                          '0.90-0.99',
-                          '1ct',
-                          '1.5ct',
-                          '2ct',
-                          '3ct',
-                          '4ct',
-                          '5ct+'
-                        ]}
-                        selectedTile={caratRangeSelectionTemp}
-                        setSelectedTile={setCaratRangeSelectionTemp}
-                        handleTileClick={({
-                          data,
-                          selectedTile,
-                          setSelectedTile
-                        }) => {
-                          handleCaratRange({
+                  <div className="flex relative w-full">
+                    <div className="w-[84%]">
+                      {accordionValue.length > 0 ? (
+                        ''
+                      ) : (
+                        <Tile
+                          tileContainerStyle=""
+                          tileStyle="w-[79px] !text-sMedium !p-0 !py-[8px]"
+                          tileData={[
+                            '0.30-0.39',
+                            '0.40-0.49',
+                            '0.50-0.59',
+                            '0.60-0.69',
+                            '0.70-0.79',
+                            '0.80-0.89',
+                            '0.90-0.99',
+                            '1ct',
+                            '1.5ct',
+                            '2ct',
+                            '3ct',
+                            '4ct',
+                            '5ct+'
+                          ]}
+                          selectedTile={caratRangeSelectionTemp}
+                          setSelectedTile={setCaratRangeSelectionTemp}
+                          handleTileClick={({
                             data,
                             selectedTile,
-                            setSelectedTile,
-                            preDefineCarats,
-                            setCaratRangeSelection
-                          });
-                        }}
-                      />
-                    )}
+                            setSelectedTile
+                          }) => {
+                            handleCaratRange({
+                              data,
+                              selectedTile,
+                              setSelectedTile,
+                              preDefineCarats,
+                              setCaratRangeSelection
+                            });
+                          }}
+                        />
+                      )}
+                    </div>
 
-                    <div className="absolute top-[0px] right-[105px]">
+                    <div className="absolute top-[0px] right-[92px]">
                       <CustomAccordionTrigger
                         value={accordionValue}
                         className={` ${styles.accordionTriggerStyle}`}

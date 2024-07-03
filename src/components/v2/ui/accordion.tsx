@@ -49,13 +49,13 @@ const CustomAccordionTrigger = React.forwardRef<
     <AccordionPrimitive.Trigger
       ref={ref}
       className={cn(
-        'flex flex-1 items-center justify-between font-medium transition-all [&[data-state=open]>svg]:rotate-180',
+        'flex flex-1 items-baseline justify-between font-medium transition-all [&[data-state=open]>svg]:rotate-180',
         className
       )}
       {...props}
     >
       {children}
-      <button className="flex justify-center items-center font-medium w-[92px] py-[8px] rounded-[4px] gap-1 bg-neutral0 border-[1px] border-solid border-neutral200 h-[30px] text-sMedium cursor-pointer hover:bg-neutral50">
+      <button className="flex justify-center items-center font-medium px-[16px] py-[8px] rounded-[4px] gap-1 bg-neutral0 border-[1px] border-solid border-neutral200 h-[30px] text-sMedium cursor-pointer hover:bg-neutral50">
         {props?.value ? (
           <>
             <Image src={lessIcon} alt="lessIcon" width={12} height={12} />

@@ -80,7 +80,11 @@ const BidToBuy = () => {
           header: short_label,
           enableGlobalFilter: accessor === 'lot_id',
           enableGrouping: accessor === 'shape',
-          enableSorting: false,
+          enableSorting:
+            accessor !== 'shape_full' &&
+            accessor !== 'details' &&
+            accessor !== 'fire_icon' &&
+            accessor !== 'location',
           minSize: 5,
           maxSize: accessor === 'details' ? 100 : 200,
           size: 5,

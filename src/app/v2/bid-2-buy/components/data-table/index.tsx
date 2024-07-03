@@ -12,7 +12,7 @@ import Image from 'next/image';
 import searchIcon from '@public/v2/assets/icons/data-table/search-icon.svg';
 
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-
+import { faSort, faSortDown } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 import DisableDecrementIcon from '@public/v2/assets/icons/new-arrivals/disable-decrement.svg?url';
 import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
@@ -31,6 +31,7 @@ import { formatNumber } from '@/utils/fix-two-digit-number';
 import { handleDecrementDiscount } from '@/utils/v2/handle-decrement-discount';
 import { handleIncrementDiscount } from '@/utils/v2/handle-increment-discount';
 import { RenderBidToBuyLotIdColor } from '@/components/v2/common/data-table/helpers/render-cell';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const theme = createTheme({
   typography: {
@@ -505,6 +506,22 @@ const BidToByDataTable = ({
     icons: {
       SearchIcon: () => (
         <Image src={searchIcon} alt={'searchIcon'} className="mr-[6px]" />
+      ),
+
+      ArrowDownwardIcon: (props: any) => (
+        <FontAwesomeIcon icon={faSortDown} {...props} width={8} height={8} />
+      ),
+      SyncAltIcon: (props: any) => (
+        <FontAwesomeIcon
+          icon={faSort}
+          {...props}
+          style={{ color: 'var(--neutral-400)' }}
+          className="transform !rotate-0 !pl-1"
+        />
+      ),
+
+      SortIcon: (props: any) => (
+        <FontAwesomeIcon icon={faSort} width={8} height={8} {...props} />
       )
     },
 
@@ -748,7 +765,11 @@ const BidToByDataTable = ({
             borderTop: '1px solid var(--neutral-200)',
             fontSize: '12px !important',
             fontWeight: 500,
-            paddingRight: ['location', 'lab'].includes(column.id) && '12px'
+            paddingRight: ['shape_full', 'location', 'details'].includes(
+              column.id
+            )
+              ? '12px'
+              : '0px'
           }
         }
       };
@@ -952,7 +973,13 @@ const BidToByDataTable = ({
                     <ActionButton
                       actionButtonData={[
                         {
-                          variant: 'primary',
+                          variant:
+                            bidValue <=
+                            (activeTab === 1
+                              ? row.original.my_current_bid
+                              : row.original.discount)
+                              ? 'disable'
+                              : 'primary',
                           label: activeTab === 0 ? 'Add Bid' : 'Update Bid',
                           handler: () => {
                             if (!bidError) {
@@ -980,6 +1007,11 @@ const BidToByDataTable = ({
                               setBidError('');
                             }
                           },
+                          isDisable:
+                            bidValue <=
+                            (activeTab === 1
+                              ? row.original.my_current_bid
+                              : row.original.discount),
                           customCtaStyle: '!h-[30px] !text-[12px]',
 
                           customStyle: 'flex-1 w-full h-[30px]'
