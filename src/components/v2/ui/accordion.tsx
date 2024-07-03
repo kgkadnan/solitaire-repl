@@ -55,16 +55,20 @@ const CustomAccordionTrigger = React.forwardRef<
       {...props}
     >
       {children}
-      <button className="flex justify-center items-center font-medium w-[92px] py-[8px] rounded-[4px] gap-1 bg-neutral0 border-[1px] border-solid border-neutral200  h-[30px] text-sMedium cursor-pointer hover:bg-neutral50">
+      <button className="flex justify-center items-center font-medium w-[92px] py-[8px] rounded-[4px] gap-1 bg-neutral0 border-[1px] border-solid border-neutral200 h-[30px] text-sMedium cursor-pointer hover:bg-neutral50">
         {props?.value ? (
           <>
             <Image src={lessIcon} alt="lessIcon" width={12} height={12} />
-            <span>{ManageLocales('app.advanceSearch.viewLess')}</span>
+            <span className="w-[65px] text-center">
+              {ManageLocales('app.advanceSearch.viewLess')}
+            </span>
           </>
         ) : (
           <>
             <Image src={addIcon} alt="addIcon" width={12} height={12} />
-            <span>{ManageLocales('app.advanceSearch.viewMore')}</span>
+            <span className="w-[65px] text-center">
+              {ManageLocales('app.advanceSearch.viewMore')}
+            </span>
           </>
         )}
       </button>
