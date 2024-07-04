@@ -61,8 +61,6 @@ import { useGetSavedSearchListQuery } from '@/features/api/saved-searches';
 import { AddCommentDialog } from '@/components/v2/common/comment-dialog';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import fireSvg from '@public/v2/assets/icons/data-table/fire-icon.svg';
-import threeDotsSvg from '@public/v2/assets/icons/threedots.svg';
-import { Dropdown } from '@/components/v2/common/dropdown-menu';
 import ImageModal from '@/components/v2/common/detail-page/components/image-modal';
 import { getShapeDisplayName } from '@/utils/v2/detail-page';
 import { FILE_URLS } from '@/constants/v2/detail-page';
@@ -247,11 +245,7 @@ const MatchingPairResult = ({
           header: short_label,
           enableGlobalFilter: accessor === 'lot_id',
           enableGrouping: accessor === 'shape',
-          // enableSorting:
-          //   accessor !== 'shape_full' &&
-          //   accessor !== 'details' &&
-          //   accessor !== 'fire_icon' &&
-          //   accessor !== 'location',
+
           minSize: 5,
           maxSize: accessor === 'details' ? 100 : 200,
           size: 5,
@@ -263,7 +257,6 @@ const MatchingPairResult = ({
             />
           )
         };
-        // return { ...commonProps, Cell: RenderMatchPairData };
         switch (accessor) {
           case 'fire_icon':
             return {
@@ -668,124 +661,6 @@ const MatchingPairResult = ({
     }
   };
 
-  const handleAddToCartDetailPage = () => {
-    const hasMemoOut = dataTableState.rows.some(
-      (row: IProduct) =>
-        row.id === detailPageData.id && row.diamond_status === MEMO_STATUS
-    );
-    const hasHold = dataTableState.rows.some(
-      (row: IProduct) =>
-        row.id === detailPageData.id && row.diamond_status === HOLD_STATUS
-    );
-
-    if (hasMemoOut) {
-      setErrorText(NO_STONES_SELECTED);
-      setIsError(true);
-    } else if (hasHold) {
-      setIsError(true);
-      setErrorText(SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH);
-    } else {
-      setIsLoading(true);
-      // Extract variant IDs for selected stones
-      const variantIds = [detailPageData.id]
-        ?.map((_id: string) => {
-          const myCartCheck: IProduct | object =
-            dataTableState.rows.find((row: IProduct) => {
-              return row?.id === detailPageData.id;
-            }) ?? {};
-
-          if (myCartCheck && 'variants' in myCartCheck) {
-            return myCartCheck.variants[0]?.id;
-          }
-          return '';
-        })
-        .filter(Boolean);
-
-      // If there are variant IDs, add to the cart
-      if (variantIds.length) {
-        addCart({
-          variants: variantIds
-        })
-          .unwrap()
-          .then((res: any) => {
-            setIsLoading(false);
-            setIsDialogOpen(true);
-            setDialogContent(
-              <CommonPoppup
-                content={''}
-                status="success"
-                customPoppupBodyStyle="!mt-[70px]"
-                header={res?.message}
-                actionButtonData={[
-                  {
-                    variant: 'secondary',
-                    label: ManageLocales('app.modal.continue'),
-                    handler: () => {
-                      setIsDialogOpen(false);
-                      setIsDetailPage(false);
-                    },
-                    customStyle: 'flex-1 w-full h-10'
-                  },
-                  {
-                    variant: 'primary',
-                    label: 'Go to "My Cart"',
-                    handler: () => {
-                      router.push('/v2/my-cart');
-                    },
-                    customStyle: 'flex-1 w-full h-10'
-                  }
-                ]}
-              />
-            );
-
-            // On success, show confirmation dialog and update badge
-            setIsError(false);
-            setErrorText('');
-            triggerMatchingPairApi({
-              url: searchUrl,
-              limit: MATCHING_PAIR_DATA_LIMIT,
-              offset: 0
-            }).then(res => {
-              let matchingPair = res.data?.products.flat();
-
-              dataTableSetState.setRows(matchingPair);
-              setOriginalData(res.data?.products);
-
-              setRowSelection({});
-              setErrorText('');
-              setData(res.data);
-            });
-            dispatch(notificationBadge(true));
-          })
-          .catch(error => {
-            setIsLoading(false);
-            // On error, set error state and error message
-
-            setIsDialogOpen(true);
-            setDialogContent(
-              <CommonPoppup
-                content={''}
-                customPoppupBodyStyle="!mt-[70px]"
-                header={error?.data?.message}
-                actionButtonData={[
-                  {
-                    variant: 'primary',
-                    label: ManageLocales('app.modal.okay'),
-                    handler: () => {
-                      setIsDialogOpen(false);
-                    },
-                    customStyle: 'flex-1 w-full h-10'
-                  }
-                ]}
-              />
-            );
-          });
-        // Clear the selected checkboxes
-        setRowSelection({});
-      }
-    }
-  };
-
   const goBackToListView = (isFrom?: string) => {
     if (isFrom === 'Detail Page') {
       setIsDetailPage(true);
@@ -1169,20 +1044,43 @@ const MatchingPairResult = ({
             data={originalData}
             filterData={detailPageData}
             goBackToListView={goBack}
-            handleDetailPage={handleDetailPage}
+            // handleDetailPage={handleDetailPage}
             breadCrumLabel={
               breadCrumLabel.length ? breadCrumLabel : 'Search Results'
             }
             modalSetState={modalSetState}
             setIsLoading={setIsLoading}
+            handleDetailImage={handleDetailImage}
+            setRowSelection={setRowSelection}
+            // setValidImages={setValidImages}
+            // validImages={validImages}
           />
-          <div className="p-[8px] flex justify-end items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow mb-1">
+          <div className="p-[8px] flex justify-between items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow mb-1">
+            <div className="flex gap-4 h-[30px]">
+              <div className=" border-[1px] border-lengendInCardBorder rounded-[4px] bg-legendInCartFill text-legendInCart">
+                <p className="text-mMedium font-medium px-[6px] py-[4px]">
+                  In Cart
+                </p>
+              </div>
+              <div className=" border-[1px] border-lengendHoldBorder rounded-[4px] bg-legendHoldFill text-legendHold">
+                <p className="text-mMedium font-medium px-[6px] py-[4px]">
+                  {' '}
+                  Hold
+                </p>
+              </div>
+              <div className="border-[1px] border-lengendMemoBorder rounded-[4px] bg-legendMemoFill text-legendMemo">
+                <p className="text-mMedium font-medium px-[6px] py-[4px]">
+                  {' '}
+                  Memo
+                </p>
+              </div>
+            </div>
             <ActionButton
               actionButtonData={[
                 {
                   variant: isConfirmStone ? 'primary' : 'secondary',
                   label: ManageLocales('app.searchResult.addToCart'),
-                  handler: handleAddToCartDetailPage
+                  handler: handleAddToCart
                 },
 
                 {
@@ -1191,10 +1089,10 @@ const MatchingPairResult = ({
                   isHidden: isConfirmStone,
                   handler: () => {
                     setBreadCrumLabel('Detail Page');
-                    const { id } = detailPageData;
-                    const selectedRows = { [id]: true };
+                    // const { id } = Object.keys(rowSelection);
+                    // const selectedRows = { [id]: true };
                     handleConfirmStone({
-                      selectedRows: selectedRows,
+                      selectedRows: rowSelection,
                       rows: dataTableState.rows,
                       setIsError,
                       setErrorText,
@@ -1203,25 +1101,6 @@ const MatchingPairResult = ({
                       setIsDetailPage
                     });
                   }
-                }
-              ]}
-            />
-            <Dropdown
-              dropdownTrigger={
-                <Image
-                  src={threeDotsSvg}
-                  alt="threeDotsSvg"
-                  width={4}
-                  height={43}
-                />
-              }
-              dropdownMenu={[
-                {
-                  label: ManageLocales(
-                    'app.search.actionButton.findMatchingPair'
-                  ),
-                  handler: () => {},
-                  commingSoon: true
                 }
               ]}
             />

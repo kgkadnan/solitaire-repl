@@ -3,50 +3,27 @@
 
 import { useEffect, useState } from 'react';
 import backWardArrow from '@public/v2/assets/icons/my-diamonds/backwardArrow.svg';
-import LinkSvg from '@public/v2/assets/icons/detail-page/link.svg?url';
 import ExportExcel from '@public/v2/assets/icons/detail-page/export-excel.svg?url';
-import NoImageFound from '@public/v2/assets/icons/compare-stone/fallback.svg';
+import NoImageFound from '@public/v2/assets/icons/detail-page/matching-pair-fallback.svg';
 import styles from '../../search/result/components/compare.module.scss';
 import CloseButton from '@public/v2/assets/icons/close.svg';
-
-export interface ITableColumn {
-  key: string;
-  label: string;
-  hiddenBelow1024?: boolean;
-  hiddenAbove1024?: boolean;
-}
-
 import Image from 'next/image';
-
-import {
-  FILE_URLS,
-  basicDetails,
-  inclusionDetails,
-  mesurementsDetails,
-  otherInformationDetails,
-  priceDetails,
-  priceDetailsForBid
-} from '@/constants/v2/detail-page';
-
-import { HOLD_STATUS, MEMO_STATUS } from '@/constants/business-logic';
-// import ShowPopups from './components/popup';
+import { FILE_URLS } from '@/constants/v2/detail-page';
+// import { HOLD_STATUS, MEMO_STATUS } from '@/constants/business-logic';
 import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
-import { kycStatus } from '@/constants/enums/kyc';
-import { formatNumber } from '@/utils/fix-two-digit-number';
+// import { kycStatus } from '@/constants/enums/kyc';
+// import { formatNumber } from '@/utils/fix-two-digit-number';
 
 import { Skeleton } from '@mui/material';
-import { useLazyTrackCopyUrlEventQuery } from '@/features/api/track-public-url-copy';
 
 import { useRouter } from 'next/navigation';
-import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
+// import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
 import { getShapeDisplayName } from '@/utils/v2/detail-page';
-import ResponsiveTable from '@/components/v2/common/detail-page/components/CommonTable';
 import { IImagesType } from '@/components/v2/common/detail-page/interface';
 import Share from '@/components/v2/common/copy-and-share/share';
 import Tooltip from '@/components/v2/common/tooltip';
-import ImagePreview from '@/components/v2/common/detail-page/components/image-preiview';
 import DetailPageTabs from '@/components/v2/common/detail-page/components/tabs';
 import { Toast } from '@/components/v2/common/copy-and-share/toast';
 import { loadImages } from '@/components/v2/common/detail-page/helpers/load-images';
@@ -59,32 +36,45 @@ import { useLazyGetManageListingSequenceQuery } from '@/features/api/manage-list
 import CheckboxComponent from '@/components/v2/common/checkbox';
 import { useCheckboxStateManagement } from '@/components/v2/common/checkbox/hooks/checkbox-state-management';
 import { MINIMUM_STONES } from '@/constants/error-messages/compare-stone';
-import Media from '@public/v2/assets/icons/data-table/Media.svg';
+import Media from '@public/v2/assets/icons/detail-page/expand.svg?url';
+import DownloadImg from '@public/v2/assets/icons/detail-page/download.svg?url';
+import forwardArrow from '@public/v2/assets/icons/arrow-forward.svg';
+import backwardArrow from '@public/v2/assets/icons/arrow-backword.svg';
+import backWardArrowDisable from '@public/v2/assets/icons/detail-page/back-ward-arrow-disable.svg';
+import forWardAarrowDisable from '@public/v2/assets/icons/detail-page/forward-arrow-disable.svg';
+import { handleDownloadImage } from '@/utils/v2/detail-page';
+
+export interface ITableColumn {
+  key: string;
+  label: string;
+  hiddenBelow1024?: boolean;
+  hiddenAbove1024?: boolean;
+}
 
 export function MatchPairDetails({
   data,
   filterData,
   goBackToListView,
-  // handleDetailPage,
   breadCrumLabel,
   modalSetState,
   setIsLoading,
-  activeTab,
-  fromBid
-}: {
+  handleDetailImage,
+  setRowSelection // setValidImages,
+} // validImages
+: {
   data: any;
   filterData: any;
   goBackToListView: any;
-  handleDetailPage: any;
   breadCrumLabel: string;
   modalSetState?: any;
   setIsLoading?: any;
-  activeTab?: number;
-  fromBid?: boolean;
+  handleDetailImage: any;
+  setRowSelection: any;
+  // setValidImages:any;
+  // validImages:any;
 }) {
   const router = useRouter();
 
-  const [tableData, setTableData] = useState<any>([]);
   const [activePreviewTab, setActivePreviewTab] = useState('Image');
   const [imageIndex, setImageIndex] = useState<number>(0);
   // const [currentIndex, setCurrentIndex] = useState(0);
@@ -95,9 +85,12 @@ export function MatchPairDetails({
 
   const [showToast, setShowToast] = useState(false);
   const [downloadExcel] = useDownloadExcelMutation();
-  const [trackCopyUrlEvent] = useLazyTrackCopyUrlEventQuery({});
-  const [originalData, setOriginalData] = useState([]);
+  const [originalData, setOriginalData] = useState<any>([]);
   const [mappingColumn, setMappingColumn] = useState<any>({});
+  const [, setZoomLevel] = useState(1);
+  const [, setZoomPosition] = useState({ x: 0, y: 0 });
+  // const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
   const { checkboxState, checkboxSetState } = useCheckboxStateManagement();
   const { selectedCheckboxes } = checkboxState;
   const { setSelectedCheckboxes } = checkboxSetState;
@@ -106,8 +99,7 @@ export function MatchPairDetails({
   useEffect(() => {
     const fetchData = async () => {
       const response = await triggerColumn({});
-      console.log(response, 'columnData');
-      updateState(response);
+      updateState(response?.data);
     };
     fetchData();
   }, []);
@@ -125,38 +117,10 @@ export function MatchPairDetails({
     const result = data.filter((subArray: any) =>
       subArray.some((obj: any) => obj.lot_id === filterData.lot_id)
     );
-    console.log('------------', result);
-    setOriginalData(result);
-  }, [filterData, data]);
-  useEffect(() => {
-    let copyData = filterData ? { ...filterData } : {};
+    setOriginalData(result[0]);
+  }, []);
 
-    if (copyData) {
-      copyData['measurement'] = `${copyData?.length ?? 0}*${
-        copyData?.width ?? 0
-      }*${copyData?.depth ?? 0}`;
-      copyData['shape'] = getShapeDisplayName(copyData?.shape ?? '');
-    }
-
-    setTableData(copyData);
-  }, [filterData, data]);
-
-  const displayTable = (tableHeadArray: any) => {
-    return (
-      <div>
-        {tableHeadArray.map((item: ITableColumn[], index: any) => (
-          <div key={`item-${index}`} className="mt-4">
-            <ResponsiveTable
-              tableHead={item}
-              tableData={[tableData]}
-              validImages={validImages}
-            />
-          </div>
-        ))}
-      </div>
-    );
-  };
-  const images = [
+  const filterImageUrl = (tableData: any) => [
     {
       name: getShapeDisplayName(tableData?.shape ?? ''),
       url: `${FILE_URLS.IMG.replace('***', tableData?.lot_id ?? '')}`,
@@ -224,12 +188,14 @@ export function MatchPairDetails({
   ];
 
   useEffect(() => {
-    if (images.length > 0 && images[0].name.length)
-      loadImages(images, setValidImages, checkImage);
-  }, [tableData?.lot_id, tableData?.certificate_url]);
-
+    if (allImages.length > 0 && allImages[0].length > 0)
+      loadImages(allImages[0], setValidImages, checkImage);
+  }, [originalData]);
   useEffect(() => {
-    if (!validImages.length && images[0].name.length) {
+    if (
+      !validImages.length
+      // && filteredImages[0][0].name.length
+    ) {
       setValidImages([
         {
           name: 'No Data Found',
@@ -239,68 +205,19 @@ export function MatchPairDetails({
     }
   }, [validImages]);
 
-  const copyLink = () => {
-    const link = `${process.env.NEXT_PUBLIC_DNA_URL}${filterData?.public_url
-      .split('/')
-      .pop()}`;
-    navigator.clipboard.writeText(link).then(() => {
-      setShowToast(true); // Show the toast notification
-      setTimeout(() => {
-        setShowToast(false); // Hide the toast notification after some time
-      }, 4000);
-    });
-    trackCopyUrlEvent({ url: filterData?.public_url.split('/').pop() });
-  };
-  let statusValue = '';
-  const RenderNewArrivalLotId = ({ tableData }: any) => {
-    let statusClass = '';
-    let borderClass = '';
-
-    if (tableData.diamond_status === MEMO_STATUS) {
-      statusClass = 'bg-legendMemoFill text-legendMemo';
-      borderClass = 'border-lengendMemoBorder';
-      statusValue = 'Memo';
-    } else if (tableData.diamond_status === HOLD_STATUS) {
-      statusClass = 'bg-legendHoldFill  text-legendHold';
-
-      borderClass = 'border-lengendHoldBorder';
-      statusValue = 'Hold';
-    } else if (tableData?.in_cart && Object.keys(tableData.in_cart).length) {
-      statusClass = 'bg-legendInCartFill text-legendInCart';
-      borderClass = 'border-lengendInCardBorder';
-      statusValue = 'InCart';
-    }
-    return (
-      <>
-        {statusValue.length > 0 && (
-          <span
-            className={`rounded-[4px] ${statusClass} border-[1px] px-[8px] py-[3px] ${borderClass}`}
-          >
-            {statusValue}
-          </span>
-        )}
-      </>
-    );
-  };
   const handleDownloadExcel = () => {
-    downloadExcelHandler({
-      products: [filterData.id],
-      downloadExcelApi: downloadExcel,
-      modalSetState,
-      router,
-      setIsLoading: setIsLoading,
-      [activeTab === 2
-        ? breadCrumLabel === 'Bid to Buy'
-          ? 'fromBidToBuyHistory'
-          : breadCrumLabel === 'New Arrival'
-          ? 'fromNewArrivalBidHistory'
-          : ''
-        : breadCrumLabel === 'Bid to Buy'
-        ? 'fromBidToBuy'
-        : breadCrumLabel === 'New Arrival'
-        ? 'fromNewArrivalBid'
-        : '']: true
-    });
+    if (selectedCheckboxes.length > 0) {
+      downloadExcelHandler({
+        products: selectedCheckboxes,
+        downloadExcelApi: downloadExcel,
+        modalSetState,
+        router,
+        setIsLoading: setIsLoading,
+        fromMatchingPair: true
+      });
+    } else {
+      setShowToast(true);
+    }
   };
   const handleImageError = (event: any) => {
     event.target.src = NoImageFound.src; // Set the fallback image when the original image fails to load
@@ -314,6 +231,12 @@ export function MatchPairDetails({
       updatedIsCheck.push(id);
     }
     setSelectedCheckboxes(updatedIsCheck);
+    setRowSelection(
+      updatedIsCheck.reduce((acc: any, item: any) => {
+        acc[item] = true;
+        return acc;
+      }, {})
+    );
     setIsError(false);
   };
   type HandleCloseType = (_event: React.MouseEvent, _id: string) => void;
@@ -324,11 +247,37 @@ export function MatchPairDetails({
     console.log(filterData, 'filterData');
   };
 
-  let isNudge = localStorage.getItem('show-nudge') === 'MINI';
-  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
+  // let isNudge = localStorage.getItem('show-nudge') === 'MINI';
+  // const isKycVerified = JSON.parse(localStorage.getItem('user')!);
+  let allImages = originalData.map((data: any) => filterImageUrl(data));
+  const filteredImages = allImages.map((data: any) =>
+    data.filter((image: any) => {
+      if (activePreviewTab === 'Video' && image.category === 'Video')
+        return true;
+      if (
+        activePreviewTab === 'Certificate' &&
+        image.category === 'Certificate'
+      )
+        return true;
+      if (
+        activePreviewTab === 'B2B Sparkle' &&
+        image.category === 'B2B Sparkle'
+      )
+        return true;
+      if (activePreviewTab === 'Image' && image.category === 'Image')
+        return true;
+      return false;
+    })
+  );
+  console.log(selectedCheckboxes, '----------------------->>>>>>>>>>>');
+
   return (
-    <div className="text-black bg-white rounded-[8px]">
-      <Toast show={showToast} message="Copied Successfully" />
+    <div className="text-black bg-white rounded-[8px] w-[calc(100vw-116px)] h-[calc(100vh-140px)]">
+      <Toast
+        show={showToast}
+        message="Please select a stone to perform action."
+        isSuccess={false}
+      />
       <div className="flex items-center">
         <Image
           src={backWardArrow}
@@ -351,7 +300,7 @@ export function MatchPairDetails({
 
           {validImages.length > 0 ? (
             <p className="text-neutral700 p-[8px] bg-neutral100 rounded-[4px] text-sMedium font-medium">
-              Stock No:{tableData.lot_id}
+              Stock No:{originalData[0]['lot_id']} & {originalData[1]['lot_id']}
             </p>
           ) : (
             <Skeleton
@@ -365,8 +314,8 @@ export function MatchPairDetails({
           )}
         </div>
       </div>
-      <div className="xl:flex pt-[16px] pl-[16px]">
-        <div className={`flex xl:w-[40%] `}>
+      <div className=" py-[16px]">
+        <div className={`flex justify-between`}>
           <div className={`mr-5 flex flex-col gap-[16px]`}>
             <DetailPageTabs
               validImages={validImages}
@@ -374,349 +323,259 @@ export function MatchPairDetails({
               activePreviewTab={activePreviewTab}
               setImageIndex={setImageIndex}
             />
-            <div
-              className={`xl:overflow-y-auto ${
-                isNudge &&
-                (isKycVerified?.customer?.kyc?.status ===
-                  kycStatus.INPROGRESS ||
-                  isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-                  ? 'xl:h-[calc(65vh-60px)]'
-                  : 'xl:h-[65vh]'
-              }`}
-            >
-              <ImagePreview
-                imageIndex={imageIndex}
-                setImageIndex={setImageIndex}
-                images={validImages}
-                setIsLoading={setIsLoading}
-                activePreviewTab={activePreviewTab}
-              />
-            </div>
           </div>
-        </div>
-
-        <div
-          className={`xl:w-[60%]  mb-[12px] scroll-adjust-custom xl:overflow-y-scroll ${
-            isNudge &&
-            (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
-              isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-              ? 'xl:h-[calc(70vh-60px)]'
-              : 'xl:h-[70vh]'
-          }`}
-        >
-          <div className="flex xl:justify-start  xl:justify-between mt-4 xl:mt-0 xl:w-full">
-            {validImages.length > 0 ? (
-              <p
-                className="text-[28px] text-[#344054] font-medium mr-5 "
-                style={{ alignSelf: 'center' }}
-              >
-                Stock No: {tableData?.lot_id ?? '-'}
-              </p>
-            ) : (
-              <Skeleton
-                width={284}
-                sx={{ bgcolor: 'var(--neutral-200)' }}
-                height={42}
-                variant="rectangular"
-                animation="wave"
-                className="rounded-[4px]"
-              />
-            )}
-
-            <div className="flex w-[22%] xl:w-[40%] justify-center xl:justify-end mr-[10px] items-center">
-              <div className="flex gap-3 items-center">
-                <Tooltip
-                  tooltipTrigger={
-                    <button
-                      onClick={handleDownloadExcel}
-                      className={`rounded-[4px] hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm ${'bg-neutral0'}`}
-                    >
-                      <ExportExcel className={`${'stroke-neutral900'}`} />
-                    </button>
-                  }
-                  tooltipContent={'Download Excel'}
-                  tooltipContentStyles={'z-[1000]'}
-                />
-
-                <Tooltip
-                  tooltipTrigger={
-                    <button
-                      onClick={copyLink}
-                      className={`rounded-[4px] hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm ${'bg-neutral0'}`}
-                    >
-                      <LinkSvg
-                        className={`${'stroke-neutral900 stroke-[1.5]'}`}
+          <div className="flex  justify-center xl:justify-end mr-[10px] items-center">
+            <div className="flex gap-3 items-center">
+              {filteredImages.length > 0 ? (
+                <div className="flex gap-6">
+                  {filteredImages.length > 0 &&
+                    filteredImages[0][imageIndex].category === 'Image' &&
+                    !(
+                      activePreviewTab === 'Video' ||
+                      activePreviewTab === 'B2B Sparkle' ||
+                      activePreviewTab === 'Certificate'
+                    ) && (
+                      <>
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => {
+                              setZoomPosition({ x: 0, y: 0 });
+                              setZoomLevel(1);
+                              setImageIndex(imageIndex - 1);
+                            }}
+                            disabled={!(imageIndex > 0)}
+                            className={` rounded-[4px]  hover:bg-neutral50 w-[37px] h-[37px] text-center px-2 border-[1px] border-solid border-neutral200 shadow-sm ${
+                              imageIndex <= 0
+                                ? '!bg-neutral100 cursor-not-allowed'
+                                : 'bg-neutral0'
+                            }`}
+                          >
+                            <Image
+                              src={
+                                !(imageIndex > 0)
+                                  ? backWardArrowDisable
+                                  : backwardArrow
+                              }
+                              alt={
+                                !(imageIndex > 0)
+                                  ? 'backWardArrowDisable'
+                                  : 'backwardArrow'
+                              }
+                            />
+                          </button>
+                          <button
+                            onClick={() => {
+                              setZoomPosition({ x: 0, y: 0 });
+                              setZoomLevel(1);
+                              setImageIndex(imageIndex + 1);
+                            }}
+                            disabled={
+                              !(imageIndex < filteredImages[0].length - 1)
+                            }
+                            className={`rounded-[4px] hover:bg-neutral50 w-[37px] h-[37px] text-center px-2 border-[1px] border-solid border-neutral200 shadow-sm ${
+                              imageIndex >= filteredImages[0].length - 1
+                                ? '!bg-neutral100 cursor-not-allowed'
+                                : 'bg-neutral0'
+                            }`}
+                          >
+                            <Image
+                              src={
+                                !(imageIndex < filteredImages[0].length - 1)
+                                  ? forWardAarrowDisable
+                                  : forwardArrow
+                              }
+                              alt={
+                                !(imageIndex < filteredImages[0].length - 1)
+                                  ? 'forWardAarrowDisable'
+                                  : 'forwardArrow'
+                              }
+                            />
+                          </button>
+                        </div>
+                        <div className="border-r-[1px] h-[40px] border-neutral200"></div>
+                      </>
+                    )}
+                  <div className="flex gap-2">
+                    {!(
+                      activePreviewTab === 'Video' ||
+                      activePreviewTab === 'B2B Sparkle'
+                    ) && (
+                      <Tooltip
+                        tooltipTrigger={
+                          <button
+                            onClick={() => {
+                              filteredImages.map((images: any) => {
+                                handleDownloadImage(
+                                  images[imageIndex].downloadUrl || '',
+                                  images[imageIndex].name,
+                                  setIsLoading
+                                );
+                              });
+                            }}
+                            disabled={
+                              !filteredImages[0][imageIndex].downloadUrl?.length
+                            }
+                            className={`rounded-[4px] bg-neutral0 disabled:!bg-neutral100 disabled:cursor-not-allowed hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm`}
+                          >
+                            <DownloadImg
+                              className={`stroke-[1.5] ${
+                                filteredImages[0][imageIndex].downloadUrl
+                                  ?.length
+                                  ? 'stroke-neutral900'
+                                  : 'stroke-neutral400'
+                              }`}
+                            />
+                          </button>
+                        }
+                        tooltipContent={
+                          activePreviewTab === 'Certificate'
+                            ? 'Download Certificate'
+                            : 'Download Image'
+                        }
+                        tooltipContentStyles={'z-[1000]'}
                       />
-                    </button>
-                  }
-                  tooltipContent={'Media Link'}
-                  tooltipContentStyles={'z-[1000]'}
-                />
+                    )}
 
-                <div className="w-[38px] h-[38px]">
-                  <Share
-                    rows={data}
-                    selectedProducts={{ [filterData.id]: true }}
-                    setIsError={setIsError}
-                    setErrorText={setErrorText}
-                    activeTab={activeTab}
-                    identifier={breadCrumLabel}
-                    shareTrackIdentifier="Details"
-                  />
-                </div>
-              </div>
-              {/* <div className="border-r-[1px] h-[40px] border-neutral200"></div> */}
-              {/* <div className="flex gap-3 items-center relative justify-center"> */}
-              {/* Backward Arrow */}
-              {/* <button
-                  className={`relative group  h-[35px] w-[37px] shadow-sm flex items-center justify-center rounded-[4px] hover:bg-neutral50 border-[1px] border-neutral-200 ${
-                    currentIndex <= 0 ? 'bg-neutral50' : 'bg-neutral0 '
-                  } `}
-                  disabled={currentIndex <= 0}
-                  onClick={() => {
-                    setCurrentIndex(prev => prev - 1);
-                    handleDetailPage({ row: data[currentIndex - 1] });
-                  }}
-                >
-                  <Image
-                    className="cursor-pointer"
-                    src={backwardArrow}
-                    alt={'backWardArrow'}
-                  />
-
-                  {currentIndex > 0 && (
-                    <ShowPopups
-                      data={data}
-                      currentIndex={currentIndex - 1}
-                      fromBid={fromBid}
-                    />
-                  )}
-                </button> */}
-
-              {/* Forward Arrow */}
-              {/* <button
-                  className={`relative group  h-[35px] w-[37px] shadow-sm flex items-center justify-center rounded-[4px] hover:bg-neutral50 border-[1px] border-neutral200 ${
-                    currentIndex >= data.length - 1
-                      ? 'bg-neutral50'
-                      : 'bg-neutral0'
-                  }`}
-                  disabled={currentIndex >= data.length - 1}
-                  onClick={() => {
-                    setCurrentIndex(prev => prev + 1);
-                    handleDetailPage({ row: data[currentIndex + 1] });
-                  }}
-                >
-                  <Image
-                    className="cursor-pointer"
-                    src={forwardArrow}
-                    alt={'forwardArrow'}
-                  />
-
-
-                  {currentIndex < data.length - 1 && (
-                    <ShowPopups
-                      data={data}
-                      currentIndex={currentIndex + 1}
-                      fromBid={fromBid}
-                    />
-                  )}
-                </button> */}
-              {/* </div> */}
-            </div>
-          </div>
-          <div className="flex items-center mt-4">
-            {validImages.length > 0 ? (
-              <>
-                <div className="flex items-center">
-                  <div className="text-headingS font-medium text-neutral-900 ">
-                    {tableData?.variants?.length > 0
-                      ? tableData?.variants[0]?.prices[0]?.amount
-                        ? `$${
-                            formatNumberWithCommas(
-                              tableData?.variants[0]?.prices[0]?.amount
-                            ) ?? ''
-                          }`
-                        : ''
-                      : tableData?.amount
-                      ? `$${formatNumberWithCommas(tableData?.amount) ?? ''}`
-                      : ''}
+                    {/* <Tooltip
+                      tooltipTrigger={
+                        <button
+                          onClick={() => {
+                            setIsModalOpen(!isModalOpen);
+                          }}
+                          disabled={!(allImages[0].length > 0)}
+                          className={`rounded-[4px] hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm ${
+                            allImages[0].length > 0
+                              ? 'bg-neutral0'
+                              : '!bg-neutral100 cursor-not-allowed'
+                          }`}
+                        >
+                          <ExpandImg
+                            className={`stroke-[1.5] ${
+                              allImages[0].length > 0
+                                ? 'stroke-neutral900'
+                                : 'stroke-neutral400'
+                            }`}
+                          />
+                        </button>
+                      }
+                      tooltipContent={'Expand'}
+                      tooltipContentStyles={'z-[1000]'}
+                    /> */}
                   </div>
-                  <p
-                    className={`text-successMain text-mMedium px-[8px] py-[2px] rounded-[4px]`}
-                  >
-                    {fromBid
-                      ? tableData.original_discount !== null &&
-                        tableData.original_discount !== undefined
-                        ? tableData.original_discount === 0
-                          ? '0.00%'
-                          : formatNumber(tableData.original_discount) + '%'
-                        : ''
-                      : tableData.discount !== null &&
-                        tableData.discount !== undefined
-                      ? tableData.discount === 0
-                        ? '0.00%'
-                        : formatNumber(tableData.discount) + '%'
-                      : ''}
-                  </p>
                 </div>
-                {statusValue.length > 0 && (
-                  <div className="border-r-[1px] border-neutral-200 h-[20px]"></div>
-                )}
-                {RenderNewArrivalLotId({ tableData })}
-              </>
-            ) : (
-              <Skeleton
-                width={150}
-                height={30}
-                sx={{ bgcolor: 'var(--neutral-200)' }}
-                className="rounded-[4px]"
-                variant="rectangular"
-                animation="wave"
+              ) : (
+                ''
+              )}
+
+              {/* <Tooltip
+                tooltipTrigger={
+                  <button
+                    onClick={() => {}}
+                    className={`rounded-[4px] hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm ${'bg-neutral0'}`}
+                  >
+                    <DownloadImg
+                      className={`${'stroke-neutral900 stroke-[1.5]'}`}
+                    />
+                  </button>
+                }
+                tooltipContent={'Download Media'}
+                tooltipContentStyles={'z-[1000]'}
+              /> */}
+              <Tooltip
+                tooltipTrigger={
+                  <button
+                    onClick={handleDownloadExcel}
+                    className={`rounded-[4px] hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm ${'bg-neutral0'}`}
+                  >
+                    <ExportExcel className={`${'stroke-neutral900'}`} />
+                  </button>
+                }
+                tooltipContent={'Download Excel'}
+                tooltipContentStyles={'z-[1000]'}
               />
-            )}
-          </div>
-          <div className="pt-8 max-w-[100%] pr-[10px]">
-            {validImages.length > 0 ? (
-              <div className="sm:text-[14px] xl:text-[16px] text-[#344054]  font-medium">
-                Price Details
+
+              <div className="w-[38px] h-[38px]">
+                <Share
+                  rows={originalData}
+                  selectedProducts={selectedCheckboxes.reduce(
+                    (acc: any, item: any) => {
+                      acc[item] = true;
+                      return acc;
+                    },
+                    {}
+                  )}
+                  setIsError={setShowToast}
+                  setErrorText={setErrorText}
+                  identifier={breadCrumLabel}
+                  shareTrackIdentifier="Matching Pair Details"
+                />
               </div>
-            ) : (
-              <Skeleton
-                width={100}
-                sx={{ bgcolor: 'var(--neutral-200)' }}
-                height={25}
-                className="rounded-[4px]"
-                variant="rectangular"
-                animation="wave"
-              />
-            )}
-
-            {displayTable(fromBid ? priceDetailsForBid : priceDetails)}
-          </div>
-          <div className="pt-8 max-w-[100%] pr-[10px]">
-            {validImages.length > 0 ? (
-              <div className="sm:text-[14px] xl:text-[16px] text-[#344054]  font-medium">
-                Basic Details
-              </div>
-            ) : (
-              <Skeleton
-                width={100}
-                sx={{ bgcolor: 'var(--neutral-200)' }}
-                height={25}
-                className="rounded-[4px]"
-                variant="rectangular"
-                animation="wave"
-              />
-            )}
-
-            {displayTable(basicDetails)}
-          </div>
-
-          <div className="mt-6 max-w-[100%] pr-[10px]">
-            {validImages.length > 0 ? (
-              <div className="sm:text-[14px] xl:text-[16px]  font-medium text-[#344054]">
-                Measurements
-              </div>
-            ) : (
-              <Skeleton
-                width={100}
-                height={25}
-                sx={{ bgcolor: 'var(--neutral-200)' }}
-                className="rounded-[4px]"
-                variant="rectangular"
-                animation="wave"
-              />
-            )}
-
-            {displayTable(mesurementsDetails)}
-          </div>
-
-          <div className="mt-6 max-w-[100%] pr-[10px]">
-            {validImages.length > 0 ? (
-              <div className="sm:text-[14px] xl:text-[16px] font-medium text-[#344054]">
-                Inclusion Details
-              </div>
-            ) : (
-              <Skeleton
-                width={100}
-                height={25}
-                sx={{ bgcolor: 'var(--neutral-200)' }}
-                className="rounded-[4px]"
-                variant="rectangular"
-                animation="wave"
-              />
-            )}
-
-            {displayTable(inclusionDetails)}
-          </div>
-
-          <div className="mt-6 max-w-[100%] pr-[10px] mb-5">
-            {validImages.length > 0 ? (
-              <div className="sm:text-[14px] xl:text-[16px] font-medium text-[#344054]">
-                Other Information
-              </div>
-            ) : (
-              <Skeleton
-                width={100}
-                height={25}
-                sx={{ bgcolor: 'var(--neutral-200)' }}
-                className="rounded-[4px]"
-                variant="rectangular"
-                animation="wave"
-              />
-            )}
-
-            {displayTable(otherInformationDetails)}
+            </div>
           </div>
         </div>
       </div>
-      <div className="flex  h-[calc(100%-120px)] overflow-auto border-t-[1px] border-b-[1px] border-neutral200">
+      <div className="flex  h-[calc(100%-110px)] overflow-auto  border-neutral200">
         <div className="flex ">
           <div
             className="sticky left-0  min-h-[2080px] text-neutral700 text-mMedium font-medium w-[150px] !z-5"
             style={{ zIndex: 5 }}
           >
-            <div className="h-[234px] sticky top-0  items-center flex px-4 border-[0.5px] border-neutral200 bg-neutral50">
+            <div className="h-[420px]  items-center flex px-4 border-[0.5px] border-neutral200 bg-neutral50">
               Media
             </div>
             <div className=" flex flex-col">
-              {Object.keys(mappingColumn).map(key => (
-                <div
-                  key={key}
-                  className="py-2 px-4 border-[1px] border-neutral200 h-[38px] bg-neutral50"
-                >
-                  {key !== 'id' && mappingColumn[key]}
-                </div>
-              ))}
+              {Object.keys(mappingColumn).map(
+                key =>
+                  key !== 'details' &&
+                  key !== 'id' && (
+                    <div
+                      key={key}
+                      className="py-2 px-4 border-[1px] border-neutral200 h-[38px] bg-neutral50"
+                    >
+                      {mappingColumn[key]}
+                    </div>
+                  )
+              )}
             </div>
           </div>
+          {/* sticky top-0 */}
           <div className=" bg-neutral0 text-neutral900 text-mMedium font-medium min-h-[2080px] !z-2">
-            <div className="flex h-[234px] sticky top-0 ">
+            <div className="flex h-[420px]  ">
               {originalData !== undefined &&
                 originalData.length > 0 &&
-                originalData.map((items: IProduct) => (
-                  <div key={items.id} className="w-[198px]">
+                originalData.map((items: IProduct, index: number) => (
+                  <div key={items.id} className="w-[460px]">
                     <div
-                      className={`h-[234px] flex flex-col border-[0.5px] border-neutral200 bg-neutral0 p-2 gap-[10px]`}
+                      className={`h-[420px] flex flex-col border-[0.5px]  border-neutral200 bg-neutral0 p-2 gap-[10px]`}
                     >
-                      <div className="w-[180px] h-[175px]">
-                        <img
-                          // className="!h-[175px] !w-[180px]"
-                          src={`${FILE_URLS.IMG.replace(
-                            '***',
-                            items?.lot_id ?? ''
-                          )}`}
-                          alt="Diamond Image"
-                          width={180}
-                          height={175}
-                          onClick={
-                            () => {}
-                            // handleCheckboxClick(items.id)
-                          }
-                          onError={e => {
-                            handleImageError(e);
-                          }}
-                        />
+                      <div className="flex justify-around">
+                        {activePreviewTab === 'Video' ||
+                        activePreviewTab === 'B2B Sparkle' ? (
+                          <iframe
+                            src={
+                              allImages[index].filter(
+                                (data: any) =>
+                                  data.category === activePreviewTab
+                              )[0].url
+                            }
+                            className="w-[370px] h-[370px]"
+                          />
+                        ) : (
+                          // console.log(allImages[index].filter((data:any)=>data.category===activePreviewTab))
+                          <img
+                            src={filteredImages[index][imageIndex].url}
+                            alt={filteredImages[index][imageIndex].name}
+                            width={440}
+                            height={440}
+                            onClick={
+                              () => {}
+                              // handleCheckboxClick(items.id)
+                            }
+                            onError={e => {
+                              handleImageError(e);
+                            }}
+                          />
+                        )}
                       </div>
                       <div className="flex justify-between">
                         <div>
@@ -732,10 +591,13 @@ export function MatchPairDetails({
                           <button
                             onClick={e => {
                               e.stopPropagation();
-                              // handleDetailImage({ row: items });
+                              handleDetailImage({ row: items });
                             }}
                           >
-                            <Image src={Media} alt="Media" />
+                            <Media
+                              className={`stroke-[1.5] stroke-neutral900
+                           `}
+                            />
                           </button>
                         </div>
                         <div
@@ -753,8 +615,6 @@ export function MatchPairDetails({
                             height={24}
                             width={24}
                           />
-
-                          {/* <CloseButton /> */}
                         </div>
                       </div>
                     </div>
@@ -762,18 +622,23 @@ export function MatchPairDetails({
                 ))}
             </div>
             <div className={`flex `}>
-              {originalData.map((diamond: any) => (
-                <div className={`w-[198px] `} key={diamond.id}>
-                  {Object.keys(mappingColumn).map(key => (
-                    <div
-                      key={key}
-                      className="py-2 px-4 border-[1px] border-neutral200 h-[38px] whitespace-nowrap overflow-hidden overflow-ellipsis  bg-neutral0"
-                    >
-                      {key !== 'id' ? diamond[key] || '-' : ''}
-                    </div>
-                  ))}
-                </div>
-              ))}
+              {originalData.length > 0 &&
+                originalData.map((diamond: any) => (
+                  <div className={`w-[460px] `} key={diamond.id}>
+                    {Object.keys(mappingColumn).map(
+                      key =>
+                        key !== 'details' &&
+                        key !== 'id' && (
+                          <div
+                            key={key}
+                            className="py-2 px-4 border-[1px] border-neutral200 h-[38px] whitespace-nowrap overflow-hidden overflow-ellipsis  bg-neutral0"
+                          >
+                            {diamond[key] || '-'}
+                          </div>
+                        )
+                    )}
+                  </div>
+                ))}
             </div>
           </div>
         </div>

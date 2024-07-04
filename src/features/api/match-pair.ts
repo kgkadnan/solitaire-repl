@@ -12,9 +12,6 @@ export const matchingPairApi = createApi({
     getAllMatchingPair: builder.query({
       query: ({ offset, limit, url }) => ({
         url: `/store/products-matching-pair?limit=${limit}&offset=${offset}&expand=variants&${url}`
-        // url: `/store/products-matching-pair?limit=1&expand=variants&fields=id${
-        //   url !== '' ? '&' + url : ''
-        // }`
       })
     }),
     getMatchingPairCount: builder.query({
@@ -24,6 +21,12 @@ export const matchingPairApi = createApi({
         }`
       }),
       providesTags: ['MatchingPair']
+    }),
+    getSimilarMatchingPair: builder.query({
+      query: ({ product_id, matching_product_id }) => ({
+        url: `/store/similar-product?product_id=${product_id}&matching_pair_product_id=${matching_product_id}`
+      }),
+      providesTags: ['MatchingPair']
     })
   })
 });
@@ -31,5 +34,6 @@ export const matchingPairApi = createApi({
 export const {
   useLazyGetAllMatchingPairQuery,
   useGetMatchingPairCountQuery,
-  useLazyGetMatchingPairCountQuery
+  useLazyGetMatchingPairCountQuery,
+  useLazyGetSimilarMatchingPairQuery
 } = matchingPairApi;
