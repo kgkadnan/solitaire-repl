@@ -223,7 +223,7 @@ export const Carat = ({
                 value={accordionValue}
               >
                 <AccordionItem value={'Carats'}>
-                  <div className="flex ">
+                  <div className="flex relative w-full ">
                     {accordionValue.length > 0 ? (
                       ''
                     ) : (
@@ -263,7 +263,7 @@ export const Carat = ({
                       />
                     )}
 
-                    <div className="absolute top-[0px] right-[105px]">
+                    <div className="absolute top-[0px] right-[92px]">
                       <CustomAccordionTrigger
                         value={accordionValue}
                         className={` ${styles.accordionTriggerStyle}`}

@@ -814,6 +814,7 @@ const BidToByDataTable = ({
           isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED
         )
       ) {
+        console.log('row.original.discount', row.original.discount);
         const bidValue =
           bidValues[row.id] !== undefined
             ? bidValues[row.id]
@@ -952,7 +953,13 @@ const BidToByDataTable = ({
                     <ActionButton
                       actionButtonData={[
                         {
-                          variant: 'primary',
+                          variant:
+                            bidValue <=
+                            (activeTab === 1
+                              ? row.original.my_current_bid
+                              : row.original.discount)
+                              ? 'disable'
+                              : 'primary',
                           label: activeTab === 0 ? 'Add Bid' : 'Update Bid',
                           handler: () => {
                             if (!bidError) {
@@ -967,6 +974,10 @@ const BidToByDataTable = ({
                                 );
                                 return; // Exit early, do not update bidValues
                               }
+                              console.log(
+                                'bidValues[row.id]',
+                                bidValues[row.id]
+                              );
                               socketManager.emit('place_bidtobuy', {
                                 product_id: row.id,
                                 bid_value: bidValues[row.id]
@@ -980,6 +991,11 @@ const BidToByDataTable = ({
                               setBidError('');
                             }
                           },
+                          isDisable:
+                            bidValue <=
+                            (activeTab === 1
+                              ? row.original.my_current_bid
+                              : row.original.discount),
                           customCtaStyle: '!h-[30px] !text-[12px]',
 
                           customStyle: 'flex-1 w-full h-[30px]'

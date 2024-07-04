@@ -945,7 +945,11 @@ const NewArrivalDataTable = ({
                     <ActionButton
                       actionButtonData={[
                         {
-                          variant: 'primary',
+                          variant:
+                            bidValue <= row.original.current_max_bid
+                              ? 'disable'
+                              : 'primary',
+
                           label: activeTab === 0 ? 'Add Bid' : 'Update Bid',
                           handler: () => {
                             if (!bidError) {
@@ -968,6 +972,7 @@ const NewArrivalDataTable = ({
                               setBidError('');
                             }
                           },
+                          isDisable: bidValue <= row.original.current_max_bid,
                           customStyle: 'flex-1 w-full h-[30px] text-sMedium',
                           customCtaStyle: '!h-[30px] !text-[12px]'
                         }
