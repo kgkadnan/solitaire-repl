@@ -10,3 +10,6 @@ export const SELECT_STONE_TO_PERFORM_ACTION = 'Please select parameters';
 
 export const TITLE_ALREADY_EXISTS =
   'Title already exists. Choose another title to save your search';
+
+export const EXCEEDS_LIMITS_MATCHING_PAIR =
+  'Your selection includes more than 150 match pairs. Please modify your search.';

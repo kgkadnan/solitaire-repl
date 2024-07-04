@@ -134,6 +134,13 @@ export function MatchPairDetails({
     }
   }, [viewSimilar]);
 
+  useEffect(() => {
+    showToast &&
+      setTimeout(() => {
+        setShowToast(false); // Hide the toast notification after some time
+      }, 4000);
+  }, [showToast]);
+
   const filterImageUrl = (tableData: any) => [
     {
       name: getShapeDisplayName(tableData?.shape ?? ''),
