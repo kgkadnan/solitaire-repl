@@ -76,9 +76,10 @@ export function MatchPairDetails({
   const [imageIndex, setImageIndex] = useState<number>(0);
   // const [currentIndex, setCurrentIndex] = useState(0);
   const [validImages, setValidImages] = useState<IImagesType[]>([]);
-  const { errorSetState } = useErrorStateManagement();
+  const { errorState, errorSetState } = useErrorStateManagement();
 
   const { setIsError, setErrorText } = errorSetState;
+  const { errorText } = errorState;
 
   const [showToast, setShowToast] = useState(false);
   const [downloadExcel] = useDownloadExcelMutation();
@@ -240,8 +241,8 @@ export function MatchPairDetails({
 
   const handleClose: HandleCloseType = (event, id) => {
     const filterData = originalData.filter((item: IProduct) => item.id !== id);
-    // setCompareStoneData(filterData);
-    console.log(filterData, 'filterData');
+    setOriginalData(filterData);
+    // console.log(filterData, 'filterData');
   };
 
   // let isNudge = localStorage.getItem('show-nudge') === 'MINI';
@@ -272,7 +273,11 @@ export function MatchPairDetails({
     <div className="text-black bg-white rounded-[8px] w-[calc(100vw-116px)] h-[calc(100vh-140px)]">
       <Toast
         show={showToast}
-        message="Please select a stone to perform action."
+        message={
+          errorText !== ''
+            ? errorText
+            : 'Please select a stone to perform action.'
+        }
         isSuccess={false}
       />
       <div className="flex items-center">
@@ -297,7 +302,9 @@ export function MatchPairDetails({
 
           {validImages.length > 0 ? (
             <p className="text-neutral700 p-[8px] bg-neutral100 rounded-[4px] text-sMedium font-medium">
-              Stock No:{originalData[0]['lot_id']} & {originalData[1]['lot_id']}
+              Stock No:
+              {originalData.map((data: any) => data.lot_id).join(' & ')}
+              {/* Stock No:{originalData[0]['lot_id']} & {originalData[1]['lot_id']} */}
             </p>
           ) : (
             <Skeleton
@@ -601,9 +608,12 @@ export function MatchPairDetails({
                           className={`${styles.closeButton} cursor-pointer`}
                           data-testid={'Remove Stone'}
                           onClick={event =>
-                            originalData.length > 2
+                            originalData.length > 1
                               ? handleClose(event, items.id)
-                              : (setIsError(true), setErrorText(MINIMUM_STONES))
+                              : (setShowToast(true),
+                                setErrorText(
+                                  'At least one stone required on detail page'
+                                ))
                           }
                         >
                           <Image
