@@ -59,9 +59,8 @@ export function MatchPairDetails({
   modalSetState,
   setIsLoading,
   handleDetailImage,
-  setRowSelection // setValidImages,
-} // validImages
-: {
+  setRowSelection
+}: {
   data: any;
   filterData: any;
   goBackToListView: any;
@@ -70,8 +69,6 @@ export function MatchPairDetails({
   setIsLoading?: any;
   handleDetailImage: any;
   setRowSelection: any;
-  // setValidImages:any;
-  // validImages:any;
 }) {
   const router = useRouter();
 
