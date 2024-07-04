@@ -187,7 +187,8 @@ const MatchPairTable = ({
   setIsCompareStone,
   setCompareStoneData,
   setIsInputDialogOpen,
-  handleCreateAppointment
+  handleCreateAppointment,
+  originalData
 }: any) => {
   // Fetching saved search data
   const router = useRouter();
@@ -523,6 +524,7 @@ const MatchPairTable = ({
         sx: {
           height: '20px',
           cursor: 'pointer',
+          // border:"1px solid red !important",
           '&.MuiTableRow-root:hover .MuiTableCell-root::after': {
             backgroundColor: 'var(--neutral-50)'
           },
@@ -691,7 +693,11 @@ const MatchPairTable = ({
           },
 
           whiteSpace: 'nowrap',
-          borderBottom: '1px solid var(--neutral-50)'
+          borderBottom: originalData.some(
+            (subArray: any) => subArray[1].id === row.id
+          )
+            ? '4px solid var(--primary-border) !important'
+            : '1px solid var(--neutral-50)' //'1px solid var(--neutral-50)'
         }
       };
     },

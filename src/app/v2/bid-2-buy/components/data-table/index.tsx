@@ -814,7 +814,6 @@ const BidToByDataTable = ({
           isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED
         )
       ) {
-        console.log('row.original.discount', row.original.discount);
         const bidValue =
           bidValues[row.id] !== undefined
             ? bidValues[row.id]
@@ -974,10 +973,7 @@ const BidToByDataTable = ({
                                 );
                                 return; // Exit early, do not update bidValues
                               }
-                              console.log(
-                                'bidValues[row.id]',
-                                bidValues[row.id]
-                              );
+
                               socketManager.emit('place_bidtobuy', {
                                 product_id: row.id,
                                 bid_value: bidValues[row.id]

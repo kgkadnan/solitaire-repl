@@ -307,7 +307,9 @@ const Form = ({
     if (searchCount !== -1) {
       if (searchUrl) {
         if (
-          data?.count > MAX_SEARCH_FORM_COUNT &&
+          (isMatchingPair
+            ? data?.count > MAX_SEARCH_FORM_COUNT / 2
+            : data?.count > MAX_SEARCH_FORM_COUNT) &&
           data?.count > MIN_SEARCH_FORM_COUNT
         ) {
           setIsError(true);
@@ -442,7 +444,9 @@ const Form = ({
       minMaxError.length === 0
     ) {
       if (
-        data?.count < MAX_SEARCH_FORM_COUNT &&
+        (formIdentifier === 'MatchingPair'
+          ? data?.count < MAX_SEARCH_FORM_COUNT / 2
+          : data?.count < MAX_SEARCH_FORM_COUNT) &&
         data?.count > MIN_SEARCH_FORM_COUNT
       ) {
         const queryParams = generateQueryParams(state);
@@ -631,7 +635,9 @@ const Form = ({
       setIsDialogOpen(true);
     } else if (searchUrl && data?.count > MIN_SEARCH_FORM_COUNT) {
       if (
-        data?.count < MAX_SEARCH_FORM_COUNT &&
+        (formIdentifier === 'MatchingPair'
+          ? data?.count < MAX_SEARCH_FORM_COUNT / 2
+          : data?.count < MAX_SEARCH_FORM_COUNT) &&
         data?.count > MIN_SEARCH_FORM_COUNT
       ) {
         const queryParams = generateQueryParams(state);
@@ -814,7 +820,9 @@ const Form = ({
       handler: () => {
         if (searchUrl) {
           if (
-            data?.count < MAX_SEARCH_FORM_COUNT &&
+            (isMatchingPair
+              ? data?.count < MAX_SEARCH_FORM_COUNT / 2
+              : data?.count < MAX_SEARCH_FORM_COUNT) &&
             data?.count > MIN_SEARCH_FORM_COUNT
           ) {
             if (activeTab !== undefined) {
