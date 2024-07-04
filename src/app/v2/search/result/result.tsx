@@ -67,8 +67,6 @@ import { AddCommentDialog } from '@/components/v2/common/comment-dialog';
 import { handleComment } from './helpers/handle-comment';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import fireSvg from '@public/v2/assets/icons/data-table/fire-icon.svg';
-import threeDotsSvg from '@public/v2/assets/icons/threedots.svg';
-import { Dropdown } from '@/components/v2/common/dropdown-menu';
 import { IItem } from '../saved-search/saved-search';
 import { IManageListingSequenceResponse, IProduct } from '../interface';
 import { DiamondDetailsComponent } from '@/components/v2/common/detail-page';
