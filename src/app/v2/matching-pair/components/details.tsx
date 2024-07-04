@@ -96,8 +96,7 @@ export function MatchPairDetails({
   const { setSelectedCheckboxes } = checkboxSetState;
   const [triggerColumn] =
     useLazyGetManageListingSequenceQuery<IManageListingSequenceResponse>();
-  const [triggerSimilarMatchingPairApi] =
-    useLazyGetSimilarMatchingPairQuery();
+  const [triggerSimilarMatchingPairApi] = useLazyGetSimilarMatchingPairQuery();
   useEffect(() => {
     const fetchData = async () => {
       const response = await triggerColumn({});
