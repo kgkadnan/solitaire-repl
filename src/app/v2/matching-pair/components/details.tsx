@@ -566,7 +566,7 @@ export function MatchPairDetails({
                             }
                             className={`${
                               viewSimilar
-                                ? 'w-[180px] h-[175px]'
+                                ? 'w-[130px] h-[175px]'
                                 : 'w-[370px] h-[370px]'
                             } `}
                           />
