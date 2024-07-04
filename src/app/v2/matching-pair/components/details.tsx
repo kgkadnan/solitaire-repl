@@ -35,7 +35,6 @@ import {
 import { useLazyGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
 import CheckboxComponent from '@/components/v2/common/checkbox';
 import { useCheckboxStateManagement } from '@/components/v2/common/checkbox/hooks/checkbox-state-management';
-import { MINIMUM_STONES } from '@/constants/error-messages/compare-stone';
 import Media from '@public/v2/assets/icons/detail-page/expand.svg?url';
 import DownloadImg from '@public/v2/assets/icons/detail-page/download.svg?url';
 import forwardArrow from '@public/v2/assets/icons/arrow-forward.svg';
