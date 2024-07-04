@@ -241,7 +241,9 @@ export function MatchPairDetails({
     }
   };
   const handleImageError = (event: any) => {
-    event.target.src = NoImageFound.src; // Set the fallback image when the original image fails to load
+    event.target.src = NoImageFound.src; //30et the fallback image when the original image fails to load
+    event.target.height = viewSimilar ? 150 : 300;
+    event.target.width = viewSimilar ? 150 : 350;
   };
   const handleClick = (id: string) => {
     let updatedIsCheck = [...selectedCheckboxes];
@@ -623,7 +625,7 @@ export function MatchPairDetails({
                     <div
                       className={`${
                         viewSimilar ? 'h-[234px]' : 'h-[420px]'
-                      } flex flex-col border-[0.5px]  border-neutral200 bg-neutral0 p-2 gap-[10px]`}
+                      } flex flex-col justify-between border-[0.5px]  border-neutral200 bg-neutral0 p-2 gap-[10px]`}
                     >
                       <div className="flex justify-around">
                         {activePreviewTab === 'Video' ||
@@ -640,6 +642,16 @@ export function MatchPairDetails({
                                 ? 'w-[130px] h-[175px]'
                                 : 'w-[370px] h-[370px]'
                             } `}
+                          />
+                        ) : activePreviewTab === 'Certificate' ? (
+                          <img
+                            src={filteredImages[index][imageIndex].url}
+                            alt={filteredImages[index][imageIndex].name}
+                            width={viewSimilar ? 150 : 250}
+                            height={viewSimilar ? 150 : 300}
+                            onError={e => {
+                              handleImageError(e);
+                            }}
                           />
                         ) : (
                           <img

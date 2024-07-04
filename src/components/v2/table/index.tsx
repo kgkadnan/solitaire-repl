@@ -26,6 +26,7 @@ interface ITable {
   breadCrumLabel?: string;
   isOrderDetail?: boolean;
   identifier?: string;
+  isMatchingPair?: boolean;
 }
 
 const Table = ({
@@ -39,7 +40,8 @@ const Table = ({
   goBackToListView,
   breadCrumLabel,
   isOrderDetail = false,
-  identifier
+  identifier,
+  isMatchingPair = false
 }: ITable) => {
   // Fetching saved search data
 
@@ -211,6 +213,8 @@ const Table = ({
             ? 'calc(100vh - 220px)'
             : identifier === 'myCart'
             ? 'calc(100vh - 266px)'
+            : isMatchingPair
+            ? 'calc(100vh - 240px)'
             : 'calc(100vh - 310px)',
         maxHeight:
           isNudge &&
