@@ -656,7 +656,11 @@ const NewArrivalDataTable = ({
         sx: {
           color: 'var(--neutral-900)',
           '&.MuiTableCell-root': {
-            padding: '0px 4px',
+            padding: ['discount', 'price_per_carat', 'rap', 'amount'].includes(
+              cell.column.id
+            )
+              ? '0px 6px'
+              : '0px 2px',
             fontSize: '12px !important',
             fontWeight: rowSelection[row.id] ? 500 : 400,
 
@@ -718,14 +722,20 @@ const NewArrivalDataTable = ({
         sx: {
           color: 'var(--neutral-700)',
           '&.MuiTableCell-root': {
-            padding: '0px 4px 0px 4px',
+            padding: ['discount', 'price_per_carat', 'rap', 'amount'].includes(
+              column.id
+            )
+              ? '0px 6px'
+              : '0px 2px',
             height: '20px',
             background: 'var(--neutral-50)',
             opacity: 1,
             borderTop: '1px solid var(--neutral-200)',
             fontSize: '12px !important',
             fontWeight: 500,
-            paddingRight: ['location', 'lab'].includes(column.id) && '12px'
+            paddingRight: ['location', 'lab'].includes(column.id) && '12px',
+            textAlign:
+              column.id === 'girdle_percentage' ? 'center !important' : 'left'
           }
         }
       };

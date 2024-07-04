@@ -260,6 +260,7 @@ const Table = ({
             height: '20px',
             fontSize: '12px !important',
             fontWeight: 500
+            // textAlign:column.id==='girdle_percentage' ? 'center !important':'left',
           }
         }
       };
