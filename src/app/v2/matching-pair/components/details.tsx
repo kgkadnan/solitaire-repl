@@ -416,6 +416,7 @@ export function MatchPairDetails({
                   className=" flex gap-1 border-[1px] h-[40px] border-[#E4E7EC] rounded-[4px] px-4 py-2 cursor-pointer"
                   onClick={() => {
                     !viewSimilar &&
+                      similarData &&
                       setOriginalData([
                         ...originalData,
                         ...similarData?.products
