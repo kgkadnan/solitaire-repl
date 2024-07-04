@@ -42,6 +42,8 @@ import backwardArrow from '@public/v2/assets/icons/arrow-backword.svg';
 import backWardArrowDisable from '@public/v2/assets/icons/detail-page/back-ward-arrow-disable.svg';
 import forWardAarrowDisable from '@public/v2/assets/icons/detail-page/forward-arrow-disable.svg';
 import { handleDownloadImage } from '@/utils/v2/detail-page';
+import { useLazyGetSimilarMatchingPairQuery } from '@/features/api/match-pair';
+import logger from 'logging/log-util';
 
 export interface ITableColumn {
   key: string;
@@ -86,13 +88,16 @@ export function MatchPairDetails({
   const [mappingColumn, setMappingColumn] = useState<any>({});
   const [, setZoomLevel] = useState(1);
   const [, setZoomPosition] = useState({ x: 0, y: 0 });
-  // const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
+  const [viewSimilar, setViewSimilar] = useState<boolean>(false);
+  const [similarData, setSimilarData] = useState<any>();
   const { checkboxState, checkboxSetState } = useCheckboxStateManagement();
   const { selectedCheckboxes } = checkboxState;
   const { setSelectedCheckboxes } = checkboxSetState;
   const [triggerColumn] =
     useLazyGetManageListingSequenceQuery<IManageListingSequenceResponse>();
+  const [triggerSimilarMatchingPairApi, { data: matchingPairData }] =
+    useLazyGetSimilarMatchingPairQuery();
   useEffect(() => {
     const fetchData = async () => {
       const response = await triggerColumn({});
@@ -100,6 +105,17 @@ export function MatchPairDetails({
     };
     fetchData();
   }, []);
+  useEffect(() => {
+    if (originalData.length >= 2) {
+      triggerSimilarMatchingPairApi({
+        product_id: originalData[0].id,
+        matching_product_id: originalData[1].id
+      })
+        .unwrap()
+        .then(res => setSimilarData(res))
+        .catch(e => logger.error(e));
+    }
+  }, [originalData]);
   function updateState(column: any) {
     const updatedObj: any = { ...mappingColumn }; // Create a copy of newObj
     column?.forEach((obj: any) => {
@@ -111,11 +127,13 @@ export function MatchPairDetails({
     setMappingColumn(updatedObj); // Update the state with the updated object
   }
   useEffect(() => {
-    const result = data.filter((subArray: any) =>
-      subArray.some((obj: any) => obj.lot_id === filterData.lot_id)
-    );
-    setOriginalData(result[0]);
-  }, []);
+    if (viewSimilar === false) {
+      const result = data.filter((subArray: any) =>
+        subArray.some((obj: any) => obj.lot_id === filterData.lot_id)
+      );
+      setOriginalData(result[0]);
+    }
+  }, [viewSimilar]);
 
   const filterImageUrl = (tableData: any) => [
     {
@@ -302,8 +320,9 @@ export function MatchPairDetails({
           {validImages.length > 0 ? (
             <p className="text-neutral700 p-[8px] bg-neutral100 rounded-[4px] text-sMedium font-medium">
               Stock No:
-              {originalData.map((data: any) => data.lot_id).join(' & ')}
-              {/* Stock No:{originalData[0]['lot_id']} & {originalData[1]['lot_id']} */}
+              {viewSimilar
+                ? `Compare Stone ${similarData?.count}`
+                : originalData.map((data: any) => data.lot_id).join(' & ')}
             </p>
           ) : (
             <Skeleton
@@ -329,7 +348,22 @@ export function MatchPairDetails({
           </div>
           <div className="flex  justify-center xl:justify-end mr-[10px] items-center">
             <div className="flex gap-3 items-center">
-              hu
+              {similarData && similarData?.count > 0 && (
+                <div
+                  className=" flex gap-1 border-[1px] h-[40px] border-[#E4E7EC] rounded-[4px] px-4 py-2 cursor-pointer"
+                  onClick={() => {
+                    !viewSimilar && setOriginalData(similarData?.products),
+                      setViewSimilar(!viewSimilar);
+                  }}
+                >
+                  <p className="text-mMedium text-neutral900 font-medium">
+                    {viewSimilar ? 'Hide' : 'View'} similar
+                  </p>
+                  <div className=" bg-primaryMain border-[2px] border-primaryBorder text-white text-mMedium px-[6px] py-[1px] rounded-[4px]">
+                    +{similarData?.count}
+                  </div>
+                </div>
+              )}
               {filteredImages.length > 0 ? (
                 <div className="flex gap-6">
                   {filteredImages.length > 0 &&
@@ -482,7 +516,11 @@ export function MatchPairDetails({
             className="sticky left-0  min-h-[2080px] text-neutral700 text-mMedium font-medium w-[150px] !z-5"
             style={{ zIndex: 5 }}
           >
-            <div className="h-[420px]  items-center flex px-4 border-[0.5px] border-neutral200 bg-neutral50">
+            <div
+              className={`${
+                viewSimilar ? 'h-[234px]  sticky top-0 ' : 'h-[420px]'
+              }  items-center flex px-4 border-[0.5px] border-neutral200 bg-neutral50`}
+            >
               Media
             </div>
             <div className=" flex flex-col">
@@ -502,13 +540,22 @@ export function MatchPairDetails({
           </div>
           {/* sticky top-0 */}
           <div className=" bg-neutral0 text-neutral900 text-mMedium font-medium min-h-[2080px] !z-2">
-            <div className="flex h-[420px]  ">
+            <div
+              className={`flex ${
+                viewSimilar ? 'h-[234px]  sticky top-0 ' : 'h-[420px]'
+              } `}
+            >
               {originalData !== undefined &&
                 originalData.length > 0 &&
                 originalData.map((items: IProduct, index: number) => (
-                  <div key={items.id} className="w-[460px]">
+                  <div
+                    key={items.id}
+                    className={`${viewSimilar ? 'w-[150px]' : 'w-[460px]'}`}
+                  >
                     <div
-                      className={`h-[420px] flex flex-col border-[0.5px]  border-neutral200 bg-neutral0 p-2 gap-[10px]`}
+                      className={`${
+                        viewSimilar ? 'h-[234px]' : 'h-[420px]'
+                      } flex flex-col border-[0.5px]  border-neutral200 bg-neutral0 p-2 gap-[10px]`}
                     >
                       <div className="flex justify-around">
                         {activePreviewTab === 'Video' ||
@@ -520,15 +567,19 @@ export function MatchPairDetails({
                                   data.category === activePreviewTab
                               )[0].url
                             }
-                            className="w-[370px] h-[370px]"
+                            className={`${
+                              viewSimilar
+                                ? 'w-[180px] h-[175px]'
+                                : 'w-[370px] h-[370px]'
+                            } `}
                           />
                         ) : (
                           // console.log(allImages[index].filter((data:any)=>data.category===activePreviewTab))
                           <img
                             src={filteredImages[index][imageIndex].url}
                             alt={filteredImages[index][imageIndex].name}
-                            width={440}
-                            height={440}
+                            width={viewSimilar ? 185 : 440}
+                            height={viewSimilar ? 175 : 440}
                             onClick={
                               () => {}
                               // handleCheckboxClick(items.id)
@@ -566,11 +617,11 @@ export function MatchPairDetails({
                           className={`${styles.closeButton} cursor-pointer`}
                           data-testid={'Remove Stone'}
                           onClick={event =>
-                            originalData.length > 1
+                            originalData.length > 2
                               ? handleClose(event, items.id)
                               : (setShowToast(true),
                                 setErrorText(
-                                  'At least one stone required on detail page'
+                                  'Matching Pair requires atleast 2 stones'
                                 ))
                           }
                         >
@@ -589,7 +640,10 @@ export function MatchPairDetails({
             <div className={`flex `}>
               {originalData.length > 0 &&
                 originalData.map((diamond: any) => (
-                  <div className={`w-[460px] `} key={diamond.id}>
+                  <div
+                    className={`${viewSimilar ? 'w-[150px]' : 'w-[460px]'} `}
+                    key={diamond.id}
+                  >
                     {Object.keys(mappingColumn).map(
                       key =>
                         key !== 'details' &&
