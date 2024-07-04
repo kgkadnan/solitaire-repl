@@ -55,7 +55,7 @@ const CustomAccordionTrigger = React.forwardRef<
       {...props}
     >
       {children}
-      <button className="flex justify-center items-center font-medium w-[92px] py-[8px] rounded-[4px] gap-1 bg-neutral0 border-[1px] border-solid border-neutral200 h-[30px] text-sMedium cursor-pointer hover:bg-neutral50">
+      <button className="flex justify-center items-center font-medium px-[16px] py-[8px] rounded-[4px] gap-1 bg-neutral0 border-[1px] border-solid border-neutral200 h-[30px] text-sMedium cursor-pointer hover:bg-neutral50">
         {props?.value ? (
           <>
             <Image src={lessIcon} alt="lessIcon" width={12} height={12} />
