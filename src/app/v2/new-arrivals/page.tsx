@@ -56,9 +56,14 @@ import BookAppointment from '../my-appointments/components/book-appointment/book
 import { HOLD_STATUS, MEMO_STATUS } from '@/constants/business-logic';
 import { kycStatus } from '@/constants/enums/kyc';
 import BiddingSkeleton from '@/components/v2/skeleton/bidding';
+import { useAppSelector } from '@/hooks/hook';
 
 const NewArrivals = () => {
   const router = useRouter();
+
+  const filterData = useAppSelector(state => state.filterNewArrival);
+
+  console.log('newArrival', filterData);
   const [isDetailPage, setIsDetailPage] = useState(false);
   const [detailPageData, setDetailPageData] = useState<any>({});
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -238,7 +243,12 @@ const NewArrivals = () => {
   }, [authToken]);
   const handleBidStones = useCallback((data: any) => {
     setActiveBid(data.activeStone);
-    setBid(data.bidStone);
+    setBid(
+      filterData?.bidFilterData?.length > 0
+        ? filterData.bidFilterData
+        : data.bidStone
+    );
+    console.log('hereee ,bidStone', filterData.bidFilterData);
     setTime(data.endTime);
     if (data.activeStone) {
       data.activeStone.map((row: any) => {
@@ -774,6 +784,7 @@ const NewArrivals = () => {
             <div className="border-b-[1px] border-neutral200">
               {
                 <NewArrivalDataTable
+                  filterData={filterData}
                   columns={
                     activeTab === 2
                       ? memoizedColumns.filter(
@@ -806,6 +817,7 @@ const NewArrivals = () => {
                       : bidHistory?.data
                   }
                   activeCount={activeBid?.length}
+                  setBid={setBid}
                   bidCount={bid?.length}
                   historyCount={bidHistory?.data?.length}
                   socketManager={socketManager}

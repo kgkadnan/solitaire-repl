@@ -17,5 +17,6 @@ export enum Routes {
 export enum SubRoutes {
   NEW_SEARCH = 'new-search',
   RESULT = 'result',
-  SAVED_SEARCH = 'saved-search'
+  SAVED_SEARCH = 'saved-search',
+  NEW_ARRIVAL = 'new-arrival'
 }

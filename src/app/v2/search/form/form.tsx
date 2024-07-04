@@ -73,6 +73,7 @@ import {
   setEndTime,
   setIsSuccess
 } from '@/features/track-page-event/track-page-event-slice';
+import { filterFunction } from '@/features/filter-new-arrival/filter-new-arrival-slice';
 
 export interface ISavedSearch {
   saveSearchName: string;
@@ -99,7 +100,7 @@ const Form = ({
   setIsLoading,
   setIsAddDemand
 }: {
-  searchUrl: String;
+  searchUrl: string;
   setSearchUrl: Dispatch<SetStateAction<string>>;
   activeTab: number;
   setActiveTab: Dispatch<SetStateAction<number>>;
@@ -130,6 +131,8 @@ const Form = ({
   const { startTime, endTime } = useAppSelector(
     state => state.pageTimeTracking
   );
+
+  const filterThData = useAppSelector(state => state.filterNewArrival);
 
   const [isAllowedToUnload, setIsAllowedToUnload] = useState(true);
   const isAllowedToUnloadRef = useRef(isAllowedToUnload);
@@ -265,9 +268,93 @@ const Form = ({
       handleBeforeUnload();
     };
   }, [startTime]);
+  function filterData(data: any[], query: any): any[] {
+    return data.filter(item => {
+      // Check all properties from the query object
+      for (const key in query) {
+        if (Array.isArray(query[key])) {
+          if (key === 'key_to_symbol') {
+            const searchType = query['key_to_symbol_search_type'] as string;
+            const symbols = query[key] as string[];
+            console.log('symbols', symbols);
+            console.log('searchType', searchType);
+            if (searchType === 'contain') {
+              if (!symbols.every(symbol => item[key].includes(symbol))) {
+                return false;
+              }
+            } else if (searchType === 'doesNotContain') {
+              if (symbols.some(symbol => item[key].includes(symbol))) {
+                return false;
+              }
+            }
+          } else if (key === 'carats') {
+            const ranges = query[key] as string[];
+            const itemValue = item[key] as number;
+
+            if (
+              !ranges.some(range => {
+                const [min, max] = range.split('-').map(parseFloat);
+                return itemValue >= min && itemValue <= max;
+              })
+            ) {
+              return false;
+            }
+          } else if (!(query[key] as string[]).includes(item[key])) {
+            return false;
+          }
+        } else if (key.includes('[') && key.includes(']')) {
+          const [mainKey, condition] = key.split(/\[|\]/).filter(Boolean);
+          const value = parseFloat(query[key] as string);
+          const itemValue = parseFloat(item[mainKey]);
+
+          if (condition === 'lte' && !(itemValue <= value)) {
+            return false;
+          } else if (condition === 'gte' && !(itemValue >= value)) {
+            return false;
+          }
+        } else if (item[key] !== query[key]) {
+          return false;
+        }
+      }
+      return true;
+    });
+  }
+
+  function parseQueryString(queryString: string): any {
+    const params = new URLSearchParams(queryString);
+    const queryObject: any = {};
+
+    for (const [key, value] of params.entries()) {
+      if (key.endsWith('[]')) {
+        const cleanKey = key.slice(0, -2);
+        if (!queryObject[cleanKey]) {
+          queryObject[cleanKey] = [];
+        }
+        (queryObject[cleanKey] as string[]).push(value);
+      } else {
+        queryObject[key] = value;
+      }
+    }
+
+    return queryObject;
+  }
 
   useEffect(() => {
-    if (searchUrl.length > 0) {
+    if (subRoute === SubRoutes.NEW_ARRIVAL) {
+      const query = parseQueryString(searchUrl);
+      console.log('query', query);
+      console.log('filterThData?.bidData', filterThData?.bidData);
+      const filteredData =
+        filterThData?.bidData && filterData(filterThData?.bidData, query);
+
+      console.log('form count ', filteredData);
+      setData({
+        count: filteredData.length,
+        products: filteredData
+      });
+
+      setError('');
+    } else if (searchUrl.length > 0) {
       setIsLoading(true);
       triggerProductCountApi({ searchUrl })
         .unwrap()
@@ -333,8 +420,12 @@ const Form = ({
     let modifySearchResult = JSON.parse(localStorage.getItem('Search')!);
 
     let modifysavedSearchData = savedSearch?.savedSearch?.meta_data;
+    let bidDataQuery = filterThData.queryParams;
     setSelectedCaratRange([]);
-    if (
+    console.log('bidDataQuery', bidDataQuery);
+    if (subRoute === SubRoutes.NEW_ARRIVAL && bidDataQuery) {
+      setModifySearch(bidDataQuery, setState);
+    } else if (
       modifySearchFrom === `${SubRoutes.SAVED_SEARCH}` &&
       modifysavedSearchData
     ) {
@@ -375,7 +466,17 @@ const Form = ({
     isSavedParams: boolean = false,
     id?: string
   ) => {
-    if (
+    if (subRoute === SubRoutes.NEW_ARRIVAL) {
+      const queryParams = generateQueryParams(state);
+      dispatch(
+        filterFunction({
+          queryParams,
+          bidData: filterThData.bidData,
+          bidFilterData: data?.products
+        })
+      );
+      router.push(`/v2/new-arrivals`);
+    } else if (
       JSON.parse(localStorage.getItem('Search')!)?.length >=
         MAX_SEARCH_TAB_LIMIT &&
       modifySearchFrom !== `${SubRoutes.RESULT}`
@@ -761,7 +862,8 @@ const Form = ({
           setIsError(true);
           setErrorText(SELECT_SOME_PARAM);
         }
-      }
+      },
+      isHidden: subRoute === SubRoutes.NEW_ARRIVAL
     },
     {
       variant: 'primary',

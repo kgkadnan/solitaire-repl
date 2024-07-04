@@ -12,6 +12,7 @@ import { cartApi } from './features/api/cart';
 import { downloadExcelApi } from './features/api/download-excel';
 import notificationBadgeReducer from './features/notification/notification-slice';
 import trackPageEventReducer from './features/track-page-event/track-page-event-slice';
+import filterNewArrivalReducer from './features/filter-new-arrival/filter-new-arrival-slice';
 import profileUpdateReducer from './features/profile/profile-update-slice';
 import isEditingKycSlice from './features/kyc/is-editing-kyc';
 import searchResultReducer from './features/search-result/search-result';
@@ -49,6 +50,7 @@ const rootReducer = combineReducers({
   notificationBadge: notificationBadgeReducer,
   profileUpdate: profileUpdateReducer,
   pageTimeTracking: trackPageEventReducer,
+  filterNewArrival: filterNewArrivalReducer,
   isEditingKYC: isEditingKycSlice,
   searchResult: searchResultReducer,
   searchList: searchListReducer,

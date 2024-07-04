@@ -8,13 +8,14 @@ import {
 import ExpandImg from '@public/v2/assets/icons/detail-page/expand.svg?url';
 import CollapsIcon from '@public/v2/assets/icons/collapse-icon.svg?url';
 import ExportExcel from '@public/v2/assets/icons/detail-page/export-excel.svg?url';
+import crossIcon from '@public/v2/assets/icons/new-arrivals/cross-icon.svg';
 import Image from 'next/image';
 import DisableDecrementIcon from '@public/v2/assets/icons/new-arrivals/disable-decrement.svg?url';
 import searchIcon from '@public/v2/assets/icons/data-table/search-icon.svg';
 import { faSort, faSortDown } from '@fortawesome/free-solid-svg-icons';
 // theme.js
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-
+import FilterIcon from '@public/v2/assets/icons/new-arrivals/filter-icon.svg?url';
 import { useEffect, useState } from 'react';
 
 import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
@@ -34,6 +35,10 @@ import { formatNumber } from '@/utils/fix-two-digit-number';
 import { handleIncrementDiscount } from '@/utils/v2/handle-increment-discount';
 import { handleDecrementDiscount } from '@/utils/v2/handle-decrement-discount';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ManageLocales } from '@/utils/v2/translate';
+import { SubRoutes } from '@/constants/v2/enums/routes';
+import { useAppDispatch } from '@/hooks/hook';
+import { filterFunction } from '@/features/filter-new-arrival/filter-new-arrival-slice';
 
 const theme = createTheme({
   typography: {
@@ -164,9 +169,14 @@ const NewArrivalDataTable = ({
   setRowSelection,
   setIsLoading,
   renderFooter,
-  router
+  router,
+  filterData,
+  setBid
 }: any) => {
   // Fetching saved search data
+
+  const dispatch = useAppDispatch();
+  console.log('data', filterData);
 
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [bidError, setBidError] = useState('');
@@ -310,6 +320,57 @@ const NewArrivalDataTable = ({
           </div>
 
           <div className="flex gap-[12px]" style={{ alignItems: 'inherit' }}>
+            <div className="">
+              {filterData?.bidFilterData?.length > 0 ? (
+                <button
+                  onClick={() => {
+                    dispatch(
+                      filterFunction({
+                        bidData: filterData.bidData,
+                        queryParams: filterData.queryParams
+                      })
+                    );
+                    router.push(
+                      `/v2/search?active-tab=${SubRoutes.NEW_ARRIVAL}`
+                    );
+                  }}
+                  className={`flex w-full justify-center py-[8px] h-[39px] px-[16px]  items-center font-medium  rounded-[4px] gap-1  border-[1px]  border-solid border-neutral200 text-mMedium  cursor-pointer  ${'bg-primaryMain text-neutral0 hover:bg-primaryHover'}`}
+                >
+                  <FilterIcon stroke={`${'var(--neutral-0)'}`} />
+
+                  <p className="w-[60%]">{ManageLocales('app.modifyFilter')}</p>
+                  <div
+                    className="w-[17%] cursor-pointer"
+                    onClick={e => {
+                      e.stopPropagation();
+                      setBid(filterData.bidData);
+                      dispatch(filterFunction({}));
+                    }}
+                  >
+                    <Image src={crossIcon} alt="crossIcon" />
+                  </div>
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    dispatch(
+                      filterFunction({
+                        bidData: rows
+                      })
+                    );
+                    router.push(
+                      `/v2/search?active-tab=${SubRoutes.NEW_ARRIVAL}`
+                    );
+                  }}
+                  className={`flex justify-center py-[8px] h-[39px] px-[16px] items-center font-medium  rounded-[4px] gap-1  border-[1px]  border-solid border-neutral200 text-mMedium  cursor-pointer  ${'text-neutral900 bg-neutral0 hover:bg-neutral50'}`}
+                >
+                  <FilterIcon stroke={`${'var(--neutral-900)'}`} />
+
+                  <p>{ManageLocales('app.applyFilter')}</p>
+                </button>
+              )}
+            </div>
+
             <MRT_GlobalFilterTextField
               table={table}
               autoComplete="false"

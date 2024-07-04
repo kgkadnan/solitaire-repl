@@ -166,6 +166,9 @@
   "app.verifyOtp.goBack": "Go back",
   "app.OTPVerification.resend": "Resend",
 
+  "app.applyFilter": "Apply Filter",
+  "app.modifyFilter": "Modify Filter",
+
   "app.OTPVerification.cancel": "Cancel",
   "app.OTPVerification.save": "Save",
 
