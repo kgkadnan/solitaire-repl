@@ -26,7 +26,6 @@ import { DialogComponent } from '@/components/v2/common/dialog';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import deleteIcon from '@public/v2/assets/icons/modal/bin.svg';
 
-import threeDotsSvg from '@public/v2/assets/icons/threedots.svg';
 import {
   RednderLocation,
   RenderAmount,
@@ -57,7 +56,6 @@ import { AddCommentDialog } from '@/components/v2/common/comment-dialog';
 import { handleComment } from '../search/result/helpers/handle-comment';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useConfirmProductMutation } from '@/features/api/product';
-import { Dropdown } from '@/components/v2/common/dropdown-menu';
 import { IProduct, IProductItem } from '../search/interface';
 import { DiamondDetailsComponent } from '@/components/v2/common/detail-page';
 import { FILE_URLS } from '@/constants/v2/detail-page';
@@ -986,32 +984,6 @@ const MyCart = () => {
                       identifier: 'detailPage'
                     });
                   }
-                }
-              ]}
-            />
-            <Dropdown
-              dropdownTrigger={
-                <Image
-                  src={threeDotsSvg}
-                  alt="threeDotsSvg"
-                  width={43}
-                  height={43}
-                />
-              }
-              dropdownMenu={[
-                {
-                  label: ManageLocales(
-                    'app.search.actionButton.bookAppointment'
-                  ),
-                  handler: () => {},
-                  commingSoon: true
-                },
-                {
-                  label: ManageLocales(
-                    'app.search.actionButton.findMatchingPair'
-                  ),
-                  handler: () => {},
-                  commingSoon: true
                 }
               ]}
             />
