@@ -36,8 +36,7 @@ import { constructUrlParams } from '@/utils/v2/construct-url-params';
 import {
   AVAILABLE_STATUS,
   MAX_SAVED_SEARCH_COUNT,
-  MAX_SEARCH_TAB_LIMIT,
-  SOLD_STATUS
+  MAX_SEARCH_TAB_LIMIT
 } from '@/constants/business-logic';
 import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
 import { useRouter } from 'next/navigation';
@@ -1099,13 +1098,6 @@ const DataTable = ({
                         kycStatus.INPROGRESS ||
                       isKycVerified?.customer?.kyc?.status ===
                         kycStatus.REJECTED
-                  },
-                  {
-                    label: ManageLocales(
-                      'app.search.actionButton.findMatchingPair'
-                    ),
-                    handler: () => {},
-                    commingSoon: true
                   }
                 ]}
               />
@@ -1154,14 +1146,6 @@ const DataTable = ({
                   />
                 }
                 dropdownMenu={[
-                  {
-                    label: ManageLocales(
-                      'app.myCart.actionButton.findMatchingPair'
-                    ),
-                    handler: () => {},
-                    isHidden: activeCartTab !== AVAILABLE_STATUS,
-                    commingSoon: true
-                  },
                   {
                     label: ManageLocales(
                       'app.myCart.actionButton.bookAppointment'

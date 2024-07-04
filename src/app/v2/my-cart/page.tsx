@@ -1005,13 +1005,6 @@ const MyCart = () => {
                   ),
                   handler: () => {},
                   commingSoon: true
-                },
-                {
-                  label: ManageLocales(
-                    'app.search.actionButton.findMatchingPair'
-                  ),
-                  handler: () => {},
-                  commingSoon: true
                 }
               ]}
             />

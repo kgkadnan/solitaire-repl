@@ -329,6 +329,7 @@ export function MatchPairDetails({
           </div>
           <div className="flex  justify-center xl:justify-end mr-[10px] items-center">
             <div className="flex gap-3 items-center">
+              hu
               {filteredImages.length > 0 ? (
                 <div className="flex gap-6">
                   {filteredImages.length > 0 &&
@@ -438,52 +439,11 @@ export function MatchPairDetails({
                         tooltipContentStyles={'z-[1000]'}
                       />
                     )}
-
-                    {/* <Tooltip
-                      tooltipTrigger={
-                        <button
-                          onClick={() => {
-                            setIsModalOpen(!isModalOpen);
-                          }}
-                          disabled={!(allImages[0].length > 0)}
-                          className={`rounded-[4px] hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm ${
-                            allImages[0].length > 0
-                              ? 'bg-neutral0'
-                              : '!bg-neutral100 cursor-not-allowed'
-                          }`}
-                        >
-                          <ExpandImg
-                            className={`stroke-[1.5] ${
-                              allImages[0].length > 0
-                                ? 'stroke-neutral900'
-                                : 'stroke-neutral400'
-                            }`}
-                          />
-                        </button>
-                      }
-                      tooltipContent={'Expand'}
-                      tooltipContentStyles={'z-[1000]'}
-                    /> */}
                   </div>
                 </div>
               ) : (
                 ''
               )}
-
-              {/* <Tooltip
-                tooltipTrigger={
-                  <button
-                    onClick={() => {}}
-                    className={`rounded-[4px] hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm ${'bg-neutral0'}`}
-                  >
-                    <DownloadImg
-                      className={`${'stroke-neutral900 stroke-[1.5]'}`}
-                    />
-                  </button>
-                }
-                tooltipContent={'Download Media'}
-                tooltipContentStyles={'z-[1000]'}
-              /> */}
               <Tooltip
                 tooltipTrigger={
                   <button
@@ -496,7 +456,6 @@ export function MatchPairDetails({
                 tooltipContent={'Download Excel'}
                 tooltipContentStyles={'z-[1000]'}
               />
-
               <div className="w-[38px] h-[38px]">
                 <Share
                   rows={originalData}

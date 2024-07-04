@@ -1178,25 +1178,6 @@ const Result = ({
                 }
               ]}
             />
-            <Dropdown
-              dropdownTrigger={
-                <Image
-                  src={threeDotsSvg}
-                  alt="threeDotsSvg"
-                  width={4}
-                  height={43}
-                />
-              }
-              dropdownMenu={[
-                {
-                  label: ManageLocales(
-                    'app.search.actionButton.findMatchingPair'
-                  ),
-                  handler: () => {},
-                  commingSoon: true
-                }
-              ]}
-            />
           </div>
         </>
       ) : (
