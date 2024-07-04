@@ -11,7 +11,7 @@ import { ReactNode } from 'react';
 import CommonPoppup from '@/app/v2/login/component/common-poppup';
 
 export const isSearchAlreadyExist = (data: any, nameToFind: string) => {
-  const foundSearch = data.find(
+  const foundSearch = data?.find(
     (search: any) =>
       search.saveSearchName.toLowerCase() === nameToFind.toLowerCase()
   );
@@ -87,11 +87,17 @@ export const handleCardClick = ({
           );
 
           if (isAlreadyOpenIndex >= 0 && isAlreadyOpenIndex !== null) {
-            router.push(
-              `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
-                isAlreadyOpenIndex + 1
-              }`
-            );
+            isMatchingPair
+              ? router.push(
+                  `${Routes.MATCHING_PAIR}?active-tab=${SubRoutes.RESULT}-${
+                    isAlreadyOpenIndex + 1
+                  }`
+                )
+              : router.push(
+                  `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
+                    isAlreadyOpenIndex + 1
+                  }`
+                );
           }
           // Check if the maximum search tab limit is reached
           else if (data?.length >= MAX_SEARCH_TAB_LIMIT) {
@@ -114,9 +120,17 @@ export const handleCardClick = ({
                     variant: 'primary',
                     label: ManageLocales('app.modal.manageTabs'),
                     handler: () => {
-                      router.push(
-                        `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${1}`
-                      );
+                      isMatchingPair
+                        ? router.push(
+                            `${Routes.MATCHING_PAIR}?active-tab=${
+                              SubRoutes.RESULT
+                            }-${1}`
+                          )
+                        : router.push(
+                            `${Routes.SEARCH}?active-tab=${
+                              SubRoutes.RESULT
+                            }-${1}`
+                          );
                     },
                     customStyle: 'flex-1 h-10'
                   }
@@ -138,12 +152,21 @@ export const handleCardClick = ({
               }
             ];
 
-            localStorage.setItem('Search', JSON.stringify(localStorageData));
-            router.push(
-              `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
-                data.length + 1
-              }`
+            localStorage.setItem(
+              isMatchingPair ? 'MatchingPair' : 'Search',
+              JSON.stringify(localStorageData)
             );
+            isMatchingPair
+              ? router.push(
+                  `${Routes.MATCHING_PAIR}?active-tab=${SubRoutes.RESULT}-${
+                    data.length + 1
+                  }`
+                )
+              : router.push(
+                  `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
+                    data.length + 1
+                  }`
+                );
           }
         } else {
           // If no data in local storage, create a new entry and navigate to the search result page
@@ -157,8 +180,17 @@ export const handleCardClick = ({
             }
           ];
 
-          localStorage.setItem('Search', JSON.stringify(localStorageData));
-          router.push(`${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${1}`);
+          localStorage.setItem(
+            isMatchingPair ? 'MatchingPair' : 'Search',
+            JSON.stringify(localStorageData)
+          );
+          isMatchingPair
+            ? router.push(
+                `${Routes.MATCHING_PAIR}?active-tab=${SubRoutes.RESULT}-${1}`
+              )
+            : router.push(
+                `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${1}`
+              );
         }
       }
     }
