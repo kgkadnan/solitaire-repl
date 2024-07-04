@@ -55,7 +55,7 @@ import {
   useUpdateSavedSearchMutation
 } from '@/features/api/saved-searches';
 import Breadcrum from '@/components/v2/common/search-breadcrum/breadcrum';
-import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
+import { MatchSubRoutes, Routes, SubRoutes } from '@/constants/v2/enums/routes';
 import BinIcon from '@public/v2/assets/icons/bin.svg';
 import Image from 'next/image';
 import { InputDialogComponent } from '@/components/v2/common/input-dialog';
@@ -66,6 +66,7 @@ import { isSearchAlreadyExist } from '../saved-search/helpers/handle-card-click'
 import { constructUrlParams } from '@/utils/v2/construct-url-params';
 import CommonPoppup from '../../login/component/common-poppup';
 import { kycStatus } from '@/constants/enums/kyc';
+import { useLazyGetMatchingPairCountQuery } from '@/features/api/match-pair';
 import { useAppDispatch } from '@/hooks/hook';
 import { useSharePageEventMutation } from '@/features/api/track-page';
 import {
@@ -97,7 +98,8 @@ const Form = ({
   addSearches,
   setAddSearches,
   setIsLoading,
-  setIsAddDemand
+  setIsAddDemand,
+  isMatchingPair = false
 }: {
   searchUrl: String;
   setSearchUrl: Dispatch<SetStateAction<string>>;
@@ -117,6 +119,7 @@ const Form = ({
   setAddSearches: any;
   setIsLoading: any;
   setIsAddDemand: Dispatch<SetStateAction<boolean>>;
+  isMatchingPair: boolean;
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -224,6 +227,7 @@ const Form = ({
   const [data, setData] = useState<any>();
   const [error, setError] = useState<any>();
   let [triggerProductCountApi] = useLazyGetProductCountQuery();
+  let [triggerMatchingPairCountApi] = useLazyGetMatchingPairCountQuery();
   // const { errorState, errorSetState } = useNumericFieldValidation();
 
   const { caratError, discountError, pricePerCaratError, amountRangeError } =
@@ -269,14 +273,23 @@ const Form = ({
   useEffect(() => {
     if (searchUrl.length > 0) {
       setIsLoading(true);
-      triggerProductCountApi({ searchUrl })
-        .unwrap()
-        .then((response: any) => {
-          setData(response), setError(''), setIsLoading(false);
-        })
-        .catch(e => {
-          setError(e), setIsLoading(false);
-        });
+      isMatchingPair
+        ? triggerMatchingPairCountApi({ searchUrl })
+            .unwrap()
+            .then((response: any) => {
+              setData(response), setError(''), setIsLoading(false);
+            })
+            .catch(e => {
+              setError(e), setIsLoading(false);
+            })
+        : triggerProductCountApi({ searchUrl })
+            .unwrap()
+            .then((response: any) => {
+              setData(response), setError(''), setIsLoading(false);
+            })
+            .catch(e => {
+              setError(e), setIsLoading(false);
+            });
     }
   }, [searchUrl]);
 
@@ -330,7 +343,11 @@ const Form = ({
   // Load saved search data when component mounts
   useEffect(() => {
     setIsLoading(false);
-    let modifySearchResult = JSON.parse(localStorage.getItem('Search')!);
+    let modifySearchResult = JSON.parse(
+      isMatchingPair
+        ? localStorage.getItem('MatchingPair')!
+        : localStorage.getItem('Search')!
+    );
 
     let modifysavedSearchData = savedSearch?.savedSearch?.meta_data;
     setSelectedCaratRange([]);
@@ -358,7 +375,11 @@ const Form = ({
 
   useEffect(() => {
     let data: ISavedSearch[] | [] =
-      JSON.parse(localStorage.getItem('Search')!) || [];
+      JSON.parse(
+        isMatchingPair
+          ? localStorage.getItem('MatchingPair')!
+          : localStorage.getItem('Search')!
+      ) || [];
     if (data?.length > 0 && data[data?.length - 1]) {
       setAddSearches(data);
     }
@@ -373,10 +394,11 @@ const Form = ({
 
   const handleFormSearch = async (
     isSavedParams: boolean = false,
-    id?: string
+    id?: string,
+    formIdentifier = 'Search'
   ) => {
     if (
-      JSON.parse(localStorage.getItem('Search')!)?.length >=
+      JSON.parse(localStorage.getItem(formIdentifier)!)?.length >=
         MAX_SEARCH_TAB_LIMIT &&
       modifySearchFrom !== `${SubRoutes.RESULT}`
     ) {
@@ -399,7 +421,12 @@ const Form = ({
               variant: 'primary',
               label: ManageLocales('app.modal.manageTabs'),
               handler: () => {
-                router.push(`/v2/search?active-tab=${SubRoutes.RESULT}-1`);
+                formIdentifier === 'MatchingPair'
+                  ? router.push(
+                      `/v2/matching-pair?active-tab=${MatchSubRoutes.RESULT}-1`
+                    )
+                  : router.push(`/v2/search?active-tab=${SubRoutes.RESULT}-1`);
+
                 setIsDialogOpen(false);
               },
               customStyle: 'flex-1 h-10'
@@ -420,7 +447,10 @@ const Form = ({
       ) {
         const queryParams = generateQueryParams(state);
 
-        if (modifySearchFrom === `${SubRoutes.SAVED_SEARCH}`) {
+        if (
+          modifySearchFrom === `${SubRoutes.SAVED_SEARCH}` ||
+          modifySearchFrom === `${MatchSubRoutes.SAVED_SEARCH}`
+        ) {
           if (savedSearch?.savedSearch?.meta_data) {
             let updatedMeta = queryParams;
 
@@ -439,7 +469,7 @@ const Form = ({
                 queryParams
               };
               let localStorageData = JSON.parse(
-                localStorage.getItem('Search')!
+                localStorage.getItem(formIdentifier)!
               );
 
               let isAlreadyOpenIndex = isSearchAlreadyExist(
@@ -448,26 +478,43 @@ const Form = ({
               );
 
               if (isAlreadyOpenIndex >= 0 && isAlreadyOpenIndex !== null) {
-                router.push(
-                  `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
-                    isAlreadyOpenIndex + 1
-                  }`
-                );
+                formIdentifier === 'MatchingPair'
+                  ? router.push(
+                      `${Routes.MATCHING_PAIR}?active-tab=${SubRoutes.RESULT}-${
+                        isAlreadyOpenIndex + 1
+                      }`
+                    )
+                  : router.push(
+                      `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
+                        isAlreadyOpenIndex + 1
+                      }`
+                    );
               } else {
                 localStorage.setItem(
-                  'Search',
+                  formIdentifier,
                   JSON.stringify([...addSearches, setDataOnLocalStorage])
                 );
-                router.push(
-                  `/v2/search?active-tab=${SubRoutes.RESULT}-${
-                    JSON.parse(localStorage.getItem('Search')!).length
-                  }`
-                );
+                formIdentifier === 'MatchingPair'
+                  ? router.push(
+                      `/v2/matching-pair?active-tab=${MatchSubRoutes.RESULT}-${
+                        JSON.parse(localStorage.getItem(formIdentifier)!).length
+                      }`
+                    )
+                  : router.push(
+                      `/v2/search?active-tab=${SubRoutes.RESULT}-${
+                        JSON.parse(localStorage.getItem(formIdentifier)!).length
+                      }`
+                    );
               }
             });
           }
-        } else if (modifySearchFrom === `${SubRoutes.RESULT}`) {
-          let modifySearchResult = JSON.parse(localStorage.getItem('Search')!);
+        } else if (
+          modifySearchFrom === `${SubRoutes.RESULT}` ||
+          modifySearchFrom === `${MatchSubRoutes.RESULT}`
+        ) {
+          let modifySearchResult = JSON.parse(
+            localStorage.getItem(formIdentifier)!
+          );
           let setDataOnLocalStorage = {
             id: modifySearchResult[activeTab - 1]?.id || id,
             saveSearchName:
@@ -480,9 +527,15 @@ const Form = ({
           if (modifySearchResult[activeTab - 1]) {
             const updatedData = [...modifySearchResult];
             updatedData[activeTab - 1] = setDataOnLocalStorage;
-            localStorage.setItem('Search', JSON.stringify(updatedData));
+            localStorage.setItem(formIdentifier, JSON.stringify(updatedData));
           }
-          router.push(`/v2/search?active-tab=${SubRoutes.RESULT}-${activeTab}`);
+          formIdentifier === 'MatchingPair'
+            ? router.push(
+                `/v2/matching-pair?active-tab=${MatchSubRoutes.RESULT}-${activeTab}`
+              )
+            : router.push(
+                `/v2/search?active-tab=${SubRoutes.RESULT}-${activeTab}`
+              );
         } else {
           setIsAllowedToUnload(false);
           let setDataOnLocalStorage = {
@@ -508,14 +561,20 @@ const Form = ({
           }
 
           localStorage.setItem(
-            'Search',
+            formIdentifier,
             JSON.stringify([...addSearches, setDataOnLocalStorage])
           );
-          router.push(
-            `/v2/search?active-tab=${SubRoutes.RESULT}-${
-              JSON.parse(localStorage.getItem('Search')!).length
-            }`
-          );
+          formIdentifier === 'MatchingPair'
+            ? router.push(
+                `/v2/matching-pair?active-tab=${MatchSubRoutes.RESULT}-${
+                  JSON.parse(localStorage.getItem(formIdentifier)!).length
+                }`
+              )
+            : router.push(
+                `/v2/search?active-tab=${SubRoutes.RESULT}-${
+                  JSON.parse(localStorage.getItem(formIdentifier)!).length
+                }`
+              );
         }
       } else {
         setIsError(true);
@@ -525,7 +584,9 @@ const Form = ({
       setErrorText(SELECT_SOME_PARAM);
     }
   };
-
+  const handleMatchingPairSearch = () => {
+    handleFormSearch(false, '', 'MatchingPair');
+  };
   // Function: Save and search
   const handleSaveAndSearch: any = async () => {
     if (
@@ -582,7 +643,11 @@ const Form = ({
             };
             updateSavedSearch(updateSavedData);
 
-            let localStorageData = JSON.parse(localStorage.getItem('Search')!);
+            let localStorageData = JSON.parse(
+              isMatchingPair
+                ? localStorage.getItem('MatchingPair')!
+                : localStorage.getItem('Search')!
+            );
 
             let isAlreadyOpenIndex = isSearchAlreadyExist(
               localStorageData,
@@ -618,7 +683,9 @@ const Form = ({
           updateSavedSearch(updateSaveSearchData)
             .unwrap()
             .then(() => {
-              handleFormSearch(true);
+              isMatchingPair
+                ? handleFormSearch(true, '', 'MatchingPair')
+                : handleFormSearch(true);
             })
             .catch((error: any) => {
               logger.error(error);
@@ -632,7 +699,9 @@ const Form = ({
           })
             .unwrap()
             .then((res: any) => {
-              handleFormSearch(true, res.id);
+              isMatchingPair
+                ? handleFormSearch(true, res.id, 'MatchingPair')
+                : handleFormSearch(true, res.id);
             })
             .catch((error: any) => {
               setInputError(error.data.message);
@@ -768,18 +837,21 @@ const Form = ({
       label:
         // 'Search',
         `${
-          minMaxError.length === 0 &&
-          errorText === NO_STONE_FOUND &&
-          isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
+          isMatchingPair
+            ? 'Search'
+            : minMaxError.length === 0 &&
+              errorText === NO_STONE_FOUND &&
+              isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
             ? 'Add Demand'
             : 'Search'
         } `,
       handler:
         // errorText === NO_STONE_FOUND ? () => {} : handleFormSearch
-
-        minMaxError.length === 0 &&
-        errorText === NO_STONE_FOUND &&
-        isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
+        isMatchingPair
+          ? handleMatchingPairSearch
+          : minMaxError.length === 0 &&
+            errorText === NO_STONE_FOUND &&
+            isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
           ? handleAddDemand
           : handleFormSearch
     }
@@ -872,7 +944,7 @@ const Form = ({
       <div>
         <div className="py-2">
           <span className="text-neutral900 text-lRegular font-medium grid gap-[24px]">
-            Search for Diamonds
+            Search for {isMatchingPair ? 'Matching Pair' : 'Diamonds'}
           </span>
         </div>
         <div className="flex flex-col gap-[16px]">
@@ -885,6 +957,7 @@ const Form = ({
                   setActiveTab={setActiveTab}
                   handleCloseSpecificTab={handleCloseSpecificTab}
                   setIsLoading={setIsLoading}
+                  isMatchingPair={isMatchingPair}
                 />
               </div>
               <div className="pr-[2px] flex gap-[12px]  justify-end flex-wrap">

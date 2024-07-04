@@ -25,7 +25,8 @@ export const handleCardClick = ({
   router,
   triggerProductCountApi,
   setDialogContent,
-  setIsDialogOpen
+  setIsDialogOpen,
+  isMatchingPair
 }: {
   id: string;
   savedSearchData: ISavedSearchData[];
@@ -33,6 +34,7 @@ export const handleCardClick = ({
   triggerProductCountApi: any;
   setDialogContent: React.Dispatch<React.SetStateAction<ReactNode>>;
   setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isMatchingPair?: boolean;
 }) => {
   // Filter the saved search data to get the clicked card's data
 
@@ -74,7 +76,9 @@ export const handleCardClick = ({
           />
         );
       } else {
-        const data: any = JSON.parse(localStorage.getItem('Search')!);
+        const data: any = isMatchingPair
+          ? JSON.parse(localStorage.getItem('MatchingPair')!)
+          : JSON.parse(localStorage.getItem('Search')!);
 
         if (data?.length) {
           let isAlreadyOpenIndex = isSearchAlreadyExist(

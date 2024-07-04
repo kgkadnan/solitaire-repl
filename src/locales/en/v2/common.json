@@ -9,6 +9,8 @@
   "app.advanceSearch.savedSearch.input.content": "Great news! You can save your current search parameters for quick access later. This will help you pick up right where you left off. Give your saved search a name and click 'Save' to keep things organized.",
 
   "app.sideNavigationBar.search": "Search",
+  "app.sideNavigationBar.matchingPair": "Matching Pair",
+
   "app.sideNavigationBar.dashboard": "Dashboard",
   "app.sideNavigationBar.yourOrders": "Your Orders",
   "app.sideNavigationBar.myAppointments": "My Appointments",
