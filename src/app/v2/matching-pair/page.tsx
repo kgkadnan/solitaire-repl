@@ -1,9 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
+import { MatchSubRoutes, Routes } from '@/constants/v2/enums/routes';
 import { useRouter, useSearchParams } from 'next/navigation';
-import Form, { ISavedSearch } from './form/form';
-import useValidationStateManagement from './hooks/validation-state-management';
 import { constructUrlParams } from '@/utils/v2/construct-url-params';
 import EmptyScreen from '@/components/v2/common/empty-screen';
 import empty from '@public/v2/assets/icons/data-table/empty-cart.svg';
@@ -12,29 +10,32 @@ import ActionButton from '@/components/v2/common/action-button';
 import { ManageLocales } from '@/utils/v2/translate';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import { DialogComponent } from '@/components/v2/common/dialog';
-import { handleReset } from './form/helpers/reset';
-import useFormStateManagement from './form/hooks/form-state';
-import useNumericFieldValidation from './form/hooks/numeric-field-validation-management';
-import Result from './result/result';
-import SavedSearch from './saved-search/saved-search';
+
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import logger from 'logging/log-util';
 import {
   useAddSavedSearchMutation,
   useUpdateSavedSearchMutation
 } from '@/features/api/saved-searches';
-import { useGetProductCountQuery } from '@/features/api/product';
 import { InputDialogComponent } from '@/components/v2/common/input-dialog';
 import { InputField } from '@/components/v2/common/input-field';
 import bookmarkIcon from '@public/v2/assets/icons/modal/bookmark.svg';
 import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
-import { handleSaveSearch } from './result/helpers/handle-save-search';
 import CommonPoppup from '../login/component/common-poppup';
+import { handleSaveSearch } from '../search/result/helpers/handle-save-search';
+import Form, { ISavedSearch } from '../search/form/form';
+import { handleReset } from '../search/form/helpers/reset';
+import useFormStateManagement from '../search/form/hooks/form-state';
+import useNumericFieldValidation from '../search/form/hooks/numeric-field-validation-management';
+import useValidationStateManagement from '../search/hooks/validation-state-management';
+import SavedSearch from '../search/saved-search/saved-search';
+import MatchingPairResult from './result';
+import { useGetMatchingPairCountQuery } from '@/features/api/match-pair';
 
-const Search = () => {
+const MatchingPair = () => {
   const subRoute = useSearchParams().get('active-tab');
   const editRoute = useSearchParams().get('edit');
-
+  // const currentPath = usePathname();
   const [activeTab, setActiveTab] = useState(0);
   const [isAddDemand, setIsAddDemand] = useState(false);
   const [searchParameters, setSearchParameters] = useState<ISavedSearch[] | []>(
@@ -62,7 +63,7 @@ const Search = () => {
   const [saveSearchName, setSaveSearchName] = useState('');
   const [addSavedSearch] = useAddSavedSearchMutation();
 
-  const { data } = useGetProductCountQuery(
+  const { data } = useGetMatchingPairCountQuery(
     {
       searchUrl
     },
@@ -71,16 +72,16 @@ const Search = () => {
     }
   );
   useEffect(() => {
-    let selection = JSON.parse(localStorage.getItem('Search')!) || [];
+    let selection = JSON.parse(localStorage.getItem('MatchingPair')!) || [];
     const filteredSelection = selection.filter(
       (obj: any) => Object.keys(obj).length !== 0
     );
     if (
-      subRoute !== SubRoutes.NEW_SEARCH &&
-      subRoute !== SubRoutes.SAVED_SEARCH
+      subRoute !== MatchSubRoutes.NEW_SEARCH &&
+      subRoute !== MatchSubRoutes.SAVED_SEARCH
     ) {
       const replaceSubrouteWithSearchResult = subRoute?.replace(
-        `${SubRoutes.RESULT}-`,
+        `${MatchSubRoutes.RESULT}-`,
         ''
       );
       if (
@@ -95,7 +96,7 @@ const Search = () => {
   }, [subRoute]);
   useEffect(() => {
     const fetchMyAPI = async () => {
-      const yourSelection = localStorage.getItem('Search');
+      const yourSelection = localStorage.getItem('MatchingPair');
 
       if (yourSelection) {
         let parseYourSelection = JSON.parse(yourSelection);
@@ -107,7 +108,10 @@ const Search = () => {
 
         // Update local storage only if empty objects were found and removed
         if (filteredSelection.length !== parseYourSelection.length) {
-          localStorage.setItem('Search', JSON.stringify(filteredSelection));
+          localStorage.setItem(
+            'MatchingPair',
+            JSON.stringify(filteredSelection)
+          );
         }
 
         // Check if there are valid entries after filtering
@@ -123,7 +127,7 @@ const Search = () => {
     };
 
     fetchMyAPI();
-  }, [localStorage.getItem('Search')!]);
+  }, [localStorage.getItem('MatchingPair')!]);
 
   const handleCloseAllTabs = () => {
     setDialogContent(
@@ -144,10 +148,10 @@ const Search = () => {
             variant: 'primary',
             label: ManageLocales('app.modal.yes'),
             handler: () => {
-              localStorage.removeItem('Search'),
-                setIsDialogOpen(false),
+              localStorage.removeItem('MatchingPair');
+              setIsDialogOpen(false),
                 router.push(
-                  `${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`
+                  `${Routes.MATCHING_PAIR}?active-tab=${MatchSubRoutes.NEW_SEARCH}`
                 ),
                 setSearchParameters([]);
               setAddSearches([]);
@@ -175,21 +179,25 @@ const Search = () => {
       setSearchParameters([]);
       setAddSearches([]);
       handleReset(setState, errorSetState);
-      router.push(`${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`);
+      router.push(
+        `${Routes.MATCHING_PAIR}?active-tab=${MatchSubRoutes.NEW_SEARCH}`
+      );
     } else {
       setSearchParameters(closeSpecificSearch);
       setAddSearches(closeSpecificSearch);
       setActiveTab(removeDataIndex);
       router.push(
-        `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${removeDataIndex - 1}`
+        `${Routes.MATCHING_PAIR}?active-tab=${MatchSubRoutes.RESULT}-${
+          removeDataIndex - 1
+        }`
       );
     }
 
-    localStorage.setItem('Search', JSON.stringify(closeSpecificSearch));
+    localStorage.setItem('MatchingPair', JSON.stringify(closeSpecificSearch));
   };
 
   const handleCloseSpecificTab = (id: number) => {
-    let yourSelection = JSON.parse(localStorage.getItem('Search')!);
+    let yourSelection = JSON.parse(localStorage.getItem('MatchingPair')!);
 
     if (!yourSelection[id - 1]?.isSavedSearch) {
       setIsDialogOpen(true);
@@ -318,7 +326,8 @@ const Search = () => {
                         setIsInputDialogOpen,
                         setStoredSelection: setSearchParameters,
                         setSaveSearchName,
-                        setInputError
+                        setInputError,
+                        isMatchingPair: true
                       });
                     }
                   }
@@ -331,6 +340,7 @@ const Search = () => {
       </>
     );
   };
+
   return (
     <div>
       <DialogComponent
@@ -344,9 +354,10 @@ const Search = () => {
         renderContent={renderContentWithInput}
       />
       {isLoading && <CustomKGKLoader />}
-      {subRoute === SubRoutes.NEW_SEARCH ||
-      editRoute === SubRoutes.SAVED_SEARCH ||
-      editRoute === SubRoutes.RESULT ? (
+      {subRoute === MatchSubRoutes.NEW_SEARCH ||
+      // currentPath === Routes.MATCHING_PAIR ||
+      editRoute === MatchSubRoutes.SAVED_SEARCH ||
+      editRoute === MatchSubRoutes.RESULT ? (
         <Form
           searchUrl={searchUrl}
           setSearchUrl={setSearchUrl}
@@ -366,9 +377,9 @@ const Search = () => {
           setAddSearches={setAddSearches}
           setIsLoading={setIsLoading}
           setIsAddDemand={setIsAddDemand}
-          isMatchingPair={false}
+          isMatchingPair={true}
         />
-      ) : subRoute === SubRoutes.SAVED_SEARCH ? (
+      ) : subRoute === MatchSubRoutes.SAVED_SEARCH ? (
         <SavedSearch setIsLoading={setIsLoading} />
       ) : activeTab === -1 ? (
         <div className="h-screen">
@@ -385,7 +396,7 @@ const Search = () => {
           />
         </div>
       ) : (
-        <Result
+        <MatchingPairResult
           activeTab={activeTab}
           searchParameters={searchParameters}
           setSearchParameters={setSearchParameters}
@@ -400,4 +411,4 @@ const Search = () => {
   );
 };
 
-export default Search;
+export default MatchingPair;

@@ -1,5 +1,5 @@
 import { Box, Stack } from '@mui/material';
-import styles from './data-table.module.scss';
+import styles from '../../../../components/v2/common/data-table/data-table.module.scss';
 import {
   MRT_ExpandButton,
   MRT_GlobalFilterTextField,
@@ -21,20 +21,15 @@ import threeDotsSvg from '@public/v2/assets/icons/threedots.svg';
 
 // theme.js
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import CalculatedField from '../calculated-field';
-import ActionButton from '../action-button';
-import { ManageLocales } from '@/utils/v2/translate';
-import Breadcrum from '../search-breadcrum/breadcrum';
+
 import {
   useLazyGetAllSavedSearchesQuery,
   useUpdateSavedSearchMutation
 } from '@/features/api/saved-searches';
 import { useEffect, useState } from 'react';
-import SavedSearchDropDown from '../saved-search-dropdown';
 import { useLazyGetProductCountQuery } from '@/features/api/product';
 import { constructUrlParams } from '@/utils/v2/construct-url-params';
 import {
-  AVAILABLE_STATUS,
   MAX_SAVED_SEARCH_COUNT,
   MAX_SEARCH_TAB_LIMIT
 } from '@/constants/business-logic';
@@ -43,15 +38,19 @@ import { useRouter } from 'next/navigation';
 import { MODIFY_SEARCH_STONES_EXCEEDS_LIMIT } from '@/constants/error-messages/saved';
 import { isSearchAlreadyExist } from '@/app/v2/search/saved-search/helpers/handle-card-click';
 import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
-import Share from '../copy-and-share/share';
-import Tooltip from '../tooltip';
-import { Dropdown } from '../dropdown-menu';
+
 import { kycStatus } from '@/constants/enums/kyc';
 import { handleConfirmStone } from '@app/v2/search/result/helpers/handle-confirm-stone';
 import { handleCompareStone } from '@/app/v2/search/result/helpers/handle-compare-stone';
 import CommonPoppup from '@/app/v2/login/component/common-poppup';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSort, faSortDown } from '@fortawesome/free-solid-svg-icons';
+import { ManageLocales } from '@/utils/v2/translate';
+import ActionButton from '@/components/v2/common/action-button';
+import CalculatedField from '@/components/v2/common/calculated-field';
+import SavedSearchDropDown from '@/components/v2/common/saved-search-dropdown';
+import Breadcrum from '@/components/v2/common/search-breadcrum/breadcrum';
+import Tooltip from '@/components/v2/common/tooltip';
+import { Dropdown } from '@/components/v2/common/dropdown-menu';
+import Share from '@/components/v2/common/copy-and-share/share';
 
 const theme = createTheme({
   typography: {
@@ -160,13 +159,13 @@ const theme = createTheme({
   }
 });
 
-const DataTable = ({
+const MatchPairTable = ({
   rows,
   columns,
   setRowSelection,
   rowSelection,
-  showCalculatedField = false,
-  isResult = false,
+  // showCalculatedField = false,
+  // isResult = false,
   myCart = false,
   activeTab,
   searchParameters,
@@ -177,27 +176,22 @@ const DataTable = ({
   setSearchParameters,
   modalSetState,
   downloadExcel,
-  data,
+  matchingPairData,
   setErrorText,
   setIsError,
   searchList,
   setIsLoading,
   handleAddToCart,
-  // handleConfirmStone,
   setIsConfirmStone,
   setConfirmStoneData,
-  deleteCartHandler,
-  activeCartTab,
   setIsCompareStone,
   setCompareStoneData,
   setIsInputDialogOpen,
-  isDashboard,
-  setIsDetailPage,
-  handleCreateAppointment
+  handleCreateAppointment,
+  originalData
 }: any) => {
   // Fetching saved search data
   const router = useRouter();
-
   const [triggerSavedSearch] = useLazyGetAllSavedSearchesQuery({});
   let [triggerProductCountApi] = useLazyGetProductCountQuery();
   const [isDropDownOpen, setIsDropDownOpen] = useState(false);
@@ -313,7 +307,9 @@ const DataTable = ({
                 />
               );
             } else {
-              const data: any = JSON.parse(localStorage.getItem('Search')!);
+              const data: any = JSON.parse(
+                localStorage.getItem('MatchingPair')!
+              );
 
               if (data?.length) {
                 let isAlreadyOpenIndex = isSearchAlreadyExist(
@@ -426,17 +422,18 @@ const DataTable = ({
   const [updateSavedSearch] = useUpdateSavedSearchMutation();
 
   const handleUpdateSaveSearch = () => {
-    const yourSelection = JSON.parse(localStorage.getItem('Search')!);
+    const yourSelection = JSON.parse(localStorage.getItem('MatchingPair')!);
     const updateSaveSearchData = {
       id: yourSelection[activeTab - 1]?.id,
       meta_data: yourSelection[activeTab - 1]?.queryParams,
-      diamond_count: parseInt(data?.count)
+      diamond_count: parseInt(matchingPairData?.count),
+      is_matching_pair: true
     };
 
     yourSelection[activeTab - 1] = {
       id: yourSelection[activeTab - 1]?.id,
       saveSearchName: yourSelection[activeTab - 1]?.saveSearchName,
-      searchId: data?.search_id,
+      searchId: matchingPairData?.search_id,
       isSavedSearch: true,
       queryParams: yourSelection[activeTab - 1].queryParams
     };
@@ -457,12 +454,13 @@ const DataTable = ({
       modalSetState,
       setRowSelection,
       setIsLoading: setIsLoading,
-      router
+      router,
+      fromMatchingPair: true
     });
   };
 
   const downloadAllSearchTabsExcelHandler = () => {
-    const searchTabsData = JSON.parse(localStorage.getItem('Search')!);
+    const searchTabsData = JSON.parse(localStorage.getItem('MatchingPair')!);
     const allTabsIds = searchTabsData.map((tab: any) => tab.searchId);
     downloadExcelHandler({
       previousSearch: allTabsIds,
@@ -497,10 +495,11 @@ const DataTable = ({
     enableColumnFilters: false,
     enableStickyHeader: true,
     enableBottomToolbar: true,
-    enableGrouping: true,
+    enableGrouping: false,
     enableExpandAll: false,
     enableColumnDragging: false,
     groupedColumnMode: 'remove',
+    enableSorting: false,
     enableRowSelection: true,
     enableToolbarInternalActions: true,
     globalFilterFn: 'startsWith',
@@ -514,24 +513,8 @@ const DataTable = ({
     icons: {
       SearchIcon: () => (
         <Image src={searchIcon} alt={'searchIcon'} className="mr-[6px]" />
-      ),
-      SortIcon: (props: any) => (
-        <FontAwesomeIcon icon={faSort} width={8} height={8} {...props} />
-      ), //best practice
-      SyncAltIcon: (props: any) => (
-        <FontAwesomeIcon
-          icon={faSort}
-          {...props}
-          // width={8} height={8}
-          style={{ color: 'neutral400' }}
-          className="transform !rotate-0 !pl-1"
-        />
-      ),
-      ArrowDownwardIcon: (props: any) => (
-        <FontAwesomeIcon icon={faSortDown} {...props} width={8} height={8} />
       )
     },
-    // headerSortico
     muiTableBodyRowProps: ({ row }) => {
       return {
         onClick: row.id.includes('shape')
@@ -541,6 +524,7 @@ const DataTable = ({
         sx: {
           height: '20px',
           cursor: 'pointer',
+          // border:"1px solid red !important",
           '&.MuiTableRow-root:hover .MuiTableCell-root::after': {
             backgroundColor: 'var(--neutral-50)'
           },
@@ -620,24 +604,14 @@ const DataTable = ({
         height: isFullScreen ? '70vh' : 'calc(100vh - 300px)',
         minHeight: isFullScreen
           ? myCart
-            ? showCalculatedField
-              ? 'calc(100vh - 130px)'
-              : 'calc(100vh - 90px)'
-            : isDashboard
-            ? 'calc(100vh - 180px)'
+            ? 'calc(100vh - 130px)'
             : 'calc(100vh - 230px)'
           : myCart
-          ? showCalculatedField
-            ? isNudge &&
-              (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
-                isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-              ? 'calc(100vh - 420px)'
-              : 'calc(100vh - 343px)'
-            : isNudge &&
-              (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
-                isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-            ? 'calc(100vh - 380px)'
-            : 'calc(100vh - 303px)'
+          ? isNudge &&
+            (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+              isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+            ? 'calc(100vh - 420px)'
+            : 'calc(100vh - 343px)'
           : isNudge &&
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
@@ -645,24 +619,14 @@ const DataTable = ({
           : 'calc(100vh - 300px)',
         maxHeight: isFullScreen
           ? myCart
-            ? showCalculatedField
-              ? 'calc(100vh - 130px)'
-              : 'calc(100vh - 90px)'
-            : isDashboard
-            ? 'calc(100vh - 180px)'
+            ? 'calc(100vh - 130px)'
             : 'calc(100vh - 230px)'
           : myCart
-          ? showCalculatedField
-            ? isNudge &&
-              (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
-                isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-              ? 'calc(100vh - 420px)'
-              : 'calc(100vh - 343px)'
-            : isNudge &&
-              (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
-                isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-            ? 'calc(100vh - 380px)'
-            : 'calc(100vh - 303px)'
+          ? isNudge &&
+            (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+              isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+            ? 'calc(100vh - 420px)'
+            : 'calc(100vh - 343px)'
           : isNudge &&
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
@@ -729,7 +693,11 @@ const DataTable = ({
           },
 
           whiteSpace: 'nowrap',
-          borderBottom: '1px solid var(--neutral-50)'
+          borderBottom: originalData.some(
+            (subArray: any) => subArray[1].id === row.id
+          )
+            ? '4px solid var(--primary-border) !important'
+            : '1px solid var(--neutral-50)' //'1px solid var(--neutral-50)'
         }
       };
     },
@@ -806,7 +774,7 @@ const DataTable = ({
     },
     renderTopToolbar: ({ table }) => (
       <div>
-        {isResult && (
+        {
           <div className="flex min-h-[55px] items-center justify-between border-b-[1px] border-neutral200 flex px-[16px] py-[8px]">
             <div className="flex lg-w-[calc(100%-500px)] gap-[12px] flex-wrap">
               <Breadcrum
@@ -815,6 +783,7 @@ const DataTable = ({
                 setActiveTab={setActiveTab}
                 handleCloseSpecificTab={handleCloseSpecificTab}
                 setIsLoading={setIsLoading}
+                isMatchingPair={true}
               />
             </div>
             <div className="pr-[2px] flex gap-[12px] w-[500px]  justify-end flex-wrap relative">
@@ -861,10 +830,9 @@ const DataTable = ({
               />
             </div>
           </div>
-        )}
-        {showCalculatedField && (
-          <CalculatedField rows={rows} selectedProducts={rowSelection} />
-        )}
+        }
+        <CalculatedField rows={rows} selectedProducts={rowSelection} />
+
         <Box
           sx={{
             display: 'flex',
@@ -916,8 +884,9 @@ const DataTable = ({
           </div>
 
           <div className="flex gap-[12px]" style={{ alignItems: 'inherit' }}>
-            {isResult &&
-              (searchParameters &&
+            {
+              // isResult &&
+              searchParameters &&
               !searchParameters[activeTab - 1]?.isSavedSearch ? (
                 <button
                   className=" flex border-[1px] border-neutral200 rounded-[4px] px-2 py-1 shadow-sm bg-neutral0 items-center cursor-pointer h-[37px]"
@@ -934,7 +903,8 @@ const DataTable = ({
                 </button>
               ) : (
                 ''
-              ))}
+              )
+            }
 
             <div
               className=" rounded-[4px] cursor-pointer"
@@ -992,9 +962,7 @@ const DataTable = ({
                 selectedProducts={rowSelection}
                 setErrorText={setErrorText}
                 setIsError={setIsError}
-                shareTrackIdentifier={
-                  myCart ? 'Cart' : isDashboard ? 'Dashboard' : 'Search Results'
-                }
+                shareTrackIdentifier={'Matching Pair'}
               />
             </div>
           </div>
@@ -1003,11 +971,12 @@ const DataTable = ({
     ),
     renderBottomToolbar: ({ table }) => (
       <div
-        className={`px-[16px] border-t-[1px] border-neutral200 ${
-          isDashboard && 'border-b-[1px]'
-        }`}
+        className={`px-[16px] border-t-[1px] border-neutral200 
+       
+        `}
       >
-        {(isResult || isDashboard) && (
+        {
+          // (isResult || isDashboard) && (
           <div className="flex items-center justify-between">
             <div className="flex gap-4 h-[30px]">
               <div className=" border-[1px] border-lengendInCardBorder rounded-[4px] bg-legendInCartFill text-legendInCart">
@@ -1042,24 +1011,14 @@ const DataTable = ({
                     variant: 'primary',
                     label: ManageLocales('app.searchResult.confirmStone'),
                     handler: () => {
-                      isDashboard
-                        ? handleConfirmStone({
-                            selectedRows: rowSelection,
-                            rows: rows,
-                            setIsError,
-                            setErrorText,
-                            setIsConfirmStone,
-                            setConfirmStoneData,
-                            setIsDetailPage
-                          })
-                        : handleConfirmStone({
-                            selectedRows: rowSelection,
-                            rows: rows,
-                            setIsError,
-                            setErrorText,
-                            setIsConfirmStone,
-                            setConfirmStoneData
-                          });
+                      handleConfirmStone({
+                        selectedRows: rowSelection,
+                        rows: rows,
+                        setIsError,
+                        setErrorText,
+                        setIsConfirmStone,
+                        setConfirmStoneData
+                      });
                     }
                   }
                 ]}
@@ -1103,76 +1062,8 @@ const DataTable = ({
               />
             </div>
           </div>
-        )}
-        {myCart && (
-          <div className="flex items-center  justify-between">
-            <div className=""></div>
-            <MRT_TablePagination table={table} />
-            <div className="flex gap-2">
-              <ActionButton
-                actionButtonData={[
-                  {
-                    variant: 'secondary',
-                    label: ManageLocales('app.myCart.actionButton.delete'),
-                    handler: deleteCartHandler
-                  },
-
-                  {
-                    variant: 'primary',
-                    label: ManageLocales(
-                      'app.myCart.actionButton.confirmStone'
-                    ),
-                    handler: () => {
-                      handleConfirmStone({
-                        selectedRows: rowSelection,
-                        rows: rows,
-                        setIsError,
-                        setErrorText,
-                        setIsConfirmStone,
-                        setConfirmStoneData
-                      });
-                    },
-                    isHidden: activeCartTab !== AVAILABLE_STATUS
-                  }
-                ]}
-              />
-              <Dropdown
-                dropdownTrigger={
-                  <Image
-                    src={threeDotsSvg}
-                    alt="threeDotsSvg"
-                    width={43}
-                    height={43}
-                  />
-                }
-                dropdownMenu={[
-                  {
-                    label: ManageLocales(
-                      'app.myCart.actionButton.bookAppointment'
-                    ),
-                    handler: () => {
-                      handleCreateAppointment();
-                    },
-                    commingSoon:
-                      isKycVerified?.customer?.kyc?.status ===
-                        kycStatus.INPROGRESS ||
-                      isKycVerified?.customer?.kyc?.status ===
-                        kycStatus.REJECTED,
-                    isHidden: activeCartTab !== AVAILABLE_STATUS
-                  },
-                  {
-                    label: ManageLocales(
-                      'app.myCart.actionButton.viewSimilarStone'
-                    ),
-                    handler: () => {},
-                    isHidden: activeCartTab === AVAILABLE_STATUS,
-                    commingSoon: true
-                  }
-                ]}
-              />
-            </div>
-          </div>
-        )}
+          // )
+        }
       </div>
     )
   });
@@ -1186,4 +1077,4 @@ const DataTable = ({
   );
 };
 
-export default DataTable;
+export default MatchPairTable;
