@@ -425,7 +425,8 @@ const MatchPairTable = ({
     const updateSaveSearchData = {
       id: yourSelection[activeTab - 1]?.id,
       meta_data: yourSelection[activeTab - 1]?.queryParams,
-      diamond_count: parseInt(matchingPairData?.count)
+      diamond_count: parseInt(matchingPairData?.count),
+      is_matching_pair: true
     };
 
     yourSelection[activeTab - 1] = {
@@ -452,7 +453,8 @@ const MatchPairTable = ({
       modalSetState,
       setRowSelection,
       setIsLoading: setIsLoading,
-      router
+      router,
+      fromMatchingPair: true
     });
   };
 
