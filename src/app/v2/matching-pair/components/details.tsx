@@ -258,7 +258,6 @@ export function MatchPairDetails({
   const handleClose: HandleCloseType = (event, id) => {
     const filterData = originalData.filter((item: IProduct) => item.id !== id);
     setOriginalData(filterData);
-    // console.log(filterData, 'filterData');
   };
 
   // let isNudge = localStorage.getItem('show-nudge') === 'MINI';
@@ -283,7 +282,6 @@ export function MatchPairDetails({
       return false;
     })
   );
-  console.log(selectedCheckboxes, '----------------------->>>>>>>>>>>');
 
   return (
     <div className="text-black bg-white rounded-[8px] w-[calc(100vw-116px)] h-[calc(100vh-140px)]">
@@ -573,7 +571,6 @@ export function MatchPairDetails({
                             } `}
                           />
                         ) : (
-                          // console.log(allImages[index].filter((data:any)=>data.category===activePreviewTab))
                           <img
                             src={filteredImages[index][imageIndex].url}
                             alt={filteredImages[index][imageIndex].name}

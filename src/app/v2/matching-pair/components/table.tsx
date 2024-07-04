@@ -187,7 +187,8 @@ const MatchPairTable = ({
   setIsCompareStone,
   setCompareStoneData,
   setIsInputDialogOpen,
-  handleCreateAppointment
+  handleCreateAppointment,
+  originalData
 }: any) => {
   // Fetching saved search data
   const router = useRouter();
@@ -425,7 +426,8 @@ const MatchPairTable = ({
     const updateSaveSearchData = {
       id: yourSelection[activeTab - 1]?.id,
       meta_data: yourSelection[activeTab - 1]?.queryParams,
-      diamond_count: parseInt(matchingPairData?.count)
+      diamond_count: parseInt(matchingPairData?.count),
+      is_matching_pair: true
     };
 
     yourSelection[activeTab - 1] = {
@@ -452,7 +454,8 @@ const MatchPairTable = ({
       modalSetState,
       setRowSelection,
       setIsLoading: setIsLoading,
-      router
+      router,
+      fromMatchingPair: true
     });
   };
 
@@ -521,6 +524,7 @@ const MatchPairTable = ({
         sx: {
           height: '20px',
           cursor: 'pointer',
+          // border:"1px solid red !important",
           '&.MuiTableRow-root:hover .MuiTableCell-root::after': {
             backgroundColor: 'var(--neutral-50)'
           },
@@ -689,7 +693,11 @@ const MatchPairTable = ({
           },
 
           whiteSpace: 'nowrap',
-          borderBottom: '1px solid var(--neutral-50)'
+          borderBottom: originalData.some(
+            (subArray: any) => subArray[1].id === row.id
+          )
+            ? '4px solid var(--primary-border) !important'
+            : '1px solid var(--neutral-50)' //'1px solid var(--neutral-50)'
         }
       };
     },

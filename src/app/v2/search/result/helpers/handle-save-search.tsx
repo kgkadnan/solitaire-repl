@@ -40,7 +40,8 @@ export const handleSaveSearch = async ({
       name: saveSearchName,
       diamond_count: parseInt(data?.count),
       meta_data: parseData[activeTab - 1].queryParams,
-      is_deleted: false
+      is_deleted: false,
+      is_matching_pair: isMatchingPair
     })
       .unwrap()
       .then((res: any) => {

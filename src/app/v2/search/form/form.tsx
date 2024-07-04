@@ -307,7 +307,9 @@ const Form = ({
     if (searchCount !== -1) {
       if (searchUrl) {
         if (
-          data?.count > MAX_SEARCH_FORM_COUNT &&
+          (isMatchingPair
+            ? data?.count > MAX_SEARCH_FORM_COUNT / 2
+            : data?.count > MAX_SEARCH_FORM_COUNT) &&
           data?.count > MIN_SEARCH_FORM_COUNT
         ) {
           setIsError(true);
@@ -442,7 +444,9 @@ const Form = ({
       minMaxError.length === 0
     ) {
       if (
-        data?.count < MAX_SEARCH_FORM_COUNT &&
+        (formIdentifier === 'MatchingPair'
+          ? data?.count < MAX_SEARCH_FORM_COUNT / 2
+          : data?.count < MAX_SEARCH_FORM_COUNT) &&
         data?.count > MIN_SEARCH_FORM_COUNT
       ) {
         const queryParams = generateQueryParams(state);
@@ -457,7 +461,8 @@ const Form = ({
             let updateSavedSearchData = {
               id: savedSearch.savedSearch.id,
               meta_data: updatedMeta,
-              diamond_count: parseInt(data?.count)
+              diamond_count: parseInt(data?.count),
+              is_matching_pair: isMatchingPair
             };
 
             updateSavedSearch(updateSavedSearchData).then(() => {
@@ -588,9 +593,9 @@ const Form = ({
     handleFormSearch(false, '', 'MatchingPair');
   };
   // Function: Save and search
-  const handleSaveAndSearch: any = async () => {
+  const handleSaveAndSearch: any = async (formIdentifier = 'Search') => {
     if (
-      JSON.parse(localStorage.getItem('Search')!)?.length >=
+      JSON.parse(localStorage.getItem(formIdentifier)!)?.length >=
         MAX_SEARCH_TAB_LIMIT &&
       modifySearchFrom !== `${ManageLocales('app.search.resultRoute')}` &&
       modifySearchFrom !== `${SubRoutes.SAVED_SEARCH}`
@@ -614,8 +619,13 @@ const Form = ({
               variant: 'primary',
               label: ManageLocales('app.modal.manageTabs'),
               handler: () => {
-                router.push(`/v2/search?active-tab=${SubRoutes.RESULT}-1`);
                 setIsDialogOpen(false);
+
+                formIdentifier === 'MatchingPair'
+                  ? router.push(
+                      `/v2/matching-pair?active-tab=${SubRoutes.RESULT}-1`
+                    )
+                  : router.push(`/v2/search?active-tab=${SubRoutes.RESULT}-1`);
               },
               customStyle: 'flex-1 h-10'
             }
@@ -625,7 +635,9 @@ const Form = ({
       setIsDialogOpen(true);
     } else if (searchUrl && data?.count > MIN_SEARCH_FORM_COUNT) {
       if (
-        data?.count < MAX_SEARCH_FORM_COUNT &&
+        (formIdentifier === 'MatchingPair'
+          ? data?.count < MAX_SEARCH_FORM_COUNT / 2
+          : data?.count < MAX_SEARCH_FORM_COUNT) &&
         data?.count > MIN_SEARCH_FORM_COUNT
       ) {
         const queryParams = generateQueryParams(state);
@@ -639,7 +651,8 @@ const Form = ({
             let updateSavedData = {
               id: savedSearch.savedSearch.id,
               meta_data: updatedMeta,
-              diamond_count: parseInt(data?.count)
+              diamond_count: parseInt(data?.count),
+              is_matching_pair: isMatchingPair
             };
             updateSavedSearch(updateSavedData);
 
@@ -665,12 +678,15 @@ const Form = ({
 
               const updatedData = [...localStorageData];
               updatedData[isAlreadyOpenIndex] = setDataOnLocalStorage;
-              localStorage.setItem('Search', JSON.stringify(updatedData));
+              localStorage.setItem(formIdentifier, JSON.stringify(updatedData));
             }
-
-            router.push(
-              `${Routes.SEARCH}?active-tab=${SubRoutes.SAVED_SEARCH}`
-            );
+            formIdentifier === 'MatchingPair'
+              ? router.push(
+                  `${Routes.MATCHING_PAIR}?active-tab=${SubRoutes.SAVED_SEARCH}`
+                )
+              : router.push(
+                  `${Routes.SEARCH}?active-tab=${SubRoutes.SAVED_SEARCH}`
+                );
           }
         } else if (activeSearch) {
           const updatedMeta = addSearches;
@@ -678,7 +694,8 @@ const Form = ({
           let updateSaveSearchData = {
             id: updatedMeta[activeTab - 1].id,
             meta_data: updatedMeta[activeTab - 1].queryParams,
-            diamond_count: parseInt(data?.count)
+            diamond_count: parseInt(data?.count),
+            is_matching_pair: isMatchingPair
           };
           updateSavedSearch(updateSaveSearchData)
             .unwrap()
@@ -695,7 +712,8 @@ const Form = ({
             name: saveSearchName,
             diamond_count: parseInt(data?.count),
             meta_data: queryParams,
-            is_deleted: false
+            is_deleted: false,
+            is_matching_pair: isMatchingPair
           })
             .unwrap()
             .then((res: any) => {
@@ -802,7 +820,9 @@ const Form = ({
       handler: () => {
         if (searchUrl) {
           if (
-            data?.count < MAX_SEARCH_FORM_COUNT &&
+            (isMatchingPair
+              ? data?.count < MAX_SEARCH_FORM_COUNT / 2
+              : data?.count < MAX_SEARCH_FORM_COUNT) &&
             data?.count > MIN_SEARCH_FORM_COUNT
           ) {
             if (activeTab !== undefined) {
@@ -813,11 +833,11 @@ const Form = ({
                 addSearches[activeTab - 1]?.isSavedSearch;
               // Check if the active search is not null and isSavedSearch is true
               if (modifySearchFrom === `${SubRoutes.SAVED_SEARCH}`) {
-                handleSaveAndSearch();
+                handleSaveAndSearch(isMatchingPair && 'MatchingPair');
               } else if (isSaved) {
-                handleSaveAndSearch();
+                handleSaveAndSearch(isMatchingPair && 'MatchingPair');
               } else if (!isSaved && isSearchName) {
-                handleSaveAndSearch();
+                handleSaveAndSearch(isMatchingPair && 'MatchingPair');
               } else {
                 searchUrl && setIsInputDialogOpen(true);
               }
@@ -923,7 +943,8 @@ const Form = ({
                   if (!saveSearchName.length) {
                     setInputError('Please enter name');
                   } else {
-                    !inputError.length && handleSaveAndSearch();
+                    !inputError.length &&
+                      handleSaveAndSearch(isMatchingPair && 'MatchingPair');
                   }
                 },
                 customStyle: 'flex-1 h-10'

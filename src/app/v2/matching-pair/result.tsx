@@ -1207,6 +1207,7 @@ const MatchingPairResult = ({
                   setCompareStoneData={setCompareStoneData}
                   setIsInputDialogOpen={setIsInputDialogOpen}
                   handleCreateAppointment={handleCreateAppointment}
+                  originalData={originalData}
                 />
               )}
             </div>

@@ -57,6 +57,7 @@ import ImageModal from '@/components/v2/common/detail-page/components/image-moda
 import { FILE_URLS } from '@/constants/v2/detail-page';
 import { getShapeDisplayName } from '@/utils/v2/detail-page';
 import DataTable from '@/components/v2/common/data-table';
+import matchPairIcon from '@public/v2/assets/icons/match-pair-saved.svg';
 
 import Tooltip from '@/components/v2/common/tooltip';
 import {
@@ -508,7 +509,7 @@ const Dashboard = () => {
     [searchColumn]
   );
 
-  const handleEdit = (stone: string) => {
+  const handleEdit = (stone: string, identifier = false) => {
     let savedSearchEditData = customerData?.customer?.saved_searches?.filter(
       (items: any) => {
         return items.id === stone;
@@ -517,9 +518,13 @@ const Dashboard = () => {
 
     dispatch(modifySavedSearch({ savedSearch: savedSearchEditData[0] }));
 
-    router.push(
-      `${Routes.SEARCH}?active-tab=${SubRoutes.SAVED_SEARCH}&edit=${SubRoutes.SAVED_SEARCH}`
-    );
+    identifier
+      ? router.push(
+          `${Routes.MATCHING_PAIR}?active-tab=${SubRoutes.SAVED_SEARCH}&edit=${SubRoutes.SAVED_SEARCH}`
+        )
+      : router.push(
+          `${Routes.SEARCH}?active-tab=${SubRoutes.SAVED_SEARCH}&edit=${SubRoutes.SAVED_SEARCH}`
+        );
   };
 
   const column = [
@@ -1997,7 +2002,8 @@ const Dashboard = () => {
                                 router,
                                 triggerProductCountApi,
                                 setDialogContent,
-                                setIsDialogOpen
+                                setIsDialogOpen,
+                                isMatchingPair: searchData.is_matching_pair
                               })
                             }
                           >
@@ -2018,6 +2024,21 @@ const Dashboard = () => {
                                 <div className="text-neutral700 font-regular text-sMedium">
                                   {formatCreatedAt(searchData.created_at)}
                                 </div>
+                                {searchData.is_matching_pair && (
+                                  <div
+                                    className="h-[20px] rounded-[2px] border-[1px] border-neutral200 px-[6px] py-[1px] text-neutral600 text-[10px] w-[90px] flex items-center justify-around"
+                                    style={{
+                                      background:
+                                        'linear-gradient(0deg, #EDF0F6 0%,  #FCFDFF 100%)'
+                                    }}
+                                  >
+                                    <Image
+                                      src={matchPairIcon}
+                                      alt="matchPairIcon"
+                                    />
+                                    Match Pair
+                                  </div>
+                                )}
                               </div>
                             </div>
                             <div className="w-full md:w-[60%] mt-4 md:mt-0">
@@ -2030,7 +2051,10 @@ const Dashboard = () => {
                               className="w-full md:w-[10%] flex justify-end items-start opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                               onClick={e => {
                                 e.stopPropagation();
-                                handleEdit(searchData.id);
+                                handleEdit(
+                                  searchData.id,
+                                  searchData.is_matching_pair
+                                );
                               }}
                             >
                               <Image src={editIcon} alt="editIcon" />
