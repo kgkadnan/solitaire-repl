@@ -261,13 +261,13 @@ const NewArrivals = () => {
   const handleBidStones = useCallback((data: any) => {
     setActiveBid(data.activeStone);
 
-    if (filterData?.bidFilterData?.length > 0) {
+    if (filterData?.queryParams) {
       const filteredData = filterBidData(data.bidStone, filterData.queryParams);
       dispatch(
         filterFunction({
           bidData: data.bidStone,
           queryParams: filterData.queryParams,
-          bidFilterData: filterData?.bidFilterData
+          bidFilterData: filteredData
         })
       );
       setBid(filteredData);
