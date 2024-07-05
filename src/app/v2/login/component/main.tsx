@@ -324,6 +324,7 @@ const Login = () => {
             password={password}
             passwordErrorText={passwordErrorText}
             handleLogin={handleLogin}
+            currentCountryCode={currentCountryCode}
           />
         );
       case 'otpVerification':
