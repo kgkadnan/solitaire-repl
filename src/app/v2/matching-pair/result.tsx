@@ -157,6 +157,7 @@ const MatchingPairResult = ({
   const editRoute = useSearchParams().get('edit');
   const router = useRouter();
   const [searchUrl, setSearchUrl] = useState('');
+  const [similarData, setSimilarData] = useState<any>();
 
   const [downloadExcel] = useDownloadExcelMutation();
   const [confirmProduct] = useConfirmProductMutation();
@@ -552,8 +553,10 @@ const MatchingPairResult = ({
       setErrorText(SELECT_STONE_TO_PERFORM_ACTION);
     }
   };
-
-  const handleAddToCart = () => {
+  const isIProduct = (obj: any): obj is IProduct => {
+    return 'variants' in obj && Array.isArray(obj.variants);
+  };
+  const handleAddToCart = (similarData = []) => {
     let selectedIds = Object.keys(rowSelection);
 
     if (selectedIds.length > 300) {
@@ -567,11 +570,10 @@ const MatchingPairResult = ({
       const variantIds = selectedIds
         ?.map((id: string) => {
           const myCartCheck: IProduct | object =
-            dataTableState.rows.find((row: IProduct) => {
+            [...dataTableState.rows, ...similarData].find((row: IProduct) => {
               return row?.id === id;
             }) ?? {};
-
-          if (myCartCheck && 'variants' in myCartCheck) {
+          if (isIProduct(myCartCheck)) {
             return myCartCheck.variants[0]?.id;
           }
           return '';
@@ -1051,6 +1053,8 @@ const MatchingPairResult = ({
             setIsLoading={setIsLoading}
             handleDetailImage={handleDetailImage}
             setRowSelection={setRowSelection}
+            setSimilarData={setSimilarData}
+            similarData={similarData}
           />
           <div className="p-[8px] flex justify-between items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow mb-1">
             <div className="flex gap-4 h-[30px]">
@@ -1077,7 +1081,9 @@ const MatchingPairResult = ({
                 {
                   variant: isConfirmStone ? 'primary' : 'secondary',
                   label: ManageLocales('app.searchResult.addToCart'),
-                  handler: handleAddToCart
+                  handler: () => {
+                    handleAddToCart(similarData?.products || []);
+                  }
                 },
 
                 {
@@ -1086,8 +1092,7 @@ const MatchingPairResult = ({
                   isHidden: isConfirmStone,
                   handler: () => {
                     setBreadCrumLabel('Detail Page');
-                    // const { id } = Object.keys(rowSelection);
-                    // const selectedRows = { [id]: true };
+
                     handleConfirmStone({
                       selectedRows: rowSelection,
                       rows: dataTableState.rows,
