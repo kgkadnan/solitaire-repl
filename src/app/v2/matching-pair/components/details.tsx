@@ -60,7 +60,9 @@ export function MatchPairDetails({
   modalSetState,
   setIsLoading,
   handleDetailImage,
-  setRowSelection
+  setRowSelection,
+  setSimilarData,
+  similarData
 }: {
   data: any;
   filterData: any;
@@ -70,6 +72,8 @@ export function MatchPairDetails({
   setIsLoading?: any;
   handleDetailImage: any;
   setRowSelection: any;
+  setSimilarData: any;
+  similarData: any;
 }) {
   const router = useRouter();
 
@@ -88,9 +92,8 @@ export function MatchPairDetails({
   const [mappingColumn, setMappingColumn] = useState<any>({});
   const [, setZoomLevel] = useState(1);
   const [, setZoomPosition] = useState({ x: 0, y: 0 });
-
+  const [breadCrumMatchPair, setBreadCrumMatchPair] = useState('');
   const [viewSimilar, setViewSimilar] = useState<boolean>(false);
-  const [similarData, setSimilarData] = useState<any>();
   const { checkboxState, checkboxSetState } = useCheckboxStateManagement();
   const { selectedCheckboxes } = checkboxState;
   const { setSelectedCheckboxes } = checkboxSetState;
@@ -113,6 +116,11 @@ export function MatchPairDetails({
         .unwrap()
         .then(res => setSimilarData(res))
         .catch(e => logger.error(e));
+    }
+    if (originalData.length === 2) {
+      setBreadCrumMatchPair(
+        originalData.map((data: any) => data.lot_id).join(' & ')
+      );
     }
   }, [originalData]);
   function updateState(column: any) {
@@ -270,7 +278,6 @@ export function MatchPairDetails({
   };
 
   const dataFormatting = (diamond: any, key: string) => {
-    console.log(diamond, '-------', key);
     switch (key) {
       case 'amount':
       case 'price_per_carat':
@@ -279,7 +286,6 @@ export function MatchPairDetails({
         return `$${formatNumberWithCommas(diamond[key])}`;
       case 'table_percentage':
       case 'carats':
-      case 'discount':
       case 'depth_percentage':
       case 'ratio':
       case 'length':
@@ -293,6 +299,9 @@ export function MatchPairDetails({
       case 'lower_half':
       case 'star_length':
         return `${formatNumber(diamond[key])}`;
+      case 'discount':
+        return `${formatNumber(diamond[key])}%`;
+
       case 'key_to_symbol':
       case 'report_comments':
         return diamond[key].length > 0 ? diamond[key] : '-';
@@ -350,6 +359,18 @@ export function MatchPairDetails({
     })
   );
 
+  const updateDataAsPerSimilarData = (originalData: any, similarData: any) => {
+    const originalLotIds = new Set(
+      originalData.map((product: any) => product.lot_id)
+    );
+
+    const newProducts = (similarData?.products || []).filter(
+      (product: any) => !originalLotIds.has(product.lot_id)
+    );
+
+    return [...originalData, ...newProducts];
+  };
+  console.log(filteredImages, 'filteredImages');
   return (
     <div className="text-black bg-white rounded-[8px] w-[calc(100vw-116px)] h-[calc(100vh-140px)]">
       <Toast
@@ -383,11 +404,7 @@ export function MatchPairDetails({
 
           {validImages.length > 0 ? (
             <p className="text-neutral700 p-[8px] bg-neutral100 rounded-[4px] text-sMedium font-medium">
-              {viewSimilar
-                ? `Compare Stone (${originalData.length})`
-                : `Stock No: ${originalData
-                    .map((data: any) => data.lot_id)
-                    .join(' & ')}`}
+              Stock No: {breadCrumMatchPair}
             </p>
           ) : (
             <Skeleton
@@ -418,12 +435,10 @@ export function MatchPairDetails({
                   className=" flex gap-1 border-[1px] h-[40px] border-[#E4E7EC] rounded-[4px] px-4 py-2 cursor-pointer"
                   onClick={() => {
                     !viewSimilar &&
-                      // similarData && similarData?.products.length>0 &&
-                      setOriginalData([
-                        ...originalData,
-                        ...(similarData?.products || [])
-                      ]),
-                      setViewSimilar(!viewSimilar);
+                      setOriginalData(
+                        updateDataAsPerSimilarData(originalData, similarData)
+                      );
+                    setViewSimilar(!viewSimilar);
                   }}
                 >
                   <p className="text-mMedium text-neutral900 font-medium">
@@ -696,7 +711,7 @@ export function MatchPairDetails({
                               ? handleClose(event, items.id)
                               : (setShowToast(true),
                                 setErrorText(
-                                  'Matching Pair requires atleast 2 stones'
+                                  'Minimum of 2 stones needed for matching pairs'
                                 ))
                           }
                         >
