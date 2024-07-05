@@ -650,7 +650,7 @@ export function MatchPairDetails({
                 originalData.map((items: IProduct, index: number) => (
                   <div
                     key={items.id}
-                    className={`${viewSimilar ? 'w-[150px]' : 'w-[460px]'}`}
+                    className={`${originalData.length>2 ? originalData.length>5 ? 'w-[150px]' : 'w-[300px]' : 'w-[460px]'}`}
                   >
                     <div
                       className={`${
@@ -668,8 +668,9 @@ export function MatchPairDetails({
                               )[0].url
                             }
                             className={`${
-                              viewSimilar
+                              originalData.length>2 ? originalData.length>5
                                 ? 'w-[130px] h-[175px]'
+                                :'w-[220px] h-[250px]'
                                 : 'w-[370px] h-[370px]'
                             } `}
                           />
@@ -677,8 +678,8 @@ export function MatchPairDetails({
                           <img
                             src={filteredImages[index][imageIndex].url}
                             alt={filteredImages[index][imageIndex].name}
-                            width={viewSimilar ? 150 : 250}
-                            height={viewSimilar ? 150 : 300}
+                            width={originalData.length>2 ? originalData.length>5  ? 150 :180: 250}
+                            height={originalData.length>2 ? originalData.length>5  ? 150 :180: 300}
                             onError={e => {
                               handleImageError(e);
                             }}
@@ -687,8 +688,8 @@ export function MatchPairDetails({
                           <img
                             src={filteredImages[index][imageIndex].url}
                             alt={filteredImages[index][imageIndex].name}
-                            width={viewSimilar ? 185 : 440}
-                            height={viewSimilar ? 175 : 440}
+                            width={originalData.length>2 ? originalData.length>5  ? 185:300 : 440}
+                            height={originalData.length>2 ? originalData.length>5  ? 175:300 : 440}
                             onError={e => {
                               handleImageError(e);
                             }}
@@ -746,7 +747,7 @@ export function MatchPairDetails({
               {originalData.length > 0 &&
                 originalData.map((diamond: any) => (
                   <div
-                    className={`${viewSimilar ? 'w-[150px]' : 'w-[460px]'} `}
+                    className={`${originalData.length>2 ? originalData.length>5 ? 'w-[150px]' : 'w-[300px]' : 'w-[460px]'}`}
                     key={diamond.id}
                   >
                     {Object.keys(mappingColumn).map(

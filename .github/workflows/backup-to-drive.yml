@@ -1,0 +1,58 @@
+name: Backup Repository to Google Drive
+
+on:
+  schedule:
+    - cron: '0 2 * * MON'  # Runs every Monday at 2 AM UTC
+  push:
+    branches:
+      - dev  # Trigger on push to the dev branch
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          ref: dev  # Specify the dev branch to checkout
+
+      - name: Install rclone
+        run: |
+          curl https://rclone.org/install.sh | sudo bash
+
+      - name: Set up rclone configuration
+        env:
+          RCLONE_CONFIG: ${{ secrets.RCLONE_CONFIG }}
+        run: |
+          mkdir -p ~/.config/rclone
+          echo "${RCLONE_CONFIG}" > ~/.config/rclone/rclone.conf
+          # Print the configuration for debugging (remove sensitive data)
+          echo "Rclone Configuration:"
+          cat ~/.config/rclone/rclone.conf | sed 's/access_token":"[^"]*/access_token":"[REDACTED]/' | sed 's/refresh_token":"[^"]*/refresh_token":"[REDACTED]/'
+
+      - name: Determine backup slot
+        id: slot
+        run: |
+          WEEK_NUM=$(( (($(date +%-d) - 1) / 7 + 1) % 4 + 1 ))
+          echo "slot=${WEEK_NUM}" >> $GITHUB_ENV
+          echo "Backup will be saved with the suffix -slot${WEEK_NUM}.tar.gz"
+
+      - name: Extract repository name
+        id: repo_name
+        run: |
+          REPO_NAME=$(echo $GITHUB_REPOSITORY | cut -d'/' -f2)
+          echo "repo_name=${REPO_NAME}" >> $GITHUB_ENV
+          echo "Repository name is: ${REPO_NAME}"
+
+      - name: Copy repository to temp directory
+        run: |
+          rsync -a --exclude='.git' --exclude='node_modules' --exclude='.github' . /tmp/repo
+
+      - name: Compress repository
+        run: |
+          tar -czvf ${{ env.repo_name }}-slot-${{ env.slot }}.tar.gz -C /tmp/repo .
+
+      - name: Upload to Google Drive
+        run: |
+          rclone --config ~/.config/rclone/rclone.conf copy ${{ env.repo_name }}-slot-${{ env.slot }}.tar.gz KGK:/kgk-codebase/${{ env.repo_name }}-backups
