@@ -377,7 +377,6 @@ export function MatchPairDetails({
 
     return [...originalData, ...newProducts];
   };
-  console.log(filteredImages, 'filteredImages');
   return (
     <div className="text-black bg-white rounded-[8px] w-[calc(100vw-116px)] h-[calc(100vh-140px)]">
       <Toast
