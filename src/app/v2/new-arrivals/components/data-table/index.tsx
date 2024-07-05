@@ -323,7 +323,7 @@ const NewArrivalDataTable = ({
                   <button
                     onClick={() => {
                       router.push(
-                        `/v2/search?active-tab=${SubRoutes.NEW_ARRIVAL}`
+                        `/v2/new-arrivals?active-tab=${SubRoutes.NEW_ARRIVAL}`
                       );
                     }}
                     className={`flex w-full justify-center py-[8px] h-[39px] px-[16px]  items-center font-medium  rounded-[4px] gap-1  border-[1px]  border-solid border-neutral200 text-mMedium  cursor-pointer  ${'bg-primaryMain text-neutral0 hover:bg-primaryHover'}`}
@@ -353,7 +353,7 @@ const NewArrivalDataTable = ({
                         })
                       );
                       router.push(
-                        `/v2/search?active-tab=${SubRoutes.NEW_ARRIVAL}`
+                        `/v2/new-arrivals?active-tab=${SubRoutes.NEW_ARRIVAL}`
                       );
                     }}
                     className={`flex justify-center py-[8px] h-[39px] px-[16px] items-center font-medium  rounded-[4px] gap-1  border-[1px]  border-solid border-neutral200 text-mMedium  cursor-pointer  ${'text-neutral900 bg-neutral0 hover:bg-neutral50'}`}
@@ -1052,6 +1052,7 @@ const NewArrivalDataTable = ({
                                 product_id: row.id,
                                 bid_value: bidValues[row.id]
                               });
+
                               activeTab === 0 &&
                                 setRowSelection((prev: any) => {
                                   let prevRows = { ...prev };

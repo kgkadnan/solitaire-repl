@@ -110,7 +110,7 @@ const Form = ({
   setSearchUrl: Dispatch<SetStateAction<string>>;
   activeTab: number;
   setActiveTab: Dispatch<SetStateAction<number>>;
-  searchParameters: any;
+  searchParameters?: any;
   handleCloseAllTabs: () => void;
   handleCloseSpecificTab: (_id: number) => void;
   state: any;
@@ -120,8 +120,8 @@ const Form = ({
   errorSetState: any;
   setIsDialogOpen: any;
   setDialogContent: any;
-  addSearches: any;
-  setAddSearches: any;
+  addSearches?: any;
+  setAddSearches?: any;
   setIsLoading: any;
   setIsAddDemand: Dispatch<SetStateAction<boolean>>;
   isMatchingPair: boolean;
@@ -432,7 +432,12 @@ const Form = ({
 
   // Reset form when a new search is initiated
   useEffect(() => {
-    if (subRoute === SubRoutes.NEW_SEARCH) {
+    if (
+      subRoute === SubRoutes.NEW_SEARCH ||
+      (subRoute === SubRoutes.NEW_ARRIVAL &&
+        !newArrivalFilterData.queryParams) ||
+      (subRoute === SubRoutes.BID_TO_BUY && !bidToBuyFilterData.queryParams)
+    ) {
       handleFormReset();
     }
   }, [subRoute]);
@@ -1033,7 +1038,7 @@ const Form = ({
           <span className="text-neutral900 text-lRegular font-medium grid gap-[24px]">
             Search for{' '}
             {subRoute === SubRoutes.NEW_ARRIVAL
-              ? 'New Arrival'
+              ? 'New Arrivals'
               : subRoute === SubRoutes.BID_TO_BUY
               ? 'Bid To Buy'
               : isMatchingPair
@@ -1042,7 +1047,7 @@ const Form = ({
           </span>
         </div>
         <div className="flex flex-col gap-[16px]">
-          {searchParameters.length > 0 ? (
+          {searchParameters?.length > 0 ? (
             <div className="flex justify-between border-[1px] border-neutral200  px-[16px] py-[8px]">
               <div className="flex gap-[12px] flex-wrap ">
                 <Breadcrum
