@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import ImageSvg from '@public/v2/assets/icons/detail-page/image.svg?url';
 import VideoSvg from '@public/v2/assets/icons/detail-page/video.svg?url';
 import PdfSvg from '@public/v2/assets/icons/detail-page/pdf.svg?url';
-import { IImagesType } from '../interface';
+// import { IImagesType } from '../interface';
 
 interface IDetailPageTabs {
   activePreviewTab: string;
