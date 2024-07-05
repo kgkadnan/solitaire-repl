@@ -56,9 +56,21 @@ import BookAppointment from '../my-appointments/components/book-appointment/book
 import { HOLD_STATUS, MEMO_STATUS } from '@/constants/business-logic';
 import { kycStatus } from '@/constants/enums/kyc';
 import BiddingSkeleton from '@/components/v2/skeleton/bidding';
+import { useAppDispatch, useAppSelector } from '@/hooks/hook';
+import { filterBidData } from '../search/form/helpers/filter-bid-data';
+import { filterFunction } from '@/features/filter-new-arrival/filter-new-arrival-slice';
+import Form from '../search/form/form';
+import useValidationStateManagement from '../search/hooks/validation-state-management';
+import useFormStateManagement from '../search/form/hooks/form-state';
+import useNumericFieldValidation from '../search/form/hooks/numeric-field-validation-management';
+import { SubRoutes } from '@/constants/v2/enums/routes';
 
 const NewArrivals = () => {
   const router = useRouter();
+  const dispatch = useAppDispatch();
+  const filterData = useAppSelector(state => state.filterNewArrival);
+
+  const subRoute = useSearchParams().get('active-tab');
   const [isDetailPage, setIsDetailPage] = useState(false);
   const [detailPageData, setDetailPageData] = useState<any>({});
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -67,6 +79,10 @@ const NewArrivals = () => {
   const pathName = useSearchParams().get('path');
   const [isLoading, setIsLoading] = useState(false); // State to track loading
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
+
+  const { setSearchUrl, searchUrl } = useValidationStateManagement();
+  const { state, setState, carat } = useFormStateManagement();
+  const [isAddDemand, setIsAddDemand] = useState(false);
 
   const handleDetailPage = ({ row }: { row: any }) => {
     setIsDetailPage(true);
@@ -231,14 +247,34 @@ const NewArrivals = () => {
   }, [time]);
   const { authToken } = useUser();
 
-  // const socketManager = new SocketManager();
   const socketManager = useMemo(() => new SocketManager(), []);
   useEffect(() => {
     if (authToken) useSocket(socketManager, authToken);
   }, [authToken]);
+
+  useEffect(() => {
+    if (filterData?.bidFilterData?.length > 0) {
+      setBid(filterData.bidFilterData);
+    }
+  }, [filterData]);
+
   const handleBidStones = useCallback((data: any) => {
     setActiveBid(data.activeStone);
-    setBid(data.bidStone);
+
+    if (filterData?.queryParams) {
+      const filteredData = filterBidData(data.bidStone, filterData.queryParams);
+      dispatch(
+        filterFunction({
+          bidData: data.bidStone,
+          queryParams: filterData.queryParams,
+          bidFilterData: filteredData
+        })
+      );
+      setBid(filteredData);
+    } else {
+      setBid(data.bidStone);
+    }
+
     setTime(data.endTime);
     if (data.activeStone) {
       data.activeStone.map((row: any) => {
@@ -300,6 +336,7 @@ const NewArrivals = () => {
       );
     }
   }, []);
+
   useEffect(() => {
     const handleRequestGetBidStones = (_data: any) => {
       socketManager.emit('get_bid_stones');
@@ -326,6 +363,7 @@ const NewArrivals = () => {
   );
   const { modalState, modalSetState } = useModalStateManagement();
   const { errorState, errorSetState } = useErrorStateManagement();
+  const formErrorState = useNumericFieldValidation();
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
 
   const [showAppointmentForm, setShowAppointmentForm] = useState(false);
@@ -702,6 +740,7 @@ const NewArrivals = () => {
       <DialogComponent
         dialogContent={modalState.dialogContent}
         isOpens={modalState.isDialogOpen}
+        dialogStyle={{ dialogContent: isAddDemand ? 'min-h-[280px]' : '' }}
       />
 
       {isDetailPage ? (
@@ -751,74 +790,99 @@ const NewArrivals = () => {
         <BiddingSkeleton />
       ) : (
         <>
-          {' '}
-          <div className="flex py-[4px] items-center justify-between">
-            <p className="text-lMedium font-medium text-neutral900">
-              New Arrivals
-            </p>
-            <div className="h-[40px]">
-              {timeDifference !== null && timeDifference >= 0 && (
-                <CountdownTimer
-                  initialHours={Math.floor(timeDifference / (1000 * 60 * 60))}
-                  initialMinutes={Math.floor(
-                    (timeDifference % (1000 * 60 * 60)) / (1000 * 60)
+          {subRoute === SubRoutes.NEW_ARRIVAL ? (
+            <Form
+              searchUrl={searchUrl}
+              setSearchUrl={setSearchUrl}
+              state={state}
+              setState={setState}
+              carat={carat}
+              handleCloseAllTabs={() => {}}
+              handleCloseSpecificTab={() => {}}
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
+              errorState={formErrorState.errorState}
+              errorSetState={formErrorState.errorSetState}
+              setIsDialogOpen={modalSetState.setIsDialogOpen}
+              setDialogContent={modalSetState.setDialogContent}
+              setIsLoading={setIsLoading}
+              setIsAddDemand={setIsAddDemand}
+              isMatchingPair={false}
+            />
+          ) : (
+            <>
+              <div className="flex py-[4px] items-center justify-between">
+                <p className="text-lMedium font-medium text-neutral900">
+                  New Arrivals
+                </p>
+                <div className="h-[40px]">
+                  {timeDifference !== null && timeDifference >= 0 && (
+                    <CountdownTimer
+                      initialHours={Math.floor(
+                        timeDifference / (1000 * 60 * 60)
+                      )}
+                      initialMinutes={Math.floor(
+                        (timeDifference % (1000 * 60 * 60)) / (1000 * 60)
+                      )}
+                      initialSeconds={Math.floor(
+                        (timeDifference % (1000 * 60)) / 1000
+                      )}
+                    />
                   )}
-                  initialSeconds={Math.floor(
-                    (timeDifference % (1000 * 60)) / 1000
-                  )}
-                />
-              )}
-            </div>
-          </div>
-          <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow">
-            <div className="border-b-[1px] border-neutral200">
-              {
-                <NewArrivalDataTable
-                  columns={
-                    activeTab === 2
-                      ? memoizedColumns.filter(
-                          (data: any) =>
-                            data.accessorKey !== 'current_max_bid' &&
-                            data.accessorKey !== 'shape'
-                        ) // Filter out data with accessor key 'current_max_bid'
-                      : activeTab === 1
-                      ? memoizedColumns.filter(
-                          (data: any) =>
-                            data.accessorKey !== 'last_bid_date' &&
-                            data.accessorKey !== 'shape'
-                        )
-                      : memoizedColumns.filter(
-                          (data: any) => data.accessorKey !== 'last_bid_date'
-                        )
-                  }
-                  modalSetState={modalSetState}
-                  setErrorText={setErrorText}
-                  downloadExcel={downloadExcel}
-                  setIsError={setIsError}
-                  tabLabels={tabLabels}
-                  activeTab={activeTab}
-                  handleTabClick={handleTabClick}
-                  rows={
-                    activeTab === 0
-                      ? bid
-                      : activeTab === 1
-                      ? activeBid
-                      : bidHistory?.data
-                  }
-                  activeCount={activeBid?.length}
-                  bidCount={bid?.length}
-                  historyCount={bidHistory?.data?.length}
-                  socketManager={socketManager}
-                  rowSelection={rowSelection}
-                  setRowSelection={setRowSelection}
-                  setIsLoading={setIsLoading}
-                  renderFooter={renderFooter}
-                  router={router}
-                />
-              }
-            </div>
-            {/* {renderFooter()} */}
-          </div>
+                </div>
+              </div>
+              <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow">
+                <div className="border-b-[1px] border-neutral200">
+                  <NewArrivalDataTable
+                    dispatch={dispatch}
+                    filterData={filterData}
+                    columns={
+                      activeTab === 2
+                        ? memoizedColumns.filter(
+                            (data: any) =>
+                              data.accessorKey !== 'current_max_bid' &&
+                              data.accessorKey !== 'shape'
+                          ) // Filter out data with accessor key 'current_max_bid'
+                        : activeTab === 1
+                        ? memoizedColumns.filter(
+                            (data: any) =>
+                              data.accessorKey !== 'last_bid_date' &&
+                              data.accessorKey !== 'shape'
+                          )
+                        : memoizedColumns.filter(
+                            (data: any) => data.accessorKey !== 'last_bid_date'
+                          )
+                    }
+                    modalSetState={modalSetState}
+                    setErrorText={setErrorText}
+                    downloadExcel={downloadExcel}
+                    setIsError={setIsError}
+                    tabLabels={tabLabels}
+                    activeTab={activeTab}
+                    handleTabClick={handleTabClick}
+                    rows={
+                      activeTab === 0
+                        ? bid
+                        : activeTab === 1
+                        ? activeBid
+                        : bidHistory?.data
+                    }
+                    activeCount={activeBid?.length}
+                    setBid={setBid}
+                    bidCount={bid?.length}
+                    historyCount={bidHistory?.data?.length}
+                    socketManager={socketManager}
+                    rowSelection={rowSelection}
+                    setRowSelection={setRowSelection}
+                    setIsLoading={setIsLoading}
+                    renderFooter={renderFooter}
+                    router={router}
+                  />
+                </div>
+                {/* {renderFooter()} */}
+              </div>
+            </>
+          )}
         </>
       )}
     </div>

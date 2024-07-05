@@ -49,6 +49,13 @@ const BiddingSkeleton = () => {
             <Skeleton
               variant="rectangular"
               height={'38px'}
+              width={'137px'}
+              animation="wave"
+              sx={{ bgcolor: 'var(--neutral-200)' }}
+            />
+            <Skeleton
+              variant="rectangular"
+              height={'38px'}
               width={'252px'}
               animation="wave"
               sx={{ bgcolor: 'var(--neutral-200)' }}
