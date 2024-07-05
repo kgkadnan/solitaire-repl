@@ -921,7 +921,8 @@ const Form = ({
           setErrorText(SELECT_SOME_PARAM);
         }
       },
-      isHidden: subRoute === SubRoutes.NEW_ARRIVAL
+      isHidden:
+        subRoute === SubRoutes.NEW_ARRIVAL || subRoute === SubRoutes.BID_TO_BUY
     },
     {
       variant: 'primary',
