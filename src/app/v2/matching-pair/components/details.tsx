@@ -20,7 +20,6 @@ import { Skeleton } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
 import { getShapeDisplayName } from '@/utils/v2/detail-page';
-import { IImagesType } from '@/components/v2/common/detail-page/interface';
 import Share from '@/components/v2/common/copy-and-share/share';
 import Tooltip from '@/components/v2/common/tooltip';
 import DetailPageTabs from '@/components/v2/common/detail-page/components/tabs';
