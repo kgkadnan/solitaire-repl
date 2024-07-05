@@ -6,7 +6,7 @@ const filterNewArrivalSlice = createSlice({
     bidData: [],
     bidFilterData: [],
     bidCount: 0,
-    queryParams: {}
+    queryParams: ''
   },
   reducers: {
     filterFunction: (state, action) => {

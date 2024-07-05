@@ -37,7 +37,6 @@ import { handleDecrementDiscount } from '@/utils/v2/handle-decrement-discount';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ManageLocales } from '@/utils/v2/translate';
 import { SubRoutes } from '@/constants/v2/enums/routes';
-import { useAppDispatch } from '@/hooks/hook';
 import { filterFunction } from '@/features/filter-new-arrival/filter-new-arrival-slice';
 
 const theme = createTheme({
@@ -171,12 +170,10 @@ const NewArrivalDataTable = ({
   renderFooter,
   router,
   filterData,
-  setBid
+  setBid,
+  dispatch
 }: any) => {
   // Fetching saved search data
-
-  const dispatch = useAppDispatch();
-  console.log('data', filterData);
 
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [bidError, setBidError] = useState('');
@@ -320,56 +317,54 @@ const NewArrivalDataTable = ({
           </div>
 
           <div className="flex gap-[12px]" style={{ alignItems: 'inherit' }}>
-            <div className="">
-              {filterData?.bidFilterData?.length > 0 ? (
-                <button
-                  onClick={() => {
-                    dispatch(
-                      filterFunction({
-                        bidData: filterData.bidData,
-                        queryParams: filterData.queryParams
-                      })
-                    );
-                    router.push(
-                      `/v2/search?active-tab=${SubRoutes.NEW_ARRIVAL}`
-                    );
-                  }}
-                  className={`flex w-full justify-center py-[8px] h-[39px] px-[16px]  items-center font-medium  rounded-[4px] gap-1  border-[1px]  border-solid border-neutral200 text-mMedium  cursor-pointer  ${'bg-primaryMain text-neutral0 hover:bg-primaryHover'}`}
-                >
-                  <FilterIcon stroke={`${'var(--neutral-0)'}`} />
-
-                  <p className="w-[60%]">{ManageLocales('app.modifyFilter')}</p>
-                  <div
-                    className="w-[17%] cursor-pointer"
-                    onClick={e => {
-                      e.stopPropagation();
-                      setBid(filterData.bidData);
-                      dispatch(filterFunction({}));
+            {activeTab === 0 && (
+              <div className="">
+                {filterData?.bidFilterData?.length > 0 ? (
+                  <button
+                    onClick={() => {
+                      router.push(
+                        `/v2/search?active-tab=${SubRoutes.NEW_ARRIVAL}`
+                      );
                     }}
+                    className={`flex w-full justify-center py-[8px] h-[39px] px-[16px]  items-center font-medium  rounded-[4px] gap-1  border-[1px]  border-solid border-neutral200 text-mMedium  cursor-pointer  ${'bg-primaryMain text-neutral0 hover:bg-primaryHover'}`}
                   >
-                    <Image src={crossIcon} alt="crossIcon" />
-                  </div>
-                </button>
-              ) : (
-                <button
-                  onClick={() => {
-                    dispatch(
-                      filterFunction({
-                        bidData: rows
-                      })
-                    );
-                    router.push(
-                      `/v2/search?active-tab=${SubRoutes.NEW_ARRIVAL}`
-                    );
-                  }}
-                  className={`flex justify-center py-[8px] h-[39px] px-[16px] items-center font-medium  rounded-[4px] gap-1  border-[1px]  border-solid border-neutral200 text-mMedium  cursor-pointer  ${'text-neutral900 bg-neutral0 hover:bg-neutral50'}`}
-                >
-                  <FilterIcon stroke={`${'var(--neutral-900)'}`} />
+                    <FilterIcon stroke={`${'var(--neutral-0)'}`} />
 
-                  <p>{ManageLocales('app.applyFilter')}</p>
-                </button>
-              )}
-            </div>
+                    <p className="w-[60%]">
+                      {ManageLocales('app.modifyFilter')}
+                    </p>
+                    <div
+                      className="w-[17%] cursor-pointer"
+                      onClick={e => {
+                        e.stopPropagation();
+                        setBid(filterData.bidData);
+                        dispatch(filterFunction({}));
+                      }}
+                    >
+                      <Image src={crossIcon} alt="crossIcon" />
+                    </div>
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => {
+                      dispatch(
+                        filterFunction({
+                          bidData: rows
+                        })
+                      );
+                      router.push(
+                        `/v2/search?active-tab=${SubRoutes.NEW_ARRIVAL}`
+                      );
+                    }}
+                    className={`flex justify-center py-[8px] h-[39px] px-[16px] items-center font-medium  rounded-[4px] gap-1  border-[1px]  border-solid border-neutral200 text-mMedium  cursor-pointer  ${'text-neutral900 bg-neutral0 hover:bg-neutral50'}`}
+                  >
+                    <FilterIcon stroke={`${'var(--neutral-900)'}`} />
+
+                    <p>{ManageLocales('app.applyFilter')}</p>
+                  </button>
+                )}
+              </div>
+            )}
 
             <MRT_GlobalFilterTextField
               table={table}
@@ -1040,6 +1035,7 @@ const NewArrivalDataTable = ({
                                 );
                                 return; // Exit early, do not update bidValues
                               }
+
                               socketManager.emit('place_bid', {
                                 product_id: row.id,
                                 bid_value: bidValues[row.id]

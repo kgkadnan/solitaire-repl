@@ -288,7 +288,10 @@ const BidToBuy = () => {
     }
   }, []);
 
+  console.log('biddd', bid);
+
   const handleBidPlaced = useCallback((data: any) => {
+    console.log('Data handleBidPlaced', data);
     if (data && data['status'] === 'success') {
       modalSetState.setIsDialogOpen(true);
       modalSetState.setDialogContent(
@@ -322,8 +325,8 @@ const BidToBuy = () => {
     };
     socketManager.on('bidtobuy_stones', handleBidStones);
     socketManager.on('error', handleError);
-    socketManager.on('place_bidtobuy', handleBidPlaced);
-    socketManager.on('cancel_bidtobuy', handleBidCanceled);
+    socketManager.on('bidtobuy_placed', handleBidPlaced);
+    socketManager.on('bidtobuy_canceled', handleBidCanceled);
 
     // Setting up the event listener for "request_get_bid_stones"
     socketManager.on('request_get_bidtobuy_stones', handleRequestGetBidStones);

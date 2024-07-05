@@ -56,14 +56,15 @@ import BookAppointment from '../my-appointments/components/book-appointment/book
 import { HOLD_STATUS, MEMO_STATUS } from '@/constants/business-logic';
 import { kycStatus } from '@/constants/enums/kyc';
 import BiddingSkeleton from '@/components/v2/skeleton/bidding';
-import { useAppSelector } from '@/hooks/hook';
+import { useAppDispatch, useAppSelector } from '@/hooks/hook';
+import { filterBidData } from '../search/form/helpers/filter-bid-data';
+import { filterFunction } from '@/features/filter-new-arrival/filter-new-arrival-slice';
 
 const NewArrivals = () => {
   const router = useRouter();
-
+  const dispatch = useAppDispatch();
   const filterData = useAppSelector(state => state.filterNewArrival);
 
-  console.log('newArrival', filterData);
   const [isDetailPage, setIsDetailPage] = useState(false);
   const [detailPageData, setDetailPageData] = useState<any>({});
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -236,19 +237,29 @@ const NewArrivals = () => {
   }, [time]);
   const { authToken } = useUser();
 
-  // const socketManager = new SocketManager();
   const socketManager = useMemo(() => new SocketManager(), []);
   useEffect(() => {
     if (authToken) useSocket(socketManager, authToken);
   }, [authToken]);
   const handleBidStones = useCallback((data: any) => {
     setActiveBid(data.activeStone);
-    setBid(
-      filterData?.bidFilterData?.length > 0
-        ? filterData.bidFilterData
-        : data.bidStone
-    );
-    console.log('hereee ,bidStone', filterData.bidFilterData);
+
+    console.log('filterData?.bidFilterData?.', filterData?.bidFilterData);
+    if (filterData?.bidFilterData?.length > 0) {
+      console.log('filterData.queryParams', filterData.queryParams);
+      const filteredData = filterBidData(data.bidStone, filterData.queryParams);
+      dispatch(
+        filterFunction({
+          bidData: data.bidStone,
+          queryParams: filterData.queryParams,
+          bidFilterData: filterData?.bidFilterData
+        })
+      );
+      setBid(filteredData);
+    } else {
+      setBid(data.bidStone);
+    }
+
     setTime(data.endTime);
     if (data.activeStone) {
       data.activeStone.map((row: any) => {
@@ -297,6 +308,7 @@ const NewArrivals = () => {
     }
   }, []);
   const handleBidCanceled = useCallback((data: any) => {
+    console.log('Data ssss', data);
     if (data && data['status'] === 'success') {
       modalSetState.setIsDialogOpen(true);
       modalSetState.setDialogContent(
@@ -784,6 +796,7 @@ const NewArrivals = () => {
             <div className="border-b-[1px] border-neutral200">
               {
                 <NewArrivalDataTable
+                  dispatch={dispatch}
                   filterData={filterData}
                   columns={
                     activeTab === 2
