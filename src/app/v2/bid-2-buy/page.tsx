@@ -47,6 +47,11 @@ import BiddingSkeleton from '@/components/v2/skeleton/bidding';
 import { useAppDispatch, useAppSelector } from '@/hooks/hook';
 import { filterBidData } from '../search/form/helpers/filter-bid-data';
 import { filterBidToBuyFunction } from '@/features/filter-bid-to-buy/filter-bid-to-buy-slice';
+import useValidationStateManagement from '../search/hooks/validation-state-management';
+import useFormStateManagement from '../search/form/hooks/form-state';
+import Form from '../search/form/form';
+import { SubRoutes } from '@/constants/v2/enums/routes';
+import useNumericFieldValidation from '../search/form/hooks/numeric-field-validation-management';
 
 const BidToBuy = () => {
   const router = useRouter();
@@ -63,6 +68,12 @@ const BidToBuy = () => {
   const [isLoading, setIsLoading] = useState(false); // State to track loading
   const [checkStatus, setCheckStatus] = useState(false);
 
+  const { setSearchUrl, searchUrl } = useValidationStateManagement();
+  const { state, setState, carat } = useFormStateManagement();
+  const [isAddDemand, setIsAddDemand] = useState(false);
+  const formErrorState = useNumericFieldValidation();
+
+  const subRoute = useSearchParams().get('active-tab');
   const handleDetailPage = ({ row }: { row: any }) => {
     setIsDetailPage(true);
     setDetailPageData(row);
@@ -258,16 +269,23 @@ const BidToBuy = () => {
   useEffect(() => {
     if (authToken) useSocket(socketManager, authToken);
   }, [authToken]);
+
+  useEffect(() => {
+    if (filterData?.bidFilterData?.length > 0) {
+      setBid(filterData.bidFilterData);
+    }
+  }, [filterData]);
+
   const handleBidStones = useCallback((data: any) => {
     setCheckStatus(true);
     setActiveBid(data.activeStone);
-    if (filterData?.bidFilterData?.length > 0) {
+    if (filterData?.queryParams) {
       const filteredData = filterBidData(data.bidStone, filterData.queryParams);
       dispatch(
         filterBidToBuyFunction({
           bidData: data.bidStone,
           queryParams: filterData.queryParams,
-          bidFilterData: filterData?.bidFilterData
+          bidFilterData: filteredData
         })
       );
       setBid(filteredData);
@@ -616,6 +634,7 @@ const BidToBuy = () => {
       <DialogComponent
         dialogContent={modalState.dialogContent}
         isOpens={modalState.isDialogOpen}
+        dialogStyle={{ dialogContent: isAddDemand ? 'min-h-[280px]' : '' }}
       />
 
       {isDetailPage ? (
@@ -644,94 +663,117 @@ const BidToBuy = () => {
         <BiddingSkeleton />
       ) : (
         <>
-          <div className="flex  py-[4px] items-center justify-between">
-            <div className="flex gap-3 items-center">
-              <p className="text-lMedium font-medium text-neutral900">
-                Bid to Buy
-              </p>
-              {checkStatus ? (
-                time && time?.length ? (
-                  <div className="text-successMain text-lMedium font-medium">
-                    ACTIVE
-                  </div>
-                ) : (
-                  <div className="text-visRed text-lMedium font-medium">
-                    INACTIVE
-                  </div>
-                )
-              ) : (
-                ''
-              )}
-            </div>
+          {subRoute === SubRoutes.BID_TO_BUY ? (
+            <Form
+              searchUrl={searchUrl}
+              setSearchUrl={setSearchUrl}
+              state={state}
+              setState={setState}
+              carat={carat}
+              handleCloseAllTabs={() => {}}
+              handleCloseSpecificTab={() => {}}
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
+              errorState={formErrorState.errorState}
+              errorSetState={formErrorState.errorSetState}
+              setIsDialogOpen={modalSetState.setIsDialogOpen}
+              setDialogContent={modalSetState.setDialogContent}
+              setIsLoading={setIsLoading}
+              setIsAddDemand={setIsAddDemand}
+              isMatchingPair={false}
+            />
+          ) : (
+            <>
+              <div className="flex  py-[4px] items-center justify-between">
+                <div className="flex gap-3 items-center">
+                  <p className="text-lMedium font-medium text-neutral900">
+                    Bid to Buy
+                  </p>
+                  {checkStatus ? (
+                    time && time?.length ? (
+                      <div className="text-successMain text-lMedium font-medium">
+                        ACTIVE
+                      </div>
+                    ) : (
+                      <div className="text-visRed text-lMedium font-medium">
+                        INACTIVE
+                      </div>
+                    )
+                  ) : (
+                    ''
+                  )}
+                </div>
 
-            <div className="h-[38px]">
-              {timeDifference !== null && timeDifference >= 0 && (
-                <CountdownTimer
-                  initialHours={Math.floor(timeDifference / (1000 * 60 * 60))}
-                  initialMinutes={Math.floor(
-                    (timeDifference % (1000 * 60 * 60)) / (1000 * 60)
+                <div className="h-[38px]">
+                  {timeDifference !== null && timeDifference >= 0 && (
+                    <CountdownTimer
+                      initialHours={Math.floor(
+                        timeDifference / (1000 * 60 * 60)
+                      )}
+                      initialMinutes={Math.floor(
+                        (timeDifference % (1000 * 60 * 60)) / (1000 * 60)
+                      )}
+                      initialSeconds={Math.floor(
+                        (timeDifference % (1000 * 60)) / 1000
+                      )}
+                    />
                   )}
-                  initialSeconds={Math.floor(
-                    (timeDifference % (1000 * 60)) / 1000
-                  )}
-                />
-              )}
-            </div>
-          </div>
-          <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow">
-            <div className="border-b-[1px] border-neutral200">
-              {
-                <BidToByDataTable
-                  dispatch={dispatch}
-                  filterData={filterData}
-                  setBid={setBid}
-                  columns={
-                    activeTab === 2
-                      ? memoizedColumns.filter(
-                          (data: any) =>
-                            data.accessorKey !== 'shape' &&
-                            data.accessorKey !== 'discount'
-                        )
-                      : activeTab === 1
-                      ? memoizedColumns.filter(
-                          (data: any) =>
-                            data.accessorKey !== 'last_bid_date' &&
-                            data.accessorKey !== 'shape' &&
-                            data.accessorKey !== 'discount'
-                        )
-                      : memoizedColumns.filter(
-                          (data: any) =>
-                            data.accessorKey !== 'my_current_bid' &&
-                            data.accessorKey !== 'last_bid_date'
-                        )
-                  }
-                  modalSetState={modalSetState}
-                  setErrorText={setErrorText}
-                  downloadExcel={downloadExcel}
-                  setIsError={setIsError}
-                  tabLabels={tabLabels}
-                  activeTab={activeTab}
-                  handleTabClick={handleTabClick}
-                  rows={
-                    activeTab === 0
-                      ? bid
-                      : activeTab === 1
-                      ? activeBid
-                      : bidHistory?.data
-                  }
-                  activeCount={activeBid?.length}
-                  bidCount={bid?.length}
-                  historyCount={bidHistory?.data?.length}
-                  socketManager={socketManager}
-                  rowSelection={rowSelection}
-                  setRowSelection={setRowSelection}
-                  setIsLoading={setIsLoading}
-                  renderFooter={renderFooter}
-                  router={router}
-                />
-              }
-            </div>
-          </div>
+                </div>
+              </div>
+              <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow">
+                <div className="border-b-[1px] border-neutral200">
+                  <BidToByDataTable
+                    dispatch={dispatch}
+                    filterData={filterData}
+                    setBid={setBid}
+                    columns={
+                      activeTab === 2
+                        ? memoizedColumns.filter(
+                            (data: any) =>
+                              data.accessorKey !== 'shape' &&
+                              data.accessorKey !== 'discount'
+                          )
+                        : activeTab === 1
+                        ? memoizedColumns.filter(
+                            (data: any) =>
+                              data.accessorKey !== 'last_bid_date' &&
+                              data.accessorKey !== 'shape' &&
+                              data.accessorKey !== 'discount'
+                          )
+                        : memoizedColumns.filter(
+                            (data: any) =>
+                              data.accessorKey !== 'my_current_bid' &&
+                              data.accessorKey !== 'last_bid_date'
+                          )
+                    }
+                    modalSetState={modalSetState}
+                    setErrorText={setErrorText}
+                    downloadExcel={downloadExcel}
+                    setIsError={setIsError}
+                    tabLabels={tabLabels}
+                    activeTab={activeTab}
+                    handleTabClick={handleTabClick}
+                    rows={
+                      activeTab === 0
+                        ? bid
+                        : activeTab === 1
+                        ? activeBid
+                        : bidHistory?.data
+                    }
+                    activeCount={activeBid?.length}
+                    bidCount={bid?.length}
+                    historyCount={bidHistory?.data?.length}
+                    socketManager={socketManager}
+                    rowSelection={rowSelection}
+                    setRowSelection={setRowSelection}
+                    setIsLoading={setIsLoading}
+                    renderFooter={renderFooter}
+                    router={router}
+                  />
+                </div>
+              </div>
+            </>
+          )}
         </>
       )}
     </div>

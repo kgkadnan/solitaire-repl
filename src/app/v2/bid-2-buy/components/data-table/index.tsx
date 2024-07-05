@@ -334,7 +334,7 @@ const BidToByDataTable = ({
                   <button
                     onClick={() => {
                       router.push(
-                        `/v2/search?active-tab=${SubRoutes.BID_TO_BUY}`
+                        `/v2/bid-2-buy?active-tab=${SubRoutes.BID_TO_BUY}`
                       );
                     }}
                     className={`flex w-full justify-center py-[8px] h-[39px] px-[16px]  items-center font-medium  rounded-[4px] gap-1  border-[1px]  border-solid border-neutral200 text-mMedium  cursor-pointer  ${'bg-primaryMain text-neutral0 hover:bg-primaryHover'}`}
@@ -364,7 +364,7 @@ const BidToByDataTable = ({
                         })
                       );
                       router.push(
-                        `/v2/search?active-tab=${SubRoutes.BID_TO_BUY}`
+                        `/v2/bid-2-buy?active-tab=${SubRoutes.BID_TO_BUY}`
                       );
                     }}
                     className={`flex justify-center py-[8px] h-[39px] px-[16px] items-center font-medium  rounded-[4px] gap-1  border-[1px]  border-solid border-neutral200 text-mMedium  cursor-pointer  ${'text-neutral900 bg-neutral0 hover:bg-neutral50'}`}
