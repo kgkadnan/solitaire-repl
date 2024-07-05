@@ -154,7 +154,8 @@ export function MatchPairDetails({
       name: getShapeDisplayName(tableData?.shape ?? ''),
       url: `${FILE_URLS.IMG.replace('***', tableData?.lot_id ?? '')}`,
       downloadUrl: `${FILE_URLS.IMG.replace('***', tableData?.lot_id ?? '')}`,
-      category: 'Image'
+      category: 'Image',
+      id: tableData?.id
     },
     {
       name: 'GIA Certificate',
@@ -166,7 +167,8 @@ export function MatchPairDetails({
       downloadUrl: tableData?.assets_pre_check?.CERT_FILE
         ? tableData?.certificate_url
         : '',
-      url_check: tableData?.assets_pre_check?.CERT_IMG
+      url_check: tableData?.assets_pre_check?.CERT_IMG,
+      id: tableData?.id
     },
     {
       name: 'Video',
@@ -185,25 +187,29 @@ export function MatchPairDetails({
       name: 'Heart',
       url: `${FILE_URLS.HEART.replace('***', tableData?.lot_id ?? '')}`,
       downloadUrl: `${FILE_URLS.HEART.replace('***', tableData?.lot_id ?? '')}`,
-      category: 'Image'
+      category: 'Image',
+      id: tableData?.id
     },
     {
       name: 'Arrow',
       url: `${FILE_URLS.ARROW.replace('***', tableData?.lot_id ?? '')}`,
       downloadUrl: `${FILE_URLS.ARROW.replace('***', tableData?.lot_id ?? '')}`,
-      category: 'Image'
+      category: 'Image',
+      id: tableData?.id
     },
     {
       name: 'Aset',
       url: `${FILE_URLS.ASET.replace('***', tableData?.lot_id ?? '')}`,
       downloadUrl: `${FILE_URLS.ASET.replace('***', tableData?.lot_id ?? '')}`,
-      category: 'Image'
+      category: 'Image',
+      id: tableData?.id
     },
     {
       name: 'Ideal',
       url: `${FILE_URLS.IDEAL.replace('***', tableData?.lot_id ?? '')}`,
       downloadUrl: `${FILE_URLS.IDEAL.replace('***', tableData?.lot_id ?? '')}`,
-      category: 'Image'
+      category: 'Image',
+      id: tableData?.id
     },
     {
       name: 'Fluorescence',
@@ -212,7 +218,8 @@ export function MatchPairDetails({
         '***',
         tableData?.lot_id ?? ''
       )}`,
-      category: 'Image'
+      category: 'Image',
+      id: tableData?.id
     }
   ];
 
@@ -527,12 +534,19 @@ export function MatchPairDetails({
                         tooltipTrigger={
                           <button
                             onClick={() => {
-                              filteredImages.map((images: any) => {
-                                handleDownloadImage(
-                                  images[imageIndex].downloadUrl || '',
-                                  images[imageIndex].name,
-                                  setIsLoading
-                                );
+                              filteredImages.forEach((images: any) => {
+                                if (selectedCheckboxes.length > 0) {
+                                  selectedCheckboxes.includes(
+                                    images[imageIndex].id
+                                  ) &&
+                                    handleDownloadImage(
+                                      images[imageIndex].downloadUrl || '',
+                                      images[imageIndex].name,
+                                      setIsLoading
+                                    );
+                                } else {
+                                  setShowToast(true);
+                                }
                               });
                             }}
                             disabled={
