@@ -5,6 +5,8 @@ import DashboardIcon from '@public/v2/assets/icons/sidebar-icons/dashboard-squar
 import ArrivalIcon from '@public/v2/assets/icons/sidebar-icons/new-arrivals.svg?url';
 import Bid2BuyIcon from '@public/v2/assets/icons/sidebar-icons/bid-2-buy.svg?url';
 import SearchIcon from '@public/v2/assets/icons/sidebar-icons/search.svg?url';
+import MatchingPairIcon from '@public/v2/assets/icons/sidebar-icons/matching-pair.svg?url';
+
 import MyDaimondsIcon from '@public/v2/assets/icons/sidebar-icons/diamond.svg?url';
 import BookmarkIcon from '@public/v2/assets/icons/sidebar-icons/bookmark.svg?url';
 import MyAppointments from '@public/v2/assets/icons/sidebar-icons/my-appointments.svg?url';
@@ -15,7 +17,7 @@ import styles from './side-navigation.module.scss';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import Tooltip from '../tooltip';
-import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
+import { MatchSubRoutes, Routes, SubRoutes } from '@/constants/v2/enums/routes';
 import { Button } from '../../ui/button';
 import { SocketManager, useSocket } from '@/hooks/v2/socket-manager';
 import useUser from '@/lib/use-auth';
@@ -42,7 +44,6 @@ const SideNavigationBar = ({
   const [showPulse, setShowPulse] = useState(false);
 
   const router = useRouter();
-
   const SideNavigationData: ISideNavigationBar[] = [
     {
       src: <DashboardIcon />,
@@ -72,6 +73,14 @@ const SideNavigationBar = ({
       isActive:
         currentRoute === Routes.SEARCH &&
         currentSubRoute !== SubRoutes.SAVED_SEARCH
+    },
+    {
+      src: <MatchingPairIcon />,
+      title: ManageLocales('app.sideNavigationBar.matchingPair'),
+      link: `${Routes.MATCHING_PAIR}?active-tab=${MatchSubRoutes.NEW_SEARCH}`,
+      isActive:
+        currentRoute === Routes.MATCHING_PAIR &&
+        currentSubRoute !== MatchSubRoutes.SAVED_SEARCH
     },
 
     {
