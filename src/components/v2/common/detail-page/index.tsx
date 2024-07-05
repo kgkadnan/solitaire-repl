@@ -182,7 +182,7 @@ export function DiamondDetailsComponent({
 
   useEffect(() => {
     if (images.length > 0 && images[0].name.length)
-      loadImages(images, setValidImages, checkImage);
+      loadImages(images, setValidImages, checkImage, false);
   }, [tableData?.lot_id, tableData?.certificate_url]);
 
   useEffect(() => {
@@ -263,7 +263,7 @@ export function DiamondDetailsComponent({
   let isNudge = localStorage.getItem('show-nudge') === 'MINI';
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   return (
-    <div className="text-black bg-white rounded-[8px]">
+    <div className="text-black bg-neutral25 rounded-[8px]">
       <Toast show={showToast} message="Copied Successfully" />
       <div className="flex items-center">
         <Image

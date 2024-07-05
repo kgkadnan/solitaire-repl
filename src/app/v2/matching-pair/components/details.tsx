@@ -20,7 +20,6 @@ import { Skeleton } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
 import { getShapeDisplayName } from '@/utils/v2/detail-page';
-import { IImagesType } from '@/components/v2/common/detail-page/interface';
 import Share from '@/components/v2/common/copy-and-share/share';
 import Tooltip from '@/components/v2/common/tooltip';
 import DetailPageTabs from '@/components/v2/common/detail-page/components/tabs';
@@ -80,7 +79,7 @@ export function MatchPairDetails({
   const [activePreviewTab, setActivePreviewTab] = useState('Image');
   const [imageIndex, setImageIndex] = useState<number>(0);
   // const [currentIndex, setCurrentIndex] = useState(0);
-  const [validImages, setValidImages] = useState<IImagesType[]>([]);
+  const [validImages, setValidImages] = useState<any>([]);
   const { errorState, errorSetState } = useErrorStateManagement();
 
   const { setIsError, setErrorText } = errorSetState;
@@ -154,7 +153,8 @@ export function MatchPairDetails({
       name: getShapeDisplayName(tableData?.shape ?? ''),
       url: `${FILE_URLS.IMG.replace('***', tableData?.lot_id ?? '')}`,
       downloadUrl: `${FILE_URLS.IMG.replace('***', tableData?.lot_id ?? '')}`,
-      category: 'Image'
+      category: 'Image',
+      id: tableData?.id
     },
     {
       name: 'GIA Certificate',
@@ -166,7 +166,8 @@ export function MatchPairDetails({
       downloadUrl: tableData?.assets_pre_check?.CERT_FILE
         ? tableData?.certificate_url
         : '',
-      url_check: tableData?.assets_pre_check?.CERT_IMG
+      url_check: tableData?.assets_pre_check?.CERT_IMG,
+      id: tableData?.id
     },
     {
       name: 'Video',
@@ -185,25 +186,29 @@ export function MatchPairDetails({
       name: 'Heart',
       url: `${FILE_URLS.HEART.replace('***', tableData?.lot_id ?? '')}`,
       downloadUrl: `${FILE_URLS.HEART.replace('***', tableData?.lot_id ?? '')}`,
-      category: 'Image'
+      category: 'Image',
+      id: tableData?.id
     },
     {
       name: 'Arrow',
       url: `${FILE_URLS.ARROW.replace('***', tableData?.lot_id ?? '')}`,
       downloadUrl: `${FILE_URLS.ARROW.replace('***', tableData?.lot_id ?? '')}`,
-      category: 'Image'
+      category: 'Image',
+      id: tableData?.id
     },
     {
       name: 'Aset',
       url: `${FILE_URLS.ASET.replace('***', tableData?.lot_id ?? '')}`,
       downloadUrl: `${FILE_URLS.ASET.replace('***', tableData?.lot_id ?? '')}`,
-      category: 'Image'
+      category: 'Image',
+      id: tableData?.id
     },
     {
       name: 'Ideal',
       url: `${FILE_URLS.IDEAL.replace('***', tableData?.lot_id ?? '')}`,
       downloadUrl: `${FILE_URLS.IDEAL.replace('***', tableData?.lot_id ?? '')}`,
-      category: 'Image'
+      category: 'Image',
+      id: tableData?.id
     },
     {
       name: 'Fluorescence',
@@ -212,27 +217,29 @@ export function MatchPairDetails({
         '***',
         tableData?.lot_id ?? ''
       )}`,
-      category: 'Image'
+      category: 'Image',
+      id: tableData?.id
     }
   ];
 
   useEffect(() => {
-    if (allImages.length > 0 && allImages[0].length > 0)
-      loadImages(allImages[0], setValidImages, checkImage);
+    let allImagesData = originalData.map((data: any) => filterImageUrl(data));
+    if (allImagesData.length > 0)
+      loadImages(allImagesData, setValidImages, checkImage, true);
   }, [originalData]);
-  useEffect(() => {
-    if (
-      !validImages.length
-      // && filteredImages[0][0].name.length
-    ) {
-      setValidImages([
-        {
-          name: 'No Data Found',
-          url: ''
-        }
-      ]);
-    }
-  }, [validImages]);
+  // useEffect(() => {
+  //   if (
+  //     !validImages.length
+  //     // && filteredImages[0][0].name.length
+  //   ) {
+  //     setValidImages([
+  //       [{
+  //         name: 'No Data Found',
+  //         url: ''
+  //       }]
+  //     ]);
+  //   }
+  // }, [validImages]);
 
   const handleDownloadExcel = () => {
     if (selectedCheckboxes.length > 0) {
@@ -339,6 +346,7 @@ export function MatchPairDetails({
   // let isNudge = localStorage.getItem('show-nudge') === 'MINI';
   // const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   let allImages = originalData.map((data: any) => filterImageUrl(data));
+
   const filteredImages = allImages.map((data: any) =>
     data.filter((image: any) => {
       if (activePreviewTab === 'Video' && image.category === 'Video')
@@ -358,7 +366,6 @@ export function MatchPairDetails({
       return false;
     })
   );
-
   const updateDataAsPerSimilarData = (originalData: any, similarData: any) => {
     const originalLotIds = new Set(
       originalData.map((product: any) => product.lot_id)
@@ -370,9 +377,8 @@ export function MatchPairDetails({
 
     return [...originalData, ...newProducts];
   };
-  console.log(filteredImages, 'filteredImages');
   return (
-    <div className="text-black bg-white rounded-[8px] w-[calc(100vw-116px)] h-[calc(100vh-140px)]">
+    <div className="text-black bg-neutral25 rounded-[8px] w-[calc(100vw-116px)] h-[calc(100vh-140px)]">
       <Toast
         show={showToast}
         message={
@@ -426,13 +432,15 @@ export function MatchPairDetails({
               setActivePreviewTab={setActivePreviewTab}
               activePreviewTab={activePreviewTab}
               setImageIndex={setImageIndex}
+              isMatchingPair={true}
             />
           </div>
           <div className="flex  justify-center xl:justify-end mr-[10px] items-center">
             <div className="flex gap-3 items-center">
               {similarData && similarData?.count > 0 && (
                 <div
-                  className=" flex gap-1 border-[1px] h-[40px] border-[#E4E7EC] rounded-[4px] px-4 py-2 cursor-pointer"
+                  className=" flex items-center gap-1 border-[1px] h-[40px] border-[#E4E7EC] rounded-[4px] px-4 py-2 cursor-pointer"
+                  style={{ boxShadow: 'var(--input-shadow)' }}
                   onClick={() => {
                     !viewSimilar &&
                       setOriginalData(
@@ -444,7 +452,7 @@ export function MatchPairDetails({
                   <p className="text-mMedium text-neutral900 font-medium">
                     {viewSimilar ? 'Hide' : 'View'} similar
                   </p>
-                  <div className=" bg-primaryMain border-[2px] border-primaryBorder text-white text-mMedium px-[6px] py-[1px] rounded-[4px]">
+                  <div className=" bg-primaryMain border-[2px] border-primaryBorder text-white text-mMedium px-[6px] py-[1px] rounded-[4px] h-[25px]">
                     +{similarData?.count}
                   </div>
                 </div>
@@ -527,12 +535,19 @@ export function MatchPairDetails({
                         tooltipTrigger={
                           <button
                             onClick={() => {
-                              filteredImages.map((images: any) => {
-                                handleDownloadImage(
-                                  images[imageIndex].downloadUrl || '',
-                                  images[imageIndex].name,
-                                  setIsLoading
-                                );
+                              filteredImages.forEach((images: any) => {
+                                if (selectedCheckboxes.length > 0) {
+                                  selectedCheckboxes.includes(
+                                    images[imageIndex].id
+                                  ) &&
+                                    handleDownloadImage(
+                                      images[imageIndex].downloadUrl || '',
+                                      images[imageIndex].name,
+                                      setIsLoading
+                                    );
+                                } else {
+                                  setShowToast(true);
+                                }
                               });
                             }}
                             disabled={
