@@ -369,6 +369,7 @@ const NewArrivalDataTable = ({
             <MRT_GlobalFilterTextField
               table={table}
               autoComplete="false"
+              className="max-[1092px]:w-[110px]   max-[1160px]:w-[180px] max-xl:w-auto"
               sx={{
                 boxShadow: 'var(--input-shadow) inset',
                 border: 'none',
@@ -892,7 +893,7 @@ const NewArrivalDataTable = ({
                     input:
                       '!bg-infoSurface !border-infoBorder !text-infoMain !h-[30px]  text-sMedium'
                   }}
-                  value={`${row.original.current_max_bid}%`}
+                  value={`${formatNumber(row.original.current_max_bid)}%`}
                   disabled
                 />
               </div>
@@ -967,7 +968,7 @@ const NewArrivalDataTable = ({
                           inputMain: 'h-[54px]',
                           input: '!h-[30px]  text-sMedium'
                         }}
-                        value={bidValue}
+                        value={formatNumber(bidValue)}
                         onChange={e => {
                           const newValue = e.target.value;
                           if (newValue < row.original.current_max_bid) {

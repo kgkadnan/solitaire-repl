@@ -13,6 +13,7 @@ import { downloadExcelApi } from './features/api/download-excel';
 import notificationBadgeReducer from './features/notification/notification-slice';
 import trackPageEventReducer from './features/track-page-event/track-page-event-slice';
 import filterNewArrivalReducer from './features/filter-new-arrival/filter-new-arrival-slice';
+import filterBidToBuyReducer from './features/filter-bid-to-buy/filter-bid-to-buy-slice';
 import profileUpdateReducer from './features/profile/profile-update-slice';
 import isEditingKycSlice from './features/kyc/is-editing-kyc';
 import searchResultReducer from './features/search-result/search-result';
@@ -52,6 +53,7 @@ const rootReducer = combineReducers({
   profileUpdate: profileUpdateReducer,
   pageTimeTracking: trackPageEventReducer,
   filterNewArrival: filterNewArrivalReducer,
+  filterBidToBuy: filterBidToBuyReducer,
   isEditingKYC: isEditingKycSlice,
   searchResult: searchResultReducer,
   searchList: searchListReducer,

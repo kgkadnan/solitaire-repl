@@ -44,9 +44,15 @@ import { loadImages } from '@/components/v2/common/detail-page/helpers/load-imag
 import { checkImage } from '@/components/v2/common/detail-page/helpers/check-image';
 import CommonPoppup from '../login/component/common-poppup';
 import BiddingSkeleton from '@/components/v2/skeleton/bidding';
+import { useAppDispatch, useAppSelector } from '@/hooks/hook';
+import { filterBidData } from '../search/form/helpers/filter-bid-data';
+import { filterBidToBuyFunction } from '@/features/filter-bid-to-buy/filter-bid-to-buy-slice';
 
 const BidToBuy = () => {
   const router = useRouter();
+
+  const dispatch = useAppDispatch();
+  const filterData = useAppSelector(state => state.filterBidToBuy);
 
   const [isDetailPage, setIsDetailPage] = useState(false);
   const [detailPageData, setDetailPageData] = useState<any>({});
@@ -255,7 +261,19 @@ const BidToBuy = () => {
   const handleBidStones = useCallback((data: any) => {
     setCheckStatus(true);
     setActiveBid(data.activeStone);
-    setBid(data.bidStone);
+    if (filterData?.bidFilterData?.length > 0) {
+      const filteredData = filterBidData(data.bidStone, filterData.queryParams);
+      dispatch(
+        filterBidToBuyFunction({
+          bidData: data.bidStone,
+          queryParams: filterData.queryParams,
+          bidFilterData: filterData?.bidFilterData
+        })
+      );
+      setBid(filteredData);
+    } else {
+      setBid(data.bidStone);
+    }
     setTime(data.endTime);
     if (data.activeStone) {
       data.activeStone.map((row: any) => {
@@ -664,6 +682,9 @@ const BidToBuy = () => {
             <div className="border-b-[1px] border-neutral200">
               {
                 <BidToByDataTable
+                  dispatch={dispatch}
+                  filterData={filterData}
+                  setBid={setBid}
                   columns={
                     activeTab === 2
                       ? memoizedColumns.filter(

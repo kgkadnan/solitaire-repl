@@ -77,6 +77,7 @@ import {
 import { filterFunction } from '@/features/filter-new-arrival/filter-new-arrival-slice';
 import { parseQueryString } from './helpers/parse-query-string';
 import { filterBidData } from './helpers/filter-bid-data';
+import { filterBidToBuyFunction } from '@/features/filter-bid-to-buy/filter-bid-to-buy-slice';
 
 export interface ISavedSearch {
   saveSearchName: string;
@@ -137,7 +138,8 @@ const Form = ({
     state => state.pageTimeTracking
   );
 
-  const filterThData = useAppSelector(state => state.filterNewArrival);
+  const newArrivalFilterData = useAppSelector(state => state.filterNewArrival);
+  const bidToBuyFilterData = useAppSelector(state => state.filterBidToBuy);
 
   const [isAllowedToUnload, setIsAllowedToUnload] = useState(true);
   const isAllowedToUnloadRef = useRef(isAllowedToUnload);
@@ -280,7 +282,21 @@ const Form = ({
       const query = parseQueryString(searchUrl);
 
       const filteredData =
-        filterThData?.bidData && filterBidData(filterThData?.bidData, query);
+        newArrivalFilterData?.bidData &&
+        filterBidData(newArrivalFilterData?.bidData, query);
+
+      setData({
+        count: filteredData.length,
+        products: filteredData
+      });
+
+      setError('');
+    } else if (subRoute === SubRoutes.BID_TO_BUY) {
+      const query = parseQueryString(searchUrl);
+
+      const filteredData =
+        bidToBuyFilterData?.bidData &&
+        filterBidData(bidToBuyFilterData?.bidData, query);
 
       setData({
         count: filteredData.length,
@@ -369,11 +385,14 @@ const Form = ({
     );
 
     let modifysavedSearchData = savedSearch?.savedSearch?.meta_data;
-    let bidDataQuery = filterThData.queryParams;
+    let newArrivalBidDataQuery = newArrivalFilterData.queryParams;
+    let bidToBuyBidDataQuery = bidToBuyFilterData.queryParams;
     setSelectedCaratRange([]);
 
-    if (subRoute === SubRoutes.NEW_ARRIVAL && bidDataQuery) {
-      setModifySearch(bidDataQuery, setState);
+    if (subRoute === SubRoutes.NEW_ARRIVAL && newArrivalBidDataQuery) {
+      setModifySearch(newArrivalBidDataQuery, setState);
+    } else if (subRoute === SubRoutes.BID_TO_BUY && bidToBuyBidDataQuery) {
+      setModifySearch(bidToBuyBidDataQuery, setState);
     } else if (
       modifySearchFrom === `${SubRoutes.SAVED_SEARCH}` &&
       modifysavedSearchData
@@ -426,11 +445,22 @@ const Form = ({
       dispatch(
         filterFunction({
           queryParams,
-          bidData: filterThData.bidData,
+          bidData: newArrivalFilterData.bidData,
           bidFilterData: data?.products
         })
       );
       router.push(`/v2/new-arrivals`);
+    } else if (subRoute === SubRoutes.BID_TO_BUY) {
+      const queryParams = generateQueryParams(state);
+
+      dispatch(
+        filterBidToBuyFunction({
+          queryParams,
+          bidData: bidToBuyFilterData.bidData,
+          bidFilterData: data?.products
+        })
+      );
+      router.push(`/v2/bid-2-buy`);
     } else if (
       JSON.parse(localStorage.getItem(formIdentifier)!)?.length >=
         MAX_SEARCH_TAB_LIMIT &&
@@ -998,7 +1028,14 @@ const Form = ({
       <div>
         <div className="py-2">
           <span className="text-neutral900 text-lRegular font-medium grid gap-[24px]">
-            Search for {isMatchingPair ? 'Matching Pair' : 'Diamonds'}
+            Search for{' '}
+            {subRoute === SubRoutes.NEW_ARRIVAL
+              ? 'New Arrival'
+              : subRoute === SubRoutes.BID_TO_BUY
+              ? 'Bid To Buy'
+              : isMatchingPair
+              ? 'Matching Pair'
+              : 'Diamonds'}
           </span>
         </div>
         <div className="flex flex-col gap-[16px]">

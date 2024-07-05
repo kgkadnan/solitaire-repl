@@ -244,7 +244,6 @@ const NewArrivals = () => {
   const handleBidStones = useCallback((data: any) => {
     setActiveBid(data.activeStone);
 
-    console.log('filterData?.bidFilterData?.', filterData?.bidFilterData);
     if (filterData?.bidFilterData?.length > 0) {
       console.log('filterData.queryParams', filterData.queryParams);
       const filteredData = filterBidData(data.bidStone, filterData.queryParams);
