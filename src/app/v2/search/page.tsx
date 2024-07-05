@@ -344,7 +344,9 @@ const Search = () => {
         renderContent={renderContentWithInput}
       />
       {isLoading && <CustomKGKLoader />}
-      {subRoute === SubRoutes.NEW_SEARCH ||
+      {subRoute === SubRoutes.NEW_ARRIVAL ||
+      subRoute === SubRoutes.BID_TO_BUY ||
+      subRoute === SubRoutes.NEW_SEARCH ||
       editRoute === SubRoutes.SAVED_SEARCH ||
       editRoute === SubRoutes.RESULT ? (
         <Form
