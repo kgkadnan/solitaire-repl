@@ -1383,7 +1383,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (images?.length > 0 && images[0]?.name?.length)
-      loadImages(images, setValidImages, checkImage);
+      loadImages(images, setValidImages, checkImage, false);
   }, [detailImageData]);
 
   useEffect(() => {

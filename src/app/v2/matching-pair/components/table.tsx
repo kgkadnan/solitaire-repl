@@ -444,12 +444,23 @@ const MatchPairTable = ({
 
   const handleDownloadExcel = () => {
     let selectedIds = Object.keys(rowSelection);
+    let result: any = [];
+
+    selectedIds.map(selectedId =>
+      result.push(
+        ...originalData.filter((subArray: any) =>
+          subArray.some((obj: any) => obj.id === selectedId)
+        )[0]
+      )
+    );
     const allProductIds = rows.map(({ id }: { id: string }) => {
       return id;
     });
-
+    const pairedIds = result.map(({ id }: { id: string }) => {
+      return id;
+    });
     downloadExcelHandler({
-      products: selectedIds.length > 0 ? selectedIds : allProductIds,
+      products: selectedIds.length > 0 ? pairedIds : allProductIds,
       downloadExcelApi: downloadExcel,
       modalSetState,
       setRowSelection,
