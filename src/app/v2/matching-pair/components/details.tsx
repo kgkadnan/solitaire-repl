@@ -9,17 +9,16 @@ import styles from '../../search/result/components/compare.module.scss';
 import CloseButton from '@public/v2/assets/icons/close.svg';
 import Image from 'next/image';
 import { FILE_URLS } from '@/constants/v2/detail-page';
-// import { HOLD_STATUS, MEMO_STATUS } from '@/constants/business-logic';
+import { HOLD_STATUS, MEMO_STATUS } from '@/constants/business-logic';
 import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
 // import { kycStatus } from '@/constants/enums/kyc';
-// import { formatNumber } from '@/utils/fix-two-digit-number';
 
 import { Skeleton } from '@mui/material';
 
 import { useRouter } from 'next/navigation';
-// import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
+import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
 import { getShapeDisplayName } from '@/utils/v2/detail-page';
 import { IImagesType } from '@/components/v2/common/detail-page/interface';
 import Share from '@/components/v2/common/copy-and-share/share';
@@ -44,6 +43,7 @@ import forWardAarrowDisable from '@public/v2/assets/icons/detail-page/forward-ar
 import { handleDownloadImage } from '@/utils/v2/detail-page';
 import { useLazyGetSimilarMatchingPairQuery } from '@/features/api/match-pair';
 import logger from 'logging/log-util';
+import { formatNumber } from '@/utils/fix-two-digit-number';
 
 export interface ITableColumn {
   key: string;
@@ -60,7 +60,9 @@ export function MatchPairDetails({
   modalSetState,
   setIsLoading,
   handleDetailImage,
-  setRowSelection
+  setRowSelection,
+  setSimilarData,
+  similarData
 }: {
   data: any;
   filterData: any;
@@ -70,6 +72,8 @@ export function MatchPairDetails({
   setIsLoading?: any;
   handleDetailImage: any;
   setRowSelection: any;
+  setSimilarData: any;
+  similarData: any;
 }) {
   const router = useRouter();
 
@@ -88,9 +92,8 @@ export function MatchPairDetails({
   const [mappingColumn, setMappingColumn] = useState<any>({});
   const [, setZoomLevel] = useState(1);
   const [, setZoomPosition] = useState({ x: 0, y: 0 });
-
+  const [breadCrumMatchPair, setBreadCrumMatchPair] = useState('');
   const [viewSimilar, setViewSimilar] = useState<boolean>(false);
-  const [similarData, setSimilarData] = useState<any>();
   const { checkboxState, checkboxSetState } = useCheckboxStateManagement();
   const { selectedCheckboxes } = checkboxState;
   const { setSelectedCheckboxes } = checkboxSetState;
@@ -114,6 +117,11 @@ export function MatchPairDetails({
         .then(res => setSimilarData(res))
         .catch(e => logger.error(e));
     }
+    if (originalData.length === 2) {
+      setBreadCrumMatchPair(
+        originalData.map((data: any) => data.lot_id).join(' & ')
+      );
+    }
   }, [originalData]);
   function updateState(column: any) {
     const updatedObj: any = { ...mappingColumn }; // Create a copy of newObj
@@ -133,6 +141,13 @@ export function MatchPairDetails({
       setOriginalData(result[0]);
     }
   }, [viewSimilar]);
+
+  useEffect(() => {
+    showToast &&
+      setTimeout(() => {
+        setShowToast(false); // Hide the toast notification after some time
+      }, 4000);
+  }, [showToast]);
 
   const filterImageUrl = (tableData: any) => [
     {
@@ -234,7 +249,9 @@ export function MatchPairDetails({
     }
   };
   const handleImageError = (event: any) => {
-    event.target.src = NoImageFound.src; // Set the fallback image when the original image fails to load
+    event.target.src = NoImageFound.src; //30et the fallback image when the original image fails to load
+    event.target.height = viewSimilar ? 150 : 300;
+    event.target.width = viewSimilar ? 150 : 350;
   };
   const handleClick = (id: string) => {
     let updatedIsCheck = [...selectedCheckboxes];
@@ -260,6 +277,65 @@ export function MatchPairDetails({
     setOriginalData(filterData);
   };
 
+  const dataFormatting = (diamond: any, key: string) => {
+    switch (key) {
+      case 'amount':
+      case 'price_per_carat':
+      case 'rap':
+      case 'rap_value':
+        return `$${formatNumberWithCommas(diamond[key])}`;
+      case 'table_percentage':
+      case 'carats':
+      case 'depth_percentage':
+      case 'ratio':
+      case 'length':
+      case 'width':
+      case 'depth':
+      case 'crown_angle':
+      case 'crown_height':
+      case 'girdle_percentage':
+      case 'pavilion_angle':
+      case 'pavilion_height':
+      case 'lower_half':
+      case 'star_length':
+        return `${formatNumber(diamond[key])}`;
+      case 'discount':
+        return `${formatNumber(diamond[key])}%`;
+
+      case 'key_to_symbol':
+      case 'report_comments':
+        return diamond[key].length > 0 ? diamond[key] : '-';
+      default:
+        return diamond[key] || '-';
+    }
+  };
+
+  const renderLotId = (row: any) => {
+    let statusClass = '';
+    let borderClass = '';
+
+    if (row.diamond_status === MEMO_STATUS) {
+      statusClass = 'bg-legendMemoFill text-legendMemo';
+      borderClass = 'border-lengendMemoBorder border-[1px] px-[8px]';
+    } else if (row.diamond_status === HOLD_STATUS) {
+      statusClass = 'bg-legendHoldFill  text-legendHold';
+
+      borderClass = 'border-lengendHoldBorder border-[1px] px-[8px]';
+    } else if (row?.in_cart && Object.keys(row.in_cart).length) {
+      statusClass = 'bg-legendInCartFill text-legendInCart';
+      borderClass = 'border-lengendInCardBorder border-[1px] px-[8px]';
+    }
+    return (
+      <>
+        <span
+          className={`rounded-[4px] ${statusClass}   py-[3px] ${borderClass} `}
+        >
+          {row.lot_id}
+        </span>
+      </>
+    );
+  };
+
   // let isNudge = localStorage.getItem('show-nudge') === 'MINI';
   // const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   let allImages = originalData.map((data: any) => filterImageUrl(data));
@@ -283,6 +359,18 @@ export function MatchPairDetails({
     })
   );
 
+  const updateDataAsPerSimilarData = (originalData: any, similarData: any) => {
+    const originalLotIds = new Set(
+      originalData.map((product: any) => product.lot_id)
+    );
+
+    const newProducts = (similarData?.products || []).filter(
+      (product: any) => !originalLotIds.has(product.lot_id)
+    );
+
+    return [...originalData, ...newProducts];
+  };
+  console.log(filteredImages, 'filteredImages');
   return (
     <div className="text-black bg-white rounded-[8px] w-[calc(100vw-116px)] h-[calc(100vh-140px)]">
       <Toast
@@ -316,10 +404,7 @@ export function MatchPairDetails({
 
           {validImages.length > 0 ? (
             <p className="text-neutral700 p-[8px] bg-neutral100 rounded-[4px] text-sMedium font-medium">
-              Stock No:
-              {viewSimilar
-                ? `Compare Stone ${similarData?.count}`
-                : originalData.map((data: any) => data.lot_id).join(' & ')}
+              Stock No: {breadCrumMatchPair}
             </p>
           ) : (
             <Skeleton
@@ -349,8 +434,11 @@ export function MatchPairDetails({
                 <div
                   className=" flex gap-1 border-[1px] h-[40px] border-[#E4E7EC] rounded-[4px] px-4 py-2 cursor-pointer"
                   onClick={() => {
-                    !viewSimilar && setOriginalData(similarData?.products),
-                      setViewSimilar(!viewSimilar);
+                    !viewSimilar &&
+                      setOriginalData(
+                        updateDataAsPerSimilarData(originalData, similarData)
+                      );
+                    setViewSimilar(!viewSimilar);
                   }}
                 >
                   <p className="text-mMedium text-neutral900 font-medium">
@@ -552,7 +640,7 @@ export function MatchPairDetails({
                     <div
                       className={`${
                         viewSimilar ? 'h-[234px]' : 'h-[420px]'
-                      } flex flex-col border-[0.5px]  border-neutral200 bg-neutral0 p-2 gap-[10px]`}
+                      } flex flex-col justify-between border-[0.5px]  border-neutral200 bg-neutral0 p-2 gap-[10px]`}
                     >
                       <div className="flex justify-around">
                         {activePreviewTab === 'Video' ||
@@ -570,16 +658,22 @@ export function MatchPairDetails({
                                 : 'w-[370px] h-[370px]'
                             } `}
                           />
+                        ) : activePreviewTab === 'Certificate' ? (
+                          <img
+                            src={filteredImages[index][imageIndex].url}
+                            alt={filteredImages[index][imageIndex].name}
+                            width={viewSimilar ? 150 : 250}
+                            height={viewSimilar ? 150 : 300}
+                            onError={e => {
+                              handleImageError(e);
+                            }}
+                          />
                         ) : (
                           <img
                             src={filteredImages[index][imageIndex].url}
                             alt={filteredImages[index][imageIndex].name}
                             width={viewSimilar ? 185 : 440}
                             height={viewSimilar ? 175 : 440}
-                            onClick={
-                              () => {}
-                              // handleCheckboxClick(items.id)
-                            }
                             onError={e => {
                               handleImageError(e);
                             }}
@@ -617,7 +711,7 @@ export function MatchPairDetails({
                               ? handleClose(event, items.id)
                               : (setShowToast(true),
                                 setErrorText(
-                                  'Matching Pair requires atleast 2 stones'
+                                  'Minimum of 2 stones needed for matching pairs'
                                 ))
                           }
                         >
@@ -643,14 +737,22 @@ export function MatchPairDetails({
                     {Object.keys(mappingColumn).map(
                       key =>
                         key !== 'details' &&
-                        key !== 'id' && (
+                        key !== 'id' &&
+                        (key === 'lot_id' ? (
                           <div
                             key={key}
                             className="py-2 px-4 border-[1px] border-neutral200 h-[38px] whitespace-nowrap overflow-hidden overflow-ellipsis  bg-neutral0"
                           >
-                            {diamond[key] || '-'}
+                            {renderLotId(diamond)}
                           </div>
-                        )
+                        ) : (
+                          <div
+                            key={key}
+                            className="py-2 px-4 border-[1px] border-neutral200 h-[38px] whitespace-nowrap overflow-hidden overflow-ellipsis  bg-neutral0"
+                          >
+                            {dataFormatting(diamond, key)}
+                          </div>
+                        ))
                     )}
                   </div>
                 ))}

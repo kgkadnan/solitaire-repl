@@ -686,6 +686,11 @@ const DataTable = ({
             )
               ? '0px 6px'
               : '0px 2px',
+            textAlign:
+              cell.column.id === 'girdle_percentage'
+                ? 'center !important'
+                : 'left',
+
             height: '20px !important',
             background: 'White',
             opacity: 1,
@@ -739,7 +744,11 @@ const DataTable = ({
         sx: {
           color: 'var(--neutral-700)',
           '&.MuiTableCell-root': {
-            padding: '0px 2px',
+            padding: ['discount', 'price_per_carat', 'rap', 'amount'].includes(
+              column.id
+            )
+              ? '0px 6px'
+              : '0px 2px',
             height: '20px',
             background: 'var(--neutral-50)',
             opacity: 1,
@@ -750,7 +759,9 @@ const DataTable = ({
               column.id
             )
               ? '12px'
-              : '0px'
+              : '0px',
+            textAlign:
+              column.id === 'girdle_percentage' ? 'center !important' : 'left'
           }
         }
       };

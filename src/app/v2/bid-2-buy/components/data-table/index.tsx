@@ -752,6 +752,11 @@ const BidToByDataTable = ({
             )
               ? '0px 6px'
               : '0px 4px',
+            textAlign:
+              cell.column.id === 'girdle_percentage'
+                ? 'center !important'
+                : 'left',
+
             height: '20px !important',
             fontSize: '12px !important',
             fontWeight: rowSelection[row.id] ? 500 : 400,
@@ -815,13 +820,17 @@ const BidToByDataTable = ({
         sx: {
           color: 'var(--neutral-700)',
           '&.MuiTableCell-root': {
-            padding: '0px 4px',
+            padding: ['discount', 'price_per_carat', 'rap'].includes(column.id)
+              ? '0px 6px'
+              : '0px 4px',
             background: 'var(--neutral-50)',
             opacity: 1,
             borderTop: '1px solid var(--neutral-200)',
             fontSize: '12px !important',
             fontWeight: 500,
-            paddingRight: ['shape_full', 'location', 'details'].includes(
+            textAlign:
+              column.id === 'girdle_percentage' ? 'center !important' : 'left',
+            paddingRight: ['shape_full', 'location', 'details', 'lab'].includes(
               column.id
             )
               ? '12px'

@@ -180,6 +180,7 @@ const ConfirmStone = ({
           }}
           breadCrumLabel={breadCrumLabel}
           identifier={identifier}
+          isMatchingPair={isMatchingPair}
         />
       )}
     </>

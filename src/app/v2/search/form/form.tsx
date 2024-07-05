@@ -42,6 +42,7 @@ import {
 } from '@/constants/business-logic';
 import {
   EXCEEDS_LIMITS,
+  EXCEEDS_LIMITS_MATCHING_PAIR,
   NO_STONE_FOUND,
   SELECT_SOME_PARAM,
   SOMETHING_WENT_WRONG
@@ -346,7 +347,9 @@ const Form = ({
           data?.count > MIN_SEARCH_FORM_COUNT
         ) {
           setIsError(true);
-          setErrorText(EXCEEDS_LIMITS);
+          setErrorText(
+            isMatchingPair ? EXCEEDS_LIMITS_MATCHING_PAIR : EXCEEDS_LIMITS
+          );
           setMessageColor('dangerMain');
         } else if (data?.count === MIN_SEARCH_FORM_COUNT) {
           setIsError(true);
