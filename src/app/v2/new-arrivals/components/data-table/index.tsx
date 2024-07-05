@@ -52,11 +52,11 @@ const theme = createTheme({
     MuiTableCell: {
       styleOverrides: {
         root: {
-          // Default state for the badge inside the cell
+          // Default state for the badge inside the cell - sorting icon not visible by default
           '& .MuiBadge-root': {
-            visibility: 'hidden',
             width: '15px !important',
-            marginLeft: '-3px'
+            marginLeft: '-3px',
+            visibility: 'hidden'
           },
           // Hover state for the cell
           '&:hover .MuiBadge-root': {
