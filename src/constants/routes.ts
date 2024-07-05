@@ -22,7 +22,8 @@ export const v2Routes = [
   '/v2/bid-2-buy',
   '/v2/my-account',
   '/v2/faqs',
-  '/v2/my-appointments'
+  '/v2/my-appointments',
+  '/v2/matching-pair'
 ];
 export const protectedRoutes = ['/', ...v2Routes];
 

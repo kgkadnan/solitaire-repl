@@ -58,7 +58,8 @@ const ActionButton = ({
             ${variant === 'primary' && styles.ctaPrimaryStyle} ${
               variant === 'secondary' && styles.ctaSecondaryStyle
             } ${
-              isDisable && '!bg-neutral100 !text-neutral400 !shadow-none'
+              isDisable &&
+              'bg-neutral100 text-neutral400 !shadow-none cursor-not-allowed'
             } ${customCtaStyle}`}
                 >
                   {svg && <Image src={svg} alt={label ?? 'icon-button'} />}

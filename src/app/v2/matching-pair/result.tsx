@@ -5,11 +5,10 @@ import React, {
   SetStateAction,
   Dispatch
 } from 'react';
-import DataTable from '@/components/v2/common/data-table';
 import { useDataTableStateManagement } from '@/components/v2/common/data-table/hooks/data-table-state-management';
 import {
   HOLD_STATUS,
-  LISTING_PAGE_DATA_LIMIT,
+  MATCHING_PAIR_DATA_LIMIT,
   MEMO_STATUS
 } from '@/constants/business-logic';
 import unAuthorizedSvg from '@public/v2/assets/icons/data-table/unauthorized.svg';
@@ -33,10 +32,7 @@ import {
   RenderTracerId,
   RenderNumericFields
 } from '@/components/v2/common/data-table/helpers/render-cell';
-import {
-  useConfirmProductMutation,
-  useLazyGetAllProductQuery
-} from '@/features/api/product';
+import { useConfirmProductMutation } from '@/features/api/product';
 import { useLazyGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
 import { MRT_RowSelectionState } from 'material-react-table';
 import { notificationBadge } from '@/features/notification/notification-slice';
@@ -58,39 +54,43 @@ import {
   SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH
 } from '@/constants/error-messages/confirm-stone';
 import { NOT_MORE_THAN_300 } from '@/constants/error-messages/search';
+// import { NO_STONES_SELECTED } from '@/constants/error-messages/compare-stone';
 import { NO_STONES_SELECTED } from '@/constants/error-messages/cart';
 import { useGetSavedSearchListQuery } from '@/features/api/saved-searches';
-import { ISavedSearch } from '../form/form';
-import ConfirmStone from './components';
-import { handleConfirmStone } from './helpers/handle-confirm-stone';
+
 import { AddCommentDialog } from '@/components/v2/common/comment-dialog';
-import { handleComment } from './helpers/handle-comment';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import fireSvg from '@public/v2/assets/icons/data-table/fire-icon.svg';
-import { IItem } from '../saved-search/saved-search';
-import { IManageListingSequenceResponse, IProduct } from '../interface';
-import { DiamondDetailsComponent } from '@/components/v2/common/detail-page';
 import ImageModal from '@/components/v2/common/detail-page/components/image-modal';
 import { getShapeDisplayName } from '@/utils/v2/detail-page';
 import { FILE_URLS } from '@/constants/v2/detail-page';
 import { Toast } from '@/components/v2/common/copy-and-share/toast';
-import CompareStone from './components/compare-stone';
 import { statusCode } from '@/constants/enums/status-code';
 import { loadImages } from '@/components/v2/common/detail-page/helpers/load-images';
 import { checkImage } from '@/components/v2/common/detail-page/helpers/check-image';
 import { useLazyGetAvailableMyAppointmentSlotsQuery } from '@/features/api/my-appointments';
-import { IAppointmentPayload } from '../../my-appointments/page';
-import BookAppointment from '../../my-appointments/components/book-appointment/book-appointment';
-import styles from './style.module.scss';
+import styles from '../search/result/style.module.scss';
 import DataTableSkeleton from '@/components/v2/skeleton/data-table';
 import { Skeleton } from '@mui/material';
-import CommonPoppup from '../../login/component/common-poppup';
 import EmptyScreen from '@/components/v2/common/empty-screen';
 import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
+import CommonPoppup from '../login/component/common-poppup';
+import BookAppointment from '../my-appointments/components/book-appointment/book-appointment';
+import { IAppointmentPayload } from '../my-appointments/page';
+import { ISavedSearch } from '../search/form/form';
+import { IProduct, IManageListingSequenceResponse } from '../search/interface';
+import ConfirmStone from '../search/result/components';
+import CompareStone from '../search/result/components/compare-stone';
+import { handleComment } from '../search/result/helpers/handle-comment';
+import { handleConfirmStone } from '../search/result/helpers/handle-confirm-stone';
+import { IItem } from '../search/saved-search/saved-search';
+import { useLazyGetAllMatchingPairQuery } from '@/features/api/match-pair';
+import MatchPairTable from './components/table';
+import { MatchPairDetails } from './components/details';
 
 // Column mapper outside the component to avoid re-creation on each render
 
-const Result = ({
+const MatchingPairResult = ({
   activeTab,
   searchParameters,
   setActiveTab,
@@ -114,7 +114,6 @@ const Result = ({
   const [triggerAvailableSlots] = useLazyGetAvailableMyAppointmentSlotsQuery(
     {}
   );
-
   const { data: searchList }: { data?: IItem[] } =
     useGetSavedSearchListQuery('');
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();
@@ -142,7 +141,7 @@ const Result = ({
 
   const [commentValue, setCommentValue] = useState('');
   const [textAreaValue, setTextAreaValue] = useState('');
-
+  const [originalData, setOriginalData] = useState();
   const [showAppointmentForm, setShowAppointmentForm] = useState(false);
   const [appointmentPayload, setAppointmentPayload] =
     useState<IAppointmentPayload>({
@@ -164,14 +163,14 @@ const Result = ({
 
   const [triggerColumn, { data: columnData }] =
     useLazyGetManageListingSequenceQuery<IManageListingSequenceResponse>();
-  const [triggerProductApi, { data: productData }] =
-    useLazyGetAllProductQuery();
+  const [triggerMatchingPairApi, { data: matchingPairData }] =
+    useLazyGetAllMatchingPairQuery();
 
   // Fetch Products
 
   const fetchProducts = async () => {
     // setIsLoading(true);
-    const storedSelection = localStorage.getItem('Search');
+    const storedSelection = localStorage.getItem('MatchingPair');
 
     if (!storedSelection) return;
 
@@ -181,24 +180,28 @@ const Result = ({
 
     const url = constructUrlParams(selections[activeTab - 1]?.queryParams);
     setSearchUrl(url);
-    triggerProductApi({ url, limit: LISTING_PAGE_DATA_LIMIT, offset: 0 }).then(
-      (res: any) => {
-        if (columnData?.length > 0) {
-          if (res?.error?.status === statusCode.UNAUTHORIZED) {
-            setHasLimitExceeded(true);
-            dataTableSetState.setRows([]);
-          } else {
-            setHasLimitExceeded(false);
-            dataTableSetState.setRows(res.data?.products);
-          }
-
-          setRowSelection({});
-          setErrorText('');
-          setData(res.data);
-          setIsLoading(false);
+    triggerMatchingPairApi({
+      url,
+      limit: MATCHING_PAIR_DATA_LIMIT,
+      offset: 0
+    }).then((res: any) => {
+      if (columnData?.length > 0) {
+        if (res?.error?.status === statusCode.UNAUTHORIZED) {
+          setHasLimitExceeded(true);
+          dataTableSetState.setRows([]);
+        } else {
+          setHasLimitExceeded(false);
+          let matchingPair = res.data?.products.flat();
+          dataTableSetState.setRows(matchingPair);
+          setOriginalData(res.data?.products);
         }
+
+        setRowSelection({});
+        setErrorText('');
+        setData(res.data);
+        setIsLoading(false);
       }
-    );
+    });
   };
   const handleDetailPage = ({ row }: { row: any }) => {
     if (isConfirmStone) {
@@ -242,11 +245,7 @@ const Result = ({
           header: short_label,
           enableGlobalFilter: accessor === 'lot_id',
           enableGrouping: accessor === 'shape',
-          enableSorting:
-            accessor !== 'shape_full' &&
-            accessor !== 'details' &&
-            accessor !== 'fire_icon' &&
-            accessor !== 'location',
+
           minSize: 5,
           maxSize: accessor === 'details' ? 100 : 200,
           size: 5,
@@ -258,7 +257,6 @@ const Result = ({
             />
           )
         };
-
         switch (accessor) {
           case 'fire_icon':
             return {
@@ -268,6 +266,7 @@ const Result = ({
               minSize: 26,
               size: 26,
               maxSize: 26,
+
               Cell: ({ row }: { row: any }) => {
                 return row.original.in_high_demand ? (
                   <Tooltip
@@ -407,9 +406,9 @@ const Result = ({
               ...commonProps,
               Cell: ({ renderedCellValue }: { renderedCellValue: any }) => (
                 <span>{`${
-                  renderedCellValue === null || renderedCellValue === undefined
-                    ? '-'
-                    : `$${formatNumberWithCommas(renderedCellValue)}`
+                  renderedCellValue === 0
+                    ? '$0.00'
+                    : `$${formatNumberWithCommas(renderedCellValue)}` ?? '$0.00'
                 }`}</span>
               )
             };
@@ -501,7 +500,7 @@ const Result = ({
     [dataTableState.columns]
   );
   const handleNewSearch = () => {
-    router.push(`${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`);
+    router.push(`${Routes.MATCHING_PAIR}?active-tab=${SubRoutes.NEW_SEARCH}`);
   };
 
   const handleCreateAppointment = () => {
@@ -523,7 +522,7 @@ const Result = ({
       });
 
       if (hasMemoOut) {
-        setErrorText(SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH);
+        setErrorText(NO_STONES_SELECTED);
         setIsError(true);
       } else if (hasHold) {
         setIsError(true);
@@ -615,12 +614,15 @@ const Result = ({
             // On success, show confirmation dialog and update badge
             setIsError(false);
             setErrorText('');
-            triggerProductApi({
+            triggerMatchingPairApi({
               url: searchUrl,
-              limit: LISTING_PAGE_DATA_LIMIT,
+              limit: MATCHING_PAIR_DATA_LIMIT,
               offset: 0
             }).then(res => {
-              dataTableSetState.setRows(res.data?.products);
+              let matchingPair = res.data?.products.flat();
+              dataTableSetState.setRows(matchingPair);
+              setOriginalData(res.data?.products);
+
               setRowSelection({});
               setErrorText('');
               setData(res.data);
@@ -656,103 +658,6 @@ const Result = ({
         setRowSelection({});
       }
       // }
-    }
-  };
-
-  const handleAddToCartDetailPage = () => {
-    setIsLoading(true);
-    // Extract variant IDs for selected stones
-    const variantIds = [detailPageData.id]
-      ?.map((_id: string) => {
-        const myCartCheck: IProduct | object =
-          dataTableState.rows.find((row: IProduct) => {
-            return row?.id === detailPageData.id;
-          }) ?? {};
-
-        if (myCartCheck && 'variants' in myCartCheck) {
-          return myCartCheck.variants[0]?.id;
-        }
-        return '';
-      })
-      .filter(Boolean);
-
-    // If there are variant IDs, add to the cart
-    if (variantIds.length) {
-      addCart({
-        variants: variantIds
-      })
-        .unwrap()
-        .then((res: any) => {
-          setIsLoading(false);
-          setIsDialogOpen(true);
-          setDialogContent(
-            <CommonPoppup
-              content={''}
-              status="success"
-              customPoppupBodyStyle="!mt-[70px]"
-              header={res?.message}
-              actionButtonData={[
-                {
-                  variant: 'secondary',
-                  label: ManageLocales('app.modal.continue'),
-                  handler: () => {
-                    setIsDialogOpen(false);
-                    setIsDetailPage(false);
-                  },
-                  customStyle: 'flex-1 w-full h-10'
-                },
-                {
-                  variant: 'primary',
-                  label: 'Go to "My Cart"',
-                  handler: () => {
-                    router.push('/v2/my-cart');
-                  },
-                  customStyle: 'flex-1 w-full h-10'
-                }
-              ]}
-            />
-          );
-
-          // On success, show confirmation dialog and update badge
-          setIsError(false);
-          setErrorText('');
-          triggerProductApi({
-            url: searchUrl,
-            limit: LISTING_PAGE_DATA_LIMIT,
-            offset: 0
-          }).then(res => {
-            dataTableSetState.setRows(res.data?.products);
-            setRowSelection({});
-            setErrorText('');
-            setData(res.data);
-          });
-          dispatch(notificationBadge(true));
-        })
-        .catch(error => {
-          setIsLoading(false);
-          // On error, set error state and error message
-
-          setIsDialogOpen(true);
-          setDialogContent(
-            <CommonPoppup
-              content={''}
-              customPoppupBodyStyle="!mt-[70px]"
-              header={error?.data?.message}
-              actionButtonData={[
-                {
-                  variant: 'primary',
-                  label: ManageLocales('app.modal.okay'),
-                  handler: () => {
-                    setIsDialogOpen(false);
-                  },
-                  customStyle: 'flex-1 w-full h-10'
-                }
-              ]}
-            />
-          );
-        });
-      // Clear the selected checkboxes
-      setRowSelection({});
     }
   };
 
@@ -864,7 +769,7 @@ const Result = ({
                 status="success"
                 customPoppupBodyStyle="!mt-[70px]"
                 header={`${variantIds.length} stones have been successfully added to
-            "My Diamond"`}
+              "My Diamond"`}
                 actionButtonData={[
                   {
                     variant: 'secondary',
@@ -890,12 +795,16 @@ const Result = ({
 
             setCommentValue('');
 
-            triggerProductApi({
+            triggerMatchingPairApi({
               url: searchUrl,
-              limit: LISTING_PAGE_DATA_LIMIT,
+              limit: MATCHING_PAIR_DATA_LIMIT,
               offset: 0
             }).then(res => {
-              dataTableSetState.setRows(res.data?.products);
+              let matchingPair = res.data?.products.flat();
+
+              dataTableSetState.setRows(matchingPair);
+              setOriginalData(res.data?.products);
+
               setRowSelection({});
               setErrorText('');
               setData(res.data);
@@ -1110,48 +1019,68 @@ const Result = ({
         <p className="text-lMedium font-medium text-neutral900">
           {editRoute ? (
             ManageLocales('app.result.headerEdit')
-          ) : isCompareStone ? (
-            'Diamond Comparison Overview'
           ) : showAppointmentForm ? (
             ManageLocales('app.myAppointment.header')
           ) : isDetailPage ? (
             ''
           ) : hasLimitExceeded ? (
             ''
-          ) : productData === undefined ? (
+          ) : matchingPairData === undefined ? (
             <Skeleton
               variant="rectangular"
               height={'24px'}
               width={'336px'}
               animation="wave"
-              sx={{ bgcolor: 'var(--neutral-200)' }}
             />
           ) : (
-            ManageLocales('app.result.headerResult')
+            <div>Matching Pair ({dataTableState.rows.length / 2})</div>
           )}
         </p>
       </div>
 
       {isDetailPage && detailPageData?.length ? (
         <>
-          <DiamondDetailsComponent
-            data={dataTableState.rows}
+          <MatchPairDetails
+            data={originalData}
             filterData={detailPageData}
             goBackToListView={goBack}
-            handleDetailPage={handleDetailPage}
+            // handleDetailPage={handleDetailPage}
             breadCrumLabel={
               breadCrumLabel.length ? breadCrumLabel : 'Search Results'
             }
             modalSetState={modalSetState}
             setIsLoading={setIsLoading}
+            handleDetailImage={handleDetailImage}
+            setRowSelection={setRowSelection}
+            // setValidImages={setValidImages}
+            // validImages={validImages}
           />
-          <div className="p-[8px] flex justify-end items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow mb-1">
+          <div className="p-[8px] flex justify-between items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow mb-1">
+            <div className="flex gap-4 h-[30px]">
+              <div className=" border-[1px] border-lengendInCardBorder rounded-[4px] bg-legendInCartFill text-legendInCart">
+                <p className="text-mMedium font-medium px-[6px] py-[4px]">
+                  In Cart
+                </p>
+              </div>
+              <div className=" border-[1px] border-lengendHoldBorder rounded-[4px] bg-legendHoldFill text-legendHold">
+                <p className="text-mMedium font-medium px-[6px] py-[4px]">
+                  {' '}
+                  Hold
+                </p>
+              </div>
+              <div className="border-[1px] border-lengendMemoBorder rounded-[4px] bg-legendMemoFill text-legendMemo">
+                <p className="text-mMedium font-medium px-[6px] py-[4px]">
+                  {' '}
+                  Memo
+                </p>
+              </div>
+            </div>
             <ActionButton
               actionButtonData={[
                 {
                   variant: isConfirmStone ? 'primary' : 'secondary',
                   label: ManageLocales('app.searchResult.addToCart'),
-                  handler: handleAddToCartDetailPage
+                  handler: handleAddToCart
                 },
 
                 {
@@ -1160,17 +1089,16 @@ const Result = ({
                   isHidden: isConfirmStone,
                   handler: () => {
                     setBreadCrumLabel('Detail Page');
-                    const { id } = detailPageData;
-                    const selectedRows = { [id]: true };
+                    // const { id } = Object.keys(rowSelection);
+                    // const selectedRows = { [id]: true };
                     handleConfirmStone({
-                      selectedRows: selectedRows,
+                      selectedRows: rowSelection,
                       rows: dataTableState.rows,
                       setIsError,
                       setErrorText,
                       setIsConfirmStone,
                       setConfirmStoneData,
-                      setIsDetailPage,
-                      identifier: 'detailPage'
+                      setIsDetailPage
                     });
                   }
                 }
@@ -1189,7 +1117,8 @@ const Result = ({
               isFrom={breadCrumLabel}
               handleDetailImage={handleDetailImage}
               handleDetailPage={handleDetailPage}
-              identifier={'result'}
+              identifier={'Matching Pair'}
+              isMatchingPair={true}
             />
           ) : isCompareStone ? (
             <CompareStone
@@ -1209,6 +1138,7 @@ const Result = ({
               setIsConfirmStone={setIsConfirmStone}
               setConfirmStoneData={setConfirmStoneData}
               setIsDetailPage={setIsDetailPage}
+              isMatchingPair={true}
             />
           ) : showAppointmentForm ? (
             <BookAppointment
@@ -1246,18 +1176,16 @@ const Result = ({
             </div>
           ) : (
             <div className="">
-              {productData === undefined &&
+              {matchingPairData === undefined &&
               !memoizedRows.length &&
               !data?.length ? (
                 <DataTableSkeleton />
               ) : (
-                <DataTable
+                <MatchPairTable
                   rows={memoizedRows}
                   columns={memoizedColumns}
                   setRowSelection={setRowSelection}
                   rowSelection={rowSelection}
-                  showCalculatedField={true}
-                  isResult={true}
                   activeTab={activeTab}
                   searchParameters={searchParameters}
                   setActiveTab={setActiveTab}
@@ -1266,7 +1194,7 @@ const Result = ({
                   handleNewSearch={handleNewSearch}
                   setSearchParameters={setSearchParameters}
                   modalSetState={modalSetState}
-                  data={data}
+                  matchingPairData={data}
                   setErrorText={setErrorText}
                   downloadExcel={downloadExcel}
                   setIsError={setIsError}
@@ -1279,6 +1207,7 @@ const Result = ({
                   setCompareStoneData={setCompareStoneData}
                   setIsInputDialogOpen={setIsInputDialogOpen}
                   handleCreateAppointment={handleCreateAppointment}
+                  originalData={originalData}
                 />
               )}
             </div>
@@ -1321,4 +1250,4 @@ const Result = ({
     </div>
   );
 };
-export default Result;
+export default MatchingPairResult;

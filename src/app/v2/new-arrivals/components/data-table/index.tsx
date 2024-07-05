@@ -970,6 +970,7 @@ const NewArrivalDataTable = ({
                             bidValue <= row.original.current_max_bid
                               ? 'disable'
                               : 'primary',
+
                           label: activeTab === 0 ? 'Add Bid' : 'Update Bid',
                           handler: () => {
                             if (!bidError) {

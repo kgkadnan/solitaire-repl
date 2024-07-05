@@ -994,6 +994,7 @@ const BidToByDataTable = ({
                                 );
                                 return; // Exit early, do not update bidValues
                               }
+
                               socketManager.emit('place_bidtobuy', {
                                 product_id: row.id,
                                 bid_value: bidValues[row.id]
