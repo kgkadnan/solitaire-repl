@@ -337,7 +337,7 @@ const BidToByDataTable = ({
                         `/v2/bid-2-buy?active-tab=${SubRoutes.BID_TO_BUY}`
                       );
                     }}
-                    className={`flex w-full justify-center py-[8px] h-[39px] px-[16px]  items-center font-medium  rounded-[4px] gap-1  border-[1px]  border-solid border-neutral200 text-mMedium  cursor-pointer  ${'bg-primaryMain text-neutral0 hover:bg-primaryHover'}`}
+                    className={`flex w-full shadow-sm justify-center py-[8px] h-[39px] px-[16px]  items-center font-medium  rounded-[4px] gap-1  border-[1px]  border-solid border-neutral200 text-mMedium  cursor-pointer  ${'bg-primaryMain text-neutral0 hover:bg-primaryHover'}`}
                   >
                     <FilterIcon stroke={`${'var(--neutral-0)'}`} />
 
@@ -367,7 +367,7 @@ const BidToByDataTable = ({
                         `/v2/bid-2-buy?active-tab=${SubRoutes.BID_TO_BUY}`
                       );
                     }}
-                    className={`flex justify-center py-[8px] h-[39px] px-[16px] items-center font-medium  rounded-[4px] gap-1  border-[1px]  border-solid border-neutral200 text-mMedium  cursor-pointer  ${'text-neutral900 bg-neutral0 hover:bg-neutral50'}`}
+                    className={`flex justify-center  shadow-sm py-[8px] h-[39px] px-[16px] items-center font-medium  rounded-[4px] gap-1  border-[1px]  border-solid border-neutral200 text-mMedium  cursor-pointer  ${'text-neutral900 bg-neutral0 hover:bg-neutral50'}`}
                   >
                     <FilterIcon stroke={`${'var(--neutral-900)'}`} />
 
@@ -830,7 +830,7 @@ const BidToByDataTable = ({
             fontWeight: 500,
             textAlign:
               column.id === 'girdle_percentage' ? 'center !important' : 'left',
-            paddingRight: ['shape_full', 'location', 'details', 'lab'].includes(
+            paddingRight: ['shape_full', 'location', 'details'].includes(
               column.id
             )
               ? '12px'
