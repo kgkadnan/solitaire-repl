@@ -27,7 +27,7 @@ export async function loadImages(
     return validImageIndexes;
   };
   if (isMatchingPair) {
-    let validAllData = [];
+    let validAllData: any = [];
     images.map(async (imageMatchPair: any) => {
       let validData = await getValidImageIndexes(imageMatchPair);
       validAllData.push(
