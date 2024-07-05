@@ -8,35 +8,61 @@ interface IDetailPageTabs {
   activePreviewTab: string;
   setActivePreviewTab: React.Dispatch<React.SetStateAction<string>>;
   setImageIndex: React.Dispatch<React.SetStateAction<number>>;
-  validImages: IImagesType[];
+  validImages: any;
+  isMatchingPair?: boolean;
 }
 
 const DetailPageTabs = ({
   activePreviewTab,
   setActivePreviewTab,
   validImages,
-  setImageIndex
+  setImageIndex,
+  isMatchingPair
 }: IDetailPageTabs) => {
   let TabsData = [
     {
       label: 'Image',
       svg: <ImageSvg />,
-      isDisable: !validImages.some(image => image.category === 'Image')
+      isDisable: isMatchingPair
+        ? !validImages.some(
+            (innerArray: any) =>
+              Array.isArray(innerArray) &&
+              innerArray.some((image: any) => image.category === 'Image')
+          )
+        : !validImages.some((image: any) => image.category === 'Image')
     },
     {
       label: 'Video',
       svg: <VideoSvg />,
-      isDisable: !validImages.some(image => image.category === 'Video')
+      isDisable: isMatchingPair
+        ? !validImages.some(
+            (innerArray: any) =>
+              Array.isArray(innerArray) &&
+              innerArray.some((image: any) => image.category === 'Video')
+          )
+        : !validImages.some((image: any) => image.category === 'Video')
     },
     {
       label: 'B2B Sparkle',
       svg: <VideoSvg />,
-      isDisable: !validImages.some(image => image.category === 'B2B Sparkle')
+      isDisable: isMatchingPair
+        ? !validImages.some(
+            (innerArray: any) =>
+              Array.isArray(innerArray) &&
+              innerArray.some((image: any) => image.category === 'B2B Sparkle')
+          )
+        : !validImages.some((image: any) => image.category === 'B2B Sparkle')
     },
     {
       label: 'Certificate',
       svg: <PdfSvg />,
-      isDisable: !validImages.some(image => image.category === 'Certificate')
+      isDisable: isMatchingPair
+        ? !validImages.some(
+            (innerArray: any) =>
+              Array.isArray(innerArray) &&
+              innerArray.some((image: any) => image.category === 'Certificate')
+          )
+        : !validImages.some((image: any) => image.category === 'Certificate')
     }
   ];
 
