@@ -256,9 +256,9 @@ export function MatchPairDetails({
   const handleImageError = (event: any) => {
     event.target.src = NoImageFound.src; //30et the fallback image when the original image fails to load
     event.target.height =
-      originalData.length > 2 ? (originalData.length > 5 ? 175 : 300) : 400;
+      originalData.length > 2 ? (originalData.length > 5 ? 175 : 320) : 400;
     event.target.width =
-      originalData.length > 2 ? (originalData.length > 5 ? 185 : 300) : 350;
+      originalData.length > 2 ? (originalData.length > 5 ? 185 : 290) : 350;
   };
   const handleClick = (id: string) => {
     let updatedIsCheck = [...Object.keys(rowSelection)];
@@ -376,6 +376,7 @@ export function MatchPairDetails({
 
     return [...originalData, ...newProducts];
   };
+  console.log(allImages, 'allImages');
   return (
     <div className="text-black bg-neutral25 rounded-[8px] w-[calc(100vw-116px)] h-[calc(100vh-140px)]">
       <Toast
@@ -619,8 +620,8 @@ export function MatchPairDetails({
               className={`${
                 originalData.length > 2
                   ? originalData.length > 5
-                    ? 'h-[234px]'
-                    : 'h-[320px]  sticky top-0'
+                    ? 'h-[360px] '
+                    : 'h-[350px]  '
                   : 'h-[420px]'
               }  items-center flex px-4 border-[0.5px] border-neutral200 bg-neutral50`}
             >
@@ -647,8 +648,8 @@ export function MatchPairDetails({
               className={`flex ${
                 originalData.length > 2
                   ? originalData.length > 5
-                    ? 'h-[234px]'
-                    : 'h-[320px]  sticky top-0'
+                    ? 'h-[360px] '
+                    : 'h-[350px] '
                   : 'h-[420px]'
               } `}
             >
@@ -660,8 +661,8 @@ export function MatchPairDetails({
                     className={`${
                       originalData.length > 2
                         ? originalData.length > 5
-                          ? 'w-[200px]'
-                          : 'w-[300px]'
+                          ? 'w-[250px]'
+                          : 'w-[350px]'
                         : 'w-[460px]'
                     }`}
                   >
@@ -669,29 +670,56 @@ export function MatchPairDetails({
                       className={`${
                         originalData.length > 2
                           ? originalData.length > 5
-                            ? 'h-[234px]'
-                            : 'h-[320px]'
+                            ? 'h-[360px]'
+                            : 'h-[350px]'
                           : 'h-[420px]'
                       } flex flex-col justify-between border-[0.5px]  border-neutral200 bg-neutral0 p-2 gap-[10px]`}
                     >
                       <div className="flex justify-around">
                         {activePreviewTab === 'Video' ||
                         activePreviewTab === 'B2B Sparkle' ? (
-                          <iframe
-                            src={
-                              allImages[index].filter(
-                                (data: any) =>
-                                  data.category === activePreviewTab
-                              )[0].url
-                            }
-                            className={`${
-                              originalData.length > 2
-                                ? originalData.length > 5
-                                  ? 'w-[150px] h-[185px]'
-                                  : 'w-[250px] h-[290px]'
-                                : 'w-[370px] h-[370px]'
-                            } `}
-                          />
+                          allImages[index].filter(
+                            (data: any) => data.category === activePreviewTab
+                          )[0].url_check ? (
+                            <iframe
+                              src={
+                                allImages[index].filter(
+                                  (data: any) =>
+                                    data.category === activePreviewTab
+                                )[0].url
+                              }
+                              className={`${
+                                originalData.length > 2
+                                  ? originalData.length > 5
+                                    ? 'w-[240px] h-[360px]'
+                                    : 'w-[285px] h-[305px]'
+                                  : 'w-[370px] h-[370px]'
+                              } `}
+                            />
+                          ) : (
+                            <img
+                              src={NoImageFound}
+                              alt={'Video'}
+                              width={
+                                originalData.length > 2
+                                  ? originalData.length > 5
+                                    ? 185
+                                    : 290
+                                  : 350
+                              }
+                              height={
+                                originalData.length > 2
+                                  ? originalData.length > 5
+                                    ? 175
+                                    : 320
+                                  : 400
+                              }
+                              className="object-contain"
+                              onError={e => {
+                                handleImageError(e);
+                              }}
+                            />
+                          )
                         ) : activePreviewTab === 'Certificate' ? (
                           <img
                             src={filteredImages[index][imageIndex].url}
@@ -699,17 +727,18 @@ export function MatchPairDetails({
                             width={
                               originalData.length > 2
                                 ? originalData.length > 5
-                                  ? 130
-                                  : 180
-                                : 250
+                                  ? 200
+                                  : 250
+                                : 270
                             }
                             height={
                               originalData.length > 2
                                 ? originalData.length > 5
                                   ? 140
-                                  : 180
+                                  : 200
                                 : 300
                             }
+                            className="object-contain"
                             onError={e => {
                               handleImageError(e);
                             }}
@@ -722,14 +751,14 @@ export function MatchPairDetails({
                               originalData.length > 2
                                 ? originalData.length > 5
                                   ? 185
-                                  : 300
+                                  : 290
                                 : 370
                             }
                             height={
                               originalData.length > 2
                                 ? originalData.length > 5
                                   ? 175
-                                  : 300
+                                  : 320
                                 : 400
                             }
                             onError={e => {
@@ -793,8 +822,8 @@ export function MatchPairDetails({
                     className={`${
                       originalData.length > 2
                         ? originalData.length > 5
-                          ? 'w-[200px]'
-                          : 'w-[300px]'
+                          ? 'w-[250px]'
+                          : 'w-[350px]'
                         : 'w-[460px]'
                     }`}
                     key={diamond.id}
