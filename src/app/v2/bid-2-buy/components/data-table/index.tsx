@@ -545,7 +545,7 @@ const BidToByDataTable = ({
     enableColumnFilters: false,
     // enablePagination: activeTab !== 2,
     enableStickyHeader: true,
-    enableGrouping: true,
+    enableGrouping: false,
     enableExpandAll: false,
     enableColumnDragging: false,
     groupedColumnMode: 'remove',

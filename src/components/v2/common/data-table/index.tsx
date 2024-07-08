@@ -497,7 +497,7 @@ const DataTable = ({
     enableColumnFilters: false,
     enableStickyHeader: true,
     enableBottomToolbar: true,
-    enableGrouping: true,
+    enableGrouping: false,
     enableExpandAll: false,
     enableColumnDragging: false,
     groupedColumnMode: 'remove',
