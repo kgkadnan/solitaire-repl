@@ -257,8 +257,10 @@ export function MatchPairDetails({
   };
   const handleImageError = (event: any) => {
     event.target.src = NoImageFound.src; //30et the fallback image when the original image fails to load
-    event.target.height = viewSimilar ? 150 : 300;
-    event.target.width = viewSimilar ? 150 : 350;
+    event.target.height =
+      originalData.length > 2 ? (originalData.length > 5 ? 175 : 300) : 400;
+    event.target.width =
+      originalData.length > 2 ? (originalData.length > 5 ? 185 : 300) : 350;
   };
   const handleClick = (id: string) => {
     let updatedIsCheck = [...selectedCheckboxes];
@@ -613,12 +615,16 @@ export function MatchPairDetails({
       <div className="flex  h-[calc(100%-110px)] overflow-auto  border-neutral200">
         <div className="flex ">
           <div
-            className="sticky left-0  min-h-[2080px] text-neutral700 text-mMedium font-medium w-[150px] !z-5"
+            className="sticky left-0  min-h-[2080px] text-neutral700 text-mMedium font-medium w-[200px] !z-5"
             style={{ zIndex: 5 }}
           >
             <div
               className={`${
-                viewSimilar ? 'h-[234px]  sticky top-0 ' : 'h-[420px]'
+                originalData.length > 2
+                  ? originalData.length > 5
+                    ? 'h-[234px]'
+                    : 'h-[320px]  sticky top-0'
+                  : 'h-[420px]'
               }  items-center flex px-4 border-[0.5px] border-neutral200 bg-neutral50`}
             >
               Media
@@ -642,7 +648,11 @@ export function MatchPairDetails({
           <div className=" bg-neutral0 text-neutral900 text-mMedium font-medium min-h-[2080px] !z-2">
             <div
               className={`flex ${
-                viewSimilar ? 'h-[234px]  sticky top-0 ' : 'h-[420px]'
+                originalData.length > 2
+                  ? originalData.length > 5
+                    ? 'h-[234px]'
+                    : 'h-[320px]  sticky top-0'
+                  : 'h-[420px]'
               } `}
             >
               {originalData !== undefined &&
@@ -650,11 +660,21 @@ export function MatchPairDetails({
                 originalData.map((items: IProduct, index: number) => (
                   <div
                     key={items.id}
-                    className={`${viewSimilar ? 'w-[150px]' : 'w-[460px]'}`}
+                    className={`${
+                      originalData.length > 2
+                        ? originalData.length > 5
+                          ? 'w-[200px]'
+                          : 'w-[300px]'
+                        : 'w-[460px]'
+                    }`}
                   >
                     <div
                       className={`${
-                        viewSimilar ? 'h-[234px]' : 'h-[420px]'
+                        originalData.length > 2
+                          ? originalData.length > 5
+                            ? 'h-[234px]'
+                            : 'h-[320px]'
+                          : 'h-[420px]'
                       } flex flex-col justify-between border-[0.5px]  border-neutral200 bg-neutral0 p-2 gap-[10px]`}
                     >
                       <div className="flex justify-around">
@@ -668,8 +688,10 @@ export function MatchPairDetails({
                               )[0].url
                             }
                             className={`${
-                              viewSimilar
-                                ? 'w-[130px] h-[175px]'
+                              originalData.length > 2
+                                ? originalData.length > 5
+                                  ? 'w-[150px] h-[185px]'
+                                  : 'w-[250px] h-[290px]'
                                 : 'w-[370px] h-[370px]'
                             } `}
                           />
@@ -677,8 +699,20 @@ export function MatchPairDetails({
                           <img
                             src={filteredImages[index][imageIndex].url}
                             alt={filteredImages[index][imageIndex].name}
-                            width={viewSimilar ? 150 : 250}
-                            height={viewSimilar ? 150 : 300}
+                            width={
+                              originalData.length > 2
+                                ? originalData.length > 5
+                                  ? 130
+                                  : 180
+                                : 250
+                            }
+                            height={
+                              originalData.length > 2
+                                ? originalData.length > 5
+                                  ? 140
+                                  : 180
+                                : 300
+                            }
                             onError={e => {
                               handleImageError(e);
                             }}
@@ -687,8 +721,20 @@ export function MatchPairDetails({
                           <img
                             src={filteredImages[index][imageIndex].url}
                             alt={filteredImages[index][imageIndex].name}
-                            width={viewSimilar ? 185 : 440}
-                            height={viewSimilar ? 175 : 440}
+                            width={
+                              originalData.length > 2
+                                ? originalData.length > 5
+                                  ? 185
+                                  : 300
+                                : 370
+                            }
+                            height={
+                              originalData.length > 2
+                                ? originalData.length > 5
+                                  ? 175
+                                  : 300
+                                : 400
+                            }
                             onError={e => {
                               handleImageError(e);
                             }}
@@ -746,7 +792,13 @@ export function MatchPairDetails({
               {originalData.length > 0 &&
                 originalData.map((diamond: any) => (
                   <div
-                    className={`${viewSimilar ? 'w-[150px]' : 'w-[460px]'} `}
+                    className={`${
+                      originalData.length > 2
+                        ? originalData.length > 5
+                          ? 'w-[200px]'
+                          : 'w-[300px]'
+                        : 'w-[460px]'
+                    }`}
                     key={diamond.id}
                   >
                     {Object.keys(mappingColumn).map(
