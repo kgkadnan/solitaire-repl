@@ -126,7 +126,17 @@ const ImageModal: React.FC<IModalProps> = ({
                         src={filteredImages[0]?.url}
                         className="w-[527px] h-[527px]"
                       />
-                    ) : (
+                    ) : 
+                    filteredImages[imageIndex]?.category === 'Certificate' ?
+                    <Image
+                        src={filteredImages[imageIndex]?.url}
+                        alt={filteredImages[imageIndex]?.name}
+                        width={650}
+                        height={600}
+                        className="w-[625px] h-[520px] object-contain"
+                       
+                      />
+                    :(
                       <Image
                         src={filteredImages[imageIndex]?.url}
                         alt={filteredImages[imageIndex]?.name}
