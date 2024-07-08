@@ -86,7 +86,7 @@ const DetailPageTabs = ({
   const handleTabs = (label: string) => {
     setActivePreviewTab(label);
     setImageIndex(0);
-    setIsLoading(true);
+    setIsLoading && setIsLoading(true);
   };
 
   // Find the next enabled tab
