@@ -407,6 +407,7 @@ const MatchingPair = () => {
           handleCloseSpecificTab={handleCloseSpecificTab}
           setIsLoading={setIsLoading}
           setIsInputDialogOpen={setIsInputDialogOpen}
+          isLoading={isLoading}
         />
       )}
     </div>

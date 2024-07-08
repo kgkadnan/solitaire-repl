@@ -10,6 +10,8 @@ interface IDetailPageTabs {
   setImageIndex: React.Dispatch<React.SetStateAction<number>>;
   validImages: any;
   isMatchingPair?: boolean;
+  setIsLoading?: any;
+  isLoading?: boolean;
 }
 
 const DetailPageTabs = ({
@@ -17,7 +19,9 @@ const DetailPageTabs = ({
   setActivePreviewTab,
   validImages,
   setImageIndex,
-  isMatchingPair
+  isMatchingPair,
+  setIsLoading,
+  isLoading
 }: IDetailPageTabs) => {
   let TabsData = [
     {
@@ -71,10 +75,18 @@ const DetailPageTabs = ({
         : !validImages.some((image: any) => image.category === 'Certificate')
     }
   ];
+  useEffect(() => {
+    setIsLoading &&
+      isLoading &&
+      setTimeout(() => {
+        setIsLoading(false); // Hide the toast notification after some time
+      }, 3000);
+  }, [isLoading]);
 
   const handleTabs = (label: string) => {
     setActivePreviewTab(label);
     setImageIndex(0);
+    setIsLoading(true);
   };
 
   // Find the next enabled tab
