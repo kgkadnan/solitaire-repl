@@ -35,7 +35,7 @@ const Pill = (props: {
                 </div>
               )}
               <p
-                className={`w-[61px] ${
+                className={` ${
                   label.length > BREADCRUM_CHARACTER_LIMIT && ' truncate'
                 }`}
                 onClick={handlePillClick}
@@ -72,7 +72,7 @@ const Pill = (props: {
             </div>
           )}
           <p
-            className={`w-[61px] ${
+            className={` ${
               label?.length > BREADCRUM_CHARACTER_LIMIT && ' truncate'
             }`}
             onClick={handlePillClick}
