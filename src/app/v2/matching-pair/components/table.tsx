@@ -981,7 +981,7 @@ const MatchPairTable = ({
                 selectedProducts={rowSelection}
                 setErrorText={setErrorText}
                 setIsError={setIsError}
-                shareTrackIdentifier={'Matching Pair'}
+                shareTrackIdentifier={'Match Pair'}
               />
             </div>
           </div>

@@ -43,6 +43,7 @@ import {
 import {
   EXCEEDS_LIMITS,
   EXCEEDS_LIMITS_MATCHING_PAIR,
+  NO_MATCHING_PAIRS_FOUND,
   NO_STONE_FOUND,
   SELECT_SOME_PARAM,
   SOMETHING_WENT_WRONG
@@ -355,12 +356,17 @@ const Form = ({
           setMessageColor('dangerMain');
         } else if (data?.count === MIN_SEARCH_FORM_COUNT) {
           setIsError(true);
-          setErrorText(NO_STONE_FOUND);
+          setErrorText(
+            isMatchingPair ? NO_MATCHING_PAIRS_FOUND : NO_STONE_FOUND
+          );
           setMessageColor('dangerMain');
         } else if (data?.count !== MIN_SEARCH_FORM_COUNT) {
           setMessageColor('successMain');
           setIsError(true);
-          data?.count && setErrorText(`${data?.count} stones found`);
+          data?.count &&
+            setErrorText(
+              `${data?.count} ${isMatchingPair ? 'pairs' : 'stones'} found`
+            );
         } else {
           setIsError(false);
           setErrorText('');
@@ -1046,7 +1052,7 @@ const Form = ({
               : subRoute === SubRoutes.BID_TO_BUY
               ? 'Bid To Buy'
               : isMatchingPair
-              ? 'Matching Pair'
+              ? 'Match Pair'
               : 'Diamonds'}
           </span>
         </div>
@@ -1200,9 +1206,10 @@ const Form = ({
                   minMaxError.length > 0 ? 'dangerMain' : messageColor
                 } pl-[8px]`}
               >
-                {minMaxError.length
-                  ? minMaxError
-                  : !isValidationError && errorText}
+                {!isLoading &&
+                  (minMaxError.length
+                    ? minMaxError
+                    : !isValidationError && errorText)}
               </span>
             </div>
           )}
