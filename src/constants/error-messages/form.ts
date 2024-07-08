@@ -13,3 +13,4 @@ export const TITLE_ALREADY_EXISTS =
 
 export const EXCEEDS_LIMITS_MATCHING_PAIR =
   'Your selection includes more than 150 match pairs. Please modify your search.';
+export const NO_MATCHING_PAIRS_FOUND = `No matching pairs found`;
