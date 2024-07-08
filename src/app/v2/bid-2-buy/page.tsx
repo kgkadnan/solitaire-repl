@@ -1,6 +1,6 @@
 'use client';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import BidToByDataTable from './components/data-table';
+import BidToBuyDataTable from './components/data-table';
 import {
   RenderCarat,
   RenderDiscount,
@@ -323,10 +323,7 @@ const BidToBuy = () => {
     }
   }, []);
 
-  console.log('biddd', bid);
-
   const handleBidPlaced = useCallback((data: any) => {
-    console.log('Data handleBidPlaced', data);
     if (data && data['status'] === 'success') {
       modalSetState.setIsDialogOpen(true);
       modalSetState.setDialogContent(
@@ -721,7 +718,7 @@ const BidToBuy = () => {
               </div>
               <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow">
                 <div className="border-b-[1px] border-neutral200">
-                  <BidToByDataTable
+                  <BidToBuyDataTable
                     dispatch={dispatch}
                     filterData={filterData}
                     setBid={setBid}

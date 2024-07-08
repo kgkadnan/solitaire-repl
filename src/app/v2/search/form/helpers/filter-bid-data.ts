@@ -23,10 +23,8 @@ export function filterBidData(data: any[], query: any): any[] {
           const searchType = query['key_to_symbol_search_type'] as string;
           const symbols = query[key] as string[];
 
-          console.log('searchType', searchType);
           if (searchType === 'contain') {
             if (!symbols.some(symbol => item[key].includes(symbol))) {
-              console.log('false');
               return false;
             }
           } else if (searchType === 'doesNotContain') {
