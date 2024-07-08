@@ -526,7 +526,7 @@ const NewArrivalDataTable = ({
     enableHiding: false,
     enableColumnFilters: false,
     enableStickyHeader: true,
-    enableGrouping: true,
+    enableGrouping: false,
     enableExpandAll: false,
     enableColumnDragging: false,
     groupedColumnMode: 'remove',
