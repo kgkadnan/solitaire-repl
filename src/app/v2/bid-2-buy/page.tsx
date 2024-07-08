@@ -51,6 +51,7 @@ import useFormStateManagement from '../search/form/hooks/form-state';
 import Form from '../search/form/form';
 import { SubRoutes } from '@/constants/v2/enums/routes';
 import useNumericFieldValidation from '../search/form/hooks/numeric-field-validation-management';
+import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 
 const BidToBuy = () => {
   const router = useRouter();
@@ -65,6 +66,8 @@ const BidToBuy = () => {
   const [validImages, setValidImages] = useState<any>([]);
   const pathName = useSearchParams().get('path');
   const [isLoading, setIsLoading] = useState(false); // State to track loading
+  const [searchLoading, setSearchLoading] = useState(false);
+
   const [checkStatus, setCheckStatus] = useState(false);
 
   const { setSearchUrl, searchUrl } = useValidationStateManagement();
@@ -616,6 +619,8 @@ const BidToBuy = () => {
       {isError && (
         <Toast show={isError} message={errorText} isSuccess={false} />
       )}
+      {isLoading && <CustomKGKLoader />}
+
       <ImageModal
         isOpen={isModalOpen}
         onClose={() => {
@@ -673,10 +678,10 @@ const BidToBuy = () => {
               errorSetState={formErrorState.errorSetState}
               setIsDialogOpen={modalSetState.setIsDialogOpen}
               setDialogContent={modalSetState.setDialogContent}
-              setIsLoading={setIsLoading}
+              setIsLoading={setSearchLoading}
               setIsAddDemand={setIsAddDemand}
               isMatchingPair={false}
-              isLoading={isLoading}
+              isLoading={searchLoading}
             />
           ) : (
             <>

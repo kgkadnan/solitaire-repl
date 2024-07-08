@@ -30,6 +30,7 @@ import useValidationStateManagement from '../search/hooks/validation-state-manag
 import SavedSearch from '../search/saved-search/saved-search';
 import MatchingPairResult from './result';
 import { useGetMatchingPairCountQuery } from '@/features/api/match-pair';
+import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 
 const MatchingPair = () => {
   const subRoute = useSearchParams().get('active-tab');
@@ -58,6 +59,7 @@ const MatchingPair = () => {
 
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false); // State to track loading
+  const [searchLoading, setSearchLoading] = useState(false);
   const [updateSavedSearch] = useUpdateSavedSearchMutation();
   const [saveSearchName, setSaveSearchName] = useState('');
   const [addSavedSearch] = useAddSavedSearchMutation();
@@ -342,6 +344,7 @@ const MatchingPair = () => {
 
   return (
     <div>
+      {isLoading && <CustomKGKLoader />}
       <DialogComponent
         dialogContent={dialogContent}
         isOpens={isDialogOpen}
@@ -373,10 +376,10 @@ const MatchingPair = () => {
           setDialogContent={setDialogContent}
           addSearches={addSearches}
           setAddSearches={setAddSearches}
-          setIsLoading={setIsLoading}
+          setIsLoading={setSearchLoading}
           setIsAddDemand={setIsAddDemand}
           isMatchingPair={true}
-          isLoading={isLoading}
+          isLoading={searchLoading}
         />
       ) : subRoute === MatchSubRoutes.SAVED_SEARCH ? (
         <SavedSearch setIsLoading={setIsLoading} />
