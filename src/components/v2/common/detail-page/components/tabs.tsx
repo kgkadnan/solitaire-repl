@@ -80,7 +80,7 @@ const DetailPageTabs = ({
       isLoading &&
       setTimeout(() => {
         setIsLoading(false); // Hide the toast notification after some time
-      }, 2000);
+      }, 1000);
   }, [isLoading]);
 
   const handleTabs = (label: string) => {
