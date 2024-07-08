@@ -61,7 +61,8 @@ export function MatchPairDetails({
   handleDetailImage,
   setRowSelection,
   setSimilarData,
-  similarData
+  similarData,
+  rowSelection
 }: {
   data: any;
   filterData: any;
@@ -73,6 +74,7 @@ export function MatchPairDetails({
   setRowSelection: any;
   setSimilarData: any;
   similarData: any;
+  rowSelection: any;
 }) {
   const router = useRouter();
 
@@ -93,9 +95,6 @@ export function MatchPairDetails({
   const [, setZoomPosition] = useState({ x: 0, y: 0 });
   const [breadCrumMatchPair, setBreadCrumMatchPair] = useState('');
   const [viewSimilar, setViewSimilar] = useState<boolean>(false);
-  const { checkboxState, checkboxSetState } = useCheckboxStateManagement();
-  const { selectedCheckboxes } = checkboxState;
-  const { setSelectedCheckboxes } = checkboxSetState;
   const [triggerColumn] =
     useLazyGetManageListingSequenceQuery<IManageListingSequenceResponse>();
   const [triggerSimilarMatchingPairApi] = useLazyGetSimilarMatchingPairQuery();
@@ -242,9 +241,24 @@ export function MatchPairDetails({
   // }, [validImages]);
 
   const handleDownloadExcel = () => {
-    if (selectedCheckboxes.length > 0) {
+    if (Object.keys(rowSelection).length > 0) {
+      // let selectedIds = Object.keys(rowSelection);
+      // let result: any = [];
+
+      // selectedIds.map(selectedId =>
+      //   result.push(
+      //     ...data.filter((subArray: any) =>
+      //       subArray.some((obj: any) => obj.id === selectedId)
+      //     )[0]
+      //   )
+      // );
+
+      // const pairedIds = result.map(({ id }: { id: string }) => {
+      //   return id;
+      // });
+      // console.log(pairedIds,"pairedIds")
       downloadExcelHandler({
-        products: selectedCheckboxes,
+        products: Object.keys(rowSelection),
         downloadExcelApi: downloadExcel,
         modalSetState,
         router,
@@ -263,14 +277,13 @@ export function MatchPairDetails({
       originalData.length > 2 ? (originalData.length > 5 ? 185 : 300) : 350;
   };
   const handleClick = (id: string) => {
-    let updatedIsCheck = [...selectedCheckboxes];
+    let updatedIsCheck = [...Object.keys(rowSelection)];
 
     if (updatedIsCheck.includes(id)) {
       updatedIsCheck = updatedIsCheck.filter(item => item !== id);
     } else {
       updatedIsCheck.push(id);
     }
-    setSelectedCheckboxes(updatedIsCheck);
     setRowSelection(
       updatedIsCheck.reduce((acc: any, item: any) => {
         acc[item] = true;
@@ -538,8 +551,8 @@ export function MatchPairDetails({
                           <button
                             onClick={() => {
                               filteredImages.forEach((images: any) => {
-                                if (selectedCheckboxes.length > 0) {
-                                  selectedCheckboxes.includes(
+                                if (Object.keys(rowSelection).length > 0) {
+                                  Object.keys(rowSelection).includes(
                                     images[imageIndex].id
                                   ) &&
                                     handleDownloadImage(
@@ -595,7 +608,7 @@ export function MatchPairDetails({
               <div className="w-[38px] h-[38px]">
                 <Share
                   rows={originalData}
-                  selectedProducts={selectedCheckboxes.reduce(
+                  selectedProducts={Object.keys(rowSelection).reduce(
                     (acc: any, item: any) => {
                       acc[item] = true;
                       return acc;
@@ -747,7 +760,8 @@ export function MatchPairDetails({
                             onClick={() => handleClick(items.id)}
                             data-testid={'compare stone checkbox'}
                             isChecked={
-                              selectedCheckboxes.includes(items.id) || false
+                              Object.keys(rowSelection).includes(items.id) ||
+                              false
                             }
                           />
                         </div>
