@@ -148,7 +148,7 @@ const theme = createTheme({
 export interface IBidValues {
   [key: string]: number;
 }
-const BidToByDataTable = ({
+const BidToBuyDataTable = ({
   columns,
   modalSetState,
   downloadExcel,
@@ -832,7 +832,9 @@ const BidToByDataTable = ({
             fontWeight: 500,
             textAlign:
               column.id === 'girdle_percentage' ? 'center !important' : 'left',
-            paddingRight: ['location', 'details'].includes(column.id)
+            paddingRight: ['shape_full', 'location', 'details'].includes(
+              column.id
+            )
               ? '12px'
               : '0px'
           }
@@ -1105,4 +1107,4 @@ const BidToByDataTable = ({
   );
 };
 
-export default BidToByDataTable;
+export default BidToBuyDataTable;
