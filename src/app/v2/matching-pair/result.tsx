@@ -245,7 +245,7 @@ const MatchingPairResult = ({
           accessorKey: accessor,
           header: short_label,
           enableGlobalFilter: accessor === 'lot_id',
-          enableGrouping: accessor === 'shape',
+          // enableGrouping: accessor === 'shape',
 
           minSize: 5,
           maxSize: accessor === 'details' ? 100 : 200,
