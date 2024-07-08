@@ -1885,7 +1885,7 @@ const Dashboard = () => {
                         activeTab === 'Pending') && (
                         <div className="max-w-full overflow-x-auto border-[1px] border-neutral200">
                           {/* header */}
-                          <div className="grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] text-mMedium h-[47px] border-b border-neutral-200 bg-neutral-50 text-neutral700">
+                          <div className="grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] text-mMedium h-[47px] border-b border-neutral200 bg-neutral50 text-neutral700">
                             {keys?.map(({ label }: any) => (
                               <div
                                 key={label}

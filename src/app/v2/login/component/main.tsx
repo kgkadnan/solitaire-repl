@@ -10,6 +10,7 @@ import {
   ENTER_PASSWORD,
   ENTER_PHONE,
   INCORRECT_LOGIN_CREDENTIALS,
+  INVALID_EMAIL_FORMAT,
   INVALID_MOBILE
 } from '@/constants/error-messages/register';
 import { Events } from '@/constants/enums/event';
@@ -41,6 +42,7 @@ import { IAuthDataResponse } from '../interface';
 import CommonPoppup from './common-poppup';
 import LoginComponent from './login';
 import ConfirmScreen from '../../register/component/confirmation-screen';
+import { isEmailValid } from '@/utils/validate-email';
 
 export interface IToken {
   token: string;
@@ -62,8 +64,9 @@ const Login = () => {
     mobileNumber: string;
   }>({ countryCode: '', mobileNumber: '' });
   const [password, setPassword] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false); // State to track loading
-
+  const [loginByEmail, setLoginByEmail] = useState<boolean>(false);
   const [token, setToken] = useState(initialTokenState);
   const { data }: { data?: IAuthDataResponse } = useGetAuthDataQuery(
     token.token,
@@ -72,6 +75,8 @@ const Login = () => {
   const [verifyLogin] = useVerifyLoginMutation();
 
   const [phoneErrorText, setPhoneErrorText] = useState<string>('');
+  const [emailErrorText, setEmailErrorText] = useState<string>('');
+
   const [passwordErrorText, setPasswordErrorText] = useState<string>('');
   const { modalState, modalSetState } = useModalStateManagement();
   const { dialogContent, isDialogOpen, isInputDialogOpen } = modalState;
@@ -169,7 +174,7 @@ const Login = () => {
   const handleLogin = async () => {
     setIsLoading(true);
     if (
-      !phoneErrorText.length &&
+      (!phoneErrorText.length || !emailErrorText.length) &&
       !passwordErrorText.length &&
       isPhoneNumberValid(phoneNumber.mobileNumber) &&
       password.length &&
@@ -178,7 +183,8 @@ const Login = () => {
       let res: any = await verifyLogin({
         phone: phoneNumber.mobileNumber,
         password: password,
-        country_code: phoneNumber.countryCode
+        country_code: phoneNumber.countryCode,
+        email: email
       });
       setOTPVerificationFormState(prev => ({
         ...prev,
@@ -221,9 +227,16 @@ const Login = () => {
           tempToken: res.data.customer.temp_token
         }));
       }
-    } else if (!password.length && !phoneNumber.mobileNumber.length) {
+    } else if (
+      !loginByEmail &&
+      !password.length &&
+      !phoneNumber.mobileNumber.length
+    ) {
       setPasswordErrorText(ENTER_PASSWORD);
       setPhoneErrorText(ENTER_PHONE);
+    } else if (loginByEmail && (!email.length || !isEmailValid(email))) {
+      setEmailErrorText(INVALID_EMAIL_FORMAT);
+      setPasswordErrorText(ENTER_PASSWORD);
     } else if (!isPhoneNumberValid(phoneNumber.mobileNumber)) {
       setPhoneErrorText(INVALID_MOBILE);
     } else if (!password.length) {
@@ -325,6 +338,12 @@ const Login = () => {
             passwordErrorText={passwordErrorText}
             handleLogin={handleLogin}
             currentCountryCode={currentCountryCode}
+            setEmail={setEmail}
+            setEmailErrorText={setEmailErrorText}
+            email={email}
+            emailErrorText={emailErrorText}
+            loginByEmail={loginByEmail}
+            setLoginByEmail={setLoginByEmail}
           />
         );
       case 'otpVerification':
