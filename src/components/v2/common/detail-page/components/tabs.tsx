@@ -38,7 +38,10 @@ const DetailPageTabs = ({
         ? !validImages.some(
             (innerArray: any) =>
               Array.isArray(innerArray) &&
-              innerArray.some((image: any) => image.category === 'Video')
+              innerArray.some(
+                (image: any) =>
+                  image.category === 'Video' && image.url_check === true
+              )
           )
         : !validImages.some((image: any) => image.category === 'Video')
     },
@@ -49,7 +52,10 @@ const DetailPageTabs = ({
         ? !validImages.some(
             (innerArray: any) =>
               Array.isArray(innerArray) &&
-              innerArray.some((image: any) => image.category === 'B2B Sparkle')
+              innerArray.some(
+                (image: any) =>
+                  image.category === 'B2B Sparkle' && image.url_check === true
+              )
           )
         : !validImages.some((image: any) => image.category === 'B2B Sparkle')
     },

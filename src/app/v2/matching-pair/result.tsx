@@ -1035,7 +1035,7 @@ const MatchingPairResult = ({
               animation="wave"
             />
           ) : (
-            <div>Matching Pair ({dataTableState.rows.length / 2})</div>
+            <div>Match Pair ({dataTableState.rows.length / 2})</div>
           )}
         </p>
       </div>
@@ -1047,7 +1047,7 @@ const MatchingPairResult = ({
             filterData={detailPageData}
             goBackToListView={goBack}
             breadCrumLabel={
-              breadCrumLabel.length ? breadCrumLabel : 'Matching Pair'
+              breadCrumLabel.length ? breadCrumLabel : 'Match Pair'
             }
             modalSetState={modalSetState}
             setIsLoading={setIsLoading}
@@ -1120,7 +1120,7 @@ const MatchingPairResult = ({
               isFrom={breadCrumLabel}
               handleDetailImage={handleDetailImage}
               handleDetailPage={handleDetailPage}
-              identifier={'Matching Pair'}
+              identifier={'Match Pair'}
               isMatchingPair={true}
             />
           ) : isCompareStone ? (

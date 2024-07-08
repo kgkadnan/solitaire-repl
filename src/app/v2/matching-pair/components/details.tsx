@@ -4,7 +4,7 @@
 import { useEffect, useState } from 'react';
 import backWardArrow from '@public/v2/assets/icons/my-diamonds/backwardArrow.svg';
 import ExportExcel from '@public/v2/assets/icons/detail-page/export-excel.svg?url';
-import NoImageFound from '@public/v2/assets/icons/detail-page/matching-pair-fallback.svg';
+import NoImageFound from '@public/v2/assets/icons/compare-stone/fallback.svg';
 import styles from '../../search/result/components/compare.module.scss';
 import CloseButton from '@public/v2/assets/icons/close.svg';
 import Image from 'next/image';
@@ -256,9 +256,15 @@ export function MatchPairDetails({
   const handleImageError = (event: any) => {
     event.target.src = NoImageFound.src; //30et the fallback image when the original image fails to load
     event.target.height =
-      originalData.length > 2 ? (originalData.length > 5 ? 175 : 320) : 400;
+      originalData.length > 2
+        ? 320
+        : // (originalData.length > 5 ? 175 : 320)
+          400;
     event.target.width =
-      originalData.length > 2 ? (originalData.length > 5 ? 185 : 290) : 350;
+      originalData.length > 2
+        ? 290
+        : // (originalData.length > 5 ? 185 : 290)
+          350;
   };
   const handleClick = (id: string) => {
     let updatedIsCheck = [...Object.keys(rowSelection)];
@@ -376,7 +382,6 @@ export function MatchPairDetails({
 
     return [...originalData, ...newProducts];
   };
-  console.log(allImages, 'allImages');
   return (
     <div className="text-black bg-neutral25 rounded-[8px] w-[calc(100vw-116px)] h-[calc(100vh-140px)]">
       <Toast
@@ -437,26 +442,44 @@ export function MatchPairDetails({
           </div>
           <div className="flex  justify-center xl:justify-end mr-[10px] items-center">
             <div className="flex gap-3 items-center">
-              {similarData && similarData?.count > 0 && (
+              {
                 <div
-                  className=" flex items-center gap-1 border-[1px] h-[40px] border-[#E4E7EC] rounded-[4px] px-4 py-2 cursor-pointer"
+                  className={` flex items-center gap-1 border-[1px] h-[40px] border-[#E4E7EC] rounded-[4px] px-4 py-2 cursor-pointer ${
+                    similarData &&
+                    similarData?.count === 0 &&
+                    '!cursor-not-allowed bg-neutral100'
+                  }`}
                   style={{ boxShadow: 'var(--input-shadow)' }}
                   onClick={() => {
-                    !viewSimilar &&
-                      setOriginalData(
-                        updateDataAsPerSimilarData(originalData, similarData)
-                      );
-                    setViewSimilar(!viewSimilar);
+                    if (similarData && similarData?.count > 0) {
+                      !viewSimilar &&
+                        setOriginalData(
+                          updateDataAsPerSimilarData(originalData, similarData)
+                        );
+                      setViewSimilar(!viewSimilar);
+                    }
                   }}
                 >
-                  <p className="text-mMedium text-neutral900 font-medium">
+                  <p
+                    className={`text-mMedium text-neutral900 font-medium ${
+                      similarData &&
+                      similarData?.count === 0 &&
+                      '!text-neutral400'
+                    }`}
+                  >
                     {viewSimilar ? 'Hide' : 'View'} similar
                   </p>
-                  <div className=" bg-primaryMain border-[2px] border-primaryBorder text-white text-mMedium px-[6px] py-[1px] rounded-[4px] h-[25px]">
+                  <div
+                    className={`bg-primaryMain border-[2px] border-primaryBorder text-white text-mMedium px-[6px] py-[1px] rounded-[4px] h-[25px]  ${
+                      similarData &&
+                      similarData?.count === 0 &&
+                      '!bg-neutral400'
+                    }`}
+                  >
                     +{similarData?.count}
                   </div>
                 </div>
-              )}
+              }
               {filteredImages.length > 0 ? (
                 <div className="flex gap-6">
                   {filteredImages.length > 0 &&
@@ -603,7 +626,7 @@ export function MatchPairDetails({
                   setIsError={setShowToast}
                   setErrorText={setErrorText}
                   identifier={breadCrumLabel}
-                  shareTrackIdentifier="Matching Pair Details"
+                  shareTrackIdentifier="Match Pair Details"
                 />
               </div>
             </div>
@@ -619,10 +642,10 @@ export function MatchPairDetails({
             <div
               className={`${
                 originalData.length > 2
-                  ? originalData.length > 5
-                    ? 'h-[360px] '
-                    : 'h-[350px]  '
-                  : 'h-[420px]'
+                  ? // ? originalData.length > 5
+                    'h-[350px] '
+                  : // : 'h-[350px]  '
+                    'h-[420px]'
               }  items-center flex px-4 border-[0.5px] border-neutral200 bg-neutral50`}
             >
               Media
@@ -647,9 +670,10 @@ export function MatchPairDetails({
             <div
               className={`flex ${
                 originalData.length > 2
-                  ? originalData.length > 5
-                    ? 'h-[360px] '
-                    : 'h-[350px] '
+                  ? // originalData.length > 5
+                    //   ? 'h-[360px] '
+                    //   :
+                    'h-[350px] '
                   : 'h-[420px]'
               } `}
             >
@@ -660,18 +684,20 @@ export function MatchPairDetails({
                     key={items.id}
                     className={`${
                       originalData.length > 2
-                        ? originalData.length > 5
-                          ? 'w-[250px]'
-                          : 'w-[350px]'
+                        ? // originalData.length > 5
+                          //   ? 'w-[250px]'
+                          //   :
+                          'w-[350px]'
                         : 'w-[460px]'
                     }`}
                   >
                     <div
                       className={`${
                         originalData.length > 2
-                          ? originalData.length > 5
-                            ? 'h-[360px]'
-                            : 'h-[350px]'
+                          ? // originalData.length > 5
+                            //   ? 'h-[360px]'
+                            //   :
+                            'h-[350px]'
                           : 'h-[420px]'
                       } flex flex-col justify-between border-[0.5px]  border-neutral200 bg-neutral0 p-2 gap-[10px]`}
                     >
@@ -690,9 +716,10 @@ export function MatchPairDetails({
                               }
                               className={`${
                                 originalData.length > 2
-                                  ? originalData.length > 5
-                                    ? 'w-[240px] h-[360px]'
-                                    : 'w-[285px] h-[305px]'
+                                  ? // originalData.length > 5
+                                    //   ? 'w-[240px] h-[360px]'
+                                    //   :
+                                    'w-[285px] h-[305px]'
                                   : 'w-[370px] h-[370px]'
                               } `}
                             />
@@ -702,16 +729,18 @@ export function MatchPairDetails({
                               alt={'Video'}
                               width={
                                 originalData.length > 2
-                                  ? originalData.length > 5
-                                    ? 185
-                                    : 290
+                                  ? // originalData.length > 5
+                                    //   ? 185
+                                    //   :
+                                    290
                                   : 350
                               }
                               height={
                                 originalData.length > 2
-                                  ? originalData.length > 5
-                                    ? 175
-                                    : 320
+                                  ? // originalData.length > 5
+                                    //   ? 175
+                                    //   :
+                                    320
                                   : 400
                               }
                               className="object-contain"
@@ -726,16 +755,18 @@ export function MatchPairDetails({
                             alt={filteredImages[index][imageIndex].name}
                             width={
                               originalData.length > 2
-                                ? originalData.length > 5
-                                  ? 200
-                                  : 250
+                                ? // originalData.length > 5
+                                  //   ? 200
+                                  //   :
+                                  250
                                 : 270
                             }
                             height={
                               originalData.length > 2
-                                ? originalData.length > 5
-                                  ? 140
-                                  : 200
+                                ? // originalData.length > 5
+                                  //   ? 140
+                                  //   :
+                                  200
                                 : 300
                             }
                             className="object-contain"
@@ -749,16 +780,18 @@ export function MatchPairDetails({
                             alt={filteredImages[index][imageIndex].name}
                             width={
                               originalData.length > 2
-                                ? originalData.length > 5
-                                  ? 185
-                                  : 290
+                                ? // originalData.length > 5
+                                  //   ? 185
+                                  //   :
+                                  290
                                 : 370
                             }
                             height={
                               originalData.length > 2
-                                ? originalData.length > 5
-                                  ? 175
-                                  : 320
+                                ? // originalData.length > 5
+                                  //   ? 175
+                                  //   :
+                                  320
                                 : 400
                             }
                             onError={e => {
@@ -821,9 +854,10 @@ export function MatchPairDetails({
                   <div
                     className={`${
                       originalData.length > 2
-                        ? originalData.length > 5
-                          ? 'w-[250px]'
-                          : 'w-[350px]'
+                        ? // originalData.length > 5
+                          //   ? 'w-[250px]'
+                          //   :
+                          'w-[350px]'
                         : 'w-[460px]'
                     }`}
                     key={diamond.id}
