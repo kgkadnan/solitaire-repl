@@ -242,28 +242,13 @@ export function MatchPairDetails({
 
   const handleDownloadExcel = () => {
     if (Object.keys(rowSelection).length > 0) {
-      // let selectedIds = Object.keys(rowSelection);
-      // let result: any = [];
-
-      // selectedIds.map(selectedId =>
-      //   result.push(
-      //     ...data.filter((subArray: any) =>
-      //       subArray.some((obj: any) => obj.id === selectedId)
-      //     )[0]
-      //   )
-      // );
-
-      // const pairedIds = result.map(({ id }: { id: string }) => {
-      //   return id;
-      // });
-      // console.log(pairedIds,"pairedIds")
       downloadExcelHandler({
         products: Object.keys(rowSelection),
         downloadExcelApi: downloadExcel,
         modalSetState,
         router,
-        setIsLoading: setIsLoading,
-        fromMatchingPair: true
+        setIsLoading: setIsLoading
+        // fromMatchingPair: true
       });
     } else {
       setShowToast(true);
