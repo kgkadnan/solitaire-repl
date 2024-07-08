@@ -52,11 +52,11 @@ const theme = createTheme({
     MuiTableCell: {
       styleOverrides: {
         root: {
-          // Default state for the badge inside the cell
+          // Default state for the badge inside the cell - sorting icon not visible by default
           '& .MuiBadge-root': {
-            visibility: 'hidden',
             width: '15px !important',
-            marginLeft: '-3px'
+            marginLeft: '-3px',
+            visibility: 'hidden'
           },
           // Hover state for the cell
           '&:hover .MuiBadge-root': {
@@ -809,9 +809,7 @@ const NewArrivalDataTable = ({
             fontWeight: 500,
             textAlign:
               column.id === 'girdle_percentage' ? 'center !important' : 'left',
-            paddingRight: ['shape_full', 'location', 'details', 'lab'].includes(
-              column.id
-            )
+            paddingRight: ['location', 'details', 'lab'].includes(column.id)
               ? '12px'
               : '0px'
           }
