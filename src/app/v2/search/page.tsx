@@ -17,7 +17,6 @@ import useFormStateManagement from './form/hooks/form-state';
 import useNumericFieldValidation from './form/hooks/numeric-field-validation-management';
 import Result from './result/result';
 import SavedSearch from './saved-search/saved-search';
-import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import logger from 'logging/log-util';
 import {
   useAddSavedSearchMutation,
@@ -343,7 +342,6 @@ const Search = () => {
         onClose={() => setIsInputDialogOpen(false)}
         renderContent={renderContentWithInput}
       />
-      {/* {isLoading && <CustomKGKLoader />} */}
       {subRoute === SubRoutes.NEW_SEARCH ||
       editRoute === SubRoutes.SAVED_SEARCH ||
       editRoute === SubRoutes.RESULT ? (

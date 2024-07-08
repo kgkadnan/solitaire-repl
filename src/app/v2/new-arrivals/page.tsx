@@ -39,7 +39,6 @@ import { getShapeDisplayName } from '@/utils/v2/detail-page';
 import ImageModal from '@/components/v2/common/detail-page/components/image-modal';
 import { FILE_URLS } from '@/constants/v2/detail-page';
 import { useRouter, useSearchParams } from 'next/navigation';
-import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import { Toast } from '@/components/v2/common/copy-and-share/toast';
 import { loadImages } from '@/components/v2/common/detail-page/helpers/load-images';
 import { checkImage } from '@/components/v2/common/detail-page/helpers/check-image';
@@ -723,7 +722,6 @@ const NewArrivals = () => {
 
   return (
     <div className="mb-[4px] relative">
-      {/* {isLoading && <CustomKGKLoader />} */}
       {isError && (
         <Toast show={isError} message={errorText} isSuccess={false} />
       )}

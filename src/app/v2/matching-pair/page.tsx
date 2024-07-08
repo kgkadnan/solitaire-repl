@@ -11,7 +11,6 @@ import { ManageLocales } from '@/utils/v2/translate';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import { DialogComponent } from '@/components/v2/common/dialog';
 
-import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import logger from 'logging/log-util';
 import {
   useAddSavedSearchMutation,
@@ -353,7 +352,6 @@ const MatchingPair = () => {
         onClose={() => setIsInputDialogOpen(false)}
         renderContent={renderContentWithInput}
       />
-      {/* {isLoading && <CustomKGKLoader />} */}
       {subRoute === MatchSubRoutes.NEW_SEARCH ||
       // currentPath === Routes.MATCHING_PAIR ||
       editRoute === MatchSubRoutes.SAVED_SEARCH ||
