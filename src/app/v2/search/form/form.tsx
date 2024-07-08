@@ -104,7 +104,8 @@ const Form = ({
   setAddSearches,
   setIsLoading,
   setIsAddDemand,
-  isMatchingPair = false
+  isMatchingPair = false,
+  isLoading
 }: {
   searchUrl: string;
   setSearchUrl: Dispatch<SetStateAction<string>>;
@@ -125,6 +126,7 @@ const Form = ({
   setIsLoading: any;
   setIsAddDemand: Dispatch<SetStateAction<boolean>>;
   isMatchingPair: boolean;
+  isLoading: boolean;
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -945,7 +947,8 @@ const Form = ({
             errorText === NO_STONE_FOUND &&
             isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
           ? handleAddDemand
-          : handleFormSearch
+          : handleFormSearch,
+      isLoading: isLoading
     }
   ];
 

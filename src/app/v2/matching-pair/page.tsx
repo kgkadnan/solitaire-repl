@@ -353,7 +353,7 @@ const MatchingPair = () => {
         onClose={() => setIsInputDialogOpen(false)}
         renderContent={renderContentWithInput}
       />
-      {isLoading && <CustomKGKLoader />}
+      {/* {isLoading && <CustomKGKLoader />} */}
       {subRoute === MatchSubRoutes.NEW_SEARCH ||
       // currentPath === Routes.MATCHING_PAIR ||
       editRoute === MatchSubRoutes.SAVED_SEARCH ||
@@ -378,6 +378,7 @@ const MatchingPair = () => {
           setIsLoading={setIsLoading}
           setIsAddDemand={setIsAddDemand}
           isMatchingPair={true}
+          isLoading={isLoading}
         />
       ) : subRoute === MatchSubRoutes.SAVED_SEARCH ? (
         <SavedSearch setIsLoading={setIsLoading} />

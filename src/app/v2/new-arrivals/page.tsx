@@ -723,7 +723,7 @@ const NewArrivals = () => {
 
   return (
     <div className="mb-[4px] relative">
-      {isLoading && <CustomKGKLoader />}
+      {/* {isLoading && <CustomKGKLoader />} */}
       {isError && (
         <Toast show={isError} message={errorText} isSuccess={false} />
       )}
@@ -808,6 +808,7 @@ const NewArrivals = () => {
               setIsLoading={setIsLoading}
               setIsAddDemand={setIsAddDemand}
               isMatchingPair={false}
+              isLoading={isLoading}
             />
           ) : (
             <>

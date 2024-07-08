@@ -343,7 +343,7 @@ const Search = () => {
         onClose={() => setIsInputDialogOpen(false)}
         renderContent={renderContentWithInput}
       />
-      {isLoading && <CustomKGKLoader />}
+      {/* {isLoading && <CustomKGKLoader />} */}
       {subRoute === SubRoutes.NEW_SEARCH ||
       editRoute === SubRoutes.SAVED_SEARCH ||
       editRoute === SubRoutes.RESULT ? (
@@ -367,6 +367,7 @@ const Search = () => {
           setIsLoading={setIsLoading}
           setIsAddDemand={setIsAddDemand}
           isMatchingPair={false}
+          isLoading={isLoading}
         />
       ) : subRoute === SubRoutes.SAVED_SEARCH ? (
         <SavedSearch setIsLoading={setIsLoading} />
