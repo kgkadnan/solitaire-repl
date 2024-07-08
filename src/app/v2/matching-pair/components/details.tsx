@@ -376,6 +376,7 @@ export function MatchPairDetails({
 
     return [...originalData, ...newProducts];
   };
+  console.log(allImages, 'allImages');
   return (
     <div className="text-black bg-neutral25 rounded-[8px] w-[calc(100vw-116px)] h-[calc(100vh-140px)]">
       <Toast
@@ -677,21 +678,48 @@ export function MatchPairDetails({
                       <div className="flex justify-around">
                         {activePreviewTab === 'Video' ||
                         activePreviewTab === 'B2B Sparkle' ? (
-                          <iframe
-                            src={
-                              allImages[index].filter(
-                                (data: any) =>
-                                  data.category === activePreviewTab
-                              )[0].url
-                            }
-                            className={`${
-                              originalData.length > 2
-                                ? originalData.length > 5
-                                  ? 'w-[240px] h-[360px]'
-                                  : 'w-[285px] h-[305px]'
-                                : 'w-[370px] h-[370px]'
-                            } `}
-                          />
+                          allImages[index].filter(
+                            (data: any) => data.category === activePreviewTab
+                          )[0].url_check ? (
+                            <iframe
+                              src={
+                                allImages[index].filter(
+                                  (data: any) =>
+                                    data.category === activePreviewTab
+                                )[0].url
+                              }
+                              className={`${
+                                originalData.length > 2
+                                  ? originalData.length > 5
+                                    ? 'w-[240px] h-[360px]'
+                                    : 'w-[285px] h-[305px]'
+                                  : 'w-[370px] h-[370px]'
+                              } `}
+                            />
+                          ) : (
+                            <img
+                              src={NoImageFound}
+                              alt={'Video'}
+                              width={
+                                originalData.length > 2
+                                  ? originalData.length > 5
+                                    ? 185
+                                    : 290
+                                  : 350
+                              }
+                              height={
+                                originalData.length > 2
+                                  ? originalData.length > 5
+                                    ? 175
+                                    : 320
+                                  : 400
+                              }
+                              className="object-contain"
+                              onError={e => {
+                                handleImageError(e);
+                              }}
+                            />
+                          )
                         ) : activePreviewTab === 'Certificate' ? (
                           <img
                             src={filteredImages[index][imageIndex].url}
