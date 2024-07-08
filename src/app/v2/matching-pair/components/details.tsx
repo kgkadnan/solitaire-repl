@@ -61,7 +61,8 @@ export function MatchPairDetails({
   setRowSelection,
   setSimilarData,
   similarData,
-  rowSelection
+  rowSelection,
+  isLoading
 }: {
   data: any;
   filterData: any;
@@ -74,6 +75,7 @@ export function MatchPairDetails({
   setSimilarData: any;
   similarData: any;
   rowSelection: any;
+  isLoading: boolean;
 }) {
   const router = useRouter();
 
@@ -438,6 +440,8 @@ export function MatchPairDetails({
               activePreviewTab={activePreviewTab}
               setImageIndex={setImageIndex}
               isMatchingPair={true}
+              setIsLoading={setIsLoading}
+              isLoading={isLoading}
             />
           </div>
           <div className="flex  justify-center xl:justify-end mr-[10px] items-center">
@@ -643,8 +647,8 @@ export function MatchPairDetails({
               className={`${
                 originalData.length > 2
                   ? // ? originalData.length > 5
-                    'h-[350px] '
-                  : // : 'h-[350px]  '
+                    'h-[370px] '
+                  : // : 'h-[370px]  '
                     'h-[420px]'
               }  items-center flex px-4 border-[0.5px] border-neutral200 bg-neutral50`}
             >
@@ -673,7 +677,7 @@ export function MatchPairDetails({
                   ? // originalData.length > 5
                     //   ? 'h-[360px] '
                     //   :
-                    'h-[350px] '
+                    'h-[370px] '
                   : 'h-[420px]'
               } `}
             >
@@ -697,7 +701,7 @@ export function MatchPairDetails({
                           ? // originalData.length > 5
                             //   ? 'h-[360px]'
                             //   :
-                            'h-[350px]'
+                            'h-[370px]'
                           : 'h-[420px]'
                       } flex flex-col justify-between border-[0.5px]  border-neutral200 bg-neutral0 p-2 gap-[10px]`}
                     >
@@ -720,7 +724,7 @@ export function MatchPairDetails({
                                     //   ? 'w-[240px] h-[360px]'
                                     //   :
                                     'w-[285px] h-[305px]'
-                                  : 'w-[370px] h-[370px]'
+                                  : 'w-[370px] h-[360px]'
                               } `}
                             />
                           ) : (
@@ -759,7 +763,7 @@ export function MatchPairDetails({
                                   //   ? 200
                                   //   :
                                   200
-                                : 270
+                                : 250
                             }
                             height={
                               originalData.length > 2
