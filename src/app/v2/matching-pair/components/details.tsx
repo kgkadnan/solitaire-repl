@@ -32,7 +32,6 @@ import {
 } from '../../search/interface';
 import { useLazyGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
 import CheckboxComponent from '@/components/v2/common/checkbox';
-import { useCheckboxStateManagement } from '@/components/v2/common/checkbox/hooks/checkbox-state-management';
 import Media from '@public/v2/assets/icons/detail-page/expand.svg?url';
 import DownloadImg from '@public/v2/assets/icons/detail-page/download.svg?url';
 import forwardArrow from '@public/v2/assets/icons/arrow-forward.svg';
@@ -61,7 +60,8 @@ export function MatchPairDetails({
   handleDetailImage,
   setRowSelection,
   setSimilarData,
-  similarData
+  similarData,
+  rowSelection
 }: {
   data: any;
   filterData: any;
@@ -73,6 +73,7 @@ export function MatchPairDetails({
   setRowSelection: any;
   setSimilarData: any;
   similarData: any;
+  rowSelection: any;
 }) {
   const router = useRouter();
 
@@ -93,9 +94,6 @@ export function MatchPairDetails({
   const [, setZoomPosition] = useState({ x: 0, y: 0 });
   const [breadCrumMatchPair, setBreadCrumMatchPair] = useState('');
   const [viewSimilar, setViewSimilar] = useState<boolean>(false);
-  const { checkboxState, checkboxSetState } = useCheckboxStateManagement();
-  const { selectedCheckboxes } = checkboxState;
-  const { setSelectedCheckboxes } = checkboxSetState;
   const [triggerColumn] =
     useLazyGetManageListingSequenceQuery<IManageListingSequenceResponse>();
   const [triggerSimilarMatchingPairApi] = useLazyGetSimilarMatchingPairQuery();
@@ -242,14 +240,14 @@ export function MatchPairDetails({
   // }, [validImages]);
 
   const handleDownloadExcel = () => {
-    if (selectedCheckboxes.length > 0) {
+    if (Object.keys(rowSelection).length > 0) {
       downloadExcelHandler({
-        products: selectedCheckboxes,
+        products: Object.keys(rowSelection),
         downloadExcelApi: downloadExcel,
         modalSetState,
         router,
-        setIsLoading: setIsLoading,
-        fromMatchingPair: true
+        setIsLoading: setIsLoading
+        // fromMatchingPair: true
       });
     } else {
       setShowToast(true);
@@ -263,14 +261,13 @@ export function MatchPairDetails({
       originalData.length > 2 ? (originalData.length > 5 ? 185 : 300) : 350;
   };
   const handleClick = (id: string) => {
-    let updatedIsCheck = [...selectedCheckboxes];
+    let updatedIsCheck = [...Object.keys(rowSelection)];
 
     if (updatedIsCheck.includes(id)) {
       updatedIsCheck = updatedIsCheck.filter(item => item !== id);
     } else {
       updatedIsCheck.push(id);
     }
-    setSelectedCheckboxes(updatedIsCheck);
     setRowSelection(
       updatedIsCheck.reduce((acc: any, item: any) => {
         acc[item] = true;
@@ -538,8 +535,8 @@ export function MatchPairDetails({
                           <button
                             onClick={() => {
                               filteredImages.forEach((images: any) => {
-                                if (selectedCheckboxes.length > 0) {
-                                  selectedCheckboxes.includes(
+                                if (Object.keys(rowSelection).length > 0) {
+                                  Object.keys(rowSelection).includes(
                                     images[imageIndex].id
                                   ) &&
                                     handleDownloadImage(
@@ -595,7 +592,7 @@ export function MatchPairDetails({
               <div className="w-[38px] h-[38px]">
                 <Share
                   rows={originalData}
-                  selectedProducts={selectedCheckboxes.reduce(
+                  selectedProducts={Object.keys(rowSelection).reduce(
                     (acc: any, item: any) => {
                       acc[item] = true;
                       return acc;
@@ -747,7 +744,8 @@ export function MatchPairDetails({
                             onClick={() => handleClick(items.id)}
                             data-testid={'compare stone checkbox'}
                             isChecked={
-                              selectedCheckboxes.includes(items.id) || false
+                              Object.keys(rowSelection).includes(items.id) ||
+                              false
                             }
                           />
                         </div>
