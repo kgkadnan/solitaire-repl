@@ -758,7 +758,7 @@ export function MatchPairDetails({
                                 ? // originalData.length > 5
                                   //   ? 200
                                   //   :
-                                  250
+                                  200
                                 : 270
                             }
                             height={
