@@ -950,7 +950,11 @@ const Form = ({
       handler:
         // errorText === NO_STONE_FOUND ? () => {} : handleFormSearch
         isMatchingPair
-          ? handleMatchingPairSearch
+          ? minMaxError.length === 0 &&
+            errorText === NO_MATCHING_PAIRS_FOUND &&
+            isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
+            ? () => {}
+            : handleMatchingPairSearch
           : minMaxError.length === 0 &&
             errorText === NO_STONE_FOUND &&
             isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
