@@ -293,9 +293,9 @@ export function MatchPairDetails({
   const dataFormatting = (diamond: any, key: string) => {
     switch (key) {
       case 'amount':
-        return `$${formatNumberWithCommas(
-          diamond.variants[0].prices[0].amount
-        )}`;
+        return diamond.variants[0].prices[0].amount
+          ? `$${formatNumberWithCommas(diamond.variants[0].prices[0].amount)}`
+          : '-';
       case 'price_per_carat':
       case 'rap':
       case 'rap_value':
