@@ -299,7 +299,7 @@ export function MatchPairDetails({
       case 'price_per_carat':
       case 'rap':
       case 'rap_value':
-        return `$${formatNumberWithCommas(diamond[key])}`;
+        return diamond[key] ? `$${formatNumberWithCommas(diamond[key])}` : '-';
       case 'table_percentage':
       case 'carats':
       case 'depth_percentage':
@@ -314,9 +314,9 @@ export function MatchPairDetails({
       case 'pavilion_height':
       case 'lower_half':
       case 'star_length':
-        return `${formatNumber(diamond[key])}`;
+        return diamond[key] ? `${formatNumber(diamond[key])}` : '-';
       case 'discount':
-        return `${formatNumber(diamond[key])}%`;
+        return diamond[key] ? `${formatNumber(diamond[key])}%` : '-';
 
       case 'key_to_symbol':
       case 'report_comments':
