@@ -724,7 +724,7 @@ export function MatchPairDetails({
                                     //   ? 'w-[240px] h-[360px]'
                                     //   :
                                     'w-[285px] h-[305px]'
-                                  : 'w-[370px] h-[360px]'
+                                  : 'w-[350px] h-[360px]'
                               } `}
                             />
                           ) : (
