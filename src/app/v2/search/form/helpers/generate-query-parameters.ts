@@ -155,7 +155,9 @@ export const generateQueryParams = (state: IState) => {
     starLengthMin,
     selectedWhiteColor,
     selectedGirdle,
-    selectionChecked
+    selectionChecked,
+    caratMin,
+    caratMax
   } = state;
 
   // Initialize an empty object to store query parameters
@@ -184,9 +186,14 @@ export const generateQueryParams = (state: IState) => {
 
   if (
     (selectedCaratRange && selectedCaratRange.length > 0) ||
-    (caratRangeSelection && caratRangeSelection.length > 0)
+    (caratRangeSelection && caratRangeSelection.length > 0) ||
+    (caratMin && caratMin.length >= 0.15 && caratMax && caratMax.length <= 50)
   ) {
-    queryParams['carats'] = [...selectedCaratRange, ...caratRangeSelection];
+    queryParams['carats'] = [
+      ...selectedCaratRange,
+      ...caratRangeSelection,
+      ...[`${caratMin}-${caratMax}`]
+    ];
   }
 
   selectedCut?.length !== 0 && (queryParams['cut'] = selectedCut);
