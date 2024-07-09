@@ -365,7 +365,9 @@ const Form = ({
           setIsError(true);
           data?.count &&
             setErrorText(
-              `${data?.count} ${isMatchingPair ? 'pairs' : 'stones'} found`
+              `${data?.count} ${
+                isMatchingPair ? 'matching pairs' : 'stones'
+              } found`
             );
         } else {
           setIsError(false);
