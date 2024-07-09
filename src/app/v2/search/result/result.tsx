@@ -55,10 +55,9 @@ import {
 import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
 import {
   SELECT_STONE_TO_PERFORM_ACTION,
-  SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH
+  SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH
 } from '@/constants/error-messages/confirm-stone';
 import { NOT_MORE_THAN_300 } from '@/constants/error-messages/search';
-import { NO_STONES_AVAILABLE } from '@/constants/error-messages/compare-stone';
 import { NO_STONES_SELECTED } from '@/constants/error-messages/cart';
 import { useGetSavedSearchListQuery } from '@/features/api/saved-searches';
 import { ISavedSearch } from '../form/form';
@@ -68,8 +67,6 @@ import { AddCommentDialog } from '@/components/v2/common/comment-dialog';
 import { handleComment } from './helpers/handle-comment';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import fireSvg from '@public/v2/assets/icons/data-table/fire-icon.svg';
-import threeDotsSvg from '@public/v2/assets/icons/threedots.svg';
-import { Dropdown } from '@/components/v2/common/dropdown-menu';
 import { IItem } from '../saved-search/saved-search';
 import { IManageListingSequenceResponse, IProduct } from '../interface';
 import { DiamondDetailsComponent } from '@/components/v2/common/detail-page';
@@ -244,7 +241,7 @@ const Result = ({
           accessorKey: accessor,
           header: short_label,
           enableGlobalFilter: accessor === 'lot_id',
-          enableGrouping: accessor === 'shape',
+          // enableGrouping: accessor === 'shape',
           enableSorting:
             accessor !== 'shape_full' &&
             accessor !== 'details' &&
@@ -526,11 +523,11 @@ const Result = ({
       });
 
       if (hasMemoOut) {
-        setErrorText(NO_STONES_AVAILABLE);
+        setErrorText(SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH);
         setIsError(true);
       } else if (hasHold) {
         setIsError(true);
-        setErrorText(SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH);
+        setErrorText(SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH);
       } else {
         setShowAppointmentForm(true);
         triggerAvailableSlots({}).then(payload => {
@@ -663,116 +660,99 @@ const Result = ({
   };
 
   const handleAddToCartDetailPage = () => {
-    const hasMemoOut = dataTableState.rows.some(
-      (row: IProduct) =>
-        row.id === detailPageData.id && row.diamond_status === MEMO_STATUS
-    );
-    const hasHold = dataTableState.rows.some(
-      (row: IProduct) =>
-        row.id === detailPageData.id && row.diamond_status === HOLD_STATUS
-    );
+    setIsLoading(true);
+    // Extract variant IDs for selected stones
+    const variantIds = [detailPageData.id]
+      ?.map((_id: string) => {
+        const myCartCheck: IProduct | object =
+          dataTableState.rows.find((row: IProduct) => {
+            return row?.id === detailPageData.id;
+          }) ?? {};
 
-    if (hasMemoOut) {
-      setErrorText(NO_STONES_AVAILABLE);
-      setIsError(true);
-    } else if (hasHold) {
-      setIsError(true);
-      setErrorText(SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH);
-    } else {
-      setIsLoading(true);
-      // Extract variant IDs for selected stones
-      const variantIds = [detailPageData.id]
-        ?.map((_id: string) => {
-          const myCartCheck: IProduct | object =
-            dataTableState.rows.find((row: IProduct) => {
-              return row?.id === detailPageData.id;
-            }) ?? {};
+        if (myCartCheck && 'variants' in myCartCheck) {
+          return myCartCheck.variants[0]?.id;
+        }
+        return '';
+      })
+      .filter(Boolean);
 
-          if (myCartCheck && 'variants' in myCartCheck) {
-            return myCartCheck.variants[0]?.id;
-          }
-          return '';
-        })
-        .filter(Boolean);
-
-      // If there are variant IDs, add to the cart
-      if (variantIds.length) {
-        addCart({
-          variants: variantIds
-        })
-          .unwrap()
-          .then((res: any) => {
-            setIsLoading(false);
-            setIsDialogOpen(true);
-            setDialogContent(
-              <CommonPoppup
-                content={''}
-                status="success"
-                customPoppupBodyStyle="!mt-[70px]"
-                header={res?.message}
-                actionButtonData={[
-                  {
-                    variant: 'secondary',
-                    label: ManageLocales('app.modal.continue'),
-                    handler: () => {
-                      setIsDialogOpen(false);
-                      setIsDetailPage(false);
-                    },
-                    customStyle: 'flex-1 w-full h-10'
+    // If there are variant IDs, add to the cart
+    if (variantIds.length) {
+      addCart({
+        variants: variantIds
+      })
+        .unwrap()
+        .then((res: any) => {
+          setIsLoading(false);
+          setIsDialogOpen(true);
+          setDialogContent(
+            <CommonPoppup
+              content={''}
+              status="success"
+              customPoppupBodyStyle="!mt-[70px]"
+              header={res?.message}
+              actionButtonData={[
+                {
+                  variant: 'secondary',
+                  label: ManageLocales('app.modal.continue'),
+                  handler: () => {
+                    setIsDialogOpen(false);
+                    setIsDetailPage(false);
                   },
-                  {
-                    variant: 'primary',
-                    label: 'Go to "My Cart"',
-                    handler: () => {
-                      router.push('/v2/my-cart');
-                    },
-                    customStyle: 'flex-1 w-full h-10'
-                  }
-                ]}
-              />
-            );
+                  customStyle: 'flex-1 w-full h-10'
+                },
+                {
+                  variant: 'primary',
+                  label: 'Go to "My Cart"',
+                  handler: () => {
+                    router.push('/v2/my-cart');
+                  },
+                  customStyle: 'flex-1 w-full h-10'
+                }
+              ]}
+            />
+          );
 
-            // On success, show confirmation dialog and update badge
-            setIsError(false);
+          // On success, show confirmation dialog and update badge
+          setIsError(false);
+          setErrorText('');
+          triggerProductApi({
+            url: searchUrl,
+            limit: LISTING_PAGE_DATA_LIMIT,
+            offset: 0
+          }).then(res => {
+            dataTableSetState.setRows(res.data?.products);
+            setRowSelection({});
             setErrorText('');
-            triggerProductApi({
-              url: searchUrl,
-              limit: LISTING_PAGE_DATA_LIMIT,
-              offset: 0
-            }).then(res => {
-              dataTableSetState.setRows(res.data?.products);
-              setRowSelection({});
-              setErrorText('');
-              setData(res.data);
-            });
-            dispatch(notificationBadge(true));
-          })
-          .catch(error => {
-            setIsLoading(false);
-            // On error, set error state and error message
-
-            setIsDialogOpen(true);
-            setDialogContent(
-              <CommonPoppup
-                content={''}
-                customPoppupBodyStyle="!mt-[70px]"
-                header={error?.data?.message}
-                actionButtonData={[
-                  {
-                    variant: 'primary',
-                    label: ManageLocales('app.modal.okay'),
-                    handler: () => {
-                      setIsDialogOpen(false);
-                    },
-                    customStyle: 'flex-1 w-full h-10'
-                  }
-                ]}
-              />
-            );
+            setData(res.data);
           });
-        // Clear the selected checkboxes
-        setRowSelection({});
-      }
+          dispatch(notificationBadge(true));
+        })
+        .catch(error => {
+          setIsLoading(false);
+          // On error, set error state and error message
+
+          setIsDialogOpen(true);
+          setDialogContent(
+            <CommonPoppup
+              content={''}
+              customPoppupBodyStyle="!mt-[70px]"
+              header={error?.data?.message}
+              actionButtonData={[
+                {
+                  variant: 'primary',
+                  label: ManageLocales('app.modal.okay'),
+                  handler: () => {
+                    setIsDialogOpen(false);
+                  },
+                  customStyle: 'flex-1 w-full h-10'
+                }
+              ]}
+            />
+          );
+        });
+      // Clear the selected checkboxes
+      setRowSelection({});
     }
   };
 
@@ -1083,7 +1063,7 @@ const Result = ({
 
   useEffect(() => {
     if (images.length > 0 && images[0].name.length)
-      loadImages(images, setValidImages, checkImage);
+      loadImages(images, setValidImages, checkImage, false);
   }, [detailImageData]);
 
   useEffect(() => {
@@ -1144,6 +1124,7 @@ const Result = ({
               height={'24px'}
               width={'336px'}
               animation="wave"
+              sx={{ bgcolor: 'var(--neutral-200)' }}
             />
           ) : (
             ManageLocales('app.result.headerResult')
@@ -1188,28 +1169,10 @@ const Result = ({
                       setErrorText,
                       setIsConfirmStone,
                       setConfirmStoneData,
-                      setIsDetailPage
+                      setIsDetailPage,
+                      identifier: 'detailPage'
                     });
                   }
-                }
-              ]}
-            />
-            <Dropdown
-              dropdownTrigger={
-                <Image
-                  src={threeDotsSvg}
-                  alt="threeDotsSvg"
-                  width={4}
-                  height={43}
-                />
-              }
-              dropdownMenu={[
-                {
-                  label: ManageLocales(
-                    'app.search.actionButton.findMatchingPair'
-                  ),
-                  handler: () => {},
-                  commingSoon: true
                 }
               ]}
             />

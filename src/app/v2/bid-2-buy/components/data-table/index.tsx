@@ -10,9 +10,9 @@ import CollapsIcon from '@public/v2/assets/icons/collapse-icon.svg?url';
 import ExportExcel from '@public/v2/assets/icons/detail-page/export-excel.svg?url';
 import Image from 'next/image';
 import searchIcon from '@public/v2/assets/icons/data-table/search-icon.svg';
-
+import FilterIcon from '@public/v2/assets/icons/new-arrivals/filter-icon.svg?url';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-
+import { faSort, faSortDown } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 import DisableDecrementIcon from '@public/v2/assets/icons/new-arrivals/disable-decrement.svg?url';
 import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
@@ -31,6 +31,11 @@ import { formatNumber } from '@/utils/fix-two-digit-number';
 import { handleDecrementDiscount } from '@/utils/v2/handle-decrement-discount';
 import { handleIncrementDiscount } from '@/utils/v2/handle-increment-discount';
 import { RenderBidToBuyLotIdColor } from '@/components/v2/common/data-table/helpers/render-cell';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import crossIcon from '@public/v2/assets/icons/new-arrivals/cross-icon.svg';
+import { SubRoutes } from '@/constants/v2/enums/routes';
+import { ManageLocales } from '@/utils/v2/translate';
+import { filterBidToBuyFunction } from '@/features/filter-bid-to-buy/filter-bid-to-buy-slice';
 
 const theme = createTheme({
   typography: {
@@ -45,8 +50,10 @@ const theme = createTheme({
     MuiTableCell: {
       styleOverrides: {
         root: {
-          // Default state for the badge inside the cell
+          // Default state for the badge inside the cell - sorting icon not visible by default
           '& .MuiBadge-root': {
+            width: '15px !important',
+            marginLeft: '-3px',
             visibility: 'hidden'
           },
           // Hover state for the cell
@@ -141,7 +148,7 @@ const theme = createTheme({
 export interface IBidValues {
   [key: string]: number;
 }
-const BidToByDataTable = ({
+const BidToBuyDataTable = ({
   columns,
   modalSetState,
   downloadExcel,
@@ -159,7 +166,10 @@ const BidToByDataTable = ({
   setRowSelection,
   setIsLoading,
   renderFooter,
-  router
+  router,
+  filterData,
+  setBid,
+  dispatch
 }: any) => {
   // Fetching saved search data
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -320,9 +330,58 @@ const BidToByDataTable = ({
           </div>
 
           <div className="flex gap-[12px]" style={{ alignItems: 'inherit' }}>
+            {activeTab === 0 && (
+              <div className="">
+                {filterData?.bidFilterData?.length > 0 ? (
+                  <button
+                    onClick={() => {
+                      router.push(
+                        `/v2/bid-2-buy?active-tab=${SubRoutes.BID_TO_BUY}`
+                      );
+                    }}
+                    className={`flex w-full shadow-sm justify-center py-[8px] h-[39px] px-[16px]  items-center font-medium  rounded-[4px] gap-1  border-[1px]  border-solid border-neutral200 text-mMedium  cursor-pointer  ${'bg-primaryMain text-neutral0 hover:bg-primaryHover'}`}
+                  >
+                    <FilterIcon stroke={`${'var(--neutral-0)'}`} />
+
+                    <p className="w-[60%]">
+                      {ManageLocales('app.modifyFilter')}
+                    </p>
+                    <div
+                      className="w-[17%] cursor-pointer"
+                      onClick={e => {
+                        e.stopPropagation();
+                        setBid(filterData.bidData);
+                        dispatch(filterBidToBuyFunction({}));
+                      }}
+                    >
+                      <Image src={crossIcon} alt="crossIcon" />
+                    </div>
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => {
+                      dispatch(
+                        filterBidToBuyFunction({
+                          bidData: rows
+                        })
+                      );
+                      router.push(
+                        `/v2/bid-2-buy?active-tab=${SubRoutes.BID_TO_BUY}`
+                      );
+                    }}
+                    className={`flex justify-center  shadow-sm py-[8px] h-[39px] px-[16px] items-center font-medium  rounded-[4px] gap-1  border-[1px]  border-solid border-neutral200 text-mMedium  cursor-pointer  ${'text-neutral900 bg-neutral0 hover:bg-neutral50'}`}
+                  >
+                    <FilterIcon stroke={`${'var(--neutral-900)'}`} />
+
+                    <p>{ManageLocales('app.applyFilter')}</p>
+                  </button>
+                )}
+              </div>
+            )}
             <MRT_GlobalFilterTextField
               table={table}
               autoComplete="false"
+              className="max-[1092px]:w-[110px]   max-[1160px]:w-[180px] max-xl:w-auto"
               sx={{
                 boxShadow: 'var(--input-shadow) inset',
                 border: 'none',
@@ -486,7 +545,7 @@ const BidToByDataTable = ({
     enableColumnFilters: false,
     // enablePagination: activeTab !== 2,
     enableStickyHeader: true,
-    enableGrouping: true,
+    enableGrouping: false,
     enableExpandAll: false,
     enableColumnDragging: false,
     groupedColumnMode: 'remove',
@@ -505,6 +564,22 @@ const BidToByDataTable = ({
     icons: {
       SearchIcon: () => (
         <Image src={searchIcon} alt={'searchIcon'} className="mr-[6px]" />
+      ),
+
+      ArrowDownwardIcon: (props: any) => (
+        <FontAwesomeIcon icon={faSortDown} {...props} width={8} height={8} />
+      ),
+      SyncAltIcon: (props: any) => (
+        <FontAwesomeIcon
+          icon={faSort}
+          {...props}
+          style={{ color: 'var(--neutral-400)' }}
+          className="transform !rotate-0 !pl-1"
+        />
+      ),
+
+      SortIcon: (props: any) => (
+        <FontAwesomeIcon icon={faSort} width={8} height={8} {...props} />
       )
     },
 
@@ -679,6 +754,11 @@ const BidToByDataTable = ({
             )
               ? '0px 6px'
               : '0px 4px',
+            textAlign:
+              cell.column.id === 'girdle_percentage'
+                ? 'center !important'
+                : 'left',
+
             height: '20px !important',
             fontSize: '12px !important',
             fontWeight: rowSelection[row.id] ? 500 : 400,
@@ -742,13 +822,21 @@ const BidToByDataTable = ({
         sx: {
           color: 'var(--neutral-700)',
           '&.MuiTableCell-root': {
-            padding: '0px 4px',
+            padding: ['discount', 'price_per_carat', 'rap'].includes(column.id)
+              ? '0px 6px'
+              : '0px 4px',
             background: 'var(--neutral-50)',
             opacity: 1,
             borderTop: '1px solid var(--neutral-200)',
             fontSize: '12px !important',
             fontWeight: 500,
-            paddingRight: ['location', 'lab'].includes(column.id) && '12px'
+            textAlign:
+              column.id === 'girdle_percentage' ? 'center !important' : 'left',
+            paddingRight: ['shape_full', 'location', 'details'].includes(
+              column.id
+            )
+              ? '12px'
+              : '0px'
           }
         }
       };
@@ -906,7 +994,7 @@ const BidToByDataTable = ({
                           inputMain: 'h-[54px]',
                           input: '!h-[30px]  text-sMedium'
                         }}
-                        value={bidValue}
+                        value={formatNumber(bidValue)}
                         onChange={e => {
                           const newValue = e.target.value;
                           if (newValue < row.original.discount) {
@@ -952,7 +1040,13 @@ const BidToByDataTable = ({
                     <ActionButton
                       actionButtonData={[
                         {
-                          variant: 'primary',
+                          variant:
+                            bidValue <=
+                            (activeTab === 1
+                              ? row.original.my_current_bid
+                              : row.original.discount)
+                              ? 'disable'
+                              : 'primary',
                           label: activeTab === 0 ? 'Add Bid' : 'Update Bid',
                           handler: () => {
                             if (!bidError) {
@@ -967,6 +1061,7 @@ const BidToByDataTable = ({
                                 );
                                 return; // Exit early, do not update bidValues
                               }
+
                               socketManager.emit('place_bidtobuy', {
                                 product_id: row.id,
                                 bid_value: bidValues[row.id]
@@ -980,6 +1075,11 @@ const BidToByDataTable = ({
                               setBidError('');
                             }
                           },
+                          isDisable:
+                            bidValue <=
+                            (activeTab === 1
+                              ? row.original.my_current_bid
+                              : row.original.discount),
                           customCtaStyle: '!h-[30px] !text-[12px]',
 
                           customStyle: 'flex-1 w-full h-[30px]'
@@ -1007,4 +1107,4 @@ const BidToByDataTable = ({
   );
 };
 
-export default BidToByDataTable;
+export default BidToBuyDataTable;

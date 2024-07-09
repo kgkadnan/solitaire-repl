@@ -8,13 +8,14 @@ import {
 import ExpandImg from '@public/v2/assets/icons/detail-page/expand.svg?url';
 import CollapsIcon from '@public/v2/assets/icons/collapse-icon.svg?url';
 import ExportExcel from '@public/v2/assets/icons/detail-page/export-excel.svg?url';
+import crossIcon from '@public/v2/assets/icons/new-arrivals/cross-icon.svg';
 import Image from 'next/image';
 import DisableDecrementIcon from '@public/v2/assets/icons/new-arrivals/disable-decrement.svg?url';
 import searchIcon from '@public/v2/assets/icons/data-table/search-icon.svg';
-
+import { faSort, faSortDown } from '@fortawesome/free-solid-svg-icons';
 // theme.js
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-
+import FilterIcon from '@public/v2/assets/icons/new-arrivals/filter-icon.svg?url';
 import { useEffect, useState } from 'react';
 
 import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
@@ -33,6 +34,10 @@ import { kycStatus } from '@/constants/enums/kyc';
 import { formatNumber } from '@/utils/fix-two-digit-number';
 import { handleIncrementDiscount } from '@/utils/v2/handle-increment-discount';
 import { handleDecrementDiscount } from '@/utils/v2/handle-decrement-discount';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ManageLocales } from '@/utils/v2/translate';
+import { SubRoutes } from '@/constants/v2/enums/routes';
+import { filterFunction } from '@/features/filter-new-arrival/filter-new-arrival-slice';
 
 const theme = createTheme({
   typography: {
@@ -47,11 +52,11 @@ const theme = createTheme({
     MuiTableCell: {
       styleOverrides: {
         root: {
-          // Default state for the badge inside the cell
+          // Default state for the badge inside the cell - sorting icon not visible by default
           '& .MuiBadge-root': {
-            visibility: 'hidden',
             width: '15px !important',
-            marginLeft: '-3px'
+            marginLeft: '-3px',
+            visibility: 'hidden'
           },
           // Hover state for the cell
           '&:hover .MuiBadge-root': {
@@ -163,7 +168,10 @@ const NewArrivalDataTable = ({
   setRowSelection,
   setIsLoading,
   renderFooter,
-  router
+  router,
+  filterData,
+  setBid,
+  dispatch
 }: any) => {
   // Fetching saved search data
 
@@ -309,9 +317,59 @@ const NewArrivalDataTable = ({
           </div>
 
           <div className="flex gap-[12px]" style={{ alignItems: 'inherit' }}>
+            {activeTab === 0 && (
+              <div className="">
+                {filterData?.bidFilterData?.length > 0 ? (
+                  <button
+                    onClick={() => {
+                      router.push(
+                        `/v2/new-arrivals?active-tab=${SubRoutes.NEW_ARRIVAL}`
+                      );
+                    }}
+                    className={`flex w-full  shadow-sm justify-center py-[8px] h-[39px] px-[16px]  items-center font-medium  rounded-[4px] gap-1  border-[1px]  border-solid border-neutral200 text-mMedium  cursor-pointer  ${'bg-primaryMain text-neutral0 hover:bg-primaryHover'}`}
+                  >
+                    <FilterIcon stroke={`${'var(--neutral-0)'}`} />
+
+                    <p className="w-[60%]">
+                      {ManageLocales('app.modifyFilter')}
+                    </p>
+                    <div
+                      className="w-[17%] cursor-pointer"
+                      onClick={e => {
+                        e.stopPropagation();
+                        setBid(filterData.bidData);
+                        dispatch(filterFunction({}));
+                      }}
+                    >
+                      <Image src={crossIcon} alt="crossIcon" />
+                    </div>
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => {
+                      dispatch(
+                        filterFunction({
+                          bidData: rows
+                        })
+                      );
+                      router.push(
+                        `/v2/new-arrivals?active-tab=${SubRoutes.NEW_ARRIVAL}`
+                      );
+                    }}
+                    className={`flex justify-center  shadow-sm py-[8px] h-[39px] px-[16px] items-center font-medium  rounded-[4px] gap-1  border-[1px]  border-solid border-neutral200 text-mMedium  cursor-pointer  ${'text-neutral900 bg-neutral0 hover:bg-neutral50'}`}
+                  >
+                    <FilterIcon stroke={`${'var(--neutral-900)'}`} />
+
+                    <p>{ManageLocales('app.applyFilter')}</p>
+                  </button>
+                )}
+              </div>
+            )}
+
             <MRT_GlobalFilterTextField
               table={table}
               autoComplete="false"
+              className="max-[1092px]:w-[110px]   max-[1160px]:w-[180px] max-xl:w-auto"
               sx={{
                 boxShadow: 'var(--input-shadow) inset',
                 border: 'none',
@@ -468,7 +526,7 @@ const NewArrivalDataTable = ({
     enableHiding: false,
     enableColumnFilters: false,
     enableStickyHeader: true,
-    enableGrouping: true,
+    enableGrouping: false,
     enableExpandAll: false,
     enableColumnDragging: false,
     groupedColumnMode: 'remove',
@@ -488,6 +546,22 @@ const NewArrivalDataTable = ({
     icons: {
       SearchIcon: () => (
         <Image src={searchIcon} alt={'searchIcon'} className="mr-[6px]" />
+      ),
+      ArrowDownwardIcon: (props: any) => (
+        <FontAwesomeIcon icon={faSortDown} {...props} width={8} height={8} />
+      ),
+
+      SyncAltIcon: (props: any) => (
+        <FontAwesomeIcon
+          icon={faSort}
+          {...props}
+          style={{ color: 'var(--neutral-400)' }}
+          className="transform !rotate-0 !pl-1"
+        />
+      ),
+
+      SortIcon: (props: any) => (
+        <FontAwesomeIcon icon={faSort} width={8} height={8} {...props} />
       )
     },
 
@@ -656,7 +730,11 @@ const NewArrivalDataTable = ({
         sx: {
           color: 'var(--neutral-900)',
           '&.MuiTableCell-root': {
-            padding: '0px 4px',
+            padding: ['discount', 'price_per_carat', 'rap', 'amount'].includes(
+              cell.column.id
+            )
+              ? '0px 6px'
+              : '0px 2px',
             fontSize: '12px !important',
             fontWeight: rowSelection[row.id] ? 500 : 400,
 
@@ -718,14 +796,24 @@ const NewArrivalDataTable = ({
         sx: {
           color: 'var(--neutral-700)',
           '&.MuiTableCell-root': {
-            padding: '0px 4px 0px 4px',
+            padding: ['discount', 'price_per_carat', 'rap', 'amount'].includes(
+              column.id
+            )
+              ? '0px 6px'
+              : '0px 2px',
             height: '20px',
             background: 'var(--neutral-50)',
             opacity: 1,
             borderTop: '1px solid var(--neutral-200)',
             fontSize: '12px !important',
             fontWeight: 500,
-            paddingRight: ['location', 'lab'].includes(column.id) && '12px'
+            textAlign:
+              column.id === 'girdle_percentage' ? 'center !important' : 'left',
+            paddingRight: ['shape_full', 'location', 'details'].includes(
+              column.id
+            )
+              ? '12px'
+              : '0px'
           }
         }
       };
@@ -815,7 +903,7 @@ const NewArrivalDataTable = ({
                     input:
                       '!bg-infoSurface !border-infoBorder !text-infoMain !h-[30px]  text-sMedium'
                   }}
-                  value={`${row.original.current_max_bid}%`}
+                  value={`${formatNumber(row.original.current_max_bid)}%`}
                   disabled
                 />
               </div>
@@ -890,7 +978,7 @@ const NewArrivalDataTable = ({
                           inputMain: 'h-[54px]',
                           input: '!h-[30px]  text-sMedium'
                         }}
-                        value={bidValue}
+                        value={formatNumber(bidValue)}
                         onChange={e => {
                           const newValue = e.target.value;
                           if (newValue < row.original.current_max_bid) {
@@ -945,7 +1033,11 @@ const NewArrivalDataTable = ({
                     <ActionButton
                       actionButtonData={[
                         {
-                          variant: 'primary',
+                          variant:
+                            bidValue <= row.original.current_max_bid
+                              ? 'disable'
+                              : 'primary',
+
                           label: activeTab === 0 ? 'Add Bid' : 'Update Bid',
                           handler: () => {
                             if (!bidError) {
@@ -955,10 +1047,12 @@ const NewArrivalDataTable = ({
                                 );
                                 return; // Exit early, do not update bidValues
                               }
+
                               socketManager.emit('place_bid', {
                                 product_id: row.id,
                                 bid_value: bidValues[row.id]
                               });
+
                               activeTab === 0 &&
                                 setRowSelection((prev: any) => {
                                   let prevRows = { ...prev };
@@ -968,6 +1062,7 @@ const NewArrivalDataTable = ({
                               setBidError('');
                             }
                           },
+                          isDisable: bidValue <= row.original.current_max_bid,
                           customStyle: 'flex-1 w-full h-[30px] text-sMedium',
                           customCtaStyle: '!h-[30px] !text-[12px]'
                         }

@@ -2,7 +2,13 @@
 
 import AnchorLinkNavigation from '@/components/v2/common/anchor-tag-navigation';
 import { anchor } from '@/constants/v2/form';
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import React, {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState
+} from 'react';
 import { Shape } from './components/shape';
 import { Carat } from './components/carat';
 import { Color } from './components/color';
@@ -36,6 +42,8 @@ import {
 } from '@/constants/business-logic';
 import {
   EXCEEDS_LIMITS,
+  EXCEEDS_LIMITS_MATCHING_PAIR,
+  NO_MATCHING_PAIRS_FOUND,
   NO_STONE_FOUND,
   SELECT_SOME_PARAM,
   SOMETHING_WENT_WRONG
@@ -49,7 +57,7 @@ import {
   useUpdateSavedSearchMutation
 } from '@/features/api/saved-searches';
 import Breadcrum from '@/components/v2/common/search-breadcrum/breadcrum';
-import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
+import { MatchSubRoutes, Routes, SubRoutes } from '@/constants/v2/enums/routes';
 import BinIcon from '@public/v2/assets/icons/bin.svg';
 import Image from 'next/image';
 import { InputDialogComponent } from '@/components/v2/common/input-dialog';
@@ -60,6 +68,18 @@ import { isSearchAlreadyExist } from '../saved-search/helpers/handle-card-click'
 import { constructUrlParams } from '@/utils/v2/construct-url-params';
 import CommonPoppup from '../../login/component/common-poppup';
 import { kycStatus } from '@/constants/enums/kyc';
+import { useLazyGetMatchingPairCountQuery } from '@/features/api/match-pair';
+import { useAppDispatch } from '@/hooks/hook';
+import { useSharePageEventMutation } from '@/features/api/track-page';
+import {
+  resetTimeTracking,
+  setEndTime,
+  setIsSuccess
+} from '@/features/track-page-event/track-page-event-slice';
+import { filterFunction } from '@/features/filter-new-arrival/filter-new-arrival-slice';
+import { parseQueryString } from './helpers/parse-query-string';
+import { filterBidData } from './helpers/filter-bid-data';
+import { filterBidToBuyFunction } from '@/features/filter-bid-to-buy/filter-bid-to-buy-slice';
 
 export interface ISavedSearch {
   saveSearchName: string;
@@ -84,13 +104,15 @@ const Form = ({
   addSearches,
   setAddSearches,
   setIsLoading,
-  setIsAddDemand
+  setIsAddDemand,
+  isMatchingPair = false,
+  isLoading
 }: {
-  searchUrl: String;
+  searchUrl: string;
   setSearchUrl: Dispatch<SetStateAction<string>>;
   activeTab: number;
   setActiveTab: Dispatch<SetStateAction<number>>;
-  searchParameters: any;
+  searchParameters?: any;
   handleCloseAllTabs: () => void;
   handleCloseSpecificTab: (_id: number) => void;
   state: any;
@@ -100,10 +122,12 @@ const Form = ({
   errorSetState: any;
   setIsDialogOpen: any;
   setDialogContent: any;
-  addSearches: any;
-  setAddSearches: any;
+  addSearches?: any;
+  setAddSearches?: any;
   setIsLoading: any;
   setIsAddDemand: Dispatch<SetStateAction<boolean>>;
+  isMatchingPair: boolean;
+  isLoading: boolean;
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -113,6 +137,20 @@ const Form = ({
   const savedSearch: any = useAppSelector(
     (store: { savedSearch: any }) => store.savedSearch
   );
+
+  const { startTime, endTime } = useAppSelector(
+    state => state.pageTimeTracking
+  );
+
+  const newArrivalFilterData = useAppSelector(state => state.filterNewArrival);
+  const bidToBuyFilterData = useAppSelector(state => state.filterBidToBuy);
+
+  const [isAllowedToUnload, setIsAllowedToUnload] = useState(true);
+  const isAllowedToUnloadRef = useRef(isAllowedToUnload);
+
+  const dispatch = useAppDispatch();
+
+  const [sharePageEvent] = useSharePageEventMutation();
 
   const [updateSavedSearch] = useUpdateSavedSearchMutation();
   let [addSavedSearch] = useAddSavedSearchMutation();
@@ -200,6 +238,7 @@ const Form = ({
   const [data, setData] = useState<any>();
   const [error, setError] = useState<any>();
   let [triggerProductCountApi] = useLazyGetProductCountQuery();
+  let [triggerMatchingPairCountApi] = useLazyGetMatchingPairCountQuery();
   // const { errorState, errorSetState } = useNumericFieldValidation();
 
   const { caratError, discountError, pricePerCaratError, amountRangeError } =
@@ -211,17 +250,83 @@ const Form = ({
     setAmountRangeError
   } = errorSetState;
 
+  // Sync useRef with useState
   useEffect(() => {
-    if (searchUrl.length > 0) {
+    isAllowedToUnloadRef.current = isAllowedToUnload;
+  }, [isAllowedToUnload]);
+
+  useEffect(() => {
+    const handleBeforeUnload = async () => {
+      if (isAllowedToUnloadRef.current && startTime && !endTime) {
+        const dropEndTime = new Date().toISOString();
+        dispatch(setEndTime(dropEndTime));
+        dispatch(setIsSuccess(false));
+        try {
+          await sharePageEvent({
+            startTime,
+            endTime: dropEndTime,
+            page: 'search',
+            is_success: false
+          });
+
+          dispatch(resetTimeTracking());
+        } catch (error) {
+          logger.error(`Error logging time on drop-off: ${error}`);
+        }
+      }
+    };
+
+    return () => {
+      handleBeforeUnload();
+    };
+  }, [startTime]);
+
+  useEffect(() => {
+    if (subRoute === SubRoutes.NEW_ARRIVAL) {
+      const query = parseQueryString(searchUrl);
+
+      const filteredData =
+        newArrivalFilterData?.bidData &&
+        filterBidData(newArrivalFilterData?.bidData, query);
+
+      setData({
+        count: filteredData.length,
+        products: filteredData
+      });
+
+      setError('');
+    } else if (subRoute === SubRoutes.BID_TO_BUY) {
+      const query = parseQueryString(searchUrl);
+
+      const filteredData =
+        bidToBuyFilterData?.bidData &&
+        filterBidData(bidToBuyFilterData?.bidData, query);
+
+      setData({
+        count: filteredData.length,
+        products: filteredData
+      });
+
+      setError('');
+    } else if (searchUrl.length > 0) {
       setIsLoading(true);
-      triggerProductCountApi({ searchUrl })
-        .unwrap()
-        .then((response: any) => {
-          setData(response), setError(''), setIsLoading(false);
-        })
-        .catch(e => {
-          setError(e), setIsLoading(false);
-        });
+      isMatchingPair
+        ? triggerMatchingPairCountApi({ searchUrl })
+            .unwrap()
+            .then((response: any) => {
+              setData(response), setError(''), setIsLoading(false);
+            })
+            .catch(e => {
+              setError(e), setIsLoading(false);
+            })
+        : triggerProductCountApi({ searchUrl })
+            .unwrap()
+            .then((response: any) => {
+              setData(response), setError(''), setIsLoading(false);
+            })
+            .catch(e => {
+              setError(e), setIsLoading(false);
+            });
     }
   }, [searchUrl]);
 
@@ -239,20 +344,31 @@ const Form = ({
     if (searchCount !== -1) {
       if (searchUrl) {
         if (
-          data?.count > MAX_SEARCH_FORM_COUNT &&
+          (isMatchingPair
+            ? data?.count > MAX_SEARCH_FORM_COUNT / 2
+            : data?.count > MAX_SEARCH_FORM_COUNT) &&
           data?.count > MIN_SEARCH_FORM_COUNT
         ) {
           setIsError(true);
-          setErrorText(EXCEEDS_LIMITS);
+          setErrorText(
+            isMatchingPair ? EXCEEDS_LIMITS_MATCHING_PAIR : EXCEEDS_LIMITS
+          );
           setMessageColor('dangerMain');
         } else if (data?.count === MIN_SEARCH_FORM_COUNT) {
           setIsError(true);
-          setErrorText(NO_STONE_FOUND);
+          setErrorText(
+            isMatchingPair ? NO_MATCHING_PAIRS_FOUND : NO_STONE_FOUND
+          );
           setMessageColor('dangerMain');
         } else if (data?.count !== MIN_SEARCH_FORM_COUNT) {
           setMessageColor('successMain');
           setIsError(true);
-          data?.count && setErrorText(`${data?.count} stones found`);
+          data?.count &&
+            setErrorText(
+              `${data?.count} ${
+                isMatchingPair ? 'matching pairs' : 'stones'
+              } found`
+            );
         } else {
           setIsError(false);
           setErrorText('');
@@ -275,11 +391,22 @@ const Form = ({
   // Load saved search data when component mounts
   useEffect(() => {
     setIsLoading(false);
-    let modifySearchResult = JSON.parse(localStorage.getItem('Search')!);
+    let modifySearchResult = JSON.parse(
+      isMatchingPair
+        ? localStorage.getItem('MatchingPair')!
+        : localStorage.getItem('Search')!
+    );
 
     let modifysavedSearchData = savedSearch?.savedSearch?.meta_data;
+    let newArrivalBidDataQuery = newArrivalFilterData.queryParams;
+    let bidToBuyBidDataQuery = bidToBuyFilterData.queryParams;
     setSelectedCaratRange([]);
-    if (
+
+    if (subRoute === SubRoutes.NEW_ARRIVAL && newArrivalBidDataQuery) {
+      setModifySearch(newArrivalBidDataQuery, setState);
+    } else if (subRoute === SubRoutes.BID_TO_BUY && bidToBuyBidDataQuery) {
+      setModifySearch(bidToBuyBidDataQuery, setState);
+    } else if (
       modifySearchFrom === `${SubRoutes.SAVED_SEARCH}` &&
       modifysavedSearchData
     ) {
@@ -303,7 +430,11 @@ const Form = ({
 
   useEffect(() => {
     let data: ISavedSearch[] | [] =
-      JSON.parse(localStorage.getItem('Search')!) || [];
+      JSON.parse(
+        isMatchingPair
+          ? localStorage.getItem('MatchingPair')!
+          : localStorage.getItem('Search')!
+      ) || [];
     if (data?.length > 0 && data[data?.length - 1]) {
       setAddSearches(data);
     }
@@ -311,17 +442,45 @@ const Form = ({
 
   // Reset form when a new search is initiated
   useEffect(() => {
-    if (subRoute === SubRoutes.NEW_SEARCH) {
+    if (
+      subRoute === SubRoutes.NEW_SEARCH ||
+      (subRoute === SubRoutes.NEW_ARRIVAL &&
+        !newArrivalFilterData.queryParams) ||
+      (subRoute === SubRoutes.BID_TO_BUY && !bidToBuyFilterData.queryParams)
+    ) {
       handleFormReset();
     }
   }, [subRoute]);
 
   const handleFormSearch = async (
     isSavedParams: boolean = false,
-    id?: string
+    id?: string,
+    formIdentifier = 'Search'
   ) => {
-    if (
-      JSON.parse(localStorage.getItem('Search')!)?.length >=
+    if (subRoute === SubRoutes.NEW_ARRIVAL) {
+      const queryParams = generateQueryParams(state);
+
+      dispatch(
+        filterFunction({
+          queryParams,
+          bidData: newArrivalFilterData.bidData,
+          bidFilterData: data?.products
+        })
+      );
+      router.push(`/v2/new-arrivals`);
+    } else if (subRoute === SubRoutes.BID_TO_BUY) {
+      const queryParams = generateQueryParams(state);
+
+      dispatch(
+        filterBidToBuyFunction({
+          queryParams,
+          bidData: bidToBuyFilterData.bidData,
+          bidFilterData: data?.products
+        })
+      );
+      router.push(`/v2/bid-2-buy`);
+    } else if (
+      JSON.parse(localStorage.getItem(formIdentifier)!)?.length >=
         MAX_SEARCH_TAB_LIMIT &&
       modifySearchFrom !== `${SubRoutes.RESULT}`
     ) {
@@ -344,7 +503,12 @@ const Form = ({
               variant: 'primary',
               label: ManageLocales('app.modal.manageTabs'),
               handler: () => {
-                router.push(`/v2/search?active-tab=${SubRoutes.RESULT}-1`);
+                formIdentifier === 'MatchingPair'
+                  ? router.push(
+                      `/v2/matching-pair?active-tab=${MatchSubRoutes.RESULT}-1`
+                    )
+                  : router.push(`/v2/search?active-tab=${SubRoutes.RESULT}-1`);
+
                 setIsDialogOpen(false);
               },
               customStyle: 'flex-1 h-10'
@@ -360,19 +524,25 @@ const Form = ({
       minMaxError.length === 0
     ) {
       if (
-        data?.count < MAX_SEARCH_FORM_COUNT &&
+        (formIdentifier === 'MatchingPair'
+          ? data?.count < MAX_SEARCH_FORM_COUNT / 2
+          : data?.count < MAX_SEARCH_FORM_COUNT) &&
         data?.count > MIN_SEARCH_FORM_COUNT
       ) {
         const queryParams = generateQueryParams(state);
 
-        if (modifySearchFrom === `${SubRoutes.SAVED_SEARCH}`) {
+        if (
+          modifySearchFrom === `${SubRoutes.SAVED_SEARCH}` ||
+          modifySearchFrom === `${MatchSubRoutes.SAVED_SEARCH}`
+        ) {
           if (savedSearch?.savedSearch?.meta_data) {
             let updatedMeta = queryParams;
 
             let updateSavedSearchData = {
               id: savedSearch.savedSearch.id,
               meta_data: updatedMeta,
-              diamond_count: parseInt(data?.count)
+              diamond_count: parseInt(data?.count),
+              is_matching_pair: isMatchingPair
             };
 
             updateSavedSearch(updateSavedSearchData).then(() => {
@@ -384,7 +554,7 @@ const Form = ({
                 queryParams
               };
               let localStorageData = JSON.parse(
-                localStorage.getItem('Search')!
+                localStorage.getItem(formIdentifier)!
               );
 
               let isAlreadyOpenIndex = isSearchAlreadyExist(
@@ -393,26 +563,43 @@ const Form = ({
               );
 
               if (isAlreadyOpenIndex >= 0 && isAlreadyOpenIndex !== null) {
-                router.push(
-                  `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
-                    isAlreadyOpenIndex + 1
-                  }`
-                );
+                formIdentifier === 'MatchingPair'
+                  ? router.push(
+                      `${Routes.MATCHING_PAIR}?active-tab=${SubRoutes.RESULT}-${
+                        isAlreadyOpenIndex + 1
+                      }`
+                    )
+                  : router.push(
+                      `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
+                        isAlreadyOpenIndex + 1
+                      }`
+                    );
               } else {
                 localStorage.setItem(
-                  'Search',
+                  formIdentifier,
                   JSON.stringify([...addSearches, setDataOnLocalStorage])
                 );
-                router.push(
-                  `/v2/search?active-tab=${SubRoutes.RESULT}-${
-                    JSON.parse(localStorage.getItem('Search')!).length
-                  }`
-                );
+                formIdentifier === 'MatchingPair'
+                  ? router.push(
+                      `/v2/matching-pair?active-tab=${MatchSubRoutes.RESULT}-${
+                        JSON.parse(localStorage.getItem(formIdentifier)!).length
+                      }`
+                    )
+                  : router.push(
+                      `/v2/search?active-tab=${SubRoutes.RESULT}-${
+                        JSON.parse(localStorage.getItem(formIdentifier)!).length
+                      }`
+                    );
               }
             });
           }
-        } else if (modifySearchFrom === `${SubRoutes.RESULT}`) {
-          let modifySearchResult = JSON.parse(localStorage.getItem('Search')!);
+        } else if (
+          modifySearchFrom === `${SubRoutes.RESULT}` ||
+          modifySearchFrom === `${MatchSubRoutes.RESULT}`
+        ) {
+          let modifySearchResult = JSON.parse(
+            localStorage.getItem(formIdentifier)!
+          );
           let setDataOnLocalStorage = {
             id: modifySearchResult[activeTab - 1]?.id || id,
             saveSearchName:
@@ -425,10 +612,17 @@ const Form = ({
           if (modifySearchResult[activeTab - 1]) {
             const updatedData = [...modifySearchResult];
             updatedData[activeTab - 1] = setDataOnLocalStorage;
-            localStorage.setItem('Search', JSON.stringify(updatedData));
+            localStorage.setItem(formIdentifier, JSON.stringify(updatedData));
           }
-          router.push(`/v2/search?active-tab=${SubRoutes.RESULT}-${activeTab}`);
+          formIdentifier === 'MatchingPair'
+            ? router.push(
+                `/v2/matching-pair?active-tab=${MatchSubRoutes.RESULT}-${activeTab}`
+              )
+            : router.push(
+                `/v2/search?active-tab=${SubRoutes.RESULT}-${activeTab}`
+              );
         } else {
+          setIsAllowedToUnload(false);
           let setDataOnLocalStorage = {
             id: id,
             saveSearchName: saveSearchName,
@@ -437,15 +631,35 @@ const Form = ({
             queryParams
           };
 
+          if (startTime && !endTime) {
+            const endTime = new Date().toISOString();
+            dispatch(setEndTime(endTime));
+            dispatch(setIsSuccess(true));
+            await sharePageEvent({
+              startTime,
+              endTime,
+              page: 'search',
+              is_success: true
+            });
+
+            dispatch(resetTimeTracking());
+          }
+
           localStorage.setItem(
-            'Search',
+            formIdentifier,
             JSON.stringify([...addSearches, setDataOnLocalStorage])
           );
-          router.push(
-            `/v2/search?active-tab=${SubRoutes.RESULT}-${
-              JSON.parse(localStorage.getItem('Search')!).length
-            }`
-          );
+          formIdentifier === 'MatchingPair'
+            ? router.push(
+                `/v2/matching-pair?active-tab=${MatchSubRoutes.RESULT}-${
+                  JSON.parse(localStorage.getItem(formIdentifier)!).length
+                }`
+              )
+            : router.push(
+                `/v2/search?active-tab=${SubRoutes.RESULT}-${
+                  JSON.parse(localStorage.getItem(formIdentifier)!).length
+                }`
+              );
         }
       } else {
         setIsError(true);
@@ -455,11 +669,13 @@ const Form = ({
       setErrorText(SELECT_SOME_PARAM);
     }
   };
-
+  const handleMatchingPairSearch = () => {
+    handleFormSearch(false, '', 'MatchingPair');
+  };
   // Function: Save and search
-  const handleSaveAndSearch: any = async () => {
+  const handleSaveAndSearch: any = async (formIdentifier = 'Search') => {
     if (
-      JSON.parse(localStorage.getItem('Search')!)?.length >=
+      JSON.parse(localStorage.getItem(formIdentifier)!)?.length >=
         MAX_SEARCH_TAB_LIMIT &&
       modifySearchFrom !== `${ManageLocales('app.search.resultRoute')}` &&
       modifySearchFrom !== `${SubRoutes.SAVED_SEARCH}`
@@ -483,8 +699,13 @@ const Form = ({
               variant: 'primary',
               label: ManageLocales('app.modal.manageTabs'),
               handler: () => {
-                router.push(`/v2/search?active-tab=${SubRoutes.RESULT}-1`);
                 setIsDialogOpen(false);
+
+                formIdentifier === 'MatchingPair'
+                  ? router.push(
+                      `/v2/matching-pair?active-tab=${SubRoutes.RESULT}-1`
+                    )
+                  : router.push(`/v2/search?active-tab=${SubRoutes.RESULT}-1`);
               },
               customStyle: 'flex-1 h-10'
             }
@@ -494,7 +715,9 @@ const Form = ({
       setIsDialogOpen(true);
     } else if (searchUrl && data?.count > MIN_SEARCH_FORM_COUNT) {
       if (
-        data?.count < MAX_SEARCH_FORM_COUNT &&
+        (formIdentifier === 'MatchingPair'
+          ? data?.count < MAX_SEARCH_FORM_COUNT / 2
+          : data?.count < MAX_SEARCH_FORM_COUNT) &&
         data?.count > MIN_SEARCH_FORM_COUNT
       ) {
         const queryParams = generateQueryParams(state);
@@ -508,11 +731,16 @@ const Form = ({
             let updateSavedData = {
               id: savedSearch.savedSearch.id,
               meta_data: updatedMeta,
-              diamond_count: parseInt(data?.count)
+              diamond_count: parseInt(data?.count),
+              is_matching_pair: isMatchingPair
             };
             updateSavedSearch(updateSavedData);
 
-            let localStorageData = JSON.parse(localStorage.getItem('Search')!);
+            let localStorageData = JSON.parse(
+              isMatchingPair
+                ? localStorage.getItem('MatchingPair')!
+                : localStorage.getItem('Search')!
+            );
 
             let isAlreadyOpenIndex = isSearchAlreadyExist(
               localStorageData,
@@ -530,12 +758,15 @@ const Form = ({
 
               const updatedData = [...localStorageData];
               updatedData[isAlreadyOpenIndex] = setDataOnLocalStorage;
-              localStorage.setItem('Search', JSON.stringify(updatedData));
+              localStorage.setItem(formIdentifier, JSON.stringify(updatedData));
             }
-
-            router.push(
-              `${Routes.SEARCH}?active-tab=${SubRoutes.SAVED_SEARCH}`
-            );
+            formIdentifier === 'MatchingPair'
+              ? router.push(
+                  `${Routes.MATCHING_PAIR}?active-tab=${SubRoutes.SAVED_SEARCH}`
+                )
+              : router.push(
+                  `${Routes.SEARCH}?active-tab=${SubRoutes.SAVED_SEARCH}`
+                );
           }
         } else if (activeSearch) {
           const updatedMeta = addSearches;
@@ -543,12 +774,15 @@ const Form = ({
           let updateSaveSearchData = {
             id: updatedMeta[activeTab - 1].id,
             meta_data: updatedMeta[activeTab - 1].queryParams,
-            diamond_count: parseInt(data?.count)
+            diamond_count: parseInt(data?.count),
+            is_matching_pair: isMatchingPair
           };
           updateSavedSearch(updateSaveSearchData)
             .unwrap()
             .then(() => {
-              handleFormSearch(true);
+              isMatchingPair
+                ? handleFormSearch(true, '', 'MatchingPair')
+                : handleFormSearch(true);
             })
             .catch((error: any) => {
               logger.error(error);
@@ -558,11 +792,14 @@ const Form = ({
             name: saveSearchName,
             diamond_count: parseInt(data?.count),
             meta_data: queryParams,
-            is_deleted: false
+            is_deleted: false,
+            is_matching_pair: isMatchingPair
           })
             .unwrap()
             .then((res: any) => {
-              handleFormSearch(true, res.id);
+              isMatchingPair
+                ? handleFormSearch(true, res.id, 'MatchingPair')
+                : handleFormSearch(true, res.id);
             })
             .catch((error: any) => {
               setInputError(error.data.message);
@@ -663,7 +900,9 @@ const Form = ({
       handler: () => {
         if (searchUrl) {
           if (
-            data?.count < MAX_SEARCH_FORM_COUNT &&
+            (isMatchingPair
+              ? data?.count < MAX_SEARCH_FORM_COUNT / 2
+              : data?.count < MAX_SEARCH_FORM_COUNT) &&
             data?.count > MIN_SEARCH_FORM_COUNT
           ) {
             if (activeTab !== undefined) {
@@ -674,11 +913,11 @@ const Form = ({
                 addSearches[activeTab - 1]?.isSavedSearch;
               // Check if the active search is not null and isSavedSearch is true
               if (modifySearchFrom === `${SubRoutes.SAVED_SEARCH}`) {
-                handleSaveAndSearch();
+                handleSaveAndSearch(isMatchingPair && 'MatchingPair');
               } else if (isSaved) {
-                handleSaveAndSearch();
+                handleSaveAndSearch(isMatchingPair && 'MatchingPair');
               } else if (!isSaved && isSearchName) {
-                handleSaveAndSearch();
+                handleSaveAndSearch(isMatchingPair && 'MatchingPair');
               } else {
                 searchUrl && setIsInputDialogOpen(true);
               }
@@ -691,27 +930,37 @@ const Form = ({
           setIsError(true);
           setErrorText(SELECT_SOME_PARAM);
         }
-      }
+      },
+      isHidden:
+        subRoute === SubRoutes.NEW_ARRIVAL || subRoute === SubRoutes.BID_TO_BUY
     },
     {
       variant: 'primary',
       label:
         // 'Search',
         `${
-          minMaxError.length === 0 &&
-          errorText === NO_STONE_FOUND &&
-          isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
+          isMatchingPair
+            ? 'Search'
+            : minMaxError.length === 0 &&
+              errorText === NO_STONE_FOUND &&
+              isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
             ? 'Add Demand'
             : 'Search'
         } `,
       handler:
         // errorText === NO_STONE_FOUND ? () => {} : handleFormSearch
-
-        minMaxError.length === 0 &&
-        errorText === NO_STONE_FOUND &&
-        isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
+        isMatchingPair
+          ? minMaxError.length === 0 &&
+            errorText === NO_MATCHING_PAIRS_FOUND &&
+            isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
+            ? () => {}
+            : handleMatchingPairSearch
+          : minMaxError.length === 0 &&
+            errorText === NO_STONE_FOUND &&
+            isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
           ? handleAddDemand
-          : handleFormSearch
+          : handleFormSearch,
+      isLoading: isLoading
     }
   ];
 
@@ -781,7 +1030,8 @@ const Form = ({
                   if (!saveSearchName.length) {
                     setInputError('Please enter name');
                   } else {
-                    !inputError.length && handleSaveAndSearch();
+                    !inputError.length &&
+                      handleSaveAndSearch(isMatchingPair && 'MatchingPair');
                   }
                 },
                 customStyle: 'flex-1 h-10'
@@ -802,11 +1052,18 @@ const Form = ({
       <div>
         <div className="py-2">
           <span className="text-neutral900 text-lRegular font-medium grid gap-[24px]">
-            Search for Diamonds
+            Search for{' '}
+            {subRoute === SubRoutes.NEW_ARRIVAL
+              ? 'New Arrivals'
+              : subRoute === SubRoutes.BID_TO_BUY
+              ? 'Bid To Buy'
+              : isMatchingPair
+              ? 'Match Pair'
+              : 'Diamonds'}
           </span>
         </div>
         <div className="flex flex-col gap-[16px]">
-          {searchParameters.length > 0 ? (
+          {searchParameters?.length > 0 ? (
             <div className="flex justify-between border-[1px] border-neutral200  px-[16px] py-[8px]">
               <div className="flex gap-[12px] flex-wrap ">
                 <Breadcrum
@@ -815,6 +1072,7 @@ const Form = ({
                   setActiveTab={setActiveTab}
                   handleCloseSpecificTab={handleCloseSpecificTab}
                   setIsLoading={setIsLoading}
+                  isMatchingPair={isMatchingPair}
                 />
               </div>
               <div className="pr-[2px] flex gap-[12px]  justify-end flex-wrap">
@@ -954,9 +1212,10 @@ const Form = ({
                   minMaxError.length > 0 ? 'dangerMain' : messageColor
                 } pl-[8px]`}
               >
-                {minMaxError.length
-                  ? minMaxError
-                  : !isValidationError && errorText}
+                {!isLoading &&
+                  (minMaxError.length
+                    ? minMaxError
+                    : !isValidationError && errorText)}
               </span>
             </div>
           )}

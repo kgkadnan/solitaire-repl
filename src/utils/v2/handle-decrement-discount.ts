@@ -10,8 +10,8 @@ export const handleDecrementDiscount = (
     // Calculate the new bid value
     const newBidValue =
       currentBidValue !== undefined
-        ? Number(currentBidValue) - 0.5
-        : Number(currentMaxBid) - 0.5;
+        ? Number(currentBidValue) - 0.25
+        : Number(currentMaxBid) - 0.25;
 
     // Check if the new bid value is less than or equal to currentMaxBid
     if (newBidValue >= currentMaxBid) {

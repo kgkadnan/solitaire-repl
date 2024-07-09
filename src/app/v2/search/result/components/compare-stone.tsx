@@ -37,7 +37,8 @@ const CompareStone = ({
   setDialogContent,
   setIsConfirmStone,
   setConfirmStoneData,
-  setIsDetailPage
+  setIsDetailPage,
+  isMatchingPair = false
 }: any) => {
   const [mappingColumn, setMappingColumn] = useState<any>({});
 
@@ -55,7 +56,9 @@ const CompareStone = ({
     if (isFrom.length) {
       setBreadCrumLabel(isFrom);
     } else {
-      const storedSelection = localStorage.getItem('Search');
+      const storedSelection = isMatchingPair
+        ? localStorage.getItem('MatchingPair')
+        : localStorage.getItem('Search');
 
       if (!storedSelection) return;
 

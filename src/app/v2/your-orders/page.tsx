@@ -599,6 +599,7 @@ const MyDiamonds = () => {
               height={'24px'}
               width={'92px'}
               animation="wave"
+              sx={{ bgcolor: 'var(--neutral-200)' }}
             />
           ) : (
             ManageLocales('app.myDiamonds.yourOrders')

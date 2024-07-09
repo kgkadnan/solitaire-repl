@@ -1,9 +1,10 @@
 import { HOLD_STATUS, MEMO_STATUS } from '@/constants/business-logic';
+
 import {
-  SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH,
-  SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH
+  SELECT_STONE_TO_PERFORM_ACTION,
+  SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH,
+  STONE_NOT_AVAILABLE
 } from '@/constants/error-messages/confirm-stone';
-import { SELECT_STONE_TO_PERFORM_ACTION } from '@/constants/error-messages/confirm-stone';
 import { Dispatch, SetStateAction } from 'react';
 import { IProduct } from '../../interface';
 
@@ -26,6 +27,7 @@ interface IHandleConfirmStone {
   setIsConfirmStone: Dispatch<SetStateAction<boolean>>;
   setConfirmStoneData: Dispatch<SetStateAction<IProduct[]>>;
   setIsDetailPage?: any;
+  identifier?: string;
 }
 export const handleConfirmStone = ({
   selectedRows,
@@ -34,7 +36,8 @@ export const handleConfirmStone = ({
   setIsError,
   setIsConfirmStone,
   setConfirmStoneData,
-  setIsDetailPage
+  setIsDetailPage,
+  identifier
 }: IHandleConfirmStone) => {
   let selectedIds = Object.keys(selectedRows);
   const hasMemoOut = selectedIds?.some(id => {
@@ -50,11 +53,19 @@ export const handleConfirmStone = ({
   });
 
   if (hasMemoOut) {
-    setErrorText(SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH);
+    setErrorText(
+      identifier === 'detailPage'
+        ? STONE_NOT_AVAILABLE
+        : SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH
+    );
     setIsError(true);
   } else if (hasHold) {
     setIsError(true);
-    setErrorText(SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH);
+    setErrorText(
+      identifier === 'detailPage'
+        ? STONE_NOT_AVAILABLE
+        : SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH
+    );
   } else if (selectedIds?.length) {
     setIsError(false);
     setIsConfirmStone(true);

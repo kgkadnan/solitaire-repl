@@ -57,6 +57,7 @@ import ImageModal from '@/components/v2/common/detail-page/components/image-moda
 import { FILE_URLS } from '@/constants/v2/detail-page';
 import { getShapeDisplayName } from '@/utils/v2/detail-page';
 import DataTable from '@/components/v2/common/data-table';
+import matchPairIcon from '@public/v2/assets/icons/match-pair-saved.svg';
 
 import Tooltip from '@/components/v2/common/tooltip';
 import {
@@ -92,11 +93,10 @@ import VolumeDiscount from '@/components/v2/common/volume-discount';
 import EmptyScreen from '@/components/v2/common/empty-screen';
 import emptyOrderSvg from '@public/v2/assets/icons/empty-order.svg';
 import empty from '@public/v2/assets/icons/saved-search/empty-screen-saved-search.svg';
-import { NO_STONES_AVAILABLE } from '@/constants/error-messages/compare-stone';
 import { HOLD_STATUS, MEMO_STATUS } from '@/constants/business-logic';
 import {
   SELECT_STONE_TO_PERFORM_ACTION,
-  SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH
+  SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH
 } from '@/constants/error-messages/confirm-stone';
 import { useLazyGetAvailableMyAppointmentSlotsQuery } from '@/features/api/my-appointments';
 import { IAppointmentPayload } from './my-appointments/page';
@@ -311,7 +311,7 @@ const Dashboard = () => {
           accessorKey: accessor,
           header: short_label,
           enableGlobalFilter: accessor === 'lot_id',
-          enableGrouping: accessor === 'shape',
+          // enableGrouping: accessor === 'shape',
           enableSorting: accessor !== 'shape_full' && accessor !== 'details',
           minSize: 5,
           maxSize: accessor === 'details' ? 100 : 200,
@@ -509,7 +509,7 @@ const Dashboard = () => {
     [searchColumn]
   );
 
-  const handleEdit = (stone: string) => {
+  const handleEdit = (stone: string, identifier = false) => {
     let savedSearchEditData = customerData?.customer?.saved_searches?.filter(
       (items: any) => {
         return items.id === stone;
@@ -518,9 +518,13 @@ const Dashboard = () => {
 
     dispatch(modifySavedSearch({ savedSearch: savedSearchEditData[0] }));
 
-    router.push(
-      `${Routes.SEARCH}?active-tab=${SubRoutes.SAVED_SEARCH}&edit=${SubRoutes.SAVED_SEARCH}`
-    );
+    identifier
+      ? router.push(
+          `${Routes.MATCHING_PAIR}?active-tab=${SubRoutes.SAVED_SEARCH}&edit=${SubRoutes.SAVED_SEARCH}`
+        )
+      : router.push(
+          `${Routes.SEARCH}?active-tab=${SubRoutes.SAVED_SEARCH}&edit=${SubRoutes.SAVED_SEARCH}`
+        );
   };
 
   const column = [
@@ -1107,9 +1111,9 @@ const Dashboard = () => {
       });
 
       if (hasMemoOut) {
-        setError(NO_STONES_AVAILABLE);
+        setError(SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH);
       } else if (hasHold) {
-        setError(SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH);
+        setError(SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH);
       } else {
         setShowAppointmentForm(true);
         triggerAvailableSlots({}).then(payload => {
@@ -1379,7 +1383,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (images?.length > 0 && images[0]?.name?.length)
-      loadImages(images, setValidImages, checkImage);
+      loadImages(images, setValidImages, checkImage, false);
   }, [detailImageData]);
 
   useEffect(() => {
@@ -1507,7 +1511,8 @@ const Dashboard = () => {
                       setErrorText: setError,
                       setIsConfirmStone,
                       setConfirmStoneData,
-                      setIsDetailPage: setIsDiamondDetail
+                      setIsDetailPage: setIsDiamondDetail,
+                      identifier: 'detailPage'
                     });
                   }
                 }
@@ -1526,13 +1531,6 @@ const Dashboard = () => {
                 {
                   label: ManageLocales(
                     'app.search.actionButton.bookAppointment'
-                  ),
-                  handler: () => {},
-                  commingSoon: true
-                },
-                {
-                  label: ManageLocales(
-                    'app.search.actionButton.findMatchingPair'
                   ),
                   handler: () => {},
                   commingSoon: true
@@ -1730,6 +1728,7 @@ const Dashboard = () => {
               ) : (
                 <Skeleton
                   width={720}
+                  sx={{ bgcolor: 'var(--neutral-200)' }}
                   variant="rectangular"
                   height={54}
                   animation="wave"
@@ -1749,6 +1748,7 @@ const Dashboard = () => {
                       >
                         <Skeleton
                           width={'100%'}
+                          sx={{ bgcolor: 'var(--neutral-200)' }}
                           height={97}
                           variant="rectangular"
                           animation="wave"
@@ -1812,6 +1812,7 @@ const Dashboard = () => {
                   <Skeleton
                     height={400}
                     width={'100%'}
+                    sx={{ bgcolor: 'var(--neutral-200)' }}
                     animation="wave"
                     variant="rectangular"
                     className="rounded-[4px]"
@@ -1959,6 +1960,7 @@ const Dashboard = () => {
                 <Skeleton
                   height={420}
                   width={'100%'}
+                  sx={{ bgcolor: 'var(--neutral-200)' }}
                   animation="wave"
                   variant="rectangular"
                   className="rounded-[4px]"
@@ -2000,7 +2002,8 @@ const Dashboard = () => {
                                 router,
                                 triggerProductCountApi,
                                 setDialogContent,
-                                setIsDialogOpen
+                                setIsDialogOpen,
+                                isMatchingPair: searchData.is_matching_pair
                               })
                             }
                           >
@@ -2021,6 +2024,21 @@ const Dashboard = () => {
                                 <div className="text-neutral700 font-regular text-sMedium">
                                   {formatCreatedAt(searchData.created_at)}
                                 </div>
+                                {searchData.is_matching_pair && (
+                                  <div
+                                    className="h-[20px] rounded-[2px] border-[1px] border-neutral200 px-[6px] py-[1px] text-neutral600 text-[10px] w-[90px] flex items-center justify-around"
+                                    style={{
+                                      background:
+                                        'linear-gradient(0deg, #EDF0F6 0%,  #FCFDFF 100%)'
+                                    }}
+                                  >
+                                    <Image
+                                      src={matchPairIcon}
+                                      alt="matchPairIcon"
+                                    />
+                                    Match Pair
+                                  </div>
+                                )}
                               </div>
                             </div>
                             <div className="w-full md:w-[60%] mt-4 md:mt-0">
@@ -2033,7 +2051,10 @@ const Dashboard = () => {
                               className="w-full md:w-[10%] flex justify-end items-start opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                               onClick={e => {
                                 e.stopPropagation();
-                                handleEdit(searchData.id);
+                                handleEdit(
+                                  searchData.id,
+                                  searchData.is_matching_pair
+                                );
                               }}
                             >
                               <Image src={editIcon} alt="editIcon" />
@@ -2066,6 +2087,7 @@ const Dashboard = () => {
                     height={420}
                     width={300}
                     animation="wave"
+                    sx={{ bgcolor: 'var(--neutral-200)' }}
                     variant="rectangular"
                     className="rounded-[4px]"
                   />
@@ -2102,6 +2124,7 @@ const Dashboard = () => {
                     width={'100%'}
                     variant="rectangular"
                     height={400}
+                    sx={{ bgcolor: 'var(--neutral-200)' }}
                     className="rounded-[4px]"
                   />
                 )}
@@ -2114,6 +2137,7 @@ const Dashboard = () => {
                     width={'100%'}
                     variant="rectangular"
                     height={400}
+                    sx={{ bgcolor: 'var(--neutral-200)' }}
                     className="rounded-[4px]"
                   />
                 ) : (

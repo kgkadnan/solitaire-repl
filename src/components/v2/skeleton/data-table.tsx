@@ -3,7 +3,7 @@ import { Skeleton } from '@mui/material';
 
 const DataTableSkeleton = ({ identifier }: { identifier?: 'myCart' }) => {
   // Adjust the number of rows and columns as needed or make them dynamic
-  const skeletonRows = Array.from({ length: 10 });
+  const skeletonRows = Array.from({ length: 15 });
   const skeletonCols = Array.from({ length: 15 });
   return (
     <div className="rounded-[4px]">
@@ -16,24 +16,28 @@ const DataTableSkeleton = ({ identifier }: { identifier?: 'myCart' }) => {
           <div className="flex gap-3">
             <Skeleton
               variant="rectangular"
+              sx={{ bgcolor: 'var(--neutral-200)' }}
               height={'19px'}
               width={'86px'}
               animation="wave"
             />
             <Skeleton
               variant="rectangular"
+              sx={{ bgcolor: 'var(--neutral-200)' }}
               height={'19px'}
               width={'86px'}
               animation="wave"
             />
             <Skeleton
               variant="rectangular"
+              sx={{ bgcolor: 'var(--neutral-200)' }}
               height={'19px'}
               width={'86px'}
               animation="wave"
             />
             <Skeleton
               variant="rectangular"
+              sx={{ bgcolor: 'var(--neutral-200)' }}
               height={'19px'}
               width={'86px'}
               animation="wave"
@@ -45,69 +49,135 @@ const DataTableSkeleton = ({ identifier }: { identifier?: 'myCart' }) => {
             <div>
               <Skeleton
                 variant="rectangular"
-                height={'19px'}
+                sx={{ bgcolor: 'var(--neutral-200)' }}
+                height={'38px'}
                 width={'137px'}
                 animation="wave"
               />
             </div>
-            <div className="flex gap-3">
+            <div className="flex gap-2">
               <Skeleton
                 variant="rectangular"
-                height={'19px'}
+                height={'38px'}
                 width={'137px'}
                 animation="wave"
+                sx={{ bgcolor: 'var(--neutral-200)' }}
               />
               <Skeleton
                 variant="rectangular"
-                height={'19px'}
+                height={'38px'}
                 width={'137px'}
                 animation="wave"
+                sx={{ bgcolor: 'var(--neutral-200)' }}
+              />
+
+              <Skeleton
+                variant="rectangular"
+                height={'38px'}
+                width={'38px'}
+                animation="wave"
+                sx={{ bgcolor: 'var(--neutral-200)' }}
               />
               <Skeleton
                 variant="rectangular"
-                height={'19px'}
-                width={'137px'}
+                height={'38px'}
+                width={'38px'}
                 animation="wave"
+                sx={{ bgcolor: 'var(--neutral-200)' }}
               />
             </div>
           </>
         )}
       </div>
       <div>
-        <div className="bg-[#E3E3E3] flex items-center h-[35px] px-2"></div>
-        <div className="h-[7px]"></div>
+        <div className="bg-neutral50 gap-2 flex items-center h-[28px] px-2">
+          {[1, 2, 3, 4, 5].map(data => {
+            return (
+              <div key={data}>
+                <Skeleton
+                  sx={{ bgcolor: 'var(--neutral-200)' }}
+                  variant="rectangular"
+                  height={'16px'}
+                  width={'100px'}
+                  animation="wave"
+                  className="w-full"
+                />
+              </div>
+            );
+          })}
+        </div>
+
         <div className="h-[51px] bg-neutral0 flex justify-between items-center px-2 border-y border-neutral200 ">
           <div>
             <Skeleton
               variant="rectangular"
-              height={'19px'}
-              width={'137px'}
+              sx={{ bgcolor: 'var(--neutral-200)' }}
+              height={'38px'}
+              width={'252px'}
               animation="wave"
             />
           </div>
+
           <div className="flex gap-3">
-            <Skeleton
-              variant="rectangular"
-              height={'19px'}
-              width={'137px'}
-              animation="wave"
-            />
-            <Skeleton
-              variant="rectangular"
-              height={'19px'}
-              width={'137px'}
-              animation="wave"
-            />
-            <Skeleton
-              variant="rectangular"
-              height={'19px'}
-              width={'137px'}
-              animation="wave"
-            />
+            <div className="flex gap-2">
+              {identifier !== 'myCart' ? (
+                <Skeleton
+                  variant="rectangular"
+                  height={'38px'}
+                  width={'137px'}
+                  animation="wave"
+                  sx={{ bgcolor: 'var(--neutral-200)' }}
+                />
+              ) : (
+                <></>
+              )}
+              <Skeleton
+                variant="rectangular"
+                height={'38px'}
+                width={'38px'}
+                animation="wave"
+                sx={{ bgcolor: 'var(--neutral-200)' }}
+              />
+              <Skeleton
+                variant="rectangular"
+                height={'38px'}
+                width={'38px'}
+                animation="wave"
+                sx={{ bgcolor: 'var(--neutral-200)' }}
+              />
+              <Skeleton
+                variant="rectangular"
+                height={'38px'}
+                width={'38px'}
+                animation="wave"
+                sx={{ bgcolor: 'var(--neutral-200)' }}
+              />
+            </div>
           </div>
         </div>
         <div className="overflow-auto h-[56vh]">
           <table className="min-w-full divide-y divide-transparent">
+            <thead>
+              <tr className="bg-neutral50 h-[28px] overflow-hidden border-b-[1px] border-neutral200">
+                {skeletonCols.map((_, rowIndex) => {
+                  return (
+                    <th
+                      key={rowIndex}
+                      className="py-1 px-2 whitespace-nowrap hidden sm:table-cell"
+                    >
+                      <Skeleton
+                        sx={{ bgcolor: 'var(--neutral-200)' }}
+                        variant="rectangular"
+                        height={'16px'}
+                        width={'73px'}
+                        animation="wave"
+                        className="w-full rounded-[2px]"
+                      />
+                    </th>
+                  );
+                })}
+              </tr>
+            </thead>
             <tbody className="divide-y divide-transparent">
               {skeletonRows.map((_, rowIndex) => (
                 <tr key={rowIndex} className="overflow-hidden">
@@ -117,17 +187,19 @@ const DataTableSkeleton = ({ identifier }: { identifier?: 'myCart' }) => {
                       key={colIndex}
                     >
                       <Skeleton
+                        sx={{ bgcolor: 'var(--neutral-200)' }}
                         variant="rectangular"
-                        height={'32px'}
+                        height={'16px'}
                         width={'73px'}
                         animation="wave"
-                        className="w-full"
+                        className="w-full rounded-[2px]"
                       />
                     </td>
                   ))}
                   {/* Add a single visible column for checkboxes on small screens */}
                   <td className="py-1 px-2 whitespace-nowrap sm:hidden">
                     <Skeleton
+                      sx={{ bgcolor: 'var(--neutral-200)' }}
                       variant="rectangular"
                       height={'32px'}
                       width={'32px'}

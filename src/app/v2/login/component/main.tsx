@@ -128,6 +128,8 @@ const Login = () => {
       localStorage.setItem('user', JSON.stringify(data));
       if (data.customer.is_phone_verified) {
         localStorage.removeItem('Search');
+        localStorage.removeItem('MatchingPair');
+
         userLoggedIn(token.token);
         router.push('/v2/');
       } else {
@@ -322,6 +324,7 @@ const Login = () => {
             password={password}
             passwordErrorText={passwordErrorText}
             handleLogin={handleLogin}
+            currentCountryCode={currentCountryCode}
           />
         );
       case 'otpVerification':

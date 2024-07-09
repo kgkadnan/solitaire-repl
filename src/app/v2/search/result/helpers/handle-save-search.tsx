@@ -14,6 +14,7 @@ export interface IHandleSaveSearch {
   setIsInputDialogOpen: Dispatch<SetStateAction<boolean>>;
   setSaveSearchName: Dispatch<SetStateAction<string>>;
   setInputError: Dispatch<SetStateAction<string>>;
+  isMatchingPair?: boolean;
 }
 
 export const handleSaveSearch = async ({
@@ -24,10 +25,13 @@ export const handleSaveSearch = async ({
   setIsInputDialogOpen,
   setSaveSearchName,
   setInputError,
-  setStoredSelection
+  setStoredSelection,
+  isMatchingPair
 }: IHandleSaveSearch) => {
   // Retrieve the array from localStorage
-  const searchData = localStorage.getItem('Search');
+  const searchData = isMatchingPair
+    ? localStorage.getItem('MatchingPair')
+    : localStorage.getItem('Search');
 
   if (searchData !== null) {
     const parseData = JSON.parse(searchData) || [];
@@ -35,8 +39,9 @@ export const handleSaveSearch = async ({
     await addSavedSearch({
       name: saveSearchName,
       diamond_count: parseInt(data?.count),
-      meta_data: parseData[activeTab - 1].queryParams,
-      is_deleted: false
+      meta_data: parseData[activeTab - 1]?.queryParams,
+      is_deleted: false,
+      is_matching_pair: isMatchingPair
     })
       .unwrap()
       .then((res: any) => {
@@ -47,7 +52,9 @@ export const handleSaveSearch = async ({
           searchId: data?.search_id,
           queryParams: parseData[activeTab - 1].queryParams
         };
-        localStorage.setItem('Search', JSON.stringify(parseData));
+        isMatchingPair
+          ? localStorage.setItem('MatchingPair', JSON.stringify(parseData))
+          : localStorage.setItem('Search', JSON.stringify(parseData));
         setStoredSelection(parseData);
         setIsInputDialogOpen(false);
         setSaveSearchName('');

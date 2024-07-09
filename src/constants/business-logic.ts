@@ -59,6 +59,7 @@ export const MAX_MY_INVOICE_LIMIT_COUNT = 50;
 export const MAX_SEARCH_TAB_LIMIT = 10;
 
 export const LISTING_PAGE_DATA_LIMIT = 300;
+export const MATCHING_PAIR_DATA_LIMIT = 150;
 
 export const FILE_URLS = {
   IMG: 'https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/***/still.jpg',
@@ -81,7 +82,7 @@ export const FILE_URLS = {
 };
 
 export const GIA_LINK = 'https://www.gia.edu/report-check?reportno=';
-export const BREADCRUM_CHARACTER_LIMIT = 9;
+export const BREADCRUM_CHARACTER_LIMIT = 15;
 
 export const LAB_LINKS = {
   GIA_LINK: 'https://www.gia.edu/report-check?reportno=',

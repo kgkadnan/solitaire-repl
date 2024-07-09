@@ -11,6 +11,9 @@ import { loginApi } from './features/api/login';
 import { cartApi } from './features/api/cart';
 import { downloadExcelApi } from './features/api/download-excel';
 import notificationBadgeReducer from './features/notification/notification-slice';
+import trackPageEventReducer from './features/track-page-event/track-page-event-slice';
+import filterNewArrivalReducer from './features/filter-new-arrival/filter-new-arrival-slice';
+import filterBidToBuyReducer from './features/filter-bid-to-buy/filter-bid-to-buy-slice';
 import profileUpdateReducer from './features/profile/profile-update-slice';
 import isEditingKycSlice from './features/kyc/is-editing-kyc';
 import searchResultReducer from './features/search-result/search-result';
@@ -42,10 +45,15 @@ import { statusCode } from './constants/enums/status-code';
 import { show } from './features/logout/logout-slice';
 import { copyURLApi } from './features/api/track-public-url-copy';
 import { trackApi } from './features/api/track-interaction';
+import { matchingPairApi } from './features/api/match-pair';
+import trackPageApi from './features/api/track-page';
 
 const rootReducer = combineReducers({
   notificationBadge: notificationBadgeReducer,
   profileUpdate: profileUpdateReducer,
+  pageTimeTracking: trackPageEventReducer,
+  filterNewArrival: filterNewArrivalReducer,
+  filterBidToBuy: filterBidToBuyReducer,
   isEditingKYC: isEditingKycSlice,
   searchResult: searchResultReducer,
   searchList: searchListReducer,
@@ -76,7 +84,9 @@ const rootReducer = combineReducers({
   [faqsApi.reducerPath]: faqsApi.reducer,
   [myAppointmentApi.reducerPath]: myAppointmentApi.reducer,
   [copyURLApi.reducerPath]: copyURLApi.reducer,
-  [trackApi.reducerPath]: trackApi.reducer
+  [trackApi.reducerPath]: trackApi.reducer,
+  [matchingPairApi.reducerPath]: matchingPairApi.reducer,
+  [trackPageApi.reducerPath]: trackPageApi.reducer
 });
 
 const handle410Middleware =
@@ -122,6 +132,8 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
         myAppointmentApi.middleware,
         copyURLApi.middleware,
         trackApi.middleware,
+        matchingPairApi.middleware,
+        trackPageApi.middleware,
         handle410Middleware
       ),
     preloadedState

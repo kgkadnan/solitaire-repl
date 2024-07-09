@@ -12,4 +12,5 @@ export interface IActionButtonDataItem {
   isDisable?: boolean;
   handler: () => void;
   isHidden?: boolean;
+  isLoading?: boolean;
 }

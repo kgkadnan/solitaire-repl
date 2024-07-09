@@ -1,12 +1,16 @@
 {
   "app.search.savedSearchesRoute": "saved-searches",
   "app.advanceSearch.cancel": "Cancel",
+  "app.advanceSearch.viewMore": "View More",
+  "app.advanceSearch.viewLess": "View Less",
   "app.advanceSearch.reset": "Reset",
   "app.advanceSearch.saveSearch": "Save Search",
   "app.advanceSearch.savedSearch.input.header": "Save search parameters",
   "app.advanceSearch.savedSearch.input.content": "Great news! You can save your current search parameters for quick access later. This will help you pick up right where you left off. Give your saved search a name and click 'Save' to keep things organized.",
 
   "app.sideNavigationBar.search": "Search",
+  "app.sideNavigationBar.matchingPair": "Match Pair",
+
   "app.sideNavigationBar.dashboard": "Dashboard",
   "app.sideNavigationBar.yourOrders": "Your Orders",
   "app.sideNavigationBar.myAppointments": "My Appointments",
@@ -100,7 +104,7 @@
   "app.myCart.mycart": "My Cart",
   "app.myCart.actionButton.delete": "Delete",
   "app.myCart.actionButton.bookAppointment": "Book Appointment",
-  "app.myCart.actionButton.findMatchingPair": "Find Matching Pair",
+  "app.myCart.actionButton.findMatchingPair": "Find Match Pair",
   "app.myCart.actionButton.confirmStone": "Confirm Stone",
   "app.myCart.actionButton.viewSimilarStone": "View Similar Stone",
   "app.myCart.actionButton.compareStone": "Compare Stone",
@@ -128,7 +132,7 @@
   "app.search.manageLimit": "Manage Tabs",
 
   "app.search.actionButton.bookAppointment": "Book Appointment",
-  "app.search.actionButton.findMatchingPair": "Find Matching Pair",
+  "app.search.actionButton.findMatchingPair": "Find Match Pair",
   "app.search.actionButton.compareStone": "Compare Stone",
 
   "app.register": "Register",
@@ -163,6 +167,9 @@
   "app.verifyOTP": "Verify OTP",
   "app.verifyOtp.goBack": "Go back",
   "app.OTPVerification.resend": "Resend",
+
+  "app.applyFilter": "Apply Filter",
+  "app.modifyFilter": "Modify Filter",
 
   "app.OTPVerification.cancel": "Cancel",
   "app.OTPVerification.save": "Save",

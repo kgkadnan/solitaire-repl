@@ -5,6 +5,8 @@ import DashboardIcon from '@public/v2/assets/icons/sidebar-icons/dashboard-squar
 import ArrivalIcon from '@public/v2/assets/icons/sidebar-icons/new-arrivals.svg?url';
 import Bid2BuyIcon from '@public/v2/assets/icons/sidebar-icons/bid-2-buy.svg?url';
 import SearchIcon from '@public/v2/assets/icons/sidebar-icons/search.svg?url';
+import MatchingPairIcon from '@public/v2/assets/icons/sidebar-icons/matching-pair.svg?url';
+
 import MyDaimondsIcon from '@public/v2/assets/icons/sidebar-icons/diamond.svg?url';
 import BookmarkIcon from '@public/v2/assets/icons/sidebar-icons/bookmark.svg?url';
 import MyAppointments from '@public/v2/assets/icons/sidebar-icons/my-appointments.svg?url';
@@ -15,11 +17,13 @@ import styles from './side-navigation.module.scss';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import Tooltip from '../tooltip';
-import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
+import { MatchSubRoutes, Routes, SubRoutes } from '@/constants/v2/enums/routes';
 import { Button } from '../../ui/button';
 import { SocketManager, useSocket } from '@/hooks/v2/socket-manager';
 import useUser from '@/lib/use-auth';
 import { kycStatus } from '@/constants/enums/kyc';
+import { useAppDispatch } from '@/hooks/hook';
+import { setStartTime } from '@/features/track-page-event/track-page-event-slice';
 
 interface ISideNavigationBar {
   src?: React.ReactNode;
@@ -32,13 +36,14 @@ const SideNavigationBar = ({
 }: {
   isInMaintenanceMode: boolean;
 }) => {
+  const dispatch = useAppDispatch();
+
   const currentRoute = usePathname();
   const currentSubRoute = useSearchParams().get('active-tab');
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   const [showPulse, setShowPulse] = useState(false);
 
   const router = useRouter();
-
   const SideNavigationData: ISideNavigationBar[] = [
     {
       src: <DashboardIcon />,
@@ -69,13 +74,22 @@ const SideNavigationBar = ({
         currentRoute === Routes.SEARCH &&
         currentSubRoute !== SubRoutes.SAVED_SEARCH
     },
+    {
+      src: <MatchingPairIcon />,
+      title: ManageLocales('app.sideNavigationBar.matchingPair'),
+      link: `${Routes.MATCHING_PAIR}?active-tab=${MatchSubRoutes.NEW_SEARCH}`,
+      isActive:
+        currentRoute === Routes.MATCHING_PAIR &&
+        currentSubRoute !== MatchSubRoutes.SAVED_SEARCH
+    },
 
     {
       src: <BookmarkIcon />,
       title: ManageLocales('app.sideNavigationBar.bookmark'),
       link: `${Routes.SEARCH}?active-tab=${SubRoutes.SAVED_SEARCH}`,
       isActive:
-        currentRoute === Routes.SEARCH &&
+        (currentRoute === Routes.SEARCH ||
+          currentRoute === Routes.MATCHING_PAIR) &&
         currentSubRoute === SubRoutes.SAVED_SEARCH
     },
 
@@ -185,7 +199,16 @@ const SideNavigationBar = ({
                         }`}
                       >
                         <Button
-                          onClick={() => router.push(items.link!)}
+                          onClick={() => {
+                            if (
+                              items.link ===
+                              `${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`
+                            ) {
+                              dispatch(setStartTime(new Date().toISOString()));
+                            }
+
+                            router.push(items.link!);
+                          }}
                           className={`${
                             items.isActive && !isInMaintenanceMode
                               ? `bg-primaryMain p-[8px] rounded stroke-neutral25 `

@@ -2,47 +2,94 @@ import React, { useEffect } from 'react';
 import ImageSvg from '@public/v2/assets/icons/detail-page/image.svg?url';
 import VideoSvg from '@public/v2/assets/icons/detail-page/video.svg?url';
 import PdfSvg from '@public/v2/assets/icons/detail-page/pdf.svg?url';
-import { IImagesType } from '../interface';
+// import { IImagesType } from '../interface';
 
 interface IDetailPageTabs {
   activePreviewTab: string;
   setActivePreviewTab: React.Dispatch<React.SetStateAction<string>>;
   setImageIndex: React.Dispatch<React.SetStateAction<number>>;
-  validImages: IImagesType[];
+  validImages: any;
+  isMatchingPair?: boolean;
+  setIsLoading?: any;
+  isLoading?: boolean;
 }
 
 const DetailPageTabs = ({
   activePreviewTab,
   setActivePreviewTab,
   validImages,
-  setImageIndex
+  setImageIndex,
+  isMatchingPair,
+  setIsLoading,
+  isLoading
 }: IDetailPageTabs) => {
   let TabsData = [
     {
       label: 'Image',
       svg: <ImageSvg />,
-      isDisable: !validImages.some(image => image.category === 'Image')
+      isDisable: isMatchingPair
+        ? !validImages.some(
+            (innerArray: any) =>
+              Array.isArray(innerArray) &&
+              innerArray.some((image: any) => image.category === 'Image')
+          )
+        : !validImages.some((image: any) => image.category === 'Image')
     },
     {
       label: 'Video',
       svg: <VideoSvg />,
-      isDisable: !validImages.some(image => image.category === 'Video')
+      isDisable: isMatchingPair
+        ? !validImages.some(
+            (innerArray: any) =>
+              Array.isArray(innerArray) &&
+              innerArray.some(
+                (image: any) =>
+                  image.category === 'Video' && image.url_check === true
+              )
+          )
+        : !validImages.some((image: any) => image.category === 'Video')
     },
     {
       label: 'B2B Sparkle',
       svg: <VideoSvg />,
-      isDisable: !validImages.some(image => image.category === 'B2B Sparkle')
+      isDisable: isMatchingPair
+        ? !validImages.some(
+            (innerArray: any) =>
+              Array.isArray(innerArray) &&
+              innerArray.some(
+                (image: any) =>
+                  image.category === 'B2B Sparkle' && image.url_check === true
+              )
+          )
+        : !validImages.some((image: any) => image.category === 'B2B Sparkle')
     },
     {
       label: 'Certificate',
       svg: <PdfSvg />,
-      isDisable: !validImages.some(image => image.category === 'Certificate')
+      isDisable: isMatchingPair
+        ? !validImages.some(
+            (innerArray: any) =>
+              Array.isArray(innerArray) &&
+              innerArray.some(
+                (image: any) =>
+                  image.category === 'Certificate' && image.url_check === true
+              )
+          )
+        : !validImages.some((image: any) => image.category === 'Certificate')
     }
   ];
+  useEffect(() => {
+    setIsLoading &&
+      isLoading &&
+      setTimeout(() => {
+        setIsLoading(false); // Hide the toast notification after some time
+      }, 1000);
+  }, [isLoading]);
 
   const handleTabs = (label: string) => {
     setActivePreviewTab(label);
     setImageIndex(0);
+    setIsLoading && setIsLoading(true);
   };
 
   // Find the next enabled tab

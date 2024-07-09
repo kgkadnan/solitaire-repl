@@ -26,7 +26,6 @@ import { DialogComponent } from '@/components/v2/common/dialog';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import deleteIcon from '@public/v2/assets/icons/modal/bin.svg';
 
-import threeDotsSvg from '@public/v2/assets/icons/threedots.svg';
 import {
   RednderLocation,
   RenderAmount,
@@ -57,7 +56,6 @@ import { AddCommentDialog } from '@/components/v2/common/comment-dialog';
 import { handleComment } from '../search/result/helpers/handle-comment';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useConfirmProductMutation } from '@/features/api/product';
-import { Dropdown } from '@/components/v2/common/dropdown-menu';
 import { IProduct, IProductItem } from '../search/interface';
 import { DiamondDetailsComponent } from '@/components/v2/common/detail-page';
 import { FILE_URLS } from '@/constants/v2/detail-page';
@@ -70,7 +68,6 @@ import { kycStatus } from '@/constants/enums/kyc';
 import { loadImages } from '@/components/v2/common/detail-page/helpers/load-images';
 import { checkImage } from '@/components/v2/common/detail-page/helpers/check-image';
 import { IAppointmentPayload } from '../my-appointments/page';
-import { NO_STONES_AVAILABLE } from '@/constants/error-messages/compare-stone';
 import { useLazyGetAvailableMyAppointmentSlotsQuery } from '@/features/api/my-appointments';
 import { SELECT_STONE_TO_PERFORM_ACTION } from '@/constants/error-messages/confirm-stone';
 import BookAppointment from '../my-appointments/components/book-appointment/book-appointment';
@@ -897,7 +894,7 @@ const MyCart = () => {
 
   useEffect(() => {
     if (images.length > 0 && images[0].name.length)
-      loadImages(images, setValidImages, checkImage);
+      loadImages(images, setValidImages, checkImage, false);
   }, [detailImageData]);
 
   useEffect(() => {
@@ -911,7 +908,6 @@ const MyCart = () => {
     }
   }, [validImages]);
 
-  console.log('detailPageData', detailPageData);
   return (
     <div className="relative">
       {isLoading && <CustomKGKLoader />}
@@ -949,6 +945,7 @@ const MyCart = () => {
               height={'21px'}
               width={'61px'}
               animation="wave"
+              sx={{ bgcolor: 'var(--neutral-200)' }}
             />
           ) : (
             ManageLocales('app.myCart.mycart')
@@ -983,35 +980,10 @@ const MyCart = () => {
                       setErrorText,
                       setIsConfirmStone,
                       setConfirmStoneData,
-                      setIsDetailPage
+                      setIsDetailPage,
+                      identifier: 'detailPage'
                     });
                   }
-                }
-              ]}
-            />
-            <Dropdown
-              dropdownTrigger={
-                <Image
-                  src={threeDotsSvg}
-                  alt="threeDotsSvg"
-                  width={43}
-                  height={43}
-                />
-              }
-              dropdownMenu={[
-                {
-                  label: ManageLocales(
-                    'app.search.actionButton.bookAppointment'
-                  ),
-                  handler: () => {},
-                  commingSoon: true
-                },
-                {
-                  label: ManageLocales(
-                    'app.search.actionButton.findMatchingPair'
-                  ),
-                  handler: () => {},
-                  commingSoon: true
                 }
               ]}
             />

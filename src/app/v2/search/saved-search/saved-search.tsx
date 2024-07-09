@@ -28,6 +28,7 @@ export interface ISavedSearches {
   created_at: Date;
   updated_at: Date;
   deleted_at: string | null;
+  is_matching_pair?: boolean;
 }
 
 export interface IItem {
@@ -35,6 +36,8 @@ export interface IItem {
 }
 
 import editIcon from '@public/v2/assets/icons/saved-search/edit-button.svg';
+import matchPairIcon from '@public/v2/assets/icons/match-pair-saved.svg';
+
 import Image from 'next/image';
 import { useCheckboxStateManagement } from '@/components/v2/common/checkbox/hooks/checkbox-state-management';
 import { handleSelectAll } from '@/components/v2/common/checkbox/helpers/handle-select-all-checkbox';
@@ -54,6 +57,7 @@ import EmptyScreen from '@/components/v2/common/empty-screen';
 import { kycStatus } from '@/constants/enums/kyc';
 import { Toast } from '@/components/v2/common/copy-and-share/toast';
 import SavedSearchSkeleton from '@/components/v2/skeleton/saved-search';
+import { useLazyGetMatchingPairCountQuery } from '@/features/api/match-pair';
 
 const SavedSearch = ({ setIsLoading }: any) => {
   const router = useRouter();
@@ -62,6 +66,8 @@ const SavedSearch = ({ setIsLoading }: any) => {
     useSavedSearchStateManagement();
 
   let [triggerProductCountApi] = useLazyGetProductCountQuery();
+  let [triggerMatchingPairCountApi] = useLazyGetMatchingPairCountQuery();
+
   // Fetching saved search data
   const { data, isLoading: isDataLoading } = useGetAllSavedSearchesQuery({
     searchByName: savedSearchState.searchByName
@@ -175,7 +181,7 @@ const SavedSearch = ({ setIsLoading }: any) => {
   ];
 
   // Function to handle edit action
-  const handleEdit = (stone: string) => {
+  const handleEdit = (stone: string, identifier = false) => {
     let savedSearchEditData = savedSearchState.savedSearchData.filter(
       (items: any) => {
         return items.id === stone;
@@ -184,9 +190,13 @@ const SavedSearch = ({ setIsLoading }: any) => {
 
     dispatch(modifySavedSearch({ savedSearch: savedSearchEditData[0] }));
 
-    router.push(
-      `${Routes.SEARCH}?active-tab=${SubRoutes.SAVED_SEARCH}&edit=${SubRoutes.SAVED_SEARCH}`
-    );
+    identifier
+      ? router.push(
+          `${Routes.MATCHING_PAIR}?active-tab=${SubRoutes.SAVED_SEARCH}&edit=${SubRoutes.SAVED_SEARCH}`
+        )
+      : router.push(
+          `${Routes.SEARCH}?active-tab=${SubRoutes.SAVED_SEARCH}&edit=${SubRoutes.SAVED_SEARCH}`
+        );
   };
 
   let isNudge = localStorage.getItem('show-nudge') === 'MINI';
@@ -293,7 +303,13 @@ const SavedSearch = ({ setIsLoading }: any) => {
               ) : (
                 savedSearchState?.savedSearchData?.map(
                   (
-                    { id, name, meta_data, created_at }: ISavedSearches,
+                    {
+                      id,
+                      name,
+                      meta_data,
+                      created_at,
+                      is_matching_pair
+                    }: ISavedSearches,
                     index
                   ) => {
                     // Calculate the gradient index based on the item's index
@@ -310,9 +326,12 @@ const SavedSearch = ({ setIsLoading }: any) => {
                             id,
                             savedSearchData: savedSearchState.savedSearchData,
                             router,
-                            triggerProductCountApi,
+                            triggerProductCountApi: is_matching_pair
+                              ? triggerMatchingPairCountApi
+                              : triggerProductCountApi,
                             setDialogContent,
-                            setIsDialogOpen
+                            setIsDialogOpen,
+                            isMatchingPair: is_matching_pair
                           })
                         }
                       >
@@ -340,13 +359,28 @@ const SavedSearch = ({ setIsLoading }: any) => {
                               .map(word => word.charAt(0)) // Extract the first character of each word
                               .join('')}
                           </div>
-                          <div className="flex flex-col gap-[18px]">
+                          <div className="flex flex-col justify-around h-[69px]">
                             <h1 className="text-neutral900 font-medium text-mMedium capitalize">
                               {name}
                             </h1>
                             <div className="text-neutral700 font-regular text-sMedium">
                               {formatCreatedAt(created_at)}
                             </div>
+                            {is_matching_pair && (
+                              <div
+                                className="h-[20px] rounded-[2px] border-[1px] border-neutral200 px-[6px] py-[1px] text-neutral600 text-[10px] w-[90px] flex items-center justify-around"
+                                style={{
+                                  background:
+                                    'linear-gradient(0deg, #EDF0F6 0%,  #FCFDFF 100%)'
+                                }}
+                              >
+                                <Image
+                                  src={matchPairIcon}
+                                  alt="matchPairIcon"
+                                />
+                                Match Pair
+                              </div>
+                            )}
                           </div>
                         </div>
                         <div className="w-full md:w-[50%] mt-4 md:mt-0">
@@ -356,7 +390,7 @@ const SavedSearch = ({ setIsLoading }: any) => {
                           className="w-full md:w-[10%] flex justify-end items-start opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                           onClick={e => {
                             e.stopPropagation();
-                            handleEdit(id);
+                            handleEdit(id, is_matching_pair);
                           }}
                         >
                           <Image src={editIcon} alt="editIcon" />
@@ -394,6 +428,7 @@ const SavedSearch = ({ setIsLoading }: any) => {
                             setIsError,
                             setIsLoading
                           })
+                        // isMatchingPair:true
                       })
                   }
                 ]}

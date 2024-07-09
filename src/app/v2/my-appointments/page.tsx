@@ -33,6 +33,8 @@ import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
 import { Toast } from '@/components/v2/common/copy-and-share/toast';
 import BookAppointment from './components/book-appointment/book-appointment';
 import CommonPoppup from '../login/component/common-poppup';
+import MyAppointmentSkeleton from '@/components/v2/skeleton/my-appointment';
+import { Skeleton } from '@mui/material';
 
 export interface ISlot {
   datetimeString: string;
@@ -101,7 +103,6 @@ const MyAppointments = () => {
   };
 
   useEffect(() => {
-    setIsLoading(true);
     getAppointment();
   }, [myAppointmentData]);
 
@@ -481,9 +482,20 @@ const MyAppointments = () => {
       {isLoading && <CustomKGKLoader />}
       {!showAppointmentForm && (
         <div className="flex  py-[8px] items-center">
-          <p className="text-lMedium font-medium text-neutral900">
-            {ManageLocales('app.myAppointments.myAppointments')}
-          </p>
+          {myAppointmentData !== undefined ? (
+            <p className="text-lMedium font-medium text-neutral900">
+              {ManageLocales('app.myAppointments.myAppointments')}
+            </p>
+          ) : (
+            <Skeleton
+              variant="rectangular"
+              height={'24px'}
+              sx={{ bgcolor: 'var(--neutral-200)' }}
+              width={'135px'}
+              animation="wave"
+              className=""
+            />
+          )}
         </div>
       )}
       <div
@@ -503,7 +515,12 @@ const MyAppointments = () => {
       }
       `}
       >
-        <div className="">{renderContent()}</div>
+        {myAppointmentData === undefined ? (
+          <MyAppointmentSkeleton />
+        ) : (
+          <div className="">{renderContent()}</div>
+        )}
+
         {data.length > 0 && !showAppointmentForm && (
           <div
             className="h-[72px] border-t-[1px]  border-solid border-neutral200 bg-neutral0 rounded-b-[8px]"

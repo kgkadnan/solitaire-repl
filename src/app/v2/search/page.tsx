@@ -17,7 +17,6 @@ import useFormStateManagement from './form/hooks/form-state';
 import useNumericFieldValidation from './form/hooks/numeric-field-validation-management';
 import Result from './result/result';
 import SavedSearch from './saved-search/saved-search';
-import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import logger from 'logging/log-util';
 import {
   useAddSavedSearchMutation,
@@ -30,6 +29,7 @@ import bookmarkIcon from '@public/v2/assets/icons/modal/bookmark.svg';
 import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
 import { handleSaveSearch } from './result/helpers/handle-save-search';
 import CommonPoppup from '../login/component/common-poppup';
+import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 
 const Search = () => {
   const subRoute = useSearchParams().get('active-tab');
@@ -58,6 +58,8 @@ const Search = () => {
 
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false); // State to track loading
+  const [searchLoading, setSearchLoading] = useState(false);
+
   const [updateSavedSearch] = useUpdateSavedSearchMutation();
   const [saveSearchName, setSaveSearchName] = useState('');
   const [addSavedSearch] = useAddSavedSearchMutation();
@@ -338,12 +340,13 @@ const Search = () => {
         isOpens={isDialogOpen}
         dialogStyle={{ dialogContent: isAddDemand ? 'min-h-[280px]' : '' }}
       />
+      {isLoading && <CustomKGKLoader />}
+
       <InputDialogComponent
         isOpen={isInputDialogOpen}
         onClose={() => setIsInputDialogOpen(false)}
         renderContent={renderContentWithInput}
       />
-      {isLoading && <CustomKGKLoader />}
       {subRoute === SubRoutes.NEW_SEARCH ||
       editRoute === SubRoutes.SAVED_SEARCH ||
       editRoute === SubRoutes.RESULT ? (
@@ -364,8 +367,10 @@ const Search = () => {
           setDialogContent={setDialogContent}
           addSearches={addSearches}
           setAddSearches={setAddSearches}
-          setIsLoading={setIsLoading}
+          setIsLoading={setSearchLoading}
           setIsAddDemand={setIsAddDemand}
+          isMatchingPair={false}
+          isLoading={searchLoading}
         />
       ) : subRoute === SubRoutes.SAVED_SEARCH ? (
         <SavedSearch setIsLoading={setIsLoading} />

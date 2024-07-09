@@ -11,7 +11,7 @@ import { ReactNode } from 'react';
 import CommonPoppup from '@/app/v2/login/component/common-poppup';
 
 export const isSearchAlreadyExist = (data: any, nameToFind: string) => {
-  const foundSearch = data.find(
+  const foundSearch = data?.find(
     (search: any) =>
       search.saveSearchName.toLowerCase() === nameToFind.toLowerCase()
   );
@@ -25,7 +25,8 @@ export const handleCardClick = ({
   router,
   triggerProductCountApi,
   setDialogContent,
-  setIsDialogOpen
+  setIsDialogOpen,
+  isMatchingPair
 }: {
   id: string;
   savedSearchData: ISavedSearchData[];
@@ -33,6 +34,7 @@ export const handleCardClick = ({
   triggerProductCountApi: any;
   setDialogContent: React.Dispatch<React.SetStateAction<ReactNode>>;
   setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isMatchingPair?: boolean;
 }) => {
   // Filter the saved search data to get the clicked card's data
 
@@ -74,7 +76,9 @@ export const handleCardClick = ({
           />
         );
       } else {
-        const data: any = JSON.parse(localStorage.getItem('Search')!);
+        const data: any = isMatchingPair
+          ? JSON.parse(localStorage.getItem('MatchingPair')!)
+          : JSON.parse(localStorage.getItem('Search')!);
 
         if (data?.length) {
           let isAlreadyOpenIndex = isSearchAlreadyExist(
@@ -83,11 +87,17 @@ export const handleCardClick = ({
           );
 
           if (isAlreadyOpenIndex >= 0 && isAlreadyOpenIndex !== null) {
-            router.push(
-              `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
-                isAlreadyOpenIndex + 1
-              }`
-            );
+            isMatchingPair
+              ? router.push(
+                  `${Routes.MATCHING_PAIR}?active-tab=${SubRoutes.RESULT}-${
+                    isAlreadyOpenIndex + 1
+                  }`
+                )
+              : router.push(
+                  `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
+                    isAlreadyOpenIndex + 1
+                  }`
+                );
           }
           // Check if the maximum search tab limit is reached
           else if (data?.length >= MAX_SEARCH_TAB_LIMIT) {
@@ -110,9 +120,17 @@ export const handleCardClick = ({
                     variant: 'primary',
                     label: ManageLocales('app.modal.manageTabs'),
                     handler: () => {
-                      router.push(
-                        `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${1}`
-                      );
+                      isMatchingPair
+                        ? router.push(
+                            `${Routes.MATCHING_PAIR}?active-tab=${
+                              SubRoutes.RESULT
+                            }-${1}`
+                          )
+                        : router.push(
+                            `${Routes.SEARCH}?active-tab=${
+                              SubRoutes.RESULT
+                            }-${1}`
+                          );
                     },
                     customStyle: 'flex-1 h-10'
                   }
@@ -134,12 +152,21 @@ export const handleCardClick = ({
               }
             ];
 
-            localStorage.setItem('Search', JSON.stringify(localStorageData));
-            router.push(
-              `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
-                data.length + 1
-              }`
+            localStorage.setItem(
+              isMatchingPair ? 'MatchingPair' : 'Search',
+              JSON.stringify(localStorageData)
             );
+            isMatchingPair
+              ? router.push(
+                  `${Routes.MATCHING_PAIR}?active-tab=${SubRoutes.RESULT}-${
+                    data.length + 1
+                  }`
+                )
+              : router.push(
+                  `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
+                    data.length + 1
+                  }`
+                );
           }
         } else {
           // If no data in local storage, create a new entry and navigate to the search result page
@@ -153,8 +180,17 @@ export const handleCardClick = ({
             }
           ];
 
-          localStorage.setItem('Search', JSON.stringify(localStorageData));
-          router.push(`${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${1}`);
+          localStorage.setItem(
+            isMatchingPair ? 'MatchingPair' : 'Search',
+            JSON.stringify(localStorageData)
+          );
+          isMatchingPair
+            ? router.push(
+                `${Routes.MATCHING_PAIR}?active-tab=${SubRoutes.RESULT}-${1}`
+              )
+            : router.push(
+                `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${1}`
+              );
         }
       }
     }

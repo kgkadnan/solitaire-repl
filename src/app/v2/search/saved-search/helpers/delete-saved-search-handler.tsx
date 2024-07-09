@@ -10,6 +10,7 @@ interface IDeleteSavedSearchHandler {
   setDialogContent: React.Dispatch<React.SetStateAction<React.ReactNode>>;
   setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
   handleDelete: () => void;
+  // isMatchingPair?: boolean;
 }
 
 // Handles the deletion of selected stones.
@@ -19,10 +20,13 @@ export const deleteSavedSearchHandler = ({
   setErrorText,
   setIsDialogOpen,
   setDialogContent,
-  handleDelete
+  handleDelete // isMatchingPair
 }: IDeleteSavedSearchHandler) => {
   // Get saved search data from local storage
   const searchTabData = JSON.parse(localStorage.getItem('Search') ?? '[]');
+  const matchingPairTabData = JSON.parse(
+    localStorage.getItem('MatchingPair') ?? '[]'
+  );
 
   // Check if stones are selected for deletion
   if (selectedCheckboxes?.length) {
@@ -35,7 +39,15 @@ export const deleteSavedSearchHandler = ({
         }
       })
     );
-
+    const matchingPairData = matchingPairTabData.filter(
+      (item1: any, index: number) =>
+        selectedCheckboxes.some(item2 => {
+          if (item1.id === item2) {
+            item1.position = index + 1;
+            return item1;
+          }
+        })
+    );
     // Check if there are matching data
     if (matchingData.length > 0) {
       // Display error message if any of the selected stones are open in search result tabs
@@ -49,6 +61,44 @@ export const deleteSavedSearchHandler = ({
 
       const errorMessage =
         matchingData.length > 1
+          ? `Your saved searches ${searchNames.join(
+              ', '
+            )} are already opened in ${resultPositions.join(
+              ', '
+            )} respectively. Please close those tabs and then try deleting it.`
+          : `Your saved search ${searchNames.join(
+              ', '
+            )} is already opened in ${resultPositions.join(
+              ', '
+            )}. Please close the tab and then try deleting it.`;
+      setDialogContent(
+        <CommonPoppup
+          content={''}
+          customPoppupBodyStyle="!mt-[70px]"
+          header={errorMessage}
+          actionButtonData={[
+            {
+              variant: 'primary',
+              label: ManageLocales('app.modal.okay'),
+              handler: () => setIsDialogOpen(false),
+              customStyle: 'flex-1 h-10'
+            }
+          ]}
+        />
+      );
+      setIsDialogOpen(true);
+    } else if (matchingPairData.length > 0) {
+      // Display error message if any of the selected stones are open in search result tabs
+
+      const searchNames = matchingPairData.map(
+        (items: any) => items.saveSearchName
+      );
+      const resultPositions = matchingPairData.map((items: any) => {
+        return `Matching Pair Result ${items.position}`;
+      });
+
+      const errorMessage =
+        matchingPairData.length > 1
           ? `Your saved searches ${searchNames.join(
               ', '
             )} are already opened in ${resultPositions.join(
