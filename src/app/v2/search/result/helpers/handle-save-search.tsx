@@ -52,7 +52,9 @@ export const handleSaveSearch = async ({
           searchId: data?.search_id,
           queryParams: parseData[activeTab - 1].queryParams
         };
-        localStorage.setItem('Search', JSON.stringify(parseData));
+        isMatchingPair
+          ? localStorage.setItem('MatchingPair', JSON.stringify(parseData))
+          : localStorage.setItem('Search', JSON.stringify(parseData));
         setStoredSelection(parseData);
         setIsInputDialogOpen(false);
         setSaveSearchName('');
