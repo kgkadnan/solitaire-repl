@@ -23,7 +23,6 @@ const Share = ({
   activeTab = 0,
   shareTrackIdentifier
 }: any) => {
-  console.log(rows, '================', selectedProducts);
   const [selectedRows, setSelectedRows] = useState<IProduct[]>(
     rows?.filter((row: IProduct) => row.id in selectedProducts)
   );

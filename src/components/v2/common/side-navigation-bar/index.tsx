@@ -88,7 +88,8 @@ const SideNavigationBar = ({
       title: ManageLocales('app.sideNavigationBar.bookmark'),
       link: `${Routes.SEARCH}?active-tab=${SubRoutes.SAVED_SEARCH}`,
       isActive:
-        currentRoute === Routes.SEARCH &&
+        (currentRoute === Routes.SEARCH ||
+          currentRoute === Routes.MATCHING_PAIR) &&
         currentSubRoute === SubRoutes.SAVED_SEARCH
     },
 

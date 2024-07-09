@@ -221,7 +221,6 @@ export function MatchPairDetails({
       id: tableData?.id
     }
   ];
-
   useEffect(() => {
     let allImagesData = originalData.map((data: any) => filterImageUrl(data));
     if (allImagesData.length > 0)
@@ -294,10 +293,13 @@ export function MatchPairDetails({
   const dataFormatting = (diamond: any, key: string) => {
     switch (key) {
       case 'amount':
+        return diamond.variants[0].prices[0].amount
+          ? `$${formatNumberWithCommas(diamond.variants[0].prices[0].amount)}`
+          : '-';
       case 'price_per_carat':
       case 'rap':
       case 'rap_value':
-        return `$${formatNumberWithCommas(diamond[key])}`;
+        return diamond[key] ? `$${formatNumberWithCommas(diamond[key])}` : '-';
       case 'table_percentage':
       case 'carats':
       case 'depth_percentage':
@@ -312,9 +314,9 @@ export function MatchPairDetails({
       case 'pavilion_height':
       case 'lower_half':
       case 'star_length':
-        return `${formatNumber(diamond[key])}`;
+        return diamond[key] ? `${formatNumber(diamond[key])}` : '-';
       case 'discount':
-        return `${formatNumber(diamond[key])}%`;
+        return diamond[key] ? `${formatNumber(diamond[key])}%` : '-';
 
       case 'key_to_symbol':
       case 'report_comments':
@@ -724,7 +726,7 @@ export function MatchPairDetails({
                                     //   ? 'w-[240px] h-[360px]'
                                     //   :
                                     'w-[285px] h-[305px]'
-                                  : 'w-[370px] h-[360px]'
+                                  : 'w-[350px] h-[360px]'
                               } `}
                             />
                           ) : (
