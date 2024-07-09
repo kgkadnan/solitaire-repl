@@ -254,6 +254,23 @@ const Form = ({
   useEffect(() => {
     isAllowedToUnloadRef.current = isAllowedToUnload;
   }, [isAllowedToUnload]);
+  console.log(caratRangeSelection);
+
+  useEffect(() => {
+    if (
+      caratMin &&
+      caratMin.length >= 0.15 &&
+      caratMax &&
+      caratMax.length <= 50
+    ) {
+      const caratFrom = parseFloat(caratMin).toFixed(2);
+      const caratTo = parseFloat(caratMax).toFixed(2);
+      setCaratRangeSelection([
+        ...caratRangeSelection,
+        `${caratFrom}-${caratTo}`
+      ]);
+    }
+  }, [caratMin, caratMax]);
 
   useEffect(() => {
     const handleBeforeUnload = async () => {
