@@ -17,11 +17,7 @@ import useFormStateManagement from './form/hooks/form-state';
 import useNumericFieldValidation from './form/hooks/numeric-field-validation-management';
 import Result from './result/result';
 import SavedSearch from './saved-search/saved-search';
-import logger from 'logging/log-util';
-import {
-  useAddSavedSearchMutation,
-  useUpdateSavedSearchMutation
-} from '@/features/api/saved-searches';
+import { useAddSavedSearchMutation } from '@/features/api/saved-searches';
 import { useGetProductCountQuery } from '@/features/api/product';
 import { InputDialogComponent } from '@/components/v2/common/input-dialog';
 import { InputField } from '@/components/v2/common/input-field';
@@ -60,7 +56,6 @@ const Search = () => {
   const [isLoading, setIsLoading] = useState(false); // State to track loading
   const [searchLoading, setSearchLoading] = useState(false);
 
-  const [updateSavedSearch] = useUpdateSavedSearchMutation();
   const [saveSearchName, setSaveSearchName] = useState('');
   const [addSavedSearch] = useAddSavedSearchMutation();
 

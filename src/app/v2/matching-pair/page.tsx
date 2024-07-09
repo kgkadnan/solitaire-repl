@@ -11,11 +11,7 @@ import { ManageLocales } from '@/utils/v2/translate';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import { DialogComponent } from '@/components/v2/common/dialog';
 
-import logger from 'logging/log-util';
-import {
-  useAddSavedSearchMutation,
-  useUpdateSavedSearchMutation
-} from '@/features/api/saved-searches';
+import { useAddSavedSearchMutation } from '@/features/api/saved-searches';
 import { InputDialogComponent } from '@/components/v2/common/input-dialog';
 import { InputField } from '@/components/v2/common/input-field';
 import bookmarkIcon from '@public/v2/assets/icons/modal/bookmark.svg';
@@ -60,7 +56,6 @@ const MatchingPair = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false); // State to track loading
   const [searchLoading, setSearchLoading] = useState(false);
-  const [updateSavedSearch] = useUpdateSavedSearchMutation();
   const [saveSearchName, setSaveSearchName] = useState('');
   const [addSavedSearch] = useAddSavedSearchMutation();
 
