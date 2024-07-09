@@ -19,7 +19,6 @@ export async function loadImages(
         } else {
           isValid = await checkImage(image.url);
         }
-
         return isValid ? index : null;
       })
     );
@@ -31,9 +30,9 @@ export async function loadImages(
     images.map(async (imageMatchPair: any) => {
       let validData = await getValidImageIndexes(imageMatchPair);
       validAllData.push(
-        ...validData
+        validData
           .filter(index => index !== null)
-          .map((items: any) => images[items])
+          .map((items: any) => imageMatchPair[items])
       );
       validAllData.length > 0 && setValidImages(validAllData);
     });

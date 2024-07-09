@@ -221,7 +221,6 @@ export function MatchPairDetails({
       id: tableData?.id
     }
   ];
-
   useEffect(() => {
     let allImagesData = originalData.map((data: any) => filterImageUrl(data));
     if (allImagesData.length > 0)

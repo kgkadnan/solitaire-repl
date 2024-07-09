@@ -70,7 +70,10 @@ const DetailPageTabs = ({
         ? !validImages.some(
             (innerArray: any) =>
               Array.isArray(innerArray) &&
-              innerArray.some((image: any) => image.category === 'Certificate')
+              innerArray.some(
+                (image: any) =>
+                  image.category === 'Certificate' && image.url_check === true
+              )
           )
         : !validImages.some((image: any) => image.category === 'Certificate')
     }
