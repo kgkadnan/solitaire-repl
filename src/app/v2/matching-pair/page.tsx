@@ -204,7 +204,7 @@ const MatchingPair = () => {
       setIsDialogOpen(true);
       setDialogContent(
         <CommonPoppup
-          content={`Do you want to save your "Search Result" for this session?`}
+          content={`Do you want to save your "Matching Pair Result" for this session?`}
           status="warning"
           customPoppupStyle="h-[200px]"
           customPoppupBodyStyle="!mt-[65px]"
