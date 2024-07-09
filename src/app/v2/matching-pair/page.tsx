@@ -200,58 +200,58 @@ const MatchingPair = () => {
   const handleCloseSpecificTab = (id: number) => {
     let yourSelection = JSON.parse(localStorage.getItem('MatchingPair')!);
 
-    if (!yourSelection[id - 1]?.isSavedSearch) {
-      setIsDialogOpen(true);
-      setDialogContent(
-        <CommonPoppup
-          content={`Do you want to save your "Matching Pair Result" for this session?`}
-          status="warning"
-          customPoppupStyle="h-[200px]"
-          customPoppupBodyStyle="!mt-[65px]"
-          header={ManageLocales('app.search.confirmHeader')}
-          actionButtonData={[
-            {
-              variant: 'secondary',
-              label: ManageLocales('app.modal.no'),
-              handler: () => {
-                setIsDialogOpen(false);
-                closeSearch(id, yourSelection);
-              },
-              customStyle: 'flex-1 h-10'
-            },
-            {
-              variant: 'primary',
-              label: ManageLocales('app.modal.yes'),
-              handler: () => {
-                if (yourSelection[id - 1]?.saveSearchName.length) {
-                  //update logic comes here
-                  const updateSaveSearchData = {
-                    id: yourSelection[id - 1]?.id,
-                    meta_data: yourSelection[id - 1]?.queryParams,
-                    diamond_count: data?.count
-                  };
-                  updateSavedSearch(updateSaveSearchData)
-                    .unwrap()
-                    .then(() => {
-                      setIsDialogOpen(false);
-                      closeSearch(id, yourSelection);
-                    })
-                    .catch((error: any) => {
-                      logger.error(error);
-                    });
-                } else {
-                  setIsInputDialogOpen(true);
-                  setIsDialogOpen(false);
-                }
-              },
-              customStyle: 'flex-1 h-10'
-            }
-          ]}
-        />
-      );
-    } else {
-      closeSearch(id, yourSelection);
-    }
+    // if (!yourSelection[id - 1]?.isSavedSearch) {
+    //   setIsDialogOpen(true);
+    //   setDialogContent(
+    //     <CommonPoppup
+    //       content={`Do you want to save your "Matching Pair Result" for this session?`}
+    //       status="warning"
+    //       customPoppupStyle="h-[200px]"
+    //       customPoppupBodyStyle="!mt-[65px]"
+    //       header={ManageLocales('app.search.confirmHeader')}
+    //       actionButtonData={[
+    //         {
+    //           variant: 'secondary',
+    //           label: ManageLocales('app.modal.no'),
+    //           handler: () => {
+    //             setIsDialogOpen(false);
+    //             closeSearch(id, yourSelection);
+    //           },
+    //           customStyle: 'flex-1 h-10'
+    //         },
+    //         {
+    //           variant: 'primary',
+    //           label: ManageLocales('app.modal.yes'),
+    //           handler: () => {
+    //             if (yourSelection[id - 1]?.saveSearchName.length) {
+    //               //update logic comes here
+    //               const updateSaveSearchData = {
+    //                 id: yourSelection[id - 1]?.id,
+    //                 meta_data: yourSelection[id - 1]?.queryParams,
+    //                 diamond_count: data?.count
+    //               };
+    //               updateSavedSearch(updateSaveSearchData)
+    //                 .unwrap()
+    //                 .then(() => {
+    //                   setIsDialogOpen(false);
+    //                   closeSearch(id, yourSelection);
+    //                 })
+    //                 .catch((error: any) => {
+    //                   logger.error(error);
+    //                 });
+    //             } else {
+    //               setIsInputDialogOpen(true);
+    //               setIsDialogOpen(false);
+    //             }
+    //           },
+    //           customStyle: 'flex-1 h-10'
+    //         }
+    //       ]}
+    //     />
+    //   );
+    // } else {
+    closeSearch(id, yourSelection);
+    // }
   };
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputError('');
