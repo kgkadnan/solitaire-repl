@@ -126,39 +126,13 @@ const MatchingPair = () => {
   }, [localStorage.getItem('MatchingPair')!]);
 
   const handleCloseAllTabs = () => {
-    setDialogContent(
-      <CommonPoppup
-        content={ManageLocales('app.search.closeTabs')}
-        status="warning"
-        customPoppupStyle="h-[200px]"
-        customPoppupBodyStyle="!mt-[65px]"
-        header={ManageLocales('app.search.confirmHeader')}
-        actionButtonData={[
-          {
-            variant: 'secondary',
-            label: ManageLocales('app.modal.no'),
-            handler: () => setIsDialogOpen(false),
-            customStyle: 'flex-1 h-10'
-          },
-          {
-            variant: 'primary',
-            label: ManageLocales('app.modal.yes'),
-            handler: () => {
-              localStorage.removeItem('MatchingPair');
-              setIsDialogOpen(false),
-                router.push(
-                  `${Routes.MATCHING_PAIR}?active-tab=${MatchSubRoutes.NEW_SEARCH}`
-                ),
-                setSearchParameters([]);
-              setAddSearches([]);
-            },
-            customStyle: 'flex-1 h-10'
-          }
-        ]}
-      />
-    );
-
-    setIsDialogOpen(true);
+    localStorage.removeItem('MatchingPair');
+    setIsDialogOpen(false),
+      router.push(
+        `${Routes.MATCHING_PAIR}?active-tab=${MatchSubRoutes.NEW_SEARCH}`
+      ),
+      setSearchParameters([]);
+    setAddSearches([]);
   };
 
   const closeSearch = (
