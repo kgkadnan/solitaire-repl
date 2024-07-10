@@ -16,7 +16,6 @@ import { InputDialogComponent } from '@/components/v2/common/input-dialog';
 import { InputField } from '@/components/v2/common/input-field';
 import bookmarkIcon from '@public/v2/assets/icons/modal/bookmark.svg';
 import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
-import CommonPoppup from '../login/component/common-poppup';
 import { handleSaveSearch } from '../search/result/helpers/handle-save-search';
 import Form, { ISavedSearch } from '../search/form/form';
 import { handleReset } from '../search/form/helpers/reset';

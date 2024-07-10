@@ -24,7 +24,6 @@ import { InputField } from '@/components/v2/common/input-field';
 import bookmarkIcon from '@public/v2/assets/icons/modal/bookmark.svg';
 import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
 import { handleSaveSearch } from './result/helpers/handle-save-search';
-import CommonPoppup from '../login/component/common-poppup';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 
 const Search = () => {
