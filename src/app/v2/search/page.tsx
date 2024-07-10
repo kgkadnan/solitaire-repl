@@ -24,7 +24,6 @@ import { InputField } from '@/components/v2/common/input-field';
 import bookmarkIcon from '@public/v2/assets/icons/modal/bookmark.svg';
 import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
 import { handleSaveSearch } from './result/helpers/handle-save-search';
-import CommonPoppup from '../login/component/common-poppup';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 
 const Search = () => {
@@ -123,39 +122,44 @@ const Search = () => {
   }, [localStorage.getItem('Search')!]);
 
   const handleCloseAllTabs = () => {
-    setDialogContent(
-      <CommonPoppup
-        content={ManageLocales('app.search.closeTabs')}
-        status="warning"
-        customPoppupStyle="h-[200px]"
-        customPoppupBodyStyle="!mt-[65px]"
-        header={ManageLocales('app.search.confirmHeader')}
-        actionButtonData={[
-          {
-            variant: 'secondary',
-            label: ManageLocales('app.modal.no'),
-            handler: () => setIsDialogOpen(false),
-            customStyle: 'flex-1 h-10'
-          },
-          {
-            variant: 'primary',
-            label: ManageLocales('app.modal.yes'),
-            handler: () => {
-              localStorage.removeItem('Search'),
-                setIsDialogOpen(false),
-                router.push(
-                  `${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`
-                ),
-                setSearchParameters([]);
-              setAddSearches([]);
-            },
-            customStyle: 'flex-1 h-10'
-          }
-        ]}
-      />
-    );
+    localStorage.removeItem('Search'),
+      setIsDialogOpen(false),
+      router.push(`${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`),
+      setSearchParameters([]);
+    setAddSearches([]);
+    // setDialogContent(
+    //   <CommonPoppup
+    //     content={ManageLocales('app.search.closeTabs')}
+    //     status="warning"
+    //     customPoppupStyle="h-[200px]"
+    //     customPoppupBodyStyle="!mt-[65px]"
+    //     header={ManageLocales('app.search.confirmHeader')}
+    //     actionButtonData={[
+    //       {
+    //         variant: 'secondary',
+    //         label: ManageLocales('app.modal.no'),
+    //         handler: () => setIsDialogOpen(false),
+    //         customStyle: 'flex-1 h-10'
+    //       },
+    //       {
+    //         variant: 'primary',
+    //         label: ManageLocales('app.modal.yes'),
+    //         handler: () => {
+    //           localStorage.removeItem('Search'),
+    //             setIsDialogOpen(false),
+    //             router.push(
+    //               `${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`
+    //             ),
+    //             setSearchParameters([]);
+    //           setAddSearches([]);
+    //         },
+    //         customStyle: 'flex-1 h-10'
+    //       }
+    //     ]}
+    //   />
+    // );
 
-    setIsDialogOpen(true);
+    // setIsDialogOpen(true);
   };
 
   const closeSearch = (

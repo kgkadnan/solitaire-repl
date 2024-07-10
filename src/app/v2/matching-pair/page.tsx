@@ -16,7 +16,6 @@ import { InputDialogComponent } from '@/components/v2/common/input-dialog';
 import { InputField } from '@/components/v2/common/input-field';
 import bookmarkIcon from '@public/v2/assets/icons/modal/bookmark.svg';
 import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
-import CommonPoppup from '../login/component/common-poppup';
 import { handleSaveSearch } from '../search/result/helpers/handle-save-search';
 import Form, { ISavedSearch } from '../search/form/form';
 import { handleReset } from '../search/form/helpers/reset';
@@ -126,39 +125,13 @@ const MatchingPair = () => {
   }, [localStorage.getItem('MatchingPair')!]);
 
   const handleCloseAllTabs = () => {
-    setDialogContent(
-      <CommonPoppup
-        content={ManageLocales('app.search.closeTabs')}
-        status="warning"
-        customPoppupStyle="h-[200px]"
-        customPoppupBodyStyle="!mt-[65px]"
-        header={ManageLocales('app.search.confirmHeader')}
-        actionButtonData={[
-          {
-            variant: 'secondary',
-            label: ManageLocales('app.modal.no'),
-            handler: () => setIsDialogOpen(false),
-            customStyle: 'flex-1 h-10'
-          },
-          {
-            variant: 'primary',
-            label: ManageLocales('app.modal.yes'),
-            handler: () => {
-              localStorage.removeItem('MatchingPair');
-              setIsDialogOpen(false),
-                router.push(
-                  `${Routes.MATCHING_PAIR}?active-tab=${MatchSubRoutes.NEW_SEARCH}`
-                ),
-                setSearchParameters([]);
-              setAddSearches([]);
-            },
-            customStyle: 'flex-1 h-10'
-          }
-        ]}
-      />
-    );
-
-    setIsDialogOpen(true);
+    localStorage.removeItem('MatchingPair');
+    setIsDialogOpen(false),
+      router.push(
+        `${Routes.MATCHING_PAIR}?active-tab=${MatchSubRoutes.NEW_SEARCH}`
+      ),
+      setSearchParameters([]);
+    setAddSearches([]);
   };
 
   const closeSearch = (
