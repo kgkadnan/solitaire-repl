@@ -15,7 +15,8 @@ import {
   useLazyCardMyInvoiceQuery,
   useLazyCardPreviousConfirmationQuery,
   useLazyCardRecentConfirmationQuery,
-  useLazyGetProductDetailsQuery
+  useLazyGetProductDetailsQuery,
+  useLazySearchPendingOrderByKeywordQuery
 } from '@/features/api/your-order';
 import { ManageLocales } from '@/utils/v2/translate';
 import React, { useEffect, useState } from 'react';
@@ -87,7 +88,7 @@ const MyDiamonds = () => {
   const [showSuggestions, setShowSuggestions] = useState(false);
 
   const [triggerProductDetail] = useLazyGetProductDetailsQuery();
-
+  const [triggerSearchByKeyword] = useLazySearchPendingOrderByKeywordQuery();
   const { modalState, modalSetState } = useModalStateManagement();
   const { isDialogOpen, dialogContent } = modalState;
   useEffect(() => {
@@ -249,16 +250,22 @@ const MyDiamonds = () => {
     setShowSuggestions(true);
     setSearch(inputValue);
 
-    if (activeTab === PENDING) {
-      const filteredData = pendingDataState.filter((item: any) => {
-        const formattedValue = formatNumberWithLeadingZeros(item.display_id);
-        return (
-          String(item.display_id).includes(inputValue) ||
-          formattedValue.includes(inputValue)
-        );
-      });
-      setPendingDataState(filteredData);
-    } else if (activeTab === IN_TRANSIT) {
+    // if (activeTab === PENDING) {
+    //   // const filteredData = pendingDataState.filter((item: any) => {
+    //   //   const formattedValue = formatNumberWithLeadingZeros(item.display_id);
+    //   //   return (
+    //   //     String(item.display_id).includes(inputValue) ||
+    //   //     formattedValue.includes(inputValue)
+    //   //   );
+    //   // });
+    //   triggerSearchByKeyword({ keyword: inputValue })
+    //     .unwrap()
+    //     .then(res => setPendingDataState(res?.orders))
+    //     .catch(e => logger.error(e));
+
+    //   // setPendingDataState(filteredData);
+    // } else
+    if (activeTab === IN_TRANSIT) {
       const filteredData = inTransitDataState.filter((item: any) =>
         String(item.invoice_id).toLowerCase().includes(inputValue)
       );
@@ -277,13 +284,28 @@ const MyDiamonds = () => {
     }
   };
 
+  const handleGoSearch = () => {
+    if (activeTab === PENDING) {
+      triggerSearchByKeyword({ keyword: search })
+        .unwrap()
+        .then(res => setPendingDataState(res?.orders))
+        .catch(e => logger.error(e));
+
+      // setPendingDataState(filteredData);
+    }
+
+    if (!search) {
+      setPendingDataState(pendingInvoicesData?.orders);
+    }
+  };
+
   const handleClearInput = () => {
     setSearch('');
     setPendingDataState(pendingInvoicesData?.orders);
     setPastDataState(invoiceHistoryData?.orders);
     setInTransitDataState(activeInvoicesData?.orders);
   };
-
+  console.log(pendingDataState, 'pendingDataState');
   const filterDataByDate = (
     data: IDataItem[],
     fromDate: Date,
@@ -504,6 +526,7 @@ const MyDiamonds = () => {
                 handleClearInput={handleClearInput}
                 setShowSuggestions={setShowSuggestions}
                 showSuggestions={showSuggestions}
+                handleGoSearch={handleGoSearch}
               />
 
               <DatePickerWithRange

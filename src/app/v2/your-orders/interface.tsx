@@ -7,6 +7,7 @@ export interface IHeaderSearchBarProps {
   handleClearInput: any;
   setShowSuggestions?: any;
   showSuggestions?: boolean;
+  handleGoSearch: any;
 }
 
 export interface ITabsProps {
