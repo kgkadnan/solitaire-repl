@@ -245,26 +245,12 @@ const MyDiamonds = () => {
   };
 
   const handleSearch = (e: any) => {
+    setDate(undefined);
     let inputValue = e.target.value;
     inputValue = inputValue.toLowerCase();
     setShowSuggestions(true);
     setSearch(inputValue);
 
-    // if (activeTab === PENDING) {
-    //   // const filteredData = pendingDataState.filter((item: any) => {
-    //   //   const formattedValue = formatNumberWithLeadingZeros(item.display_id);
-    //   //   return (
-    //   //     String(item.display_id).includes(inputValue) ||
-    //   //     formattedValue.includes(inputValue)
-    //   //   );
-    //   // });
-    //   triggerSearchByKeyword({ keyword: inputValue })
-    //     .unwrap()
-    //     .then(res => setPendingDataState(res?.orders))
-    //     .catch(e => logger.error(e));
-
-    //   // setPendingDataState(filteredData);
-    // } else
     if (activeTab === IN_TRANSIT) {
       const filteredData = inTransitDataState.filter((item: any) =>
         String(item.invoice_id).toLowerCase().includes(inputValue)
@@ -286,12 +272,17 @@ const MyDiamonds = () => {
 
   const handleGoSearch = () => {
     if (activeTab === PENDING) {
+      setIsLoading(true);
       triggerSearchByKeyword({ keyword: search })
         .unwrap()
-        .then(res => setPendingDataState(res?.orders))
-        .catch(e => logger.error(e));
+        .then(res => {
+          setPendingDataState(res?.orders);
 
-      // setPendingDataState(filteredData);
+          setIsLoading(false);
+        })
+        .catch(e => {
+          logger.error(e), setIsLoading(false);
+        });
     }
 
     if (!search) {
@@ -305,7 +296,6 @@ const MyDiamonds = () => {
     setPastDataState(invoiceHistoryData?.orders);
     setInTransitDataState(activeInvoicesData?.orders);
   };
-  console.log(pendingDataState, 'pendingDataState');
   const filterDataByDate = (
     data: IDataItem[],
     fromDate: Date,
@@ -322,6 +312,7 @@ const MyDiamonds = () => {
     });
   };
   const handleApplyFilter = (date: any, reset: string) => {
+    setSearch('');
     const fromDate = new Date(date.from);
     const toDate = new Date(date.to);
     switch (activeTab) {
