@@ -23,7 +23,7 @@ export const HeaderSearchBar: React.FC<IHeaderSearchBarProps> = ({
       <div className="relative">
         {/* CustomSearchInputField component for the search input */}
         <SearchInputField
-          type="number"
+          type="text"
           name="Search"
           value={search}
           onChange={handleSearch}
