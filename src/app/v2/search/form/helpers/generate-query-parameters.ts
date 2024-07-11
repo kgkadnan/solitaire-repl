@@ -187,9 +187,10 @@ export const generateQueryParams = (state: IState) => {
   if (
     (selectedCaratRange && selectedCaratRange.length > 0) ||
     (caratRangeSelection && caratRangeSelection.length > 0) ||
-    (caratMin !== '' && caratMax !== '')
+    caratMin !== '' ||
+    caratMax !== ''
   ) {
-    if (caratMin !== '' && caratMax !== '') {
+    if (caratMin !== '' || caratMax !== '') {
       const caratMinValue = parseFloat(caratMin);
       const caratMaxValue = parseFloat(caratMax);
 
@@ -198,21 +199,19 @@ export const generateQueryParams = (state: IState) => {
       );
       const caratTo = (caratMaxValue <= 50 ? caratMaxValue : 50).toFixed(2);
       if (
-        !(
-          queryParams['carats']?.includes(`${caratFrom}-${caratTo}`) ||
-          selectedCaratRange.includes(`${caratFrom}-${caratTo}`)
-        )
+        !queryParams['carats']?.includes(`${caratFrom}-${caratTo}`) &&
+        !selectedCaratRange.includes(`${caratFrom}-${caratTo}`)
       ) {
         queryParams['carats'] = [
           ...selectedCaratRange,
           ...caratRangeSelection,
           `${caratFrom}-${caratTo}`
         ];
+      } else {
+        queryParams['carats'] = [...selectedCaratRange, ...caratRangeSelection];
       }
     } else {
-      queryParams['carats'] = [
-        ...new Set([...selectedCaratRange, ...caratRangeSelection])
-      ];
+      queryParams['carats'] = [...selectedCaratRange, ...caratRangeSelection];
     }
   }
 

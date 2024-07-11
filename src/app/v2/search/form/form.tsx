@@ -473,7 +473,6 @@ const Form = ({
       handleFormReset();
     }
   }, [subRoute]);
-  console.log(searchUrl, data?.count, minMaxError);
   const handleFormSearch = async (
     isSavedParams: boolean = false,
     id?: string,
@@ -561,7 +560,6 @@ const Form = ({
       data?.count > MIN_SEARCH_FORM_COUNT &&
       minMaxError.length === 0
     ) {
-      console.log('herer', state);
       if (
         (formIdentifier === 'MatchingPair'
           ? data?.count < MAX_SEARCH_FORM_COUNT / 2
