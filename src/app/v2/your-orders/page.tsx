@@ -245,6 +245,7 @@ const MyDiamonds = () => {
   };
 
   const handleSearch = (e: any) => {
+    setDate(undefined);
     let inputValue = e.target.value;
     inputValue = inputValue.toLowerCase();
     setShowSuggestions(true);
@@ -275,13 +276,13 @@ const MyDiamonds = () => {
       triggerSearchByKeyword({ keyword: search })
         .unwrap()
         .then(res => {
-          setPendingDataState(res?.orders), setIsLoading(false);
+          setPendingDataState(res?.orders);
+
+          setIsLoading(false);
         })
         .catch(e => {
           logger.error(e), setIsLoading(false);
         });
-
-      // setPendingDataState(filteredData);
     }
 
     if (!search) {
@@ -295,7 +296,6 @@ const MyDiamonds = () => {
     setPastDataState(invoiceHistoryData?.orders);
     setInTransitDataState(activeInvoicesData?.orders);
   };
-  console.log(pendingDataState, 'pendingDataState');
   const filterDataByDate = (
     data: IDataItem[],
     fromDate: Date,
@@ -312,6 +312,7 @@ const MyDiamonds = () => {
     });
   };
   const handleApplyFilter = (date: any, reset: string) => {
+    setSearch('');
     const fromDate = new Date(date.from);
     const toDate = new Date(date.to);
     switch (activeTab) {
