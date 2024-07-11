@@ -104,6 +104,7 @@ import BookAppointment from './my-appointments/components/book-appointment/book-
 import { Skeleton } from '@mui/material';
 import CommonPoppup from './login/component/common-poppup';
 import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
+import { useLazyGetMatchingPairCountQuery } from '@/features/api/match-pair';
 
 interface ITabs {
   label: string;
@@ -231,6 +232,8 @@ const Dashboard = () => {
     setActiveTab(tab);
   };
   let [triggerProductCountApi] = useLazyGetProductCountQuery();
+  let [triggerMatchingPairCountApi] = useLazyGetMatchingPairCountQuery();
+
   const { modalState, modalSetState } = useModalStateManagement();
   const { isDialogOpen, dialogContent } = modalState;
 
@@ -2000,7 +2003,10 @@ const Dashboard = () => {
                                 id: searchData.id,
                                 savedSearchData: [searchData],
                                 router,
-                                triggerProductCountApi,
+                                triggerProductCountApi:
+                                  searchData.is_matching_pair
+                                    ? triggerMatchingPairCountApi
+                                    : triggerProductCountApi,
                                 setDialogContent,
                                 setIsDialogOpen,
                                 isMatchingPair: searchData.is_matching_pair
