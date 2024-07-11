@@ -29,7 +29,7 @@ export const HeaderSearchBar: React.FC<IHeaderSearchBarProps> = ({
           placeholder={
             // Dynamic placeholder based on the active tab
             activeTab === PENDING
-              ? ManageLocales('app.myDiamonds.pendingInvoice.searchByOrderId')
+              ? 'Search by Order ID/Stock No/Certificate No'
               : ManageLocales('app.myDiamonds.activeInvoice.searchByInvoiceId')
           }
           setShowSuggestions={setShowSuggestions}
