@@ -284,7 +284,7 @@ const MyDiamonds = () => {
     }
   };
 
-  const handleGoSearch = (e: any) => {
+  const handleGoSearch = () => {
     if (activeTab === PENDING) {
       triggerSearchByKeyword({ keyword: search })
         .unwrap()

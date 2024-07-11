@@ -1248,7 +1248,11 @@ const Form = ({
               <span className="hidden  text-successMain" />
               <span
                 className={`text-mRegular font-medium text-${
-                  minMaxError.length > 0 ? 'dangerMain' : messageColor
+                  minMaxError.length > 0 ||
+                  errorText === EXCEEDS_LIMITS ||
+                  errorText === EXCEEDS_LIMITS_MATCHING_PAIR
+                    ? 'dangerMain'
+                    : messageColor
                 } pl-[8px]`}
               >
                 {!isLoading &&
