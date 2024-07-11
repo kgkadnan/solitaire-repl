@@ -254,23 +254,10 @@ const Form = ({
   useEffect(() => {
     isAllowedToUnloadRef.current = isAllowedToUnload;
   }, [isAllowedToUnload]);
-  console.log(caratRangeSelection);
 
-  useEffect(() => {
-    if (
-      caratMin &&
-      caratMin.length >= 0.15 &&
-      caratMax &&
-      caratMax.length <= 50
-    ) {
-      const caratFrom = parseFloat(caratMin).toFixed(2);
-      const caratTo = parseFloat(caratMax).toFixed(2);
-      setCaratRangeSelection([
-        ...caratRangeSelection,
-        `${caratFrom}-${caratTo}`
-      ]);
-    }
-  }, [caratMin, caratMax]);
+  // useEffect(() => {
+
+  // }, [caratMin, caratMax]);
 
   useEffect(() => {
     const handleBeforeUnload = async () => {
@@ -457,6 +444,24 @@ const Form = ({
     }
   }, []);
 
+  // useEffect(()=>{
+  //   if (
+  //     caratMin ||
+  //     caratMax
+  //   ) {
+  //     const caratFrom = parseFloat((caratMin&&caratMin >= 0.15 )? caratMin:0.15).toFixed(2);
+  //     const caratTo = parseFloat((caratMax&& caratMax <= 50)? caratMax : 50).toFixed(2);
+  //     setCaratRangeSelection([
+  //       ...caratRangeSelection,
+  //       `${caratFrom}-${caratTo}`
+  //     ]);
+  //     // setSelectedCaratRange([
+  //     //   ...selectedCaratRange,
+  //     //   `${caratFrom}-${caratTo}`
+  //     // ]);
+  //   }
+  // },[caratMin,caratMax])
+
   // Reset form when a new search is initiated
   useEffect(() => {
     if (
@@ -468,12 +473,27 @@ const Form = ({
       handleFormReset();
     }
   }, [subRoute]);
-
   const handleFormSearch = async (
     isSavedParams: boolean = false,
     id?: string,
     formIdentifier = 'Search'
   ) => {
+    let caratFrom;
+    let caratTo;
+    if (caratMin || caratMax) {
+      caratFrom = parseFloat(
+        caratMin && caratMin >= 0.15 ? caratMin : 0.15
+      ).toFixed(2);
+      caratTo = parseFloat(caratMax && caratMax <= 50 ? caratMax : 50).toFixed(
+        2
+      );
+
+      !selectedCaratRange.includes(`${caratFrom}-${caratTo}`) &&
+        setSelectedCaratRange([
+          ...selectedCaratRange,
+          `${caratFrom}-${caratTo}`
+        ]);
+    }
     if (subRoute === SubRoutes.NEW_ARRIVAL) {
       const queryParams = generateQueryParams(state);
 
@@ -536,7 +556,7 @@ const Form = ({
 
       setIsDialogOpen(true);
     } else if (
-      searchUrl &&
+      (searchUrl || (caratFrom && caratTo)) &&
       data?.count > MIN_SEARCH_FORM_COUNT &&
       minMaxError.length === 0
     ) {
@@ -547,6 +567,8 @@ const Form = ({
         data?.count > MIN_SEARCH_FORM_COUNT
       ) {
         const queryParams = generateQueryParams(state);
+        setCaratMax('');
+        setCaratMin('');
 
         if (
           modifySearchFrom === `${SubRoutes.SAVED_SEARCH}` ||

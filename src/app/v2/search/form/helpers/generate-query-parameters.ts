@@ -155,7 +155,9 @@ export const generateQueryParams = (state: IState) => {
     starLengthMin,
     selectedWhiteColor,
     selectedGirdle,
-    selectionChecked
+    selectionChecked,
+    caratMin,
+    caratMax
   } = state;
 
   // Initialize an empty object to store query parameters
@@ -184,9 +186,33 @@ export const generateQueryParams = (state: IState) => {
 
   if (
     (selectedCaratRange && selectedCaratRange.length > 0) ||
-    (caratRangeSelection && caratRangeSelection.length > 0)
+    (caratRangeSelection && caratRangeSelection.length > 0) ||
+    caratMin !== '' ||
+    caratMax !== ''
   ) {
-    queryParams['carats'] = [...selectedCaratRange, ...caratRangeSelection];
+    if (caratMin !== '' || caratMax !== '') {
+      const caratMinValue = parseFloat(caratMin);
+      const caratMaxValue = parseFloat(caratMax);
+
+      const caratFrom = (caratMinValue >= 0.15 ? caratMinValue : 0.15).toFixed(
+        2
+      );
+      const caratTo = (caratMaxValue <= 50 ? caratMaxValue : 50).toFixed(2);
+      if (
+        !queryParams['carats']?.includes(`${caratFrom}-${caratTo}`) &&
+        !selectedCaratRange.includes(`${caratFrom}-${caratTo}`)
+      ) {
+        queryParams['carats'] = [
+          ...selectedCaratRange,
+          ...caratRangeSelection,
+          `${caratFrom}-${caratTo}`
+        ];
+      } else {
+        queryParams['carats'] = [...selectedCaratRange, ...caratRangeSelection];
+      }
+    } else {
+      queryParams['carats'] = [...selectedCaratRange, ...caratRangeSelection];
+    }
   }
 
   selectedCut?.length !== 0 && (queryParams['cut'] = selectedCut);
