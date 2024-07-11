@@ -180,12 +180,18 @@ const Login = () => {
       password.length &&
       phoneNumber.mobileNumber.length
     ) {
-      let res: any = await verifyLogin({
-        phone: phoneNumber.mobileNumber,
-        password: password,
-        country_code: phoneNumber.countryCode,
-        email: email
-      });
+      let res: any = await verifyLogin(
+        loginByEmail
+          ? {
+              password: password,
+              email: email
+            }
+          : {
+              phone: phoneNumber.mobileNumber,
+              password: password,
+              country_code: phoneNumber.countryCode
+            }
+      );
       setOTPVerificationFormState(prev => ({
         ...prev,
         otpMobileNumber: `${phoneNumber.mobileNumber}`,
