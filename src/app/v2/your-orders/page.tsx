@@ -271,10 +271,15 @@ const MyDiamonds = () => {
 
   const handleGoSearch = () => {
     if (activeTab === PENDING) {
+      setIsLoading(true);
       triggerSearchByKeyword({ keyword: search })
         .unwrap()
-        .then(res => setPendingDataState(res?.orders))
-        .catch(e => logger.error(e));
+        .then(res => {
+          setPendingDataState(res?.orders), setIsLoading(false);
+        })
+        .catch(e => {
+          logger.error(e), setIsLoading(false);
+        });
 
       // setPendingDataState(filteredData);
     }
