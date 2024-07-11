@@ -36,7 +36,7 @@ const YourOrderSkeleton = () => {
             variant="rectangular"
             height={'40px'}
             sx={{ bgcolor: 'var(--neutral-200)' }}
-            width={'312px'}
+            width={'375px'}
             animation="wave"
           />
           <Skeleton

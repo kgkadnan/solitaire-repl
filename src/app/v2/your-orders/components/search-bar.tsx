@@ -15,14 +15,15 @@ export const HeaderSearchBar: React.FC<IHeaderSearchBarProps> = ({
   handleClearInput,
   setShowSuggestions,
   showSuggestions,
-  handleGoSearch
+  handleGoSearch,
+  handleKeyDown
 }) => {
   return (
     <div className="flex">
       <div className="relative">
         {/* CustomSearchInputField component for the search input */}
         <SearchInputField
-          type="number"
+          type="text"
           name="Search"
           value={search}
           onChange={handleSearch}
@@ -34,6 +35,7 @@ export const HeaderSearchBar: React.FC<IHeaderSearchBarProps> = ({
           }
           setShowSuggestions={setShowSuggestions}
           showSuggestions={showSuggestions}
+          handleKeyPress={handleKeyDown}
         />
         {search && (
           <>

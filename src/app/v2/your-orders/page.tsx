@@ -39,6 +39,7 @@ import YourOrderSkeleton from '@/components/v2/skeleton/your-order';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import { Skeleton } from '@mui/material';
 import { kycStatus } from '@/constants/enums/kyc';
+import { Events } from '@/constants/enums/event';
 
 interface IDataItem {
   id: number;
@@ -250,7 +251,6 @@ const MyDiamonds = () => {
     inputValue = inputValue.toLowerCase();
     setShowSuggestions(true);
     setSearch(inputValue);
-
     if (activeTab === IN_TRANSIT) {
       const filteredData = inTransitDataState.filter((item: any) =>
         String(item.invoice_id).toLowerCase().includes(inputValue)
@@ -269,7 +269,11 @@ const MyDiamonds = () => {
       setInTransitDataState(activeInvoicesData?.orders);
     }
   };
-
+  const handleKeyDown = (e: any) => {
+    if (e.key === Events.ENTER && activeTab === PENDING) {
+      handleGoSearch();
+    }
+  };
   const handleGoSearch = () => {
     if (activeTab === PENDING) {
       setIsLoading(true);
@@ -518,6 +522,7 @@ const MyDiamonds = () => {
                 setShowSuggestions={setShowSuggestions}
                 showSuggestions={showSuggestions}
                 handleGoSearch={handleGoSearch}
+                handleKeyDown={handleKeyDown}
               />
 
               <DatePickerWithRange

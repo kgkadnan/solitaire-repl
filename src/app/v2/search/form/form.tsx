@@ -482,13 +482,14 @@ const Form = ({
     let caratTo;
     if (caratMin || caratMax) {
       caratFrom = parseFloat(
-        caratMin && caratMin >= 0.15 ? caratMin : 0.15
+        caratMin && caratMin >= 0.15 && caratMin <= 50 ? caratMin : 0.15
       ).toFixed(2);
-      caratTo = parseFloat(caratMax && caratMax <= 50 ? caratMax : 50).toFixed(
-        2
-      );
+      caratTo = parseFloat(
+        caratMax && caratMax <= 50 && caratMax >= 0.15 ? caratMax : 50
+      ).toFixed(2);
 
       !selectedCaratRange.includes(`${caratFrom}-${caratTo}`) &&
+        caratFrom < caratTo &&
         setSelectedCaratRange([
           ...selectedCaratRange,
           `${caratFrom}-${caratTo}`
