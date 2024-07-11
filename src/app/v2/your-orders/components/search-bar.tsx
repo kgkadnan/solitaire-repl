@@ -15,7 +15,8 @@ export const HeaderSearchBar: React.FC<IHeaderSearchBarProps> = ({
   handleClearInput,
   setShowSuggestions,
   showSuggestions,
-  handleGoSearch
+  handleGoSearch,
+  handleKeyDown
 }) => {
   return (
     <div className="flex">
@@ -34,6 +35,7 @@ export const HeaderSearchBar: React.FC<IHeaderSearchBarProps> = ({
           }
           setShowSuggestions={setShowSuggestions}
           showSuggestions={showSuggestions}
+          handleKeyPress={handleKeyDown}
         />
         {search && (
           <>
