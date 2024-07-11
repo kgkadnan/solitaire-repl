@@ -250,21 +250,6 @@ const MyDiamonds = () => {
     setShowSuggestions(true);
     setSearch(inputValue);
 
-    // if (activeTab === PENDING) {
-    //   // const filteredData = pendingDataState.filter((item: any) => {
-    //   //   const formattedValue = formatNumberWithLeadingZeros(item.display_id);
-    //   //   return (
-    //   //     String(item.display_id).includes(inputValue) ||
-    //   //     formattedValue.includes(inputValue)
-    //   //   );
-    //   // });
-    //   triggerSearchByKeyword({ keyword: inputValue })
-    //     .unwrap()
-    //     .then(res => setPendingDataState(res?.orders))
-    //     .catch(e => logger.error(e));
-
-    //   // setPendingDataState(filteredData);
-    // } else
     if (activeTab === IN_TRANSIT) {
       const filteredData = inTransitDataState.filter((item: any) =>
         String(item.invoice_id).toLowerCase().includes(inputValue)
