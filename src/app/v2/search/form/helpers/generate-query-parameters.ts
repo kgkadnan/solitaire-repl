@@ -198,7 +198,11 @@ export const generateQueryParams = (state: IState) => {
         caratMinValue >= 0.15 && caratMinValue <= 50 ? caratMinValue : 0.15
       ).toFixed(2);
       const caratTo = (
-        caratMaxValue <= 50 && caratMaxValue >= 0.15 ? caratMaxValue : 50
+        caratMaxValue <= 50 &&
+        caratMaxValue >= 0.15 &&
+        caratMinValue < caratMaxValue
+          ? caratMaxValue
+          : 50
       ).toFixed(2);
       if (
         !queryParams['carats']?.includes(`${caratFrom}-${caratTo}`) &&
