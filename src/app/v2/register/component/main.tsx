@@ -92,7 +92,6 @@ const Register = () => {
   const [register] = useRegisterMutation();
   const [verifyOTP] = useVerifyOTPMutation();
   const [sendOtp] = useSendOtpMutation();
-
   useEffect(() => {
     if (data) {
       setRegisterFormState({

@@ -11,6 +11,7 @@ import CheckboxComponent from '@/components/v2/common/checkbox';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { KgkDiamondLaunchDialog } from '@/components/v2/common/dialog/kgk-diamond-launch-modal';
 import { InputField } from '@/components/v2/common/input-field';
+import { useLazyTrackRegisterFlowQuery } from '@/features/api/register';
 
 const LoginComponent = ({
   setPhoneNumber,
@@ -35,6 +36,7 @@ const LoginComponent = ({
   const pathName = useSearchParams().get('path');
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [triggerRegisterFlowTrack] = useLazyTrackRegisterFlowQuery();
 
   useEffect(() => {
     if (
@@ -46,7 +48,6 @@ const LoginComponent = ({
   }, [currentCountryCode]);
 
   const handleSubmit = (event: any) => {
-    console.log('called');
     event.preventDefault(); // Prevent default form submission behavior
     handleLogin(); // Your login handler
   };
@@ -195,6 +196,9 @@ const LoginComponent = ({
 
             <IndividualActionButton
               onClick={() => {
+                triggerRegisterFlowTrack({
+                  event: 'registration-button-click'
+                });
                 pathName === 'register'
                   ? router.back()
                   : router.push('/v2/register?path=login');
