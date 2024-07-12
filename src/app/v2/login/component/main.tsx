@@ -66,7 +66,7 @@ const Login = () => {
   const [password, setPassword] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false); // State to track loading
-  const [loginByEmail, _setLoginByEmail] = useState<boolean>(false);
+  const [loginByEmail] = useState<boolean>(false);
   const [token, setToken] = useState(initialTokenState);
   const { data }: { data?: IAuthDataResponse } = useGetAuthDataQuery(
     token.token,
