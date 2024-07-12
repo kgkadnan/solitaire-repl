@@ -41,17 +41,17 @@ const EmailVerification = ({
   setOtpValues,
   otpValues,
   resendTimer,
-  setCurrentState,
-  token,
-  userLoggedIn,
-  setIsDialogOpen,
-  setDialogContent,
-  verifyOTP,
+  // setCurrentState,
+  // token,
+  // userLoggedIn,
+  // setIsDialogOpen,
+  // setDialogContent,
+  // verifyOTP,
   setResendTimer,
-  sendOtp,
-  role = '',
-  setToken,
-  setIsLoading,
+  // sendOtp,
+  // role = '',
+  // setToken,
+  // setIsLoading,
   isLoading
 }: IOTPVerification) => {
   const resendLabel = resendTimer > 0 ? `(${resendTimer}Sec)` : '';
@@ -68,14 +68,14 @@ const EmailVerification = ({
     return () => clearInterval(countdownInterval);
   }, [resendTimer]);
 
-  function checkOTPEntry(otpEntry: string[]) {
-    for (let i = 0; i < otpEntry.length; i++) {
-      if (otpEntry[i] === '') {
-        return false;
-      }
-    }
-    return true;
-  }
+  // function checkOTPEntry(otpEntry: string[]) {
+  //   for (let i = 0; i < otpEntry.length; i++) {
+  //     if (otpEntry[i] === '') {
+  //       return false;
+  //     }
+  //   }
+  //   return true;
+  // }
 
   return (
     <div className="flex  items-center">

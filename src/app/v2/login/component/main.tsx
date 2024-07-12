@@ -353,7 +353,7 @@ const Login = () => {
             email={email}
             emailErrorText={emailErrorText}
             loginByEmail={loginByEmail}
-            setLoginByEmail={setLoginByEmail}
+            // setLoginByEmail={setLoginByEmail}
           />
         );
       case 'otpVerification':
