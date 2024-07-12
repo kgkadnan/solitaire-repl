@@ -29,7 +29,8 @@ const LoginComponent = ({
   setEmailErrorText,
   email,
   emailErrorText,
-  loginByEmail
+  loginByEmail,
+  setLoginByEmail
 }: any) => {
   const [isKeepSignedIn, setIsKeepSignedIn] = useState(false);
   const router = useRouter();
@@ -72,7 +73,7 @@ const LoginComponent = ({
           <div className="text-headingM text-neutral900 font-medium text-left">
             {ManageLocales('app.login')}
           </div>
-          {/* <div className="flex">
+          <div className="flex">
             <button
               className={`py-2 px-4 text-mMedium font-medium ${
                 !loginByEmail
@@ -95,7 +96,7 @@ const LoginComponent = ({
             >
               <div className="flex gap-1">Email</div>
             </button>
-          </div> */}
+          </div>
 
           {/* Input fields */}
           <div className="flex flex-col gap-5">
