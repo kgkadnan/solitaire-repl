@@ -68,6 +68,7 @@ const Login = () => {
   }>({ countryCode: '', mobileNumber: '' });
   const [password, setPassword] = useState<string>('');
   const [email, setEmail] = useState<string>('');
+  const [emailToken, setEmailToken] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false); // State to track loading
   const [loginByEmail, setLoginByEmail] = useState<boolean>(false);
   const [token, setToken] = useState(initialTokenState);
@@ -230,6 +231,7 @@ const Login = () => {
           tempToken: res.data.access_token
         }));
       } else if (!res.data.customer.is_email_verified && loginByEmail) {
+        setEmailToken(res.data.customer.email_token);
         setCurrentState('emailVerificationVerification');
       } else if (res.data.customer.phone_token) {
         setCurrentState('otpVerification');
@@ -463,7 +465,7 @@ const Login = () => {
             sendOtp={sendOtp}
             resendTimer={resendTimer}
             setCurrentState={setCurrentState}
-            emailToken={'token'}
+            emailToken={emailToken}
             userLoggedIn={userLoggedIn}
             setIsInputDialogOpen={setIsInputDialogOpen}
             setIsDialogOpen={setIsDialogOpen}
