@@ -14,8 +14,14 @@ export const registerApi = createApi({
         body: data // Modify this to match your API's payload
       }),
       invalidatesTags: ['Register']
+    }),
+    trackRegisterFlow: builder.query({
+      query: ({ event }) => ({
+        url: `/event-track/${event}`
+      })
     })
   })
 });
 
-export const { useRegisterMutation } = registerApi;
+export const { useRegisterMutation, useLazyTrackRegisterFlowQuery } =
+  registerApi;
