@@ -29,8 +29,7 @@ const LoginComponent = ({
   email,
   emailErrorText,
   loginByEmail
-} // setLoginByEmail
-: any) => {
+}: any) => {
   const [isKeepSignedIn, setIsKeepSignedIn] = useState(false);
   const router = useRouter();
   const pathName = useSearchParams().get('path');
