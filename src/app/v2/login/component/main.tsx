@@ -175,10 +175,11 @@ const Login = () => {
     setIsLoading(true);
     if (
       (!phoneErrorText.length || !emailErrorText.length) &&
-      !passwordErrorText.length &&
-      isPhoneNumberValid(phoneNumber.mobileNumber) &&
-      password.length &&
-      phoneNumber.mobileNumber.length
+      ((!passwordErrorText.length &&
+        isPhoneNumberValid(phoneNumber.mobileNumber) &&
+        phoneNumber.mobileNumber.length) ||
+        isEmailValid(email)) &&
+      password.length
     ) {
       let res: any = await verifyLogin(
         loginByEmail
@@ -225,6 +226,8 @@ const Login = () => {
           token: res.data.access_token,
           tempToken: res.data.access_token
         }));
+      } else if (!res.data.customer.is_email_verified && loginByEmail) {
+        setCurrentState('emailVerificationVerification');
       } else if (res.data.customer.phone_token) {
         setCurrentState('otpVerification');
         setToken((prev: any) => ({
@@ -249,6 +252,7 @@ const Login = () => {
       setPasswordErrorText(ENTER_PASSWORD);
     }
     setIsLoading(false);
+    // 4;
   };
   // Handle Enter key press for login
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -353,6 +357,28 @@ const Login = () => {
           />
         );
       case 'otpVerification':
+        return (
+          <OTPVerification
+            otpVerificationFormState={otpVerificationFormState}
+            setOtpValues={setOtpValues}
+            otpValues={otpValues}
+            sendOtp={sendOtp}
+            resendTimer={resendTimer}
+            setCurrentState={setCurrentState}
+            token={token}
+            userLoggedIn={userLoggedIn}
+            setIsInputDialogOpen={setIsInputDialogOpen}
+            setIsDialogOpen={setIsDialogOpen}
+            setDialogContent={setDialogContent}
+            verifyOTP={verifyOTP}
+            setToken={setToken}
+            setResendTimer={setResendTimer}
+            role={'login'}
+            setIsLoading={setIsLoading}
+            isLoading={isLoading}
+          />
+        );
+      case 'emailVerificationVerification':
         return (
           <OTPVerification
             otpVerificationFormState={otpVerificationFormState}
