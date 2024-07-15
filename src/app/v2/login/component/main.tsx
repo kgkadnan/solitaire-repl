@@ -252,20 +252,19 @@ const Login = () => {
         !phoneNumber.mobileNumber.length ||
         !isPhoneNumberValid(phoneNumber.mobileNumber))
     ) {
-      if (
-        (!phoneNumber.mobileNumber ||
-          !isPhoneNumberValid(phoneNumber.mobileNumber)) &&
-        !passwordErrorText.length
-      ) {
-        if (!phoneNumber.mobileNumber) {
-          setPhoneErrorText(ENTER_PHONE);
-        } else {
-          setPhoneErrorText(INVALID_MOBILE);
-        }
+      if (!phoneNumber.mobileNumber && !password.length) {
+        // if (!phoneNumber.mobileNumber) {
+        //   setPhoneErrorText(ENTER_PHONE);
+        // } else {
+        //   setPhoneErrorText(INVALID_MOBILE);
+        // }
+        setPhoneErrorText(ENTER_PHONE);
         setPasswordErrorText(ENTER_PASSWORD);
+      } else if (!phoneNumber.mobileNumber) {
+        setPhoneErrorText(ENTER_PHONE);
       } else if (!isPhoneNumberValid(phoneNumber.mobileNumber)) {
         setPhoneErrorText(INVALID_MOBILE);
-      } else if (!passwordErrorText.length) {
+      } else if (!password.length) {
         setPasswordErrorText(ENTER_PASSWORD);
       }
     } else if (
@@ -277,7 +276,7 @@ const Login = () => {
         setPasswordErrorText(ENTER_PASSWORD);
       } else if (!isEmailValid(email)) {
         setEmailErrorText(INVALID_EMAIL_FORMAT);
-      } else if (!passwordErrorText.length) {
+      } else if (!password.length) {
         setPasswordErrorText(ENTER_PASSWORD);
       }
       // setEmailErrorText(INVALID_EMAIL_FORMAT);
