@@ -473,7 +473,8 @@ const MyCart = () => {
     if (variantIds.length) {
       confirmProduct({
         variants: variantIds,
-        comments: commentValue
+        comments: commentValue,
+        identifier: 'My-Cart'
       })
         .unwrap()
         .then(res => {

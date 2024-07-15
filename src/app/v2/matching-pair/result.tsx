@@ -757,7 +757,8 @@ const MatchingPairResult = ({
       setIsLoading(true);
       confirmProduct({
         variants: variantIds,
-        comments: commentValue
+        comments: commentValue,
+        identifier: 'Matching-Pair'
       })
         .unwrap()
         .then(res => {

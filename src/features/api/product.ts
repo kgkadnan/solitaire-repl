@@ -32,8 +32,8 @@ export const productApi = createApi({
       invalidatesTags: ['Product']
     }),
     confirmProduct: builder.mutation({
-      query: data => ({
-        url: `/store/products/confirm`,
+      query: ({ identifier, ...data }) => ({
+        url: `/store/products/confirm?request_page=${identifier ?? ''}`,
         method: 'POST',
         body: data
       }),

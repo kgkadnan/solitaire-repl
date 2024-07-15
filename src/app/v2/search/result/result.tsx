@@ -848,7 +848,8 @@ const Result = ({
       setIsLoading(true);
       confirmProduct({
         variants: variantIds,
-        comments: commentValue
+        comments: commentValue,
+        identifier: 'Searching'
       })
         .unwrap()
         .then(res => {

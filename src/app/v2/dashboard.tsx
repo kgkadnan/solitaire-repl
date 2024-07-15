@@ -1152,7 +1152,8 @@ const Dashboard = () => {
     if (variantIds.length) {
       confirmProduct({
         variants: variantIds,
-        comments: commentValue
+        comments: commentValue,
+        identifier: 'Dashboard'
       })
         .unwrap()
         .then(res => {
