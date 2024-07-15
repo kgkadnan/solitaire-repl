@@ -75,26 +75,26 @@ const LoginComponent = ({
           </div>
           <div className="flex h-[40px]">
             <button
-              className={`py-2 px-4 text-mMedium font-medium  ${
+              className={`pt-[8px] px-4 text-mMedium font-medium h-[40px] ${
                 !loginByEmail
-                  ? 'text-neutral900 border-b-[2px] border-primaryMain'
-                  : 'text-neutral600 border-b-[1px] border-[#E4E7EC] pb-[9px]'
+                  ? 'text-neutral900 border-b-[2px] border-primaryMain pb-[7px]'
+                  : 'text-neutral600 border-b-[1px] border-[#E4E7EC] pb-[8px]'
               }`}
               key={'Mobile'}
               onClick={() => setLoginByEmail(false)}
             >
-              <div className="flex gap-1">Mobile</div>
+              Mobile
             </button>
             <button
-              className={`py-2 px-4 text-mMedium font-medium  ${
+              className={`pt-[8px] px-4 text-mMedium font-medium h-[40px] ${
                 loginByEmail
-                  ? 'text-neutral900 border-b-[2px] border-primaryMain'
-                  : 'text-neutral600 border-b-[1px] border-[#E4E7EC]'
+                  ? 'text-neutral900 border-b-[2px] border-primaryMain pb-[7px]'
+                  : 'text-neutral600 border-b-[1px] border-[#E4E7EC] pb-[8px]'
               }`}
               key={'Email'}
               onClick={() => setLoginByEmail(true)}
             >
-              <div className="flex gap-1">Email</div>
+              Email
             </button>
           </div>
 
@@ -171,7 +171,7 @@ const LoginComponent = ({
               styles={{ inputMain: 'h-[64px]' }}
             />
 
-            <div className="flex justify-between text-mRegualar text-neutral900">
+            <div className="flex justify-between text-mRegualar text-neutral900 pt-1">
               <div className="flex items-center gap-2">
                 {' '}
                 <CheckboxComponent

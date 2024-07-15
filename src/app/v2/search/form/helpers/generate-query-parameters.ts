@@ -190,7 +190,6 @@ export const generateQueryParams = (state: IState) => {
     caratMin !== '' ||
     caratMax !== ''
   ) {
-    console.log('here1');
     if (caratMin !== '' || caratMax !== '') {
       const caratMinValue = parseFloat(caratMin);
       const caratMaxValue = parseFloat(caratMax);

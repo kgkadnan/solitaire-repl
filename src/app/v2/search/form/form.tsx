@@ -1251,7 +1251,9 @@ const Form = ({
                 className={`text-mRegular font-medium text-${
                   minMaxError.length > 0 ||
                   errorText === EXCEEDS_LIMITS ||
-                  errorText === EXCEEDS_LIMITS_MATCHING_PAIR
+                  errorText === EXCEEDS_LIMITS_MATCHING_PAIR ||
+                  errorText === NO_MATCHING_PAIRS_FOUND ||
+                  errorText === NO_STONE_FOUND
                     ? 'dangerMain'
                     : messageColor
                 } pl-[8px]`}
