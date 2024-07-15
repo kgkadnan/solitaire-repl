@@ -101,7 +101,7 @@ const LoginComponent = ({
           {/* Input fields */}
           <div className="flex flex-col gap-5">
             {loginByEmail ? (
-              <>
+              <div className=" h-[65px]">
                 <InputField
                   label={ManageLocales('app.register.email')}
                   onChange={event =>
@@ -124,32 +124,35 @@ const LoginComponent = ({
                   styles={{ inputMain: 'h-[64px]' }}
                   autoComplete="none"
                 />
-              </>
+              </div>
             ) : (
-              <MobileInput
-                label={ManageLocales('app.register.mobileNumber')}
-                onChange={event => {
-                  handleLoginInputChange({
-                    event,
-                    type: 'phone',
-                    setPhoneNumber,
-                    setPhoneErrorText,
-                    setPasswordErrorText,
-                    setPassword
-                  });
-                }}
-                type="number"
-                name="mobileNumber"
-                errorText={phoneErrorText}
-                placeholder={ManageLocales(
-                  'app.register.mobileNumber.placeholder'
-                )}
-                registerFormState={phoneNumber}
-                setRegisterFormState={setPhoneNumber}
-                value={phoneNumber.mobileNumber}
-                onKeyDown={handleKeyDown}
-              />
+              <div className=" h-[65px]">
+                <MobileInput
+                  label={ManageLocales('app.register.mobileNumber')}
+                  onChange={event => {
+                    handleLoginInputChange({
+                      event,
+                      type: 'phone',
+                      setPhoneNumber,
+                      setPhoneErrorText,
+                      setPasswordErrorText,
+                      setPassword
+                    });
+                  }}
+                  type="number"
+                  name="mobileNumber"
+                  errorText={phoneErrorText}
+                  placeholder={ManageLocales(
+                    'app.register.mobileNumber.placeholder'
+                  )}
+                  registerFormState={phoneNumber}
+                  setRegisterFormState={setPhoneNumber}
+                  value={phoneNumber.mobileNumber}
+                  onKeyDown={handleKeyDown}
+                />
+              </div>
             )}
+
             <PasswordField
               label={ManageLocales('app.register.password')}
               onChange={event =>
