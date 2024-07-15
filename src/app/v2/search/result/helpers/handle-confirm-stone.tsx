@@ -8,7 +8,6 @@ import {
 import { Dispatch, SetStateAction } from 'react';
 import { IProduct } from '../../interface';
 import { setConfirmStoneTrack } from '@/features/confirm-stone-track/confirm-stone-track-slice';
-import { useAppDispatch } from '@/hooks/hook';
 
 /**
  * Handles the confirmation of selected stones.
