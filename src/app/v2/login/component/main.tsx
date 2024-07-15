@@ -180,7 +180,6 @@ const Login = () => {
   }, [data]);
 
   const handleLogin = async () => {
-    console.log('kokok');
     setIsLoading(true);
     if (
       (!phoneErrorText.length || !emailErrorText.length) &&
@@ -257,8 +256,8 @@ const Login = () => {
     } else if (loginByEmail && (!email.length || !isEmailValid(email))) {
       setEmailErrorText(INVALID_EMAIL_FORMAT);
       setPasswordErrorText(ENTER_PASSWORD);
-    } else if (!isPhoneNumberValid(phoneNumber.mobileNumber)) {
-      setPhoneErrorText(INVALID_MOBILE);
+    } else if (!isEmailValid(email)) {
+      setEmailErrorText(INVALID_EMAIL_FORMAT);
     } else if (!password.length) {
       setPasswordErrorText(ENTER_PASSWORD);
     }
