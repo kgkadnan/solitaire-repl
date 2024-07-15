@@ -266,7 +266,10 @@ const Login = () => {
       } else if (!passwordErrorText.length) {
         setPasswordErrorText(ENTER_PASSWORD);
       }
-    } else if (loginByEmail && (!email.length || !isEmailValid(email))) {
+    } else if (
+      loginByEmail &&
+      (!email.length || !isEmailValid(email) || !password.length)
+    ) {
       if ((!email || !isEmailValid(email)) && !passwordErrorText.length) {
         setEmailErrorText(INVALID_EMAIL_FORMAT);
         setPasswordErrorText(ENTER_PASSWORD);
