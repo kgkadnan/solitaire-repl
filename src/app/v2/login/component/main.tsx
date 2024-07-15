@@ -248,19 +248,41 @@ const Login = () => {
       }
     } else if (
       !loginByEmail &&
-      !password.length &&
-      !phoneNumber.mobileNumber.length
+      (!password.length || !phoneNumber.mobileNumber.length)
     ) {
-      setPasswordErrorText(ENTER_PASSWORD);
-      setPhoneErrorText(ENTER_PHONE);
+      if (
+        (!phoneNumber.mobileNumber ||
+          !isPhoneNumberValid(phoneNumber.mobileNumber)) &&
+        !passwordErrorText.length
+      ) {
+        if (!phoneNumber.mobileNumber) {
+          setPhoneErrorText(ENTER_PHONE);
+        } else {
+          setPhoneErrorText(INVALID_MOBILE);
+        }
+        setPasswordErrorText(ENTER_PASSWORD);
+      } else if (!isPhoneNumberValid(phoneNumber.mobileNumber)) {
+        setPhoneErrorText(INVALID_MOBILE);
+      } else if (!passwordErrorText.length) {
+        setPasswordErrorText(ENTER_PASSWORD);
+      }
     } else if (loginByEmail && (!email.length || !isEmailValid(email))) {
-      setEmailErrorText(INVALID_EMAIL_FORMAT);
-      setPasswordErrorText(ENTER_PASSWORD);
-    } else if (!isEmailValid(email)) {
-      setEmailErrorText(INVALID_EMAIL_FORMAT);
-    } else if (!password.length) {
-      setPasswordErrorText(ENTER_PASSWORD);
+      if ((!email || !isEmailValid(email)) && !passwordErrorText.length) {
+        setEmailErrorText(INVALID_EMAIL_FORMAT);
+        setPasswordErrorText(ENTER_PASSWORD);
+      } else if (!isEmailValid(email)) {
+        setEmailErrorText(INVALID_EMAIL_FORMAT);
+      } else if (!passwordErrorText.length) {
+        setPasswordErrorText(ENTER_PASSWORD);
+      }
+      // setEmailErrorText(INVALID_EMAIL_FORMAT);
+      // setPasswordErrorText(ENTER_PASSWORD);
     }
+    // else if (!isEmailValid(email)) {
+    //   setEmailErrorText(INVALID_EMAIL_FORMAT);
+    // } else if (!password.length) {
+    //   setPasswordErrorText(ENTER_PASSWORD);
+    // }
     setIsLoading(false);
     // 4;
   };
