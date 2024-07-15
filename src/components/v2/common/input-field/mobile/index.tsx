@@ -54,7 +54,7 @@ export const MobileInput = ({
   const Option = (props: any) => (
     <components.Option {...props} className="country-option">
       <img
-        src={`${apiURL}flags/${props.data.iso.toLowerCase()}.png`}
+        src={`${apiURL}flags/${props.data.iso}.png`}
         style={{ width: 24 }}
         alt="logo"
       />
@@ -65,7 +65,7 @@ export const MobileInput = ({
   const SingleValue = ({ children, ...props }: any) => (
     <components.SingleValue {...props}>
       <img
-        src={`${apiURL}flags/${registerFormState?.iso.toLowerCase()}.png`}
+        src={`${apiURL}flags/${registerFormState?.iso}.png`}
         style={{ width: 24 }}
         alt={registerFormState.iso}
       />
@@ -111,7 +111,7 @@ export const MobileInput = ({
                   <div className="flex items-center">
                     {' '}
                     <img
-                      src={`${apiURL}flags/${registerFormState.iso?.toLowerCase()}.png`}
+                      src={`${apiURL}flags/${registerFormState.iso?}.png`}
                       style={{ width: 24 }}
                       alt="logo"
                     />{' '}

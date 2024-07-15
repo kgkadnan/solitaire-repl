@@ -58,7 +58,7 @@ export const DynamicMobileInput = ({
   const Option = (props: any) => (
     <components.Option {...props} className="country-option">
       <img
-        src={`${apiURL}flags/${props.data.iso.toLowerCase()}.png`}
+        src={`${apiURL}flags/${props.data.iso}.png`}
         style={{ width: 24 }}
         alt="logo"
       />
@@ -69,7 +69,7 @@ export const DynamicMobileInput = ({
   const SingleValue = ({ children, ...props }: any) => (
     <components.SingleValue {...props}>
       <img
-        src={`${apiURL}flags/${selectedCountryIso?.toLowerCase()}.png`}
+        src={`${apiURL}flags/${selectedCountryIso?}.png`}
         style={{ width: 24 }}
         alt={''}
       />
@@ -106,7 +106,7 @@ export const DynamicMobileInput = ({
                 <div className="flex items-center">
                   {' '}
                   <img
-                    src={`${apiURL}flags/${selectedCountryIso?.toLowerCase()}.png`}
+                    src={`${apiURL}flags/${selectedCountryIso?}.png`}
                     style={{ width: 24 }}
                     alt="logo"
                   />{' '}
