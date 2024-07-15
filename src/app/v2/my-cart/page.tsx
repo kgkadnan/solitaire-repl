@@ -75,8 +75,14 @@ import CommonPoppup from '../login/component/common-poppup';
 import DataTableSkeleton from '@/components/v2/skeleton/data-table';
 import { Skeleton } from '@mui/material';
 import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
+import { useAppDispatch, useAppSelector } from '@/hooks/hook';
+import { setConfirmStoneTrack } from '@/features/confirm-stone-track/confirm-stone-track-slice';
 
 const MyCart = () => {
+  const dispatch = useAppDispatch();
+
+  const confirmTrack = useAppSelector(state => state.setConfirmStoneTrack);
+
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();
   const { modalState, modalSetState } = useModalStateManagement();
   const { isDialogOpen, dialogContent } = modalState;
@@ -474,13 +480,16 @@ const MyCart = () => {
       confirmProduct({
         variants: variantIds,
         comments: commentValue,
-        identifier: 'My-Cart'
+        identifier: confirmTrack.confirmStoneTrack
+          ? confirmTrack.confirmStoneTrack
+          : 'My-Cart'
       })
         .unwrap()
         .then(res => {
           if (res) {
             setCommentValue('');
             setIsDialogOpen(true);
+            dispatch(setConfirmStoneTrack(''));
 
             setRowSelection({});
             setDialogContent(
@@ -527,6 +536,7 @@ const MyCart = () => {
         })
         .catch(e => {
           setCommentValue('');
+          dispatch(setConfirmStoneTrack(''));
 
           if (e.data.type === 'unauthorized') {
             setIsDialogOpen(true);
@@ -982,7 +992,9 @@ const MyCart = () => {
                       setIsConfirmStone,
                       setConfirmStoneData,
                       setIsDetailPage,
-                      identifier: 'detailPage'
+                      identifier: 'detailPage',
+                      confirmStoneTrack: 'DNA',
+                      dispatch
                     });
                   }
                 }

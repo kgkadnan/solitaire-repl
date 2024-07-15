@@ -28,7 +28,7 @@ import { currentIPApi } from './features/api/current-ip';
 import { forgotPasswordApi } from './features/api/forgot-password';
 import kycReducer from './features/kyc/kyc';
 import LogoutReducer from './features/logout/logout-slice';
-
+import setConfirmStoneTrackReducer from './features/confirm-stone-track/confirm-stone-track-slice';
 import { kycApi } from './features/api/kyc';
 import { otpVerificationApi } from './features/api/otp-verification';
 import { verifyEmailApi } from './features/api/verify-email';
@@ -60,6 +60,7 @@ const rootReducer = combineReducers({
   savedSearch: savedSearchReducer,
   kyc: kycReducer,
   logoutAll: LogoutReducer,
+  setConfirmStoneTrack: setConfirmStoneTrackReducer,
   [downloadExcelApi.reducerPath]: downloadExcelApi.reducer,
   [currentIPApi.reducerPath]: currentIPApi.reducer,
   [manageListingSequenceApi.reducerPath]: manageListingSequenceApi.reducer,

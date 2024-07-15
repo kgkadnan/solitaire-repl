@@ -41,7 +41,7 @@ import { useLazyGetManageListingSequenceQuery } from '@/features/api/manage-list
 import { MRT_RowSelectionState } from 'material-react-table';
 import { notificationBadge } from '@/features/notification/notification-slice';
 import { useAddCartMutation } from '@/features/api/cart';
-import { useAppDispatch } from '@/hooks/hook';
+import { useAppDispatch, useAppSelector } from '@/hooks/hook';
 import Image from 'next/image';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import { DialogComponent } from '@/components/v2/common/dialog';
@@ -87,6 +87,7 @@ import { Skeleton } from '@mui/material';
 import CommonPoppup from '../../login/component/common-poppup';
 import EmptyScreen from '@/components/v2/common/empty-screen';
 import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
+import { setConfirmStoneTrack } from '@/features/confirm-stone-track/confirm-stone-track-slice';
 
 // Column mapper outside the component to avoid re-creation on each render
 
@@ -110,7 +111,8 @@ const Result = ({
   setIsInputDialogOpen: any;
 }) => {
   const dispatch = useAppDispatch();
-
+  const confirmTrack = useAppSelector(state => state.setConfirmStoneTrack);
+  console.log(confirmTrack, 'confirmTrack');
   const [triggerAvailableSlots] = useLazyGetAvailableMyAppointmentSlotsQuery(
     {}
   );
@@ -849,7 +851,9 @@ const Result = ({
       confirmProduct({
         variants: variantIds,
         comments: commentValue,
-        identifier: 'Searching'
+        identifier: confirmTrack.confirmStoneTrack
+          ? confirmTrack.confirmStoneTrack
+          : 'Searching'
       })
         .unwrap()
         .then(res => {
@@ -859,6 +863,7 @@ const Result = ({
             setIsDialogOpen(true);
 
             setRowSelection({});
+            dispatch(setConfirmStoneTrack(''));
             setDialogContent(
               <CommonPoppup
                 content={''}
@@ -906,6 +911,7 @@ const Result = ({
         .catch(e => {
           setIsLoading(false);
           setCommentValue('');
+          dispatch(setConfirmStoneTrack(''));
 
           if (e.data.type === 'unauthorized') {
             setIsDialogOpen(true);
@@ -1171,7 +1177,9 @@ const Result = ({
                       setIsConfirmStone,
                       setConfirmStoneData,
                       setIsDetailPage,
-                      identifier: 'detailPage'
+                      identifier: 'detailPage',
+                      confirmStoneTrack: 'DNA',
+                      dispatch
                     });
                   }
                 }

@@ -7,6 +7,8 @@ import {
 } from '@/constants/error-messages/confirm-stone';
 import { Dispatch, SetStateAction } from 'react';
 import { IProduct } from '../../interface';
+import { setConfirmStoneTrack } from '@/features/confirm-stone-track/confirm-stone-track-slice';
+import { useAppDispatch } from '@/hooks/hook';
 
 /**
  * Handles the confirmation of selected stones.
@@ -28,6 +30,8 @@ interface IHandleConfirmStone {
   setConfirmStoneData: Dispatch<SetStateAction<IProduct[]>>;
   setIsDetailPage?: any;
   identifier?: string;
+  confirmStoneTrack?: string;
+  dispatch?: any;
 }
 export const handleConfirmStone = ({
   selectedRows,
@@ -37,7 +41,9 @@ export const handleConfirmStone = ({
   setIsConfirmStone,
   setConfirmStoneData,
   setIsDetailPage,
-  identifier
+  identifier,
+  confirmStoneTrack,
+  dispatch
 }: IHandleConfirmStone) => {
   let selectedIds = Object.keys(selectedRows);
   const hasMemoOut = selectedIds?.some(id => {
@@ -72,6 +78,9 @@ export const handleConfirmStone = ({
     const confirmStone = rows?.filter(item => selectedIds?.includes(item.id));
     setConfirmStoneData(confirmStone);
     setIsDetailPage && setIsDetailPage(false);
+    confirmStoneTrack &&
+      dispatch &&
+      dispatch(setConfirmStoneTrack(confirmStoneTrack));
   } else {
     setIsError(true);
     setErrorText(SELECT_STONE_TO_PERFORM_ACTION);

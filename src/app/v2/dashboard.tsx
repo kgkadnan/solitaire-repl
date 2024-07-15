@@ -105,6 +105,8 @@ import { Skeleton } from '@mui/material';
 import CommonPoppup from './login/component/common-poppup';
 import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
 import { useLazyGetMatchingPairCountQuery } from '@/features/api/match-pair';
+import { useAppSelector } from '@/hooks/hook';
+import { setConfirmStoneTrack } from '@/features/confirm-stone-track/confirm-stone-track-slice';
 
 interface ITabs {
   label: string;
@@ -132,6 +134,7 @@ function formatDateString(dateString: string) {
 const Dashboard = () => {
   const router = useRouter();
   const dispatch = useDispatch();
+  const confirmTrack = useAppSelector(state => state.setConfirmStoneTrack);
 
   const { data: customerData, refetch: refetchCustomerData } =
     useGetCustomerQuery({}, { refetchOnMountOrArgChange: true });
@@ -1153,12 +1156,15 @@ const Dashboard = () => {
       confirmProduct({
         variants: variantIds,
         comments: commentValue,
-        identifier: 'Dashboard'
+        identifier: confirmTrack.confirmStoneTrack
+          ? confirmTrack.confirmStoneTrack
+          : 'Dashboard'
       })
         .unwrap()
         .then(res => {
           if (res) {
             setIsLoading(false);
+            dispatch(setConfirmStoneTrack(''));
 
             setCommentValue('');
             setIsDialogOpen(true);
@@ -1217,6 +1223,7 @@ const Dashboard = () => {
         .catch(e => {
           setIsLoading(false);
           setCommentValue('');
+          dispatch(setConfirmStoneTrack(''));
 
           if (e.data.type === 'unauthorized') {
             setIsDialogOpen(true);
@@ -1516,7 +1523,9 @@ const Dashboard = () => {
                       setIsConfirmStone,
                       setConfirmStoneData,
                       setIsDetailPage: setIsDiamondDetail,
-                      identifier: 'detailPage'
+                      identifier: 'detailPage',
+                      confirmStoneTrack: 'DNA',
+                      dispatch
                     });
                   }
                 }

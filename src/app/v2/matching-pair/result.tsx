@@ -37,7 +37,7 @@ import { useLazyGetManageListingSequenceQuery } from '@/features/api/manage-list
 import { MRT_RowSelectionState } from 'material-react-table';
 import { notificationBadge } from '@/features/notification/notification-slice';
 import { useAddCartMutation } from '@/features/api/cart';
-import { useAppDispatch } from '@/hooks/hook';
+import { useAppDispatch, useAppSelector } from '@/hooks/hook';
 import Image from 'next/image';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import { DialogComponent } from '@/components/v2/common/dialog';
@@ -87,6 +87,7 @@ import { IItem } from '../search/saved-search/saved-search';
 import { useLazyGetAllMatchingPairQuery } from '@/features/api/match-pair';
 import MatchPairTable from './components/table';
 import { MatchPairDetails } from './components/details';
+import { setConfirmStoneTrack } from '@/features/confirm-stone-track/confirm-stone-track-slice';
 
 // Column mapper outside the component to avoid re-creation on each render
 
@@ -112,6 +113,7 @@ const MatchingPairResult = ({
   isLoading: boolean;
 }) => {
   const dispatch = useAppDispatch();
+  const confirmTrack = useAppSelector(state => state.setConfirmStoneTrack);
 
   const [triggerAvailableSlots] = useLazyGetAvailableMyAppointmentSlotsQuery(
     {}
@@ -758,7 +760,9 @@ const MatchingPairResult = ({
       confirmProduct({
         variants: variantIds,
         comments: commentValue,
-        identifier: 'Matching-Pair'
+        identifier: confirmTrack.confirmStoneTrack
+          ? confirmTrack.confirmStoneTrack
+          : 'Matching-Pair'
       })
         .unwrap()
         .then(res => {
@@ -766,6 +770,7 @@ const MatchingPairResult = ({
             setIsLoading(false);
             setCommentValue('');
             setIsDialogOpen(true);
+            dispatch(setConfirmStoneTrack(''));
 
             setRowSelection({});
             setDialogContent(
@@ -819,6 +824,7 @@ const MatchingPairResult = ({
         .catch(e => {
           setIsLoading(false);
           setCommentValue('');
+          dispatch(setConfirmStoneTrack(''));
 
           if (e.data.type === 'unauthorized') {
             setIsDialogOpen(true);
@@ -1105,7 +1111,9 @@ const MatchingPairResult = ({
                       setErrorText,
                       setIsConfirmStone,
                       setConfirmStoneData,
-                      setIsDetailPage
+                      setIsDetailPage,
+                      confirmStoneTrack: 'Matching-Pair-Details',
+                      dispatch
                     });
                   }
                 }
