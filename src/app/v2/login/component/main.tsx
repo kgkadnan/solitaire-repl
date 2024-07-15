@@ -248,7 +248,9 @@ const Login = () => {
       }
     } else if (
       !loginByEmail &&
-      (!password.length || !phoneNumber.mobileNumber.length)
+      (!password.length ||
+        !phoneNumber.mobileNumber.length ||
+        !isPhoneNumberValid(phoneNumber.mobileNumber))
     ) {
       if (
         (!phoneNumber.mobileNumber ||
