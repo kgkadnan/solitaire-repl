@@ -489,7 +489,7 @@ const Form = ({
       ).toFixed(2);
 
       !selectedCaratRange.includes(`${caratFrom}-${caratTo}`) &&
-        caratFrom < caratTo &&
+        parseFloat(caratFrom) <= parseFloat(caratTo) &&
         setSelectedCaratRange([
           ...selectedCaratRange,
           `${caratFrom}-${caratTo}`

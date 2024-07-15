@@ -3,9 +3,11 @@ import Image from 'next/image';
 import successIcon from '@public/v2/assets/icons/modal/confirm.svg';
 import { IndividualActionButton } from '@/components/v2/common/action-button/individual-button';
 import { useRouter } from 'next/navigation';
+import { useLazyTrackRegisterFlowQuery } from '@/features/api/register';
 
 const ConfirmScreen = () => {
   const router = useRouter();
+  const [triggerRegisterFlowTrack] = useLazyTrackRegisterFlowQuery();
 
   return (
     <div className="flex items-center text-center text-neutral900 ">
@@ -21,6 +23,7 @@ const ConfirmScreen = () => {
         <div className="flex flex-col gap-1">
           <IndividualActionButton
             onClick={() => {
+              triggerRegisterFlowTrack({ event: 'complete-kyc' });
               router.push(`/v2/kyc`);
             }}
             variant={'primary'}
@@ -31,6 +34,7 @@ const ConfirmScreen = () => {
           </IndividualActionButton>
           <IndividualActionButton
             onClick={() => {
+              triggerRegisterFlowTrack({ event: 'go-to-dashboard' });
               router.push(`/v2/`);
             }}
             className="rounded-[4px] text-neutral600 w-[450px]"

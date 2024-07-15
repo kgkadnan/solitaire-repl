@@ -10,6 +10,8 @@ import { IndividualActionButton } from '@/components/v2/common/action-button/ind
 import CheckboxComponent from '@/components/v2/common/checkbox';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { KgkDiamondLaunchDialog } from '@/components/v2/common/dialog/kgk-diamond-launch-modal';
+import { InputField } from '@/components/v2/common/input-field';
+import { useLazyTrackRegisterFlowQuery } from '@/features/api/register';
 
 const LoginComponent = ({
   setPhoneNumber,
@@ -22,13 +24,20 @@ const LoginComponent = ({
   password,
   passwordErrorText,
   handleLogin,
-  currentCountryCode
+  currentCountryCode,
+  setEmail,
+  setEmailErrorText,
+  email,
+  emailErrorText,
+  loginByEmail,
+  setLoginByEmail
 }: any) => {
   const [isKeepSignedIn, setIsKeepSignedIn] = useState(false);
   const router = useRouter();
   const pathName = useSearchParams().get('path');
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [triggerRegisterFlowTrack] = useLazyTrackRegisterFlowQuery();
 
   useEffect(() => {
     if (
@@ -50,7 +59,7 @@ const LoginComponent = ({
         isOpens={isDialogOpen}
         setIsDialogOpen={setIsDialogOpen}
       />
-      <form onSubmit={handleSubmit} className="flex items-center text-center">
+      <div className="flex items-center text-center">
         {' '}
         {/* Wrap with form and handle onSubmit */}
         <div className="flex flex-col w-[450px]  p-8 gap-[24px] rounded-[8px] border-[1px] border-neutral-200 ">
@@ -64,32 +73,83 @@ const LoginComponent = ({
           <div className="text-headingM text-neutral900 font-medium text-left">
             {ManageLocales('app.login')}
           </div>
+          <div className="flex h-[40px]">
+            <button
+              className={`py-2 px-4 text-mMedium font-medium  ${
+                !loginByEmail
+                  ? 'text-neutral900 border-b-[2px] border-primaryMain'
+                  : 'text-neutral600 border-b-[1px] border-[#E4E7EC] pb-[9px]'
+              }`}
+              key={'Mobile'}
+              onClick={() => setLoginByEmail(false)}
+            >
+              <div className="flex gap-1">Mobile</div>
+            </button>
+            <button
+              className={`py-2 px-4 text-mMedium font-medium  ${
+                loginByEmail
+                  ? 'text-neutral900 border-b-[2px] border-primaryMain'
+                  : 'text-neutral600 border-b-[1px] border-[#E4E7EC]'
+              }`}
+              key={'Email'}
+              onClick={() => setLoginByEmail(true)}
+            >
+              <div className="flex gap-1">Email</div>
+            </button>
+          </div>
 
           {/* Input fields */}
           <div className="flex flex-col gap-5">
-            <MobileInput
-              label={ManageLocales('app.register.mobileNumber')}
-              onChange={event => {
-                handleLoginInputChange({
-                  event,
-                  type: 'phone',
-                  setPhoneNumber,
-                  setPhoneErrorText,
-                  setPasswordErrorText,
-                  setPassword
-                });
-              }}
-              type="number"
-              name="mobileNumber"
-              errorText={phoneErrorText}
-              placeholder={ManageLocales(
-                'app.register.mobileNumber.placeholder'
-              )}
-              registerFormState={phoneNumber}
-              setRegisterFormState={setPhoneNumber}
-              value={phoneNumber.mobileNumber}
-              onKeyDown={handleKeyDown}
-            />
+            {loginByEmail ? (
+              <>
+                <InputField
+                  label={ManageLocales('app.register.email')}
+                  onChange={event =>
+                    handleLoginInputChange({
+                      event,
+                      type: 'email',
+                      setEmail,
+                      setEmailErrorText,
+                      setPasswordErrorText,
+                      setPassword,
+                      setPhoneNumber,
+                      setPhoneErrorText
+                    })
+                  }
+                  type="email"
+                  name="email"
+                  value={email}
+                  errorText={emailErrorText}
+                  placeholder={ManageLocales('app.register.email.placeholder')}
+                  styles={{ inputMain: 'h-[64px]' }}
+                  autoComplete="none"
+                />
+              </>
+            ) : (
+              <MobileInput
+                label={ManageLocales('app.register.mobileNumber')}
+                onChange={event => {
+                  handleLoginInputChange({
+                    event,
+                    type: 'phone',
+                    setPhoneNumber,
+                    setPhoneErrorText,
+                    setPasswordErrorText,
+                    setPassword
+                  });
+                }}
+                type="number"
+                name="mobileNumber"
+                errorText={phoneErrorText}
+                placeholder={ManageLocales(
+                  'app.register.mobileNumber.placeholder'
+                )}
+                registerFormState={phoneNumber}
+                setRegisterFormState={setPhoneNumber}
+                value={phoneNumber.mobileNumber}
+                onKeyDown={handleKeyDown}
+              />
+            )}
             <PasswordField
               label={ManageLocales('app.register.password')}
               onChange={event =>
@@ -132,13 +192,17 @@ const LoginComponent = ({
               variant={'primary'}
               size={'custom'}
               className="rounded-[4px] w-[100%]"
-              type={'submit'}
+              // type={'submit'}.
+              onClick={handleSubmit}
             >
               {ManageLocales('app.login')}
             </IndividualActionButton>
 
             <IndividualActionButton
               onClick={() => {
+                triggerRegisterFlowTrack({
+                  event: 'registration-button-click'
+                });
                 pathName === 'register'
                   ? router.back()
                   : router.push('/v2/register?path=login');
@@ -160,7 +224,7 @@ const LoginComponent = ({
             </IndividualActionButton>
           </div>
         </div>
-      </form>
+      </div>
     </>
   );
 };

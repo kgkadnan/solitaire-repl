@@ -36,6 +36,7 @@ export const HeaderSearchBar: React.FC<IHeaderSearchBarProps> = ({
           setShowSuggestions={setShowSuggestions}
           showSuggestions={showSuggestions}
           handleKeyPress={handleKeyDown}
+          customStyle={search && '!pr-[110px]'}
         />
         {search && (
           <>
