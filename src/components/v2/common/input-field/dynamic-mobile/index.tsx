@@ -5,6 +5,7 @@ import Select, { components } from 'react-select';
 import countryCode from '../../../../../constants/country-code.json';
 import { colourStyles } from './country-select';
 import { useGetAllCountryCodeQuery } from '@/features/api/get-country-code';
+import Ind from '@public/v2/assets/png/data-table/IND.png';
 
 interface IDynamicMobileInputField extends IDynamicInputFieldProps {
   containerStyle?: string;
@@ -61,6 +62,10 @@ export const DynamicMobileInput = ({
         src={`${apiURL}flags/${props.data.iso}.png`}
         style={{ width: 24 }}
         alt="logo"
+        onError={(e: any) => {
+          e.target.error = null; // prevents looping
+          e.target.src = Ind;
+        }}
       />
       +{props.data.label + ' ' + props.data.country}
     </components.Option>
@@ -69,8 +74,12 @@ export const DynamicMobileInput = ({
   const SingleValue = ({ children, ...props }: any) => (
     <components.SingleValue {...props}>
       <img
-        src={`${apiURL}flags/${selectedCountryIso?}.png`}
+        src={`${apiURL}flags/${selectedCountryIso}.png`}
         style={{ width: 24 }}
+        onError={(e: any) => {
+          e.target.error = null; // prevents looping
+          e.target.src = Ind;
+        }}
         alt={''}
       />
       {children}
@@ -106,8 +115,12 @@ export const DynamicMobileInput = ({
                 <div className="flex items-center">
                   {' '}
                   <img
-                    src={`${apiURL}flags/${selectedCountryIso?}.png`}
+                    src={`${apiURL}flags/${selectedCountryIso}.png`}
                     style={{ width: 24 }}
+                    onError={(e: any) => {
+                      e.target.error = null; // prevents looping
+                      e.target.src = Ind;
+                    }}
                     alt="logo"
                   />{' '}
                   {countryCodeValue.value}

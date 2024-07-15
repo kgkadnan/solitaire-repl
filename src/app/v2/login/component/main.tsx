@@ -326,6 +326,7 @@ const Login = () => {
                 .then((res: any) => {
                   if (res) {
                     setResendTimer(60);
+                    console.log(res, 'res');
                     setIsInputDialogOpen(false);
                     setTempToken(res.data.customer.temp_token);
                     setEmailToken(res.data.customer.email_token);
