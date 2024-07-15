@@ -29,7 +29,8 @@ const LoginComponent = ({
   setEmailErrorText,
   email,
   emailErrorText,
-  loginByEmail
+  loginByEmail,
+  setLoginByEmail
 }: any) => {
   const [isKeepSignedIn, setIsKeepSignedIn] = useState(false);
   const router = useRouter();
@@ -58,7 +59,7 @@ const LoginComponent = ({
         isOpens={isDialogOpen}
         setIsDialogOpen={setIsDialogOpen}
       />
-      <form onSubmit={handleSubmit} className="flex items-center text-center">
+      <div className="flex items-center text-center">
         {' '}
         {/* Wrap with form and handle onSubmit */}
         <div className="flex flex-col w-[450px]  p-8 gap-[24px] rounded-[8px] border-[1px] border-neutral-200 ">
@@ -72,12 +73,12 @@ const LoginComponent = ({
           <div className="text-headingM text-neutral900 font-medium text-left">
             {ManageLocales('app.login')}
           </div>
-          {/* <div className="flex">
+          <div className="flex h-[40px]">
             <button
-              className={`py-2 px-4 text-mMedium font-medium ${
+              className={`py-2 px-4 text-mMedium font-medium  ${
                 !loginByEmail
                   ? 'text-neutral900 border-b-[2px] border-primaryMain'
-                  : 'text-neutral600 border-b-[1px] border-[#E4E7EC]'
+                  : 'text-neutral600 border-b-[1px] border-[#E4E7EC] pb-[9px]'
               }`}
               key={'Mobile'}
               onClick={() => setLoginByEmail(false)}
@@ -95,33 +96,35 @@ const LoginComponent = ({
             >
               <div className="flex gap-1">Email</div>
             </button>
-          </div> */}
+          </div>
 
           {/* Input fields */}
           <div className="flex flex-col gap-5">
             {loginByEmail ? (
-              <InputField
-                label={ManageLocales('app.register.email')}
-                onChange={event =>
-                  handleLoginInputChange({
-                    event,
-                    type: 'email',
-                    setEmail,
-                    setEmailErrorText,
-                    setPasswordErrorText,
-                    setPassword,
-                    setPhoneNumber,
-                    setPhoneErrorText
-                  })
-                }
-                type="email"
-                name="email"
-                value={email}
-                errorText={emailErrorText}
-                placeholder={ManageLocales('app.register.email.placeholder')}
-                styles={{ inputMain: 'h-[64px]' }}
-                autoComplete="none"
-              />
+              <>
+                <InputField
+                  label={ManageLocales('app.register.email')}
+                  onChange={event =>
+                    handleLoginInputChange({
+                      event,
+                      type: 'email',
+                      setEmail,
+                      setEmailErrorText,
+                      setPasswordErrorText,
+                      setPassword,
+                      setPhoneNumber,
+                      setPhoneErrorText
+                    })
+                  }
+                  type="email"
+                  name="email"
+                  value={email}
+                  errorText={emailErrorText}
+                  placeholder={ManageLocales('app.register.email.placeholder')}
+                  styles={{ inputMain: 'h-[64px]' }}
+                  autoComplete="none"
+                />
+              </>
             ) : (
               <MobileInput
                 label={ManageLocales('app.register.mobileNumber')}
@@ -189,7 +192,8 @@ const LoginComponent = ({
               variant={'primary'}
               size={'custom'}
               className="rounded-[4px] w-[100%]"
-              type={'submit'}
+              // type={'submit'}.
+              onClick={handleSubmit}
             >
               {ManageLocales('app.login')}
             </IndividualActionButton>
@@ -220,7 +224,7 @@ const LoginComponent = ({
             </IndividualActionButton>
           </div>
         </div>
-      </form>
+      </div>
     </>
   );
 };

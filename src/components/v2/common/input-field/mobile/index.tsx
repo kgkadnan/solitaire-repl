@@ -97,10 +97,10 @@ export const MobileInput = ({
   };
   return (
     <>
-      <div className={`flex text-left  flex-col`}>
+      <div className={`flex text-left  flex-col `}>
         {label && <p className="text-mRegular text-neutral900">{label}</p>}
 
-        <div className={`flex`}>
+        <div className={`flex h-[40px]`}>
           <div onClick={() => !isOpen && toggleOpen()}>
             <Dropdown
               isOpen={isOpen}

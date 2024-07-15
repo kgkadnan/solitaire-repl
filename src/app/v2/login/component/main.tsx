@@ -15,6 +15,7 @@ import {
 } from '@/constants/error-messages/register';
 import { Events } from '@/constants/enums/event';
 import {
+  useSendEmailResetOtpMutation,
   useSendOtpMutation,
   useVerifyOTPMutation
 } from '@/features/api/otp-verification';
@@ -43,6 +44,9 @@ import CommonPoppup from './common-poppup';
 import LoginComponent from './login';
 import ConfirmScreen from '../../register/component/confirmation-screen';
 import { isEmailValid } from '@/utils/validate-email';
+import EmailVerification from '@/components/v2/common/email-verification';
+import { InputField } from '@/components/v2/common/input-field';
+import { handleLoginInputChange } from '../helpers/handle-login-input-change';
 
 export interface IToken {
   token: string;
@@ -65,14 +69,18 @@ const Login = () => {
   }>({ countryCode: '', mobileNumber: '' });
   const [password, setPassword] = useState<string>('');
   const [email, setEmail] = useState<string>('');
+  const [emailToken, setEmailToken] = useState<string>('');
+  const [tempToken, setTempToken] = useState<string>('');
+
   const [isLoading, setIsLoading] = useState(false); // State to track loading
-  const [loginByEmail] = useState<boolean>(false);
+  const [loginByEmail, setLoginByEmail] = useState<boolean>(false);
   const [token, setToken] = useState(initialTokenState);
   const { data }: { data?: IAuthDataResponse } = useGetAuthDataQuery(
     token.token,
     { skip: !token.token }
   );
   const [verifyLogin] = useVerifyLoginMutation();
+  const [resendEmailOTP] = useSendEmailResetOtpMutation();
 
   const [phoneErrorText, setPhoneErrorText] = useState<string>('');
   const [emailErrorText, setEmailErrorText] = useState<string>('');
@@ -172,6 +180,7 @@ const Login = () => {
   }, [data]);
 
   const handleLogin = async () => {
+    console.log('kokok');
     setIsLoading(true);
     if (
       (!phoneErrorText.length || !emailErrorText.length) &&
@@ -227,6 +236,8 @@ const Login = () => {
           tempToken: res.data.access_token
         }));
       } else if (!res.data.customer.is_email_verified && loginByEmail) {
+        setEmailToken(res.data.customer.email_token);
+        setTempToken(res.data.customer.temp_token);
         setCurrentState('emailVerificationVerification');
       } else if (res.data.customer.phone_token) {
         setCurrentState('otpVerification');
@@ -261,6 +272,87 @@ const Login = () => {
     }
   };
 
+  const renderContentWithEmail = () => {
+    return (
+      <div className="flex gap-[12px] flex-col w-full">
+        <div className="absolute left-[-84px] top-[-84px]">
+          <Image src={editIcon} alt="update phone number" />
+        </div>
+        <div className="flex gap-[16px] flex-col mt-[60px] align-left">
+          <p className="text-headingS text-neutral900 font-medium">
+            Enter new email
+          </p>
+        </div>
+        <InputField
+          label={ManageLocales('app.register.email')}
+          onChange={event =>
+            handleLoginInputChange({
+              event,
+              type: 'email',
+              setEmail,
+              setEmailErrorText,
+              setPasswordErrorText,
+              setPassword,
+              setPhoneNumber,
+              setPhoneErrorText
+            })
+          }
+          type="email"
+          name="email"
+          value={email}
+          errorText={emailErrorText}
+          placeholder={ManageLocales('app.register.email.placeholder')}
+          styles={{ inputMain: 'h-[64px]' }}
+          autoComplete="none"
+        />
+
+        <div className="flex justify-between gap-[12px]">
+          <IndividualActionButton
+            onClick={() => {
+              // setOTPVerificationFormState(prev => ({ ...prev }));
+              setOTPVerificationFormErrors(initialOTPFormState);
+              setIsInputDialogOpen(false);
+            }}
+            variant={'secondary'}
+            size={'custom'}
+            className="rounded-[4px] w-[170px] h-10"
+          >
+            {ManageLocales('app.OTPVerification.cancel')}
+          </IndividualActionButton>
+          <IndividualActionButton
+            onClick={() => {
+              resendEmailOTP({ resend_token: tempToken })
+                .unwrap()
+                .then((res: any) => {
+                  if (res) {
+                    setResendTimer(60);
+                    setIsInputDialogOpen(false);
+                    setTempToken(res.data.customer.temp_token);
+                    setEmailToken(res.data.customer.email_token);
+                  }
+                })
+                .catch((e: any) => {
+                  setIsDialogOpen(true);
+                  setDialogContent(
+                    <CommonPoppup
+                      content=""
+                      header={e?.data?.message}
+                      handleClick={() => setIsDialogOpen(false)}
+                    />
+                  );
+                });
+            }}
+            variant={'primary'}
+            size={'custom'}
+            className="rounded-[4px] w-[170px] h-10"
+            type="button"
+          >
+            {ManageLocales('app.OTPVerification.save')}
+          </IndividualActionButton>
+        </div>
+      </div>
+    );
+  };
   const renderContentWithInput = () => {
     return (
       <div className="flex gap-[12px] flex-col w-full">
@@ -353,7 +445,7 @@ const Login = () => {
             email={email}
             emailErrorText={emailErrorText}
             loginByEmail={loginByEmail}
-            // setLoginByEmail={setLoginByEmail}
+            setLoginByEmail={setLoginByEmail}
           />
         );
       case 'otpVerification':
@@ -380,14 +472,14 @@ const Login = () => {
         );
       case 'emailVerificationVerification':
         return (
-          <OTPVerification
-            otpVerificationFormState={otpVerificationFormState}
+          <EmailVerification
+            email={email}
             setOtpValues={setOtpValues}
             otpValues={otpValues}
             sendOtp={sendOtp}
             resendTimer={resendTimer}
             setCurrentState={setCurrentState}
-            token={token}
+            emailToken={emailToken}
             userLoggedIn={userLoggedIn}
             setIsInputDialogOpen={setIsInputDialogOpen}
             setIsDialogOpen={setIsDialogOpen}
@@ -398,6 +490,9 @@ const Login = () => {
             role={'login'}
             setIsLoading={setIsLoading}
             isLoading={isLoading}
+            tempToken={tempToken}
+            setTempToken={setTempToken}
+            setEmailToken={setEmailToken}
           />
         );
       case 'successfullyCreated':
@@ -414,7 +509,9 @@ const Login = () => {
       <InputDialogComponent
         isOpen={isInputDialogOpen}
         onClose={() => setIsInputDialogOpen(false)}
-        renderContent={renderContentWithInput}
+        renderContent={
+          loginByEmail ? renderContentWithEmail : renderContentWithInput
+        }
         dialogStyle="min-h-[280px]"
       />
       <UserAuthenticationLayout
