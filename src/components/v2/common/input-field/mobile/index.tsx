@@ -5,6 +5,7 @@ import Select, { components } from 'react-select';
 import countryCode from '../../../../../constants/country-code.json';
 import { colourStyles } from './country-select';
 import { useGetAllCountryCodeQuery } from '@/features/api/get-country-code';
+import Ind from '@public/v2/assets/png/data-table/IND.png';
 
 interface IMobileInputField extends IInputFieldProps {
   registerFormState: any;
@@ -17,6 +18,7 @@ interface IDropdownProps {
   onClose: () => void;
   errorText: string | undefined;
 }
+const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
 export const MobileInput = ({
   name,
@@ -53,8 +55,12 @@ export const MobileInput = ({
   const Option = (props: any) => (
     <components.Option {...props} className="country-option">
       <img
-        src={`https://flagsapi.com/${props.data.iso}/flat/64.png`}
+        src={`${apiURL}flags/${props.data.iso}.png`}
         style={{ width: 24 }}
+        onError={(e: any) => {
+          e.target.error = null; // prevents looping
+          e.target.src = Ind;
+        }}
         alt="logo"
       />
       +{props.data.label + ' ' + props.data.country}
@@ -64,8 +70,12 @@ export const MobileInput = ({
   const SingleValue = ({ children, ...props }: any) => (
     <components.SingleValue {...props}>
       <img
-        src={`https://flagsapi.com/${registerFormState.iso}/flat/64.png`}
+        src={`${apiURL}flags/${registerFormState?.iso}.png`}
         style={{ width: 24 }}
+        onError={(e: any) => {
+          e.target.error = null; // prevents looping
+          e.target.src = Ind;
+        }}
         alt={registerFormState.iso}
       />
       {children}
@@ -110,8 +120,12 @@ export const MobileInput = ({
                   <div className="flex items-center">
                     {' '}
                     <img
-                      src={`https://flagsapi.com/${registerFormState.iso}/flat/64.png`}
+                      src={`${apiURL}flags/${registerFormState.iso}.png`}
                       style={{ width: 24 }}
+                      onError={(e: any) => {
+                        e.target.error = null; // prevents looping
+                        e.target.src = Ind;
+                      }}
                       alt="logo"
                     />{' '}
                     +{registerFormState.countryCode}

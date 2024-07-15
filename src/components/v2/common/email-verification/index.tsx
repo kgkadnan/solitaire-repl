@@ -48,7 +48,7 @@ const EmailVerification = ({
   setOtpValues,
   otpValues,
   resendTimer,
-  // setCurrentState,
+  setCurrentState,
   emailToken,
   // userLoggedIn,
   setIsDialogOpen,
@@ -166,7 +166,8 @@ const EmailVerification = ({
             checkOTPEntry(otpValues)
               ? (verifyEmailOTP({
                   token: emailToken,
-                  otp: otpValues.join('')
+                  otp: otpValues.join(''),
+                  resend_token: tempToken
                 })
                   .unwrap()
                   .then((res: any) => {
@@ -187,6 +188,7 @@ const EmailVerification = ({
                               handler: () => {
                                 setIsDialogOpen(false);
                                 router.push(`/v2/login`);
+                                setCurrentState('login');
                               },
                               customStyle: 'flex-1 w-full h-10'
                             }
