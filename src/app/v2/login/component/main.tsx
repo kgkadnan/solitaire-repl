@@ -321,15 +321,14 @@ const Login = () => {
           </IndividualActionButton>
           <IndividualActionButton
             onClick={() => {
-              resendEmailOTP({ resend_token: tempToken })
+              resendEmailOTP({ resend_token: tempToken, email: email })
                 .unwrap()
                 .then((res: any) => {
                   if (res) {
                     setResendTimer(60);
-                    console.log(res, 'res');
                     setIsInputDialogOpen(false);
-                    setTempToken(res.data.customer.temp_token);
-                    setEmailToken(res.data.customer.email_token);
+                    setTempToken(res.customer.temp_token);
+                    setEmailToken(res.customer.email_token);
                   }
                 })
                 .catch((e: any) => {
@@ -337,7 +336,7 @@ const Login = () => {
                   setDialogContent(
                     <CommonPoppup
                       content=""
-                      header={e?.data?.message}
+                      header={e?.data.message}
                       handleClick={() => setIsDialogOpen(false)}
                     />
                   );
