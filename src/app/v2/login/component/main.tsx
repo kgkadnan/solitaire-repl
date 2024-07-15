@@ -15,6 +15,7 @@ import {
 } from '@/constants/error-messages/register';
 import { Events } from '@/constants/enums/event';
 import {
+  useSendEmailResetOtpMutation,
   useSendOtpMutation,
   useVerifyOTPMutation
 } from '@/features/api/otp-verification';
@@ -69,6 +70,8 @@ const Login = () => {
   const [password, setPassword] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [emailToken, setEmailToken] = useState<string>('');
+  const [tempToken, setTempToken] = useState<string>('');
+
   const [isLoading, setIsLoading] = useState(false); // State to track loading
   const [loginByEmail, setLoginByEmail] = useState<boolean>(false);
   const [token, setToken] = useState(initialTokenState);
@@ -77,6 +80,7 @@ const Login = () => {
     { skip: !token.token }
   );
   const [verifyLogin] = useVerifyLoginMutation();
+  const [resendEmailOTP] = useSendEmailResetOtpMutation();
 
   const [phoneErrorText, setPhoneErrorText] = useState<string>('');
   const [emailErrorText, setEmailErrorText] = useState<string>('');
@@ -176,6 +180,7 @@ const Login = () => {
   }, [data]);
 
   const handleLogin = async () => {
+    console.log('kokok');
     setIsLoading(true);
     if (
       (!phoneErrorText.length || !emailErrorText.length) &&
@@ -232,6 +237,7 @@ const Login = () => {
         }));
       } else if (!res.data.customer.is_email_verified && loginByEmail) {
         setEmailToken(res.data.customer.email_token);
+        setTempToken(res.data.customer.temp_token);
         setCurrentState('emailVerificationVerification');
       } else if (res.data.customer.phone_token) {
         setCurrentState('otpVerification');
@@ -315,18 +321,26 @@ const Login = () => {
           </IndividualActionButton>
           <IndividualActionButton
             onClick={() => {
-              handleEditMobileNumber({
-                // verifyNumber,
-                otpVerificationFormState,
-                setOTPVerificationFormErrors,
-                setOTPVerificationFormState,
-                setIsInputDialogOpen,
-                setIsDialogOpen,
-                setDialogContent,
-                sendOtp,
-                setToken,
-                token
-              });
+              resendEmailOTP({ resend_token: tempToken })
+                .unwrap()
+                .then((res: any) => {
+                  if (res) {
+                    setResendTimer(60);
+                    setIsInputDialogOpen(false);
+                    setTempToken(res.data.customer.temp_token);
+                    setEmailToken(res.data.customer.email_token);
+                  }
+                })
+                .catch((e: any) => {
+                  setIsDialogOpen(true);
+                  setDialogContent(
+                    <CommonPoppup
+                      content=""
+                      header={e?.data?.message}
+                      handleClick={() => setIsDialogOpen(false)}
+                    />
+                  );
+                });
             }}
             variant={'primary'}
             size={'custom'}
@@ -476,6 +490,9 @@ const Login = () => {
             role={'login'}
             setIsLoading={setIsLoading}
             isLoading={isLoading}
+            tempToken={tempToken}
+            setTempToken={setTempToken}
+            setEmailToken={setEmailToken}
           />
         );
       case 'successfullyCreated':

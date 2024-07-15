@@ -7,12 +7,10 @@ import KgkIcon from '@public/v2/assets/icons/sidebar-icons/vector.svg';
 import { IndividualActionButton } from '../action-button/individual-button';
 import OtpInput from '../otp';
 import { IToken } from '@/app/v2/register/interface';
-import {
-  useResendEmailOTPMutation,
-  useVerifyEmailOTPMutation
-} from '@/features/api/kyc';
+import { useVerifyEmailOTPMutation } from '@/features/api/kyc';
 import CommonPoppup from '@/app/v2/login/component/common-poppup';
 import { useRouter } from 'next/navigation';
+import { useSendEmailResetOtpMutation } from '@/features/api/otp-verification';
 
 export interface IOtp {
   otpMobileNumber: string;
@@ -39,6 +37,9 @@ interface IEmailVerification {
   setToken: React.Dispatch<React.SetStateAction<IToken>>;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   isLoading: boolean;
+  tempToken: string;
+  setTempToken: any;
+  setEmailToken: any;
 }
 
 const EmailVerification = ({
@@ -58,14 +59,17 @@ const EmailVerification = ({
   // role = '',
   // setToken,
   // setIsLoading,
-  isLoading
+  isLoading,
+  tempToken,
+  setTempToken,
+  setEmailToken
 }: IEmailVerification) => {
   const router = useRouter();
 
   const resendLabel = resendTimer > 0 ? `(${resendTimer}Sec)` : '';
   const [error, setError] = useState('');
   const [verifyEmailOTP] = useVerifyEmailOTPMutation();
-  const [resendEmailOTP] = useResendEmailOTPMutation();
+  const [resendEmailOTP] = useSendEmailResetOtpMutation();
   useEffect(() => {
     let countdownInterval: NodeJS.Timeout;
 
@@ -128,10 +132,12 @@ const EmailVerification = ({
             onClick={() =>
               resendTimer > 0
                 ? {}
-                : resendEmailOTP({})
+                : resendEmailOTP({ resend_token: tempToken })
                     .unwrap()
                     .then((res: any) => {
                       if (res) {
+                        setTempToken(res.data.customer.temp_token);
+                        setEmailToken(res.data.customer.email_token);
                         setResendTimer(60);
                       }
                     })
