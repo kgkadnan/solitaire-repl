@@ -17,6 +17,7 @@ interface IDropdownProps {
   onClose: () => void;
   errorText: string | undefined;
 }
+const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
 export const MobileInput = ({
   name,
@@ -53,7 +54,7 @@ export const MobileInput = ({
   const Option = (props: any) => (
     <components.Option {...props} className="country-option">
       <img
-        src={`https://flagsapi.com/${props.data.iso}/flat/64.png`}
+        src={`${apiURL}flags/${props.data.iso.toLowerCase()}.png`}
         style={{ width: 24 }}
         alt="logo"
       />
@@ -64,7 +65,7 @@ export const MobileInput = ({
   const SingleValue = ({ children, ...props }: any) => (
     <components.SingleValue {...props}>
       <img
-        src={`https://flagsapi.com/${registerFormState.iso}/flat/64.png`}
+        src={`${apiURL}flags/${registerFormState?.iso.toLowerCase()}.png`}
         style={{ width: 24 }}
         alt={registerFormState.iso}
       />
@@ -110,7 +111,7 @@ export const MobileInput = ({
                   <div className="flex items-center">
                     {' '}
                     <img
-                      src={`https://flagsapi.com/${registerFormState.iso}/flat/64.png`}
+                      src={`${apiURL}flags/${registerFormState.iso?.toLowerCase()}.png`}
                       style={{ width: 24 }}
                       alt="logo"
                     />{' '}

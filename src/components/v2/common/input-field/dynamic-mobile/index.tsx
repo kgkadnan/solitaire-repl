@@ -18,6 +18,8 @@ interface IDropdownProps {
   onClose: () => void;
   errorText: string | undefined;
 }
+const apiURL = process.env.NEXT_PUBLIC_API_URL;
+
 export const DynamicMobileInput = ({
   name,
   phoneValue,
@@ -56,7 +58,7 @@ export const DynamicMobileInput = ({
   const Option = (props: any) => (
     <components.Option {...props} className="country-option">
       <img
-        src={`https://flagsapi.com/${props.data.iso}/flat/64.png`}
+        src={`${apiURL}flags/${props.data.iso.toLowerCase()}.png`}
         style={{ width: 24 }}
         alt="logo"
       />
@@ -67,7 +69,7 @@ export const DynamicMobileInput = ({
   const SingleValue = ({ children, ...props }: any) => (
     <components.SingleValue {...props}>
       <img
-        src={`https://flagsapi.com/${selectedCountryIso}/flat/64.png`}
+        src={`${apiURL}flags/${selectedCountryIso?.toLowerCase()}.png`}
         style={{ width: 24 }}
         alt={''}
       />
@@ -104,7 +106,7 @@ export const DynamicMobileInput = ({
                 <div className="flex items-center">
                   {' '}
                   <img
-                    src={`https://flagsapi.com/${selectedCountryIso}/flat/64.png`}
+                    src={`${apiURL}flags/${selectedCountryIso?.toLowerCase()}.png`}
                     style={{ width: 24 }}
                     alt="logo"
                   />{' '}
