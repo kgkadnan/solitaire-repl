@@ -237,7 +237,7 @@ const Login = () => {
       } else if (!res.data.customer.is_email_verified && loginByEmail) {
         setEmailToken(res.data.customer.email_token);
         setTempToken(res.data.customer.temp_token);
-        setCurrentState('emailVerificationVerification');
+        setCurrentState('emailVerification');
       } else if (res.data.customer.phone_token) {
         setCurrentState('otpVerification');
         setToken((prev: any) => ({
@@ -301,36 +301,37 @@ const Login = () => {
     return (
       <div className="flex gap-[12px] flex-col w-full">
         <div className="absolute left-[-84px] top-[-84px]">
-          <Image src={editIcon} alt="update phone number" />
+          <Image src={editIcon} alt="update email" />
         </div>
         <div className="flex gap-[16px] flex-col mt-[60px] align-left">
           <p className="text-headingS text-neutral900 font-medium">
             Enter new email
           </p>
         </div>
-        <InputField
-          label={ManageLocales('app.register.email')}
-          onChange={event =>
-            handleLoginInputChange({
-              event,
-              type: 'email',
-              setEmail,
-              setEmailErrorText,
-              setPasswordErrorText,
-              setPassword,
-              setPhoneNumber,
-              setPhoneErrorText
-            })
-          }
-          type="email"
-          name="email"
-          value={email}
-          errorText={emailErrorText}
-          placeholder={ManageLocales('app.register.email.placeholder')}
-          styles={{ inputMain: 'h-[64px]' }}
-          autoComplete="none"
-        />
-
+        <div className="pb-2">
+          <InputField
+            label={ManageLocales('app.register.email')}
+            onChange={event =>
+              handleLoginInputChange({
+                event,
+                type: 'email',
+                setEmail,
+                setEmailErrorText,
+                setPasswordErrorText,
+                setPassword,
+                setPhoneNumber,
+                setPhoneErrorText
+              })
+            }
+            type="email"
+            name="email"
+            value={email}
+            errorText={emailErrorText}
+            placeholder={ManageLocales('app.register.email.placeholder')}
+            styles={{ inputMain: 'h-[64px]' }}
+            autoComplete="none"
+          />
+        </div>
         <div className="flex justify-between gap-[12px]">
           <IndividualActionButton
             onClick={() => {
@@ -346,26 +347,28 @@ const Login = () => {
           </IndividualActionButton>
           <IndividualActionButton
             onClick={() => {
-              resendEmailOTP({ resend_token: tempToken, email: email })
-                .unwrap()
-                .then((res: any) => {
-                  if (res) {
-                    setResendTimer(60);
-                    setIsInputDialogOpen(false);
-                    setTempToken(res.customer.temp_token);
-                    setEmailToken(res.customer.email_token);
-                  }
-                })
-                .catch((e: any) => {
-                  setIsDialogOpen(true);
-                  setDialogContent(
-                    <CommonPoppup
-                      content=""
-                      header={e?.data.message}
-                      handleClick={() => setIsDialogOpen(false)}
-                    />
-                  );
-                });
+              isEmailValid(email)
+                ? resendEmailOTP({ resend_token: tempToken, email: email })
+                    .unwrap()
+                    .then((res: any) => {
+                      if (res) {
+                        setResendTimer(60);
+                        setIsInputDialogOpen(false);
+                        setTempToken(res.customer.temp_token);
+                        setEmailToken(res.customer.email_token);
+                      }
+                    })
+                    .catch((e: any) => {
+                      setIsDialogOpen(true);
+                      setDialogContent(
+                        <CommonPoppup
+                          content=""
+                          header={e?.data.message}
+                          handleClick={() => setIsDialogOpen(false)}
+                        />
+                      );
+                    })
+                : setEmailErrorText(INVALID_EMAIL_FORMAT);
             }}
             variant={'primary'}
             size={'custom'}
@@ -389,25 +392,27 @@ const Login = () => {
             Enter new mobile number
           </p>
         </div>
-        <MobileInput
-          label={ManageLocales('app.register.mobileNumber')}
-          onChange={event => {
-            setOTPVerificationFormErrors(prev => ({
-              ...prev,
-              otpMobileNumber: ''
-            }));
+        <div className="pb-2">
+          <MobileInput
+            label={ManageLocales('app.register.mobileNumber')}
+            onChange={event => {
+              setOTPVerificationFormErrors(prev => ({
+                ...prev,
+                otpMobileNumber: ''
+              }));
 
-            handleOTPChange({ event, setOTPVerificationFormState });
-          }}
-          type="number"
-          name="otpMobileNumber"
-          errorText={otpVerificationFormErrors.otpMobileNumber}
-          placeholder={ManageLocales('app.register.mobileNumber.placeholder')}
-          registerFormState={otpVerificationFormState}
-          setRegisterFormState={setOTPVerificationFormState}
-          value={otpVerificationFormState.otpMobileNumber}
-          onKeyDown={handleKeyDown}
-        />
+              handleOTPChange({ event, setOTPVerificationFormState });
+            }}
+            type="number"
+            name="otpMobileNumber"
+            errorText={otpVerificationFormErrors.otpMobileNumber}
+            placeholder={ManageLocales('app.register.mobileNumber.placeholder')}
+            registerFormState={otpVerificationFormState}
+            setRegisterFormState={setOTPVerificationFormState}
+            value={otpVerificationFormState.otpMobileNumber}
+            onKeyDown={handleKeyDown}
+          />
+        </div>
 
         <div className="flex justify-between gap-[12px]">
           <IndividualActionButton
@@ -495,7 +500,7 @@ const Login = () => {
             isLoading={isLoading}
           />
         );
-      case 'emailVerificationVerification':
+      case 'emailVerification':
         return (
           <EmailVerification
             email={email}
