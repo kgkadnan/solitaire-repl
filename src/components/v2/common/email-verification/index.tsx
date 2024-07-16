@@ -11,6 +11,7 @@ import { useVerifyEmailOTPMutation } from '@/features/api/kyc';
 import CommonPoppup from '@/app/v2/login/component/common-poppup';
 import { useRouter } from 'next/navigation';
 import { useSendEmailResetOtpMutation } from '@/features/api/otp-verification';
+import backArrow from '@public/v2/assets/icons/back-arrow.svg';
 
 export interface IOtp {
   otpMobileNumber: string;
@@ -102,7 +103,7 @@ const EmailVerification = ({
           <hr className="absolute bottom-0 left-0 border-none h-[1px] w-full bg-neutral200" />
         </div>
         <div className="text-headingM text-neutral900 font-medium text-left">
-          {ManageLocales('app.OTPVerification')}
+          Email {ManageLocales('app.OTPVerification')}
         </div>
 
         {setIsInputDialogOpen && (
@@ -156,66 +157,79 @@ const EmailVerification = ({
             {ManageLocales('app.OTPVerification.resend')} {resendLabel}
           </p>
         </div>
-
-        <IndividualActionButton
-          variant={'primary'}
-          size={'custom'}
-          disabled={isLoading}
-          className="rounded-[4px]"
-          onClick={() =>
-            checkOTPEntry(otpValues)
-              ? (verifyEmailOTP({
-                  token: emailToken,
-                  otp: otpValues.join(''),
-                  resend_token: tempToken
-                })
-                  .unwrap()
-                  .then((res: any) => {
-                    if (res) {
-                      // setIsInputDialogOpen(false);
+        <div className="flex flex-col gap-1">
+          <IndividualActionButton
+            variant={'primary'}
+            size={'custom'}
+            disabled={isLoading}
+            className="rounded-[4px]"
+            onClick={() =>
+              checkOTPEntry(otpValues)
+                ? (verifyEmailOTP({
+                    token: emailToken,
+                    otp: otpValues.join(''),
+                    resend_token: tempToken
+                  })
+                    .unwrap()
+                    .then((res: any) => {
+                      if (res) {
+                        // setIsInputDialogOpen(false);
+                        setIsDialogOpen(true);
+                        setDialogContent(
+                          <CommonPoppup
+                            content={''}
+                            status="success"
+                            customPoppupBodyStyle="!mt-[65px]"
+                            customPoppupStyle="h-[200px]"
+                            header={'Your email has been verified successfully'}
+                            actionButtonData={[
+                              {
+                                variant: 'primary',
+                                label: 'Login',
+                                handler: () => {
+                                  setIsDialogOpen(false);
+                                  router.push(`/v2/login`);
+                                  setCurrentState('login');
+                                },
+                                customStyle: 'flex-1 w-full h-10'
+                              }
+                            ]}
+                          />
+                        );
+                      }
+                    })
+                    .catch((e: any) => {
                       setIsDialogOpen(true);
                       setDialogContent(
                         <CommonPoppup
-                          content={''}
-                          status="success"
-                          customPoppupBodyStyle="!mt-[65px]"
-                          customPoppupStyle="h-[200px]"
-                          header={'Your email has been verified successfully'}
-                          actionButtonData={[
-                            {
-                              variant: 'primary',
-                              label: 'Login',
-                              handler: () => {
-                                setIsDialogOpen(false);
-                                router.push(`/v2/login`);
-                                setCurrentState('login');
-                              },
-                              customStyle: 'flex-1 w-full h-10'
-                            }
-                          ]}
+                          content=""
+                          header={e?.data?.message}
+                          handleClick={() => setIsDialogOpen(false)}
                         />
                       );
-                    }
-                  })
-                  .catch((e: any) => {
-                    setIsDialogOpen(true);
-                    setDialogContent(
-                      <CommonPoppup
-                        content=""
-                        header={e?.data?.message}
-                        handleClick={() => setIsDialogOpen(false)}
-                      />
-                    );
-                  }),
-                setError(''))
-              : setError(
-                  `We're sorry, but the OTP you entered is incorrect or has expired`
-                )
-          }
-        >
-          {' '}
-          {ManageLocales('app.OTPVerification.verify')}
-        </IndividualActionButton>
+                    }),
+                  setError(''))
+                : setError(
+                    `We're sorry, but the OTP you entered is incorrect or has expired`
+                  )
+            }
+          >
+            {' '}
+            {ManageLocales('app.OTPVerification.verify')}
+          </IndividualActionButton>
+          <IndividualActionButton
+            variant={'secondary'}
+            size={'custom'}
+            disabled={isLoading}
+            className=" border-none w-[100%]"
+            onClick={() => setCurrentState('login')}
+          >
+            <div className="text-mMedium font-medium flex items-center gap-2">
+              <Image src={backArrow} alt="backArrow" />
+              <p className="text-neutral900"> Go back To Login</p>
+            </div>{' '}
+          </IndividualActionButton>
+        </div>
       </div>
     </div>
   );
