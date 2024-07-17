@@ -81,7 +81,9 @@ const LoginComponent = ({
                   : 'text-neutral600 border-b-[1px] border-[#E4E7EC] pb-[8px]'
               }`}
               key={'Mobile'}
-              onClick={() => setLoginByEmail(false)}
+              onClick={() => {
+                setLoginByEmail(false);
+              }}
             >
               Mobile
             </button>

@@ -9,7 +9,6 @@ import useUser from '@/lib/use-auth';
 import {
   ENTER_PASSWORD,
   ENTER_PHONE,
-  INCORRECT_LOGIN_CREDENTIALS,
   INVALID_EMAIL_FORMAT,
   INVALID_MOBILE
 } from '@/constants/error-messages/register';
@@ -182,11 +181,10 @@ const Login = () => {
   const handleLogin = async () => {
     setIsLoading(true);
     if (
-      (!phoneErrorText.length || !emailErrorText.length) &&
-      ((!passwordErrorText.length &&
-        isPhoneNumberValid(phoneNumber.mobileNumber) &&
+      ((isPhoneNumberValid(phoneNumber.mobileNumber) &&
+        !loginByEmail &&
         phoneNumber.mobileNumber.length) ||
-        isEmailValid(email)) &&
+        (isEmailValid(email) && email.length && loginByEmail)) &&
       password.length
     ) {
       let res: any = await verifyLogin(
@@ -207,23 +205,13 @@ const Login = () => {
         countryCode: `${phoneNumber.countryCode}`,
         codeAndNumber: `${phoneNumber.countryCode} ${phoneNumber.mobileNumber}`
       }));
-      if (res?.error?.status === statusCode.UNAUTHORIZED) {
-        // Display error message if login fails
+
+      if (res.error) {
         setIsDialogOpen(true);
         setDialogContent(
           <CommonPoppup
-            content={INCORRECT_LOGIN_CREDENTIALS}
-            handleClick={() => setIsDialogOpen(false)}
+            content={res.error.data.message}
             header="Login Failed"
-            buttonText="Try Again"
-          />
-        );
-      } else if (res.error) {
-        setIsDialogOpen(true);
-        setDialogContent(
-          <CommonPoppup
-            content=""
-            header={res.error.data.message}
             handleClick={() => setIsDialogOpen(false)}
             buttonText="Try Again"
           />
@@ -234,11 +222,19 @@ const Login = () => {
           token: res.data.access_token,
           tempToken: res.data.access_token
         }));
-      } else if (!res.data.customer.is_email_verified && loginByEmail) {
+      } else if (
+        !res.data.customer.is_email_verified &&
+        loginByEmail &&
+        res.data.customer.email_token
+      ) {
         setEmailToken(res.data.customer.email_token);
         setTempToken(res.data.customer.temp_token);
         setCurrentState('emailVerification');
-      } else if (res.data.customer.phone_token) {
+      } else if (
+        res.data.customer.phone_token &&
+        !res.data.customer.is_phone_verified
+        // !loginByEmail
+      ) {
         setCurrentState('otpVerification');
         setToken((prev: any) => ({
           ...prev,
@@ -253,11 +249,6 @@ const Login = () => {
         !isPhoneNumberValid(phoneNumber.mobileNumber))
     ) {
       if (!phoneNumber.mobileNumber && !password.length) {
-        // if (!phoneNumber.mobileNumber) {
-        //   setPhoneErrorText(ENTER_PHONE);
-        // } else {
-        //   setPhoneErrorText(INVALID_MOBILE);
-        // }
         setPhoneErrorText(ENTER_PHONE);
         setPasswordErrorText(ENTER_PASSWORD);
       } else if (!phoneNumber.mobileNumber) {
@@ -271,7 +262,7 @@ const Login = () => {
       loginByEmail &&
       (!email.length || !isEmailValid(email) || !password.length)
     ) {
-      if ((!email || !isEmailValid(email)) && !passwordErrorText.length) {
+      if ((!email || !isEmailValid(email)) && !password.length) {
         setEmailErrorText(INVALID_EMAIL_FORMAT);
         setPasswordErrorText(ENTER_PASSWORD);
       } else if (!isEmailValid(email)) {
@@ -279,16 +270,9 @@ const Login = () => {
       } else if (!password.length) {
         setPasswordErrorText(ENTER_PASSWORD);
       }
-      // setEmailErrorText(INVALID_EMAIL_FORMAT);
-      // setPasswordErrorText(ENTER_PASSWORD);
     }
-    // else if (!isEmailValid(email)) {
-    //   setEmailErrorText(INVALID_EMAIL_FORMAT);
-    // } else if (!password.length) {
-    //   setPasswordErrorText(ENTER_PASSWORD);
-    // }
+
     setIsLoading(false);
-    // 4;
   };
   // Handle Enter key press for login
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
