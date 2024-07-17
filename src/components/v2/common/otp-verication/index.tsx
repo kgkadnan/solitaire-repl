@@ -98,7 +98,8 @@ const OTPVerification = ({
           <div className="flex cursor-pointer">
             <p className="text-neutral900">
               OTP has been sent to{' '}
-              {`+${otpVerificationFormState.codeAndNumber}`}
+              {otpVerificationFormState.codeAndNumber &&
+                `+${otpVerificationFormState.codeAndNumber}`}
             </p>
             <div
               onClick={() => setIsInputDialogOpen(true)}
