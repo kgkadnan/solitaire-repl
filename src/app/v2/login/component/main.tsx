@@ -240,6 +240,23 @@ const Login = () => {
           phoneToken: res.data.customer.phone_token,
           tempToken: res.data.customer.temp_token
         }));
+        if (
+          loginByEmail &&
+          res.data.customer.country_code &&
+          res.data.customer.phone
+        ) {
+          setOTPVerificationFormState((prev: any) => ({
+            ...prev,
+            otpMobileNumber: `${res.data.customer.phone}`,
+            countryCode: `${res.data.customer.country_code}`,
+            codeAndNumber: `+${res.data.customer.country_code} ${res.data.customer.phone}`
+          }));
+          setPhoneNumber((prev: any) => ({
+            ...prev,
+            mobileNumber: res.data.customer.phone,
+            countryCode: res.data.customer.country_code
+          }));
+        }
       }
     } else if (
       !loginByEmail &&
@@ -481,6 +498,7 @@ const Login = () => {
             role={'login'}
             setIsLoading={setIsLoading}
             isLoading={isLoading}
+            // setOTPVerificationFormState={setOTPVerificationFormState}
           />
         );
       case 'emailVerification':
@@ -523,7 +541,9 @@ const Login = () => {
         isOpen={isInputDialogOpen}
         onClose={() => setIsInputDialogOpen(false)}
         renderContent={
-          loginByEmail ? renderContentWithEmail : renderContentWithInput
+          currentState === 'emailVerification'
+            ? renderContentWithEmail
+            : renderContentWithInput
         }
         dialogStyle="min-h-[280px]"
       />
