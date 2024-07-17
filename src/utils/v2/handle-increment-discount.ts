@@ -8,20 +8,20 @@ export const handleIncrementDiscount = (
 ) => {
   // Retrieve the current_max_bid for the row from the rows data
   setBidError('');
-  setBidValues(prevValues => {
+  setBidValues((prevValues: any) => {
     const currentBidValue = prevValues[rowId];
     // If there's already a bid value for this row, increment it
     if (currentBidValue !== undefined) {
       return {
         ...prevValues,
-        [rowId]: Number(currentBidValue) + 0.25
+        [rowId]: (parseFloat(String(currentBidValue)) + 0.25).toFixed(2)
       };
     }
     // If no bid value for this row yet, start from current_max_bid and add 0.25
     else {
       return {
         ...prevValues,
-        [rowId]: Number(currentMaxBid) + 0.25
+        [rowId]: (parseFloat(currentMaxBid) + 0.25).toFixed(2)
       };
     }
   });

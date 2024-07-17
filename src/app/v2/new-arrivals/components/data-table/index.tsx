@@ -880,7 +880,7 @@ const NewArrivalDataTable = ({
         const bidValue =
           bidValues[row.id] !== undefined
             ? bidValues[row.id]
-            : row.original.current_max_bid;
+            : parseFloat(row.original.current_max_bid).toFixed(2);
 
         // If the row is selected, return the detail panel content
         return (
@@ -976,7 +976,7 @@ const NewArrivalDataTable = ({
                           inputMain: 'h-[54px]',
                           input: '!h-[30px]  text-sMedium'
                         }}
-                        value={formatNumber(bidValue)}
+                        value={bidValue}
                         onChange={e => {
                           const newValue = e.target.value;
                           if (newValue < row.original.current_max_bid) {

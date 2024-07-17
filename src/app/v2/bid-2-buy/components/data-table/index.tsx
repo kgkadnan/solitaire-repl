@@ -904,8 +904,8 @@ const BidToByDataTable = ({
           bidValues[row.id] !== undefined
             ? bidValues[row.id]
             : activeTab === 1
-            ? row.original.my_current_bid
-            : row.original.discount;
+            ? parseFloat(row.original.my_current_bid).toFixed(2)
+            : parseFloat(row.original.discount).toFixed(2);
 
         // If the row is selected, return the detail panel content
         return (
@@ -992,7 +992,7 @@ const BidToByDataTable = ({
                           inputMain: 'h-[54px]',
                           input: '!h-[30px]  text-sMedium'
                         }}
-                        value={formatNumber(bidValue)}
+                        value={bidValue}
                         onChange={e => {
                           const newValue = e.target.value;
                           if (newValue < row.original.discount) {

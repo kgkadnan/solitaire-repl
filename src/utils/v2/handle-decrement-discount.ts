@@ -5,7 +5,7 @@ export const handleDecrementDiscount = (
   setBidError: React.Dispatch<React.SetStateAction<string>>,
   setBidValues: React.Dispatch<React.SetStateAction<IBidValues>>
 ) => {
-  setBidValues(prevValues => {
+  setBidValues((prevValues: any) => {
     const currentBidValue = prevValues[rowId];
     // Calculate the new bid value
     const newBidValue =
@@ -19,12 +19,12 @@ export const handleDecrementDiscount = (
       // Update the bid value
       return {
         ...prevValues,
-        [rowId]: newBidValue
+        [rowId]: newBidValue.toFixed(2)
       };
     } else {
       // Set error because attempting to decrement below currentMaxBid
       setBidError('Bid value cannot be less than current maximum bid.');
-      return prevValues; // Return previous values without modification
+      return parseFloat(String(prevValues)).toFixed(2); // Return previous values without modification
     }
   });
 };
