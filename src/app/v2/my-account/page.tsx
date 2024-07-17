@@ -150,7 +150,7 @@ const MyAccount = () => {
     if (subRoute === 'privacy-policy') {
       setActiveTab(myAccount.PRIVACY_POLICY);
     } else if (subRoute === 'terms-and-conditions') {
-      setActiveTab(myAccount.TERM_AND_CONDITION);
+      setActiveTab(myAccount.TERMS_AND_CONDITION);
     } else if (subRoute === 'notification-preferences') {
       setActiveTab(myAccount.NOTIFICATION_PREFRENCES);
     }
@@ -170,8 +170,8 @@ const MyAccount = () => {
       status: myAccount.NOTIFICATION_PREFRENCES
     },
     {
-      label: ManageLocales('app.myAccount.tabs.term&Conditions'),
-      status: myAccount.TERM_AND_CONDITION
+      label: ManageLocales('app.myAccount.tabs.terms&Conditions'),
+      status: myAccount.TERMS_AND_CONDITION
     },
     {
       label: ManageLocales('app.myAccount.tabs.privacyPolicy'),
@@ -196,7 +196,7 @@ const MyAccount = () => {
 
       case myAccount.PRIVACY_POLICY:
         return <PrivacyPolicy />;
-      case myAccount.TERM_AND_CONDITION:
+      case myAccount.TERMS_AND_CONDITION:
         return <TermAndCondtions />;
 
       case myAccount.PROFILE_UPDATE:
