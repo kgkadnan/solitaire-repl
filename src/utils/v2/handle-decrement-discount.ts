@@ -2,7 +2,7 @@ import { IBidValues } from '@/app/v2/bid-2-buy/components/data-table';
 export const handleDecrementDiscount = (
   rowId: string,
   currentMaxBid: any,
-  setBidError: React.Dispatch<React.SetStateAction<string>>,
+  setBidError: React.Dispatch<React.SetStateAction<{}>>,
   setBidValues: React.Dispatch<React.SetStateAction<IBidValues>>
 ) => {
   setBidValues((prevValues: any) => {
@@ -15,15 +15,26 @@ export const handleDecrementDiscount = (
 
     // Check if the new bid value is less than or equal to currentMaxBid
     if (newBidValue >= currentMaxBid) {
-      setBidError('');
+      setBidError(prevError => {
+        return {
+          ...prevError,
+          [rowId]: ''
+        };
+      });
       // Update the bid value
       return {
         ...prevValues,
         [rowId]: newBidValue.toFixed(2)
       };
     } else {
+      setBidError(prevError => {
+        return {
+          ...prevError,
+          [rowId]: 'Bid value cannot be less than current maximum bid.'
+        };
+      });
       // Set error because attempting to decrement below currentMaxBid
-      setBidError('Bid value cannot be less than current maximum bid.');
+
       return parseFloat(String(prevValues)).toFixed(2); // Return previous values without modification
     }
   });
