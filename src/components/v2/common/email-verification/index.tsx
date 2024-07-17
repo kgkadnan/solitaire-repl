@@ -4,11 +4,13 @@ import React, { useEffect, useState } from 'react';
 import Edit from '@public/v2/assets/icons/edit-number.svg?url';
 import { ManageLocales } from '@/utils/translate';
 import KgkIcon from '@public/v2/assets/icons/sidebar-icons/vector.svg';
-import { handleVerifyOtp } from './helpers/handle-verify-otp';
 import { IndividualActionButton } from '../action-button/individual-button';
 import OtpInput from '../otp';
-import { handleRegisterResendOTP } from './helpers/handle-register-resent';
 import { IToken } from '@/app/v2/register/interface';
+import { useVerifyEmailOTPMutation } from '@/features/api/kyc';
+import CommonPoppup from '@/app/v2/login/component/common-poppup';
+import { useRouter } from 'next/navigation';
+import { useSendEmailResetOtpMutation } from '@/features/api/otp-verification';
 import backArrow from '@public/v2/assets/icons/back-arrow.svg';
 
 export interface IOtp {
@@ -18,14 +20,14 @@ export interface IOtp {
   iso?: string;
 }
 
-interface IOTPVerification {
-  otpVerificationFormState: IOtp;
+interface IEmailVerification {
+  email: string;
   setIsInputDialogOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   setOtpValues: React.Dispatch<React.SetStateAction<string[]>>;
   otpValues: string[];
   resendTimer: number;
   setCurrentState: React.Dispatch<React.SetStateAction<string>>;
-  token: IToken;
+  emailToken: string;
   userLoggedIn: any;
   setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setDialogContent: React.Dispatch<React.SetStateAction<React.ReactNode>>;
@@ -36,29 +38,39 @@ interface IOTPVerification {
   setToken: React.Dispatch<React.SetStateAction<IToken>>;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   isLoading: boolean;
+  tempToken: string;
+  setTempToken: any;
+  setEmailToken: any;
 }
 
-const OTPVerification = ({
-  otpVerificationFormState,
+const EmailVerification = ({
+  email,
   setIsInputDialogOpen,
   setOtpValues,
   otpValues,
   resendTimer,
   setCurrentState,
-  token,
-  userLoggedIn,
+  emailToken,
+  // userLoggedIn,
   setIsDialogOpen,
   setDialogContent,
-  verifyOTP,
+  // verifyOTP,
   setResendTimer,
-  sendOtp,
-  role = '',
-  setToken,
-  setIsLoading,
-  isLoading
-}: IOTPVerification) => {
+  // sendOtp,
+  // role = '',
+  // setToken,
+  // setIsLoading,
+  isLoading,
+  tempToken,
+  setTempToken,
+  setEmailToken
+}: IEmailVerification) => {
+  const router = useRouter();
+
   const resendLabel = resendTimer > 0 ? `(${resendTimer}Sec)` : '';
   const [error, setError] = useState('');
+  const [verifyEmailOTP] = useVerifyEmailOTPMutation();
+  const [resendEmailOTP] = useSendEmailResetOtpMutation();
   useEffect(() => {
     let countdownInterval: NodeJS.Timeout;
 
@@ -91,16 +103,12 @@ const OTPVerification = ({
           <hr className="absolute bottom-0 left-0 border-none h-[1px] w-full bg-neutral200" />
         </div>
         <div className="text-headingM text-neutral900 font-medium text-left">
-          Mobile {ManageLocales('app.OTPVerification')}
+          Email {ManageLocales('app.OTPVerification')}
         </div>
 
         {setIsInputDialogOpen && (
           <div className="flex cursor-pointer">
-            <p className="text-neutral900">
-              OTP has been sent to{' '}
-              {otpVerificationFormState.codeAndNumber &&
-                `+${otpVerificationFormState.codeAndNumber}`}
-            </p>
+            <p className="text-neutral900">OTP has been sent to {email}</p>
             <div
               onClick={() => setIsInputDialogOpen(true)}
               className="font-bold pl-1"
@@ -125,21 +133,31 @@ const OTPVerification = ({
             onClick={() =>
               resendTimer > 0
                 ? {}
-                : handleRegisterResendOTP({
-                    otpVerificationFormState,
-                    setResendTimer,
-                    sendOtp,
-                    setIsDialogOpen,
-                    setDialogContent,
-                    setToken,
-                    token
-                  })
+                : resendEmailOTP({ resend_token: tempToken })
+                    .unwrap()
+                    .then((res: any) => {
+                      if (res) {
+                        setTempToken(res.data.customer.temp_token);
+                        setEmailToken(res.data.customer.email_token);
+                        setResendTimer(60);
+                      }
+                    })
+                    .catch((e: any) => {
+                      setIsDialogOpen(true);
+                      setDialogContent(
+                        <CommonPoppup
+                          content=""
+                          header={e?.data?.message}
+                          handleClick={() => setIsDialogOpen(false)}
+                        />
+                      );
+                    })
             }
           >
             {ManageLocales('app.OTPVerification.resend')} {resendLabel}
           </p>
         </div>
-        <div className="flex flex-col   gap-1">
+        <div className="flex flex-col gap-1">
           <IndividualActionButton
             variant={'primary'}
             size={'custom'}
@@ -147,19 +165,49 @@ const OTPVerification = ({
             className="rounded-[4px]"
             onClick={() =>
               checkOTPEntry(otpValues)
-                ? (handleVerifyOtp({
-                    otpValues,
-                    setCurrentState,
-                    token,
-                    userLoggedIn,
-                    setIsDialogOpen,
-                    setDialogContent,
-                    verifyOTP,
-                    role,
-                    setToken,
-                    setError,
-                    setIsLoading
-                  }),
+                ? (verifyEmailOTP({
+                    token: emailToken,
+                    otp: otpValues.join(''),
+                    resend_token: tempToken
+                  })
+                    .unwrap()
+                    .then((res: any) => {
+                      if (res) {
+                        // setIsInputDialogOpen(false);
+                        setIsDialogOpen(true);
+                        setDialogContent(
+                          <CommonPoppup
+                            content={''}
+                            status="success"
+                            customPoppupBodyStyle="!mt-[65px]"
+                            customPoppupStyle="h-[200px]"
+                            header={'Your email has been verified successfully'}
+                            actionButtonData={[
+                              {
+                                variant: 'primary',
+                                label: 'Login',
+                                handler: () => {
+                                  setIsDialogOpen(false);
+                                  router.push(`/v2/login`);
+                                  setCurrentState('login');
+                                },
+                                customStyle: 'flex-1 w-full h-10'
+                              }
+                            ]}
+                          />
+                        );
+                      }
+                    })
+                    .catch((e: any) => {
+                      setIsDialogOpen(true);
+                      setDialogContent(
+                        <CommonPoppup
+                          content=""
+                          header={e?.data?.message}
+                          handleClick={() => setIsDialogOpen(false)}
+                        />
+                      );
+                    }),
                   setError(''))
                 : setError(
                     `We're sorry, but the OTP you entered is incorrect or has expired`
@@ -174,19 +222,12 @@ const OTPVerification = ({
             size={'custom'}
             disabled={isLoading}
             className=" border-none w-[100%]"
-            onClick={() =>
-              role === 'login'
-                ? setCurrentState('login')
-                : setCurrentState('register')
-            }
+            onClick={() => setCurrentState('login')}
           >
             <div className="text-mMedium font-medium flex items-center gap-2">
               <Image src={backArrow} alt="backArrow" />
-              <p className="text-neutral900">
-                {' '}
-                Go back To {role === 'login' ? 'Login' : 'Register'}
-              </p>
-            </div>
+              <p className="text-neutral900"> Go back To Login</p>
+            </div>{' '}
           </IndividualActionButton>
         </div>
       </div>
@@ -194,4 +235,4 @@ const OTPVerification = ({
   );
 };
 
-export default OTPVerification;
+export default EmailVerification;

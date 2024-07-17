@@ -5,6 +5,7 @@ import Select, { components } from 'react-select';
 import countryCode from '../../../../../constants/country-code.json';
 import { colourStyles } from './country-select';
 import { useGetAllCountryCodeQuery } from '@/features/api/get-country-code';
+import Ind from '@public/v2/assets/png/data-table/IND.png';
 
 interface IDynamicMobileInputField extends IDynamicInputFieldProps {
   containerStyle?: string;
@@ -18,6 +19,8 @@ interface IDropdownProps {
   onClose: () => void;
   errorText: string | undefined;
 }
+const apiURL = process.env.NEXT_PUBLIC_API_URL;
+
 export const DynamicMobileInput = ({
   name,
   phoneValue,
@@ -56,9 +59,13 @@ export const DynamicMobileInput = ({
   const Option = (props: any) => (
     <components.Option {...props} className="country-option">
       <img
-        src={`https://flagsapi.com/${props.data.iso}/flat/64.png`}
+        src={`${apiURL}flags/${props.data.iso}.png`}
         style={{ width: 24 }}
         alt="logo"
+        onError={(e: any) => {
+          e.target.error = null; // prevents looping
+          e.target.src = Ind;
+        }}
       />
       +{props.data.label + ' ' + props.data.country}
     </components.Option>
@@ -67,8 +74,12 @@ export const DynamicMobileInput = ({
   const SingleValue = ({ children, ...props }: any) => (
     <components.SingleValue {...props}>
       <img
-        src={`https://flagsapi.com/${selectedCountryIso}/flat/64.png`}
+        src={`${apiURL}flags/${selectedCountryIso}.png`}
         style={{ width: 24 }}
+        onError={(e: any) => {
+          e.target.error = null; // prevents looping
+          e.target.src = Ind;
+        }}
         alt={''}
       />
       {children}
@@ -104,8 +115,12 @@ export const DynamicMobileInput = ({
                 <div className="flex items-center">
                   {' '}
                   <img
-                    src={`https://flagsapi.com/${selectedCountryIso}/flat/64.png`}
+                    src={`${apiURL}flags/${selectedCountryIso}.png`}
                     style={{ width: 24 }}
+                    onError={(e: any) => {
+                      e.target.error = null; // prevents looping
+                      e.target.src = Ind;
+                    }}
                     alt="logo"
                   />{' '}
                   {countryCodeValue.value}

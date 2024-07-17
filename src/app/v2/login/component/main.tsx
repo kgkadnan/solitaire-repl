@@ -9,15 +9,15 @@ import useUser from '@/lib/use-auth';
 import {
   ENTER_PASSWORD,
   ENTER_PHONE,
-  INCORRECT_LOGIN_CREDENTIALS,
+  INVALID_EMAIL_FORMAT,
   INVALID_MOBILE
 } from '@/constants/error-messages/register';
 import { Events } from '@/constants/enums/event';
 import {
+  useSendEmailResetOtpMutation,
   useSendOtpMutation,
   useVerifyOTPMutation
 } from '@/features/api/otp-verification';
-import { statusCode } from '@/constants/enums/status-code';
 import { DialogComponent } from '@/components/v2/common/dialog';
 import UserAuthenticationLayout from '@/components/v2/common/user-authentication-layout';
 import { isPhoneNumberValid } from '@/utils/validate-phone';
@@ -41,6 +41,10 @@ import { IAuthDataResponse } from '../interface';
 import CommonPoppup from './common-poppup';
 import LoginComponent from './login';
 import ConfirmScreen from '../../register/component/confirmation-screen';
+import { isEmailValid } from '@/utils/validate-email';
+import EmailVerification from '@/components/v2/common/email-verification';
+import { InputField } from '@/components/v2/common/input-field';
+import { handleLoginInputChange } from '../helpers/handle-login-input-change';
 
 export interface IToken {
   token: string;
@@ -62,16 +66,23 @@ const Login = () => {
     mobileNumber: string;
   }>({ countryCode: '', mobileNumber: '' });
   const [password, setPassword] = useState<string>('');
-  const [isLoading, setIsLoading] = useState(false); // State to track loading
+  const [email, setEmail] = useState<string>('');
+  const [emailToken, setEmailToken] = useState<string>('');
+  const [tempToken, setTempToken] = useState<string>('');
 
+  const [isLoading, setIsLoading] = useState(false); // State to track loading
+  const [loginByEmail, setLoginByEmail] = useState<boolean>(false);
   const [token, setToken] = useState(initialTokenState);
   const { data }: { data?: IAuthDataResponse } = useGetAuthDataQuery(
     token.token,
     { skip: !token.token }
   );
   const [verifyLogin] = useVerifyLoginMutation();
+  const [resendEmailOTP] = useSendEmailResetOtpMutation();
 
   const [phoneErrorText, setPhoneErrorText] = useState<string>('');
+  const [emailErrorText, setEmailErrorText] = useState<string>('');
+
   const [passwordErrorText, setPasswordErrorText] = useState<string>('');
   const { modalState, modalSetState } = useModalStateManagement();
   const { dialogContent, isDialogOpen, isInputDialogOpen } = modalState;
@@ -169,40 +180,37 @@ const Login = () => {
   const handleLogin = async () => {
     setIsLoading(true);
     if (
-      !phoneErrorText.length &&
-      !passwordErrorText.length &&
-      isPhoneNumberValid(phoneNumber.mobileNumber) &&
-      password.length &&
-      phoneNumber.mobileNumber.length
+      ((isPhoneNumberValid(phoneNumber.mobileNumber) &&
+        !loginByEmail &&
+        phoneNumber.mobileNumber.length) ||
+        (isEmailValid(email) && email.length && loginByEmail)) &&
+      password.length
     ) {
-      let res: any = await verifyLogin({
-        phone: phoneNumber.mobileNumber,
-        password: password,
-        country_code: phoneNumber.countryCode
-      });
+      let res: any = await verifyLogin(
+        loginByEmail
+          ? {
+              password: password,
+              email: email
+            }
+          : {
+              phone: phoneNumber.mobileNumber,
+              password: password,
+              country_code: phoneNumber.countryCode
+            }
+      );
       setOTPVerificationFormState(prev => ({
         ...prev,
         otpMobileNumber: `${phoneNumber.mobileNumber}`,
         countryCode: `${phoneNumber.countryCode}`,
         codeAndNumber: `${phoneNumber.countryCode} ${phoneNumber.mobileNumber}`
       }));
-      if (res?.error?.status === statusCode.UNAUTHORIZED) {
-        // Display error message if login fails
+
+      if (res.error) {
         setIsDialogOpen(true);
         setDialogContent(
           <CommonPoppup
-            content={INCORRECT_LOGIN_CREDENTIALS}
-            handleClick={() => setIsDialogOpen(false)}
+            content={res.error.data.message}
             header="Login Failed"
-            buttonText="Try Again"
-          />
-        );
-      } else if (res.error) {
-        setIsDialogOpen(true);
-        setDialogContent(
-          <CommonPoppup
-            content=""
-            header={res.error.data.message}
             handleClick={() => setIsDialogOpen(false)}
             buttonText="Try Again"
           />
@@ -213,22 +221,73 @@ const Login = () => {
           token: res.data.access_token,
           tempToken: res.data.access_token
         }));
-      } else if (res.data.customer.phone_token) {
+      } else if (
+        !res.data.customer.is_email_verified &&
+        loginByEmail &&
+        res.data.customer.email_token
+      ) {
+        setEmailToken(res.data.customer.email_token);
+        setTempToken(res.data.customer.temp_token);
+        setCurrentState('emailVerification');
+      } else if (
+        res.data.customer.phone_token &&
+        !res.data.customer.is_phone_verified
+        // !loginByEmail
+      ) {
         setCurrentState('otpVerification');
         setToken((prev: any) => ({
           ...prev,
           phoneToken: res.data.customer.phone_token,
           tempToken: res.data.customer.temp_token
         }));
+        if (
+          loginByEmail &&
+          res.data.customer.country_code &&
+          res.data.customer.phone
+        ) {
+          setOTPVerificationFormState((prev: any) => ({
+            ...prev,
+            otpMobileNumber: `${res.data.customer.phone}`,
+            countryCode: `${res.data.customer.country_code}`,
+            codeAndNumber: `${res.data.customer.country_code} ${res.data.customer.phone}`
+          }));
+          setPhoneNumber((prev: any) => ({
+            ...prev,
+            mobileNumber: res.data.customer.phone,
+            countryCode: res.data.customer.country_code
+          }));
+        }
       }
-    } else if (!password.length && !phoneNumber.mobileNumber.length) {
-      setPasswordErrorText(ENTER_PASSWORD);
-      setPhoneErrorText(ENTER_PHONE);
-    } else if (!isPhoneNumberValid(phoneNumber.mobileNumber)) {
-      setPhoneErrorText(INVALID_MOBILE);
-    } else if (!password.length) {
-      setPasswordErrorText(ENTER_PASSWORD);
+    } else if (
+      !loginByEmail &&
+      (!password.length ||
+        !phoneNumber.mobileNumber.length ||
+        !isPhoneNumberValid(phoneNumber.mobileNumber))
+    ) {
+      if (!phoneNumber.mobileNumber && !password.length) {
+        setPhoneErrorText(ENTER_PHONE);
+        setPasswordErrorText(ENTER_PASSWORD);
+      } else if (!phoneNumber.mobileNumber) {
+        setPhoneErrorText(ENTER_PHONE);
+      } else if (!isPhoneNumberValid(phoneNumber.mobileNumber)) {
+        setPhoneErrorText(INVALID_MOBILE);
+      } else if (!password.length) {
+        setPasswordErrorText(ENTER_PASSWORD);
+      }
+    } else if (
+      loginByEmail &&
+      (!email.length || !isEmailValid(email) || !password.length)
+    ) {
+      if ((!email || !isEmailValid(email)) && !password.length) {
+        setEmailErrorText(INVALID_EMAIL_FORMAT);
+        setPasswordErrorText(ENTER_PASSWORD);
+      } else if (!isEmailValid(email)) {
+        setEmailErrorText(INVALID_EMAIL_FORMAT);
+      } else if (!password.length) {
+        setPasswordErrorText(ENTER_PASSWORD);
+      }
     }
+
     setIsLoading(false);
   };
   // Handle Enter key press for login
@@ -238,6 +297,90 @@ const Login = () => {
     }
   };
 
+  const renderContentWithEmail = () => {
+    return (
+      <div className="flex gap-[12px] flex-col w-full">
+        <div className="absolute left-[-84px] top-[-84px]">
+          <Image src={editIcon} alt="update email" />
+        </div>
+        <div className="flex gap-[16px] flex-col mt-[60px] align-left">
+          <p className="text-headingS text-neutral900 font-medium">
+            Enter new email
+          </p>
+        </div>
+        <div className="pb-2">
+          <InputField
+            label={ManageLocales('app.register.email')}
+            onChange={event =>
+              handleLoginInputChange({
+                event,
+                type: 'email',
+                setEmail,
+                setEmailErrorText,
+                setPasswordErrorText,
+                setPassword,
+                setPhoneNumber,
+                setPhoneErrorText
+              })
+            }
+            type="email"
+            name="email"
+            value={email}
+            errorText={emailErrorText}
+            placeholder={ManageLocales('app.register.email.placeholder')}
+            styles={{ inputMain: 'h-[64px]' }}
+            autoComplete="none"
+          />
+        </div>
+        <div className="flex justify-between gap-[12px]">
+          <IndividualActionButton
+            onClick={() => {
+              // setOTPVerificationFormState(prev => ({ ...prev }));
+              setOTPVerificationFormErrors(initialOTPFormState);
+              setIsInputDialogOpen(false);
+            }}
+            variant={'secondary'}
+            size={'custom'}
+            className="rounded-[4px] w-[170px] h-10"
+          >
+            {ManageLocales('app.OTPVerification.cancel')}
+          </IndividualActionButton>
+          <IndividualActionButton
+            onClick={() => {
+              isEmailValid(email)
+                ? resendEmailOTP({ resend_token: tempToken, email: email })
+                    .unwrap()
+                    .then((res: any) => {
+                      if (res) {
+                        setResendTimer(60);
+                        setIsInputDialogOpen(false);
+                        setTempToken(res.customer.temp_token);
+                        setEmailToken(res.customer.email_token);
+                      }
+                    })
+                    .catch((e: any) => {
+                      setIsDialogOpen(true);
+                      setDialogContent(
+                        <CommonPoppup
+                          content=""
+                          header={e?.data.message}
+                          handleClick={() => setIsDialogOpen(false)}
+                        />
+                      );
+                    })
+                : setEmailErrorText(INVALID_EMAIL_FORMAT);
+            }}
+            variant={'primary'}
+            size={'custom'}
+            className="rounded-[4px] w-[170px] h-10"
+            type="button"
+          >
+            {ManageLocales('app.OTPVerification.save')}
+          </IndividualActionButton>
+        </div>
+      </div>
+    );
+  };
   const renderContentWithInput = () => {
     return (
       <div className="flex gap-[12px] flex-col w-full">
@@ -249,25 +392,27 @@ const Login = () => {
             Enter new mobile number
           </p>
         </div>
-        <MobileInput
-          label={ManageLocales('app.register.mobileNumber')}
-          onChange={event => {
-            setOTPVerificationFormErrors(prev => ({
-              ...prev,
-              otpMobileNumber: ''
-            }));
+        <div className="pb-2">
+          <MobileInput
+            label={ManageLocales('app.register.mobileNumber')}
+            onChange={event => {
+              setOTPVerificationFormErrors(prev => ({
+                ...prev,
+                otpMobileNumber: ''
+              }));
 
-            handleOTPChange({ event, setOTPVerificationFormState });
-          }}
-          type="number"
-          name="otpMobileNumber"
-          errorText={otpVerificationFormErrors.otpMobileNumber}
-          placeholder={ManageLocales('app.register.mobileNumber.placeholder')}
-          registerFormState={otpVerificationFormState}
-          setRegisterFormState={setOTPVerificationFormState}
-          value={otpVerificationFormState.otpMobileNumber}
-          onKeyDown={handleKeyDown}
-        />
+              handleOTPChange({ event, setOTPVerificationFormState });
+            }}
+            type="number"
+            name="otpMobileNumber"
+            errorText={otpVerificationFormErrors.otpMobileNumber}
+            placeholder={ManageLocales('app.register.mobileNumber.placeholder')}
+            registerFormState={otpVerificationFormState}
+            setRegisterFormState={setOTPVerificationFormState}
+            value={otpVerificationFormState.otpMobileNumber}
+            onKeyDown={handleKeyDown}
+          />
+        </div>
 
         <div className="flex justify-between gap-[12px]">
           <IndividualActionButton
@@ -325,6 +470,12 @@ const Login = () => {
             passwordErrorText={passwordErrorText}
             handleLogin={handleLogin}
             currentCountryCode={currentCountryCode}
+            setEmail={setEmail}
+            setEmailErrorText={setEmailErrorText}
+            email={email}
+            emailErrorText={emailErrorText}
+            loginByEmail={loginByEmail}
+            setLoginByEmail={setLoginByEmail}
           />
         );
       case 'otpVerification':
@@ -347,6 +498,32 @@ const Login = () => {
             role={'login'}
             setIsLoading={setIsLoading}
             isLoading={isLoading}
+            // setOTPVerificationFormState={setOTPVerificationFormState}
+          />
+        );
+      case 'emailVerification':
+        return (
+          <EmailVerification
+            email={email}
+            setOtpValues={setOtpValues}
+            otpValues={otpValues}
+            sendOtp={sendOtp}
+            resendTimer={resendTimer}
+            setCurrentState={setCurrentState}
+            emailToken={emailToken}
+            userLoggedIn={userLoggedIn}
+            setIsInputDialogOpen={setIsInputDialogOpen}
+            setIsDialogOpen={setIsDialogOpen}
+            setDialogContent={setDialogContent}
+            verifyOTP={verifyOTP}
+            setToken={setToken}
+            setResendTimer={setResendTimer}
+            role={'login'}
+            setIsLoading={setIsLoading}
+            isLoading={isLoading}
+            tempToken={tempToken}
+            setTempToken={setTempToken}
+            setEmailToken={setEmailToken}
           />
         );
       case 'successfullyCreated':
@@ -363,7 +540,11 @@ const Login = () => {
       <InputDialogComponent
         isOpen={isInputDialogOpen}
         onClose={() => setIsInputDialogOpen(false)}
-        renderContent={renderContentWithInput}
+        renderContent={
+          currentState === 'emailVerification'
+            ? renderContentWithEmail
+            : renderContentWithInput
+        }
         dialogStyle="min-h-[280px]"
       />
       <UserAuthenticationLayout

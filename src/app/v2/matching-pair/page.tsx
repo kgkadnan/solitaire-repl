@@ -11,16 +11,11 @@ import { ManageLocales } from '@/utils/v2/translate';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import { DialogComponent } from '@/components/v2/common/dialog';
 
-import logger from 'logging/log-util';
-import {
-  useAddSavedSearchMutation,
-  useUpdateSavedSearchMutation
-} from '@/features/api/saved-searches';
+import { useAddSavedSearchMutation } from '@/features/api/saved-searches';
 import { InputDialogComponent } from '@/components/v2/common/input-dialog';
 import { InputField } from '@/components/v2/common/input-field';
 import bookmarkIcon from '@public/v2/assets/icons/modal/bookmark.svg';
 import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
-import CommonPoppup from '../login/component/common-poppup';
 import { handleSaveSearch } from '../search/result/helpers/handle-save-search';
 import Form, { ISavedSearch } from '../search/form/form';
 import { handleReset } from '../search/form/helpers/reset';
@@ -60,7 +55,6 @@ const MatchingPair = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false); // State to track loading
   const [searchLoading, setSearchLoading] = useState(false);
-  const [updateSavedSearch] = useUpdateSavedSearchMutation();
   const [saveSearchName, setSaveSearchName] = useState('');
   const [addSavedSearch] = useAddSavedSearchMutation();
 
@@ -131,39 +125,13 @@ const MatchingPair = () => {
   }, [localStorage.getItem('MatchingPair')!]);
 
   const handleCloseAllTabs = () => {
-    setDialogContent(
-      <CommonPoppup
-        content={ManageLocales('app.search.closeTabs')}
-        status="warning"
-        customPoppupStyle="h-[200px]"
-        customPoppupBodyStyle="!mt-[65px]"
-        header={ManageLocales('app.search.confirmHeader')}
-        actionButtonData={[
-          {
-            variant: 'secondary',
-            label: ManageLocales('app.modal.no'),
-            handler: () => setIsDialogOpen(false),
-            customStyle: 'flex-1 h-10'
-          },
-          {
-            variant: 'primary',
-            label: ManageLocales('app.modal.yes'),
-            handler: () => {
-              localStorage.removeItem('MatchingPair');
-              setIsDialogOpen(false),
-                router.push(
-                  `${Routes.MATCHING_PAIR}?active-tab=${MatchSubRoutes.NEW_SEARCH}`
-                ),
-                setSearchParameters([]);
-              setAddSearches([]);
-            },
-            customStyle: 'flex-1 h-10'
-          }
-        ]}
-      />
-    );
-
-    setIsDialogOpen(true);
+    localStorage.removeItem('MatchingPair');
+    setIsDialogOpen(false),
+      router.push(
+        `${Routes.MATCHING_PAIR}?active-tab=${MatchSubRoutes.NEW_SEARCH}`
+      ),
+      setSearchParameters([]);
+    setAddSearches([]);
   };
 
   const closeSearch = (
@@ -200,58 +168,58 @@ const MatchingPair = () => {
   const handleCloseSpecificTab = (id: number) => {
     let yourSelection = JSON.parse(localStorage.getItem('MatchingPair')!);
 
-    if (!yourSelection[id - 1]?.isSavedSearch) {
-      setIsDialogOpen(true);
-      setDialogContent(
-        <CommonPoppup
-          content={`Do you want to save your "Matching Pair Result" for this session?`}
-          status="warning"
-          customPoppupStyle="h-[200px]"
-          customPoppupBodyStyle="!mt-[65px]"
-          header={ManageLocales('app.search.confirmHeader')}
-          actionButtonData={[
-            {
-              variant: 'secondary',
-              label: ManageLocales('app.modal.no'),
-              handler: () => {
-                setIsDialogOpen(false);
-                closeSearch(id, yourSelection);
-              },
-              customStyle: 'flex-1 h-10'
-            },
-            {
-              variant: 'primary',
-              label: ManageLocales('app.modal.yes'),
-              handler: () => {
-                if (yourSelection[id - 1]?.saveSearchName.length) {
-                  //update logic comes here
-                  const updateSaveSearchData = {
-                    id: yourSelection[id - 1]?.id,
-                    meta_data: yourSelection[id - 1]?.queryParams,
-                    diamond_count: data?.count
-                  };
-                  updateSavedSearch(updateSaveSearchData)
-                    .unwrap()
-                    .then(() => {
-                      setIsDialogOpen(false);
-                      closeSearch(id, yourSelection);
-                    })
-                    .catch((error: any) => {
-                      logger.error(error);
-                    });
-                } else {
-                  setIsInputDialogOpen(true);
-                  setIsDialogOpen(false);
-                }
-              },
-              customStyle: 'flex-1 h-10'
-            }
-          ]}
-        />
-      );
-    } else {
-      closeSearch(id, yourSelection);
-    }
+    // if (!yourSelection[id - 1]?.isSavedSearch) {
+    //   setIsDialogOpen(true);
+    //   setDialogContent(
+    //     <CommonPoppup
+    //       content={`Do you want to save your "Matching Pair Result" for this session?`}
+    //       status="warning"
+    //       customPoppupStyle="h-[200px]"
+    //       customPoppupBodyStyle="!mt-[65px]"
+    //       header={ManageLocales('app.search.confirmHeader')}
+    //       actionButtonData={[
+    //         {
+    //           variant: 'secondary',
+    //           label: ManageLocales('app.modal.no'),
+    //           handler: () => {
+    //             setIsDialogOpen(false);
+    //             closeSearch(id, yourSelection);
+    //           },
+    //           customStyle: 'flex-1 h-10'
+    //         },
+    //         {
+    //           variant: 'primary',
+    //           label: ManageLocales('app.modal.yes'),
+    //           handler: () => {
+    //             if (yourSelection[id - 1]?.saveSearchName.length) {
+    //               //update logic comes here
+    //               const updateSaveSearchData = {
+    //                 id: yourSelection[id - 1]?.id,
+    //                 meta_data: yourSelection[id - 1]?.queryParams,
+    //                 diamond_count: data?.count
+    //               };
+    //               updateSavedSearch(updateSaveSearchData)
+    //                 .unwrap()
+    //                 .then(() => {
+    //                   setIsDialogOpen(false);
+    //                   closeSearch(id, yourSelection);
+    //                 })
+    //                 .catch((error: any) => {
+    //                   logger.error(error);
+    //                 });
+    //             } else {
+    //               setIsInputDialogOpen(true);
+    //               setIsDialogOpen(false);
+    //             }
+    //           },
+    //           customStyle: 'flex-1 h-10'
+    //         }
+    //       ]}
+    //     />
+    //   );
+    // } else {
+    closeSearch(id, yourSelection);
+    // }
   };
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputError('');

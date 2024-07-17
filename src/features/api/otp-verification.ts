@@ -49,6 +49,14 @@ export const otpVerificationApi = createApi({
         body: filter
       }),
       invalidatesTags: ['OtpVerification']
+    }),
+    sendEmailResetOtp: builder.mutation({
+      query: data => ({
+        url: `/store/customers/email/otp/resend-or-edit`,
+        method: 'POST',
+        body: data
+      }),
+      invalidatesTags: ['OtpVerification']
     })
   })
 });
@@ -58,5 +66,6 @@ export const {
   useVerifyResetOTPMutation,
   useSendOtpMutation,
   useVerifyPhoneQuery,
-  useSendResetOtpMutation
+  useSendResetOtpMutation,
+  useSendEmailResetOtpMutation
 } = otpVerificationApi;

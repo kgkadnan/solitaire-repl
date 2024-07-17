@@ -15,6 +15,7 @@ export interface ISearchInputProps {
   handleKeyPress?: (_e: React.KeyboardEvent<HTMLInputElement>) => void;
   setShowSuggestions?: any;
   showSuggestions?: boolean;
+  customStyle?: string;
 }
 
 const SearchInputField: React.FC<ISearchInputProps> = ({
@@ -27,7 +28,8 @@ const SearchInputField: React.FC<ISearchInputProps> = ({
   handleSuggestionClick,
   setShowSuggestions,
   showSuggestions,
-  handleKeyPress
+  handleKeyPress,
+  customStyle
 }) => {
   const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(0);
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -71,7 +73,7 @@ const SearchInputField: React.FC<ISearchInputProps> = ({
         </div>
         <Input
           data-testid="custom-search-input"
-          className={`${styles.defaultSearchInputStyle} ${styles.searchInput} placeholder:text-mMedium placeholder:font-mMedium`}
+          className={`${styles.defaultSearchInputStyle} ${styles.searchInput} placeholder:text-mMedium placeholder:font-mMedium ${customStyle}`}
           type={type}
           name={name}
           autoComplete="off"

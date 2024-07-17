@@ -17,18 +17,13 @@ import useFormStateManagement from './form/hooks/form-state';
 import useNumericFieldValidation from './form/hooks/numeric-field-validation-management';
 import Result from './result/result';
 import SavedSearch from './saved-search/saved-search';
-import logger from 'logging/log-util';
-import {
-  useAddSavedSearchMutation,
-  useUpdateSavedSearchMutation
-} from '@/features/api/saved-searches';
+import { useAddSavedSearchMutation } from '@/features/api/saved-searches';
 import { useGetProductCountQuery } from '@/features/api/product';
 import { InputDialogComponent } from '@/components/v2/common/input-dialog';
 import { InputField } from '@/components/v2/common/input-field';
 import bookmarkIcon from '@public/v2/assets/icons/modal/bookmark.svg';
 import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
 import { handleSaveSearch } from './result/helpers/handle-save-search';
-import CommonPoppup from '../login/component/common-poppup';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 
 const Search = () => {
@@ -60,7 +55,6 @@ const Search = () => {
   const [isLoading, setIsLoading] = useState(false); // State to track loading
   const [searchLoading, setSearchLoading] = useState(false);
 
-  const [updateSavedSearch] = useUpdateSavedSearchMutation();
   const [saveSearchName, setSaveSearchName] = useState('');
   const [addSavedSearch] = useAddSavedSearchMutation();
 
@@ -128,39 +122,44 @@ const Search = () => {
   }, [localStorage.getItem('Search')!]);
 
   const handleCloseAllTabs = () => {
-    setDialogContent(
-      <CommonPoppup
-        content={ManageLocales('app.search.closeTabs')}
-        status="warning"
-        customPoppupStyle="h-[200px]"
-        customPoppupBodyStyle="!mt-[65px]"
-        header={ManageLocales('app.search.confirmHeader')}
-        actionButtonData={[
-          {
-            variant: 'secondary',
-            label: ManageLocales('app.modal.no'),
-            handler: () => setIsDialogOpen(false),
-            customStyle: 'flex-1 h-10'
-          },
-          {
-            variant: 'primary',
-            label: ManageLocales('app.modal.yes'),
-            handler: () => {
-              localStorage.removeItem('Search'),
-                setIsDialogOpen(false),
-                router.push(
-                  `${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`
-                ),
-                setSearchParameters([]);
-              setAddSearches([]);
-            },
-            customStyle: 'flex-1 h-10'
-          }
-        ]}
-      />
-    );
+    localStorage.removeItem('Search'),
+      setIsDialogOpen(false),
+      router.push(`${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`),
+      setSearchParameters([]);
+    setAddSearches([]);
+    // setDialogContent(
+    //   <CommonPoppup
+    //     content={ManageLocales('app.search.closeTabs')}
+    //     status="warning"
+    //     customPoppupStyle="h-[200px]"
+    //     customPoppupBodyStyle="!mt-[65px]"
+    //     header={ManageLocales('app.search.confirmHeader')}
+    //     actionButtonData={[
+    //       {
+    //         variant: 'secondary',
+    //         label: ManageLocales('app.modal.no'),
+    //         handler: () => setIsDialogOpen(false),
+    //         customStyle: 'flex-1 h-10'
+    //       },
+    //       {
+    //         variant: 'primary',
+    //         label: ManageLocales('app.modal.yes'),
+    //         handler: () => {
+    //           localStorage.removeItem('Search'),
+    //             setIsDialogOpen(false),
+    //             router.push(
+    //               `${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`
+    //             ),
+    //             setSearchParameters([]);
+    //           setAddSearches([]);
+    //         },
+    //         customStyle: 'flex-1 h-10'
+    //       }
+    //     ]}
+    //   />
+    // );
 
-    setIsDialogOpen(true);
+    // setIsDialogOpen(true);
   };
 
   const closeSearch = (
@@ -193,58 +192,58 @@ const Search = () => {
   const handleCloseSpecificTab = (id: number) => {
     let yourSelection = JSON.parse(localStorage.getItem('Search')!);
 
-    if (!yourSelection[id - 1]?.isSavedSearch) {
-      setIsDialogOpen(true);
-      setDialogContent(
-        <CommonPoppup
-          content={`Do you want to save your "Search Result" for this session?`}
-          status="warning"
-          customPoppupStyle="h-[200px]"
-          customPoppupBodyStyle="!mt-[65px]"
-          header={ManageLocales('app.search.confirmHeader')}
-          actionButtonData={[
-            {
-              variant: 'secondary',
-              label: ManageLocales('app.modal.no'),
-              handler: () => {
-                setIsDialogOpen(false);
-                closeSearch(id, yourSelection);
-              },
-              customStyle: 'flex-1 h-10'
-            },
-            {
-              variant: 'primary',
-              label: ManageLocales('app.modal.yes'),
-              handler: () => {
-                if (yourSelection[id - 1]?.saveSearchName.length) {
-                  //update logic comes here
-                  const updateSaveSearchData = {
-                    id: yourSelection[id - 1]?.id,
-                    meta_data: yourSelection[id - 1]?.queryParams,
-                    diamond_count: data?.count
-                  };
-                  updateSavedSearch(updateSaveSearchData)
-                    .unwrap()
-                    .then(() => {
-                      setIsDialogOpen(false);
-                      closeSearch(id, yourSelection);
-                    })
-                    .catch((error: any) => {
-                      logger.error(error);
-                    });
-                } else {
-                  setIsInputDialogOpen(true);
-                  setIsDialogOpen(false);
-                }
-              },
-              customStyle: 'flex-1 h-10'
-            }
-          ]}
-        />
-      );
-    } else {
-      closeSearch(id, yourSelection);
-    }
+    // if (!yourSelection[id - 1]?.isSavedSearch) {
+    //   setIsDialogOpen(true);
+    //   setDialogContent(
+    //     <CommonPoppup
+    //       content={`Do you want to save your "Search Result" for this session?`}
+    //       status="warning"
+    //       customPoppupStyle="h-[200px]"
+    //       customPoppupBodyStyle="!mt-[65px]"
+    //       header={ManageLocales('app.search.confirmHeader')}
+    //       actionButtonData={[
+    //         {
+    //           variant: 'secondary',
+    //           label: ManageLocales('app.modal.no'),
+    //           handler: () => {
+    //             setIsDialogOpen(false);
+    //             closeSearch(id, yourSelection);
+    //           },
+    //           customStyle: 'flex-1 h-10'
+    //         },
+    //         {
+    //           variant: 'primary',
+    //           label: ManageLocales('app.modal.yes'),
+    //           handler: () => {
+    //             if (yourSelection[id - 1]?.saveSearchName.length) {
+    //               //update logic comes here
+    //               const updateSaveSearchData = {
+    //                 id: yourSelection[id - 1]?.id,
+    //                 meta_data: yourSelection[id - 1]?.queryParams,
+    //                 diamond_count: data?.count
+    //               };
+    //               updateSavedSearch(updateSaveSearchData)
+    //                 .unwrap()
+    //                 .then(() => {
+    //                   setIsDialogOpen(false);
+    //                   closeSearch(id, yourSelection);
+    //                 })
+    //                 .catch((error: any) => {
+    //                   logger.error(error);
+    //                 });
+    //             } else {
+    //               setIsInputDialogOpen(true);
+    //               setIsDialogOpen(false);
+    //             }
+    //           },
+    //           customStyle: 'flex-1 h-10'
+    //         }
+    //       ]}
+    //     />
+    //   );
+    // } else {
+    closeSearch(id, yourSelection);
+    // }
   };
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputError('');
