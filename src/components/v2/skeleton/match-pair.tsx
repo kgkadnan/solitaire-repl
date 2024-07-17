@@ -21,6 +21,7 @@ const MathPairSkeleton = () => {
               height={'38px'}
               width={'137px'}
               animation="wave"
+              className="rounded-[4px]"
             />
           </div>
           <div className="flex gap-2">
@@ -30,6 +31,7 @@ const MathPairSkeleton = () => {
               width={'137px'}
               animation="wave"
               sx={{ bgcolor: 'var(--neutral-200)' }}
+              className="rounded-[4px]"
             />
             <Skeleton
               variant="rectangular"
@@ -37,6 +39,7 @@ const MathPairSkeleton = () => {
               width={'137px'}
               animation="wave"
               sx={{ bgcolor: 'var(--neutral-200)' }}
+              className="rounded-[4px]"
             />
 
             <Skeleton
@@ -45,6 +48,16 @@ const MathPairSkeleton = () => {
               width={'38px'}
               animation="wave"
               sx={{ bgcolor: 'var(--neutral-200)' }}
+              className="rounded-[4px]"
+            />
+
+            <Skeleton
+              variant="rectangular"
+              height={'38px'}
+              width={'38px'}
+              animation="wave"
+              sx={{ bgcolor: 'var(--neutral-200)' }}
+              className="rounded-[4px]"
             />
           </div>
         </>
@@ -75,6 +88,7 @@ const MathPairSkeleton = () => {
               height={'38px'}
               width={'252px'}
               animation="wave"
+              className="rounded-[4px]"
             />
           </div>
 
@@ -85,6 +99,7 @@ const MathPairSkeleton = () => {
                 height={'38px'}
                 width={'38px'}
                 animation="wave"
+                className="rounded-[4px]"
                 sx={{ bgcolor: 'var(--neutral-200)' }}
               />
               <Skeleton
@@ -92,6 +107,7 @@ const MathPairSkeleton = () => {
                 height={'38px'}
                 width={'38px'}
                 animation="wave"
+                className="rounded-[4px]"
                 sx={{ bgcolor: 'var(--neutral-200)' }}
               />
               <Skeleton
@@ -99,6 +115,7 @@ const MathPairSkeleton = () => {
                 height={'38px'}
                 width={'38px'}
                 animation="wave"
+                className="rounded-[4px]"
                 sx={{ bgcolor: 'var(--neutral-200)' }}
               />
             </div>
