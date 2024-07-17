@@ -39,7 +39,6 @@ import { getShapeDisplayName } from '@/utils/v2/detail-page';
 import ImageModal from '@/components/v2/common/detail-page/components/image-modal';
 import { FILE_URLS } from '@/constants/v2/detail-page';
 import { useRouter, useSearchParams } from 'next/navigation';
-import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import { Toast } from '@/components/v2/common/copy-and-share/toast';
 import { loadImages } from '@/components/v2/common/detail-page/helpers/load-images';
 import { checkImage } from '@/components/v2/common/detail-page/helpers/check-image';
@@ -64,6 +63,7 @@ import useValidationStateManagement from '../search/hooks/validation-state-manag
 import useFormStateManagement from '../search/form/hooks/form-state';
 import useNumericFieldValidation from '../search/form/hooks/numeric-field-validation-management';
 import { SubRoutes } from '@/constants/v2/enums/routes';
+import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 
 const NewArrivals = () => {
   const router = useRouter();
@@ -78,6 +78,8 @@ const NewArrivals = () => {
   const [validImages, setValidImages] = useState<any>([]);
   const pathName = useSearchParams().get('path');
   const [isLoading, setIsLoading] = useState(false); // State to track loading
+  const [searchLoading, setSearchLoading] = useState(false);
+
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
 
   const { setSearchUrl, searchUrl } = useValidationStateManagement();
@@ -103,7 +105,7 @@ const NewArrivals = () => {
           accessorKey: accessor,
           header: short_label,
           enableGlobalFilter: accessor === 'lot_id',
-          enableGrouping: accessor === 'shape',
+          // enableGrouping: accessor === 'shape',
           enableSorting:
             accessor !== 'shape_full' &&
             accessor !== 'details' &&
@@ -723,10 +725,11 @@ const NewArrivals = () => {
 
   return (
     <div className="mb-[4px] relative">
-      {isLoading && <CustomKGKLoader />}
       {isError && (
         <Toast show={isError} message={errorText} isSuccess={false} />
       )}
+      {isLoading && <CustomKGKLoader />}
+
       <ImageModal
         isOpen={isModalOpen}
         onClose={() => {
@@ -805,9 +808,10 @@ const NewArrivals = () => {
               errorSetState={formErrorState.errorSetState}
               setIsDialogOpen={modalSetState.setIsDialogOpen}
               setDialogContent={modalSetState.setDialogContent}
-              setIsLoading={setIsLoading}
+              setIsLoading={setSearchLoading}
               setIsAddDemand={setIsAddDemand}
               isMatchingPair={false}
+              isLoading={searchLoading}
             />
           ) : (
             <>

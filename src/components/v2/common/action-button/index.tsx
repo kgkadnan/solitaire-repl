@@ -3,6 +3,7 @@ import styles from './action-button.module.scss';
 import Image from 'next/image';
 import { Button } from '../../ui/button';
 import Tooltip from '../tooltip';
+import ButtonLoader from '../loader/button-loader';
 
 export interface IActionButtonData {
   actionButtonData: {
@@ -15,6 +16,7 @@ export interface IActionButtonData {
     customStyle?: string;
     tooltip?: string;
     customCtaStyle?: string;
+    isLoading?: boolean;
   }[];
   containerStyle?: string;
 }
@@ -36,7 +38,8 @@ const ActionButton = ({
             isHidden,
             customStyle,
             tooltip,
-            customCtaStyle
+            customCtaStyle,
+            isLoading
           },
           index
         ) => {
@@ -50,8 +53,8 @@ const ActionButton = ({
             >
               {label || !tooltip ? (
                 <Button
-                  disabled={isDisable}
-                  onClick={() => handler()}
+                  disabled={isDisable || isLoading}
+                  onClick={() => !isLoading && handler()}
                   variant={variant}
                   className={`${styles.ctaStyle} 
                 ${svg ? 'p-[8px] ' : 'px-[16px] py-[8px]'}
@@ -63,7 +66,10 @@ const ActionButton = ({
             } ${customCtaStyle}`}
                 >
                   {svg && <Image src={svg} alt={label ?? 'icon-button'} />}
-                  <div>{label}</div>
+                  <div className="flex gap-1">
+                    {label}
+                    {isLoading && <ButtonLoader />}
+                  </div>
                 </Button>
               ) : (
                 <Tooltip

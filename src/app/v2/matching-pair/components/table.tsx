@@ -733,9 +733,7 @@ const MatchPairTable = ({
             borderTop: '1px solid var(--neutral-200)',
             fontSize: '12px !important',
             fontWeight: 500,
-            paddingRight: ['shape_full', 'location', 'details'].includes(
-              column.id
-            )
+            paddingRight: ['location', 'details'].includes(column.id)
               ? '12px'
               : '0px',
             textAlign:
@@ -983,7 +981,7 @@ const MatchPairTable = ({
                 selectedProducts={rowSelection}
                 setErrorText={setErrorText}
                 setIsError={setIsError}
-                shareTrackIdentifier={'Matching Pair'}
+                shareTrackIdentifier={'Match Pair'}
               />
             </div>
           </div>

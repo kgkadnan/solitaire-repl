@@ -6,7 +6,9 @@ export const handleLoginInputChange = ({
   setPhoneNumber,
   setPhoneErrorText,
   setPasswordErrorText,
-  setPassword
+  setPassword,
+  setEmail,
+  setEmailErrorText
 }: any) => {
   const inputValue = event.target.value;
 
@@ -17,5 +19,8 @@ export const handleLoginInputChange = ({
   } else if (type === 'password') {
     setPassword(inputValue);
     setPasswordErrorText('');
+  } else if (type === 'email') {
+    setEmail(inputValue);
+    setEmailErrorText('');
   }
 };

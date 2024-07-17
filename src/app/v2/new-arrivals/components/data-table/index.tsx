@@ -528,7 +528,7 @@ const NewArrivalDataTable = ({
     enableHiding: false,
     enableColumnFilters: false,
     enableStickyHeader: true,
-    enableGrouping: true,
+    enableGrouping: false,
     enableExpandAll: false,
     enableColumnDragging: false,
     groupedColumnMode: 'remove',
@@ -811,7 +811,9 @@ const NewArrivalDataTable = ({
             fontWeight: 500,
             textAlign:
               column.id === 'girdle_percentage' ? 'center !important' : 'left',
-            paddingRight: ['location', 'details', 'lab'].includes(column.id)
+            paddingRight: ['shape_full', 'location', 'details'].includes(
+              column.id
+            )
               ? '12px'
               : '0px'
           }
