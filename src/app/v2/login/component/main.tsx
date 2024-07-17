@@ -249,7 +249,7 @@ const Login = () => {
             ...prev,
             otpMobileNumber: `${res.data.customer.phone}`,
             countryCode: `${res.data.customer.country_code}`,
-            codeAndNumber: `+${res.data.customer.country_code} ${res.data.customer.phone}`
+            codeAndNumber: `${res.data.customer.country_code} ${res.data.customer.phone}`
           }));
           setPhoneNumber((prev: any) => ({
             ...prev,
