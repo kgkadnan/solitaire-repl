@@ -64,7 +64,6 @@ const OrderDetail: React.FC<IOrderDetail> = ({
   const [detailPageData, setDetailPageData] = useState<any>({});
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [detailImageData, setDetailImageData] = useState<any>({});
-
   const handleDetailPage = ({ row }: { row: any }) => {
     setIsDetailPage(true);
     setDetailPageData(row);

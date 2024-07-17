@@ -79,7 +79,6 @@ export const setModifySearch = (data: any, setState: any) => {
     setCaratRangeSelection,
     setCaratRangeSelectionTemp
   } = setState;
-
   data?.shape && setSelectedShape(data?.shape);
 
   data?.carats &&

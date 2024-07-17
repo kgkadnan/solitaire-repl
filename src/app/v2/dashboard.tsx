@@ -104,6 +104,7 @@ import BookAppointment from './my-appointments/components/book-appointment/book-
 import { Skeleton } from '@mui/material';
 import CommonPoppup from './login/component/common-poppup';
 import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
+import { useLazyGetMatchingPairCountQuery } from '@/features/api/match-pair';
 
 interface ITabs {
   label: string;
@@ -231,6 +232,8 @@ const Dashboard = () => {
     setActiveTab(tab);
   };
   let [triggerProductCountApi] = useLazyGetProductCountQuery();
+  let [triggerMatchingPairCountApi] = useLazyGetMatchingPairCountQuery();
+
   const { modalState, modalSetState } = useModalStateManagement();
   const { isDialogOpen, dialogContent } = modalState;
 
@@ -311,7 +314,7 @@ const Dashboard = () => {
           accessorKey: accessor,
           header: short_label,
           enableGlobalFilter: accessor === 'lot_id',
-          enableGrouping: accessor === 'shape',
+          // enableGrouping: accessor === 'shape',
           enableSorting: accessor !== 'shape_full' && accessor !== 'details',
           minSize: 5,
           maxSize: accessor === 'details' ? 100 : 200,
@@ -1885,7 +1888,7 @@ const Dashboard = () => {
                         activeTab === 'Pending') && (
                         <div className="max-w-full overflow-x-auto border-[1px] border-neutral200">
                           {/* header */}
-                          <div className="grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] text-mMedium h-[47px] border-b border-neutral-200 bg-neutral-50 text-neutral700">
+                          <div className="grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] text-mMedium h-[47px] border-b border-neutral200 bg-neutral50 text-neutral700">
                             {keys?.map(({ label }: any) => (
                               <div
                                 key={label}
@@ -2000,7 +2003,10 @@ const Dashboard = () => {
                                 id: searchData.id,
                                 savedSearchData: [searchData],
                                 router,
-                                triggerProductCountApi,
+                                triggerProductCountApi:
+                                  searchData.is_matching_pair
+                                    ? triggerMatchingPairCountApi
+                                    : triggerProductCountApi,
                                 setDialogContent,
                                 setIsDialogOpen,
                                 isMatchingPair: searchData.is_matching_pair

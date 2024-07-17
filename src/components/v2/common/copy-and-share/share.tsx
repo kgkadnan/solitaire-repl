@@ -165,9 +165,10 @@ const Share = ({
             }
             // Handle amount separately if it's selected
             if (attribute === 'amount' && selectedAttributes['amount']) {
-              const amount = product?.variants[0]?.prices[0]?.amount
-                ? product?.variants[0]?.prices[0]?.amount
-                : product?.amount;
+              const amount =
+                product?.variants && product?.variants[0]?.prices[0]?.amount
+                  ? product?.variants[0]?.prices[0]?.amount
+                  : product?.amount;
               return `Amt ($): ${
                 amount === undefined || amount === null
                   ? '-'
@@ -205,7 +206,7 @@ const Share = ({
               attribute === 'current_max_bid' &&
               selectedAttributes['current_max_bid']
             ) {
-              return `Current Max Bid: ${formatNumber(
+              return `Current Max Bid %: ${formatNumber(
                 product?.current_max_bid
               )}`;
             }

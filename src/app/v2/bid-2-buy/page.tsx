@@ -1,6 +1,6 @@
 'use client';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import BidToByDataTable from './components/data-table';
+import BidToBuyDataTable from './components/data-table';
 import {
   RenderCarat,
   RenderDiscount,
@@ -38,7 +38,6 @@ import { getShapeDisplayName } from '@/utils/v2/detail-page';
 import ImageModal from '@/components/v2/common/detail-page/components/image-modal';
 import { FILE_URLS } from '@/constants/v2/detail-page';
 import { useRouter, useSearchParams } from 'next/navigation';
-import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import { Toast } from '@/components/v2/common/copy-and-share/toast';
 import { loadImages } from '@/components/v2/common/detail-page/helpers/load-images';
 import { checkImage } from '@/components/v2/common/detail-page/helpers/check-image';
@@ -52,6 +51,7 @@ import useFormStateManagement from '../search/form/hooks/form-state';
 import Form from '../search/form/form';
 import { SubRoutes } from '@/constants/v2/enums/routes';
 import useNumericFieldValidation from '../search/form/hooks/numeric-field-validation-management';
+import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 
 const BidToBuy = () => {
   const router = useRouter();
@@ -66,6 +66,8 @@ const BidToBuy = () => {
   const [validImages, setValidImages] = useState<any>([]);
   const pathName = useSearchParams().get('path');
   const [isLoading, setIsLoading] = useState(false); // State to track loading
+  const [searchLoading, setSearchLoading] = useState(false);
+
   const [checkStatus, setCheckStatus] = useState(false);
 
   const { setSearchUrl, searchUrl } = useValidationStateManagement();
@@ -96,7 +98,7 @@ const BidToBuy = () => {
           accessorKey: accessor,
           header: short_label,
           enableGlobalFilter: accessor === 'lot_id',
-          enableGrouping: accessor === 'shape',
+          // enableGrouping: accessor === 'shape',
           enableSorting:
             accessor !== 'shape_full' &&
             accessor !== 'details' &&
@@ -324,10 +326,7 @@ const BidToBuy = () => {
     }
   }, []);
 
-  console.log('biddd', bid);
-
   const handleBidPlaced = useCallback((data: any) => {
-    console.log('Data handleBidPlaced', data);
     if (data && data['status'] === 'success') {
       modalSetState.setIsDialogOpen(true);
       modalSetState.setDialogContent(
@@ -617,10 +616,11 @@ const BidToBuy = () => {
 
   return (
     <div className="mb-[4px] relative">
-      {isLoading && <CustomKGKLoader />}
       {isError && (
         <Toast show={isError} message={errorText} isSuccess={false} />
       )}
+      {isLoading && <CustomKGKLoader />}
+
       <ImageModal
         isOpen={isModalOpen}
         onClose={() => {
@@ -678,9 +678,10 @@ const BidToBuy = () => {
               errorSetState={formErrorState.errorSetState}
               setIsDialogOpen={modalSetState.setIsDialogOpen}
               setDialogContent={modalSetState.setDialogContent}
-              setIsLoading={setIsLoading}
+              setIsLoading={setSearchLoading}
               setIsAddDemand={setIsAddDemand}
               isMatchingPair={false}
+              isLoading={searchLoading}
             />
           ) : (
             <>
@@ -722,7 +723,7 @@ const BidToBuy = () => {
               </div>
               <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow">
                 <div className="border-b-[1px] border-neutral200">
-                  <BidToByDataTable
+                  <BidToBuyDataTable
                     dispatch={dispatch}
                     filterData={filterData}
                     setBid={setBid}

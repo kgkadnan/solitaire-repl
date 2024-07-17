@@ -46,7 +46,8 @@ export const handleRegister = async ({
     password: registerFormState.password,
     country_code: registerFormState.countryCode,
     phone: registerFormState.mobileNumber,
-    company_name: registerFormState.companyName
+    company_name: registerFormState.companyName,
+    country_iso2_code: registerFormState.iso
   })
     .unwrap()
     .then((res: any) => {

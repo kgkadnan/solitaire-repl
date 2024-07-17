@@ -92,7 +92,6 @@ const Register = () => {
   const [register] = useRegisterMutation();
   const [verifyOTP] = useVerifyOTPMutation();
   const [sendOtp] = useSendOtpMutation();
-
   useEffect(() => {
     if (data) {
       setRegisterFormState({
@@ -127,25 +126,26 @@ const Register = () => {
             Enter new mobile number
           </p>
         </div>
-        <MobileInput
-          label={ManageLocales('app.register.mobileNumber')}
-          onChange={event => {
-            setOTPVerificationFormErrors(prev => ({
-              ...prev,
-              otpMobileNumber: ''
-            }));
+        <div className="pb-2">
+          <MobileInput
+            label={ManageLocales('app.register.mobileNumber')}
+            onChange={event => {
+              setOTPVerificationFormErrors(prev => ({
+                ...prev,
+                otpMobileNumber: ''
+              }));
 
-            handleOTPChange({ event, setOTPVerificationFormState });
-          }}
-          type="number"
-          name="otpMobileNumber"
-          errorText={otpVerificationFormErrors.otpMobileNumber}
-          placeholder={'Enter mobile number'}
-          registerFormState={otpVerificationFormState}
-          setRegisterFormState={setOTPVerificationFormState}
-          value={otpVerificationFormState.otpMobileNumber}
-        />
-
+              handleOTPChange({ event, setOTPVerificationFormState });
+            }}
+            type="number"
+            name="otpMobileNumber"
+            errorText={otpVerificationFormErrors.otpMobileNumber}
+            placeholder={'Enter mobile number'}
+            registerFormState={otpVerificationFormState}
+            setRegisterFormState={setOTPVerificationFormState}
+            value={otpVerificationFormState.otpMobileNumber}
+          />
+        </div>
         <div className="flex justify-between gap-[12px]">
           <IndividualActionButton
             onClick={() => {

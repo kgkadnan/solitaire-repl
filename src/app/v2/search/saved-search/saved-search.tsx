@@ -57,6 +57,7 @@ import EmptyScreen from '@/components/v2/common/empty-screen';
 import { kycStatus } from '@/constants/enums/kyc';
 import { Toast } from '@/components/v2/common/copy-and-share/toast';
 import SavedSearchSkeleton from '@/components/v2/skeleton/saved-search';
+import { useLazyGetMatchingPairCountQuery } from '@/features/api/match-pair';
 
 const SavedSearch = ({ setIsLoading }: any) => {
   const router = useRouter();
@@ -65,6 +66,8 @@ const SavedSearch = ({ setIsLoading }: any) => {
     useSavedSearchStateManagement();
 
   let [triggerProductCountApi] = useLazyGetProductCountQuery();
+  let [triggerMatchingPairCountApi] = useLazyGetMatchingPairCountQuery();
+
   // Fetching saved search data
   const { data, isLoading: isDataLoading } = useGetAllSavedSearchesQuery({
     searchByName: savedSearchState.searchByName
@@ -323,7 +326,9 @@ const SavedSearch = ({ setIsLoading }: any) => {
                             id,
                             savedSearchData: savedSearchState.savedSearchData,
                             router,
-                            triggerProductCountApi,
+                            triggerProductCountApi: is_matching_pair
+                              ? triggerMatchingPairCountApi
+                              : triggerProductCountApi,
                             setDialogContent,
                             setIsDialogOpen,
                             isMatchingPair: is_matching_pair

@@ -10,6 +10,8 @@ interface IDetailPageTabs {
   setImageIndex: React.Dispatch<React.SetStateAction<number>>;
   validImages: any;
   isMatchingPair?: boolean;
+  setIsLoading?: any;
+  isLoading?: boolean;
 }
 
 const DetailPageTabs = ({
@@ -17,7 +19,9 @@ const DetailPageTabs = ({
   setActivePreviewTab,
   validImages,
   setImageIndex,
-  isMatchingPair
+  isMatchingPair,
+  setIsLoading,
+  isLoading
 }: IDetailPageTabs) => {
   let TabsData = [
     {
@@ -38,7 +42,10 @@ const DetailPageTabs = ({
         ? !validImages.some(
             (innerArray: any) =>
               Array.isArray(innerArray) &&
-              innerArray.some((image: any) => image.category === 'Video')
+              innerArray.some(
+                (image: any) =>
+                  image.category === 'Video' && image.url_check === true
+              )
           )
         : !validImages.some((image: any) => image.category === 'Video')
     },
@@ -49,7 +56,10 @@ const DetailPageTabs = ({
         ? !validImages.some(
             (innerArray: any) =>
               Array.isArray(innerArray) &&
-              innerArray.some((image: any) => image.category === 'B2B Sparkle')
+              innerArray.some(
+                (image: any) =>
+                  image.category === 'B2B Sparkle' && image.url_check === true
+              )
           )
         : !validImages.some((image: any) => image.category === 'B2B Sparkle')
     },
@@ -60,15 +70,26 @@ const DetailPageTabs = ({
         ? !validImages.some(
             (innerArray: any) =>
               Array.isArray(innerArray) &&
-              innerArray.some((image: any) => image.category === 'Certificate')
+              innerArray.some(
+                (image: any) =>
+                  image.category === 'Certificate' && image.url_check === true
+              )
           )
         : !validImages.some((image: any) => image.category === 'Certificate')
     }
   ];
+  useEffect(() => {
+    setIsLoading &&
+      isLoading &&
+      setTimeout(() => {
+        setIsLoading(false); // Hide the toast notification after some time
+      }, 1000);
+  }, [isLoading]);
 
   const handleTabs = (label: string) => {
     setActivePreviewTab(label);
     setImageIndex(0);
+    setIsLoading && setIsLoading(true);
   };
 
   // Find the next enabled tab

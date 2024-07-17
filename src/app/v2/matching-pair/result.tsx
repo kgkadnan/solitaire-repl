@@ -98,7 +98,8 @@ const MatchingPairResult = ({
   handleCloseSpecificTab,
   setSearchParameters,
   setIsLoading,
-  setIsInputDialogOpen
+  setIsInputDialogOpen,
+  isLoading
 }: {
   activeTab: number;
   searchParameters: any;
@@ -108,6 +109,7 @@ const MatchingPairResult = ({
   handleCloseSpecificTab: (_id: number) => void;
   setIsLoading: any;
   setIsInputDialogOpen: any;
+  isLoading: boolean;
 }) => {
   const dispatch = useAppDispatch();
 
@@ -245,7 +247,7 @@ const MatchingPairResult = ({
           accessorKey: accessor,
           header: short_label,
           enableGlobalFilter: accessor === 'lot_id',
-          enableGrouping: accessor === 'shape',
+          // enableGrouping: accessor === 'shape',
 
           minSize: 5,
           maxSize: accessor === 'details' ? 100 : 200,
@@ -1035,7 +1037,7 @@ const MatchingPairResult = ({
               animation="wave"
             />
           ) : (
-            <div>Matching Pair ({dataTableState.rows.length / 2})</div>
+            <div>Match Pair ({dataTableState.rows.length / 2})</div>
           )}
         </p>
       </div>
@@ -1047,7 +1049,7 @@ const MatchingPairResult = ({
             filterData={detailPageData}
             goBackToListView={goBack}
             breadCrumLabel={
-              breadCrumLabel.length ? breadCrumLabel : 'Matching Pair'
+              breadCrumLabel.length ? breadCrumLabel : 'Match Pair'
             }
             modalSetState={modalSetState}
             setIsLoading={setIsLoading}
@@ -1055,6 +1057,8 @@ const MatchingPairResult = ({
             setRowSelection={setRowSelection}
             setSimilarData={setSimilarData}
             similarData={similarData}
+            rowSelection={rowSelection}
+            isLoading={isLoading}
           />
           <div className="p-[8px] flex justify-between items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow mb-1">
             <div className="flex gap-4 h-[30px]">
@@ -1119,7 +1123,7 @@ const MatchingPairResult = ({
               isFrom={breadCrumLabel}
               handleDetailImage={handleDetailImage}
               handleDetailPage={handleDetailPage}
-              identifier={'Matching Pair'}
+              identifier={'Match Pair'}
               isMatchingPair={true}
             />
           ) : isCompareStone ? (

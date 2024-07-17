@@ -43,6 +43,7 @@ import {
 import {
   EXCEEDS_LIMITS,
   EXCEEDS_LIMITS_MATCHING_PAIR,
+  NO_MATCHING_PAIRS_FOUND,
   NO_STONE_FOUND,
   SELECT_SOME_PARAM,
   SOMETHING_WENT_WRONG
@@ -104,7 +105,8 @@ const Form = ({
   setAddSearches,
   setIsLoading,
   setIsAddDemand,
-  isMatchingPair = false
+  isMatchingPair = false,
+  isLoading
 }: {
   searchUrl: string;
   setSearchUrl: Dispatch<SetStateAction<string>>;
@@ -125,6 +127,7 @@ const Form = ({
   setIsLoading: any;
   setIsAddDemand: Dispatch<SetStateAction<boolean>>;
   isMatchingPair: boolean;
+  isLoading: boolean;
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -252,6 +255,10 @@ const Form = ({
     isAllowedToUnloadRef.current = isAllowedToUnload;
   }, [isAllowedToUnload]);
 
+  // useEffect(() => {
+
+  // }, [caratMin, caratMax]);
+
   useEffect(() => {
     const handleBeforeUnload = async () => {
       if (isAllowedToUnloadRef.current && startTime && !endTime) {
@@ -353,12 +360,19 @@ const Form = ({
           setMessageColor('dangerMain');
         } else if (data?.count === MIN_SEARCH_FORM_COUNT) {
           setIsError(true);
-          setErrorText(NO_STONE_FOUND);
+          setErrorText(
+            isMatchingPair ? NO_MATCHING_PAIRS_FOUND : NO_STONE_FOUND
+          );
           setMessageColor('dangerMain');
         } else if (data?.count !== MIN_SEARCH_FORM_COUNT) {
           setMessageColor('successMain');
           setIsError(true);
-          data?.count && setErrorText(`${data?.count} stones found`);
+          data?.count &&
+            setErrorText(
+              `${data?.count} ${
+                isMatchingPair ? 'matching pairs' : 'stones'
+              } found`
+            );
         } else {
           setIsError(false);
           setErrorText('');
@@ -430,6 +444,24 @@ const Form = ({
     }
   }, []);
 
+  // useEffect(()=>{
+  //   if (
+  //     caratMin ||
+  //     caratMax
+  //   ) {
+  //     const caratFrom = parseFloat((caratMin&&caratMin >= 0.15 )? caratMin:0.15).toFixed(2);
+  //     const caratTo = parseFloat((caratMax&& caratMax <= 50)? caratMax : 50).toFixed(2);
+  //     setCaratRangeSelection([
+  //       ...caratRangeSelection,
+  //       `${caratFrom}-${caratTo}`
+  //     ]);
+  //     // setSelectedCaratRange([
+  //     //   ...selectedCaratRange,
+  //     //   `${caratFrom}-${caratTo}`
+  //     // ]);
+  //   }
+  // },[caratMin,caratMax])
+
   // Reset form when a new search is initiated
   useEffect(() => {
     if (
@@ -441,12 +473,28 @@ const Form = ({
       handleFormReset();
     }
   }, [subRoute]);
-
   const handleFormSearch = async (
     isSavedParams: boolean = false,
     id?: string,
     formIdentifier = 'Search'
   ) => {
+    let caratFrom;
+    let caratTo;
+    if (caratMin || caratMax) {
+      caratFrom = parseFloat(
+        caratMin && caratMin >= 0.15 && caratMin <= 50 ? caratMin : 0.15
+      ).toFixed(2);
+      caratTo = parseFloat(
+        caratMax && caratMax <= 50 && caratMax >= 0.15 ? caratMax : 50
+      ).toFixed(2);
+
+      !selectedCaratRange.includes(`${caratFrom}-${caratTo}`) &&
+        parseFloat(caratFrom) <= parseFloat(caratTo) &&
+        setSelectedCaratRange([
+          ...selectedCaratRange,
+          `${caratFrom}-${caratTo}`
+        ]);
+    }
     if (subRoute === SubRoutes.NEW_ARRIVAL) {
       const queryParams = generateQueryParams(state);
 
@@ -509,7 +557,7 @@ const Form = ({
 
       setIsDialogOpen(true);
     } else if (
-      searchUrl &&
+      (searchUrl || (caratFrom && caratTo)) &&
       data?.count > MIN_SEARCH_FORM_COUNT &&
       minMaxError.length === 0
     ) {
@@ -520,6 +568,8 @@ const Form = ({
         data?.count > MIN_SEARCH_FORM_COUNT
       ) {
         const queryParams = generateQueryParams(state);
+        setCaratMax('');
+        setCaratMin('');
 
         if (
           modifySearchFrom === `${SubRoutes.SAVED_SEARCH}` ||
@@ -940,12 +990,17 @@ const Form = ({
       handler:
         // errorText === NO_STONE_FOUND ? () => {} : handleFormSearch
         isMatchingPair
-          ? handleMatchingPairSearch
+          ? minMaxError.length === 0 &&
+            errorText === NO_MATCHING_PAIRS_FOUND &&
+            isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
+            ? () => {}
+            : handleMatchingPairSearch
           : minMaxError.length === 0 &&
             errorText === NO_STONE_FOUND &&
             isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
           ? handleAddDemand
-          : handleFormSearch
+          : handleFormSearch,
+      isLoading: isLoading
     }
   ];
 
@@ -1043,7 +1098,7 @@ const Form = ({
               : subRoute === SubRoutes.BID_TO_BUY
               ? 'Bid To Buy'
               : isMatchingPair
-              ? 'Matching Pair'
+              ? 'Match Pair'
               : 'Diamonds'}
           </span>
         </div>
@@ -1194,12 +1249,19 @@ const Form = ({
               <span className="hidden  text-successMain" />
               <span
                 className={`text-mRegular font-medium text-${
-                  minMaxError.length > 0 ? 'dangerMain' : messageColor
+                  minMaxError.length > 0 ||
+                  errorText === EXCEEDS_LIMITS ||
+                  errorText === EXCEEDS_LIMITS_MATCHING_PAIR ||
+                  errorText === NO_MATCHING_PAIRS_FOUND ||
+                  errorText === NO_STONE_FOUND
+                    ? 'dangerMain'
+                    : messageColor
                 } pl-[8px]`}
               >
-                {minMaxError.length
-                  ? minMaxError
-                  : !isValidationError && errorText}
+                {!isLoading &&
+                  (minMaxError.length
+                    ? minMaxError
+                    : !isValidationError && errorText)}
               </span>
             </div>
           )}

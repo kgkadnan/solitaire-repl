@@ -4,7 +4,7 @@
 import { useEffect, useState } from 'react';
 import backWardArrow from '@public/v2/assets/icons/my-diamonds/backwardArrow.svg';
 import ExportExcel from '@public/v2/assets/icons/detail-page/export-excel.svg?url';
-import NoImageFound from '@public/v2/assets/icons/detail-page/matching-pair-fallback.svg';
+import NoImageFound from '@public/v2/assets/icons/compare-stone/fallback.svg';
 import styles from '../../search/result/components/compare.module.scss';
 import CloseButton from '@public/v2/assets/icons/close.svg';
 import Image from 'next/image';
@@ -32,7 +32,6 @@ import {
 } from '../../search/interface';
 import { useLazyGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
 import CheckboxComponent from '@/components/v2/common/checkbox';
-import { useCheckboxStateManagement } from '@/components/v2/common/checkbox/hooks/checkbox-state-management';
 import Media from '@public/v2/assets/icons/detail-page/expand.svg?url';
 import DownloadImg from '@public/v2/assets/icons/detail-page/download.svg?url';
 import forwardArrow from '@public/v2/assets/icons/arrow-forward.svg';
@@ -61,7 +60,9 @@ export function MatchPairDetails({
   handleDetailImage,
   setRowSelection,
   setSimilarData,
-  similarData
+  similarData,
+  rowSelection,
+  isLoading
 }: {
   data: any;
   filterData: any;
@@ -73,6 +74,8 @@ export function MatchPairDetails({
   setRowSelection: any;
   setSimilarData: any;
   similarData: any;
+  rowSelection: any;
+  isLoading: boolean;
 }) {
   const router = useRouter();
 
@@ -93,9 +96,6 @@ export function MatchPairDetails({
   const [, setZoomPosition] = useState({ x: 0, y: 0 });
   const [breadCrumMatchPair, setBreadCrumMatchPair] = useState('');
   const [viewSimilar, setViewSimilar] = useState<boolean>(false);
-  const { checkboxState, checkboxSetState } = useCheckboxStateManagement();
-  const { selectedCheckboxes } = checkboxState;
-  const { setSelectedCheckboxes } = checkboxSetState;
   const [triggerColumn] =
     useLazyGetManageListingSequenceQuery<IManageListingSequenceResponse>();
   const [triggerSimilarMatchingPairApi] = useLazyGetSimilarMatchingPairQuery();
@@ -221,7 +221,6 @@ export function MatchPairDetails({
       id: tableData?.id
     }
   ];
-
   useEffect(() => {
     let allImagesData = originalData.map((data: any) => filterImageUrl(data));
     if (allImagesData.length > 0)
@@ -242,14 +241,14 @@ export function MatchPairDetails({
   // }, [validImages]);
 
   const handleDownloadExcel = () => {
-    if (selectedCheckboxes.length > 0) {
+    if (Object.keys(rowSelection).length > 0) {
       downloadExcelHandler({
-        products: selectedCheckboxes,
+        products: Object.keys(rowSelection),
         downloadExcelApi: downloadExcel,
         modalSetState,
         router,
-        setIsLoading: setIsLoading,
-        fromMatchingPair: true
+        setIsLoading: setIsLoading
+        // fromMatchingPair: true
       });
     } else {
       setShowToast(true);
@@ -257,18 +256,25 @@ export function MatchPairDetails({
   };
   const handleImageError = (event: any) => {
     event.target.src = NoImageFound.src; //30et the fallback image when the original image fails to load
-    event.target.height = viewSimilar ? 150 : 300;
-    event.target.width = viewSimilar ? 150 : 350;
+    event.target.height =
+      originalData.length > 2
+        ? 320
+        : // (originalData.length > 5 ? 175 : 320)
+          400;
+    event.target.width =
+      originalData.length > 2
+        ? 290
+        : // (originalData.length > 5 ? 185 : 290)
+          350;
   };
   const handleClick = (id: string) => {
-    let updatedIsCheck = [...selectedCheckboxes];
+    let updatedIsCheck = [...Object.keys(rowSelection)];
 
     if (updatedIsCheck.includes(id)) {
       updatedIsCheck = updatedIsCheck.filter(item => item !== id);
     } else {
       updatedIsCheck.push(id);
     }
-    setSelectedCheckboxes(updatedIsCheck);
     setRowSelection(
       updatedIsCheck.reduce((acc: any, item: any) => {
         acc[item] = true;
@@ -287,10 +293,13 @@ export function MatchPairDetails({
   const dataFormatting = (diamond: any, key: string) => {
     switch (key) {
       case 'amount':
+        return diamond.variants[0].prices[0].amount
+          ? `$${formatNumberWithCommas(diamond.variants[0].prices[0].amount)}`
+          : '-';
       case 'price_per_carat':
       case 'rap':
       case 'rap_value':
-        return `$${formatNumberWithCommas(diamond[key])}`;
+        return diamond[key] ? `$${formatNumberWithCommas(diamond[key])}` : '-';
       case 'table_percentage':
       case 'carats':
       case 'depth_percentage':
@@ -305,9 +314,9 @@ export function MatchPairDetails({
       case 'pavilion_height':
       case 'lower_half':
       case 'star_length':
-        return `${formatNumber(diamond[key])}`;
+        return diamond[key] ? `${formatNumber(diamond[key])}` : '-';
       case 'discount':
-        return `${formatNumber(diamond[key])}%`;
+        return diamond[key] ? `${formatNumber(diamond[key])}%` : '-';
 
       case 'key_to_symbol':
       case 'report_comments':
@@ -433,30 +442,50 @@ export function MatchPairDetails({
               activePreviewTab={activePreviewTab}
               setImageIndex={setImageIndex}
               isMatchingPair={true}
+              setIsLoading={setIsLoading}
+              isLoading={isLoading}
             />
           </div>
           <div className="flex  justify-center xl:justify-end mr-[10px] items-center">
             <div className="flex gap-3 items-center">
-              {similarData && similarData?.count > 0 && (
+              {
                 <div
-                  className=" flex items-center gap-1 border-[1px] h-[40px] border-[#E4E7EC] rounded-[4px] px-4 py-2 cursor-pointer"
+                  className={` flex items-center gap-1 border-[1px] h-[40px] border-[#E4E7EC] rounded-[4px] px-4 py-2 cursor-pointer ${
+                    similarData &&
+                    similarData?.count === 0 &&
+                    '!cursor-not-allowed bg-neutral100'
+                  }`}
                   style={{ boxShadow: 'var(--input-shadow)' }}
                   onClick={() => {
-                    !viewSimilar &&
-                      setOriginalData(
-                        updateDataAsPerSimilarData(originalData, similarData)
-                      );
-                    setViewSimilar(!viewSimilar);
+                    if (similarData && similarData?.count > 0) {
+                      !viewSimilar &&
+                        setOriginalData(
+                          updateDataAsPerSimilarData(originalData, similarData)
+                        );
+                      setViewSimilar(!viewSimilar);
+                    }
                   }}
                 >
-                  <p className="text-mMedium text-neutral900 font-medium">
+                  <p
+                    className={`text-mMedium text-neutral900 font-medium ${
+                      similarData &&
+                      similarData?.count === 0 &&
+                      '!text-neutral400'
+                    }`}
+                  >
                     {viewSimilar ? 'Hide' : 'View'} similar
                   </p>
-                  <div className=" bg-primaryMain border-[2px] border-primaryBorder text-white text-mMedium px-[6px] py-[1px] rounded-[4px] h-[25px]">
+                  <div
+                    className={`bg-primaryMain border-[2px] border-primaryBorder text-white text-mMedium px-[6px] py-[1px] rounded-[4px] h-[25px]  ${
+                      similarData &&
+                      similarData?.count === 0 &&
+                      '!bg-neutral400'
+                    }`}
+                  >
                     +{similarData?.count}
                   </div>
                 </div>
-              )}
+              }
               {filteredImages.length > 0 ? (
                 <div className="flex gap-6">
                   {filteredImages.length > 0 &&
@@ -536,8 +565,8 @@ export function MatchPairDetails({
                           <button
                             onClick={() => {
                               filteredImages.forEach((images: any) => {
-                                if (selectedCheckboxes.length > 0) {
-                                  selectedCheckboxes.includes(
+                                if (Object.keys(rowSelection).length > 0) {
+                                  Object.keys(rowSelection).includes(
                                     images[imageIndex].id
                                   ) &&
                                     handleDownloadImage(
@@ -593,7 +622,7 @@ export function MatchPairDetails({
               <div className="w-[38px] h-[38px]">
                 <Share
                   rows={originalData}
-                  selectedProducts={selectedCheckboxes.reduce(
+                  selectedProducts={Object.keys(rowSelection).reduce(
                     (acc: any, item: any) => {
                       acc[item] = true;
                       return acc;
@@ -603,7 +632,7 @@ export function MatchPairDetails({
                   setIsError={setShowToast}
                   setErrorText={setErrorText}
                   identifier={breadCrumLabel}
-                  shareTrackIdentifier="Matching Pair Details"
+                  shareTrackIdentifier="Match Pair Details"
                 />
               </div>
             </div>
@@ -613,12 +642,16 @@ export function MatchPairDetails({
       <div className="flex  h-[calc(100%-110px)] overflow-auto  border-neutral200">
         <div className="flex ">
           <div
-            className="sticky left-0  min-h-[2080px] text-neutral700 text-mMedium font-medium w-[150px] !z-5"
+            className="sticky left-0  min-h-[2080px] text-neutral700 text-mMedium font-medium w-[200px] !z-5"
             style={{ zIndex: 5 }}
           >
             <div
               className={`${
-                viewSimilar ? 'h-[234px]  sticky top-0 ' : 'h-[420px]'
+                originalData.length > 2
+                  ? // ? originalData.length > 5
+                    'h-[370px] '
+                  : // : 'h-[370px]  '
+                    'h-[420px]'
               }  items-center flex px-4 border-[0.5px] border-neutral200 bg-neutral50`}
             >
               Media
@@ -642,7 +675,12 @@ export function MatchPairDetails({
           <div className=" bg-neutral0 text-neutral900 text-mMedium font-medium min-h-[2080px] !z-2">
             <div
               className={`flex ${
-                viewSimilar ? 'h-[234px]  sticky top-0 ' : 'h-[420px]'
+                originalData.length > 2
+                  ? // originalData.length > 5
+                    //   ? 'h-[360px] '
+                    //   :
+                    'h-[370px] '
+                  : 'h-[420px]'
               } `}
             >
               {originalData !== undefined &&
@@ -650,35 +688,94 @@ export function MatchPairDetails({
                 originalData.map((items: IProduct, index: number) => (
                   <div
                     key={items.id}
-                    className={`${viewSimilar ? 'w-[150px]' : 'w-[460px]'}`}
+                    className={`${
+                      originalData.length > 2
+                        ? // originalData.length > 5
+                          //   ? 'w-[250px]'
+                          //   :
+                          'w-[350px]'
+                        : 'w-[460px]'
+                    }`}
                   >
                     <div
                       className={`${
-                        viewSimilar ? 'h-[234px]' : 'h-[420px]'
+                        originalData.length > 2
+                          ? // originalData.length > 5
+                            //   ? 'h-[360px]'
+                            //   :
+                            'h-[370px]'
+                          : 'h-[420px]'
                       } flex flex-col justify-between border-[0.5px]  border-neutral200 bg-neutral0 p-2 gap-[10px]`}
                     >
                       <div className="flex justify-around">
                         {activePreviewTab === 'Video' ||
                         activePreviewTab === 'B2B Sparkle' ? (
-                          <iframe
-                            src={
-                              allImages[index].filter(
-                                (data: any) =>
-                                  data.category === activePreviewTab
-                              )[0].url
-                            }
-                            className={`${
-                              viewSimilar
-                                ? 'w-[130px] h-[175px]'
-                                : 'w-[370px] h-[370px]'
-                            } `}
-                          />
+                          allImages[index].filter(
+                            (data: any) => data.category === activePreviewTab
+                          )[0].url_check ? (
+                            <iframe
+                              src={
+                                allImages[index].filter(
+                                  (data: any) =>
+                                    data.category === activePreviewTab
+                                )[0].url
+                              }
+                              className={`${
+                                originalData.length > 2
+                                  ? // originalData.length > 5
+                                    //   ? 'w-[240px] h-[360px]'
+                                    //   :
+                                    'w-[285px] h-[305px]'
+                                  : 'w-[350px] h-[360px]'
+                              } `}
+                            />
+                          ) : (
+                            <img
+                              src={NoImageFound}
+                              alt={'Video'}
+                              width={
+                                originalData.length > 2
+                                  ? // originalData.length > 5
+                                    //   ? 185
+                                    //   :
+                                    290
+                                  : 350
+                              }
+                              height={
+                                originalData.length > 2
+                                  ? // originalData.length > 5
+                                    //   ? 175
+                                    //   :
+                                    320
+                                  : 400
+                              }
+                              className="object-contain"
+                              onError={e => {
+                                handleImageError(e);
+                              }}
+                            />
+                          )
                         ) : activePreviewTab === 'Certificate' ? (
                           <img
                             src={filteredImages[index][imageIndex].url}
                             alt={filteredImages[index][imageIndex].name}
-                            width={viewSimilar ? 150 : 250}
-                            height={viewSimilar ? 150 : 300}
+                            width={
+                              originalData.length > 2
+                                ? // originalData.length > 5
+                                  //   ? 200
+                                  //   :
+                                  200
+                                : 250
+                            }
+                            height={
+                              originalData.length > 2
+                                ? // originalData.length > 5
+                                  //   ? 140
+                                  //   :
+                                  200
+                                : 300
+                            }
+                            className="object-contain"
                             onError={e => {
                               handleImageError(e);
                             }}
@@ -687,8 +784,22 @@ export function MatchPairDetails({
                           <img
                             src={filteredImages[index][imageIndex].url}
                             alt={filteredImages[index][imageIndex].name}
-                            width={viewSimilar ? 185 : 440}
-                            height={viewSimilar ? 175 : 440}
+                            width={
+                              originalData.length > 2
+                                ? // originalData.length > 5
+                                  //   ? 185
+                                  //   :
+                                  290
+                                : 370
+                            }
+                            height={
+                              originalData.length > 2
+                                ? // originalData.length > 5
+                                  //   ? 175
+                                  //   :
+                                  320
+                                : 400
+                            }
                             onError={e => {
                               handleImageError(e);
                             }}
@@ -701,7 +812,8 @@ export function MatchPairDetails({
                             onClick={() => handleClick(items.id)}
                             data-testid={'compare stone checkbox'}
                             isChecked={
-                              selectedCheckboxes.includes(items.id) || false
+                              Object.keys(rowSelection).includes(items.id) ||
+                              false
                             }
                           />
                         </div>
@@ -746,7 +858,14 @@ export function MatchPairDetails({
               {originalData.length > 0 &&
                 originalData.map((diamond: any) => (
                   <div
-                    className={`${viewSimilar ? 'w-[150px]' : 'w-[460px]'} `}
+                    className={`${
+                      originalData.length > 2
+                        ? // originalData.length > 5
+                          //   ? 'w-[250px]'
+                          //   :
+                          'w-[350px]'
+                        : 'w-[460px]'
+                    }`}
                     key={diamond.id}
                   >
                     {Object.keys(mappingColumn).map(
