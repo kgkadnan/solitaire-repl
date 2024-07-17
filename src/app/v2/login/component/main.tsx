@@ -18,7 +18,6 @@ import {
   useSendOtpMutation,
   useVerifyOTPMutation
 } from '@/features/api/otp-verification';
-import { statusCode } from '@/constants/enums/status-code';
 import { DialogComponent } from '@/components/v2/common/dialog';
 import UserAuthenticationLayout from '@/components/v2/common/user-authentication-layout';
 import { isPhoneNumberValid } from '@/utils/validate-phone';
