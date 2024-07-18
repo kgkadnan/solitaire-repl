@@ -10,6 +10,7 @@ import OtpInput from '../otp';
 import { handleRegisterResendOTP } from './helpers/handle-register-resent';
 import { IToken } from '@/app/v2/register/interface';
 import backArrow from '@public/v2/assets/icons/back-arrow.svg';
+import { useRouter } from 'next/navigation';
 
 export interface IOtp {
   otpMobileNumber: string;
@@ -57,6 +58,8 @@ const OTPVerification = ({
   setIsLoading,
   isLoading
 }: IOTPVerification) => {
+  const router = useRouter();
+
   const resendLabel = resendTimer > 0 ? `(${resendTimer}Sec)` : '';
   const [error, setError] = useState('');
   useEffect(() => {
@@ -177,15 +180,12 @@ const OTPVerification = ({
             onClick={() =>
               role === 'login'
                 ? setCurrentState('login')
-                : setCurrentState('register')
+                : router.push('/v2/login')
             }
           >
             <div className="text-mMedium font-medium flex items-center gap-2">
               <Image src={backArrow} alt="backArrow" />
-              <p className="text-neutral900">
-                {' '}
-                Go back To {role === 'login' ? 'Login' : 'Register'}
-              </p>
+              <p className="text-neutral900"> Go back to Login</p>
             </div>
           </IndividualActionButton>
         </div>
