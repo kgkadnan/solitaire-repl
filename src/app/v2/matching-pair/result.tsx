@@ -70,7 +70,6 @@ import { loadImages } from '@/components/v2/common/detail-page/helpers/load-imag
 import { checkImage } from '@/components/v2/common/detail-page/helpers/check-image';
 import { useLazyGetAvailableMyAppointmentSlotsQuery } from '@/features/api/my-appointments';
 import styles from '../search/result/style.module.scss';
-import DataTableSkeleton from '@/components/v2/skeleton/data-table';
 import { Skeleton } from '@mui/material';
 import EmptyScreen from '@/components/v2/common/empty-screen';
 import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
@@ -87,6 +86,7 @@ import { IItem } from '../search/saved-search/saved-search';
 import { useLazyGetAllMatchingPairQuery } from '@/features/api/match-pair';
 import MatchPairTable from './components/table';
 import { MatchPairDetails } from './components/details';
+import MathPairSkeleton from '@/components/v2/skeleton/match-pair';
 import { setConfirmStoneTrack } from '@/features/confirm-stone-track/confirm-stone-track-slice';
 
 // Column mapper outside the component to avoid re-creation on each render
@@ -1191,10 +1191,8 @@ const MatchingPairResult = ({
             </div>
           ) : (
             <div className="">
-              {matchingPairData === undefined &&
-              !memoizedRows.length &&
-              !data?.length ? (
-                <DataTableSkeleton />
+              {matchingPairData === undefined ? (
+                <MathPairSkeleton />
               ) : (
                 <MatchPairTable
                   rows={memoizedRows}

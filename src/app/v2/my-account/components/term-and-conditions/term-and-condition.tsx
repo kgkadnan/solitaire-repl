@@ -158,7 +158,7 @@ all: revert;
     <div className="flex flex-col gap-[16px] mt-[16px] commonStyle">
       {isLoading && <CustomKGKLoader />}
       <h1 className="text-headingS font-medium text-neutral-900">
-        {ManageLocales('app.myAccount.tabs.termAndConditions')}
+        {ManageLocales('app.myAccount.tabs.termsAndConditions')}
       </h1>
 
       <div className="flex flex-col gap-[16px]">

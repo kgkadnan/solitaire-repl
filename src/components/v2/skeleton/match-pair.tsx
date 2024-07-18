@@ -1,102 +1,66 @@
 import React from 'react';
 import { Skeleton } from '@mui/material';
 
-const DataTableSkeleton = ({ identifier }: { identifier?: 'myCart' }) => {
+const MathPairSkeleton = () => {
   // Adjust the number of rows and columns as needed or make them dynamic
   const skeletonRows = Array.from({ length: 15 });
   const skeletonCols = Array.from({ length: 15 });
+  const rowStyle = {
+    borderBottom: '2px solid var(--neutral-200)'
+  };
   return (
     <div className="rounded-[4px]">
       <div
-        className={`${
-          identifier === 'myCart' ? 'h-[72px]' : 'h-[58px]'
-        } bg-neutral0 flex justify-between items-center px-2 border-b border-neutral200 rounded-t-[8px]`}
+        className={`h-[58px] bg-neutral0 flex justify-between items-center px-2 border-b border-neutral200 rounded-t-[8px]`}
       >
-        {identifier === 'myCart' ? (
-          <div className="flex gap-3">
+        <>
+          <div>
             <Skeleton
               variant="rectangular"
               sx={{ bgcolor: 'var(--neutral-200)' }}
-              height={'19px'}
-              width={'86px'}
-              animation="wave"
-              className="rounded-[4px]"
-            />
-            <Skeleton
-              variant="rectangular"
-              sx={{ bgcolor: 'var(--neutral-200)' }}
-              height={'19px'}
-              width={'86px'}
-              animation="wave"
-              className="rounded-[4px]"
-            />
-            <Skeleton
-              variant="rectangular"
-              sx={{ bgcolor: 'var(--neutral-200)' }}
-              height={'19px'}
-              width={'86px'}
-              animation="wave"
-              className="rounded-[4px]"
-            />
-            <Skeleton
-              variant="rectangular"
-              sx={{ bgcolor: 'var(--neutral-200)' }}
-              height={'19px'}
-              width={'86px'}
+              height={'38px'}
+              width={'137px'}
               animation="wave"
               className="rounded-[4px]"
             />
           </div>
-        ) : (
-          <>
-            {' '}
-            <div>
-              <Skeleton
-                variant="rectangular"
-                sx={{ bgcolor: 'var(--neutral-200)' }}
-                height={'38px'}
-                width={'137px'}
-                animation="wave"
-                className="rounded-[4px]"
-              />
-            </div>
-            <div className="flex gap-2">
-              <Skeleton
-                variant="rectangular"
-                height={'38px'}
-                width={'137px'}
-                animation="wave"
-                className="rounded-[4px]"
-                sx={{ bgcolor: 'var(--neutral-200)' }}
-              />
-              <Skeleton
-                variant="rectangular"
-                height={'38px'}
-                width={'137px'}
-                animation="wave"
-                className="rounded-[4px]"
-                sx={{ bgcolor: 'var(--neutral-200)' }}
-              />
+          <div className="flex gap-2">
+            <Skeleton
+              variant="rectangular"
+              height={'38px'}
+              width={'137px'}
+              animation="wave"
+              sx={{ bgcolor: 'var(--neutral-200)' }}
+              className="rounded-[4px]"
+            />
+            <Skeleton
+              variant="rectangular"
+              height={'38px'}
+              width={'137px'}
+              animation="wave"
+              sx={{ bgcolor: 'var(--neutral-200)' }}
+              className="rounded-[4px]"
+            />
 
-              <Skeleton
-                variant="rectangular"
-                height={'38px'}
-                width={'38px'}
-                animation="wave"
-                className="rounded-[4px]"
-                sx={{ bgcolor: 'var(--neutral-200)' }}
-              />
-              <Skeleton
-                variant="rectangular"
-                height={'38px'}
-                width={'38px'}
-                animation="wave"
-                className="rounded-[4px]"
-                sx={{ bgcolor: 'var(--neutral-200)' }}
-              />
-            </div>
-          </>
-        )}
+            <Skeleton
+              variant="rectangular"
+              height={'38px'}
+              width={'38px'}
+              animation="wave"
+              sx={{ bgcolor: 'var(--neutral-200)' }}
+              className="rounded-[4px]"
+            />
+
+            <Skeleton
+              variant="rectangular"
+              height={'38px'}
+              width={'38px'}
+              animation="wave"
+              sx={{ bgcolor: 'var(--neutral-200)' }}
+              className="rounded-[4px]"
+            />
+          </div>
+        </>
       </div>
       <div>
         <div className="bg-neutral50 gap-2 flex items-center h-[28px] px-2">
@@ -130,18 +94,6 @@ const DataTableSkeleton = ({ identifier }: { identifier?: 'myCart' }) => {
 
           <div className="flex gap-3">
             <div className="flex gap-2">
-              {identifier !== 'myCart' ? (
-                <Skeleton
-                  variant="rectangular"
-                  height={'38px'}
-                  width={'137px'}
-                  animation="wave"
-                  className="rounded-[4px]"
-                  sx={{ bgcolor: 'var(--neutral-200)' }}
-                />
-              ) : (
-                <></>
-              )}
               <Skeleton
                 variant="rectangular"
                 height={'38px'}
@@ -177,7 +129,7 @@ const DataTableSkeleton = ({ identifier }: { identifier?: 'myCart' }) => {
                   return (
                     <th
                       key={rowIndex}
-                      className="py-1 px-2 whitespace-nowrap hidden sm:table-cell"
+                      className="py-1 px-2 whitespace-nowrap hidden sm:table-cell "
                     >
                       <Skeleton
                         sx={{ bgcolor: 'var(--neutral-200)' }}
@@ -194,7 +146,11 @@ const DataTableSkeleton = ({ identifier }: { identifier?: 'myCart' }) => {
             </thead>
             <tbody className="divide-y divide-transparent">
               {skeletonRows.map((_, rowIndex) => (
-                <tr key={rowIndex} className="overflow-hidden">
+                <tr
+                  key={rowIndex}
+                  style={rowIndex % 2 === 1 ? rowStyle : undefined}
+                  className={`overflow-hidden `}
+                >
                   {skeletonCols.map((_, colIndex) => (
                     <td
                       className="py-1 px-2 whitespace-nowrap hidden sm:table-cell"
@@ -232,4 +188,4 @@ const DataTableSkeleton = ({ identifier }: { identifier?: 'myCart' }) => {
   );
 };
 
-export default DataTableSkeleton;
+export default MathPairSkeleton;
