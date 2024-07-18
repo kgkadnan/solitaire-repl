@@ -918,9 +918,11 @@ const NewArrivalDataTable = ({
                   type="text"
                   value={
                     bidValues[row.id] !== undefined
-                      ? formatNumber(
-                          row.original.rap * (1 + bidValues[row.id] / 100)
-                        )
+                      ? !bidValue || bidValue <= row.original.current_max_bid
+                        ? formatNumber(row.original.price_per_carat)
+                        : formatNumber(
+                            row.original.rap * (1 + bidValues[row.id] / 100)
+                          )
                       : formatNumber(row.original.price_per_carat)
                   }
                   styles={{
@@ -943,11 +945,13 @@ const NewArrivalDataTable = ({
                   }}
                   value={
                     bidValues[row.id] !== undefined
-                      ? formatNumber(
-                          row.original.rap *
-                            (1 + bidValues[row.id] / 100) *
-                            row.original.carats
-                        )
+                      ? !bidValue || bidValue <= row.original.current_max_bid
+                        ? formatNumber(row.original.price)
+                        : formatNumber(
+                            row.original.rap *
+                              (1 + bidValues[row.id] / 100) *
+                              row.original.carats
+                          )
                       : formatNumber(row.original.price)
                   }
                   disabled

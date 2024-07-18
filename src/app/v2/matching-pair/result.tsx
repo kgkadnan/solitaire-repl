@@ -1040,8 +1040,9 @@ const MatchingPairResult = ({
             <Skeleton
               variant="rectangular"
               height={'24px'}
-              width={'336px'}
+              width={'108px'}
               animation="wave"
+              sx={{ bgcolor: 'var(--neutral-200)' }}
             />
           ) : (
             <div>Match Pair ({dataTableState.rows.length / 2})</div>

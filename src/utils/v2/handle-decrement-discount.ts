@@ -9,7 +9,7 @@ export const handleDecrementDiscount = (
     const currentBidValue = prevValues[rowId];
     // Calculate the new bid value
     const newBidValue =
-      currentBidValue !== undefined
+      currentBidValue !== undefined && currentBidValue
         ? Number(currentBidValue) - 0.25
         : Number(currentMaxBid) - 0.25;
 
