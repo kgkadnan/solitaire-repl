@@ -83,6 +83,9 @@ const Login = () => {
   const [phoneErrorText, setPhoneErrorText] = useState<string>('');
   const [emailErrorText, setEmailErrorText] = useState<string>('');
 
+  const [tempEmail, setTempEmail] = useState<string>('');
+  const [tempEmailError, setTempEmailError] = useState<string>('');
+
   const [passwordErrorText, setPasswordErrorText] = useState<string>('');
   const { modalState, modalSetState } = useModalStateManagement();
   const { dialogContent, isDialogOpen, isInputDialogOpen } = modalState;
@@ -315,8 +318,8 @@ const Login = () => {
               handleLoginInputChange({
                 event,
                 type: 'email',
-                setEmail,
-                setEmailErrorText,
+                setEmail: setTempEmail,
+                setEmailErrorText: setTempEmailError,
                 setPasswordErrorText,
                 setPassword,
                 setPhoneNumber,
@@ -325,8 +328,8 @@ const Login = () => {
             }
             type="email"
             name="email"
-            value={email}
-            errorText={emailErrorText}
+            value={tempEmail !== '' ? tempEmail : email}
+            errorText={tempEmailError}
             placeholder={ManageLocales('app.register.email.placeholder')}
             styles={{ inputMain: 'h-[64px]' }}
             autoComplete="none"
@@ -335,6 +338,7 @@ const Login = () => {
         <div className="flex justify-between gap-[12px]">
           <IndividualActionButton
             onClick={() => {
+              setTempEmail(email);
               // setOTPVerificationFormState(prev => ({ ...prev }));
               setOTPVerificationFormErrors(initialOTPFormState);
               setIsInputDialogOpen(false);
@@ -352,6 +356,7 @@ const Login = () => {
                     .unwrap()
                     .then((res: any) => {
                       if (res) {
+                        setEmail(tempEmail);
                         setResendTimer(60);
                         setIsInputDialogOpen(false);
                         setTempToken(res.customer.temp_token);
