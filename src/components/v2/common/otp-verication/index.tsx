@@ -9,6 +9,7 @@ import { IndividualActionButton } from '../action-button/individual-button';
 import OtpInput from '../otp';
 import { handleRegisterResendOTP } from './helpers/handle-register-resent';
 import { IToken } from '@/app/v2/register/interface';
+import backArrow from '@public/v2/assets/icons/back-arrow.svg';
 
 export interface IOtp {
   otpMobileNumber: string;
@@ -90,14 +91,15 @@ const OTPVerification = ({
           <hr className="absolute bottom-0 left-0 border-none h-[1px] w-full bg-neutral200" />
         </div>
         <div className="text-headingM text-neutral900 font-medium text-left">
-          {ManageLocales('app.OTPVerification')}
+          Mobile {ManageLocales('app.OTPVerification')}
         </div>
 
         {setIsInputDialogOpen && (
           <div className="flex cursor-pointer">
             <p className="text-neutral900">
               OTP has been sent to{' '}
-              {`+${otpVerificationFormState.codeAndNumber}`}
+              {otpVerificationFormState.codeAndNumber &&
+                `+${otpVerificationFormState.codeAndNumber}`}
             </p>
             <div
               onClick={() => setIsInputDialogOpen(true)}
@@ -137,36 +139,56 @@ const OTPVerification = ({
             {ManageLocales('app.OTPVerification.resend')} {resendLabel}
           </p>
         </div>
-
-        <IndividualActionButton
-          variant={'primary'}
-          size={'custom'}
-          disabled={isLoading}
-          className="rounded-[4px]"
-          onClick={() =>
-            checkOTPEntry(otpValues)
-              ? (handleVerifyOtp({
-                  otpValues,
-                  setCurrentState,
-                  token,
-                  userLoggedIn,
-                  setIsDialogOpen,
-                  setDialogContent,
-                  verifyOTP,
-                  role,
-                  setToken,
-                  setError,
-                  setIsLoading
-                }),
-                setError(''))
-              : setError(
-                  `We're sorry, but the OTP you entered is incorrect or has expired`
-                )
-          }
-        >
-          {' '}
-          {ManageLocales('app.OTPVerification.verify')}
-        </IndividualActionButton>
+        <div className="flex flex-col   gap-1">
+          <IndividualActionButton
+            variant={'primary'}
+            size={'custom'}
+            disabled={isLoading}
+            className="rounded-[4px]"
+            onClick={() =>
+              checkOTPEntry(otpValues)
+                ? (handleVerifyOtp({
+                    otpValues,
+                    setCurrentState,
+                    token,
+                    userLoggedIn,
+                    setIsDialogOpen,
+                    setDialogContent,
+                    verifyOTP,
+                    role,
+                    setToken,
+                    setError,
+                    setIsLoading
+                  }),
+                  setError(''))
+                : setError(
+                    `We're sorry, but the OTP you entered is incorrect or has expired`
+                  )
+            }
+          >
+            {' '}
+            {ManageLocales('app.OTPVerification.verify')}
+          </IndividualActionButton>
+          <IndividualActionButton
+            variant={'secondary'}
+            size={'custom'}
+            disabled={isLoading}
+            className=" border-none w-[100%]"
+            onClick={() =>
+              role === 'login'
+                ? setCurrentState('login')
+                : setCurrentState('register')
+            }
+          >
+            <div className="text-mMedium font-medium flex items-center gap-2">
+              <Image src={backArrow} alt="backArrow" />
+              <p className="text-neutral900">
+                {' '}
+                Go back To {role === 'login' ? 'Login' : 'Register'}
+              </p>
+            </div>
+          </IndividualActionButton>
+        </div>
       </div>
     </div>
   );
