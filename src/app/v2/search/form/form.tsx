@@ -180,7 +180,8 @@ const Form = ({
     selectedFancyColor,
     selectedIntensity,
     selectedOvertone,
-    selectionChecked
+    selectionChecked,
+    isSliderActive
   } = state;
   const {
     setCaratMin,
@@ -206,7 +207,8 @@ const Form = ({
     setPricePerCaratMax,
     setSelectedKeyToSymbol,
     setSelectedCaratRange,
-    setSelectionChecked
+    setSelectionChecked,
+    setIsSliderActive
   } = setState;
 
   const {
@@ -338,7 +340,8 @@ const Form = ({
   useEffect(() => {
     const queryParams = generateQueryParams(state);
     // Construct your search URL here
-    if (!isValidationError) {
+
+    if (!isValidationError && !isSliderActive) {
       setSearchUrl(constructUrlParams(queryParams));
     }
   }, [state]);
@@ -857,6 +860,7 @@ const Form = ({
 
   const handleFormReset = () => {
     setSelectedStep('');
+    setIsSliderActive(false);
     setSelectedShadeContain('');
     setSearchCount(0);
     setIsError(false);
@@ -1198,6 +1202,7 @@ const Form = ({
             setSelectedShade={setSelectedShade}
           />
           <DiscountPrice
+            setIsSliderActive={setIsSliderActive}
             setDiscountMin={setDiscountMin}
             setDiscountMax={setDiscountMax}
             setAmountRangeMin={setAmountRangeMin}
