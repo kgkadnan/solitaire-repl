@@ -188,8 +188,10 @@ const NewArrivalDataTable = ({
   const [globalFilter, setGlobalFilter] = useState('');
   useEffect(() => {
     if (globalFilter !== '') {
+      // Remove all whitespace characters from globalFilter
+      const trimmedFilter = globalFilter.replace(/\s+/g, '');
       let data = rows.filter(
-        (data: any) => data?.lot_id?.startsWith(globalFilter)
+        (data: any) => data?.lot_id?.startsWith(trimmedFilter)
       );
       const startIndex = pagination.pageIndex * pagination.pageSize;
       const endIndex = startIndex + pagination.pageSize;
