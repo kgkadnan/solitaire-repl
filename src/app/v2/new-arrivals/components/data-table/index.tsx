@@ -176,7 +176,9 @@ const NewArrivalDataTable = ({
   // Fetching saved search data
 
   const [isFullScreen, setIsFullScreen] = useState(false);
-  const [bidError, setBidError] = useState('');
+  const [bidError, setBidError] = useState<{
+    [key: string]: string;
+  }>({});
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 20 //customize the default page size
@@ -882,7 +884,7 @@ const NewArrivalDataTable = ({
         const bidValue =
           bidValues[row.id] !== undefined
             ? bidValues[row.id]
-            : row.original.current_max_bid;
+            : parseFloat(row.original.current_max_bid).toFixed(2);
 
         // If the row is selected, return the detail panel content
         return (
@@ -978,13 +980,17 @@ const NewArrivalDataTable = ({
                           inputMain: 'h-[54px]',
                           input: '!h-[30px]  text-sMedium'
                         }}
-                        value={formatNumber(bidValue)}
+                        value={bidValue}
                         onChange={e => {
                           const newValue = e.target.value;
                           if (newValue < row.original.current_max_bid) {
-                            setBidError(
-                              'Bid value cannot be less than current maximum bid.'
-                            );
+                            setBidError(prevError => {
+                              return {
+                                ...prevError,
+                                [row.id]:
+                                  'Bid value cannot be less than current maximum bid.'
+                              };
+                            });
                             setBidValues((prevValues: any) => {
                               // If there's already a bid value for this row, increment it
                               return {
@@ -993,7 +999,12 @@ const NewArrivalDataTable = ({
                               };
                             });
                           } else {
-                            setBidError('');
+                            setBidError(prevError => {
+                              return {
+                                ...prevError,
+                                [row.id]: ''
+                              };
+                            });
                             setBidValues((prevValues: any) => {
                               // If there's already a bid value for this row, increment it
                               return {
@@ -1040,11 +1051,15 @@ const NewArrivalDataTable = ({
 
                           label: activeTab === 0 ? 'Add Bid' : 'Update Bid',
                           handler: () => {
-                            if (!bidError) {
+                            if (!bidError[row.id]) {
                               if (bidValue < row.original.current_max_bid) {
-                                setBidError(
-                                  'Bid value cannot be less than current maximum bid.'
-                                );
+                                setBidError(prevError => {
+                                  return {
+                                    ...prevError,
+                                    [row.id]:
+                                      'Bid value cannot be less than current maximum bid.'
+                                  };
+                                });
                                 return; // Exit early, do not update bidValues
                               }
 
@@ -1059,7 +1074,12 @@ const NewArrivalDataTable = ({
                                   delete prevRows[row.id];
                                   return prevRows;
                                 });
-                              setBidError('');
+                              setBidError(prevError => {
+                                return {
+                                  ...prevError,
+                                  [row.id]: ''
+                                };
+                              });
                             }
                           },
                           isDisable: bidValue <= row.original.current_max_bid,
@@ -1070,7 +1090,9 @@ const NewArrivalDataTable = ({
                     />
                   </div>
                 </div>
-                <div className=" text-dangerMain text-sRegular">{bidError}</div>
+                <div className=" text-dangerMain text-sRegular">
+                  {bidError[row.id]}
+                </div>
               </div>
             </div>
             {/* <div className="pl-10 text-dangerMain text-mRegular">

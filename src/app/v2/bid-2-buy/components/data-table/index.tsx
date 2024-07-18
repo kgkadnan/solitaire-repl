@@ -173,7 +173,9 @@ const BidToBuyDataTable = ({
 }: any) => {
   // Fetching saved search data
   const [isFullScreen, setIsFullScreen] = useState(false);
-  const [bidError, setBidError] = useState('');
+  const [bidError, setBidError] = useState<{
+    [key: string]: string;
+  }>({});
 
   const [pagination, setPagination] = useState({
     pageIndex: 0,
@@ -906,8 +908,8 @@ const BidToBuyDataTable = ({
           bidValues[row.id] !== undefined
             ? bidValues[row.id]
             : activeTab === 1
-            ? row.original.my_current_bid
-            : row.original.discount;
+            ? parseFloat(row.original.my_current_bid).toFixed(2)
+            : parseFloat(row.original.discount).toFixed(2);
 
         // If the row is selected, return the detail panel content
         return (
@@ -994,13 +996,17 @@ const BidToBuyDataTable = ({
                           inputMain: 'h-[54px]',
                           input: '!h-[30px]  text-sMedium'
                         }}
-                        value={formatNumber(bidValue)}
+                        value={bidValue}
                         onChange={e => {
                           const newValue = e.target.value;
                           if (newValue < row.original.discount) {
-                            setBidError(
-                              'Bid value cannot be less than maximum discount.'
-                            );
+                            setBidError(prevError => {
+                              return {
+                                ...prevError,
+                                [row.id]:
+                                  'Bid value cannot be less than maximum discount.'
+                              };
+                            });
                             setBidValues((prevValues: any) => {
                               // If there's already a bid value for this row, increment it
                               return {
@@ -1009,7 +1015,13 @@ const BidToBuyDataTable = ({
                               };
                             });
                           } else {
-                            setBidError('');
+                            setBidError(prevError => {
+                              return {
+                                ...prevError,
+                                [row.id]: ''
+                              };
+                            });
+                            console.log('row.id', row.id);
                             setBidValues((prevValues: any) => {
                               // If there's already a bid value for this row, increment it
                               return {
@@ -1049,16 +1061,20 @@ const BidToBuyDataTable = ({
                               : 'primary',
                           label: activeTab === 0 ? 'Add Bid' : 'Update Bid',
                           handler: () => {
-                            if (!bidError) {
+                            if (!bidError[row.id]) {
                               if (
                                 bidValue <
                                 (activeTab === 1
                                   ? row.original.my_current_bid
                                   : row.original.discount)
                               ) {
-                                setBidError(
-                                  'Bid value cannot be less than maximum discount.'
-                                );
+                                setBidError(prevError => {
+                                  return {
+                                    ...prevError,
+                                    [row.id]:
+                                      'Bid value cannot be less than maximum discount.'
+                                  };
+                                });
                                 return; // Exit early, do not update bidValues
                               }
 
@@ -1072,7 +1088,12 @@ const BidToBuyDataTable = ({
                                   delete prevRows[row.id];
                                   return prevRows;
                                 });
-                              setBidError('');
+                              setBidError(prevError => {
+                                return {
+                                  ...prevError,
+                                  [row.id]: ''
+                                };
+                              });
                             }
                           },
                           isDisable:
@@ -1088,7 +1109,9 @@ const BidToBuyDataTable = ({
                     />
                   </div>
                 </div>
-                <div className=" text-dangerMain text-sRegular">{bidError}</div>
+                <div className=" text-dangerMain text-sRegular">
+                  {bidError[row.id]}
+                </div>
               </div>
             </div>
             {/* <div className="pl-10 text-dangerMain text-mRegular">
