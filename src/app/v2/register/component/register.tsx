@@ -60,13 +60,13 @@ const RegisterComponent = ({
     });
   };
   return (
-    <div className="my-[20px]">
+    <div className="my-[20px] ">
       <form
         autoComplete="off"
         onSubmit={handleRegisterSubmit}
         className="flex items-center text-center"
       >
-        <div className="flex flex-col w-[450px] min-h-[880px] p-8 gap-[24px] rounded-[8px] border-[1px] border-neutral-200">
+        <div className="flex flex-col w-[450px] min-h-[880px] p-8 gap-[24px] rounded-[8px] border-[1px] border-neutral200  mb-[20px]">
           <div className="flex flex-col items-center">
             <Image src={KgkIcon} alt="KGKlogo" width={60} height={84} />
           </div>
