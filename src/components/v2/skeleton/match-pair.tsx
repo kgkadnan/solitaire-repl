@@ -3,7 +3,7 @@ import { Skeleton } from '@mui/material';
 
 const MathPairSkeleton = () => {
   // Adjust the number of rows and columns as needed or make them dynamic
-  const skeletonRows = Array.from({ length: 15 });
+  const skeletonRows = Array.from({ length: 16 });
   const skeletonCols = Array.from({ length: 15 });
   const rowStyle = {
     borderBottom: '2px solid var(--neutral-200)'

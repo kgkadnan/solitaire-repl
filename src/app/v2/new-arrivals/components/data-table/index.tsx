@@ -188,8 +188,10 @@ const NewArrivalDataTable = ({
   const [globalFilter, setGlobalFilter] = useState('');
   useEffect(() => {
     if (globalFilter !== '') {
+      // Remove all whitespace characters from globalFilter
+      const trimmedFilter = globalFilter.replace(/\s+/g, '');
       let data = rows.filter(
-        (data: any) => data?.lot_id?.startsWith(globalFilter)
+        (data: any) => data?.lot_id?.startsWith(trimmedFilter)
       );
       const startIndex = pagination.pageIndex * pagination.pageSize;
       const endIndex = startIndex + pagination.pageSize;
@@ -916,9 +918,11 @@ const NewArrivalDataTable = ({
                   type="text"
                   value={
                     bidValues[row.id] !== undefined
-                      ? formatNumber(
-                          row.original.rap * (1 + bidValues[row.id] / 100)
-                        )
+                      ? !bidValue || bidValue <= row.original.current_max_bid
+                        ? formatNumber(row.original.price_per_carat)
+                        : formatNumber(
+                            row.original.rap * (1 + bidValues[row.id] / 100)
+                          )
                       : formatNumber(row.original.price_per_carat)
                   }
                   styles={{
@@ -941,11 +945,13 @@ const NewArrivalDataTable = ({
                   }}
                   value={
                     bidValues[row.id] !== undefined
-                      ? formatNumber(
-                          row.original.rap *
-                            (1 + bidValues[row.id] / 100) *
-                            row.original.carats
-                        )
+                      ? !bidValue || bidValue <= row.original.current_max_bid
+                        ? formatNumber(row.original.price)
+                        : formatNumber(
+                            row.original.rap *
+                              (1 + bidValues[row.id] / 100) *
+                              row.original.carats
+                          )
                       : formatNumber(row.original.price)
                   }
                   disabled
