@@ -351,8 +351,8 @@ const Login = () => {
           </IndividualActionButton>
           <IndividualActionButton
             onClick={() => {
-              isEmailValid(email)
-                ? resendEmailOTP({ resend_token: tempToken, email: email })
+              isEmailValid(tempEmail)
+                ? resendEmailOTP({ resend_token: tempToken, email: tempEmail })
                     .unwrap()
                     .then((res: any) => {
                       if (res) {
@@ -373,7 +373,7 @@ const Login = () => {
                         />
                       );
                     })
-                : setEmailErrorText(INVALID_EMAIL_FORMAT);
+                : setTempEmailError(INVALID_EMAIL_FORMAT);
             }}
             variant={'primary'}
             size={'custom'}
