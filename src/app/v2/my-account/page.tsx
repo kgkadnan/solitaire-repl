@@ -312,7 +312,8 @@ const MyAccount = () => {
                   <Phone />
                   <p className="text-mRegular font-regular text-neutral-600">
                     {' '}
-                    {userAccountInfo?.customer?.phone ?? '-'}
+                    {`+${userAccountInfo?.customer?.country_code} ${userAccountInfo?.customer?.phone}` ??
+                      '-'}
                   </p>
                 </div>
               </div>
