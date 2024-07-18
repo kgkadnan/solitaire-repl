@@ -16,7 +16,8 @@ export const handleIncrementDiscount = (
   setBidValues((prevValues: any) => {
     const currentBidValue = prevValues[rowId];
     // If there's already a bid value for this row, increment it
-    if (currentBidValue !== undefined) {
+
+    if (currentBidValue !== undefined && currentBidValue) {
       return {
         ...prevValues,
         [rowId]: (parseFloat(String(currentBidValue)) + 0.25).toFixed(2)
@@ -26,7 +27,7 @@ export const handleIncrementDiscount = (
     else {
       return {
         ...prevValues,
-        [rowId]: (parseFloat(currentMaxBid) + 0.25).toFixed(2)
+        [rowId]: (Number(currentMaxBid) + 0.25).toFixed(2)
       };
     }
   });

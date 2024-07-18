@@ -186,8 +186,10 @@ const BidToBuyDataTable = ({
   const [globalFilter, setGlobalFilter] = useState('');
   useEffect(() => {
     if (globalFilter !== '') {
+      // Remove all whitespace characters from globalFilter
+      const trimmedFilter = globalFilter.replace(/\s+/g, '');
       let data = rows.filter(
-        (data: any) => data?.lot_id?.startsWith(globalFilter)
+        (data: any) => data?.lot_id?.startsWith(trimmedFilter)
       );
       const startIndex = pagination.pageIndex * pagination.pageSize;
       const endIndex = startIndex + pagination.pageSize;
@@ -926,9 +928,15 @@ const BidToBuyDataTable = ({
                   type="text"
                   value={
                     bidValues[row.id] !== undefined
-                      ? formatNumber(
-                          row.original.rap * (1 + bidValues[row.id] / 100)
-                        )
+                      ? !bidValue ||
+                        bidValue <=
+                          (activeTab === 1
+                            ? row.original.my_current_bid
+                            : row.original.discount)
+                        ? formatNumber(row.original.price_per_carat)
+                        : formatNumber(
+                            row.original.rap * (1 + bidValues[row.id] / 100)
+                          )
                       : formatNumber(row.original.price_per_carat)
                   }
                   styles={{
@@ -951,11 +959,17 @@ const BidToBuyDataTable = ({
                   }}
                   value={
                     bidValues[row.id] !== undefined
-                      ? formatNumber(
-                          row.original.rap *
-                            (1 + bidValues[row.id] / 100) *
-                            row.original.carats
-                        )
+                      ? !bidValue ||
+                        bidValue <=
+                          (activeTab === 1
+                            ? row.original.my_current_bid
+                            : row.original.discount)
+                        ? formatNumber(row.original.price)
+                        : formatNumber(
+                            row.original.rap *
+                              (1 + bidValues[row.id] / 100) *
+                              row.original.carats
+                          )
                       : formatNumber(row.original.price)
                   }
                   disabled
@@ -1021,7 +1035,7 @@ const BidToBuyDataTable = ({
                                 [row.id]: ''
                               };
                             });
-                            console.log('row.id', row.id);
+
                             setBidValues((prevValues: any) => {
                               // If there's already a bid value for this row, increment it
                               return {
@@ -1098,9 +1112,9 @@ const BidToBuyDataTable = ({
                           },
                           isDisable:
                             bidValue <=
-                            (activeTab === 1
-                              ? row.original.my_current_bid
-                              : row.original.discount),
+                              (activeTab === 1
+                                ? row.original.my_current_bid
+                                : row.original.discount) || !bidValue,
                           customCtaStyle: '!h-[30px] !text-[12px]',
 
                           customStyle: 'flex-1 w-full h-[30px]'
