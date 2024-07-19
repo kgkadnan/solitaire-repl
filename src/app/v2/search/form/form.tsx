@@ -439,7 +439,7 @@ const Form = ({
           ? localStorage.getItem('MatchingPair')!
           : localStorage.getItem('Search')!
       ) || [];
-    if (data?.length > 0 && data[data?.length - 1]) {
+    if (data?.length > 0 && data[data?.length - 1] && setAddSearches) {
       setAddSearches(data);
     }
   }, []);

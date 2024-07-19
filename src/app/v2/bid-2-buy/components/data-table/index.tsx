@@ -373,7 +373,8 @@ const BidToBuyDataTable = ({
                         `/v2/bid-2-buy?active-tab=${SubRoutes.BID_TO_BUY}`
                       );
                     }}
-                    className={`flex justify-center  shadow-sm py-[8px] h-[39px] px-[16px] items-center font-medium  rounded-[4px] gap-1  border-[1px]  border-solid border-neutral200 text-mMedium  cursor-pointer  ${'text-neutral900 bg-neutral0 hover:bg-neutral50'}`}
+                    disabled={!rows.length}
+                    className={`flex justify-center disabled:!bg-neutral100 disabled:cursor-not-allowed disabled:text-neutral400  shadow-sm py-[8px] h-[39px] px-[16px] items-center font-medium  rounded-[4px] gap-1  border-[1px]  border-solid border-neutral200 text-mMedium  cursor-pointer  ${'text-neutral900 bg-neutral0 hover:bg-neutral50'}`}
                   >
                     <FilterIcon stroke={`${'var(--neutral-900)'}`} />
 
