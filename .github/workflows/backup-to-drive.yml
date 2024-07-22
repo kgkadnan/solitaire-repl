@@ -5,7 +5,7 @@ on:
     - cron: '0 2 * * MON'  # Runs every Monday at 2 AM UTC
   push:
     branches:
-      - dev  # Trigger on push to the dev branch
+      - development  # Trigger on push to the development branch
 
 jobs:
   backup:
@@ -15,7 +15,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
         with:
-          ref: dev  # Specify the dev branch to checkout
+          ref: development  # Specify the development branch to checkout
 
       - name: Install rclone
         run: |
