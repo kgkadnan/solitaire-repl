@@ -1351,14 +1351,16 @@ const KYC = () => {
         <div className="w-[100%]">
           {' '}
           <IndividualActionButton
-            onClick={() =>
+            onClick={() => {
               checkOTPEntry(otpValues)
-                ? (verifyEmailOTP({
+                ? (setIsLoading(true),
+                  verifyEmailOTP({
                     token: token.token,
                     otp: otpValues.join('')
                   })
                     .unwrap()
                     .then((res: any) => {
+                      setIsLoading(false);
                       if (res) {
                         dispatch(
                           updateFormState({
@@ -1397,6 +1399,7 @@ const KYC = () => {
                       }
                     })
                     .catch((e: any) => {
+                      setIsLoading(false);
                       setIsDialogOpen(true);
                       setDialogContent(
                         <CommonPoppup
@@ -1409,8 +1412,9 @@ const KYC = () => {
                   setOtpError(''))
                 : setOtpError(
                     `We're sorry, but the OTP you entered is incorrect or has expired`
-                  )
-            }
+                  );
+            }}
+            disabled={isLoading}
             variant={'primary'}
             size={'custom'}
             className="rounded-[4px] w-[100%] h-10"

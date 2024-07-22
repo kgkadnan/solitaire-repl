@@ -37,7 +37,7 @@ import { useLazyGetManageListingSequenceQuery } from '@/features/api/manage-list
 import { MRT_RowSelectionState } from 'material-react-table';
 import { notificationBadge } from '@/features/notification/notification-slice';
 import { useAddCartMutation } from '@/features/api/cart';
-import { useAppDispatch } from '@/hooks/hook';
+import { useAppDispatch, useAppSelector } from '@/hooks/hook';
 import Image from 'next/image';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import { DialogComponent } from '@/components/v2/common/dialog';
@@ -70,7 +70,6 @@ import { loadImages } from '@/components/v2/common/detail-page/helpers/load-imag
 import { checkImage } from '@/components/v2/common/detail-page/helpers/check-image';
 import { useLazyGetAvailableMyAppointmentSlotsQuery } from '@/features/api/my-appointments';
 import styles from '../search/result/style.module.scss';
-import DataTableSkeleton from '@/components/v2/skeleton/data-table';
 import { Skeleton } from '@mui/material';
 import EmptyScreen from '@/components/v2/common/empty-screen';
 import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
@@ -87,6 +86,8 @@ import { IItem } from '../search/saved-search/saved-search';
 import { useLazyGetAllMatchingPairQuery } from '@/features/api/match-pair';
 import MatchPairTable from './components/table';
 import { MatchPairDetails } from './components/details';
+import MathPairSkeleton from '@/components/v2/skeleton/match-pair/match-pair';
+import { setConfirmStoneTrack } from '@/features/confirm-stone-track/confirm-stone-track-slice';
 
 // Column mapper outside the component to avoid re-creation on each render
 
@@ -112,6 +113,7 @@ const MatchingPairResult = ({
   isLoading: boolean;
 }) => {
   const dispatch = useAppDispatch();
+  const confirmTrack = useAppSelector(state => state.setConfirmStoneTrack);
 
   const [triggerAvailableSlots] = useLazyGetAvailableMyAppointmentSlotsQuery(
     {}
@@ -757,7 +759,10 @@ const MatchingPairResult = ({
       setIsLoading(true);
       confirmProduct({
         variants: variantIds,
-        comments: commentValue
+        comments: commentValue,
+        identifier: confirmTrack.confirmStoneTrack
+          ? confirmTrack.confirmStoneTrack
+          : 'Matching-Pair'
       })
         .unwrap()
         .then(res => {
@@ -765,6 +770,7 @@ const MatchingPairResult = ({
             setIsLoading(false);
             setCommentValue('');
             setIsDialogOpen(true);
+            dispatch(setConfirmStoneTrack(''));
 
             setRowSelection({});
             setDialogContent(
@@ -818,6 +824,7 @@ const MatchingPairResult = ({
         .catch(e => {
           setIsLoading(false);
           setCommentValue('');
+          dispatch(setConfirmStoneTrack(''));
 
           if (e.data.type === 'unauthorized') {
             setIsDialogOpen(true);
@@ -1033,8 +1040,9 @@ const MatchingPairResult = ({
             <Skeleton
               variant="rectangular"
               height={'24px'}
-              width={'336px'}
+              width={'108px'}
               animation="wave"
+              sx={{ bgcolor: 'var(--neutral-200)' }}
             />
           ) : (
             <div>Match Pair ({dataTableState.rows.length / 2})</div>
@@ -1104,7 +1112,9 @@ const MatchingPairResult = ({
                       setErrorText,
                       setIsConfirmStone,
                       setConfirmStoneData,
-                      setIsDetailPage
+                      setIsDetailPage,
+                      confirmStoneTrack: 'Matching-Pair-Details',
+                      dispatch
                     });
                   }
                 }
@@ -1182,10 +1192,8 @@ const MatchingPairResult = ({
             </div>
           ) : (
             <div className="">
-              {matchingPairData === undefined &&
-              !memoizedRows.length &&
-              !data?.length ? (
-                <DataTableSkeleton />
+              {matchingPairData === undefined ? (
+                <MathPairSkeleton />
               ) : (
                 <MatchPairTable
                   rows={memoizedRows}

@@ -51,6 +51,7 @@ const BiddingSkeleton = () => {
               height={'38px'}
               width={'137px'}
               animation="wave"
+              className="rounded-[4px]"
               sx={{ bgcolor: 'var(--neutral-200)' }}
             />
             <Skeleton
@@ -58,6 +59,7 @@ const BiddingSkeleton = () => {
               height={'38px'}
               width={'252px'}
               animation="wave"
+              className="rounded-[4px]"
               sx={{ bgcolor: 'var(--neutral-200)' }}
             />
             <Skeleton
@@ -65,6 +67,7 @@ const BiddingSkeleton = () => {
               height={'38px'}
               width={'38px'}
               animation="wave"
+              className="rounded-[4px]"
               sx={{ bgcolor: 'var(--neutral-200)' }}
             />
             <Skeleton
@@ -72,6 +75,7 @@ const BiddingSkeleton = () => {
               height={'38px'}
               width={'38px'}
               animation="wave"
+              className="rounded-[4px]"
               sx={{ bgcolor: 'var(--neutral-200)' }}
             />
             <Skeleton
@@ -79,6 +83,7 @@ const BiddingSkeleton = () => {
               height={'38px'}
               width={'38px'}
               animation="wave"
+              className="rounded-[4px]"
               sx={{ bgcolor: 'var(--neutral-200)' }}
             />
           </div>

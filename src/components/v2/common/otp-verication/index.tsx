@@ -179,7 +179,7 @@ const OTPVerification = ({
             onClick={() =>
               role === 'login'
                 ? setCurrentState('login')
-                : router.push('/v2/register')
+                : router.push('/v2/login')
             }
           >
             <div className="text-mMedium font-medium flex items-center gap-2">
