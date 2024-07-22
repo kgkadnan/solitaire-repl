@@ -82,10 +82,8 @@ const Login = () => {
 
   const [phoneErrorText, setPhoneErrorText] = useState<string>('');
   const [emailErrorText, setEmailErrorText] = useState<string>('');
-
   const [tempEmail, setTempEmail] = useState<string>('');
   const [tempEmailError, setTempEmailError] = useState<string>('');
-
   const [passwordErrorText, setPasswordErrorText] = useState<string>('');
   const { modalState, modalSetState } = useModalStateManagement();
   const { dialogContent, isDialogOpen, isInputDialogOpen } = modalState;
