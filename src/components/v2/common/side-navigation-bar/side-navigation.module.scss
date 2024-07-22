@@ -18,15 +18,12 @@
 
 @keyframes pulse {
   0% {
-    box-shadow: 0 0 0 2px rgba(255, 0, 0, 0.4); /* Lighter red color */
-  }
-  25% {
-    box-shadow: 0 0 0 5px rgba(255, 0, 0, 0.3); /* Lighter red color */
+    box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7); /* Slightly darker red */
   }
   50% {
-    box-shadow: 0 0 0 7px rgba(255, 0, 0, 0.2); /* Lighter red color */
+    box-shadow: 0 0 0 10px rgba(255, 0, 0, 0); /* Fully transparent */
   }
   100% {
-    box-shadow: 0 0 0 10px rgba(255, 0, 0, 0); /* Transparent */
+    box-shadow: 0 0 0 0 rgba(255, 0, 0, 0); /* Fully transparent */
   }
 }

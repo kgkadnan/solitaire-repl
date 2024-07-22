@@ -337,7 +337,6 @@ const Login = () => {
           <IndividualActionButton
             onClick={() => {
               setTempEmail(email);
-
               // setOTPVerificationFormState(prev => ({ ...prev }));
               setOTPVerificationFormErrors(initialOTPFormState);
               setIsInputDialogOpen(false);
@@ -356,7 +355,6 @@ const Login = () => {
                     .then((res: any) => {
                       if (res) {
                         setEmail(tempEmail);
-
                         setResendTimer(60);
                         setIsInputDialogOpen(false);
                         setTempToken(res.customer.temp_token);

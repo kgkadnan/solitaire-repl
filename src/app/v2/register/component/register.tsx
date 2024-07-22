@@ -59,8 +59,9 @@ const RegisterComponent = ({
       setIsLoading
     });
   };
+
   return (
-    <div className="my-[20px]">
+    <div className="my-[20px] ">
       <form
         autoComplete="off"
         onSubmit={handleRegisterSubmit}
@@ -77,6 +78,19 @@ const RegisterComponent = ({
           <div className="text-headingM text-neutral900 font-medium text-left">
             {ManageLocales('app.register')}
           </div>
+          {/* Hidden input fields to trick autofill */}
+          <input
+            type="text"
+            name="fake_user_name"
+            autoComplete="username"
+            style={{ display: 'none' }}
+          />
+          <input
+            type="password"
+            name="fake_password"
+            autoComplete="new-password"
+            style={{ display: 'none' }}
+          />
           <InputField
             label={ManageLocales('app.register.firstName')}
             type="text"
@@ -128,7 +142,7 @@ const RegisterComponent = ({
               errorText={registerFormErrors.email}
               placeholder={ManageLocales('app.register.email.placeholder')}
               styles={{ inputMain: 'h-[64px]' }}
-              autoComplete="none"
+              autoComplete="off"
             />
 
             <InputField

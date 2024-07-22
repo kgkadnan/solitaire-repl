@@ -176,7 +176,9 @@ const NewArrivalDataTable = ({
   // Fetching saved search data
 
   const [isFullScreen, setIsFullScreen] = useState(false);
-  const [bidError, setBidError] = useState('');
+  const [bidError, setBidError] = useState<{
+    [key: string]: string;
+  }>({});
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 20 //customize the default page size
@@ -186,8 +188,10 @@ const NewArrivalDataTable = ({
   const [globalFilter, setGlobalFilter] = useState('');
   useEffect(() => {
     if (globalFilter !== '') {
+      // Remove all whitespace characters from globalFilter
+      const trimmedFilter = globalFilter.replace(/\s+/g, '');
       let data = rows.filter(
-        (data: any) => data?.lot_id?.startsWith(globalFilter)
+        (data: any) => data?.lot_id?.startsWith(trimmedFilter)
       );
       const startIndex = pagination.pageIndex * pagination.pageSize;
       const endIndex = startIndex + pagination.pageSize;
@@ -356,7 +360,8 @@ const NewArrivalDataTable = ({
                         `/v2/new-arrivals?active-tab=${SubRoutes.NEW_ARRIVAL}`
                       );
                     }}
-                    className={`flex justify-center  shadow-sm py-[8px] h-[39px] px-[16px] items-center font-medium  rounded-[4px] gap-1  border-[1px]  border-solid border-neutral200 text-mMedium  cursor-pointer  ${'text-neutral900 bg-neutral0 hover:bg-neutral50'}`}
+                    disabled={!rows.length}
+                    className={`flex justify-center  shadow-sm disabled:!bg-neutral100 disabled:cursor-not-allowed disabled:text-neutral400 py-[8px] h-[39px] px-[16px] items-center font-medium  rounded-[4px] gap-1  border-[1px]  border-solid border-neutral200 text-mMedium  cursor-pointer  ${'text-neutral900 bg-neutral0 hover:bg-neutral50'}`}
                   >
                     <FilterIcon stroke={`${'var(--neutral-900)'}`} />
 
@@ -882,7 +887,7 @@ const NewArrivalDataTable = ({
         const bidValue =
           bidValues[row.id] !== undefined
             ? bidValues[row.id]
-            : row.original.current_max_bid;
+            : parseFloat(row.original.current_max_bid).toFixed(2);
 
         // If the row is selected, return the detail panel content
         return (
@@ -914,9 +919,11 @@ const NewArrivalDataTable = ({
                   type="text"
                   value={
                     bidValues[row.id] !== undefined
-                      ? formatNumber(
-                          row.original.rap * (1 + bidValues[row.id] / 100)
-                        )
+                      ? !bidValue || bidValue <= row.original.current_max_bid
+                        ? formatNumber(row.original.price_per_carat)
+                        : formatNumber(
+                            row.original.rap * (1 + bidValues[row.id] / 100)
+                          )
                       : formatNumber(row.original.price_per_carat)
                   }
                   styles={{
@@ -939,11 +946,13 @@ const NewArrivalDataTable = ({
                   }}
                   value={
                     bidValues[row.id] !== undefined
-                      ? formatNumber(
-                          row.original.rap *
-                            (1 + bidValues[row.id] / 100) *
-                            row.original.carats
-                        )
+                      ? !bidValue || bidValue <= row.original.current_max_bid
+                        ? formatNumber(row.original.price)
+                        : formatNumber(
+                            row.original.rap *
+                              (1 + bidValues[row.id] / 100) *
+                              row.original.carats
+                          )
                       : formatNumber(row.original.price)
                   }
                   disabled
@@ -978,13 +987,17 @@ const NewArrivalDataTable = ({
                           inputMain: 'h-[54px]',
                           input: '!h-[30px]  text-sMedium'
                         }}
-                        value={formatNumber(bidValue)}
+                        value={bidValue}
                         onChange={e => {
                           const newValue = e.target.value;
                           if (newValue < row.original.current_max_bid) {
-                            setBidError(
-                              'Bid value cannot be less than current maximum bid.'
-                            );
+                            setBidError(prevError => {
+                              return {
+                                ...prevError,
+                                [row.id]:
+                                  'Bid value cannot be less than current maximum bid.'
+                              };
+                            });
                             setBidValues((prevValues: any) => {
                               // If there's already a bid value for this row, increment it
                               return {
@@ -993,7 +1006,12 @@ const NewArrivalDataTable = ({
                               };
                             });
                           } else {
-                            setBidError('');
+                            setBidError(prevError => {
+                              return {
+                                ...prevError,
+                                [row.id]: ''
+                              };
+                            });
                             setBidValues((prevValues: any) => {
                               // If there's already a bid value for this row, increment it
                               return {
@@ -1040,11 +1058,15 @@ const NewArrivalDataTable = ({
 
                           label: activeTab === 0 ? 'Add Bid' : 'Update Bid',
                           handler: () => {
-                            if (!bidError) {
+                            if (!bidError[row.id]) {
                               if (bidValue < row.original.current_max_bid) {
-                                setBidError(
-                                  'Bid value cannot be less than current maximum bid.'
-                                );
+                                setBidError(prevError => {
+                                  return {
+                                    ...prevError,
+                                    [row.id]:
+                                      'Bid value cannot be less than current maximum bid.'
+                                  };
+                                });
                                 return; // Exit early, do not update bidValues
                               }
 
@@ -1059,7 +1081,12 @@ const NewArrivalDataTable = ({
                                   delete prevRows[row.id];
                                   return prevRows;
                                 });
-                              setBidError('');
+                              setBidError(prevError => {
+                                return {
+                                  ...prevError,
+                                  [row.id]: ''
+                                };
+                              });
                             }
                           },
                           isDisable: bidValue <= row.original.current_max_bid,
@@ -1070,7 +1097,9 @@ const NewArrivalDataTable = ({
                     />
                   </div>
                 </div>
-                <div className=" text-dangerMain text-sRegular">{bidError}</div>
+                <div className=" text-dangerMain text-sRegular">
+                  {bidError[row.id]}
+                </div>
               </div>
             </div>
             {/* <div className="pl-10 text-dangerMain text-mRegular">
