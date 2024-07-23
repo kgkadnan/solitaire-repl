@@ -972,6 +972,8 @@ const MatchingPairResult = ({
     if (breadCrumLabel === 'Confirm Stone') {
       setBreadCrumLabel('');
     }
+    setActivePreviewTab('Image');
+    setImageIndex(0);
     setIsDetailPage(false);
     setDetailPageData({});
   };
