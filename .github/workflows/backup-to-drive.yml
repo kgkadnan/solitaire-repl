@@ -2,10 +2,10 @@ name: Backup Repository to Google Drive
 
 on:
   schedule:
-    - cron: '0 2 * * MON'  # Runs every Monday at 2 AM UTC
+    - cron: '0 2 * * MON' # Runs every Monday at 2 AM UTC
   push:
     branches:
-      - development  # Trigger on push to the development branch
+      - dev # Trigger on push to the dev branch
 
 jobs:
   backup:
@@ -15,7 +15,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
         with:
-          ref: development  # Specify the development branch to checkout
+          ref: dev # Specify the dev branch to checkout
 
       - name: Install rclone
         run: |
