@@ -59,7 +59,6 @@ const OTPVerification = ({
   isLoading
 }: IOTPVerification) => {
   const router = useRouter();
-
   const resendLabel = resendTimer > 0 ? `(${resendTimer}Sec)` : '';
   const [error, setError] = useState('');
   useEffect(() => {

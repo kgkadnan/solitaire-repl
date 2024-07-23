@@ -42,6 +42,7 @@ import { handleDownloadImage } from '@/utils/v2/detail-page';
 import { useLazyGetSimilarMatchingPairQuery } from '@/features/api/match-pair';
 import logger from 'logging/log-util';
 import { formatNumber } from '@/utils/fix-two-digit-number';
+import MatchPairDnaSkeleton from '@/components/v2/skeleton/match-pair/match-pair-dna-page';
 
 export interface ITableColumn {
   key: string;
@@ -226,6 +227,7 @@ export function MatchPairDetails({
     if (allImagesData.length > 0)
       loadImages(allImagesData, setValidImages, checkImage, true);
   }, [originalData]);
+
   // useEffect(() => {
   //   if (
   //     !validImages.length
@@ -386,6 +388,7 @@ export function MatchPairDetails({
 
     return [...originalData, ...newProducts];
   };
+
   return (
     <div className="text-black bg-neutral25 rounded-[8px] w-[calc(100vw-116px)] h-[calc(100vh-140px)]">
       <Toast
@@ -397,6 +400,7 @@ export function MatchPairDetails({
         }
         isSuccess={false}
       />
+
       <div className="flex items-center">
         <Image
           src={backWardArrow}
@@ -407,14 +411,25 @@ export function MatchPairDetails({
           className="cursor-pointer"
         />
         <div className="flex gap-[8px] items-center">
-          <button
-            className="text-neutral600 text-sMedium font-regular cursor-pointer"
-            onClick={() => {
-              goBackToListView!();
-            }}
-          >
-            {breadCrumLabel}
-          </button>
+          {validImages.length > 0 ? (
+            <button
+              className="text-neutral600 text-sMedium font-regular cursor-pointer"
+              onClick={() => {
+                goBackToListView!();
+              }}
+            >
+              {breadCrumLabel}
+            </button>
+          ) : (
+            <Skeleton
+              width={60}
+              sx={{ bgcolor: 'var(--neutral-200)' }}
+              height={18}
+              variant="rectangular"
+              animation="wave"
+              className="rounded-[4px]"
+            />
+          )}
           <span className="text-neutral600">/</span>
 
           {validImages.length > 0 ? (
@@ -423,7 +438,7 @@ export function MatchPairDetails({
             </p>
           ) : (
             <Skeleton
-              width={134}
+              width={220}
               sx={{ bgcolor: 'var(--neutral-200)' }}
               height={34}
               variant="rectangular"
@@ -433,467 +448,483 @@ export function MatchPairDetails({
           )}
         </div>
       </div>
-      <div className=" py-[16px]">
-        <div className={`flex justify-between`}>
-          <div className={`mr-5 flex flex-col gap-[16px]`}>
-            <DetailPageTabs
-              validImages={validImages}
-              setActivePreviewTab={setActivePreviewTab}
-              activePreviewTab={activePreviewTab}
-              setImageIndex={setImageIndex}
-              isMatchingPair={true}
-              setIsLoading={setIsLoading}
-              isLoading={isLoading}
-            />
-          </div>
-          <div className="flex  justify-center xl:justify-end mr-[10px] items-center">
-            <div className="flex gap-3 items-center">
-              {
-                <div
-                  className={` flex items-center gap-1 border-[1px] h-[40px] border-[#E4E7EC] rounded-[4px] px-4 py-2 cursor-pointer ${
-                    similarData &&
-                    similarData?.count === 0 &&
-                    '!cursor-not-allowed bg-neutral100'
-                  }`}
-                  style={{ boxShadow: 'var(--input-shadow)' }}
-                  onClick={() => {
-                    if (similarData && similarData?.count > 0) {
-                      !viewSimilar &&
-                        setOriginalData(
-                          updateDataAsPerSimilarData(originalData, similarData)
-                        );
-                      setViewSimilar(!viewSimilar);
-                    }
-                  }}
-                >
-                  <p
-                    className={`text-mMedium text-neutral900 font-medium ${
-                      similarData &&
-                      similarData?.count === 0 &&
-                      '!text-neutral400'
-                    }`}
-                  >
-                    {viewSimilar ? 'Hide' : 'View'} similar
-                  </p>
-                  <div
-                    className={`bg-primaryMain border-[2px] border-primaryBorder text-white text-mMedium px-[6px] py-[1px] rounded-[4px] h-[25px]  ${
-                      similarData &&
-                      similarData?.count === 0 &&
-                      '!bg-neutral400'
-                    }`}
-                  >
-                    +{similarData?.count}
-                  </div>
-                </div>
-              }
-              {filteredImages.length > 0 ? (
-                <div className="flex gap-6">
-                  {filteredImages.length > 0 &&
-                    filteredImages[0][imageIndex].category === 'Image' &&
-                    !(
-                      activePreviewTab === 'Video' ||
-                      activePreviewTab === 'B2B Sparkle' ||
-                      activePreviewTab === 'Certificate'
-                    ) && (
-                      <>
-                        <div className="flex gap-2">
-                          <button
-                            onClick={() => {
-                              setZoomPosition({ x: 0, y: 0 });
-                              setZoomLevel(1);
-                              setImageIndex(imageIndex - 1);
-                            }}
-                            disabled={!(imageIndex > 0)}
-                            className={` rounded-[4px]  hover:bg-neutral50 w-[37px] h-[37px] text-center px-2 border-[1px] border-solid border-neutral200 shadow-sm ${
-                              imageIndex <= 0
-                                ? '!bg-neutral100 cursor-not-allowed'
-                                : 'bg-neutral0'
-                            }`}
-                          >
-                            <Image
-                              src={
-                                !(imageIndex > 0)
-                                  ? backWardArrowDisable
-                                  : backwardArrow
-                              }
-                              alt={
-                                !(imageIndex > 0)
-                                  ? 'backWardArrowDisable'
-                                  : 'backwardArrow'
-                              }
-                            />
-                          </button>
-                          <button
-                            onClick={() => {
-                              setZoomPosition({ x: 0, y: 0 });
-                              setZoomLevel(1);
-                              setImageIndex(imageIndex + 1);
-                            }}
-                            disabled={
-                              !(imageIndex < filteredImages[0].length - 1)
-                            }
-                            className={`rounded-[4px] hover:bg-neutral50 w-[37px] h-[37px] text-center px-2 border-[1px] border-solid border-neutral200 shadow-sm ${
-                              imageIndex >= filteredImages[0].length - 1
-                                ? '!bg-neutral100 cursor-not-allowed'
-                                : 'bg-neutral0'
-                            }`}
-                          >
-                            <Image
-                              src={
-                                !(imageIndex < filteredImages[0].length - 1)
-                                  ? forWardAarrowDisable
-                                  : forwardArrow
-                              }
-                              alt={
-                                !(imageIndex < filteredImages[0].length - 1)
-                                  ? 'forWardAarrowDisable'
-                                  : 'forwardArrow'
-                              }
-                            />
-                          </button>
-                        </div>
-                        <div className="border-r-[1px] h-[40px] border-neutral200"></div>
-                      </>
-                    )}
-                  <div className="flex gap-2">
-                    {!(
-                      activePreviewTab === 'Video' ||
-                      activePreviewTab === 'B2B Sparkle'
-                    ) && (
-                      <Tooltip
-                        tooltipTrigger={
-                          <button
-                            onClick={() => {
-                              filteredImages.forEach((images: any) => {
-                                if (Object.keys(rowSelection).length > 0) {
-                                  Object.keys(rowSelection).includes(
-                                    images[imageIndex].id
-                                  ) &&
-                                    handleDownloadImage(
-                                      images[imageIndex].downloadUrl || '',
-                                      images[imageIndex].name,
-                                      setIsLoading
-                                    );
-                                } else {
-                                  setShowToast(true);
-                                }
-                              });
-                            }}
-                            disabled={
-                              !filteredImages[0][imageIndex].downloadUrl?.length
-                            }
-                            className={`rounded-[4px] bg-neutral0 disabled:!bg-neutral100 disabled:cursor-not-allowed hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm`}
-                          >
-                            <DownloadImg
-                              className={`stroke-[1.5] ${
-                                filteredImages[0][imageIndex].downloadUrl
-                                  ?.length
-                                  ? 'stroke-neutral900'
-                                  : 'stroke-neutral400'
-                              }`}
-                            />
-                          </button>
-                        }
-                        tooltipContent={
-                          activePreviewTab === 'Certificate'
-                            ? 'Download Certificate'
-                            : 'Download Image'
-                        }
-                        tooltipContentStyles={'z-[1000]'}
-                      />
-                    )}
-                  </div>
-                </div>
-              ) : (
-                ''
-              )}
-              <Tooltip
-                tooltipTrigger={
-                  <button
-                    onClick={handleDownloadExcel}
-                    className={`rounded-[4px] hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm ${'bg-neutral0'}`}
-                  >
-                    <ExportExcel className={`${'stroke-neutral900'}`} />
-                  </button>
-                }
-                tooltipContent={'Download Excel'}
-                tooltipContentStyles={'z-[1000]'}
-              />
-              <div className="w-[38px] h-[38px]">
-                <Share
-                  rows={originalData}
-                  selectedProducts={Object.keys(rowSelection).reduce(
-                    (acc: any, item: any) => {
-                      acc[item] = true;
-                      return acc;
-                    },
-                    {}
-                  )}
-                  setIsError={setShowToast}
-                  setErrorText={setErrorText}
-                  identifier={breadCrumLabel}
-                  shareTrackIdentifier="Match Pair Details"
+
+      {validImages.length > 0 ? (
+        <>
+          <div className=" py-[16px]">
+            <div className={`flex justify-between`}>
+              <div className={`mr-5 flex flex-col gap-[16px]`}>
+                <DetailPageTabs
+                  validImages={validImages}
+                  setActivePreviewTab={setActivePreviewTab}
+                  activePreviewTab={activePreviewTab}
+                  setImageIndex={setImageIndex}
+                  isMatchingPair={true}
+                  setIsLoading={setIsLoading}
+                  isLoading={isLoading}
                 />
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="flex  h-[calc(100%-110px)] overflow-auto  border-neutral200">
-        <div className="flex ">
-          <div
-            className="sticky left-0  min-h-[2080px] text-neutral700 text-mMedium font-medium w-[200px] !z-5"
-            style={{ zIndex: 5 }}
-          >
-            <div
-              className={`${
-                originalData.length > 2
-                  ? // ? originalData.length > 5
-                    'h-[370px] '
-                  : // : 'h-[370px]  '
-                    'h-[420px]'
-              }  items-center flex px-4 border-[0.5px] border-neutral200 bg-neutral50`}
-            >
-              Media
-            </div>
-            <div className=" flex flex-col">
-              {Object.keys(mappingColumn).map(
-                key =>
-                  key !== 'details' &&
-                  key !== 'id' && (
+              <div className="flex  justify-center xl:justify-end mr-[10px] items-center">
+                <div className="flex gap-3 items-center">
+                  {
                     <div
-                      key={key}
-                      className="py-2 px-4 border-[1px] border-neutral200 h-[38px] bg-neutral50"
+                      className={` flex items-center gap-1 border-[1px] h-[40px] border-[#E4E7EC] rounded-[4px] px-4 py-2 cursor-pointer ${
+                        similarData &&
+                        similarData?.count === 0 &&
+                        '!cursor-not-allowed bg-neutral100'
+                      }`}
+                      style={{ boxShadow: 'var(--input-shadow)' }}
+                      onClick={() => {
+                        if (similarData && similarData?.count > 0) {
+                          !viewSimilar &&
+                            setOriginalData(
+                              updateDataAsPerSimilarData(
+                                originalData,
+                                similarData
+                              )
+                            );
+                          setViewSimilar(!viewSimilar);
+                        }
+                      }}
                     >
-                      {mappingColumn[key]}
+                      <p
+                        className={`text-mMedium text-neutral900 font-medium ${
+                          similarData &&
+                          similarData?.count === 0 &&
+                          '!text-neutral400'
+                        }`}
+                      >
+                        {viewSimilar ? 'Hide' : 'View'} similar
+                      </p>
+                      <div
+                        className={`bg-primaryMain border-[2px] border-primaryBorder text-white text-mMedium px-[6px] py-[1px] rounded-[4px] h-[25px]  ${
+                          similarData &&
+                          similarData?.count === 0 &&
+                          '!bg-neutral400'
+                        }`}
+                      >
+                        +{similarData?.count}
+                      </div>
                     </div>
-                  )
-              )}
-            </div>
-          </div>
-          {/* sticky top-0 */}
-          <div className=" bg-neutral0 text-neutral900 text-mMedium font-medium min-h-[2080px] !z-2">
-            <div
-              className={`flex ${
-                originalData.length > 2
-                  ? // originalData.length > 5
-                    //   ? 'h-[360px] '
-                    //   :
-                    'h-[370px] '
-                  : 'h-[420px]'
-              } `}
-            >
-              {originalData !== undefined &&
-                originalData.length > 0 &&
-                originalData.map((items: IProduct, index: number) => (
-                  <div
-                    key={items.id}
-                    className={`${
-                      originalData.length > 2
-                        ? // originalData.length > 5
-                          //   ? 'w-[250px]'
-                          //   :
-                          'w-[350px]'
-                        : 'w-[460px]'
-                    }`}
-                  >
-                    <div
-                      className={`${
-                        originalData.length > 2
-                          ? // originalData.length > 5
-                            //   ? 'h-[360px]'
-                            //   :
-                            'h-[370px]'
-                          : 'h-[420px]'
-                      } flex flex-col justify-between border-[0.5px]  border-neutral200 bg-neutral0 p-2 gap-[10px]`}
-                    >
-                      <div className="flex justify-around">
-                        {activePreviewTab === 'Video' ||
-                        activePreviewTab === 'B2B Sparkle' ? (
-                          allImages[index].filter(
-                            (data: any) => data.category === activePreviewTab
-                          )[0].url_check ? (
-                            <iframe
-                              src={
-                                allImages[index].filter(
-                                  (data: any) =>
-                                    data.category === activePreviewTab
-                                )[0].url
-                              }
-                              className={`${
-                                originalData.length > 2
-                                  ? // originalData.length > 5
-                                    //   ? 'w-[240px] h-[360px]'
-                                    //   :
-                                    'w-[285px] h-[305px]'
-                                  : 'w-[350px] h-[360px]'
-                              } `}
-                            />
-                          ) : (
-                            <img
-                              src={NoImageFound}
-                              alt={'Video'}
-                              width={
-                                originalData.length > 2
-                                  ? // originalData.length > 5
-                                    //   ? 185
-                                    //   :
-                                    290
-                                  : 350
-                              }
-                              height={
-                                originalData.length > 2
-                                  ? // originalData.length > 5
-                                    //   ? 175
-                                    //   :
-                                    320
-                                  : 400
-                              }
-                              className="object-contain"
-                              onError={e => {
-                                handleImageError(e);
-                              }}
-                            />
-                          )
-                        ) : activePreviewTab === 'Certificate' ? (
-                          <img
-                            src={filteredImages[index][imageIndex].url}
-                            alt={filteredImages[index][imageIndex].name}
-                            width={
-                              originalData.length > 2
-                                ? // originalData.length > 5
-                                  //   ? 200
-                                  //   :
-                                  200
-                                : 250
+                  }
+                  {filteredImages.length > 0 ? (
+                    <div className="flex gap-6">
+                      {filteredImages.length > 0 &&
+                        filteredImages[0][imageIndex].category === 'Image' &&
+                        !(
+                          activePreviewTab === 'Video' ||
+                          activePreviewTab === 'B2B Sparkle' ||
+                          activePreviewTab === 'Certificate'
+                        ) && (
+                          <>
+                            <div className="flex gap-2">
+                              <button
+                                onClick={() => {
+                                  setZoomPosition({ x: 0, y: 0 });
+                                  setZoomLevel(1);
+                                  setImageIndex(imageIndex - 1);
+                                }}
+                                disabled={!(imageIndex > 0)}
+                                className={` rounded-[4px]  hover:bg-neutral50 w-[37px] h-[37px] text-center px-2 border-[1px] border-solid border-neutral200 shadow-sm ${
+                                  imageIndex <= 0
+                                    ? '!bg-neutral100 cursor-not-allowed'
+                                    : 'bg-neutral0'
+                                }`}
+                              >
+                                <Image
+                                  src={
+                                    !(imageIndex > 0)
+                                      ? backWardArrowDisable
+                                      : backwardArrow
+                                  }
+                                  alt={
+                                    !(imageIndex > 0)
+                                      ? 'backWardArrowDisable'
+                                      : 'backwardArrow'
+                                  }
+                                />
+                              </button>
+                              <button
+                                onClick={() => {
+                                  setZoomPosition({ x: 0, y: 0 });
+                                  setZoomLevel(1);
+                                  setImageIndex(imageIndex + 1);
+                                }}
+                                disabled={
+                                  !(imageIndex < filteredImages[0].length - 1)
+                                }
+                                className={`rounded-[4px] hover:bg-neutral50 w-[37px] h-[37px] text-center px-2 border-[1px] border-solid border-neutral200 shadow-sm ${
+                                  imageIndex >= filteredImages[0].length - 1
+                                    ? '!bg-neutral100 cursor-not-allowed'
+                                    : 'bg-neutral0'
+                                }`}
+                              >
+                                <Image
+                                  src={
+                                    !(imageIndex < filteredImages[0].length - 1)
+                                      ? forWardAarrowDisable
+                                      : forwardArrow
+                                  }
+                                  alt={
+                                    !(imageIndex < filteredImages[0].length - 1)
+                                      ? 'forWardAarrowDisable'
+                                      : 'forwardArrow'
+                                  }
+                                />
+                              </button>
+                            </div>
+                            <div className="border-r-[1px] h-[40px] border-neutral200"></div>
+                          </>
+                        )}
+                      <div className="flex gap-2">
+                        {!(
+                          activePreviewTab === 'Video' ||
+                          activePreviewTab === 'B2B Sparkle'
+                        ) && (
+                          <Tooltip
+                            tooltipTrigger={
+                              <button
+                                onClick={() => {
+                                  filteredImages.forEach((images: any) => {
+                                    if (Object.keys(rowSelection).length > 0) {
+                                      Object.keys(rowSelection).includes(
+                                        images[imageIndex].id
+                                      ) &&
+                                        handleDownloadImage(
+                                          images[imageIndex].downloadUrl || '',
+                                          images[imageIndex].name,
+                                          setIsLoading
+                                        );
+                                    } else {
+                                      setShowToast(true);
+                                    }
+                                  });
+                                }}
+                                disabled={
+                                  !filteredImages[0][imageIndex].downloadUrl
+                                    ?.length
+                                }
+                                className={`rounded-[4px] bg-neutral0 disabled:!bg-neutral100 disabled:cursor-not-allowed hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm`}
+                              >
+                                <DownloadImg
+                                  className={`stroke-[1.5] ${
+                                    filteredImages[0][imageIndex].downloadUrl
+                                      ?.length
+                                      ? 'stroke-neutral900'
+                                      : 'stroke-neutral400'
+                                  }`}
+                                />
+                              </button>
                             }
-                            height={
-                              originalData.length > 2
-                                ? // originalData.length > 5
-                                  //   ? 140
-                                  //   :
-                                  200
-                                : 300
+                            tooltipContent={
+                              activePreviewTab === 'Certificate'
+                                ? 'Download Certificate'
+                                : 'Download Image'
                             }
-                            className="object-contain"
-                            onError={e => {
-                              handleImageError(e);
-                            }}
-                          />
-                        ) : (
-                          <img
-                            src={filteredImages[index][imageIndex].url}
-                            alt={filteredImages[index][imageIndex].name}
-                            width={
-                              originalData.length > 2
-                                ? // originalData.length > 5
-                                  //   ? 185
-                                  //   :
-                                  290
-                                : 370
-                            }
-                            height={
-                              originalData.length > 2
-                                ? // originalData.length > 5
-                                  //   ? 175
-                                  //   :
-                                  320
-                                : 400
-                            }
-                            onError={e => {
-                              handleImageError(e);
-                            }}
+                            tooltipContentStyles={'z-[1000]'}
                           />
                         )}
                       </div>
-                      <div className="flex justify-between">
-                        <div>
-                          <CheckboxComponent
-                            onClick={() => handleClick(items.id)}
-                            data-testid={'compare stone checkbox'}
-                            isChecked={
-                              Object.keys(rowSelection).includes(items.id) ||
-                              false
-                            }
-                          />
-                        </div>
-                        <div>
-                          <button
-                            onClick={e => {
-                              e.stopPropagation();
-                              handleDetailImage({ row: items });
-                            }}
-                          >
-                            <Media
-                              className={`stroke-[1.5] stroke-neutral900
-                           `}
-                            />
-                          </button>
-                        </div>
-                        <div
-                          className={`${styles.closeButton} cursor-pointer`}
-                          data-testid={'Remove Stone'}
-                          onClick={event =>
-                            originalData.length > 2
-                              ? handleClose(event, items.id)
-                              : (setShowToast(true),
-                                setErrorText(
-                                  'Minimum of 2 stones needed for matching pairs'
-                                ))
-                          }
-                        >
-                          <Image
-                            src={CloseButton}
-                            alt="Preview"
-                            height={24}
-                            width={24}
-                          />
-                        </div>
-                      </div>
                     </div>
+                  ) : (
+                    ''
+                  )}
+                  <Tooltip
+                    tooltipTrigger={
+                      <button
+                        onClick={handleDownloadExcel}
+                        className={`rounded-[4px] hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm ${'bg-neutral0'}`}
+                      >
+                        <ExportExcel className={`${'stroke-neutral900'}`} />
+                      </button>
+                    }
+                    tooltipContent={'Download Excel'}
+                    tooltipContentStyles={'z-[1000]'}
+                  />
+                  <div className="w-[38px] h-[38px]">
+                    <Share
+                      rows={originalData}
+                      selectedProducts={Object.keys(rowSelection).reduce(
+                        (acc: any, item: any) => {
+                          acc[item] = true;
+                          return acc;
+                        },
+                        {}
+                      )}
+                      setIsError={setShowToast}
+                      setErrorText={setErrorText}
+                      identifier={breadCrumLabel}
+                      shareTrackIdentifier="Match Pair Details"
+                    />
                   </div>
-                ))}
-            </div>
-            <div className={`flex `}>
-              {originalData.length > 0 &&
-                originalData.map((diamond: any) => (
-                  <div
-                    className={`${
-                      originalData.length > 2
-                        ? // originalData.length > 5
-                          //   ? 'w-[250px]'
-                          //   :
-                          'w-[350px]'
-                        : 'w-[460px]'
-                    }`}
-                    key={diamond.id}
-                  >
-                    {Object.keys(mappingColumn).map(
-                      key =>
-                        key !== 'details' &&
-                        key !== 'id' &&
-                        (key === 'lot_id' ? (
-                          <div
-                            key={key}
-                            className="py-2 px-4 border-[1px] border-neutral200 h-[38px] whitespace-nowrap overflow-hidden overflow-ellipsis  bg-neutral0"
-                          >
-                            {renderLotId(diamond)}
-                          </div>
-                        ) : (
-                          <div
-                            key={key}
-                            className="py-2 px-4 border-[1px] border-neutral200 h-[38px] whitespace-nowrap overflow-hidden overflow-ellipsis  bg-neutral0"
-                          >
-                            {dataFormatting(diamond, key)}
-                          </div>
-                        ))
-                    )}
-                  </div>
-                ))}
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
+          <div className="flex  h-[calc(100%-110px)] overflow-auto  border-neutral200">
+            <div className="flex ">
+              <div
+                className="sticky left-0  min-h-[2080px] text-neutral700 text-mMedium font-medium w-[200px] !z-5"
+                style={{ zIndex: 5 }}
+              >
+                <div
+                  className={`${
+                    originalData.length > 2
+                      ? // ? originalData.length > 5
+                        'h-[370px] '
+                      : // : 'h-[370px]  '
+                        'h-[420px]'
+                  }  items-center flex px-4 border-[0.5px] border-neutral200 bg-neutral50`}
+                >
+                  Media
+                </div>
+                <div className=" flex flex-col">
+                  {Object.keys(mappingColumn).map(
+                    key =>
+                      key !== 'details' &&
+                      key !== 'id' && (
+                        <div
+                          key={key}
+                          className="py-2 px-4 border-[1px] border-neutral200 h-[38px] bg-neutral50"
+                        >
+                          {mappingColumn[key]}
+                        </div>
+                      )
+                  )}
+                </div>
+              </div>
+              {/* sticky top-0 */}
+              <div className=" bg-neutral0 text-neutral900 text-mMedium font-medium min-h-[2080px] !z-2">
+                <div
+                  className={`flex ${
+                    originalData.length > 2
+                      ? // originalData.length > 5
+                        //   ? 'h-[360px] '
+                        //   :
+                        'h-[370px] '
+                      : 'h-[420px]'
+                  } `}
+                >
+                  {originalData !== undefined &&
+                    originalData.length > 0 &&
+                    originalData.map((items: IProduct, index: number) => (
+                      <div
+                        key={items.id}
+                        className={`${
+                          originalData.length > 2
+                            ? // originalData.length > 5
+                              //   ? 'w-[250px]'
+                              //   :
+                              'w-[350px]'
+                            : 'w-[460px]'
+                        }`}
+                      >
+                        <div
+                          className={`${
+                            originalData.length > 2
+                              ? // originalData.length > 5
+                                //   ? 'h-[360px]'
+                                //   :
+                                'h-[370px]'
+                              : 'h-[420px]'
+                          } flex flex-col justify-between border-[0.5px]  border-neutral200 bg-neutral0 p-2 gap-[10px]`}
+                        >
+                          <div className="flex justify-around">
+                            {activePreviewTab === 'Video' ||
+                            activePreviewTab === 'B2B Sparkle' ? (
+                              allImages[index].filter(
+                                (data: any) =>
+                                  data.category === activePreviewTab
+                              )[0].url_check ? (
+                                <iframe
+                                  src={
+                                    allImages[index].filter(
+                                      (data: any) =>
+                                        data.category === activePreviewTab
+                                    )[0].url
+                                  }
+                                  className={`${
+                                    originalData.length > 2
+                                      ? // originalData.length > 5
+                                        //   ? 'w-[240px] h-[360px]'
+                                        //   :
+                                        'w-[285px] h-[305px]'
+                                      : 'w-[350px] h-[360px]'
+                                  } `}
+                                />
+                              ) : (
+                                <img
+                                  src={NoImageFound}
+                                  alt={'Video'}
+                                  width={
+                                    originalData.length > 2
+                                      ? // originalData.length > 5
+                                        //   ? 185
+                                        //   :
+                                        290
+                                      : 350
+                                  }
+                                  height={
+                                    originalData.length > 2
+                                      ? // originalData.length > 5
+                                        //   ? 175
+                                        //   :
+                                        320
+                                      : 400
+                                  }
+                                  className="object-contain"
+                                  onError={e => {
+                                    handleImageError(e);
+                                  }}
+                                />
+                              )
+                            ) : activePreviewTab === 'Certificate' ? (
+                              <img
+                                src={filteredImages[index][imageIndex].url}
+                                alt={filteredImages[index][imageIndex].name}
+                                width={
+                                  originalData.length > 2
+                                    ? // originalData.length > 5
+                                      //   ? 200
+                                      //   :
+                                      200
+                                    : 250
+                                }
+                                height={
+                                  originalData.length > 2
+                                    ? // originalData.length > 5
+                                      //   ? 140
+                                      //   :
+                                      200
+                                    : 300
+                                }
+                                className="object-contain"
+                                onError={e => {
+                                  handleImageError(e);
+                                }}
+                              />
+                            ) : (
+                              <img
+                                src={filteredImages[index][imageIndex].url}
+                                alt={filteredImages[index][imageIndex].name}
+                                width={
+                                  originalData.length > 2
+                                    ? // originalData.length > 5
+                                      //   ? 185
+                                      //   :
+                                      290
+                                    : 370
+                                }
+                                height={
+                                  originalData.length > 2
+                                    ? // originalData.length > 5
+                                      //   ? 175
+                                      //   :
+                                      320
+                                    : 400
+                                }
+                                onError={e => {
+                                  handleImageError(e);
+                                }}
+                              />
+                            )}
+                          </div>
+                          <div className="flex justify-between">
+                            <div>
+                              <CheckboxComponent
+                                onClick={() => handleClick(items.id)}
+                                data-testid={'compare stone checkbox'}
+                                isChecked={
+                                  Object.keys(rowSelection).includes(
+                                    items.id
+                                  ) || false
+                                }
+                              />
+                            </div>
+                            <div>
+                              <button
+                                onClick={e => {
+                                  e.stopPropagation();
+                                  handleDetailImage({
+                                    row: items,
+                                    activePreviewTab
+                                  });
+                                }}
+                              >
+                                <Media
+                                  className={`stroke-[1.5] stroke-neutral900
+                           `}
+                                />
+                              </button>
+                            </div>
+                            <div
+                              className={`${styles.closeButton} cursor-pointer`}
+                              data-testid={'Remove Stone'}
+                              onClick={event =>
+                                originalData.length > 2
+                                  ? handleClose(event, items.id)
+                                  : (setShowToast(true),
+                                    setErrorText(
+                                      'Minimum of 2 stones needed for matching pairs'
+                                    ))
+                              }
+                            >
+                              <Image
+                                src={CloseButton}
+                                alt="Preview"
+                                height={24}
+                                width={24}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                </div>
+                <div className={`flex `}>
+                  {originalData.length > 0 &&
+                    originalData.map((diamond: any) => (
+                      <div
+                        className={`${
+                          originalData.length > 2
+                            ? // originalData.length > 5
+                              //   ? 'w-[250px]'
+                              //   :
+                              'w-[350px]'
+                            : 'w-[460px]'
+                        }`}
+                        key={diamond.id}
+                      >
+                        {Object.keys(mappingColumn).map(
+                          key =>
+                            key !== 'details' &&
+                            key !== 'id' &&
+                            (key === 'lot_id' ? (
+                              <div
+                                key={key}
+                                className="py-2 px-4 border-[1px] border-neutral200 h-[38px] whitespace-nowrap overflow-hidden overflow-ellipsis  bg-neutral0"
+                              >
+                                {renderLotId(diamond)}
+                              </div>
+                            ) : (
+                              <div
+                                key={key}
+                                className="py-2 px-4 border-[1px] border-neutral200 h-[38px] whitespace-nowrap overflow-hidden overflow-ellipsis  bg-neutral0"
+                              >
+                                {dataFormatting(diamond, key)}
+                              </div>
+                            ))
+                        )}
+                      </div>
+                    ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      ) : (
+        <MatchPairDnaSkeleton />
+      )}
     </div>
   );
 }

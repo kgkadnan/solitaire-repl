@@ -86,7 +86,7 @@ import { IItem } from '../search/saved-search/saved-search';
 import { useLazyGetAllMatchingPairQuery } from '@/features/api/match-pair';
 import MatchPairTable from './components/table';
 import { MatchPairDetails } from './components/details';
-import MathPairSkeleton from '@/components/v2/skeleton/match-pair';
+import MathPairSkeleton from '@/components/v2/skeleton/match-pair/match-pair';
 import { setConfirmStoneTrack } from '@/features/confirm-stone-track/confirm-stone-track-slice';
 
 // Column mapper outside the component to avoid re-creation on each render
