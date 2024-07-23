@@ -12,6 +12,7 @@ import { useGetCustomerQuery } from '@/features/api/dashboard';
 import fireSvg from '@public/v2/assets/icons/data-table/fire-icon.svg';
 import { useEffect, useMemo, useState } from 'react';
 import searchIcon from '@public/v2/assets/icons/data-table/search-icon.svg';
+import noImageFound from '@public/v2/assets/icons/detail-page/fall-back-img.svg';
 import editIcon from '@public/v2/assets/icons/saved-search/edit-button.svg';
 import threeDotsSvg from '@public/v2/assets/icons/threedots.svg';
 import BidHammer from '@public/v2/assets/icons/dashboard/bid-hammer.svg';
@@ -1398,11 +1399,12 @@ const Dashboard = () => {
   }, [detailImageData]);
 
   useEffect(() => {
-    if (!validImages.length && images[0].name.length) {
+    if (!validImages.length && isModalOpen) {
       setValidImages([
         {
-          name: 'No Data Found',
-          url: ''
+          name: '',
+          url: noImageFound,
+          category: 'NoDataFound'
         }
       ]);
     }
