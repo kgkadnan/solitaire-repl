@@ -63,7 +63,11 @@ export function MatchPairDetails({
   setSimilarData,
   similarData,
   rowSelection,
-  isLoading
+  isLoading,
+  setActivePreviewTab,
+  activePreviewTab,
+  setImageIndex,
+  imageIndex
 }: {
   data: any;
   filterData: any;
@@ -77,11 +81,13 @@ export function MatchPairDetails({
   similarData: any;
   rowSelection: any;
   isLoading: boolean;
+  setActivePreviewTab: any;
+  activePreviewTab: any;
+  setImageIndex: any;
+  imageIndex: any;
 }) {
   const router = useRouter();
 
-  const [activePreviewTab, setActivePreviewTab] = useState('Image');
-  const [imageIndex, setImageIndex] = useState<number>(0);
   // const [currentIndex, setCurrentIndex] = useState(0);
   const [validImages, setValidImages] = useState<any>([]);
   const { errorState, errorSetState } = useErrorStateManagement();

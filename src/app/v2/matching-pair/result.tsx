@@ -114,7 +114,8 @@ const MatchingPairResult = ({
 }) => {
   const dispatch = useAppDispatch();
   const confirmTrack = useAppSelector(state => state.setConfirmStoneTrack);
-
+  const [activePreviewTab, setActivePreviewTab] = useState('Image');
+  const [imageIndex, setImageIndex] = useState<number>(0);
   const [triggerAvailableSlots] = useLazyGetAvailableMyAppointmentSlotsQuery(
     {}
   );
@@ -1011,6 +1012,8 @@ const MatchingPairResult = ({
           setIsModalOpen(!isModalOpen);
         }}
         images={validImages}
+        activeTab={activePreviewTab}
+        selectedImageIndex={imageIndex}
       />
       <DialogComponent
         dialogContent={dialogContent}
@@ -1067,6 +1070,10 @@ const MatchingPairResult = ({
             similarData={similarData}
             rowSelection={rowSelection}
             isLoading={isLoading}
+            setActivePreviewTab={setActivePreviewTab}
+            activePreviewTab={activePreviewTab}
+            setImageIndex={setImageIndex}
+            imageIndex={imageIndex}
           />
           <div className="p-[8px] flex justify-between items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow mb-1">
             <div className="flex gap-4 h-[30px]">
