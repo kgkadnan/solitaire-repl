@@ -19,6 +19,8 @@ export const SliderWithInputExample = () => {
     setSliderValue([minValue, value]);
   };
 
+  const handleSliderAfterChange = () => {};
+
   const handleSliderChange = (newValue: string[]) => {
     setSliderValue(newValue);
     setMinValue(newValue[0]);
@@ -32,6 +34,7 @@ export const SliderWithInputExample = () => {
       handleMaxChange={handleMaxChange}
       handleMinChange={handleMinChange}
       handleSliderChange={handleSliderChange}
+      handleSliderAfterChange={handleSliderAfterChange}
       maxValue={maxValue}
       minValue={minValue}
       sliderValue={sliderValue}
