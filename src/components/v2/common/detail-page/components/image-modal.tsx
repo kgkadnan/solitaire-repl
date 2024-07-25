@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
+import noImageFound from '@public/v2/assets/icons/detail-page/fall-back-img.svg';
 import closeSvg from '@public/v2/assets/icons/detail-page/close.svg';
 import { Toast } from '../../copy-and-share/toast';
 import Tooltip from '../../tooltip';
@@ -37,34 +38,19 @@ const ImageModal: React.FC<IModalProps> = ({
   const [showMagnifier, setShowMagnifier] = useState(false);
   const [[imgWidth, imgHeight], setSize] = useState([0, 0]);
   const [[x, y], setXY] = useState([0, 0]);
-  const [filteredImages, setFilteredImages] = useState<IImagesType[]>([]);
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
 
-  useEffect(() => {
-    if (isOpen) {
-      const filteredImages = images.filter(image => {
-        if (activePreviewTab === 'Video' && image.category === 'Video')
-          return true;
-        if (
-          activePreviewTab === 'Certificate' &&
-          image.category === 'Certificate'
-        )
-          return true;
-        if (
-          activePreviewTab === 'B2B Sparkle' &&
-          image.category === 'B2B Sparkle'
-        )
-          return true;
-        if (activePreviewTab === 'Image' && image.category === 'Image')
-          return true;
-        if (image.category === 'NoDataFound') {
-          return true;
-        }
-        return false;
-      });
+  console.log('isImageLoaded', isImageLoaded);
 
-      setFilteredImages(filteredImages);
-    }
-  }, [isOpen, images, activePreviewTab]);
+  const filteredImages = images.filter(image => {
+    if (activePreviewTab === 'Video' && image.category === 'Video') return true;
+    if (activePreviewTab === 'Certificate' && image.category === 'Certificate')
+      return true;
+    if (activePreviewTab === 'B2B Sparkle' && image.category === 'B2B Sparkle')
+      return true;
+    if (activePreviewTab === 'Image' && image.category === 'Image') return true;
+    return false;
+  });
 
   useEffect(() => {
     const handleKeyDown = (event: any) => {
@@ -120,6 +106,7 @@ const ImageModal: React.FC<IModalProps> = ({
                 <button
                   onClick={() => {
                     onClose();
+                    setIsImageLoaded(false);
                     setActivePreviewTab('Image');
                   }}
                   className="text-gray-500 hover:text-gray-800 focus:outline-none"
@@ -135,51 +122,80 @@ const ImageModal: React.FC<IModalProps> = ({
                   position: 'relative'
                 }}
               >
-                {images.length > 0 && filteredImages.length > 0 ? (
-                  filteredImages[imageIndex]?.category === 'Video' ||
-                  filteredImages[imageIndex]?.category === 'B2B Sparkle' ? (
-                    <iframe
-                      src={filteredImages[0]?.url}
-                      className="w-[527px] h-[527px]"
+                {!isImageLoaded && (
+                  <div className="absolute">
+                    <Skeleton
+                      width={625}
+                      variant="rectangular"
+                      sx={{ bgcolor: 'var(--neutral-200)' }}
+                      height={520}
+                      animation="wave"
                     />
-                  ) : filteredImages[imageIndex]?.category === 'Certificate' ? (
-                    <Image
-                      src={filteredImages[imageIndex]?.url}
-                      alt={filteredImages[imageIndex]?.name}
-                      width={650}
-                      height={600}
-                      className="w-[625px] h-[520px] object-contain"
-                    />
+                  </div>
+                )}
+                {images.length > 0 ? (
+                  filteredImages.length > 0 ? (
+                    filteredImages[imageIndex]?.category === 'Video' ||
+                    filteredImages[imageIndex]?.category === 'B2B Sparkle' ? (
+                      <iframe
+                        src={filteredImages[0]?.url}
+                        className="w-[527px] h-[527px]"
+                        onLoad={() => {
+                          setIsImageLoaded(true);
+                        }}
+                      />
+                    ) : filteredImages[imageIndex]?.category ===
+                      'Certificate' ? (
+                      <Image
+                        src={filteredImages[imageIndex]?.url}
+                        alt={filteredImages[imageIndex]?.name}
+                        width={650}
+                        height={600}
+                        onLoad={() => {
+                          setIsImageLoaded(true);
+                        }}
+                        className="w-[625px] h-[520px] object-contain"
+                      />
+                    ) : (
+                      <Image
+                        src={filteredImages[imageIndex]?.url}
+                        alt={filteredImages[imageIndex]?.name}
+                        width={650}
+                        height={600}
+                        className="w-[625px] h-[520px] object-contain"
+                        onMouseEnter={e => {
+                          // update image size and turn-on magnifier
+                          const elem = e.currentTarget;
+                          const { width, height } =
+                            elem.getBoundingClientRect();
+                          setSize([width, height]);
+                          setShowMagnifier(true);
+                        }}
+                        onMouseLeave={() => {
+                          setShowMagnifier(false);
+                        }}
+                        onLoad={() => {
+                          setIsImageLoaded(true);
+                        }}
+                        onMouseMove={e => {
+                          // update cursor position
+                          const elem = e.currentTarget;
+                          const { top, left } = elem.getBoundingClientRect();
+
+                          // calculate cursor position on the image
+                          const x = e.pageX - left - window.pageXOffset;
+                          const y = e.pageY - top - window.pageYOffset;
+                          setXY([x, y]);
+                        }}
+                      />
+                    )
                   ) : (
                     <Image
-                      src={filteredImages[imageIndex]?.url}
-                      alt={filteredImages[imageIndex]?.name}
+                      src={noImageFound}
+                      alt="noImageFound"
                       width={650}
                       height={600}
-                      className={`w-[625px] h-[520px] object-contain ${
-                        filteredImages[imageIndex].category === 'NoDataFound' &&
-                        'bg-[#F2F4F7]'
-                      }`}
-                      onMouseEnter={e => {
-                        // update image size and turn-on magnifier
-                        const elem = e.currentTarget;
-                        const { width, height } = elem.getBoundingClientRect();
-                        setSize([width, height]);
-                        setShowMagnifier(true);
-                      }}
-                      onMouseLeave={() => {
-                        setShowMagnifier(false);
-                      }}
-                      onMouseMove={e => {
-                        // update cursor position
-                        const elem = e.currentTarget;
-                        const { top, left } = elem.getBoundingClientRect();
-
-                        // calculate cursor position on the image
-                        const x = e.pageX - left - window.pageXOffset;
-                        const y = e.pageY - top - window.pageYOffset;
-                        setXY([x, y]);
-                      }}
+                      className="w-[625px] h-[520px] bg-[#F2F4F7]"
                     />
                   )
                 ) : (
@@ -191,38 +207,34 @@ const ImageModal: React.FC<IModalProps> = ({
                     animation="wave"
                   />
                 )}
-                {filteredImages[imageIndex]?.category !== 'Video' &&
-                  filteredImages[imageIndex]?.category !== 'B2B Sparkle' &&
-                  filteredImages[imageIndex]?.category !== 'Certificate' && (
-                    <div
-                      style={{
-                        display: showMagnifier ? '' : 'none',
-                        position: 'absolute',
+                <div
+                  style={{
+                    display: showMagnifier ? '' : 'none',
+                    position: 'absolute',
 
-                        // prevent magnifier blocks the mousemove event of img
-                        pointerEvents: 'none',
-                        // set size of magnifier
-                        height: `${130}px`,
-                        width: `${130}px`,
-                        borderRadius: '50%',
-                        // move element center to cursor pos
-                        top: `${y - 130 / 2}px`,
-                        left: `${x - 130 / 2}px`,
-                        opacity: '1', // reduce opacity so you can verify position
-                        backgroundColor: 'white',
-                        backgroundImage: `url('${filteredImages[imageIndex]?.url}')`,
-                        backgroundRepeat: 'no-repeat',
-                        boxShadow: 'var(--popups-shadow)',
+                    // prevent magnifier blocks the mousemove event of img
+                    pointerEvents: 'none',
+                    // set size of magnifier
+                    height: `${130}px`,
+                    width: `${130}px`,
+                    borderRadius: '50%',
+                    // move element center to cursor pos
+                    top: `${y - 130 / 2}px`,
+                    left: `${x - 130 / 2}px`,
+                    opacity: '1', // reduce opacity so you can verify position
+                    backgroundColor: 'white',
+                    backgroundImage: `url('${filteredImages[imageIndex]?.url}')`,
+                    backgroundRepeat: 'no-repeat',
+                    boxShadow: 'var(--popups-shadow)',
 
-                        //calculate zoomed image size
-                        backgroundSize: `${imgWidth * 2}px ${imgHeight * 2}px`,
+                    //calculate zoomed image size
+                    backgroundSize: `${imgWidth * 2}px ${imgHeight * 2}px`,
 
-                        //calculate position of zoomed image.
-                        backgroundPositionX: `${-x * 2 + 130 / 2}px`,
-                        backgroundPositionY: `${-y * 2 + 130 / 2}px`
-                      }}
-                    ></div>
-                  )}
+                    //calculate position of zoomed image.
+                    backgroundPositionX: `${-x * 2 + 130 / 2}px`,
+                    backgroundPositionY: `${-y * 2 + 130 / 2}px`
+                  }}
+                ></div>
               </div>
 
               <div className="flex justify-between items-center w-[625px]">
