@@ -15,6 +15,7 @@ import { formatNumberWithLeadingZeros } from '@/utils/format-number-withLeadingZ
 import { ManageLocales } from '@/utils/v2/translate';
 import React, { useEffect, useMemo, useState } from 'react';
 import backWardArrow from '@public/v2/assets/icons/my-diamonds/backwardArrow.svg';
+import noImageFound from '@public/v2/assets/icons/detail-page/fall-back-img.svg';
 import Image from 'next/image';
 import {
   INVOICE_HISTORY_BREADCRUMB_LABEL,
@@ -316,11 +317,12 @@ const OrderDetail: React.FC<IOrderDetail> = ({
   }, [detailImageData]);
 
   useEffect(() => {
-    if (!validImages.length && images[0].name.length) {
+    if (!validImages.length && isModalOpen) {
       setValidImages([
         {
-          name: 'No Data Found',
-          url: ''
+          name: '',
+          url: noImageFound,
+          category: 'NoDataFound'
         }
       ]);
     }

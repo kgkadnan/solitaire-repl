@@ -793,18 +793,18 @@ export function MatchPairDetails({
                                     ? // originalData.length > 5
                                       //   ? 200
                                       //   :
-                                      200
-                                    : 250
+                                      290
+                                    : 370
                                 }
                                 height={
                                   originalData.length > 2
                                     ? // originalData.length > 5
                                       //   ? 140
                                       //   :
-                                      200
-                                    : 300
+                                      320
+                                    : 400
                                 }
-                                className="object-contain"
+                                className={`object-contain h-[290px]`}
                                 onError={e => {
                                   handleImageError(e);
                                 }}
@@ -829,6 +829,7 @@ export function MatchPairDetails({
                                       320
                                     : 400
                                 }
+                                className="h-[290px]"
                                 onError={e => {
                                   handleImageError(e);
                                 }}

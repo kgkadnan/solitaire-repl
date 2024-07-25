@@ -12,6 +12,7 @@ import {
   LISTING_PAGE_DATA_LIMIT,
   MEMO_STATUS
 } from '@/constants/business-logic';
+import noImageFound from '@public/v2/assets/icons/detail-page/fall-back-img.svg';
 import unAuthorizedSvg from '@public/v2/assets/icons/data-table/unauthorized.svg';
 import { constructUrlParams } from '@/utils/v2/construct-url-params';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -1074,11 +1075,12 @@ const Result = ({
   }, [detailImageData]);
 
   useEffect(() => {
-    if (!validImages.length && images[0].name.length) {
+    if (!validImages.length && isModalOpen) {
       setValidImages([
         {
-          name: 'No Data Found',
-          url: ''
+          name: '',
+          url: noImageFound,
+          category: 'NoDataFound'
         }
       ]);
     }

@@ -13,6 +13,7 @@ import {
 } from '@/constants/business-logic';
 import unAuthorizedSvg from '@public/v2/assets/icons/data-table/unauthorized.svg';
 import { constructUrlParams } from '@/utils/v2/construct-url-params';
+import noImageFound from '@public/v2/assets/icons/detail-page/fall-back-img.svg';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ManageLocales } from '@/utils/v2/translate';
 import ActionButton from '@/components/v2/common/action-button';
@@ -673,6 +674,7 @@ const MatchingPairResult = ({
       setIsDetailPage(true);
       setBreadCrumLabel('');
     }
+
     setIsConfirmStone(false);
     setConfirmStoneData([]);
     setIsCompareStone(false);
@@ -990,11 +992,12 @@ const MatchingPairResult = ({
   }, [detailImageData]);
 
   useEffect(() => {
-    if (!validImages.length && images[0].name.length) {
+    if (!validImages.length && isModalOpen) {
       setValidImages([
         {
-          name: 'No Data Found',
-          url: ''
+          name: '',
+          url: noImageFound,
+          category: 'NoDataFound'
         }
       ]);
     }
