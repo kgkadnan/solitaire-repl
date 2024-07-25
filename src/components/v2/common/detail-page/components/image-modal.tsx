@@ -195,6 +195,9 @@ const ImageModal: React.FC<IModalProps> = ({
                       alt="noImageFound"
                       width={650}
                       height={600}
+                      onLoad={() => {
+                        setIsImageLoaded(true);
+                      }}
                       className="w-[625px] h-[520px] bg-[#F2F4F7]"
                     />
                   )
