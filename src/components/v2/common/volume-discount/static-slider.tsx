@@ -39,7 +39,7 @@ const StaticSlider = ({ totalSpent }: any) => {
             display: none;
           }
         `}</style>
-        <span className="text-sRegular text-neutral900">$300K</span>
+        <span className="text-sRegular text-neutral900">$300.00K</span>
         <div
           className="absolute top-[17px]  transform -translate-y-1/2 translate-x-1/2 w-2 h-2 bg-[#FFAD05] rounded-full"
           style={{
@@ -91,7 +91,7 @@ const StaticSlider = ({ totalSpent }: any) => {
                   <div className="text-center items-center flex flex-col w-[50px]">
                     <div className="w-5 h-5 bg-[#5995ED] transform rotate-45 rounded-b-[16px]  rounded-tr-[16px]"></div>
                     <p className="text-sRegular font-semiBold text-[#5995ED]">
-                      ${(filledRange / 1000).toFixed(2)}K
+                      ${filledRange / 1000}K
                     </p>
                   </div>
                 }
