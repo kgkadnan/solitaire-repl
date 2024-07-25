@@ -72,7 +72,7 @@ const StaticSlider = ({ totalSpent }: any) => {
                 }
                 tooltipContent={`Need to Spend $${Math.floor(
                   (VOLUME_DISCOUNT_LIMIT - filledRange) / 1000
-                )}K`}
+                ).toFixed(2)}K`}
                 tooltipContentStyles={'z-[1000]'}
               />
             </div>
