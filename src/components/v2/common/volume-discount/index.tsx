@@ -105,13 +105,13 @@ const VolumeDiscount: React.FC<any> = ({
               <div className="text-sMedium text-neutral600 font-medium bg-[#F1FAF8] rounded-[4px] p-[6px]">
                 Spend{' '}
                 <span className="font-semiBold">
-                  ${((VOLUME_DISCOUNT_LIMIT - totalSpent) / 1000).toFixed(2)}K
+                  ${((VOLUME_DISCOUNT_LIMIT - totalSpent) / 1000).toFixed(2)}K+
                 </span>{' '}
-                {eligibleForDiscount && 'more'} within next
+                {eligibleForDiscount && 'more'} within{' '}
                 <span className="font-semiBold">
-                  {Math.floor(timeDifference! / (1000 * 60 * 60))}
+                  next {Math.floor(timeDifference! / (1000 * 60 * 60))} hours
                 </span>{' '}
-                hours to get a 2% volume discount
+                to get a 2% volume discount
               </div>
             </div>
           )}
