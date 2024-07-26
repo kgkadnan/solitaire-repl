@@ -29,20 +29,41 @@ module.exports = {
       ]
     }
   },
+  webpackFinal: async (config) => {
+    // Exclude SVGs from file-loader
+    const fileLoaderRule = config.module.rules.find((rule) =>
+      rule.test?.test('.svg')
+    );
+    if (fileLoaderRule) {
+      fileLoaderRule.exclude = /\.svg$/;
+    }
 
-  // Add framework configuration if applicable
-  // framework: '@storybook/react',
+    // Handle SVGs with @svgr/webpack for components
+    config.module.rules.push({
+      test: /\.svg$/,
+      use: ['@svgr/webpack']
+    });
 
-  // Typescript configuration
-  // typescript: {
-  //   check: false, // Disable TypeScript type checking
-  // },
+    // Optionally handle SVGs as static assets
+    config.module.rules.push({
+      test: /\.svg$/,
+      use: [
+        {
+          loader: 'file-loader',
+          options: {
+            name: '[name].[hash].[ext]',
+            outputPath: 'static/media/public/v2/assets/icons/sidebar-icons',
+            publicPath: 'static/media/public/v2/assets/icons/sidebar-icons'
+          }
+        }
+      ],
+      include: [path.resolve(__dirname, '../public/v2/assets/icons/sidebar-icons')]
+    });
 
-  // Custom webpack configuration
-  webpackFinal: async config => {
+    // Resolve aliases
     config.resolve.alias = {
       ...config.resolve.alias,
-      '@': path.resolve(__dirname, '../src')
+      '@': path.resolve(__dirname, '../src'),
     };
 
     // Modify Webpack configuration further if needed

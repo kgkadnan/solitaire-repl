@@ -1,43 +1,12 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { IInputFieldProps } from './interface';
+import EyeSlash from '@public/v2/assets/icons/eye-slash.svg?url';
+import Eye from '@public/v2/assets/icons/eye.svg?url';
+import PasswordSuccess from '@public/v2/assets/icons/password/password-success.svg?url';
+import PasswordFail from '@public/v2/assets/icons/password/password-fail.svg?url';
+import PasswordDefault from '@public/v2/assets/icons/password/password-default.svg?url'; // Default check icon, replace with your icon
 import { Input } from '../../ui/input';
 import { MINIMUM_CHAR_PASSWORD } from '@/constants/error-messages/change-password';
-
-// Inline SVGs or use a component approach
-const EyeSlash = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    {/* Your EyeSlash SVG content here */}
-    <path d="M12 2C6.48 2 1.73 5.61.29 11c1.44 5.39 6.19 9 11.71 9 5.52 0 10.27-3.61 11.71-9C22.27 5.61 17.52 2 12 2zm0 16c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z" />
-  </svg>
-);
-
-const Eye = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    {/* Your Eye SVG content here */}
-    <path d="M12 2C6.48 2 1.73 5.61.29 11c1.44 5.39 6.19 9 11.71 9 5.52 0 10.27-3.61 11.71-9C22.27 5.61 17.52 2 12 2zm0 16c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z" />
-  </svg>
-);
-
-const PasswordSuccess = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    {/* Your PasswordSuccess SVG content here */}
-    <path d="M12 2C6.48 2 1.73 5.61.29 11c1.44 5.39 6.19 9 11.71 9 5.52 0 10.27-3.61 11.71-9C22.27 5.61 17.52 2 12 2zm0 16c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z" />
-  </svg>
-);
-
-const PasswordFail = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    {/* Your PasswordFail SVG content here */}
-    <path d="M12 2C6.48 2 1.73 5.61.29 11c1.44 5.39 6.19 9 11.71 9 5.52 0 10.27-3.61 11.71-9C22.27 5.61 17.52 2 12 2zm0 16c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z" />
-  </svg>
-);
-
-const PasswordDefault = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    {/* Your PasswordDefault SVG content here */}
-    <path d="M12 2C6.48 2 1.73 5.61.29 11c1.44 5.39 6.19 9 11.71 9 5.52 0 10.27-3.61 11.71-9C22.27 5.61 17.52 2 12 2zm0 16c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z" />
-  </svg>
-);
 
 type IPasswordInputProps = Omit<IInputFieldProps, 'type'>;
 interface IPasswordProps extends IPasswordInputProps {
