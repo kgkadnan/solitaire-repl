@@ -975,6 +975,7 @@ const MyCart = () => {
             handleDetailPage={handleDetailPage}
             breadCrumLabel={'My Cart'}
             modalSetState={modalSetState}
+            setIsLoading={setIsLoading}
           />
           <div className="p-[8px] flex justify-end items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow ">
             <ActionButton
