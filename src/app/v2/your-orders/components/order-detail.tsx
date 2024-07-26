@@ -352,6 +352,7 @@ const OrderDetail: React.FC<IOrderDetail> = ({
                 handleDetailPage={handleDetailPage}
                 breadCrumLabel={'Search Results'}
                 modalSetState={modalSetState}
+                setIsLoading={setIsLoading}
               />
             </>
           ) : (
