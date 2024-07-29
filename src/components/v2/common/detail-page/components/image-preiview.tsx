@@ -111,9 +111,12 @@ const ImagePreview: React.FC<IImagePreviewProps> = ({
                 <span className="sr-only">Loading...</span>
               </div>
               <div className="text-neutral900 font-medium text-sMedium">
-                Loading {filteredImages[imageIndex]?.name}{' '}
-                {filteredImages[imageIndex].category === 'Video' ||
-                filteredImages[imageIndex].category === 'B2B Sparkle'
+                Loading{' '}
+                {filteredImages[imageIndex]?.name === 'Video'
+                  ? ''
+                  : filteredImages[imageIndex]?.name}{' '}
+                {filteredImages[imageIndex]?.category === 'Video' ||
+                filteredImages[imageIndex]?.category === 'B2B Sparkle'
                   ? 'Video...'
                   : 'Image...'}
               </div>
@@ -121,8 +124,8 @@ const ImagePreview: React.FC<IImagePreviewProps> = ({
           )}
           {images.length > 0 ? (
             filteredImages.length > 0 ? (
-              filteredImages[imageIndex].category === 'Video' ||
-              filteredImages[imageIndex].category === 'B2B Sparkle' ? (
+              filteredImages[imageIndex]?.category === 'Video' ||
+              filteredImages[imageIndex]?.category === 'B2B Sparkle' ? (
                 <iframe
                   src={filteredImages[0].url}
                   className="w-[370px] h-[370px]"

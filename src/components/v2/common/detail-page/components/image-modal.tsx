@@ -143,9 +143,12 @@ const ImageModal: React.FC<IModalProps> = ({
                       <span className="sr-only">Loading...</span>
                     </div>
                     <div className="text-neutral900 font-medium text-sMedium">
-                      Loading {filteredImages[imageIndex]?.name}{' '}
-                      {filteredImages[imageIndex].category === 'Video' ||
-                      filteredImages[imageIndex].category === 'B2B Sparkle'
+                      Loading{' '}
+                      {filteredImages[imageIndex]?.name === 'Video'
+                        ? ''
+                        : filteredImages[imageIndex]?.name}{' '}
+                      {filteredImages[imageIndex]?.category === 'Video' ||
+                      filteredImages[imageIndex]?.category === 'B2B Sparkle'
                         ? 'Video...'
                         : 'Image...'}
                     </div>

@@ -78,7 +78,7 @@ export function DiamondDetailsComponent({
   // const [currentIndex, setCurrentIndex] = useState(0);
   const [validImages, setValidImages] = useState<IImagesType[]>([]);
   const { errorSetState } = useErrorStateManagement();
-  const [isImageLoading, setIsImageLoading] = useState(false);
+  const [isImageLoading, setIsImageLoading] = useState(true);
   const { setIsError, setErrorText } = errorSetState;
 
   const [showToast, setShowToast] = useState(false);
@@ -121,7 +121,7 @@ export function DiamondDetailsComponent({
       category: 'Image'
     },
     {
-      name: 'GIA Certificate',
+      name: 'Certificate',
       url: `${FILE_URLS.CERT_FILE.replace(
         '***',
         tableData?.certificate_number ?? ''

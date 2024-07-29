@@ -11,7 +11,7 @@ export async function loadImages(
       imagesProps.map(async (image, index) => {
         let isValid;
         if (
-          image.name === 'GIA Certificate' ||
+          image.name === 'Certificate' ||
           image.name === 'Video' ||
           image.name === 'B2B Sparkle'
         ) {
