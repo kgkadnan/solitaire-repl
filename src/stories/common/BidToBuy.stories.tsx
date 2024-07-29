@@ -5,7 +5,6 @@ import { setupStore } from '@/store';
 const store = setupStore();
 import BidToBuy from '@/app/v2/bid-2-buy/page';
 
-// Define metadata for the story
 export default {
   title: 'Modules/BidToBuy/BidToBuy',
   component: BidToBuy,
@@ -18,7 +17,6 @@ export default {
   ],
 } as ComponentMeta<typeof BidToBuy>;
 
-// Define a template for rendering the component
 const Template: ComponentStory<typeof BidToBuy> = (args) => <BidToBuy {...args} />;
 
 export const Docs = () => {
@@ -108,13 +106,9 @@ export const Docs = () => {
   );
 };
 
-// Create default story
 export const Default = Template.bind({});
 Default.args = {};
 
-// You can define additional stories with different arguments if needed
-// For example, a story with initial data
 export const WithInitialData = Template.bind({});
 WithInitialData.args = {
-  // You can provide initial state or props if required
 };
