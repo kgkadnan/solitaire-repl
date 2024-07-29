@@ -511,7 +511,7 @@ const BidToBuy = () => {
       category: 'Image'
     },
     {
-      name: 'GIA Certificate',
+      name: 'Certificate',
       url: `${FILE_URLS.CERT_FILE.replace(
         '***',
         detailImageData?.certificate_number ?? ''
