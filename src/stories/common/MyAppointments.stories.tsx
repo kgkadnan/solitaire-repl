@@ -119,7 +119,6 @@ export const Docs = () => {
 
 export const LoadingState = Template.bind({});
 LoadingState.args = {
-  // Mock props to simulate loading state if necessary
 };
 
 export const NoAppointments = Template.bind({});
