@@ -165,7 +165,7 @@ export function MatchPairDetails({
       id: tableData?.id
     },
     {
-      name: 'GIA Certificate',
+      name: 'Certificate',
       url: `${FILE_URLS.CERT_FILE.replace(
         '***',
         tableData?.certificate_number ?? ''
