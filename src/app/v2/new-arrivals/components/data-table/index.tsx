@@ -279,7 +279,9 @@ const NewArrivalDataTable = ({
       setRowSelection,
       router,
       setIsLoading: setIsLoading,
-      [activeTab === 2 ? 'fromNewArrivalBidHistory' : 'fromNewArrivalBid']: true
+      [activeTab === 2 ? 'fromNewArrivalBidHistory' : 'fromNewArrivalBid']:
+        true,
+      page: 'New_Arrival'
     });
   };
 

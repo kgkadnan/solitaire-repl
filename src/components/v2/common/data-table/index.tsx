@@ -459,7 +459,14 @@ const DataTable = ({
       modalSetState,
       setRowSelection,
       setIsLoading: setIsLoading,
-      router
+      router,
+      page: isResult
+        ? 'Normal_Search'
+        : myCart
+        ? 'My_Cart'
+        : isDashboard
+        ? 'Dashboard_Search'
+        : ''
     });
   };
 
@@ -472,7 +479,14 @@ const DataTable = ({
       modalSetState,
       setRowSelection,
       router,
-      setIsLoading: setIsLoading
+      setIsLoading: setIsLoading,
+      page: isResult
+        ? 'Normal_Search'
+        : myCart
+        ? 'My_Cart'
+        : isDashboard
+        ? 'Dashboard_Search'
+        : ''
     });
   };
 

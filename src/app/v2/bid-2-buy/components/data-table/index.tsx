@@ -277,7 +277,8 @@ const BidToBuyDataTable = ({
       setRowSelection,
       setIsLoading: setIsLoading,
       router,
-      [activeTab === 2 ? 'fromBidToBuyHistory' : 'fromBidToBuy']: true
+      [activeTab === 2 ? 'fromBidToBuyHistory' : 'fromBidToBuy']: true,
+      page: 'Bid_To_Buy'
     });
   };
 
