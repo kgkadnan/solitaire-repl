@@ -78,7 +78,7 @@ export function DiamondDetailsComponent({
   // const [currentIndex, setCurrentIndex] = useState(0);
   const [validImages, setValidImages] = useState<IImagesType[]>([]);
   const { errorSetState } = useErrorStateManagement();
-
+  const [isImageLoading, setIsImageLoading] = useState(true);
   const { setIsError, setErrorText } = errorSetState;
 
   const [showToast, setShowToast] = useState(false);
@@ -121,7 +121,7 @@ export function DiamondDetailsComponent({
       category: 'Image'
     },
     {
-      name: 'GIA Certificate',
+      name: 'Certificate',
       url: `${FILE_URLS.CERT_FILE.replace(
         '***',
         tableData?.certificate_number ?? ''
@@ -256,7 +256,8 @@ export function DiamondDetailsComponent({
         ? 'fromBidToBuy'
         : breadCrumLabel === 'New Arrival'
         ? 'fromNewArrivalBid'
-        : '']: true
+        : '']: true,
+      page: 'DNA_Page'
     });
   };
 
@@ -309,6 +310,7 @@ export function DiamondDetailsComponent({
               setActivePreviewTab={setActivePreviewTab}
               activePreviewTab={activePreviewTab}
               setImageIndex={setImageIndex}
+              setIsImageLoading={setIsImageLoading}
             />
             <div
               className={`xl:overflow-y-auto ${
@@ -326,6 +328,8 @@ export function DiamondDetailsComponent({
                 images={validImages}
                 setIsLoading={setIsLoading}
                 activePreviewTab={activePreviewTab}
+                isImageLoading={isImageLoading}
+                setIsImageLoading={setIsImageLoading}
               />
             </div>
           </div>

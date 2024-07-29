@@ -13,6 +13,7 @@ import {
 } from '@/constants/business-logic';
 import unAuthorizedSvg from '@public/v2/assets/icons/data-table/unauthorized.svg';
 import { constructUrlParams } from '@/utils/v2/construct-url-params';
+import noImageFound from '@public/v2/assets/icons/detail-page/fall-back-img.svg';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ManageLocales } from '@/utils/v2/translate';
 import ActionButton from '@/components/v2/common/action-button';
@@ -114,7 +115,8 @@ const MatchingPairResult = ({
 }) => {
   const dispatch = useAppDispatch();
   const confirmTrack = useAppSelector(state => state.setConfirmStoneTrack);
-
+  const [activePreviewTab, setActivePreviewTab] = useState('Image');
+  const [imageIndex, setImageIndex] = useState<number>(0);
   const [triggerAvailableSlots] = useLazyGetAvailableMyAppointmentSlotsQuery(
     {}
   );
@@ -672,6 +674,7 @@ const MatchingPairResult = ({
       setIsDetailPage(true);
       setBreadCrumLabel('');
     }
+
     setIsConfirmStone(false);
     setConfirmStoneData([]);
     setIsCompareStone(false);
@@ -889,7 +892,7 @@ const MatchingPairResult = ({
       category: 'Image'
     },
     {
-      name: 'GIA Certificate',
+      name: 'Certificate',
       url: `${FILE_URLS.CERT_FILE.replace(
         '***',
         detailImageData?.certificate_number ?? ''
@@ -971,6 +974,8 @@ const MatchingPairResult = ({
     if (breadCrumLabel === 'Confirm Stone') {
       setBreadCrumLabel('');
     }
+    setActivePreviewTab('Image');
+    setImageIndex(0);
     setIsDetailPage(false);
     setDetailPageData({});
   };
@@ -987,11 +992,12 @@ const MatchingPairResult = ({
   }, [detailImageData]);
 
   useEffect(() => {
-    if (!validImages.length && images[0].name.length) {
+    if (!validImages.length && isModalOpen) {
       setValidImages([
         {
-          name: 'No Data Found',
-          url: ''
+          name: '',
+          url: noImageFound,
+          category: 'NoDataFound'
         }
       ]);
     }
@@ -1011,6 +1017,8 @@ const MatchingPairResult = ({
           setIsModalOpen(!isModalOpen);
         }}
         images={validImages}
+        activeTab={activePreviewTab}
+        selectedImageIndex={imageIndex}
       />
       <DialogComponent
         dialogContent={dialogContent}
@@ -1067,6 +1075,10 @@ const MatchingPairResult = ({
             similarData={similarData}
             rowSelection={rowSelection}
             isLoading={isLoading}
+            setActivePreviewTab={setActivePreviewTab}
+            activePreviewTab={activePreviewTab}
+            setImageIndex={setImageIndex}
+            imageIndex={imageIndex}
           />
           <div className="p-[8px] flex justify-between items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow mb-1">
             <div className="flex gap-4 h-[30px]">

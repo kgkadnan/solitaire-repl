@@ -9,10 +9,13 @@ export const SliderExample = () => {
     setSliderValue(newValue);
   };
 
+  const handleSliderAfterChange = () => {};
+
   return (
     <RangeSlider
       handleSliderChange={handleSliderChange}
       sliderValue={sliderValue}
+      handleSliderAfterChange={handleSliderAfterChange}
     />
   );
 };

@@ -11,6 +11,7 @@ import {
 import { useLazyGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
 import { ManageLocales } from '@/utils/v2/translate';
 import { MRT_RowSelectionState } from 'material-react-table';
+import noImageFound from '@public/v2/assets/icons/detail-page/fall-back-img.svg';
 import crossIcon from '@public/v2/assets/icons/modal/cross.svg';
 import Image from 'next/image';
 import Tooltip from '@/components/v2/common/tooltip';
@@ -605,7 +606,7 @@ const MyCart = () => {
       category: 'Image'
     },
     {
-      name: 'GIA Certificate',
+      name: 'Certificate',
       url: `${FILE_URLS.CERT_FILE.replace(
         '***',
         detailImageData?.certificate_number ?? ''
@@ -909,11 +910,12 @@ const MyCart = () => {
   }, [detailImageData]);
 
   useEffect(() => {
-    if (!validImages.length && images[0].name.length) {
+    if (!validImages.length && isModalOpen) {
       setValidImages([
         {
-          name: 'No Data Found',
-          url: ''
+          name: '',
+          url: noImageFound,
+          category: 'NoDataFound'
         }
       ]);
     }
@@ -973,6 +975,7 @@ const MyCart = () => {
             handleDetailPage={handleDetailPage}
             breadCrumLabel={'My Cart'}
             modalSetState={modalSetState}
+            setIsLoading={setIsLoading}
           />
           <div className="p-[8px] flex justify-end items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow ">
             <ActionButton

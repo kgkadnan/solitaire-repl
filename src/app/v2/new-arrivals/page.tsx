@@ -23,6 +23,7 @@ import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
 import { columnHeaders } from './constant';
 import { SocketManager, useSocket } from '@/hooks/v2/socket-manager';
+import noImageFound from '@public/v2/assets/icons/detail-page/fall-back-img.svg';
 import CountdownTimer from '@components/v2/common/timer/index';
 import { useGetBidHistoryQuery } from '@/features/api/dashboard';
 import CommonPoppup from '../login/component/common-poppup';
@@ -612,7 +613,7 @@ const NewArrivals = () => {
       category: 'Image'
     },
     {
-      name: 'GIA Certificate',
+      name: 'Certificate',
       url: `${FILE_URLS.CERT_FILE.replace(
         '***',
         detailImageData?.certificate_number ?? ''
@@ -713,16 +714,16 @@ const NewArrivals = () => {
   }, [detailImageData]);
 
   useEffect(() => {
-    if (!validImages.length && images[0].name.length) {
+    if (!validImages.length && isModalOpen) {
       setValidImages([
         {
-          name: 'No Data Found',
-          url: ''
+          name: '',
+          url: noImageFound,
+          category: 'NoDataFound'
         }
       ]);
     }
   }, [validImages]);
-
   return (
     <div className="mb-[4px] relative">
       {isError && (

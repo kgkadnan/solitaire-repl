@@ -12,6 +12,8 @@ interface IDetailPageTabs {
   isMatchingPair?: boolean;
   setIsLoading?: any;
   isLoading?: boolean;
+  setIsImageLoading?: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsImageLoaded?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const DetailPageTabs = ({
@@ -21,7 +23,9 @@ const DetailPageTabs = ({
   setImageIndex,
   isMatchingPair,
   setIsLoading,
-  isLoading
+  isLoading,
+  setIsImageLoaded,
+  setIsImageLoading
 }: IDetailPageTabs) => {
   let TabsData = [
     {
@@ -88,6 +92,8 @@ const DetailPageTabs = ({
 
   const handleTabs = (label: string) => {
     setActivePreviewTab(label);
+    setIsImageLoading && setIsImageLoading(true);
+    setIsImageLoaded && setIsImageLoaded(false);
     setImageIndex(0);
     setIsLoading && setIsLoading(true);
   };

@@ -40,7 +40,7 @@ export const handleDownloadImage = async (
     }
     const byteArray = new Uint8Array(byteNumbers);
     const blob = new Blob([byteArray], {
-      type: name === 'GIA Certificate' ? 'application/pdf' : 'image/jpeg'
+      type: name === 'Certificate' ? 'application/pdf' : 'image/jpeg'
     });
 
     // Create URL for the Blob

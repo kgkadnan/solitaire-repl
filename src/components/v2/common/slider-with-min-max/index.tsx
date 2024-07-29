@@ -9,6 +9,7 @@ export interface ISliderWithMinMaxInputProps {
   sliderValue: string[];
   handleMinChange: (_event: React.ChangeEvent<HTMLInputElement>) => void;
   handleMaxChange: (_event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleSliderAfterChange: () => void;
   handleSliderChange: (_newValue: string[]) => void;
   errorText?: string;
   label: string;
@@ -22,6 +23,7 @@ export interface ISliderWithMinMaxInputProps {
 export const SliderWithMinMaxInput: React.FC<ISliderWithMinMaxInputProps> = ({
   minValue,
   maxValue,
+  handleSliderAfterChange,
   sliderValue,
   handleMinChange,
   handleMaxChange,
@@ -58,6 +60,7 @@ export const SliderWithMinMaxInput: React.FC<ISliderWithMinMaxInputProps> = ({
       />
       <RangeSlider
         handleSliderChange={handleSliderChange}
+        handleSliderAfterChange={handleSliderAfterChange}
         sliderValue={sliderValue}
         rangeMax={rangeMax}
         rangeMin={rangeMin}

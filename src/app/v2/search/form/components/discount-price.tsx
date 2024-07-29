@@ -16,6 +16,7 @@ interface IShapeProps {
   setDiscountError: Dispatch<SetStateAction<string>>;
   setPricePerCaratError: Dispatch<SetStateAction<string>>;
   setAmountRangeError: Dispatch<SetStateAction<string>>;
+  setIsSliderActive: Dispatch<SetStateAction<boolean>>;
   pricePerCaratError: string;
   discountMin: string;
   discountMax: string;
@@ -29,6 +30,7 @@ interface IShapeProps {
 }
 
 export const DiscountPrice = ({
+  setIsSliderActive,
   setDiscountMin,
   setDiscountMax,
   setAmountRangeMin,
@@ -79,6 +81,7 @@ export const DiscountPrice = ({
         }
       },
       handleSliderChange: (newValue: string[]) => {
+        setIsSliderActive(true);
         if (Number(newValue[0]) === 0 && Number(newValue[1]) === 0) {
           setDiscountMin('');
           setDiscountMax('');
@@ -94,6 +97,9 @@ export const DiscountPrice = ({
           rangeCondition: discount.range,
           setMinMaxError
         });
+      },
+      handleSliderAfterChange: () => {
+        setIsSliderActive(false);
       },
       maxValue: discountMax,
       minValue: discountMin,
@@ -133,6 +139,7 @@ export const DiscountPrice = ({
         }
       },
       handleSliderChange: (newValue: string[]) => {
+        setIsSliderActive(true);
         if (Number(newValue[0]) === 0 && Number(newValue[1]) === 0) {
           setPricePerCaratMin('');
           setPricePerCaratMax('');
@@ -148,6 +155,9 @@ export const DiscountPrice = ({
           rangeCondition: pricePerCarat.range,
           setMinMaxError
         });
+      },
+      handleSliderAfterChange: () => {
+        setIsSliderActive(false);
       },
       maxValue: pricePerCaratMax,
       minValue: pricePerCaratMin,
@@ -186,6 +196,7 @@ export const DiscountPrice = ({
         }
       },
       handleSliderChange: (newValue: string[]) => {
+        setIsSliderActive(true);
         if (Number(newValue[0]) === 0 && Number(newValue[1]) === 0) {
           setAmountRangeMin('');
           setAmountRangeMax('');
@@ -200,6 +211,9 @@ export const DiscountPrice = ({
           rangeCondition: amountRange.range,
           setMinMaxError
         });
+      },
+      handleSliderAfterChange: () => {
+        setIsSliderActive(false);
       },
       maxValue: amountRangeMax,
       minValue: amountRangeMin,
@@ -228,6 +242,7 @@ export const DiscountPrice = ({
                     handleMaxChange={items.handleMaxChange}
                     handleMinChange={items.handleMinChange}
                     handleSliderChange={items.handleSliderChange}
+                    handleSliderAfterChange={items.handleSliderAfterChange}
                     maxValue={items.maxValue}
                     minValue={items.minValue}
                     sliderValue={items.sliderValue}

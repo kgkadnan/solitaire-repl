@@ -17,6 +17,7 @@ import {
   DiscountWithCross,
   RenderNumericFields
 } from '@/components/v2/common/data-table/helpers/render-cell';
+import noImageFound from '@public/v2/assets/icons/detail-page/fall-back-img.svg';
 import Tooltip from '@/components/v2/common/tooltip';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
@@ -510,7 +511,7 @@ const BidToBuy = () => {
       category: 'Image'
     },
     {
-      name: 'GIA Certificate',
+      name: 'Certificate',
       url: `${FILE_URLS.CERT_FILE.replace(
         '***',
         detailImageData?.certificate_number ?? ''
@@ -604,11 +605,12 @@ const BidToBuy = () => {
   }, [detailImageData]);
 
   useEffect(() => {
-    if (!validImages.length && images[0].name.length) {
+    if (!validImages.length && isModalOpen) {
       setValidImages([
         {
-          name: 'No Data Found',
-          url: ''
+          name: '',
+          url: noImageFound,
+          category: 'NoDataFound'
         }
       ]);
     }

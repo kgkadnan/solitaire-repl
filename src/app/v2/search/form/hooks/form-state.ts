@@ -1,6 +1,8 @@
 import { useState } from 'react';
 
 const useFormStateManagement = () => {
+  const [isSliderActive, setIsSliderActive] = useState(false);
+
   const [selectedShape, setSelectedShape] = useState<string[]>([]);
   const [selectedColor, setSelectedColor] = useState<string>('white');
 
@@ -89,6 +91,7 @@ const useFormStateManagement = () => {
   const [caratRangeData, setCaratRangeData] = useState<string[]>();
   return {
     state: {
+      isSliderActive,
       selectedShape,
       selectedWhiteColor,
       selectedFancyColor,
@@ -165,6 +168,7 @@ const useFormStateManagement = () => {
       selectionChecked
     },
     setState: {
+      setIsSliderActive,
       setSelectedShape,
       setSelectedWhiteColor,
       setSelectedFancyColor,

@@ -65,7 +65,8 @@ const VolumeDiscount: React.FC<any> = ({
                   </div>
                   <p>
                     Eligibility for a volume discount requires the sum of your
-                    pending invoices in the last 48 hours to exceed $300.00K
+                    pending invoices in the last 48 hours to exceed $300.00K at
+                    company level
                   </p>
                 </div>
               </div>
@@ -108,9 +109,9 @@ const VolumeDiscount: React.FC<any> = ({
                 </span>{' '}
                 {eligibleForDiscount && 'more'} within{' '}
                 <span className="font-semiBold">
-                  {Math.floor(timeDifference! / (1000 * 60 * 60))}
+                  next {Math.floor(timeDifference! / (1000 * 60 * 60))} hours
                 </span>{' '}
-                hours to get a 2% volume discount
+                to get a 2% volume discount
               </div>
             </div>
           )}
