@@ -214,7 +214,8 @@ const OrderDetail: React.FC<IOrderDetail> = ({
       modalSetState,
       setRowSelection,
       router,
-      setIsLoading: setIsLoading
+      setIsLoading: setIsLoading,
+      page: 'Your_Orders'
     });
   };
 

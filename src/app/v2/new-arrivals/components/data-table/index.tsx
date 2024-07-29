@@ -279,7 +279,9 @@ const NewArrivalDataTable = ({
       setRowSelection,
       router,
       setIsLoading: setIsLoading,
-      [activeTab === 2 ? 'fromNewArrivalBidHistory' : 'fromNewArrivalBid']: true
+      [activeTab === 2 ? 'fromNewArrivalBidHistory' : 'fromNewArrivalBid']:
+        true,
+      page: 'New_Arrival'
     });
   };
 
@@ -417,9 +419,14 @@ const NewArrivalDataTable = ({
               <Tooltip
                 tooltipTrigger={
                   <button
-                    className={`rounded-[4px] hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm ${'bg-neutral0'}`}
+                    disabled={!rows.length}
+                    className={`disabled:!bg-neutral100 disabled:cursor-not-allowed disabled:text-neutral400 rounded-[4px] hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm ${'bg-neutral0'}`}
                   >
-                    <ExportExcel className={`${'stroke-neutral900'}`} />
+                    <ExportExcel
+                      className={`${
+                        !rows.length ? 'stroke-neutral400' : 'stroke-neutral900'
+                      }`}
+                    />
                   </button>
                 }
                 tooltipContent={'Download Excel'}

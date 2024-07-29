@@ -468,7 +468,8 @@ const MatchPairTable = ({
       setRowSelection,
       setIsLoading: setIsLoading,
       router,
-      fromMatchingPair: true
+      fromMatchingPair: true,
+      page: 'Match_Pair'
     });
   };
 
@@ -481,7 +482,8 @@ const MatchPairTable = ({
       modalSetState,
       setRowSelection,
       router,
-      setIsLoading: setIsLoading
+      setIsLoading: setIsLoading,
+      page: 'Match_Pair'
     });
   };
 

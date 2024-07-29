@@ -256,7 +256,8 @@ export function DiamondDetailsComponent({
         ? 'fromBidToBuy'
         : breadCrumLabel === 'New Arrival'
         ? 'fromNewArrivalBid'
-        : '']: true
+        : '']: true,
+      page: 'DNA_Page'
     });
   };
 
