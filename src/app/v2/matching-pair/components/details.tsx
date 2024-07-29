@@ -256,7 +256,8 @@ export function MatchPairDetails({
         downloadExcelApi: downloadExcel,
         modalSetState,
         router,
-        setIsLoading: setIsLoading
+        setIsLoading: setIsLoading,
+        page: 'DNA_Page'
         // fromMatchingPair: true
       });
     } else {
