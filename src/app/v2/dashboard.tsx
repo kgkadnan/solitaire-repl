@@ -1452,11 +1452,7 @@ const Dashboard = () => {
     } else {
       return (
         <p className="text-neutral900 text-headingS font-medium">
-          {data.isAvailable
-            ? data.count === 0
-              ? '-'
-              : data.count
-            : 'Coming Soon'}
+          {data.isAvailable ? data.count : 'Coming Soon'}
         </p>
       );
     }

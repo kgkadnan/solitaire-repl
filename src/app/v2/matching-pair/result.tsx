@@ -100,8 +100,7 @@ const MatchingPairResult = ({
   handleCloseSpecificTab,
   setSearchParameters,
   setIsLoading,
-  setIsInputDialogOpen,
-  isLoading
+  setIsInputDialogOpen
 }: {
   activeTab: number;
   searchParameters: any;
@@ -1074,7 +1073,6 @@ const MatchingPairResult = ({
             setSimilarData={setSimilarData}
             similarData={similarData}
             rowSelection={rowSelection}
-            isLoading={isLoading}
             setActivePreviewTab={setActivePreviewTab}
             activePreviewTab={activePreviewTab}
             setImageIndex={setImageIndex}
