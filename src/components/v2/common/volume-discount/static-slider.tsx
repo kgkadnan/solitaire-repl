@@ -26,7 +26,7 @@ const StaticSlider = ({ totalSpent }: any) => {
           readOnly
           style={{
             background: `linear-gradient(to right, #5995ED 0%,#168B85, #FFAD05 ${
-              filledRange / 3000
+              filledRange / 3000 + 1
             }%, #E4E7EC ${filledRange / 3000}%, #E4E7EC 100%)`
           }}
         />
@@ -45,7 +45,7 @@ const StaticSlider = ({ totalSpent }: any) => {
           style={{
             left: `calc(${(filledRange / VOLUME_DISCOUNT_LIMIT) * 100}% - ${
               (filledRange / 50000) * 6 -
-              (filledRange > VOLUME_DISCOUNT_LIMIT / 2 ? 13 : 11)
+              (filledRange > VOLUME_DISCOUNT_LIMIT / 2 ? 8 : 11)
             }%)`
           }}
         ></div>
@@ -55,7 +55,7 @@ const StaticSlider = ({ totalSpent }: any) => {
           <>
             <div
               className="absolute bottom-8 text-center w-16 mx-auto left-0 right-0"
-              style={{ left: `calc(${100}% - 100px)` }}
+              style={{ left: `calc(${100}% - 135px)` }}
             >
               <Tooltip
                 tooltipTrigger={
@@ -83,7 +83,7 @@ const StaticSlider = ({ totalSpent }: any) => {
               style={{
                 left: `calc(${(filledRange / VOLUME_DISCOUNT_LIMIT) * 100}% - ${
                   (filledRange / 50000) * 6 -
-                  (filledRange > VOLUME_DISCOUNT_LIMIT / 2 ? 7 : 5)
+                  (filledRange > VOLUME_DISCOUNT_LIMIT / 2 ? 2 : 5)
                 }%)`
               }}
             >
@@ -106,7 +106,7 @@ const StaticSlider = ({ totalSpent }: any) => {
         ) : (
           <div
             className="absolute top-8 text-center w-16 mx-auto left-0 right-0"
-            style={{ left: `calc(${100}% - 110px)` }}
+            style={{ left: `calc(${100}% - 135px)` }}
           >
             <div className="text-center">
               <div className="w-5 h-5 bg-[#FFAD05]  mx-auto transform rotate-45 rounded-b-[16px]  rounded-tr-[16px]"></div>
