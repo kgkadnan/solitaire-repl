@@ -18,7 +18,7 @@ import CompanyOwnerDetail from '@/app/v2/kyc/components/company-owner-detail';
 
 // Default export for Storybook
 export default {
-  title: 'Modules/auth/KYC',
+  title: 'Modules/Auth/KYC',
   component: RenderAttachment,
   decorators: [
     Story => (
