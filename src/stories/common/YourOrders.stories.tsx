@@ -5,26 +5,6 @@ import { setupStore } from '@/store';
 import MyDiamonds from '@/app/v2/your-orders/page';
 const store = setupStore();
 
-// Mock the data and functions used in the MyDiamonds component
-// const mockData = {
-//   orders: [
-//     {
-//       id: 1,
-//       display_id: '123456',
-//       created_at: '2024-07-29T10:00:00Z',
-//       invoice_id: 'INV001',
-//       details: 'Order details'
-//     },
-//     {
-//       id: 2,
-//       display_id: '789012',
-//       created_at: '2024-07-28T10:00:00Z',
-//       invoice_id: 'INV002',
-//       details: 'Order details'
-//     }
-//   ]
-// };
-
 export default {
   title: 'Modules/YourOrder/YourOrder',
   component: MyDiamonds,
@@ -148,11 +128,5 @@ export const Docs = () => {
   );
 };
 
-export const Default = Template.bind({});
-Default.args = {};
-
-export const Loading = Template.bind({});
-Loading.args = {};
-
-export const WithData = Template.bind({});
-WithData.args = {};
+export const YourOrderComponent = Template.bind({});
+YourOrderComponent.args = {};

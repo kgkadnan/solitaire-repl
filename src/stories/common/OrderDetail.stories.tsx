@@ -132,36 +132,10 @@ export default {
   }
 } as Meta;
 
-export const Default = Template.bind({});
-Default.args = {
+export const OrderDetailComponent = Template.bind({});
+OrderDetailComponent.args = {
   productDetailData: mockProductDetailData,
   breadCrumLabel: 'Order Details',
-  goBackToListView: () => {},
-  modalSetState: () => {},
-  setIsLoading: () => {},
-  router: {}
-};
-
-export const WithImageModal = Template.bind({});
-WithImageModal.args = {
-  ...Default.args,
-  isModalOpen: true,
-  detailImageData: {
-    lot_id: '12345',
-    shape: 'Round',
-    certificate_number: 'CERT123456',
-    assets_pre_check: {
-      CERT_IMG: true,
-      B2B_CHECK: true,
-      B2B_SPARKLE_CHECK: true
-    }
-  }
-};
-
-export const NoData = Template.bind({});
-NoData.args = {
-  productDetailData: {},
-  breadCrumLabel: 'No Data',
   goBackToListView: () => {},
   modalSetState: () => {},
   setIsLoading: () => {},

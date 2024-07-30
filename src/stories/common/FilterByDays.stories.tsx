@@ -103,16 +103,9 @@ export const Docs = () => {
   );
 };
 
-export const Default = Template.bind({});
-Default.args = {
+export const FilterByDayComponent = Template.bind({});
+FilterByDayComponent.args = {
   radioState: '7days',
-  filterFunction: (event: React.ChangeEvent<HTMLInputElement>) =>
-    console.log('Filter changed:', event.target.value)
-};
-
-export const WithDifferentInitialState = Template.bind({});
-WithDifferentInitialState.args = {
-  radioState: '30days',
   filterFunction: (event: React.ChangeEvent<HTMLInputElement>) =>
     console.log('Filter changed:', event.target.value)
 };

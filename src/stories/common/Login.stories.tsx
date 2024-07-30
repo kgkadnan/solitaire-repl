@@ -136,8 +136,8 @@ export const Docs = () => {
   );
 };
 
-export const byMobile = Template.bind({});
-byMobile.args = {
+export const ByMobile = Template.bind({});
+ByMobile.args = {
   phoneNumber: { mobileNumber: '' },
   phoneErrorText: '',
   password: '',
@@ -147,8 +147,8 @@ byMobile.args = {
   emailErrorText: '',
   loginByEmail: false
 };
-export const byEmail = Template.bind({});
-byEmail.args = {
+export const ByEmail = Template.bind({});
+ByEmail.args = {
   phoneNumber: { mobileNumber: '' },
   phoneErrorText: '',
   password: '',

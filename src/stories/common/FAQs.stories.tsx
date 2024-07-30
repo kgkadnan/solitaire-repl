@@ -20,5 +20,5 @@ export default {
 
 const Template: ComponentStory<typeof FAQs> = _args => <FAQs />;
 
-export const faqs = Template.bind({});
-faqs.args = {};
+export const Faqs = Template.bind({});
+Faqs.args = {};

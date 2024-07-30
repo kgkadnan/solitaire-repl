@@ -18,7 +18,7 @@ import CompanyOwnerDetail from '@/app/v2/kyc/components/company-owner-detail';
 
 // Default export for Storybook
 export default {
-  title: 'Modules/auth/KYC',
+  title: 'Modules/Auth/KYC',
   component: RenderAttachment,
   decorators: [
     Story => (
@@ -644,9 +644,9 @@ export const Docs = () => {
 };
 
 const companyOwnerDerail: Story<any> = args => <CompanyOwnerDetail {...args} />;
-export const companyOwnerDerailStory = companyOwnerDerail.bind({});
+export const CompanyOwnerDerailStory = companyOwnerDerail.bind({});
 
-companyOwnerDerailStory.args = {
+CompanyOwnerDerailStory.args = {
   formErrorState: {
     online: {
       sections: {
