@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { ComponentMeta } from '@storybook/react';
 import { Provider } from 'react-redux';
 import MyAccount from '@/app/v2/my-account/page';
 import { setupStore } from '@/store';
@@ -17,9 +17,9 @@ export default {
 } as ComponentMeta<typeof MyAccount>;
 
 // Template for the component
-const Template: ComponentStory<typeof MyAccount> = args => (
-  <MyAccount {...args} />
-);
+// const Template: ComponentStory<typeof MyAccount> = args => (
+//   <MyAccount {...args} />
+// );
 
 export const Docs = () => {
   const [showCode, setShowCode] = useState(false);
@@ -124,84 +124,84 @@ export const Docs = () => {
 };
 
 // Default story with no user data
-export const Default = Template.bind({});
-Default.args = {};
+// export const Default = Template.bind({});
+// Default.args = {};
 
 // Story with user data and KYC status pending
-export const KycPending = Template.bind({});
-KycPending.args = {
-  userAccountInfo: {
-    customer: {
-      first_name: 'John',
-      last_name: 'Doe',
-      email: 'john.doe@example.com',
-      phone: '123-456-7890',
-      kyc: { status: 'PENDING' }
-    }
-  }
-};
+// export const KycPending = Template.bind({});
+// KycPending.args = {
+//   userAccountInfo: {
+//     customer: {
+//       first_name: 'John',
+//       last_name: 'Doe',
+//       email: 'john.doe@example.com',
+//       phone: '123-456-7890',
+//       kyc: { status: 'PENDING' }
+//     }
+//   }
+// };
 
-// Story with user data and KYC status approved
-export const KycApproved = Template.bind({});
-KycApproved.args = {
-  userAccountInfo: {
-    customer: {
-      first_name: 'Jane',
-      last_name: 'Smith',
-      email: 'jane.smith@example.com',
-      phone: '098-765-4321',
-      kyc: { status: 'APPROVED' }
-    }
-  }
-};
+// // Story with user data and KYC status approved
+// export const KycApproved = Template.bind({});
+// KycApproved.args = {
+//   userAccountInfo: {
+//     customer: {
+//       first_name: 'Jane',
+//       last_name: 'Smith',
+//       email: 'jane.smith@example.com',
+//       phone: '098-765-4321',
+//       kyc: { status: 'APPROVED' }
+//     }
+//   }
+// };
 
-// Story with user data and KYC status rejected
-export const KycRejected = Template.bind({});
-KycRejected.args = {
-  userAccountInfo: {
-    customer: {
-      first_name: 'Alice',
-      last_name: 'Johnson',
-      email: 'alice.johnson@example.com',
-      phone: '555-555-5555',
-      kyc: { status: 'REJECTED' }
-    }
-  }
-};
+// // Story with user data and KYC status rejected
+// export const KycRejected = Template.bind({});
+// KycRejected.args = {
+//   userAccountInfo: {
+//     customer: {
+//       first_name: 'Alice',
+//       last_name: 'Johnson',
+//       email: 'alice.johnson@example.com',
+//       phone: '555-555-5555',
+//       kyc: { status: 'REJECTED' }
+//     }
+//   }
+// };
 
-// Story with profile update tab active
-export const ProfileUpdateTab = Template.bind({});
-ProfileUpdateTab.args = {
-  activeTab: 'PROFILE_UPDATE',
-  imageUrl: ''
-};
+// // Story with profile update tab active
+// export const ProfileUpdateTab = Template.bind({});
+// ProfileUpdateTab.args = {
+//   activeTab: 'PROFILE_UPDATE',
+//   imageUrl: ''
+// };
 
-// Story showing the table preferences tab
-export const TablePreferencesTab = Template.bind({});
-TablePreferencesTab.args = {
-  activeTab: 'TABLE_PREFRENCES'
-};
+// // Story showing the table preferences tab
+// export const TablePreferencesTab = Template.bind({});
+// TablePreferencesTab.args = {
+//   activeTab: 'TABLE_PREFRENCES'
+// };
 
-// Story showing the change password tab
-export const ChangePasswordTab = Template.bind({});
-ChangePasswordTab.args = {
-  activeTab: 'CHANGE_PASSWORD'
-};
+// // Story showing the change password tab
+// export const ChangePasswordTab = Template.bind({});
+// ChangePasswordTab.args = {
+//   activeTab: 'CHANGE_PASSWORD'
+// };
 
-// Story showing the notifications preferences tab
-export const NotificationsPreferencesTab = Template.bind({});
-NotificationsPreferencesTab.args = {
-  activeTab: 'NOTIFICATION_PREFRENCES'
-};
+// // Story showing the notifications preferences tab
+// export const NotificationsPreferencesTab = Template.bind({});
+// NotificationsPreferencesTab.args = {
+//   activeTab: 'NOTIFICATION_PREFRENCES'
+// };
 
-// Story showing the terms and conditions tab
-export const TermsAndConditionsTab = Template.bind({});
-TermsAndConditionsTab.args = {
-  activeTab: 'TERM_AND_CONDITION'
-};
+// // Story showing the terms and conditions tab
+// export const TermsAndConditionsTab = Template.bind({});
+// TermsAndConditionsTab.args = {
+//   activeTab: 'TERM_AND_CONDITION'
+// };
 
-// Story showing the privacy policy tab
-export const PrivacyPolicyTab = Template.bind({});
-PrivacyPolicyTab.args = {
-  activeTab: 'PRIVACY_POLICY'
-};
+// // Story showing the privacy policy tab
+// export const PrivacyPolicyTab = Template.bind({});
+// PrivacyPolicyTab.args = {
+//   activeTab: 'PRIVACY_POLICY'
+// };

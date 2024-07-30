@@ -126,7 +126,7 @@ export const Docs = () => {
             <tr>
               <td className="p-3 border text-gray-700">dispatch</td>
               <td className="p-3 border text-gray-700">
-                (action: any) =&gt void
+                (action: any) =&gt ;void
               </td>
               <td className="p-3 border text-gray-700">
                 Function to dispatch actions
@@ -197,7 +197,7 @@ export const Docs = () => {
           </tr>
           <tr>
             <td className="p-3 border text-gray-700">modalSetState</td>
-            <td className="p-3 border text-gray-700">() =&gt void</td>
+            <td className="p-3 border text-gray-700">() =&gt ;void</td>
             <td className="p-3 border text-gray-700">
               Function to set modal state
             </td>
@@ -218,7 +218,7 @@ export const Docs = () => {
           </tr>
           <tr>
             <td className="p-3 border text-gray-700">handleTermAndCondition</td>
-            <td className="p-3 border text-gray-700">() =&gt void</td>
+            <td className="p-3 border text-gray-700">() =&gt ;void</td>
             <td className="p-3 border text-gray-700">
               Function to handle term and condition changes
             </td>
@@ -300,7 +300,7 @@ export const Docs = () => {
           </tr>
           <tr>
             <td className="p-3 border text-gray-700">dispatch</td>
-            <td className="p-3 border text-gray-700">() =&gt void</td>
+            <td className="p-3 border text-gray-700">() =&gt ;void</td>
             <td className="p-3 border text-gray-700">
               Function to dispatch actions
             </td>
@@ -419,7 +419,7 @@ export const Docs = () => {
           </tr>
           <tr>
             <td className="p-3 border text-gray-700">dispatch</td>
-            <td className="p-3 border text-gray-700">() =&gt void</td>
+            <td className="p-3 border text-gray-700">() =&gt ;void</td>
             <td className="p-3 border text-gray-700">
               Function to dispatch actions
             </td>
@@ -488,7 +488,7 @@ export const Docs = () => {
           </tr>
           <tr>
             <td className="p-3 border text-gray-700">modalSetState</td>
-            <td className="p-3 border text-gray-700">() =&gt void</td>
+            <td className="p-3 border text-gray-700">() =&gt ;void</td>
             <td className="p-3 border text-gray-700">
               Function to set modal state
             </td>
@@ -507,7 +507,7 @@ export const Docs = () => {
           </tr>
           <tr>
             <td className="p-3 border text-gray-700">handleTermAndCondition</td>
-            <td className="p-3 border text-gray-700">() =&gt void</td>
+            <td className="p-3 border text-gray-700">() =&gt ;void</td>
             <td className="p-3 border text-gray-700">
               Function to handle term and condition changes
             </td>

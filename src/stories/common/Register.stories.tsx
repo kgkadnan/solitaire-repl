@@ -126,7 +126,7 @@ export const Docs = () => {
           </tr>
           <tr>
             <td className="p-3 border text-gray-700">register</td>
-            <td className="p-3 border text-gray-700">() =&gt void</td>
+            <td className="p-3 border text-gray-700">() =&gt ;void</td>
             <td className="p-3 border text-gray-700">
               Function to handle the registration process
             </td>
@@ -140,7 +140,9 @@ export const Docs = () => {
           </tr>
           <tr>
             <td className="p-3 border text-gray-700">setRole</td>
-            <td className="p-3 border text-gray-700">(value: any) =&gt void</td>
+            <td className="p-3 border text-gray-700">
+              (value: any) =&gt ;void
+            </td>
             <td className="p-3 border text-gray-700">
               Function to update the user role
             </td>
@@ -148,7 +150,7 @@ export const Docs = () => {
           <tr>
             <td className="p-3 border text-gray-700">setToken</td>
             <td className="p-3 border text-gray-700">
-              (value: IToken) =&gt void
+              (value: IToken) =&gt ;void
             </td>
             <td className="p-3 border text-gray-700">
               Function to set the authentication token
@@ -156,14 +158,18 @@ export const Docs = () => {
           </tr>
           <tr>
             <td className="p-3 border text-gray-700">setIsDialogOpen</td>
-            <td className="p-3 border text-gray-700">(value: any) =&gt void</td>
+            <td className="p-3 border text-gray-700">
+              (value: any) =&gt ;void
+            </td>
             <td className="p-3 border text-gray-700">
               Function to set the dialog's open state
             </td>
           </tr>
           <tr>
             <td className="p-3 border text-gray-700">setDialogContent</td>
-            <td className="p-3 border text-gray-700">(value: any) =&gt void</td>
+            <td className="p-3 border text-gray-700">
+              (value: any) =&gt ;void
+            </td>
             <td className="p-3 border text-gray-700">
               Function to set the content of the dialog
             </td>
@@ -173,7 +179,7 @@ export const Docs = () => {
               setOTPVerificationFormState
             </td>
             <td className="p-3 border text-gray-700">
-              (value: IOtp) =&gt void
+              (value: IOtp) =&gt ;void
             </td>
             <td className="p-3 border text-gray-700">
               Function to set the OTP verification form state
@@ -182,7 +188,7 @@ export const Docs = () => {
           <tr>
             <td className="p-3 border text-gray-700">setIsLoading</td>
             <td className="p-3 border text-gray-700">
-              (value: boolean) =&gt void
+              (value: boolean) =&gt ;void
             </td>
             <td className="p-3 border text-gray-700">
               Function to set the loading state

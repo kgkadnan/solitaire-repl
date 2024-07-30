@@ -9,17 +9,17 @@ const meta: Meta = {
   title: 'Modules/MyAppointments/MyAppointments',
   component: MyAppointments,
   decorators: [
-    (Story) => (
+    Story => (
       <Provider store={store}>
         <Story />
       </Provider>
-    ),
-  ],
+    )
+  ]
 };
 
 export default meta;
 
-const Template: Story = (args) => <MyAppointments {...args} />;
+const Template: Story = args => <MyAppointments {...args} />;
 
 export const Docs = () => {
   const [showCode, setShowCode] = useState(false);
@@ -28,10 +28,11 @@ export const Docs = () => {
     <div className="font-sans mx-8 my-5 leading-7">
       <h1 className="text-2xl text-gray-800">My Appointments Component</h1>
       <p className="text-base text-gray-600">
-        The <code className="bg-gray-200 p-1 rounded">MyAppointments</code> component
-        displays a list of the user's appointments. It includes features for handling 
-        appointment details, booking new appointments, and managing appointment states 
-        like loading, error, and different appointment views.
+        The <code className="bg-gray-200 p-1 rounded">MyAppointments</code>{' '}
+        component displays a list of the user's appointments. It includes
+        features for handling appointment details, booking new appointments, and
+        managing appointment states like loading, error, and different
+        appointment views.
       </p>
       <h2 className="text-xl text-gray-800 mt-5">Usage</h2>
       <button
@@ -63,9 +64,15 @@ export const Docs = () => {
       <table className="w-full border-collapse mt-5">
         <thead>
           <tr>
-            <th className="bg-gray-100 text-gray-800 p-3 border text-left">Prop</th>
-            <th className="bg-gray-100 text-gray-800 p-3 border text-left">Type</th>
-            <th className="bg-gray-100 text-gray-800 p-3 border text-left">Description</th>
+            <th className="bg-gray-100 text-gray-800 p-3 border text-left">
+              Prop
+            </th>
+            <th className="bg-gray-100 text-gray-800 p-3 border text-left">
+              Type
+            </th>
+            <th className="bg-gray-100 text-gray-800 p-3 border text-left">
+              Description
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -118,19 +125,18 @@ export const Docs = () => {
 };
 
 export const LoadingState = Template.bind({});
-LoadingState.args = {
-};
+LoadingState.args = {};
 
 export const NoAppointments = Template.bind({});
 NoAppointments.args = {
   myAppointmentData: {
     data: {
       history: [],
-      upcoming: [],
-    },
+      upcoming: []
+    }
   },
   isLoading: false,
-  showAppointmentForm: false,
+  showAppointmentForm: false
 };
 
 export const UpcomingAppointments = Template.bind({});
@@ -143,13 +149,13 @@ UpcomingAppointments.args = {
           id: '1',
           appointment_at: '2024-08-15T10:00:00Z',
           address: '123 Main St',
-          reason: 'Routine check-up',
-        },
-      ],
-    },
+          reason: 'Routine check-up'
+        }
+      ]
+    }
   },
   isLoading: false,
-  showAppointmentForm: false,
+  showAppointmentForm: false
 };
 
 export const PastAppointments = Template.bind({});
@@ -161,14 +167,14 @@ PastAppointments.args = {
           id: '1',
           appointment_at: '2024-07-15T10:00:00Z',
           address: '123 Main St',
-          reason: 'Routine check-up',
-        },
+          reason: 'Routine check-up'
+        }
       ],
-      upcoming: [],
-    },
+      upcoming: []
+    }
   },
   isLoading: false,
-  showAppointmentForm: false,
+  showAppointmentForm: false
 };
 
 export const AppointmentFormView = Template.bind({});
@@ -176,8 +182,8 @@ AppointmentFormView.args = {
   myAppointmentData: {
     data: {
       history: [],
-      upcoming: [],
-    },
+      upcoming: []
+    }
   },
   isLoading: false,
   showAppointmentForm: true,
@@ -186,7 +192,7 @@ AppointmentFormView.args = {
     storeAddresses: ['123 Main St'],
     timeSlots: {
       dates: [{ date: '2024-08-15', day: 'Monday' }],
-      slots: {},
-    },
-  },
+      slots: {}
+    }
+  }
 };

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { ComponentMeta } from '@storybook/react';
 import { Provider } from 'react-redux';
 import { setupStore } from '@/store';
 const store = setupStore();
@@ -9,15 +9,17 @@ export default {
   title: 'Modules/BidToBuy/BidToBuy',
   component: BidToBuy,
   decorators: [
-    (Story) => (
+    Story => (
       <Provider store={store}>
         <Story />
       </Provider>
-    ),
-  ],
+    )
+  ]
 } as ComponentMeta<typeof BidToBuy>;
 
-const Template: ComponentStory<typeof BidToBuy> = (args) => <BidToBuy {...args} />;
+// const Template: ComponentStory<typeof BidToBuy> = args => (
+//   <BidToBuy {...args} />
+// );
 
 export const Docs = () => {
   const [showCode, setShowCode] = useState(false);
@@ -27,9 +29,9 @@ export const Docs = () => {
       <h1 className="text-2xl text-gray-800">BidToBuy Component</h1>
       <p className="text-base text-gray-600">
         The <code className="bg-gray-200 p-1 rounded">BidToBuy</code> component
-        allows users to place bids on items they wish to purchase. It includes features
-        for viewing item details, placing bids, and managing bid status, such as 
-        pending, accepted, or rejected.
+        allows users to place bids on items they wish to purchase. It includes
+        features for viewing item details, placing bids, and managing bid
+        status, such as pending, accepted, or rejected.
       </p>
       <h2 className="text-xl text-gray-800 mt-5">Usage</h2>
       <button
@@ -59,9 +61,15 @@ export const Docs = () => {
       <table className="w-full border-collapse mt-5">
         <thead>
           <tr>
-            <th className="bg-gray-100 text-gray-800 p-3 border text-left">Prop</th>
-            <th className="bg-gray-100 text-gray-800 p-3 border text-left">Type</th>
-            <th className="bg-gray-100 text-gray-800 p-3 border text-left">Description</th>
+            <th className="bg-gray-100 text-gray-800 p-3 border text-left">
+              Prop
+            </th>
+            <th className="bg-gray-100 text-gray-800 p-3 border text-left">
+              Type
+            </th>
+            <th className="bg-gray-100 text-gray-800 p-3 border text-left">
+              Description
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -106,9 +114,8 @@ export const Docs = () => {
   );
 };
 
-export const Default = Template.bind({});
-Default.args = {};
+// export const Default = Template.bind({});
+// Default.args = {};
 
-export const WithInitialData = Template.bind({});
-WithInitialData.args = {
-};
+// export const WithInitialData = Template.bind({});
+// WithInitialData.args = {};
