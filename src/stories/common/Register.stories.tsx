@@ -2,14 +2,13 @@ import React, { useState } from 'react';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import {
   IRegisterSetState,
-  IRegisterState,
-  IToken
+  IRegisterState
+  // IToken
 } from '@/app/v2/register/interface';
-import { IOtp } from '@/components/v2/common/otp-verication';
+// import { IOtp } from '@/components/v2/common/otp-verication';
 import RegisterComponent from '@/app/v2/register/component/register';
 import { Provider } from 'react-redux';
 import { setupStore } from '@/store';
-import { register } from 'module';
 
 const store = setupStore();
 
@@ -44,11 +43,11 @@ const mockRegisterState: IRegisterState = {
   }
 };
 
-const mockSetState = (value: any) => {};
-const mockSetDialogContent = (value: any) => {};
-const mockSetToken = (value: IToken) => {};
-const mockSetOTPVerificationFormState = (value: IOtp) => {};
-const mockSetIsLoading = (value: boolean) => {};
+const mockSetState = (_value: any) => {};
+const mockSetDialogContent = (_value: any) => {};
+// const mockSetToken = (_value: IToken) => {};
+// const mockSetOTPVerificationFormState = (_value: IOtp) => {};
+const mockSetIsLoading = (_value: boolean) => {};
 
 export default {
   title: 'Modules/Auth/RegisterComponent',
@@ -127,56 +126,64 @@ export const Docs = () => {
           </tr>
           <tr>
             <td className="p-3 border text-gray-700">register</td>
-            <td className="p-3 border text-gray-700">() => void</td>
+            <td className="p-3 border text-gray-700">() =&gt void</td>
             <td className="p-3 border text-gray-700">
               Function to handle the registration process
             </td>
           </tr>
           <tr>
             <td className="p-3 border text-gray-700">setCurrentState</td>
-            <td className="p-3 border text-gray-700">(value: any) => void</td>
+            <td className="p-3 border text-gray-700">(value: any) = void</td>
             <td className="p-3 border text-gray-700">
               Function to update the current state
             </td>
           </tr>
           <tr>
             <td className="p-3 border text-gray-700">setRole</td>
-            <td className="p-3 border text-gray-700">(value: any) => void</td>
+            <td className="p-3 border text-gray-700">(value: any) =&gt void</td>
             <td className="p-3 border text-gray-700">
               Function to update the user role
             </td>
           </tr>
           <tr>
             <td className="p-3 border text-gray-700">setToken</td>
-            <td className="p-3 border text-gray-700">(value: IToken) => void</td>
+            <td className="p-3 border text-gray-700">
+              (value: IToken) =&gt void
+            </td>
             <td className="p-3 border text-gray-700">
               Function to set the authentication token
             </td>
           </tr>
           <tr>
             <td className="p-3 border text-gray-700">setIsDialogOpen</td>
-            <td className="p-3 border text-gray-700">(value: any) => void</td>
+            <td className="p-3 border text-gray-700">(value: any) =&gt void</td>
             <td className="p-3 border text-gray-700">
               Function to set the dialog's open state
             </td>
           </tr>
           <tr>
             <td className="p-3 border text-gray-700">setDialogContent</td>
-            <td className="p-3 border text-gray-700">(value: any) => void</td>
+            <td className="p-3 border text-gray-700">(value: any) =&gt void</td>
             <td className="p-3 border text-gray-700">
               Function to set the content of the dialog
             </td>
           </tr>
           <tr>
-            <td className="p-3 border text-gray-700">setOTPVerificationFormState</td>
-            <td className="p-3 border text-gray-700">(value: IOtp) => void</td>
+            <td className="p-3 border text-gray-700">
+              setOTPVerificationFormState
+            </td>
+            <td className="p-3 border text-gray-700">
+              (value: IOtp) =&gt void
+            </td>
             <td className="p-3 border text-gray-700">
               Function to set the OTP verification form state
             </td>
           </tr>
           <tr>
             <td className="p-3 border text-gray-700">setIsLoading</td>
-            <td className="p-3 border text-gray-700">(value: boolean) => void</td>
+            <td className="p-3 border text-gray-700">
+              (value: boolean) =&gt void
+            </td>
             <td className="p-3 border text-gray-700">
               Function to set the loading state
             </td>
@@ -194,9 +201,9 @@ Register.args = {
   register: () => {},
   setCurrentState: mockSetState,
   setRole: mockSetState,
-  setToken: mockSetToken,
+  // setToken: mockSetToken,
   setIsDialogOpen: mockSetState,
   setDialogContent: mockSetDialogContent,
-  setOTPVerificationFormState: mockSetOTPVerificationFormState,
+  // setOTPVerificationFormState: mockSetOTPVerificationFormState,
   setIsLoading: mockSetIsLoading
 };

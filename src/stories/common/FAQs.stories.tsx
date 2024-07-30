@@ -10,15 +10,15 @@ export default {
   title: 'Modules/FAQs/FAQs',
   component: FAQs,
   decorators: [
-    (Story) => (
+    Story => (
       <Provider store={store}>
         <Story />
       </Provider>
-    ),
-  ],
+    )
+  ]
 } as ComponentMeta<typeof FAQs>;
 
-const Template: ComponentStory<typeof FAQs> = (args) => <FAQs />;
+const Template: ComponentStory<typeof FAQs> = args => <FAQs />;
 
 export const faqs = Template.bind({});
 faqs.args = {};
