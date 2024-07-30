@@ -6,41 +6,41 @@ import MyDiamonds from '@/app/v2/your-orders/page';
 const store = setupStore();
 
 // Mock the data and functions used in the MyDiamonds component
-const mockData = {
-  orders: [
-    {
-      id: 1,
-      display_id: '123456',
-      created_at: '2024-07-29T10:00:00Z',
-      invoice_id: 'INV001',
-      details: 'Order details',
-    },
-    {
-      id: 2,
-      display_id: '789012',
-      created_at: '2024-07-28T10:00:00Z',
-      invoice_id: 'INV002',
-      details: 'Order details',
-    },
-  ],
-};
+// const mockData = {
+//   orders: [
+//     {
+//       id: 1,
+//       display_id: '123456',
+//       created_at: '2024-07-29T10:00:00Z',
+//       invoice_id: 'INV001',
+//       details: 'Order details'
+//     },
+//     {
+//       id: 2,
+//       display_id: '789012',
+//       created_at: '2024-07-28T10:00:00Z',
+//       invoice_id: 'INV002',
+//       details: 'Order details'
+//     }
+//   ]
+// };
 
 export default {
   title: 'Modules/YourOrder/YourOrder',
   component: MyDiamonds,
   decorators: [
-    (Story) => (
+    Story => (
       <Provider store={store}>
         <Story />
       </Provider>
-    ),
+    )
   ],
   parameters: {
-    layout: 'fullscreen',
-  },
+    layout: 'fullscreen'
+  }
 } as Meta;
 
-const Template: Story = (args) => <MyDiamonds {...args} />;
+const Template: Story = args => <MyDiamonds {...args} />;
 
 export const Docs = () => {
   const [showCode, setShowCode] = useState(false);
@@ -48,9 +48,10 @@ export const Docs = () => {
     <div className="font-sans mx-8 my-5 leading-7">
       <h1 className="text-2xl text-gray-800">Orders Component</h1>
       <p className="text-base text-gray-600">
-        The <code className="bg-gray-200 p-1 rounded">Orders</code>{' '} Component
-        is responsible for displaying and managing user orders. It provides features
-        for viewing, updating, and deleting orders with proper state management and error handling.
+        The <code className="bg-gray-200 p-1 rounded">Orders</code> Component is
+        responsible for displaying and managing user orders. It provides
+        features for viewing, updating, and deleting orders with proper state
+        management and error handling.
       </p>
       <h2 className="text-xl text-gray-800 mt-5">Usage</h2>
       <button
@@ -78,7 +79,9 @@ export const Docs = () => {
           <tr>
             <th className="bg-gray-100 text-gray-800 p-3 border">Prop</th>
             <th className="bg-gray-100 text-gray-800 p-3 border">Type</th>
-            <th className="bg-gray-100 text-gray-800 p-3 border">Description</th>
+            <th className="bg-gray-100 text-gray-800 p-3 border">
+              Description
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -91,35 +94,43 @@ export const Docs = () => {
           </tr>
           <tr>
             <td className="p-3 border text-gray-700">fetchOrders</td>
-            <td className="p-3 border text-gray-700">() => void</td>
+            <td className="p-3 border text-gray-700">() =&gt ;void</td>
             <td className="p-3 border text-gray-700">
               Function to fetch orders from the server
             </td>
           </tr>
           <tr>
             <td className="p-3 border text-gray-700">updateOrder</td>
-            <td className="p-3 border text-gray-700">(orderId: string, data: IOrder) => void</td>
+            <td className="p-3 border text-gray-700">
+              (orderId: string, data: IOrder) =&gt ;void
+            </td>
             <td className="p-3 border text-gray-700">
               Function to update a specific order
             </td>
           </tr>
           <tr>
             <td className="p-3 border text-gray-700">deleteOrder</td>
-            <td className="p-3 border text-gray-700">(orderId: string) => void</td>
+            <td className="p-3 border text-gray-700">
+              (orderId: string) =&gt ;void
+            </td>
             <td className="p-3 border text-gray-700">
               Function to delete a specific order
             </td>
           </tr>
           <tr>
             <td className="p-3 border text-gray-700">setOrderStatus</td>
-            <td className="p-3 border text-gray-700">(orderId: string, status: string) => void</td>
+            <td className="p-3 border text-gray-700">
+              (orderId: string, status: string) =&gt ;void
+            </td>
             <td className="p-3 border text-gray-700">
               Function to update the status of an order
             </td>
           </tr>
           <tr>
             <td className="p-3 border text-gray-700">setOrderDetails</td>
-            <td className="p-3 border text-gray-700">(orderId: string, details: IOrderDetails) => void</td>
+            <td className="p-3 border text-gray-700">
+              (orderId: string, details: IOrderDetails) =&gt ;void
+            </td>
             <td className="p-3 border text-gray-700">
               Function to set the details of a specific order
             </td>
@@ -138,17 +149,10 @@ export const Docs = () => {
 };
 
 export const Default = Template.bind({});
-Default.args = {
-  
-};
-
+Default.args = {};
 
 export const Loading = Template.bind({});
-Loading.args = {
-  
-};
+Loading.args = {};
 
 export const WithData = Template.bind({});
-WithData.args = {
-
-};
+WithData.args = {};

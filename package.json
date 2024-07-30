@@ -77,6 +77,7 @@
     "embla-carousel": "8.0.0-rc19",
     "embla-carousel-react": "8.0.0-rc19",
     "eslint-config-next": "13.4.12",
+    "file-loader": "^6.2.0",
     "lucide-react": "^0.263.1",
     "material-react-table": "^2.9.2",
     "next": "13.4.12",

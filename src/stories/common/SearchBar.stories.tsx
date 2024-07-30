@@ -32,24 +32,26 @@ export default {
   title: 'Modules/YourOrder/SearchBar',
   component: HeaderSearchBar,
   decorators: [
-    (Story) => (
+    Story => (
       <Provider store={store}>
         <Story />
       </Provider>
-    ),
+    )
   ],
   argTypes: {
     activeTab: {
       control: {
         type: 'select',
-        options: ['PENDING', 'OTHER_TAB'],
-      },
-    },
-  },
+        options: ['PENDING', 'OTHER_TAB']
+      }
+    }
+  }
 } as Meta;
 
 // Template for the component stories
-const Template: Story<IHeaderSearchBarProps> = (args) => <HeaderSearchBar {...args} />;
+const Template: Story<IHeaderSearchBarProps> = args => (
+  <HeaderSearchBar {...args} />
+);
 
 export const Docs = () => {
   const [showCode, setShowCode] = useState(false);
@@ -58,11 +60,10 @@ export const Docs = () => {
     <div className="font-sans mx-8 my-5 leading-7">
       <h1 className="text-2xl text-gray-800">Search Bar Component</h1>
       <p className="text-base text-gray-600">
-        The <code className="bg-gray-200 p-1 rounded">SearchBar</code>{' '}
-        component provides a dynamic search input field tailored for different
-        use cases depending on the active tab. It includes features like
-        real-time search suggestions, custom styling, and search action
-        handling.
+        The <code className="bg-gray-200 p-1 rounded">SearchBar</code> component
+        provides a dynamic search input field tailored for different use cases
+        depending on the active tab. It includes features like real-time search
+        suggestions, custom styling, and search action handling.
       </p>
       <h2 className="text-xl text-gray-800 mt-5">Usage</h2>
       <button
@@ -91,7 +92,9 @@ export const Docs = () => {
           <tr>
             <th className="bg-gray-100 text-gray-800 p-3 border">Prop</th>
             <th className="bg-gray-100 text-gray-800 p-3 border">Type</th>
-            <th className="bg-gray-100 text-gray-800 p-3 border">Description</th>
+            <th className="bg-gray-100 text-gray-800 p-3 border">
+              Description
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -104,7 +107,9 @@ export const Docs = () => {
           </tr>
           <tr>
             <td className="p-3 border text-gray-700">handleSearch</td>
-            <td className="p-3 border text-gray-700">(e: React.ChangeEvent&lt;HTMLInputElement&gt;) =&gt; void</td>
+            <td className="p-3 border text-gray-700">
+              (e: React.ChangeEvent&lt;HTMLInputElement&gt;) =&gt; void
+            </td>
             <td className="p-3 border text-gray-700">
               Function to handle input changes in the search field
             </td>
@@ -125,7 +130,9 @@ export const Docs = () => {
           </tr>
           <tr>
             <td className="p-3 border text-gray-700">setShowSuggestions</td>
-            <td className="p-3 border text-gray-700">(value: boolean) =&gt; void</td>
+            <td className="p-3 border text-gray-700">
+              (value: boolean) =&gt; void
+            </td>
             <td className="p-3 border text-gray-700">
               Function to control the visibility of search suggestions
             </td>
@@ -146,7 +153,9 @@ export const Docs = () => {
           </tr>
           <tr>
             <td className="p-3 border text-gray-700">handleKeyDown</td>
-            <td className="p-3 border text-gray-700">(e: React.KeyboardEvent&lt;HTMLInputElement&gt;) =&gt; void</td>
+            <td className="p-3 border text-gray-700">
+              (e: React.KeyboardEvent&lt;HTMLInputElement&gt;) =&gt; void
+            </td>
             <td className="p-3 border text-gray-700">
               Function to handle keydown events in the search input
             </td>
@@ -167,7 +176,7 @@ Default.args = {
   setShowSuggestions,
   showSuggestions: false,
   handleGoSearch,
-  handleKeyDown,
+  handleKeyDown
 };
 
 // Story with search input filled
@@ -175,12 +184,12 @@ export const WithSearchInput = Template.bind({});
 WithSearchInput.args = {
   ...Default.args,
   search: 'Example search',
-  showSuggestions: true,
+  showSuggestions: true
 };
 
 // Story for the component when on a different tab
 export const OtherTab = Template.bind({});
 OtherTab.args = {
   ...Default.args,
-  activeTab: 'OTHER_TAB',
+  activeTab: 'OTHER_TAB'
 };

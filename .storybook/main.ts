@@ -29,10 +29,10 @@ module.exports = {
       ]
     }
   },
-  webpackFinal: async (config) => {
+  webpackFinal: async config => {
     // Exclude SVGs from file-loader
-    const fileLoaderRule = config.module.rules.find((rule) =>
-      rule.test?.test('.svg')
+    const fileLoaderRule = config.module.rules.find(
+      rule => rule.test?.test('.svg')
     );
     if (fileLoaderRule) {
       fileLoaderRule.exclude = /\.svg$/;
@@ -57,13 +57,15 @@ module.exports = {
           }
         }
       ],
-      include: [path.resolve(__dirname, '../public/v2/assets/icons/sidebar-icons')]
+      include: [
+        path.resolve(__dirname, '../public/v2/assets/icons/sidebar-icons')
+      ]
     });
 
     // Resolve aliases
     config.resolve.alias = {
       ...config.resolve.alias,
-      '@': path.resolve(__dirname, '../src'),
+      '@': path.resolve(__dirname, '../src')
     };
 
     // Modify Webpack configuration further if needed

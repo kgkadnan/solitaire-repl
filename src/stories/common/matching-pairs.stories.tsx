@@ -8,16 +8,15 @@ export default {
   title: 'Modules/MatchingPair',
   component: MatchingPair,
   decorators: [
-    (Story) => (
+    Story => (
       <Provider store={setupStore()}>
         <Story />
       </Provider>
-    ),
-  ],
+    )
+  ]
 } as Meta;
 
-const Template: Story = (args) => <MatchingPair {...args} />;
+const Template: Story = args => <MatchingPair {...args} />;
 
 export const matchingPairStory = Template.bind({});
-matchingPairStory.args = {
-};
+matchingPairStory.args = {};

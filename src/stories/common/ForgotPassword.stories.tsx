@@ -10,15 +10,17 @@ export default {
   title: 'Modules/Auth/ForgotPassword',
   component: ForgotPassword,
   decorators: [
-    (Story) => (
+    Story => (
       <Provider store={store}>
         <Story />
       </Provider>
-    ),
-  ],
+    )
+  ]
 } as ComponentMeta<typeof ForgotPassword>;
 
-const Template: ComponentStory<typeof ForgotPassword> = (args) => <ForgotPassword />;
+const Template: ComponentStory<typeof ForgotPassword> = _args => (
+  <ForgotPassword />
+);
 export const Docs = () => {
   const [showCode, setShowCode] = useState(false);
 
@@ -26,7 +28,10 @@ export const Docs = () => {
     <div className="font-sans mx-8 my-5 leading-7">
       <h1 className="text-2xl text-gray-800">Forgot Password Component</h1>
       <p className="text-base text-gray-600">
-        The <code className="bg-gray-200 p-1 rounded">ForgotPassword</code> component allows users to reset their password by entering their registered email address. The component will handle form validation and display appropriate messages.
+        The <code className="bg-gray-200 p-1 rounded">ForgotPassword</code>{' '}
+        component allows users to reset their password by entering their
+        registered email address. The component will handle form validation and
+        display appropriate messages.
       </p>
       <h2 className="text-xl text-gray-800 mt-5">Usage</h2>
       <button
@@ -46,14 +51,18 @@ export const Docs = () => {
           <tr>
             <th className="bg-gray-100 text-gray-800 p-3 border">Prop</th>
             <th className="bg-gray-100 text-gray-800 p-3 border">Type</th>
-            <th className="bg-gray-100 text-gray-800 p-3 border">Description</th>
+            <th className="bg-gray-100 text-gray-800 p-3 border">
+              Description
+            </th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td className="p-3 border text-gray-700">None</td>
             <td className="p-3 border text-gray-700">N/A</td>
-            <td className="p-3 border text-gray-700">This component does not require any props.</td>
+            <td className="p-3 border text-gray-700">
+              This component does not require any props.
+            </td>
           </tr>
         </tbody>
       </table>

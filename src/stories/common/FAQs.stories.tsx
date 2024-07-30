@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { Provider } from 'react-redux';
 import { setupStore } from '@/store';
@@ -10,15 +10,15 @@ export default {
   title: 'Modules/FAQs/FAQs',
   component: FAQs,
   decorators: [
-    (Story) => (
+    Story => (
       <Provider store={store}>
         <Story />
       </Provider>
-    ),
-  ],
+    )
+  ]
 } as ComponentMeta<typeof FAQs>;
 
-const Template: ComponentStory<typeof FAQs> = (args) => <FAQs />;
+const Template: ComponentStory<typeof FAQs> = _args => <FAQs />;
 
 export const faqs = Template.bind({});
 faqs.args = {};
