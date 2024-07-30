@@ -167,8 +167,8 @@ export const Docs = () => {
 };
 
 // Default story for the HeaderSearchBar
-export const Default = Template.bind({});
-Default.args = {
+export const SearchBarComponent = Template.bind({});
+SearchBarComponent.args = {
   activeTab: 'PENDING',
   search: '',
   handleSearch,
@@ -177,19 +177,4 @@ Default.args = {
   showSuggestions: false,
   handleGoSearch,
   handleKeyDown
-};
-
-// Story with search input filled
-export const WithSearchInput = Template.bind({});
-WithSearchInput.args = {
-  ...Default.args,
-  search: 'Example search',
-  showSuggestions: true
-};
-
-// Story for the component when on a different tab
-export const OtherTab = Template.bind({});
-OtherTab.args = {
-  ...Default.args,
-  activeTab: 'OTHER_TAB'
 };

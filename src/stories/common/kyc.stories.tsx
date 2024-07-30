@@ -644,9 +644,9 @@ export const Docs = () => {
 };
 
 const companyOwnerDerail: Story<any> = args => <CompanyOwnerDetail {...args} />;
-export const companyOwnerDerailStory = companyOwnerDerail.bind({});
+export const CompanyOwnerDerailStory = companyOwnerDerail.bind({});
 
-companyOwnerDerailStory.args = {
+CompanyOwnerDerailStory.args = {
   formErrorState: {
     online: {
       sections: {

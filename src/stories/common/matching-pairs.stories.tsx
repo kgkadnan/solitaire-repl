@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { setupStore } from '@/store';
 
 export default {
-  title: 'Modules/MatchingPair',
+  title: 'Modules/Matching-Pairs/MatchingPair',
   component: MatchingPair,
   decorators: [
     Story => (
@@ -18,5 +18,5 @@ export default {
 
 const Template: Story = args => <MatchingPair {...args} />;
 
-export const matchingPairStory = Template.bind({});
-matchingPairStory.args = {};
+export const MatchingPairStory = Template.bind({});
+MatchingPairStory.args = {};

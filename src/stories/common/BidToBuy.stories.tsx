@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { ComponentMeta } from '@storybook/react';
+import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { Provider } from 'react-redux';
 import { setupStore } from '@/store';
-const store = setupStore();
 import BidToBuy from '@/app/v2/bid-2-buy/page';
+
+const store = setupStore();
 
 export default {
   title: 'Modules/BidToBuy/BidToBuy',
@@ -17,9 +18,9 @@ export default {
   ]
 } as ComponentMeta<typeof BidToBuy>;
 
-// const Template: ComponentStory<typeof BidToBuy> = args => (
-//   <BidToBuy {...args} />
-// );
+const Template: ComponentStory<typeof BidToBuy> = args => (
+  <BidToBuy {...args} />
+);
 
 export const Docs = () => {
   const [showCode, setShowCode] = useState(false);
@@ -114,8 +115,5 @@ export const Docs = () => {
   );
 };
 
-// export const Default = Template.bind({});
-// Default.args = {};
-
-// export const WithInitialData = Template.bind({});
-// WithInitialData.args = {};
+export const BidToBuyComponent = Template.bind({});
+BidToBuyComponent.args = {};
