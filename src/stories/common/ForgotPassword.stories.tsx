@@ -18,7 +18,7 @@ export default {
   ]
 } as ComponentMeta<typeof ForgotPassword>;
 
-const Template: ComponentStory<typeof ForgotPassword> = args => (
+const Template: ComponentStory<typeof ForgotPassword> = _args => (
   <ForgotPassword />
 );
 export const Docs = () => {

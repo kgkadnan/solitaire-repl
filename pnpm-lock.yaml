@@ -125,6 +125,9 @@ dependencies:
   eslint-config-next:
     specifier: 13.4.12
     version: 13.4.12(eslint@8.46.0)(typescript@5.1.6)
+  file-loader:
+    specifier: ^6.2.0
+    version: 6.2.0(webpack@5.88.2)
   lucide-react:
     specifier: ^0.263.1
     version: 0.263.1(react@18.2.0)
