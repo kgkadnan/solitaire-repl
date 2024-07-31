@@ -110,13 +110,13 @@ const StaticSlider = ({ totalSpent }: any) => {
           >
             <div className="text-center">
               <div className="w-5 h-5 bg-[#FFAD05]  mx-auto transform rotate-45 rounded-b-[16px]  rounded-tr-[16px]"></div>
-              <div className="flex  left-[-110px] absolute">
+              <div className="flex  left-[-120px] absolute">
                 {' '}
                 <span className="text-[#98A2B3] text-[10px] font-medium pt-[2px]">
                   {'Your Current Spending >='}
                 </span>
                 <p className="text-sRegular font-semiBold text-[#FFAD05]">
-                  $300K
+                  $300.00K
                 </p>
               </div>
             </div>
