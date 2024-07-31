@@ -92,7 +92,7 @@ const VolumeDiscount: React.FC<any> = ({
               </p>
               <StaticSlider totalSpent={totalSpent} />
               <div className="text-sMedium text-neutral600 font-medium bg-[#F1FAF8] rounded-[4px] p-[6px]">
-                You can utilize current volume discount within &nbsp;
+                You can utilize current volume discount within&nbsp;
                 <span className="font-semiBold">
                   {Math.floor(timeDifference! / (1000 * 60 * 60))}
                 </span>{' '}

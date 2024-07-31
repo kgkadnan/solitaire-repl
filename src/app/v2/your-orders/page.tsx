@@ -309,9 +309,15 @@ const MyDiamonds = () => {
       const itemDate: Date = new Date(item.created_at);
 
       if (toDate) {
-        return itemDate >= fromDate && itemDate <= toDate;
+        // Set toDate to the end of the day in local time to include the entire day
+        const toDateEnd = new Date(toDate);
+        toDateEnd.setHours(23, 59, 59, 999);
+
+        // Ensure itemDate is within the range [fromDate, toDateEnd], inclusive
+        return itemDate >= fromDate && itemDate <= toDateEnd;
       } else {
-        return itemDate <= fromDate;
+        // If toDate is not provided, include items from the fromDate onwards
+        return itemDate >= fromDate;
       }
     });
   };
