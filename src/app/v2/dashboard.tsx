@@ -2131,6 +2131,7 @@ const Dashboard = () => {
                 {customerData !== undefined ? (
                   <DashboardCarousel
                     images={customerData?.customer?.carousel_items}
+                    router={router}
                   />
                 ) : (
                   <Skeleton
