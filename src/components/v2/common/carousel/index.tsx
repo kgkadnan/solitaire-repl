@@ -17,8 +17,12 @@ interface IImageData {
 }
 export interface IDashboardCarouselProps {
   images: IImageData[];
+  router: any;
 }
-const DashboardCarousel: React.FC<IDashboardCarouselProps> = ({ images }) => {
+const DashboardCarousel: React.FC<IDashboardCarouselProps> = ({
+  images,
+  router
+}) => {
   const settings = {
     dots: true, // Show dot indicators
     infinite: true, // Infinite looping
@@ -88,16 +92,7 @@ const DashboardCarousel: React.FC<IDashboardCarouselProps> = ({ images }) => {
                   >
                     {' '}
                     {/* Container with relative positioning */}
-                    <a
-                      href={data.link}
-                      key={index}
-                      target={
-                        data.link.includes('kgkdiamonds.com')
-                          ? '_self'
-                          : '_blank'
-                      }
-                      className="h-[400px]"
-                    >
+                    <div key={index} className="h-[400px]">
                       <img
                         src={imageUrl ?? NoImageFound.src}
                         alt={`banner-${index}`}
@@ -119,14 +114,18 @@ const DashboardCarousel: React.FC<IDashboardCarouselProps> = ({ images }) => {
                             {
                               variant: 'secondary',
                               label: data.cta,
-                              handler: () => {},
+                              handler: () => {
+                                data.link.includes('kgkdiamonds.com')
+                                  ? router.push(data.link)
+                                  : window.open(images[0].link);
+                              },
                               customStyle: 'flex-1 w-full h-10 '
                             }
                           ]}
                         />
                         {/* </div> */}
                       </div>
-                    </a>
+                    </div>
                   </div>
                 );
               })}
@@ -135,15 +134,7 @@ const DashboardCarousel: React.FC<IDashboardCarouselProps> = ({ images }) => {
             <div className="relative w-full h-[400px] rounded-[8px] overflow-hidden bg-neutral50">
               {' '}
               {/* Container with relative positioning */}
-              <a
-                href={images[0].link}
-                className="h-[400px]"
-                target={
-                  images[0].link.includes('kgkdiamonds.com')
-                    ? '_self'
-                    : '_blank'
-                }
-              >
+              <div className="h-[400px]">
                 <img
                   src={imageUrl ?? NoImageFound.src}
                   alt={`banner-${1}`}
@@ -163,14 +154,18 @@ const DashboardCarousel: React.FC<IDashboardCarouselProps> = ({ images }) => {
                       {
                         variant: 'secondary',
                         label: images[0].cta,
-                        handler: () => {},
+                        handler: () => {
+                          images[0].link.includes('kgkdiamonds.com')
+                            ? router.push(images[0].link)
+                            : window.open(images[0].link);
+                        },
                         customStyle: 'flex-1 w-full h-10 '
                       }
                     ]}
                   />
                   {/* </div> */}
                 </div>
-              </a>
+              </div>
             </div>
           )
         ) : (
