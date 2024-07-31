@@ -110,8 +110,8 @@ export function DatePickerWithRange({
                     handler: () => {
                       handleApplyFilter(
                         {
-                          from: format(date.from, 'LLL dd, y'),
-                          to: date.to ? format(date.to, 'LLL dd, y') : ''
+                          from: date.from,
+                          to: date.to ? date.to : ''
                         },
                         ''
                       );
