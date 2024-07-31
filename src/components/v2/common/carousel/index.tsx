@@ -88,7 +88,16 @@ const DashboardCarousel: React.FC<IDashboardCarouselProps> = ({ images }) => {
                   >
                     {' '}
                     {/* Container with relative positioning */}
-                    <a href={data.link} key={index} className="h-[400px]">
+                    <a
+                      href={data.link}
+                      key={index}
+                      target={
+                        data.link.includes('kgkdiamonds.com')
+                          ? '_self'
+                          : '_blank'
+                      }
+                      className="h-[400px]"
+                    >
                       <img
                         src={imageUrl ?? NoImageFound.src}
                         alt={`banner-${index}`}
@@ -126,7 +135,15 @@ const DashboardCarousel: React.FC<IDashboardCarouselProps> = ({ images }) => {
             <div className="relative w-full h-[400px] rounded-[8px] overflow-hidden bg-neutral50">
               {' '}
               {/* Container with relative positioning */}
-              <a href={images[0].link} className="h-[400px]">
+              <a
+                href={images[0].link}
+                className="h-[400px]"
+                target={
+                  images[0].link.includes('kgkdiamonds.com')
+                    ? '_self'
+                    : '_blank'
+                }
+              >
                 <img
                   src={imageUrl ?? NoImageFound.src}
                   alt={`banner-${1}`}
