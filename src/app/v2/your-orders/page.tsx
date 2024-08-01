@@ -61,9 +61,9 @@ const MyDiamonds = () => {
   );
   const [isLoading, setIsLoading] = useState(false); // State to track loading
 
-  const [pendingDataState, setPendingDataState] = useState([]);
-  const [inTransitDataState, setInTransitDataState] = useState([]);
-  const [pastDataState, setPastDataState] = useState([]);
+  const [pendingDataState, setPendingDataState] = useState<any>(undefined);
+  const [inTransitDataState, setInTransitDataState] = useState<any>(undefined);
+  const [pastDataState, setPastDataState] = useState<any>(undefined);
 
   const [date, setDate] = useState<DateRange | undefined>();
 
@@ -178,7 +178,7 @@ const MyDiamonds = () => {
     {
       label: ManageLocales('app.myDiamonds.tabs.pending'),
       status: PENDING,
-      count: pendingDataState?.length,
+      count: pendingDataState ? pendingDataState?.length : 0,
       info: 'Your order is being processed by the sales team.'
     },
     {
@@ -240,6 +240,8 @@ const MyDiamonds = () => {
     });
   };
 
+  console.log('data', data);
+
   const goBackToListView = () => {
     setShowDetail(false);
     setProductDetailData([]);
@@ -252,12 +254,12 @@ const MyDiamonds = () => {
     setShowSuggestions(true);
     setSearch(inputValue);
     if (activeTab === IN_TRANSIT) {
-      const filteredData = inTransitDataState.filter((item: any) =>
+      const filteredData = inTransitDataState?.filter((item: any) =>
         String(item.invoice_id).toLowerCase().includes(inputValue)
       );
       setInTransitDataState(filteredData);
     } else {
-      const filteredData = pastDataState.filter((item: any) =>
+      const filteredData = pastDataState?.filter((item: any) =>
         String(item.invoice_id).toLowerCase().includes(inputValue)
       );
       setPastDataState(filteredData);
@@ -616,9 +618,9 @@ const MyDiamonds = () => {
               activeTab === PAST &&
               ManageLocales('app.yourOrder.header.invoicesHistoryDetails')
             )
-          ) : pendingInvoicesData === undefined &&
-            activeInvoicesData === undefined &&
-            invoiceHistoryData === undefined ? (
+          ) : pendingDataState === undefined &&
+            inTransitDataState === undefined &&
+            pastDataState === undefined ? (
             <Skeleton
               variant="rectangular"
               height={'24px'}
@@ -632,9 +634,9 @@ const MyDiamonds = () => {
         </p>
       </div>
       <div className="border-[1px] border-neutral200 rounded-[8px]">
-        {pendingInvoicesData === undefined &&
-        activeInvoicesData === undefined &&
-        invoiceHistoryData === undefined ? (
+        {pendingDataState === undefined &&
+        inTransitDataState === undefined &&
+        pastDataState === undefined ? (
           <YourOrderSkeleton />
         ) : (
           renderContent()
