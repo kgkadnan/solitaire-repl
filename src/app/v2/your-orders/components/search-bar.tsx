@@ -26,7 +26,7 @@ export const HeaderSearchBar: React.FC<IHeaderSearchBarProps> = ({
           type="text"
           name="Search"
           value={search}
-          onChange={handleSearch}
+          onChange={handleSearch} 
           placeholder={
             // Dynamic placeholder based on the active tab
             activeTab === PENDING
