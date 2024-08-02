@@ -276,14 +276,26 @@ export function DiamondDetailsComponent({
           className="cursor-pointer"
         />
         <div className="flex gap-[8px] items-center">
-          <button
-            className="text-neutral600 text-sMedium font-regular cursor-pointer"
-            onClick={() => {
-              goBackToListView!();
-            }}
-          >
-            {breadCrumLabel}
-          </button>
+          {validImages.length > 0 ? (
+            <button
+              className="text-neutral600 text-sMedium font-regular cursor-pointer"
+              onClick={() => {
+                goBackToListView!();
+              }}
+            >
+              {breadCrumLabel}
+            </button>
+          ) : (
+            <Skeleton
+              width={65}
+              sx={{ bgcolor: 'var(--neutral-200)' }}
+              height={18}
+              variant="rectangular"
+              animation="wave"
+              className="rounded-[4px]"
+            />
+          )}
+
           <span className="text-neutral600">/</span>
 
           {validImages.length > 0 ? (

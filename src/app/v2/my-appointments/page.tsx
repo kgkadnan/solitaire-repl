@@ -74,8 +74,9 @@ const MyAppointments = () => {
     {}
   );
   const { modalState, modalSetState } = useModalStateManagement();
-  const [pastAppointments, setPastAppointments] = useState([]);
-  const [upcomingAppointments, setUpcomingAppointments] = useState([]);
+  const [pastAppointments, setPastAppointments] = useState<any>(undefined);
+  const [upcomingAppointments, setUpcomingAppointments] =
+    useState<any>(undefined);
   const [showAppointmentForm, setShowAppointmentForm] = useState(false);
   const [appointmentPayload, setAppointmentPayload] =
     useState<IAppointmentPayload>({
@@ -515,18 +516,22 @@ const MyAppointments = () => {
       }
       `}
       >
-        {myAppointmentData === undefined ? (
+        {upcomingAppointments === undefined &&
+        pastAppointments === undefined ? (
           <MyAppointmentSkeleton />
         ) : (
           <div className="">{renderContent()}</div>
         )}
 
-        {data.length > 0 && !showAppointmentForm && (
-          <div
-            className="h-[72px] border-t-[1px]  border-solid border-neutral200 bg-neutral0 rounded-b-[8px]"
-            style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}
-          ></div>
-        )}
+        {upcomingAppointments !== undefined &&
+          pastAppointments !== undefined &&
+          data.length > 0 &&
+          !showAppointmentForm && (
+            <div
+              className="h-[72px] border-t-[1px]  border-solid border-neutral200 bg-neutral0 rounded-b-[8px]"
+              style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}
+            ></div>
+          )}
       </div>
     </>
   );
