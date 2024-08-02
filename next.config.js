@@ -35,7 +35,9 @@ const nextConfig = {
     domains: [
       'api.kgk.live',
       'storageweweb.blob.core.windows.net',
-      'csg1003200332b85b56.blob.core.windows.net'
+      'csg1003200332b85b56.blob.core.windows.net',
+      '1.gravatar.com',
+      'primary-production-a190.up.railway.app'
     ] // Add 'api.kgk.live' to the list of allowed domains
   }
 };

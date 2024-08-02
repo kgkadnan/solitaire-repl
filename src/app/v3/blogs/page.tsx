@@ -23,6 +23,10 @@ export default async function Page() {
   const [filteredPosts, setFilteredPosts] = useState(edges);
 
   useEffect(() => {
+    setFilteredPosts(edges);
+  }, [edges]);
+
+  useEffect(() => {
     const fetchPost = async () => {
       const dataNew = await searchPostByText(searchText);
       setFilteredPosts(dataNew.edges);
