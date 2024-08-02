@@ -39,7 +39,7 @@ export default function PostPreview({
       </div>
       <h3 className="text-3xl leading-snug">
         <Link
-          href={`/blogs/${slug}`}
+          href={`/v3/blogs/${slug}`}
           className="hover:underline"
           dangerouslySetInnerHTML={{ __html: title }}
         ></Link>
@@ -53,7 +53,7 @@ export default function PostPreview({
       />
       <div
         className="flex gap-2 cursor-pointer"
-        onClick={() => router.push(`/blogs/${slug}`)}
+        onClick={() => router.push(`/v3/blogs/${slug}`)}
       >
         <p className="text-primaryMain font-semiBold text-lMedium">
           {' '}

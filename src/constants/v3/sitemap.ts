@@ -74,7 +74,7 @@ export const sitemap = [
     content: [
       {
         data: 'Blog',
-        link: '/blogs',
+        link: '/v3/blogs',
         isNew: false
       },
       {

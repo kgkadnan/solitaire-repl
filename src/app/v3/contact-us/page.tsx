@@ -108,7 +108,7 @@ const ContactUs = () => {
   return (
     <div>
       <div className="min-h-[300px] flex items-center px-[112px] bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient">
-        <div className="min-h-[300px] flex items-center px-[112px]">
+        <div className="min-h-[300px] flex items-center">
           <div className="flex flex-wrap min-h-[160px] gap-[24px] justify-between">
             <div className="w-[600px] text-neutral900 text-headingXL font-bold">
               We’d love to hear from you

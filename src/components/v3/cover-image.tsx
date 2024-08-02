@@ -27,7 +27,7 @@ export default function CoverImage({ title, coverImage, slug }: IProps) {
   return (
     <div className="sm:mx-0">
       {slug ? (
-        <Link href={`/blogs/${slug}`} aria-label={title}>
+        <Link href={`/v3/blogs/${slug}`} aria-label={title}>
           {image}
         </Link>
       ) : (
