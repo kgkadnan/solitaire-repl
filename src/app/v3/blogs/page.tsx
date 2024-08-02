@@ -1,7 +1,8 @@
+'use client';
 import Head from 'next/head';
 import { GetStaticProps } from 'next';
 import { useEffect, useState } from 'react';
-import searchIcon from '@public/icons/search.svg';
+import searchIcon from '@public/v3/icons/search.svg';
 import Image from 'next/image';
 import { getAllPostsForHome, searchPostByText } from '@/features/v3/api/blogs';
 import { InputField } from '@/components/v3/input/input';

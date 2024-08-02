@@ -1,6 +1,6 @@
 import CoverImage from './cover-image';
 import Link from 'next/link';
-import arrow from '@public/icons/arrow-up-right.svg';
+import arrow from '@public/v3/icons/arrow-up-right.svg';
 import Image from 'next/image';
 import Date from './date';
 import { useRouter } from 'next/navigation';

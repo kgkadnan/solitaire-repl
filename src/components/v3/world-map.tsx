@@ -1,3 +1,4 @@
+'use client';
 // components/WorldMap.js
 import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, useMap } from 'react-leaflet';
