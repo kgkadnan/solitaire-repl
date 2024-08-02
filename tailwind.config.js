@@ -175,15 +175,40 @@ module.exports = {
         'accordion-up': {
           from: { height: 'var(--radix-accordion-content-height)' },
           to: { height: 0 }
+        },
+        zoom: {
+          '0%': { transform: 'scale(0.5)', opacity: '0' },
+          '100%': { transform: 'scale(1)', opacity: '1' }
+        },
+        gradientAnimation: {
+          '0%': { 'background-position': '0% 0%' },
+          '50%': { 'background-position': '100% 100%' },
+          '100%': { 'background-position': '0% 0%' }
         }
       },
       boxShadow: {
         inputShadow: 'var(--input-shadow)',
         popupsShadow: 'var(--popups-shadow)'
       },
+
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
-        'accordion-up': 'accordion-up 0.2s ease-out'
+        'accordion-up': 'accordion-up 0.2s ease-out',
+        zoom: 'zoom 3s ease-in-out ',
+        gradient: 'gradientAnimation 10s ease infinite'
+      },
+      backgroundImage: {
+        'animated-gradient':
+          'linear-gradient(90deg, #ffffff, #FFF4E3, #E8E8FF, #DBF2FC, #FFFFFF)',
+        'timeline-gradient':
+          'linear-gradient(to bottom, #FFAD05, #168B85, #5995ED)'
+      },
+      backgroundSize: {
+        200: '200% 200%'
+      },
+      transitionProperty: {
+        height: 'height',
+        spacing: 'margin, padding'
       }
     }
   },
