@@ -109,7 +109,7 @@ export default async function Page() {
               />
             </div>
           </div>
-          {filteredPosts.length > 0 && <MoreStories posts={filteredPosts} />}
+          {filteredPosts?.length > 0 && <MoreStories posts={filteredPosts} />}
         </div>
       </div>
     </Layout>
