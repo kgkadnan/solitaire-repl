@@ -1,6 +1,5 @@
 'use client';
-import Head from 'next/head';
-import { GetStaticProps } from 'next';
+// app/v3/blogs/page.tsx
 import { useEffect, useState } from 'react';
 import searchIcon from '@public/v3/icons/search.svg';
 import Image from 'next/image';
@@ -9,19 +8,28 @@ import { InputField } from '@/components/v3/input/input';
 import MoreStories from '@/components/v3/more-stories';
 import Layout from '@/components/v3/layout';
 
-const Index = ({ allPosts: { edges }, preview }: any) => {
+const fetchPosts = async () => {
+  const allPosts = await getAllPostsForHome(false);
+  return allPosts;
+};
+
+export default async function Page() {
+  const allPosts = await fetchPosts();
+  const edges = allPosts.edges;
+
   const allTabs = ['View All', 'News', 'Events', 'Customer Stories'];
   const [selectedTab, setSelectedTab] = useState<string>('View All');
   const [searchText, setSearchText] = useState<string>('');
   const [filteredPosts, setFilteredPosts] = useState(edges);
 
   useEffect(() => {
-    let fetchPost = async () => {
-      let dataNew = await searchPostByText(searchText);
+    const fetchPost = async () => {
+      const dataNew = await searchPostByText(searchText);
       setFilteredPosts(dataNew.edges);
     };
     fetchPost();
   }, [searchText]);
+
   useEffect(() => {
     if (!searchText) {
       if (selectedTab === 'View All') {
@@ -38,10 +46,7 @@ const Index = ({ allPosts: { edges }, preview }: any) => {
   }, [searchText, selectedTab, edges]);
 
   return (
-    <Layout preview={preview}>
-      <Head>
-        <title>{`Blogs`}</title>
-      </Head>
+    <Layout>
       <div className="flex flex-col gap-4">
         <div className="min-h-[300px] flex items-center px-[112px] bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient">
           <div className="min-h-[300px] flex items-center px-[112px]">
@@ -82,7 +87,7 @@ const Index = ({ allPosts: { edges }, preview }: any) => {
               ))}
             </div>
             <div className="relative">
-              <div className="absolute left-2  z-10 mt-2">
+              <div className="absolute left-2 z-10 mt-2">
                 <Image src={searchIcon} alt="Search Icon" />
               </div>
               <InputField
@@ -105,14 +110,4 @@ const Index = ({ allPosts: { edges }, preview }: any) => {
       </div>
     </Layout>
   );
-};
-
-export const getStaticProps: GetStaticProps = async ({ preview = false }) => {
-  const allPosts = await getAllPostsForHome(preview);
-  return {
-    props: { allPosts, preview },
-    revalidate: 10
-  };
-};
-
-export default Index;
+}
