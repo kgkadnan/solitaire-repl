@@ -38,6 +38,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ManageLocales } from '@/utils/v2/translate';
 import { SubRoutes } from '@/constants/v2/enums/routes';
 import { filterFunction } from '@/features/filter-new-arrival/filter-new-arrival-slice';
+import BiddingSkeleton from '@/components/v2/skeleton/bidding';
 
 const theme = createTheme({
   typography: {
@@ -171,7 +172,10 @@ const NewArrivalDataTable = ({
   router,
   filterData,
   setBid,
-  dispatch
+  dispatch,
+  isLoading,
+  setIsSkeletonLoading,
+  isSkeletonLoading
 }: any) => {
   // Fetching saved search data
 
@@ -199,8 +203,10 @@ const NewArrivalDataTable = ({
       const newData = data.slice(startIndex, endIndex);
       // Update the paginated data state
       setPaginatedData(newData);
+      setIsSkeletonLoading(false);
     } else {
       setPaginatedData(rows);
+      setIsSkeletonLoading(false);
     }
   }, [globalFilter]);
   useEffect(() => {
@@ -212,8 +218,10 @@ const NewArrivalDataTable = ({
       const newData = rows.slice(startIndex, endIndex);
       // Update the paginated data state
       setPaginatedData(newData);
+      setIsSkeletonLoading(false);
     } else {
       setPaginatedData(rows);
+      setIsSkeletonLoading(false);
     }
   }, [
     rows,
@@ -515,12 +523,16 @@ const NewArrivalDataTable = ({
       )}
     </div>
   );
+  useEffect(() => {
+    setIsLoading(false);
+  }, [paginatedData]);
+
   let isNudge = localStorage.getItem('show-nudge') === 'MINI';
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   //pass table options to useMaterialReactTable
   const table = useMaterialReactTable({
     columns,
-    data: paginatedData, //must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
+    data: isLoading ? [] : paginatedData, //must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
 
     getRowId: originalRow => originalRow.id,
     onRowSelectionChange: setRowSelection,
@@ -1119,9 +1131,15 @@ const NewArrivalDataTable = ({
     }
   });
   return (
-    <ThemeProvider theme={theme}>
-      <MaterialReactTable table={table} />
-    </ThemeProvider>
+    <>
+      {isSkeletonLoading ? (
+        <BiddingSkeleton />
+      ) : (
+        <ThemeProvider theme={theme}>
+          <MaterialReactTable table={table} />
+        </ThemeProvider>
+      )}
+    </>
   );
 };
 
