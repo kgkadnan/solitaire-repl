@@ -85,6 +85,7 @@ const NewArrivals = () => {
 
   const { setSearchUrl, searchUrl } = useValidationStateManagement();
   const { state, setState, carat } = useFormStateManagement();
+  const [isSkeletonLoading, setIsSkeletonLoading] = useState(true);
   const [isAddDemand, setIsAddDemand] = useState(false);
 
   const handleDetailPage = ({ row }: { row: any }) => {
@@ -221,6 +222,10 @@ const NewArrivals = () => {
 
   const handleTabClick = (index: number) => {
     setActiveTab(index);
+    if (index !== activeTab) {
+      setIsLoading(true);
+    }
+
     setRowSelection({});
     if (index === 1 && activeBid.length > 0) {
       activeBid.map((row: any) => {
@@ -817,24 +822,31 @@ const NewArrivals = () => {
           ) : (
             <>
               <div className="flex py-[4px] items-center justify-between">
-                <p className="text-lMedium font-medium text-neutral900">
-                  New Arrivals
-                </p>
-                <div className="h-[40px]">
-                  {timeDifference !== null && timeDifference >= 0 && (
-                    <CountdownTimer
-                      initialHours={Math.floor(
-                        timeDifference / (1000 * 60 * 60)
+                {isSkeletonLoading ? (
+                  ''
+                ) : (
+                  <>
+                    {' '}
+                    <p className="text-lMedium font-medium text-neutral900">
+                      New Arrivals
+                    </p>
+                    <div className="h-[40px]">
+                      {timeDifference !== null && timeDifference >= 0 && (
+                        <CountdownTimer
+                          initialHours={Math.floor(
+                            timeDifference / (1000 * 60 * 60)
+                          )}
+                          initialMinutes={Math.floor(
+                            (timeDifference % (1000 * 60 * 60)) / (1000 * 60)
+                          )}
+                          initialSeconds={Math.floor(
+                            (timeDifference % (1000 * 60)) / 1000
+                          )}
+                        />
                       )}
-                      initialMinutes={Math.floor(
-                        (timeDifference % (1000 * 60 * 60)) / (1000 * 60)
-                      )}
-                      initialSeconds={Math.floor(
-                        (timeDifference % (1000 * 60)) / 1000
-                      )}
-                    />
-                  )}
-                </div>
+                    </div>
+                  </>
+                )}
               </div>
               <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow">
                 <div className="border-b-[1px] border-neutral200">
@@ -872,6 +884,9 @@ const NewArrivals = () => {
                         ? activeBid
                         : bidHistory?.data
                     }
+                    isSkeletonLoading={isSkeletonLoading}
+                    setIsSkeletonLoading={setIsSkeletonLoading}
+                    isLoading={isLoading}
                     activeCount={activeBid?.length}
                     setBid={setBid}
                     bidCount={bid?.length}
