@@ -10,9 +10,9 @@ export default function Leadership() {
   return (
     <div>
       {Object.keys(selectedProfile).length === 0 && (
-        <div className="min-h-[300px] py-[80px] flex items-center px-[112px] bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient">
+        <div className="min-h-[300px] pt-[180px] pb-[80px] flex items-center px-[112px] bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient">
           <div className="scroll-container flex overflow-hidden mt-8 w-full">
-            <div className="flex flex-col py-[80px] gap-14 flex-none w-full flex-shrink-0 snap-center p-4">
+            <div className="flex flex-col pt-[180px] pb-[80px] gap-14 flex-none w-full flex-shrink-0 snap-center p-4">
               <div className=" text-neutral900 text-[108px] font-bold text-center line leading-[100px] custom-fadeIn">
                 Meet KGK Leadership{' '}
               </div>

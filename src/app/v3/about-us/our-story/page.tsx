@@ -72,7 +72,7 @@ export default function AboutUs() {
     <div className="relative">
       <div className="min-h-[300px] flex items-center px-[112px] bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient">
         <div className=" w-full">
-          <div className="flex flex-col gap-14  py-[80px]">
+          <div className="flex flex-col gap-14  pt-[180px] pb-[80px]">
             <div className="text-neutral900 text-[108px] font-bold text-center leading-[100px] flowy-animate">
               KGK Diamonds: A Pillar of KGK Group
             </div>
