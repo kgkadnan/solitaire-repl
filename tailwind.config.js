@@ -198,8 +198,9 @@ module.exports = {
         gradient: 'gradientAnimation 10s ease infinite'
       },
       backgroundImage: {
-        'animated-gradient':
-          'linear-gradient(90deg, #ffffff, #FFF4E3, #E8E8FF, #DBF2FC, #FFFFFF)',
+        'animated-gradient': ` linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, white 100%),
+    linear-gradient(90deg, #FFF4E3, #E8E8FF, #DBF2FC)`,
+        // 'linear-gradient(180deg, #ffffff, #FFF4E3, #E8E8FF, #DBF2FC, #FFFFFF,#FFFFFF)',
         'timeline-gradient':
           'linear-gradient(to bottom, #FFAD05, #168B85, #5995ED)'
       },
