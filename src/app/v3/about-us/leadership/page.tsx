@@ -9,32 +9,40 @@ export default function Leadership() {
   const [selectedProfile, setSelectedProfile] = useState<any>({});
   return (
     <div>
-      <div className="min-h-[300px] flex items-center px-[112px] bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient">
-        <div className="scroll-container flex overflow-hidden mt-8 w-full">
-          <div className="flex flex-col py-[80px] gap-14 flex-none w-full flex-shrink-0 snap-center p-4">
-            <div className=" text-neutral900 text-[108px] font-bold text-center line leading-[100px] custom-fadeIn">
-              Meet KGK Leadership{' '}
-            </div>
-            <div className="flex gap-2">
-              <div className="flex gap-3 flex-col">
-                <p className="text-neutral800 text-lRegular  px-4 pt-[14px]">
-                  At KGK Diamonds, our team is the backbone of our success. With
-                  a wealth of experience and a shared passion for excellence,
-                  each member plays a crucial role. Get to know the talented
-                  individuals who make KGK Diamonds a leader in the diamond
-                  industry.{' '}
-                </p>
+      {Object.keys(selectedProfile).length === 0 && (
+        <div className="min-h-[300px] py-[80px] flex items-center px-[112px] bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient">
+          <div className="scroll-container flex overflow-hidden mt-8 w-full">
+            <div className="flex flex-col py-[80px] gap-14 flex-none w-full flex-shrink-0 snap-center p-4">
+              <div className=" text-neutral900 text-[108px] font-bold text-center line leading-[100px] custom-fadeIn">
+                Meet KGK Leadership{' '}
+              </div>
+              <div className="flex gap-2">
+                <div className="flex gap-3 flex-col">
+                  <p className="text-neutral800 text-lRegular  px-4 pt-[14px]">
+                    At KGK Diamonds, our team is the backbone of our success.
+                    With a wealth of experience and a shared passion for
+                    excellence, each member plays a crucial role. Get to know
+                    the talented individuals who make KGK Diamonds a leader in
+                    the diamond industry.{' '}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
       <div className="justify-around px-[80px] py-[64px] flex flex-wrap gap-[40px]">
         {Object.keys(selectedProfile).length === 0 ? (
           leadership.map(leader => (
             <div
               className="flex flex-col gap-2 cursor-pointer"
-              onClick={() => setSelectedProfile(leader)}
+              onClick={() => {
+                setSelectedProfile(leader),
+                  window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                  });
+              }}
               key={leader.name}
             >
               <div>
@@ -52,14 +60,14 @@ export default function Leadership() {
             </div>
           ))
         ) : (
-          <div className="flex flex-col gap-6 px-[80px]">
+          <div className="flex flex-col gap-6 px-[80px] mt-10">
             <div className="flex gap-6 items-end">
               <Image
                 src={selectedProfile['image']}
                 alt={selectedProfile['name']}
                 className="rounded-[8px] bg-[#D9D9D9]"
               />
-              <div className="border-b-[2px] border-neutral900">
+              <div className="border-b-[2px] border-neutral900 w-full">
                 <p className="text-neutral900 font-semiBold text-[20px] ">
                   {selectedProfile['name']}
                 </p>
