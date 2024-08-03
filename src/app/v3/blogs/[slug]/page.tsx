@@ -2,8 +2,6 @@
 import { notFound } from 'next/navigation';
 import Layout from '@/components/v3/layout';
 import Container from '@/components/v3/container';
-import PostTitle from '@/components/v3/post-title';
-import Header from '@/components/v3/header';
 import PostHeader from '@/components/v3/post-header';
 import PostBody from '@/components/v3/post-body';
 import Tags from '@/components/v3/tags';
