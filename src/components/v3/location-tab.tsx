@@ -5,7 +5,7 @@ const LocationTab = ({ selectedRegion, setSelectedRegion }: any) => {
     <div className="flex bg-primaryMain inline-block rounded-[6px] p-1 cursor-pointer gap-2">
       {HeadquaterLocation.map((data: any) => (
         <div
-          className={`text-neutral0 p-2 border-[1px] border-[#EAECF0] rounded-[4px] text-lRegular ${
+          className={`text-neutral0 p-2 border-[1px] rounded-[4px] text-lRegular ${
             selectedRegion === data.region &&
             'bg-neutral0 text-neutral900 font-semiBold'
           }`}
