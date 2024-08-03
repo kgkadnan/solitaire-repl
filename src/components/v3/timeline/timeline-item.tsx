@@ -114,7 +114,7 @@ class TimelineItem extends Component<ITimelineItemProps, ITimelineItemState> {
                 !isLast
                   ? 'h-[calc(100%+300px)] mt-[300px]'
                   : 'h-[calc(100%+100px)] -mt-[20px]',
-                isFirst && 'h-[calc(100%+310px)] !mt-4',
+                isFirst && 'h-[calc(100%+310px)] !mt-40',
                 visible ? 'bg-timeline-gradient' : 'bg-neutral300'
               )}
             ></div>

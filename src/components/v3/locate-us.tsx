@@ -4,7 +4,6 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
 // Fix for default marker icon not showing
-// delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl:
     'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
@@ -19,13 +18,16 @@ const LocateUs: React.FC = () => {
 
   useEffect(() => {
     setIsClient(true);
+    return () => {
+      setIsClient(false); // Clean up when the component unmounts
+    };
   }, []);
 
   if (!isClient) {
     return null; // or a loading spinner
   }
 
-  const position: [number, number] = [19.067, 72.8508]; // Latitude and Longitude of KGK office in BKC
+  const position: [number, number] = [19.067, 72.8508]; // Latitude and Longitude of KGK office in Borivali East, Mumbai
 
   return (
     <MapContainer
@@ -48,7 +50,7 @@ const LocateUs: React.FC = () => {
     >
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
       <Marker position={position}>
-        <Popup>KGK Office, BKC, Mumbai</Popup>
+        <Popup>KGK Office, Borivali East, Mumbai</Popup>
       </Marker>
     </MapContainer>
   );

@@ -244,3 +244,62 @@
 .animate-fadeIn {
   animation: fadeIn 0.5s ease-in-out forwards;
 }
+
+@keyframes fadeIn {
+  from {
+    transform: translateY(100px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+.custom-fadeIn {
+  animation: fadeIn 0.5s ease-in-out forwards;
+}
+
+@keyframes flowyText {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  50% {
+    opacity: 0.5;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.flowy {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 3s ease-in-out,
+    transform 3s ease-in-out;
+  display: inline-block;
+}
+
+.flowy.flowy-animate {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes zoomInOut {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.timeline-animate-zoom {
+  animation: zoomInOut 10s infinite;
+}

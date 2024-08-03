@@ -8,7 +8,7 @@ import TimelineComponent from '@/components/v3/timeline';
 
 export default function AboutUs() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const scrollContainerRef: any = useRef(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const sectionCount = aboutUsFirstFold.length;
 
   const scrollToIndex = (index: number) => {
@@ -22,30 +22,22 @@ export default function AboutUs() {
     }
   };
 
-  const handleScroll = (event: any) => {
-    if (scrollContainerRef.current) {
-      // const scrollContainer = scrollContainerRef.current;
-      // const scrollAmount = scrollContainer.clientWidth;
-
-      // Throttling to ensure scroll event only updates index once
-      if (event.deltaY > 0) {
-        // Scroll down
-        if (currentIndex < sectionCount - 1) {
-          setCurrentIndex(prevIndex =>
-            Math.min(prevIndex + 1, sectionCount - 1)
-          );
-        }
-      } else {
-        // Scroll up
-        if (currentIndex > 0) {
-          setCurrentIndex(prevIndex => Math.max(prevIndex - 1, 0));
-        }
+  const handleScroll = (event: WheelEvent) => {
+    if (event.deltaY > 0) {
+      // Scroll down
+      if (currentIndex < sectionCount - 1) {
+        setCurrentIndex(prevIndex => Math.min(prevIndex + 1, sectionCount - 1));
+      }
+    } else {
+      // Scroll up
+      if (currentIndex > 0) {
+        setCurrentIndex(prevIndex => Math.max(prevIndex - 1, 0));
       }
     }
   };
 
   useEffect(() => {
-    const handleGlobalScroll = (event: any) => {
+    const handleGlobalScroll = (event: WheelEvent) => {
       event.preventDefault();
       handleScroll(event);
     };
@@ -64,11 +56,10 @@ export default function AboutUs() {
   }, [currentIndex]);
 
   // Throttle function to limit the rate at which scroll events are processed
-  const throttle = (func: any, limit: any) => {
-    let inThrottle: any;
-    return () => {
-      const args = arguments;
-      let context: any;
+  const throttle = (func: (event: WheelEvent) => void, limit: number) => {
+    let inThrottle: boolean;
+    return function (this: any, ...args: [WheelEvent]) {
+      const context = this;
       if (!inThrottle) {
         func.apply(context, args);
         inThrottle = true;
@@ -80,33 +71,32 @@ export default function AboutUs() {
   return (
     <div className="relative">
       <div className="min-h-[300px] flex items-center px-[112px] bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient">
-        <div
-          ref={scrollContainerRef}
-          className="scroll-container flex overflow-hidden mt-8 w-full"
-        >
-          {aboutUsFirstFold.map((aboutStep, index) => (
-            <div
-              key={index}
-              className="flex gap-8 flex-none w-full flex-shrink-0 snap-center p-4"
-            >
-              <div className="w-[600px] text-neutral900 text-headingXL font-bold">
-                KGK Diamonds: A Pillar of KGK Group
-              </div>
-              <div className="flex gap-2">
-                <div className="flex gap-3 flex-col w-[600px]">
-                  <p className="text-neutral900 text-headingS font-bold">
+        <div className=" w-full">
+          <div className="flex flex-col gap-14  py-[80px]">
+            <div className="text-neutral900 text-[108px] font-bold text-center leading-[100px] flowy-animate">
+              KGK Diamonds: A Pillar of KGK Group
+            </div>
+            {aboutUsFirstFold.map((aboutStep, index) => (
+              <div
+                ref={scrollContainerRef}
+                className="flex gap-2 flex-none w-full flex-shrink-0 snap-center scroll-container flex overflow-hidden"
+                key={index}
+              >
+                <div className="flex gap-3">
+                  <p className="text-neutral900 text-[28px] font-bold w-1/2">
                     {aboutStep.subtitle}
                   </p>
-                  <p className="text-neutral800 text-lRegular">
+                  <p className="text-neutral800 text-lRegular w-1/2 px-4 pt-[14px]">
                     {aboutStep.description}
                   </p>
                 </div>
-                <p className="text-neutral400 text-headingXL font-bold bottom-0">
+                <p className="text-neutral400 text-headingXL font-bold bottom-0 mt-[30px]">
                   0{index + 1}
                 </p>
               </div>
-            </div>
-          ))}
+              // </div>
+            ))}
+          </div>
         </div>
       </div>
       <div>
@@ -114,7 +104,7 @@ export default function AboutUs() {
           <Image
             src={TimelineBanner}
             alt="Timeline banner"
-            className="w-full animate-zoom"
+            className="w-full timeline-animate-zoom"
             style={{ clipPath: 'polygon(0 0, 100% 0, 100% 70%, 0 90%)' }}
           />
           <div className="absolute top-[250px] px-[112px] text-neutral0 w-full flex justify-between">
@@ -131,11 +121,10 @@ export default function AboutUs() {
                 </p>
               </div>
             </div>
-            {/* <p>scroller</p> */}
           </div>
         </div>
 
-        <div className="mt-[-150px] p-6 mb-20">
+        <div className="mt-[-100px] p-6 ">
           <TimelineComponent />
         </div>
       </div>

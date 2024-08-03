@@ -1,3 +1,4 @@
+'use client';
 import CoverImage from './cover-image';
 import Link from 'next/link';
 import arrow from '@public/v3/icons/arrow-up-right.svg';

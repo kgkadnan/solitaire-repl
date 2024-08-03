@@ -40,16 +40,16 @@ const BlogList = ({ posts }: { posts: any[] }) => {
   return (
     <div className="flex flex-col gap-4">
       <div className="min-h-[300px] flex items-center px-[112px] bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient">
-        <div className="min-h-[300px] flex items-center px-[112px]">
-          <div className="flex flex-wrap min-h-[160px] gap-[24px] justify-between">
-            <div className="w-[600px] text-neutral900 text-headingXL font-bold">
+        <div className="min-h-[300px] flex items-center">
+          <div className="flex flex-wrap flex-col gap-14 py-[80px] flex-wrap min-h-[160px] justify-between">
+            <div className=" text-neutral900 text-[108px] font-bold text-center line leading-[100px] flowy-animate">
               Discover the World of Diamonds
             </div>
-            <div className="flex gap-3 flex-col w-[600px]">
-              <p className="text-neutral900 text-headingS font-bold">
+            <div className="flex gap-3">
+              <p className="text-neutral900 text-[28px] font-bold w-1/2">
                 Learn, Inspire, & Empower.
               </p>
-              <p className="text-neutral800 text-lRegular">
+              <p className="text-neutral800 text-lRegular w-1/2 px-4 pt-[14px]">
                 Stay informed with the latest trends and insights in the gem and
                 jewelry industry. Join us as we share our experiences,
                 knowledge, and understanding of diamonds.
@@ -71,6 +71,7 @@ const BlogList = ({ posts }: { posts: any[] }) => {
                 key={tab}
                 onClick={() => {
                   setSelectedTab(tab);
+                  setSearchText('');
                 }}
               >
                 {tab}

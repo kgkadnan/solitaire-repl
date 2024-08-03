@@ -11,13 +11,13 @@ export default function Leadership() {
     <div>
       <div className="min-h-[300px] flex items-center px-[112px] bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient">
         <div className="scroll-container flex overflow-hidden mt-8 w-full">
-          <div className="flex gap-8 flex-none w-full flex-shrink-0 snap-center p-4">
-            <div className="w-[600px] text-neutral900 text-headingXL font-bold">
+          <div className="flex flex-col py-[80px] gap-14 flex-none w-full flex-shrink-0 snap-center p-4">
+            <div className=" text-neutral900 text-[108px] font-bold text-center line leading-[100px] custom-fadeIn">
               Meet KGK Leadership{' '}
             </div>
             <div className="flex gap-2">
-              <div className="flex gap-3 flex-col w-[600px]">
-                <p className="text-neutral800 text-lRegular">
+              <div className="flex gap-3 flex-col">
+                <p className="text-neutral800 text-lRegular  px-4 pt-[14px]">
                   At KGK Diamonds, our team is the backbone of our success. With
                   a wealth of experience and a shared passion for excellence,
                   each member plays a crucial role. Get to know the talented

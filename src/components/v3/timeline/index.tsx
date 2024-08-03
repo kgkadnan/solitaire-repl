@@ -11,7 +11,7 @@ const TimelineComponent: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const scrollDownToDiv = () => {
     if (currentDivIndex.current < divRefs.current.length) {
-      divRefs.current[currentDivIndex.current].scrollIntoView({
+      divRefs.current[currentDivIndex.current]?.scrollIntoView({
         behavior: 'smooth',
         block: 'center'
       });
@@ -21,7 +21,7 @@ const TimelineComponent: React.FC = () => {
   };
   const scrollUpToDiv = () => {
     if (currentDivIndex.current < divRefs.current.length) {
-      divRefs.current[currentDivIndex.current].scrollIntoView({
+      divRefs.current[currentDivIndex.current]?.scrollIntoView({
         behavior: 'smooth',
         block: 'center'
       });
@@ -72,8 +72,11 @@ const TimelineComponent: React.FC = () => {
               'repeating-linear-gradient(to bottom, black 0, black 1px, transparent 2px, transparent 4px)'
           }}
         ></div>
-        <div className="absolute  h-[60px] !w-[60px] -left-[15px]  mt-[35px] border-[1px] border-primaryMain rounded-[50%] p-15 flex items-center text-center justify-center">
-          {timelineData[currentIndex].year}
+        <div
+          className="absolute  h-[60px] !w-[60px] -left-[15px]  mt-[35px] border-[1px] border-primaryMain rounded-[50%] p-15 flex items-center text-center justify-center"
+          style={{ boxShadow: 'var(--input-shadow)' }}
+        >
+          {timelineData[currentIndex]?.year}
         </div>
         <div
           className="absolute mt-[100px] left-1/2 top-full w-0.5 h-8 bg-black bg-opacity-50"

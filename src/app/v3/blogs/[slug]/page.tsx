@@ -35,10 +35,10 @@ export default async function Post({ params }: { params: { slug: string } }) {
   return (
     <Layout>
       <Container>
-        <Header />
+        {/* <Header /> */}
         <>
           <article>
-            <PostTitle>{post.title}</PostTitle>
+            {/* <PostTitle>{post.title}</PostTitle> */}
             <PostHeader
               title={post.title}
               coverImage={post.featuredImage}

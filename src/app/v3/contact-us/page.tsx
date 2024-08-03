@@ -26,15 +26,6 @@ const ContactUs = () => {
   const [selectedRegion, setSelectedRegion] = useState('ASIA PACIFIC');
   const { toast } = useToast();
 
-  // const locations = [
-  //   { position: { lat: 51.505, lng: -0.09 }, name: 'Location 1' },
-  //   { position: { lat: 51.515, lng: -0.1 }, name: 'Location 2' },
-  //   { position: { lat: 51.525, lng: -0.11 }, name: 'Location 3' }
-  // ];
-  // const locateUs = [
-  //   { position: { lat: 51.505, lng: -0.09 }, name: 'Location 1' }
-  // ];
-
   const [firstName, setFirstName] = useState<string>('');
   const [lastName, setLastName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
@@ -109,15 +100,15 @@ const ContactUs = () => {
     <div>
       <div className="min-h-[300px] flex items-center px-[112px] bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient">
         <div className="min-h-[300px] flex items-center">
-          <div className="flex flex-wrap min-h-[160px] gap-[24px] justify-between">
-            <div className="w-[600px] text-neutral900 text-headingXL font-bold">
+          <div className="flex flex-wrap flex-col gap-14 py-[80px] justify-between">
+            <div className=" text-neutral900 text-[108px] font-bold text-center line leading-[100px] flowy-animate">
               We’d love to hear from you
             </div>
-            <div className="flex gap-3 flex-col w-[600px]">
-              <p className="text-neutral900 text-headingS font-bold">
+            <div className="flex gap-3 px-[40px]">
+              <p className="text-neutral900 text-[28px] font-bold w-1/2">
                 We're Here to Assist You
               </p>
-              <p className="text-neutral800 text-lRegular">
+              <p className="text-neutral800 text-lRegular w-1/2 px-4 pt-[14px]">
                 At KGK Diamonds, we value your feedback and inquiries. Whether
                 you have a question, need assistance, or want to learn more
                 about our services, our dedicated team is here to help. Please
@@ -158,8 +149,11 @@ const ContactUs = () => {
             >
               {HeadquaterLocation.filter(
                 (loc: any) => loc.region === selectedRegion
-              )[0].location.map((loc: any) => (
-                <div className="flex flex-col gap-[6px]" key={loc.country}>
+              )[0].location.map((loc: any, index: number) => (
+                <div
+                  className="flex flex-col gap-[6px]"
+                  key={`${loc.country}-${index}`}
+                >
                   <div className="flex gap-3">
                     <Image src={loc.flag} alt={loc.country} />
 
@@ -303,7 +297,7 @@ const ContactUs = () => {
               </div>
             </div>
           </div>
-          <div className="!w-[30%] !max-h-[400px] rounded-[12px]">
+          <div className="!w-[27%] rounded-[12px]">
             <LocateUs />
           </div>
         </div>
