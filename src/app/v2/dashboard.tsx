@@ -172,6 +172,7 @@ const Dashboard = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isDetailPage, setIsDetailPage] = useState(false);
   const [isDiamondDetail, setIsDiamondDetail] = useState(false);
+  const [isDiamondDetailLoading, setIsDiamondDetailLoading] = useState(true); //
 
   const [showAppointmentForm, setShowAppointmentForm] = useState(false);
   const [appointmentPayload, setAppointmentPayload] =
@@ -1493,61 +1494,94 @@ const Dashboard = () => {
             }
             modalSetState={modalSetState}
             setIsLoading={setIsLoading}
+            setIsDiamondDetailLoading={setIsDiamondDetailLoading}
           />
           <div className="p-[8px] flex justify-end items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow mb-1">
-            <ActionButton
-              actionButtonData={[
-                {
-                  variant: 'secondary',
-                  // variant: isConfirmStone ? 'primary' : 'secondary',
-                  label: ManageLocales('app.searchResult.addToCart'),
-                  handler: handleAddToCartDetailPage
-                },
-
-                {
-                  variant: 'primary',
-                  label: ManageLocales('app.searchResult.confirmStone'),
-                  // isHidden: isConfirmStone,
-                  handler: () => {
-                    setBreadCrumLabel('Detail Page');
-                    setIsDetailPage(false);
-                    const { id } = detailPageData;
-                    const selectedRows = { [id]: true };
-                    handleConfirmStone({
-                      selectedRows: selectedRows,
-                      rows: searchData?.foundProducts,
-                      setIsError,
-                      setErrorText: setError,
-                      setIsConfirmStone,
-                      setConfirmStoneData,
-                      setIsDetailPage: setIsDiamondDetail,
-                      identifier: 'detailPage',
-                      confirmStoneTrack: 'DNA',
-                      dispatch
-                    });
-                  }
-                }
-              ]}
-            />
-            <Dropdown
-              dropdownTrigger={
-                <Image
-                  src={threeDotsSvg}
-                  alt="threeDotsSvg"
-                  width={4}
-                  height={43}
+            {isDiamondDetailLoading ? (
+              <>
+                {' '}
+                <Skeleton
+                  width={128}
+                  sx={{ bgcolor: 'var(--neutral-200)' }}
+                  height={40}
+                  variant="rectangular"
+                  animation="wave"
+                  className="rounded-[4px]"
+                />{' '}
+                <Skeleton
+                  width={128}
+                  sx={{ bgcolor: 'var(--neutral-200)' }}
+                  height={40}
+                  variant="rectangular"
+                  animation="wave"
+                  className="rounded-[4px]"
                 />
-              }
-              dropdownMenu={[
-                {
-                  label: ManageLocales(
-                    'app.search.actionButton.bookAppointment'
-                  ),
-                  handler: () => {},
-                  commingSoon: true
-                }
-              ]}
-            />
+                <Skeleton
+                  width={40}
+                  sx={{ bgcolor: 'var(--neutral-200)' }}
+                  height={40}
+                  variant="rectangular"
+                  animation="wave"
+                  className="rounded-[4px]"
+                />
+              </>
+            ) : (
+              <>
+                <ActionButton
+                  actionButtonData={[
+                    {
+                      variant: 'secondary',
+                      // variant: isConfirmStone ? 'primary' : 'secondary',
+                      label: ManageLocales('app.searchResult.addToCart'),
+                      handler: handleAddToCartDetailPage
+                    },
+
+                    {
+                      variant: 'primary',
+                      label: ManageLocales('app.searchResult.confirmStone'),
+                      // isHidden: isConfirmStone,
+                      handler: () => {
+                        setBreadCrumLabel('Detail Page');
+                        setIsDetailPage(false);
+                        const { id } = detailPageData;
+                        const selectedRows = { [id]: true };
+                        handleConfirmStone({
+                          selectedRows: selectedRows,
+                          rows: searchData?.foundProducts,
+                          setIsError,
+                          setErrorText: setError,
+                          setIsConfirmStone,
+                          setConfirmStoneData,
+                          setIsDetailPage: setIsDiamondDetail,
+                          identifier: 'detailPage',
+                          confirmStoneTrack: 'DNA',
+                          dispatch
+                        });
+                      }
+                    }
+                  ]}
+                />
+                <Dropdown
+                  dropdownTrigger={
+                    <Image
+                      src={threeDotsSvg}
+                      alt="threeDotsSvg"
+                      width={4}
+                      height={43}
+                    />
+                  }
+                  dropdownMenu={[
+                    {
+                      label: ManageLocales(
+                        'app.search.actionButton.bookAppointment'
+                      ),
+                      handler: () => {},
+                      commingSoon: true
+                    }
+                  ]}
+                />
+              </>
+            )}
           </div>
         </div>
       ) : isCompareStone ? (

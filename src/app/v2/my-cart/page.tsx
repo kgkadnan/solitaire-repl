@@ -103,7 +103,7 @@ const MyCart = () => {
   const [isConfirmStone, setIsConfirmStone] = useState(false);
   const [confirmStoneData, setConfirmStoneData] = useState<IProduct[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-
+  const [isDiamondDetailLoading, setIsDiamondDetailLoading] = useState(true); //
   const [validImages, setValidImages] = useState<any>([]);
   const [isDetailPage, setIsDetailPage] = useState(false);
   const [detailPageData, setDetailPageData] = useState<any>({});
@@ -977,34 +977,49 @@ const MyCart = () => {
             handleDetailPage={handleDetailPage}
             breadCrumLabel={'My Cart'}
             modalSetState={modalSetState}
+            setIsDiamondDetailLoading={setIsDiamondDetailLoading}
             setIsLoading={setIsLoading}
           />
           <div className="p-[8px] flex justify-end items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow ">
-            <ActionButton
-              actionButtonData={[
-                {
-                  variant: 'primary',
-                  label: ManageLocales('app.searchResult.confirmStone'),
-                  isHidden: isConfirmStone,
-                  handler: () => {
-                    const { id } = detailPageData;
-                    const selectedRows = { [id]: true };
-                    handleConfirmStone({
-                      selectedRows: selectedRows,
-                      rows: dataTableState.rows,
-                      setIsError,
-                      setErrorText,
-                      setIsConfirmStone,
-                      setConfirmStoneData,
-                      setIsDetailPage,
-                      identifier: 'detailPage',
-                      confirmStoneTrack: 'DNA',
-                      dispatch
-                    });
+            {isDiamondDetailLoading ? (
+              <>
+                {' '}
+                <Skeleton
+                  width={128}
+                  sx={{ bgcolor: 'var(--neutral-200)' }}
+                  height={40}
+                  variant="rectangular"
+                  animation="wave"
+                  className="rounded-[4px]"
+                />{' '}
+              </>
+            ) : (
+              <ActionButton
+                actionButtonData={[
+                  {
+                    variant: 'primary',
+                    label: ManageLocales('app.searchResult.confirmStone'),
+                    isHidden: isConfirmStone,
+                    handler: () => {
+                      const { id } = detailPageData;
+                      const selectedRows = { [id]: true };
+                      handleConfirmStone({
+                        selectedRows: selectedRows,
+                        rows: dataTableState.rows,
+                        setIsError,
+                        setErrorText,
+                        setIsConfirmStone,
+                        setConfirmStoneData,
+                        setIsDetailPage,
+                        identifier: 'detailPage',
+                        confirmStoneTrack: 'DNA',
+                        dispatch
+                      });
+                    }
                   }
-                }
-              ]}
-            />
+                ]}
+              />
+            )}
           </div>
         </>
       ) : (
