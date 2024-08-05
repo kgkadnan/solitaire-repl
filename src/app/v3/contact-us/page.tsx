@@ -1,6 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import Image from 'next/image';
+import Diamond from '@public/v3/timeline/diamond.svg';
 
 import Phone from '@public/v3/contact/phone.svg';
 import Mail from '@public/v3/contact/mail.svg';
@@ -128,13 +129,20 @@ const ContactUs = () => {
         <div className="relative w-[1100px]">
           <Image src={WorldMap} alt="all office location" className="w-full" />
 
-          {WorldMapPointers.map(pointer => (
+          {WorldMapPointers.map((pointer, index) => (
             <Tooltip
               key={pointer.coords} // Add a key to prevent React warnings
               tooltipTrigger={
                 <div className={`absolute ${pointer.coords} z-10`}>
-                  <div className="relative w-2 h-2 bg-primaryMain rounded-full">
-                    <div className="absolute inset-0 w-full h-full bg-primaryMain rounded-full animate-pulse"></div>
+                  <div className="relative w-4 h-4   rounded-full">
+                    <div className="absolute inset-0 w-full h-full bg-[#b2c4c4]  rounded-full animate-pulse">
+                      <Image
+                        src={Diamond}
+                        alt={`diamond-${index}`}
+                        height={20}
+                        width={20}
+                      />
+                    </div>
                   </div>
                 </div>
               }
