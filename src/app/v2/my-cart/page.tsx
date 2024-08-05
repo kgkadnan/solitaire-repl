@@ -110,6 +110,8 @@ const MyCart = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [detailImageData, setDetailImageData] = useState<any>({});
 
+  const [isSkeletonLoading, setIsSkeletonLoading] = useState<boolean>(true);
+
   const [showAppointmentForm, setShowAppointmentForm] = useState(false);
   const [appointmentPayload, setAppointmentPayload] =
     useState<IAppointmentPayload>({
@@ -1147,6 +1149,8 @@ const MyCart = () => {
                     setIsConfirmStone={setIsConfirmStone}
                     setConfirmStoneData={setConfirmStoneData}
                     handleCreateAppointment={handleCreateAppointment}
+                    setIsSkeletonLoading={setIsSkeletonLoading}
+                    isSkeletonLoading={isSkeletonLoading}
                   />
                 )
               )}
