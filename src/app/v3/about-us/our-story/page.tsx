@@ -2,7 +2,7 @@
 
 import React, { useRef, useEffect, useState } from 'react';
 import Image from 'next/image';
-import anime from 'animejs';
+// import anime from 'animejs';
 import TimelineBanner from '@public/v3/timeline/timeline-banner.png';
 import { aboutUsFirstFold } from '@/constants/v3/about-us';
 import TimelineComponent from '@/components/v3/timeline';
@@ -11,8 +11,8 @@ export default function AboutUs() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const sectionCount = aboutUsFirstFold.length;
-  const [displayedText, setDisplayedText] = useState('');
-  const [index, setIndex] = useState(0);
+  // const [displayedText, setDisplayedText] = useState('');
+  // const [index, setIndex] = useState(0);
   // const typewriterText = "KGK Diamonds: A Pillar of KGK Group";
 
   // useEffect(() => {
