@@ -137,6 +137,8 @@ const Result = ({
   const [detailImageData, setDetailImageData] = useState<any>({});
   const [breadCrumLabel, setBreadCrumLabel] = useState('');
 
+  const [isDiamondDetailLoading, setIsDiamondDetailLoading] = useState(true); //
+
   const [isConfirmStone, setIsConfirmStone] = useState(false);
   const [isCompareStone, setIsCompareStone] = useState(false);
 
@@ -1153,40 +1155,63 @@ const Result = ({
             }
             modalSetState={modalSetState}
             setIsLoading={setIsLoading}
+            setIsDiamondDetailLoading={setIsDiamondDetailLoading}
           />
           <div className="p-[8px] flex justify-end items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow mb-1">
-            <ActionButton
-              actionButtonData={[
-                {
-                  variant: isConfirmStone ? 'primary' : 'secondary',
-                  label: ManageLocales('app.searchResult.addToCart'),
-                  handler: handleAddToCartDetailPage
-                },
+            {isDiamondDetailLoading ? (
+              <>
+                {' '}
+                <Skeleton
+                  width={128}
+                  sx={{ bgcolor: 'var(--neutral-200)' }}
+                  height={40}
+                  variant="rectangular"
+                  animation="wave"
+                  className="rounded-[4px]"
+                />{' '}
+                <Skeleton
+                  width={128}
+                  sx={{ bgcolor: 'var(--neutral-200)' }}
+                  height={40}
+                  variant="rectangular"
+                  animation="wave"
+                  className="rounded-[4px]"
+                />
+              </>
+            ) : (
+              <ActionButton
+                actionButtonData={[
+                  {
+                    variant: isConfirmStone ? 'primary' : 'secondary',
+                    label: ManageLocales('app.searchResult.addToCart'),
+                    handler: handleAddToCartDetailPage
+                  },
 
-                {
-                  variant: 'primary',
-                  label: ManageLocales('app.searchResult.confirmStone'),
-                  isHidden: isConfirmStone,
-                  handler: () => {
-                    setBreadCrumLabel('Detail Page');
-                    const { id } = detailPageData;
-                    const selectedRows = { [id]: true };
-                    handleConfirmStone({
-                      selectedRows: selectedRows,
-                      rows: dataTableState.rows,
-                      setIsError,
-                      setErrorText,
-                      setIsConfirmStone,
-                      setConfirmStoneData,
-                      setIsDetailPage,
-                      identifier: 'detailPage',
-                      confirmStoneTrack: 'DNA',
-                      dispatch
-                    });
+                  {
+                    variant: 'primary',
+                    label: ManageLocales('app.searchResult.confirmStone'),
+                    isHidden: isConfirmStone,
+                    handler: () => {
+                      setBreadCrumLabel('Detail Page');
+                      const { id } = detailPageData;
+                      const selectedRows = { [id]: true };
+                      handleConfirmStone({
+                        selectedRows: selectedRows,
+                        rows: dataTableState.rows,
+                        setIsError,
+                        setErrorText,
+                        setIsConfirmStone,
+                        setConfirmStoneData,
+                        setIsDetailPage,
+                        identifier: 'detailPage',
+                        confirmStoneTrack: 'DNA',
+                        dispatch
+                      });
+                    }
                   }
-                }
-              ]}
-            />
+                ]}
+              />
+            )}
           </div>
         </>
       ) : (

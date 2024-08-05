@@ -66,7 +66,8 @@ export function MatchPairDetails({
   setActivePreviewTab,
   activePreviewTab,
   setImageIndex,
-  imageIndex
+  imageIndex,
+  setIsDiamondDetailLoading
 }: {
   data: any;
   filterData: any;
@@ -83,6 +84,7 @@ export function MatchPairDetails({
   activePreviewTab: any;
   setImageIndex: any;
   imageIndex: any;
+  setIsDiamondDetailLoading?: any;
 }) {
   const router = useRouter();
 
@@ -394,6 +396,12 @@ export function MatchPairDetails({
 
     return [...originalData, ...newProducts];
   };
+
+  useEffect(() => {
+    if (validImages.length > 0) {
+      setIsDiamondDetailLoading && setIsDiamondDetailLoading(false);
+    }
+  }, [validImages]);
 
   return (
     <div className="text-black bg-neutral25 rounded-[8px] w-[calc(100vw-116px)] h-[calc(100vh-140px)]">
