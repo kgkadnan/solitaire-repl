@@ -36,6 +36,7 @@ import crossIcon from '@public/v2/assets/icons/new-arrivals/cross-icon.svg';
 import { SubRoutes } from '@/constants/v2/enums/routes';
 import { ManageLocales } from '@/utils/v2/translate';
 import { filterBidToBuyFunction } from '@/features/filter-bid-to-buy/filter-bid-to-buy-slice';
+import BiddingSkeleton from '@/components/v2/skeleton/bidding';
 
 const theme = createTheme({
   typography: {
@@ -169,7 +170,10 @@ const BidToBuyDataTable = ({
   router,
   filterData,
   setBid,
-  dispatch
+  dispatch,
+  isSkeletonLoading,
+  setIsSkeletonLoading,
+  isLoading
 }: any) => {
   // Fetching saved search data
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -197,8 +201,10 @@ const BidToBuyDataTable = ({
       const newData = data.slice(startIndex, endIndex);
       // Update the paginated data state
       setPaginatedData(newData);
+      setIsSkeletonLoading(false);
     } else {
       setPaginatedData(rows);
+      setIsSkeletonLoading(false);
     }
   }, [globalFilter]);
   useEffect(() => {
@@ -210,8 +216,10 @@ const BidToBuyDataTable = ({
       const newData = rows.slice(startIndex, endIndex);
       // Update the paginated data state
       setPaginatedData(newData);
+      setIsSkeletonLoading(false);
     } else {
       setPaginatedData(rows);
+      setIsSkeletonLoading(false);
     }
   }, [
     rows,
@@ -219,6 +227,11 @@ const BidToBuyDataTable = ({
     pagination.pageSize, //re-fetch when page size changes
     activeTab
   ]);
+
+  useEffect(() => {
+    setIsLoading(false);
+  }, [paginatedData]);
+
   const toggleFullScreen = () => {
     setIsFullScreen(!isFullScreen);
   };
@@ -377,8 +390,13 @@ const BidToBuyDataTable = ({
                     disabled={!rows.length}
                     className={`flex justify-center disabled:!bg-neutral100 disabled:cursor-not-allowed disabled:text-neutral400  shadow-sm py-[8px] h-[39px] px-[16px] items-center font-medium  rounded-[4px] gap-1  border-[1px]  border-solid border-neutral200 text-mMedium  cursor-pointer  ${'text-neutral900 bg-neutral0 hover:bg-neutral50'}`}
                   >
-                    <FilterIcon stroke={`${'var(--neutral-900)'}`} />
-
+                    <FilterIcon
+                      stroke={`${
+                        !rows.length
+                          ? 'var(--neutral-400)'
+                          : 'var(--neutral-900)'
+                      }`}
+                    />
                     <p>{ManageLocales('app.applyFilter')}</p>
                   </button>
                 )}
@@ -535,7 +553,7 @@ const BidToBuyDataTable = ({
   //pass table options to useMaterialReactTable
   const table = useMaterialReactTable({
     columns,
-    data: paginatedData, //must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
+    data: isLoading ? [] : paginatedData, //must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
 
     //state
     getRowId: originalRow => originalRow.id,
@@ -1145,9 +1163,15 @@ const BidToBuyDataTable = ({
     }
   });
   return (
-    <ThemeProvider theme={theme}>
-      <MaterialReactTable table={table} />
-    </ThemeProvider>
+    <>
+      {isSkeletonLoading ? (
+        <BiddingSkeleton />
+      ) : (
+        <ThemeProvider theme={theme}>
+          <MaterialReactTable table={table} />
+        </ThemeProvider>
+      )}
+    </>
   );
 };
 

@@ -68,6 +68,7 @@ const BidToBuy = () => {
   const pathName = useSearchParams().get('path');
   const [isLoading, setIsLoading] = useState(false); // State to track loading
   const [searchLoading, setSearchLoading] = useState(false);
+  const [isSkeletonLoading, setIsSkeletonLoading] = useState(true);
 
   const [checkStatus, setCheckStatus] = useState(false);
 
@@ -238,6 +239,9 @@ const BidToBuy = () => {
   }, []);
 
   const handleTabClick = (index: number) => {
+    if (index !== activeTab) {
+      setIsLoading(true);
+    }
     setActiveTab(index);
     setRowSelection({});
     if (index === 1 && activeBid.length > 0) {
@@ -688,40 +692,46 @@ const BidToBuy = () => {
           ) : (
             <>
               <div className="flex  py-[4px] items-center justify-between">
-                <div className="flex gap-3 items-center">
-                  <p className="text-lMedium font-medium text-neutral900">
-                    Bid to Buy
-                  </p>
-                  {checkStatus ? (
-                    time && time?.length ? (
-                      <div className="text-successMain text-lMedium font-medium">
-                        ACTIVE
-                      </div>
-                    ) : (
-                      <div className="text-visRed text-lMedium font-medium">
-                        INACTIVE
-                      </div>
-                    )
-                  ) : (
-                    ''
-                  )}
-                </div>
-
-                <div className="h-[38px]">
-                  {timeDifference !== null && timeDifference >= 0 && (
-                    <CountdownTimer
-                      initialHours={Math.floor(
-                        timeDifference / (1000 * 60 * 60)
+                {isSkeletonLoading ? (
+                  ''
+                ) : (
+                  <>
+                    {' '}
+                    <div className="flex gap-3 items-center">
+                      <p className="text-lMedium font-medium text-neutral900">
+                        Bid to Buy
+                      </p>
+                      {checkStatus ? (
+                        time && time?.length ? (
+                          <div className="text-successMain text-lMedium font-medium">
+                            ACTIVE
+                          </div>
+                        ) : (
+                          <div className="text-visRed text-lMedium font-medium">
+                            INACTIVE
+                          </div>
+                        )
+                      ) : (
+                        ''
                       )}
-                      initialMinutes={Math.floor(
-                        (timeDifference % (1000 * 60 * 60)) / (1000 * 60)
+                    </div>
+                    <div className="h-[38px]">
+                      {timeDifference !== null && timeDifference >= 0 && (
+                        <CountdownTimer
+                          initialHours={Math.floor(
+                            timeDifference / (1000 * 60 * 60)
+                          )}
+                          initialMinutes={Math.floor(
+                            (timeDifference % (1000 * 60 * 60)) / (1000 * 60)
+                          )}
+                          initialSeconds={Math.floor(
+                            (timeDifference % (1000 * 60)) / 1000
+                          )}
+                        />
                       )}
-                      initialSeconds={Math.floor(
-                        (timeDifference % (1000 * 60)) / 1000
-                      )}
-                    />
-                  )}
-                </div>
+                    </div>
+                  </>
+                )}
               </div>
               <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow">
                 <div className="border-b-[1px] border-neutral200">
@@ -772,6 +782,9 @@ const BidToBuy = () => {
                     setIsLoading={setIsLoading}
                     renderFooter={renderFooter}
                     router={router}
+                    isSkeletonLoading={isSkeletonLoading}
+                    setIsSkeletonLoading={setIsSkeletonLoading}
+                    isLoading={isLoading}
                   />
                 </div>
               </div>

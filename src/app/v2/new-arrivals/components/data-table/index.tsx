@@ -373,7 +373,13 @@ const NewArrivalDataTable = ({
                     disabled={!rows.length}
                     className={`flex justify-center  shadow-sm disabled:!bg-neutral100 disabled:cursor-not-allowed disabled:text-neutral400 py-[8px] h-[39px] px-[16px] items-center font-medium  rounded-[4px] gap-1  border-[1px]  border-solid border-neutral200 text-mMedium  cursor-pointer  ${'text-neutral900 bg-neutral0 hover:bg-neutral50'}`}
                   >
-                    <FilterIcon stroke={`${'var(--neutral-900)'}`} />
+                    <FilterIcon
+                      stroke={`${
+                        !rows.length
+                          ? 'var(--neutral-400)'
+                          : 'var(--neutral-900)'
+                      }`}
+                    />
 
                     <p>{ManageLocales('app.applyFilter')}</p>
                   </button>
