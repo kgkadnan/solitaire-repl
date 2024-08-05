@@ -113,7 +113,7 @@ export default function AboutUs() {
         <div className="w-full">
           <div className="flex flex-col gap-14 pt-[180px] pb-[80px]">
             <div className="text-neutral900 text-[108px] font-bold text-center leading-[100px] flowy-animate typewriter-text animated-text">
-            KGK Diamonds: A Pillar of KGK Group
+              KGK Diamonds: A Pillar of KGK Group
             </div>
             {aboutUsFirstFold.map((aboutStep, index) => (
               <div

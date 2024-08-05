@@ -60,7 +60,7 @@ export default function Leadership() {
             </div>
           ))
         ) : (
-          <div className="flex flex-col gap-6 px-[80px] mt-10">
+          <div className="flex flex-col gap-6 px-[190px] mt-10">
             <div className="flex gap-6 items-end">
               <Image
                 src={selectedProfile['image']}
