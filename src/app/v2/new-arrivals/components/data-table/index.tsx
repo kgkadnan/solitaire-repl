@@ -38,6 +38,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ManageLocales } from '@/utils/v2/translate';
 import { SubRoutes } from '@/constants/v2/enums/routes';
 import { filterFunction } from '@/features/filter-new-arrival/filter-new-arrival-slice';
+import BiddingSkeleton from '@/components/v2/skeleton/bidding';
 
 const theme = createTheme({
   typography: {
@@ -171,7 +172,10 @@ const NewArrivalDataTable = ({
   router,
   filterData,
   setBid,
-  dispatch
+  dispatch,
+  isLoading,
+  setIsSkeletonLoading,
+  isSkeletonLoading
 }: any) => {
   // Fetching saved search data
 
@@ -199,8 +203,10 @@ const NewArrivalDataTable = ({
       const newData = data.slice(startIndex, endIndex);
       // Update the paginated data state
       setPaginatedData(newData);
+      setIsSkeletonLoading(false);
     } else {
       setPaginatedData(rows);
+      setIsSkeletonLoading(false);
     }
   }, [globalFilter]);
   useEffect(() => {
@@ -212,8 +218,10 @@ const NewArrivalDataTable = ({
       const newData = rows.slice(startIndex, endIndex);
       // Update the paginated data state
       setPaginatedData(newData);
+      setIsSkeletonLoading(false);
     } else {
       setPaginatedData(rows);
+      setIsSkeletonLoading(false);
     }
   }, [
     rows,
@@ -365,7 +373,13 @@ const NewArrivalDataTable = ({
                     disabled={!rows.length}
                     className={`flex justify-center  shadow-sm disabled:!bg-neutral100 disabled:cursor-not-allowed disabled:text-neutral400 py-[8px] h-[39px] px-[16px] items-center font-medium  rounded-[4px] gap-1  border-[1px]  border-solid border-neutral200 text-mMedium  cursor-pointer  ${'text-neutral900 bg-neutral0 hover:bg-neutral50'}`}
                   >
-                    <FilterIcon stroke={`${'var(--neutral-900)'}`} />
+                    <FilterIcon
+                      stroke={`${
+                        !rows.length
+                          ? 'var(--neutral-400)'
+                          : 'var(--neutral-900)'
+                      }`}
+                    />
 
                     <p>{ManageLocales('app.applyFilter')}</p>
                   </button>
@@ -515,12 +529,16 @@ const NewArrivalDataTable = ({
       )}
     </div>
   );
+  useEffect(() => {
+    setIsLoading(false);
+  }, [paginatedData]);
+
   let isNudge = localStorage.getItem('show-nudge') === 'MINI';
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   //pass table options to useMaterialReactTable
   const table = useMaterialReactTable({
     columns,
-    data: paginatedData, //must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
+    data: isLoading ? [] : paginatedData, //must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
 
     getRowId: originalRow => originalRow.id,
     onRowSelectionChange: setRowSelection,
@@ -1119,9 +1137,15 @@ const NewArrivalDataTable = ({
     }
   });
   return (
-    <ThemeProvider theme={theme}>
-      <MaterialReactTable table={table} />
-    </ThemeProvider>
+    <>
+      {isSkeletonLoading ? (
+        <BiddingSkeleton />
+      ) : (
+        <ThemeProvider theme={theme}>
+          <MaterialReactTable table={table} />
+        </ThemeProvider>
+      )}
+    </>
   );
 };
 

@@ -52,6 +52,7 @@ import { handleCompareStone } from '@/app/v2/search/result/helpers/handle-compar
 import CommonPoppup from '@/app/v2/login/component/common-poppup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSort, faSortDown } from '@fortawesome/free-solid-svg-icons';
+import DataTableSkeleton from '../../skeleton/data-table';
 
 const theme = createTheme({
   typography: {
@@ -193,7 +194,9 @@ const DataTable = ({
   setIsInputDialogOpen,
   isDashboard,
   setIsDetailPage,
-  handleCreateAppointment
+  handleCreateAppointment,
+  setIsSkeletonLoading,
+  isSkeletonLoading
 }: any) => {
   // Fetching saved search data
   const router = useRouter();
@@ -230,8 +233,10 @@ const DataTable = ({
       const newData = data.slice(startIndex, endIndex);
       // Update the paginated data state
       setPaginatedData(newData);
+      setIsSkeletonLoading && setIsSkeletonLoading(false);
     } else {
       setPaginatedData(rows);
+      setIsSkeletonLoading && setIsSkeletonLoading(false);
     }
   }, [globalFilter]);
   useEffect(() => {
@@ -242,6 +247,7 @@ const DataTable = ({
     const newData = rows.slice(startIndex, endIndex);
     // Update the paginated data state
     setPaginatedData(newData);
+    setIsSkeletonLoading && setIsSkeletonLoading(false);
   }, [
     rows,
     pagination.pageIndex, //re-fetch when page index changes
@@ -1206,9 +1212,13 @@ const DataTable = ({
 
   return (
     <>
-      <ThemeProvider theme={theme}>
-        <MaterialReactTable table={table} />
-      </ThemeProvider>
+      {isSkeletonLoading ? (
+        <DataTableSkeleton identifier={myCart ? 'myCart' : undefined} />
+      ) : (
+        <ThemeProvider theme={theme}>
+          <MaterialReactTable table={table} />
+        </ThemeProvider>
+      )}
     </>
   );
 };
