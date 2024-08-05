@@ -6,6 +6,7 @@ import Image from 'next/image';
 import TimelineBanner from '@public/v3/timeline/timeline-banner.png';
 import { aboutUsFirstFold } from '@/constants/v3/about-us';
 import TimelineComponent from '@/components/v3/timeline';
+import classNames from 'classnames';
 
 export default function AboutUs() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -142,7 +143,7 @@ export default function AboutUs() {
           <Image
             src={TimelineBanner}
             alt="Timeline banner"
-            className="w-full timeline-animate-zoom"
+            className={classNames('w-full timeline-animate-zoom')}
             style={{ clipPath: 'polygon(0 0, 100% 0, 100% 70%, 0 90%)' }}
           />
           <div className="absolute top-[250px] px-[112px] text-neutral0 w-full flex justify-between">
