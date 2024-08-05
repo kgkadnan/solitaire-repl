@@ -691,10 +691,10 @@ const BidToBuy = () => {
             />
           ) : (
             <>
-              <div className="flex  py-[4px] items-center justify-between">
-                {isSkeletonLoading ? (
-                  ''
-                ) : (
+              {isSkeletonLoading ? (
+                ''
+              ) : (
+                <div className="flex  py-[4px] items-center justify-between">
                   <>
                     {' '}
                     <div className="flex gap-3 items-center">
@@ -731,10 +731,20 @@ const BidToBuy = () => {
                       )}
                     </div>
                   </>
-                )}
-              </div>
-              <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow">
-                <div className="border-b-[1px] border-neutral200">
+                </div>
+              )}
+              <div
+                className={`${
+                  isSkeletonLoading
+                    ? ' '
+                    : 'border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow'
+                } `}
+              >
+                <div
+                  className={` ${
+                    isSkeletonLoading ? ' ' : 'border-[1px] border-neutral200'
+                  }  `}
+                >
                   <BidToBuyDataTable
                     dispatch={dispatch}
                     filterData={filterData}
