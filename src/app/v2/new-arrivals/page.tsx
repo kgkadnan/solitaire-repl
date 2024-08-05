@@ -821,10 +821,10 @@ const NewArrivals = () => {
             />
           ) : (
             <>
-              <div className="flex py-[4px] items-center justify-between">
-                {isSkeletonLoading ? (
-                  ''
-                ) : (
+              {isSkeletonLoading ? (
+                ''
+              ) : (
+                <div className="flex py-[4px] items-center justify-between">
                   <>
                     {' '}
                     <p className="text-lMedium font-medium text-neutral900">
@@ -846,10 +846,20 @@ const NewArrivals = () => {
                       )}
                     </div>
                   </>
-                )}
-              </div>
-              <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow">
-                <div className="border-b-[1px] border-neutral200">
+                </div>
+              )}
+              <div
+                className={`${
+                  isSkeletonLoading
+                    ? ' '
+                    : 'border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow'
+                } `}
+              >
+                <div
+                  className={` ${
+                    isSkeletonLoading ? ' ' : 'border-[1px] border-neutral200'
+                  }  `}
+                >
                   <NewArrivalDataTable
                     dispatch={dispatch}
                     filterData={filterData}

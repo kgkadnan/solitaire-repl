@@ -395,8 +395,6 @@ export function MatchPairDetails({
     return [...originalData, ...newProducts];
   };
 
-  console.log('filteredImages[index][imageIndex]?.name', filteredImages);
-
   return (
     <div className="text-black bg-neutral25 rounded-[8px] w-[calc(100vw-116px)] h-[calc(100vh-140px)]">
       <Toast
@@ -740,7 +738,13 @@ export function MatchPairDetails({
                         >
                           <div className="flex justify-around relative">
                             {isImageLoading && (
-                              <div className="w-[370px] absolute z-10 h-[290px] bg-[#F2F4F7]  flex flex-col gap-[6px] items-center justify-center">
+                              <div
+                                className={` ${
+                                  originalData.length > 2
+                                    ? 'w-[310px] h-[226px]'
+                                    : 'w-[370px] h-[290px]'
+                                } absolute z-10  bg-[#F2F4F7]  flex flex-col gap-[6px] items-center justify-center`}
+                              >
                                 <div role="status">
                                   <svg
                                     aria-hidden="true"
@@ -817,7 +821,11 @@ export function MatchPairDetails({
                                         320
                                       : 400
                                   }
-                                  className="object-contain"
+                                  className={` object-contain ${
+                                    originalData.length > 2
+                                      ? 'h-[226px]'
+                                      : 'h-[290px]'
+                                  }`}
                                   onError={e => {
                                     handleImageError(e);
                                   }}
@@ -846,7 +854,11 @@ export function MatchPairDetails({
                                       320
                                     : 400
                                 }
-                                className={`object-contain h-[290px]`}
+                                className={` object-contain ${
+                                  originalData.length > 2
+                                    ? 'h-[226px]'
+                                    : 'h-[290px]'
+                                }`}
                                 onError={e => {
                                   handleImageError(e);
                                 }}
@@ -874,7 +886,11 @@ export function MatchPairDetails({
                                       320
                                     : 400
                                 }
-                                className="h-[290px]"
+                                className={`${
+                                  originalData.length > 2
+                                    ? 'h-[226px]'
+                                    : 'h-[290px]'
+                                }`}
                                 onError={e => {
                                   handleImageError(e);
                                 }}
