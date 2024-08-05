@@ -58,7 +58,8 @@ export function DiamondDetailsComponent({
   modalSetState,
   setIsLoading,
   activeTab,
-  fromBid
+  fromBid,
+  setIsDiamondDetailLoading
 }: {
   data: any;
   filterData: any;
@@ -69,6 +70,7 @@ export function DiamondDetailsComponent({
   setIsLoading?: any;
   activeTab?: number;
   fromBid?: boolean;
+  setIsDiamondDetailLoading?: any;
 }) {
   const router = useRouter();
 
@@ -186,6 +188,9 @@ export function DiamondDetailsComponent({
   }, [tableData?.lot_id, tableData?.certificate_url]);
 
   useEffect(() => {
+    if (validImages.length > 0) {
+      setIsDiamondDetailLoading && setIsDiamondDetailLoading(false);
+    }
     if (!validImages.length && images[0].name.length) {
       setValidImages([
         {
@@ -276,14 +281,26 @@ export function DiamondDetailsComponent({
           className="cursor-pointer"
         />
         <div className="flex gap-[8px] items-center">
-          <button
-            className="text-neutral600 text-sMedium font-regular cursor-pointer"
-            onClick={() => {
-              goBackToListView!();
-            }}
-          >
-            {breadCrumLabel}
-          </button>
+          {validImages.length > 0 ? (
+            <button
+              className="text-neutral600 text-sMedium font-regular cursor-pointer"
+              onClick={() => {
+                goBackToListView!();
+              }}
+            >
+              {breadCrumLabel}
+            </button>
+          ) : (
+            <Skeleton
+              width={65}
+              sx={{ bgcolor: 'var(--neutral-200)' }}
+              height={18}
+              variant="rectangular"
+              animation="wave"
+              className="rounded-[4px]"
+            />
+          )}
+
           <span className="text-neutral600">/</span>
 
           {validImages.length > 0 ? (
@@ -365,45 +382,76 @@ export function DiamondDetailsComponent({
 
             <div className="flex w-[22%] xl:w-[40%] justify-center xl:justify-end mr-[10px] items-center">
               <div className="flex gap-3 items-center">
-                <Tooltip
-                  tooltipTrigger={
-                    <button
-                      onClick={handleDownloadExcel}
-                      className={`rounded-[4px] hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm ${'bg-neutral0'}`}
-                    >
-                      <ExportExcel className={`${'stroke-neutral900'}`} />
-                    </button>
-                  }
-                  tooltipContent={'Download Excel'}
-                  tooltipContentStyles={'z-[1000]'}
-                />
-
-                <Tooltip
-                  tooltipTrigger={
-                    <button
-                      onClick={copyLink}
-                      className={`rounded-[4px] hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm ${'bg-neutral0'}`}
-                    >
-                      <LinkSvg
-                        className={`${'stroke-neutral900 stroke-[1.5]'}`}
+                {validImages.length > 0 ? (
+                  <>
+                    {' '}
+                    <Tooltip
+                      tooltipTrigger={
+                        <button
+                          onClick={handleDownloadExcel}
+                          className={`rounded-[4px] hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm ${'bg-neutral0'}`}
+                        >
+                          <ExportExcel className={`${'stroke-neutral900'}`} />
+                        </button>
+                      }
+                      tooltipContent={'Download Excel'}
+                      tooltipContentStyles={'z-[1000]'}
+                    />
+                    <Tooltip
+                      tooltipTrigger={
+                        <button
+                          onClick={copyLink}
+                          className={`rounded-[4px] hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm ${'bg-neutral0'}`}
+                        >
+                          <LinkSvg
+                            className={`${'stroke-neutral900 stroke-[1.5]'}`}
+                          />
+                        </button>
+                      }
+                      tooltipContent={'Media Link'}
+                      tooltipContentStyles={'z-[1000]'}
+                    />
+                    <div className="w-[38px] h-[38px]">
+                      <Share
+                        rows={data}
+                        selectedProducts={{ [filterData.id]: true }}
+                        setIsError={setIsError}
+                        setErrorText={setErrorText}
+                        activeTab={activeTab}
+                        identifier={breadCrumLabel}
+                        shareTrackIdentifier="Details"
                       />
-                    </button>
-                  }
-                  tooltipContent={'Media Link'}
-                  tooltipContentStyles={'z-[1000]'}
-                />
-
-                <div className="w-[38px] h-[38px]">
-                  <Share
-                    rows={data}
-                    selectedProducts={{ [filterData.id]: true }}
-                    setIsError={setIsError}
-                    setErrorText={setErrorText}
-                    activeTab={activeTab}
-                    identifier={breadCrumLabel}
-                    shareTrackIdentifier="Details"
-                  />
-                </div>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    {' '}
+                    <Skeleton
+                      variant="rectangular"
+                      height={'38px'}
+                      width={'38px'}
+                      animation="wave"
+                      className="rounded-[4px]"
+                      sx={{ bgcolor: 'var(--neutral-200)' }}
+                    />{' '}
+                    <Skeleton
+                      variant="rectangular"
+                      height={'38px'}
+                      width={'38px'}
+                      animation="wave"
+                      className="rounded-[4px]"
+                      sx={{ bgcolor: 'var(--neutral-200)' }}
+                    />{' '}
+                    <Skeleton
+                      variant="rectangular"
+                      height={'38px'}
+                      width={'38px'}
+                      animation="wave"
+                      className="rounded-[4px]"
+                      sx={{ bgcolor: 'var(--neutral-200)' }}
+                    />
+                  </>
+                )}
               </div>
               {/* <div className="border-r-[1px] h-[40px] border-neutral200"></div> */}
               {/* <div className="flex gap-3 items-center relative justify-center"> */}

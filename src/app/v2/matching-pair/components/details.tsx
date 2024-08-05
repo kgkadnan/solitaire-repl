@@ -63,11 +63,11 @@ export function MatchPairDetails({
   setSimilarData,
   similarData,
   rowSelection,
-  isLoading,
   setActivePreviewTab,
   activePreviewTab,
   setImageIndex,
-  imageIndex
+  imageIndex,
+  setIsDiamondDetailLoading
 }: {
   data: any;
   filterData: any;
@@ -80,11 +80,11 @@ export function MatchPairDetails({
   setSimilarData: any;
   similarData: any;
   rowSelection: any;
-  isLoading: boolean;
   setActivePreviewTab: any;
   activePreviewTab: any;
   setImageIndex: any;
   imageIndex: any;
+  setIsDiamondDetailLoading?: any;
 }) {
   const router = useRouter();
 
@@ -103,7 +103,7 @@ export function MatchPairDetails({
   const [, setZoomPosition] = useState({ x: 0, y: 0 });
   const [breadCrumMatchPair, setBreadCrumMatchPair] = useState('');
   const [viewSimilar, setViewSimilar] = useState<boolean>(false);
-  const [isImageLoading, setIsImageLoading] = useState(false);
+  const [isImageLoading, setIsImageLoading] = useState(true);
   const [triggerColumn] =
     useLazyGetManageListingSequenceQuery<IManageListingSequenceResponse>();
   const [triggerSimilarMatchingPairApi] = useLazyGetSimilarMatchingPairQuery();
@@ -397,6 +397,12 @@ export function MatchPairDetails({
     return [...originalData, ...newProducts];
   };
 
+  useEffect(() => {
+    if (validImages.length > 0) {
+      setIsDiamondDetailLoading && setIsDiamondDetailLoading(false);
+    }
+  }, [validImages]);
+
   return (
     <div className="text-black bg-neutral25 rounded-[8px] w-[calc(100vw-116px)] h-[calc(100vh-140px)]">
       <Toast
@@ -468,8 +474,7 @@ export function MatchPairDetails({
                   activePreviewTab={activePreviewTab}
                   setImageIndex={setImageIndex}
                   isMatchingPair={true}
-                  setIsLoading={setIsLoading}
-                  isLoading={isLoading}
+                  setIsImageLoading={setIsImageLoading}
                 />
               </div>
               <div className="flex  justify-center xl:justify-end mr-[10px] items-center">
@@ -741,7 +746,13 @@ export function MatchPairDetails({
                         >
                           <div className="flex justify-around relative">
                             {isImageLoading && (
-                              <div className="w-[370px] absolute z-10 h-[290px] bg-[#F2F4F7]  flex flex-col gap-[6px] items-center justify-center">
+                              <div
+                                className={` ${
+                                  originalData.length > 2
+                                    ? 'w-[310px] h-[226px]'
+                                    : 'w-[370px] h-[290px]'
+                                } absolute z-10  bg-[#F2F4F7]  flex flex-col gap-[6px] items-center justify-center`}
+                              >
                                 <div role="status">
                                   <svg
                                     aria-hidden="true"
@@ -762,8 +773,18 @@ export function MatchPairDetails({
                                   <span className="sr-only">Loading...</span>
                                 </div>
                                 <div className="text-neutral900 font-medium text-sMedium">
-                                  Loading {filteredImages[imageIndex]?.name}{' '}
-                                  Image...
+                                  Loading{' '}
+                                  {filteredImages[index][imageIndex]?.name ===
+                                  'Video'
+                                    ? ''
+                                    : filteredImages[index][imageIndex]
+                                        ?.name}{' '}
+                                  {filteredImages[index][imageIndex]
+                                    ?.category === 'Video' ||
+                                  filteredImages[index][imageIndex]
+                                    ?.category === 'B2B Sparkle'
+                                    ? 'Video...'
+                                    : 'Image...'}
                                 </div>
                               </div>
                             )}
@@ -783,14 +804,7 @@ export function MatchPairDetails({
                                   onLoad={() => {
                                     setIsImageLoading(false);
                                   }}
-                                  className={`${
-                                    originalData.length > 2
-                                      ? // originalData.length > 5
-                                        //   ? 'w-[240px] h-[360px]'
-                                        //   :
-                                        'w-[285px] h-[305px]'
-                                      : 'w-[350px] h-[360px]'
-                                  } `}
+                                  className={`${'w-[285px] h-[305px]'} `}
                                 />
                               ) : (
                                 <img
@@ -815,7 +829,11 @@ export function MatchPairDetails({
                                         320
                                       : 400
                                   }
-                                  className="object-contain"
+                                  className={` object-contain ${
+                                    originalData.length > 2
+                                      ? 'h-[226px]'
+                                      : 'h-[290px]'
+                                  }`}
                                   onError={e => {
                                     handleImageError(e);
                                   }}
@@ -844,7 +862,11 @@ export function MatchPairDetails({
                                       320
                                     : 400
                                 }
-                                className={`object-contain h-[290px]`}
+                                className={` object-contain ${
+                                  originalData.length > 2
+                                    ? 'h-[226px]'
+                                    : 'h-[290px]'
+                                }`}
                                 onError={e => {
                                   handleImageError(e);
                                 }}
@@ -872,7 +894,11 @@ export function MatchPairDetails({
                                       320
                                     : 400
                                 }
-                                className="h-[290px]"
+                                className={`${
+                                  originalData.length > 2
+                                    ? 'h-[226px]'
+                                    : 'h-[290px]'
+                                }`}
                                 onError={e => {
                                   handleImageError(e);
                                 }}
