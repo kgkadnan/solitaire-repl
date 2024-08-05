@@ -184,6 +184,14 @@ module.exports = {
           '0%': { 'background-position': '0% 0%' },
           '50%': { 'background-position': '100% 100%' },
           '100%': { 'background-position': '0% 0%' }
+        },
+        worldMapPulse: {
+          '0%, 100%': {
+            boxShadow: '0 0 0 0 rgba(52, 68, 68, 0.7)' // Slightly darker #344444
+          },
+          '50%': {
+            boxShadow: '0 0 0 10px rgba(52, 68, 68, 0.2)' // Fully transparent
+          }
         }
       },
       boxShadow: {
@@ -195,7 +203,8 @@ module.exports = {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         zoom: 'zoom 3s ease-in-out ',
-        gradient: 'gradientAnimation 10s ease infinite'
+        gradient: 'gradientAnimation 10s ease infinite',
+        pulse: 'worldMapPulse 2s infinite'
       },
       backgroundImage: {
         'animated-gradient': ` linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, white 100%),

@@ -12,13 +12,17 @@ import { isEmailValid } from '@/utils/validate-email';
 import { isPhoneNumberValid } from '@/utils/validate-phone';
 import { createContactUsEntry } from '@/features/v3/api/contact-us';
 import LocationTab from '@/components/v3/location-tab';
-import { HeadquaterLocation } from '@/constants/v3/headquater-location';
+
+import {
+  HeadquaterLocation,
+  WorldMapPointers
+} from '@/constants/v3/headquater-location';
 import { InputField } from '@/components/v3/input/input';
 import { MobileInput } from '@/components/v3/input/mobile-input';
 import { CommonButton } from '@/components/v3/button';
-const WorldMap = dynamic(() => import('../../../components/v3/world-map'), {
-  ssr: false
-});
+import WorldMap from '@public/v3/world-map.png';
+import Tooltip from '@/components/v2/common/tooltip';
+
 const LocateUs = dynamic(() => import('../../../components/v3/locate-us'), {
   ssr: false
 });
@@ -120,8 +124,89 @@ const ContactUs = () => {
           </div>
         </div>
       </div>
-      <div className="max-h-[400px] px-[112px]">
-        <WorldMap />
+      <div className="flex justify-center py-10">
+        <div className="relative w-[1100px]">
+          <Image src={WorldMap} alt="all office location" className="w-full" />
+
+          {WorldMapPointers.map(pointer => (
+            <Tooltip
+              key={pointer.coords} // Add a key to prevent React warnings
+              tooltipTrigger={
+                <div className={`absolute ${pointer.coords} z-10`}>
+                  <div className="relative w-2 h-2 bg-primaryMain rounded-full">
+                    <div className="absolute inset-0 w-full h-full bg-primaryMain rounded-full animate-pulse"></div>
+                  </div>
+                </div>
+              }
+              tooltipContent={
+                <div className="flex justify-center text-neutral900">
+                  <div className="flex flex-col gap-2  items-center">
+                    <div>
+                      <div className="flex gap-2 items-center">
+                        <Image
+                          src={pointer.kam.image}
+                          alt={`profile image ${pointer.kam.name}`}
+                        />
+                        <div className="flex flex-col gap-2">
+                          <p className="font-semiBold text-[14px]">
+                            {pointer.kam.name}
+                          </p>
+                          <p className="text-[12px]">{pointer.kam.postion}</p>
+                        </div>
+                      </div>
+                      <div className="flex gap-2 pl-2 items-center">
+                        <Image
+                          src={pointer.kam.countryFlag}
+                          alt={`country flag image ${pointer.kam.name}`}
+                        />
+                        <p className="font-semiBold text-[12px] text-[#344054]">
+                          {pointer.kam.location}
+                        </p>
+                      </div>
+                    </div>
+                    <hr />
+                    <a
+                      href={`tel:${pointer.kam.phone}`}
+                      className="flex gap-1 items-center"
+                    >
+                      <Image src={Phone} alt={'Phone'} height={24} width={24} />
+                      <p className=" text-sRegular text-neutral600">
+                        {pointer.kam.phone}
+                      </p>
+                    </a>
+
+                    <div className="flex gap-1 items-center">
+                      <a
+                        href={`mailto:${pointer.kam.email}`}
+                        className="flex gap-1 items-center"
+                      >
+                        <Image src={Mail} alt={'Mail'} height={24} width={24} />
+                        <p className=" text-sRegular text-neutral600">
+                          {pointer.kam.email}{' '}
+                        </p>
+                      </a>
+                      <Image
+                        src={Copy}
+                        alt={'Copy'}
+                        onClick={() => {
+                          navigator.clipboard
+                            .writeText(pointer.kam.email)
+                            .then(() =>
+                              toast({
+                                description: 'Copied successfully'
+                              })
+                            );
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              }
+              tooltipContentStyles="z-[1000] !bg-neutral0 "
+              radixStyles="!fill-neutral0"
+            />
+          ))}
+        </div>
       </div>
       <div className="bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient">
         <div className="flex flex-col gap-1 py-[32px] gap-[64px]  px-[112px]">
@@ -180,7 +265,7 @@ const ContactUs = () => {
                       className="flex gap-1 items-center"
                     >
                       <Image src={Phone} alt={'Phone'} height={24} width={24} />
-                      <p className="text-neutral600 font-sRegular">
+                      <p className="text-neutral600 text-sRegular">
                         {loc.phone}
                       </p>
                     </a>
@@ -191,7 +276,7 @@ const ContactUs = () => {
                       className="flex gap-1 items-center"
                     >
                       <Image src={Mail} alt={'Mail'} height={24} width={24} />
-                      <p className="text-neutral600 font-sRegular">
+                      <p className="text-neutral600 text-sRegular">
                         {loc.email}{' '}
                       </p>
                     </a>
@@ -298,6 +383,7 @@ const ContactUs = () => {
             </div>
           </div>
           <div className="!w-[27%] rounded-[12px]">
+            {' '}
             <LocateUs />
           </div>
         </div>

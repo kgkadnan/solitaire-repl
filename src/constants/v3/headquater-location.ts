@@ -150,3 +150,102 @@ export const HeadquaterLocation = [
     ]
   }
 ];
+
+export const WorldMapPointers = [
+  {
+    coords: 'left-[55%] top-3/4',
+    kam: {
+      name: 'Mr. Rajeev Sinha',
+      postion: 'Key Account Manager',
+      countryFlag: India,
+      location: 'Surat, India',
+      image: Avatar,
+      phone: '+91 910 876 6432',
+      email: 'rajeev.sinha@kgkmail.com'
+    }
+  },
+  {
+    coords: 'left-[30%] top-[36%]',
+    kam: {
+      name: 'Mr. Rajeev Sinha',
+      postion: 'Key Account Manager',
+      countryFlag: India,
+      location: 'Surat, India',
+      image: Avatar,
+      phone: '+91 910 876 6432',
+      email: 'rajeev.sinha@kgkmail.com'
+    }
+  },
+  {
+    coords: 'left-[51%] top-[24%]',
+    kam: {
+      name: 'Mr. Rajeev Sinha',
+      postion: 'Key Account Manager',
+      countryFlag: India,
+      location: 'Surat, India',
+      image: Avatar,
+      phone: '+91 910 876 6432',
+      email: 'rajeev.sinha@kgkmail.com'
+    }
+  },
+  {
+    coords: 'left-[59%] top-[17%]',
+    kam: {
+      name: 'Mr. Rajeev Sinha',
+      postion: 'Key Account Manager',
+      countryFlag: India,
+      location: 'Surat, India',
+      image: Avatar,
+      phone: '+91 910 876 6432',
+      email: 'rajeev.sinha@kgkmail.com'
+    }
+  },
+  {
+    coords: 'left-[62%] top-[47%]',
+    kam: {
+      name: 'Mr. Rajeev Sinha',
+      postion: 'Key Account Manager',
+      countryFlag: India,
+      location: 'Surat, India',
+      image: Avatar,
+      phone: '+91 910 876 6432',
+      email: 'rajeev.sinha@kgkmail.com'
+    }
+  },
+  {
+    coords: 'left-[68%] top-[48%]',
+    kam: {
+      name: 'Mr. Rajeev Sinha',
+      postion: 'Key Account Manager',
+      countryFlag: India,
+      location: 'Surat, India',
+      image: Avatar,
+      phone: '+91 910 876 6432',
+      email: 'rajeev.sinha@kgkmail.com'
+    }
+  },
+  {
+    coords: 'left-[77%] top-[50%]',
+    kam: {
+      name: 'Mr. Rajeev Sinha',
+      postion: 'Key Account Manager',
+      countryFlag: India,
+      location: 'Surat, India',
+      image: Avatar,
+      phone: '+91 910 876 6432',
+      email: 'rajeev.sinha@kgkmail.com'
+    }
+  },
+  {
+    coords: 'left-[87%] top-[42%]',
+    kam: {
+      name: 'Mr. Rajeev Sinha',
+      postion: 'Key Account Manager',
+      countryFlag: India,
+      location: 'Surat, India',
+      image: Avatar,
+      phone: '+91 910 876 6432',
+      email: 'rajeev.sinha@kgkmail.com'
+    }
+  }
+];
