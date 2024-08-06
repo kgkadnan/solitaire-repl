@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import Image from 'next/image';
 import VisibilitySensor from 'react-visibility-sensor';
 import classNames from 'classnames';
+// import AnimationSection from '../animated-text/scroll';
 
 interface ITimelineItemProps {
   id?: string;
@@ -79,12 +80,14 @@ class TimelineItem extends Component<ITimelineItemProps, ITimelineItemState> {
                       : 'translate-y-10 opacity-0'
                   )}
                 >
+                  {/* <AnimationSection> */}
                   <Image
                     src={image}
                     alt="timelineImage"
                     layout="fill"
                     objectFit="cover"
                   />
+                  {/* </AnimationSection> */}
                 </div>
                 <div
                   className={`absolute top-2 right-10 w-[350px] h-[250px] bg-primaryMain transform -translate-x-10 translate-y-2 z-[-1] shadow-lg ${
