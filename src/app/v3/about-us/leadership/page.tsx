@@ -34,7 +34,7 @@ export default function Leadership() {
           </div>
         </div>
       )}
-      <div className="justify-around px-[80px] py-[64px] flex flex-wrap gap-[40px]">
+      <div className="justify-around px-[80px] py-[64px]  flex flex-wrap gap-[40px]">
         {Object.keys(selectedProfile).length === 0 ? (
           leadership.map(leader => (
             <div
@@ -53,7 +53,7 @@ export default function Leadership() {
                 <Image
                   src={leader.image}
                   alt={leader.name}
-                  className="rounded-[8px] bg-[#D9D9D9]"
+                  className="rounded-[8px] bg-[#D9D9D9] h-[375px] w-[375px]"
                 />
               </div>
               <p className="text-neutral900 font-semiBold text-[20px]">
