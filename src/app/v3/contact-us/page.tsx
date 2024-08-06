@@ -23,6 +23,7 @@ import { MobileInput } from '@/components/v3/input/mobile-input';
 import { CommonButton } from '@/components/v3/button';
 import WorldMap from '@public/v3/world-map.png';
 import Tooltip from '@/components/v2/common/tooltip';
+import AnimationSection from '@/components/v3/animated-text/scroll';
 
 const LocateUs = dynamic(() => import('../../../components/v3/locate-us'), {
   ssr: false
@@ -107,20 +108,26 @@ const ContactUs = () => {
         <div className="min-h-[300px] flex items-center">
           <div className="flex flex-wrap flex-col gap-14 pt-[180px] pb-[80px] justify-between">
             <div className=" text-neutral900 text-[108px] font-bold text-center line leading-[100px] flowy-animate">
-              We’d love to hear from you
+              <AnimationSection> We’d love to hear from you</AnimationSection>
             </div>
             <div className="flex gap-3 px-[40px]">
-              <p className="text-neutral900 text-[28px] font-bold w-1/2">
-                We're Here to Assist You
-              </p>
-              <p className="text-neutral800 text-lRegular w-1/2 px-4 pt-[14px]">
-                At KGK Diamonds, we value your feedback and inquiries. Whether
-                you have a question, need assistance, or want to learn more
-                about our services, our dedicated team is here to help. Please
-                feel free to reach out to us through any of the provided contact
-                methods, and we will respond promptly to ensure your
-                satisfaction.
-              </p>
+              <div className="text-neutral900 text-[28px] font-bold w-1/2">
+                {' '}
+                <AnimationSection>
+                  We're Here to Assist You{' '}
+                </AnimationSection>{' '}
+              </div>
+
+              <div className="text-neutral800 text-lRegular w-1/2 px-4 pt-[14px]">
+                <AnimationSection>
+                  At KGK Diamonds, we value your feedback and inquiries. Whether
+                  you have a question, need assistance, or want to learn more
+                  about our services, our dedicated team is here to help. Please
+                  feel free to reach out to us through any of the provided
+                  contact methods, and we will respond promptly to ensure your
+                  satisfaction.
+                </AnimationSection>
+              </div>
             </div>
           </div>
         </div>
@@ -226,13 +233,16 @@ const ContactUs = () => {
           </div>
           <div className="flex ">
             <div className="w-[30%]">
-              <p className="text-neutral800 text-lRegular font-semiBold">
-                Our location
-              </p>
-              <p className="text-neutral900 text-headingL font-semiBold">
-                Head Office{' '}
-              </p>
+              <AnimationSection>
+                <p className="text-neutral800 text-lRegular font-semiBold">
+                  Our location
+                </p>
+                <p className="text-neutral900 text-headingL font-semiBold">
+                  Head Office{' '}
+                </p>
+              </AnimationSection>
             </div>
+
             <div
               className={`w-[70%]  flex flex-wrap flex-col gap-4 ${
                 selectedRegion === 'ASIA PACIFIC'
@@ -243,73 +253,80 @@ const ContactUs = () => {
               {HeadquaterLocation.filter(
                 (loc: any) => loc.region === selectedRegion
               )[0].location.map((loc: any, index: number) => (
-                <div
-                  className="flex flex-col gap-[6px]"
-                  key={`${loc.country}-${index}`}
-                >
-                  <div className="flex gap-3">
-                    <Image src={loc.flag} alt={loc.country} />
+                <AnimationSection>
+                  <div
+                    className="flex flex-col gap-[6px]"
+                    key={`${loc.country}-${index}`}
+                  >
+                    <div className="flex gap-3">
+                      <Image src={loc.flag} alt={loc.country} />
 
-                    <p className="font-semiBold text-headingS text-neutral600">
-                      {loc.country}
-                    </p>
-                  </div>
-                  <div className="flex gap-1">
-                    {' '}
-                    <Image src={loc.image} alt={loc.name} />
-                    <div className="flex flex-col justify-center">
-                      {' '}
-                      <p className="text-mMedium font-semiBold text-neutral600">
-                        {loc.name}
-                      </p>{' '}
-                      <p className="text-mRegular text-neutral600">
-                        {loc.office}
+                      <p className="font-semiBold text-headingS text-neutral600">
+                        {loc.country}
                       </p>
                     </div>
+                    <div className="flex gap-1">
+                      {' '}
+                      <Image src={loc.image} alt={loc.name} />
+                      <div className="flex flex-col justify-center">
+                        {' '}
+                        <p className="text-mMedium font-semiBold text-neutral600">
+                          {loc.name}
+                        </p>{' '}
+                        <p className="text-mRegular text-neutral600">
+                          {loc.office}
+                        </p>
+                      </div>
+                    </div>
+                    {loc.phone && (
+                      <a
+                        href={`tel:${loc.phone}`}
+                        className="flex gap-1 items-center"
+                      >
+                        <Image
+                          src={Phone}
+                          alt={'Phone'}
+                          height={24}
+                          width={24}
+                        />
+                        <p className="text-neutral600 text-sRegular">
+                          {loc.phone}
+                        </p>
+                      </a>
+                    )}
+                    <div className="flex gap-1 items-center">
+                      <a
+                        href={`mailto:${loc.email}`}
+                        className="flex gap-1 items-center"
+                      >
+                        <Image src={Mail} alt={'Mail'} height={24} width={24} />
+                        <p className="text-neutral600 text-sRegular">
+                          {loc.email}{' '}
+                        </p>
+                      </a>
+                      <Image
+                        src={Copy}
+                        alt={'Copy'}
+                        onClick={() => {
+                          navigator.clipboard.writeText(loc.email).then(() =>
+                            toast({
+                              description: 'Copied successfully'
+                            })
+                          );
+                        }}
+                      />
+                    </div>
                   </div>
-                  {loc.phone && (
-                    <a
-                      href={`tel:${loc.phone}`}
-                      className="flex gap-1 items-center"
-                    >
-                      <Image src={Phone} alt={'Phone'} height={24} width={24} />
-                      <p className="text-neutral600 text-sRegular">
-                        {loc.phone}
-                      </p>
-                    </a>
-                  )}
-                  <div className="flex gap-1 items-center">
-                    <a
-                      href={`mailto:${loc.email}`}
-                      className="flex gap-1 items-center"
-                    >
-                      <Image src={Mail} alt={'Mail'} height={24} width={24} />
-                      <p className="text-neutral600 text-sRegular">
-                        {loc.email}{' '}
-                      </p>
-                    </a>
-                    <Image
-                      src={Copy}
-                      alt={'Copy'}
-                      onClick={() => {
-                        navigator.clipboard.writeText(loc.email).then(() =>
-                          toast({
-                            description: 'Copied successfully'
-                          })
-                        );
-                      }}
-                    />
-                  </div>
-                </div>
+                </AnimationSection>
               ))}
             </div>
           </div>
         </div>
       </div>
       <div className="flex flex-col items-center gap-4 py-[80px] px-[112px]">
-        <p className="text-neutral900 text-headingL font-semiBold">
-          Nearest office from your location
-        </p>
+        <div className="text-neutral900 text-headingL font-semiBold">
+          <AnimationSection>Nearest office from your location</AnimationSection>
+        </div>
         <div className="flex justify-between w-full">
           <div className="w-[48%]">
             <div className="flex flex-col rounded-[12px] border-[1px] border-neutral200 p-8 gap-5">

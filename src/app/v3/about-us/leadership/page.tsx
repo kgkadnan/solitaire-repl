@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Linkedin from '@public/v3/social-media/linkedin.svg';
 import { leadership } from '@/constants/v3/about-us';
 import { CommonButton } from '@/components/v3/button';
+import AnimationSection from '@/components/v3/animated-text/scroll';
 
 export default function Leadership() {
   const [selectedProfile, setSelectedProfile] = useState<any>({});
@@ -14,17 +15,19 @@ export default function Leadership() {
           <div className="scroll-container flex overflow-hidden mt-8 w-full">
             <div className="flex flex-col  gap-14 flex-none w-full flex-shrink-0 snap-center p-4">
               <div className=" text-neutral900 text-[108px] font-bold text-center line leading-[100px] custom-fadeIn">
-                Meet KGK Leadership{' '}
+                <AnimationSection>Meet KGK Leadership </AnimationSection>
               </div>
               <div className="flex gap-2">
                 <div className="flex gap-3 flex-col">
-                  <p className="text-neutral800 text-lRegular  px-4 pt-[14px]">
-                    At KGK Diamonds, our team is the backbone of our success.
-                    With a wealth of experience and a shared passion for
-                    excellence, each member plays a crucial role. Get to know
-                    the talented individuals who make KGK Diamonds a leader in
-                    the diamond industry.{' '}
-                  </p>
+                  <div className="text-neutral800 text-lRegular  px-4 pt-[14px]">
+                    <AnimationSection>
+                      At KGK Diamonds, our team is the backbone of our success.
+                      With a wealth of experience and a shared passion for
+                      excellence, each member plays a crucial role. Get to know
+                      the talented individuals who make KGK Diamonds a leader in
+                      the diamond industry.{' '}
+                    </AnimationSection>
+                  </div>
                 </div>
               </div>
             </div>
