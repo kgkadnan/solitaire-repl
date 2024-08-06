@@ -3,9 +3,9 @@ import CoverImage from './cover-image';
 
 export default function PostHeader({ title, coverImage, date }: any) {
   return (
-    <div className="flex flex-col w-full justify-center mt-4">
+    <div className="flex flex-col w-full justify-center">
       <div className="max-w-2xl mx-auto flex w-full justify-center">
-        <div className="mb-6 text-lg">
+        <div className="mb-6 text-lg mt-[100px]">
           Published <Date dateString={date} />
         </div>
       </div>

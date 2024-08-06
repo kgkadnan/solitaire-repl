@@ -34,20 +34,22 @@ export default async function Post({ params }: { params: { slug: string } }) {
     <Layout>
       <Container>
         {/* <Header /> */}
-        <>
+        <div>
           <article>
             {/* <PostTitle>{post.title}</PostTitle> */}
-            <PostHeader
-              title={post.title}
-              coverImage={post.featuredImage}
-              date={post.date}
-              author={post.author}
-              categories={post.categories}
-            />
-            <PostBody content={post.content} />
-            <footer>
-              {post.tags.edges.length > 0 && <Tags tags={post.tags} />}
-            </footer>
+            <div>
+              <PostHeader
+                title={post.title}
+                coverImage={post.featuredImage}
+                date={post.date}
+                author={post.author}
+                categories={post.categories}
+              />
+              <PostBody content={post.content} />
+              <footer>
+                {post.tags.edges.length > 0 && <Tags tags={post.tags} />}
+              </footer>
+            </div>
           </article>
 
           <SectionSeparator />
@@ -62,7 +64,7 @@ export default async function Post({ params }: { params: { slug: string } }) {
               <MoreStories posts={morePosts.slice(0, 4)} />
             </div>
           )}
-        </>
+        </div>
       </Container>
     </Layout>
   );
