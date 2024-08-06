@@ -149,6 +149,9 @@ dependencies:
   file-loader:
     specifier: ^6.2.0
     version: 6.2.0(webpack@5.88.2)
+  framer-motion:
+    specifier: ^11.3.21
+    version: 11.3.21(react-dom@18.2.0)(react@18.2.0)
   leaflet:
     specifier: ^1.9.4
     version: 1.9.4
@@ -12313,6 +12316,25 @@ packages:
     resolution: {integrity: sha512-E0X2u2JIvbEMrqEg5+4BpTqaD22OwojJI63K7MdKHdncjtAhGRbCR8nJCr2vwEt9NWBPCPcu70X9smPviEBy8Q==}
     dependencies:
       simplesignal: 2.1.7
+    dev: false
+
+  /framer-motion@11.3.21(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-D+hfIsvzV8eL/iycld4K+tKlg2Q2LdwnrcBEohtGw3cG1AIuNYATbT5RUqIM1ndsAk+EfGhoSGf0UaiFodc5Tw==}
+    peerDependencies:
+      '@emotion/is-prop-valid': '*'
+      react: ^18.0.0
+      react-dom: ^18.0.0
+    peerDependenciesMeta:
+      '@emotion/is-prop-valid':
+        optional: true
+      react:
+        optional: true
+      react-dom:
+        optional: true
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      tslib: 2.6.2
     dev: false
 
   /fresh@0.5.2:

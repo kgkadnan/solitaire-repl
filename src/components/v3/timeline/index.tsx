@@ -5,6 +5,7 @@ import Diamond from '@public/v3/timeline/diamond.svg';
 // import Image from 'next/image';
 import CircularArrow from '@public/v3/icons/circular-arrow.svg?url';
 import { timelineData } from '@/constants/v3/about-us';
+import AnimationSection from '../animated-text/scroll';
 
 const TimelineComponent: React.FC = () => {
   const divRefs: any = useRef([]);
@@ -68,9 +69,12 @@ const TimelineComponent: React.FC = () => {
         isFirst={data.year === '1905'}
       >
         <div className="flex flex-col gap-2 pl-[60px]">
-          <div className="text-headingXL neutral900 font-bold">{data.year}</div>
+          <div className="text-headingXL neutral900 font-bold">
+            {' '}
+            <AnimationSection>{data.year}</AnimationSection>
+          </div>
           <div className="text-neutral900 text-headingM font-semiBold">
-            {data.content}
+            <AnimationSection>{data.content}</AnimationSection>
           </div>
         </div>
       </TimelineItem>
