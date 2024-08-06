@@ -11,7 +11,7 @@ const AnimatedTextCoffee: React.FC<{ text: string }> = ({ text }: any) => {
       textWrapper.innerHTML =
         textWrapper.textContent?.replace(
           /\S/g,
-          "<span class='letter'>$&</span>"
+          `<span class='letter'>$&</span>`
         ) || '';
 
       anime.timeline({ loop: false }).add({
