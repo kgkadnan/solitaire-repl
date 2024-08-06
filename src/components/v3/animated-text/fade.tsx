@@ -15,7 +15,7 @@ const AnimatedTextFade: React.FC<{ text: string }> = ({ text }: any) => {
         ) || '';
 
       anime
-        .timeline({ loop: true })
+        .timeline({ loop: false })
         .add({
           targets: '.ml12 .letter',
           translateX: [40, 0],

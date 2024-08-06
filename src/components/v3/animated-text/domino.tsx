@@ -15,7 +15,7 @@ const AnimatedTextDomino: React.FC<{ text: string }> = ({ text }: any) => {
         ) || '';
 
       anime
-        .timeline({ loop: true })
+        .timeline({ loop: false })
         .add({
           targets: '.ml10 .letter',
           rotateY: [-90, 0],

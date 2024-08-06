@@ -15,7 +15,7 @@ const AnimatedTextCoffee: React.FC<{ text: string }> = ({ text }: any) => {
         ) || '';
 
       anime
-        .timeline({ loop: true })
+        .timeline({ loop: false })
         .add({
           targets: '.ml9 .letter',
           scale: [0, 1],
