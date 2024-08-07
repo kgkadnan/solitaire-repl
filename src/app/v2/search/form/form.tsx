@@ -336,14 +336,35 @@ const Form = ({
     }
   }, [searchUrl]);
 
+  const DEBOUNCE_DELAY = 500; // Adjust delay as needed (in milliseconds)
+  // Create a ref to hold the timeout ID
+  const debounceTimeout = useRef<any | null>(null);
+
   // Update search URL when form state changes
   useEffect(() => {
-    const queryParams = generateQueryParams(state);
-    // Construct your search URL here
+    // Function to execute after debounce delay
+    const handleSearchUrlUpdate = () => {
+      const queryParams = generateQueryParams(state);
 
-    if (!isValidationError && !isSliderActive) {
-      setSearchUrl(constructUrlParams(queryParams));
+      if (!isValidationError && !isSliderActive) {
+        setSearchUrl(constructUrlParams(queryParams));
+      }
+    };
+
+    // Clear the previous timeout if it exists
+    if (debounceTimeout.current) {
+      clearTimeout(debounceTimeout.current);
     }
+
+    // Set a new timeout
+    debounceTimeout.current = setTimeout(handleSearchUrlUpdate, DEBOUNCE_DELAY);
+
+    // Cleanup function to clear the timeout when the component unmounts or the dependencies change
+    return () => {
+      if (debounceTimeout.current) {
+        clearTimeout(debounceTimeout.current);
+      }
+    };
   }, [state]);
 
   //Handle search count and errors
@@ -915,6 +936,7 @@ const Form = ({
       })
       .catch(_err => setIsLoading(false));
   };
+  let isNudge = localStorage.getItem('show-nudge') === 'MINI';
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
 
   let actionButtonData: IActionButtonDataItem[] = [
@@ -1201,28 +1223,34 @@ const Form = ({
             selectedShade={selectedShade}
             setSelectedShade={setSelectedShade}
           />
-          <DiscountPrice
-            setIsSliderActive={setIsSliderActive}
-            setDiscountMin={setDiscountMin}
-            setDiscountMax={setDiscountMax}
-            setAmountRangeMin={setAmountRangeMin}
-            setAmountRangeMax={setAmountRangeMax}
-            setPricePerCaratMin={setPricePerCaratMin}
-            setPricePerCaratMax={setPricePerCaratMax}
-            discountMin={discountMin}
-            discountMax={discountMax}
-            amountRangeMin={amountRangeMin}
-            amountRangeMax={amountRangeMax}
-            pricePerCaratMin={pricePerCaratMin}
-            pricePerCaratMax={pricePerCaratMax}
-            setDiscountError={setDiscountError}
-            discountError={discountError}
-            pricePerCaratError={pricePerCaratError}
-            setPricePerCaratError={setPricePerCaratError}
-            amountRangeError={amountRangeError}
-            setAmountRangeError={setAmountRangeError}
-            setMinMaxError={setMinMaxError}
-          />
+          {isNudge &&
+          (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+            isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED) ? (
+            <></>
+          ) : (
+            <DiscountPrice
+              setIsSliderActive={setIsSliderActive}
+              setDiscountMin={setDiscountMin}
+              setDiscountMax={setDiscountMax}
+              setAmountRangeMin={setAmountRangeMin}
+              setAmountRangeMax={setAmountRangeMax}
+              setPricePerCaratMin={setPricePerCaratMin}
+              setPricePerCaratMax={setPricePerCaratMax}
+              discountMin={discountMin}
+              discountMax={discountMax}
+              amountRangeMin={amountRangeMin}
+              amountRangeMax={amountRangeMax}
+              pricePerCaratMin={pricePerCaratMin}
+              pricePerCaratMax={pricePerCaratMax}
+              setDiscountError={setDiscountError}
+              discountError={discountError}
+              pricePerCaratError={pricePerCaratError}
+              setPricePerCaratError={setPricePerCaratError}
+              amountRangeError={amountRangeError}
+              setAmountRangeError={setAmountRangeError}
+              setMinMaxError={setMinMaxError}
+            />
+          )}
 
           <Parameters
             state={state}
