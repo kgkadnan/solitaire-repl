@@ -104,6 +104,8 @@ export function MatchPairDetails({
   const [breadCrumMatchPair, setBreadCrumMatchPair] = useState('');
   const [viewSimilar, setViewSimilar] = useState<boolean>(false);
   const [isImageLoading, setIsImageLoading] = useState(true);
+  const [imageLoadingStatus, setImageLoadingStatus] = useState<any>([]);
+
   const [triggerColumn] =
     useLazyGetManageListingSequenceQuery<IManageListingSequenceResponse>();
   const [triggerSimilarMatchingPairApi] = useLazyGetSimilarMatchingPairQuery();
@@ -114,6 +116,29 @@ export function MatchPairDetails({
     };
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (originalData.length > 0) {
+      setImageLoadingStatus(new Array(originalData.length).fill(true));
+    }
+  }, [originalData]);
+
+  useEffect(() => {
+    // Check if all images are loaded
+    if (imageLoadingStatus.every((status: any) => !status)) {
+      setIsImageLoading(false);
+    }
+  }, [imageLoadingStatus]);
+
+  const handleImageLoad = (index: number) => {
+    // Set the specific image as loaded
+    setImageLoadingStatus((prevState: any) => {
+      const newStatus = [...prevState];
+      newStatus[index] = false;
+      return newStatus;
+    });
+  };
+
   useEffect(() => {
     if (originalData.length >= 2) {
       triggerSimilarMatchingPairApi({
@@ -475,6 +500,8 @@ export function MatchPairDetails({
                   setImageIndex={setImageIndex}
                   isMatchingPair={true}
                   setIsImageLoading={setIsImageLoading}
+                  setImageLoadingStatus={setImageLoadingStatus}
+                  originalDataFromMatchPair={originalData}
                 />
               </div>
               <div className="flex  justify-center xl:justify-end mr-[10px] items-center">
@@ -534,6 +561,9 @@ export function MatchPairDetails({
                               <button
                                 onClick={() => {
                                   setIsImageLoading(true);
+                                  setImageLoadingStatus(
+                                    new Array(originalData.length).fill(true)
+                                  );
                                   setZoomPosition({ x: 0, y: 0 });
                                   setZoomLevel(1);
                                   setImageIndex(imageIndex - 1);
@@ -561,6 +591,9 @@ export function MatchPairDetails({
                               <button
                                 onClick={() => {
                                   setIsImageLoading(true);
+                                  setImageLoadingStatus(
+                                    new Array(originalData.length).fill(true)
+                                  );
                                   setZoomPosition({ x: 0, y: 0 });
                                   setZoomLevel(1);
                                   setImageIndex(imageIndex + 1);
@@ -802,7 +835,7 @@ export function MatchPairDetails({
                                     )[0].url
                                   }
                                   onLoad={() => {
-                                    setIsImageLoading(false);
+                                    handleImageLoad(index);
                                   }}
                                   className={`${'w-[285px] h-[305px]'} `}
                                 />
@@ -819,7 +852,7 @@ export function MatchPairDetails({
                                       : 350
                                   }
                                   onLoad={() => {
-                                    setIsImageLoading(false);
+                                    handleImageLoad(index);
                                   }}
                                   height={
                                     originalData.length > 2
@@ -852,7 +885,7 @@ export function MatchPairDetails({
                                     : 370
                                 }
                                 onLoad={() => {
-                                  setIsImageLoading(false);
+                                  handleImageLoad(index);
                                 }}
                                 height={
                                   originalData.length > 2
@@ -884,7 +917,7 @@ export function MatchPairDetails({
                                     : 370
                                 }
                                 onLoad={() => {
-                                  setIsImageLoading(false);
+                                  handleImageLoad(index);
                                 }}
                                 height={
                                   originalData.length > 2
