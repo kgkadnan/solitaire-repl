@@ -137,6 +137,7 @@ const Result = ({
   const [detailImageData, setDetailImageData] = useState<any>({});
   const [breadCrumLabel, setBreadCrumLabel] = useState('');
 
+  const [isSkeletonLoading, setIsSkeletonLoading] = useState<boolean>(true);
   const [isDiamondDetailLoading, setIsDiamondDetailLoading] = useState(true); //
 
   const [isConfirmStone, setIsConfirmStone] = useState(false);
@@ -1129,7 +1130,7 @@ const Result = ({
             ''
           ) : hasLimitExceeded ? (
             ''
-          ) : productData === undefined ? (
+          ) : isSkeletonLoading ? (
             <Skeleton
               variant="rectangular"
               height={'24px'}
@@ -1315,6 +1316,8 @@ const Result = ({
                   setCompareStoneData={setCompareStoneData}
                   setIsInputDialogOpen={setIsInputDialogOpen}
                   handleCreateAppointment={handleCreateAppointment}
+                  setIsSkeletonLoading={setIsSkeletonLoading}
+                  isSkeletonLoading={isSkeletonLoading}
                 />
               )}
             </div>
