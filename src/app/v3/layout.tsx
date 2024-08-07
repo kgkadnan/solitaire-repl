@@ -17,10 +17,12 @@ export default function Layout({ children }: ILayoutProps) {
     <main>
       <Toaster />
       <CommonHeader />
-      {children}
-      <SubscribeNewsLetter />
-      <FooterSiteMap />
-      <Footer />
+      <div>{children}</div>
+      <div style={{ zIndex: 100 }}>
+        <SubscribeNewsLetter />
+        <FooterSiteMap />
+        <Footer />
+      </div>
     </main>
   );
 }

@@ -152,6 +152,9 @@ dependencies:
   framer-motion:
     specifier: ^11.3.21
     version: 11.3.21(react-dom@18.2.0)(react@18.2.0)
+  gsap:
+    specifier: ^3.12.5
+    version: 3.12.5
   leaflet:
     specifier: ^1.9.4
     version: 1.9.4
@@ -197,6 +200,9 @@ dependencies:
   react-globe.gl:
     specifier: ^2.27.2
     version: 2.27.2(react@18.2.0)
+  react-intersection-observer:
+    specifier: ^9.13.0
+    version: 9.13.0(react-dom@18.2.0)(react@18.2.0)
   react-leaflet:
     specifier: ^4.2.1
     version: 4.2.1(leaflet@1.9.4)(react-dom@18.2.0)(react@18.2.0)
@@ -12631,6 +12637,10 @@ packages:
     engines: {node: ^12.22.0 || ^14.16.0 || ^16.0.0 || >=17.0.0}
     dev: true
 
+  /gsap@3.12.5:
+    resolution: {integrity: sha512-srBfnk4n+Oe/ZnMIOXt3gT605BX9x5+rh/prT2F1SsNJsU1XuMiP0E2aptW481OnonOGACZWBqseH5Z7csHxhQ==}
+    dev: false
+
   /gunzip-maybe@1.4.2:
     resolution: {integrity: sha512-4haO1M4mLO91PW57BMsDFf75UmwoRX0GkdD+Faw+Lr+r/OZrOCS0pIBwOL1xCKQqnQzbNFGgK2V2CpBUPeFNTw==}
     hasBin: true
@@ -17318,6 +17328,19 @@ packages:
     dependencies:
       react: 18.2.0
     dev: true
+
+  /react-intersection-observer@9.13.0(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-y0UvBfjDiXqC8h0EWccyaj4dVBWMxgEx0t5RGNzQsvkfvZwugnKwxpu70StY4ivzYuMajavwUDjH4LJyIki9Lw==}
+    peerDependencies:
+      react: ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+      react-dom: ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    peerDependenciesMeta:
+      react-dom:
+        optional: true
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    dev: false
 
   /react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}

@@ -293,48 +293,44 @@
 /* styles/AnimatedText.module.css */
 .ml9 {
   position: relative;
-  // font-weight: 200;
-  // font-size: 4em;
 }
 
 .ml9 .text-wrapper {
   position: relative;
   display: inline-block;
-  // padding-top: 0.2em;
-  // padding-right: 0.05em;
-  // padding-bottom: 0.1em;
   overflow: hidden;
 }
 
 .ml9 .letter {
   transform-origin: 50% 100%;
   display: inline-block;
-  // line-height: 1em;
 }
 
 /* styles/AnimatedText.module.css */
 .ml10 {
   position: relative;
-  // font-weight: 900;
-  // font-size: 4em;
 }
 
 .ml10 .text-wrapper {
   position: relative;
   display: inline-block;
-  // padding-top: 0.2em;
-  // padding-right: 0.05em;
-  // padding-bottom: 0.1em;
   overflow: hidden;
 }
 
 .ml10 .letter {
   display: inline-block;
-  // line-height: 1em;
   transform-origin: 0 0;
 }
 
 .ml12 .letter {
   display: inline-block;
-  // line-height: 1em;
+}
+.scroll-image.visible {
+  @apply opacity-100 scale-110;
+}
+
+.slow-transition {
+  transition:
+    opacity 3s ease-in-out,
+    transform 3s ease-in-out;
 }
