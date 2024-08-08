@@ -454,6 +454,8 @@ export function MatchPairDetails({
             <button
               className="text-neutral600 text-sMedium font-regular cursor-pointer"
               onClick={() => {
+                setValidImages([]);
+                setOriginalData([]);
                 goBackToListView!();
               }}
             >
