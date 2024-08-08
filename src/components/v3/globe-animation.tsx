@@ -1,53 +1,76 @@
-import React, { useState, useEffect } from 'react';
+'use client';
+import React, { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 
-// Generate image paths
-const images = Array.from({ length: 465 - 22 + 1 }, (_, i) => {
-  const index = 22 + i;
-  const formattedIndex = index.toString().padStart(4, '0'); // Ensure zero-padding
-  return `/v3/globe-animation/World_Animation_Backup2_gv005_-Camera_${formattedIndex}.png`;
-});
+gsap.registerPlugin(ScrollTrigger);
 
-const partitionCount = 4;
-const imagesPerPartition = Math.ceil(images.length / partitionCount);
-
-const InteractiveScrollAnimation = () => {
-  const [currentPartition, setCurrentPartition] = useState(0);
-
-  const handleScroll = () => {
-    const scrollPosition = window.scrollY;
-    const partitionHeight = document.body.scrollHeight / partitionCount;
-    const newPartition = Math.floor(scrollPosition / partitionHeight);
-
-    setCurrentPartition(Math.min(newPartition, partitionCount - 1)); // Ensure it's within bounds
-  };
+const HeroLightpassCanvas: React.FC = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const context = canvas.getContext('2d');
+    if (!context) return;
+
+    const frameCount = 430;
+    const currentFrame = (index: number) =>
+      `/v3/globe/World_Animation_Backup2_gv005_-Camera_${(index + 22).toString().padStart(4, '0')}.png`;
+
+    const images: HTMLImageElement[] = [];
+    const airpods = { frame: 0 };
+
+    const loadImages = async () => {
+      const imagePromises = Array.from({ length: frameCount }, (_, i) => {
+        return new Promise<HTMLImageElement>((resolve) => {
+          const img = new Image();
+          img.src = currentFrame(i);
+          img.onload = () => resolve(img);
+        });
+      });
+      
+      return Promise.all(imagePromises);
+    };
+
+    loadImages().then((loadedImages) => {
+      images.push(...loadedImages);
+
+      const render = () => {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.drawImage(images[airpods.frame], 0, 0);
+      };
+
+      gsap.to(airpods, {
+        frame: frameCount - 1,
+        snap: 'frame',
+        ease: 'none',
+        scrollTrigger: {
+          trigger: canvas,
+          start: "top top", // Adjust start position if necessary
+          end: "bottom bottom", // Adjust end position if necessary
+          scrub: 0.5,
+          markers: true, // Add this line to debug ScrollTrigger
+        },
+        onUpdate: render,
+      });
+
+      render(); // Render the initial frame
+    });
+
+    return () => {
+      // Clean up GSAP animations
+      gsap.killTweensOf(airpods);
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+    };
   }, []);
 
   return (
-    <div className="relative w-screen h-[80vh] overflow-y-scroll">
-      <div className="sticky top-0 w-full h-screen">
-        <div className="relative w-full h-full">
-          {images.map((src, index) => {
-            const partitionIndex = Math.floor(index / imagesPerPartition);
-            const isActive = partitionIndex === currentPartition;
-
-            return (
-              <div
-                key={index}
-                className={`absolute w-full h-full bg-cover bg-center transition-opacity duration-1000 ${
-                  isActive ? 'opacity-100' : 'opacity-0'
-                }`}
-                style={{ backgroundImage: `url(${src})`, zIndex: index }}
-              />
-            );
-          })}
-        </div>
-      </div>
+    <div className='fixed' style={{ width: '100%', height: 'auto' }}>
+      <canvas ref={canvasRef} width={1000} height={700} />
     </div>
   );
 };
 
-export default InteractiveScrollAnimation;
+export default HeroLightpassCanvas;
