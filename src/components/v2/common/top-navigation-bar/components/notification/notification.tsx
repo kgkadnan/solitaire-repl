@@ -127,7 +127,7 @@ const Notification = ({
             router.push(`/v2/my-account`);
           } else if (splitData[0] === 'search') {
             router.push(`/v2/search?active-tab=new-search`);
-          } else if (splitData[0] === 'home') {
+          } else if (splitData[0] === 'home' || splitData[0] === 'dashboard') {
             router.push(`/v2`);
           }
         }

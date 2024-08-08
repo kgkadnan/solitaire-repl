@@ -61,37 +61,48 @@ const AnchorLinkNavigation: React.FC<IAnchorLinkNavigation> = ({
         className="flex overflow-x-auto no-scrollbar w-[95%] shadow-sm py-[10px]"
         ref={containerRef}
       >
-        {anchorNavigations.map(links => (
-          <div key={`keys-${links}`}>
-            <Link
-              activeStyle={{
-                borderBottom: '2px solid var(--neutral-900)',
-                color: 'var(--neutral-900)'
-              }}
-              to={links}
-              spy={true}
-              smooth={true}
-              offset={
+        {anchorNavigations
+          .filter(
+            links =>
+              !(
+                links === 'Discount% Price/Ct Amount Range' &&
                 isNudge &&
                 (isKycVerified?.customer?.kyc?.status ===
                   kycStatus.INPROGRESS ||
                   isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-                  ? -170
-                  : -120
-              }
-              duration={100}
-              delay={0}
-              className={`flex-shrink-0 px-[12px] py-[8px] text-center text-mMedium font-medium capitalize cursor-pointer whitespace-nowrap text-neutral600 ${
-                activeLink === links
-                  ? 'border-b-2 border-neutral900 text-neutral900'
-                  : ''
-              }`}
-              onClick={() => handleLinkClick(links)}
-            >
-              {links}
-            </Link>
-          </div>
-        ))}
+              )
+          )
+          .map(links => (
+            <div key={`keys-${links}`}>
+              <Link
+                activeStyle={{
+                  borderBottom: '2px solid var(--neutral-900)',
+                  color: 'var(--neutral-900)'
+                }}
+                to={links}
+                spy={true}
+                smooth={true}
+                offset={
+                  isNudge &&
+                  (isKycVerified?.customer?.kyc?.status ===
+                    kycStatus.INPROGRESS ||
+                    isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+                    ? -170
+                    : -120
+                }
+                duration={100}
+                delay={0}
+                className={`flex-shrink-0 px-[12px] py-[8px] text-center text-mMedium font-medium capitalize cursor-pointer whitespace-nowrap text-neutral600 ${
+                  activeLink === links
+                    ? 'border-b-2 border-neutral900 text-neutral900'
+                    : ''
+                }`}
+                onClick={() => handleLinkClick(links)}
+              >
+                {links}
+              </Link>
+            </div>
+          ))}
       </div>
 
       <div className="flex w-[5%] justify-end">
