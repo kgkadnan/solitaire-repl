@@ -336,9 +336,9 @@ const Form = ({
     }
   }, [searchUrl]);
 
-  const DEBOUNCE_DELAY = 500; // Adjust delay as needed (in milliseconds)
+  // const DEBOUNCE_DELAY = 500; // Adjust delay as needed (in milliseconds)
   // Create a ref to hold the timeout ID
-  const debounceTimeout = useRef<any | null>(null);
+  // const debounceTimeout = useRef<any | null>(null);
 
   // Update search URL when form state changes
   useEffect(() => {
