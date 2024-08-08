@@ -342,29 +342,11 @@ const Form = ({
 
   // Update search URL when form state changes
   useEffect(() => {
-    // Function to execute after debounce delay
-    const handleSearchUrlUpdate = () => {
-      const queryParams = generateQueryParams(state);
-
-      if (!isValidationError && !isSliderActive) {
-        setSearchUrl(constructUrlParams(queryParams));
-      }
-    };
-
-    // Clear the previous timeout if it exists
-    if (debounceTimeout.current) {
-      clearTimeout(debounceTimeout.current);
+    const queryParams = generateQueryParams(state);
+    // Construct your search URL here
+    if (!isValidationError && !isSliderActive) {
+      setSearchUrl(constructUrlParams(queryParams));
     }
-
-    // Set a new timeout
-    debounceTimeout.current = setTimeout(handleSearchUrlUpdate, DEBOUNCE_DELAY);
-
-    // Cleanup function to clear the timeout when the component unmounts or the dependencies change
-    return () => {
-      if (debounceTimeout.current) {
-        clearTimeout(debounceTimeout.current);
-      }
-    };
   }, [state]);
 
   //Handle search count and errors
