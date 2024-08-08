@@ -239,10 +239,17 @@ const Form = ({
   const { setIsInputDialogOpen } = modalSetState;
   const [data, setData] = useState<any>();
   const [error, setError] = useState<any>();
-  let [triggerProductCountApi] = useLazyGetProductCountQuery();
-  let [triggerMatchingPairCountApi] = useLazyGetMatchingPairCountQuery();
+  let [
+    triggerProductCountApi,
+    { isLoading: isLoadingProductApi, isFetching: isFetchingProductApi }
+  ] = useLazyGetProductCountQuery();
+  let [
+    triggerMatchingPairCountApi,
+    { isLoading: isLoadingMatchPairApi, isFetching: isFetchingMatchPairApi }
+  ] = useLazyGetMatchingPairCountQuery();
   // const { errorState, errorSetState } = useNumericFieldValidation();
 
+  console.log('isFetching', isFetchingProductApi);
   const { caratError, discountError, pricePerCaratError, amountRangeError } =
     errorState;
   const {
@@ -256,10 +263,6 @@ const Form = ({
   useEffect(() => {
     isAllowedToUnloadRef.current = isAllowedToUnload;
   }, [isAllowedToUnload]);
-
-  // useEffect(() => {
-
-  // }, [caratMin, caratMax]);
 
   useEffect(() => {
     const handleBeforeUnload = async () => {
@@ -336,7 +339,7 @@ const Form = ({
     }
   }, [searchUrl]);
 
-  const DEBOUNCE_DELAY = 500; // Adjust delay as needed (in milliseconds)
+  const DEBOUNCE_DELAY = 800; // Adjust delay as needed (in milliseconds)
   // Create a ref to hold the timeout ID
   const debounceTimeout = useRef<any | null>(null);
 
@@ -1026,7 +1029,12 @@ const Form = ({
             isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
           ? handleAddDemand
           : handleFormSearch,
-      isLoading: isLoading
+      isLoading:
+        isLoading ||
+        isLoadingProductApi ||
+        isLoadingMatchPairApi ||
+        isFetchingMatchPairApi ||
+        isFetchingProductApi
     }
   ];
 
@@ -1291,7 +1299,11 @@ const Form = ({
                     : messageColor
                 } pl-[8px]`}
               >
-                {!isLoading &&
+                {!isLoadingProductApi &&
+                  !isLoadingMatchPairApi &&
+                  !isFetchingMatchPairApi &&
+                  !isLoadingProductApi &&
+                  !isLoading &&
                   (minMaxError.length
                     ? minMaxError
                     : !isValidationError && errorText)}
