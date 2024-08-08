@@ -1,4 +1,3 @@
-
 'use client';
 import React, { useEffect, useRef, useState } from 'react';
 
@@ -97,9 +96,10 @@ const VideoScrollComponent: React.FC = () => {
           pointerEvents: 'none' // Disable pointer events to allow interactions with underlying content
         }}
       >
-        <source type="video/mp4" 
-        // src="https://www.apple.com/media/us/mac-pro/2013/16C1b6b5-1d91-4fef-891e-ff2fc1c1bb58/videos/macpro_main_desktop.mp4"
-        src="/v3/icons/globe.mp4" 
+        <source
+          type="video/mp4"
+          // src="https://www.apple.com/media/us/mac-pro/2013/16C1b6b5-1d91-4fef-891e-ff2fc1c1bb58/videos/macpro_main_desktop.mp4"
+          src="/v3/icons/globe.mp4"
         />
       </video>
       <div style={{ position: 'relative', zIndex: 3 }}>

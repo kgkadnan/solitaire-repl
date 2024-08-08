@@ -12,7 +12,6 @@ const index = () => {
     <div>
       <div>
         <VideoScrollComponent />
-
       </div>
     </div>
   );
