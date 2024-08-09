@@ -113,13 +113,13 @@ const ContactUs = () => {
             <div className="flex flex-col gap-3 px-[40px] items-center">
               <div className="text-neutral900 text-[28px] font-bold text-center">
                 {' '}
-                <AnimationSection>
+                <AnimationSection animationDelay={0.5}>
                   We're Here to Assist You
                 </AnimationSection>{' '}
               </div>
 
               <div className="text-neutral800 text-lRegular text-center w-[965px] px-10 content">
-                <AnimationSection>
+                <AnimationSection animationDelay={1}>
                   At KGK Diamonds, we value your feedback and inquiries. Whether
                   you have a question, need assistance, or want to learn more
                   about our services, our dedicated team is here to help. Please

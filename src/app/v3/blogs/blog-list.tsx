@@ -45,18 +45,19 @@ const BlogList = ({ posts }: { posts: any[] }) => {
           <div className="flex flex-wrap flex-col gap-14 pt-[180px] pb-[80px] flex-wrap min-h-[160px] justify-between">
             <div className=" text-neutral900 text-[96px] font-bold text-center line leading-[100px] flowy-animate">
               <AnimationSection>
-                {' '}
                 Discover the World of Diamonds
               </AnimationSection>
             </div>
             <div className="flex gap-3">
               <p className="text-neutral900 text-[28px] font-bold w-1/2">
-                <AnimationSection>Learn, Inspire, & Empower. </AnimationSection>
+                <AnimationSection animationDelay={0.5}>
+                  Learn, Inspire, & Empower.{' '}
+                </AnimationSection>
               </p>
 
               <p className="text-neutral800 text-lRegular w-1/2 px-4 pt-[14px]">
                 {' '}
-                <AnimationSection>
+                <AnimationSection animationDelay={1}>
                   Stay informed with the latest trends and insights in the gem
                   and jewelry industry. Join us as we share our experiences,
                   knowledge, and understanding of diamonds.

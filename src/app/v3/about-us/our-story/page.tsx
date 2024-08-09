@@ -119,11 +119,11 @@ export default function AboutUs() {
                   key={index}
                 >
                   <div className="flex gap-3">
-                    <p className="text-neutral900 text-[28px] font-bold w-1/2 ">
+                    {/* <p className="text-neutral900 text-[28px] font-bold w-1/2 ">
                       <AnimationSection>{aboutStep.subtitle}</AnimationSection>
-                    </p>
-                    <p className="text-neutral800 text-lRegular w-1/2 px-4 pt-[14px] ">
-                      <AnimationSection>
+                    </p> */}
+                    <p className="text-neutral800 text-lRegular  px-4  ">
+                      <AnimationSection animationDelay={index === 0 ? 1 : 5}>
                         {aboutStep.description}
                       </AnimationSection>
                     </p>

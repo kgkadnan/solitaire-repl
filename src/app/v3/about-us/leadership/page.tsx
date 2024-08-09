@@ -20,7 +20,7 @@ export default function Leadership() {
               <div className="flex gap-2">
                 <div className="flex gap-3 flex-col">
                   <div className="text-neutral800 text-lRegular px-4 pt-[14px]">
-                    <AnimationSection>
+                    <AnimationSection animationDelay={0.5}>
                       At KGK Diamonds, our team is the backbone of our success.
                       With a wealth of experience and a shared passion for
                       excellence, each member plays a crucial role. Get to know
