@@ -108,7 +108,7 @@ export default function AboutUs() {
       <div className="min-h-[300px] flex items-center px-[112px] bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient">
         <div className="w-full">
           <div className="flex flex-col gap-14 pt-[180px] pb-[80px]">
-            <div className="text-neutral900 text-[108px] font-bold text-center leading-[100px]">
+            <div className="text-neutral900 text-[96px] font-bold text-center leading-[100px]">
               <AnimationSection>
                 KGK Diamonds: A Pillar of KGK Group
               </AnimationSection>
