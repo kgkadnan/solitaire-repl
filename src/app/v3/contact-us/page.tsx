@@ -254,73 +254,68 @@ const ContactUs = () => {
                 (loc: any) => loc.region === selectedRegion
               )[0].location.map((loc: any, index: number) => (
                 <div key={`${loc.country}-${index}`}>
-                  <AnimationSection>
-                    <div className="flex flex-col gap-[6px]">
-                      <div className="flex gap-3">
-                        <Image src={loc.flag} alt={loc.country} />
+                  {/* <AnimationSection> */}
+                  <div className="flex flex-col gap-[6px]">
+                    <div className="flex gap-3">
+                      <Image src={loc.flag} alt={loc.country} />
 
-                        <p className="font-semiBold text-headingS text-neutral600">
-                          {loc.country}
+                      <p className="font-semiBold text-headingS text-neutral600">
+                        {loc.country}
+                      </p>
+                    </div>
+                    <div className="flex gap-1">
+                      {' '}
+                      <Image src={loc.image} alt={loc.name} />
+                      <div className="flex flex-col justify-center">
+                        {' '}
+                        <p className="text-mMedium font-semiBold text-neutral600">
+                          {loc.name}
+                        </p>{' '}
+                        <p className="text-mRegular text-neutral600">
+                          {loc.office}
                         </p>
                       </div>
-                      <div className="flex gap-1">
-                        {' '}
-                        <Image src={loc.image} alt={loc.name} />
-                        <div className="flex flex-col justify-center">
-                          {' '}
-                          <p className="text-mMedium font-semiBold text-neutral600">
-                            {loc.name}
-                          </p>{' '}
-                          <p className="text-mRegular text-neutral600">
-                            {loc.office}
-                          </p>
-                        </div>
-                      </div>
-                      {loc.phone && (
-                        <a
-                          href={`tel:${loc.phone}`}
-                          className="flex gap-1 items-center"
-                        >
-                          <Image
-                            src={Phone}
-                            alt={'Phone'}
-                            height={24}
-                            width={24}
-                          />
-                          <p className="text-neutral600 text-sRegular">
-                            {loc.phone}
-                          </p>
-                        </a>
-                      )}
-                      <div className="flex gap-1 items-center">
-                        <a
-                          href={`mailto:${loc.email}`}
-                          className="flex gap-1 items-center"
-                        >
-                          <Image
-                            src={Mail}
-                            alt={'Mail'}
-                            height={24}
-                            width={24}
-                          />
-                          <p className="text-neutral600 text-sRegular">
-                            {loc.email}{' '}
-                          </p>
-                        </a>
-                        <Image
-                          src={Copy}
-                          alt={'Copy'}
-                          onClick={() => {
-                            navigator.clipboard.writeText(loc.email).then(() =>
-                              toast({
-                                description: 'Copied successfully'
-                              })
-                            );
-                          }}
-                        />
-                      </div>
                     </div>
-                  </AnimationSection>
+                    {loc.phone && (
+                      <a
+                        href={`tel:${loc.phone}`}
+                        className="flex gap-1 items-center"
+                      >
+                        <Image
+                          src={Phone}
+                          alt={'Phone'}
+                          height={24}
+                          width={24}
+                        />
+                        <p className="text-neutral600 text-sRegular">
+                          {loc.phone}
+                        </p>
+                      </a>
+                    )}
+                    <div className="flex gap-1 items-center">
+                      <a
+                        href={`mailto:${loc.email}`}
+                        className="flex gap-1 items-center"
+                      >
+                        <Image src={Mail} alt={'Mail'} height={24} width={24} />
+                        <p className="text-neutral600 text-sRegular">
+                          {loc.email}{' '}
+                        </p>
+                      </a>
+                      <Image
+                        src={Copy}
+                        alt={'Copy'}
+                        onClick={() => {
+                          navigator.clipboard.writeText(loc.email).then(() =>
+                            toast({
+                              description: 'Copied successfully'
+                            })
+                          );
+                        }}
+                      />
+                    </div>
+                  </div>
+                  {/* </AnimationSection> */}
                 </div>
               ))}
             </div>

@@ -8,7 +8,7 @@
 
 // interface ISectionProps {
 //   fgColor: string;
-//   children: React.ReactNode;
+//   children: string;
 // }
 
 // const AnimateSectionText: React.FC<ISectionProps> = ({ fgColor, children }) => {
@@ -31,32 +31,27 @@
 //             trigger: char,
 //             start: 'top 80%',
 //             end: 'top 20%',
-//             // scrub: false, // Smooth scrolling animation
 //             markers: false,
-//             toggleActions:'play none none none'
-//             // toggleActions: 'play none reverse none', // Ensure it reverses properly
+//             scrub: false, // Smooth scrolling animation
+//             toggleActions: 'play reverse play play' // Ensure it plays and reverses properly
 //           }
 //         }
 //       );
 //     });
 
 //     return () => {
-//       SplitType.revert()
+//       SplitType.revert(); // Use revert instead of destroy to reset the text
 //       gsap.killTweensOf('*');
 //     };
 //   }, [fgColor]);
 
-//   return (
-//     <section>
-//       <p className="reveal-type">{children}</p>
-//     </section>
-//   );
+//   return <p className="reveal-type">{children}</p>;
 // };
 
 // export default AnimateSectionText;
 
 'use client';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import SplitType from 'split-type';
@@ -65,44 +60,47 @@ gsap.registerPlugin(ScrollTrigger);
 
 interface ISectionProps {
   fgColor: string;
-  children: React.ReactNode;
+  children: string;
 }
 
 const AnimateSectionText: React.FC<ISectionProps> = ({ fgColor, children }) => {
-  useEffect(() => {
-    // SplitType must be applied after the text is rendered
-    const splitTypes = document.querySelectorAll('.reveal-type');
+  const textRef = useRef<HTMLParagraphElement>(null);
 
-    splitTypes.forEach(char => {
-      const text = new SplitType(char as Element, { types: 'chars' });
+  useEffect(() => {
+    if (textRef.current) {
+      const splitText = new SplitType(textRef.current, { types: 'chars' });
 
       gsap.fromTo(
-        text.chars,
-        { autoAlpha: 0 }, // Starting state
+        splitText.chars,
+        { autoAlpha: 0 },
         {
           color: fgColor,
-          autoAlpha: 1, // Ending state
-          duration: 1, // Duration of the animation
+          autoAlpha: 1,
+          duration: 1,
           stagger: 0.02,
           scrollTrigger: {
-            trigger: char,
+            trigger: textRef.current,
             start: 'top 80%',
             end: 'top 20%',
             markers: false,
-            scrub: false, // Smooth scrolling animation
-            toggleActions: 'play reverse play play' // Ensure it plays and reverses properly
+            scrub: false,
+            toggleActions: 'play reverse play play'
           }
         }
       );
-    });
 
-    return () => {
-      SplitType.revert(); // Use revert instead of destroy to reset the text
-      gsap.killTweensOf('*');
-    };
+      return () => {
+        splitText.revert();
+        gsap.killTweensOf(textRef.current);
+      };
+    }
   }, [fgColor]);
 
-  return <p className="reveal-type">{children}</p>;
+  return (
+    <p ref={textRef} className="reveal-type">
+      {children}
+    </p>
+  );
 };
 
 export default AnimateSectionText;

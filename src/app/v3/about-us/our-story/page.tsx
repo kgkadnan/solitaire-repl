@@ -5,7 +5,6 @@ import Image from 'next/image';
 import TimelineBanner from '@public/v3/timeline/timeline-banner.png';
 import { aboutUsFirstFold } from '@/constants/v3/about-us';
 import TimelineComponent from '@/components/v3/timeline';
-
 import AnimationSection from '@/components/v3/animated-text/scroll';
 
 export default function AboutUs() {
@@ -18,6 +17,7 @@ export default function AboutUs() {
     if (scrollContainerRef.current) {
       const scrollContainer = scrollContainerRef.current;
       const scrollAmount = scrollContainer.clientWidth * index;
+      console.log(`Scrolling to index ${index}: ${scrollAmount}`);
       scrollContainer.scrollTo({
         left: scrollAmount,
         behavior: 'smooth'
@@ -27,16 +27,15 @@ export default function AboutUs() {
 
   const handleScroll = (event: WheelEvent) => {
     if (event.deltaY > 0) {
-      // Scroll down
       if (currentIndex < sectionCount - 1) {
         setCurrentIndex(prevIndex => Math.min(prevIndex + 1, sectionCount - 1));
       }
     } else {
-      // Scroll up
       if (currentIndex > 0) {
         setCurrentIndex(prevIndex => Math.max(prevIndex - 1, 0));
       }
     }
+    console.log(`Handled scroll: ${currentIndex}`);
   };
 
   useEffect(() => {
@@ -45,7 +44,7 @@ export default function AboutUs() {
       handleScroll(event);
     };
 
-    const throttledHandleScroll = throttle(handleGlobalScroll, 500); // Adjust throttle limit as needed
+    const throttledHandleScroll = throttle(handleGlobalScroll, 500);
 
     window.addEventListener('wheel', throttledHandleScroll, { passive: false });
 
@@ -58,7 +57,6 @@ export default function AboutUs() {
     scrollToIndex(currentIndex);
   }, [currentIndex]);
 
-  // Throttle function to limit the rate at which scroll events are processed
   const throttle = (func: (event: WheelEvent) => void, limit: number) => {
     let inThrottle: boolean;
     return function (this: any, ...args: [WheelEvent]) {
@@ -164,7 +162,6 @@ export default function AboutUs() {
             <div className="w-[500px]">
               <div className="text-headingXL font-bold ">
                 <AnimationSection>The Timeline</AnimationSection>
-                {/* <AnimatedTextFade text="The Timeline" /> */}
               </div>
               <div className="flex gap-1">
                 <div className="absolute transform -translate-x-1/2 top-20 h-full">
