@@ -78,12 +78,16 @@ import { Skeleton } from '@mui/material';
 import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
 import { useAppDispatch, useAppSelector } from '@/hooks/hook';
 import { setConfirmStoneTrack } from '@/features/confirm-stone-track/confirm-stone-track-slice';
+import { useLazyGetCustomerQuery } from '@/features/api/dashboard';
+import { STONE_LOCATION } from '@/constants/v2/enums/location';
+import { kamLocationAction } from '@/features/kam-location/kam-location';
 
 const MyCart = () => {
   const dispatch = useAppDispatch();
 
   const confirmTrack = useAppSelector(state => state.setConfirmStoneTrack);
-
+  const kamLocation = useAppSelector(state => state.kamLocation);
+  const [triggerGetCustomer] = useLazyGetCustomerQuery({});
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();
   const { modalState, modalSetState } = useModalStateManagement();
   const { isDialogOpen, dialogContent } = modalState;
@@ -472,14 +476,9 @@ const MyCart = () => {
     );
   };
 
-  const confirmStoneApiCall = () => {
-    const variantIds: string[] = [];
-
-    confirmStoneData.forEach((ids: any) => {
-      variantIds.push(ids.variants[0].id);
-    });
-
+  const confirmStoneApiCall = ({ variantIds }: { variantIds: string[] }) => {
     if (variantIds.length) {
+      setIsLoading(true);
       confirmProduct({
         variants: variantIds,
         comments: commentValue,
@@ -493,14 +492,21 @@ const MyCart = () => {
             setCommentValue('');
             setIsDialogOpen(true);
             dispatch(setConfirmStoneTrack(''));
+            setIsLoading(false);
 
             setRowSelection({});
             setDialogContent(
               <CommonPoppup
-                content={''}
-                status="success"
-                customPoppupBodyStyle="mt-[70px]"
-                header={`${variantIds.length} stones have been successfully added to "My Diamond"`}
+                content={res.message}
+                status={
+                  res.status === 'success'
+                    ? 'success'
+                    : res.status === 'partial'
+                    ? 'warning'
+                    : ''
+                }
+                customPoppupBodyStyle="!mt-[70px]"
+                header={res.title}
                 actionButtonData={[
                   {
                     variant: 'secondary',
@@ -538,6 +544,8 @@ const MyCart = () => {
           }
         })
         .catch(e => {
+          setIsLoading(false);
+
           setCommentValue('');
           dispatch(setConfirmStoneTrack(''));
 
@@ -590,6 +598,106 @@ const MyCart = () => {
             );
           }
         });
+    }
+  };
+
+  const checkLocation = ({
+    kamLocation,
+    variantIds
+  }: {
+    kamLocation: string;
+    variantIds: string[];
+  }) => {
+    // Compare Stone locations with KAM location
+    let locationMismatch = false;
+    confirmStoneData.forEach((stones: any) => {
+      const location = stones.location as keyof typeof STONE_LOCATION;
+      if (
+        STONE_LOCATION[location].toLowerCase() !== kamLocation.toLowerCase()
+      ) {
+        locationMismatch = true;
+      }
+    });
+    if (locationMismatch) {
+      setIsDialogOpen(true);
+      setDialogContent(
+        <CommonPoppup
+          content={
+            <div className="flex flex-col gap-1">
+              <div>
+                You are trying to confirm some of the stones from another
+                region. This might lead to additional charges. By confirming
+                your order, you acknowledge and agree to the following:
+              </div>
+
+              <div>
+                <p>
+                  {' '}
+                  &#8226; Customs Duties and Taxes: You are responsible for
+                  paying any applicable customs duties, taxes, and other charges
+                  that may be incurred when importing stones from outside your
+                  location.
+                </p>
+
+                <p>
+                  {' '}
+                  &#8226; Import Regulations: Ensure you are aware of and comply
+                  with all relevant import regulations and requirements for your
+                  region.
+                </p>
+                <p>
+                  {' '}
+                  &#8226; Delivery Times: Delivery times may vary due to customs
+                  clearance procedures.
+                </p>
+              </div>
+            </div>
+          }
+          status="warning"
+          customPoppupStyle="!h-[475px]"
+          customPoppupBodyStyle="!mt-[70px]"
+          header={'Disclaimer'}
+          actionButtonData={[
+            {
+              variant: 'secondary',
+              label: ManageLocales('app.modal.cancel'),
+              handler: () => setIsDialogOpen(false),
+              customStyle: 'flex-1 w-full h-10'
+            },
+            {
+              variant: 'primary',
+              label: 'Confirm Order',
+              handler: () => {
+                setIsDialogOpen(false);
+                confirmStoneApiCall({ variantIds });
+              },
+              customStyle: 'flex-1 w-full h-10'
+            }
+          ]}
+        />
+      );
+    } else {
+      confirmStoneApiCall({ variantIds });
+    }
+  };
+
+  console.log('kamLocation.location', kamLocation.location);
+  const confirmStone = () => {
+    const variantIds: string[] = [];
+
+    confirmStoneData.forEach((ids: any) => {
+      variantIds.push(ids.variants[0].id);
+    });
+
+    if (!kamLocation.location) {
+      triggerGetCustomer({}).then(res => {
+        let kamLocation = res.data.customer.kam.location;
+        dispatch(kamLocationAction(kamLocation));
+        checkLocation({ kamLocation, variantIds });
+      });
+    } else {
+      checkLocation({ kamLocation: kamLocation.location, variantIds });
+      console.log('kamLocation.location', kamLocation.location);
     }
   };
 
@@ -1083,7 +1191,7 @@ const MyCart = () => {
                             label: ManageLocales(
                               'app.confirmStone.footer.confirmStone'
                             ),
-                            handler: () => confirmStoneApiCall()
+                            handler: () => confirmStone()
                           }
                         ]}
                       />

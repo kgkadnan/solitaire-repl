@@ -13,6 +13,7 @@ import CommonPoppup from '@/app/v2/login/component/common-poppup';
 import { hide } from '@/features/logout/logout-slice';
 import MaintenanceMode from '@/components/v2/common/maintenace';
 import { useGetCustomerQuery } from '@/features/api/dashboard';
+import { kamLocationAction } from '@/features/kam-location/kam-location';
 
 const authorizedLogin = (WrappedComponent: React.ComponentType) => {
   const Wrapper: React.FC<any> = props => {
@@ -57,6 +58,7 @@ const authorizedLogin = (WrappedComponent: React.ComponentType) => {
     }, []);
 
     useEffect(() => {
+      dispatch(kamLocationAction(customerData?.customer.kam?.location));
       dispatch(hide()), setOpen(false);
     }, []);
     useEffect(() => {

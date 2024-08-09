@@ -26,6 +26,7 @@ export const dashboardApi = createApi({
   })
 });
 export const {
+  useLazyGetCustomerQuery,
   useGetCustomerQuery,
   useGetBidHistoryQuery,
   useGetBidToBuyHistoryQuery,
