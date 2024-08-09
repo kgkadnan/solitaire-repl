@@ -345,6 +345,7 @@ const Form = ({
 
   // Update search URL when form state changes
   useEffect(() => {
+    setErrorText('');
     // Function to execute after debounce delay
     const handleSearchUrlUpdate = () => {
       const queryParams = generateQueryParams(state);
@@ -1010,7 +1011,12 @@ const Form = ({
         `${
           isMatchingPair
             ? 'Search'
-            : minMaxError.length === 0 &&
+            : !isLoadingProductApi &&
+              !isLoadingMatchPairApi &&
+              !isFetchingMatchPairApi &&
+              !isLoading &&
+              !isFetchingProductApi &&
+              minMaxError.length === 0 &&
               errorText === NO_STONE_FOUND &&
               isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
             ? 'Add Demand'
@@ -1024,7 +1030,12 @@ const Form = ({
             isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
             ? () => {}
             : handleMatchingPairSearch
-          : minMaxError.length === 0 &&
+          : !isLoadingProductApi &&
+            !isLoadingMatchPairApi &&
+            !isFetchingMatchPairApi &&
+            !isLoading &&
+            !isFetchingProductApi &&
+            minMaxError.length === 0 &&
             errorText === NO_STONE_FOUND &&
             isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
           ? handleAddDemand
@@ -1299,14 +1310,15 @@ const Form = ({
                     : messageColor
                 } pl-[8px]`}
               >
-                {!isLoadingProductApi &&
-                  !isLoadingMatchPairApi &&
-                  !isFetchingMatchPairApi &&
-                  !isLoadingProductApi &&
-                  !isLoading &&
-                  (minMaxError.length
-                    ? minMaxError
-                    : !isValidationError && errorText)}
+                {isLoadingProductApi ||
+                isLoadingMatchPairApi ||
+                isFetchingMatchPairApi ||
+                isLoading ||
+                isFetchingProductApi
+                  ? ''
+                  : minMaxError.length
+                  ? minMaxError
+                  : !isValidationError && errorText}
               </span>
             </div>
           )}
