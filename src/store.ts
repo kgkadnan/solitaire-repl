@@ -28,6 +28,7 @@ import { currentIPApi } from './features/api/current-ip';
 import { forgotPasswordApi } from './features/api/forgot-password';
 import kycReducer from './features/kyc/kyc';
 import LogoutReducer from './features/logout/logout-slice';
+import KamLocationReducer from './features/kam-location/kam-location';
 import setConfirmStoneTrackReducer from './features/confirm-stone-track/confirm-stone-track-slice';
 import { kycApi } from './features/api/kyc';
 import { otpVerificationApi } from './features/api/otp-verification';
@@ -60,6 +61,7 @@ const rootReducer = combineReducers({
   savedSearch: savedSearchReducer,
   kyc: kycReducer,
   logoutAll: LogoutReducer,
+  kamLocation: KamLocationReducer,
   setConfirmStoneTrack: setConfirmStoneTrackReducer,
   [downloadExcelApi.reducerPath]: downloadExcelApi.reducer,
   [currentIPApi.reducerPath]: currentIPApi.reducer,

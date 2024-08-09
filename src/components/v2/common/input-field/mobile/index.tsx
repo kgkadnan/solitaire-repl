@@ -53,7 +53,7 @@ export const MobileInput = ({
   };
 
   const Option = (props: any) => (
-    <components.Option {...props} className="country-option">
+    <components.Option {...props} className="country-option gap-[6px]">
       <img
         src={`${apiURL}flags/${props.data.iso}.png`}
         style={{ width: 24 }}
@@ -68,7 +68,7 @@ export const MobileInput = ({
   );
 
   const SingleValue = ({ children, ...props }: any) => (
-    <components.SingleValue {...props}>
+    <components.SingleValue {...props} className="gap-[6px]">
       <img
         src={`${apiURL}flags/${registerFormState?.iso}.png`}
         style={{ width: 24 }}

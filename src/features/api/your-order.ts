@@ -8,14 +8,13 @@ export const yourOrderApi = createApi({
   endpoints: builder => ({
     cardRecentConfirmation: builder.query({
       query: ({
-        resentConfiramtionStatus,
         resentConfiramtionInvoiceStatus,
         expand,
         recentConfiramtionSearchUrl,
         recentConfirmlimit,
         recentConfirmationSelectedDays
       }) =>
-        `/store/customers/me/orders?status=${resentConfiramtionStatus}&invoice_status=${resentConfiramtionInvoiceStatus}&expand=${expand}&${
+        `/store/customers/me/orders?invoice_status=${resentConfiramtionInvoiceStatus}&expand=${expand}&${
           recentConfiramtionSearchUrl ? recentConfiramtionSearchUrl : ''
         }&limit=${recentConfirmlimit}&${
           recentConfirmationSelectedDays
