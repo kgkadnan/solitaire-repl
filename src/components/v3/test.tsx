@@ -30,7 +30,7 @@ const AirpodsScrollAnimationNew: React.FC = () => {
           4,
           '0'
         )}.png?sv=2023-11-03&spr=https&st=2024-06-03T11%3A48%3A44Z&se=2029-07-07T11%3A48%3A44Z&sr=b&sp=r&sig=5%2FkeLmU5GMPtUvdijxthG7P5XeuT6JKciXV7bn6VFJ8%3D`;
-      // `https://www.apple.com/105/media/us/airpods-pro/2019/1299e2f5_9206_4470_b28e_08307a42f19b/anim/sequence/large/01-hero-lightpass/${(index + 1).toString().padStart(4, '0')}.jpg`
+    // `https://www.apple.com/105/media/us/airpods-pro/2019/1299e2f5_9206_4470_b28e_08307a42f19b/anim/sequence/large/01-hero-lightpass/${(index + 1).toString().padStart(4, '0')}.jpg`
 
     for (let i = 0; i < frameCount; i++) {
       const img = new Image();
