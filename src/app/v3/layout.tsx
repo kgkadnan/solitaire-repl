@@ -6,11 +6,11 @@ import SubscribeNewsLetter from '@/components/v3/subscribe-newsletter';
 import FooterSiteMap from '@/components/v3/footer-sitemap';
 import Footer from '@/components/v3/footer';
 import { ReactNode } from 'react';
-// import dynamic from 'next/dynamic';
+import dynamic from 'next/dynamic';
 
-// const AnimatedCursor = dynamic(() => import('react-animated-cursor'), {
-//   ssr: false
-// });
+const AnimatedCursor = dynamic(() => import('react-animated-cursor'), {
+  ssr: false
+});
 interface ILayoutProps {
   children: ReactNode;
 }
@@ -20,8 +20,9 @@ export default function Layout({ children }: ILayoutProps) {
     <main>
       <Toaster />
 
-      {/* <AnimatedCursor
+      <AnimatedCursor
         color="255,255,255"
+        // color="0,0,0"
         innerSize={8}
         outerSize={35}
         innerScale={1}
@@ -29,13 +30,15 @@ export default function Layout({ children }: ILayoutProps) {
         outerAlpha={1}
         // hasBlendMode={true}
         outerStyle={{
+          // backgroundColor:"red",
           mixBlendMode: 'exclusion'
         }}
         innerStyle={{
           backgroundColor: 'var(--cursor-color)',
           mixBlendMode: 'exclusion'
         }}
-      /> */}
+        trailingSpeed={8}
+      />
 
       <CommonHeader />
       <div>{children}</div>
