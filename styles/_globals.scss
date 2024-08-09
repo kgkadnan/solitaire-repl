@@ -334,3 +334,10 @@
     opacity 3s ease-in-out,
     transform 3s ease-in-out;
 }
+@layer utilities {
+  .char {
+    @apply inline-block opacity-0;
+    animation: fadeInFromLeft 1s forwards;
+    animation-delay: calc(var(--char-index) * 0.05s);
+  }
+}

@@ -25,7 +25,7 @@ export default function Leadership() {
                       With a wealth of experience and a shared passion for
                       excellence, each member plays a crucial role. Get to know
                       the talented individuals who make KGK Diamonds a leader in
-                      the diamond industry.{' '}
+                      the diamond industry.
                     </AnimationSection>
                   </div>
                 </div>

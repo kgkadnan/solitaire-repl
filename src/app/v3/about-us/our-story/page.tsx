@@ -5,12 +5,8 @@ import Image from 'next/image';
 import TimelineBanner from '@public/v3/timeline/timeline-banner.png';
 import { aboutUsFirstFold } from '@/constants/v3/about-us';
 import TimelineComponent from '@/components/v3/timeline';
-// import anime from 'animejs/lib/anime.es.js';
-// import AnimatedTextDomino from '@/components/v3/animated-text/domino';
-// import AnimatedTextCoffee from '@/components/v3/animated-text/coffee';
-// import AnimatedTextFade from '@/components/v3/animated-text/fade';
+
 import AnimationSection from '@/components/v3/animated-text/scroll';
-// import './style.module.scss'
 
 export default function AboutUs() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -114,7 +110,6 @@ export default function AboutUs() {
           <div className="flex flex-col gap-14 pt-[180px] pb-[80px]">
             <div className="text-neutral900 text-[108px] font-bold text-center leading-[100px]">
               <AnimationSection>
-                {' '}
                 KGK Diamonds: A Pillar of KGK Group
               </AnimationSection>
             </div>

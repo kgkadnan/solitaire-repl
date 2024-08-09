@@ -114,7 +114,7 @@ const ContactUs = () => {
               <div className="text-neutral900 text-[28px] font-bold w-1/2">
                 {' '}
                 <AnimationSection>
-                  We're Here to Assist You{' '}
+                  We're Here to Assist You
                 </AnimationSection>{' '}
               </div>
 

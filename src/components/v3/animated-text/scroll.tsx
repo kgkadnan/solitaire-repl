@@ -2,6 +2,7 @@
 
 import { motion, useScroll, useTransform } from 'framer-motion';
 import React, { HTMLAttributes, useRef } from 'react';
+import AnimateSectionText from './jmd';
 
 interface ISectionProps extends HTMLAttributes<HTMLSelectElement> {}
 
@@ -22,7 +23,13 @@ const AnimationSection = ({ children, ...props }: ISectionProps) => {
   return (
     <section {...props}>
       <motion.div ref={contentRef} style={{ opacity: contentOpacity }}>
-        {children}
+        {typeof children === 'string' ? (
+          <AnimateSectionText fgColor="var(--text-neutral-900)">
+            {children}
+          </AnimateSectionText>
+        ) : (
+          children
+        )}
       </motion.div>
     </section>
   );
