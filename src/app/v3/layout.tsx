@@ -20,7 +20,7 @@ export default function Layout({ children }: ILayoutProps) {
     <main>
       <Toaster />
 
-      <AnimatedCursor
+      {/* <AnimatedCursor
         color="255,255,255"
         innerSize={8}
         outerSize={35}
@@ -35,7 +35,7 @@ export default function Layout({ children }: ILayoutProps) {
           backgroundColor: 'var(--cursor-color)',
           mixBlendMode: 'exclusion'
         }}
-      />
+      /> */}
 
       <CommonHeader />
       <div>{children}</div>
