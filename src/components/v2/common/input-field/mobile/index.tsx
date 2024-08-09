@@ -40,9 +40,9 @@ export const MobileInput = ({
     }
   }, [getAllCountryCode]);
 
-  useEffect(() => {
-    setIsOpen(false);
-  }, [registerFormState]);
+  // useEffect(() => {
+  //   setIsOpen(false);
+  // }, [registerFormState]);
   const computeCountryDropdownField = (countryCode: any) => {
     return countryCode?.map(({ code, iso, country }: any) => ({
       label: code,
@@ -88,6 +88,7 @@ export const MobileInput = ({
       countryCode: selectValue?.value,
       iso: selectValue?.iso
     }));
+    setIsOpen(false);
   };
 
   const [isOpen, setIsOpen] = useState(false);
@@ -117,7 +118,7 @@ export const MobileInput = ({
               onClose={toggleOpen}
               target={
                 <div className={`flex justify-between text-neutral900 `}>
-                  <div className="flex items-center">
+                  <div className="flex items-center gap-[6px]">
                     {' '}
                     <img
                       src={`${apiURL}flags/${registerFormState.iso}.png`}
