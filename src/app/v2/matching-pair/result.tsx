@@ -1121,13 +1121,7 @@ const MatchingPairResult = ({
         activeTab={activePreviewTab}
         selectedImageIndex={imageIndex}
       />
-      <DialogComponent
-        dialogContent={dialogContent}
-        isOpens={isDialogOpen}
-        dialogStyle={{
-          dialogContent: isConfirmStone ? 'h-[240px]' : ''
-        }}
-      />
+      <DialogComponent dialogContent={dialogContent} isOpens={isDialogOpen} />
 
       <AddCommentDialog
         isOpen={isAddCommentDialogOpen}
