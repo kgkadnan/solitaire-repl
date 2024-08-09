@@ -56,9 +56,9 @@ export default function Leadership() {
                   className="rounded-[8px] bg-[#D9D9D9] h-[375px] w-[375px]"
                 />
               </div>
-              <p className="text-neutral900 font-semiBold text-[20px]">
+              <div className="text-neutral900 font-semiBold text-[20px]">
                 {leader.name}
-              </p>
+              </div>
               <p className="text-neutral500 text-lRegular">{leader.position}</p>
             </div>
           ))
@@ -71,17 +71,21 @@ export default function Leadership() {
                 className="rounded-[8px] bg-[#D9D9D9]"
               />
               <div className="border-b-[2px] border-neutral900 w-full">
-                <p className="text-neutral900 font-semiBold text-[20px] ">
-                  {selectedProfile['name']}
-                </p>
-                <p className="text-neutral500 text-lRegular">
-                  {selectedProfile['position']}
-                </p>
+                <div className="text-neutral900 font-semiBold text-[20px] ">
+                  <AnimationSection>{selectedProfile['name']}</AnimationSection>
+                </div>
+                <div className="text-neutral500 text-lRegular">
+                  <AnimationSection animationDelay={0.5}>
+                    {selectedProfile['position']}
+                  </AnimationSection>
+                </div>
               </div>
             </div>
-            <p className="text-neutral800 text-[20px]">
-              {selectedProfile['description']}
-            </p>
+            <div className="text-neutral800 text-[20px]">
+              <AnimationSection animationDelay={1}>
+                {selectedProfile['description']}
+              </AnimationSection>
+            </div>
             <a href={`https://www.linkedin.com/${selectedProfile['linkedin']}`}>
               {' '}
               <Image src={Linkedin} alt={'Linkedin'} />
