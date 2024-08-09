@@ -51,11 +51,11 @@ const YourOrderSkeleton = () => {
       </div>
       <div>
         <div className="bg-neutral50 flex items-center border-b-[1px] border-solid border-neutral200  justify-between h-[47px] ">
-          {[1, 2, 3].map(data => {
+          {[1, 2, 3, 4].map(data => {
             return (
               <div
                 className={`py-4 flex   items-center  w-[40%] ${
-                  data === 1 ? 'pl-4' : data === 3 ? 'ml-[-27px] ' : ''
+                  data === 1 ? 'pl-4' : data === 4 ? 'ml-[-27px] ' : ''
                 }`}
                 key={data}
               >
@@ -80,7 +80,7 @@ const YourOrderSkeleton = () => {
               } `}
               key={data}
             >
-              <div className="flex items-center gap-2 w-[33.3%]">
+              <div className="flex items-center gap-2 w-[25%]">
                 <Skeleton
                   variant="rectangular"
                   sx={{ bgcolor: 'var(--neutral-200)' }}
@@ -99,7 +99,7 @@ const YourOrderSkeleton = () => {
                 />
               </div>
 
-              <div className="w-[33.3%]">
+              <div className="w-[28%]">
                 <Skeleton
                   variant="rectangular"
                   sx={{ bgcolor: 'var(--neutral-200)' }}
@@ -109,7 +109,17 @@ const YourOrderSkeleton = () => {
                   className="rounded-l-[4px]"
                 />
               </div>
-              <div className="w-[33.3%]">
+              <div className="w-[25%]">
+                <Skeleton
+                  variant="rectangular"
+                  sx={{ bgcolor: 'var(--neutral-200)' }}
+                  height={'19px'}
+                  width={'70px'}
+                  animation="wave"
+                  className="rounded-l-[4px]"
+                />
+              </div>
+              <div className="w-[25%]">
                 <Skeleton
                   variant="rectangular"
                   sx={{ bgcolor: 'var(--neutral-200)' }}
