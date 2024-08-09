@@ -113,25 +113,31 @@ export default function AboutUs() {
                 KGK Diamonds: A Pillar of KGK Group
               </AnimationSection>
             </div>
-            {aboutUsFirstFold.map((aboutStep, index) => (
-              <div
-                ref={scrollContainerRef}
-                className="flex gap-2 flex-none w-full flex-shrink-0 snap-center scroll-container flex overflow-hidden"
-                key={index}
-              >
-                <div className="flex gap-3">
-                  <p className="text-neutral900 text-[28px] font-bold w-1/2 ">
-                    <AnimationSection>{aboutStep.subtitle}</AnimationSection>
-                  </p>
-                  <p className="text-neutral800 text-lRegular w-1/2 px-4 pt-[14px] ">
-                    <AnimationSection>{aboutStep.description}</AnimationSection>
+            <div className="flex flex-col gap-10">
+              {aboutUsFirstFold.map((aboutStep, index) => (
+                <div
+                  ref={scrollContainerRef}
+                  className="flex gap-2 flex-none w-full flex-shrink-0 snap-center scroll-container flex overflow-hidden"
+                  key={index}
+                >
+                  <div className="flex gap-3">
+                    <p className="text-neutral900 text-[28px] font-bold w-1/2 ">
+                      <AnimationSection>{aboutStep.subtitle}</AnimationSection>
+                    </p>
+                    <p className="text-neutral800 text-lRegular w-1/2 px-4 pt-[14px] ">
+                      <AnimationSection>
+                        {aboutStep.description}
+                      </AnimationSection>
+                    </p>
+                  </div>
+                  <p className="text-neutral400 text-headingXL font-bold bottom-0 mt-[30px]">
+                    <span>
+                      <AnimationSection>0{index + 1}</AnimationSection>
+                    </span>
                   </p>
                 </div>
-                <p className="text-neutral400 text-headingXL font-bold bottom-0 mt-[30px]">
-                  <span>0{index + 1}</span>
-                </p>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </div>
