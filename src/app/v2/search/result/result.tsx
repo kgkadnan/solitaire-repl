@@ -985,7 +985,9 @@ const Result = ({
     let locationMismatch = false;
     confirmStoneData.forEach((stones: any) => {
       const location = stones.location as keyof typeof STONE_LOCATION;
-      if (STONE_LOCATION[location] !== kamLocation) {
+      if (
+        STONE_LOCATION[location].toLowerCase() !== kamLocation.toLowerCase()
+      ) {
         locationMismatch = true;
       }
     });
