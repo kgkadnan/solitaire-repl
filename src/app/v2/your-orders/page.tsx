@@ -214,6 +214,7 @@ const MyDiamonds = () => {
     },
     inTransit: {
       keys: [
+        { label: 'Order ID', accessor: 'display_id' },
         { label: 'Invoice Number', accessor: 'invoice_id' },
         { label: 'Invoice Date', accessor: 'created_at' },
         { label: 'Details', accessor: 'details' }
@@ -222,6 +223,7 @@ const MyDiamonds = () => {
     },
     past: {
       keys: [
+        { label: 'Order ID', accessor: 'display_id' },
         { label: 'Invoice Number', accessor: 'invoice_id' },
         { label: 'Invoice Date', accessor: 'created_at' },
         { label: 'Details', accessor: 'details' }
@@ -391,7 +393,6 @@ const MyDiamonds = () => {
       case 'invoice_id':
         return (
           <>
-            <Image src={icon} alt="icon" />
             <span>{value[accessor]}</span>
           </>
         );
