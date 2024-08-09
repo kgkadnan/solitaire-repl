@@ -50,7 +50,7 @@ const SubscribeNewsLetter = () => {
           value={email}
           errorText={emailError}
           placeholder={'Enter your email'}
-          styles={{ inputMain: ' w-[360px]' }}
+          styles={{ inputMain: ' w-[360px] mt-1' }}
           autoComplete="none"
         />
         <CommonButton
