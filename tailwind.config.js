@@ -215,7 +215,9 @@ module.exports = {
       },
       backgroundImage: {
         'animated-gradient': ` linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, white 100%),
-    linear-gradient(90deg, #FFF4E3, #E8E8FF, #DBF2FC)`,
+            linear-gradient(90deg, #FFD490,#A5A5FF, #92DEFF, #9EFFE8)`,
+
+    // linear-gradient(90deg, #44C4FC,#4AF6CD, #8989FD, #FFE0B0)`,
         // 'linear-gradient(180deg, #ffffff, #FFF4E3, #E8E8FF, #DBF2FC, #FFFFFF,#FFFFFF)',
         'timeline-gradient':
           'linear-gradient(to bottom, #FFAD05, #168B85, #5995ED)'

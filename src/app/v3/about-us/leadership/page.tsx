@@ -13,13 +13,13 @@ export default function Leadership() {
       {Object.keys(selectedProfile).length === 0 && (
         <div className="min-h-[300px] pt-[180px] pb-[80px] flex items-center px-[112px] bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient">
           <div className="scroll-container flex overflow-hidden mt-8 w-full">
-            <div className="flex flex-col  gap-14 flex-none w-full flex-shrink-0 snap-center p-4">
-              <div className=" text-neutral900 text-[96px] font-bold text-center line leading-[100px] custom-fadeIn">
-                <AnimationSection>Meet KGK Leadership </AnimationSection>
+            <div className="flex flex-col gap-14 flex-none w-full flex-shrink-0 snap-center p-4">
+              <div className="text-neutral900 text-[96px] font-bold text-center leading-[100px] custom-fadeIn">
+                <AnimationSection>Meet KGK Leadership</AnimationSection>
               </div>
               <div className="flex gap-2">
                 <div className="flex gap-3 flex-col">
-                  <div className="text-neutral800 text-lRegular  px-4 pt-[14px]">
+                  <div className="text-neutral800 text-lRegular px-4 pt-[14px]">
                     <AnimationSection>
                       At KGK Diamonds, our team is the backbone of our success.
                       With a wealth of experience and a shared passion for

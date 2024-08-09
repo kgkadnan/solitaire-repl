@@ -104,21 +104,21 @@ const ContactUs = () => {
   };
   return (
     <div>
-      <div className="min-h-[300px] flex items-center px-[112px] bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient">
-        <div className="min-h-[300px] flex items-center">
-          <div className="flex flex-wrap flex-col gap-14 pt-[180px] pb-[80px] justify-between">
-            <div className=" text-neutral900 text-[96px] font-bold text-center line leading-[100px] flowy-animate px-10">
+      <div className="min-h-[300px] flex justify-center items-center px-[112px] bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom">
+        <div className="min-h-[300px] flex items-center justify-center">
+          <div className="flex flex-wrap flex-col gap-14 pt-[180px] pb-[80px] justify-between items-center">
+            <div className=" text-neutral900 text-[96px] font-bold text-center items-center  line leading-[110px] flowy-animate px-10 w-[950px]">
               <AnimationSection> We’d love to hear from you</AnimationSection>
             </div>
-            <div className="flex gap-3 px-[40px]">
-              <div className="text-neutral900 text-[28px] font-bold w-1/2">
+            <div className="flex flex-col gap-3 px-[40px] items-center">
+              <div className="text-neutral900 text-[28px] font-bold text-center">
                 {' '}
                 <AnimationSection>
                   We're Here to Assist You
                 </AnimationSection>{' '}
               </div>
 
-              <div className="text-neutral800 text-lRegular w-1/2 px-4 pt-[14px]">
+              <div className="text-neutral800 text-lRegular text-center w-[965px] px-10 content">
                 <AnimationSection>
                   At KGK Diamonds, we value your feedback and inquiries. Whether
                   you have a question, need assistance, or want to learn more
@@ -132,7 +132,7 @@ const ContactUs = () => {
           </div>
         </div>
       </div>
-      <div className="flex justify-center py-10">
+      <div className="flex justify-center py-20">
         <div className="relative w-[1100px]">
           <Image src={WorldMap} alt="all office location" className="w-full" />
 
