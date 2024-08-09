@@ -107,7 +107,7 @@ const ContactUs = () => {
       <div className="min-h-[300px] flex justify-center items-center px-[112px] bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom">
         <div className="min-h-[300px] flex items-center justify-center">
           <div className="flex flex-wrap flex-col gap-14 pt-[180px] pb-[80px] justify-between items-center">
-            <div className=" text-neutral900 text-[96px] font-bold text-center items-center  line leading-[110px] flowy-animate px-10 w-[950px]">
+            <div className=" text-neutral900 text-[96px] font-bold text-center items-center  line leading-[110px] flowy-animate px-10 w-[1100px]">
               <AnimationSection> We’d love to hear from you</AnimationSection>
             </div>
             <div className="flex flex-col gap-3 px-[40px] items-center">

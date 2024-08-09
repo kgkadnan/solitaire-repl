@@ -41,21 +41,21 @@ const BlogList = ({ posts }: { posts: any[] }) => {
   return (
     <div className="flex flex-col gap-4">
       <div className="min-h-[300px] flex items-center px-[112px] bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient">
-        <div className="min-h-[300px] flex items-center">
+        <div className="min-h-[300px] flex items-center justify-center">
           <div className="flex flex-wrap flex-col gap-14 pt-[180px] pb-[80px] flex-wrap min-h-[160px] justify-between">
-            <div className=" text-neutral900 text-[96px] font-bold text-center line leading-[100px] flowy-animate">
+            <div className=" text-neutral900 text-[96px] font-bold text-center line leading-[110px] flowy-animate">
               <AnimationSection>
                 Discover the World of Diamonds
               </AnimationSection>
             </div>
-            <div className="flex gap-3">
-              <p className="text-neutral900 text-[28px] font-bold w-1/2">
+            <div className="flex flex-col gap-3 items-center">
+              <p className="text-neutral900 text-[28px] font-bold ">
                 <AnimationSection animationDelay={0.5}>
-                  Learn, Inspire, & Empower.{' '}
+                  Learn, Inspire, & Empower.
                 </AnimationSection>
               </p>
 
-              <p className="text-neutral800 text-lRegular w-1/2 px-4 pt-[14px]">
+              <p className="text-neutral800 text-lRegular  px-4  w-[1100px] text-center">
                 {' '}
                 <AnimationSection animationDelay={1}>
                   Stay informed with the latest trends and insights in the gem

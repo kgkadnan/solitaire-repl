@@ -103,10 +103,10 @@ export default function AboutUs() {
 
   return (
     <div className="relative">
-      <div className="min-h-[300px] flex items-center px-[112px] bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient">
+      <div className="min-h-[300px] flex items-center justify-center px-[112px] bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient ">
         <div className="w-full">
-          <div className="flex flex-col gap-14 pt-[180px] pb-[80px]">
-            <div className="text-neutral900 text-[96px] font-bold text-center leading-[100px]">
+          <div className="flex flex-col items-center gap-14 pt-[180px] pb-[80px]">
+            <div className="text-neutral900 text-[96px] font-bold text-center leading-[110px] w-[1100px]">
               <AnimationSection>
                 KGK Diamonds: A Pillar of KGK Group
               </AnimationSection>
@@ -122,7 +122,9 @@ export default function AboutUs() {
                     {/* <p className="text-neutral900 text-[28px] font-bold w-1/2 ">
                       <AnimationSection>{aboutStep.subtitle}</AnimationSection>
                     </p> */}
-                    <p className="text-neutral800 text-lRegular  px-4  ">
+                    <p
+                      className={`text-neutral800 text-lRegular text-center  w-[1100px]`}
+                    >
                       <AnimationSection animationDelay={index === 0 ? 1 : 5}>
                         {aboutStep.description}
                       </AnimationSection>
