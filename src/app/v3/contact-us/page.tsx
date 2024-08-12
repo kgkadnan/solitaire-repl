@@ -118,7 +118,7 @@ const ContactUs = () => {
                 </AnimationSection>{' '}
               </div>
 
-              <div className="text-neutral800 text-lRegular text-center w-[965px] px-10 content">
+              <div className="text-neutral800 text-lRegular text-center w-[800px] content">
                 <AnimationSection animationDelay={1}>
                   At KGK Diamonds, we value your feedback and inquiries. Whether
                   you have a question, need assistance, or want to learn more
@@ -133,7 +133,7 @@ const ContactUs = () => {
         </div>
       </div>
       <div className="flex justify-center py-20">
-        <div className="relative w-[1100px]">
+        <div className="relative w-[800px]">
           <Image src={WorldMap} alt="all office location" className="w-full" />
 
           {WorldMapPointers.map((pointer, index) => (

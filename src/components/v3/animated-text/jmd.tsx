@@ -101,7 +101,7 @@ const AnimateSectionText: React.FC<ISectionProps> = ({
             end: 'top 20%',
             markers: false,
             scrub: false,
-            toggleActions: 'play reverse play play'
+            toggleActions: 'play none play play'
           }
         }
       );

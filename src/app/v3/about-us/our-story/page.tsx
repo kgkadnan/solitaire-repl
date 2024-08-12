@@ -111,7 +111,7 @@ export default function AboutUs() {
                 KGK Diamonds: A Pillar of KGK Group
               </AnimationSection>
             </div>
-            <div className="flex flex-col gap-10">
+            <div className="flex flex-col gap-16">
               {aboutUsFirstFold.map((aboutStep, index) => (
                 <div
                   ref={scrollContainerRef}
@@ -122,17 +122,19 @@ export default function AboutUs() {
                     {/* <p className="text-neutral900 text-[28px] font-bold w-1/2 ">
                       <AnimationSection>{aboutStep.subtitle}</AnimationSection>
                     </p> */}
-                    <p
-                      className={`text-neutral800 text-lRegular text-center  w-[1100px]`}
+                    <div
+                      className={`text-neutral800 text-lRegular text-center  w-[800px]`}
                     >
                       <AnimationSection animationDelay={index === 0 ? 1 : 5}>
                         {aboutStep.description}
                       </AnimationSection>
-                    </p>
+                    </div>
                   </div>
                   <p className="text-neutral400 text-headingXL font-bold bottom-0 mt-[30px]">
                     <span>
-                      <AnimationSection>0{index + 1}</AnimationSection>
+                      <AnimationSection
+                        animationDelay={index === 0 ? 1 : 5}
+                      >{`0${index + 1}`}</AnimationSection>
                     </span>
                   </p>
                 </div>

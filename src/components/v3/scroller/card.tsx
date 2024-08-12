@@ -1,6 +1,6 @@
 import React from 'react';
 
-interface CardProps {
+interface ICardProps {
   id: number;
   title: string;
   description: string;
@@ -11,7 +11,7 @@ interface CardProps {
   isReversed: boolean;
 }
 
-const Card: React.FC<CardProps> = ({
+const Card: React.FC<ICardProps> = ({
   id,
   title,
   description,

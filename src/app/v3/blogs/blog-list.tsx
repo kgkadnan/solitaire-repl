@@ -55,7 +55,7 @@ const BlogList = ({ posts }: { posts: any[] }) => {
                 </AnimationSection>
               </p>
 
-              <p className="text-neutral800 text-lRegular  px-4  w-[1100px] text-center">
+              <p className="text-neutral800 text-lRegular  px-4  w-[800px] text-center">
                 {' '}
                 <AnimationSection animationDelay={1}>
                   Stay informed with the latest trends and insights in the gem
