@@ -86,7 +86,10 @@ export default function Leadership() {
                 {selectedProfile['description']}
               </AnimationSection>
             </div>
-            <a href={`https://www.linkedin.com/${selectedProfile['linkedin']}`}>
+            <a
+              href={`https://www.linkedin.com/${selectedProfile['linkedin']}`}
+              target="_blank"
+            >
               {' '}
               <Image src={Linkedin} alt={'Linkedin'} />
             </a>
