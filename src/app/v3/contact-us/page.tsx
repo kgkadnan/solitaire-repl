@@ -158,11 +158,13 @@ const ContactUs = () => {
               tooltipContent={
                 <div className="flex  text-neutral900">
                   <div className="flex flex-col gap-2 ">
-                    <div>
+                    <div className="flex flex-col gap-2">
                       <div className="flex gap-2 items-center">
                         <Image
                           src={pointer.kam.image}
                           alt={`profile image ${pointer.kam.name}`}
+                          className="h-10 w-10 rounded-[50%] object-contain bg-radial-grad-kam border-[2px] border-neutral0"
+                          style={{ boxShadow: 'var(--popups-shadow' }}
                         />
                         <div className="flex flex-col gap-2">
                           <p className="font-semiBold text-[14px]">
@@ -272,6 +274,7 @@ const ContactUs = () => {
                         src={loc.image}
                         alt={loc.name}
                         className="h-10 w-10 rounded-[50%] object-contain bg-radial-grad-kam border-[2px] border-neutral0"
+                        style={{ boxShadow: 'var(--popups-shadow' }}
                       />
                       <div className="flex flex-col justify-center">
                         {' '}
