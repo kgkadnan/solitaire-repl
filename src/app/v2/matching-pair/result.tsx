@@ -772,11 +772,18 @@ const MatchingPairResult = ({
             setCommentValue('');
             setIsDialogOpen(true);
             dispatch(setConfirmStoneTrack(''));
-
+            const formattedMessageArray = res.message
+              .split('\n')
+              .map((line: string, index: number) => (
+                <span key={index}>
+                  {line}
+                  <br />
+                </span>
+              ));
             setRowSelection({});
             setDialogContent(
               <CommonPoppup
-                content={res.message}
+                content={<div>{formattedMessageArray}</div>}
                 status={
                   res.status === 'success'
                     ? 'success'

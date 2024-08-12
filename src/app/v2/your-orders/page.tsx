@@ -403,7 +403,7 @@ const MyDiamonds = () => {
                 Failed
               </div>
             ) : value[accessor] === 'requires_action' ? (
-              <div className="text-mRegular px-[6px] py-[4px] rounded-[4px] border-lengendHoldBorder bg-legendHoldFill text-legendHold border-solid border-[1px] ">
+              <div className="text-mRegular px-[6px] py-[4px] rounded-[4px] border-lengendMemoBorder bg-legendMemoFill text-legendMemo border-solid border-[1px] ">
                 Processing
               </div>
             ) : (
