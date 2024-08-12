@@ -40,11 +40,13 @@ export default function Leadership() {
             <div
               className="flex flex-col gap-2 cursor-pointer"
               onClick={() => {
-                setSelectedProfile(leader),
+                setSelectedProfile(leader);
+                setTimeout(() => {
                   window.scrollTo({
                     top: 0,
                     behavior: 'smooth'
                   });
+                }, 0);
               }}
               key={leader.name}
             >
