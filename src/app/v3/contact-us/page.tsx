@@ -271,7 +271,7 @@ const ContactUs = () => {
                       <Image
                         src={loc.image}
                         alt={loc.name}
-                        className="h-10 w-10 rounded-[50%] object-contain bg-radial-grad-kam"
+                        className="h-10 w-10 rounded-[50%] object-contain bg-radial-grad-kam border-[2px] border-neutral0"
                       />
                       <div className="flex flex-col justify-center">
                         {' '}

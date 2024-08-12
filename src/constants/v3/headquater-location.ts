@@ -196,7 +196,7 @@ export const WorldMapPointers = [
     }
   },
   {
-    coords: 'left-[51%] top-[24%]',
+    coords: 'left-[55%] top-[24%]',
     kam: {
       name: 'Mr. Rajeev Sinha',
       postion: 'Key Account Manager',
@@ -208,7 +208,7 @@ export const WorldMapPointers = [
     }
   },
   {
-    coords: 'left-[59%] top-[17%]',
+    coords: 'left-[55%] top-[12%]',
     kam: {
       name: 'Mr. Rajeev Sinha',
       postion: 'Key Account Manager',
@@ -244,7 +244,7 @@ export const WorldMapPointers = [
     }
   },
   {
-    coords: 'left-[77%] top-[50%]',
+    coords: 'left-[79%] top-[47%]',
     kam: {
       name: 'Mr. Rajeev Sinha',
       postion: 'Key Account Manager',
@@ -257,6 +257,55 @@ export const WorldMapPointers = [
   },
   {
     coords: 'left-[87%] top-[42%]',
+    kam: {
+      name: 'Mr. Rajeev Sinha',
+      postion: 'Key Account Manager',
+      countryFlag: India,
+      location: 'Surat, India',
+      image: Avatar,
+      phone: '+91 910 876 6432',
+      email: 'rajeev.sinha@kgkmail.com'
+    }
+  },
+
+  {
+    coords: 'left-[56%] top-[42%]',
+    kam: {
+      name: 'Mr. Rajeev Sinha',
+      postion: 'Key Account Manager',
+      countryFlag: India,
+      location: 'Surat, India',
+      image: Avatar,
+      phone: '+91 910 876 6432',
+      email: 'rajeev.sinha@kgkmail.com'
+    }
+  },
+  {
+    coords: 'left-[79%] top-[69%]',
+    kam: {
+      name: 'Mr. Rajeev Sinha',
+      postion: 'Key Account Manager',
+      countryFlag: India,
+      location: 'Surat, India',
+      image: Avatar,
+      phone: '+91 910 876 6432',
+      email: 'rajeev.sinha@kgkmail.com'
+    }
+  },
+  {
+    coords: 'left-[75%] top-[60%]',
+    kam: {
+      name: 'Mr. Rajeev Sinha',
+      postion: 'Key Account Manager',
+      countryFlag: India,
+      location: 'Surat, India',
+      image: Avatar,
+      phone: '+91 910 876 6432',
+      email: 'rajeev.sinha@kgkmail.com'
+    }
+  },
+  {
+    coords: 'left-[82%] top-[61%]',
     kam: {
       name: 'Mr. Rajeev Sinha',
       postion: 'Key Account Manager',
