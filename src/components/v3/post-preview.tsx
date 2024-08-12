@@ -45,13 +45,17 @@ export default function PostPreview({
           dangerouslySetInnerHTML={{ __html: title }}
         ></Link>
       </h3>
-      {/* <div className="text-lg mb-4">
-        <Date dateString={date} />
-      </div> */}
+
       <div
-        className="text-lg leading-relaxed text-neutral600"
+        className="text-lg leading-relaxed text-neutral600 overflow-hidden text-ellipsis"
+        style={{
+          display: '-webkit-box',
+          WebkitLineClamp: 2,
+          WebkitBoxOrient: 'vertical'
+        }}
         dangerouslySetInnerHTML={{ __html: excerpt }}
       />
+
       <div
         className="flex gap-2 cursor-pointer"
         onClick={() => router.push(`/v3/blogs/${slug}`)}
