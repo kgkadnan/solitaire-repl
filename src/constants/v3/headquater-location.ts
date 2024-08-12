@@ -36,15 +36,7 @@ export const HeadquaterLocation = [
         email: 'ajay.ghiya@kgkmail.com',
         image: Ajay
       },
-      {
-        country: 'CHINA',
-        flag: China,
-        name: 'Mr. Abhishek Golecha',
-        office: 'Shanghai',
-        phone: '86-13585500388',
-        email: 'abhishek.golecha@kgkmail.com',
-        image: Abhishek
-      },
+
       {
         country: 'CHINESE TAIWAN',
         flag: Taiwan,
@@ -61,6 +53,15 @@ export const HeadquaterLocation = [
         phone: '65-90536043',
         email: 'ankush.mehta@kgkmail.com',
         image: Ankush
+      },
+      {
+        country: 'CHINA',
+        flag: China,
+        name: 'Mr. Abhishek Golecha',
+        office: 'Shanghai',
+        phone: '86-13585500388',
+        email: 'abhishek.golecha@kgkmail.com',
+        image: Abhishek
       },
       {
         country: 'Hong Kong SAR',
@@ -80,6 +81,16 @@ export const HeadquaterLocation = [
         email: 'jitendra.baid@kgkmail.com',
         image: Jitendra
       },
+
+      {
+        country: 'THAILAND',
+        flag: Thailand,
+        name: 'Mr. Neeraj Jain',
+        office: 'Bangkok',
+        phone: '66-811738206',
+        email: 'neeraj.jain01@kgkmail.com',
+        image: Avatar
+      },
       {
         country: 'CHINA',
         flag: China,
@@ -87,15 +98,6 @@ export const HeadquaterLocation = [
         office: 'Shenzhen',
         phone: '86-18307555545',
         email: 'deependra.kothari@kgkmail.com',
-        image: Avatar
-      },
-      {
-        country: 'India',
-        flag: Thailand,
-        name: 'Mr. Neeraj Jain',
-        office: 'Bangkok',
-        phone: '66-811738206',
-        email: 'neeraj.jain01@kgkmail.com',
         image: Avatar
       }
     ]

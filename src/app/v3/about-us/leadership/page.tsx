@@ -11,9 +11,9 @@ export default function Leadership() {
   return (
     <div>
       {Object.keys(selectedProfile).length === 0 && (
-        <div className="min-h-[300px] pt-[180px] pb-[80px] flex items-center px-[112px] bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom">
-          <div className="scroll-container flex overflow-hidden mt-8 w-full justify-center">
-            <div className="flex flex-col gap-14 flex-none w-full flex-shrink-0 snap-center p-4 items-center">
+        <div className="min-h-[800px] pt-[160px] pb-[80px] flex items-center  bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom">
+          <div className="scroll-container flex overflow-hidden  w-full justify-center">
+            <div className="flex flex-col gap-12 flex-none w-full flex-shrink-0 snap-center items-center">
               <div className="text-neutral900 text-[96px] font-bold text-center leading-[110px] custom-fadeIn">
                 <AnimationSection>Meet KGK Leadership</AnimationSection>
               </div>

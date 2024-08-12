@@ -104,9 +104,9 @@ const ContactUs = () => {
   };
   return (
     <div>
-      <div className="min-h-[300px] flex justify-center items-center px-[112px] bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom">
-        <div className="min-h-[300px] flex items-center justify-center">
-          <div className="flex flex-wrap flex-col gap-14 pt-[180px] pb-[80px] justify-between items-center">
+      <div className="min-h-[800px] flex justify-center items-center px-[112px] bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom">
+        <div className="min-h-[800px] flex items-center justify-center">
+          <div className="flex flex-wrap flex-col gap-12 pt-[160px] pb-[80px] justify-between items-center">
             <div className=" text-neutral900 text-[96px] font-bold text-center items-center  line leading-[110px] flowy-animate px-10 w-[1100px]">
               <AnimationSection> We’d love to hear from you</AnimationSection>
             </div>
@@ -163,7 +163,11 @@ const ContactUs = () => {
                         <Image
                           src={pointer.kam.image}
                           alt={`profile image ${pointer.kam.name}`}
-                          className="h-10 w-10 rounded-[50%] object-contain bg-radial-grad-kam border-[2px] border-neutral0"
+                          className={`h-10 w-10 rounded-[50%]  bg-radial-grad-kam border-[2px] border-neutral0  ${
+                            (pointer.kam.name === 'Mr. Maysey Isakov' ||
+                              pointer.kam.name === 'Mr. Jitendra Baid') &&
+                            'pt-[6px]'
+                          }`}
                           style={{ boxShadow: 'var(--popups-shadow' }}
                         />
                         <div className="flex flex-col gap-2">
@@ -255,7 +259,7 @@ const ContactUs = () => {
             </div>
 
             <div
-              className={`w-[70%]  flex flex-wrap flex-col gap-4 ${
+              className={`w-[70%]  flex flex-wrap flex-col gap-4 pb-[80px] ${
                 selectedRegion === 'ASIA PACIFIC'
                   ? 'max-h-[720px]'
                   : 'max-h-[150px]'
@@ -279,7 +283,10 @@ const ContactUs = () => {
                       <Image
                         src={loc.image}
                         alt={loc.name}
-                        className="h-10 w-10 rounded-[50%] object-contain bg-radial-grad-kam border-[2px] border-neutral0"
+                        className={`h-10 w-10 rounded-[50%]  bg-radial-grad-kam border-[2px] border-neutral0 pt-1 ${
+                          loc.name === 'Mr. Maysey Isakov' ||
+                          (loc.name === 'Mr. Jitendra Baid' && 'pt-[6px]')
+                        }`}
                         style={{ boxShadow: 'var(--popups-shadow' }}
                       />
                       <div className="flex flex-col justify-center">

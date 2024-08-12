@@ -103,30 +103,25 @@ export default function AboutUs() {
 
   return (
     <div className="relative">
-      <div className="min-h-[300px] flex items-center justify-center px-[112px] bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom ">
+      <div className="min-h-[800px] flex items-center justify-center px-[112px] bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom ">
         <div className="w-full">
-          <div className="flex flex-col items-center gap-14 pt-[180px] pb-[80px]">
+          <div className="flex flex-col items-center gap-14 pt-[160px] pb-[80px]">
             <div className="text-neutral900 text-[96px] font-bold text-center leading-[110px] w-[1100px] content">
               <AnimationSection>
                 KGK Diamonds: A Pillar of KGK Group
               </AnimationSection>
             </div>
-            <div className="text-neutral800 text-lRegular text-center w-[800px] content">
+            <div className="text-neutral800 text-lRegular text-center w-[820px] content">
               <AnimationSection animationDelay={1}>
-                KGK Diamonds, the largest vertical within the prestigious KGK
-                Group, exemplifies our commitment to excellence and innovation
-                in the diamond industry. Established in 1969, KGK Diamonds has
-                grown into a global powerhouse with over five decades of
-                experience in sourcing, manufacturing, and distributing natural
-                diamonds. Our operations span Angola, Botswana, India, Namibia,
-                and South Africa, leveraging advanced technologies like
-                DiaMark™ laser marking and Galaxy™ diamond mapping to ensure
-                superior quality. Our sophisticated distribution network extends
-                to major markets worldwide, including Belgium, China, Hong Kong,
-                India, Japan, South East Asia, Switzerland, the UAE, and the
-                USA, enabling us to participate in leading diamond and jewelry
-                trade events and reinforcing our status as a trusted partner in
-                the industry.
+                KGK Diamonds, the largest vertical of the KGK Group, has been a
+                global leader in the diamond industry since 1969. With
+                operations in Angola, Botswana, India, Namibia, and South
+                Africa, we leverage advanced technologies like DiaMark™ laser
+                marking and Galaxy™ diamond mapping to ensure top quality. Our
+                distribution network spans major markets worldwide, including
+                Belgium, China, Hong Kong, India, Japan, Southeast Asia,
+                Switzerland, the UAE, and the USA, solidifying our reputation as
+                a trusted industry partner.
               </AnimationSection>
             </div>
             {/* <div className="flex flex-col gap-4">
