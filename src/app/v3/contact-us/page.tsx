@@ -133,7 +133,7 @@ const ContactUs = () => {
         </div>
       </div>
       <div className="flex justify-center py-20">
-        <div className="relative w-[800px]">
+        <div className="relative w-[1300px]">
           <Image src={WorldMap} alt="all office location" className="w-full" />
 
           {WorldMapPointers.map((pointer, index) => (
