@@ -331,6 +331,10 @@ export function MatchPairDetails({
         return diamond.variants[0].prices[0].amount
           ? `$${formatNumberWithCommas(diamond.variants[0].prices[0].amount)}`
           : '-';
+      case 'measurements':
+        return `${diamond?.length ?? 0}*${diamond?.width ?? 0}*${
+          diamond?.depth ?? 0
+        }`;
       case 'price_per_carat':
       case 'rap':
       case 'rap_value':
