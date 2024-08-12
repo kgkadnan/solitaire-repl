@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import Card from './card';
 
-interface VerticalContainerProps {
+interface IVerticalContainerProps {
   items: {
     id: number;
     title: string;
@@ -12,7 +12,7 @@ interface VerticalContainerProps {
   }[];
 }
 
-const VerticalContainer: React.FC<VerticalContainerProps> = ({ items }) => {
+const VerticalContainer: React.FC<IVerticalContainerProps> = ({ items }) => {
   const [selectedCard, setSelectedCard] = useState<number | null>(null);
 
   const handleCardClick = (id: number) => {
