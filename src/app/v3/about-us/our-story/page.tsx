@@ -111,30 +111,25 @@ export default function AboutUs() {
                 KGK Diamonds: A Pillar of KGK Group
               </AnimationSection>
             </div>
-            <div className="flex flex-col gap-16">
+            <div className="flex flex-col gap-4">
               {aboutUsFirstFold.map((aboutStep, index) => (
                 <div
                   ref={scrollContainerRef}
-                  className="flex gap-2 flex-none w-full flex-shrink-0 snap-center scroll-container flex overflow-hidden"
+                  className="flex gap-2 w-full"
                   key={index}
                 >
-                  <div className="flex gap-3">
-                    {/* <p className="text-neutral900 text-[28px] font-bold w-1/2 ">
-                      <AnimationSection>{aboutStep.subtitle}</AnimationSection>
-                    </p> */}
-                    <div
-                      className={`text-neutral800 text-lRegular text-center  w-[800px]`}
-                    >
+                  <div className="flex flex-col items-center">
+                    <div className="text-neutral800 text-lRegular  text-center w-[800px] leading-2">
                       <AnimationSection animationDelay={index === 0 ? 1 : 5}>
                         {aboutStep.description}
                       </AnimationSection>
                     </div>
                   </div>
-                  <p className="text-neutral400 text-headingXL font-bold bottom-0 mt-[30px]">
+                  <p className="text-neutral400 text-headingXL font-bold flex items-end -mb-[16px]">
                     <span>
-                      <AnimationSection
-                        animationDelay={index === 0 ? 1 : 5}
-                      >{`0${index + 1}`}</AnimationSection>
+                      <AnimationSection animationDelay={index === 0 ? 1 : 5}>
+                        {`0${index + 1}`}
+                      </AnimationSection>
                     </span>
                   </p>
                 </div>
