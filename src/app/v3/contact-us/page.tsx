@@ -140,9 +140,11 @@ const ContactUs = () => {
             <Tooltip
               key={pointer.coords} // Add a key to prevent React warnings
               tooltipTrigger={
-                <div className={`absolute ${pointer.coords} z-10`}>
+                <div
+                  className={`absolute ${pointer.coords} z-10 cursor-pointer`}
+                >
                   <div className="relative w-4 h-4   rounded-full">
-                    <div className="absolute inset-0 w-full h-full bg-[#b2c4c4]  rounded-full animate-pulse">
+                    <div className="absolute inset-0 w-full h-full bg-[#b2c4c4]  rounded-full animate-pulse cursor-pointer">
                       <Image
                         src={Diamond}
                         alt={`diamond-${index}`}

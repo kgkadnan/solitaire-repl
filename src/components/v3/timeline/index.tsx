@@ -71,7 +71,7 @@ const TimelineComponent: React.FC = () => {
         <div className="flex flex-col gap-2 pl-[60px]">
           <div className="text-headingXL neutral900 font-bold">
             {' '}
-            <AnimationSection>{data.year}</AnimationSection>
+            <AnimationSection>{`${data.year}`}</AnimationSection>
           </div>
           <div className="text-neutral900 text-headingM font-semiBold">
             <AnimationSection>{data.content}</AnimationSection>
@@ -92,11 +92,11 @@ const TimelineComponent: React.FC = () => {
           alt="Up scroller arrow"
           onClick={scrollUpToDiv}
         /> */}
-        <div onClick={scrollUpToDiv}>
+        <div onClick={scrollUpToDiv} className="cursor-pointer">
           <CircularArrow stroke="red" />
         </div>
         <div
-          className="absolute left-1/2 top-full w-0.5 h-8 bg-black bg-opacity-50"
+          className="absolute left-1/2 top-full w-0.5 h-8 bg-black bg-opacity-50 "
           style={{
             backgroundImage:
               'repeating-linear-gradient(to bottom, black 0, black 1px, transparent 2px, transparent 4px)'
@@ -122,7 +122,7 @@ const TimelineComponent: React.FC = () => {
           onClick={scrollDownToDiv}
         /> */}
         <div
-          className="absolute left-[1px] mt-[132px] rotate-180"
+          className="absolute left-[1px] mt-[132px] rotate-180 cursor-pointer"
           onClick={scrollDownToDiv}
         >
           <CircularArrow stroke="red" />

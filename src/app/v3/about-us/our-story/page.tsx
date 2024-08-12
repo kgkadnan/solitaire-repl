@@ -150,7 +150,7 @@ export default function AboutUs() {
             <Image
               src={TimelineBanner}
               alt="Timeline banner"
-              className="w-full h-[105vh]"
+              className="w-full h-[105vh] asset"
               style={{ zIndex: 1 }}
             />
           </div>
