@@ -56,6 +56,12 @@ const MyDiamonds = () => {
     position: { left: 0 }
   });
 
+  const [columnTooltip, setColumnTooltip] = useState({
+    show: false,
+    content: '',
+    position: { left: 0 }
+  });
+
   const [activeTab, setActiveTab] = useState(
     pathName === 'inTransit' ? IN_TRANSIT : PENDING
   );
@@ -529,6 +535,7 @@ const MyDiamonds = () => {
                   className={`absolute bg-[#ECF2FC] w-[320px] border-[1px] border-[#B6CFF3] rounded-[8px] p-4 text-[#475467] top-[35px] gap-2 `}
                   style={{
                     left: `${tooltip.position.left}px`,
+
                     transform: 'translateX(-30%)' // Center the tooltip above the element
                   }}
                 >
@@ -566,12 +573,59 @@ const MyDiamonds = () => {
           {data?.length > 0 ? (
             <div className="max-w-full overflow-x-auto">
               {/* header */}
-              <div className="grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] text-mMedium h-[47px] border-b  border-neutral-200 bg-neutral-50 text-neutral700">
+              <div className=" relative grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] text-mMedium h-[47px] border-b  border-neutral-200 bg-neutral-50 text-neutral700">
                 {keys?.map(({ label }: any) => (
-                  <div key={label} className="p-4 text-left font-medium">
-                    {label}
+                  <div key={label} className="flex ">
+                    <div className="py-4 pl-4 pr-1 text-left font-medium">
+                      {label}
+                    </div>
+                    {label === 'Order Request Status' && (
+                      <button
+                        onMouseEnter={e => {
+                          const rect = e.currentTarget.getBoundingClientRect();
+                          setColumnTooltip({
+                            show: true,
+                            content:
+                              'This status shows whether your order request is successful or failed.',
+                            position: {
+                              left:
+                                rect.left + window.scrollX + rect.width / 300 // Adjust left position to center above the element
+                            }
+                          });
+                        }}
+                        onMouseLeave={() => {
+                          setColumnTooltip({
+                            show: false,
+                            content: '',
+                            position: { left: 0 }
+                          });
+                        }}
+                      >
+                        <Image src={infoIcon} alt="infoIcon" />
+                      </button>
+                    )}
                   </div>
                 ))}
+                {columnTooltip.show && (
+                  <div
+                    className={`absolute bg-[#ECF2FC] w-[320px] border-[1px] border-[#B6CFF3] rounded-[8px] p-4 text-[#475467] top-[35px] gap-2 `}
+                    style={{
+                      left: `${columnTooltip.position.left}px`,
+
+                      transform: 'translateX(-30%)' // Center the columnTooltip above the element
+                    }}
+                  >
+                    <div className="flex flex-col gap-2">
+                      <div className="flex gap-1">
+                        <Image src={infoIcon} alt="volume discount info" />{' '}
+                        <p className="text-neutral900 font-medium text-mMedium">
+                          Information
+                        </p>
+                      </div>
+                      <p>{columnTooltip.content}</p>
+                    </div>
+                  </div>
+                )}
               </div>
               {/* rows */}
 
