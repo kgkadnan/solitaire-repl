@@ -8,6 +8,7 @@ import { IndividualActionButton } from '@/components/v2/common/action-button/ind
 import { ManageLocales } from '@/utils/v2/translate';
 import ActionButton from '@/components/v2/common/action-button';
 import warningIcon from '@public/v2/assets/icons/modal/warning.svg';
+import infoIcon from '@public/v2/assets/icons/modal/info.svg';
 
 interface ICommonPoppupProps {
   content: React.ReactNode;
@@ -52,6 +53,8 @@ const CommonPoppup: React.FC<ICommonPoppupProps> = ({
               ? warningIcon
               : status === 'delete'
               ? deleteIcon
+              : status === 'info'
+              ? infoIcon
               : errorIcon
           }
           alt={
