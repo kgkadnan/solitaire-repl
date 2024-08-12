@@ -103,10 +103,10 @@ export default function AboutUs() {
 
   return (
     <div className="relative">
-      <div className="min-h-[300px] flex items-center justify-center px-[112px] bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient ">
+      <div className="min-h-[300px] flex items-center justify-center px-[112px] bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom ">
         <div className="w-full">
           <div className="flex flex-col items-center gap-14 pt-[180px] pb-[80px]">
-            <div className="text-neutral900 text-[96px] font-bold text-center leading-[110px] w-[1100px]">
+            <div className="text-neutral900 text-[96px] font-bold text-center leading-[110px] w-[1100px] content">
               <AnimationSection>
                 KGK Diamonds: A Pillar of KGK Group
               </AnimationSection>
@@ -118,14 +118,14 @@ export default function AboutUs() {
                   className="flex gap-2 w-full"
                   key={index}
                 >
-                  <div className="flex flex-col items-center">
+                  <div className="flex flex-col items-center content">
                     <div className="text-neutral800 text-lRegular  text-center w-[800px] leading-2">
                       <AnimationSection animationDelay={index === 0 ? 1 : 5}>
                         {aboutStep.description}
                       </AnimationSection>
                     </div>
                   </div>
-                  <p className="text-neutral400 text-headingXL font-bold flex items-end -mb-[16px]">
+                  <p className="text-neutral400 text-headingXL font-bold flex items-end -mb-[16px] content">
                     <span>
                       <AnimationSection animationDelay={index === 0 ? 1 : 5}>
                         {`0${index + 1}`}
