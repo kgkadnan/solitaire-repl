@@ -132,7 +132,7 @@ const ContactUs = () => {
           </div>
         </div>
       </div>
-      <div className="flex justify-center py-20">
+      <div className="flex justify-center py-20 disable-custom-cursor">
         <div className="relative w-[1300px]">
           <Image src={WorldMap} alt="all office location" className="w-full" />
 
@@ -184,16 +184,22 @@ const ContactUs = () => {
                       </div>
                     </div>
                     <hr />
-                    <a
-                      href={`tel:${pointer.kam.phone}`}
-                      className="flex gap-1 items-center cursor-pointer"
-                    >
-                      <Image src={Phone} alt={'Phone'} height={24} width={24} />
-                      <p className=" text-sRegular text-neutral600">
-                        {pointer.kam.phone}
-                      </p>
-                    </a>
-
+                    {pointer.kam.phone && (
+                      <a
+                        href={`tel:+${pointer.kam.phone}`}
+                        className="flex gap-1 items-center cursor-pointer"
+                      >
+                        <Image
+                          src={Phone}
+                          alt={'Phone'}
+                          height={24}
+                          width={24}
+                        />
+                        <p className=" text-sRegular text-neutral600">
+                          {pointer.kam.phone}
+                        </p>
+                      </a>
+                    )}
                     <div className="flex gap-1 items-center cursor-pointer">
                       <a
                         href={`mailto:${pointer.kam.email}`}

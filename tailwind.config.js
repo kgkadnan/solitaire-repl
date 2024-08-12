@@ -187,12 +187,17 @@ module.exports = {
         },
         worldMapPulse: {
           '0%': {
-            boxShadow: '0 0 0 0 rgba(52, 68, 68, 0.7)' // Slightly darker #344444
+            boxShadow:
+              '0 0 0 0 rgba(52, 68, 68, 0.7)' /* Slightly darker black */
+          },
+          '50%': {
+            boxShadow: '0 0 0 10px rgba(52, 68, 68, 0)' /* Fully transparent */
           },
           '100%': {
-            boxShadow: '0 0 0 10px rgba(52, 68, 68, 0.2)' // Fully transparent
+            boxShadow: '0 0 0 0 rgba(52, 68, 68, 0)' /* Fully transparent */
           }
         },
+
         'horizontal-reveal': {
           '0%': { width: '0%', height: '0%' },
           '30%': { width: '50px', height: '0%' },

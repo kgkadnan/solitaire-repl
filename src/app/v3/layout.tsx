@@ -77,7 +77,6 @@
 //         e.clientY
 //       );
 
-//       // Adjust cursor based on background and text color
 //       if (elementUnderCursor) {
 //         const bgColor =
 //           window.getComputedStyle(elementUnderCursor).backgroundColor;
@@ -94,7 +93,6 @@
 //           cursor.style.backgroundColor = 'rgba(128, 128, 128, 0.7)';
 //         }
 
-//         // Transparent magnifying lens effect on assets
 //         if (elementUnderCursor.classList.contains('asset')) {
 //           cursor.style.backgroundColor = 'transparent';
 //           cursor.style.border = '2px solid rgba(255, 255, 255, 0.5)';
@@ -126,7 +124,7 @@
 //   }, []);
 
 //   return (
-//     <main className="landingPage">
+//     <main className="">
 //       <Toaster />
 //       <CommonHeader />
 //       <div>{children}</div>
@@ -138,7 +136,6 @@
 //     </main>
 //   );
 // }
-
 'use client';
 import '../../../styles/_globals.scss';
 import Toaster from '@/components/v3/ui/toaster';
@@ -159,35 +156,50 @@ export default function Layout({ children }: ILayoutProps) {
     document.body.appendChild(cursor);
 
     const moveCursor = (e: MouseEvent) => {
-      cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
-      const elementUnderCursor = document.elementFromPoint(
-        e.clientX,
-        e.clientY
-      );
+      // Check if the cursor is within the div that should disable the custom cursor
+      const disableCursorDiv = document.querySelector('.disable-custom-cursor');
+      if (
+        disableCursorDiv &&
+        disableCursorDiv.contains(
+          document.elementFromPoint(e.clientX, e.clientY)
+        )
+      ) {
+        cursor.style.display = 'none';
+      } else {
+        cursor.style.display = 'block';
+        cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+        const elementUnderCursor = document.elementFromPoint(
+          e.clientX,
+          e.clientY
+        );
 
-      if (elementUnderCursor) {
-        const bgColor =
-          window.getComputedStyle(elementUnderCursor).backgroundColor;
-        const textColor = window.getComputedStyle(elementUnderCursor).color;
+        if (elementUnderCursor) {
+          const bgColor =
+            window.getComputedStyle(elementUnderCursor).backgroundColor;
+          const textColor = window.getComputedStyle(elementUnderCursor).color;
 
-        if (bgColor === 'rgb(255, 255, 255)' || textColor === 'rgb(0, 0, 0)') {
-          cursor.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
-        } else if (
-          bgColor === 'rgb(0, 0, 0)' ||
-          textColor === 'rgb(255, 255, 255)'
-        ) {
-          cursor.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
-        } else {
-          cursor.style.backgroundColor = 'rgba(128, 128, 128, 0.7)';
-        }
+          if (
+            bgColor === 'rgb(255, 255, 255)' ||
+            textColor === 'rgb(0, 0, 0)'
+          ) {
+            cursor.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+          } else if (
+            bgColor === 'rgb(0, 0, 0)' ||
+            textColor === 'rgb(255, 255, 255)'
+          ) {
+            cursor.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
+          } else {
+            cursor.style.backgroundColor = 'rgba(128, 128, 128, 0.7)';
+          }
 
-        if (elementUnderCursor.classList.contains('asset')) {
-          cursor.style.backgroundColor = 'transparent';
-          cursor.style.border = '2px solid rgba(255, 255, 255, 0.5)';
-          cursor.style.backdropFilter = 'blur(5px)';
-        } else {
-          cursor.style.border = 'none';
-          cursor.style.backdropFilter = 'none';
+          if (elementUnderCursor.classList.contains('asset')) {
+            cursor.style.backgroundColor = 'transparent';
+            cursor.style.border = '2px solid rgba(255, 255, 255, 0.5)';
+            cursor.style.backdropFilter = 'blur(5px)';
+          } else {
+            cursor.style.border = 'none';
+            cursor.style.backdropFilter = 'none';
+          }
         }
       }
     };

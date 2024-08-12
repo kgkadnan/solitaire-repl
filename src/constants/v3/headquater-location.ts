@@ -20,6 +20,9 @@ import Ankush from '@public/v3/avatar/ankush.png';
 import Abhishek from '@public/v3/avatar/abhishek.png';
 import Nitesh from '@public/v3/avatar/nitesh.png';
 import Hasmukh from '@public/v3/avatar/hasmukh.png';
+import Dev from '@public/v3/avatar/dev.png';
+import Pratik from '@public/v3/avatar/pratik.png';
+import Maysey from '@public/v3/avatar/maysey.png';
 
 export const HeadquaterLocation = [
   {
@@ -61,7 +64,7 @@ export const HeadquaterLocation = [
       },
       {
         country: 'Hong Kong SAR',
-        flag: Japan,
+        flag: Hongkong,
         name: 'Mr. Vivek Mehta',
         office: 'Hong Kong',
         phone: '852-27332201',
@@ -70,7 +73,7 @@ export const HeadquaterLocation = [
       },
       {
         country: 'JAPAN',
-        flag: Hongkong,
+        flag: Japan,
         name: 'Mr. Jitendra Baid',
         office: 'Tokyo',
         phone: '852-90957695',
@@ -121,7 +124,7 @@ export const HeadquaterLocation = [
         office: 'Antwerp',
         phone: '32-486042073',
         email: 'devanshu.jain@kgkmail.com',
-        image: Avatar
+        image: Dev
       },
       {
         country: 'SWITZERLAND',
@@ -130,7 +133,7 @@ export const HeadquaterLocation = [
         office: 'Biel/Bienne',
         phone: '41-796796041',
         email: 'patrik@kgksuisse.ch',
-        image: Avatar
+        image: Pratik
       }
     ]
   },
@@ -164,7 +167,7 @@ export const HeadquaterLocation = [
         office: 'New York',
         phone: '1-6462885207',
         email: 'moshe.isakov@kgkmail.com',
-        image: Avatar
+        image: Maysey
       }
     ]
   }
@@ -174,146 +177,158 @@ export const WorldMapPointers = [
   {
     coords: 'left-[55%] top-3/4',
     kam: {
-      name: 'Mr. Rajeev Sinha',
+      name: 'Mr. Nitesh Lunawat',
       postion: 'Key Account Manager',
-      countryFlag: India,
-      location: 'Surat, India',
-      image: Avatar,
-      phone: '+91 910 876 6432',
-      email: 'rajeev.sinha@kgkmail.com'
+      countryFlag: SouthAfrica,
+      location: 'Johannesburg, South Africa',
+      image: Nitesh,
+      phone: '27-732309811',
+      email: 'nitesh.lunawat01@kgkmail.com'
     }
   },
   {
-    coords: 'left-[30%] top-[36%]',
+    coords: 'left-[29%] top-[36%]',
     kam: {
-      name: 'Mr. Rajeev Sinha',
+      name: 'Mr. Maysey Isakov',
       postion: 'Key Account Manager',
-      countryFlag: India,
-      location: 'Surat, India',
-      image: Avatar,
-      phone: '+91 910 876 6432',
-      email: 'rajeev.sinha@kgkmail.com'
+      countryFlag: NorthAmerica,
+      location: 'New York, North America',
+      image: Maysey,
+      phone: '1-6462885207',
+      email: 'moshe.isakov@kgkmail.com'
     }
   },
   {
-    coords: 'left-[55%] top-[24%]',
+    coords: 'left-[55%] top-[26%]',
     kam: {
-      name: 'Mr. Rajeev Sinha',
+      name: 'Mr. Pratik',
       postion: 'Key Account Manager',
-      countryFlag: India,
-      location: 'Surat, India',
-      image: Avatar,
-      phone: '+91 910 876 6432',
-      email: 'rajeev.sinha@kgkmail.com'
+      countryFlag: Switzerland,
+      location: 'Biel/Bienne, Switzerland',
+      image: Pratik,
+      phone: '41-796796041',
+      email: 'patrik@kgksuisse.ch'
     }
   },
   {
-    coords: 'left-[55%] top-[12%]',
+    coords: 'left-[55%] top-[13%]',
     kam: {
-      name: 'Mr. Rajeev Sinha',
+      name: 'Mr. Devanshu Jain',
       postion: 'Key Account Manager',
-      countryFlag: India,
-      location: 'Surat, India',
-      image: Avatar,
-      phone: '+91 910 876 6432',
-      email: 'rajeev.sinha@kgkmail.com'
+      countryFlag: Belgium,
+      location: 'Antwerp, Belgium',
+      image: Dev,
+      phone: '32-486042073',
+      email: 'devanshu.jain@kgkmail.com'
     }
   },
   {
     coords: 'left-[62%] top-[47%]',
     kam: {
-      name: 'Mr. Rajeev Sinha',
+      name: 'Mr. Hasmukh Ramani',
       postion: 'Key Account Manager',
-      countryFlag: India,
-      location: 'Surat, India',
-      image: Avatar,
-      phone: '+91 910 876 6432',
-      email: 'rajeev.sinha@kgkmail.com'
+      countryFlag: Dubai,
+      location: 'Dubai',
+      image: Hasmukh,
+      phone: '32-486042074',
+      email: 'hasmukh.ramani@kgkmail.com'
     }
   },
   {
     coords: 'left-[68%] top-[48%]',
     kam: {
-      name: 'Mr. Rajeev Sinha',
+      name: 'Mr. Ajay Ghiya',
       postion: 'Key Account Manager',
       countryFlag: India,
-      location: 'Surat, India',
-      image: Avatar,
-      phone: '+91 910 876 6432',
-      email: 'rajeev.sinha@kgkmail.com'
+      location: 'India',
+      image: Ajay,
+      phone: '91-9892421286',
+      email: 'ajay.ghiya@kgkmail.com'
     }
   },
   {
-    coords: 'left-[79%] top-[47%]',
+    coords: 'left-[79%] top-[49%]',
     kam: {
-      name: 'Mr. Rajeev Sinha',
+      name: 'Mr. Deependra Kothari',
       postion: 'Key Account Manager',
-      countryFlag: India,
-      location: 'Surat, India',
+      countryFlag: China,
+      location: 'Shenzhen, China',
       image: Avatar,
-      phone: '+91 910 876 6432',
-      email: 'rajeev.sinha@kgkmail.com'
+      phone: '86-18307555545',
+      email: 'deependra.kothari@kgkmail.com'
     }
   },
   {
-    coords: 'left-[87%] top-[42%]',
+    coords: 'left-[81%] top-[42%]',
     kam: {
-      name: 'Mr. Rajeev Sinha',
+      name: 'Mr. Abhishek Golecha',
       postion: 'Key Account Manager',
-      countryFlag: India,
-      location: 'Surat, India',
-      image: Avatar,
-      phone: '+91 910 876 6432',
-      email: 'rajeev.sinha@kgkmail.com'
+      countryFlag: China,
+      location: 'Shanghai, China',
+      image: Abhishek,
+      phone: '86-13585500388',
+      email: 'abhishek.golecha@kgkmail.com'
+    }
+  },
+  {
+    coords: 'left-[87%] top-[41%]',
+    kam: {
+      name: 'Mr. Jitendra Baid',
+      postion: 'Key Account Manager',
+      countryFlag: Japan,
+      location: 'Tokyo, Japan',
+      image: Jitendra,
+      phone: '852-90957695',
+      email: 'jitendra.baid@kgkmail.com'
     }
   },
 
   {
     coords: 'left-[56%] top-[42%]',
     kam: {
-      name: 'Mr. Rajeev Sinha',
+      name: 'Mr. Yizhak Vachtel',
       postion: 'Key Account Manager',
-      countryFlag: India,
-      location: 'Surat, India',
+      countryFlag: Israel,
+      location: 'Israel',
       image: Avatar,
-      phone: '+91 910 876 6432',
-      email: 'rajeev.sinha@kgkmail.com'
+      // phone: '+91 910 876 6432',
+      email: 'yizhak.vachtel@kgkmail.com'
     }
   },
   {
     coords: 'left-[79%] top-[69%]',
     kam: {
-      name: 'Mr. Rajeev Sinha',
+      name: 'Mr. Ankush Mehta',
       postion: 'Key Account Manager',
-      countryFlag: India,
-      location: 'Surat, India',
-      image: Avatar,
-      phone: '+91 910 876 6432',
-      email: 'rajeev.sinha@kgkmail.com'
+      countryFlag: Singapore,
+      location: 'Singapore',
+      image: Ankush,
+      phone: '65-90536043',
+      email: 'ankush.mehta@kgkmail.com'
     }
   },
   {
-    coords: 'left-[75%] top-[60%]',
+    coords: 'left-[75%] top-[58%]',
     kam: {
-      name: 'Mr. Rajeev Sinha',
+      name: 'Mr. Neeraj Jain',
       postion: 'Key Account Manager',
-      countryFlag: India,
-      location: 'Surat, India',
+      countryFlag: Thailand,
+      location: 'Bangkok, Thailand',
       image: Avatar,
-      phone: '+91 910 876 6432',
-      email: 'rajeev.sinha@kgkmail.com'
+      phone: '66-811738206',
+      email: 'neeraj.jain01@kgkmail.com'
     }
   },
   {
-    coords: 'left-[82%] top-[61%]',
+    coords: 'left-[81%] top-[61%]',
     kam: {
-      name: 'Mr. Rajeev Sinha',
+      name: 'Mr. Shubham Jain',
       postion: 'Key Account Manager',
-      countryFlag: India,
-      location: 'Surat, India',
+      countryFlag: Taiwan,
+      location: 'Taipei, Taiwan',
       image: Avatar,
-      phone: '+91 910 876 6432',
-      email: 'rajeev.sinha@kgkmail.com'
+      phone: '886-981009317',
+      email: 'shubham.jain@kgkmail.com'
     }
   }
 ];

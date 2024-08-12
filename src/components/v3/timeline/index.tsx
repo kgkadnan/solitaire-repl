@@ -10,7 +10,7 @@ const checkTopOrBottom = () => {
   const scrollTop = window.scrollY;
   const viewportHeight = window.innerHeight;
   const documentHeight = document.documentElement.scrollHeight;
-  const isAtTop = scrollTop < 350;
+  const isAtTop = scrollTop < 400 || scrollTop === 0;
   const isAtBottom = scrollTop + viewportHeight >= documentHeight - 150; // Adjust threshold as needed
 
   return isAtTop || isAtBottom;
@@ -24,7 +24,7 @@ const TimelineComponent: React.FC = () => {
 
   const [isHoveredBottom, setIsHoveredBottom] = useState(false);
 
-  const [isAtTopOrBottom, setIsAtTopOrBottom] = useState(false);
+  const [isAtTopOrBottom, setIsAtTopOrBottom] = useState(true);
 
   const scrollDownToDiv = () => {
     if (currentIndex < divRefs.current.length - 1) {
