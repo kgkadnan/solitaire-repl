@@ -111,7 +111,25 @@ export default function AboutUs() {
                 KGK Diamonds: A Pillar of KGK Group
               </AnimationSection>
             </div>
-            <div className="flex flex-col gap-4">
+            <div className="text-neutral800 text-lRegular text-center w-[800px] content">
+              <AnimationSection animationDelay={1}>
+                KGK Diamonds, the largest vertical within the prestigious KGK
+                Group, exemplifies our commitment to excellence and innovation
+                in the diamond industry. Established in 1969, KGK Diamonds has
+                grown into a global powerhouse with over five decades of
+                experience in sourcing, manufacturing, and distributing natural
+                diamonds. Our operations span Angola, Botswana, India, Namibia,
+                and South Africa, leveraging advanced technologies like
+                DiaMark™ laser marking and Galaxy™ diamond mapping to ensure
+                superior quality. Our sophisticated distribution network extends
+                to major markets worldwide, including Belgium, China, Hong Kong,
+                India, Japan, South East Asia, Switzerland, the UAE, and the
+                USA, enabling us to participate in leading diamond and jewelry
+                trade events and reinforcing our status as a trusted partner in
+                the industry.
+              </AnimationSection>
+            </div>
+            {/* <div className="flex flex-col gap-4">
               {aboutUsFirstFold.map((aboutStep, index) => (
                 <div
                   ref={scrollContainerRef}
@@ -134,7 +152,7 @@ export default function AboutUs() {
                   </p>
                 </div>
               ))}
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

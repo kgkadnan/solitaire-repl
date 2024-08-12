@@ -10,6 +10,7 @@ import AnimationSection from '../animated-text/scroll';
 const TimelineComponent: React.FC = () => {
   const divRefs: any = useRef([]);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const [isHovered, setIsHovered] = useState(false);
 
   const scrollDownToDiv = () => {
     if (currentIndex < divRefs.current.length - 1) {
@@ -92,8 +93,16 @@ const TimelineComponent: React.FC = () => {
           alt="Up scroller arrow"
           onClick={scrollUpToDiv}
         /> */}
-        <div onClick={scrollUpToDiv} className="cursor-pointer">
-          <CircularArrow stroke="red" />
+        <div
+          onClick={scrollUpToDiv}
+          className="cursor-pointer"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
+          <CircularArrow
+            stroke={isHovered ? 'white' : 'hsla(180, 13%, 24%, 1)'}
+            fill={isHovered ? 'hsla(180, 13%, 24%, 1)' : 'white'}
+          />
         </div>
         <div
           className="absolute left-1/2 top-full w-0.5 h-8 bg-black bg-opacity-50 "
@@ -103,7 +112,11 @@ const TimelineComponent: React.FC = () => {
           }}
         ></div>
         <div
-          className="absolute h-[60px] !w-[60px] -left-[15px] mt-[35px] border-[1px] border-primaryMain rounded-[50%] p-15 flex items-center text-center justify-center"
+          className={`absolute h-[60px] !w-[60px] -left-[15px] mt-[35px] border-[1px]  rounded-[50%] p-15 flex items-center text-center justify-center ${
+            isHovered
+              ? 'border-neutral0 bg-primaryMain text-neutral0'
+              : 'border-primaryMain'
+          }`}
           style={{ boxShadow: 'var(--input-shadow)' }}
         >
           {timelineData[currentIndex]?.year ?? '1905'}
@@ -124,8 +137,13 @@ const TimelineComponent: React.FC = () => {
         <div
           className="absolute left-[1px] mt-[132px] rotate-180 cursor-pointer"
           onClick={scrollDownToDiv}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
         >
-          <CircularArrow stroke="red" />
+          <CircularArrow
+            stroke={isHovered ? 'white' : 'hsla(180, 13%, 24%, 1)'}
+            fill={isHovered ? 'hsla(180, 13%, 24%, 1)' : 'white'}
+          />
         </div>
       </div>
     </div>
