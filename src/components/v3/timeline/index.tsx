@@ -2,15 +2,29 @@ import React, { useRef, useState, useEffect } from 'react';
 import TimelineItem from './timeline-item';
 import Timeline from './timeline';
 import Diamond from '@public/v3/timeline/diamond.svg';
-// import Image from 'next/image';
 import CircularArrow from '@public/v3/icons/circular-arrow.svg?url';
 import { timelineData } from '@/constants/v3/about-us';
 import AnimationSection from '../animated-text/scroll';
+
+const checkTopOrBottom = () => {
+  const scrollTop = window.scrollY;
+  const viewportHeight = window.innerHeight;
+  const documentHeight = document.documentElement.scrollHeight;
+  const isAtTop = scrollTop < 350;
+  const isAtBottom = scrollTop + viewportHeight >= documentHeight - 150; // Adjust threshold as needed
+
+  return isAtTop || isAtBottom;
+};
 
 const TimelineComponent: React.FC = () => {
   const divRefs: any = useRef([]);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [isHovered, setIsHovered] = useState(false);
+  const [isHoveredCenter, setIsHoveredCenter] = useState(false);
+
+  const [isHoveredBottom, setIsHoveredBottom] = useState(false);
+
+  const [isAtTopOrBottom, setIsAtTopOrBottom] = useState(false);
 
   const scrollDownToDiv = () => {
     if (currentIndex < divRefs.current.length - 1) {
@@ -56,6 +70,19 @@ const TimelineComponent: React.FC = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsAtTopOrBottom(checkTopOrBottom());
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    // Cleanup on component unmount
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   const timelineElements = timelineData.map((data, index) => (
     <div
       key={index}
@@ -83,69 +110,68 @@ const TimelineComponent: React.FC = () => {
   ));
 
   return (
-    <div className="relative">
+    <div className="relative overflow-visible">
       <Timeline lineColor="#D0D5DD">
         <div className="flex flex-col ">{timelineElements}</div>
       </Timeline>
-      <div className="fixed right-10 top-1/2 -mt-[50px]">
-        {/* <Image
-          src={circularArrow}
-          alt="Up scroller arrow"
-          onClick={scrollUpToDiv}
-        /> */}
+      {!isAtTopOrBottom && (
         <div
-          onClick={scrollUpToDiv}
-          className="cursor-pointer"
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-        >
-          <CircularArrow
-            stroke={isHovered ? 'white' : 'hsla(180, 13%, 24%, 1)'}
-            fill={isHovered ? 'hsla(180, 13%, 24%, 1)' : 'white'}
-          />
-        </div>
-        <div
-          className="absolute left-1/2 top-full w-0.5 h-8 bg-black bg-opacity-50 "
-          style={{
-            backgroundImage:
-              'repeating-linear-gradient(to bottom, black 0, black 1px, transparent 2px, transparent 4px)'
-          }}
-        ></div>
-        <div
-          className={`absolute h-[60px] !w-[60px] -left-[15px] mt-[35px] border-[1px]  rounded-[50%] p-15 flex items-center text-center justify-center ${
-            isHovered
-              ? 'border-neutral0 bg-primaryMain text-neutral0'
-              : 'border-primaryMain'
+          className={`fixed right-10 top-1/2 -mt-[50px] transition-transform duration-300 ease-in-out ${
+            !isAtTopOrBottom
+              ? 'opacity-100 translate-x-0'
+              : 'opacity-0 translate-x-full'
           }`}
-          style={{ boxShadow: 'var(--input-shadow)' }}
         >
-          {timelineData[currentIndex]?.year ?? '1905'}
+          <div
+            onClick={scrollUpToDiv}
+            className="cursor-pointer"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+          >
+            <CircularArrow
+              stroke={isHovered ? 'white' : 'hsla(180, 13%, 24%, 1)'}
+              fill={isHovered ? 'hsla(180, 13%, 24%, 1)' : 'none'}
+            />
+          </div>
+          <div
+            className="absolute left-1/2 top-full w-0.5 h-8 bg-black bg-opacity-50"
+            style={{
+              backgroundImage:
+                'repeating-linear-gradient(to bottom, black 0, black 1px, transparent 2px, transparent 4px)'
+            }}
+          ></div>
+          <div
+            className={`absolute h-[60px] !w-[60px] -left-[15px] mt-[35px] border-[1px] rounded-[50%] p-15 flex items-center text-center justify-center ${
+              isHoveredCenter
+                ? 'border-neutral0 bg-primaryMain text-neutral0'
+                : 'border-primaryMain'
+            }`}
+            style={{ boxShadow: 'var(--input-shadow)' }}
+            onMouseEnter={() => setIsHoveredCenter(true)}
+            onMouseLeave={() => setIsHoveredCenter(false)}
+          >
+            {timelineData[currentIndex]?.year ?? '1905'}
+          </div>
+          <div
+            className="absolute mt-[100px] left-1/2 top-full w-0.5 h-8 bg-black bg-opacity-50"
+            style={{
+              backgroundImage:
+                'repeating-linear-gradient(to bottom, black 0, black 1px, transparent 2px, transparent 4px)'
+            }}
+          ></div>
+          <div
+            className="absolute left-[1px] mt-[132px] rotate-180 cursor-pointer"
+            onClick={scrollDownToDiv}
+            onMouseEnter={() => setIsHoveredBottom(true)}
+            onMouseLeave={() => setIsHoveredBottom(false)}
+          >
+            <CircularArrow
+              stroke={isHoveredBottom ? 'white' : 'hsla(180, 13%, 24%, 1)'}
+              fill={isHoveredBottom ? 'hsla(180, 13%, 24%, 1)' : 'none'}
+            />
+          </div>
         </div>
-        <div
-          className="absolute mt-[100px] left-1/2 top-full w-0.5 h-8 bg-black bg-opacity-50 "
-          style={{
-            backgroundImage:
-              'repeating-linear-gradient(to bottom, black 0, black 1px, transparent 2px, transparent 4px)'
-          }}
-        ></div>
-        {/* <Image
-          src={circularArrow}
-          alt="Down scroller arrow"
-          className="absolute left-[1px] mt-[132px] rotate-180 fill-[red]"
-          onClick={scrollDownToDiv}
-        /> */}
-        <div
-          className="absolute left-[1px] mt-[132px] rotate-180 cursor-pointer"
-          onClick={scrollDownToDiv}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-        >
-          <CircularArrow
-            stroke={isHovered ? 'white' : 'hsla(180, 13%, 24%, 1)'}
-            fill={isHovered ? 'hsla(180, 13%, 24%, 1)' : 'white'}
-          />
-        </div>
-      </div>
+      )}
     </div>
   );
 };
