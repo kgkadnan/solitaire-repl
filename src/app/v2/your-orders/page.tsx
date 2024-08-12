@@ -208,12 +208,14 @@ const MyDiamonds = () => {
       keys: [
         { label: 'Order ID', accessor: 'display_id' },
         { label: 'Confirmation Date', accessor: 'created_at' },
+        { label: 'Order Request Status', accessor: 'status' },
         { label: 'Details', accessor: 'details' }
       ],
       data: pendingDataState
     },
     inTransit: {
       keys: [
+        { label: 'Order ID', accessor: 'display_id' },
         { label: 'Invoice Number', accessor: 'invoice_id' },
         { label: 'Invoice Date', accessor: 'created_at' },
         { label: 'Details', accessor: 'details' }
@@ -222,6 +224,7 @@ const MyDiamonds = () => {
     },
     past: {
       keys: [
+        { label: 'Order ID', accessor: 'display_id' },
         { label: 'Invoice Number', accessor: 'invoice_id' },
         { label: 'Invoice Date', accessor: 'created_at' },
         { label: 'Details', accessor: 'details' }
@@ -388,10 +391,30 @@ const MyDiamonds = () => {
           </>
         );
 
+      case 'status':
+        return (
+          <>
+            {value[accessor] === 'pending' ? (
+              <div className="text-mRegular px-[6px] py-[4px] rounded-[4px] border-successBorder  bg-successSurface text-successMain border-solid border-[1px] ">
+                Success
+              </div>
+            ) : value[accessor] === 'canceled' ? (
+              <div className="text-mRegular px-[6px] py-[4px] rounded-[4px] border-dangerBorder bg-dangerSurface text-dangerMain border-solid border-[1px] ">
+                Failed
+              </div>
+            ) : value[accessor] === 'requires_action' ? (
+              <div className="text-mRegular px-[6px] py-[4px] rounded-[4px] border-lengendMemoBorder bg-legendMemoFill text-legendMemo border-solid border-[1px] ">
+                Processing
+              </div>
+            ) : (
+              value[accessor]
+            )}
+          </>
+        );
+
       case 'invoice_id':
         return (
           <>
-            <Image src={icon} alt="icon" />
             <span>{value[accessor]}</span>
           </>
         );
