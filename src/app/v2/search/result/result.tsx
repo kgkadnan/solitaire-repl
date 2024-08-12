@@ -884,7 +884,7 @@ const Result = ({
                   res.status === 'success'
                     ? 'success'
                     : res.status === 'processing'
-                    ? 'warning'
+                    ? 'info'
                     : ''
                 }
                 customPoppupBodyStyle="!mt-[70px]"
