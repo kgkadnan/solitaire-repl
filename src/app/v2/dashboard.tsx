@@ -1181,8 +1181,8 @@ const Dashboard = () => {
                 status={
                   res.status === 'success'
                     ? 'success'
-                    : res.status === 'partial'
-                    ? 'warning'
+                    : res.status === 'processing'
+                    ? 'info'
                     : ''
                 }
                 customPoppupBodyStyle="!mt-[70px]"
