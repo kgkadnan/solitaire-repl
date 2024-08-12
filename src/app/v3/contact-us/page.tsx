@@ -249,7 +249,7 @@ const ContactUs = () => {
             <div
               className={`w-[70%]  flex flex-wrap flex-col gap-4 ${
                 selectedRegion === 'ASIA PACIFIC'
-                  ? 'max-h-[780px]'
+                  ? 'max-h-[720px]'
                   : 'max-h-[150px]'
               }`}
             >
@@ -266,13 +266,13 @@ const ContactUs = () => {
                         {loc.country}
                       </p>
                     </div>
-                    <div className="flex gap-1">
+                    <div className="flex gap-1 ">
                       {' '}
-                      <Image
-                        src={loc.image}
-                        alt={loc.name}
-                        className="-ml-[10px]"
-                      />
+                        <Image
+                          src={loc.image}
+                          alt={loc.name}
+                          className="h-10 w-10 rounded-[50%] object-contain bg-radial-grad-kam"
+                        />
                       <div className="flex flex-col justify-center">
                         {' '}
                         <p className="text-mMedium font-semiBold text-neutral600">

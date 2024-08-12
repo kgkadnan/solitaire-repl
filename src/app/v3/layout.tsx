@@ -212,7 +212,7 @@ export default function Layout({ children }: ILayoutProps) {
   }, []);
 
   return (
-    <main className="landingPage">
+    <main className="">
       <Toaster />
       <CommonHeader />
       <div>{children}</div>

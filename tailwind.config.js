@@ -186,10 +186,10 @@ module.exports = {
           '100%': { 'background-position': '0% 0%' }
         },
         worldMapPulse: {
-          '0%, 100%': {
+          '0%': {
             boxShadow: '0 0 0 0 rgba(52, 68, 68, 0.7)' // Slightly darker #344444
           },
-          '50%': {
+          '100%': {
             boxShadow: '0 0 0 10px rgba(52, 68, 68, 0.2)' // Fully transparent
           }
         },
@@ -220,7 +220,8 @@ module.exports = {
         // linear-gradient(90deg, #44C4FC,#4AF6CD, #8989FD, #FFE0B0)`,
         // 'linear-gradient(180deg, #ffffff, #FFF4E3, #E8E8FF, #DBF2FC, #FFFFFF,#FFFFFF)',
         'timeline-gradient':
-          'linear-gradient(to bottom, #FFAD05, #168B85, #5995ED)'
+          'linear-gradient(to bottom, #FFAD05, #168B85, #5995ED)',
+        'radial-grad-kam': 'radial-gradient(circle, #F9FAFB, #949495)'
       },
       backgroundSize: {
         200: '200% 200%'

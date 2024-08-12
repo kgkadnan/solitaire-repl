@@ -10,7 +10,17 @@ import Belgium from '@public/v3/flags/belgium.svg';
 import NorthAmerica from '@public/v3/flags/north-america.svg';
 import Israel from '@public/v3/flags/israel.svg';
 import Dubai from '@public/v3/flags/dubai.svg';
+import Hongkong from '@public/v3/flags/hongkong.svg';
+
 import Avatar from '@public/v3/avatar/test.svg';
+import Vivek from '@public/v3/avatar/vivek.png';
+import Ajay from '@public/v3/avatar/ajay.png';
+import Jitendra from '@public/v3/avatar/jitendra.png';
+import Ankush from '@public/v3/avatar/ankush.png';
+import Abhishek from '@public/v3/avatar/abhishek.png';
+import Nitesh from '@public/v3/avatar/nitesh.png';
+import Hasmukh from '@public/v3/avatar/hasmukh.png';
+
 export const HeadquaterLocation = [
   {
     region: 'ASIA PACIFIC',
@@ -21,7 +31,7 @@ export const HeadquaterLocation = [
         name: 'Mr. Ajay Ghiya',
         phone: '91-9892421286',
         email: 'ajay.ghiya@kgkmail.com',
-        image: Avatar
+        image: Ajay
       },
       {
         country: 'CHINA',
@@ -30,7 +40,7 @@ export const HeadquaterLocation = [
         office: 'Shanghai',
         phone: '86-13585500388',
         email: 'abhishek.golecha@kgkmail.com',
-        image: Avatar
+        image: Abhishek
       },
       {
         country: 'CHINESE TAIWAN',
@@ -47,16 +57,25 @@ export const HeadquaterLocation = [
         name: 'Mr. Ankush Mehta',
         phone: '65-90536043',
         email: 'ankush.mehta@kgkmail.com',
-        image: Avatar
+        image: Ankush
+      },
+      {
+        country: 'Hong Kong SAR',
+        flag: Japan,
+        name: 'Mr. Vivek Mehta',
+        office: 'Hong Kong',
+        phone: '852-27332201',
+        email: 'vivek.mehta@kgkmail.com',
+        image: Vivek
       },
       {
         country: 'JAPAN',
-        flag: Japan,
+        flag: Hongkong,
         name: 'Mr. Jitendra Baid',
         office: 'Tokyo',
         phone: '852-90957695',
         email: 'jitendra.baid@kgkmail.com',
-        image: Avatar
+        image: Jitendra
       },
       {
         country: 'CHINA',
@@ -88,7 +107,7 @@ export const HeadquaterLocation = [
         office: 'Johannesburg',
         phone: '27-732309811',
         email: 'nitesh.lunawat01@kgkmail.com',
-        image: Avatar
+        image: Nitesh
       }
     ]
   },
@@ -124,7 +143,7 @@ export const HeadquaterLocation = [
         name: 'Mr. Hasmukh Ramani ',
         phone: '32-486042074',
         email: 'hasmukh.ramani@kgkmail.com',
-        image: Avatar
+        image: Hasmukh
       },
       {
         country: 'ISRAEL',
