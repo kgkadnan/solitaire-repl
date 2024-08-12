@@ -390,7 +390,7 @@ const OrderDetail: React.FC<IOrderDetail> = ({
               </div>
               <div className="flex p-[16px] pr-[35px] gap-[35px]">
                 <div className="">
-                  <div className="pl-[16px] flex justify-between">
+                  <div className="pl-[16px] flex items-center justify-between">
                     <div className="flex gap-[10px] ">
                       {' '}
                       <p className="text-neutral600 text-mMedium font-regular">
@@ -402,6 +402,26 @@ const OrderDetail: React.FC<IOrderDetail> = ({
                         {formatCreatedAt(productDetailData?.created_at)}
                       </span>
                     </div>
+
+                    {breadCrumLabel === PENING_INVOICE_BREADCRUMB_LABEL && (
+                      <div>
+                        {productDetailData?.status === 'pending' ? (
+                          <div className="text-mRegular px-[6px] py-[4px] rounded-[4px] border-successBorder  bg-successSurface text-successMain border-solid border-[1px] ">
+                            Success
+                          </div>
+                        ) : productDetailData?.status === 'canceled' ? (
+                          <div className="text-mRegular px-[6px] py-[4px] rounded-[4px] border-dangerBorder bg-dangerSurface text-dangerMain border-solid border-[1px] ">
+                            Failed
+                          </div>
+                        ) : productDetailData?.status === 'requires_action' ? (
+                          <div className="text-mRegular px-[6px] py-[4px] rounded-[4px]  border-lengendMemoBorder bg-legendMemoFill text-legendMemo border-solid border-[1px] ">
+                            Processing
+                          </div>
+                        ) : (
+                          productDetailData?.status
+                        )}
+                      </div>
+                    )}
                     {/* {breadCrumLabel === ACTIVE_INVOICE_BREADCRUMB_LABEL && (
                       <div className="mr-3">
                         {' '}
