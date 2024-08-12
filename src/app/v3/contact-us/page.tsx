@@ -182,7 +182,7 @@ const ContactUs = () => {
                     <hr />
                     <a
                       href={`tel:${pointer.kam.phone}`}
-                      className="flex gap-1 items-center"
+                      className="flex gap-1 items-center cursor-pointer"
                     >
                       <Image src={Phone} alt={'Phone'} height={24} width={24} />
                       <p className=" text-sRegular text-neutral600">
@@ -190,7 +190,7 @@ const ContactUs = () => {
                       </p>
                     </a>
 
-                    <div className="flex gap-1 items-center">
+                    <div className="flex gap-1 items-center cursor-pointer">
                       <a
                         href={`mailto:${pointer.kam.email}`}
                         className="flex gap-1 items-center"

@@ -364,3 +364,16 @@
   position: relative;
   z-index: 2; /* Ensure content is above the blur effect */
 }
+
+@keyframes continuousScrollUp {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-50%);
+  }
+}
+
+.continuousScroll {
+  animation: continuousScrollUp linear infinite;
+}

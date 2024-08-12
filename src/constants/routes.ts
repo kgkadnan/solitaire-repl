@@ -3,7 +3,8 @@ export const v3Routes = [
   '/v3/about-us/leadership',
   '/v3/contact-us',
   '/v3/blogs',
-  '/v3'
+  '/v3',
+  '/v3/sustainability'
 ];
 export const headerlessRoutes = [
   '/v2/register',
