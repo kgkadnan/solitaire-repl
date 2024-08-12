@@ -280,15 +280,16 @@ const ContactUs = () => {
                     </div>
                     <div className="flex gap-1 ">
                       {' '}
+                      <div className='h-10 w-10 rounded-[50%]'>
                       <Image
                         src={loc.image}
                         alt={loc.name}
-                        className={`h-10 w-10 rounded-[50%]  bg-radial-grad-kam border-[2px] border-neutral0 pt-1 ${
+                        className={`h-10 w-10  rounded-[50%]  bg-radial-grad-kam border-[2px] border-neutral0 pt-1 ${
                           loc.name === 'Mr. Maysey Isakov' ||
                           (loc.name === 'Mr. Jitendra Baid' && 'pt-[6px]')
                         }`}
                         style={{ boxShadow: 'var(--popups-shadow' }}
-                      />
+                      /></div>
                       <div className="flex flex-col justify-center">
                         {' '}
                         <p className="text-mMedium font-semiBold text-neutral600">
