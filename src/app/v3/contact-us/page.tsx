@@ -203,6 +203,7 @@ const ContactUs = () => {
                       <Image
                         src={Copy}
                         alt={'Copy'}
+                        className="cursor-pointer"
                         onClick={() => {
                           navigator.clipboard
                             .writeText(pointer.kam.email)
@@ -265,7 +266,11 @@ const ContactUs = () => {
                     </div>
                     <div className="flex gap-1">
                       {' '}
-                      <Image src={loc.image} alt={loc.name} />
+                      <Image
+                        src={loc.image}
+                        alt={loc.name}
+                        className="-ml-[10px]"
+                      />
                       <div className="flex flex-col justify-center">
                         {' '}
                         <p className="text-mMedium font-semiBold text-neutral600">
@@ -305,6 +310,7 @@ const ContactUs = () => {
                       <Image
                         src={Copy}
                         alt={'Copy'}
+                        className="cursor-pointer"
                         onClick={() => {
                           navigator.clipboard.writeText(loc.email).then(() =>
                             toast({
