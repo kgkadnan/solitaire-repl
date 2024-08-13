@@ -493,18 +493,18 @@ const MyCart = () => {
             setIsDialogOpen(true);
             dispatch(setConfirmStoneTrack(''));
             setIsLoading(false);
-            const formattedMessageArray = res.message
-              .split('\n')
-              .map((line: string, index: number) => (
+            const formatMessage = (message: string) => {
+              return message.split('\n').map((line: string, index: number) => (
                 <span key={index}>
-                  {line}
+                  <span dangerouslySetInnerHTML={{ __html: line }} />
                   <br />
                 </span>
               ));
+            };
             setRowSelection({});
             setDialogContent(
               <CommonPoppup
-                content={<div>{formattedMessageArray}</div>}
+                content={<div>{formatMessage(res.message)}</div>}
                 status={
                   res.status === 'success'
                     ? 'success'
