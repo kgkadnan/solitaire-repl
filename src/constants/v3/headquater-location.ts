@@ -23,6 +23,7 @@ import Hasmukh from '@public/v3/avatar/hasmukh.png';
 import Dev from '@public/v3/avatar/dev.png';
 import Pratik from '@public/v3/avatar/pratik.png';
 import Maysey from '@public/v3/avatar/maysey.png';
+import Yizhak from '@public/v3/avatar/yizhak.png';
 
 export const HeadquaterLocation = [
   {
@@ -155,7 +156,7 @@ export const HeadquaterLocation = [
         flag: Israel,
         name: 'Mr. Yizhak Vachtel',
         email: 'yizhak.vachtel@kgkmail.com',
-        image: Avatar
+        image: Yizhak
       }
     ]
   },
@@ -292,7 +293,7 @@ export const WorldMapPointers = [
       postion: 'Key Account Manager',
       countryFlag: Israel,
       location: 'Israel',
-      image: Avatar,
+      image: Yizhak,
       // phone: '+91 910 876 6432',
       email: 'yizhak.vachtel@kgkmail.com'
     }

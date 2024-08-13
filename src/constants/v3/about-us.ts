@@ -172,8 +172,7 @@ export const leadership = [
     name: 'Nitin Dhadda',
     image: Nitin,
     position: 'Chief Manufacturing Officer',
-    description:
-      'Mr Navrattan Kothari has managed KGK since 1962. Under his astute guidance KGK has evolved into a modern multinational that operates to world-class standards with state-of-the-art infrastructure. His leadership has enabled KGK to innovate and expand into numerous markets and achieve global growth and recognition. Mr Kothari has built a company that is inspired by life and humanity, which places the highest value on trust, integrity, ethics and corporate responsibility. As Patriarch, Mr Kothari steers the company and enlightens and inspires our team worldwide with his insights, experience and acumen.',
+    description: `Mr. Nitin Dhadda is the Chief Manufacturing Officer - Executive Management at KGK Diamonds (I) Pvt. Ltd. in Surat, bringing over two decades of extensive experience and dedication since joining the company in 1993. As a distinguished expert in manufacturing, he has played a crucial role in overseeing production processes, quality control, supply chain management, facility operations, and general administration. At the forefront of adopting new technologies, he significantly contributes to product excellence and efficiency, enhancing production capabilities and maintaining the highest quality standards in KGK Diamonds' offerings. Residing in Surat, India, Mr. Dhadda is dedicated to achieving professional excellence and driving continuous growth within the organization.`,
     linkedin: 'in/nitin-kumar-dhadda-15682881/'
   },
   {
