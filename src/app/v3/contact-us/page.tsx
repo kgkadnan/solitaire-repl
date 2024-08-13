@@ -49,7 +49,7 @@ const ContactUs = () => {
   const [emailError, setEmailError] = useState<string>('');
   const [phoneNumberError, setPhoneNumberError] = useState('');
 
-  const { data: currentCountryCode, error } = useGetCountryCodeQuery({});
+  const { data: currentCountryCode } = useGetCountryCodeQuery({});
   useEffect(() => {
     if (currentCountryCode?.country_name) {
       let country = currentCountryCode?.country_name.toLowerCase();
