@@ -51,89 +51,93 @@ export const timelineData = [
     image: Timeline1905,
     year: '1905',
     content:
-      'Shri Keshrimal Kothari began trading coloured gemstones between Jaipur, India  and Rangoon, Burma'
+      'Shri Keshrimal Kothari commenced the trading of colored gemstones between Jaipur, India, and Rangoon, Burma.'
   },
   {
     image: Timeline1915,
     year: '1915',
-    content: 'KGK started trading coloured gemstones in Chennai'
+    content: 'KGK expanded its trading of colored gemstones to Chennai, India.'
   },
   {
     image: Timeline1960,
     year: '1960',
-    content: 'Mr. Navrattan Kothari joined KGK Group'
+    content:
+      'Mr. Navrattan Kothari joined the KGK Group, marking a new era of leadership.'
   },
   {
     image: Timeline1962,
     year: '1962',
     content:
-      'KGK established an office in Hong Kong, marking a significant step in expanding its global footprint.'
+      'KGK established an office in Hong Kong, significantly expanding its global presence.'
   },
   {
     image: Timeline1972,
     year: '1972',
-    content: 'Launched coloured stone operations in USA'
+    content: 'KGK launched colored gemstone operations in the USA.'
   },
   {
     image: Timeline1975,
     year: '1975',
-    content: 'Diamond sourcing operations launched in Mumbai '
+    content: 'KGK initiated diamond sourcing operations in Mumbai, India.'
   },
   {
     image: Timeline1986,
     year: '1986',
-    content: 'Diamond processing operations established in Mumbai'
+    content:
+      'KGK set up its first diamond processing facility in Mumbai, India.'
   },
   {
     image: Timeline1997,
     year: '1997',
-    content: 'KGK awarded sightholder status by De Beers '
+    content: 'KGK was awarded Sightholder status by De Beers.'
   },
   {
     image: Timeline2000,
     year: '2000',
-    content: 'KGK opens Diamond manufacturing unit in South Africa'
+    content: 'KGK established a diamond manufacturing unit in South Africa.'
   },
   {
     image: Timeline2009,
     year: '2009',
-    content: 'First Entice boutique launched in Jaipur, India'
+    content: 'The first Entice boutique was launched in Jaipur, India.'
   },
   {
     image: Timeline2014,
     year: '2014',
-    content: 'KGK opened diamond manufacturing unit in Botswana, Africa '
+    content: 'KGK opened a diamond manufacturing unit in Botswana, Africa.'
   },
   {
     image: Timeline2015,
     year: '2015',
-    content: 'KGK Diamonds Botswana Pty Ltd became a De Beers Sightholder '
+    content:
+      'KGK Diamonds Botswana Pty Ltd achieved De Beers Sightholder status.'
   },
   {
     image: Timeline2016,
     year: '2016',
-    content: 'KGK unveiled new corporate identity and group website'
+    content:
+      'KGK unveiled its new corporate identity and launched a group website.'
   },
-
   {
     image: Timeline2018,
     year: '2018',
-    content: 'Diamond manufacturing facility launched in Namibia'
+    content: 'KGK inaugurated a diamond manufacturing facility in Namibia.'
   },
   {
     image: Timeline2019,
     year: '2019',
-    content: 'Diamond manufacturing facility opened in Luanda, Angola'
+    content: 'KGK opened a diamond manufacturing facility in Luanda, Angola.'
   },
   {
     image: Timeline2021,
     year: '2021',
-    content: 'Diamond manufacturing facility opened in Saurimo, Angola'
+    content: 'KGK launched a diamond manufacturing facility in Saurimo, Angola.'
   },
   {
     image: Timeline2023,
     year: '2023',
-    content: 'Diamond & Jewllery Manufacturing in Gaborone, Botwana'
+    content:
+      'KGK established a diamond and jewelry manufacturing facility in Gaborone, Botswana.'
   }
 ];
 

@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Diamond from '@public/v3/timeline/diamond.svg';
 
@@ -24,12 +24,14 @@ import { CommonButton } from '@/components/v3/button';
 import WorldMap from '@public/v3/world-map.png';
 import Tooltip from '@/components/v2/common/tooltip';
 import AnimationSection from '@/components/v3/animated-text/scroll';
+import { useGetCountryCodeQuery } from '@/features/api/current-ip';
 
 const LocateUs = dynamic(() => import('../../../components/v3/locate-us'), {
   ssr: false
 });
 const ContactUs = () => {
   const [selectedRegion, setSelectedRegion] = useState('ASIA PACIFIC');
+  const [defaultCountry, setDefaultCountry] = useState('india');
   const { toast } = useToast();
 
   const [firstName, setFirstName] = useState<string>('');
@@ -47,6 +49,12 @@ const ContactUs = () => {
   const [emailError, setEmailError] = useState<string>('');
   const [phoneNumberError, setPhoneNumberError] = useState('');
 
+  const { data: currentCountryCode, error } = useGetCountryCodeQuery({});
+  useEffect(() => {
+    if (currentCountryCode?.country_name) {
+      setDefaultCountry(currentCountryCode?.country_name);
+    }
+  }, [currentCountryCode]);
   const handleSend = () => {
     let isValid = true;
 
