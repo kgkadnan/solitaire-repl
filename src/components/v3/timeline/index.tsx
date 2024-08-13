@@ -10,8 +10,8 @@ const checkTopOrBottom = () => {
   const scrollTop = window.scrollY;
   const viewportHeight = window.innerHeight;
   const documentHeight = document.documentElement.scrollHeight;
-  const isAtTop = scrollTop < 400 || scrollTop === 0;
-  const isAtBottom = scrollTop + viewportHeight >= documentHeight - 150; // Adjust threshold as needed
+  const isAtTop = scrollTop < 1100 || scrollTop === 0;
+  const isAtBottom = scrollTop + viewportHeight >= documentHeight - 400; // Adjust threshold as needed
 
   return isAtTop || isAtBottom;
 };
