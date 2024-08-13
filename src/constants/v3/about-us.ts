@@ -123,7 +123,7 @@ export const timelineData = [
   {
     image: Timeline2019,
     year: '2019',
-    content: 'KDiamond manufacturing facility opened in Luanda, AngolaGK'
+    content: 'Diamond manufacturing facility opened in Luanda, Angola'
   },
   {
     image: Timeline2021,
