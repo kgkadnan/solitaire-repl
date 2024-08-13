@@ -259,7 +259,7 @@ const ContactUs = () => {
             </div>
 
             <div
-              className={`w-[70%]  flex flex-wrap flex-col gap-4 pb-[80px] ${
+              className={`w-[70%]  flex flex-wrap flex-col gap-6 pb-[80px] ${
                 selectedRegion === 'ASIA PACIFIC'
                   ? 'max-h-[720px]'
                   : 'max-h-[150px]'
@@ -271,9 +271,10 @@ const ContactUs = () => {
                 <div key={`${loc.country}-${index}`}>
                   {/* <AnimationSection> */}
                   <div className="flex flex-col gap-[6px]">
-                    <div className="flex gap-3">
-                      <Image src={loc.flag} alt={loc.country} />
-
+                    <div className="flex gap-1">
+                      <div className="w-10 flex items-center justify-center">
+                        <Image src={loc.flag} alt={loc.country} />
+                      </div>
                       <p className="font-semiBold text-headingS text-neutral600">
                         {loc.country}
                       </p>
@@ -306,12 +307,14 @@ const ContactUs = () => {
                         href={`tel:${loc.phone}`}
                         className="flex gap-1 items-center"
                       >
-                        <Image
-                          src={Phone}
-                          alt={'Phone'}
-                          height={24}
-                          width={24}
-                        />
+                        <div className="w-10 flex items-center justify-center">
+                          <Image
+                            src={Phone}
+                            alt={'Phone'}
+                            height={24}
+                            width={24}
+                          />
+                        </div>
                         <p className="text-neutral600 text-sRegular">
                           {loc.phone}
                         </p>
@@ -322,7 +325,15 @@ const ContactUs = () => {
                         href={`mailto:${loc.email}`}
                         className="flex gap-1 items-center"
                       >
-                        <Image src={Mail} alt={'Mail'} height={24} width={24} />
+                        {' '}
+                        <div className="w-10 flex items-center justify-center">
+                          <Image
+                            src={Mail}
+                            alt={'Mail'}
+                            height={24}
+                            width={24}
+                          />
+                        </div>
                         <p className="text-neutral600 text-sRegular">
                           {loc.email}{' '}
                         </p>
