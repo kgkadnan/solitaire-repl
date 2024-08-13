@@ -388,7 +388,7 @@ const ContactUs = () => {
                     autoComplete="none"
                   />
                   <InputField
-                    label="last Name*"
+                    label="Last Name*"
                     onChange={event => setLastName(event.target.value)}
                     type="text"
                     name="lastName"
