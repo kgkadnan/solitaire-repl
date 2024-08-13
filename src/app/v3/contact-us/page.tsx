@@ -122,7 +122,6 @@ const ContactUs = () => {
       });
     }
   };
-  console.log(defaultCountry, '-----------');
   return (
     <div>
       <div className="min-h-[800px] flex justify-center items-center px-[112px] bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom">
@@ -196,17 +195,7 @@ const ContactUs = () => {
                   <div className="flex  text-neutral900">
                     <div className="flex flex-col gap-2 ">
                       <div className="flex flex-col gap-2">
-                        <div className="flex gap-2 items-center">
-                          {/* <Image
-                          src={pointer.kam.image}
-                          alt={`profile image ${pointer.kam.name}`}
-                          className={`h-10 w-10 rounded-[50%]  bg-radial-grad-kam border-[2px] border-neutral0  ${
-                            (pointer.kam.name === 'Mr. Maysey Isakov' ||
-                              pointer.kam.name === 'Mr. Jitendra Baid') &&
-                            'pt-[6px]'
-                          }`}
-                          style={{ boxShadow: 'var(--popups-shadow' }}
-                        /> */}
+                        <div className="flex gap-1 items-center">
                           <div
                             className="h-10 w-10 rounded-[50%] bg-primaryMain text-neutral0 text-[14px] border-[2px] border-neutral0 justify-center items-center flex"
                             style={{ boxShadow: 'var(--popups-shadow' }}
@@ -220,11 +209,13 @@ const ContactUs = () => {
                             <p className="text-[12px]">{pointer.kam.postion}</p>
                           </div>
                         </div>
-                        <div className="flex gap-2 pl-2 items-center">
-                          <Image
-                            src={pointer.kam.countryFlag}
-                            alt={`country flag image ${pointer.kam.name}`}
-                          />
+                        <div className="flex gap-1  items-center">
+                          <div className="w-[40px] flex justify-center">
+                            <Image
+                              src={pointer.kam.countryFlag}
+                              alt={`country flag image ${pointer.kam.name}`}
+                            />
+                          </div>
                           <p className="font-semiBold text-[12px] text-[#344054]">
                             {pointer.kam.location}
                           </p>
@@ -236,12 +227,14 @@ const ContactUs = () => {
                           href={`tel:+${pointer.kam.phone}`}
                           className="flex gap-1 items-center cursor-pointer"
                         >
-                          <Image
-                            src={Phone}
-                            alt={'Phone'}
-                            height={24}
-                            width={24}
-                          />
+                          <div className="w-10 flex justify-center">
+                            <Image
+                              src={Phone}
+                              alt={'Phone'}
+                              height={24}
+                              width={24}
+                            />
+                          </div>
                           <p className=" text-sRegular text-neutral600">
                             {pointer.kam.phone}
                           </p>
@@ -252,12 +245,14 @@ const ContactUs = () => {
                           href={`mailto:${pointer.kam.email}`}
                           className="flex gap-1 items-center"
                         >
-                          <Image
-                            src={Mail}
-                            alt={'Mail'}
-                            height={24}
-                            width={24}
-                          />
+                          <div className="w-10 flex justify-center">
+                            <Image
+                              src={Mail}
+                              alt={'Mail'}
+                              height={24}
+                              width={24}
+                            />
+                          </div>
                           <p className=" text-sRegular text-neutral600">
                             {pointer.kam.email}{' '}
                           </p>
