@@ -7,17 +7,19 @@ export interface ITooltip {
   tooltipContentStyles?: string;
   tooltipContentSide?: 'top' | 'left' | 'right' | 'bottom';
   radixStyles?: string;
+  defaultOpen?: boolean;
 }
 const Tooltip = ({
   tooltipTrigger,
   tooltipContent,
   tooltipContentStyles,
   tooltipContentSide = 'top',
-  radixStyles
+  radixStyles,
+  defaultOpen = false
 }: ITooltip) => {
   return (
     <RadixTooltip.Provider delayDuration={0}>
-      <RadixTooltip.Root>
+      <RadixTooltip.Root defaultOpen={defaultOpen}>
         <RadixTooltip.Trigger asChild>{tooltipTrigger}</RadixTooltip.Trigger>
         <RadixTooltip.Portal>
           <RadixTooltip.Content

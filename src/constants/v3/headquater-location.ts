@@ -218,7 +218,7 @@ export const WorldMapPointers = [
     }
   },
   {
-    coords: 'left-[55%] top-[26%]',
+    coords: 'left-[52%] top-[38%]',
     kam: {
       name: 'Mr. Pratik',
       postion: 'Key Account Manager',
@@ -231,7 +231,7 @@ export const WorldMapPointers = [
     }
   },
   {
-    coords: 'left-[55%] top-[13%]',
+    coords: 'left-[51%] top-[26%]',
     kam: {
       name: 'Mr. Devanshu Jain',
       postion: 'Key Account Manager',
@@ -310,7 +310,7 @@ export const WorldMapPointers = [
   },
 
   {
-    coords: 'left-[56%] top-[42%]',
+    coords: 'left-[57%] top-[44%]',
     kam: {
       name: 'Mr. Yizhak Vachtel',
       postion: 'Key Account Manager',

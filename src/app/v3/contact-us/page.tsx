@@ -52,7 +52,19 @@ const ContactUs = () => {
   const { data: currentCountryCode, error } = useGetCountryCodeQuery({});
   useEffect(() => {
     if (currentCountryCode?.country_name) {
-      setDefaultCountry(currentCountryCode?.country_name);
+      let country = currentCountryCode?.country_name.toLowerCase();
+      setDefaultCountry(country);
+      if (country === 'dubai' || country === 'israel') {
+        setSelectedRegion('MIDDLE EAST');
+      } else if (country === 'north america') {
+        setSelectedRegion('NORTH & SOUTH AMERICA');
+      } else if (country === 'belgium' || country === 'switzerland') {
+        setSelectedRegion('EUROPE');
+      } else if (country === 'south africa') {
+        setSelectedRegion('AFRICA');
+      } else {
+        setSelectedRegion('ASIA PACIFIC');
+      }
     }
   }, [currentCountryCode]);
   const handleSend = () => {
@@ -110,6 +122,7 @@ const ContactUs = () => {
       });
     }
   };
+  console.log(defaultCountry, '-----------');
   return (
     <div>
       <div className="min-h-[800px] flex justify-center items-center px-[112px] bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom">
@@ -149,30 +162,42 @@ const ContactUs = () => {
           <Image src={WorldMap} alt="all office location" className="w-full" />
 
           {WorldMapPointers.map((pointer, index) => (
-            <Tooltip
+            <div
               key={pointer.coords} // Add a key to prevent React warnings
-              tooltipTrigger={
-                <div
-                  className={`absolute ${pointer.coords} z-10 cursor-pointer`}
-                >
-                  <div className="relative w-4 h-4   rounded-full">
-                    <div className="absolute inset-0 w-full h-full bg-[#b2c4c4]  rounded-full animate-pulse cursor-pointer">
-                      <Image
-                        src={Diamond}
-                        alt={`diamond-${index}`}
-                        height={20}
-                        width={20}
-                      />
+            >
+              <Tooltip
+                defaultOpen={pointer.kam.location
+                  .toLowerCase()
+                  .includes(defaultCountry)}
+                tooltipTrigger={
+                  <div
+                    className={`absolute ${pointer.coords} z-10 cursor-pointer`}
+                  >
+                    <div className="relative w-4 h-4   rounded-full">
+                      <div
+                        className={`absolute inset-0 w-full h-full  rounded-full  cursor-pointer ${
+                          pointer.kam.location
+                            .toLowerCase()
+                            .includes(defaultCountry) &&
+                          'animate-pulse bg-[#b2c4c4] '
+                        } `}
+                      >
+                        <Image
+                          src={Diamond}
+                          alt={`diamond-${index}`}
+                          height={20}
+                          width={20}
+                        />
+                      </div>
                     </div>
                   </div>
-                </div>
-              }
-              tooltipContent={
-                <div className="flex  text-neutral900">
-                  <div className="flex flex-col gap-2 ">
-                    <div className="flex flex-col gap-2">
-                      <div className="flex gap-2 items-center">
-                        {/* <Image
+                }
+                tooltipContent={
+                  <div className="flex  text-neutral900">
+                    <div className="flex flex-col gap-2 ">
+                      <div className="flex flex-col gap-2">
+                        <div className="flex gap-2 items-center">
+                          {/* <Image
                           src={pointer.kam.image}
                           alt={`profile image ${pointer.kam.name}`}
                           className={`h-10 w-10 rounded-[50%]  bg-radial-grad-kam border-[2px] border-neutral0  ${
@@ -182,77 +207,83 @@ const ContactUs = () => {
                           }`}
                           style={{ boxShadow: 'var(--popups-shadow' }}
                         /> */}
-                        <div
-                          className="h-10 w-10 rounded-[50%] bg-primaryMain text-neutral0 text-[14px] border-[2px] border-neutral0 justify-center items-center flex"
-                          style={{ boxShadow: 'var(--popups-shadow' }}
-                        >
-                          {pointer.kam.initial}
+                          <div
+                            className="h-10 w-10 rounded-[50%] bg-primaryMain text-neutral0 text-[14px] border-[2px] border-neutral0 justify-center items-center flex"
+                            style={{ boxShadow: 'var(--popups-shadow' }}
+                          >
+                            {pointer.kam.initial}
+                          </div>
+                          <div className="flex flex-col gap-2">
+                            <p className="font-semiBold text-[14px]">
+                              {pointer.kam.name}
+                            </p>
+                            <p className="text-[12px]">{pointer.kam.postion}</p>
+                          </div>
                         </div>
-                        <div className="flex flex-col gap-2">
-                          <p className="font-semiBold text-[14px]">
-                            {pointer.kam.name}
+                        <div className="flex gap-2 pl-2 items-center">
+                          <Image
+                            src={pointer.kam.countryFlag}
+                            alt={`country flag image ${pointer.kam.name}`}
+                          />
+                          <p className="font-semiBold text-[12px] text-[#344054]">
+                            {pointer.kam.location}
                           </p>
-                          <p className="text-[12px]">{pointer.kam.postion}</p>
                         </div>
                       </div>
-                      <div className="flex gap-2 pl-2 items-center">
+                      <hr />
+                      {pointer.kam.phone && (
+                        <a
+                          href={`tel:+${pointer.kam.phone}`}
+                          className="flex gap-1 items-center cursor-pointer"
+                        >
+                          <Image
+                            src={Phone}
+                            alt={'Phone'}
+                            height={24}
+                            width={24}
+                          />
+                          <p className=" text-sRegular text-neutral600">
+                            {pointer.kam.phone}
+                          </p>
+                        </a>
+                      )}
+                      <div className="flex gap-1 items-center cursor-pointer">
+                        <a
+                          href={`mailto:${pointer.kam.email}`}
+                          className="flex gap-1 items-center"
+                        >
+                          <Image
+                            src={Mail}
+                            alt={'Mail'}
+                            height={24}
+                            width={24}
+                          />
+                          <p className=" text-sRegular text-neutral600">
+                            {pointer.kam.email}{' '}
+                          </p>
+                        </a>
                         <Image
-                          src={pointer.kam.countryFlag}
-                          alt={`country flag image ${pointer.kam.name}`}
+                          src={Copy}
+                          alt={'Copy'}
+                          className="cursor-pointer"
+                          onClick={() => {
+                            navigator.clipboard
+                              .writeText(pointer.kam.email)
+                              .then(() =>
+                                toast({
+                                  description: 'Copied successfully'
+                                })
+                              );
+                          }}
                         />
-                        <p className="font-semiBold text-[12px] text-[#344054]">
-                          {pointer.kam.location}
-                        </p>
                       </div>
-                    </div>
-                    <hr />
-                    {pointer.kam.phone && (
-                      <a
-                        href={`tel:+${pointer.kam.phone}`}
-                        className="flex gap-1 items-center cursor-pointer"
-                      >
-                        <Image
-                          src={Phone}
-                          alt={'Phone'}
-                          height={24}
-                          width={24}
-                        />
-                        <p className=" text-sRegular text-neutral600">
-                          {pointer.kam.phone}
-                        </p>
-                      </a>
-                    )}
-                    <div className="flex gap-1 items-center cursor-pointer">
-                      <a
-                        href={`mailto:${pointer.kam.email}`}
-                        className="flex gap-1 items-center"
-                      >
-                        <Image src={Mail} alt={'Mail'} height={24} width={24} />
-                        <p className=" text-sRegular text-neutral600">
-                          {pointer.kam.email}{' '}
-                        </p>
-                      </a>
-                      <Image
-                        src={Copy}
-                        alt={'Copy'}
-                        className="cursor-pointer"
-                        onClick={() => {
-                          navigator.clipboard
-                            .writeText(pointer.kam.email)
-                            .then(() =>
-                              toast({
-                                description: 'Copied successfully'
-                              })
-                            );
-                        }}
-                      />
                     </div>
                   </div>
-                </div>
-              }
-              tooltipContentStyles="z-[1000] !bg-neutral0 "
-              radixStyles="!fill-neutral0"
-            />
+                }
+                tooltipContentStyles="z-[1000] !bg-neutral0 "
+                radixStyles="!fill-neutral0"
+              />
+            </div>
           ))}
         </div>
       </div>
