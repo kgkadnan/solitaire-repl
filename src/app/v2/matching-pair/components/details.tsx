@@ -43,6 +43,7 @@ import { useLazyGetSimilarMatchingPairQuery } from '@/features/api/match-pair';
 import logger from 'logging/log-util';
 import { formatNumber } from '@/utils/fix-two-digit-number';
 import MatchPairDnaSkeleton from '@/components/v2/skeleton/match-pair/match-pair-dna-page';
+import { RednderLocation } from '@/components/v2/common/data-table/helpers/render-cell';
 
 export interface ITableColumn {
   key: string;
@@ -327,6 +328,16 @@ export function MatchPairDetails({
 
   const dataFormatting = (diamond: any, key: string) => {
     switch (key) {
+      case 'location':
+        return (
+          <div className="flex gap-1 items-center">
+            {RednderLocation({
+              renderedCellValue: diamond.location
+            })}
+
+            {diamond.location}
+          </div>
+        );
       case 'amount':
         return diamond.variants[0].prices[0].amount
           ? `$${formatNumberWithCommas(diamond.variants[0].prices[0].amount)}`

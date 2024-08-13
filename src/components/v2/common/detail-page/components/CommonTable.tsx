@@ -4,6 +4,7 @@ import React from 'react';
 import { IImagesType } from '../interface';
 import { Skeleton } from '@mui/material';
 import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
+import { RednderLocation } from '@/components/v2/table/helpers/render-cell';
 
 export interface ITableColumn {
   key: string;
@@ -65,6 +66,7 @@ const ResponsiveTable: React.FC<IResponsiveTableProps> = ({
               className="font-medium sm:text-10px lg:text-[14px] leading-5 text-left text-rgba-101828"
             >
               {tableHead.map(column => {
+                console.log('column: ', column);
                 return (
                   <td
                     key={column.key}
@@ -76,7 +78,15 @@ const ResponsiveTable: React.FC<IResponsiveTableProps> = ({
                     } ${column.hiddenBelow1024 ? 'hidden lg:table-cell' : ''}`}
                   >
                     {validImages.length > 0 ? (
-                      column.key === 'amount' ? (
+                      column.key === 'location' ? (
+                        <div className="flex gap-1 items-center">
+                          {RednderLocation({
+                            renderedCellValue: row[column.key]
+                          })}
+
+                          {row[column.key]}
+                        </div>
+                      ) : column.key === 'amount' ? (
                         row?.variants?.length > 0 ? (
                           row?.variants[0]?.prices[0]?.amount ? (
                             `$${
