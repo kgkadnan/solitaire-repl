@@ -141,54 +141,25 @@ export const leadership = [
   {
     name: 'Navrattan Kothari',
     image: Navrattan,
-    position: 'Patriarch',
+    position: 'Patriarch (India)',
     description:
       'Mr Navrattan Kothari has managed KGK since 1962. Under his astute guidance KGK has evolved into a modern multinational that operates to world-class standards with state-of-the-art infrastructure. His leadership has enabled KGK to innovate and expand into numerous markets and achieve global growth and recognition. Mr Kothari has built a company that is inspired by life and humanity, which places the highest value on trust, integrity, ethics and corporate responsibility. As Patriarch, Mr Kothari steers the company and enlightens and inspires our team worldwide with his insights, experience and acumen.',
     linkedin: 'in/navrattan-kothari'
   },
-  {
-    name: 'Sanjay Kothari',
-    image: Sanjay,
-    position: 'Vice Chairman',
-    description: `Based in Hong Kong, Sanjay is taking the group to the next level of growth as we expand into new markets. He manages the gems and jewellery business, from mining to retail brands. His first initiative with the group involved establishing diamond manufacturing in Mumbai. Since then he has developed many verticals, including international sales and marketing, jewellery manufacturing, gemstone mining, jewellery retailing and real estate. He also leads the group’s IT and corporate identity initiatives.`,
-    linkedin: 'in/sanjay-kothari-kgk/'
-  },
+
   {
     name: 'Sandeep Kothari',
     image: Sandeep,
-    position: 'Managing Director',
+    position: 'Managing Director (India)',
     description: `After joining the group in 1990, Sandeep became involved in diamond procurement and processing and was responsible for growing the business considerably worldwide. Now based in Antwerp, the world’s largest diamond centre, he has been instrumental in expanding our polished diamond sales in Europe. His many successful initiatives include developing trusted supplier relationships with world renowned mining companies.`,
     linkedin: 'in/sandeep-kothari-475a5314'
   },
   {
-    name: 'Dinesh Kothari',
-    image: Dinesh,
-    position: 'Chief Trading Officer',
-    description:
-      'Mr Navrattan Kothari has managed KGK since 1962. Under his astute guidance KGK has evolved into a modern multinational that operates to world-class standards with state-of-the-art infrastructure. His leadership has enabled KGK to innovate and expand into numerous markets and achieve global growth and recognition. Mr Kothari has built a company that is inspired by life and humanity, which places the highest value on trust, integrity, ethics and corporate responsibility. As Patriarch, Mr Kothari steers the company and enlightens and inspires our team worldwide with his insights, experience and acumen.',
-    linkedin: 'in/dinesh-kothari-b007421b/'
-  },
-  {
-    name: 'Nitin Dhadda',
-    image: Nitin,
-    position: 'Chief Manufacturing Officer',
-    description: `Mr. Nitin Dhadda is the Chief Manufacturing Officer - Executive Management at KGK Diamonds (I) Pvt. Ltd. in Surat, bringing over two decades of extensive experience and dedication since joining the company in 1993. As a distinguished expert in manufacturing, he has played a crucial role in overseeing production processes, quality control, supply chain management, facility operations, and general administration. At the forefront of adopting new technologies, he significantly contributes to product excellence and efficiency, enhancing production capabilities and maintaining the highest quality standards in KGK Diamonds' offerings. Residing in Surat, India, Mr. Dhadda is dedicated to achieving professional excellence and driving continuous growth within the organization.`,
-    linkedin: 'in/nitin-kumar-dhadda-15682881/'
-  },
-  {
-    name: 'Amit Ghiya',
-    image: Amit,
-    position: 'Chief Financial Officer',
-    description: `Mr. Amit Ghiya is the Chief Financial Officer - Executive Management at KGK Diamonds (I) Pvt. Ltd. in Mumbai, bringing over two and half decades of extensive experience and dedication since joining the company in August 1999. As a distinguished Chartered Accountant, he has played a crucial role in overseeing banking, finance, legal and statutory compliance, property management, corporate structuring, and general administration. Residing in Mumbai, Mr. Ghiya is dedicated to achieving professional excellence and driving continuous growth within the organization. His strategic insights and leadership have been instrumental in navigating complex financial landscapes and fostering sustainable development for KGK Diamonds.
-`,
-    linkedin: 'in/amit-ghiya-66b15a102/'
-  },
-  {
-    name: 'Mr. Sunil Agrawal',
-    image: Sunil,
-    position: 'Chief Financial Officer (EMEA)',
-    description: `Mr. Sunil Agrawal, CFO for KGK Group’s EMEA region, brings over two decades of expertise and dedication to the organization. A distinguished Chartered Accountant, he has played a crucial role in crafting KGK Group's global financial strategy. His accomplishments include securing financing from international banks and successfully issuing bonds (Securitization Notes) in the USA market. He also oversees new business development, business expansion and compliance in the EMEA region. Based in Dubai, Mr. Agrawal values professional excellence and family time, enjoying travel and moments with loved ones.`,
-    linkedin: 'in/sunil-agrawal-5b50b352/'
+    name: 'Sanjay Kothari',
+    image: Sanjay,
+    position: 'Vice Chairman (India)',
+    description: `Based in Hong Kong, Sanjay is taking the group to the next level of growth as we expand into new markets. He manages the gems and jewellery business, from mining to retail brands. His first initiative with the group involved establishing diamond manufacturing in Mumbai. Since then he has developed many verticals, including international sales and marketing, jewellery manufacturing, gemstone mining, jewellery retailing and real estate. He also leads the group’s IT and corporate identity initiatives.`,
+    linkedin: 'in/sanjay-kothari-kgk/'
   },
   {
     name: 'Hasmukh Ramani',
@@ -198,6 +169,38 @@ export const leadership = [
       'Mr Navrattan Kothari has managed KGK since 1962. Under his astute guidance KGK has evolved into a modern multinational that operates to world-class standards with state-of-the-art infrastructure. His leadership has enabled KGK to innovate and expand into numerous markets and achieve global growth and recognition. Mr Kothari has built a company that is inspired by life and humanity, which places the highest value on trust, integrity, ethics and corporate responsibility. As Patriarch, Mr Kothari steers the company and enlightens and inspires our team worldwide with his insights, experience and acumen.',
     linkedin: 'in/hasmukh-ramani-0a082867'
   },
+  {
+    name: 'Mr. Sunil Agrawal',
+    image: Sunil,
+    position: 'Chief Financial Officer (EMEA)',
+    description: `Mr. Sunil Agrawal, CFO for KGK Group’s EMEA region, brings over two decades of expertise and dedication to the organization. A distinguished Chartered Accountant, he has played a crucial role in crafting KGK Group's global financial strategy. His accomplishments include securing financing from international banks and successfully issuing bonds (Securitization Notes) in the USA market. He also oversees new business development, business expansion and compliance in the EMEA region. Based in Dubai, Mr. Agrawal values professional excellence and family time, enjoying travel and moments with loved ones.`,
+    linkedin: 'in/sunil-agrawal-5b50b352/'
+  },
+  {
+    name: 'Nitin Dhadda',
+    image: Nitin,
+    position: 'Chief Manufacturing Officer (India)',
+    description: `Mr. Nitin Dhadda is the Chief Manufacturing Officer - Executive Management at KGK Diamonds (I) Pvt. Ltd. in Surat, bringing over two decades of extensive experience and dedication since joining the company in 1993. As a distinguished expert in manufacturing, he has played a crucial role in overseeing production processes, quality control, supply chain management, facility operations, and general administration. At the forefront of adopting new technologies, he significantly contributes to product excellence and efficiency, enhancing production capabilities and maintaining the highest quality standards in KGK Diamonds' offerings. Residing in Surat, India, Mr. Dhadda is dedicated to achieving professional excellence and driving continuous growth within the organization.`,
+    linkedin: 'in/nitin-kumar-dhadda-15682881/'
+  },
+  {
+    name: 'Dinesh Kothari',
+    image: Dinesh,
+    position: 'Chief Trading Officer (India)',
+    description:
+      'Mr Navrattan Kothari has managed KGK since 1962. Under his astute guidance KGK has evolved into a modern multinational that operates to world-class standards with state-of-the-art infrastructure. His leadership has enabled KGK to innovate and expand into numerous markets and achieve global growth and recognition. Mr Kothari has built a company that is inspired by life and humanity, which places the highest value on trust, integrity, ethics and corporate responsibility. As Patriarch, Mr Kothari steers the company and enlightens and inspires our team worldwide with his insights, experience and acumen.',
+    linkedin: 'in/dinesh-kothari-b007421b/'
+  },
+
+  {
+    name: 'Amit Ghiya',
+    image: Amit,
+    position: 'Chief Financial Officer (India)',
+    description: `Mr. Amit Ghiya is the Chief Financial Officer - Executive Management at KGK Diamonds (I) Pvt. Ltd. in Mumbai, bringing over two and half decades of extensive experience and dedication since joining the company in August 1999. As a distinguished Chartered Accountant, he has played a crucial role in overseeing banking, finance, legal and statutory compliance, property management, corporate structuring, and general administration. Residing in Mumbai, Mr. Ghiya is dedicated to achieving professional excellence and driving continuous growth within the organization. His strategic insights and leadership have been instrumental in navigating complex financial landscapes and fostering sustainable development for KGK Diamonds.
+`,
+    linkedin: 'in/amit-ghiya-66b15a102/'
+  },
+
   {
     name: 'Sonu Kothari',
     image: Sonu,

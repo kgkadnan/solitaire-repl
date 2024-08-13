@@ -49,15 +49,15 @@ const BlogList = ({ posts }: { posts: any[] }) => {
               </AnimationSection>
             </div>
             <div className="flex flex-col gap-3 items-center">
-              <p className="text-neutral900 text-[28px] font-bold ">
+              {/* <p className="text-neutral900 text-[28px] font-bold ">
                 <AnimationSection animationDelay={0.5}>
                   Learn, Inspire, & Empower.
                 </AnimationSection>
-              </p>
+              </p> */}
 
               <p className="text-neutral800 text-lRegular  px-4  w-[800px] text-center content">
                 {' '}
-                <AnimationSection animationDelay={1}>
+                <AnimationSection animationDelay={0.5}>
                   Stay informed with the latest trends and insights in the gem
                   and jewelry industry. Join us as we share our experiences,
                   knowledge, and understanding of diamonds.

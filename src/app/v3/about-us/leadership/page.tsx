@@ -84,9 +84,9 @@ export default function Leadership() {
               </div>
             </div>
             <div className="text-neutral800 text-[20px]">
-              <AnimationSection animationDelay={1}>
-                {selectedProfile['description']}
-              </AnimationSection>
+              {/* <AnimationSection animationDelay={1}> */}
+              {selectedProfile['description']}
+              {/* </AnimationSection> */}
             </div>
             <a
               href={`https://www.linkedin.com/${selectedProfile['linkedin']}`}

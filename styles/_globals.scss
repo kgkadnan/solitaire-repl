@@ -378,44 +378,40 @@
   animation: continuousScrollUp linear infinite;
 }
 
-.landingPage {
-  cursor: none;
-}
-
-// body {
+// .landingPage {
 //   cursor: none;
 // }
 
-.custom-cursor {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  pointer-events: none; /* Ensures the cursor does not interfere with mouse events */
-  transform: translate(-50%, -50%);
-  transition:
-    transform 0.1s ease,
-    background-color 0.3s ease,
-    width 0.3s ease,
-    height 0.3s ease,
-    border 0.3s ease,
-    backdrop-filter 0.3s ease;
-  z-index: 9999;
-}
+// .custom-cursor {
+//   position: fixed;
+//   top: 0;
+//   left: 0;
+//   width: 30px;
+//   height: 30px;
+//   border-radius: 50%;
+//   pointer-events: none; /* Ensures the cursor does not interfere with mouse events */
+//   transform: translate(-50%, -50%);
+//   transition:
+//     transform 0.1s ease,
+//     background-color 0.3s ease,
+//     width 0.3s ease,
+//     height 0.3s ease,
+//     border 0.3s ease,
+//     backdrop-filter 0.3s ease;
+//   z-index: 9999;
+// }
 
-.custom-cursor.hover {
-  width: 50px;
-  height: 50px;
-  background-color: rgba(255, 0, 0, 0.5); /* Default hover color */
-}
+// .custom-cursor.hover {
+//   width: 50px;
+//   height: 50px;
+//   background-color: rgba(255, 0, 0, 0.5); /* Default hover color */
+// }
 
-.asset:hover .custom-cursor {
-  background-color: transparent;
-  border: 2px solid rgba(255, 255, 255, 0.5);
-  // backdrop-filter: blur(5px);
-}
+// .asset:hover .custom-cursor {
+//   background-color: transparent;
+//   border: 2px solid rgba(255, 255, 255, 0.5);
+//   // backdrop-filter: blur(5px);
+// }
 
 .disable-custom-cursor {
   cursor: default;

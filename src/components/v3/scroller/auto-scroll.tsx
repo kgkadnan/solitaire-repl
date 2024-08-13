@@ -1,12 +1,7 @@
 'use client';
 import React, { useEffect, useRef } from 'react';
-
-const images = [
-  'https://via.placeholder.com/400x300?text=1',
-  'https://via.placeholder.com/400x300?text=2',
-  'https://via.placeholder.com/400x300?text=3',
-  'https://via.placeholder.com/400x300?text=4'
-];
+import { sustainabilitySection } from '@/constants/v3/sustainability';
+import Image from 'next/image';
 
 const AutoScrollImageGrid: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -21,22 +16,23 @@ const AutoScrollImageGrid: React.FC = () => {
 
   return (
     <div className="overflow-hidden h-full relative" ref={containerRef}>
-      <div className="absolute top-0 left-0 w-full flex flex-col continuousScroll">
-        {images.map((src, index) => (
-          <div key={index} className="p-4">
-            <img
-              src={src}
-              alt={`Image ${index + 1}`}
-              className="w-full h-auto rounded-lg"
-            />
-          </div>
-        ))}
-        {images.map((src, index) => (
-          <div key={index + images.length} className="p-4">
-            <img
-              src={src}
-              alt={`Image ${index + 1}`}
-              className="w-full h-auto rounded-lg"
+      <div className="absolute top-[80px] left-0 w-full flex flex-col continuousScroll">
+        {sustainabilitySection.map((section, index: number) => (
+          <div
+            key={section.imageTitle}
+            className={`absolute w-[350px] h-[300px] ${
+              index % 2 === 0 ? '!left-0' : '!right-0'
+            }`}
+          >
+            <div className="flex justify-between">
+              {' '}
+              <p>{section.imageTitle}</p> <p>{section.id}</p>
+            </div>
+            <Image
+              src={section.images[0]}
+              alt={section.imageTitle}
+              height={250}
+              width={350}
             />
           </div>
         ))}

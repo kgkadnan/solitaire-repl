@@ -172,19 +172,15 @@ export default function AboutUs() {
             style={{ zIndex: 2 }}
           >
             <div className="w-[500px]">
-              <div className="text-headingXL font-bold ">
-                <AnimationSection>The Timeline</AnimationSection>
-              </div>
+              <div className="text-headingXL font-bold ">The Timeline</div>
               <div className="flex gap-1">
                 <div className="absolute transform -translate-x-1/2 top-20 h-full">
                   <div className="h-[75px] mr-4 w-[2px] bg-[white] mx-auto"></div>
                 </div>
                 <div className="text-headingS ">
-                  <AnimationSection>
-                    KGK Group, founded by Shri Kesrimal Ji of Jaipur in 1905,
-                    began with a humble task of trading coloured gemstones from
-                    India.
-                  </AnimationSection>
+                  KGK Group, founded by Shri Kesrimal Ji of Jaipur in 1905,
+                  began with a humble task of trading coloured gemstones from
+                  India.
                 </div>
               </div>
             </div>

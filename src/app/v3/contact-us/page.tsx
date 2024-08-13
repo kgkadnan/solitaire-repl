@@ -111,15 +111,15 @@ const ContactUs = () => {
               <AnimationSection> We’d love to hear from you</AnimationSection>
             </div>
             <div className="flex flex-col gap-3 px-[40px] items-center">
-              <div className="text-neutral900 text-[28px] font-bold text-center">
+              {/* <div className="text-neutral900 text-[28px] font-bold text-center">
                 {' '}
                 <AnimationSection animationDelay={0.5}>
                   We're Here to Assist You
                 </AnimationSection>{' '}
-              </div>
+              </div> */}
 
               <div className="text-neutral800 text-lRegular text-center w-[800px] content">
-                <AnimationSection animationDelay={1}>
+                <AnimationSection animationDelay={0.5}>
                   At KGK Diamonds, we value your feedback and inquiries. Whether
                   you have a question, need assistance, or want to learn more
                   about our services, our dedicated team is here to help. Please
@@ -132,7 +132,11 @@ const ContactUs = () => {
           </div>
         </div>
       </div>
-      <div className="flex justify-center py-20 disable-custom-cursor">
+      <div className="flex flex-col items-center my-[50px] disable-custom-cursor gap-6">
+        <div className="text-neutral900 text-[28px] font-bold text-center">
+          {' '}
+          <AnimationSection>Global Sales Offices</AnimationSection>{' '}
+        </div>
         <div className="relative w-[1300px]">
           <Image src={WorldMap} alt="all office location" className="w-full" />
 
@@ -160,7 +164,7 @@ const ContactUs = () => {
                   <div className="flex flex-col gap-2 ">
                     <div className="flex flex-col gap-2">
                       <div className="flex gap-2 items-center">
-                        <Image
+                        {/* <Image
                           src={pointer.kam.image}
                           alt={`profile image ${pointer.kam.name}`}
                           className={`h-10 w-10 rounded-[50%]  bg-radial-grad-kam border-[2px] border-neutral0  ${
@@ -169,7 +173,13 @@ const ContactUs = () => {
                             'pt-[6px]'
                           }`}
                           style={{ boxShadow: 'var(--popups-shadow' }}
-                        />
+                        /> */}
+                        <div
+                          className="h-10 w-10 rounded-[50%] bg-primaryMain text-neutral0 text-[14px] border-[2px] border-neutral0 justify-center items-center flex"
+                          style={{ boxShadow: 'var(--popups-shadow' }}
+                        >
+                          {pointer.kam.initial}
+                        </div>
                         <div className="flex flex-col gap-2">
                           <p className="font-semiBold text-[14px]">
                             {pointer.kam.name}
@@ -281,16 +291,20 @@ const ContactUs = () => {
                     </div>
                     <div className="flex gap-1 ">
                       {' '}
-                      <div className="h-10 w-10 rounded-[50%]">
-                        <Image
+                      <div
+                        className="h-10 w-10 rounded-[50%] bg-primaryMain text-neutral0 text-[14px] border-[2px] border-neutral0 justify-center items-center flex"
+                        style={{ boxShadow: 'var(--popups-shadow' }}
+                      >
+                        {loc.initial}
+                        {/* <Image
                           src={loc.image}
                           alt={loc.name}
-                          className={`h-10 w-10  rounded-[50%]  bg-radial-grad-kam border-[2px] border-neutral0 pt-1 ${
+                          className={`h-10 w-10  rounded-[50%]  bg-radial-grad-kam  pt-1 ${
                             loc.name === 'Mr. Maysey Isakov' ||
                             (loc.name === 'Mr. Jitendra Baid' && 'pt-[6px]')
                           }`}
-                          style={{ boxShadow: 'var(--popups-shadow' }}
-                        />
+                         
+                        /> */}
                       </div>
                       <div className="flex flex-col justify-center">
                         {' '}
