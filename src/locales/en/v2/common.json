@@ -60,8 +60,8 @@
   "app.yourOrder.description.noOfStones": "No. of Stones",
   "app.yourOrder.description.Payable Amount": "Payable Amount",
   "app.yourOrder.header.pendingInvoiceDetails": "Pending Invoice Details",
-  "app.yourOrder.header.activeInvoiceDetails": "Active Invoices Details",
-  "app.yourOrder.header.invoicesHistoryDetails": "Invoices History Details",
+  "app.yourOrder.header.activeInvoiceDetails": "Active Invoice Details",
+  "app.yourOrder.header.pastInvoicesDetails": "Past Invoice Details",
   "app.yourOrder.datePicker.apply": "Apply",
   "app.yourOrder.datePicker.cancel": "Cancel",
 

@@ -3,7 +3,7 @@ import {
   IN_TRANSIT,
   ACTIVE_INVOICE_BREADCRUMB_LABEL,
   PAST,
-  INVOICE_HISTORY_BREADCRUMB_LABEL,
+  PAST_INVOICE_BREADCRUMB_LABEL,
   MAX_MY_INVOICE_LIMIT_COUNT,
   MAX_RECENT_CONFIRMATION_COUNT,
   PENDING,
@@ -243,8 +243,10 @@ const MyDiamonds = () => {
   const { keys, data } = tabsData[activeTab] || { keys: [], data: [] };
 
   const handleShowDetails = (itemId: string) => {
+    console.log('itemId', itemId);
     setShowDetail(true);
     triggerProductDetail({ id: itemId, singleExpand }).then(res => {
+      console.log('res', res);
       setProductDetailData(res.data.order);
     });
   };
@@ -470,7 +472,7 @@ const MyDiamonds = () => {
             <OrderDetail
               productDetailData={productDetailData}
               goBackToListView={goBackToListView}
-              breadCrumLabel={INVOICE_HISTORY_BREADCRUMB_LABEL}
+              breadCrumLabel={PAST_INVOICE_BREADCRUMB_LABEL}
               modalSetState={modalSetState}
               setIsLoading={setIsLoading}
               router={router}
@@ -532,7 +534,7 @@ const MyDiamonds = () => {
               })}
               {tooltip.show && (
                 <div
-                  className={`absolute bg-[#ECF2FC] w-[320px] border-[1px] border-[#B6CFF3] rounded-[8px] p-4 text-[#475467] top-[35px] gap-2 `}
+                  className={`absolute z-[5] bg-[#ECF2FC] w-[320px] border-[1px] border-[#B6CFF3] rounded-[8px] p-4 text-[#475467] top-[35px] gap-2 `}
                   style={{
                     left: `${tooltip.position.left}px`,
 
@@ -693,7 +695,7 @@ const MyDiamonds = () => {
               ManageLocales('app.yourOrder.header.activeInvoiceDetails')
             ) : (
               activeTab === PAST &&
-              ManageLocales('app.yourOrder.header.invoicesHistoryDetails')
+              ManageLocales('app.yourOrder.header.pastInvoicesDetails')
             )
           ) : pendingDataState === undefined &&
             inTransitDataState === undefined &&
