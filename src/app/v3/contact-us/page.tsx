@@ -132,7 +132,7 @@ const ContactUs = () => {
     const topMatch = positionString.match(/top-\[(\d+)%\]/);
 
     // Parse the percentages and add 2% to each
-    const leftPercentage = parseInt(leftMatch![1]) - 9;
+    const leftPercentage = parseInt(leftMatch![1]) - 8;
     const topPercentage = parseInt(topMatch![1]) + 3;
 
     // Return the modified style object
@@ -181,7 +181,7 @@ const ContactUs = () => {
               style={adjustPosition(filteredPointers[0].coords)}
             >
               {/* Caret Notch */}
-              <div className="absolute top-[-5px] left-[50%] transform -translate-x-1/2 ml-1">
+              <div className="absolute top-[-5px] left-[50%] transform -translate-x-1/2">
                 <div className="w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-b-[5px] border-b-neutral0"></div>
               </div>
               <div className="flex  text-neutral900">
