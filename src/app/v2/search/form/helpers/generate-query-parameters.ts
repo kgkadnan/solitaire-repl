@@ -205,21 +205,15 @@ export const generateQueryParams = (state: IState) => {
         // !selectedCaratRange.includes(`${caratFrom}-${caratTo}`) &&
         parseFloat(caratFrom) <= parseFloat(caratTo)
       ) {
-        console.log('here2');
-
         queryParams['carats'] = [
           ...selectedCaratRange,
           ...caratRangeSelection,
           `${caratFrom}-${caratTo}`
         ];
       } else {
-        console.log('here3', caratFrom, caratTo, caratFrom <= caratTo);
-
         queryParams['carats'] = [...selectedCaratRange, ...caratRangeSelection];
       }
     } else {
-      console.log('here4');
-
       queryParams['carats'] = [...selectedCaratRange, ...caratRangeSelection];
     }
   }
