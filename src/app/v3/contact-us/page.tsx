@@ -25,7 +25,6 @@ import WorldMap from '@public/v3/world-map.png';
 import Tooltip from '@/components/v2/common/tooltip';
 import AnimationSection from '@/components/v3/animated-text/scroll';
 import { useGetCountryCodeQuery } from '@/features/api/current-ip';
-import zIndex from '@mui/material/styles/zIndex';
 
 const LocateUs = dynamic(() => import('../../../components/v3/locate-us'), {
   ssr: false
