@@ -10,19 +10,19 @@ import { handleDownloadReport } from '@/utils/download-sustainability-report';
 import { sustainabilitySection } from '@/constants/v3/sustainability';
 
 const App: React.FC = () => {
-  const [carouselIndex, setCarouselIndex] = useState('15');
+  const [carouselIndex, setCarouselIndex] = useState('');
   return (
     <div className="flex flex-col gap-5">
       <MainLayout setCarouselIndex={setCarouselIndex} />
 
       {carouselIndex !== '' && (
         <div
-          className={`flex justify-center flex-col text-headingXL bold items-center mt-[40px]`}
+          className={`flex justify-center flex-col text-headingXL bold items-center mt-[40px] bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom`}
         >
           <p>A Journey Towards a Sustainable Future</p>
           <div className="w-full px-[112px]">
             <div className="flex h-screen justify-between w-full">
-              <div className="flex-1 flex flex-col justify-center  max-w-[400px]">
+              <div className="flex-1 flex flex-col justify-center  max-w-[500px]">
                 <h1 className="text-headingXL font-bold text-neutral900">
                   {
                     sustainabilitySection.filter(
