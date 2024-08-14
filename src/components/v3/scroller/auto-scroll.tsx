@@ -29,7 +29,7 @@ const AutoScrollImageGrid: React.FC = () => {
               <p>{section.imageTitle}</p> <p>{section.id}</p>
             </div>
             <Image
-              src={section.images[0]}
+              src={section.head}
               alt={section.imageTitle}
               height={250}
               width={350}
