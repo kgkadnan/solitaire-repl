@@ -18,7 +18,7 @@ import backWardArrow from '@public/v2/assets/icons/my-diamonds/backwardArrow.svg
 import noImageFound from '@public/v2/assets/icons/detail-page/fall-back-img.svg';
 import Image from 'next/image';
 import {
-  INVOICE_HISTORY_BREADCRUMB_LABEL,
+  PAST_INVOICE_BREADCRUMB_LABEL,
   PENING_INVOICE_BREADCRUMB_LABEL
 } from '@/constants/business-logic';
 import ActionButton from '@/components/v2/common/action-button';
@@ -533,7 +533,7 @@ const OrderDetail: React.FC<IOrderDetail> = ({
                     <div className="bg-neutral0 border-[1px] border-solid border-neutral200 rounded-[8px] shadow-sm">
                       <div className="flex flex-col p-[16px]">
                         <p className="text-neutral600 text-mRegular font-regular">
-                          {breadCrumLabel === INVOICE_HISTORY_BREADCRUMB_LABEL
+                          {breadCrumLabel === PAST_INVOICE_BREADCRUMB_LABEL
                             ? ManageLocales(
                                 'app.yourOrder.description.paidAmount'
                               )
