@@ -276,9 +276,9 @@ const ContactUs = () => {
                     <div className="relative w-4 h-4   rounded-full">
                       <div
                         className={`absolute inset-0 w-full h-full  rounded-full  cursor-pointer ${
-                          pointer.kam.location
+                          pointer.kam.country
                             .toLowerCase()
-                            .includes(defaultCountry) &&
+                            .includes(defaultCountry.toLowerCase()) &&
                           'animate-pulse bg-[#b2c4c4] '
                         } `}
                       >
