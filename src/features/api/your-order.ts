@@ -66,7 +66,7 @@ export const yourOrderApi = createApi({
     }),
     searchPendingOrderByKeyword: builder.query({
       query: ({ keyword }) =>
-        `/store/customers/me/orders?status=pending&invoice_status=pending&expand=items&search_keyword=${keyword}&limit=50`,
+        `/store/customers/me/orders?invoice_status=pending&expand=items&search_keyword=${keyword}&limit=50`,
       providesTags: ['yourOrder']
     })
   })
