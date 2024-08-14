@@ -4,7 +4,7 @@ import AutoScrollImageGrid from './auto-scroll';
 import { CommonButton } from '../button';
 import { handleDownloadReport } from '@/utils/download-sustainability-report';
 
-const MainLayout: React.FC = () => {
+const MainLayout = ({ setCarouselIndex }: any) => {
   return (
     <div className="px-[112px]">
       <div className="flex h-screen justify-between">
@@ -28,7 +28,7 @@ const MainLayout: React.FC = () => {
           </CommonButton>
         </div>
         <div className="w-[700px]">
-          <AutoScrollImageGrid />
+          <AutoScrollImageGrid setCarouselIndex={setCarouselIndex} />
         </div>
       </div>
     </div>
