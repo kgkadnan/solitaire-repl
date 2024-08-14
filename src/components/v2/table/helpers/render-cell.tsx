@@ -40,6 +40,7 @@ export const RenderCartLotId = ({
 };
 
 export const RednderLocation = ({ renderedCellValue }: any) => {
+  console.log(renderedCellValue);
   let imageSrc;
 
   switch (renderedCellValue) {
