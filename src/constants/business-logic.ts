@@ -42,7 +42,7 @@ export const PAST_APPOINTMENTS = 'pastAppointments';
 
 export const PENING_INVOICE_BREADCRUMB_LABEL = 'Pending Invoice';
 export const ACTIVE_INVOICE_BREADCRUMB_LABEL = 'Active Invoices';
-export const INVOICE_HISTORY_BREADCRUMB_LABEL = 'Invoices History';
+export const PAST_INVOICE_BREADCRUMB_LABEL = 'Past Invoices';
 
 export const NOTIFICATION_READ_STATUS = 'read';
 export const NOTIFICATION_UNSEEN_STATUS = 'unseen';
