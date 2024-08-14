@@ -177,7 +177,7 @@ const ContactUs = () => {
           <Image src={WorldMap} alt="all office location" className="w-full" />
           {filteredPointers.length > 0 && (
             <div
-              className={`absolute bg-neutral0 rounded-[8px] p-5`}
+              className={`absolute bg-neutral0 rounded-[8px] p-[10px]`}
               style={adjustPosition(filteredPointers[0].coords)}
             >
               {/* Caret Notch */}
