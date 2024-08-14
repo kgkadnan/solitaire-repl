@@ -20,7 +20,7 @@ const AutoScrollImageGrid: React.FC = () => {
         {sustainabilitySection.map((section, index: number) => (
           <div
             key={section.imageTitle}
-            className={`absolute w-[350px] h-[300px] ${
+            className={` w-[350px] h-[300px] ${
               index % 2 === 0 ? '!left-0' : '!right-0'
             }`}
           >

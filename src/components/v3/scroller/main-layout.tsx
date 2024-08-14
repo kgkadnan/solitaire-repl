@@ -26,7 +26,7 @@ const MainLayout: React.FC = () => {
             2024 Sustainability Report
           </CommonButton>
         </div>
-        <div className="w-1/2">
+        <div className="w-[700px]">
           <AutoScrollImageGrid />
         </div>
       </div>

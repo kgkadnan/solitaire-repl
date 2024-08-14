@@ -192,7 +192,7 @@ export const HeadquaterLocation = [
 
 export const WorldMapPointers = [
   {
-    coords: 'left-[55%] top-3/4',
+    coords: 'left-[55%] top-[75%]',
     kam: {
       name: 'Mr. Nitesh Lunawat',
       postion: 'Key Account Manager',

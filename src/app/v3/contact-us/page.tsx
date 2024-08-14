@@ -25,6 +25,7 @@ import WorldMap from '@public/v3/world-map.png';
 import Tooltip from '@/components/v2/common/tooltip';
 import AnimationSection from '@/components/v3/animated-text/scroll';
 import { useGetCountryCodeQuery } from '@/features/api/current-ip';
+import zIndex from '@mui/material/styles/zIndex';
 
 const LocateUs = dynamic(() => import('../../../components/v3/locate-us'), {
   ssr: false
@@ -122,6 +123,29 @@ const ContactUs = () => {
       });
     }
   };
+  const filteredPointers = WorldMapPointers.filter(data =>
+    data.kam.location.toLowerCase().includes(defaultCountry)
+  );
+
+  function adjustPosition(positionString: string) {
+    // Extract left and top percentages using a regular expression
+    const leftMatch = positionString.match(/left-\[(\d+)%\]/);
+    const topMatch = positionString.match(/top-\[(\d+)%\]/);
+
+    // Parse the percentages and add 2% to each
+    const leftPercentage = parseInt(leftMatch![1]) - 9;
+    const topPercentage = parseInt(topMatch![1]) + 3;
+
+    // Return the modified style object
+    return {
+      left: `${leftPercentage}%`,
+      top: `${topPercentage}%`,
+      position: 'absolute',
+      boxShadow: 'var(--popups-shadow)',
+      zIndex: 3
+    };
+  }
+
   return (
     <div>
       <div className="min-h-[800px] flex justify-center items-center px-[112px] bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom">
@@ -131,13 +155,6 @@ const ContactUs = () => {
               <AnimationSection> We’d love to hear from you</AnimationSection>
             </div>
             <div className="flex flex-col gap-3 px-[40px] items-center">
-              {/* <div className="text-neutral900 text-[28px] font-bold text-center">
-                {' '}
-                <AnimationSection animationDelay={0.5}>
-                  We're Here to Assist You
-                </AnimationSection>{' '}
-              </div> */}
-
               <div className="text-neutral800 text-lRegular text-center w-[800px] content">
                 <AnimationSection animationDelay={0.5}>
                   At KGK Diamonds, we value your feedback and inquiries. Whether
@@ -153,24 +170,111 @@ const ContactUs = () => {
         </div>
       </div>
       <div className="flex flex-col items-center my-[50px] disable-custom-cursor gap-6">
-        <div className="text-neutral900 text-[28px] font-bold text-center">
+        <div className="text-neutral900 text-headingL font-bold text-center">
           {' '}
           <AnimationSection>Global Sales Offices</AnimationSection>{' '}
         </div>
         <div className="relative w-[1300px]">
           <Image src={WorldMap} alt="all office location" className="w-full" />
+          {filteredPointers.length > 0 && (
+            <div
+              className={`absolute bg-neutral0 rounded-[8px] p-5`}
+              style={adjustPosition(filteredPointers[0].coords)}
+            >
+              {/* Caret Notch */}
+              <div className="absolute top-[-5px] left-[50%] transform -translate-x-1/2 ml-1">
+                <div className="w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-b-[5px] border-b-neutral0"></div>
+              </div>
+              <div className="flex  text-neutral900">
+                <div className="flex flex-col gap-2 ">
+                  <div className="flex flex-col gap-2">
+                    <div className="flex gap-1 items-center">
+                      <div
+                        className="h-10 w-10 rounded-[50%] bg-primaryMain text-neutral0 text-[14px] border-[2px] border-neutral0 justify-center items-center flex"
+                        style={{ boxShadow: 'var(--popups-shadow' }}
+                      >
+                        {filteredPointers[0].kam.initial}
+                      </div>
+                      <div className="flex flex-col gap-2">
+                        <p className="font-semiBold text-[14px]">
+                          {filteredPointers[0].kam.name}
+                        </p>
+                        <p className="text-[12px]">
+                          {filteredPointers[0].kam.postion}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex gap-1  items-center">
+                      <div className="w-[40px] flex justify-center">
+                        <Image
+                          src={filteredPointers[0].kam.countryFlag}
+                          alt={`country flag image`}
+                        />
+                      </div>
+                      <p className="font-semiBold text-[12px] text-[#344054]">
+                        {filteredPointers[0].kam.location}
+                      </p>
+                    </div>
+                  </div>
+                  <hr />
+                  {filteredPointers[0].kam.phone && (
+                    <a
+                      href={`tel:+${filteredPointers[0].kam.phone}`}
+                      className="flex gap-1 items-center cursor-pointer"
+                    >
+                      <div className="w-10 flex justify-center">
+                        <Image
+                          src={Phone}
+                          alt={'Phone'}
+                          height={24}
+                          width={24}
+                        />
+                      </div>
+                      <p className=" text-sRegular text-neutral600">
+                        {filteredPointers[0].kam.phone}
+                      </p>
+                    </a>
+                  )}
+                  <div className="flex gap-1 items-center cursor-pointer">
+                    <a
+                      href={`mailto:${filteredPointers[0].kam.email}`}
+                      className="flex gap-1 items-center"
+                    >
+                      <div className="w-10 flex justify-center">
+                        <Image src={Mail} alt={'Mail'} height={24} width={24} />
+                      </div>
+                      <p className=" text-sRegular text-neutral600">
+                        {filteredPointers[0].kam.email}{' '}
+                      </p>
+                    </a>
+                    <Image
+                      src={Copy}
+                      alt={'Copy'}
+                      className="cursor-pointer"
+                      onClick={() => {
+                        navigator.clipboard
+                          .writeText(filteredPointers[0].kam.email)
+                          .then(() =>
+                            toast({
+                              description: 'Copied successfully'
+                            })
+                          );
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
           {WorldMapPointers.map((pointer, index) => (
             <div
               key={pointer.coords} // Add a key to prevent React warnings
             >
               <Tooltip
-                defaultOpen={pointer.kam.location
-                  .toLowerCase()
-                  .includes(defaultCountry)}
                 tooltipTrigger={
                   <div
-                    className={`absolute ${pointer.coords} z-10 cursor-pointer`}
+                    className={`absolute ${pointer.coords} z-2 cursor-pointer`}
                   >
                     <div className="relative w-4 h-4   rounded-full">
                       <div
@@ -192,90 +296,99 @@ const ContactUs = () => {
                   </div>
                 }
                 tooltipContent={
-                  <div className="flex  text-neutral900">
-                    <div className="flex flex-col gap-2 ">
-                      <div className="flex flex-col gap-2">
-                        <div className="flex gap-1 items-center">
-                          <div
-                            className="h-10 w-10 rounded-[50%] bg-primaryMain text-neutral0 text-[14px] border-[2px] border-neutral0 justify-center items-center flex"
-                            style={{ boxShadow: 'var(--popups-shadow' }}
-                          >
-                            {pointer.kam.initial}
+                  !pointer.kam.location
+                    .toLowerCase()
+                    .includes(defaultCountry) && (
+                    <div className="flex  text-neutral900">
+                      <div className="flex flex-col gap-2 ">
+                        <div className="flex flex-col gap-2">
+                          <div className="flex gap-1 items-center">
+                            <div
+                              className="h-10 w-10 rounded-[50%] bg-primaryMain text-neutral0 text-[14px] border-[2px] border-neutral0 justify-center items-center flex"
+                              style={{ boxShadow: 'var(--popups-shadow' }}
+                            >
+                              {pointer.kam.initial}
+                            </div>
+                            <div className="flex flex-col gap-2">
+                              <p className="font-semiBold text-[14px]">
+                                {pointer.kam.name}
+                              </p>
+                              <p className="text-[12px]">
+                                {pointer.kam.postion}
+                              </p>
+                            </div>
                           </div>
-                          <div className="flex flex-col gap-2">
-                            <p className="font-semiBold text-[14px]">
-                              {pointer.kam.name}
+                          <div className="flex gap-1  items-center">
+                            <div className="w-[40px] flex justify-center">
+                              <Image
+                                src={pointer.kam.countryFlag}
+                                alt={`country flag image ${pointer.kam.name}`}
+                              />
+                            </div>
+                            <p className="font-semiBold text-[12px] text-[#344054]">
+                              {pointer.kam.location}
                             </p>
-                            <p className="text-[12px]">{pointer.kam.postion}</p>
                           </div>
                         </div>
-                        <div className="flex gap-1  items-center">
-                          <div className="w-[40px] flex justify-center">
-                            <Image
-                              src={pointer.kam.countryFlag}
-                              alt={`country flag image ${pointer.kam.name}`}
-                            />
-                          </div>
-                          <p className="font-semiBold text-[12px] text-[#344054]">
-                            {pointer.kam.location}
-                          </p>
+                        <hr />
+                        {pointer.kam.phone && (
+                          <a
+                            href={`tel:+${pointer.kam.phone}`}
+                            className="flex gap-1 items-center cursor-pointer"
+                          >
+                            <div className="w-10 flex justify-center">
+                              <Image
+                                src={Phone}
+                                alt={'Phone'}
+                                height={24}
+                                width={24}
+                              />
+                            </div>
+                            <p className=" text-sRegular text-neutral600">
+                              {pointer.kam.phone}
+                            </p>
+                          </a>
+                        )}
+                        <div className="flex gap-1 items-center cursor-pointer">
+                          <a
+                            href={`mailto:${pointer.kam.email}`}
+                            className="flex gap-1 items-center"
+                          >
+                            <div className="w-10 flex justify-center">
+                              <Image
+                                src={Mail}
+                                alt={'Mail'}
+                                height={24}
+                                width={24}
+                              />
+                            </div>
+                            <p className=" text-sRegular text-neutral600">
+                              {pointer.kam.email}{' '}
+                            </p>
+                          </a>
+                          <Image
+                            src={Copy}
+                            alt={'Copy'}
+                            className="cursor-pointer"
+                            onClick={() => {
+                              navigator.clipboard
+                                .writeText(pointer.kam.email)
+                                .then(() =>
+                                  toast({
+                                    description: 'Copied successfully'
+                                  })
+                                );
+                            }}
+                          />
                         </div>
-                      </div>
-                      <hr />
-                      {pointer.kam.phone && (
-                        <a
-                          href={`tel:+${pointer.kam.phone}`}
-                          className="flex gap-1 items-center cursor-pointer"
-                        >
-                          <div className="w-10 flex justify-center">
-                            <Image
-                              src={Phone}
-                              alt={'Phone'}
-                              height={24}
-                              width={24}
-                            />
-                          </div>
-                          <p className=" text-sRegular text-neutral600">
-                            {pointer.kam.phone}
-                          </p>
-                        </a>
-                      )}
-                      <div className="flex gap-1 items-center cursor-pointer">
-                        <a
-                          href={`mailto:${pointer.kam.email}`}
-                          className="flex gap-1 items-center"
-                        >
-                          <div className="w-10 flex justify-center">
-                            <Image
-                              src={Mail}
-                              alt={'Mail'}
-                              height={24}
-                              width={24}
-                            />
-                          </div>
-                          <p className=" text-sRegular text-neutral600">
-                            {pointer.kam.email}{' '}
-                          </p>
-                        </a>
-                        <Image
-                          src={Copy}
-                          alt={'Copy'}
-                          className="cursor-pointer"
-                          onClick={() => {
-                            navigator.clipboard
-                              .writeText(pointer.kam.email)
-                              .then(() =>
-                                toast({
-                                  description: 'Copied successfully'
-                                })
-                              );
-                          }}
-                        />
                       </div>
                     </div>
-                  </div>
+                  )
                 }
-                tooltipContentStyles="z-[1000] !bg-neutral0 "
+                tooltipContentStyles={`z-[1000] !bg-neutral0 ${
+                  pointer.kam.location.toLowerCase().includes(defaultCountry) &&
+                  'hidden'
+                }`}
                 radixStyles="!fill-neutral0"
               />
             </div>
