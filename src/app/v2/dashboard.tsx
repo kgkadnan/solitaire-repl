@@ -94,7 +94,11 @@ import VolumeDiscount from '@/components/v2/common/volume-discount';
 import EmptyScreen from '@/components/v2/common/empty-screen';
 import emptyOrderSvg from '@public/v2/assets/icons/empty-order.svg';
 import empty from '@public/v2/assets/icons/saved-search/empty-screen-saved-search.svg';
-import { HOLD_STATUS, MEMO_STATUS } from '@/constants/business-logic';
+import {
+  HOLD_STATUS,
+  IN_TRANSIT,
+  MEMO_STATUS
+} from '@/constants/business-logic';
 import {
   SELECT_STONE_TO_PERFORM_ACTION,
   SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH
@@ -600,12 +604,26 @@ const Dashboard = () => {
       if (customerData.customer?.orders?.length > 0) {
         const pendingInvoices = customerData.customer.orders
           .filter((item: any) => item.invoice_id === null)
+          .sort((a: any, b: any) => {
+            const dateA = new Date(a.created_at as string);
+            const dateB = new Date(b.created_at as string);
+            if (isNaN(dateA.getTime())) return 1; // Treat invalid dates as later
+            if (isNaN(dateB.getTime())) return -1; // Treat invalid dates as earlier
+            return dateB.getTime() - dateA.getTime(); // Descending order
+          })
           .slice(0, 3);
 
         const activeInvoices = customerData.customer.orders
           .filter(
             (item: any) => item.invoice_id !== null && item.status === 'pending'
           )
+          .sort((a: any, b: any) => {
+            const dateA = new Date(a.created_at as string);
+            const dateB = new Date(b.created_at as string);
+            if (isNaN(dateA.getTime())) return 1; // Treat invalid dates as later
+            if (isNaN(dateB.getTime())) return -1; // Treat invalid dates as earlier
+            return dateB.getTime() - dateA.getTime(); // Descending order
+          })
           .slice(0, 3);
 
         // Update or add "Pending Invoice" tab
@@ -707,7 +725,7 @@ const Dashboard = () => {
     let link = '/';
 
     if (activeTab === 'In-transit') {
-      return (link = '/v2/your-orders?path=active');
+      return (link = `/v2/your-orders?path=${IN_TRANSIT}`);
     } else if (activeTab === 'Pending') {
       return (link = '/v2/your-orders');
     }
@@ -2055,7 +2073,7 @@ const Dashboard = () => {
                                   onClick={() => {
                                     if (activeTab === 'In-transit') {
                                       router.push(
-                                        `/v2/your-orders?path=active&id=${items?.id}`
+                                        `/v2/your-orders?path=${IN_TRANSIT}&id=${items?.id}`
                                       );
                                     } else {
                                       router.push(

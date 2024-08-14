@@ -249,7 +249,6 @@ const Form = ({
   ] = useLazyGetMatchingPairCountQuery();
   // const { errorState, errorSetState } = useNumericFieldValidation();
 
-  console.log('isFetching', isFetchingProductApi);
   const { caratError, discountError, pricePerCaratError, amountRangeError } =
     errorState;
   const {
