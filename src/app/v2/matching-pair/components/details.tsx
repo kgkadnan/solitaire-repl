@@ -437,6 +437,9 @@ export function MatchPairDetails({
     return [...originalData, ...newProducts];
   };
 
+  // console.log('validImages', validImages);
+  // console.log('originalData', originalData);
+
   useEffect(() => {
     if (validImages.length > 0) {
       setIsDiamondDetailLoading && setIsDiamondDetailLoading(false);
@@ -801,7 +804,7 @@ export function MatchPairDetails({
                                   originalData.length > 2
                                     ? 'w-[310px] h-[226px]'
                                     : 'w-[370px] h-[290px]'
-                                } absolute z-10  bg-[#F2F4F7]  flex flex-col gap-[6px] items-center justify-center`}
+                                } absolute z-[2]  bg-[#F2F4F7]  flex flex-col gap-[6px] items-center justify-center`}
                               >
                                 <div role="status">
                                   <svg
@@ -858,8 +861,9 @@ export function MatchPairDetails({
                                 />
                               ) : (
                                 <img
+                                  key={activePreviewTab}
                                   src={NoImageFound}
-                                  alt={'Video'}
+                                  alt={activePreviewTab}
                                   width={
                                     originalData.length > 2
                                       ? // originalData.length > 5
@@ -885,12 +889,14 @@ export function MatchPairDetails({
                                       : 'h-[290px]'
                                   }`}
                                   onError={e => {
+                                    handleImageLoad(index);
                                     handleImageError(e);
                                   }}
                                 />
                               )
                             ) : activePreviewTab === 'Certificate' ? (
                               <img
+                                key={activePreviewTab}
                                 src={filteredImages[index][imageIndex].url}
                                 alt={filteredImages[index][imageIndex].name}
                                 width={
@@ -919,10 +925,12 @@ export function MatchPairDetails({
                                 }`}
                                 onError={e => {
                                   handleImageError(e);
+                                  handleImageLoad(index);
                                 }}
                               />
                             ) : (
                               <img
+                                key={activePreviewTab}
                                 src={filteredImages[index][imageIndex].url}
                                 alt={filteredImages[index][imageIndex].name}
                                 width={
@@ -951,6 +959,7 @@ export function MatchPairDetails({
                                 }`}
                                 onError={e => {
                                   handleImageError(e);
+                                  handleImageLoad(index);
                                 }}
                               />
                             )}
