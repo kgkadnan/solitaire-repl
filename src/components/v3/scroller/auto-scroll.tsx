@@ -16,8 +16,8 @@ const AutoScrollImageGrid: React.FC = () => {
 
   return (
     <div className="overflow-hidden h-full relative" ref={containerRef}>
-      <div className="absolute top-[80px] left-0 w-full flex">
-        <div className="circular-scroll-content">
+      <div className="absolute top-[80px] flex">
+        <div className="circular-scroll-content w-[350px] ">
           {sustainabilitySection.map(section => (
             <div key={section.imageTitle} className="flex flex-col">
               <div className="w-[350px] h-[300px]">
@@ -35,7 +35,7 @@ const AutoScrollImageGrid: React.FC = () => {
             </div>
           ))}
         </div>
-        <div className="downward-scroll-content">
+        <div className="downward-scroll-content w-[350px] ml-[350px]">
           {sustainabilitySection.map(section => (
             <div key={section.imageTitle} className="flex flex-col">
               <div className="w-[350px] h-[300px]">
