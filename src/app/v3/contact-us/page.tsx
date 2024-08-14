@@ -54,9 +54,9 @@ const ContactUs = () => {
     if (currentCountryCode?.country_name) {
       let country = currentCountryCode?.country_name.toLowerCase();
       setDefaultCountry(country);
-      if (country === 'dubai' || country === 'israel') {
+      if (country === 'united arab emirates' || country === 'israel') {
         setSelectedRegion('MIDDLE EAST');
-      } else if (country === 'north america') {
+      } else if (country === 'united states') {
         setSelectedRegion('NORTH & SOUTH AMERICA');
       } else if (country === 'belgium' || country === 'switzerland') {
         setSelectedRegion('EUROPE');
@@ -123,16 +123,15 @@ const ContactUs = () => {
     }
   };
   const filteredPointers = WorldMapPointers.filter(data =>
-    data.kam.location.toLowerCase().includes(defaultCountry)
+    data.kam.country.toLowerCase().includes(defaultCountry.toLowerCase())
   );
-
   function adjustPosition(positionString: string) {
     // Extract left and top percentages using a regular expression
     const leftMatch = positionString.match(/left-\[(\d+)%\]/);
     const topMatch = positionString.match(/top-\[(\d+)%\]/);
 
     // Parse the percentages and add 2% to each
-    const leftPercentage = parseInt(leftMatch![1]) - 8;
+    const leftPercentage = parseInt(leftMatch![1]) - 10;
     const topPercentage = parseInt(topMatch![1]) + 3;
 
     // Return the modified style object
@@ -176,7 +175,7 @@ const ContactUs = () => {
           <Image src={WorldMap} alt="all office location" className="w-full" />
           {filteredPointers.length > 0 && (
             <div
-              className={`absolute bg-neutral0 rounded-[8px] p-[10px]`}
+              className={`absolute bg-neutral0 rounded-[8px] p-[10px] w-[270px]`}
               style={adjustPosition(filteredPointers[0].coords)}
             >
               {/* Caret Notch */}

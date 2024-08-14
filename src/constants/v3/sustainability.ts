@@ -53,7 +53,7 @@ import Head15 from '@public/v3/sustainability/head15.png';
 
 export const sustainabilitySection = [
   {
-    id: 1,
+    id: '01',
     header: 'Empowering Communities through Skills Training & Job Creation',
     imageTitle: 'No Poverty',
     description:
@@ -62,7 +62,7 @@ export const sustainabilitySection = [
     head: Head1
   },
   {
-    id: 2,
+    id: '02',
     header: 'Enhancing Food Security and Sustainability',
     imageTitle: 'Zero Hunger',
     description: `“KGK's kitchen garden initiative improves food security in Botswana by supplying fresh greens and reducing food import bills. Feeding over 500 people daily, KGK ensures employees receive nutritious meals. Additionally, a zero-waste culture in the canteen minimizes food waste, benefiting both the environment and the economy.”`,
@@ -70,7 +70,7 @@ export const sustainabilitySection = [
     head: Head2
   },
   {
-    id: 3,
+    id: '03',
     header: 'Bhagwan Mahaveer Cancer Hospital and Research Centre',
     imageTitle: 'Good Health',
     description: `“Established in 1997 and funded by the KGK Group, the Bhagwan Mahaveer Cancer Hospital and Research Centre (BMCHRC) in Jaipur is North India's only super specialty cancer treatment hospital. The 300-bed, NABH-accredited institution offers advanced medical services, focusing on compassionate and humane patient care. With departments in surgical, medical, and radiation oncology, and an all-women’s Cancer Care wing, BMCHRC provides comprehensive cancer treatment and support, including moral and financial aid to the disadvantaged.”`,
@@ -84,7 +84,7 @@ export const sustainabilitySection = [
     head: Head3
   },
   {
-    id: 4,
+    id: '04',
     header: 'Fostering Quality Education',
     imageTitle: 'Quality Education',
     description: `“The KGK Group is a key supporter of the non-profit SS Jain Subodh Shiksha Samiti, which educates over 33,000 students in Rajasthan, India. Founded in 1918 with just four girls, it now encompasses 19 institutions, including playgroups, colleges, and professional institutes. Guided by the principle that quality education is an undeniable right, the Samiti's 900-member team is dedicated to ensuring all students can reach their full potential.” “KGK Academy enhances workplace skills through its TVET institute, promoting quality education and professional growth. Additionally, KGK Kids provides creche and daycare services, supporting early childhood development and enabling parents to focus on their careers.”`,
@@ -92,7 +92,7 @@ export const sustainabilitySection = [
     head: Head4
   },
   {
-    id: 5,
+    id: '05',
     header: [
       `Empowering Women Through Education and Health Initiatives`,
       `Promoting Gender Equality in the Workforce`
@@ -106,7 +106,7 @@ export const sustainabilitySection = [
     head: Head5
   },
   {
-    id: 6,
+    id: '06',
     header: 'Sustainable Water Management Practices',
     imageTitle: 'Clean Water & Sanitation',
     description: `“KGK Botswana promotes water sustainability by harvesting rainwater for irrigating its kitchen garden. Additionally, the facility recycles all water daily, ensuring efficient and eco-friendly water usage.”`,
@@ -114,7 +114,7 @@ export const sustainabilitySection = [
     head: Head6
   },
   {
-    id: 7,
+    id: '07',
     header: 'Harnessing Solar Energy',
     imageTitle: 'Affordable & Clean Energy',
     description: `Harnessing Solar Energy`,
@@ -122,7 +122,7 @@ export const sustainabilitySection = [
     head: Head7
   },
   {
-    id: 8,
+    id: '08',
     header: 'Promoting Decent Work and Economic Growth',
     imageTitle: 'Decent Work and Economic Growth',
     description: `KGK Diamonds ensures fair living wages for all employees and incentivizes performance and productivity. By recognizing three role model employees monthly, KGK motivates its workforce, fostering a culture of excellence and contributing to economic growth.`,
@@ -130,7 +130,7 @@ export const sustainabilitySection = [
     head: Head8
   },
   {
-    id: 9,
+    id: '09',
     header: 'Advancing Industry, Innovation, and Infrastructure',
     imageTitle: 'Industry, Innovation, and Infrastructure',
     description: `Developing Skills and Technology Transfer: KGK Group recognizes the importance of adopting and developing technologies to facilitate the systematic transfer of skills to African youth in diamond cutting and polishing.

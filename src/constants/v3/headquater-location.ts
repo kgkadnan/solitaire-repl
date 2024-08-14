@@ -36,7 +36,8 @@ export const HeadquaterLocation = [
         phone: '91-9892421286',
         email: 'ajay.ghiya@kgkmail.com',
         image: Ajay,
-        initial: 'AJ'
+        initial: 'AJ',
+        country_name: 'India'
       },
 
       {
@@ -47,7 +48,8 @@ export const HeadquaterLocation = [
         phone: '886-981009317',
         email: 'shubham.jain@kgkmail.com',
         image: Avatar,
-        initial: 'SJ'
+        initial: 'SJ',
+        country_name: 'Taiwan'
       },
       {
         country: 'SINGAPORE',
@@ -56,7 +58,8 @@ export const HeadquaterLocation = [
         phone: '65-90536043',
         email: 'ankush.mehta@kgkmail.com',
         image: Ankush,
-        initial: 'AM'
+        initial: 'AM',
+        country_name: 'Singapore'
       },
       {
         country: 'CHINA',
@@ -66,7 +69,8 @@ export const HeadquaterLocation = [
         phone: '86-13585500388',
         email: 'abhishek.golecha@kgkmail.com',
         image: Abhishek,
-        initial: 'AG'
+        initial: 'AG',
+        country_name: 'China'
       },
       {
         country: 'Hong Kong SAR',
@@ -76,7 +80,8 @@ export const HeadquaterLocation = [
         phone: '852-27332201',
         email: 'vivek.mehta@kgkmail.com',
         image: Vivek,
-        initial: 'VM'
+        initial: 'VM',
+        country_name: 'China'
       },
       {
         country: 'JAPAN',
@@ -86,7 +91,8 @@ export const HeadquaterLocation = [
         phone: '852-90957695',
         email: 'jitendra.baid@kgkmail.com',
         image: Jitendra,
-        initial: 'JB'
+        initial: 'JB',
+        country_name: 'Japan'
       },
 
       {
@@ -97,7 +103,8 @@ export const HeadquaterLocation = [
         phone: '66-811738206',
         email: 'neeraj.jain01@kgkmail.com',
         image: Avatar,
-        initial: 'NJ'
+        initial: 'NJ',
+        country_name: 'Thailand'
       },
       {
         country: 'CHINA',
@@ -107,7 +114,8 @@ export const HeadquaterLocation = [
         phone: '86-18307555545',
         email: 'deependra.kothari@kgkmail.com',
         image: Avatar,
-        initial: 'DK'
+        initial: 'DK',
+        country_name: 'China'
       }
     ]
   },
@@ -122,7 +130,8 @@ export const HeadquaterLocation = [
         phone: '27-732309811',
         email: 'nitesh.lunawat01@kgkmail.com',
         image: Nitesh,
-        initial: 'NL'
+        initial: 'NL',
+        country_name: 'SouthAfrica'
       }
     ]
   },
@@ -137,7 +146,8 @@ export const HeadquaterLocation = [
         phone: '32-486042073',
         email: 'devanshu.jain@kgkmail.com',
         image: Dev,
-        initial: 'DJ'
+        initial: 'DJ',
+        country_name: 'Belgium'
       },
       {
         country: 'SWITZERLAND',
@@ -147,7 +157,8 @@ export const HeadquaterLocation = [
         phone: '41-796796041',
         email: 'patrik@kgksuisse.ch',
         image: Pratik,
-        initial: 'P'
+        initial: 'P',
+        country_name: 'Switzerland'
       }
     ]
   },
@@ -161,7 +172,8 @@ export const HeadquaterLocation = [
         phone: '32-486042074',
         email: 'hasmukh.ramani@kgkmail.com',
         image: Hasmukh,
-        initial: 'HR'
+        initial: 'HR',
+        country_name: 'United Arab Emirates'
       },
       {
         country: 'ISRAEL',
@@ -169,7 +181,8 @@ export const HeadquaterLocation = [
         name: 'Mr. Yizhak Vachtel',
         email: 'yizhak.vachtel@kgkmail.com',
         image: Yizhak,
-        initial: 'YV'
+        initial: 'YV',
+        country_name: 'Israel'
       }
     ]
   },
@@ -184,7 +197,8 @@ export const HeadquaterLocation = [
         phone: '1-6462885207',
         email: 'moshe.isakov@kgkmail.com',
         image: Maysey,
-        initial: 'MI'
+        initial: 'MI',
+        country_name: 'United States'
       }
     ]
   }
@@ -201,7 +215,8 @@ export const WorldMapPointers = [
       image: Nitesh,
       phone: '27-732309811',
       email: 'nitesh.lunawat01@kgkmail.com',
-      initial: 'NL'
+      initial: 'NL',
+      country: 'South Africa'
     }
   },
   {
@@ -214,7 +229,8 @@ export const WorldMapPointers = [
       image: Maysey,
       phone: '1-6462885207',
       email: 'moshe.isakov@kgkmail.com',
-      initial: 'MI'
+      initial: 'MI',
+      country: 'United States'
     }
   },
   {
@@ -227,7 +243,8 @@ export const WorldMapPointers = [
       image: Pratik,
       phone: '41-796796041',
       email: 'patrik@kgksuisse.ch',
-      initial: 'P'
+      initial: 'P',
+      country: 'Switzerland'
     }
   },
   {
@@ -240,7 +257,8 @@ export const WorldMapPointers = [
       image: Dev,
       phone: '32-486042073',
       email: 'devanshu.jain@kgkmail.com',
-      initial: 'DJ'
+      initial: 'DJ',
+      country: 'Belgium'
     }
   },
   {
@@ -253,7 +271,8 @@ export const WorldMapPointers = [
       image: Hasmukh,
       phone: '32-486042074',
       email: 'hasmukh.ramani@kgkmail.com',
-      initial: 'HR'
+      initial: 'HR',
+      country: 'United Arab Emirates'
     }
   },
   {
@@ -266,7 +285,8 @@ export const WorldMapPointers = [
       image: Ajay,
       phone: '91-9892421286',
       email: 'ajay.ghiya@kgkmail.com',
-      initial: 'AJ'
+      initial: 'AJ',
+      country: 'India'
     }
   },
   {
@@ -279,7 +299,8 @@ export const WorldMapPointers = [
       image: Avatar,
       phone: '86-18307555545',
       email: 'deependra.kothari@kgkmail.com',
-      initial: 'DK'
+      initial: 'DK',
+      country: 'China'
     }
   },
   {
@@ -292,7 +313,8 @@ export const WorldMapPointers = [
       image: Abhishek,
       phone: '86-13585500388',
       email: 'abhishek.golecha@kgkmail.com',
-      initial: 'AG'
+      initial: 'AG',
+      country: 'China'
     }
   },
   {
@@ -305,7 +327,8 @@ export const WorldMapPointers = [
       image: Jitendra,
       phone: '852-90957695',
       email: 'jitendra.baid@kgkmail.com',
-      initial: 'JB'
+      initial: 'JB',
+      country: 'Japan'
     }
   },
 
@@ -319,7 +342,8 @@ export const WorldMapPointers = [
       image: Yizhak,
       // phone: '+91 910 876 6432',
       email: 'yizhak.vachtel@kgkmail.com',
-      initial: 'YV'
+      initial: 'YV',
+      country: 'Israel'
     }
   },
   {
@@ -332,7 +356,8 @@ export const WorldMapPointers = [
       image: Ankush,
       phone: '65-90536043',
       email: 'ankush.mehta@kgkmail.com',
-      initial: 'AM'
+      initial: 'AM',
+      country: 'Singapore'
     }
   },
   {
@@ -345,7 +370,8 @@ export const WorldMapPointers = [
       image: Avatar,
       phone: '66-811738206',
       email: 'neeraj.jain01@kgkmail.com',
-      initial: 'NJ'
+      initial: 'NJ',
+      country: 'Thailand'
     }
   },
   {
@@ -358,7 +384,8 @@ export const WorldMapPointers = [
       image: Avatar,
       phone: '886-981009317',
       email: 'shubham.jain@kgkmail.com',
-      initial: 'SJ'
+      initial: 'SJ',
+      country: 'Taiwan'
     }
   }
 ];

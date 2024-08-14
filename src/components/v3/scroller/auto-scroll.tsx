@@ -16,26 +16,43 @@ const AutoScrollImageGrid: React.FC = () => {
 
   return (
     <div className="overflow-hidden h-full relative" ref={containerRef}>
-      <div className="absolute top-[80px] left-0 w-full flex flex-col continuousScroll">
-        {sustainabilitySection.map((section, index: number) => (
-          <div
-            key={section.imageTitle}
-            className={` w-[350px] h-[300px] ${
-              index % 2 === 0 ? '!left-0' : '!right-0'
-            }`}
-          >
-            <div className="flex justify-between">
-              {' '}
-              <p>{section.imageTitle}</p> <p>{section.id}</p>
+      <div className="absolute top-[80px] left-0 w-full flex">
+        <div className="circular-scroll-content">
+          {sustainabilitySection.map(section => (
+            <div key={section.imageTitle} className="flex flex-col">
+              <div className="w-[350px] h-[300px]">
+                <div className="flex justify-between">
+                  <p>{section.imageTitle}</p>
+                  <p>{section.id}</p>
+                </div>
+                <Image
+                  src={section.head}
+                  alt={section.imageTitle}
+                  height={250}
+                  width={350}
+                />
+              </div>
             </div>
-            <Image
-              src={section.head}
-              alt={section.imageTitle}
-              height={250}
-              width={350}
-            />
-          </div>
-        ))}
+          ))}
+        </div>
+        <div className="downward-scroll-content">
+          {sustainabilitySection.map(section => (
+            <div key={section.imageTitle} className="flex flex-col">
+              <div className="w-[350px] h-[300px]">
+                <div className="flex justify-between">
+                  <p>{section.imageTitle}</p>
+                  <p>{section.id}</p>
+                </div>
+                <Image
+                  src={section.head}
+                  alt={section.imageTitle}
+                  height={250}
+                  width={350}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

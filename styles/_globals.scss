@@ -416,3 +416,34 @@
 .disable-custom-cursor {
   cursor: default;
 }
+
+@keyframes scrollUp {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-100%);
+  }
+}
+
+.circular-scroll-content {
+  position: absolute;
+  width: 100%;
+  animation: scrollUp linear infinite;
+  animation-duration: 30s; /* Adjust the duration for speed */
+}
+@keyframes scrollDown {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.downward-scroll-content {
+  position: absolute;
+  width: 100%;
+  animation: scrollDown linear infinite;
+  animation-duration: 30s; /* Adjust the duration for speed */
+}
