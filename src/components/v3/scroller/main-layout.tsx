@@ -2,6 +2,7 @@
 import React from 'react';
 import AutoScrollImageGrid from './auto-scroll';
 import { CommonButton } from '../button';
+import { handleDownloadReport } from '@/utils/download-sustainability-report';
 
 const MainLayout: React.FC = () => {
   return (
@@ -18,7 +19,7 @@ const MainLayout: React.FC = () => {
             practices.
           </p>
           <CommonButton
-            onClick={() => {}}
+            onClick={handleDownloadReport}
             variant={'primary'}
             size={'custom'}
             className="rounded-[8px] w-[280px] h-[44px]"
