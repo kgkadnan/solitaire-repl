@@ -346,10 +346,14 @@ export function MatchPairDetails({
         return `${diamond?.length ?? 0}*${diamond?.width ?? 0}*${
           diamond?.depth ?? 0
         }`;
-      case 'price_per_carat':
+
       case 'rap':
       case 'rap_value':
         return diamond[key] ? `$${formatNumberWithCommas(diamond[key])}` : '-';
+      case 'price_per_carat':
+        return diamond[key] !== undefined || diamond[key] !== null
+          ? `$${formatNumberWithCommas(diamond[key])}`
+          : '-';
       case 'table_percentage':
       case 'carats':
       case 'depth_percentage':
