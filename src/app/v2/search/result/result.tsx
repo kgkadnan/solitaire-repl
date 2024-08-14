@@ -1062,7 +1062,6 @@ const Result = ({
     }
   };
 
-  console.log('kamLocation.location', kamLocation.location);
   const confirmStone = () => {
     const variantIds: string[] = [];
 
@@ -1078,7 +1077,6 @@ const Result = ({
       });
     } else {
       checkLocation({ kamLocation: kamLocation.location, variantIds });
-      console.log('kamLocation.location', kamLocation.location);
     }
   };
 

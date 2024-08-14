@@ -43,6 +43,7 @@ import { useLazyGetSimilarMatchingPairQuery } from '@/features/api/match-pair';
 import logger from 'logging/log-util';
 import { formatNumber } from '@/utils/fix-two-digit-number';
 import MatchPairDnaSkeleton from '@/components/v2/skeleton/match-pair/match-pair-dna-page';
+import { RednderLocation } from '@/components/v2/common/data-table/helpers/render-cell';
 
 export interface ITableColumn {
   key: string;
@@ -327,6 +328,16 @@ export function MatchPairDetails({
 
   const dataFormatting = (diamond: any, key: string) => {
     switch (key) {
+      case 'location':
+        return (
+          <div className="flex gap-1 items-center">
+            {RednderLocation({
+              renderedCellValue: diamond.location
+            })}
+
+            {diamond.location}
+          </div>
+        );
       case 'amount':
         return diamond.variants[0].prices[0].amount
           ? `$${formatNumberWithCommas(diamond.variants[0].prices[0].amount)}`
@@ -425,6 +436,9 @@ export function MatchPairDetails({
 
     return [...originalData, ...newProducts];
   };
+
+  // console.log('validImages', validImages);
+  // console.log('originalData', originalData);
 
   useEffect(() => {
     if (validImages.length > 0) {
@@ -790,7 +804,7 @@ export function MatchPairDetails({
                                   originalData.length > 2
                                     ? 'w-[310px] h-[226px]'
                                     : 'w-[370px] h-[290px]'
-                                } absolute z-10  bg-[#F2F4F7]  flex flex-col gap-[6px] items-center justify-center`}
+                                } absolute z-[2]  bg-[#F2F4F7]  flex flex-col gap-[6px] items-center justify-center`}
                               >
                                 <div role="status">
                                   <svg
@@ -847,8 +861,9 @@ export function MatchPairDetails({
                                 />
                               ) : (
                                 <img
+                                  key={activePreviewTab}
                                   src={NoImageFound}
-                                  alt={'Video'}
+                                  alt={activePreviewTab}
                                   width={
                                     originalData.length > 2
                                       ? // originalData.length > 5
@@ -874,12 +889,14 @@ export function MatchPairDetails({
                                       : 'h-[290px]'
                                   }`}
                                   onError={e => {
+                                    handleImageLoad(index);
                                     handleImageError(e);
                                   }}
                                 />
                               )
                             ) : activePreviewTab === 'Certificate' ? (
                               <img
+                                key={activePreviewTab}
                                 src={filteredImages[index][imageIndex].url}
                                 alt={filteredImages[index][imageIndex].name}
                                 width={
@@ -908,10 +925,12 @@ export function MatchPairDetails({
                                 }`}
                                 onError={e => {
                                   handleImageError(e);
+                                  handleImageLoad(index);
                                 }}
                               />
                             ) : (
                               <img
+                                key={activePreviewTab}
                                 src={filteredImages[index][imageIndex].url}
                                 alt={filteredImages[index][imageIndex].name}
                                 width={
@@ -940,6 +959,7 @@ export function MatchPairDetails({
                                 }`}
                                 onError={e => {
                                   handleImageError(e);
+                                  handleImageLoad(index);
                                 }}
                               />
                             )}
