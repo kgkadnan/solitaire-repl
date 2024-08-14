@@ -89,6 +89,9 @@ import CommonPoppup from '../../login/component/common-poppup';
 import EmptyScreen from '@/components/v2/common/empty-screen';
 import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
 import { setConfirmStoneTrack } from '@/features/confirm-stone-track/confirm-stone-track-slice';
+import { useLazyGetCustomerQuery } from '@/features/api/dashboard';
+import { kamLocationAction } from '@/features/kam-location/kam-location';
+import { STONE_LOCATION } from '@/constants/v2/enums/location';
 
 // Column mapper outside the component to avoid re-creation on each render
 
@@ -113,11 +116,14 @@ const Result = ({
 }) => {
   const dispatch = useAppDispatch();
   const confirmTrack = useAppSelector(state => state.setConfirmStoneTrack);
+  const kamLocation = useAppSelector(state => state.kamLocation);
+
   console.log(confirmTrack, 'confirmTrack');
   const [triggerAvailableSlots] = useLazyGetAvailableMyAppointmentSlotsQuery(
     {}
   );
 
+  const [triggerGetCustomer] = useLazyGetCustomerQuery({});
   const { data: searchList }: { data?: IItem[] } =
     useGetSavedSearchListQuery('');
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();
@@ -137,6 +143,7 @@ const Result = ({
   const [detailImageData, setDetailImageData] = useState<any>({});
   const [breadCrumLabel, setBreadCrumLabel] = useState('');
 
+  const [isSkeletonLoading, setIsSkeletonLoading] = useState<boolean>(true);
   const [isDiamondDetailLoading, setIsDiamondDetailLoading] = useState(true); //
 
   const [isConfirmStone, setIsConfirmStone] = useState(false);
@@ -842,13 +849,7 @@ const Result = ({
     );
   };
 
-  const confirmStoneApiCall = () => {
-    const variantIds: string[] = [];
-
-    confirmStoneData.forEach((ids: any) => {
-      variantIds.push(ids.variants[0].id);
-    });
-
+  const confirmStoneApiCall = ({ variantIds }: { variantIds: string[] }) => {
     if (variantIds.length) {
       setIsLoading(true);
       confirmProduct({
@@ -864,16 +865,29 @@ const Result = ({
             setIsLoading(false);
             setCommentValue('');
             setIsDialogOpen(true);
-
             setRowSelection({});
             dispatch(setConfirmStoneTrack(''));
+
+            const formatMessage = (message: string) => {
+              return message.split('\n').map((line: string, index: number) => (
+                <span key={index}>
+                  <span dangerouslySetInnerHTML={{ __html: line }} />
+                  <br />
+                </span>
+              ));
+            };
             setDialogContent(
               <CommonPoppup
-                content={''}
-                status="success"
+                content={<div>{formatMessage(res.message)}</div>}
+                status={
+                  res.status === 'success'
+                    ? 'success'
+                    : res.status === 'processing'
+                    ? 'info'
+                    : ''
+                }
                 customPoppupBodyStyle="!mt-[70px]"
-                header={`${variantIds.length} stones have been successfully added to
-            "My Diamond"`}
+                header={res.title}
                 actionButtonData={[
                   {
                     variant: 'secondary',
@@ -965,6 +979,104 @@ const Result = ({
             );
           }
         });
+    }
+  };
+
+  const checkLocation = ({
+    kamLocation,
+    variantIds
+  }: {
+    kamLocation: string;
+    variantIds: string[];
+  }) => {
+    // Compare Stone locations with KAM location
+    let locationMismatch = false;
+    confirmStoneData.forEach((stones: any) => {
+      const location = stones.location as keyof typeof STONE_LOCATION;
+      if (
+        STONE_LOCATION[location].toLowerCase() !== kamLocation.toLowerCase()
+      ) {
+        locationMismatch = true;
+      }
+    });
+    if (locationMismatch) {
+      setIsDialogOpen(true);
+      setDialogContent(
+        <CommonPoppup
+          content={
+            <div className="flex flex-col gap-1">
+              <div>
+                You are trying to confirm some of the stones from another
+                region. This might lead to additional charges. By confirming
+                your order, you acknowledge and agree to the following:
+              </div>
+
+              <div>
+                <p>
+                  {' '}
+                  &#8226; Customs Duties and Taxes: You are responsible for
+                  paying any applicable customs duties, taxes, and other charges
+                  that may be incurred when importing stones from outside your
+                  location.
+                </p>
+
+                <p>
+                  {' '}
+                  &#8226; Import Regulations: Ensure you are aware of and comply
+                  with all relevant import regulations and requirements for your
+                  region.
+                </p>
+                <p>
+                  {' '}
+                  &#8226; Delivery Times: Delivery times may vary due to customs
+                  clearance procedures.
+                </p>
+              </div>
+            </div>
+          }
+          status="warning"
+          customPoppupStyle="!h-[475px]"
+          customPoppupBodyStyle="!mt-[70px]"
+          header={'Disclaimer'}
+          actionButtonData={[
+            {
+              variant: 'secondary',
+              label: ManageLocales('app.modal.cancel'),
+              handler: () => setIsDialogOpen(false),
+              customStyle: 'flex-1 w-full h-10'
+            },
+            {
+              variant: 'primary',
+              label: 'Confirm Order',
+              handler: () => {
+                setIsDialogOpen(false);
+                confirmStoneApiCall({ variantIds });
+              },
+              customStyle: 'flex-1 w-full h-10'
+            }
+          ]}
+        />
+      );
+    } else {
+      confirmStoneApiCall({ variantIds });
+    }
+  };
+
+  const confirmStone = () => {
+    const variantIds: string[] = [];
+
+    confirmStoneData.forEach((ids: any) => {
+      variantIds.push(ids.variants[0].id);
+    });
+
+    if (!kamLocation.location) {
+      triggerGetCustomer({}).then(res => {
+        let kamLocation = res.data.customer.kam.location;
+        dispatch(kamLocationAction(kamLocation));
+        checkLocation({ kamLocation, variantIds });
+      });
+    } else {
+      checkLocation({ kamLocation: kamLocation.location, variantIds });
     }
   };
 
@@ -1106,9 +1218,9 @@ const Result = ({
       <DialogComponent
         dialogContent={dialogContent}
         isOpens={isDialogOpen}
-        dialogStyle={{
-          dialogContent: isConfirmStone ? 'h-[240px]' : ''
-        }}
+        // dialogStyle={{
+        //   dialogContent: isConfirmStone ? 'h-[480px] min-h-[480px]' : ''
+        // }}
       />
 
       <AddCommentDialog
@@ -1129,7 +1241,7 @@ const Result = ({
             ''
           ) : hasLimitExceeded ? (
             ''
-          ) : productData === undefined ? (
+          ) : isSkeletonLoading ? (
             <Skeleton
               variant="rectangular"
               height={'24px'}
@@ -1315,6 +1427,8 @@ const Result = ({
                   setCompareStoneData={setCompareStoneData}
                   setIsInputDialogOpen={setIsInputDialogOpen}
                   handleCreateAppointment={handleCreateAppointment}
+                  setIsSkeletonLoading={setIsSkeletonLoading}
+                  isSkeletonLoading={isSkeletonLoading}
                 />
               )}
             </div>
@@ -1346,7 +1460,7 @@ const Result = ({
                     label: ManageLocales(
                       'app.confirmStone.footer.confirmStone'
                     ),
-                    handler: () => confirmStoneApiCall()
+                    handler: () => confirmStone()
                   }
                 ]}
               />

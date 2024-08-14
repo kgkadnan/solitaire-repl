@@ -220,6 +220,7 @@ const DataTable = ({
 
   const [paginatedData, setPaginatedData] = useState<any>([]);
   const [globalFilter, setGlobalFilter] = useState('');
+
   useEffect(() => {
     if (globalFilter !== '') {
       // Remove all whitespace characters from globalFilter
@@ -233,10 +234,8 @@ const DataTable = ({
       const newData = data.slice(startIndex, endIndex);
       // Update the paginated data state
       setPaginatedData(newData);
-      setIsSkeletonLoading && setIsSkeletonLoading(false);
     } else {
       setPaginatedData(rows);
-      setIsSkeletonLoading && setIsSkeletonLoading(false);
     }
   }, [globalFilter]);
   useEffect(() => {
@@ -247,7 +246,11 @@ const DataTable = ({
     const newData = rows.slice(startIndex, endIndex);
     // Update the paginated data state
     setPaginatedData(newData);
-    setIsSkeletonLoading && setIsSkeletonLoading(false);
+    if (isResult && setIsSkeletonLoading && newData.length > 0) {
+      setIsSkeletonLoading(false);
+    } else if (myCart && setIsSkeletonLoading) {
+      setIsSkeletonLoading(false);
+    }
   }, [
     rows,
     pagination.pageIndex, //re-fetch when page index changes

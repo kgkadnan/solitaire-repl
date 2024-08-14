@@ -18,12 +18,13 @@ import backWardArrow from '@public/v2/assets/icons/my-diamonds/backwardArrow.svg
 import noImageFound from '@public/v2/assets/icons/detail-page/fall-back-img.svg';
 import Image from 'next/image';
 import {
-  INVOICE_HISTORY_BREADCRUMB_LABEL,
+  PAST_INVOICE_BREADCRUMB_LABEL,
   PENING_INVOICE_BREADCRUMB_LABEL
 } from '@/constants/business-logic';
 import ActionButton from '@/components/v2/common/action-button';
 import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
+import infoIcon from '@public/v2/assets/icons/info-icon.svg';
 import {
   RenderMeasurements,
   RenderNumericFields,
@@ -64,6 +65,11 @@ const OrderDetail: React.FC<IOrderDetail> = ({
   const [isDetailPage, setIsDetailPage] = useState(false);
   const [detailPageData, setDetailPageData] = useState<any>({});
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [tooltip, setTooltip] = useState({
+    show: false,
+    content: '',
+    position: { left: 0 }
+  });
   const [detailImageData, setDetailImageData] = useState<any>({});
   const handleDetailPage = ({ row }: { row: any }) => {
     setIsDetailPage(true);
@@ -390,8 +396,8 @@ const OrderDetail: React.FC<IOrderDetail> = ({
               </div>
               <div className="flex p-[16px] pr-[35px] gap-[35px]">
                 <div className="">
-                  <div className="pl-[16px] flex justify-between">
-                    <div className="flex gap-[10px] ">
+                  <div className=" flex items-center justify-between">
+                    <div className="flex gap-[8px] ">
                       {' '}
                       <p className="text-neutral600 text-mMedium font-regular">
                         {ManageLocales('app.yourOrder.description.dataAndTime')}
@@ -402,6 +408,84 @@ const OrderDetail: React.FC<IOrderDetail> = ({
                         {formatCreatedAt(productDetailData?.created_at)}
                       </span>
                     </div>
+
+                    {breadCrumLabel === PENING_INVOICE_BREADCRUMB_LABEL && (
+                      <div className="flex items-center gap-1 relative">
+                        <div className="flex items-center">
+                          <div className="text-neutral900 text-mRegular font-medium">
+                            Status
+                          </div>
+
+                          <button
+                            onMouseEnter={e => {
+                              const rect =
+                                e.currentTarget.getBoundingClientRect();
+                              setTooltip({
+                                show: true,
+                                content:
+                                  'This status shows whether your order request is successful or failed.',
+                                position: {
+                                  left:
+                                    rect.left +
+                                    window.scrollX +
+                                    rect.width / 300 // Adjust left position to center above the element
+                                }
+                              });
+                            }}
+                            onMouseLeave={() => {
+                              setTooltip({
+                                show: false,
+                                content: '',
+                                position: { left: 0 }
+                              });
+                            }}
+                          >
+                            <Image src={infoIcon} alt="infoIcon" />
+                          </button>
+                          <span>:</span>
+                        </div>
+
+                        {tooltip.show && (
+                          <div
+                            className={`absolute bg-[#ECF2FC] w-[320px] border-[1px] border-[#B6CFF3] rounded-[8px] p-4 text-[#475467] top-[35px] gap-2 `}
+                            style={{
+                              top: '-105px',
+                              left: `${tooltip.position.left}px`,
+
+                              transform: 'translateX(-115%)' // Center the tooltip above the element
+                            }}
+                          >
+                            <div className="flex flex-col gap-2">
+                              <div className="flex gap-1">
+                                <Image
+                                  src={infoIcon}
+                                  alt="volume discount info"
+                                />{' '}
+                                <p className="text-neutral900 font-medium text-mMedium">
+                                  Information
+                                </p>
+                              </div>
+                              <p>{tooltip.content}</p>
+                            </div>
+                          </div>
+                        )}
+                        {productDetailData?.status === 'pending' ? (
+                          <div className="text-mRegular px-[6px] py-[4px] rounded-[4px] border-successBorder  bg-successSurface text-successMain border-solid border-[1px] ">
+                            Success
+                          </div>
+                        ) : productDetailData?.status === 'canceled' ? (
+                          <div className="text-mRegular px-[6px] py-[4px] rounded-[4px] border-dangerBorder bg-dangerSurface text-dangerMain border-solid border-[1px] ">
+                            Failed
+                          </div>
+                        ) : productDetailData?.status === 'requires_action' ? (
+                          <div className="text-mRegular px-[6px] py-[4px] rounded-[4px]  border-lengendMemoBorder bg-legendMemoFill text-legendMemo border-solid border-[1px] ">
+                            Processing
+                          </div>
+                        ) : (
+                          productDetailData?.status
+                        )}
+                      </div>
+                    )}
                     {/* {breadCrumLabel === ACTIVE_INVOICE_BREADCRUMB_LABEL && (
                       <div className="mr-3">
                         {' '}
@@ -415,7 +499,7 @@ const OrderDetail: React.FC<IOrderDetail> = ({
                       </div>
                     )} */}
                   </div>
-                  <div className="bg-neutral25 flex gap-[8px] py-[8px]">
+                  <div className="bg-neutral25 flex gap-[10px] py-[8px]">
                     <div className="bg-neutral0 border-[1px] border-solid border-neutral200 rounded-[8px] shadow-sm">
                       <div className="flex flex-col p-[16px]">
                         <p className="text-neutral600 text-mRegular font-regular">
@@ -449,7 +533,7 @@ const OrderDetail: React.FC<IOrderDetail> = ({
                     <div className="bg-neutral0 border-[1px] border-solid border-neutral200 rounded-[8px] shadow-sm">
                       <div className="flex flex-col p-[16px]">
                         <p className="text-neutral600 text-mRegular font-regular">
-                          {breadCrumLabel === INVOICE_HISTORY_BREADCRUMB_LABEL
+                          {breadCrumLabel === PAST_INVOICE_BREADCRUMB_LABEL
                             ? ManageLocales(
                                 'app.yourOrder.description.paidAmount'
                               )
@@ -466,7 +550,7 @@ const OrderDetail: React.FC<IOrderDetail> = ({
                 </div>
 
                 {breadCrumLabel === PENING_INVOICE_BREADCRUMB_LABEL && (
-                  <div className="flex flex-col ">
+                  <div className="flex flex-col pt-1">
                     <p className="text-neutral600 text-mRegular font-regular">
                       {ManageLocales('app.yourOrder.description.comments')}
                     </p>

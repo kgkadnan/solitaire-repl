@@ -18,7 +18,7 @@ export const DialogComponent: React.FC<IDialog> = ({
     <Dialog open={isOpens} defaultOpen={false}>
       {/*Remove onOpenChange to prevent the dialog from closing when clicking outside the dialog*/}
       <DialogContent
-        className={`max-w-[400px] min-h-[222px] bg-neutral25 max-h-[300px] flex flex-col justify-center  !rounded-[8px] p-[24px] ${dialogStyle?.dialogContent}`}
+        className={`max-w-[400px] min-h-[222px] bg-neutral25 max-h-[480px] flex flex-col justify-center  !rounded-[8px] p-[24px] ${dialogStyle?.dialogContent}`}
       >
         {dialogContent}
       </DialogContent>

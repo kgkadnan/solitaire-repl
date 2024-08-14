@@ -14,6 +14,8 @@ interface IDetailPageTabs {
   isLoading?: boolean;
   setIsImageLoading?: React.Dispatch<React.SetStateAction<boolean>>;
   setIsImageLoaded?: React.Dispatch<React.SetStateAction<boolean>>;
+  setImageLoadingStatus?: any;
+  originalDataFromMatchPair?: any;
 }
 
 const DetailPageTabs = ({
@@ -25,7 +27,9 @@ const DetailPageTabs = ({
   setIsLoading,
   isLoading,
   setIsImageLoaded,
-  setIsImageLoading
+  setIsImageLoading,
+  setImageLoadingStatus,
+  originalDataFromMatchPair
 }: IDetailPageTabs) => {
   let TabsData = [
     {
@@ -91,11 +95,17 @@ const DetailPageTabs = ({
   }, [isLoading]);
 
   const handleTabs = (label: string) => {
-    setActivePreviewTab(label);
-    setIsImageLoading && setIsImageLoading(true);
-    setIsImageLoaded && setIsImageLoaded(false);
-    setImageIndex(0);
-    setIsLoading && setIsLoading(true);
+    if (label !== activePreviewTab) {
+      setActivePreviewTab(label);
+      setIsImageLoading && setIsImageLoading(true);
+      setImageLoadingStatus &&
+        setImageLoadingStatus(
+          new Array(originalDataFromMatchPair.length).fill(true)
+        );
+      setIsImageLoaded && setIsImageLoaded(false);
+      setImageIndex(0);
+      setIsLoading && setIsLoading(true);
+    }
   };
 
   // Find the next enabled tab

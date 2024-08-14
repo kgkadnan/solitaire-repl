@@ -3,7 +3,7 @@ import {
   IN_TRANSIT,
   ACTIVE_INVOICE_BREADCRUMB_LABEL,
   PAST,
-  INVOICE_HISTORY_BREADCRUMB_LABEL,
+  PAST_INVOICE_BREADCRUMB_LABEL,
   MAX_MY_INVOICE_LIMIT_COUNT,
   MAX_RECENT_CONFIRMATION_COUNT,
   PENDING,
@@ -51,6 +51,12 @@ const MyDiamonds = () => {
   const pathName = useSearchParams().get('path');
   const detailId = useSearchParams().get('id');
   const [tooltip, setTooltip] = useState({
+    show: false,
+    content: '',
+    position: { left: 0 }
+  });
+
+  const [columnTooltip, setColumnTooltip] = useState({
     show: false,
     content: '',
     position: { left: 0 }
@@ -208,12 +214,14 @@ const MyDiamonds = () => {
       keys: [
         { label: 'Order ID', accessor: 'display_id' },
         { label: 'Confirmation Date', accessor: 'created_at' },
+        { label: 'Order Request Status', accessor: 'status' },
         { label: 'Details', accessor: 'details' }
       ],
       data: pendingDataState
     },
     inTransit: {
       keys: [
+        { label: 'Order ID', accessor: 'display_id' },
         { label: 'Invoice Number', accessor: 'invoice_id' },
         { label: 'Invoice Date', accessor: 'created_at' },
         { label: 'Details', accessor: 'details' }
@@ -222,6 +230,7 @@ const MyDiamonds = () => {
     },
     past: {
       keys: [
+        { label: 'Order ID', accessor: 'display_id' },
         { label: 'Invoice Number', accessor: 'invoice_id' },
         { label: 'Invoice Date', accessor: 'created_at' },
         { label: 'Details', accessor: 'details' }
@@ -234,8 +243,10 @@ const MyDiamonds = () => {
   const { keys, data } = tabsData[activeTab] || { keys: [], data: [] };
 
   const handleShowDetails = (itemId: string) => {
+    console.log('itemId', itemId);
     setShowDetail(true);
     triggerProductDetail({ id: itemId, singleExpand }).then(res => {
+      console.log('res', res);
       setProductDetailData(res.data.order);
     });
   };
@@ -388,10 +399,30 @@ const MyDiamonds = () => {
           </>
         );
 
+      case 'status':
+        return (
+          <>
+            {value[accessor] === 'pending' ? (
+              <div className="text-mRegular px-[6px] py-[4px] rounded-[4px] border-successBorder  bg-successSurface text-successMain border-solid border-[1px] ">
+                Success
+              </div>
+            ) : value[accessor] === 'canceled' ? (
+              <div className="text-mRegular px-[6px] py-[4px] rounded-[4px] border-dangerBorder bg-dangerSurface text-dangerMain border-solid border-[1px] ">
+                Failed
+              </div>
+            ) : value[accessor] === 'requires_action' ? (
+              <div className="text-mRegular px-[6px] py-[4px] rounded-[4px] border-lengendMemoBorder bg-legendMemoFill text-legendMemo border-solid border-[1px] ">
+                Processing
+              </div>
+            ) : (
+              value[accessor]
+            )}
+          </>
+        );
+
       case 'invoice_id':
         return (
           <>
-            <Image src={icon} alt="icon" />
             <span>{value[accessor]}</span>
           </>
         );
@@ -441,7 +472,7 @@ const MyDiamonds = () => {
             <OrderDetail
               productDetailData={productDetailData}
               goBackToListView={goBackToListView}
-              breadCrumLabel={INVOICE_HISTORY_BREADCRUMB_LABEL}
+              breadCrumLabel={PAST_INVOICE_BREADCRUMB_LABEL}
               modalSetState={modalSetState}
               setIsLoading={setIsLoading}
               router={router}
@@ -503,9 +534,10 @@ const MyDiamonds = () => {
               })}
               {tooltip.show && (
                 <div
-                  className={`absolute bg-[#ECF2FC] w-[320px] border-[1px] border-[#B6CFF3] rounded-[8px] p-4 text-[#475467] top-[35px] gap-2 `}
+                  className={`absolute z-[5] bg-[#ECF2FC] w-[320px] border-[1px] border-[#B6CFF3] rounded-[8px] p-4 text-[#475467] top-[35px] gap-2 `}
                   style={{
                     left: `${tooltip.position.left}px`,
+
                     transform: 'translateX(-30%)' // Center the tooltip above the element
                   }}
                 >
@@ -543,12 +575,59 @@ const MyDiamonds = () => {
           {data?.length > 0 ? (
             <div className="max-w-full overflow-x-auto">
               {/* header */}
-              <div className="grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] text-mMedium h-[47px] border-b  border-neutral-200 bg-neutral-50 text-neutral700">
+              <div className=" relative grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] text-mMedium h-[47px] border-b  border-neutral-200 bg-neutral-50 text-neutral700">
                 {keys?.map(({ label }: any) => (
-                  <div key={label} className="p-4 text-left font-medium">
-                    {label}
+                  <div key={label} className="flex ">
+                    <div className="py-4 pl-4 pr-1 text-left font-medium">
+                      {label}
+                    </div>
+                    {label === 'Order Request Status' && (
+                      <button
+                        onMouseEnter={e => {
+                          const rect = e.currentTarget.getBoundingClientRect();
+                          setColumnTooltip({
+                            show: true,
+                            content:
+                              'This status shows whether your order request is successful or failed.',
+                            position: {
+                              left:
+                                rect.left + window.scrollX + rect.width / 300 // Adjust left position to center above the element
+                            }
+                          });
+                        }}
+                        onMouseLeave={() => {
+                          setColumnTooltip({
+                            show: false,
+                            content: '',
+                            position: { left: 0 }
+                          });
+                        }}
+                      >
+                        <Image src={infoIcon} alt="infoIcon" />
+                      </button>
+                    )}
                   </div>
                 ))}
+                {columnTooltip.show && (
+                  <div
+                    className={`absolute bg-[#ECF2FC] w-[320px] border-[1px] border-[#B6CFF3] rounded-[8px] p-4 text-[#475467] top-[35px] gap-2 `}
+                    style={{
+                      left: `${columnTooltip.position.left}px`,
+
+                      transform: 'translateX(-30%)' // Center the columnTooltip above the element
+                    }}
+                  >
+                    <div className="flex flex-col gap-2">
+                      <div className="flex gap-1">
+                        <Image src={infoIcon} alt="volume discount info" />{' '}
+                        <p className="text-neutral900 font-medium text-mMedium">
+                          Information
+                        </p>
+                      </div>
+                      <p>{columnTooltip.content}</p>
+                    </div>
+                  </div>
+                )}
               </div>
               {/* rows */}
 
@@ -616,7 +695,7 @@ const MyDiamonds = () => {
               ManageLocales('app.yourOrder.header.activeInvoiceDetails')
             ) : (
               activeTab === PAST &&
-              ManageLocales('app.yourOrder.header.invoicesHistoryDetails')
+              ManageLocales('app.yourOrder.header.pastInvoicesDetails')
             )
           ) : pendingDataState === undefined &&
             inTransitDataState === undefined &&
