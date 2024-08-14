@@ -140,7 +140,7 @@ const ContactUs = () => {
     return {
       left: `${leftPercentage}%`,
       top: `${topPercentage}%`,
-      position: 'absolute',
+      // position: 'absolute',
       boxShadow: 'var(--popups-shadow)',
       zIndex: 3
     };
