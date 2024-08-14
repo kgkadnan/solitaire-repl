@@ -2053,35 +2053,52 @@ const Dashboard = () => {
                           {/* rows */}
                           <div className="">
                             {data?.length > 0 ? (
-                              data?.map((items: any) => (
-                                <div
-                                  key={items.order_id}
-                                  onClick={() => {
-                                    if (activeTab === 'In-transit') {
-                                      router.push(
-                                        `/v2/your-orders?path=${IN_TRANSIT}&id=${items?.id}`
-                                      );
-                                    } else {
-                                      router.push(
-                                        `/v2/your-orders?id=${items?.id}`
-                                      );
-                                    }
-                                    //  handleShowDetails(items?.id);
-                                  }}
-                                  className="cursor-pointer grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] bg-neutral0 border-b border-neutral-200 hover:bg-neutral-50"
-                                >
-                                  {keys?.map(
-                                    ({ accessor }: any, index: number) => (
-                                      <div
-                                        key={index}
-                                        className="flex items-center text-lRegular space-x-2 py-3 pr-3 pl-4 text-left text-gray-800"
-                                      >
-                                        {renderCellContent(accessor, items)}
-                                      </div>
-                                    )
-                                  )}
-                                </div>
-                              ))
+                              data
+                                ?.sort((a: any, b: any) => {
+                                  // Convert created_at to Date objects, handling potential parsing issues
+                                  const dateA = new Date(
+                                    a.created_at as string
+                                  );
+                                  const dateB = new Date(
+                                    b.created_at as string
+                                  );
+
+                                  // Ensure valid date objects before comparing
+                                  if (isNaN(dateA.getTime())) return 1; // Treat invalid dates as later
+                                  if (isNaN(dateB.getTime())) return -1; // Treat invalid dates as earlier
+
+                                  // Sort in descending order
+                                  return dateB.getTime() - dateA.getTime();
+                                })
+                                ?.map((items: any) => (
+                                  <div
+                                    key={items.order_id}
+                                    onClick={() => {
+                                      if (activeTab === 'In-transit') {
+                                        router.push(
+                                          `/v2/your-orders?path=${IN_TRANSIT}&id=${items?.id}`
+                                        );
+                                      } else {
+                                        router.push(
+                                          `/v2/your-orders?id=${items?.id}`
+                                        );
+                                      }
+                                      //  handleShowDetails(items?.id);
+                                    }}
+                                    className="cursor-pointer grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] bg-neutral0 border-b border-neutral-200 hover:bg-neutral-50"
+                                  >
+                                    {keys?.map(
+                                      ({ accessor }: any, index: number) => (
+                                        <div
+                                          key={index}
+                                          className="flex items-center text-lRegular space-x-2 py-3 pr-3 pl-4 text-left text-gray-800"
+                                        >
+                                          {renderCellContent(accessor, items)}
+                                        </div>
+                                      )
+                                    )}
+                                  </div>
+                                ))
                             ) : (
                               // <> <div className="min-h-[73vh] h-[65vh]">
                               <EmptyScreen
