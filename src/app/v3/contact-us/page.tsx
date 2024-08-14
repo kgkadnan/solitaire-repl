@@ -156,12 +156,11 @@ const ContactUs = () => {
             <div className="flex flex-col gap-3 px-[40px] items-center">
               <div className="text-neutral800 text-lRegular text-center w-[800px] content">
                 <AnimationSection animationDelay={0.5}>
-                  At KGK Diamonds, we value your feedback and inquiries. Whether
-                  you have a question, need assistance, or want to learn more
-                  about our services, our dedicated team is here to help. Please
-                  feel free to reach out to us through any of the provided
-                  contact methods, and we will respond promptly to ensure your
-                  satisfaction.
+                  We value your feedback and inquiries. Whether you have a
+                  question, need assistance, or want to learn more about our
+                  services, our dedicated team is here to help. Please feel free
+                  to reach out to our sales team closest to you through any of
+                  the provided contact options.
                 </AnimationSection>
               </div>
             </div>

@@ -21,11 +21,9 @@ export default function Leadership() {
                 <div className="flex gap-3 flex-col items-center">
                   <div className="text-neutral800 text-lRegular px-4 pt-[14px] w-[800px] text-center content">
                     <AnimationSection animationDelay={0.5}>
-                      At KGK Diamonds, our team is the backbone of our success.
-                      With a wealth of experience and a shared passion for
-                      excellence, each member plays a crucial role. Get to know
-                      the talented individuals who make KGK Diamonds a leader in
-                      the diamond industry.
+                      Our team is the backbone of our success. Get to know the
+                      talented individuals who helped make KGK Diamonds what it
+                      is today.
                     </AnimationSection>
                   </div>
                 </div>
