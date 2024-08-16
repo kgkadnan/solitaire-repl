@@ -816,6 +816,7 @@ const NewArrivals = () => {
               setDialogContent={modalSetState.setDialogContent}
               setIsLoading={setSearchLoading}
               setIsAddDemand={setIsAddDemand}
+              setIsCommonLoading={setIsLoading}
               isMatchingPair={false}
               isLoading={searchLoading}
             />

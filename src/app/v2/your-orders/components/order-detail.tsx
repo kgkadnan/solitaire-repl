@@ -389,7 +389,7 @@ const OrderDetail: React.FC<IOrderDetail> = ({
                         ? formatNumberWithLeadingZeros(
                             productDetailData?.display_id
                           )
-                        : productDetailData?.invoice_id}
+                        : productDetailData?.invoice_id ?? '-'}
                     </p>
                   </div>
                 </div>
@@ -499,7 +499,7 @@ const OrderDetail: React.FC<IOrderDetail> = ({
                       </div>
                     )} */}
                   </div>
-                  <div className="bg-neutral25 flex gap-[10px] py-[8px]">
+                  <div className="bg-neutral25 flex gap-[16px] py-[8px]">
                     <div className="bg-neutral0 border-[1px] border-solid border-neutral200 rounded-[8px] shadow-sm">
                       <div className="flex flex-col p-[16px]">
                         <p className="text-neutral600 text-mRegular font-regular">
@@ -514,7 +514,7 @@ const OrderDetail: React.FC<IOrderDetail> = ({
                             ? formatNumberWithLeadingZeros(
                                 productDetailData?.display_id
                               )
-                            : productDetailData?.invoice_id}
+                            : productDetailData?.invoice_id ?? '-'}
                         </span>
                       </div>
                     </div>
