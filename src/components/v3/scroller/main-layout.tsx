@@ -27,7 +27,7 @@ const MainLayout = ({ setCarouselIndex }: any) => {
             2024 Sustainability Report
           </CommonButton>
         </div>
-        <div className="w-[700px]">
+        <div className="w-[720px]">
           <AutoScrollImageGrid setCarouselIndex={setCarouselIndex} />
         </div>
       </div>

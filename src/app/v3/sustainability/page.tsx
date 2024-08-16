@@ -12,7 +12,7 @@ import prev from '@public/v3/icons/previous.svg';
 import next from '@public/v3/icons/next.svg';
 
 const App: React.FC = () => {
-  const [carouselIndex, setCarouselIndex] = useState('');
+  const [carouselIndex, setCarouselIndex] = useState('01');
   const [lastScrollY, setLastScrollY] = useState(0);
 
   const prevClick = (id: number) => {
@@ -40,7 +40,7 @@ const App: React.FC = () => {
               section => section.id === carouselIndex
             )
           );
-        } else if (currentScrollY < lastScrollY && carouselIndex > '0') {
+        } else if (currentScrollY < lastScrollY && carouselIndex > '1') {
           // Scrolling up
           prevClick(
             sustainabilitySection.findIndex(

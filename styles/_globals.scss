@@ -427,8 +427,8 @@
 }
 
 .circular-scroll-content {
-  position: absolute;
-  width: 100%;
+  // position: absolute;
+  // width: 100%;
   animation: scrollUp linear infinite;
   animation-duration: 30s; /* Adjust the duration for speed */
 }
