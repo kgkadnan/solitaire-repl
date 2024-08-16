@@ -94,23 +94,60 @@ const App: React.FC = () => {
           <div className="w-full px-[112px] mt-[20px]">
             <div className="flex h-screen justify-between w-full ">
               <div className="flex-1 flex flex-col justify-center max-w-[500px] gap-5">
-                <h1 className="text-headingL font-bold text-neutral900 leading-10">
-                  {
-                    //  typeof sustainabilitySection.filter(
-                    //     data => data.id === carouselIndex
-                    //   )[0].header ==='string'?
-                    sustainabilitySection.filter(
-                      data => data.id === carouselIndex
-                    )[0].header
-                  }
-                </h1>
-                <p className="text-lRegular text-neutral800 pb-12">
-                  {
-                    sustainabilitySection.filter(
-                      data => data.id === carouselIndex
-                    )[0].description
-                  }
-                </p>
+                {typeof sustainabilitySection.filter(
+                  data => data.id === carouselIndex
+                )[0].header === 'string' ? (
+                  <>
+                    <h1 className="text-headingL font-bold text-neutral900 leading-10">
+                      {
+                        //  typeof sustainabilitySection.filter(
+                        //     data => data.id === carouselIndex
+                        //   )[0].header ==='string'?
+                        sustainabilitySection.filter(
+                          data => data.id === carouselIndex
+                        )[0].header
+                      }
+                    </h1>
+                    <p className="text-lRegular text-neutral800 pb-12">
+                      {
+                        sustainabilitySection.filter(
+                          data => data.id === carouselIndex
+                        )[0].description
+                      }
+                    </p>
+                  </>
+                ) : (
+                  <div className="flex-1 flex flex-col justify-center max-w-[500px] gap-5">
+                    <h1 className="text-headingL font-bold text-neutral900 leading-10">
+                      {
+                        sustainabilitySection.filter(
+                          data => data.id === carouselIndex
+                        )[0].header[0]
+                      }
+                    </h1>
+                    <p className="text-lRegular text-neutral800 pb-12">
+                      {
+                        sustainabilitySection.filter(
+                          data => data.id === carouselIndex
+                        )[0].description[0]
+                      }
+                    </p>
+                    <h1 className="text-headingL font-bold text-neutral900 leading-10">
+                      {
+                        sustainabilitySection.filter(
+                          data => data.id === carouselIndex
+                        )[0].header[1]
+                      }
+                    </h1>
+                    <p className="text-lRegular text-neutral800 pb-12">
+                      {
+                        sustainabilitySection.filter(
+                          data => data.id === carouselIndex
+                        )[0].description[1]
+                      }
+                    </p>
+                  </div>
+                )}
               </div>
               <div
                 className=" flex flex-col  "

@@ -99,7 +99,7 @@ export const sustainabilitySection = [
     id: '07',
     header: 'Harnessing Solar Energy',
     imageTitle: 'Affordable &  <br/> Clean Energy',
-    description: `Harnessing Solar Energy`,
+    description: `“KGK Botswana has installed a 462 kWh solar rooftop, generating the majority of the factory's green energy needs. This initiative supports sustainable energy use and reduces the carbon footprint, aligning with global goals for affordable and clean energy.”`,
     images: Sus7,
     head: Head7,
     color: '#E0F7FA'
