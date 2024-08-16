@@ -50,14 +50,17 @@ const SubscribeNewsLetter = () => {
           value={email}
           errorText={emailError}
           placeholder={'Enter your email'}
-          styles={{ inputMain: ' w-[360px] mt-1', input: 'w-[360px]' }}
+          styles={{
+            inputMain: ' !w-[360px] mt-1',
+            input: '!w-[360px] h-[48px]'
+          }}
           autoComplete="none"
         />
         <CommonButton
           onClick={handleSubscribe}
           variant={'primary'}
           size={'custom'}
-          className="rounded-[8px] w-[120px] h-[40px]"
+          className="rounded-[8px] w-[120px] h-[48px]"
         >
           Subscribe
         </CommonButton>

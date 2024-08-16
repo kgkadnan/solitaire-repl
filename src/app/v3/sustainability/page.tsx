@@ -1,7 +1,7 @@
 'use client';
 
 import MainLayout from '@/components/v3/scroller/main-layout';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Landscape from '@public/v3/sustainability/landscape.png';
 import Image from 'next/image';
 import DownloadReport from '@public/v3/sustainability/download-report.png';
@@ -10,14 +10,12 @@ import { handleDownloadReport } from '@/utils/download-sustainability-report';
 import { sustainabilitySection } from '@/constants/v3/sustainability';
 import prev from '@public/v3/icons/previous.svg';
 import next from '@public/v3/icons/next.svg';
+import { getAllPostsForHome } from '@/features/v3/api/blogs';
 // import MoreStories from '@/components/v3/more-stories';
-// import { getAllPostsForHome } from '@/features/v3/api/blogs';
 
 const App: React.FC = () => {
   const [carouselIndex, setCarouselIndex] = useState('01'); // Default to the first index
-  // const lastScrollY = useRef(0);
-  // const allPosts = await getAllPostsForHome(false);
-
+  const [_allPosts, setAllPosts] = useState([]);
   const prevClick = (id: number) => {
     if (id > 0) {
       setCarouselIndex(sustainabilitySection[id - 1].id);
@@ -41,6 +39,14 @@ const App: React.FC = () => {
       }, 0);
     }
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const posts = await getAllPostsForHome(false);
+      setAllPosts(posts?.edges);
+    };
+    fetchData();
+  }, []);
 
   //   useEffect(() => {
   //     const handleScroll = (e: Event) => {
@@ -172,8 +178,8 @@ const App: React.FC = () => {
                   )[0].color
                 }}
               >
-                <div className="flex justify-between w-[500px]">
-                  <div className="text-neutral900 text-[20px] font-bold  flex items-end">
+                <div className="flex justify-between w-[470px] mx-[15px]">
+                  <div className="text-neutral900 text-[20px] font-bold  flex items-end ">
                     <div
                       dangerouslySetInnerHTML={{
                         __html: sustainabilitySection.filter(
@@ -262,7 +268,7 @@ const App: React.FC = () => {
         <p className="text-headingXL font-bold flex text-center">
         Read the Latest Sustainability News          </p>
           <div>
-          {allPosts?.edges?.length > 0 && <MoreStories posts={allPosts?.edges} />}
+          {allPosts?.length > 0 && <MoreStories posts={allPosts} />}
 
           </div>
         </div> */}
