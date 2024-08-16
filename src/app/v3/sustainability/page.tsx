@@ -15,7 +15,7 @@ import { getAllPostsForHome } from '@/features/v3/api/blogs';
 
 const App: React.FC = () => {
   const [carouselIndex, setCarouselIndex] = useState('01'); // Default to the first index
-  const [_allPosts, setAllPosts] = useState([]);
+  const [_, setAllPosts] = useState([]);
   const prevClick = (id: number) => {
     if (id > 0) {
       setCarouselIndex(sustainabilitySection[id - 1].id);
