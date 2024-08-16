@@ -112,7 +112,10 @@ const Search = () => {
           const url = constructUrlParams(
             filteredSelection[activeTab]?.queryParams
           );
-          setSearchUrl(url);
+          if (activeTab) {
+            setSearchUrl(url);
+          }
+
           setSearchParameters(filteredSelection);
         }
       }
@@ -367,6 +370,7 @@ const Search = () => {
           addSearches={addSearches}
           setAddSearches={setAddSearches}
           setIsLoading={setSearchLoading}
+          setIsCommonLoading={setIsLoading}
           setIsAddDemand={setIsAddDemand}
           isMatchingPair={false}
           isLoading={searchLoading}
