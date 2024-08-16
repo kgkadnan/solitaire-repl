@@ -1,7 +1,7 @@
 'use client';
 
 import MainLayout from '@/components/v3/scroller/main-layout';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Landscape from '@public/v3/sustainability/landscape.png';
 import Image from 'next/image';
 import DownloadReport from '@public/v3/sustainability/download-report.png';
@@ -12,8 +12,8 @@ import prev from '@public/v3/icons/previous.svg';
 import next from '@public/v3/icons/next.svg';
 
 const App: React.FC = () => {
-  const [carouselIndex, setCarouselIndex] = useState('01');
-  const [lastScrollY, setLastScrollY] = useState(0);
+  const [carouselIndex, setCarouselIndex] = useState('01'); // Default to the first index
+  // const lastScrollY = useRef(0);
 
   const prevClick = (id: number) => {
     if (id > 0) {
@@ -27,48 +27,57 @@ const App: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      const scrollDifference = Math.abs(currentScrollY - lastScrollY);
+  //   useEffect(() => {
+  //     const handleScroll = (e: Event) => {
+  //       e.preventDefault(); // Prevent default scroll behavior
+  //       const currentScrollY = window.scrollY;
+  //       const scrollDifference = Math.abs(currentScrollY - lastScrollY.current);
+  // // console.log(currentScrollY,lastScrollY.current)
+  //       // Only trigger carousel update if the scroll exceeds a threshold
+  //       if (scrollDifference > 400 && carouselIndex < '17') {
+  //         if (currentScrollY > lastScrollY.current) {
+  //           // Scrolling down
+  //           nextClick(
+  //             sustainabilitySection.findIndex(
+  //               section => section.id === carouselIndex
+  //             )
+  //           );
+  //         } else if (currentScrollY < lastScrollY.current && carouselIndex > '01') {
+  //           // Scrolling up
+  //           prevClick(
+  //             sustainabilitySection.findIndex(
+  //               section => section.id === carouselIndex
+  //             )
+  //           );
+  //         }
+  //         lastScrollY.current = currentScrollY;
+  //       }
 
-      if (scrollDifference > 500) {
-        if (currentScrollY > lastScrollY && carouselIndex < '17') {
-          // Scrolling down
-          nextClick(
-            sustainabilitySection.findIndex(
-              section => section.id === carouselIndex
-            )
-          );
-        } else if (currentScrollY < lastScrollY && carouselIndex > '1') {
-          // Scrolling up
-          prevClick(
-            sustainabilitySection.findIndex(
-              section => section.id === carouselIndex
-            )
-          );
-        }
-        setLastScrollY(currentScrollY); // Update lastScrollY only after a section change
-      }
-    };
+  //       // Reset scroll position to prevent unwanted UI movement
+  //       window.scrollTo(0, 0);
+  //     };
 
-    window.addEventListener('scroll', handleScroll);
+  //     window.addEventListener('scroll', handleScroll, { passive: false });
 
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, [lastScrollY, carouselIndex, sustainabilitySection]);
+  //     return () => {
+  //       window.removeEventListener('scroll', handleScroll);
+  //     };
+  //   }, [carouselIndex]);
+
+  //   console.log(carouselIndex);
 
   return (
     <div className="flex flex-col gap-5">
-      <MainLayout setCarouselIndex={setCarouselIndex} />
+      {carouselIndex === '01' && ( // Render the landscape section only when carouselIndex is '17'
+        <MainLayout setCarouselIndex={setCarouselIndex} />
+      )}
 
       {carouselIndex !== '' && (
         <div
-          className={`relative flex justify-center flex-col text-headingXL bold items-center mt-[40px] bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom`}
+          className={`fixed flex justify-center flex-col text-headingXL bold items-center mt-[40px] bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom`}
         >
           <p>A Journey Towards a Sustainable Future</p>
-          <div className="w-full px-[112px] ">
+          <div className="w-full px-[112px]">
             <div className="flex h-screen justify-between w-full">
               <div className="flex-1 flex flex-col justify-center max-w-[500px]">
                 <h1 className="text-headingXL font-bold text-neutral900">
@@ -88,7 +97,7 @@ const App: React.FC = () => {
               </div>
               <div className="w-[500px] flex flex-col">
                 <div className="flex justify-between">
-                  <p className="text-neutral900 text-[20px] w-[150px]">
+                  <p className="text-neutral900 text-[20px] w-[150px] flex items-end">
                     {
                       sustainabilitySection.filter(
                         data => data.id === carouselIndex
@@ -148,29 +157,28 @@ const App: React.FC = () => {
         </div>
       )}
 
-      <div className="relative">
-        <Image
-          src={Landscape}
-          alt="download report background"
-          className="w-full "
-        />
-        <div
-          className="absolute left-[38%] top-[15%] w-[350px] flex flex-col gap-2 text-neutral0 cursor-pointer"
-          onClick={handleDownloadReport}
-        >
-          <Image src={DownloadReport} alt="download report" />
-          <div className="ml-[25px] mt-[-40px]">
-            <p className="text-[20px]">2024 Sustainability Report</p>
-            <div className="flex gap-2">
-              <p>Download</p>
-              <Image src={Download} alt="download" />
+      {carouselIndex === '17' && ( // Render the landscape section only when carouselIndex is '17'
+        <div className="relative">
+          <Image
+            src={Landscape}
+            alt="download report background"
+            className="w-full"
+          />
+          <div
+            className="absolute left-[38%] top-[15%] w-[350px] flex flex-col gap-2 text-neutral0 cursor-pointer"
+            onClick={handleDownloadReport}
+          >
+            <Image src={DownloadReport} alt="download report" />
+            <div className="ml-[25px] mt-[-40px]">
+              <p className="text-[20px]">2024 Sustainability Report</p>
+              <div className="flex gap-2">
+                <p>Download</p>
+                <Image src={Download} alt="download" />
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      {/* <div>
-        <p>Read the Latest Sustainability News</p>
-      </div> */}
+      )}
     </div>
   );
 };

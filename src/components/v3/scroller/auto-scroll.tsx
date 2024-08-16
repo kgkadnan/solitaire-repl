@@ -67,10 +67,10 @@ const AutoScrollImageGrid = ({ setCarouselIndex }: any) => {
       ref={containerRef}
     >
       <div className="absolute top-[80px] flex">
-        <div className="circular-scroll-content w-[350px] flex flex-col gap-5">
+        <div className="circular-scroll-content w-[350px] flex flex-col gap-[250px]">
           {renderSection(oddSections)}
         </div>
-        <div className="downward-scroll-content w-[350px] ml-[370px] flex flex-col gap-5">
+        <div className="downward-scroll-content w-[350px] ml-[370px] flex flex-col gap-[250px]">
           {renderSection(evenSections)}
         </div>
       </div>
