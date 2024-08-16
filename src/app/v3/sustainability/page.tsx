@@ -18,12 +18,24 @@ const App: React.FC = () => {
   const prevClick = (id: number) => {
     if (id > 0) {
       setCarouselIndex(sustainabilitySection[id - 1].id);
+      setTimeout(() => {
+        window.scrollTo({
+          top: 780,
+          behavior: 'smooth'
+        });
+      }, 0);
     }
   };
 
   const nextClick = (id: number) => {
     if (id < sustainabilitySection.length - 1) {
       setCarouselIndex(sustainabilitySection[id + 1].id);
+      setTimeout(() => {
+        window.scrollTo({
+          top: 780,
+          behavior: 'smooth'
+        });
+      }, 0);
     }
   };
 
@@ -68,20 +80,25 @@ const App: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-5">
-      {carouselIndex === '01' && ( // Render the landscape section only when carouselIndex is '17'
-        <MainLayout setCarouselIndex={setCarouselIndex} />
-      )}
+      {/* {carouselIndex === '01' && ( // Render the landscape section only when carouselIndex is '17' */}
+      <MainLayout setCarouselIndex={setCarouselIndex} />
+      {/* )} */}
 
       {carouselIndex !== '' && (
         <div
-          className={`fixed flex justify-center flex-col text-headingXL bold items-center mt-[40px] bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom`}
+          className={`relative  flex justify-center flex-col text-headingXL bold items-center mt-[20px] bg-[length:200%_200%] bg-no-repeat `}
         >
-          <p>A Journey Towards a Sustainable Future</p>
-          <div className="w-full px-[112px]">
-            <div className="flex h-screen justify-between w-full">
-              <div className="flex-1 flex flex-col justify-center max-w-[500px]">
-                <h1 className="text-headingXL font-bold text-neutral900">
+          <p className="text-headingXL font-bold">
+            A Journey Towards a Sustainable Future
+          </p>
+          <div className="w-full px-[112px] mt-[20px]">
+            <div className="flex h-screen justify-between w-full ">
+              <div className="flex-1 flex flex-col justify-center max-w-[500px] gap-5">
+                <h1 className="text-headingL font-bold text-neutral900 leading-10">
                   {
+                    //  typeof sustainabilitySection.filter(
+                    //     data => data.id === carouselIndex
+                    //   )[0].header ==='string'?
                     sustainabilitySection.filter(
                       data => data.id === carouselIndex
                     )[0].header
@@ -95,16 +112,22 @@ const App: React.FC = () => {
                   }
                 </p>
               </div>
-              <div className="w-[500px] flex flex-col">
+              <div
+                className=" flex flex-col  "
+                style={{ width: 'calc(50% - 27px)' }}
+              >
                 <div className="flex justify-between">
-                  <p className="text-neutral900 text-[20px] w-[150px] flex items-end">
-                    {
-                      sustainabilitySection.filter(
-                        data => data.id === carouselIndex
-                      )[0].imageTitle
-                    }
-                  </p>
-                  <p className="text-neutral300 text-headingXL mb-[-15px] flex items-end">
+                  <div className="text-neutral900 text-[20px] font-bold  flex items-end">
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: sustainabilitySection.filter(
+                          data => data.id === carouselIndex
+                        )[0].imageTitle
+                      }}
+                      // className=''
+                    />
+                  </div>
+                  <p className="text-neutral400 text-headingXL mb-[-15px] flex items-end">
                     {
                       sustainabilitySection.filter(
                         data => data.id === carouselIndex
@@ -112,7 +135,14 @@ const App: React.FC = () => {
                     }
                   </p>
                 </div>
-                <div className="flex justify-around">
+                <div
+                  className="flex justify-around items-center rounded-[8px]"
+                  style={{
+                    background: sustainabilitySection.filter(
+                      data => data.id === carouselIndex
+                    )[0].color
+                  }}
+                >
                   <Image
                     src={
                       sustainabilitySection.filter(

@@ -1,9 +1,10 @@
 'use client';
 import React from 'react';
 import AutoScrollImageGrid from './auto-scroll';
-import { CommonButton } from '../button';
+// import { CommonButton } from '../button';
 import { handleDownloadReport } from '@/utils/download-sustainability-report';
-
+import DownloadButton from '@public/v3/icons/button-variation.svg';
+import Image from 'next/image';
 const MainLayout = ({ setCarouselIndex }: any) => {
   return (
     <div className="px-[112px] bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom">
@@ -18,16 +19,23 @@ const MainLayout = ({ setCarouselIndex }: any) => {
             commitment to ethical sourcing and environmentally responsible
             practices.
           </p>
-          <CommonButton
+          <Image
+            src={DownloadButton}
+            alt={'button'}
+            className="cursor-pointer"
+            onClick={handleDownloadReport}
+          />
+
+          {/* <CommonButton
             onClick={handleDownloadReport}
             variant={'primary'}
             size={'custom'}
             className="rounded-[8px] w-[280px] h-[44px]"
           >
             2024 Sustainability Report
-          </CommonButton>
+          </CommonButton> */}
         </div>
-        <div className="w-[720px]">
+        <div className="w-[750px]">
           <AutoScrollImageGrid setCarouselIndex={setCarouselIndex} />
         </div>
       </div>

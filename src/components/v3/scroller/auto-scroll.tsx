@@ -4,28 +4,38 @@ import { sustainabilitySection } from '@/constants/v3/sustainability';
 import Image from 'next/image';
 
 const ScrollableSection = ({ section, onClick }: any) => (
-  <div key={section.imageTitle} className="flex flex-col" onClick={onClick}>
-    <div className="w-[350px] h-[300px]">
+  <div
+    key={section.imageTitle}
+    className="group flex flex-col transition-all duration-300"
+    onClick={onClick}
+  >
+    <div className="w-[350px] h-[300px] ">
+      {' '}
+      {/* Apply rounded corners to the container */}
       <div className="flex justify-between">
-        <p className="text-neutral900 text-[20px] w-[150px] flex items-end">
-          {section.imageTitle}
-        </p>
-        <p className="text-neutral300 text-headingXL flex items-end">
+        <div className="text-neutral900 text-[20px]  flex items-end">
+          <div dangerouslySetInnerHTML={{ __html: section.imageTitle }} />
+        </div>
+        <p className="text-neutral400 text-headingXL flex items-end">
           {section.id}
         </p>
       </div>
-      <Image
-        src={section.head}
-        alt={section.imageTitle}
-        height={250}
-        width={350}
-      />
+      <div className="overflow-hidden rounded-[8px]">
+        <Image
+          src={section.head}
+          alt={section.imageTitle}
+          height={250}
+          width={350}
+          className="object-cover transition-transform duration-300 transform hover:scale-110"
+        />
+      </div>
     </div>
   </div>
 );
 
 const AutoScrollImageGrid = ({ setCarouselIndex }: any) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [hovered, setHovered] = React.useState<number | null>(null);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -36,26 +46,32 @@ const AutoScrollImageGrid = ({ setCarouselIndex }: any) => {
   }, []);
 
   const renderSection = (sections: any) =>
-    sections.map((section: any) => (
-      <ScrollableSection
+    sections.map((section: any, index: number) => (
+      <div
         key={section.imageTitle}
-        section={section}
+        className={`flex flex-col transition-transform duration-300 transform 
+          
+        `}
+        onMouseEnter={() => setHovered(index)}
+        onMouseLeave={() => setHovered(null)}
         onClick={() => handleClick(section.id)}
-      />
+      >
+        <ScrollableSection section={section} />
+      </div>
     ));
 
-  const oddSections = sustainabilitySection.filter(
-    (_, index) => index % 2 !== 0
-  );
-  const evenSections = sustainabilitySection.filter(
-    (_, index) => index % 2 === 0
-  );
+  // const oddSections = sustainabilitySection.filter(
+  //   (_, index) => index % 2 !== 0
+  // );
+  // const evenSections = sustainabilitySection.filter(
+  //   (_, index) => index % 2 === 0
+  // );
 
   const handleClick = (id: any) => {
     setCarouselIndex(id);
     setTimeout(() => {
       window.scrollTo({
-        top: 750,
+        top: 780,
         behavior: 'smooth'
       });
     }, 0);
@@ -63,15 +79,31 @@ const AutoScrollImageGrid = ({ setCarouselIndex }: any) => {
 
   return (
     <div
-      className="overflow-hidden h-full relative cursor-pointer"
+      className={`overflow-hidden h-full relative cursor-pointer flex justify-center ${
+        hovered !== null ? 'paused-animation' : ''
+      }`}
       ref={containerRef}
     >
-      <div className="absolute top-[80px] flex">
-        <div className="circular-scroll-content w-[350px] flex flex-col gap-[250px]">
-          {renderSection(oddSections)}
+      <div className="absolute top-[80px] flex w-[700px]">
+        <div className="circular-scroll-content w-[350px] flex flex-col gap-[50px]">
+          {renderSection([
+            ...sustainabilitySection,
+            ...sustainabilitySection,
+            ...sustainabilitySection,
+            ...sustainabilitySection,
+            ...sustainabilitySection,
+            ...sustainabilitySection
+          ])}
         </div>
-        <div className="downward-scroll-content w-[350px] ml-[370px] flex flex-col gap-[250px]">
-          {renderSection(evenSections)}
+        <div className="downward-scroll-content w-[350px] ml-[370px] flex flex-col gap-[50px]">
+          {renderSection([
+            ...sustainabilitySection,
+            ...sustainabilitySection,
+            ...sustainabilitySection,
+            ...sustainabilitySection,
+            ...sustainabilitySection,
+            ...sustainabilitySection
+          ])}
         </div>
       </div>
     </div>

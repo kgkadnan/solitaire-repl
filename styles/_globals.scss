@@ -430,7 +430,7 @@
   // position: absolute;
   // width: 100%;
   animation: scrollUp linear infinite;
-  animation-duration: 30s; /* Adjust the duration for speed */
+  animation-duration: 150s; /* Adjust the duration for speed */
 }
 @keyframes scrollDown {
   0% {
@@ -445,5 +445,16 @@
   position: absolute;
   width: 100%;
   animation: scrollDown linear infinite;
-  animation-duration: 30s; /* Adjust the duration for speed */
+  animation-duration: 150s; /* Adjust the duration for speed */
+}
+
+// .circular-scroll-content,
+// .downward-scroll-content {
+//   animation: scroll linear infinite;
+// }
+
+/* Pauses animation when the hovered state is active */
+.paused-animation .circular-scroll-content,
+.paused-animation .downward-scroll-content {
+  animation-play-state: paused;
 }
