@@ -10,10 +10,13 @@ import { handleDownloadReport } from '@/utils/download-sustainability-report';
 import { sustainabilitySection } from '@/constants/v3/sustainability';
 import prev from '@public/v3/icons/previous.svg';
 import next from '@public/v3/icons/next.svg';
+// import MoreStories from '@/components/v3/more-stories';
+// import { getAllPostsForHome } from '@/features/v3/api/blogs';
 
 const App: React.FC = () => {
   const [carouselIndex, setCarouselIndex] = useState('01'); // Default to the first index
   // const lastScrollY = useRef(0);
+  // const allPosts = await getAllPostsForHome(false);
 
   const prevClick = (id: number) => {
     if (id > 0) {
@@ -125,7 +128,7 @@ const App: React.FC = () => {
                         )[0].header[0]
                       }
                     </h1>
-                    <p className="text-lRegular text-neutral800 pb-12">
+                    <p className="text-lRegular text-neutral800">
                       {
                         sustainabilitySection.filter(
                           data => data.id === carouselIndex
@@ -139,7 +142,7 @@ const App: React.FC = () => {
                         )[0].header[1]
                       }
                     </h1>
-                    <p className="text-lRegular text-neutral800 pb-12">
+                    <p className="text-lRegular text-neutral800">
                       {
                         sustainabilitySection.filter(
                           data => data.id === carouselIndex
@@ -150,10 +153,15 @@ const App: React.FC = () => {
                 )}
               </div>
               <div
-                className=" flex flex-col  "
-                style={{ width: 'calc(50% - 27px)' }}
+                className=" flex flex-col rounded-[8px] h-full items-center justify-center"
+                style={{
+                  width: 'calc(50% - 27px)',
+                  background: sustainabilitySection.filter(
+                    data => data.id === carouselIndex
+                  )[0].color
+                }}
               >
-                <div className="flex justify-between">
+                <div className="flex justify-between w-[500px]">
                   <div className="text-neutral900 text-[20px] font-bold  flex items-end">
                     <div
                       dangerouslySetInnerHTML={{
@@ -164,7 +172,7 @@ const App: React.FC = () => {
                       // className=''
                     />
                   </div>
-                  <p className="text-neutral400 text-headingXL mb-[-15px] flex items-end">
+                  <p className="text-neutral400 text-headingXL mb-[-15px] flex items-end ">
                     {
                       sustainabilitySection.filter(
                         data => data.id === carouselIndex
@@ -172,14 +180,7 @@ const App: React.FC = () => {
                     }
                   </p>
                 </div>
-                <div
-                  className="flex justify-around items-center rounded-[8px]"
-                  style={{
-                    background: sustainabilitySection.filter(
-                      data => data.id === carouselIndex
-                    )[0].color
-                  }}
-                >
+                <div className="flex justify-around ">
                   <Image
                     src={
                       sustainabilitySection.filter(
@@ -224,7 +225,8 @@ const App: React.FC = () => {
         </div>
       )}
 
-      {carouselIndex === '17' && ( // Render the landscape section only when carouselIndex is '17'
+      {/* {carouselIndex === '17' && ( // Render the landscape section only when carouselIndex is '17' */}
+      <>
         <div className="relative">
           <Image
             src={Landscape}
@@ -245,7 +247,16 @@ const App: React.FC = () => {
             </div>
           </div>
         </div>
-      )}
+        {/* <div className='flex w-full flex-col items-center'>
+        <p className="text-headingXL font-bold flex text-center">
+        Read the Latest Sustainability News          </p>
+          <div>
+          {allPosts?.edges?.length > 0 && <MoreStories posts={allPosts?.edges} />}
+
+          </div>
+        </div> */}
+      </>
+      {/* )} */}
     </div>
   );
 };
