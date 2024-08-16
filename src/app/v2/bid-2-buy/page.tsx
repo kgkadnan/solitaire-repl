@@ -688,6 +688,7 @@ const BidToBuy = () => {
               setIsAddDemand={setIsAddDemand}
               isMatchingPair={false}
               isLoading={searchLoading}
+              setIsCommonLoading={setIsLoading}
             />
           ) : (
             <>

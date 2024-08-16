@@ -106,7 +106,8 @@ const Form = ({
   setIsLoading,
   setIsAddDemand,
   isMatchingPair = false,
-  isLoading
+  isLoading,
+  setIsCommonLoading
 }: {
   searchUrl: string;
   setSearchUrl: Dispatch<SetStateAction<string>>;
@@ -128,6 +129,7 @@ const Form = ({
   setIsAddDemand: Dispatch<SetStateAction<boolean>>;
   isMatchingPair: boolean;
   isLoading: boolean;
+  setIsCommonLoading: Dispatch<SetStateAction<boolean>>;
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -421,6 +423,7 @@ const Form = ({
 
   // Load saved search data when component mounts
   useEffect(() => {
+    setIsCommonLoading(false);
     setIsLoading(false);
     let modifySearchResult = JSON.parse(
       isMatchingPair
@@ -735,6 +738,8 @@ const Form = ({
       setIsError(true);
       setErrorText(SELECT_SOME_PARAM);
     }
+    setSearchUrl('');
+    handleFormReset();
   };
   const handleMatchingPairSearch = () => {
     handleFormSearch(false, '', 'MatchingPair');
@@ -891,7 +896,6 @@ const Form = ({
     setErrorText('');
     setMinMaxError('');
     setValidationError('');
-
     handleReset(setState, errorSetState);
   };
 
