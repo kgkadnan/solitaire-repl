@@ -135,6 +135,17 @@ const App: React.FC = () => {
                         )[0].description[0]
                       }
                     </p>
+                    <div className="text-lRegular text-neutral800">
+                      For more details, visit{' '}
+                      <a
+                        href="https://www.khiltipari.org/"
+                        target="_blank"
+                        className="underline text-infoMain"
+                      >
+                        {' '}
+                        Khilti Pari Foundation.
+                      </a>
+                    </div>
                     <h1 className="text-headingL font-bold text-neutral900 leading-10">
                       {
                         sustainabilitySection.filter(

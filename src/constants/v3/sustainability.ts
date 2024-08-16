@@ -79,7 +79,7 @@ export const sustainabilitySection = [
     ],
     imageTitle: 'Gender <br/> Equality',
     description: [
-      `The Khilti Pari Foundation focuses on empowering underprivileged women in India by providing education, health awareness, and vocational training. Programs like "Pad-for-Pad" educate girls on menstrual hygiene, while scholarship and tuition support ensure continued education. By addressing gender inequality and breaking the cycle of child marriage, the foundation helps women achieve their potential. For more details, visit Khilti Pari Foundation.`,
+      `The Khilti Pari Foundation focuses on empowering underprivileged women in India by providing education, health awareness, and vocational training. Programs like "Pad-for-Pad" educate girls on menstrual hygiene, while scholarship and tuition support ensure continued education. By addressing gender inequality and breaking the cycle of child marriage, the foundation helps women achieve their potential.`,
       `“KGK Diamonds champions gender equality with a balanced workforce comprising 49% males and 51% females. This commitment to equal employment opportunities fosters a diverse and inclusive work environment.”`
     ],
     images: Sus5,
