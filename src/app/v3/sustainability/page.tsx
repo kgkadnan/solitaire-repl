@@ -11,11 +11,11 @@ import { sustainabilitySection } from '@/constants/v3/sustainability';
 import prev from '@public/v3/icons/previous.svg';
 import next from '@public/v3/icons/next.svg';
 import { getAllPostsForHome } from '@/features/v3/api/blogs';
-// import MoreStories from '@/components/v3/more-stories';
+import { BlogCarousel } from '@/components/v3/blog-carousel';
 
 const App: React.FC = () => {
   const [carouselIndex, setCarouselIndex] = useState('01'); // Default to the first index
-  const [_, setAllPosts] = useState([]);
+  const [allPosts, setAllPosts] = useState([]);
   const prevClick = (id: number) => {
     if (id > 0) {
       setCarouselIndex(sustainabilitySection[id - 1].id);
@@ -243,7 +243,7 @@ const App: React.FC = () => {
       )}
 
       {/* {carouselIndex === '17' && ( // Render the landscape section only when carouselIndex is '17' */}
-      <>
+      <div className="flex flex-col gap-10">
         <div className="relative">
           <Image
             src={Landscape}
@@ -264,15 +264,15 @@ const App: React.FC = () => {
             </div>
           </div>
         </div>
-        {/* <div className='flex w-full flex-col items-center'>
-        <p className="text-headingXL font-bold flex text-center">
-        Read the Latest Sustainability News          </p>
-          <div>
-          {allPosts?.length > 0 && <MoreStories posts={allPosts} />}
-
+        <div className="flex w-full flex-col items-center gap-5">
+          <p className="text-headingXL font-bold flex text-center">
+            Read the Latest Sustainability News{' '}
+          </p>
+          <div className="w-[650px]">
+            {allPosts?.length > 0 && <BlogCarousel posts={allPosts} />}
           </div>
-        </div> */}
-      </>
+        </div>
+      </div>
       {/* )} */}
     </div>
   );

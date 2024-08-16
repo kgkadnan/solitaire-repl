@@ -9,3 +9,4 @@ declare module 'react-responsive';
 declare module 'react-leaflet';
 declare module 'split-type';
 declare module 'file-saver';
+declare module 'react-responsive-carousel';
