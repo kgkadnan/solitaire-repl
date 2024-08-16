@@ -12,7 +12,7 @@ export default function PostPreview({
   date,
   excerpt,
   slug,
-  categories,
+  categories
 }: any) {
   const router = useRouter();
   return (
