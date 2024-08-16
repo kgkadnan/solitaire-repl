@@ -13,7 +13,6 @@ export default function PostPreview({
   excerpt,
   slug,
   categories,
-  carousel = false
 }: any) {
   const router = useRouter();
   return (

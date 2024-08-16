@@ -99,7 +99,7 @@ const VideoScrollComponent: React.FC = () => {
         <source
           type="video/mp4"
           // src="https://www.apple.com/media/us/mac-pro/2013/16C1b6b5-1d91-4fef-891e-ff2fc1c1bb58/videos/macpro_main_desktop.mp4"
-          src="/v3/icons/globe.mp4"
+          src="/v3/videos/globe.mp4"
         />
       </video>
       <div style={{ position: 'relative', zIndex: 3 }}>
