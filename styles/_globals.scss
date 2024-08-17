@@ -458,3 +458,10 @@
 .paused-animation .downward-scroll-content {
   animation-play-state: paused;
 }
+.video-element::-webkit-media-controls {
+  display: none !important;
+}
+
+.video-element::-webkit-media-controls-enclosure {
+  display: none !important;
+}
