@@ -28,12 +28,12 @@ export const BlogCarousel = ({ posts }: any) => {
               alt={'Carousel'}
               width={500}
               height={350}
-              className={`${
-                selectedIndex === index ? '!h-[350px]' : '!h-[250px] mt-[50px]'
+              className={`rounded-[12px] ${
+                selectedIndex === index ? '!h-[500px]' : '!h-[400px] mt-[50px]'
               }`}
             />
             {selectedIndex === index && (
-              <div className="absolute bottom-0 text-neutral0 p-6 flex w-full justify-between backdrop-blur">
+              <div className="absolute bottom-0 text-neutral0 p-6 flex w-full justify-between backdrop-blur rounded-b-[12px]">
                 <div className="flex flex-col items-start">
                   <p className="text-mMedium">{node.title}</p>
                   <Date dateString={node.date} />

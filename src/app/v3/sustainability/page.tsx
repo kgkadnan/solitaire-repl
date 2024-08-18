@@ -264,11 +264,11 @@ const App: React.FC = () => {
             </div>
           </div>
         </div>
-        <div className="flex w-full flex-col items-center gap-5">
+        <div className="flex w-full flex-col items-center gap-12">
           <p className="text-headingXL font-bold flex text-center">
             Read the Latest Sustainability News{' '}
           </p>
-          <div className="w-[650px]">
+          <div className="w-[1000px] pb-[48px]">
             {allPosts?.length > 0 && <BlogCarousel posts={allPosts} />}
           </div>
         </div>

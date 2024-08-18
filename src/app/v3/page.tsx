@@ -42,7 +42,7 @@ const index = () => {
         <SmoothVideoPlayer />
         {/* <CustomVideoPlayer /> */}
       </div>
-      <div className="bg-[#F2F4F7] flex items-center">
+      <div className="bg-[#F2F4F7] flex items-center ">
         {/* <SmoothVideoPlayer/> */}
         <CustomVideoPlayer />
       </div>

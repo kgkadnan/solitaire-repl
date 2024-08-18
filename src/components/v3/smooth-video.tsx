@@ -4,7 +4,7 @@ import React, { useRef, useState, useEffect } from 'react';
 
 const SmoothVideoPlayer = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [scrollPosition, setScrollPosition] = useState(0);
+  const [scrollPosition, setScrollPosition] = useState(1);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -13,15 +13,19 @@ const SmoothVideoPlayer = () => {
 
       const rect = videoElement.getBoundingClientRect();
       const windowHeight = window.innerHeight;
+      // console.log(rect.top)
+      // if (rect.top >= windowHeight) {
+      //   setScrollPosition(1); // Video is fully visible, no inset
+      // } else
+      if (rect.top < 0 && Math.abs(rect.top) < windowHeight / 2) {
+        // Calculate how far rect.top has moved up (negative value)
+        const negativeTop = Math.abs(rect.top);
 
-      // Calculate how much the video is visible based on scroll position
-      const visibleRatio = Math.max(
-        Math.min((windowHeight - rect.top) / windowHeight, 1),
-        0
-      );
+        // Calculate the visible ratio based on how far out of view the top is
+        const visibleRatio = Math.max(1 - negativeTop / windowHeight, 0);
 
-      // Set scroll position where 1 is fully visible and 0 is not visible
-      setScrollPosition(visibleRatio);
+        setScrollPosition(visibleRatio);
+      }
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -30,15 +34,15 @@ const SmoothVideoPlayer = () => {
     };
   }, []);
 
-  // Interpolate values for clip-path and transform matrix
-  const clipPathValue = `inset(${(1 - scrollPosition) * 6.25}% round 44px)`;
-  const transformValue = `matrix(${1 - (1 - scrollPosition) * 0.05}, 0, 0, ${
-    1 - (1 - scrollPosition) * 0.05
-  }, 0, 0)`;
-
+  // Clip-path logic without any transform/zoom effect
+  const clipPathValue =
+    scrollPosition === 1
+      ? 'inset(0% round 44px)' // Fully visible
+      : `inset(${(1 - scrollPosition) * 6.25}% round 44px)`; // Increase inset as video moves out
+  console.log(scrollPosition);
   return (
     <div
-      className="welcome-video-wall-container"
+      className="welcome-video-wall-container h-[700px]"
       style={{
         clipPath: clipPathValue,
         transition: 'clip-path 0.5s ease'
@@ -47,8 +51,7 @@ const SmoothVideoPlayer = () => {
       <div
         className="welcome-video-content-container"
         style={{
-          transform: transformValue,
-          transition: 'transform 0.5s ease'
+          transition: 'transform 0.5s ease' // Apply smooth transition for clip-path changes
         }}
       >
         <video
