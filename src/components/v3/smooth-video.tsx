@@ -17,12 +17,20 @@ const SmoothVideoPlayer = () => {
       // if (rect.top >= windowHeight) {
       //   setScrollPosition(1); // Video is fully visible, no inset
       // } else
-      if (rect.top < 0 && Math.abs(rect.top) < windowHeight / 2) {
+      if (Math.abs(rect.top) < windowHeight) {
         // Calculate how far rect.top has moved up (negative value)
-        const negativeTop = Math.abs(rect.top);
+        let visibleRatio;
+        if (rect.top < 0) {
+          const negativeTop = Math.abs(rect.top);
 
-        // Calculate the visible ratio based on how far out of view the top is
-        const visibleRatio = Math.max(1 - negativeTop / windowHeight, 0);
+          // Calculate the visible ratio based on how far out of view the top is
+          visibleRatio = Math.max(1 - negativeTop / windowHeight, 0);
+        } else {
+          const negativeTop = Math.abs(rect.top);
+
+          // Calculate the visible ratio based on how far out of view the top is
+          visibleRatio = Math.max(1 + negativeTop / windowHeight, 0);
+        }
 
         setScrollPosition(visibleRatio);
       }
