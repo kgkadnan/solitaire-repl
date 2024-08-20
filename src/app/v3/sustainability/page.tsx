@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import Landscape from '@public/v3/sustainability/landscape.png';
 import Image from 'next/image';
 import DownloadReport from '@public/v3/sustainability/download-report.png';
-import DownloadButton from '@public/v3/icons/button-variation.svg';
+// import DownloadButton from '@public/v3/icons/button-variation.svg';
 import { handleDownloadReport } from '@/utils/download-sustainability-report';
 import { sustainabilitySection } from '@/constants/v3/sustainability';
 import prev from '@public/v3/icons/previous.svg';
