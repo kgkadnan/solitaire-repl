@@ -12,6 +12,7 @@ import prev from '@public/v3/icons/previous.svg';
 import next from '@public/v3/icons/next.svg';
 import { getAllPostsForHome } from '@/features/v3/api/blogs';
 import { BlogCarousel } from '@/components/v3/blog-carousel';
+import DownloadReportCTA from '@public/v3/sustainability/download-report-cta.svg';
 
 const App: React.FC = () => {
   const [carouselIndex, setCarouselIndex] = useState('01'); // Default to the first index
@@ -265,9 +266,9 @@ const App: React.FC = () => {
             <div className="ml-[25px] mt-[-40px]">
               {/* <p className="text-[20px]">2024 Sustainability Report</p> */}
               <Image
-                src={DownloadButton}
+                src={DownloadReportCTA}
                 alt={'button'}
-                className="cursor-pointer -ml-[9px] lg-!w-[200px]  xl:!w-[300px] "
+                className="cursor-pointer -ml-[9px] lg:!w-[250px]  xl:!w-[300px] "
                 onClick={handleDownloadReport}
                 // width={300}
               />
