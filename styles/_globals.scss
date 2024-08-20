@@ -465,3 +465,13 @@
 .video-element::-webkit-media-controls-enclosure {
   display: none !important;
 }
+
+/* Custom CSS to remove the background color on hover */
+.blog-carousel .carousel .control-arrow:hover {
+  background-color: transparent !important;
+}
+
+.blog-carousel .carousel .control-next.control-arrow:hover,
+.blog-carousel .carousel .control-prev.control-arrow:hover {
+  background-color: transparent !important;
+}

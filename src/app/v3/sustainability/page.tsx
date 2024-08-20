@@ -212,7 +212,11 @@ const App: React.FC = () => {
                         data => data.id === carouselIndex
                       )[0].imageTitle
                     }
-                    className=" w-[500px]"
+                    className={` w-[500px] ${
+                      sustainabilitySection.filter(
+                        data => data.id === carouselIndex
+                      )[0].id === '16' && 'h-[600px]'
+                    }`}
                   />
                 </div>
               </div>
