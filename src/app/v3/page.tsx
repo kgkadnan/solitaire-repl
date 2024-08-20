@@ -1,6 +1,5 @@
 import AnimationSection from '@/components/v3/animated-text/scroll';
 import SmoothVideoPlayer from '@/components/v3/smooth-video';
-import CustomVideoPlayer from '@/components/v3/video-player';
 import React from 'react';
 
 const index = () => {
@@ -55,10 +54,7 @@ const index = () => {
         <SmoothVideoPlayer />
         {/* <CustomVideoPlayer /> */}
       </div>
-      <div className="bg-[#F2F4F7] flex items-center ">
-        {/* <SmoothVideoPlayer/> */}
-        <CustomVideoPlayer />
-      </div>
+
       <div className="px-[112px] pt-[80px] pb-[100px] flex flex-col   bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom">
         <div className="text-neutral400 text-[118px] text-left">
           <AnimationSection>03</AnimationSection>
