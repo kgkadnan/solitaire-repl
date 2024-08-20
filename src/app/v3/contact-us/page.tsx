@@ -146,7 +146,7 @@ const ContactUs = () => {
 
   return (
     <div>
-      <div className="min-h-[800px] flex justify-center items-center px-[112px] bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom">
+      <div className="min-h-[800px] flex justify-center items-center xl:px-[112px] lg:px-[32px] bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom">
         <div className="min-h-[800px] flex items-center justify-center">
           <div className="flex flex-wrap flex-col gap-12 pt-[160px] pb-[80px] justify-between items-center">
             <div className=" text-neutral900 text-[96px] font-bold text-center items-center  line leading-[110px] flowy-animate px-10 w-[1100px]">
@@ -393,7 +393,7 @@ const ContactUs = () => {
         </div>
       </div>
       <div className="bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient">
-        <div className="flex flex-col gap-1 py-[32px] gap-[64px]  px-[112px]">
+        <div className="flex flex-col gap-1 py-[32px] gap-[64px]  xl:px-[112px] lg:px-[32px]">
           <div className="flex justify-center">
             <LocationTab
               selectedRegion={selectedRegion}
@@ -517,7 +517,7 @@ const ContactUs = () => {
           </div>
         </div>
       </div>
-      <div className="flex flex-col items-center gap-4 py-[80px] px-[112px]">
+      <div className="flex flex-col items-center gap-4 py-[80px] xl:px-[112px] lg:px-[32px]">
         <div className="text-neutral900 text-headingL font-semiBold">
           <AnimationSection>Nearest office from your location</AnimationSection>
         </div>

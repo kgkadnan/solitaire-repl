@@ -17,6 +17,9 @@ const App: React.FC = () => {
   const [carouselIndex, setCarouselIndex] = useState('01'); // Default to the first index
   const [allPosts, setAllPosts] = useState([]);
   const prevClick = (id: number) => {
+    if (id === 0) {
+      setCarouselIndex(sustainabilitySection[15].id);
+    }
     if (id > 0) {
       setCarouselIndex(sustainabilitySection[id - 1].id);
       setTimeout(() => {
@@ -29,7 +32,9 @@ const App: React.FC = () => {
   };
 
   const nextClick = (id: number) => {
-    if (id < sustainabilitySection.length - 1) {
+    if (id === 15) {
+      setCarouselIndex(sustainabilitySection[0].id);
+    } else if (id < sustainabilitySection.length - 1) {
       setCarouselIndex(sustainabilitySection[id + 1].id);
       setTimeout(() => {
         window.scrollTo({
@@ -100,7 +105,7 @@ const App: React.FC = () => {
           <p className="text-headingXL font-bold">
             A Journey Towards a Sustainable Future
           </p>
-          <div className="w-full px-[112px] mt-[20px]">
+          <div className="w-full xl:px-[112px] lg:px-[32px] mt-[20px]">
             <div className="flex h-screen justify-between w-full ">
               <div className="flex-1 flex flex-col justify-center max-w-[500px] gap-5">
                 {typeof sustainabilitySection.filter(

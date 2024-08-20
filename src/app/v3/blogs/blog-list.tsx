@@ -40,7 +40,7 @@ const BlogList = ({ posts }: { posts: any[] }) => {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="min-h-[800px] flex justify-center px-[112px] bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom">
+      <div className="min-h-[800px] flex justify-center xl:px-[112px] lg:px-[32px] bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom">
         <div className="min-h-[800px] flex items-center justify-center">
           <div className="flex flex-wrap flex-col gap-14 pt-[160px] pb-[80px] flex-wrap min-h-[160px] justify-between items-center">
             <div className=" text-neutral900 text-[96px] font-bold text-center line leading-[110px]">
@@ -65,7 +65,7 @@ const BlogList = ({ posts }: { posts: any[] }) => {
           </div>
         </div>
       </div>
-      <div className="px-[112px]">
+      <div className="xl:px-[112px] lg:px-[32px]">
         <div className="flex gap-4">
           <div className="flex h-[40px] w-full border-b-[1px] border-[#E4E7EC]">
             {allTabs.map(tab => (

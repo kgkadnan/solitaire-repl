@@ -68,6 +68,7 @@ const AutoScrollImageGrid = ({ setCarouselIndex }: any) => {
   // );
 
   const handleClick = (id: any) => {
+    // if(id===)
     setCarouselIndex(id);
     setTimeout(() => {
       window.scrollTo({

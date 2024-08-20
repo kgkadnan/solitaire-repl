@@ -7,13 +7,13 @@ import DownloadButton from '@public/v3/icons/button-variation.svg';
 import Image from 'next/image';
 const MainLayout = ({ setCarouselIndex }: any) => {
   return (
-    <div className="px-[112px] bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom">
+    <div className="xl:px-[112px] lg:px-[32px] bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom">
       <div className="flex h-screen justify-between">
-        <div className="flex-1 flex flex-col justify-center items-start max-w-[400px]">
-          <h1 className="text-headingXL font-bold text-neutral900">
+        <div className="flex-1 flex flex-col justify-center items-start max-w-[300px]">
+          <h1 className="text-headingM font-bold text-neutral900">
             Sustainability
           </h1>
-          <p className="text-lRegular text-neutral800 pb-12">
+          <p className="text-mRegular text-neutral800 pb-12">
             At KGK, we believe in the brilliance of sustainability. Our diamonds
             are not just a symbol of elegance but also a testament to our
             commitment to ethical sourcing and environmentally responsible

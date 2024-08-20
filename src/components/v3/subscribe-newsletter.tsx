@@ -32,7 +32,7 @@ const SubscribeNewsLetter = () => {
     }
   };
   return (
-    <div className="flex w-full px-[112px] bg-[#F9FAFB] justify-between items-center py-4">
+    <div className="flex w-full xl:px-[112px] lg:px-[32px] bg-[#F9FAFB] justify-between items-center py-4">
       <div className="flex flex-col gap-2">
         <p className="text-neutral900 text-[30px] font-bold">
           Join 2,000+ subscribers

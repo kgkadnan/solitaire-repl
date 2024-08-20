@@ -47,7 +47,7 @@ const CommonHeader = () => {
         showHeader ? 'translate-y-0' : '-translate-y-full'
       }`}
     >
-      <div className="flex justify-between h-[80px] items-center px-[112px] border-b-[1px] border-[#F2F4F7]">
+      <div className="flex justify-between h-[80px] items-center xl:px-[112px] lg:px-[32px] border-b-[1px] border-[#F2F4F7]">
         <div className="flex gap-5">
           <Image
             src={kgkLogo}

@@ -172,7 +172,7 @@ Sophisticated Technological Investments: KGK has invested in several sophisticat
   {
     id: '16',
     header: 'Ensuring Peace, Justice, and Strong Institutions',
-    imageTitle: 'Peace Justice <br/> & Strong Institutions',
+    imageTitle: 'Peace, Justice <br/> & Strong Institutions',
     description: `“KGK upholds high compliance standards and undergoes rigorous audits, including Best Practice Principles, Forevermark Pipeline Integrity, Responsible Jewelry Council, and Tiffany Compliance audits. These practices ensure integrity and accountability within the industry.”`,
     images: Sus16,
     head: Head16,

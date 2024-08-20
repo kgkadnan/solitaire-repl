@@ -5,7 +5,7 @@ import { sitemap } from '@/constants/v3/sitemap';
 
 const FooterSiteMap = () => {
   return (
-    <div className="flex px-[112px] py-[64px] justify-between">
+    <div className="flex xl:px-[112px] lg:px-[32px] py-[64px] justify-between">
       <div className="w-[30%] flex flex-col gap-8">
         <Image src={kgkLogo} alt="KGK logo" />
         <p className="text-[#475467] text-lRegular">

@@ -6,7 +6,7 @@ import Linkedin from '@public/v3/social-media/linkedin.svg';
 
 const Footer = () => {
   return (
-    <div className="px-[112px] bg-[#F9FAFB] flex justify-between py-12">
+    <div className="xl:px-[112px] lg:px-[32px] bg-[#F9FAFB] flex justify-between py-12">
       <p className="text-neutral500 ">
         Copyright © {new Date().getFullYear()} KGK Live. All rights reserved.
       </p>

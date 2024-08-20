@@ -5,7 +5,7 @@ import React from 'react';
 const index = () => {
   return (
     <div className="flex flex-col gap-5">
-      <div className="px-[112px] pt-[160px] pb-[100px] flex flex-col   bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom">
+      <div className="xl:px-[112px] lg:px-[32px] pt-[160px] pb-[100px] flex flex-col   bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom">
         <div className="text-neutral400 text-[118px]">
           <AnimationSection>01 </AnimationSection>
         </div>
@@ -26,10 +26,10 @@ const index = () => {
           </div>
         </div>
       </div>
-      <div className="px-[112px]">
+      <div className="xl:px-[112px] lg:px-[32px]">
         <div className="h-[700px]  bg-neutral100 rounded-[25px]">Carousel</div>
       </div>
-      <div className="px-[112px] pt-[80px] pb-[100px] flex flex-col   bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom">
+      <div className="xl:px-[112px] lg:px-[32px] pt-[80px] pb-[100px] flex flex-col   bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom">
         <div className="text-neutral400 text-[118px] text-right">
           <AnimationSection>02</AnimationSection>
         </div>
@@ -55,7 +55,7 @@ const index = () => {
         {/* <CustomVideoPlayer /> */}
       </div>
 
-      <div className="px-[112px] pt-[80px] pb-[100px] flex flex-col   bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom">
+      <div className="xl:px-[112px] lg:px-[32px] pt-[80px] pb-[100px] flex flex-col   bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom">
         <div className="text-neutral400 text-[118px] text-left">
           <AnimationSection>03</AnimationSection>
         </div>

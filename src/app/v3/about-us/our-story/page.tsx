@@ -103,7 +103,7 @@ export default function AboutUs() {
 
   return (
     <div className="relative">
-      <div className="min-h-[800px] flex items-center justify-center px-[112px] bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom ">
+      <div className="min-h-[800px] flex items-center justify-center xl:px-[112px] lg:px-[32px] bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom ">
         <div className="w-full">
           <div className="flex flex-col items-center gap-14 pt-[160px] pb-[80px]">
             <div className="text-neutral900 text-[96px] font-bold text-center leading-[110px] w-[1100px] content">
@@ -164,7 +164,7 @@ export default function AboutUs() {
             />
           </div>
           <div
-            className="absolute top-[250px] px-[112px] text-neutral0 w-full flex justify-between"
+            className="absolute top-[250px] xl:px-[112px] lg:px-[32px] text-neutral0 w-full flex justify-between"
             style={{ zIndex: 2 }}
           >
             <div className="w-[500px]">
