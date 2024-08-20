@@ -569,7 +569,7 @@ const ContactUs = () => {
                   autoComplete="none"
                 />
                 <MobileInput
-                  label={'Mobile Number'}
+                  label={'Contact Number'}
                   onChange={(event: any) =>
                     setPhoneNumber(prev => ({
                       ...prev,
@@ -578,7 +578,7 @@ const ContactUs = () => {
                   }
                   // type="nustrimber"
                   errorText={phoneNumberError}
-                  placeholder={'Enter mobile Number'}
+                  placeholder={'Enter contact number'}
                   phoneNumber={phoneNumber}
                   setPhoneNumber={setPhoneNumber}
                 />

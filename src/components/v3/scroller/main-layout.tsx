@@ -5,20 +5,23 @@ import AutoScrollImageGrid from './auto-scroll';
 import { handleDownloadReport } from '@/utils/download-sustainability-report';
 import DownloadButton from '@public/v3/icons/button-variation.svg';
 import Image from 'next/image';
+import AnimationSection from '../animated-text/scroll';
 const MainLayout = ({ setCarouselIndex }: any) => {
   return (
     <div className="xl:px-[112px] lg:px-[32px] bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom">
       <div className="flex h-screen justify-between gap-1">
         <div className="flex-1 flex flex-col justify-center items-start max-w-[300px]">
-          <h1 className="lg:text-headingM xl:text-headingXL  font-bold text-neutral900">
-            Sustainability
+          <h1 className="lg:text-headingM xl:text-headingL  font-bold text-neutral900">
+            <AnimationSection>Sustainability</AnimationSection>
           </h1>
-          <p className="text-mRegular text-neutral800 pb-12">
-            At KGK, we believe in the brilliance of sustainability. Our diamonds
-            are not just a symbol of elegance but also a testament to our
-            commitment to ethical sourcing and environmentally responsible
-            practices.
-          </p>
+          <div className="text-mRegular text-neutral800 pb-8">
+            <AnimationSection>
+              At KGK, we believe in the brilliance of sustainability. Our
+              diamonds are not just a symbol of elegance but also a testament to
+              our commitment to ethical sourcing and environmentally responsible
+              practices.
+            </AnimationSection>
+          </div>
           <Image
             src={DownloadButton}
             alt={'button'}

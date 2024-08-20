@@ -116,7 +116,7 @@ export const sustainabilitySection = [
   {
     id: '09',
     header: 'Advancing Industry, Innovation, and Infrastructure',
-    imageTitle: 'Industry, <br/> Innovation, & Infrastructure',
+    imageTitle: 'Industry, <br/> Innovation & Infrastructure',
     description: `Developing Skills and Technology Transfer: KGK Group recognizes the importance of adopting and developing technologies to facilitate the systematic transfer of skills to African youth in diamond cutting and polishing.
 OPTIMUS Technology Investment: KGK has invested in the innovative OPTIMUS technology, localizing hundreds of jobs in Africa, a continent with a scarcity of skills in the diamond cutting and polishing sector.
 Sophisticated Technological Investments: KGK has invested in several sophisticated technologies, enabling the localization of the workforce in Africa.`,

@@ -191,8 +191,7 @@ export const leadership = [
     name: 'Dinesh Kothari',
     image: Dinesh,
     position: 'Chief Trading Officer (India)',
-    description:
-      'Mr Navrattan Kothari has managed KGK since 1962. Under his astute guidance KGK has evolved into a modern multinational that operates to world-class standards with state-of-the-art infrastructure. His leadership has enabled KGK to innovate and expand into numerous markets and achieve global growth and recognition. Mr Kothari has built a company that is inspired by life and humanity, which places the highest value on trust, integrity, ethics and corporate responsibility. As Patriarch, Mr Kothari steers the company and enlightens and inspires our team worldwide with his insights, experience and acumen.',
+    description: `Mr. Dinesh Kothari is the Chief Trading/Commercial Officer at KGK Diamonds (I) Pvt. Ltd. in Mumbai, bringing over three decades of experience since joining in 1993. He oversees sales operations, commercial strategy, market expansion, and client relationships. His strategic leadership has been crucial in exploring new markets, driving sales performance, and fostering sustainable development. By adopting innovative approaches, he significantly enhances client relationships and sales efficiency, boosting the company's market reach and maintaining the highest standards for KGK Diamonds.`,
     linkedin: 'in/dinesh-kothari-b007421b/'
   },
 

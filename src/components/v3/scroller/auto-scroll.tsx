@@ -16,7 +16,7 @@ const ScrollableSection = ({ section, onClick }: any) => (
         <div className="text-neutral900 lg:text-[16px] xl:text-[20px] semiBold  flex items-end">
           <div dangerouslySetInnerHTML={{ __html: section.imageTitle }} />
         </div>
-        <p className="text-neutral400 lg:text-headingL xl:text-headingXL flex items-end">
+        <p className="text-neutral400 lg:text-headingL xl:text-headingXL flex items-baseline mb-[-10px]">
           {section.id}
         </p>
       </div>

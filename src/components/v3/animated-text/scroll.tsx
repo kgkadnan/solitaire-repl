@@ -17,6 +17,7 @@ const AnimationSection = ({ children, animationDelay = 0, ...props }: any) => {
     [0, 0.1, 0.2, 0.8, 0.9, 1],
     [0, 0, 1, 1, 0, 0]
   );
+  console.log(children, 'children', typeof children);
   return (
     <section {...props}>
       <motion.div ref={contentRef} style={{ opacity: contentOpacity }}>
