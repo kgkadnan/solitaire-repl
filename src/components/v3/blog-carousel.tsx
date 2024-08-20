@@ -27,8 +27,9 @@ export const BlogCarousel = ({ posts }: any) => {
           <Link
             href={`/v3/blogs/${node.slug.replace(/%20/, '-')}`}
             className="hover:underline"
+            key={node.slug.replace(/%20/, '-')}
           >
-            <div className="flex " key={node.slug.replace(/%20/, '-')}>
+            <div className="flex ">
               <div className="relative">
                 <Image
                   src={node.featuredImage?.node.sourceUrl}
