@@ -26,16 +26,21 @@ export async function loadImages(
     return validImageIndexes;
   };
   if (isMatchingPair) {
-    let validAllData: any = [];
-    images.map(async (imageMatchPair: any) => {
-      let validData = await getValidImageIndexes(imageMatchPair);
+    let validAllData: any[] = [];
+
+    for (const imageMatchPair of images) {
+      const validData = await getValidImageIndexes(imageMatchPair);
       validAllData.push(
         validData
           .filter(index => index !== null)
-          .map((items: any) => imageMatchPair[items])
+          .map((index: any) => imageMatchPair[index])
       );
-      validAllData.length > 0 && setValidImages(validAllData);
-    });
+    }
+
+    // Ensure that the state is updated once after processing all images
+    if (validAllData.length > 0) {
+      setValidImages(validAllData);
+    }
   } else {
     let validData = await getValidImageIndexes(images);
     setValidImages(
