@@ -13,10 +13,10 @@ const ScrollableSection = ({ section, onClick }: any) => (
       {' '}
       {/* Apply rounded corners to the container */}
       <div className="flex justify-between">
-        <div className="text-neutral900 text-[20px]  flex items-end">
+        <div className="text-neutral900 lg:text-[16px] xl:text-[20px] semiBold  flex items-end">
           <div dangerouslySetInnerHTML={{ __html: section.imageTitle }} />
         </div>
-        <p className="text-neutral400 text-headingXL flex items-end">
+        <p className="text-neutral400 lg:text-headingL xl:text-headingXL flex items-end">
           {section.id}
         </p>
       </div>

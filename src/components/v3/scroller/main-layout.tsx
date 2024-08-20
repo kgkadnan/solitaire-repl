@@ -8,9 +8,9 @@ import Image from 'next/image';
 const MainLayout = ({ setCarouselIndex }: any) => {
   return (
     <div className="xl:px-[112px] lg:px-[32px] bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom">
-      <div className="flex h-screen justify-between">
+      <div className="flex h-screen justify-between gap-1">
         <div className="flex-1 flex flex-col justify-center items-start max-w-[300px]">
-          <h1 className="text-headingM font-bold text-neutral900">
+          <h1 className="lg:text-headingM xl:text-headingXL  font-bold text-neutral900">
             Sustainability
           </h1>
           <p className="text-mRegular text-neutral800 pb-12">

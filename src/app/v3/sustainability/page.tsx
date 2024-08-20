@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import Landscape from '@public/v3/sustainability/landscape.png';
 import Image from 'next/image';
 import DownloadReport from '@public/v3/sustainability/download-report.png';
-import Download from '@public/v3/icons/download.svg';
+import DownloadButton from '@public/v3/icons/button-variation.svg';
 import { handleDownloadReport } from '@/utils/download-sustainability-report';
 import { sustainabilitySection } from '@/constants/v3/sustainability';
 import prev from '@public/v3/icons/previous.svg';
@@ -22,12 +22,12 @@ const App: React.FC = () => {
     }
     if (id > 0) {
       setCarouselIndex(sustainabilitySection[id - 1].id);
-      setTimeout(() => {
-        window.scrollTo({
-          top: 780,
-          behavior: 'smooth'
-        });
-      }, 0);
+      // setTimeout(() => {
+      //   window.scrollTo({
+      //     top: 780,
+      //     behavior: 'smooth'
+      //   });
+      // }, 0);
     }
   };
 
@@ -36,12 +36,12 @@ const App: React.FC = () => {
       setCarouselIndex(sustainabilitySection[0].id);
     } else if (id < sustainabilitySection.length - 1) {
       setCarouselIndex(sustainabilitySection[id + 1].id);
-      setTimeout(() => {
-        window.scrollTo({
-          top: 780,
-          behavior: 'smooth'
-        });
-      }, 0);
+      // setTimeout(() => {
+      //   window.scrollTo({
+      //     top: 780,
+      //     behavior: 'smooth'
+      //   });
+      // }, 0);
     }
   };
 
@@ -102,27 +102,24 @@ const App: React.FC = () => {
         <div
           className={`relative  flex justify-center flex-col text-headingXL bold items-center mt-[20px] bg-[length:200%_200%] bg-no-repeat `}
         >
-          <p className="text-headingXL font-bold">
+          <p className="lg:text-headingM xl:text-headingXL font-bold">
             A Journey Towards a Sustainable Future
           </p>
           <div className="w-full xl:px-[112px] lg:px-[32px] mt-[20px]">
             <div className="flex h-screen justify-between w-full ">
-              <div className="flex-1 flex flex-col justify-center max-w-[500px] gap-5">
+              <div className="flex-1 flex flex-col justify-center max-w-[450px] gap-5">
                 {typeof sustainabilitySection.filter(
                   data => data.id === carouselIndex
                 )[0].header === 'string' ? (
                   <>
-                    <h1 className="text-headingL font-bold text-neutral900 leading-10">
+                    <h1 className="lg:text-headingM xl:text-headingL font-bold text-neutral900 leading-10">
                       {
-                        //  typeof sustainabilitySection.filter(
-                        //     data => data.id === carouselIndex
-                        //   )[0].header ==='string'?
                         sustainabilitySection.filter(
                           data => data.id === carouselIndex
                         )[0].header
                       }
                     </h1>
-                    <p className="text-lRegular text-neutral800 pb-12">
+                    <p className="lg:text-mRegular xl:text-lRegular  text-neutral800 pb-12">
                       {
                         sustainabilitySection.filter(
                           data => data.id === carouselIndex
@@ -132,21 +129,21 @@ const App: React.FC = () => {
                   </>
                 ) : (
                   <div className="flex-1 flex flex-col justify-center max-w-[500px] gap-5">
-                    <h1 className="text-headingL font-bold text-neutral900 leading-10">
+                    <h1 className="lg:text-headingM xl:text-headingL font-bold text-neutral900 leading-10">
                       {
                         sustainabilitySection.filter(
                           data => data.id === carouselIndex
                         )[0].header[0]
                       }
                     </h1>
-                    <p className="text-lRegular text-neutral800">
+                    <p className="lg:text-mRegular xl:text-lRegular text-neutral800">
                       {
                         sustainabilitySection.filter(
                           data => data.id === carouselIndex
                         )[0].description[0]
                       }
                     </p>
-                    <div className="text-lRegular text-neutral800">
+                    <div className="lg:text-mRegular xl:text-lRegular text-neutral800">
                       For more details, visit{' '}
                       <a
                         href="https://www.khiltipari.org/"
@@ -157,7 +154,7 @@ const App: React.FC = () => {
                         Khilti Pari Foundation.
                       </a>
                     </div>
-                    <h1 className="text-headingL font-bold text-neutral900 leading-10">
+                    <h1 className="lg:text-mRegular xl:text-lRegular font-bold text-neutral900 leading-10">
                       {
                         sustainabilitySection.filter(
                           data => data.id === carouselIndex
@@ -180,11 +177,12 @@ const App: React.FC = () => {
                   width: 'calc(50% - 27px)',
                   background: sustainabilitySection.filter(
                     data => data.id === carouselIndex
-                  )[0].color
+                  )[0].color,
+                  minWidth: '500px !important'
                 }}
               >
                 <div className="flex justify-between w-[470px] mx-[15px]">
-                  <div className="text-neutral900 text-[20px] font-bold  flex items-end ">
+                  <div className="text-neutral900 lg:text-[16px] xl:text-[20px] font-bold  flex items-end ">
                     <div
                       dangerouslySetInnerHTML={{
                         __html: sustainabilitySection.filter(
@@ -194,7 +192,7 @@ const App: React.FC = () => {
                       // className=''
                     />
                   </div>
-                  <p className="text-neutral400 text-headingXL mb-[-15px] flex items-end ">
+                  <p className="text-neutral400 lg:text-headingL xl:text-headingXL mb-[-15px] flex items-end ">
                     {
                       sustainabilitySection.filter(
                         data => data.id === carouselIndex
@@ -214,7 +212,7 @@ const App: React.FC = () => {
                         data => data.id === carouselIndex
                       )[0].imageTitle
                     }
-                    className="h-[600px] w-[500px]"
+                    className=" w-[500px]"
                   />
                 </div>
               </div>
@@ -256,21 +254,28 @@ const App: React.FC = () => {
             className="w-full"
           />
           <div
-            className="absolute left-[38%] top-[15%] w-[350px] flex flex-col gap-2 text-neutral0 cursor-pointer"
+            className="absolute left-[38%] lg:top-[8%] xl:top-[15%] lg:w-[300px] xl:w-[350px] flex flex-col gap-2 text-neutral0 cursor-pointer"
             onClick={handleDownloadReport}
           >
             <Image src={DownloadReport} alt="download report" />
             <div className="ml-[25px] mt-[-40px]">
-              <p className="text-[20px]">2024 Sustainability Report</p>
-              <div className="flex gap-2">
+              {/* <p className="text-[20px]">2024 Sustainability Report</p> */}
+              <Image
+                src={DownloadButton}
+                alt={'button'}
+                className="cursor-pointer -ml-[9px] lg-!w-[200px]  xl:!w-[300px] "
+                onClick={handleDownloadReport}
+                // width={300}
+              />
+              {/* <div className="flex gap-2">
                 <p>Download</p>
                 <Image src={Download} alt="download" />
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
         <div className="flex w-full flex-col items-center gap-12">
-          <p className="text-headingXL font-bold flex text-center">
+          <p className="lg:text-headingM xl:text-headingXL font-bold flex text-center">
             Read the Latest Sustainability News{' '}
           </p>
           <div className="w-[1000px] pb-[48px]">
