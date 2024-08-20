@@ -40,7 +40,7 @@ export const PAST = 'past';
 export const UPCOMING_APPOINTMENTS = 'upcomingAppointments';
 export const PAST_APPOINTMENTS = 'pastAppointments';
 
-export const PENING_INVOICE_BREADCRUMB_LABEL = 'Pending Invoice';
+export const PENING_INVOICE_BREADCRUMB_LABEL = 'Pending Invoices';
 export const ACTIVE_INVOICE_BREADCRUMB_LABEL = 'Active Invoices';
 export const PAST_INVOICE_BREADCRUMB_LABEL = 'Past Invoices';
 

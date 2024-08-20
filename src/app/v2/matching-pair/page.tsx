@@ -115,7 +115,11 @@ const MatchingPair = () => {
           const url = constructUrlParams(
             filteredSelection[activeTab]?.queryParams
           );
-          setSearchUrl(url);
+
+          if (activeTab) {
+            setSearchUrl(url);
+          }
+
           setSearchParameters(filteredSelection);
         }
       }
@@ -347,6 +351,7 @@ const MatchingPair = () => {
           setIsLoading={setSearchLoading}
           setIsAddDemand={setIsAddDemand}
           isMatchingPair={true}
+          setIsCommonLoading={setIsLoading}
           isLoading={searchLoading}
         />
       ) : subRoute === MatchSubRoutes.SAVED_SEARCH ? (
