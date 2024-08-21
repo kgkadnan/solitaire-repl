@@ -52,30 +52,43 @@ const ContactUs = () => {
   const { data: currentCountryCode } = useGetCountryCodeQuery({});
   const [selectedPointer, setSelectedPointer] = useState<any>({});
   const [officeCoords, setOfficeCoords] = useState<any>([]);
+  const [, setTooltipData] = useState('KGK Office, BKC, Mumbai');
 
   useEffect(() => {
     if (currentCountryCode?.country_name) {
       let country = currentCountryCode?.country_name.toLowerCase();
+      // let country = 'thailand';
       setDefaultCountry(country);
       if (country === 'united arab emirates' || country === 'israel') {
         setSelectedRegion('MIDDLE EAST');
-        setOfficeCoords([21.8955505, 53.4263439]);
+        setOfficeCoords([25.0743, 55.1314]); //final
+        setTooltipData('36 J, Almas Tower, Cluster I, JLT, Dubai');
       } else if (country === 'united states') {
         setSelectedRegion('NORTH & SOUTH AMERICA');
-        setOfficeCoords([]);
+        setOfficeCoords([40.7570481, -73.9846408]);
+        setTooltipData('');
       } else if (country === 'belgium' || country === 'switzerland') {
         setSelectedRegion('EUROPE');
-        if (country === 'switzerland') {
-          setOfficeCoords([]);
-        } else {
-          setOfficeCoords([19.283968, 72.8891392]);
-        }
+        setOfficeCoords([51.2158277, 4.4159125]); //final
+        // if (country === 'switzerland') {
+        //   setOfficeCoords([]);
+        // } else {
+        //   setOfficeCoords([51.2158277,4.4159125]);
+        // }
       } else if (country === 'south africa') {
         setSelectedRegion('AFRICA');
-        setOfficeCoords([]);
+        setOfficeCoords([-26.2053825, 28.0536787]); //final
       } else {
         setSelectedRegion('ASIA PACIFIC');
-        setOfficeCoords([19.067, 72.8508]);
+        if (country === 'china') {
+          setOfficeCoords([22.3114479, 114.1873412]);
+        } else if (country === 'japan') {
+          setOfficeCoords([35.7083551, 139.7754062]);
+        } else if (country === 'thailand') {
+          setOfficeCoords([13.7236825, 100.3648119]);
+        } else {
+          setOfficeCoords([19.067, 72.8508]);
+        }
       }
     }
   }, [currentCountryCode]);

@@ -37,40 +37,37 @@ Bandra East, Mumbai - 400051`,
     }
   }, [currentCountryCode]);
   return (
-    <div className="flex xl:pr-[112px] lg:pr-[32px] py-[64px] justify-between gap-4">
+    <div className="flex xl:pr-[112px] lg:pr-[32px] justify-between gap-4">
       <div className="w-[30%] flex flex-col gap-8">
         <Image src={Globe} alt="KGK Globe presence" />
       </div>
-      <div className="w-[70%] flex flex-col gap-4">
+      <div className="w-[70%] flex flex-col justify-center gap-4">
         <Image src={kgkLogo} alt="KGK logo" />
-        <div className="flex gap-8">
-          <div className=" flex w-[60%]  justify-between gap-2">
-            {sitemap.map(site => (
-              <div className="flex gap-4 flex-col" key={site.title}>
-                <p className="text-[#667085] text-mMedium font-semiBold">
-                  {site.title}
-                </p>
-                <div className="flex flex-col gap-3">
-                  {site.content.map(link => (
-                    <div className="flex gap-2" key={link.data}>
-                      {' '}
-                      <a
-                        href={link.link}
-                        className="text-[#475467] text-lMedium"
-                      >
-                        {link.data}
-                      </a>{' '}
-                      {link.isNew && (
-                        <div className="rounded-[16px] px-2 py-[2px] bg-[#ECFDF3] text-[#027A48] text-sMedium font-medium">
-                          New
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
+        <div className="flex justify-between">
+          {/* <div className=" flex w-[60%]  justify-between gap-2"> */}
+          {sitemap.map(site => (
+            <div className="flex gap-4 flex-col" key={site.title}>
+              <p className="text-[#667085] text-mMedium font-semiBold">
+                {site.title}
+              </p>
+              <div className="flex flex-col gap-3">
+                {site.content.map(link => (
+                  <div className="flex gap-2" key={link.data}>
+                    {' '}
+                    <a href={link.link} className="text-[#475467] text-lMedium">
+                      {link.data}
+                    </a>{' '}
+                    {link.isNew && (
+                      <div className="rounded-[16px] px-2 py-[2px] bg-[#ECFDF3] text-[#027A48] text-sMedium font-medium">
+                        New
+                      </div>
+                    )}
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
+          {/* </div> */}
           <div className="w-[40%] flex flex-col gap-4">
             <p className="text-[#667085] text-mMedium font-semiBold">
               Contact us

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import L from 'leaflet';
+import L, { tooltip } from 'leaflet';
 
 // Fix for default marker icon not showing
 L.Icon.Default.mergeOptions({
@@ -48,10 +48,13 @@ const LocateUs = ({ position }: any) => {
       keyboard={false} // Disable keyboard interactions
       attributionControl={true} // Enable attribution control
     >
-      <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-      <Marker position={position}>
-        <Popup>KGK Office, Borivali East, Mumbai</Popup>
-      </Marker>
+      {/* <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" /> */}
+      <TileLayer
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+      />
+
+      <Marker position={position}>{/* <Popup>{tooltip}</Popup> */}</Marker>
     </MapContainer>
   );
 };
