@@ -173,7 +173,7 @@ export const HeadquaterLocation = [
         phone: '+971-4225 2729',
         email: 'hasmukh.ramani@kgkmail.com',
         image: Hasmukh,
-        office: 'Dubai, UAE',
+        office: 'Dubai',
         initial: 'HR',
         country_name: 'United Arab Emirates'
       },
