@@ -1,7 +1,7 @@
 'use client';
 
 import MainLayout from '@/components/v3/scroller/main-layout';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Landscape from '@public/v3/sustainability/landscape.png';
 import Image from 'next/image';
 import DownloadReport from '@public/v3/sustainability/download-report.png';
@@ -9,13 +9,13 @@ import DownloadReport from '@public/v3/sustainability/download-report.png';
 import { sustainabilitySection } from '@/constants/v3/sustainability';
 import prev from '@public/v3/icons/previous.svg';
 import next from '@public/v3/icons/next.svg';
-import { getAllPostsForHome } from '@/features/v3/api/blogs';
-import { BlogCarousel } from '@/components/v3/blog-carousel';
+// import { getAllPostsForHome } from '@/features/v3/api/blogs';
+// import { BlogCarousel } from '@/components/v3/blog-carousel';
 import AnimationSection from '@/components/v3/animated-text/scroll';
 
 const App: React.FC = () => {
   const [carouselIndex, setCarouselIndex] = useState('01'); // Default to the first index
-  const [allPosts, setAllPosts] = useState([]);
+  // const [allPosts, setAllPosts] = useState([]);
   const prevClick = (id: number) => {
     if (id === 0) {
       setCarouselIndex(sustainabilitySection[15].id);
@@ -45,13 +45,13 @@ const App: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const posts = await getAllPostsForHome(false);
-      setAllPosts(posts?.edges);
-    };
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const posts = await getAllPostsForHome(false);
+  //     setAllPosts(posts?.edges);
+  //   };
+  //   fetchData();
+  // }, []);
 
   //   useEffect(() => {
   //     const handleScroll = (e: Event) => {
@@ -103,9 +103,7 @@ const App: React.FC = () => {
         className={`relative flex justify-center flex-col text-headingXL bold items-center mt-[20px] bg-[length:200%_200%] bg-no-repeat `}
       >
         <p className="lg:text-headingM xl:text-headingXL font-bold">
-          <AnimationSection>
-            A Journey Towards a Sustainable Future
-          </AnimationSection>
+          A Journey Towards a Sustainable Future
         </p>
         <div className="w-full !h-[750px] xl:px-[112px] lg:px-[32px] mt-[20px]">
           <div className="flex !h-[750px] justify-between w-full ">
@@ -115,73 +113,59 @@ const App: React.FC = () => {
               )[0].header === 'string' ? (
                 <>
                   <div className="lg:text-headingM xl:text-headingL font-bold text-neutral900 leading-10">
-                    <AnimationSection>
-                      {
-                        sustainabilitySection.filter(
-                          data => data.id === carouselIndex
-                        )[0].header
-                      }
-                    </AnimationSection>
+                    {
+                      sustainabilitySection.filter(
+                        data => data.id === carouselIndex
+                      )[0].header
+                    }
                   </div>
                   <div className="lg:text-mRegular xl:text-lRegular  text-neutral800 pb-12">
-                    <AnimationSection>
-                      {
-                        sustainabilitySection.filter(
-                          data => data.id === carouselIndex
-                        )[0].description
-                      }
-                    </AnimationSection>
+                    {
+                      sustainabilitySection.filter(
+                        data => data.id === carouselIndex
+                      )[0].description
+                    }
                   </div>
                 </>
               ) : (
                 <div className="flex-1 flex flex-col justify-center max-w-[500px] gap-5">
                   <h1 className="lg:text-headingM xl:text-headingL font-bold text-neutral900 leading-10">
-                    <AnimationSection>
-                      {
-                        sustainabilitySection.filter(
-                          data => data.id === carouselIndex
-                        )[0].header[0]
-                      }
-                    </AnimationSection>
+                    {
+                      sustainabilitySection.filter(
+                        data => data.id === carouselIndex
+                      )[0].header[0]
+                    }
                   </h1>
                   <p className="lg:text-mRegular xl:text-lRegular text-neutral800">
-                    <AnimationSection>
-                      {
-                        sustainabilitySection.filter(
-                          data => data.id === carouselIndex
-                        )[0].description[0]
-                      }
-                    </AnimationSection>
+                    {
+                      sustainabilitySection.filter(
+                        data => data.id === carouselIndex
+                      )[0].description[0]
+                    }
                   </p>
                   <div className="lg:text-mRegular xl:text-lRegular text-neutral800">
-                    <AnimationSection>
-                      For more details, visit
-                      <a
-                        href="https://www.khiltipari.org/"
-                        target="_blank"
-                        className="underline text-infoMain"
-                      >
-                        Khilti Pari Foundation.
-                      </a>
-                    </AnimationSection>
+                    For more details, visit
+                    <a
+                      href="https://www.khiltipari.org/"
+                      target="_blank"
+                      className="underline text-infoMain"
+                    >
+                      Khilti Pari Foundation.
+                    </a>
                   </div>
                   <h1 className="lg:text-mRegular xl:text-lRegular font-bold text-neutral900 leading-10">
-                    <AnimationSection>
-                      {
-                        sustainabilitySection.filter(
-                          data => data.id === carouselIndex
-                        )[0].header[1]
-                      }
-                    </AnimationSection>
+                    {
+                      sustainabilitySection.filter(
+                        data => data.id === carouselIndex
+                      )[0].header[1]
+                    }
                   </h1>
                   <p className="text-lRegular text-neutral800">
-                    <AnimationSection>
-                      {
-                        sustainabilitySection.filter(
-                          data => data.id === carouselIndex
-                        )[0].description[1]
-                      }
-                    </AnimationSection>
+                    {
+                      sustainabilitySection.filter(
+                        data => data.id === carouselIndex
+                      )[0].description[1]
+                    }
                   </p>
                 </div>
               )}
@@ -274,8 +258,10 @@ const App: React.FC = () => {
           />
           <div className="absolute left-[38%] lg:top-[8%] xl:top-[15%] lg:w-[300px] xl:w-[350px] flex flex-col gap-2 text-neutral0">
             <Image src={DownloadReport} alt="download report" />
-            <div className="ml-[25px] mt-[-20px]">
-              {/* <p className="text-[20px]">2024 Sustainability Report</p> */}
+            <div className="ml-[25px] mt-[-40px]">
+              <p className="text-[16px]">
+                The report will be available starting in November.
+              </p>
               {/* <Image
                 src={DownloadReportCTA}
                 alt={'button'}
@@ -290,7 +276,7 @@ const App: React.FC = () => {
             </div>
           </div>
         </div>
-        <div className="flex w-full flex-col items-center gap-12">
+        {/* <div className="flex w-full flex-col items-center gap-12">
           <p className="lg:text-headingM xl:text-headingXL font-bold flex text-center">
             <AnimationSection>
               Read the Latest Sustainability News
@@ -299,7 +285,7 @@ const App: React.FC = () => {
           <div className="w-[1000px] pb-[48px]">
             {allPosts?.length > 0 && <BlogCarousel posts={allPosts} />}
           </div>
-        </div>
+        </div> */}
       </div>
       {/* )} */}
     </div>

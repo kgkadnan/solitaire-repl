@@ -12,7 +12,9 @@ const MainLayout = ({ setCarouselIndex }: any) => {
       <div className="flex h-screen justify-between gap-1">
         <div className="flex-1 flex flex-col justify-center items-start max-w-[300px]">
           <h1 className="lg:text-headingM xl:text-headingL  font-bold text-neutral900">
-            <AnimationSection>Sustainability</AnimationSection>
+            <AnimationSection>
+              UN Sustainable Development Goals
+            </AnimationSection>
           </h1>
           <div className="text-mRegular text-neutral800 pb-8">
             <AnimationSection>

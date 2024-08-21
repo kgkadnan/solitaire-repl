@@ -200,7 +200,7 @@ const ContactUs = () => {
       <div className="flex flex-col items-center my-[50px] disable-custom-cursor gap-6">
         <div className="text-neutral900 text-headingL font-bold text-center">
           {' '}
-          <AnimationSection>Global Sales Offices</AnimationSection>{' '}
+          Global Sales Offices
         </div>
         <div className="relative w-[1300px]">
           <Image src={WorldMap} alt="all office location" className="w-full" />
@@ -333,14 +333,12 @@ const ContactUs = () => {
           </div>
           <div className="flex ">
             <div className="w-[30%]">
-              <AnimationSection>
-                <p className="text-neutral800 text-lRegular font-semiBold">
-                  Our location
-                </p>
-                <p className="text-neutral900 text-headingL font-semiBold">
-                  Head Office{' '}
-                </p>
-              </AnimationSection>
+              <p className="text-neutral800 text-lRegular font-semiBold">
+                Our location
+              </p>
+              <p className="text-neutral900 text-headingL font-semiBold">
+                Head Office{' '}
+              </p>
             </div>
 
             <div
@@ -450,7 +448,7 @@ const ContactUs = () => {
       </div>
       <div className="flex flex-col items-center gap-4 py-[80px] xl:px-[112px] lg:px-[32px]">
         <div className="text-neutral900 text-headingL font-semiBold">
-          <AnimationSection>Nearest office from your location</AnimationSection>
+          Nearest office from your location
         </div>
         <div className="flex justify-between w-full">
           <div className="w-[48%]">

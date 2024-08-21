@@ -22,6 +22,8 @@ export const BlogCarousel = ({ posts }: any) => {
         selectedItem={selectedIndex}
         onChange={handleChange}
         autoPlay
+        showIndicators={false} // Disable indicators
+        showStatus={false} // Disable status
       >
         {posts.map(({ node }: any, index: number) => (
           <Link
