@@ -968,6 +968,23 @@ export function MatchPairDetails({
                               />
                             )}
                           </div>
+                          <div className="flex justify-center items-center">
+                            {!isImageLoading ? (
+                              <div className="text-mRegular font-medium text-neutral900">
+                                {filteredImages[index][imageIndex].name ?? '-'}
+                              </div>
+                            ) : (
+                              <div>
+                                <Skeleton
+                                  width={88}
+                                  variant="rectangular"
+                                  height={20}
+                                  animation="wave"
+                                  sx={{ bgcolor: 'var(--neutral-200)' }}
+                                />
+                              </div>
+                            )}
+                          </div>
                           <div className="flex justify-between">
                             <div>
                               <CheckboxComponent
