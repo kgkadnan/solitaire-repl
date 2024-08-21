@@ -1,70 +1,30 @@
+import India from '@public/v3/flags/india.svg';
+import Belgium from '@public/v3/flags/belgium.svg';
+import NorthAmerica from '@public/v3/flags/north-america.svg';
+import Dubai from '@public/v3/flags/dubai.svg';
+
 export const sitemap = [
-  {
-    title: 'Product',
-    content: [
-      {
-        data: 'Link',
-        link: 'test',
-        isNew: false
-      },
-      {
-        data: 'Link',
-        link: 'test',
-        isNew: false
-      },
-      {
-        data: 'Link',
-        link: 'test',
-        isNew: true
-      },
-      {
-        data: 'Link',
-        link: 'test',
-        isNew: false
-      },
-      {
-        data: 'Link',
-        link: 'test',
-        isNew: false
-      },
-      {
-        data: 'Link',
-        link: 'test',
-        isNew: false
-      }
-    ]
-  },
   {
     title: 'Company',
     content: [
       {
         data: 'About us',
-        link: 'test',
+        link: '/v3/about-us/our-story',
         isNew: false
       },
       {
-        data: 'Link',
-        link: 'test',
+        data: 'Leadership',
+        link: '/v3/about-us/leadership',
         isNew: false
       },
       {
-        data: 'Press',
-        link: 'test',
+        data: 'Sustainability',
+        link: '/v3/sustainability',
         isNew: false
       },
       {
-        data: 'News',
-        link: 'test',
-        isNew: false
-      },
-      {
-        data: 'Link',
-        link: 'test',
-        isNew: false
-      },
-      {
-        data: 'Contact',
-        link: 'test',
+        data: 'Traceability',
+        link: '/v3/traceability',
         isNew: false
       }
     ]
@@ -76,102 +36,52 @@ export const sitemap = [
         data: 'Blog',
         link: '/v3/blogs',
         isNew: false
-      },
-      {
-        data: 'Newsletter',
-        link: 'test',
-        isNew: false
-      },
-      {
-        data: 'Events',
-        link: 'test',
-        isNew: false
-      },
-      {
-        data: 'Help center',
-        link: 'test',
-        isNew: false
-      },
-      {
-        data: 'Link',
-        link: 'test',
-        isNew: false
-      },
-      {
-        data: 'Support',
-        link: 'test',
-        isNew: false
       }
     ]
   },
-  {
-    title: 'Social',
-    content: [
-      {
-        data: 'Twitter',
-        link: 'https://www.x.com/',
-        isNew: false
-      },
-      {
-        data: 'LinkedIn',
-        link: 'https://www.linkedin.com/',
-        isNew: false
-      },
-      {
-        data: 'Facebook',
-        link: 'https://www.facebook.com/',
-        isNew: false
-      },
-      {
-        data: 'Link',
-        link: 'test',
-        isNew: false
-      },
-      {
-        data: 'Link',
-        link: 'test',
-        isNew: false
-      },
-      {
-        data: 'Link',
-        link: 'test',
-        isNew: false
-      }
-    ]
-  },
+
   {
     title: 'Legal',
     content: [
       {
-        data: 'Terms',
-        link: 'test',
+        data: 'Terms & Conditions',
+        link: '/terms-and-conditions',
         isNew: false
       },
       {
-        data: 'Privacy',
-        link: 'test',
-        isNew: false
-      },
-      {
-        data: 'Cookies',
-        link: 'test',
-        isNew: false
-      },
-      {
-        data: 'Licenses',
-        link: 'test',
-        isNew: false
-      },
-      {
-        data: 'Setting',
-        link: 'test',
-        isNew: false
-      },
-      {
-        data: 'Contact',
-        link: 'test',
+        data: 'Privacy Policy',
+        link: '/privacy-policy',
         isNew: false
       }
     ]
+  }
+];
+export const officeLocation = [
+  {
+    address: `DE-4011, D Tower 4th Floor,
+Bharat Diamonds Bourse,
+Bandra Kurla Complex,
+Bandra East, Mumbai - 400051`,
+    phone: '+91-9892421286',
+    email: 'ajay.ghiya@kgkmail.com',
+    flag: India
+  },
+  {
+    address: '36 J, Almas Tower, Cluster I, JLT, Dubai',
+    phone: '+32-486042074',
+    email: 'hasmukh.ramani@kgkmail.com',
+    flag: Dubai
+  },
+  {
+    address: '20 W 47th St #1101, New York, NY 10036, USA',
+    phone: '+1-642885207',
+    email: 'moshe.isakov@kgkmail.com',
+    flag: NorthAmerica
+  },
+  {
+    address: 'Hoveniersstraat 2, 2018 Antwerpen, Belgium',
+    phone: '+32-486042073',
+    email: 'devanshu.jain@kgkmail.com',
+    flag: Belgium
   }
 ];

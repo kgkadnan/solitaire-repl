@@ -13,7 +13,7 @@ L.Icon.Default.mergeOptions({
     'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png'
 });
 
-const LocateUs: React.FC = () => {
+const LocateUs = ({ position }: any) => {
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -27,7 +27,7 @@ const LocateUs: React.FC = () => {
     return null; // or a loading spinner
   }
 
-  const position: [number, number] = [19.067, 72.8508]; // Latitude and Longitude of KGK office in Borivali East, Mumbai
+  // const position: [number, number] = [19.067, 72.8508]; // Latitude and Longitude of KGK office in Borivali East, Mumbai
 
   return (
     <MapContainer

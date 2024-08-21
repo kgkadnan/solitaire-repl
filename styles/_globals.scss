@@ -430,7 +430,7 @@
   // position: absolute;
   // width: 100%;
   animation: scrollUp linear infinite;
-  animation-duration: 250s; /* Adjust the duration for speed */
+  animation-duration: 300s; /* Adjust the duration for speed */
 }
 @keyframes scrollDown {
   0% {
@@ -445,7 +445,7 @@
   position: absolute;
   width: 100%;
   animation: scrollDown linear infinite;
-  animation-duration: 250s; /* Adjust the duration for speed */
+  animation-duration: 300s; /* Adjust the duration for speed */
 }
 
 // .circular-scroll-content,

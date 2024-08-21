@@ -21,7 +21,7 @@ import Abhishek from '@public/v3/avatar/abhishek.png';
 import Nitesh from '@public/v3/avatar/nitesh.png';
 import Hasmukh from '@public/v3/avatar/hasmukh.png';
 import Dev from '@public/v3/avatar/dev.png';
-import Pratik from '@public/v3/avatar/pratik.png';
+import Patrik from '@public/v3/avatar/pratik.png';
 import Maysey from '@public/v3/avatar/maysey.png';
 import Yizhak from '@public/v3/avatar/yizhak.png';
 
@@ -153,11 +153,11 @@ export const HeadquaterLocation = [
       {
         country: 'SWITZERLAND',
         flag: Switzerland,
-        name: 'Mr. Pratik',
+        name: 'Mr. Patrik',
         office: 'Biel/Bienne',
         phone: '+41-796796041',
         email: 'patrik@kgksuisse.ch',
-        image: Pratik,
+        image: Patrik,
         initial: 'P',
         country_name: 'Switzerland'
       }
@@ -238,11 +238,11 @@ export const WorldMapPointers = [
   {
     coords: 'left-[52%] top-[38%]',
     kam: {
-      name: 'Mr. Pratik',
+      name: 'Mr. Patrik',
       postion: 'Key Account Manager',
       countryFlag: Switzerland,
       location: 'Biel/Bienne, Switzerland',
-      image: Pratik,
+      image: Patrik,
       phone: '+41-796796041',
       email: 'patrik@kgksuisse.ch',
       initial: 'P',
@@ -383,7 +383,7 @@ export const WorldMapPointers = [
       name: 'Mr. Shubham Jain',
       postion: 'Key Account Manager',
       countryFlag: Taiwan,
-      location: 'Taipei, Taiwan',
+      location: 'Taipei, Chinese Taiwan',
       image: Avatar,
       phone: '+886-227318242',
       email: 'shubham.jain@kgkmail.com',

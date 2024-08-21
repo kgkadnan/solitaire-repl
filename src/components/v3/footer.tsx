@@ -12,10 +12,6 @@ const Footer = () => {
         Copyright © {new Date().getFullYear()} KGK Live. All rights reserved.
       </p>
       <div className="flex gap-8">
-        <a href="https://x.com/kgk_group" target="_blank">
-          {' '}
-          <Image src={Twitter} alt={'Twitter'} />
-        </a>
         <a
           href="https://www.linkedin.com/company/kgk-group/mycompany/"
           target="_blank"
@@ -23,16 +19,20 @@ const Footer = () => {
           {' '}
           <Image src={Linkedin} alt={'Linkedin'} />
         </a>
+        <a href="https://www.instagram.com/kgk_group/?hl=en" target="_blank">
+          {' '}
+          <Image src={Instagram} alt={'Instagram'} />
+        </a>
+
         <a
           href="https://www.facebook.com/KGKgroup.officialpage/"
           target="_blank"
         >
           <Image src={Facebook} alt={'Facebook'} />
         </a>
-
-        <a href="https://www.instagram.com/kgk_group/?hl=en" target="_blank">
+        <a href="https://x.com/kgk_group" target="_blank">
           {' '}
-          <Image src={Instagram} alt={'Instagram'} />
+          <Image src={Twitter} alt={'Twitter'} />
         </a>
       </div>
     </div>
