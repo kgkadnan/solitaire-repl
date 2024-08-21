@@ -385,11 +385,9 @@ const OrderDetail: React.FC<IOrderDetail> = ({
                     </button>
                     <span className="text-neutral600">/</span>
                     <p className="text-neutral700 p-[8px] bg-neutral100 rounded-[4px] text-sMedium font-medium">
-                      {breadCrumLabel === PENING_INVOICE_BREADCRUMB_LABEL
-                        ? formatNumberWithLeadingZeros(
-                            productDetailData?.display_id
-                          )
-                        : productDetailData?.invoice_id ?? '-'}
+                      {formatNumberWithLeadingZeros(
+                        productDetailData?.display_id
+                      )}
                     </p>
                   </div>
                 </div>
@@ -503,18 +501,12 @@ const OrderDetail: React.FC<IOrderDetail> = ({
                     <div className="bg-neutral0 border-[1px] border-solid border-neutral200 rounded-[8px] shadow-sm">
                       <div className="flex flex-col p-[16px]">
                         <p className="text-neutral600 text-mRegular font-regular">
-                          {breadCrumLabel === PENING_INVOICE_BREADCRUMB_LABEL
-                            ? ManageLocales('app.yourOrder.description.orderId')
-                            : ManageLocales(
-                                'app.yourOrder.description.invoiceNumber'
-                              )}
+                          {ManageLocales('app.yourOrder.description.orderId')}
                         </p>
                         <span className="text-neutral900 text-mMedium font-medium">
-                          {breadCrumLabel === PENING_INVOICE_BREADCRUMB_LABEL
-                            ? formatNumberWithLeadingZeros(
-                                productDetailData?.display_id
-                              )
-                            : productDetailData?.invoice_id ?? '-'}
+                          {formatNumberWithLeadingZeros(
+                            productDetailData?.display_id
+                          )}
                         </span>
                       </div>
                     </div>

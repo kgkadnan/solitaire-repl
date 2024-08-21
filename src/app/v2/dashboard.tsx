@@ -704,6 +704,7 @@ const Dashboard = () => {
     },
     activeInvoice: {
       keys: [
+        { label: 'Order ID', accessor: 'display_id' },
         { label: 'Invoice Number', accessor: 'invoice_id' },
         { label: 'Invoice Date', accessor: 'created_at' },
         { label: 'Details', accessor: 'details' }
@@ -745,7 +746,7 @@ const Dashboard = () => {
       case 'invoice_id':
         return (
           <>
-            <Image src={icon} alt="icon" />
+            {/* <Image src={icon} alt="icon" /> */}
             <span>{value[accessor]}</span>
           </>
         );

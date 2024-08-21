@@ -40,9 +40,10 @@ export const PAST = 'past';
 export const UPCOMING_APPOINTMENTS = 'upcomingAppointments';
 export const PAST_APPOINTMENTS = 'pastAppointments';
 
-export const PENING_INVOICE_BREADCRUMB_LABEL = 'Pending Invoices';
-export const ACTIVE_INVOICE_BREADCRUMB_LABEL = 'Active Invoices';
-export const PAST_INVOICE_BREADCRUMB_LABEL = 'Past Invoices';
+export const PENING_INVOICE_BREADCRUMB_LABEL = 'Pending Orders';
+export const ACTIVE_INVOICE_BREADCRUMB_LABEL = 'In-Transit Orders';
+export const PAST_INVOICE_BREADCRUMB_LABEL = 'Past Orders';
+export const DASHBOARD_BREADCRUMB_LABEL = 'Dashboard';
 
 export const NOTIFICATION_READ_STATUS = 'read';
 export const NOTIFICATION_UNSEEN_STATUS = 'unseen';
