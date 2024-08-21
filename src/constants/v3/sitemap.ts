@@ -79,7 +79,7 @@ Bandra East, Mumbai - 400051`,
     flag: NorthAmerica
   },
   {
-    address: 'Hoveniersstraat 2, 2018 Antwerpen, Belgium',
+    address: '708, Hovenierstraat 2, Antwerp 2018, Country - Belgium',
     phone: '+32-486042073',
     email: 'devanshu.jain@kgkmail.com',
     flag: Belgium
