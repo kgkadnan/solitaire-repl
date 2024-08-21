@@ -2,9 +2,9 @@
 import React from 'react';
 import AutoScrollImageGrid from './auto-scroll';
 // import { CommonButton } from '../button';
-import { handleDownloadReport } from '@/utils/download-sustainability-report';
-import DownloadButton from '@public/v3/icons/button-variation.svg';
-import Image from 'next/image';
+// import { handleDownloadReport } from '@/utils/download-sustainability-report';
+// import DownloadButton from '@public/v3/icons/button-variation.svg';
+// import Image from 'next/image';
 import AnimationSection from '../animated-text/scroll';
 const MainLayout = ({ setCarouselIndex }: any) => {
   return (
@@ -22,12 +22,12 @@ const MainLayout = ({ setCarouselIndex }: any) => {
               practices.
             </AnimationSection>
           </div>
-          <Image
+          {/* <Image
             src={DownloadButton}
             alt={'button'}
             className="cursor-pointer -ml-[9px]"
             onClick={handleDownloadReport}
-          />
+          /> */}
 
           {/* <CommonButton
             onClick={handleDownloadReport}

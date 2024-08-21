@@ -5,14 +5,12 @@ import React, { useEffect, useState } from 'react';
 import Landscape from '@public/v3/sustainability/landscape.png';
 import Image from 'next/image';
 import DownloadReport from '@public/v3/sustainability/download-report.png';
-// import DownloadButton from '@public/v3/icons/button-variation.svg';
 import { handleDownloadReport } from '@/utils/download-sustainability-report';
 import { sustainabilitySection } from '@/constants/v3/sustainability';
 import prev from '@public/v3/icons/previous.svg';
 import next from '@public/v3/icons/next.svg';
 import { getAllPostsForHome } from '@/features/v3/api/blogs';
 import { BlogCarousel } from '@/components/v3/blog-carousel';
-import DownloadReportCTA from '@public/v3/sustainability/download-report-cta.svg';
 import AnimationSection from '@/components/v3/animated-text/scroll';
 
 const App: React.FC = () => {
@@ -274,20 +272,17 @@ const App: React.FC = () => {
             alt="download report background"
             className="w-full"
           />
-          <div
-            className="absolute left-[38%] lg:top-[8%] xl:top-[15%] lg:w-[300px] xl:w-[350px] flex flex-col gap-2 text-neutral0 cursor-pointer"
-            onClick={handleDownloadReport}
-          >
+          <div className="absolute left-[38%] lg:top-[8%] xl:top-[15%] lg:w-[300px] xl:w-[350px] flex flex-col gap-2 text-neutral0">
             <Image src={DownloadReport} alt="download report" />
             <div className="ml-[25px] mt-[-20px]">
               {/* <p className="text-[20px]">2024 Sustainability Report</p> */}
-              <Image
+              {/* <Image
                 src={DownloadReportCTA}
                 alt={'button'}
                 className="cursor-pointer -ml-[9px] lg:!w-[250px]  xl:!w-[300px] "
                 onClick={handleDownloadReport}
                 // width={300}
-              />
+              /> */}
               {/* <div className="flex gap-2">
                 <p>Download</p>
                 <Image src={Download} alt="download" />

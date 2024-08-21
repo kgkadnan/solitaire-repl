@@ -190,7 +190,7 @@ export const HeadquaterLocation = [
     region: 'NORTH & SOUTH AMERICA',
     location: [
       {
-        country: 'NORTH AMERICA',
+        country: 'USA',
         flag: NorthAmerica,
         name: 'Mr. Maysey Isakov',
         office: 'New York',
@@ -225,7 +225,7 @@ export const WorldMapPointers = [
       name: 'Mr. Maysey Isakov',
       postion: 'Key Account Manager',
       countryFlag: NorthAmerica,
-      location: 'New York, North America',
+      location: 'New York, USA',
       image: Maysey,
       phone: '+1-6462885207',
       email: 'moshe.isakov@kgkmail.com',
