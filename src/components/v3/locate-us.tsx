@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import L, { tooltip } from 'leaflet';
+import L from 'leaflet';
 
 // Fix for default marker icon not showing
 L.Icon.Default.mergeOptions({
