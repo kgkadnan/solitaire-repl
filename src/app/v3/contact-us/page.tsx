@@ -50,6 +50,7 @@ const ContactUs = () => {
   const [phoneNumberError, setPhoneNumberError] = useState('');
 
   const { data: currentCountryCode } = useGetCountryCodeQuery({});
+  const [selectedPointer, setSelectedPointer] = useState<any>({});
   useEffect(() => {
     if (currentCountryCode?.country_name) {
       let country = currentCountryCode?.country_name.toLowerCase();
@@ -122,9 +123,15 @@ const ContactUs = () => {
       });
     }
   };
-  const filteredPointers = WorldMapPointers.filter(data =>
-    data.kam.country.toLowerCase().includes(defaultCountry.toLowerCase())
-  );
+
+  useEffect(() => {
+    if (defaultCountry) {
+      const filteredPointers = WorldMapPointers.filter(data =>
+        data.kam.country.toLowerCase().includes(defaultCountry.toLowerCase())
+      );
+      setSelectedPointer(filteredPointers);
+    }
+  }, [defaultCountry]);
   function adjustPosition(positionString: string) {
     // Extract left and top percentages using a regular expression
     const leftMatch = positionString.match(/left-\[(\d+)%\]/);
@@ -173,10 +180,10 @@ const ContactUs = () => {
         </div>
         <div className="relative w-[1300px]">
           <Image src={WorldMap} alt="all office location" className="w-full" />
-          {filteredPointers.length > 0 && (
+          {selectedPointer.length > 0 && (
             <div
               className={`absolute bg-neutral0 rounded-[8px] p-[10px] w-[270px]`}
-              style={adjustPosition(filteredPointers[0].coords)}
+              style={adjustPosition(selectedPointer[0].coords)}
             >
               {/* Caret Notch */}
               <div className="absolute top-[-5px] left-[50%] transform -translate-x-1/2">
@@ -190,33 +197,33 @@ const ContactUs = () => {
                         className="h-10 w-10 rounded-[50%] bg-primaryMain text-neutral0 text-[14px] border-[2px] border-neutral0 justify-center items-center flex"
                         style={{ boxShadow: 'var(--popups-shadow' }}
                       >
-                        {filteredPointers[0].kam.initial}
+                        {selectedPointer[0].kam.initial}
                       </div>
                       <div className="flex flex-col gap-2">
                         <p className="font-semiBold text-[14px]">
-                          {filteredPointers[0].kam.name}
+                          {selectedPointer[0].kam.name}
                         </p>
                         <p className="text-[12px]">
-                          {filteredPointers[0].kam.postion}
+                          {selectedPointer[0].kam.postion}
                         </p>
                       </div>
                     </div>
                     <div className="flex gap-1  items-center">
                       <div className="w-[40px] flex justify-center">
                         <Image
-                          src={filteredPointers[0].kam.countryFlag}
+                          src={selectedPointer[0].kam.countryFlag}
                           alt={`country flag image`}
                         />
                       </div>
                       <p className="font-semiBold text-[12px] text-[#344054]">
-                        {filteredPointers[0].kam.location}
+                        {selectedPointer[0].kam.location}
                       </p>
                     </div>
                   </div>
                   <hr />
-                  {filteredPointers[0].kam.phone && (
+                  {selectedPointer[0].kam.phone && (
                     <a
-                      href={`tel:+${filteredPointers[0].kam.phone}`}
+                      href={`tel:+${selectedPointer[0].kam.phone}`}
                       className="flex gap-1 items-center cursor-pointer"
                     >
                       <div className="w-10 flex justify-center">
@@ -228,20 +235,20 @@ const ContactUs = () => {
                         />
                       </div>
                       <p className=" text-sRegular text-neutral600">
-                        {filteredPointers[0].kam.phone}
+                        {selectedPointer[0].kam.phone}
                       </p>
                     </a>
                   )}
                   <div className="flex gap-1 items-center cursor-pointer">
                     <a
-                      href={`mailto:${filteredPointers[0].kam.email}`}
+                      href={`mailto:${selectedPointer[0].kam.email}`}
                       className="flex gap-1 items-center"
                     >
                       <div className="w-10 flex justify-center">
                         <Image src={Mail} alt={'Mail'} height={24} width={24} />
                       </div>
                       <p className=" text-sRegular text-neutral600">
-                        {filteredPointers[0].kam.email}{' '}
+                        {selectedPointer[0].kam.email}{' '}
                       </p>
                     </a>
                     <Image
@@ -250,7 +257,7 @@ const ContactUs = () => {
                       className="cursor-pointer"
                       onClick={() => {
                         navigator.clipboard
-                          .writeText(filteredPointers[0].kam.email)
+                          .writeText(selectedPointer[0].kam.email)
                           .then(() =>
                             toast({
                               description: 'Copied successfully'
@@ -268,7 +275,7 @@ const ContactUs = () => {
             <div
               key={pointer.coords} // Add a key to prevent React warnings
             >
-              <Tooltip
+              {/* <Tooltip
                 tooltipTrigger={
                   <div
                     className={`absolute ${pointer.coords} z-2 cursor-pointer`}
@@ -387,7 +394,27 @@ const ContactUs = () => {
                   'hidden'
                 }`}
                 radixStyles="!fill-neutral0"
-              />
+              /> */}
+              <div
+                className={`absolute ${pointer.coords} z-2 cursor-pointer`}
+                onMouseEnter={() => setSelectedPointer([pointer])}
+              >
+                <div className="relative w-4 h-4   rounded-full">
+                  <div
+                    className={`absolute inset-0 w-full h-full  rounded-full  cursor-pointer ${
+                      pointer.kam.country === selectedPointer[0]?.kam.country &&
+                      'animate-pulse bg-[#b2c4c4] '
+                    } `}
+                  >
+                    <Image
+                      src={Diamond}
+                      alt={`diamond-${index}`}
+                      height={20}
+                      width={20}
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
           ))}
         </div>
