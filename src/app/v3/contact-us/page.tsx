@@ -22,7 +22,7 @@ import { InputField } from '@/components/v3/input/input';
 import { MobileInput } from '@/components/v3/input/mobile-input';
 import { CommonButton } from '@/components/v3/button';
 import WorldMap from '@public/v3/world-map.png';
-import Tooltip from '@/components/v2/common/tooltip';
+// import Tooltip from '@/components/v2/common/tooltip';
 import AnimationSection from '@/components/v3/animated-text/scroll';
 import { useGetCountryCodeQuery } from '@/features/api/current-ip';
 
