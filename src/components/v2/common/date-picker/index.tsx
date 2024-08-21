@@ -80,7 +80,7 @@ export function DatePickerWithRange({
           )}
         </div>
 
-        <PopoverContent className="w-auto p-0" align="start">
+        <PopoverContent className="w-auto p-0 z-10" align="start">
           <div className="bg-neutral0  border-[1px] border-solid border-neutral200 rounded-[8px] absolute top-[4px] right-[-249px]">
             <Calendar
               initialFocus

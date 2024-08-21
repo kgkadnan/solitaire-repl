@@ -151,7 +151,8 @@ export const lab = [
   'DBIOD',
   'FM',
   'NGTC',
-  'KGK GRADING'
+  'KGK GRADING',
+  'KGK'
 ];
 export const location = [
   { title: 'Belgium', short_name: 'BEL' },
@@ -327,6 +328,7 @@ export const fancy = [
   { value: 'Gray', label: 'Gray' },
   { value: 'Violet', label: 'Violet' },
   { value: 'Brown', label: 'Brown' },
+  { value: 'Fancy', label: 'Fancy' },
   { value: 'Other', label: 'Other' }
 ];
 
