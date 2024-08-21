@@ -43,7 +43,7 @@ const CommonHeader = () => {
 
   return (
     <div
-      className={`fixed w-full z-50 transition-transform duration-300 bg-neutral0 ${
+      className={`fixed w-full z-[99999] transition-transform duration-300 bg-neutral0 ${
         showHeader ? 'translate-y-0' : '-translate-y-full'
       }`}
     >

@@ -32,6 +32,7 @@ export const HeadquaterLocation = [
       {
         country: 'INDIA',
         flag: India,
+        office: 'Mumbai',
         name: 'Mr. Ajay Ghiya',
         phone: '+91-9892421286',
         email: 'ajay.ghiya@kgkmail.com',
@@ -166,12 +167,13 @@ export const HeadquaterLocation = [
     region: 'MIDDLE EAST',
     location: [
       {
-        country: 'DUBAI',
+        country: 'UAE',
         flag: Dubai,
         name: 'Mr. Hasmukh Ramani ',
         phone: '+971-4225 2729',
         email: 'hasmukh.ramani@kgkmail.com',
         image: Hasmukh,
+        office: 'Dubai, UAE',
         initial: 'HR',
         country_name: 'United Arab Emirates'
       },
@@ -267,7 +269,7 @@ export const WorldMapPointers = [
       name: 'Mr. Hasmukh Ramani',
       postion: 'Key Account Manager',
       countryFlag: Dubai,
-      location: 'Dubai',
+      location: 'Dubai, UAE',
       image: Hasmukh,
       phone: '+971-4225 2729',
       email: 'hasmukh.ramani@kgkmail.com',
@@ -279,9 +281,10 @@ export const WorldMapPointers = [
     coords: 'left-[68%] top-[48%]',
     kam: {
       name: 'Mr. Ajay Ghiya',
+      // location:
       postion: 'Key Account Manager',
       countryFlag: India,
-      location: 'India',
+      location: 'Mumbai, India',
       image: Ajay,
       phone: '+91-9892421286',
       email: 'ajay.ghiya@kgkmail.com',
