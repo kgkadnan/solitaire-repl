@@ -10,8 +10,8 @@ const MainLayout = ({ setCarouselIndex }: any) => {
   return (
     <div className="xl:px-[112px] lg:px-[32px] bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom">
       <div className="flex h-screen justify-between gap-1">
-        <div className="flex-1 flex flex-col justify-center items-start max-w-[300px]">
-          <h1 className="lg:text-headingM xl:text-headingL  font-bold text-neutral900">
+        <div className="flex-1 flex flex-col justify-center items-start max-w-[350px] gap-5">
+          <h1 className="lg:text-headingM xl:text-headingL  font-bold text-neutral900 leading-10">
             <AnimationSection>
               UN Sustainable Development Goals
             </AnimationSection>
