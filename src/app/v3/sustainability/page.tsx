@@ -107,11 +107,11 @@ const App: React.FC = () => {
         </p>
         <div className="w-full !h-[750px] xl:px-[112px] lg:px-[32px] mt-[20px]">
           <div className="flex !h-[750px] justify-between w-full ">
-            <div className="flex-1 flex flex-col justify-center max-w-[450px] gap-5">
+            <div className="flex-1 flex max-w-[450px] ">
               {typeof sustainabilitySection.filter(
                 data => data.id === carouselIndex
               )[0].header === 'string' ? (
-                <>
+                <div className="flex flex-col mt-[200px] gap-5">
                   <div className="lg:text-headingM xl:text-headingL font-bold text-neutral900 leading-10">
                     {
                       sustainabilitySection.filter(
@@ -119,14 +119,14 @@ const App: React.FC = () => {
                       )[0].header
                     }
                   </div>
-                  <div className="lg:text-mRegular xl:text-lRegular  text-neutral800 pb-12">
+                  <div className="lg:text-mRegular xl:text-lRegular  text-neutral800">
                     {
                       sustainabilitySection.filter(
                         data => data.id === carouselIndex
                       )[0].description
                     }
                   </div>
-                </>
+                </div>
               ) : (
                 <div className="flex-1 flex flex-col justify-center max-w-[500px] gap-5">
                   <h1 className="lg:text-headingM xl:text-headingL font-bold text-neutral900 leading-10">
