@@ -20,6 +20,9 @@ import { useRouter } from 'next/navigation';
 import { handleConfirmStone } from '../helpers/handle-confirm-stone';
 import NoImageFound from '@public/v2/assets/icons/compare-stone/fallback.svg';
 import CommonPoppup from '@/app/v2/login/component/common-poppup';
+import { formatNumber } from '@/utils/fix-two-digit-number';
+import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
+import { RednderLocation } from '@/components/v2/table/helpers/render-cell';
 
 const CompareStone = ({
   rows,
@@ -227,7 +230,7 @@ const CompareStone = ({
       <div className="flex  h-[calc(100%-120px)] overflow-auto border-t-[1px] border-b-[1px] border-neutral200">
         <div className="flex ">
           <div
-            className="sticky left-0  min-h-[2080px] text-neutral700 text-mMedium font-medium w-[150px] !z-5"
+            className="sticky left-0  min-h-[2080px] text-neutral700 text-mMedium font-medium w-[175px] !z-5"
             style={{ zIndex: 5 }}
           >
             <div className="h-[234px] sticky top-0  items-center flex px-4 border-[0.5px] border-neutral200 bg-neutral50">
@@ -321,7 +324,45 @@ const CompareStone = ({
                       key={key}
                       className="py-2 px-4 border-[1px] border-neutral200 h-[38px] whitespace-nowrap overflow-hidden overflow-ellipsis  bg-neutral0"
                     >
-                      {key !== 'id' ? diamond[key] || '-' : ''}
+                      {key !== 'id' ? (
+                        key === 'location' ? (
+                          <div className="flex gap-1 items-center">
+                            {RednderLocation({
+                              renderedCellValue: diamond[key]
+                            })}
+
+                            {diamond[key]}
+                          </div>
+                        ) : key === 'rap' ? (
+                          diamond[key] === undefined ||
+                          diamond[key] === null ||
+                          diamond[key] === 0 ? (
+                            '-'
+                          ) : (
+                            `$${formatNumberWithCommas(diamond[key])}`
+                          )
+                        ) : key === 'rap_value' ? (
+                          diamond[key] === undefined ||
+                          diamond[key] === null ||
+                          diamond[key] === 0 ? (
+                            '-'
+                          ) : (
+                            `$${formatNumberWithCommas(diamond[key])}`
+                          )
+                        ) : key === 'price_per_carat' ? (
+                          `${
+                            diamond[key] === undefined || diamond[key] === null
+                              ? '-'
+                              : `$${formatNumberWithCommas(diamond[key])}`
+                          }`
+                        ) : typeof diamond[key] === 'number' ? (
+                          formatNumber(diamond[key]) ?? '-'
+                        ) : (
+                          diamond[key] || '-'
+                        )
+                      ) : (
+                        ''
+                      )}
                     </div>
                   ))}
                 </div>
