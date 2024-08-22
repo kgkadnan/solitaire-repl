@@ -60,13 +60,6 @@ const AutoScrollImageGrid = ({ setCarouselIndex }: any) => {
       </div>
     ));
 
-  // const oddSections = sustainabilitySection.filter(
-  //   (_, index) => index % 2 !== 0
-  // );
-  // const evenSections = sustainabilitySection.filter(
-  //   (_, index) => index % 2 === 0
-  // );
-
   const handleClick = (id: any) => {
     // if(id===)
     setCarouselIndex(id);

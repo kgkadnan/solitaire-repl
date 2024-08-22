@@ -30,23 +30,17 @@ const index = () => {
         <div className="h-[700px]  bg-neutral100 rounded-[25px]">Carousel</div>
       </div>
       <div className="xl:px-[112px] lg:px-[32px] pt-[80px] pb-[100px] flex flex-col   bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom">
-        <div className="text-neutral400 text-[118px] text-right">
-          <AnimationSection>02</AnimationSection>
-        </div>
+        <div className="text-neutral400 text-[118px] text-right">02</div>
         <div className="text-neutral900 flex justify-between">
           <div className="text-headingXL font-bold max-w-[700px]">
-            <AnimationSection animationDelay={0.5}>
-              Global Manufacturing Units & Sales Offices
-            </AnimationSection>
+            Global Manufacturing Units & Sales Offices
           </div>
           <div className="text-[16px] w-[500px] mt-5">
-            <AnimationSection animationDelay={0.5}>
-              With sales offices in nearly every continent, we're ready to serve
-              our clients wherever they are. We stay client-centric by
-              accommodating to your needs, whether it's about terms, pricing,
-              shipping, or QC. So don't be shy, give us a call or come meet us
-              in-person!
-            </AnimationSection>
+            With sales offices in nearly every continent, we're ready to serve
+            our clients wherever they are. We stay client-centric by
+            accommodating to your needs, whether it's about terms, pricing,
+            shipping, or QC. So don't be shy, give us a call or come meet us
+            in-person!
           </div>
         </div>
       </div>
@@ -56,25 +50,19 @@ const index = () => {
       </div>
 
       <div className="xl:px-[112px] lg:px-[32px] pt-[80px] pb-[100px] flex flex-col   bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom">
-        <div className="text-neutral400 text-[118px] text-left">
-          <AnimationSection>03</AnimationSection>
-        </div>
+        <div className="text-neutral400 text-[118px] text-left">03</div>
         <div className="text-neutral900 flex justify-between">
           <div className="text-headingXL font-bold max-w-[700px]">
-            <AnimationSection animationDelay={0.5}>
-              {' '}
-              E-commerce platform
-            </AnimationSection>
+            {' '}
+            E-commerce platform
           </div>
           <div className="text-[16px] w-[500px] mt-5">
-            <AnimationSection animationDelay={0.5}>
-              To empower our physical sales offices, we've streamlined internal
-              policies to provide clients across the world with a unified
-              experience. This means we're able to serve smaller clients with
-              similar levels of care through promotions such as volume discount,
-              bid to buy, and new arrivals. To learn more, make a guest account
-              and we'll reach out to you shortly!
-            </AnimationSection>
+            To empower our physical sales offices, we've streamlined internal
+            policies to provide clients across the world with a unified
+            experience. This means we're able to serve smaller clients with
+            similar levels of care through promotions such as volume discount,
+            bid to buy, and new arrivals. To learn more, make a guest account
+            and we'll reach out to you shortly!
           </div>
         </div>
       </div>

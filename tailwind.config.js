@@ -187,8 +187,7 @@ module.exports = {
         },
         worldMapPulse: {
           '0%': {
-            boxShadow:
-              '0 0 0 0 rgba(52, 68, 68, 0.7)' /* Slightly darker black */
+            boxShadow: '0 0 0 0 rgba(52, 68, 68, 0.7)' // Pulse starts from the center
           },
           '50%': {
             boxShadow: '0 0 0 10px rgba(52, 68, 68, 0)' /* Fully transparent */

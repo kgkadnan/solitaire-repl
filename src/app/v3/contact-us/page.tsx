@@ -303,20 +303,21 @@ const ContactUs = () => {
                 className={`absolute ${pointer.coords} z-2 cursor-pointer`}
                 onMouseEnter={() => setSelectedPointer([pointer])}
               >
-                <div className="relative w-4 h-4   rounded-full">
+                <div className="relative">
+                  <Image
+                    src={Diamond}
+                    alt={`diamond-${index}`}
+                    height={20}
+                    width={20}
+                    className={`inset-0 !w-4 !h-4  rounded-full  cursor-pointer  `}
+                  />
+
                   <div
-                    className={`absolute inset-0 w-full h-full  rounded-full  cursor-pointer ${
+                    className={`absolute w-[12px] h-[12px] top-[1px] left-[2px]  rounded-full ${
                       pointer.kam.country === selectedPointer[0]?.kam.country &&
-                      'animate-pulse bg-[#b2c4c4] '
+                      'animate-pulse bg-animated-pulse'
                     } `}
-                  >
-                    <Image
-                      src={Diamond}
-                      alt={`diamond-${index}`}
-                      height={20}
-                      width={20}
-                    />
-                  </div>
+                  ></div>
                 </div>
               </div>
             </div>

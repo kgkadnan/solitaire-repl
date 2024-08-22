@@ -171,7 +171,7 @@ const App: React.FC = () => {
               )}
             </div>
             <div
-              className=" flex flex-col rounded-[8px] h-full items-center justify-center"
+              className=" flex flex-col rounded-[8px] h-full items-center pt-[40px]"
               style={{
                 width: 'calc(50% - 27px)',
                 background: sustainabilitySection.filter(
@@ -214,7 +214,7 @@ const App: React.FC = () => {
                   className={` w-[500px] ${
                     sustainabilitySection.filter(
                       data => data.id === carouselIndex
-                    )[0].id === '16' && 'h-[600px]'
+                    )[0].id === '16' && 'h-[650px]'
                   }`}
                 />
               </div>
@@ -260,7 +260,7 @@ const App: React.FC = () => {
             <Image src={DownloadReport} alt="download report" />
             <div className="ml-[25px] mt-[-40px]">
               <p className="text-[16px]">
-                The report will be available starting in November.
+                The report will be available starting in November 2024.
               </p>
               {/* <Image
                 src={DownloadReportCTA}
