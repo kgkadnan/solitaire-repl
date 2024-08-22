@@ -1150,18 +1150,20 @@ const Dashboard = () => {
           setAppointmentPayload(data);
         });
 
-        const lotIds = selectedIds?.map((id: string) => {
-          const getLotIds: any =
-            searchData?.foundProducts.find((row: IProduct) => {
-              return row?.id === id;
-            }) ?? {};
+        const lotIdsWithCountry = selectedIds?.map((id: string) => {
+          const foundProduct =
+            searchData?.foundProducts.find((row: IProduct) => row?.id === id) ??
+            {};
 
-          if (getLotIds) {
-            return getLotIds?.lot_id;
+          if (foundProduct) {
+            const lotId = foundProduct?.lot_id;
+            const country = foundProduct?.location; // assuming country is a property in foundProduct
+            return `${lotId}(${country})`;
           }
+
           return '';
         });
-        setLotIds(lotIds);
+        setLotIds(lotIdsWithCountry);
       }
     } else {
       setError(SELECT_STONE_TO_PERFORM_ACTION);
@@ -2155,7 +2157,7 @@ const Dashboard = () => {
                       </Link>
                     </div>
                   </div>
-                  <div className="p-4 ">
+                  <div className="p-[10px] ">
                     {savedSearchData.length > 0 ? (
                       savedSearchData?.map((searchData: any, index: number) => {
                         const gradientIndex = index % gradientClasses.length;
