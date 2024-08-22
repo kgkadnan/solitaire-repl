@@ -536,6 +536,7 @@ const Form = ({
         })
       );
       router.push(`/v2/new-arrivals`);
+      setSearchUrl('');
     } else if (subRoute === SubRoutes.BID_TO_BUY) {
       const queryParams = generateQueryParams(state);
 
@@ -547,6 +548,7 @@ const Form = ({
         })
       );
       router.push(`/v2/bid-2-buy`);
+      setSearchUrl('');
     } else if (
       JSON.parse(localStorage.getItem(formIdentifier)!)?.length >=
         MAX_SEARCH_TAB_LIMIT &&
@@ -584,7 +586,7 @@ const Form = ({
           ]}
         />
       );
-
+      setSearchUrl('');
       setIsDialogOpen(true);
     } else if (
       (searchUrl || (caratFrom && caratTo)) &&
@@ -734,12 +736,12 @@ const Form = ({
       } else {
         setIsError(true);
       }
+      setSearchUrl('');
     } else {
       setIsError(true);
       setErrorText(SELECT_SOME_PARAM);
+      setSearchUrl('');
     }
-    setSearchUrl('');
-    handleFormReset();
   };
   const handleMatchingPairSearch = () => {
     handleFormSearch(false, '', 'MatchingPair');

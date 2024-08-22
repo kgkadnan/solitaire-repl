@@ -698,6 +698,7 @@ const Dashboard = () => {
       keys: [
         { label: 'Order ID', accessor: 'display_id' },
         { label: 'Confirmation Date', accessor: 'created_at' },
+        { label: 'Order Request Status', accessor: 'status' },
         { label: 'Details', accessor: 'details' }
       ],
       data: tabs.find(tab => tab.label === activeTab)?.data
@@ -740,6 +741,26 @@ const Dashboard = () => {
           <>
             <Image src={icon} alt="icon" />
             <span>{formatNumberWithLeadingZeros(value[accessor])}</span>
+          </>
+        );
+      case 'status':
+        return (
+          <>
+            {value[accessor] === 'pending' ? (
+              <div className="text-mRegular px-[6px] py-[4px] rounded-[4px] border-successBorder  bg-successSurface text-successMain border-solid border-[1px] ">
+                Success
+              </div>
+            ) : value[accessor] === 'canceled' ? (
+              <div className="text-mRegular px-[6px] py-[4px] rounded-[4px] border-dangerBorder bg-dangerSurface text-dangerMain border-solid border-[1px] ">
+                Failed
+              </div>
+            ) : value[accessor] === 'requires_action' ? (
+              <div className="text-mRegular px-[6px] py-[4px] rounded-[4px] border-lengendMemoBorder bg-legendMemoFill text-legendMemo border-solid border-[1px] ">
+                Processing
+              </div>
+            ) : (
+              value[accessor]
+            )}
           </>
         );
 
@@ -1214,8 +1235,12 @@ const Dashboard = () => {
                     label: ManageLocales('app.modal.continue'),
                     handler: () => {
                       goBackToListView();
+                      setIsDetailPage(false);
+                      setRowSelection({});
+                      setError('');
                       setIsAddCommentDialogOpen(false);
                       setIsDialogOpen(false);
+                      router.push('/v2');
                     },
                     customStyle: 'flex-1 w-full h-10'
                   },
@@ -1232,26 +1257,27 @@ const Dashboard = () => {
             );
 
             setCommentValue('');
-            getProductById({
-              search_keyword: stoneId
-            })
-              .unwrap()
-              .then((res: any) => {
-                // setIsLoading(false);
-                setSearchData(res);
-                setRowSelection({});
-                setError('');
-                setIsDetailPage(true);
-              })
-              .catch((_e: any) => {
-                if (_e?.status === statusCode.NOT_FOUND) {
-                  setError(`We couldn't find any results for this search`);
-                } else if (_e?.status === statusCode.UNAUTHORIZED) {
-                  setError(_e?.data?.message?.message);
-                } else {
-                  setError('Something went wrong');
-                }
-              });
+
+            // getProductById({
+            //   search_keyword: stoneId
+            // })
+            //   .unwrap()
+            //   .then((res: any) => {
+            //     // setIsLoading(false);
+            //     setSearchData(res);
+            //     setRowSelection({});
+            //     setError('');
+            //     setIsDetailPage(true);
+            //   })
+            //   .catch((_e: any) => {
+            //     if (_e?.status === statusCode.NOT_FOUND) {
+            //       setError(`We couldn't find any results for this search`);
+            //     } else if (_e?.status === statusCode.UNAUTHORIZED) {
+            //       setError(_e?.data?.message?.message);
+            //     } else {
+            //       setError('Something went wrong');
+            //     }
+            //   });
           }
         })
         .catch(e => {

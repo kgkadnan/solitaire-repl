@@ -817,7 +817,9 @@ export function MatchPairDetails({
                                 //   :
                                 'h-[370px]'
                               : 'h-[420px]'
-                          } flex flex-col justify-between border-[0.5px]  border-neutral200 bg-neutral0 p-2 gap-[6px]`}
+                          } flex flex-col justify-between border-[0.5px]  border-neutral200 bg-neutral0 p-2 ${
+                            originalData.length > 2 ? 'gap-[4px]' : 'gap-[6px]'
+                          } `}
                         >
                           <div className="flex justify-around relative">
                             {imageLoadingStatus[index] && (
