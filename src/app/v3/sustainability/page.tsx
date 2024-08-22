@@ -61,7 +61,6 @@ const App: React.FC = () => {
   //       e.preventDefault(); // Prevent default scroll behavior
   //       const currentScrollY = window.scrollY;
   //       const scrollDifference = Math.abs(currentScrollY - lastScrollY.current);
-  // // console.log(currentScrollY,lastScrollY.current)
   //       // Only trigger carousel update if the scroll exceeds a threshold
   //       if (scrollDifference > 400 && carouselIndex < '17') {
   //         if (currentScrollY > lastScrollY.current) {
@@ -93,7 +92,6 @@ const App: React.FC = () => {
   //     };
   //   }, [carouselIndex]);
 
-  //   console.log(carouselIndex);
 
   return (
     <div className="flex flex-col gap-5">

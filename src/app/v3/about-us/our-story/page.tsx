@@ -17,7 +17,6 @@ export default function AboutUs() {
     if (scrollContainerRef.current) {
       const scrollContainer = scrollContainerRef.current;
       const scrollAmount = scrollContainer.clientWidth * index;
-      console.log(`Scrolling to index ${index}: ${scrollAmount}`);
       scrollContainer.scrollTo({
         left: scrollAmount,
         behavior: 'smooth'
@@ -35,7 +34,6 @@ export default function AboutUs() {
         setCurrentIndex(prevIndex => Math.max(prevIndex - 1, 0));
       }
     }
-    console.log(`Handled scroll: ${currentIndex}`);
   };
 
   useEffect(() => {
