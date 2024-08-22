@@ -7,8 +7,8 @@ import Image from 'next/image';
 import DownloadReport from '@public/v3/sustainability/download-report.png';
 // import { handleDownloadReport } from '@/utils/download-sustainability-report';
 import { sustainabilitySection } from '@/constants/v3/sustainability';
-import prev from '@public/v3/icons/previous.svg';
-import next from '@public/v3/icons/next.svg';
+import Prev from '@public/v3/icons/previous.svg?url';
+import Next from '@public/v3/icons/next.svg?url';
 // import { getAllPostsForHome } from '@/features/v3/api/blogs';
 // import { BlogCarousel } from '@/components/v3/blog-carousel';
 // import AnimationSection from '@/components/v3/animated-text/scroll';
@@ -16,6 +16,9 @@ import next from '@public/v3/icons/next.svg';
 const App: React.FC = () => {
   const [carouselIndex, setCarouselIndex] = useState('01'); // Default to the first index
   // const [allPosts, setAllPosts] = useState([]);
+  const [isHoveredNext, setIsHoveredNext] = useState(false);
+  const [isHoveredPrev, setIsHoveredPrev] = useState(false);
+
   const prevClick = (id: number) => {
     if (id === 0) {
       setCarouselIndex(sustainabilitySection[15].id);
@@ -222,9 +225,8 @@ const App: React.FC = () => {
           </div>
         </div>
         <div className="absolute left-[50%] bottom-[20%] flex flex-col gap-2">
-          <Image
-            src={prev}
-            alt="previous"
+          <div
+            className="cursor-pointer"
             onClick={() =>
               prevClick(
                 sustainabilitySection.findIndex(
@@ -232,10 +234,13 @@ const App: React.FC = () => {
                 )
               )
             }
-          />
-          <Image
-            src={next}
-            alt="next"
+            onMouseEnter={() => setIsHoveredPrev(true)}
+            onMouseLeave={() => setIsHoveredPrev(false)}
+          >
+            <Prev fill={isHoveredPrev ? '#F9FAFB' : '#E4E7EC'} />
+          </div>
+          <div
+            className="cursor-pointer"
             onClick={() =>
               nextClick(
                 sustainabilitySection.findIndex(
@@ -243,7 +248,11 @@ const App: React.FC = () => {
                 )
               )
             }
-          />
+            onMouseEnter={() => setIsHoveredNext(true)}
+            onMouseLeave={() => setIsHoveredNext(false)}
+          >
+            <Next fill={isHoveredNext ? '#5D6969' : '#343434'} />
+          </div>
         </div>
       </div>
       {/* )} */}
