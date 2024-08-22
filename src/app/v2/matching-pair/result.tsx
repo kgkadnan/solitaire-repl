@@ -533,7 +533,7 @@ const MatchingPairResult = ({
       });
 
       if (hasMemoOut) {
-        setErrorText(NO_STONES_SELECTED);
+        setErrorText(SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH);
         setIsError(true);
       } else if (hasHold) {
         setIsError(true);
