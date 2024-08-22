@@ -92,7 +92,6 @@ const App: React.FC = () => {
   //     };
   //   }, [carouselIndex]);
 
-
   return (
     <div className="flex flex-col gap-5">
       {/* {carouselIndex === '01' && ( // Render the landscape section only when carouselIndex is '17' */}
