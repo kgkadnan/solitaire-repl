@@ -11,7 +11,7 @@ import prev from '@public/v3/icons/previous.svg';
 import next from '@public/v3/icons/next.svg';
 // import { getAllPostsForHome } from '@/features/v3/api/blogs';
 // import { BlogCarousel } from '@/components/v3/blog-carousel';
-import AnimationSection from '@/components/v3/animated-text/scroll';
+// import AnimationSection from '@/components/v3/animated-text/scroll';
 
 const App: React.FC = () => {
   const [carouselIndex, setCarouselIndex] = useState('01'); // Default to the first index
