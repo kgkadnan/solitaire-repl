@@ -19,6 +19,7 @@ import BidHammer from '@public/v2/assets/icons/dashboard/bid-hammer.svg';
 import Image from 'next/image';
 import { handleCardClick } from './search/saved-search/helpers/handle-card-click';
 import {
+  // useCheckProductAvailabilityMutation,
   useConfirmProductMutation,
   useGetProductByIdMutation,
   useLazyGetProductCountQuery
@@ -193,6 +194,7 @@ const Dashboard = () => {
   const [triggerAvailableSlots] = useLazyGetAvailableMyAppointmentSlotsQuery(
     {}
   );
+  // const [checkProductAvailability] = useCheckProductAvailabilityMutation({});
 
   let isNudge = localStorage.getItem('show-nudge')! === 'MINI';
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
@@ -1709,6 +1711,9 @@ const Dashboard = () => {
                           identifier: 'detailPage',
                           confirmStoneTrack: 'DNA',
                           dispatch
+                          // router,
+                          // modalSetState,
+                          // checkProductAvailability
                         });
                       }
                     }
@@ -1762,6 +1767,7 @@ const Dashboard = () => {
               setIsConfirmStone={setIsConfirmStone}
               setConfirmStoneData={setConfirmStoneData}
               setIsDetailPage={setIsDetailPage}
+              // modalSetState={modalSetState}p
             />
           </div>
         </div>
@@ -2348,7 +2354,7 @@ const Dashboard = () => {
                     role={
                       customerData?.customer.kam?.post ?? 'Key Account Manager'
                     }
-                    location={customerData?.customer.kam?.location ?? location}
+                    location={customerData?.customer.kam?.location ?? '-'}
                     phoneNumber={customerData?.customer.kam?.phone ?? '-'}
                     email={customerData?.customer.kam?.email ?? '-'}
                     image={customerData?.customer.kam?.image ?? ''}
