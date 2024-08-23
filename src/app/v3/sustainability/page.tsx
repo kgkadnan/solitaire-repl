@@ -185,7 +185,7 @@ const App: React.FC = () => {
                       Khilti Pari Foundation.
                     </a>
                   </div>
-                  <h1 className="lg:text-mRegular xl:text-lRegular font-bold text-neutral900 leading-10">
+                  <h1 className="lg:text-headingS xl:text-headingM font-bold text-neutral900 leading-8">
                     {
                       sustainabilitySection.filter(
                         data => data.id === carouselIndex
