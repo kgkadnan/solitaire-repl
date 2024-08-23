@@ -155,7 +155,7 @@ Sophisticated Technological Investments: KGK has invested in several sophisticat
     id: '11',
     header: 'Jal Mahal reconstruction',
     imageTitle: 'Sustainable <br/> Cities & Communities',
-    description: `One of the most picturesque monuments in Jaipur is the enchanting Jal Mahal Palace. ...In 2005, the restoration began... The KGK Group has been instrumental in restoring the palace to its old glory. ... Given the historical importance of the place, every little detail was studied carefully and restored keeping its original beauty intact.`,
+    description: `At the heart of our commitment to sustainability lies the preservation and restoration of our cultural heritage. The restoration of the Jal Mahal Palace is a testament to our dedication to reviving historical landmarks while adhering to eco-friendly practices. By employing traditional techniques alongside modern conservation methods, we ensure that these structures not only stand the test of time but also contribute to a sustainable future. This project reflects our belief that preserving history is essential for creating a better tomorrow, where culture and nature coexist harmoniously.`,
     images: Sus11,
     head: Head11,
     color: '#E0E0E0'

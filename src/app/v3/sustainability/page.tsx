@@ -233,7 +233,7 @@ const App: React.FC = () => {
                   }
                 </p>
               </div>
-              <div className="flex justify-around ">
+              <div className="flex justify-around w-full ">
                 <Image
                   src={
                     sustainabilitySection.filter(
@@ -251,7 +251,7 @@ const App: React.FC = () => {
             </div>
           </div>
         </div>
-        <div className="absolute left-[50%] bottom-[20%] flex flex-col gap-2">
+        <div className="absolute left-[50%] bottom-[25%] flex flex-col gap-2">
           <div
             className="cursor-pointer"
             onClick={() =>
