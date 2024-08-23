@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import KgkIcon from '@public/v2/assets/icons/sidebar-icons/vector.svg';
 import { handleLoginInputChange } from '../helpers/handle-login-input-change';
 import Link from 'next/link';
