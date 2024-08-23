@@ -1,5 +1,6 @@
 'use client';
 import AnimationSection from '@/components/v3/animated-text/scroll';
+import SuperfastWireless from '@/components/v3/section-3d';
 import SmoothVideoPlayer from '@/components/v3/smooth-video';
 import React, { useState } from 'react';
 
@@ -33,7 +34,7 @@ const Index = () => {
           </div>
           <div className="xl:px-[112px] lg:px-[32px]">
             <div className="h-[700px] bg-neutral100 rounded-[25px]">
-              Carousel
+              Traceability Carousel
             </div>
           </div>
           <div className="xl:px-[112px] lg:px-[32px] pt-[80px] pb-[100px] flex flex-col bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom">
@@ -70,6 +71,9 @@ const Index = () => {
                 make a guest account and we'll reach out to you shortly!
               </div>
             </div>
+          </div>
+          <div className="overflow-auto	w-full flex justify-center">
+            <SuperfastWireless />
           </div>
         </div>
       ) : (

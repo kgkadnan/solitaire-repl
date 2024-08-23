@@ -202,6 +202,14 @@ module.exports = {
           '30%': { width: '50px', height: '0%' },
           '60%': { width: '50px', height: '80px' },
           '100%': { width: '100%', height: '100%' }
+        },
+        'slide-left': {
+          from: {
+            marginLeft: '100%'
+          },
+          to: {
+            marginLeft: '0%'
+          }
         }
       },
       boxShadow: {
@@ -215,7 +223,8 @@ module.exports = {
         zoom: 'zoom 3s ease-in-out ',
         gradient: 'gradientAnimation 10s ease infinite',
         pulse: 'worldMapPulse 2s infinite',
-        'horizontal-reveal': 'horizontal-reveal 2s linear forwards'
+        'horizontal-reveal': 'horizontal-reveal 2s linear forwards',
+        slideLeft: 'slide-left 3s linear'
       },
       backgroundImage: {
         'animated-gradient': ` linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, white 100%),
