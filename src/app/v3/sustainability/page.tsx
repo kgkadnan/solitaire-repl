@@ -233,6 +233,7 @@ const App: React.FC = () => {
             }
             onMouseEnter={() => setIsHoveredPrev(true)}
             onMouseLeave={() => setIsHoveredPrev(false)}
+            style={{ userSelect: 'none', outline: 'none' }}
           >
             <Prev fill={isHoveredPrev ? '#F9FAFB' : '#E4E7EC'} />
           </div>
@@ -247,6 +248,7 @@ const App: React.FC = () => {
             }
             onMouseEnter={() => setIsHoveredNext(true)}
             onMouseLeave={() => setIsHoveredNext(false)}
+            style={{ userSelect: 'none', outline: 'none' }}
           >
             <Next fill={isHoveredNext ? '#5D6969' : '#343434'} />
           </div>
