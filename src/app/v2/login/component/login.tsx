@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import KgkIcon from '@public/v2/assets/icons/sidebar-icons/vector.svg';
 import { handleLoginInputChange } from '../helpers/handle-login-input-change';
 import Link from 'next/link';
@@ -9,7 +9,6 @@ import { ManageLocales } from '@/utils/v2/translate';
 import { IndividualActionButton } from '@/components/v2/common/action-button/individual-button';
 import CheckboxComponent from '@/components/v2/common/checkbox';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { KgkDiamondLaunchDialog } from '@/components/v2/common/dialog/kgk-diamond-launch-modal';
 import { InputField } from '@/components/v2/common/input-field';
 import { useLazyTrackRegisterFlowQuery } from '@/features/api/register';
 
@@ -24,7 +23,6 @@ const LoginComponent = ({
   password,
   passwordErrorText,
   handleLogin,
-  currentCountryCode,
   setEmail,
   setEmailErrorText,
   email,
@@ -36,17 +34,7 @@ const LoginComponent = ({
   const router = useRouter();
   const pathName = useSearchParams().get('path');
 
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [triggerRegisterFlowTrack] = useLazyTrackRegisterFlowQuery();
-
-  useEffect(() => {
-    if (
-      currentCountryCode &&
-      currentCountryCode.country_calling_code !== '+91'
-    ) {
-      setIsDialogOpen(true);
-    }
-  }, [currentCountryCode]);
 
   const handleSubmit = (event: any) => {
     event.preventDefault(); // Prevent default form submission behavior
@@ -55,10 +43,6 @@ const LoginComponent = ({
 
   return (
     <>
-      <KgkDiamondLaunchDialog
-        isOpens={isDialogOpen}
-        setIsDialogOpen={setIsDialogOpen}
-      />
       <div className="flex items-center text-center">
         {' '}
         {/* Wrap with form and handle onSubmit */}
