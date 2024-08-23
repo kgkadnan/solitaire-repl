@@ -176,7 +176,7 @@ const App: React.FC = () => {
                     }
                   </p>
                   <div className="lg:text-mRegular xl:text-lRegular text-neutral800">
-                    For more details, visit
+                    For more details, visit&nbsp;
                     <a
                       href="https://www.khiltipari.org/"
                       target="_blank"
