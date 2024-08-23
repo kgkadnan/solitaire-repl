@@ -5,7 +5,8 @@ import SmoothVideoPlayer from '@/components/v3/smooth-video';
 import React, { useState } from 'react';
 
 const Index = () => {
-  const [isHtml, setIsHtml] = useState(true);
+  const [isHtml, setIsHtml] = useState(false);
+  const [isManufactureBlurred, setIsManufactureBlurred] = useState(true);
 
   return (
     <div className="relative ">
@@ -77,7 +78,64 @@ const Index = () => {
           </div>
         </div>
       ) : (
-        <div>hello</div>
+        <div className="relative">
+          {/* Content with Blur Effect */}
+          <div className="h-[100vh] xl:px-[112px] lg:px-[32px] pt-[160px] pb-[100px] flex flex-col ">
+            <div
+              className={` transition-all duration-300 ease-in-out ${
+                isManufactureBlurred ? 'filter blur-sm' : 'filter-none'
+              } absolute inset-0`}
+            >
+              <div className="flex items-center justify-center flex-col h-full bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom">
+                <p>This content is initially blurred.</p>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  Phasellus imperdiet, nulla nec auctor.
+                </p>
+                <p>This content is initially blurred.</p>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  Phasellus imperdiet, nulla nec auctor.
+                </p>
+                <p>This content is initially blurred.</p>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  Phasellus imperdiet, nulla nec auctor.
+                </p>
+                {/* More content here */}
+              </div>
+            </div>
+            {/* Overlay with CTA */}
+            {isManufactureBlurred && (
+              <div className="relative z-10 flex justify-center items-center flex-col text-primaryMain gap-10">
+                <div className="flex flex-col gap-5 text-center w-[780px]">
+                  <div className="flex flex-col">
+                    <p className="text-primaryMain text-[62px] font-bold">
+                      Manufacturing
+                    </p>
+                    <p className="text-primaryMain text-[42px] font-semiBold mt-[-20px]">
+                      Transforming Rough Diamonds
+                    </p>
+                  </div>
+                  <p className="text-primaryPressed text-[24px] font-semiBold leading-7">
+                    By manufacturing where the mines are located, we stimulate
+                    the regional economy. As a consequence, we're seen as a
+                    favorable company to work with in the eyes of the government
+                    and miners. We double down on this value by ensuring that
+                    all our goods are traceable and sustainably developed.
+                  </p>
+                </div>
+
+                <button
+                  className="cta-button px-6 py-3 bg-primaryMain text-white rounded shadow-lg  transition"
+                  onClick={() => setIsManufactureBlurred(!isManufactureBlurred)}
+                >
+                  {isManufactureBlurred && 'Explore'}
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
       )}
 
       {/* Toggle Button */}
