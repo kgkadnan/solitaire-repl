@@ -141,7 +141,7 @@ const App: React.FC = () => {
                       {sustainabilitySection
                         .filter(data => data.id === carouselIndex)[0]
                         .metadata?.map(figure => (
-                          <div className="flex items-start">
+                          <div className="flex items-start" key={figure.key}>
                             {/* Gradient line */}
                             <div className="w-[2px] h-full bg-gradient-to-b from-[#FFAD05] via-[#168B85] to-[#5995ED] mr-2"></div>
 
