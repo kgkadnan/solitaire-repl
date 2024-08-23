@@ -111,7 +111,15 @@ const App: React.FC = () => {
               {typeof sustainabilitySection.filter(
                 data => data.id === carouselIndex
               )[0].header === 'string' ? (
-                <div className="flex flex-col mt-[200px] gap-5">
+                <div
+                  className={`flex flex-col  gap-5 ${
+                    sustainabilitySection.filter(
+                      data => data.id === carouselIndex
+                    )[0].id === '03'
+                      ? 'mt-[80px]'
+                      : 'mt-[200px]'
+                  }`}
+                >
                   <div className="lg:text-headingM xl:text-headingL font-bold text-neutral900 leading-10">
                     {
                       sustainabilitySection.filter(
@@ -126,6 +134,30 @@ const App: React.FC = () => {
                       )[0].description
                     }
                   </div>
+                  {sustainabilitySection.filter(
+                    data => data.id === carouselIndex
+                  )[0].metadata && (
+                    <div className="flex flex-wrap gap-10">
+                      {sustainabilitySection
+                        .filter(data => data.id === carouselIndex)[0]
+                        .metadata?.map(figure => (
+                          <div className="flex items-start">
+                            {/* Gradient line */}
+                            <div className="w-[2px] h-full bg-gradient-to-b from-[#FFAD05] via-[#168B85] to-[#5995ED] mr-2"></div>
+
+                            {/* Text content */}
+                            <div className="flex flex-col w-[150px]">
+                              <p className="text-primaryMain text-headingM font-semiBold">
+                                {figure.value}
+                              </p>
+                              <p className="text-[12px] text-neutral600">
+                                {figure.key}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                    </div>
+                  )}
                 </div>
               ) : (
                 <div className="flex-1 flex flex-col justify-center max-w-[500px] gap-5">
@@ -171,8 +203,9 @@ const App: React.FC = () => {
               )}
             </div>
             <div
-              className=" flex flex-col rounded-[8px] h-full items-center pt-[40px]"
+              className=" flex flex-col rounded-[8px] px-[50px] pb-[50px] items-center pt-[20px] h-auto"
               style={{
+                height: 'fit-content',
                 width: 'calc(50% - 27px)',
                 background: sustainabilitySection.filter(
                   data => data.id === carouselIndex
@@ -180,9 +213,10 @@ const App: React.FC = () => {
                 minWidth: '500px !important'
               }}
             >
-              <div className="flex justify-between w-[470px] mx-[15px]">
-                <div className="text-neutral900 lg:text-[16px] xl:text-[20px] font-bold  flex items-baseline ">
+              <div className="flex justify-between w-full !px-[15px] mb-[-10px] h-[50px]">
+                <div className="text-neutral900 lg:text-[16px] xl:text-[20px] font-bold  flex items-center ">
                   <div
+                    style={{ lineHeight: '21px' }}
                     dangerouslySetInnerHTML={{
                       __html: sustainabilitySection.filter(
                         data => data.id === carouselIndex
@@ -191,7 +225,7 @@ const App: React.FC = () => {
                     // className=''
                   />
                 </div>
-                <p className="text-neutral400 lg:text-headingL xl:text-headingXL mb-[-16px] flex items-baseline">
+                <p className="text-neutral400 lg:text-headingL xl:text-headingXL mb-[-4px] flex items-center">
                   {
                     sustainabilitySection.filter(
                       data => data.id === carouselIndex
@@ -211,11 +245,7 @@ const App: React.FC = () => {
                       data => data.id === carouselIndex
                     )[0].imageTitle
                   }
-                  className={` w-[500px] ${
-                    sustainabilitySection.filter(
-                      data => data.id === carouselIndex
-                    )[0].id === '16' && 'h-[650px]'
-                  }`}
+                  className={` w-full `}
                 />
               </div>
             </div>

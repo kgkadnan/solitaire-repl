@@ -60,7 +60,25 @@ export const sustainabilitySection = [
     description: `Established in 1997 and funded by the KGK Group, the Bhagwan Mahaveer Cancer Hospital and Research Centre (BMCHRC) in Jaipur is North India's only super specialty cancer treatment hospital. The 300-bed, NABH-accredited institution offers advanced medical services, focusing on compassionate and humane patient care. With departments in surgical, medical, and radiation oncology, and an all-women’s Cancer Care wing, BMCHRC provides comprehensive cancer treatment and support, including moral and financial aid to the disadvantaged.`,
     images: Sus3,
     head: Head3,
-    color: '#F0F0F0'
+    color: '#F0F0F0',
+    metadata: [
+      {
+        key: 'Lives Touched',
+        value: '250,000+'
+      },
+      {
+        key: 'Chemotherapy Sessions',
+        value: '942+'
+      },
+      {
+        key: 'Radiation Therapy',
+        value: '58,000+'
+      },
+      {
+        key: 'Surgeries',
+        value: '60,000+'
+      }
+    ]
   },
   {
     id: '04',
