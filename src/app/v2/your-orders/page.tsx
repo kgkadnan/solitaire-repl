@@ -7,7 +7,8 @@ import {
   MAX_MY_INVOICE_LIMIT_COUNT,
   MAX_RECENT_CONFIRMATION_COUNT,
   PENDING,
-  PENING_INVOICE_BREADCRUMB_LABEL
+  PENING_INVOICE_BREADCRUMB_LABEL,
+  DASHBOARD_BREADCRUMB_LABEL
 } from '@/constants/business-logic';
 import infoIcon from '@public/v2/assets/icons/info-icon.svg';
 import emptyOrderSvg from '@public/v2/assets/icons/empty-order.svg';
@@ -243,19 +244,19 @@ const MyDiamonds = () => {
   const { keys, data } = tabsData[activeTab] || { keys: [], data: [] };
 
   const handleShowDetails = (itemId: string) => {
-    console.log('itemId', itemId);
     setShowDetail(true);
     triggerProductDetail({ id: itemId, singleExpand }).then(res => {
-      console.log('res', res);
       setProductDetailData(res.data.order);
     });
   };
 
-  console.log('data', data);
-
   const goBackToListView = () => {
-    setShowDetail(false);
-    setProductDetailData([]);
+    if (detailId) {
+      router.push('/v2');
+    } else {
+      setShowDetail(false);
+      setProductDetailData([]);
+    }
   };
 
   const handleSearch = (e: any) => {
@@ -450,7 +451,11 @@ const MyDiamonds = () => {
             <OrderDetail
               productDetailData={productDetailData}
               goBackToListView={goBackToListView}
-              breadCrumLabel={PENING_INVOICE_BREADCRUMB_LABEL}
+              breadCrumLabel={
+                detailId
+                  ? DASHBOARD_BREADCRUMB_LABEL
+                  : PENING_INVOICE_BREADCRUMB_LABEL
+              }
               modalSetState={modalSetState}
               setIsLoading={setIsLoading}
               router={router}
@@ -461,7 +466,11 @@ const MyDiamonds = () => {
             <OrderDetail
               productDetailData={productDetailData}
               goBackToListView={goBackToListView}
-              breadCrumLabel={ACTIVE_INVOICE_BREADCRUMB_LABEL}
+              breadCrumLabel={
+                detailId
+                  ? DASHBOARD_BREADCRUMB_LABEL
+                  : ACTIVE_INVOICE_BREADCRUMB_LABEL
+              }
               modalSetState={modalSetState}
               setIsLoading={setIsLoading}
               router={router}
@@ -534,7 +543,7 @@ const MyDiamonds = () => {
               })}
               {tooltip.show && (
                 <div
-                  className={`absolute z-[5] bg-[#ECF2FC] w-[320px] border-[1px] border-[#B6CFF3] rounded-[8px] p-4 text-[#475467] top-[35px] gap-2 `}
+                  className={`absolute z-[1] bg-[#ECF2FC] w-[320px] border-[1px] border-[#B6CFF3] rounded-[8px] p-4 text-[#475467] top-[35px] gap-2 `}
                   style={{
                     left: `${tooltip.position.left}px`,
 

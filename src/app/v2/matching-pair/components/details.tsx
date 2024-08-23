@@ -104,7 +104,7 @@ export function MatchPairDetails({
   const [, setZoomPosition] = useState({ x: 0, y: 0 });
   const [breadCrumMatchPair, setBreadCrumMatchPair] = useState('');
   const [viewSimilar, setViewSimilar] = useState<boolean>(false);
-  const [isImageLoading, setIsImageLoading] = useState(true);
+  // const [isImageLoading, setIsImageLoading] = useState(true);
   const [imageLoadingStatus, setImageLoadingStatus] = useState<any>([]);
 
   const [triggerColumn] =
@@ -119,17 +119,17 @@ export function MatchPairDetails({
   }, []);
 
   useEffect(() => {
-    if (originalData.length > 0) {
+    if (originalData.length > 0 && originalData.length < 2) {
       setImageLoadingStatus(new Array(originalData.length).fill(true));
     }
   }, [originalData]);
 
-  useEffect(() => {
-    // Check if all images are loaded
-    if (imageLoadingStatus.every((status: any) => !status)) {
-      setIsImageLoading(false);
-    }
-  }, [imageLoadingStatus]);
+  // useEffect(() => {
+  //   // Check if all images are loaded
+  //   if (imageLoadingStatus.every((status: any) => !status)) {
+  //     setIsImageLoading(false);
+  //   }
+  // }, [imageLoadingStatus]);
 
   const handleImageLoad = (index: number) => {
     // Set the specific image as loaded
@@ -429,7 +429,11 @@ export function MatchPairDetails({
       return false;
     })
   );
-  const updateDataAsPerSimilarData = (originalData: any, similarData: any) => {
+  const updateDataAsPerSimilarData = (
+    originalData: any,
+    similarData: any,
+    imageLoadingStatus: boolean[]
+  ) => {
     const originalLotIds = new Set(
       originalData.map((product: any) => product.lot_id)
     );
@@ -438,7 +442,16 @@ export function MatchPairDetails({
       (product: any) => !originalLotIds.has(product.lot_id)
     );
 
-    return [...originalData, ...newProducts];
+    // Combine original data and new products
+    const updatedData = [...originalData, ...newProducts];
+
+    // Update the image loading status array to account for new products
+    const updatedImageLoadingStatus = [
+      ...imageLoadingStatus,
+      ...new Array(newProducts.length).fill(true)
+    ];
+
+    return { updatedData, updatedImageLoadingStatus };
   };
 
   // console.log('validImages', validImages);
@@ -523,7 +536,7 @@ export function MatchPairDetails({
                   activePreviewTab={activePreviewTab}
                   setImageIndex={setImageIndex}
                   isMatchingPair={true}
-                  setIsImageLoading={setIsImageLoading}
+                  // setIsImageLoading={setIsImageLoading}
                   setImageLoadingStatus={setImageLoadingStatus}
                   originalDataFromMatchPair={originalData}
                 />
@@ -540,13 +553,18 @@ export function MatchPairDetails({
                       style={{ boxShadow: 'var(--input-shadow)' }}
                       onClick={() => {
                         if (similarData && similarData?.count > 0) {
-                          !viewSimilar &&
-                            setOriginalData(
+                          if (!viewSimilar) {
+                            const { updatedData, updatedImageLoadingStatus } =
                               updateDataAsPerSimilarData(
                                 originalData,
-                                similarData
-                              )
-                            );
+                                similarData,
+                                imageLoadingStatus
+                              );
+
+                            setOriginalData(updatedData);
+                            setImageLoadingStatus(updatedImageLoadingStatus);
+                          }
+
                           setViewSimilar(!viewSimilar);
                         }
                       }}
@@ -584,7 +602,7 @@ export function MatchPairDetails({
                             <div className="flex gap-2">
                               <button
                                 onClick={() => {
-                                  setIsImageLoading(true);
+                                  // setIsImageLoading(true);
                                   setImageLoadingStatus(
                                     new Array(originalData.length).fill(true)
                                   );
@@ -614,7 +632,7 @@ export function MatchPairDetails({
                               </button>
                               <button
                                 onClick={() => {
-                                  setIsImageLoading(true);
+                                  // setIsImageLoading(true);
                                   setImageLoadingStatus(
                                     new Array(originalData.length).fill(true)
                                   );
@@ -799,10 +817,12 @@ export function MatchPairDetails({
                                 //   :
                                 'h-[370px]'
                               : 'h-[420px]'
-                          } flex flex-col justify-between border-[0.5px]  border-neutral200 bg-neutral0 p-2 gap-[10px]`}
+                          } flex flex-col justify-between border-[0.5px]  border-neutral200 bg-neutral0 p-2 ${
+                            originalData.length > 2 ? 'gap-[4px]' : 'gap-[6px]'
+                          } `}
                         >
                           <div className="flex justify-around relative">
-                            {isImageLoading && (
+                            {imageLoadingStatus[index] && (
                               <div
                                 className={` ${
                                   originalData.length > 2
@@ -966,6 +986,23 @@ export function MatchPairDetails({
                                   handleImageLoad(index);
                                 }}
                               />
+                            )}
+                          </div>
+                          <div className="flex justify-center items-center">
+                            {!imageLoadingStatus[index] ? (
+                              <div className="text-mRegular font-medium text-neutral900">
+                                {filteredImages[index][imageIndex].name ?? '-'}
+                              </div>
+                            ) : (
+                              <div>
+                                <Skeleton
+                                  width={88}
+                                  variant="rectangular"
+                                  height={20}
+                                  animation="wave"
+                                  sx={{ bgcolor: 'var(--neutral-200)' }}
+                                />
+                              </div>
                             )}
                           </div>
                           <div className="flex justify-between">

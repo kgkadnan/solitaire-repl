@@ -115,19 +115,7 @@ const MatchPairDnaSkeleton = () => {
                 className=""
               />
             </div>
-            <div className="h-full flex justify-center p-2 border-r-[0.5px] border-neutral200 border-solid  w-[460px] ">
-              <div>
-                <Skeleton
-                  variant="rectangular"
-                  sx={{ bgcolor: 'var(--neutral-200)' }}
-                  height={'291px'}
-                  width={'370px'}
-                  animation="wave"
-                  className=""
-                />
-              </div>
-            </div>
-            <div className="h-full flex justify-center pt-2  border-r-[0.5px] border-neutral200 border-solid w-[460px]">
+            <div className="h-full flex flex-col items-center gap-6 p-2 border-r-[0.5px] border-neutral200 border-solid  w-[460px] ">
               <Skeleton
                 variant="rectangular"
                 sx={{ bgcolor: 'var(--neutral-200)' }}
@@ -135,6 +123,31 @@ const MatchPairDnaSkeleton = () => {
                 width={'370px'}
                 animation="wave"
                 className=""
+              />
+
+              <Skeleton
+                width={88}
+                variant="rectangular"
+                height={20}
+                animation="wave"
+                sx={{ bgcolor: 'var(--neutral-200)' }}
+              />
+            </div>
+            <div className="h-full flex flex-col items-center gap-6 pt-2  border-r-[0.5px] border-neutral200 border-solid w-[460px]">
+              <Skeleton
+                variant="rectangular"
+                sx={{ bgcolor: 'var(--neutral-200)' }}
+                height={'291px'}
+                width={'370px'}
+                animation="wave"
+                className=""
+              />
+              <Skeleton
+                width={88}
+                variant="rectangular"
+                height={20}
+                animation="wave"
+                sx={{ bgcolor: 'var(--neutral-200)' }}
               />
             </div>
           </div>

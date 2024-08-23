@@ -547,18 +547,20 @@ const Result = ({
           setAppointmentPayload(data);
         });
 
-        const lotIds = selectedIds?.map((id: string) => {
-          const getLotIds: any =
+        const lotIdsWithCountry = selectedIds?.map((id: string) => {
+          const foundProduct: any =
             dataTableState.rows.find((row: IProduct) => {
               return row?.id === id;
             }) ?? {};
 
-          if (getLotIds) {
-            return getLotIds?.lot_id;
+          if (foundProduct) {
+            const lotId = foundProduct?.lot_id;
+            const country = foundProduct?.location; // assuming country is a property in foundProduct
+            return `${lotId}(${country})`;
           }
           return '';
         });
-        setLotIds(lotIds);
+        setLotIds(lotIdsWithCountry);
       }
     } else {
       setIsError(true);

@@ -2,11 +2,14 @@ import Avatar from '@public/v2/assets/icons/dashboard/avatar.svg?url';
 import Image from 'next/image';
 
 import Phone from '@public/v2/assets/icons/dashboard/phone.svg?url';
+import Location from '@public/v2/assets/icons/dashboard/location.svg?url';
 import WhatsApp from '@public/v2/assets/icons/dashboard/whatsapp.svg?url';
 import Mail from '@public/v2/assets/icons/dashboard/mail.svg?url';
 import Copy from '@public/v2/assets/icons/dashboard/copy.svg?url';
 import { Toast } from '../copy-and-share/toast';
 import { useState } from 'react';
+import { RednderLocation } from '../data-table/helpers/render-cell';
+import { STONE_LOCATION_SHORT } from '@/constants/v2/enums/location';
 
 interface IKAMCardProps {
   name: string;
@@ -14,6 +17,7 @@ interface IKAMCardProps {
   phoneNumber: string;
   email: string;
   image?: string | null;
+  location: string;
 }
 
 const styles = {
@@ -29,7 +33,8 @@ const KAMCard: React.FC<IKAMCardProps> = ({
   role,
   phoneNumber,
   email,
-  image
+  image,
+  location
 }) => {
   const [showToast, setShowToast] = useState(false);
   const handleCopy = (email: string) => {
@@ -39,6 +44,14 @@ const KAMCard: React.FC<IKAMCardProps> = ({
       setShowToast(false); // Hide the toast notification after some time
     }, 4000);
   };
+  console.log(
+    'location',
+    location,
+    RednderLocation({
+      renderedCellValue:
+        STONE_LOCATION_SHORT[location as keyof typeof STONE_LOCATION_SHORT]
+    })
+  );
   return (
     <>
       <Toast show={showToast} message="Copied Successfully" />
@@ -69,13 +82,28 @@ const KAMCard: React.FC<IKAMCardProps> = ({
             )}{' '}
           </div>
         </div>
-        <div className="flex flex-col items-center gap-3">
+        <div className="flex flex-col items-center gap-[8px]">
           <h3 className="text-headingM medium text-neutral900">{name}</h3>
-          <span className="text-lRegular  text-neutral900">{role}</span>
+          <div className="text-lRegular  text-neutral900 ">
+            <span>{role}</span>
+          </div>
+
           <div className="parent relative">
             <hr className=" bottom-0 left-0 border-none h-[1px] w-[250px] bg-neutral200" />
           </div>
-          <div className="flex flex-col gap-4 text-mRegular text-neutral600">
+          <div className="flex flex-col gap-[14px] text-mRegular text-neutral600">
+            <div className="flex gap-[13px] items-center">
+              <Location />
+              <div>
+                {RednderLocation({
+                  renderedCellValue:
+                    STONE_LOCATION_SHORT[
+                      location as keyof typeof STONE_LOCATION_SHORT
+                    ]
+                })}
+              </div>
+              <span>{location}</span>
+            </div>
             <div className="flex items-center gap-2 cursor-pointer">
               <a href={`tel:${phoneNumber}`}>
                 {' '}

@@ -698,12 +698,14 @@ const Dashboard = () => {
       keys: [
         { label: 'Order ID', accessor: 'display_id' },
         { label: 'Confirmation Date', accessor: 'created_at' },
+        { label: 'Order Request Status', accessor: 'status' },
         { label: 'Details', accessor: 'details' }
       ],
       data: tabs.find(tab => tab.label === activeTab)?.data
     },
     activeInvoice: {
       keys: [
+        { label: 'Order ID', accessor: 'display_id' },
         { label: 'Invoice Number', accessor: 'invoice_id' },
         { label: 'Invoice Date', accessor: 'created_at' },
         { label: 'Details', accessor: 'details' }
@@ -741,11 +743,31 @@ const Dashboard = () => {
             <span>{formatNumberWithLeadingZeros(value[accessor])}</span>
           </>
         );
+      case 'status':
+        return (
+          <>
+            {value[accessor] === 'pending' ? (
+              <div className="text-mRegular px-[6px] py-[4px] rounded-[4px] border-successBorder  bg-successSurface text-successMain border-solid border-[1px] ">
+                Success
+              </div>
+            ) : value[accessor] === 'canceled' ? (
+              <div className="text-mRegular px-[6px] py-[4px] rounded-[4px] border-dangerBorder bg-dangerSurface text-dangerMain border-solid border-[1px] ">
+                Failed
+              </div>
+            ) : value[accessor] === 'requires_action' ? (
+              <div className="text-mRegular px-[6px] py-[4px] rounded-[4px] border-lengendMemoBorder bg-legendMemoFill text-legendMemo border-solid border-[1px] ">
+                Processing
+              </div>
+            ) : (
+              value[accessor]
+            )}
+          </>
+        );
 
       case 'invoice_id':
         return (
           <>
-            <Image src={icon} alt="icon" />
+            {/* <Image src={icon} alt="icon" /> */}
             <span>{value[accessor]}</span>
           </>
         );
@@ -1149,18 +1171,20 @@ const Dashboard = () => {
           setAppointmentPayload(data);
         });
 
-        const lotIds = selectedIds?.map((id: string) => {
-          const getLotIds: any =
-            searchData?.foundProducts.find((row: IProduct) => {
-              return row?.id === id;
-            }) ?? {};
+        const lotIdsWithCountry = selectedIds?.map((id: string) => {
+          const foundProduct =
+            searchData?.foundProducts.find((row: IProduct) => row?.id === id) ??
+            {};
 
-          if (getLotIds) {
-            return getLotIds?.lot_id;
+          if (foundProduct) {
+            const lotId = foundProduct?.lot_id;
+            const country = foundProduct?.location; // assuming country is a property in foundProduct
+            return `${lotId}(${country})`;
           }
+
           return '';
         });
-        setLotIds(lotIds);
+        setLotIds(lotIdsWithCountry);
       }
     } else {
       setError(SELECT_STONE_TO_PERFORM_ACTION);
@@ -1211,8 +1235,12 @@ const Dashboard = () => {
                     label: ManageLocales('app.modal.continue'),
                     handler: () => {
                       goBackToListView();
+                      setIsDetailPage(false);
+                      setRowSelection({});
+                      setError('');
                       setIsAddCommentDialogOpen(false);
                       setIsDialogOpen(false);
+                      router.push('/v2');
                     },
                     customStyle: 'flex-1 w-full h-10'
                   },
@@ -1229,26 +1257,27 @@ const Dashboard = () => {
             );
 
             setCommentValue('');
-            getProductById({
-              search_keyword: stoneId
-            })
-              .unwrap()
-              .then((res: any) => {
-                // setIsLoading(false);
-                setSearchData(res);
-                setRowSelection({});
-                setError('');
-                setIsDetailPage(true);
-              })
-              .catch((_e: any) => {
-                if (_e?.status === statusCode.NOT_FOUND) {
-                  setError(`We couldn't find any results for this search`);
-                } else if (_e?.status === statusCode.UNAUTHORIZED) {
-                  setError(_e?.data?.message?.message);
-                } else {
-                  setError('Something went wrong');
-                }
-              });
+
+            // getProductById({
+            //   search_keyword: stoneId
+            // })
+            //   .unwrap()
+            //   .then((res: any) => {
+            //     // setIsLoading(false);
+            //     setSearchData(res);
+            //     setRowSelection({});
+            //     setError('');
+            //     setIsDetailPage(true);
+            //   })
+            //   .catch((_e: any) => {
+            //     if (_e?.status === statusCode.NOT_FOUND) {
+            //       setError(`We couldn't find any results for this search`);
+            //     } else if (_e?.status === statusCode.UNAUTHORIZED) {
+            //       setError(_e?.data?.message?.message);
+            //     } else {
+            //       setError('Something went wrong');
+            //     }
+            //   });
           }
         })
         .catch(e => {
@@ -2154,7 +2183,7 @@ const Dashboard = () => {
                       </Link>
                     </div>
                   </div>
-                  <div className="p-4 ">
+                  <div className="p-[10px] ">
                     {savedSearchData.length > 0 ? (
                       savedSearchData?.map((searchData: any, index: number) => {
                         const gradientIndex = index % gradientClasses.length;
@@ -2319,6 +2348,7 @@ const Dashboard = () => {
                     role={
                       customerData?.customer.kam?.post ?? 'Key Account Manager'
                     }
+                    location={customerData?.customer.kam?.location ?? location}
                     phoneNumber={customerData?.customer.kam?.phone ?? '-'}
                     email={customerData?.customer.kam?.email ?? '-'}
                     image={customerData?.customer.kam?.image ?? ''}
