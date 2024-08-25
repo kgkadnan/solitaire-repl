@@ -31,7 +31,10 @@ import {
 } from '@/features/api/saved-searches';
 import { useEffect, useState } from 'react';
 import SavedSearchDropDown from '../saved-search-dropdown';
-import { useLazyGetProductCountQuery } from '@/features/api/product';
+import {
+  useCheckProductAvailabilityMutation,
+  useLazyGetProductCountQuery
+} from '@/features/api/product';
 import { constructUrlParams } from '@/utils/v2/construct-url-params';
 import {
   AVAILABLE_STATUS,
@@ -201,6 +204,7 @@ const DataTable = ({
   // Fetching saved search data
   const router = useRouter();
 
+  const [checkProductAvailability] = useCheckProductAvailabilityMutation({});
   const [triggerSavedSearch] = useLazyGetAllSavedSearchesQuery({});
   let [triggerProductCountApi] = useLazyGetProductCountQuery();
   const [isDropDownOpen, setIsDropDownOpen] = useState(false);
@@ -1086,7 +1090,11 @@ const DataTable = ({
                             setErrorText,
                             setIsConfirmStone,
                             setConfirmStoneData,
-                            setIsDetailPage
+                            setIsDetailPage,
+                            checkProductAvailability,
+                            modalSetState,
+                            router,
+                            setIsLoading
                           })
                         : handleConfirmStone({
                             selectedRows: rowSelection,
@@ -1094,7 +1102,11 @@ const DataTable = ({
                             setIsError,
                             setErrorText,
                             setIsConfirmStone,
-                            setConfirmStoneData
+                            setConfirmStoneData,
+                            checkProductAvailability,
+                            modalSetState,
+                            router,
+                            setIsLoading
                           });
                     }
                   }
@@ -1165,7 +1177,11 @@ const DataTable = ({
                         setIsError,
                         setErrorText,
                         setIsConfirmStone,
-                        setConfirmStoneData
+                        setConfirmStoneData,
+                        checkProductAvailability,
+                        modalSetState,
+                        router,
+                        setIsLoading
                       });
                     },
                     isHidden: activeCartTab !== AVAILABLE_STATUS
