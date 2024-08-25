@@ -1,47 +1,50 @@
 'use client';
-import React, { useState } from 'react';
+import React from 'react';
 import { CommonButton } from './button';
-import { InputField } from './input/input';
-import { useToast } from './ui/use-toast';
-import { isEmailValid } from '@/utils/validate-email';
-import { newsletterSubscribe } from '@/features/v3/api/newsletter-subscribe';
+import { useRouter } from 'next/navigation';
+// import { InputField } from './input/input';
+// import { useToast } from './ui/use-toast';
+// import { isEmailValid } from '@/utils/validate-email';
+// import { newsletterSubscribe } from '@/features/v3/api/newsletter-subscribe';
 
 const SubscribeNewsLetter = () => {
-  const [email, setEmail] = useState<string>('');
-  const [emailError, setEmailError] = useState<string>('');
-  const { toast } = useToast();
+  const router = useRouter();
 
-  const handleSubscribe = () => {
-    let isValid = true;
-    if (!email) {
-      setEmailError('Email is required');
-      isValid = false;
-    } else if (!isEmailValid(email)) {
-      setEmailError('Invalid email address');
-      isValid = false;
-    } else {
-      setEmailError('');
-    }
-    if (isValid) {
-      newsletterSubscribe(email).then(_res => {
-        setEmail('');
-        toast({
-          description: 'Newsletter Subscribed'
-        });
-      });
-    }
-  };
+  // const [email, setEmail] = useState<string>('');
+  // const [emailError, setEmailError] = useState<string>('');
+  // const { toast } = useToast();
+
+  // const handleSubscribe = () => {
+  //   let isValid = true;
+  //   if (!email) {
+  //     setEmailError('Email is required');
+  //     isValid = false;
+  //   } else if (!isEmailValid(email)) {
+  //     setEmailError('Invalid email address');
+  //     isValid = false;
+  //   } else {
+  //     setEmailError('');
+  //   }
+  //   if (isValid) {
+  //     newsletterSubscribe(email).then(_res => {
+  //       setEmail('');
+  //       toast({
+  //         description: 'Newsletter Subscribed'
+  //       });
+  //     });
+  //   }
+  // };
   return (
     <div className="flex w-full xl:px-[112px] lg:px-[32px] bg-[#F9FAFB] justify-between items-center py-4">
       <div className="flex flex-col gap-2">
         <p className="text-neutral900 text-[30px] font-bold">
-          Join 2,000+ subscribers
+          Haven't registered yet?
         </p>
         <p className="text-neutral700 text-headingS">
-          Stay in the loop with everything you need to know.
+          Elevate Your Diamond Buying Experience with KGK Diamonds!{' '}
         </p>
       </div>
-      <div className="flex gap-4 items-center">
+      {/* <div className="flex gap-4 items-center">
         <InputField
           label=""
           onChange={event => setEmail(event.target.value)}
@@ -63,6 +66,16 @@ const SubscribeNewsLetter = () => {
           className="rounded-[8px] w-[120px] h-[48px]"
         >
           Subscribe
+        </CommonButton>
+      </div> */}
+      <div>
+        <CommonButton
+          onClick={() => router.push('/v2/register')}
+          variant={'primary'}
+          size={'custom'}
+          className="rounded-[8px] w-[120px] h-[48px]"
+        >
+          Register
         </CommonButton>
       </div>
     </div>

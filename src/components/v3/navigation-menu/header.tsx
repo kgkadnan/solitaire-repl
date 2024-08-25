@@ -56,14 +56,24 @@ const CommonHeader = () => {
           />
           {NavigationMenuDemo(selectedHeader, setSelectedHeader)}
         </div>
-        <CommonButton
-          onClick={() => router.push('/v2/login')}
-          variant={'primary'}
-          size={'custom'}
-          className="rounded-[8px] w-[80px] h-[44px]"
-        >
-          Login
-        </CommonButton>
+        <div className="flex gap-4">
+          <CommonButton
+            onClick={() => router.push('/v2/login')}
+            variant={'secondary'}
+            size={'custom'}
+            className="rounded-[8px] w-[80px] h-[44px]"
+          >
+            Login
+          </CommonButton>
+          <CommonButton
+            onClick={() => router.push('/v2/register')}
+            variant={'primary'}
+            size={'custom'}
+            className="rounded-[8px] w-[80px] h-[44px]"
+          >
+            Register
+          </CommonButton>
+        </div>
       </div>
     </div>
   );
