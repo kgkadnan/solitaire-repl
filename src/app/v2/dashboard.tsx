@@ -19,6 +19,7 @@ import BidHammer from '@public/v2/assets/icons/dashboard/bid-hammer.svg';
 import Image from 'next/image';
 import { handleCardClick } from './search/saved-search/helpers/handle-card-click';
 import {
+  useCheckProductAvailabilityMutation,
   useConfirmProductMutation,
   useGetProductByIdMutation,
   useLazyGetProductCountQuery
@@ -193,6 +194,7 @@ const Dashboard = () => {
   const [triggerAvailableSlots] = useLazyGetAvailableMyAppointmentSlotsQuery(
     {}
   );
+  const [checkProductAvailability] = useCheckProductAvailabilityMutation({});
 
   let isNudge = localStorage.getItem('show-nudge')! === 'MINI';
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
@@ -1708,7 +1710,11 @@ const Dashboard = () => {
                           setIsDetailPage: setIsDiamondDetail,
                           identifier: 'detailPage',
                           confirmStoneTrack: 'DNA',
-                          dispatch
+                          dispatch,
+                          router,
+                          modalSetState,
+                          checkProductAvailability,
+                          setIsLoading
                         });
                       }
                     }
@@ -1762,6 +1768,7 @@ const Dashboard = () => {
               setIsConfirmStone={setIsConfirmStone}
               setConfirmStoneData={setConfirmStoneData}
               setIsDetailPage={setIsDetailPage}
+              modalSetState={modalSetState}
             />
           </div>
         </div>
@@ -1986,7 +1993,7 @@ const Dashboard = () => {
                             {data.label}
                             {data.label === 'My Appointments' &&
                               data.count > 0 &&
-                              `(${data.count})`}
+                              ` (${data.count})`}
                           </p>
                           {data.label === 'Bid to Buy' &&
                             (!data?.start_at && data?.count > 0 ? (
@@ -2348,7 +2355,7 @@ const Dashboard = () => {
                     role={
                       customerData?.customer.kam?.post ?? 'Key Account Manager'
                     }
-                    location={customerData?.customer.kam?.location ?? location}
+                    location={customerData?.customer.kam?.location ?? '-'}
                     phoneNumber={customerData?.customer.kam?.phone ?? '-'}
                     email={customerData?.customer.kam?.email ?? '-'}
                     image={customerData?.customer.kam?.image ?? ''}
