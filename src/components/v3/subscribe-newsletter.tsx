@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
-import { CommonButton } from './button';
 import { useRouter } from 'next/navigation';
+import ShimmerButton from './animated-button';
 // import { InputField } from './input/input';
 // import { useToast } from './ui/use-toast';
 // import { isEmailValid } from '@/utils/validate-email';
@@ -69,14 +69,12 @@ const SubscribeNewsLetter = () => {
         </CommonButton>
       </div> */}
       <div>
-        <CommonButton
+        <ShimmerButton
+          className="!rounded-[8px] w-[120px] h-[44px]"
           onClick={() => router.push('/v2/register')}
-          variant={'primary'}
-          size={'custom'}
-          className="rounded-[8px] w-[120px] h-[48px]"
         >
           Register
-        </CommonButton>
+        </ShimmerButton>
       </div>
     </div>
   );

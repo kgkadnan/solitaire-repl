@@ -1,4 +1,5 @@
 'use client';
+import ShimmerButton from '@/components/v3/animated-button';
 // import AnimationSection from '@/components/v3/animated-text/scroll';
 import SuperfastWireless from '@/components/v3/section-3d';
 import SmoothVideoPlayer from '@/components/v3/smooth-video';
@@ -114,14 +115,14 @@ const Index = () => {
                     </p>
                   </div>
 
-                  <button
-                    className="cta-button px-6 py-3 bg-primaryMain text-white rounded shadow-lg  transition"
+                  <ShimmerButton
+                    className="!rounded-[8px] w-[120px] h-[44px]"
                     onClick={() =>
                       setIsManufactureBlurred(!isManufactureBlurred)
                     }
                   >
-                    {isManufactureBlurred && 'Explore'}
-                  </button>
+                    Explore
+                  </ShimmerButton>
                 </div>
               )}
             </div>
@@ -173,14 +174,14 @@ const Index = () => {
                     </p>
                   </div>
 
-                  <button
-                    className="cta-button px-6 py-3 bg-primaryMain text-white rounded shadow-lg  transition"
+                  <ShimmerButton
+                    className="!rounded-[8px] w-[120px] h-[44px]"
                     onClick={() =>
                       setIsGlobalSalesBlurred(!isGlobalSalesBlurred)
                     }
                   >
-                    {isGlobalSalesBlurred && 'Explore'}
-                  </button>
+                    Explore
+                  </ShimmerButton>
                 </div>
               )}
             </div>

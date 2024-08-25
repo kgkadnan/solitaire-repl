@@ -210,6 +210,14 @@ module.exports = {
           to: {
             marginLeft: '0%'
           }
+        },
+        shimmer: {
+          '0%': {
+            backgroundPosition: '0 0'
+          },
+          '100%': {
+            backgroundPosition: '-200% 0'
+          }
         }
       },
       boxShadow: {
@@ -224,7 +232,8 @@ module.exports = {
         gradient: 'gradientAnimation 10s ease infinite',
         pulse: 'worldMapPulse 2s infinite',
         'horizontal-reveal': 'horizontal-reveal 2s linear forwards',
-        slideLeft: 'slide-left 3s linear'
+        slideLeft: 'slide-left 3s linear',
+        shimmer: 'shimmer 2s linear infinite'
       },
       backgroundImage: {
         'animated-gradient': ` linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, white 100%),

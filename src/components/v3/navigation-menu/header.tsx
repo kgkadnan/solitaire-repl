@@ -5,6 +5,7 @@ import { CommonButton } from '../button';
 import Image from 'next/image';
 import kgkLogo from '@public/v3/kgklogo.svg';
 import { usePathname, useRouter } from 'next/navigation';
+import ShimmerButton from '../animated-button';
 
 const CommonHeader = () => {
   const currentRoute = usePathname();
@@ -65,14 +66,13 @@ const CommonHeader = () => {
           >
             Login
           </CommonButton>
-          <CommonButton
+
+          <ShimmerButton
+            className="!rounded-[8px] w-[120px] h-[44px]"
             onClick={() => router.push('/v2/register')}
-            variant={'primary'}
-            size={'custom'}
-            className="rounded-[8px] w-[80px] h-[44px]"
           >
             Register
-          </CommonButton>
+          </ShimmerButton>
         </div>
       </div>
     </div>
