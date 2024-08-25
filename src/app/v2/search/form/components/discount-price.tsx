@@ -57,7 +57,7 @@ export const DiscountPrice = ({
       minPlaceHolder: `${discount.range.gte}`,
       maxPlaceHolder: `${discount.range.lte}`,
       handleMaxChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (/^\d*\.?\d{0,2}$/.test(event.target.value)) {
+        if (/^-?\d*\.?\d{0,2}$/.test(event.target.value)) {
           setDiscountMax(event.target.value);
           handleNumericRange({
             min: discountMin,

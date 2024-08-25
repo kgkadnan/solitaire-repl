@@ -35,6 +35,7 @@ import {
   RenderNumericFields
 } from '@/components/v2/common/data-table/helpers/render-cell';
 import {
+  useCheckProductAvailabilityMutation,
   useConfirmProductMutation,
   useLazyGetAllProductQuery
 } from '@/features/api/product';
@@ -117,8 +118,7 @@ const Result = ({
   const dispatch = useAppDispatch();
   const confirmTrack = useAppSelector(state => state.setConfirmStoneTrack);
   const kamLocation = useAppSelector(state => state.kamLocation);
-
-  console.log(confirmTrack, 'confirmTrack');
+  const [checkProductAvailability] = useCheckProductAvailabilityMutation({});
   const [triggerAvailableSlots] = useLazyGetAvailableMyAppointmentSlotsQuery(
     {}
   );
@@ -1319,7 +1319,11 @@ const Result = ({
                         setIsDetailPage,
                         identifier: 'detailPage',
                         confirmStoneTrack: 'DNA',
-                        dispatch
+                        dispatch,
+                        router,
+                        modalSetState,
+                        checkProductAvailability,
+                        setIsLoading
                       });
                     }
                   }
@@ -1359,6 +1363,7 @@ const Result = ({
               setIsConfirmStone={setIsConfirmStone}
               setConfirmStoneData={setConfirmStoneData}
               setIsDetailPage={setIsDetailPage}
+              modalSetState={modalSetState}
             />
           ) : showAppointmentForm ? (
             <BookAppointment

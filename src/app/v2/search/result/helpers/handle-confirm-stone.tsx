@@ -8,6 +8,8 @@ import {
 import { Dispatch, SetStateAction } from 'react';
 import { IProduct } from '../../interface';
 import { setConfirmStoneTrack } from '@/features/confirm-stone-track/confirm-stone-track-slice';
+import CommonPoppup from '@/app/v2/login/component/common-poppup';
+import { ManageLocales } from '@/utils/v2/translate';
 
 /**
  * Handles the confirmation of selected stones.
@@ -31,6 +33,10 @@ interface IHandleConfirmStone {
   identifier?: string;
   confirmStoneTrack?: string;
   dispatch?: any;
+  checkProductAvailability?: any;
+  modalSetState?: any;
+  router?: any;
+  setIsLoading: any;
 }
 export const handleConfirmStone = ({
   selectedRows,
@@ -42,7 +48,11 @@ export const handleConfirmStone = ({
   setIsDetailPage,
   identifier,
   confirmStoneTrack,
-  dispatch
+  dispatch,
+  checkProductAvailability,
+  modalSetState,
+  router,
+  setIsLoading
 }: IHandleConfirmStone) => {
   let selectedIds = Object.keys(selectedRows);
   const hasMemoOut = selectedIds?.some(id => {
@@ -72,14 +82,107 @@ export const handleConfirmStone = ({
         : SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH
     );
   } else if (selectedIds?.length) {
+    setIsLoading(true);
     setIsError(false);
-    setIsConfirmStone(true);
+
     const confirmStone = rows?.filter(item => selectedIds?.includes(item.id));
-    setConfirmStoneData(confirmStone);
-    setIsDetailPage && setIsDetailPage(false);
-    confirmStoneTrack &&
-      dispatch &&
-      dispatch(setConfirmStoneTrack(confirmStoneTrack));
+
+    const variantIds: string[] = [];
+
+    confirmStone.forEach((ids: any) => {
+      variantIds.push(ids.variants[0].id);
+    });
+
+    checkProductAvailability({
+      variants: variantIds
+    })
+      .unwrap()
+      .then((res: any) => {
+        const availableStones = confirmStone.filter((stone: any) => {
+          const variantKey = `${stone.variants[0].id}`;
+
+          return res.data[variantKey]?.status === 'Available';
+        });
+
+        if (res.status === 'available') {
+          setIsConfirmStone(true);
+          setConfirmStoneData(confirmStone);
+          setIsDetailPage && setIsDetailPage(false);
+          confirmStoneTrack &&
+            dispatch &&
+            dispatch(setConfirmStoneTrack(confirmStoneTrack));
+        } else if (res.status === 'unavailable') {
+          modalSetState.setIsDialogOpen(true);
+          modalSetState.setDialogContent(
+            <CommonPoppup
+              content={res.message}
+              status="info"
+              customPoppupBodyStyle="!mt-[70px]"
+              header={res.title}
+              actionButtonData={[
+                {
+                  variant: 'secondary',
+                  label: ManageLocales('app.confirmStone.updateSelection'),
+                  handler: () => {
+                    modalSetState.setIsDialogOpen(false);
+                  },
+                  customStyle: 'flex-1'
+                },
+                {
+                  variant: 'primary',
+                  label: ManageLocales('app.confirmStone.refreshSearchResults'),
+                  handler: () => {
+                    modalSetState.setIsDialogOpen(false);
+                    router.refresh();
+                  },
+                  customStyle: 'flex-1'
+                }
+              ]}
+            />
+          );
+        } else if (res.status === 'some-available') {
+          modalSetState.setIsDialogOpen(true);
+          modalSetState.setDialogContent(
+            <CommonPoppup
+              content={res.message}
+              status="info"
+              customPoppupBodyStyle="!mt-[70px]"
+              header={res.title}
+              actionButtonData={[
+                {
+                  variant: 'secondary',
+                  label: ManageLocales(
+                    'app.confirmStone.confirmRemainingStones'
+                  ),
+                  handler: () => {
+                    modalSetState.setIsDialogOpen(false);
+                    setIsConfirmStone(true);
+                    setConfirmStoneData(availableStones);
+                    setIsDetailPage && setIsDetailPage(false);
+                    confirmStoneTrack &&
+                      dispatch &&
+                      dispatch(setConfirmStoneTrack(confirmStoneTrack));
+                  },
+                  customStyle: 'flex-1'
+                },
+                {
+                  variant: 'primary',
+                  label: ManageLocales('app.confirmStone.updateSelection'),
+                  handler: () => {
+                    modalSetState.setIsDialogOpen(false);
+                  },
+                  customStyle: 'flex-1'
+                }
+              ]}
+            />
+          );
+        }
+        setIsLoading(false);
+      })
+      .catch((err: any) => {
+        setIsLoading(false);
+        console.log('err', err);
+      });
   } else {
     setIsError(true);
     setErrorText(SELECT_STONE_TO_PERFORM_ACTION);

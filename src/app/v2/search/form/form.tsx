@@ -319,6 +319,7 @@ const Form = ({
 
       setError('');
     } else if (searchUrl.length > 0) {
+      setErrorText('');
       setIsLoading(true);
       isMatchingPair
         ? triggerMatchingPairCountApi({ searchUrl })
@@ -346,9 +347,11 @@ const Form = ({
 
   // Update search URL when form state changes
   useEffect(() => {
-    setErrorText('');
+    console.log('state', state);
+
     // Function to execute after debounce delay
     const handleSearchUrlUpdate = () => {
+      // setErrorText('');
       const queryParams = generateQueryParams(state);
 
       if (!isValidationError && !isSliderActive) {
@@ -1006,6 +1009,7 @@ const Form = ({
           setErrorText(SELECT_SOME_PARAM);
         }
       },
+
       isHidden:
         subRoute === SubRoutes.NEW_ARRIVAL || subRoute === SubRoutes.BID_TO_BUY
     },
@@ -1045,6 +1049,20 @@ const Form = ({
             isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
           ? handleAddDemand
           : handleFormSearch,
+
+      isDisable:
+        !(
+          isLoading ||
+          isLoadingProductApi ||
+          isLoadingMatchPairApi ||
+          isFetchingMatchPairApi ||
+          isFetchingProductApi
+        ) &&
+        (isMatchingPair
+          ? data?.count > MAX_SEARCH_FORM_COUNT / 2
+          : data?.count > MAX_SEARCH_FORM_COUNT) &&
+        data?.count > MIN_SEARCH_FORM_COUNT,
+
       isLoading:
         isLoading ||
         isLoadingProductApi ||

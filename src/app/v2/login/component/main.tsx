@@ -64,7 +64,8 @@ const Login = () => {
   const [phoneNumber, setPhoneNumber] = useState<{
     countryCode: string;
     mobileNumber: string;
-  }>({ countryCode: '', mobileNumber: '' });
+    iso: string;
+  }>({ countryCode: '', mobileNumber: '', iso: '' });
   const [password, setPassword] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [emailToken, setEmailToken] = useState<string>('');
@@ -101,7 +102,20 @@ const Login = () => {
     useOtpVerificationStateManagement();
   const { data: currentCountryCode, error } = useGetCountryCodeQuery({});
   useEffect(() => {
-    if (currentCountryCode) {
+    const userIp = JSON.parse(localStorage.getItem('userIp')!);
+
+    if (userIp) {
+      setPhoneNumber((prev: any) => ({
+        ...prev,
+        countryCode: userIp.countryCode,
+        iso: userIp?.iso
+      }));
+      setOTPVerificationFormState({
+        ...otpVerificationFormState,
+        countryCode: userIp.countryCode,
+        iso: userIp?.iso
+      });
+    } else if (currentCountryCode) {
       setPhoneNumber((prev: any) => ({
         ...prev,
         countryCode: currentCountryCode.country_calling_code.replace('+', ''),
@@ -138,6 +152,13 @@ const Login = () => {
   useEffect(() => {
     if (data) {
       localStorage.setItem('user', JSON.stringify(data));
+      localStorage.setItem(
+        'userIp',
+        JSON.stringify({
+          countryCode: phoneNumber?.countryCode,
+          iso: phoneNumber?.iso
+        })
+      );
       if (data.customer.is_phone_verified) {
         localStorage.removeItem('Search');
         localStorage.removeItem('MatchingPair');
