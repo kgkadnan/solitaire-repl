@@ -60,7 +60,15 @@ const ForgotPassword = () => {
   };
   const { data: currentCountryCode, error } = useGetCountryCodeQuery({});
   useEffect(() => {
-    if (currentCountryCode) {
+    const userIp = JSON.parse(localStorage.getItem('userIp')!);
+
+    if (userIp) {
+      setPhoneNumber((prev: any) => ({
+        ...prev,
+        countryCode: userIp.countryCode,
+        iso: userIp?.iso
+      }));
+    } else if (currentCountryCode) {
       setPhoneNumber((prev: any) => ({
         ...prev,
         countryCode: currentCountryCode.country_calling_code.replace('+', ''),

@@ -31,7 +31,19 @@ const CompanyOwnerDetail = ({
         setSelectedCountryIso(getSpecificCountryData[0].iso);
       });
     } else {
-      if (data) {
+      const userIp = JSON.parse(localStorage.getItem('userIp')!);
+
+      if (userIp) {
+        dispatch(
+          updateFormState({
+            name: `formState.online.sections[${[
+              kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
+            ]}][owner_country_code]`,
+            value: userIp.countryCode
+          })
+        );
+        setSelectedCountryIso(userIp?.iso);
+      } else if (data) {
         dispatch(
           updateFormState({
             name: `formState.online.sections[${[

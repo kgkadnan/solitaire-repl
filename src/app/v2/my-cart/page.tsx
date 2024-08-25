@@ -56,7 +56,10 @@ import ConfirmStone from '../search/result/components';
 import { AddCommentDialog } from '@/components/v2/common/comment-dialog';
 import { handleComment } from '../search/result/helpers/handle-comment';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useConfirmProductMutation } from '@/features/api/product';
+import {
+  useCheckProductAvailabilityMutation,
+  useConfirmProductMutation
+} from '@/features/api/product';
 import { IProduct, IProductItem } from '../search/interface';
 import { DiamondDetailsComponent } from '@/components/v2/common/detail-page';
 import { FILE_URLS } from '@/constants/v2/detail-page';
@@ -88,6 +91,7 @@ const MyCart = () => {
   const confirmTrack = useAppSelector(state => state.setConfirmStoneTrack);
   const kamLocation = useAppSelector(state => state.kamLocation);
   const [triggerGetCustomer] = useLazyGetCustomerQuery({});
+  const [checkProductAvailability] = useCheckProductAvailabilityMutation({});
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();
   const { modalState, modalSetState } = useModalStateManagement();
   const { isDialogOpen, dialogContent } = modalState;
@@ -1128,7 +1132,11 @@ const MyCart = () => {
                         setIsDetailPage,
                         identifier: 'detailPage',
                         confirmStoneTrack: 'DNA',
-                        dispatch
+                        dispatch,
+                        router,
+                        modalSetState,
+                        checkProductAvailability,
+                        setIsLoading
                       });
                     }
                   }
