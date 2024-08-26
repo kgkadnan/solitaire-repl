@@ -38,7 +38,7 @@ export function NavigationMenuDemo(
   return (
     <NavigationMenu>
       <NavigationMenuList>
-        <NavigationMenuItem className="bg-neutral0   text-neutral700 hover:bg-neutral0 focus:bg-neutral0">
+        <NavigationMenuItem className="bg-neutral0   text-neutral700 !hover:text-neutral900  hover:bg-neutral0  focus:bg-neutral0">
           <Link href="/v3" legacyBehavior passHref>
             <NavigationMenuLink
               className={`${navigationMenuTriggerStyle()} ${
@@ -55,7 +55,7 @@ export function NavigationMenuDemo(
 
         <NavigationMenuItem className="relative">
           <NavigationMenuTrigger
-            className={`bg-neutral0   text-neutral700 hover:bg-neutral0 focus:bg-neutral0 ${
+            className={`bg-neutral0   text-neutral700 !hover:text-neutral900  hover:bg-neutral0 focus:bg-neutral0 ${
               selectedHeader === 'aboutUs' && 'text-neutral900 font-medium'
             }`}
           >
@@ -75,7 +75,7 @@ export function NavigationMenuDemo(
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
-        <NavigationMenuItem className="bg-neutral0  text-neutral700 hover:bg-neutral0 focus:bg-neutral0">
+        <NavigationMenuItem className="bg-neutral0  text-neutral700 !hover:text-neutral900  hover:bg-neutral0 focus:bg-neutral0">
           <Link href="/v3/traceability" legacyBehavior passHref>
             <NavigationMenuLink
               className={`${navigationMenuTriggerStyle()} ${
@@ -90,7 +90,7 @@ export function NavigationMenuDemo(
             </NavigationMenuLink>
           </Link>
         </NavigationMenuItem>
-        <NavigationMenuItem className="bg-neutral0   text-neutral700 hover:bg-neutral0 focus:bg-neutral0">
+        <NavigationMenuItem className="bg-neutral0   text-neutral700 !hover:text-neutral900  hover:bg-neutral0 focus:bg-neutral0">
           <Link href="/v3/sustainability" legacyBehavior passHref>
             <NavigationMenuLink
               className={`${navigationMenuTriggerStyle()} ${
@@ -105,7 +105,7 @@ export function NavigationMenuDemo(
             </NavigationMenuLink>
           </Link>
         </NavigationMenuItem>
-        <NavigationMenuItem className="bg-neutral0   text-neutral700 hover:bg-neutral0 focus:bg-neutral0">
+        <NavigationMenuItem className="bg-neutral0   text-neutral700 !hover:text-neutral900  hover:bg-neutral0 focus:bg-neutral0">
           <Link href="/v3/contact-us" legacyBehavior passHref>
             <NavigationMenuLink
               className={`${navigationMenuTriggerStyle()} ${
@@ -134,13 +134,13 @@ const ListItem = React.forwardRef<
         <a
           ref={ref}
           className={cn(
-            'block select-none space-y-1  p-3 leading-none no-underline outline-none transition-colors hover:bg-neutral100 hover:text-neutral700 focus:neutral100 focus:text-neutral700 !w-[200px] !border-none',
+            'block select-none space-y-1  p-3 leading-none no-underline outline-none transition-colors hover:bg-neutral100 hover:text-neutral700 !hover:text-neutral900  focus:neutral100 focus:text-neutral700 !hover:text-neutral900  !w-[200px] !border-none',
             className
           )}
           {...props}
         >
           <div className="   leading-none">{title}</div>
-          <p className="line-clamp-2  leading-snug text-neutral700">
+          <p className="line-clamp-2  leading-snug text-neutral700 !hover:text-neutral900 ">
             {children}
           </p>
         </a>

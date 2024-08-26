@@ -54,7 +54,10 @@ Bandra East, Mumbai - 400051`,
                 {site.content.map(link => (
                   <div className="flex gap-2" key={link.data}>
                     {' '}
-                    <a href={link.link} className="text-[#475467] text-lMedium">
+                    <a
+                      href={link.link}
+                      className="text-[#475467] hover:text-neutral900 text-lMedium"
+                    >
                       {link.data}
                     </a>{' '}
                     {link.isNew && (
