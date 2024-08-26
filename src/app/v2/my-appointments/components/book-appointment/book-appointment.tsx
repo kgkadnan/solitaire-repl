@@ -26,13 +26,18 @@ export interface IModalSetState {
   setIsInputDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function getInitials(name: string): string {
+function getInitials(name: string | null | undefined): string {
+  if (!name) {
+    return '';
+  }
+
   const salutations = ['Mr.', 'Ms.', 'Mrs.', 'Dr.', 'Prof.'];
   const initials = name
     .split(' ')
     .filter(word => !salutations.includes(word)) // Exclude salutations
     .map(word => word.charAt(0).toUpperCase())
     .join('');
+
   return initials;
 }
 interface IBookAppointment {
