@@ -367,11 +367,11 @@ const MatchPairTable = ({
                   const localStorageData = [
                     ...data,
                     {
-                      saveSearchName: res.data.savedSearches[0].name,
+                      saveSearchName: searchData.name,
                       isSavedSearch: true,
                       searchId: response?.data?.search_id,
-                      queryParams: res.data.savedSearches[0].meta_data,
-                      id: res.data.savedSearches[0].id
+                      queryParams: searchData.meta_data,
+                      id: searchData.id
                     }
                   ];
 
@@ -439,7 +439,7 @@ const MatchPairTable = ({
     yourSelection[activeTab - 1] = {
       id: yourSelection[activeTab - 1]?.id,
       saveSearchName: yourSelection[activeTab - 1]?.saveSearchName,
-      searchId: matchingPairData?.search_id,
+      searchId: yourSelection[activeTab - 1]?.searchId,
       isSavedSearch: true,
       queryParams: yourSelection[activeTab - 1].queryParams
     };
