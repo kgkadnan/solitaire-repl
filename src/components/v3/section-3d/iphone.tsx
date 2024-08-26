@@ -46,7 +46,7 @@ const IphoneAnimation = () => {
 
   return (
     <div className="relative flex items-center justify-center min-h-[80%] text-black w-full">
-      <div>KGK Inventory Locations</div>
+      <div className="h-full">KGK Inventory Locations</div>
       <div
         className={`relative transition-transform duration-700 flex justify-center ${
           phoneVisible ? 'translate-y-0' : 'translate-y-full'

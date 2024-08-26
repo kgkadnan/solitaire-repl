@@ -15,7 +15,7 @@ const CommonHeader = () => {
   const lastScrollY = useRef(0);
 
   useEffect(() => {
-    if (currentRoute === '/') setSelectedHeader('home');
+    if (currentRoute === '/v3') setSelectedHeader('home');
     else if (currentRoute === '/v3/contact-us') setSelectedHeader('contactUs');
     else if (
       currentRoute === '/v3/about-us/our-story' ||
