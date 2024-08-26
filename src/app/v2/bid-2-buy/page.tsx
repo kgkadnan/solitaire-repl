@@ -287,7 +287,10 @@ const BidToBuy = () => {
     setCheckStatus(true);
     setActiveBid(data.activeStone);
     if (filterData?.queryParams) {
-      const filteredData = filterBidData(data.bidStone, filterData.queryParams);
+      const filteredData =
+        filterData?.bidFilterData?.length > 0
+          ? filterData?.bidFilterData
+          : filterBidData(data.bidStone, filterData.queryParams);
       dispatch(
         filterBidToBuyFunction({
           bidData: data.bidStone,

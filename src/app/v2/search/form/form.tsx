@@ -299,8 +299,6 @@ const Form = ({
         newArrivalFilterData?.bidData &&
         filterBidData(newArrivalFilterData?.bidData, query);
 
-      console.log('filteredData form', filteredData, query);
-
       setData({
         count: filteredData.length,
         products: filteredData

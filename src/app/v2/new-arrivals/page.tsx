@@ -262,7 +262,6 @@ const NewArrivals = () => {
 
   useEffect(() => {
     if (filterData?.bidFilterData?.length > 0) {
-      console.log('filterData adnana', filterData);
       setBid(filterData.bidFilterData);
     }
   }, [filterData]);
@@ -270,17 +269,12 @@ const NewArrivals = () => {
   const handleBidStones = useCallback((data: any) => {
     setActiveBid(data.activeStone);
 
-    console.log('filterData new', filterData);
     if (filterData?.queryParams) {
-      console.log('data.bidStone', data.bidStone);
-      console.log('filterData', filterData);
-      console.log('data', data);
-
       const filteredData =
         filterData?.bidFilterData?.length > 0
           ? filterData?.bidFilterData
           : filterBidData(data.bidStone, filterData.queryParams);
-      console.log('filteredData', filteredData);
+
       dispatch(
         filterFunction({
           bidData: data.bidStone,
@@ -288,7 +282,7 @@ const NewArrivals = () => {
           bidFilterData: filteredData
         })
       );
-      console.log('filteredData 22', filteredData);
+
       setBid(filteredData);
     } else {
       setBid(data.bidStone);
