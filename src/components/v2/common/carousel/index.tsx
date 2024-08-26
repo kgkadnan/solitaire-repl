@@ -99,7 +99,7 @@ const DashboardCarousel: React.FC<IDashboardCarouselProps> = ({
                         className="w-full h-[400px] rounded-[8px]"
                         onError={handleImageError}
                       />
-                      <div className="absolute bottom-0 left-0 w-full min-h-[100px] bg-black bg-opacity-50 flex justify-between items-center rounded-b-[8px] text-neutral0 p-4">
+                      <div className="absolute bottom-0 left-0 w-full min-h-[60px] bg-black bg-opacity-50 flex justify-between items-center rounded-b-[8px] text-neutral0 p-4">
                         {/* <div className='flex justify-between'> */}
                         <div className="flex flex-col">
                           <p className="text-headingS medium">
@@ -141,7 +141,7 @@ const DashboardCarousel: React.FC<IDashboardCarouselProps> = ({
                   className="w-full h-[400px] rounded-[8px]"
                   onError={handleImageError}
                 />
-                <div className="absolute bottom-0 left-0 w-full h-[100px] bg-black bg-opacity-50 flex justify-between items-center rounded-b-[8px] text-neutral0 p-4">
+                <div className="absolute bottom-0 left-0 w-full h-[60px] bg-black bg-opacity-50 flex justify-between items-center rounded-b-[8px] text-neutral0 p-4">
                   {/* <div className='flex justify-between'> */}
                   <div className="flex flex-col">
                     <p className="text-headingS medium">{images[0].tag_line}</p>
