@@ -100,7 +100,7 @@ export const MobileInput = ({
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleOpen = () => {
-    setIsOpen(!isOpen);
+    !isFlagLoaded && setIsOpen(!isOpen);
   };
 
   const customFilter = (option: any, inputValue: any) => {
@@ -138,7 +138,7 @@ export const MobileInput = ({
                   <div className="relative flex justify-center items-center">
                     {isFlagLoaded && (
                       <div
-                        className="absolute  flex justify-center items-center bg-neutral0 w-[100px] h-[21px] top-[1px]"
+                        className="absolute  flex justify-center items-center bg-neutral0 rounded-[4px] w-[105px] top-[-7px] h-[37px]"
                         onClick={e => {
                           e.stopPropagation();
                         }}
