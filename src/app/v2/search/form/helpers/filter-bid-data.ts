@@ -1,5 +1,4 @@
 export function filterBidData(data: any[], query: any): any[] {
-  console.log('filterBidData', data, query);
   const skipKeys = ['key_to_symbol_search_type'];
   const girdleOrder = [
     'ETN',
