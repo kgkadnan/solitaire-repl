@@ -83,7 +83,7 @@ const HtmlAnimation = () => {
                   src={src}
                   alt={`Slide ${index + 1}`}
                   className={`w-full mx-auto mb-[12px] ${
-                    scrollIndex !== 0 && 'mt-[-10px]'
+                    scrollIndex !== 0 && 'mt-[-4px]'
                   }`}
                 />
               </li>
