@@ -86,11 +86,18 @@ const BookAppointment: React.FC<IBookAppointment> = ({
       : false;
   };
 
+  function removeCountryFromLotIds(lotIdsWithCountry: string[]): string[] {
+    return lotIdsWithCountry.map(item => {
+      const match = item.match(/^(\w+)\(/);
+      return match ? match[1] : '';
+    });
+  }
+
   useEffect(() => {
     let { kam, storeAddresses, timeSlots } = appointmentPayload;
 
     if (lotIds?.length) {
-      setStones(lotIds);
+      setStones(removeCountryFromLotIds(lotIds));
       let createComment = `I want to know more about ${lotIds.join(', ')}`;
       setComment(createComment);
       setSelectedDate(Number(timeSlots.dates[0].date));

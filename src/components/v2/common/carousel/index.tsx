@@ -14,6 +14,7 @@ interface IImageData {
   tag_line: string;
   description_line: string;
   cta: string;
+  is_button_actionable?: string;
 }
 export interface IDashboardCarouselProps {
   images: IImageData[];
@@ -112,12 +113,15 @@ const DashboardCarousel: React.FC<IDashboardCarouselProps> = ({
                         <ActionButton
                           actionButtonData={[
                             {
-                              variant: 'secondary',
+                              variant: !data.is_button_actionable
+                                ? 'disable'
+                                : 'secondary',
                               label: data.cta,
+                              isDisable: !data.is_button_actionable,
                               handler: () => {
                                 data.link.includes('kgkdiamonds.com')
                                   ? router.push(data.link)
-                                  : window.open(images[0].link);
+                                  : window.open(data.link);
                               },
                               customStyle: 'flex-1 w-full h-10 '
                             }
@@ -152,8 +156,11 @@ const DashboardCarousel: React.FC<IDashboardCarouselProps> = ({
                   <ActionButton
                     actionButtonData={[
                       {
-                        variant: 'secondary',
+                        variant: !images[0].is_button_actionable
+                          ? 'disable'
+                          : 'secondary',
                         label: images[0].cta,
+                        isDisable: !images[0].is_button_actionable,
                         handler: () => {
                           images[0].link.includes('kgkdiamonds.com')
                             ? router.push(images[0].link)

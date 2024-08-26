@@ -270,7 +270,11 @@ const NewArrivals = () => {
     setActiveBid(data.activeStone);
 
     if (filterData?.queryParams) {
-      const filteredData = filterBidData(data.bidStone, filterData.queryParams);
+      const filteredData =
+        filterData?.bidFilterData?.length > 0
+          ? filterData?.bidFilterData
+          : filterBidData(data.bidStone, filterData.queryParams);
+
       dispatch(
         filterFunction({
           bidData: data.bidStone,
@@ -278,6 +282,7 @@ const NewArrivals = () => {
           bidFilterData: filteredData
         })
       );
+
       setBid(filteredData);
     } else {
       setBid(data.bidStone);
@@ -363,7 +368,7 @@ const NewArrivals = () => {
       socketManager.off('error', handleError);
       socketManager.off('request_get_bid_stones', handleRequestGetBidStones);
     };
-  }, [socketManager, handleBidStones, handleError, authToken]);
+  }, [socketManager, authToken]);
 
   const memoizedColumns = useMemo(
     () => mapColumns(columnHeaders),

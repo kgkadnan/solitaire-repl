@@ -347,14 +347,12 @@ const Form = ({
 
   // Update search URL when form state changes
   useEffect(() => {
-    console.log('state', state);
-
     // Function to execute after debounce delay
     const handleSearchUrlUpdate = () => {
       // setErrorText('');
       const queryParams = generateQueryParams(state);
 
-      if (!isValidationError && !isSliderActive) {
+      if (!isValidationError && !isSliderActive && !minMaxError) {
         setSearchUrl(constructUrlParams(queryParams));
       }
     };
