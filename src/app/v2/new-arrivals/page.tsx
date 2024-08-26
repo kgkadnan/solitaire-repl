@@ -270,7 +270,12 @@ const NewArrivals = () => {
     setActiveBid(data.activeStone);
 
     if (filterData?.queryParams) {
+      console.log('data.bidStone', data.bidStone);
+      console.log('filterData', filterData);
+      console.log('data', data);
+
       const filteredData = filterBidData(data.bidStone, filterData.queryParams);
+      console.log('filteredData', filteredData);
       dispatch(
         filterFunction({
           bidData: data.bidStone,
@@ -278,6 +283,7 @@ const NewArrivals = () => {
           bidFilterData: filteredData
         })
       );
+      console.log('filteredData 22', filteredData);
       setBid(filteredData);
     } else {
       setBid(data.bidStone);
