@@ -5,7 +5,8 @@ import Select, { components, InputActionMeta } from 'react-select';
 import countryCode from '../../../../../constants/country-code.json';
 import { colourStyles } from './country-select';
 import { useGetAllCountryCodeQuery } from '@/features/api/get-country-code';
-import ind from '@public/v2/assets/png/data-table/IND.png';
+import ind from '@public/v2/assets/png/data-table/IND_NEW.png';
+import Image from 'next/image';
 
 interface IMobileInputField extends IInputFieldProps {
   registerFormState: any;
@@ -56,10 +57,12 @@ export const MobileInput = ({
 
   const Option = (props: any) => (
     <components.Option {...props} className="country-option gap-[6px]">
-      <img
+      <Image
         src={`${apiURL}flags/${props.data.iso}.png`}
-        style={{ width: 24 }}
+        width={24}
+        height={24}
         onError={(e: any) => {
+          console.log('e', e);
           e.target.error = null; // prevents looping
           e.target.src = ind;
         }}
@@ -71,9 +74,10 @@ export const MobileInput = ({
 
   const SingleValue = ({ children, ...props }: any) => (
     <components.SingleValue {...props} className="gap-[6px]">
-      <img
+      <Image
         src={`${apiURL}flags/${registerFormState?.iso}.png`}
-        style={{ width: 24 }}
+        width={24}
+        height={24}
         onError={(e: any) => {
           e.target.error = null; // prevents looping
           e.target.src = ind;
@@ -133,7 +137,12 @@ export const MobileInput = ({
                   {' '}
                   <div className="relative flex justify-center items-center">
                     {isFlagLoaded && (
-                      <div className="absolute flex justify-center items-center bg-neutral0 w-[100px] h-[21px] top-[1px]">
+                      <div
+                        className="absolute  flex justify-center items-center bg-neutral0 w-[100px] h-[21px] top-[1px]"
+                        onClick={e => {
+                          e.stopPropagation();
+                        }}
+                      >
                         <div role="status" className="flex justify-center">
                           <svg
                             aria-hidden="true"
@@ -160,9 +169,10 @@ export const MobileInput = ({
                         className={`flex justify-between text-neutral900  gap-2`}
                       >
                         <div className="flex items-center gap-[6px]">
-                          <img
+                          <Image
+                            width={24}
+                            height={24}
                             src={`${apiURL}flags/${registerFormState.iso}.png`}
-                            style={{ width: 24 }}
                             onError={(e: any) => {
                               e.target.error = null; // prevents looping
                               e.target.src = ind;
