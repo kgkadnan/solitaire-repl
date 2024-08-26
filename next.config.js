@@ -33,6 +33,7 @@ const nextConfig = {
   },
   images: {
     domains: [
+      'medusa-staging.kgkit.net',
       'api.kgk.live',
       'storageweweb.blob.core.windows.net',
       'csg1003200332b85b56.blob.core.windows.net'
