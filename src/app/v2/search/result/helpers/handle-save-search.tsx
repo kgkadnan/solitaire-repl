@@ -33,12 +33,14 @@ export const handleSaveSearch = async ({
     ? localStorage.getItem('MatchingPair')
     : localStorage.getItem('Search');
 
+  console.log('data', data);
+
   if (searchData !== null) {
     const parseData = JSON.parse(searchData) || [];
 
     await addSavedSearch({
       name: saveSearchName,
-      diamond_count: parseInt(data?.count),
+      diamond_count: Number(data?.count),
       meta_data: parseData[activeTab - 1]?.queryParams,
       is_deleted: false,
       is_matching_pair: isMatchingPair
