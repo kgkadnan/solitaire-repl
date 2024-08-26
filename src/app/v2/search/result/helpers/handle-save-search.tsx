@@ -33,8 +33,6 @@ export const handleSaveSearch = async ({
     ? localStorage.getItem('MatchingPair')
     : localStorage.getItem('Search');
 
-  console.log('data', data);
-
   if (searchData !== null) {
     const parseData = JSON.parse(searchData) || [];
 
@@ -51,7 +49,7 @@ export const handleSaveSearch = async ({
           id: res?.id,
           saveSearchName,
           isSavedSearch: true,
-          searchId: data?.search_id,
+          searchId: parseData[activeTab - 1].searchId,
           queryParams: parseData[activeTab - 1].queryParams
         };
         isMatchingPair
