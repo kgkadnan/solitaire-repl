@@ -72,7 +72,7 @@ const HtmlAnimation = () => {
 
   return (
     <div className="relative w-full" style={{ height: 'calc(100vh - 50px)' }}>
-      <div className="flex justify-around relative ">
+      <div className="flex justify-around relative px-[50px]">
         {/* Left div */}
         <div
           className={`flex flex-col gap-4 mt-[100px] w-[265px] transition-opacity duration-700 ease-in-out transform ${
