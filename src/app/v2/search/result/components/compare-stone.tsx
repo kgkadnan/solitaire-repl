@@ -23,6 +23,7 @@ import CommonPoppup from '@/app/v2/login/component/common-poppup';
 import { formatNumber } from '@/utils/fix-two-digit-number';
 import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
 import { RednderLocation } from '@/components/v2/table/helpers/render-cell';
+import { useCheckProductAvailabilityMutation } from '@/features/api/product';
 
 const CompareStone = ({
   rows,
@@ -41,10 +42,11 @@ const CompareStone = ({
   setIsConfirmStone,
   setConfirmStoneData,
   setIsDetailPage,
-  isMatchingPair = false
+  isMatchingPair = false,
+  modalSetState
 }: any) => {
   const [mappingColumn, setMappingColumn] = useState<any>({});
-
+  const [checkProductAvailability] = useCheckProductAvailabilityMutation({});
   const [breadCrumLabel, setBreadCrumLabel] = useState('');
   const { checkboxState, checkboxSetState } = useCheckboxStateManagement();
   const { selectedCheckboxes } = checkboxState;
@@ -325,7 +327,27 @@ const CompareStone = ({
                       className="py-2 px-4 border-[1px] border-neutral200 h-[38px] whitespace-nowrap overflow-hidden overflow-ellipsis  bg-neutral0"
                     >
                       {key !== 'id' ? (
-                        key === 'location' ? (
+                        key === 'report_comments' ? (
+                          diamond[key]?.length > 0 ? (
+                            diamond[key]?.toString()
+                          ) : (
+                            '-'
+                          )
+                        ) : key === 'measurements' ? (
+                          `${diamond?.length ?? 0}*${diamond?.width ?? 0}*${
+                            diamond?.depth ?? 0
+                          }`
+                        ) : key === 'amount' ? (
+                          diamond?.variants?.length > 0 ? (
+                            `$${
+                              formatNumberWithCommas(
+                                diamond?.variants[0]?.prices[0]?.amount
+                              ) ?? '-'
+                            }`
+                          ) : (
+                            '-'
+                          )
+                        ) : key === 'location' ? (
                           <div className="flex gap-1 items-center">
                             {RednderLocation({
                               renderedCellValue: diamond[key]
@@ -364,7 +386,12 @@ const CompareStone = ({
                               : `${formatNumberWithCommas(diamond[key])}%`
                           }`
                         ) : typeof diamond[key] === 'number' ? (
-                          formatNumber(diamond[key]) ?? '-'
+                          diamond[key] === null ||
+                          diamond[key] === undefined ? (
+                            '-'
+                          ) : (
+                            formatNumber(diamond[key]) ?? '-'
+                          )
                         ) : (
                           diamond[key] || '-'
                         )
@@ -420,7 +447,11 @@ const CompareStone = ({
                   setErrorText,
                   setIsConfirmStone,
                   setConfirmStoneData,
-                  setIsDetailPage
+                  setIsDetailPage,
+                  router,
+                  modalSetState,
+                  checkProductAvailability,
+                  setIsLoading
                 });
               }
             }

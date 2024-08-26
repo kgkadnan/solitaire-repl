@@ -93,7 +93,20 @@ const Register = () => {
   const [verifyOTP] = useVerifyOTPMutation();
   const [sendOtp] = useSendOtpMutation();
   useEffect(() => {
-    if (data) {
+    const userIp = JSON.parse(localStorage.getItem('userIp')!);
+
+    if (userIp) {
+      setRegisterFormState({
+        ...registerFormState,
+        countryCode: userIp.countryCode,
+        iso: userIp?.iso
+      });
+      setOTPVerificationFormState({
+        ...otpVerificationFormState,
+        countryCode: userIp.countryCode,
+        iso: userIp?.iso
+      });
+    } else if (data) {
       setRegisterFormState({
         ...registerFormState,
         countryCode: data.country_calling_code.replace('+', ''),

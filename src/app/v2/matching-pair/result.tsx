@@ -33,7 +33,10 @@ import {
   RenderTracerId,
   RenderNumericFields
 } from '@/components/v2/common/data-table/helpers/render-cell';
-import { useConfirmProductMutation } from '@/features/api/product';
+import {
+  useCheckProductAvailabilityMutation,
+  useConfirmProductMutation
+} from '@/features/api/product';
 import { useLazyGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
 import { MRT_RowSelectionState } from 'material-react-table';
 import { notificationBadge } from '@/features/notification/notification-slice';
@@ -126,6 +129,7 @@ const MatchingPairResult = ({
   );
   const { data: searchList }: { data?: IItem[] } =
     useGetSavedSearchListQuery('');
+  const [checkProductAvailability] = useCheckProductAvailabilityMutation({});
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();
   const { errorState, errorSetState } = useErrorStateManagement();
   const { setIsError, setErrorText } = errorSetState;
@@ -1285,7 +1289,11 @@ const MatchingPairResult = ({
                         setConfirmStoneData,
                         setIsDetailPage,
                         confirmStoneTrack: 'Matching-Pair-Details',
-                        dispatch
+                        dispatch,
+                        router,
+                        modalSetState,
+                        checkProductAvailability,
+                        setIsLoading
                       });
                     }
                   }
@@ -1327,6 +1335,7 @@ const MatchingPairResult = ({
               setConfirmStoneData={setConfirmStoneData}
               setIsDetailPage={setIsDetailPage}
               isMatchingPair={true}
+              modalSetState={modalSetState}
             />
           ) : showAppointmentForm ? (
             <BookAppointment

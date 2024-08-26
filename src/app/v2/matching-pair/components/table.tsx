@@ -27,7 +27,10 @@ import {
   useUpdateSavedSearchMutation
 } from '@/features/api/saved-searches';
 import { useEffect, useState } from 'react';
-import { useLazyGetProductCountQuery } from '@/features/api/product';
+import {
+  useCheckProductAvailabilityMutation,
+  useLazyGetProductCountQuery
+} from '@/features/api/product';
 import { constructUrlParams } from '@/utils/v2/construct-url-params';
 import {
   MAX_SAVED_SEARCH_COUNT,
@@ -193,6 +196,7 @@ const MatchPairTable = ({
   // Fetching saved search data
   const router = useRouter();
   const [triggerSavedSearch] = useLazyGetAllSavedSearchesQuery({});
+  const [checkProductAvailability] = useCheckProductAvailabilityMutation({});
   let [triggerProductCountApi] = useLazyGetProductCountQuery();
   const [isDropDownOpen, setIsDropDownOpen] = useState(false);
   const handleDropdown = () => {
@@ -1040,7 +1044,11 @@ const MatchPairTable = ({
                         setIsError,
                         setErrorText,
                         setIsConfirmStone,
-                        setConfirmStoneData
+                        setConfirmStoneData,
+                        router,
+                        modalSetState,
+                        checkProductAvailability,
+                        setIsLoading
                       });
                     }
                   }
