@@ -1,10 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import ShimmerButton from '../animated-button';
+import Image from 'next/image';
+import ExploreNow from '@public/v3/home/explore.svg';
+import { useRouter } from 'next/navigation';
+import US from '@public/v3/home/map/usa.svg';
+import India from '@public/v3/home/map/india.svg';
+import Belgium from '@public/v3/home/map/belgium.svg';
+import Dubai from '@public/v3/home/map/dubai.svg';
 
 const HtmlAnimation = () => {
   const [phoneVisible, setPhoneVisible] = useState(false);
   const [showBanner, setShowBanner] = useState(false);
   const [scrollIndex, setScrollIndex] = useState(0);
+  const router = useRouter();
 
   const imageList = [
     '/v3/home/usa.png',
@@ -44,10 +51,50 @@ const HtmlAnimation = () => {
     }
   }, [showBanner, imageList.length]);
 
+  const leftContainer = [
+    {
+      name: 'U.S.',
+      image: US
+    },
+    {
+      name: 'INDIA',
+      image: India
+    },
+    {
+      name: 'BELGIUM',
+      image: Belgium
+    },
+    {
+      name: 'DUBAI',
+      image: Dubai
+    }
+  ];
+
   return (
-    <div className="h-screen relative w-full">
-      <div className="flex justify-center relative">
-        <div>kgk</div>
+    <div className="relative w-full" style={{ height: 'calc(100vh - 50px)' }}>
+      <div className="flex justify-around relative ">
+        {/* Left div */}
+        <div
+          className={`flex flex-col gap-4 mt-[100px] w-[265px] transition-opacity duration-700 ease-in-out transform ${
+            showBanner
+              ? 'opacity-100 scale-100 translate-x-0'
+              : 'opacity-0 scale-90 translate-x-1/2'
+          }`}
+        >
+          <p className="text-[30px] font-semiBold text-neutral900">
+            KGK Inventory Locations
+          </p>
+          <div className="flex gap-4">
+            {leftContainer.map(data => (
+              <div key={data.name}>
+                <div className="w-[44px] h-[44px]">
+                  <Image src={data.image} alt={data.name} />
+                </div>
+                <p className="text-[14px] text-neutral900">{data.name}</p>
+              </div>
+            ))}
+          </div>
+        </div>
 
         {/* Phone Skeleton */}
         <div
@@ -73,7 +120,7 @@ const HtmlAnimation = () => {
             className="list-none p-0 transition-transform duration-700 ease-in-out"
             style={{
               transform: `translateY(-${
-                scrollIndex * (100 / imageList.length)
+                scrollIndex * (100 / (imageList.length + 1))
               }%)` // Adjust scroll position
             }}
           >
@@ -83,7 +130,7 @@ const HtmlAnimation = () => {
                   src={src}
                   alt={`Slide ${index + 1}`}
                   className={`w-full mx-auto mb-[12px] ${
-                    scrollIndex !== 0 && 'mt-[-4px]'
+                    scrollIndex !== 0 && ''
                   }`}
                 />
               </li>
@@ -91,7 +138,33 @@ const HtmlAnimation = () => {
           </ul>
         </div>
 
-        <div>kgk</div>
+        {/* Right div */}
+        <div
+          className={`mt-[250px] w-[265px] transition-opacity duration-700 ease-in-out transform ${
+            showBanner
+              ? 'opacity-100 scale-100 translate-x-0'
+              : 'opacity-0 scale-90 translate-x-1/2'
+          }`}
+        >
+          <div className="w-[180px] text-neutral900">
+            <span className="text-[48px] font-semiBold">2.0</span>
+            <span className="text-[20px]">
+              Points
+              <br /> below
+            </span>{' '}
+            <span
+              className="text-[20px]"
+              style={{
+                background: 'linear-gradient(90deg, #DBF2FC, #E8E8FF, #FFF4E3)',
+                padding: '4px 8px',
+                borderRadius: '4px',
+                backgroundColor: 'transparent'
+              }}
+            >
+              RAP Price
+            </span>
+          </div>
+        </div>
       </div>
 
       {/* Banner that appears after the phone and cards scroll up */}
@@ -100,25 +173,26 @@ const HtmlAnimation = () => {
           showBanner ? 'translate-y-0' : 'translate-y-full'
         }`}
         style={{
-          height: '45%',
-          boxShadow: 'var(--popups-shadow)',
-          zIndex: 999
+          height: '40%',
+          // boxShadow: '0 4px 20px #1F2F2F', // Increased shadow effect
+          zIndex: 999,
+          boxShadow: '0 4px 20px rgba(44, 110, 110, 0.38)'
+          // borderTop: '1px solid #e5e7eb', // Customize border color and width
         }}
       >
-        <div className="bg-white py-5 w-[800px] h-full relative">
+        <div className="bg-white py-5 w-[800px] h-full relative flex flex-col justify-center items-center">
           <h1 className="text-[36px] text-neutral900 font-semiBold">
             Trusted by Thousands of Buyers and Sellers
           </h1>
           <p className="text-[20px] text-[#475467] mb-[20px] px-[75px]">
-            The world’s largest and most trusted marketplace for diamonds! Proud
-            Members of Major Diamond and Jewelry Trade Organizations
+            The world’s largest and most trusted marketplace for diamonds!
           </p>
-          <ShimmerButton
-            className="!rounded-[8px] w-[200px] h-[44px]"
-            onClick={() => {}}
-          >
-            Explore Now!
-          </ShimmerButton>
+          <Image
+            src={ExploreNow}
+            alt="explore now"
+            onClick={() => router.push('/v2/register')}
+            className="cursor-pointer"
+          />
         </div>
       </div>
     </div>

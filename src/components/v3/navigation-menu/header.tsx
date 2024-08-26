@@ -2,10 +2,11 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { NavigationMenuDemo } from './navigation-menu';
 import { CommonButton } from '../button';
-import Image from 'next/image';
 import kgkLogo from '@public/v3/kgklogo.svg';
 import { usePathname, useRouter } from 'next/navigation';
-import ShimmerButton from '../animated-button';
+// import ShimmerButton from '../animated-button';
+import Image from 'next/image';
+import Register from '@public/v3/home/register.svg';
 
 const CommonHeader = () => {
   const currentRoute = usePathname();
@@ -57,7 +58,7 @@ const CommonHeader = () => {
           />
           {NavigationMenuDemo(selectedHeader, setSelectedHeader)}
         </div>
-        <div className="flex gap-4">
+        <div className="flex gap-4 mt-[20px]">
           <CommonButton
             onClick={() => router.push('/v2/login')}
             variant={'secondary'}
@@ -66,13 +67,21 @@ const CommonHeader = () => {
           >
             Login
           </CommonButton>
+          <Image
+            src={Register}
+            alt="register"
+            onClick={() => {
+              router.push('/v2/register');
+            }}
+            className="cursor-pointer"
+          />
 
-          <ShimmerButton
+          {/* <ShimmerButton
             className="!rounded-[8px] w-[120px] h-[44px]"
             onClick={() => router.push('/v2/register')}
           >
             Register
-          </ShimmerButton>
+          </ShimmerButton> */}
         </div>
       </div>
     </div>

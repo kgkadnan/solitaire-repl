@@ -1,7 +1,10 @@
 'use client';
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import ShimmerButton from './animated-button';
+import Image from 'next/image';
+import RegisterNow from '@public/v3/home/register-now.svg';
+
+// import ShimmerButton from './animated-button';
 // import { InputField } from './input/input';
 // import { useToast } from './ui/use-toast';
 // import { isEmailValid } from '@/utils/validate-email';
@@ -68,13 +71,13 @@ const SubscribeNewsLetter = () => {
           Subscribe
         </CommonButton>
       </div> */}
-      <div>
-        <ShimmerButton
-          className="!rounded-[8px] w-[120px] h-[44px]"
+      <div className="mb-[-30px]">
+        <Image
+          src={RegisterNow}
+          alt="register now"
           onClick={() => router.push('/v2/register')}
-        >
-          Register
-        </ShimmerButton>
+          className="cursor-pointer"
+        />
       </div>
     </div>
   );
