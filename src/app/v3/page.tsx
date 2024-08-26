@@ -21,10 +21,10 @@ const Index = () => {
           <div className="xl:px-[112px] lg:px-[32px]  pb-[100px] flex flex-col bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom items-center">
             <div className="flex flex-col gap-5 text-center w-[840px] py-[40px]">
               <div className="flex flex-col">
-                <p className="text-primaryMain text-[62px] font-bold">
+                <p className="text-neutral900 text-[62px] font-bold">
                   Manufacturing
                 </p>
-                <p className="text-primaryMain text-[42px] font-semiBold mt-[-20px]">
+                <p className="text-neutral900 text-[42px] font-semiBold mt-[-20px]">
                   Transforming Rough Diamonds
                 </p>
               </div>
@@ -45,10 +45,8 @@ const Index = () => {
           <div className="xl:px-[112px] lg:px-[32px]  pb-[100px] flex flex-col bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom items-center">
             <div className="flex flex-col gap-5 text-center w-[840px] py-[40px]">
               <div className="flex flex-col">
-                <p className="text-primaryMain text-[62px] font-bold">
-                  Global{' '}
-                </p>
-                <p className="text-primaryMain text-[42px] font-semiBold mt-[-20px]">
+                <p className="text-neutral900 text-[62px] font-bold">Global </p>
+                <p className="text-neutral900 text-[42px] font-semiBold mt-[-20px]">
                   Manufacturing Units & Sales Offices{' '}
                 </p>
               </div>
@@ -96,13 +94,13 @@ const Index = () => {
               </div>
               {/* Overlay with CTA */}
               {isManufactureBlurred && (
-                <div className="relative z-10 flex justify-center items-center flex-col text-primaryMain gap-10">
+                <div className="relative z-10 flex justify-center items-center flex-col text-neutral900 gap-10">
                   <div className="flex flex-col gap-5 text-center w-[780px]">
                     <div className="flex flex-col">
-                      <p className="text-primaryMain text-[62px] font-bold">
+                      <p className="text-neutral900 text-[62px] font-bold">
                         Manufacturing
                       </p>
-                      <p className="text-primaryMain text-[42px] font-semiBold mt-[-20px]">
+                      <p className="text-neutral900 text-[42px] font-semiBold mt-[-20px]">
                         Transforming Rough Diamonds
                       </p>
                     </div>
@@ -156,13 +154,13 @@ const Index = () => {
               </div>
               {/* Overlay with CTA */}
               {isGlobalSalesBlurred && (
-                <div className="relative z-10 flex justify-center items-center flex-col text-primaryMain gap-10">
+                <div className="relative z-10 flex justify-center items-center flex-col text-neutral900 gap-10">
                   <div className="flex flex-col gap-5 text-center w-[780px]">
                     <div className="flex flex-col">
-                      <p className="text-primaryMain text-[62px] font-bold">
+                      <p className="text-neutral900 text-[62px] font-bold">
                         Global
                       </p>
-                      <p className="text-primaryMain text-[42px] font-semiBold mt-[-20px]">
+                      <p className="text-neutral900 text-[42px] font-semiBold mt-[-20px]">
                         Manufacturing Units & Sales Offices
                       </p>
                     </div>
