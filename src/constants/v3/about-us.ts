@@ -18,14 +18,13 @@ import Timeline2023 from '@public/v3/timeline/2023.png';
 
 import Navrattan from '@public/v3/leadership/navrattan.png';
 import Amit from '@public/v3/leadership/amit.png';
-
 import Sandeep from '@public/v3/leadership/sandeep.png';
-
 import Sanjay from '@public/v3/leadership/sanjay.png';
 import Nitin from '@public/v3/leadership/nitin.png';
 import Dinesh from '@public/v3/leadership/dinesh.png';
 import Sunil from '@public/v3/leadership/sunil.png';
 import Sonu from '@public/v3/leadership/sonu.png';
+import Hasmukh from '@public/v3/leadership/hasmukh.png';
 
 export const aboutUsFirstFold = [
   {
@@ -167,7 +166,7 @@ export const leadership = [
   },
   {
     name: 'Hasmukh Ramani',
-    image: Nitin,
+    image: Hasmukh,
     position: 'Chief Commercial Officer (International)',
     description:
       'Mr Navrattan Kothari has managed KGK since 1962. Under his astute guidance KGK has evolved into a modern multinational that operates to world-class standards with state-of-the-art infrastructure. His leadership has enabled KGK to innovate and expand into numerous markets and achieve global growth and recognition. Mr Kothari has built a company that is inspired by life and humanity, which places the highest value on trust, integrity, ethics and corporate responsibility. As Patriarch, Mr Kothari steers the company and enlightens and inspires our team worldwide with his insights, experience and acumen.',
