@@ -151,6 +151,14 @@ export const handleConfirmStone = ({
               actionButtonData={[
                 {
                   variant: 'secondary',
+                  label: ManageLocales('app.confirmStone.updateSelection'),
+                  handler: () => {
+                    modalSetState.setIsDialogOpen(false);
+                  },
+                  customStyle: 'flex-1'
+                },
+                {
+                  variant: 'primary',
                   label: ManageLocales(
                     'app.confirmStone.confirmRemainingStones'
                   ),
@@ -162,14 +170,6 @@ export const handleConfirmStone = ({
                     confirmStoneTrack &&
                       dispatch &&
                       dispatch(setConfirmStoneTrack(confirmStoneTrack));
-                  },
-                  customStyle: 'flex-1'
-                },
-                {
-                  variant: 'primary',
-                  label: ManageLocales('app.confirmStone.updateSelection'),
-                  handler: () => {
-                    modalSetState.setIsDialogOpen(false);
                   },
                   customStyle: 'flex-1'
                 }
