@@ -14,7 +14,7 @@ interface IImageData {
   tag_line: string;
   description_line: string;
   cta: string;
-  is_button_actionable: string;
+  is_button_actionable?: string;
 }
 export interface IDashboardCarouselProps {
   images: IImageData[];
