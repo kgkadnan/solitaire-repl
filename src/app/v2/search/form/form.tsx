@@ -375,7 +375,6 @@ const Form = ({
 
   //Handle search count and errors
   useEffect(() => {
-    console.log('sdasdsadasd', data, error, searchUrl, messageColor);
     if (searchCount !== -1) {
       if (searchUrl) {
         if (
@@ -390,7 +389,6 @@ const Form = ({
           );
           setMessageColor('dangerMain');
         } else if (data?.count === MIN_SEARCH_FORM_COUNT) {
-          console.log('Data', data?.count);
           setIsError(true);
           setErrorText(
             isMatchingPair ? NO_MATCHING_PAIRS_FOUND : NO_STONE_FOUND
