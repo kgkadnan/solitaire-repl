@@ -262,6 +262,7 @@ const NewArrivals = () => {
 
   useEffect(() => {
     if (filterData?.bidFilterData?.length > 0) {
+      console.log('filterData adnana', filterData);
       setBid(filterData.bidFilterData);
     }
   }, [filterData]);
@@ -269,6 +270,7 @@ const NewArrivals = () => {
   const handleBidStones = useCallback((data: any) => {
     setActiveBid(data.activeStone);
 
+    console.log('filterData new', filterData);
     if (filterData?.queryParams) {
       console.log('data.bidStone', data.bidStone);
       console.log('filterData', filterData);
@@ -369,7 +371,7 @@ const NewArrivals = () => {
       socketManager.off('error', handleError);
       socketManager.off('request_get_bid_stones', handleRequestGetBidStones);
     };
-  }, [socketManager, handleBidStones, handleError, authToken]);
+  }, [socketManager, authToken]);
 
   const memoizedColumns = useMemo(
     () => mapColumns(columnHeaders),
