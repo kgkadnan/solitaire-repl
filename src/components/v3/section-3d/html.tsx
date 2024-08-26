@@ -21,6 +21,14 @@ const HtmlAnimation = () => {
   ];
 
   useEffect(() => {
+    setTimeout(() => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }, 0);
+  }, []);
+  useEffect(() => {
     const phoneTimer = setTimeout(() => {
       setPhoneVisible(true);
     }, 300); // Delay before the phone and cards start scrolling up
