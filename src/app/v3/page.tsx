@@ -1,7 +1,8 @@
 'use client';
 import ShimmerButton from '@/components/v3/animated-button';
+import HtmlAnimation from '@/components/v3/section-3d/html';
 // import AnimationSection from '@/components/v3/animated-text/scroll';
-import IphoneAnimation from '@/components/v3/section-3d/iphone';
+// import IphoneAnimation from '@/components/v3/section-3d/iphone';
 import SmoothVideoPlayer from '@/components/v3/smooth-video';
 import React, { useState } from 'react';
 
@@ -14,8 +15,8 @@ const Index = () => {
     <div className="relative ">
       {isHtml ? (
         <div className="flex flex-col">
-          <div className="overflow-hidden	w-full flex justify-center pt-[100px]">
-            <IphoneAnimation />
+          <div className="overflow-hidden	w-full flex justify-center pt-[100px] bg-[#FCFDFD]">
+            <HtmlAnimation />
           </div>
           <div className="xl:px-[112px] lg:px-[32px]  pb-[100px] flex flex-col bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom items-center">
             <div className="flex flex-col gap-5 text-center w-[840px] py-[40px]">
