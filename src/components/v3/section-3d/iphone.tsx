@@ -45,7 +45,8 @@ const IphoneAnimation = () => {
   }, [activeIndex, imageList.length, startRemoving]);
 
   return (
-    <div className="relative flex flex-col items-center justify-center min-h-[80%] text-black w-full">
+    <div className="relative flex items-center justify-center min-h-[80%] text-black w-full">
+      <div>KGK Inventory Locations</div>
       <div
         className={`relative transition-transform duration-700 flex justify-center ${
           phoneVisible ? 'translate-y-0' : 'translate-y-full'
@@ -90,6 +91,7 @@ const IphoneAnimation = () => {
           </ul>
         </div>
       </div>
+      <div>points</div>
       {isLastElement && (
         <div
           className="absolute bottom-[-50px] w-full text-center bg-white flex justify-center shadow-lg before:content-[''] before:absolute before:top-[-1px] before:left-0 before:w-full before:h-[10px] before:shadow-[0_-5px_10px_rgba(0,0,0,0.1)]"
