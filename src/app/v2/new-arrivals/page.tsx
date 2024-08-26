@@ -276,7 +276,10 @@ const NewArrivals = () => {
       console.log('filterData', filterData);
       console.log('data', data);
 
-      const filteredData = filterBidData(data.bidStone, filterData.queryParams);
+      const filteredData =
+        filterData?.bidFilterData?.length > 0
+          ? filterData?.bidFilterData
+          : filterBidData(data.bidStone, filterData.queryParams);
       console.log('filteredData', filteredData);
       dispatch(
         filterFunction({
