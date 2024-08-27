@@ -168,8 +168,7 @@ export const leadership = [
     name: 'Hasmukh Ramani',
     image: Hasmukh,
     position: 'Chief Commercial Officer (International)',
-    description:
-      'Mr Navrattan Kothari has managed KGK since 1962. Under his astute guidance KGK has evolved into a modern multinational that operates to world-class standards with state-of-the-art infrastructure. His leadership has enabled KGK to innovate and expand into numerous markets and achieve global growth and recognition. Mr Kothari has built a company that is inspired by life and humanity, which places the highest value on trust, integrity, ethics and corporate responsibility. As Patriarch, Mr Kothari steers the company and enlightens and inspires our team worldwide with his insights, experience and acumen.',
+    description: `Mr. Hasmukh Ramani, Chief Commercial Officer of KGK International, brings over two decades of experience to the organization. He oversees the entire international sales of polished diamonds for KGK globally. His extensive expertise and leadership have been instrumental in driving the group's international sales strategy and growth. Based on his profound understanding of the diamond industry, Mr. Ramani continues to lead KGK’s commercial operations towards new heights.`,
     linkedin: 'in/hasmukh-ramani-0a082867'
   },
   {
@@ -207,8 +206,7 @@ export const leadership = [
     name: 'Sonu Kothari',
     image: Sonu,
     position: 'Partner (USA)',
-    description:
-      'Mr Navrattan Kothari has managed KGK since 1962. Under his astute guidance KGK has evolved into a modern multinational that operates to world-class standards with state-of-the-art infrastructure. His leadership has enabled KGK to innovate and expand into numerous markets and achieve global growth and recognition. Mr Kothari has built a company that is inspired by life and humanity, which places the highest value on trust, integrity, ethics and corporate responsibility. As Patriarch, Mr Kothari steers the company and enlightens and inspires our team worldwide with his insights, experience and acumen.',
+    description: `Mr. Sonu Kothari, a managing partner of Belgium Diamonds a KGK Group Company , has been a pivotal force in the NY diamond and jewelry industry since 1998, bringing a wealth of experience and entrepreneurial acumen to the company. After graduating from Stuyvesant High School .Mr. Kothari immersed himself in the diamond trade, moving to India to master rough diamond sorting, diamond manufacturing, polished diamond assorting as well as jewelry manufacturing. His hands-on training across China and India provided him with a comprehensive understanding of the industry, knowledge he now applies to the day-to-day operations of KGK Group. Belgium Diamonds`,
     linkedin: 'in/sonu-kothari-514241262/'
   }
 ];
