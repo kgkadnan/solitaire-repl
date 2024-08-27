@@ -24,6 +24,7 @@ import { formatNumber } from '@/utils/fix-two-digit-number';
 import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
 import { RednderLocation } from '@/components/v2/table/helpers/render-cell';
 import { useCheckProductAvailabilityMutation } from '@/features/api/product';
+import { HOLD_STATUS, MEMO_STATUS } from '@/constants/business-logic';
 
 const CompareStone = ({
   rows,
@@ -43,7 +44,8 @@ const CompareStone = ({
   setConfirmStoneData,
   setIsDetailPage,
   isMatchingPair = false,
-  modalSetState
+  modalSetState,
+  refreshCompareStone
 }: any) => {
   const [mappingColumn, setMappingColumn] = useState<any>({});
   const [checkProductAvailability] = useCheckProductAvailabilityMutation({});
@@ -200,6 +202,31 @@ const CompareStone = ({
       // }
     }
   };
+  const renderLotId = (row: any) => {
+    let statusClass = '';
+    let borderClass = '';
+
+    if (row.diamond_status === MEMO_STATUS) {
+      statusClass = 'bg-legendMemoFill text-legendMemo';
+      borderClass = 'border-lengendMemoBorder border-[1px] px-[8px]';
+    } else if (row.diamond_status === HOLD_STATUS) {
+      statusClass = 'bg-legendHoldFill  text-legendHold';
+
+      borderClass = 'border-lengendHoldBorder border-[1px] px-[8px]';
+    } else if (row?.in_cart && Object.keys(row.in_cart).length) {
+      statusClass = 'bg-legendInCartFill text-legendInCart';
+      borderClass = 'border-lengendInCardBorder border-[1px] px-[8px]';
+    }
+    return (
+      <>
+        <span
+          className={`rounded-[4px] ${statusClass}   py-[3px] ${borderClass} `}
+        >
+          {row.lot_id}
+        </span>
+      </>
+    );
+  };
   const handleImageError = (event: any) => {
     event.target.src = NoImageFound.src; // Set the fallback image when the original image fails to load
   };
@@ -327,7 +354,9 @@ const CompareStone = ({
                       className="py-2 px-4 border-[1px] border-neutral200 h-[38px] whitespace-nowrap overflow-hidden overflow-ellipsis  bg-neutral0"
                     >
                       {key !== 'id' ? (
-                        key === 'report_comments' ? (
+                        key === 'lot_id' ? (
+                          <div>{renderLotId(diamond)}</div>
+                        ) : key === 'report_comments' ? (
                           diamond[key]?.length > 0 ? (
                             diamond[key]?.toString()
                           ) : (
@@ -449,9 +478,12 @@ const CompareStone = ({
                   setConfirmStoneData,
                   setIsDetailPage,
                   router,
+                  identifier: 'compare-stone',
                   modalSetState,
                   checkProductAvailability,
-                  setIsLoading
+                  setIsLoading,
+                  setSelectedCheckboxes,
+                  refreshSearchResults: refreshCompareStone
                 });
               }
             }

@@ -124,7 +124,7 @@ const DashboardCarousel: React.FC<IDashboardCarouselProps> = ({
                                   : window.open(data.link);
                               },
                               customStyle: 'flex-1 w-full h-[34px] ',
-                              customCtaStyle: '!h-[34px]'
+                              customCtaStyle: 'h-[34px]'
                             }
                           ]}
                         />

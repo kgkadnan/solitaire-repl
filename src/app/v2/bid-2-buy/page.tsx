@@ -104,8 +104,7 @@ const BidToBuy = () => {
           enableSorting:
             accessor !== 'shape_full' &&
             accessor !== 'details' &&
-            accessor !== 'fire_icon' &&
-            accessor !== 'location',
+            accessor !== 'fire_icon',
           minSize: 5,
           maxSize: accessor === 'details' ? 100 : 200,
           size: 5,
