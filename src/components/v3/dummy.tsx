@@ -43,16 +43,17 @@ const VideoScrollComponentNew: React.FC = () => {
   useEffect(() => {
     if (videoRef.current) {
       const handleTimeUpdate = () => {
-        if (
-          !videoPlayedOnce &&
-          videoRef.current.currentTime >= 5.8 &&
-          videoRef.current.currentTime < 6
-        ) {
-          videoRef.current.playbackRate = 0.5; // Slow down video before pausing
-        } else if (videoRef.current.currentTime >= 6 && !videoPlayedOnce) {
+        // if (
+        //   !videoPlayedOnce &&
+        //   videoRef.current.currentTime >= 5.8 &&
+        //   videoRef.current.currentTime < 6
+        // ) {
+        //   videoRef.current.playbackRate = 0.5; // Slow down video before pausing
+        // } else
+        if (videoRef.current.currentTime >= 6.6 && !videoPlayedOnce) {
           videoRef.current.pause();
-          videoRef.current.currentTime = 6;
-          videoRef.current.playbackRate = 1; // Reset playback speed
+          videoRef.current.currentTime = 6.8;
+          //   videoRef.current.playbackRate = 1; // Reset playback speed
           setIsVideoPlaying(false);
           setVideoPlayedOnce(true);
 
@@ -60,16 +61,17 @@ const VideoScrollComponentNew: React.FC = () => {
           document.body.style.overflow = '';
         }
 
-        if (
-          videoPlayedOnce &&
-          videoRef.current.currentTime >= 13.8 &&
-          videoRef.current.currentTime < 14
-        ) {
-          videoRef.current.playbackRate = 0.5; // Slow down video before pausing
-        } else if (videoRef.current.currentTime >= 14 && videoPlayedOnce) {
+        // if (
+        //   videoPlayedOnce &&
+        //   videoRef.current.currentTime >= 13.8 &&
+        //   videoRef.current.currentTime < 15
+        // ) {
+        //   videoRef.current.playbackRate = 0.5; // Slow down video before pausing
+        // } else
+        if (videoRef.current.currentTime >= 15 && videoPlayedOnce) {
           videoRef.current.pause();
-          videoRef.current.currentTime = 14;
-          videoRef.current.playbackRate = 1; // Reset playback speed
+          videoRef.current.currentTime = 15;
+          //   videoRef.current.playbackRate = 1; // Reset playback speed
           setIsVideoPlaying(false);
 
           // Re-enable global scroll after the video stops at 14 seconds
@@ -86,6 +88,7 @@ const VideoScrollComponentNew: React.FC = () => {
       };
     }
   }, [videoPlayedOnce]);
+
   useEffect(() => {
     setTimeout(() => {
       window.scrollTo({
@@ -94,6 +97,7 @@ const VideoScrollComponentNew: React.FC = () => {
       });
     }, 0);
   }, []);
+
   return (
     <div
       style={{
@@ -113,8 +117,8 @@ const VideoScrollComponentNew: React.FC = () => {
           display: 'flex',
           justifyContent: 'center',
           position: 'fixed',
-          top: '20vh', // Position video slightly lower in the viewport
-          width: '70%',
+          top: '15vh', // Position video slightly lower in the viewport
+          width: '80%',
           zIndex: 2,
           pointerEvents: 'none' // Disable pointer events to allow interactions with underlying content
         }}
