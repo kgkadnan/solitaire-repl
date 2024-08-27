@@ -61,7 +61,7 @@ const HtmlAnimation = () => {
 
   const leftContainer = [
     {
-      name: 'U.S',
+      name: 'U.S.',
       image: US
     },
     {
