@@ -50,9 +50,9 @@ const VideoScrollComponentNew: React.FC = () => {
         // ) {
         //   videoRef.current.playbackRate = 0.5; // Slow down video before pausing
         // } else
-        if (videoRef.current.currentTime >= 6.6 && !videoPlayedOnce) {
+        if (videoRef.current.currentTime >= 6.75 && !videoPlayedOnce) {
           videoRef.current.pause();
-          videoRef.current.currentTime = 6.8;
+          videoRef.current.currentTime = 6.9;
           //   videoRef.current.playbackRate = 1; // Reset playback speed
           setIsVideoPlaying(false);
           setVideoPlayedOnce(true);
@@ -117,7 +117,7 @@ const VideoScrollComponentNew: React.FC = () => {
           display: 'flex',
           justifyContent: 'center',
           position: 'fixed',
-          top: '15vh', // Position video slightly lower in the viewport
+          top: '12vh', // Position video slightly lower in the viewport
           width: '80%',
           zIndex: 2,
           pointerEvents: 'none' // Disable pointer events to allow interactions with underlying content
