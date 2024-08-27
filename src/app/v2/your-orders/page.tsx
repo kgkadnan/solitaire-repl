@@ -241,7 +241,7 @@ const MyDiamonds = () => {
   };
 
   // Get the keys and data for the active tab
-  const { keys, data } = tabsData[activeTab] || { keys: [], data: [] };
+  const { keys, data } = tabsData[activeTab];
 
   const handleShowDetails = (itemId: string) => {
     setShowDetail(true);
@@ -706,9 +706,7 @@ const MyDiamonds = () => {
               activeTab === PAST &&
               ManageLocales('app.yourOrder.header.pastInvoicesDetails')
             )
-          ) : pendingDataState === undefined &&
-            inTransitDataState === undefined &&
-            pastDataState === undefined ? (
+          ) : data === undefined ? (
             <Skeleton
               variant="rectangular"
               height={'24px'}
@@ -722,13 +720,7 @@ const MyDiamonds = () => {
         </p>
       </div>
       <div className="border-[1px] border-neutral200 rounded-[8px]">
-        {pendingDataState === undefined &&
-        inTransitDataState === undefined &&
-        pastDataState === undefined ? (
-          <YourOrderSkeleton />
-        ) : (
-          renderContent()
-        )}
+        {data === undefined ? <YourOrderSkeleton /> : renderContent()}
       </div>
     </div>
   );

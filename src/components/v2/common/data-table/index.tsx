@@ -297,12 +297,14 @@ const DataTable = ({
           let filteredData = savedSearchData.filter((savedSearch: any) => {
             return savedSearch.name.toLowerCase() === value.value.toLowerCase();
           })[0];
+
           searchData = filteredData;
         } else {
           searchData = res.data.savedSearches[0];
         }
 
         const searchUrl = constructUrlParams(searchData.meta_data);
+
         setIsLoading(false);
         triggerProductCountApi({ searchUrl })
           .then(response => {
@@ -380,11 +382,11 @@ const DataTable = ({
                   const localStorageData = [
                     ...data,
                     {
-                      saveSearchName: res.data.savedSearches[0].name,
+                      saveSearchName: searchData.name,
                       isSavedSearch: true,
                       searchId: response?.data?.search_id,
-                      queryParams: res.data.savedSearches[0].meta_data,
-                      id: res.data.savedSearches[0].id
+                      queryParams: searchData.meta_data,
+                      id: searchData.id
                     }
                   ];
 
@@ -451,7 +453,7 @@ const DataTable = ({
     yourSelection[activeTab - 1] = {
       id: yourSelection[activeTab - 1]?.id,
       saveSearchName: yourSelection[activeTab - 1]?.saveSearchName,
-      searchId: data?.search_id,
+      searchId: yourSelection[activeTab - 1]?.searchId,
       isSavedSearch: true,
       queryParams: yourSelection[activeTab - 1].queryParams
     };
