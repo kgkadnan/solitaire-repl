@@ -1,3 +1,104 @@
+// // // 'use client';
+// // // import React, { useEffect, useRef, useState } from 'react';
+// // // const VideoScrollComponent: React.FC = () => {
+// // //   const [videoHeight, setVideoHeight] = useState<number>(0);
+// // //   const videoRef = useRef<HTMLVideoElement | null>(null);
+// // //   const containerRef = useRef<HTMLDivElement | null>(null);
+// // //   const [scrollCount, setScrollCount] = useState<number>(0);
+// // //   useEffect(() => {
+// // //     const handleResize = () => {
+// // //       if (videoRef.current) {
+// // //         setVideoHeight(Math.floor(videoRef.current.duration) * 3000); // Adjust 2000 to your desired scroll-to-time ratio
+// // //       }
+// // //     };
+// // //     const handleScroll = (event: Event) => {
+// // //       if (videoRef.current) {
+// // //         const scrollPosition = window.pageYOffset;
+// // //         let videoCurrentTime: number | undefined;
+// // //         // Ratio of scroll to video time (adjust 2000 as needed)
+// // //         const scrollToTimeRatio = 2000;
+// // //         if (scrollCount === 0) {
+// // //           // Stop at the 6th second on the first scroll
+// // //           videoCurrentTime = Math.min(scrollPosition / scrollToTimeRatio, 6);
+// // //           if (videoCurrentTime >= 6) {
+// // //             setScrollCount(1);
+// // //           }
+// // //         } else if (scrollCount === 1) {
+// // //           // Stop at the 14th second on the second scroll
+// // //           videoCurrentTime = Math.min(scrollPosition / scrollToTimeRatio, 14);
+// // //           if (videoCurrentTime >= 14) {
+// // //             setScrollCount(2);
+// // //           }
+// // //         }
+// // //         if (typeof videoCurrentTime === 'number' && !isNaN(videoCurrentTime)) {
+// // //           videoRef.current.currentTime = videoCurrentTime;
+// // //         } else {
+// // //           console.error('Invalid videoCurrentTime:', videoCurrentTime);
+// // //         }
+// // //         console.log('Scroll position:', scrollPosition);
+// // //         console.log('Video current time:', videoCurrentTime);
+// // //         if (scrollCount < 2 && videoCurrentTime !== undefined) {
+// // //           event.preventDefault(); // Prevent the default scroll behavior
+// // //         }
+// // //       }
+// // //     };
+// // //     const handleLoad = () => {
+// // //       if (videoRef.current) {
+// // //         handleResize();
+// // //       }
+// // //     };
+// // //     // Initialize video height when metadata is loaded
+// // //     if (videoRef.current) {
+// // //       videoRef.current.addEventListener('loadedmetadata', handleLoad);
+// // //     }
+// // //     // Add scroll event listener with passive: false to allow preventDefault
+// // //     window.addEventListener('scroll', handleScroll, { passive: false });
+// // //     // Clean up event listeners
+// // //     return () => {
+// // //       if (videoRef.current) {
+// // //         videoRef.current.removeEventListener('loadedmetadata', handleLoad);
+// // //       }
+// // //       window.removeEventListener('scroll', handleScroll);
+// // //     };
+// // //   }, [scrollCount]);
+// // //   useEffect(() => {
+// // //     if (videoRef.current && videoRef.current.readyState >= 1) {
+// // //       setVideoHeight(Math.floor(videoRef.current.duration) * 2000); // Adjust 2000 to your desired scroll-to-time ratio
+// // //     }
+// // //   }, [videoRef.current?.readyState]);
+// // //   return (
+// // //     <div
+// // //       ref={containerRef}
+// // //       style={{
+// // //         height: videoHeight + 'px',
+// // //         overflow: 'hidden',
+// // //         position: 'relative',
+// // //         zIndex: 1
+// // //       }}
+// // //       className="flex justify-center"
+// // //     >
+// // //       <video
+// // //         ref={videoRef}
+// // //         id="v0"
+// // //         preload="auto"
+// // //         muted
+// // //         style={{
+// // //           display: 'flex',
+// // //           justifyContent: 'center',
+// // //           position: 'fixed',
+// // //           top: 100,
+// // //           width: '70%',
+// // //           zIndex: 2,
+// // //           pointerEvents: 'none' // Disable pointer events to allow interactions with underlying content
+// // //         }}
+// // //       >
+// // //         <source type="video/mp4" src="/v3/videos/globe.mp4" />
+// // //       </video>
+// // //     </div>
+// // //   );
+// // // };
+// // // export default VideoScrollComponent;
+
 // // 'use client';
 // // import React, { useEffect, useRef, useState } from 'react';
 
@@ -6,11 +107,12 @@
 // //   const videoRef = useRef<HTMLVideoElement | null>(null);
 // //   const containerRef = useRef<HTMLDivElement | null>(null);
 // //   const [scrollCount, setScrollCount] = useState<number>(0);
+// //   const [videoDuration, setVideoDuration] = useState<number>(0);
 
 // //   useEffect(() => {
 // //     const handleResize = () => {
-// //       if (videoRef.current) {
-// //         setVideoHeight(Math.floor(videoRef.current.duration) * 500); // Adjust 500 to your desired scroll-to-time ratio
+// //       if (videoRef.current && videoDuration > 0) {
+// //         setVideoHeight(videoDuration * 2000); // Adjust 2000 to your desired scroll-to-time ratio
 // //       }
 // //     };
 
@@ -19,42 +121,41 @@
 // //         const scrollPosition = window.pageYOffset;
 // //         let videoCurrentTime: number | undefined;
 
+// //         // Ratio of scroll to video time (adjust 2000 as needed)
+// //         const scrollToTimeRatio = 2000;
+
 // //         if (scrollCount === 0) {
 // //           // Stop at the 6th second on the first scroll
-// //           videoCurrentTime = Math.min(scrollPosition / 500, 6);
+// //           videoCurrentTime = Math.min(scrollPosition / scrollToTimeRatio, 6);
 // //           if (videoCurrentTime >= 6) {
 // //             setScrollCount(1);
 // //           }
 // //         } else if (scrollCount === 1) {
 // //           // Stop at the 14th second on the second scroll
-// //           videoCurrentTime = Math.min(scrollPosition / 500, 14);
+// //           videoCurrentTime = Math.min(scrollPosition / scrollToTimeRatio, 14);
 // //           if (videoCurrentTime >= 14) {
 // //             setScrollCount(2);
 // //           }
+// //         } else {
+// //           // Continue playing until the video ends
+// //           videoCurrentTime = Math.min(scrollPosition / scrollToTimeRatio, videoDuration);
 // //         }
 
-// //         if (
-// //           typeof videoCurrentTime === 'number' &&
-// //           !isNaN(videoCurrentTime) &&
-// //           videoCurrentTime < 14 &&
-// //           videoCurrentTime
-// //         ) {
+// //         if (typeof videoCurrentTime === 'number' && !isNaN(videoCurrentTime)) {
 // //           videoRef.current.currentTime = videoCurrentTime;
 // //         } else {
 // //           console.error('Invalid videoCurrentTime:', videoCurrentTime);
 // //         }
 
-// //         console.log('Scroll position:', scrollPosition);
-// //         console.log('Video current time:', videoCurrentTime);
-
-// //         if (scrollCount < 2) {
-// //           event.preventDefault();
+// //         if (scrollCount < 2 && videoCurrentTime !== undefined && videoCurrentTime < videoDuration) {
+// //           event.preventDefault(); // Prevent the default scroll behavior
 // //         }
 // //       }
 // //     };
 
 // //     const handleLoad = () => {
 // //       if (videoRef.current) {
+// //         setVideoDuration(videoRef.current.duration);
 // //         handleResize();
 // //       }
 // //     };
@@ -74,11 +175,12 @@
 // //       }
 // //       window.removeEventListener('scroll', handleScroll);
 // //     };
-// //   }, [scrollCount]);
+// //   }, [scrollCount, videoDuration]);
 
 // //   useEffect(() => {
 // //     if (videoRef.current && videoRef.current.readyState >= 1) {
-// //       setVideoHeight(Math.floor(videoRef.current.duration) * 500); // Adjust 500 to your desired scroll-to-time ratio
+// //       setVideoDuration(videoRef.current.duration);
+// //       setVideoHeight(videoRef.current.duration * 2000); // Adjust 2000 to your desired scroll-to-time ratio
 // //     }
 // //   }, [videoRef.current?.readyState]);
 
@@ -89,7 +191,7 @@
 // //         height: videoHeight + 'px',
 // //         overflow: 'hidden',
 // //         position: 'relative',
-// //         zIndex: 1
+// //         zIndex: 1,
 // //       }}
 // //       className="flex justify-center"
 // //     >
@@ -103,9 +205,9 @@
 // //           justifyContent: 'center',
 // //           position: 'fixed',
 // //           top: 100,
-// //           width: '50%',
+// //           width: '70%',
 // //           zIndex: 2,
-// //           pointerEvents: 'none' // Disable pointer events to allow interactions with underlying content
+// //           pointerEvents: 'none', // Disable pointer events to allow interactions with underlying content
 // //         }}
 // //       >
 // //         <source type="video/mp4" src="/v3/videos/globe.mp4" />
@@ -117,71 +219,95 @@
 // // export default VideoScrollComponent;
 // 'use client';
 // import React, { useEffect, useRef, useState } from 'react';
+
 // const VideoScrollComponent: React.FC = () => {
 //   const [videoHeight, setVideoHeight] = useState<number>(0);
 //   const videoRef = useRef<HTMLVideoElement | null>(null);
 //   const containerRef = useRef<HTMLDivElement | null>(null);
 //   const [scrollCount, setScrollCount] = useState<number>(0);
+//   const [videoDuration, setVideoDuration] = useState<number>(0);
+
 //   useEffect(() => {
 //     const handleResize = () => {
-//       if (videoRef.current) {
-//         setVideoHeight(Math.floor(videoRef.current.duration) * 500); // Adjust 500 to your desired scroll-to-time ratio
+//       if (videoRef.current && videoDuration > 0) {
+//         // Adjust 2000 to your desired scroll-to-time ratio
+//         setVideoHeight(videoDuration * 2000);
 //       }
 //     };
+
 //     const handleScroll = (event: Event) => {
 //       if (videoRef.current) {
 //         const scrollPosition = window.pageYOffset;
-//         let videoCurrentTime: any;
+//         let videoCurrentTime: number | undefined;
+
+//         // Ratio of scroll to video time (adjust 2000 as needed)
+//         const scrollToTimeRatio = 2000;
+
 //         if (scrollCount === 0) {
 //           // Stop at the 6th second on the first scroll
-//           videoCurrentTime = Math.min(scrollPosition / 500, 6);
+//           videoCurrentTime = Math.min(scrollPosition / scrollToTimeRatio, 6);
 //           if (videoCurrentTime >= 6) {
 //             setScrollCount(1);
 //           }
 //         } else if (scrollCount === 1) {
 //           // Stop at the 14th second on the second scroll
-//           videoCurrentTime = Math.min(scrollPosition / 500, 14);
+//           videoCurrentTime = Math.min(scrollPosition / scrollToTimeRatio, 14);
 //           if (videoCurrentTime >= 14) {
 //             setScrollCount(2);
 //           }
+//         } else {
+//           // Continue playing until the video ends
+//           videoCurrentTime = Math.min(scrollPosition / scrollToTimeRatio, videoDuration);
 //         }
+
+//         // Ensure that the video doesn't play beyond its duration
 //         if (typeof videoCurrentTime === 'number' && !isNaN(videoCurrentTime)) {
 //           videoRef.current.currentTime = videoCurrentTime;
+//           if (videoCurrentTime >= videoDuration) {
+//             videoRef.current.pause();
+//           }
+//         } else {
+//           console.error('Invalid videoCurrentTime:', videoCurrentTime);
 //         }
-//         console.log('Scroll position:', scrollPosition);
-//         console.log('Video current time:', videoCurrentTime);
-//         if (scrollCount < 2) {
-//           event.preventDefault(); // Prevent scrolling further until video stops
+
+//         // Prevent scrolling if the video hasn't reached its end
+//         if (scrollCount < 2 && videoCurrentTime !== undefined && videoCurrentTime < videoDuration) {
+//           event.preventDefault(); // Prevent the default scroll behavior
 //         }
 //       }
 //     };
+
 //     const handleLoad = () => {
 //       if (videoRef.current) {
+//         setVideoDuration(videoRef.current.duration);
 //         handleResize();
 //       }
 //     };
+
 //     // Initialize video height when metadata is loaded
 //     if (videoRef.current) {
 //       videoRef.current.addEventListener('loadedmetadata', handleLoad);
 //     }
+
 //     // Add scroll event listener with passive: false to allow preventDefault
 //     window.addEventListener('scroll', handleScroll, { passive: false });
-//     // Handle resizing of the window
-//     window.addEventListener('resize', handleResize);
+
 //     // Clean up event listeners
 //     return () => {
 //       if (videoRef.current) {
 //         videoRef.current.removeEventListener('loadedmetadata', handleLoad);
 //       }
 //       window.removeEventListener('scroll', handleScroll);
-//       window.removeEventListener('resize', handleResize);
 //     };
-//   }, [scrollCount]);
+//   }, [scrollCount, videoDuration]);
+
 //   useEffect(() => {
 //     if (videoRef.current && videoRef.current.readyState >= 1) {
-//       setVideoHeight(Math.floor(videoRef.current.duration) * 500); // Adjust 500 to your desired scroll-to-time ratio
+//       setVideoDuration(videoRef.current.duration);
+//       setVideoHeight(videoRef.current.duration * 2000); // Adjust 2000 to your desired scroll-to-time ratio
 //     }
 //   }, [videoRef.current?.readyState]);
+
 //   return (
 //     <div
 //       ref={containerRef}
@@ -189,7 +315,7 @@
 //         height: videoHeight + 'px',
 //         overflow: 'hidden',
 //         position: 'relative',
-//         zIndex: 1
+//         zIndex: 1,
 //       }}
 //       className="flex justify-center"
 //     >
@@ -203,9 +329,9 @@
 //           justifyContent: 'center',
 //           position: 'fixed',
 //           top: 100,
-//           width: '50%',
+//           width: '70%',
 //           zIndex: 2,
-//           pointerEvents: 'none' // Disable pointer events to allow interactions with underlying content
+//           pointerEvents: 'none', // Disable pointer events to allow interactions with underlying content
 //         }}
 //       >
 //         <source type="video/mp4" src="/v3/videos/globe.mp4" />
@@ -213,27 +339,34 @@
 //     </div>
 //   );
 // };
-// export default VideoScrollComponent;
 
+// export default VideoScrollComponent;
 'use client';
 import React, { useEffect, useRef, useState } from 'react';
+
 const VideoScrollComponent: React.FC = () => {
   const [videoHeight, setVideoHeight] = useState<number>(0);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [scrollCount, setScrollCount] = useState<number>(0);
+  const [videoDuration, setVideoDuration] = useState<number>(0);
+
   useEffect(() => {
     const handleResize = () => {
-      if (videoRef.current) {
-        setVideoHeight(Math.floor(videoRef.current.duration) * 500); // Adjust 500 to your desired scroll-to-time ratio
+      if (videoRef.current && videoDuration > 0) {
+        // Adjust 2000 to your desired scroll-to-time ratio
+        setVideoHeight(videoDuration * 3000);
       }
     };
+
     const handleScroll = (event: Event) => {
       if (videoRef.current) {
         const scrollPosition = window.pageYOffset;
         let videoCurrentTime: number | undefined;
-        // Ratio of scroll to video time (adjust 500 as needed)
-        const scrollToTimeRatio = 500;
+
+        // Ratio of scroll to video time (adjust 3000 as needed)
+        const scrollToTimeRatio = 3000;
+
         if (scrollCount === 0) {
           // Stop at the 6th second on the first scroll
           videoCurrentTime = Math.min(scrollPosition / scrollToTimeRatio, 6);
@@ -246,30 +379,49 @@ const VideoScrollComponent: React.FC = () => {
           if (videoCurrentTime >= 14) {
             setScrollCount(2);
           }
+        } else {
+          // Continue playing until the video ends
+          videoCurrentTime = Math.min(
+            scrollPosition / scrollToTimeRatio,
+            videoDuration
+          );
         }
+
         if (typeof videoCurrentTime === 'number' && !isNaN(videoCurrentTime)) {
           videoRef.current.currentTime = videoCurrentTime;
+          if (videoCurrentTime >= videoDuration - 0.5) {
+            videoRef.current.pause(); // Pause slightly before the end to prevent missing the last second
+          }
         } else {
           console.error('Invalid videoCurrentTime:', videoCurrentTime);
         }
-        console.log('Scroll position:', scrollPosition);
-        console.log('Video current time:', videoCurrentTime);
-        if (scrollCount < 2 && videoCurrentTime !== undefined) {
+
+        // Prevent scrolling if the video hasn't reached its end
+        if (
+          scrollCount < 2 &&
+          videoCurrentTime !== undefined &&
+          videoCurrentTime < videoDuration
+        ) {
           event.preventDefault(); // Prevent the default scroll behavior
         }
       }
     };
+
     const handleLoad = () => {
       if (videoRef.current) {
+        setVideoDuration(videoRef.current.duration);
         handleResize();
       }
     };
+
     // Initialize video height when metadata is loaded
     if (videoRef.current) {
       videoRef.current.addEventListener('loadedmetadata', handleLoad);
     }
+
     // Add scroll event listener with passive: false to allow preventDefault
     window.addEventListener('scroll', handleScroll, { passive: false });
+
     // Clean up event listeners
     return () => {
       if (videoRef.current) {
@@ -277,12 +429,15 @@ const VideoScrollComponent: React.FC = () => {
       }
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [scrollCount]);
+  }, [scrollCount, videoDuration]);
+
   useEffect(() => {
     if (videoRef.current && videoRef.current.readyState >= 1) {
-      setVideoHeight(Math.floor(videoRef.current.duration) * 500); // Adjust 500 to your desired scroll-to-time ratio
+      setVideoDuration(videoRef.current.duration);
+      setVideoHeight(videoRef.current.duration * 3000); // Adjust 3000 to your desired scroll-to-time ratio
     }
   }, [videoRef.current?.readyState]);
+
   return (
     <div
       ref={containerRef}
@@ -290,9 +445,10 @@ const VideoScrollComponent: React.FC = () => {
         height: videoHeight + 'px',
         overflow: 'hidden',
         position: 'relative',
-        zIndex: 1
+        zIndex: 1,
+        background: 'radial-gradient(circle, #FFFFFF, #344444)'
       }}
-      className="flex justify-center"
+      className="flex justify-center "
     >
       <video
         ref={videoRef}
@@ -314,4 +470,5 @@ const VideoScrollComponent: React.FC = () => {
     </div>
   );
 };
+
 export default VideoScrollComponent;
