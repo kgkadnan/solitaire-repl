@@ -75,7 +75,7 @@ export function NavigationMenuDemo(
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
-        <NavigationMenuItem className="bg-neutral0  text-neutral700 !hover:text-neutral900  hover:bg-neutral0 focus:bg-neutral0">
+        {/* <NavigationMenuItem className="bg-neutral0  text-neutral700 !hover:text-neutral900  hover:bg-neutral0 focus:bg-neutral0">
           <Link href="/v3/traceability" legacyBehavior passHref>
             <NavigationMenuLink
               className={`${navigationMenuTriggerStyle()} ${
@@ -89,7 +89,7 @@ export function NavigationMenuDemo(
               Traceability
             </NavigationMenuLink>
           </Link>
-        </NavigationMenuItem>
+        </NavigationMenuItem> */}
         <NavigationMenuItem className="bg-neutral0   text-neutral700 !hover:text-neutral900  hover:bg-neutral0 focus:bg-neutral0">
           <Link href="/v3/sustainability" legacyBehavior passHref>
             <NavigationMenuLink
