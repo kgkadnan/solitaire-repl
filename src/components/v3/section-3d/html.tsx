@@ -161,7 +161,7 @@ const HtmlAnimation = () => {
               <br /> below
             </span>{' '}
             <span
-              className="text-[20px]"
+              className="text-[20px] font-semiBold"
               style={{
                 background: 'linear-gradient(90deg, #DBF2FC, #E8E8FF, #FFF4E3)',
                 padding: '4px 8px',
