@@ -157,7 +157,7 @@ export const DynamicMobileInput = ({
                   </div>
                 )}{' '}
                 {selectedCountryIso && (
-                  <div className={`flex justify-between text-neutral900 `}>
+                  <div className={`flex justify-between text-neutral900 gap-2`}>
                     <div className="flex items-center">
                       <Image
                         src={`${apiURL}flags/${selectedCountryIso}.png`}
