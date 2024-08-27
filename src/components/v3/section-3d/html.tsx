@@ -73,7 +73,7 @@ const HtmlAnimation = () => {
       image: Belgium
     },
     {
-      name: 'DUBAI',
+      name: 'UAE',
       image: Dubai
     }
   ];
