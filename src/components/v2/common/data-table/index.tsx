@@ -199,7 +199,8 @@ const DataTable = ({
   setIsDetailPage,
   handleCreateAppointment,
   setIsSkeletonLoading,
-  isSkeletonLoading
+  isSkeletonLoading,
+  refreshSearchResults
 }: any) => {
   // Fetching saved search data
   const router = useRouter();
@@ -786,9 +787,7 @@ const DataTable = ({
             borderTop: '1px solid var(--neutral-200)',
             fontSize: '12px !important',
             fontWeight: 500,
-            paddingRight: ['shape_full', 'location', 'details'].includes(
-              column.id
-            )
+            paddingRight: ['shape_full', 'details'].includes(column.id)
               ? '12px'
               : '0px',
             textAlign:
@@ -898,7 +897,9 @@ const DataTable = ({
               <SavedSearchDropDown
                 handleClose={handleDropdown}
                 isOpen={isDropDownOpen}
-                options={searchList}
+                options={searchList.filter(
+                  (item: any) => item.is_matching_pair === false
+                )}
                 onDropDownClick={onDropDownClick}
               />
             </div>
@@ -1096,7 +1097,9 @@ const DataTable = ({
                             checkProductAvailability,
                             modalSetState,
                             router,
-                            setIsLoading
+                            identifier: 'dashboard',
+                            setIsLoading,
+                            refreshSearchResults
                           })
                         : handleConfirmStone({
                             selectedRows: rowSelection,

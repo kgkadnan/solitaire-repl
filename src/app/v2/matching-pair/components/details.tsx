@@ -173,7 +173,7 @@ export function MatchPairDetails({
       );
       setOriginalData(result[0]);
     }
-  }, [viewSimilar]);
+  }, [viewSimilar, data]);
 
   useEffect(() => {
     showToast &&

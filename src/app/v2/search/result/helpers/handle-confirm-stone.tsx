@@ -37,6 +37,8 @@ interface IHandleConfirmStone {
   modalSetState?: any;
   router?: any;
   setIsLoading: any;
+  refreshSearchResults?: any;
+  setSelectedCheckboxes?: any;
 }
 export const handleConfirmStone = ({
   selectedRows,
@@ -52,7 +54,9 @@ export const handleConfirmStone = ({
   checkProductAvailability,
   modalSetState,
   router,
-  setIsLoading
+  setIsLoading,
+  refreshSearchResults,
+  setSelectedCheckboxes
 }: IHandleConfirmStone) => {
   let selectedIds = Object.keys(selectedRows);
   const hasMemoOut = selectedIds?.some(id => {
@@ -133,7 +137,19 @@ export const handleConfirmStone = ({
                   label: ManageLocales('app.confirmStone.refreshSearchResults'),
                   handler: () => {
                     modalSetState.setIsDialogOpen(false);
-                    router.refresh();
+                    if (
+                      (identifier === 'dashboard' ||
+                        identifier === 'detailPage' ||
+                        identifier === 'compare-stone' ||
+                        identifier === 'match-pair-detail') &&
+                      refreshSearchResults
+                    ) {
+                      setSelectedCheckboxes && setSelectedCheckboxes([]);
+                      setIsLoading(true);
+                      refreshSearchResults();
+                    } else {
+                      router.refresh();
+                    }
                   },
                   customStyle: 'flex-1'
                 }
