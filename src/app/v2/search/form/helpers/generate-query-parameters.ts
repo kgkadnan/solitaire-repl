@@ -237,20 +237,20 @@ export const generateQueryParams = (state: IState) => {
   amountRangeMin?.length !== 0 &&
     amountRangeMax?.length !== 0 &&
     (queryParams['price_range'] = {
-      lte: amountRangeMax,
-      gte: amountRangeMin
+      lte: Number(amountRangeMax),
+      gte: Number(amountRangeMin)
     });
   discountMin?.length !== 0 &&
     discountMax?.length !== 0 &&
     (queryParams['discount'] = {
-      lte: discountMax,
-      gte: discountMin
+      lte: Number(discountMax),
+      gte: Number(discountMin)
     });
   pricePerCaratMin?.length !== 0 &&
     pricePerCaratMax?.length !== 0 &&
     (queryParams['price_per_carat'] = {
-      lte: pricePerCaratMax,
-      gte: pricePerCaratMin
+      lte: Number(pricePerCaratMax),
+      gte: Number(pricePerCaratMin)
     });
   blackTable?.length !== 0 && (queryParams['table_black'] = blackTable);
   sideBlack?.length !== 0 && (queryParams['side_black'] = sideBlack);
@@ -276,86 +276,86 @@ export const generateQueryParams = (state: IState) => {
     (queryParams['internal_graining'] = internalGraining);
   selectedGirdle.length &&
     (queryParams['girdle'] = {
-      lte: selectedGirdle[selectedGirdle.length - 1],
-      gte: selectedGirdle[0]
+      lte: Number(selectedGirdle[selectedGirdle.length - 1]),
+      gte: Number(selectedGirdle[0])
     });
   tablePerMax?.length !== 0 &&
     tablePerMin?.length !== 0 &&
     (queryParams['table_percentage'] = {
-      lte: tablePerMax,
-      gte: tablePerMin
+      lte: Number(tablePerMax),
+      gte: Number(tablePerMin)
     });
   depthMax?.length !== 0 &&
     depthMin?.length !== 0 &&
     (queryParams['depth'] = {
-      lte: depthMax,
-      gte: depthMin
+      lte: Number(depthMax),
+      gte: Number(depthMin)
     });
   crownAngleMax?.length !== 0 &&
     crownAngleMin?.length !== 0 &&
     (queryParams['crown_angle'] = {
-      lte: crownAngleMax,
-      gte: crownAngleMin
+      lte: Number(crownAngleMax),
+      gte: Number(crownAngleMin)
     });
   lengthMax?.length !== 0 &&
     lengthMin?.length !== 0 &&
     (queryParams['length'] = {
-      lte: lengthMax,
-      gte: lengthMin
+      lte: Number(lengthMax),
+      gte: Number(lengthMin)
     });
   pavilionHeightMax?.length !== 0 &&
     pavilionHeightMin?.length !== 0 &&
     (queryParams['pavilion_height'] = {
-      lte: pavilionHeightMax,
-      gte: pavilionHeightMin
+      lte: Number(pavilionHeightMax),
+      gte: Number(pavilionHeightMin)
     });
   depthPerMax?.length !== 0 &&
     depthPerMin?.length !== 0 &&
     (queryParams['depth_percentage'] = {
-      lte: depthPerMax,
-      gte: depthPerMin
+      lte: Number(depthPerMax),
+      gte: Number(depthPerMin)
     });
   crownHeightMax?.length !== 0 &&
     crownHeightMin?.length !== 0 &&
     (queryParams['crown_height'] = {
-      lte: crownHeightMax,
-      gte: crownHeightMin
+      lte: Number(crownHeightMax),
+      gte: Number(crownHeightMin)
     });
   widthMax?.length !== 0 &&
     widthMin?.length !== 0 &&
     (queryParams['width'] = {
-      lte: widthMax,
-      gte: widthMin
+      lte: Number(widthMax),
+      gte: Number(widthMin)
     });
   lowerHalfMax?.length !== 0 &&
     lowerHalfMin?.length !== 0 &&
     (queryParams['lower_half'] = {
-      lte: lowerHalfMax,
-      gte: lowerHalfMin
+      lte: Number(lowerHalfMax),
+      gte: Number(lowerHalfMin)
     });
   ratioMax?.length !== 0 &&
     ratioMin?.length !== 0 &&
     (queryParams['ratio'] = {
-      lte: ratioMax,
-      gte: ratioMin
+      lte: Number(ratioMax),
+      gte: Number(ratioMin)
     });
   girdlePerMax?.length !== 0 &&
     girdlePerMin?.length !== 0 &&
     (queryParams['girdle_percentage'] = {
-      lte: girdlePerMax,
-      gte: girdlePerMin
+      lte: Number(girdlePerMax),
+      gte: Number(girdlePerMin)
     });
   pavilionAngleMax?.length !== 0 &&
     pavilionAngleMin?.length !== 0 &&
     (queryParams['pavilion_angle'] = {
-      lte: pavilionAngleMax,
-      gte: pavilionAngleMin
+      lte: Number(pavilionAngleMax),
+      gte: Number(pavilionAngleMin)
     });
   starLengthMax?.length !== 0 &&
     starLengthMin?.length !== 0 &&
     (queryParams['star_length'] = {
-      lte: starLengthMax,
-      gte: starLengthMin
+      lte: Number(starLengthMax),
+      gte: Number(starLengthMin)
     });
   return queryParams;
 };

@@ -5,7 +5,7 @@ import {
 
 // Define an interface for the function parameters
 interface ICompareStoneParams {
-  isCheck: string[];
+  isCheck: any;
   setIsError: (_value: boolean) => void;
   setErrorText: (_text: string) => void;
   activeCartRows: any;

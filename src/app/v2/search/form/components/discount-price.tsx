@@ -54,8 +54,8 @@ export const DiscountPrice = ({
   const discountPriceAmoutData = [
     {
       label: 'Discount %',
-      minPlaceHolder: `${discount.range.gte}`,
-      maxPlaceHolder: `${discount.range.lte}`,
+      minPlaceHolder: `${formatNumber(discount.range.gte)}`,
+      maxPlaceHolder: `${formatNumber(discount.range.lte)}`,
       handleMaxChange: (event: React.ChangeEvent<HTMLInputElement>) => {
         if (/^-?\d*\.?\d{0,2}$/.test(event.target.value)) {
           setDiscountMax(event.target.value);
@@ -112,7 +112,7 @@ export const DiscountPrice = ({
 
     {
       label: 'Price/Ct',
-      minPlaceHolder: `${pricePerCarat.range.gte}`,
+      minPlaceHolder: `${formatNumber(pricePerCarat.range.gte)}`,
       maxPlaceHolder: `${formatNumber(pricePerCarat.range.lte)}`,
       handleMaxChange: (event: React.ChangeEvent<HTMLInputElement>) => {
         if (/^\d*\.?\d{0,2}$/.test(event.target.value)) {
@@ -169,7 +169,7 @@ export const DiscountPrice = ({
     },
     {
       label: 'Amount Range',
-      minPlaceHolder: `${amountRange.range.gte}`,
+      minPlaceHolder: `${formatNumber(amountRange.range.gte)}`,
       maxPlaceHolder: `${formatNumber(amountRange.range.lte)}`,
       handleMaxChange: (event: React.ChangeEvent<HTMLInputElement>) => {
         if (/^\d*\.?\d{0,2}$/.test(event.target.value)) {

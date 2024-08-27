@@ -115,6 +115,7 @@ import { useAppSelector } from '@/hooks/hook';
 import { setConfirmStoneTrack } from '@/features/confirm-stone-track/confirm-stone-track-slice';
 import { STONE_LOCATION } from '@/constants/v2/enums/location';
 import { kamLocationAction } from '@/features/kam-location/kam-location';
+import { handleCompareStone } from './search/result/helpers/handle-compare-stone';
 
 interface ITabs {
   label: string;
@@ -1193,6 +1194,47 @@ const Dashboard = () => {
     }
   };
 
+  const refreshSearchResults = () => {
+    getProductById({
+      search_keyword: stoneId
+    })
+      .unwrap()
+      .then((res: any) => {
+        setSearchData(res);
+
+        setRowSelection({});
+        setError('');
+        setIsDetailPage(true);
+        setIsLoading(false);
+        if (isDiamondDetail) {
+          let detailPageUpdatedData = res.foundProducts.filter(
+            (products: any) => {
+              return products.id === detailPageData.id;
+            }
+          );
+          handleDetailPage({ row: detailPageUpdatedData[0] });
+        } else if (isCompareStone) {
+          handleCompareStone({
+            isCheck: rowSelection,
+            setIsError,
+            setErrorText: setError,
+            activeCartRows: res.foundProducts,
+            setIsCompareStone,
+            setCompareStoneData
+          });
+        }
+      })
+      .catch((_e: any) => {
+        if (_e?.status === statusCode.NOT_FOUND) {
+          setError(`We couldn't find any results for this search`);
+        } else if (_e?.status === statusCode.UNAUTHORIZED) {
+          setError(_e?.data?.message?.message);
+        } else {
+          setError('Something went wrong');
+        }
+      });
+  };
+
   const confirmStoneApiCall = ({ variantIds }: { variantIds: string[] }) => {
     if (variantIds.length) {
       setIsLoading(true);
@@ -1714,7 +1756,8 @@ const Dashboard = () => {
                           router,
                           modalSetState,
                           checkProductAvailability,
-                          setIsLoading
+                          setIsLoading,
+                          refreshSearchResults
                         });
                       }
                     }
@@ -1769,6 +1812,7 @@ const Dashboard = () => {
               setConfirmStoneData={setConfirmStoneData}
               setIsDetailPage={setIsDetailPage}
               modalSetState={modalSetState}
+              refreshCompareStone={refreshSearchResults}
             />
           </div>
         </div>
@@ -1849,6 +1893,7 @@ const Dashboard = () => {
               setIsCompareStone={setIsCompareStone}
               setCompareStoneData={setCompareStoneData}
               handleCreateAppointment={handleCreateAppointment}
+              refreshSearchResults={refreshSearchResults}
             />
           </div>
         </div>

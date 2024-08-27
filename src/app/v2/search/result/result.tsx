@@ -93,6 +93,7 @@ import { setConfirmStoneTrack } from '@/features/confirm-stone-track/confirm-sto
 import { useLazyGetCustomerQuery } from '@/features/api/dashboard';
 import { kamLocationAction } from '@/features/kam-location/kam-location';
 import { STONE_LOCATION } from '@/constants/v2/enums/location';
+import { handleCompareStone } from './helpers/handle-compare-stone';
 
 // Column mapper outside the component to avoid re-creation on each render
 
@@ -212,6 +213,39 @@ const Result = ({
       }
     );
   };
+
+  const refreshSearchResults = () => {
+    triggerProductApi({
+      url: searchUrl,
+      limit: LISTING_PAGE_DATA_LIMIT,
+      offset: 0
+    }).then(res => {
+      dataTableSetState.setRows(res.data?.products);
+      setRowSelection({});
+      setErrorText('');
+      setData(res.data);
+
+      setIsLoading(false);
+      if (isDetailPage) {
+        let detailPageUpdatedData = res.data?.products.filter(
+          (products: any) => {
+            return products.id === detailPageData.id;
+          }
+        );
+        handleDetailPage({ row: detailPageUpdatedData[0] });
+      } else if (isCompareStone) {
+        handleCompareStone({
+          isCheck: rowSelection,
+          setIsError,
+          setErrorText,
+          activeCartRows: res.data?.products,
+          setIsCompareStone,
+          setCompareStoneData
+        });
+      }
+    });
+  };
+
   const handleDetailPage = ({ row }: { row: any }) => {
     if (isConfirmStone) {
       setBreadCrumLabel('Confirm Stone');
@@ -257,8 +291,7 @@ const Result = ({
           enableSorting:
             accessor !== 'shape_full' &&
             accessor !== 'details' &&
-            accessor !== 'fire_icon' &&
-            accessor !== 'location',
+            accessor !== 'fire_icon',
           minSize: 5,
           maxSize: accessor === 'details' ? 100 : 200,
           size: 5,
@@ -1323,7 +1356,8 @@ const Result = ({
                         router,
                         modalSetState,
                         checkProductAvailability,
-                        setIsLoading
+                        setIsLoading,
+                        refreshSearchResults
                       });
                     }
                   }
@@ -1364,6 +1398,7 @@ const Result = ({
               setConfirmStoneData={setConfirmStoneData}
               setIsDetailPage={setIsDetailPage}
               modalSetState={modalSetState}
+              refreshCompareStone={refreshSearchResults}
             />
           ) : showAppointmentForm ? (
             <BookAppointment

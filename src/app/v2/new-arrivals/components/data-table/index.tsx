@@ -839,9 +839,7 @@ const NewArrivalDataTable = ({
             fontWeight: 500,
             textAlign:
               column.id === 'girdle_percentage' ? 'center !important' : 'left',
-            paddingRight: ['shape_full', 'location', 'details'].includes(
-              column.id
-            )
+            paddingRight: ['shape_full', 'details'].includes(column.id)
               ? '12px'
               : '0px'
           }
