@@ -211,7 +211,7 @@ const AirpodsScrollAnimation: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imagesRef = useRef<HTMLImageElement[]>([]);
   const airpodsRef = useRef<{ frame: number }>({ frame: 0 });
-  const frameCount = 44; // Adjusted for skipping
+  const frameCount = 45; // Adjusted for skipping
 
   useEffect(() => {
     const canvas = canvasRef.current;
