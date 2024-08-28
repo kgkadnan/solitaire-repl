@@ -230,8 +230,9 @@ const AirpodsScrollAnimation: React.FC = () => {
 
     const currentFrame = (index: number): string =>
       `https://kgk-diamonds-assets.s3.eu-west-1.amazonaws.com/landing-page-assets/globe/Black_bg_0${(
-        index * 20 + 1 // Skip every other image by incrementing by 2
-      )
+        index * 20 +
+        1
+      ) // Skip every other image by incrementing by 2
         .toString()
         .padStart(4, '0')}.png`;
 
