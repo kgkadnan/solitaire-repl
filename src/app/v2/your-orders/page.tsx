@@ -456,6 +456,7 @@ const MyDiamonds = () => {
                   ? DASHBOARD_BREADCRUMB_LABEL
                   : PENING_INVOICE_BREADCRUMB_LABEL
               }
+              identifier={PENING_INVOICE_BREADCRUMB_LABEL}
               modalSetState={modalSetState}
               setIsLoading={setIsLoading}
               router={router}
@@ -471,6 +472,7 @@ const MyDiamonds = () => {
                   ? DASHBOARD_BREADCRUMB_LABEL
                   : ACTIVE_INVOICE_BREADCRUMB_LABEL
               }
+              identifier={ACTIVE_INVOICE_BREADCRUMB_LABEL}
               modalSetState={modalSetState}
               setIsLoading={setIsLoading}
               router={router}
@@ -484,6 +486,7 @@ const MyDiamonds = () => {
               breadCrumLabel={PAST_INVOICE_BREADCRUMB_LABEL}
               modalSetState={modalSetState}
               setIsLoading={setIsLoading}
+              identifier={PAST_INVOICE_BREADCRUMB_LABEL}
               router={router}
             />
           );

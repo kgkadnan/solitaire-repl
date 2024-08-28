@@ -67,6 +67,15 @@ const LoginComponent = ({
               key={'Mobile'}
               onClick={() => {
                 setLoginByEmail(false);
+                const passwordInput = document.querySelector(
+                  'input[name="password"]'
+                ) as HTMLInputElement;
+
+                // Clear the value of the input element
+                if (passwordInput) {
+                  passwordInput.value = '';
+                  setPassword('');
+                }
               }}
             >
               Mobile
@@ -78,7 +87,26 @@ const LoginComponent = ({
                   : 'text-neutral600 border-b-[1px] border-[#E4E7EC] pb-[8px]'
               }`}
               key={'Email'}
-              onClick={() => setLoginByEmail(true)}
+              onClick={() => {
+                setLoginByEmail(true);
+                const passwordInput = document.querySelector(
+                  'input[name="password"]'
+                ) as HTMLInputElement;
+                const mobileInput = document.querySelector(
+                  'input[name="mobileNumber"]'
+                ) as HTMLInputElement;
+
+                // Clear the value of the input element
+                if (passwordInput && mobileInput) {
+                  mobileInput.value = '';
+                  setPhoneNumber((prev: any) => ({
+                    ...prev,
+                    mobileNumber: ''
+                  }));
+                  passwordInput.value = '';
+                  setPassword('');
+                }
+              }}
             >
               Email
             </button>

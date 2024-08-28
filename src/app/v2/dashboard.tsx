@@ -964,6 +964,7 @@ const Dashboard = () => {
       setIsDetailPage(true);
       setBreadCrumLabel('');
     }
+    setRowSelection({});
     setIsDetailPage(true);
     setIsConfirmStone(false);
     setConfirmStoneData([]);
@@ -1854,6 +1855,7 @@ const Dashboard = () => {
                 alt="backWardArrow"
                 onClick={() => {
                   setIsDetailPage(false);
+                  setRowSelection({});
                 }}
                 className="cursor-pointer"
               />
@@ -1862,6 +1864,7 @@ const Dashboard = () => {
                   className="text-neutral600 text-sMedium font-regular cursor-pointer"
                   onClick={() => {
                     setIsDetailPage(false);
+                    setRowSelection({});
                   }}
                 >
                   {breadCrumLabel}
@@ -2256,7 +2259,8 @@ const Dashboard = () => {
                                     : triggerProductCountApi,
                                 setDialogContent,
                                 setIsDialogOpen,
-                                isMatchingPair: searchData.is_matching_pair
+                                isMatchingPair: searchData.is_matching_pair,
+                                setIsLoading
                               })
                             }
                           >

@@ -720,7 +720,7 @@ const MatchingPairResult = ({
       setIsDetailPage(true);
       setBreadCrumLabel('');
     }
-
+    setRowSelection({});
     setIsConfirmStone(false);
     setConfirmStoneData([]);
     setIsCompareStone(false);

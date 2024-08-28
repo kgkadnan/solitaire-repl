@@ -207,6 +207,15 @@ const MyAppointments = () => {
     setShowAppointmentForm(false);
   };
 
+  // Created a copy of the array before sorting
+  const sortedPastAppointmentsData = [...(pastAppointments || [])].sort(
+    (a, b) => {
+      return (
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      );
+    }
+  );
+
   const tabsData: ITabsData = {
     upcomingAppointments: {
       keys: [
@@ -225,7 +234,7 @@ const MyAppointments = () => {
         { label: 'Location', accessor: 'address' },
         { label: 'Comment', accessor: 'reason' }
       ],
-      data: pastAppointments
+      data: sortedPastAppointmentsData
     }
   };
 
