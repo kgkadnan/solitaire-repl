@@ -39,7 +39,7 @@ Bandra East, Mumbai - 400051`,
   return (
     <div className="flex xl:pr-[112px] lg:pr-[32px] justify-between gap-4 bg-[white]">
       <div className="w-[30%] flex flex-col gap-8">
-        <Image src={Globe} alt="KGK Globe presence" width={320} />
+        <Image src={Globe} alt="KGK Globe presence" width={250} />
       </div>
       <div className="w-[70%] flex flex-col justify-center gap-2">
         <Image src={kgkLogo} alt="KGK logo" />
