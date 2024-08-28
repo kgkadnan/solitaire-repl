@@ -299,7 +299,7 @@ const SmoothVideoPlayer = () => {
           role="img"
           autoPlay
           aria-label="A video showcasing the lineup of Mac products"
-          src="/v3/videos/globe.mp4"
+          src="https://kgk-diamonds-assets.s3.eu-west-1.amazonaws.com/landing-page-assets/videos/globe.mp4"
           style={{
             width: '100%',
             height: 'auto'

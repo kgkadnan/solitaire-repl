@@ -465,7 +465,10 @@ const VideoScrollComponent: React.FC = () => {
           pointerEvents: 'none' // Disable pointer events to allow interactions with underlying content
         }}
       >
-        <source type="video/mp4" src="/v3/videos/globe.mp4" />
+        <source
+          type="video/mp4"
+          src="https://kgk-diamonds-assets.s3.eu-west-1.amazonaws.com/landing-page-assets/videos/globe.mp4"
+        />
       </video>
     </div>
   );
