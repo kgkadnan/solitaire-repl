@@ -1127,6 +1127,7 @@ const MatchingPairResult = ({
     setActivePreviewTab('Image');
     setImageIndex(0);
     setIsDetailPage(false);
+    setIsDiamondDetailLoading(true);
     setDetailPageData({});
   };
   useEffect(() => {

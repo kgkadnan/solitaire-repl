@@ -276,8 +276,8 @@ export const generateQueryParams = (state: IState) => {
     (queryParams['internal_graining'] = internalGraining);
   selectedGirdle.length &&
     (queryParams['girdle'] = {
-      lte: Number(selectedGirdle[selectedGirdle.length - 1]),
-      gte: Number(selectedGirdle[0])
+      lte: selectedGirdle[selectedGirdle.length - 1],
+      gte: selectedGirdle[0]
     });
   tablePerMax?.length !== 0 &&
     tablePerMin?.length !== 0 &&

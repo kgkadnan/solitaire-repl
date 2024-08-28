@@ -58,7 +58,7 @@ export const DynamicMobileInput = ({
     setIsOpen(false);
   }, [countryCodeValue]);
   const Option = (props: any) => (
-    <components.Option {...props} className="country-option">
+    <components.Option {...props} className="country-option gap-[6px]">
       <Image
         src={`${apiURL}flags/${props.data.iso}.png`}
         width={24}
@@ -74,7 +74,7 @@ export const DynamicMobileInput = ({
   );
 
   const SingleValue = ({ children, ...props }: any) => (
-    <components.SingleValue {...props}>
+    <components.SingleValue {...props} className="gap-[6px]">
       <Image
         src={`${apiURL}flags/${selectedCountryIso}.png`}
         width={24}
@@ -158,7 +158,7 @@ export const DynamicMobileInput = ({
                 )}{' '}
                 {selectedCountryIso && (
                   <div className={`flex justify-between text-neutral900 gap-2`}>
-                    <div className="flex items-center">
+                    <div className="flex items-center gap-[6px]">
                       <Image
                         src={`${apiURL}flags/${selectedCountryIso}.png`}
                         width={24}
