@@ -286,6 +286,7 @@ const MyCart = () => {
     setIsDetailPage(false);
     setConfirmStoneData([]);
     setShowAppointmentForm(false);
+    setRowSelection({});
     setAppointmentPayload({
       kam: { kam_name: '', image: '' },
       storeAddresses: [],

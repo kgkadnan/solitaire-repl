@@ -26,7 +26,8 @@ export const handleCardClick = ({
   triggerProductCountApi,
   setDialogContent,
   setIsDialogOpen,
-  isMatchingPair
+  isMatchingPair,
+  setIsLoading
 }: {
   id: string;
   savedSearchData: ISavedSearchData[];
@@ -34,10 +35,11 @@ export const handleCardClick = ({
   triggerProductCountApi: any;
   setDialogContent: React.Dispatch<React.SetStateAction<ReactNode>>;
   setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   isMatchingPair?: boolean;
 }) => {
   // Filter the saved search data to get the clicked card's data
-
+  setIsLoading(true);
   const cardClickData: any = savedSearchData.filter(
     (items: ISavedSearchData) => {
       return items.id === id;
@@ -56,6 +58,7 @@ export const handleCardClick = ({
       );
       // Check if the product data count exceeds the maximum limit
       if (response?.data?.count > MAX_SAVED_SEARCH_COUNT) {
+        setIsLoading(false);
         setIsDialogOpen(true);
         setDialogContent(
           <CommonPoppup
@@ -168,6 +171,7 @@ export const handleCardClick = ({
                   }`
                 );
           }
+          setIsLoading(false);
         } else {
           // If no data in local storage, create a new entry and navigate to the search result page
           let localStorageData = [
@@ -191,6 +195,8 @@ export const handleCardClick = ({
             : router.push(
                 `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${1}`
               );
+
+          setIsLoading(false);
         }
       }
     }
