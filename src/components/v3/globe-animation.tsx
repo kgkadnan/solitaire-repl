@@ -229,10 +229,7 @@ const AirpodsScrollAnimation: React.FC = () => {
     window.addEventListener('resize', setCanvasSize); // Adjust size on window resize
 
     const currentFrame = (index: number): string =>
-      `https://kgk-diamonds-assets.s3.eu-west-1.amazonaws.com/landing-page-assets/webp/Black_bg_0${(
-        index * 1 +
-        1
-      ) // Skip every other image by incrementing by 2
+      `/v3/webp-globe/Black_bg_0${(index * 1 + 1) // Skip every other image by incrementing by 2
         .toString()
         .padStart(4, '0')}.webp`;
 
