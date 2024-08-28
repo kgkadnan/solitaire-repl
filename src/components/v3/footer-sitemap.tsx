@@ -41,7 +41,7 @@ Bandra East, Mumbai - 400051`,
       <div className="w-[30%] flex flex-col gap-8">
         <Image src={Globe} alt="KGK Globe presence" />
       </div>
-      <div className="w-[70%] flex flex-col justify-center gap-4">
+      <div className="w-[70%] flex flex-col justify-center gap-2">
         <Image src={kgkLogo} alt="KGK logo" />
         <div className="flex justify-between">
           {/* <div className=" flex w-[60%]  justify-between gap-2"> */}
@@ -71,7 +71,7 @@ Bandra East, Mumbai - 400051`,
             </div>
           ))}
           {/* </div> */}
-          <div className="w-[40%] flex flex-col gap-4">
+          <div className="w-[45%] flex flex-col gap-4">
             <p className="text-[#667085] text-mMedium font-semiBold">
               Contact us
             </p>
