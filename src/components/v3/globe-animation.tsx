@@ -9,7 +9,7 @@ const AirpodsScrollAnimation: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imagesRef = useRef<HTMLImageElement[]>([]);
   const airpodsRef = useRef<{ frame: number }>({ frame: 0 });
-  const frameCount = 420;
+  const frameCount = 440;
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -21,7 +21,9 @@ const AirpodsScrollAnimation: React.FC = () => {
     canvas.height = 680; //770
 
     const currentFrame = (index: number): string =>
-      `/v3/globe/World_Animation_Backup2_gv005_-Camera_${(index + 22)
+      `https://kgk-diamonds-assets.s3.eu-west-1.amazonaws.com/landing-page-assets/globe/Black_bg_0${(
+        index + 1
+      )
         .toString()
         .padStart(4, '0')}.png`;
     // `https://www.apple.com/105/media/us/airpods-pro/2019/1299e2f5_9206_4470_b28e_08307a42f19b/anim/sequence/large/01-hero-lightpass/${(index + 1).toString().padStart(4, '0')}.jpg`
