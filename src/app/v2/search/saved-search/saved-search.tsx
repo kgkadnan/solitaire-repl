@@ -331,7 +331,8 @@ const SavedSearch = ({ setIsLoading }: any) => {
                               : triggerProductCountApi,
                             setDialogContent,
                             setIsDialogOpen,
-                            isMatchingPair: is_matching_pair
+                            isMatchingPair: is_matching_pair,
+                            setIsLoading
                           })
                         }
                       >

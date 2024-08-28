@@ -2,7 +2,7 @@ import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import keyIcon from '@public/v2/assets/icons/modal/key.svg';
 import backArrow from '@public/v2/assets/icons/back-arrow.svg';
-
+import editNumber from '@public/v2/assets/icons/edit-number.svg';
 import { ManageLocales } from '@/utils/v2/translate';
 import { IndividualActionButton } from '@/components/v2/common/action-button/individual-button';
 import { useRouter } from 'next/navigation';
@@ -59,13 +59,14 @@ const OTPComponent = ({
           {ManageLocales('app.forgotPassword')}
         </div>
 
-        <div className="text-mRegular text-neutral900">
-          OTP has been sent to {phoneNumber.phoneNumber}
+        <div className="text-mRegular text-neutral900 flex items-center justify-center gap-[3px]">
+          OTP has been sent to +{phoneNumber.countryCode}{' '}
+          {phoneNumber.phoneNumber}
           <div
             className="cursor-pointer"
             onClick={() => setCurrentState('forgotPassword')}
           >
-            Not My Number
+            <Image src={editNumber} alt="editNumber" width={16} height={16} />
           </div>
         </div>
 
@@ -90,7 +91,8 @@ const OTPComponent = ({
                     sendOtp,
                     setIsDialogOpen,
                     setDialogContent,
-                    setToken
+                    setToken,
+                    setOtpValues
                   })
             }
           >
@@ -116,7 +118,8 @@ const OTPComponent = ({
                     `We're sorry, but the OTP you entered is incorrect or has expired`
                   )
             }
-            variant={'primary'}
+            disabled={!checkOTPEntry(otpValues)}
+            variant={!checkOTPEntry(otpValues) ? 'disable' : 'primary'}
             size={'custom'}
             className="rounded-[4px] w-[100%]"
           >

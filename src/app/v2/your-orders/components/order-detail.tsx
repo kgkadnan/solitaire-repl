@@ -47,6 +47,7 @@ interface IOrderDetail {
   modalSetState: any;
   setIsLoading: any;
   router: any;
+  identifier?: string;
 }
 
 const OrderDetail: React.FC<IOrderDetail> = ({
@@ -55,7 +56,8 @@ const OrderDetail: React.FC<IOrderDetail> = ({
   breadCrumLabel,
   modalSetState,
   setIsLoading,
-  router
+  router,
+  identifier
 }) => {
   const [triggerColumn] =
     useLazyGetManageListingSequenceQuery<IManageListingSequenceResponse>();
@@ -407,7 +409,7 @@ const OrderDetail: React.FC<IOrderDetail> = ({
                       </span>
                     </div>
 
-                    {breadCrumLabel === PENING_INVOICE_BREADCRUMB_LABEL && (
+                    {identifier === PENING_INVOICE_BREADCRUMB_LABEL && (
                       <div className="flex items-center gap-1 relative">
                         <div className="flex items-center">
                           <div className="text-neutral900 text-mRegular font-medium">
@@ -525,7 +527,7 @@ const OrderDetail: React.FC<IOrderDetail> = ({
                     <div className="bg-neutral0 border-[1px] border-solid border-neutral200 rounded-[8px] shadow-sm">
                       <div className="flex flex-col p-[16px]">
                         <p className="text-neutral600 text-mRegular font-regular">
-                          {breadCrumLabel === PAST_INVOICE_BREADCRUMB_LABEL
+                          {identifier === PAST_INVOICE_BREADCRUMB_LABEL
                             ? ManageLocales(
                                 'app.yourOrder.description.paidAmount'
                               )
@@ -541,7 +543,7 @@ const OrderDetail: React.FC<IOrderDetail> = ({
                   </div>
                 </div>
 
-                {breadCrumLabel === PENING_INVOICE_BREADCRUMB_LABEL && (
+                {identifier === PENING_INVOICE_BREADCRUMB_LABEL && (
                   <div className="flex flex-col pt-1">
                     <p className="text-neutral600 text-mRegular font-regular">
                       {ManageLocales('app.yourOrder.description.comments')}
@@ -564,7 +566,7 @@ const OrderDetail: React.FC<IOrderDetail> = ({
               <div className="px-[16px] py-2">
                 <ActionButton
                   actionButtonData={
-                    breadCrumLabel === PENING_INVOICE_BREADCRUMB_LABEL
+                    identifier === PENING_INVOICE_BREADCRUMB_LABEL
                       ? [
                           {
                             variant: 'secondary',
