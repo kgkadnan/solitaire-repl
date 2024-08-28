@@ -211,7 +211,7 @@ const AirpodsScrollAnimation: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imagesRef = useRef<HTMLImageElement[]>([]);
   const airpodsRef = useRef<{ frame: number }>({ frame: 0 });
-  const frameCount = 23; // Adjusted for skipping
+  const frameCount = 44; // Adjusted for skipping
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -230,7 +230,7 @@ const AirpodsScrollAnimation: React.FC = () => {
 
     const currentFrame = (index: number): string =>
       `https://kgk-diamonds-assets.s3.eu-west-1.amazonaws.com/landing-page-assets/globe/Black_bg_0${(
-        index * 20 +
+        index * 10 +
         1
       ) // Skip every other image by incrementing by 2
         .toString()
