@@ -1,3 +1,4 @@
+import { formatNumber } from '@/utils/fix-two-digit-number';
 import { Dispatch, SetStateAction } from 'react';
 interface IHandleNumericRange {
   min: string;
@@ -25,10 +26,14 @@ export const handleNumericRange = ({
 
   if (parsedMin < rangeCondition.gte || parsedMax > rangeCondition.lte) {
     setErrorState(
-      `Please enter a range between ${rangeCondition.gte} to ${rangeCondition.lte} only`
+      `Please enter a range between ${formatNumber(
+        rangeCondition.gte
+      )} to ${formatNumber(rangeCondition.lte)} only`
     );
     setMinMaxError(
-      `Please enter a range between ${rangeCondition.gte} to ${rangeCondition.lte} only`
+      `Please enter a range between ${formatNumber(
+        rangeCondition.gte
+      )} to ${formatNumber(rangeCondition.lte)} only`
     );
 
     return;
