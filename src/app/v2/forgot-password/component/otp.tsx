@@ -24,7 +24,8 @@ const OTPComponent = ({
   setToken,
   setCurrentState,
   token,
-  setIsLoading
+  setIsLoading,
+  isLoading
 }: any) => {
   const router = useRouter();
   const [error, setError] = useState('');
@@ -67,6 +68,7 @@ const OTPComponent = ({
             className="cursor-pointer"
             onClick={() => {
               setResendTimer(60);
+              setOtpValues(['', '', '', '', '', '']);
               setCurrentState('forgotPassword');
             }}
           >
@@ -124,8 +126,10 @@ const OTPComponent = ({
                     `We're sorry, but the OTP you entered is incorrect or has expired`
                   )
             }
-            disabled={!checkOTPEntry(otpValues)}
-            variant={!checkOTPEntry(otpValues) ? 'disable' : 'primary'}
+            disabled={!checkOTPEntry(otpValues) || isLoading}
+            variant={
+              !checkOTPEntry(otpValues) || isLoading ? 'disable' : 'primary'
+            }
             size={'custom'}
             className="rounded-[4px] w-[100%]"
           >
