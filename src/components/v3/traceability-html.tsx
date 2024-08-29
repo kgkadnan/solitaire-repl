@@ -63,7 +63,6 @@ const TraceabilityHtml = () => {
     };
   }, []);
 
-
   const dotClasses = (timeStart: any, timeEnd: any) =>
     currentTime > timeStart && currentTime <= timeEnd
       ? 'bg-neutral400 relative w-8 rounded-[8px]'
