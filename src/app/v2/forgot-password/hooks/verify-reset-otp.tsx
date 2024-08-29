@@ -7,6 +7,7 @@ interface IHandleResetOTP {
   token: IToken;
   setCurrentState: React.Dispatch<React.SetStateAction<string>>;
   setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   setDialogContent: React.Dispatch<React.SetStateAction<React.ReactNode>>;
   verifyResetOTP: any;
   phoneNumber?: any;
@@ -20,10 +21,11 @@ export const handleResetOTP = ({
   setDialogContent,
   verifyResetOTP,
   phoneNumber,
-  setToken
+  setToken,
+  setIsLoading
 }: IHandleResetOTP) => {
   const enteredOtp = otpValues.join('');
-
+  setIsLoading(true);
   verifyResetOTP({
     token: token.phoneToken,
     otp: enteredOtp,
@@ -39,8 +41,10 @@ export const handleResetOTP = ({
         }));
         setCurrentState('resetPassword');
       }
+      setIsLoading(false);
     })
     .catch((e: any) => {
+      setIsLoading(false);
       setIsDialogOpen(true);
       setDialogContent(
         <CommonPoppup

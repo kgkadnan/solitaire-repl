@@ -2,9 +2,13 @@ import { constructUrlParams } from '@/utils/v2/construct-url-params';
 import { ISavedSearchData } from '../saved-search-interface';
 import {
   MAX_SAVED_SEARCH_COUNT,
-  MAX_SEARCH_TAB_LIMIT
+  MAX_SEARCH_TAB_LIMIT,
+  MIN_SAVED_SEARCH_COUNT
 } from '@/constants/business-logic';
-import { MODIFY_SEARCH_STONES_EXCEEDS_LIMIT } from '@/constants/error-messages/saved';
+import {
+  MODIFY_SEARCH_STONES_EXCEEDS_LIMIT,
+  NO_PRODUCT_FOUND
+} from '@/constants/error-messages/saved';
 import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
 import { ManageLocales } from '@/utils/v2/translate';
 import { ReactNode } from 'react';
@@ -66,6 +70,27 @@ export const handleCardClick = ({
             content={''}
             customPoppupBodyStyle="!mt-[70px]"
             header={MODIFY_SEARCH_STONES_EXCEEDS_LIMIT}
+            actionButtonData={[
+              {
+                variant: 'primary',
+                label: ManageLocales('app.modal.okay'),
+                handler: () => {
+                  setIsDialogOpen(false);
+                },
+                customStyle: 'flex-1 h-10'
+              }
+            ]}
+          />
+        );
+      } else if (response?.data?.count <= MIN_SAVED_SEARCH_COUNT) {
+        setIsLoading(false);
+        setIsDialogOpen(true);
+        setDialogContent(
+          <CommonPoppup
+            status="warning"
+            content={''}
+            customPoppupBodyStyle="!mt-[70px]"
+            header={NO_PRODUCT_FOUND}
             actionButtonData={[
               {
                 variant: 'primary',

@@ -8,6 +8,7 @@ import React, {
 import DataTable from '@/components/v2/common/data-table';
 import { useDataTableStateManagement } from '@/components/v2/common/data-table/hooks/data-table-state-management';
 import {
+  AVAILABLE_STATUS,
   HOLD_STATUS,
   LISTING_PAGE_DATA_LIMIT,
   MEMO_STATUS
@@ -57,7 +58,8 @@ import {
 import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
 import {
   SELECT_STONE_TO_PERFORM_ACTION,
-  SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH
+  SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH,
+  STONE_NOT_AVAILABLE_MODIFY_SEARCH
 } from '@/constants/error-messages/confirm-stone';
 import { NOT_MORE_THAN_300 } from '@/constants/error-messages/search';
 import { NO_STONES_SELECTED } from '@/constants/error-messages/cart';
@@ -567,12 +569,23 @@ const Result = ({
         return stone?.diamond_status === HOLD_STATUS;
       });
 
-      if (hasMemoOut) {
+      // Check for stones with AVAILABLE_STATUS
+      const hasAvailable = selectedIds?.some((id: string) => {
+        const stone = dataTableState.rows.find(
+          (row: IProduct) => row?.id === id
+        );
+        return stone?.diamond_status === AVAILABLE_STATUS;
+      });
+
+      if ((hasHold && hasAvailable) || (hasMemoOut && hasAvailable)) {
         setErrorText(SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH);
+        setIsError(true);
+      } else if (hasMemoOut) {
+        setErrorText(STONE_NOT_AVAILABLE_MODIFY_SEARCH);
         setIsError(true);
       } else if (hasHold) {
+        setErrorText(STONE_NOT_AVAILABLE_MODIFY_SEARCH);
         setIsError(true);
-        setErrorText(SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH);
       } else {
         setShowAppointmentForm(true);
         triggerAvailableSlots({}).then(payload => {
