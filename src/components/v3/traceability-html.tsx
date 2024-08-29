@@ -71,7 +71,7 @@ const TraceabilityHtml = () => {
             { timeStart: 10, timeEnd: 13 },
             { timeStart: 13, timeEnd: 26 },
             { timeStart: 26, timeEnd: 29 }
-          ].map(({ timeStart, timeEnd }, index) => (
+          ].map(({ timeStart, timeEnd }) => (
             <div
               key={`${timeStart}-${timeEnd}`}
               onClick={() => handleReferenceClick(timeStart)}
