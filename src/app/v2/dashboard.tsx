@@ -96,13 +96,15 @@ import EmptyScreen from '@/components/v2/common/empty-screen';
 import emptyOrderSvg from '@public/v2/assets/icons/empty-order.svg';
 import empty from '@public/v2/assets/icons/saved-search/empty-screen-saved-search.svg';
 import {
+  AVAILABLE_STATUS,
   HOLD_STATUS,
   IN_TRANSIT,
   MEMO_STATUS
 } from '@/constants/business-logic';
 import {
   SELECT_STONE_TO_PERFORM_ACTION,
-  SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH
+  SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH,
+  STONE_NOT_AVAILABLE_MODIFY_SEARCH
 } from '@/constants/error-messages/confirm-stone';
 import { useLazyGetAvailableMyAppointmentSlotsQuery } from '@/features/api/my-appointments';
 import { IAppointmentPayload } from './my-appointments/page';
@@ -115,6 +117,7 @@ import { useAppSelector } from '@/hooks/hook';
 import { setConfirmStoneTrack } from '@/features/confirm-stone-track/confirm-stone-track-slice';
 import { STONE_LOCATION } from '@/constants/v2/enums/location';
 import { kamLocationAction } from '@/features/kam-location/kam-location';
+import { handleCompareStone } from './search/result/helpers/handle-compare-stone';
 
 interface ITabs {
   label: string;
@@ -963,6 +966,7 @@ const Dashboard = () => {
       setIsDetailPage(true);
       setBreadCrumLabel('');
     }
+    setRowSelection({});
     setIsDetailPage(true);
     setIsConfirmStone(false);
     setConfirmStoneData([]);
@@ -1162,10 +1166,20 @@ const Dashboard = () => {
         return stone?.diamond_status === HOLD_STATUS;
       });
 
-      if (hasMemoOut) {
+      // Check for stones with AVAILABLE_STATUS
+      const hasAvailable = selectedIds?.some((id: string) => {
+        const stone = searchData?.foundProducts.find(
+          (row: IProduct) => row?.id === id
+        );
+        return stone?.diamond_status === AVAILABLE_STATUS;
+      });
+
+      if ((hasHold && hasAvailable) || (hasMemoOut && hasAvailable)) {
         setError(SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH);
+      } else if (hasMemoOut) {
+        setError(STONE_NOT_AVAILABLE_MODIFY_SEARCH);
       } else if (hasHold) {
-        setError(SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH);
+        setError(STONE_NOT_AVAILABLE_MODIFY_SEARCH);
       } else {
         setShowAppointmentForm(true);
         triggerAvailableSlots({}).then(payload => {
@@ -1191,6 +1205,47 @@ const Dashboard = () => {
     } else {
       setError(SELECT_STONE_TO_PERFORM_ACTION);
     }
+  };
+
+  const refreshSearchResults = () => {
+    getProductById({
+      search_keyword: stoneId
+    })
+      .unwrap()
+      .then((res: any) => {
+        setSearchData(res);
+
+        setRowSelection({});
+        setError('');
+        setIsDetailPage(true);
+        setIsLoading(false);
+        if (isDiamondDetail) {
+          let detailPageUpdatedData = res.foundProducts.filter(
+            (products: any) => {
+              return products.id === detailPageData.id;
+            }
+          );
+          handleDetailPage({ row: detailPageUpdatedData[0] });
+        } else if (isCompareStone) {
+          handleCompareStone({
+            isCheck: rowSelection,
+            setIsError,
+            setErrorText: setError,
+            activeCartRows: res.foundProducts,
+            setIsCompareStone,
+            setCompareStoneData
+          });
+        }
+      })
+      .catch((_e: any) => {
+        if (_e?.status === statusCode.NOT_FOUND) {
+          setError(`We couldn't find any results for this search`);
+        } else if (_e?.status === statusCode.UNAUTHORIZED) {
+          setError(_e?.data?.message?.message);
+        } else {
+          setError('Something went wrong');
+        }
+      });
   };
 
   const confirmStoneApiCall = ({ variantIds }: { variantIds: string[] }) => {
@@ -1714,7 +1769,8 @@ const Dashboard = () => {
                           router,
                           modalSetState,
                           checkProductAvailability,
-                          setIsLoading
+                          setIsLoading,
+                          refreshSearchResults
                         });
                       }
                     }
@@ -1769,6 +1825,7 @@ const Dashboard = () => {
               setConfirmStoneData={setConfirmStoneData}
               setIsDetailPage={setIsDetailPage}
               modalSetState={modalSetState}
+              refreshCompareStone={refreshSearchResults}
             />
           </div>
         </div>
@@ -1810,6 +1867,7 @@ const Dashboard = () => {
                 alt="backWardArrow"
                 onClick={() => {
                   setIsDetailPage(false);
+                  setRowSelection({});
                 }}
                 className="cursor-pointer"
               />
@@ -1818,6 +1876,7 @@ const Dashboard = () => {
                   className="text-neutral600 text-sMedium font-regular cursor-pointer"
                   onClick={() => {
                     setIsDetailPage(false);
+                    setRowSelection({});
                   }}
                 >
                   {breadCrumLabel}
@@ -1849,6 +1908,7 @@ const Dashboard = () => {
               setIsCompareStone={setIsCompareStone}
               setCompareStoneData={setCompareStoneData}
               handleCreateAppointment={handleCreateAppointment}
+              refreshSearchResults={refreshSearchResults}
             />
           </div>
         </div>
@@ -2211,7 +2271,8 @@ const Dashboard = () => {
                                     : triggerProductCountApi,
                                 setDialogContent,
                                 setIsDialogOpen,
-                                isMatchingPair: searchData.is_matching_pair
+                                isMatchingPair: searchData.is_matching_pair,
+                                setIsLoading
                               })
                             }
                           >

@@ -50,10 +50,15 @@ import { IAppointmentPayload } from '../my-appointments/page';
 import { useLazyGetAvailableMyAppointmentSlotsQuery } from '@/features/api/my-appointments';
 import {
   SELECT_STONE_TO_PERFORM_ACTION,
-  SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH
+  SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH,
+  STONE_NOT_AVAILABLE_MODIFY_SEARCH
 } from '@/constants/error-messages/confirm-stone';
 import BookAppointment from '../my-appointments/components/book-appointment/book-appointment';
-import { HOLD_STATUS, MEMO_STATUS } from '@/constants/business-logic';
+import {
+  AVAILABLE_STATUS,
+  HOLD_STATUS,
+  MEMO_STATUS
+} from '@/constants/business-logic';
 import { kycStatus } from '@/constants/enums/kyc';
 import BiddingSkeleton from '@/components/v2/skeleton/bidding';
 import { useAppDispatch, useAppSelector } from '@/hooks/hook';
@@ -111,8 +116,7 @@ const NewArrivals = () => {
           enableSorting:
             accessor !== 'shape_full' &&
             accessor !== 'details' &&
-            accessor !== 'fire_icon' &&
-            accessor !== 'location',
+            accessor !== 'fire_icon',
           minSize: 5,
           maxSize: accessor === 'details' ? 100 : 200,
           size: 5,
@@ -424,12 +428,21 @@ const NewArrivals = () => {
         setAppointmentPayload(data);
       });
 
-      if (hasMemoOut) {
+      // Check for stones with AVAILABLE_STATUS
+      const hasAvailable = selectedIds?.some((id: string) => {
+        const stone = data.find((row: any) => row?.id === id);
+        return stone?.diamond_status === AVAILABLE_STATUS;
+      });
+
+      if ((hasHold && hasAvailable) || (hasMemoOut && hasAvailable)) {
         setErrorText(SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH);
+        setIsError(true);
+      } else if (hasMemoOut) {
+        setErrorText(STONE_NOT_AVAILABLE_MODIFY_SEARCH);
         setIsError(true);
       } else if (hasHold) {
+        setErrorText(STONE_NOT_AVAILABLE_MODIFY_SEARCH);
         setIsError(true);
-        setErrorText(SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH);
       } else {
         const lotIdsWithCountry = selectedIds?.map((id: string) => {
           const foundProduct: any =
@@ -863,11 +876,7 @@ const NewArrivals = () => {
                     : 'border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow'
                 } `}
               >
-                <div
-                  className={` ${
-                    isSkeletonLoading ? ' ' : 'border-[1px] border-neutral200'
-                  }  `}
-                >
+                <div>
                   <NewArrivalDataTable
                     dispatch={dispatch}
                     filterData={filterData}

@@ -322,12 +322,7 @@ const BidToBuyDataTable = ({
 
   const renderTopToolbar = ({ table }: any) => (
     <div>
-      <div
-        className={`border-neutral200 ${
-          (activeTab !== 2 || (activeTab === 2 && historyCount === 0)) &&
-          'border-b-[1px]'
-        }`}
-      >
+      <div className={`border-neutral200 border-b-[1px] `}>
         <Box
           sx={{
             display: 'flex',
@@ -513,7 +508,7 @@ const BidToBuyDataTable = ({
         </Box>
       </div>
 
-      {rows.length > 0 && activeTab !== 2 && (
+      {rows.length > 0 && (
         <Bid2BuyCalculatedField
           rows={rows}
           selectedProducts={rowSelection}
@@ -861,9 +856,7 @@ const BidToBuyDataTable = ({
             fontWeight: 500,
             textAlign:
               column.id === 'girdle_percentage' ? 'center !important' : 'left',
-            paddingRight: ['shape_full', 'location', 'details'].includes(
-              column.id
-            )
+            paddingRight: ['shape_full', 'details'].includes(column.id)
               ? '12px'
               : '0px'
           }

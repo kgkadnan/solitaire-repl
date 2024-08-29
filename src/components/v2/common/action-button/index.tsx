@@ -56,7 +56,7 @@ const ActionButton = ({
                   disabled={isDisable || isLoading}
                   onClick={() => !isLoading && handler()}
                   variant={variant}
-                  className={`${styles.ctaStyle} 
+                  className={`${styles.ctaStyle} h-[40px]
                 ${svg ? 'p-[8px] ' : 'px-[16px] py-[8px]'}
             ${variant === 'primary' && styles.ctaPrimaryStyle} ${
               variant === 'secondary' && styles.ctaSecondaryStyle
@@ -78,7 +78,7 @@ const ActionButton = ({
                       disabled={isDisable}
                       onClick={() => handler()}
                       variant={variant}
-                      className={`${styles.ctaStyle} 
+                      className={`${styles.ctaStyle}  h-[40px]
                 ${svg ? 'p-[8px] ' : 'px-[16px] py-[8px]'}
             ${variant === 'primary' && styles.ctaPrimaryStyle} ${
               variant === 'secondary' && styles.ctaSecondaryStyle

@@ -220,6 +220,7 @@ const Login = () => {
               country_code: phoneNumber.countryCode
             }
       );
+
       setOTPVerificationFormState(prev => ({
         ...prev,
         otpMobileNumber: `${phoneNumber.mobileNumber}`,
@@ -231,7 +232,7 @@ const Login = () => {
         setIsDialogOpen(true);
         setDialogContent(
           <CommonPoppup
-            content={res.error.data.message}
+            content={res?.error?.data?.message ?? res?.error?.status}
             header="Login Failed"
             handleClick={() => setIsDialogOpen(false)}
             buttonText="Try Again"

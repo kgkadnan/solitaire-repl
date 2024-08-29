@@ -7,6 +7,7 @@ import React, {
 } from 'react';
 import { useDataTableStateManagement } from '@/components/v2/common/data-table/hooks/data-table-state-management';
 import {
+  AVAILABLE_STATUS,
   HOLD_STATUS,
   MATCHING_PAIR_DATA_LIMIT,
   MEMO_STATUS
@@ -55,7 +56,8 @@ import {
 import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
 import {
   SELECT_STONE_TO_PERFORM_ACTION,
-  SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH
+  SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH,
+  STONE_NOT_AVAILABLE_MODIFY_SEARCH
 } from '@/constants/error-messages/confirm-stone';
 import { NOT_MORE_THAN_300 } from '@/constants/error-messages/search';
 // import { NO_STONES_SELECTED } from '@/constants/error-messages/compare-stone';
@@ -95,6 +97,7 @@ import { setConfirmStoneTrack } from '@/features/confirm-stone-track/confirm-sto
 import { STONE_LOCATION } from '@/constants/v2/enums/location';
 import { useLazyGetCustomerQuery } from '@/features/api/dashboard';
 import { kamLocationAction } from '@/features/kam-location/kam-location';
+import { handleCompareStone } from '../search/result/helpers/handle-compare-stone';
 
 // Column mapper outside the component to avoid re-creation on each render
 
@@ -122,6 +125,7 @@ const MatchingPairResult = ({
   const confirmTrack = useAppSelector(state => state.setConfirmStoneTrack);
   const kamLocation = useAppSelector(state => state.kamLocation);
   const [triggerGetCustomer] = useLazyGetCustomerQuery({});
+  const [isSkeletonLoading, setIsSkeletonLoading] = useState<boolean>(true);
   const [activePreviewTab, setActivePreviewTab] = useState('Image');
   const [imageIndex, setImageIndex] = useState<number>(0);
   const [triggerAvailableSlots] = useLazyGetAvailableMyAppointmentSlotsQuery(
@@ -536,12 +540,23 @@ const MatchingPairResult = ({
         return stone?.diamond_status === HOLD_STATUS;
       });
 
-      if (hasMemoOut) {
+      // Check for stones with AVAILABLE_STATUS
+      const hasAvailable = selectedIds?.some((id: string) => {
+        const stone = dataTableState.rows.find(
+          (row: IProduct) => row?.id === id
+        );
+        return stone?.diamond_status === AVAILABLE_STATUS;
+      });
+
+      if ((hasHold && hasAvailable) || (hasMemoOut && hasAvailable)) {
         setErrorText(SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH);
+        setIsError(true);
+      } else if (hasMemoOut) {
+        setErrorText(STONE_NOT_AVAILABLE_MODIFY_SEARCH);
         setIsError(true);
       } else if (hasHold) {
+        setErrorText(STONE_NOT_AVAILABLE_MODIFY_SEARCH);
         setIsError(true);
-        setErrorText(SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH);
       } else {
         setShowAppointmentForm(true);
         triggerAvailableSlots({}).then(payload => {
@@ -572,6 +587,40 @@ const MatchingPairResult = ({
   const isIProduct = (obj: any): obj is IProduct => {
     return 'variants' in obj && Array.isArray(obj.variants);
   };
+
+  const refreshSearchResults = () => {
+    triggerMatchingPairApi({
+      url: searchUrl,
+      limit: MATCHING_PAIR_DATA_LIMIT,
+      offset: 0
+    }).then(res => {
+      let matchingPair = res.data?.products.flat();
+      dataTableSetState.setRows(matchingPair);
+      setOriginalData(res.data?.products);
+
+      setRowSelection({});
+      setErrorText('');
+      setData(res.data);
+      setIsLoading(false);
+
+      if (isDetailPage) {
+        let detailPageUpdatedData = matchingPair.filter((products: any) => {
+          return products.id === detailPageData.id;
+        });
+        handleDetailPage({ row: detailPageUpdatedData[0] });
+      } else if (isCompareStone) {
+        handleCompareStone({
+          isCheck: rowSelection,
+          setIsError,
+          setErrorText,
+          activeCartRows: matchingPair,
+          setIsCompareStone,
+          setCompareStoneData
+        });
+      }
+    });
+  };
+
   const handleAddToCart = (similarData = []) => {
     let selectedIds = Object.keys(rowSelection);
 
@@ -684,7 +733,7 @@ const MatchingPairResult = ({
       setIsDetailPage(true);
       setBreadCrumLabel('');
     }
-
+    setRowSelection({});
     setIsConfirmStone(false);
     setConfirmStoneData([]);
     setIsCompareStone(false);
@@ -1091,6 +1140,7 @@ const MatchingPairResult = ({
     setActivePreviewTab('Image');
     setImageIndex(0);
     setIsDetailPage(false);
+    setIsDiamondDetailLoading(true);
     setDetailPageData({});
   };
   useEffect(() => {
@@ -1152,7 +1202,7 @@ const MatchingPairResult = ({
             ''
           ) : hasLimitExceeded ? (
             ''
-          ) : matchingPairData === undefined ? (
+          ) : isSkeletonLoading ? (
             <Skeleton
               variant="rectangular"
               height={'24px'}
@@ -1288,12 +1338,14 @@ const MatchingPairResult = ({
                         setIsConfirmStone,
                         setConfirmStoneData,
                         setIsDetailPage,
+                        identifier: 'match-pair-detail',
                         confirmStoneTrack: 'Matching-Pair-Details',
                         dispatch,
                         router,
                         modalSetState,
                         checkProductAvailability,
-                        setIsLoading
+                        setIsLoading,
+                        refreshSearchResults
                       });
                     }
                   }
@@ -1336,6 +1388,7 @@ const MatchingPairResult = ({
               setIsDetailPage={setIsDetailPage}
               isMatchingPair={true}
               modalSetState={modalSetState}
+              refreshCompareStone={refreshSearchResults}
             />
           ) : showAppointmentForm ? (
             <BookAppointment
@@ -1403,6 +1456,8 @@ const MatchingPairResult = ({
                   setIsInputDialogOpen={setIsInputDialogOpen}
                   handleCreateAppointment={handleCreateAppointment}
                   originalData={originalData}
+                  setIsSkeletonLoading={setIsSkeletonLoading}
+                  isSkeletonLoading={isSkeletonLoading}
                 />
               )}
             </div>

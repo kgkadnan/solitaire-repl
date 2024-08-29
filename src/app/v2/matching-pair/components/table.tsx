@@ -54,6 +54,7 @@ import Breadcrum from '@/components/v2/common/search-breadcrum/breadcrum';
 import Tooltip from '@/components/v2/common/tooltip';
 import { Dropdown } from '@/components/v2/common/dropdown-menu';
 import Share from '@/components/v2/common/copy-and-share/share';
+import MathPairSkeleton from '@/components/v2/skeleton/match-pair';
 
 const theme = createTheme({
   typography: {
@@ -191,7 +192,9 @@ const MatchPairTable = ({
   setCompareStoneData,
   setIsInputDialogOpen,
   handleCreateAppointment,
-  originalData
+  originalData,
+  setIsSkeletonLoading,
+  isSkeletonLoading
 }: any) => {
   // Fetching saved search data
   const router = useRouter();
@@ -240,6 +243,9 @@ const MatchPairTable = ({
     const newData = rows.slice(startIndex, endIndex);
     // Update the paginated data state
     setPaginatedData(newData);
+    if (newData.length > 0 && setIsSkeletonLoading) {
+      setIsSkeletonLoading(false);
+    }
   }, [
     rows,
     pagination.pageIndex, //re-fetch when page index changes
@@ -852,7 +858,9 @@ const MatchPairTable = ({
               <SavedSearchDropDown
                 handleClose={handleDropdown}
                 isOpen={isDropDownOpen}
-                options={searchList}
+                options={searchList.filter(
+                  (item: any) => item.is_matching_pair !== false
+                )}
                 onDropDownClick={onDropDownClick}
               />
             </div>
@@ -1101,9 +1109,13 @@ const MatchPairTable = ({
 
   return (
     <>
-      <ThemeProvider theme={theme}>
-        <MaterialReactTable table={table} />
-      </ThemeProvider>
+      {isSkeletonLoading ? (
+        <MathPairSkeleton />
+      ) : (
+        <ThemeProvider theme={theme}>
+          <MaterialReactTable table={table} />
+        </ThemeProvider>
+      )}
     </>
   );
 };

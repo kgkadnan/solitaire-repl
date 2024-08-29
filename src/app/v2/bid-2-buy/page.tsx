@@ -104,8 +104,7 @@ const BidToBuy = () => {
           enableSorting:
             accessor !== 'shape_full' &&
             accessor !== 'details' &&
-            accessor !== 'fire_icon' &&
-            accessor !== 'location',
+            accessor !== 'fire_icon',
           minSize: 5,
           maxSize: accessor === 'details' ? 100 : 200,
           size: 5,
@@ -744,11 +743,7 @@ const BidToBuy = () => {
                     : 'border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow'
                 } `}
               >
-                <div
-                  className={` ${
-                    isSkeletonLoading ? ' ' : 'border-[1px] border-neutral200'
-                  }  `}
-                >
+                <div>
                   <BidToBuyDataTable
                     dispatch={dispatch}
                     filterData={filterData}
