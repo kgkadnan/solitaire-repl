@@ -156,47 +156,60 @@ const RightStructure = ({ currentTime }: any) => {
       {activeData && (
         <div
           key={activeData.header1}
-          className={`xl:w-[420px] lg:w-[320px] bg-[#FFFFFF57] p-[20px] flex flex-col rounded-[12px] xl:gap-1 transition-all duration-700 ease-in-out transform opacity-0 translate-x-10 ${
+          className={`xl:w-[420px] lg:w-[320px] bg-[#FFFFFF57] p-[20px] flex flex-col rounded-[12px] xl:gap-1 transition-all duration-700 ease-in-out transform opacity-0 ${
             activeData ? 'opacity-100 translate-x-0' : ''
           }`}
-          style={{ boxShadow: 'var(--popups-shadow)' }}
+          style={{ boxShadow: 'var(--popups-shadow)', height: 'fit-content' }}
         >
           <p className="xl:text-[16px] lg:text-[14px] text-neutral900">
             Diamond Journey
           </p>
-          <div className="rounded-[8px] bg-[#ffffff] p-[12px] flex flex-col gap-1">
+          <div className="rounded-[8px] bg-[#ffffff] p-[12px] flex flex-col ">
             <div className="flex gap-2">
               <Image
                 src={activeData.icon}
                 alt="trace steps"
-                className="xl:w-[40px] xl:h-[40px] lg:w-[30px] lg:h-[30px]"
+                className="xl:w-[40px] xl:h-[40px] lg:w-[30px] lg:h-[30px] flex items-center"
               />
-              <p className="xl:text-[16px] lg:text-[14px] text-neutral900 font-semiBold">
+              <p className="xl:text-[16px] lg:text-[12px] text-neutral900 font-semiBold flex items-center lg:leading-[16px] xl:leading-[20px]">
                 {activeData.header1}
               </p>
             </div>
             <div className="flex gap-2">
               <div className="min-w-[40px] xl:pl-[20px] lg:pl-[15px]">
-                <div className="border-l border-dotted border-gray-400 xl:h-[120%] lg:h-[110%] mt-[-20px]"></div>
+                <div className="border-l border-dotted border-gray-400 xl:h-[120%] lg:h-[110%] "></div>
               </div>
               {activeData.timeStart !== 0 ? (
-                <ol className="list-disc xl:pl-[20px] lg:pl-[10px]">
+                <ol className="list-disc xl:pl-[20px] lg:pl-[10px] ">
                   {activeData.data.map((list: string, index: number) => (
-                    <li key={`list-${index}`}>{list}</li>
+                    <li
+                      key={`list-${index}`}
+                      className="xl:text-[14px] lg:text-[10px] xl:leading-[20px] lg:leading-[14px]"
+                    >
+                      {list}
+                    </li>
                   ))}
                 </ol>
               ) : (
                 <div className="flex flex-col gap-2">
                   <ol className="list-disc pl-[20px]">
-                    <li>{activeData.data[0]}</li>
-                    <li>{activeData.data[1]}</li>
+                    <li className="xl:text-[14px] lg:text-[10px] xl:leading-[20px] lg:leading-[14px]">
+                      {activeData.data[0]}
+                    </li>
+                    <li className="xl:text-[14px] lg:text-[10px] xl:leading-[20px] lg:leading-[14px]">
+                      {activeData.data[1]}
+                    </li>
                   </ol>
-                  <p className="font-semiBold xl:text-[12px] lg:text-[10px]">
+                  <p className="font-semiBold xl:text-[16px] lg:text-[10px] xl:leading-[20px]">
                     Splitting & Barcoding
                   </p>
                   <ol className="list-disc pl-[20px]">
-                    <li>{activeData.data[2]}</li>
-                    <li>{activeData.data[3]}</li>
+                    <li className="xl:text-[14px] lg:text-[10px] xl:leading-[20px] lg:leading-[14px]">
+                      {activeData.data[2]}
+                    </li>
+                    <li className="xl:text-[14px] lg:text-[10px] xl:leading-[20px] lg:leading-[14px]">
+                      {activeData.data[3]}
+                    </li>
                   </ol>
                 </div>
               )}
@@ -207,7 +220,7 @@ const RightStructure = ({ currentTime }: any) => {
                 alt="trace steps"
                 className="xl:w-[40px] xl:h-[40px] lg:w-[30px] lg:h-[30px]"
               />
-              <p className="xl:text-[16px] lg:text-[14px] text-neutral900 font-semiBold">
+              <p className="xl:text-[16px] lg:text-[12px] text-neutral900 font-semiBold">
                 {activeData.header2}
               </p>
             </div>
