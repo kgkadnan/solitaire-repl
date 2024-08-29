@@ -4,6 +4,7 @@ import HtmlAnimation from '@/components/v3/section-3d/html';
 // import AnimationSection from '@/components/v3/animated-text/scroll';
 // import IphoneAnimation from '@/components/v3/section-3d/iphone';
 import SmoothVideoPlayer from '@/components/v3/smooth-video';
+import TraceabilityHtml from '@/components/v3/traceability-html';
 import React, { useState } from 'react';
 
 const Index = () => {
@@ -37,10 +38,8 @@ const Index = () => {
               </p>
             </div>
           </div>
-          <div className="xl:px-[112px] lg:px-[32px]">
-            <div className="h-[700px] bg-neutral100 rounded-[25px]">
-              Traceability Carousel
-            </div>
+          <div className="flex justify-center w-full">
+            <TraceabilityHtml />
           </div>
           <div className="xl:px-[112px] lg:px-[32px]  pb-[100px] flex flex-col bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom items-center">
             <div className="flex flex-col gap-5 text-center w-[840px] py-[40px]">
