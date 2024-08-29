@@ -117,6 +117,7 @@ const RightStructure = ({ currentTime }: any) => {
             <div
               key={data.header1}
               className={`w-[420px] bg-[#FFFFFF57] p-[20px] flex flex-col rounded-[12px] gap-2 transition-opacity duration-500 z-9999`}
+              style={{ boxShadow: 'var(--popups-shadow' }}
             >
               <p className="text-[16px] text-neutral900">Diamond Journey</p>
               <div className="rounded-[8px] bg-[#ffffff] p-[12px] flex flex-col gap-2">
