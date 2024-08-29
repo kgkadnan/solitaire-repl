@@ -118,11 +118,11 @@ const OTPVerification = ({
           setError={setError}
         />
 
-        <div className="flex ">
+        <div className="flex justify-center">
           <p className="text-neutral900 pr-10">Haven’t received any OTP ?</p>
           <p
             className={`${
-              resendTimer > 0 ? 'text-neutral200' : 'text-infoMain'
+              resendTimer > 0 ? 'text-neutral500' : 'text-infoMain'
             } cursor-pointer`}
             onClick={() =>
               resendTimer > 0
@@ -143,9 +143,11 @@ const OTPVerification = ({
         </div>
         <div className="flex flex-col   gap-1">
           <IndividualActionButton
-            variant={'primary'}
+            disabled={!checkOTPEntry(otpValues) || isLoading}
+            variant={
+              !checkOTPEntry(otpValues) || isLoading ? 'disable' : 'primary'
+            }
             size={'custom'}
-            disabled={isLoading}
             className="rounded-[4px]"
             onClick={() =>
               checkOTPEntry(otpValues)

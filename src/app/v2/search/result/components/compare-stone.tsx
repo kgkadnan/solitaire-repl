@@ -62,7 +62,7 @@ const CompareStone = ({
     if (rows.length > 0) {
       setImageLoadingStatus(new Array(rows.length).fill(true));
     }
-  }, [rows]);
+  }, []);
 
   const handleImageLoad = (index: number) => {
     // Set the specific image as loaded
@@ -110,6 +110,9 @@ const CompareStone = ({
         updatedObj[obj.accessor] = obj.short_label; // Use the dynamic key to update the object
       }
     });
+    // Remove the 'details' key from updatedObj
+    delete updatedObj.details;
+    console.log('updatedObj', updatedObj);
     setMappingColumn(updatedObj); // Update the state with the updated object
   }
 
@@ -128,6 +131,7 @@ const CompareStone = ({
   };
   const handleClose: HandleCloseType = (event, id) => {
     const filterData = rows.filter((item: IProduct) => item.id !== id);
+
     setCompareStoneData(filterData);
   };
   const handleAddToCartFromCompareStone = () => {
@@ -276,7 +280,7 @@ const CompareStone = ({
       <div className="flex  h-[calc(100%-120px)] overflow-auto border-t-[1px] border-b-[1px] border-neutral200">
         <div className="flex ">
           <div
-            className="sticky left-0  min-h-[2080px] text-neutral700 text-mMedium font-medium w-[175px] !z-5"
+            className="sticky left-0  min-h-[2024px] text-neutral700 text-mMedium font-medium w-[175px] !z-5"
             style={{ zIndex: 5 }}
           >
             <div className="h-[234px] sticky top-0  items-center flex px-4 border-[0.5px] border-neutral200 bg-neutral50">
@@ -293,7 +297,7 @@ const CompareStone = ({
               ))}
             </div>
           </div>
-          <div className=" bg-neutral0 text-neutral900 text-mMedium font-medium min-h-[2080px] !z-2">
+          <div className=" bg-neutral0 text-neutral900 text-mMedium font-medium min-h-[2024px] !z-2">
             <div className="flex h-[234px] sticky top-0 ">
               {rows.map((items: IProduct, index: number) => (
                 <div key={items.id} className="w-[198px]">
@@ -326,7 +330,7 @@ const CompareStone = ({
                           </div>
                           <div className="text-neutral900 font-medium text-sMedium">
                             Loading {getShapeDisplayName(items?.shape ?? '')}
-                            Image...
+                            &nbsp;Image...
                           </div>
                         </div>
                       )}

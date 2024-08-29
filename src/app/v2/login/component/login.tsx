@@ -70,11 +70,18 @@ const LoginComponent = ({
                 const passwordInput = document.querySelector(
                   'input[name="password"]'
                 ) as HTMLInputElement;
+                const emailInput = document.querySelector(
+                  'input[name="email"]'
+                ) as HTMLInputElement;
 
                 // Clear the value of the input element
-                if (passwordInput) {
+                if (passwordInput && emailInput) {
                   passwordInput.value = '';
                   setPassword('');
+                  emailInput.value = '';
+                  setEmail('');
+                  setEmailErrorText('');
+                  setPasswordErrorText('');
                 }
               }}
             >
@@ -105,6 +112,8 @@ const LoginComponent = ({
                   }));
                   passwordInput.value = '';
                   setPassword('');
+                  setPhoneErrorText('');
+                  setPasswordErrorText('');
                 }
               }}
             >

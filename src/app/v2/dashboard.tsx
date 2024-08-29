@@ -96,13 +96,15 @@ import EmptyScreen from '@/components/v2/common/empty-screen';
 import emptyOrderSvg from '@public/v2/assets/icons/empty-order.svg';
 import empty from '@public/v2/assets/icons/saved-search/empty-screen-saved-search.svg';
 import {
+  AVAILABLE_STATUS,
   HOLD_STATUS,
   IN_TRANSIT,
   MEMO_STATUS
 } from '@/constants/business-logic';
 import {
   SELECT_STONE_TO_PERFORM_ACTION,
-  SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH
+  SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH,
+  STONE_NOT_AVAILABLE_MODIFY_SEARCH
 } from '@/constants/error-messages/confirm-stone';
 import { useLazyGetAvailableMyAppointmentSlotsQuery } from '@/features/api/my-appointments';
 import { IAppointmentPayload } from './my-appointments/page';
@@ -1164,10 +1166,20 @@ const Dashboard = () => {
         return stone?.diamond_status === HOLD_STATUS;
       });
 
-      if (hasMemoOut) {
+      // Check for stones with AVAILABLE_STATUS
+      const hasAvailable = selectedIds?.some((id: string) => {
+        const stone = searchData?.foundProducts.find(
+          (row: IProduct) => row?.id === id
+        );
+        return stone?.diamond_status === AVAILABLE_STATUS;
+      });
+
+      if ((hasHold && hasAvailable) || (hasMemoOut && hasAvailable)) {
         setError(SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH);
+      } else if (hasMemoOut) {
+        setError(STONE_NOT_AVAILABLE_MODIFY_SEARCH);
       } else if (hasHold) {
-        setError(SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH);
+        setError(STONE_NOT_AVAILABLE_MODIFY_SEARCH);
       } else {
         setShowAppointmentForm(true);
         triggerAvailableSlots({}).then(payload => {

@@ -743,11 +743,7 @@ const BidToBuy = () => {
                     : 'border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow'
                 } `}
               >
-                <div
-                  className={` ${
-                    isSkeletonLoading ? ' ' : 'border-[1px] border-neutral200'
-                  }  `}
-                >
+                <div>
                   <BidToBuyDataTable
                     dispatch={dispatch}
                     filterData={filterData}
