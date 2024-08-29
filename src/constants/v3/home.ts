@@ -1,4 +1,9 @@
-import TraceStart from '@public/v3/home/trace-start.png';
+import Icon1 from '@public/v3/home/icon1.png';
+import Icon2 from '@public/v3/home/icon2.png';
+import Icon3 from '@public/v3/home/icon3.png';
+import Icon4 from '@public/v3/home/icon4.png';
+import Icon5 from '@public/v3/home/icon5.png';
+
 import Step1 from '@public/v3/home/trace-step-1.png';
 import Step2 from '@public/v3/home/trace-step-2.png';
 import Step3 from '@public/v3/home/trace-step-3.png';
@@ -17,7 +22,7 @@ export const traceabilityData = [
     ],
     header2: 'Data Uploaded to ERP',
     tags: ['Kimberley Process Certification', 'Invoice', 'Barcode ID'],
-    icon: TraceStart,
+    icon: Icon1,
     indicator: Step1,
     timeStart: 0,
     timeEnd: 2
@@ -32,7 +37,7 @@ export const traceabilityData = [
     ],
     header2: 'Data Uploaded to ERP',
     tags: ['Carat', 'Color', 'Shape', 'Clarity'],
-    icon: TraceStart,
+    icon: Icon2,
     indicator: Step2,
     timeStart: 2,
     timeEnd: 10
@@ -49,7 +54,7 @@ Laser cut`,
     ],
     header2: 'Data Uploaded to ERP',
     tags: ['Carat', 'Color', 'Shape', 'Clarity', 'Cut'],
-    icon: TraceStart,
+    icon: Icon3,
     indicator: Step3,
     timeStart: 10,
     timeEnd: 13
@@ -65,7 +70,7 @@ Registration`,
     ],
     header2: 'Data Uploaded to ERP',
     tags: ['Carat', 'Color', 'Shape', 'Clarity', 'Cut'],
-    icon: TraceStart,
+    icon: Icon4,
     indicator: Step4,
     timeStart: 13,
     timeEnd: 26
@@ -82,7 +87,7 @@ Registration`,
     ],
     header2: 'Data Uploaded to ERP',
     tags: ['Carat', 'Color', 'Shape', 'Clarity', 'Cut', 'QC details'],
-    icon: TraceStart,
+    icon: Icon5,
     indicator: Step5,
     timeStart: 26,
     timeEnd: 30

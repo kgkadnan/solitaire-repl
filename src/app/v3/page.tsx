@@ -188,7 +188,7 @@ const Index = () => {
       )}
 
       {/* Toggle Button */}
-      <div className="fixed bottom-2 left-2 right-0 ">
+      <div className="fixed bottom-2 left-2 right-0 w-[200px]">
         <button
           onClick={() => setIsHtml(!isHtml)}
           className=" rounded text-neutral600 text-[12px]"

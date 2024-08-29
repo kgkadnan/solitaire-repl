@@ -116,7 +116,7 @@ const RightStructure = ({ currentTime }: any) => {
           currentTime < data.timeEnd && (
             <div
               key={data.header1}
-              className={`w-[420px] bg-[#FFFFFF57] p-[20px] flex flex-col rounded-[12px] gap-2 transition-opacity duration-500 `}
+              className={`w-[420px] bg-[#FFFFFF57] p-[20px] flex flex-col rounded-[12px] gap-2 transition-opacity duration-500 z-9999`}
             >
               <p className="text-[16px] text-neutral900">Diamond Journey</p>
               <div className="rounded-[8px] bg-[#ffffff] p-[12px] flex flex-col gap-2">
@@ -135,14 +135,14 @@ const RightStructure = ({ currentTime }: any) => {
                     <div className="border-l border-dotted border-gray-400 h-[120%] mt-[-20px]"></div>
                   </div>
                   {data.timeStart !== 0 ? (
-                    <ol className="list-disc">
+                    <ol className="list-disc pl-[20px]">
                       {data.data.map((list: string, index: number) => (
                         <li key={`list-${index}`}>{list}</li>
                       ))}
                     </ol>
                   ) : (
                     <div className="flex flex-col gap-2">
-                      <ol className="list-disc">
+                      <ol className="list-disc pl-[20px]">
                         <li key={`list-${index}`}>{data.data[0]}</li>
                         <li key={`list-${index}`}>{data.data[1]}</li>
                       </ol>
@@ -150,7 +150,7 @@ const RightStructure = ({ currentTime }: any) => {
                         {' '}
                         Splitting & Barcoding
                       </p>
-                      <ol className="list-disc">
+                      <ol className="list-disc pl-[20px]">
                         <li key={`list-${index}`}>{data.data[2]}</li>
                         <li key={`list-${index}`}>{data.data[3]}</li>
                       </ol>
@@ -185,32 +185,63 @@ const RightStructure = ({ currentTime }: any) => {
   );
 };
 
-const LeftStructure = ({ currentTime }: any) => {
+const circularRevealStyles = `
+  @keyframes circularReveal {
+    0% {
+      clip-path: circle(0% at 50% 50%);
+    }
+    100% {
+      clip-path: circle(100% at 50% 50%);
+    }
+  }
+
+  .reveal-image {
+    opacity: 0;
+    clip-path: circle(0% at 50% 50%);
+    transition: opacity 0.5s ease-in-out;
+  }
+
+  .reveal-visible {
+    opacity: 1;
+    animation: circularReveal 1s forwards ease-in-out;
+  }
+`;
+
+const LeftStructure = ({ currentTime }: { currentTime: number }) => {
+  const [reveal, setReveal] = useState(false);
+
+  useEffect(() => {
+    setReveal(true);
+  }, [currentTime]);
+
   return (
-    <div className="flex flex-col gap-2">
-      {traceabilityData.map(trace =>
-        currentTime > trace.timeStart ? (
-          <div
-            className="flex gap-2 items-center w-[150px]"
-            key={trace.header1}
-          >
-            <div className="w-[54px] h-[54px] bg-[white] rounded-[8px] flex items-center justify-center">
-              <Image src={trace.indicator} alt={trace.header1} />
+    <>
+      <style>{circularRevealStyles}</style>
+      <div className="flex flex-col gap-2">
+        {traceabilityData.map((trace, index) => (
+          <div className="flex gap-2 items-center w-[150px]" key={index}>
+            <div
+              className={`w-[54px] h-[54px] bg-[white] rounded-[8px] flex items-center justify-center transition-opacity duration-500 ${
+                currentTime > trace.timeStart ? 'opacity-100' : 'opacity-50'
+              }`}
+            >
+              {currentTime > trace.timeStart && (
+                <Image
+                  src={trace.indicator}
+                  alt={trace.header1}
+                  className={`reveal-image ${reveal ? 'reveal-visible' : ''}`}
+                  layout="intrinsic" // Adjust layout as needed
+                />
+              )}
             </div>
             <p className="w-[92px] text-neutral900 text-[14px]">
-              {trace.short}
+              {currentTime > trace.timeStart ? trace.short : ''}
             </p>
           </div>
-        ) : (
-          <div
-            className="flex gap-2 items-center w-[150px]"
-            key={trace.header1}
-          >
-            <div className="w-[54px] h-[54px] bg-[#FFFFFF] rounded-[8px] opacity-50"></div>
-          </div>
-        )
-      )}
-    </div>
+        ))}
+        <p className="pl-[15px] text-[14px] text-neutral700">{10}%</p>
+      </div>
+    </>
   );
 };
 
