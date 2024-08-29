@@ -63,7 +63,7 @@ const TraceabilityHtml = () => {
         <source src="/v3/videos/traceability.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
-      <div className="absolute bottom-8 flex space-x-4 bg-[#FFFFFF24] border-[white] rounded-[8px] px-[24px] py-[12px] border-[1px]">
+      <div className="absolute bottom-8 flex justify-between space-x-4 bg-[#FFFFFF24] border-[white] rounded-[8px] px-[24px] py-[12px] border-[1px] min-w-[200px]">
         <div className="flex space-x-2 items-center ">
           {[
             { timeStart: 0, timeEnd: 2 },
@@ -90,6 +90,7 @@ const TraceabilityHtml = () => {
           ))}
         </div>
         <Image
+          className="cursor-pointer"
           src={isPlaying ? Pause : Play}
           onClick={handlePlayPause}
           alt="video control"
