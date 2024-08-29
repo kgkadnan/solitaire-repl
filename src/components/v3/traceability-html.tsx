@@ -122,80 +122,165 @@ const TraceabilityHtml = () => {
   );
 };
 
+// const RightStructure = ({ currentTime }: any) => {
+//   return (
+//     <>
+//       {traceabilityData.map(
+//         (data, index) =>
+//           currentTime > data.timeStart &&
+//           (index === 4 ? currentTime <= 31 : currentTime <= data.timeEnd) && (
+//             <div
+//               key={data.header1}
+//               className={`w-[420px] bg-[#FFFFFF57] p-[20px] flex flex-col rounded-[12px] gap-1 transition-opacity duration-500 z-9999`}
+//               style={{ boxShadow: 'var(--popups-shadow' }}
+//             >
+//               <p className="text-[16px] text-neutral900">Diamond Journey</p>
+//               <div className="rounded-[8px] bg-[#ffffff] p-[12px] flex flex-col gap-1">
+//                 <div className="flex gap-2">
+//                   <Image
+//                     src={data.icon}
+//                     alt="trace steps"
+//                     className="w-[40px] h-[40px]"
+//                   />
+//                   <p className="text-[16px] text-neutral900 font-semiBold">
+//                     {data.header1}
+//                   </p>
+//                 </div>
+//                 <div className="flex gap-2">
+//                   <div className="min-w-[40px] pl-[20px]">
+//                     <div className="border-l border-dotted border-gray-400 h-[120%] mt-[-20px]"></div>
+//                   </div>
+//                   {data.timeStart !== 0 ? (
+//                     <ol className="list-disc pl-[20px]">
+//                       {data.data.map((list: string, index: number) => (
+//                         <li key={`list-${index}`}>{list}</li>
+//                       ))}
+//                     </ol>
+//                   ) : (
+//                     <div className="flex flex-col gap-2">
+//                       <ol className="list-disc pl-[20px]">
+//                         <li key={`list-${index}`}>{data.data[0]}</li>
+//                         <li key={`list-${index}`}>{data.data[1]}</li>
+//                       </ol>
+//                       <p className="font-semiBold text-[12px]">
+//                         {' '}
+//                         Splitting & Barcoding
+//                       </p>
+//                       <ol className="list-disc pl-[20px]">
+//                         <li key={`list-${index}`}>{data.data[2]}</li>
+//                         <li key={`list-${index}`}>{data.data[3]}</li>
+//                       </ol>
+//                     </div>
+//                   )}
+//                 </div>
+//                 <div className="flex gap-2 items-center">
+//                   <Image
+//                     src={TraceEnd}
+//                     alt="trace steps"
+//                     className="w-[40px] h-[40px]"
+//                   />
+//                   <p className="text-[16px] text-neutral900 font-semiBold">
+//                     {data.header2}
+//                   </p>
+//                 </div>
+//                 <div className="pl-[48px] flex gap-2 flex-wrap">
+//                   {data.tags.map((tag: string, index: number) => (
+//                     <div
+//                       className="bg-[#E4E7EC] rounded-[4px] px-[6px] py-[8px] text-neutral800 text-[12px]"
+//                       key={`${tag}-${index}`}
+//                     >
+//                       {tag}
+//                     </div>
+//                   ))}
+//                 </div>
+//               </div>
+//             </div>
+//           )
+//       )}
+//     </>
+//   );
+// };
+
 const RightStructure = ({ currentTime }: any) => {
+  const [activeData, setActiveData] = useState<any>(null);
+
+  useEffect(() => {
+    const matchedData = traceabilityData.find(
+      (data, index) =>
+        currentTime > data.timeStart &&
+        (index === 4 ? currentTime <= 31 : currentTime <= data.timeEnd)
+    );
+    setActiveData(matchedData);
+  }, [currentTime]);
+
   return (
     <>
-      {traceabilityData.map(
-        (data, index) =>
-          currentTime > data.timeStart &&
-          (index === 4 ? currentTime <= 31 : currentTime <= data.timeEnd) && (
-            <div
-              key={data.header1}
-              className={`w-[420px] bg-[#FFFFFF57] p-[20px] flex flex-col rounded-[12px] gap-1 transition-opacity duration-500 z-9999`}
-              style={{ boxShadow: 'var(--popups-shadow' }}
-            >
-              <p className="text-[16px] text-neutral900">Diamond Journey</p>
-              <div className="rounded-[8px] bg-[#ffffff] p-[12px] flex flex-col gap-1">
-                <div className="flex gap-2">
-                  <Image
-                    src={data.icon}
-                    alt="trace steps"
-                    className="w-[40px] h-[40px]"
-                  />
-                  <p className="text-[16px] text-neutral900 font-semiBold">
-                    {data.header1}
-                  </p>
-                </div>
-                <div className="flex gap-2">
-                  <div className="min-w-[40px] pl-[20px]">
-                    <div className="border-l border-dotted border-gray-400 h-[120%] mt-[-20px]"></div>
-                  </div>
-                  {data.timeStart !== 0 ? (
-                    <ol className="list-disc pl-[20px]">
-                      {data.data.map((list: string, index: number) => (
-                        <li key={`list-${index}`}>{list}</li>
-                      ))}
-                    </ol>
-                  ) : (
-                    <div className="flex flex-col gap-2">
-                      <ol className="list-disc pl-[20px]">
-                        <li key={`list-${index}`}>{data.data[0]}</li>
-                        <li key={`list-${index}`}>{data.data[1]}</li>
-                      </ol>
-                      <p className="font-semiBold text-[12px]">
-                        {' '}
-                        Splitting & Barcoding
-                      </p>
-                      <ol className="list-disc pl-[20px]">
-                        <li key={`list-${index}`}>{data.data[2]}</li>
-                        <li key={`list-${index}`}>{data.data[3]}</li>
-                      </ol>
-                    </div>
-                  )}
-                </div>
-                <div className="flex gap-2 items-center">
-                  <Image
-                    src={TraceEnd}
-                    alt="trace steps"
-                    className="w-[40px] h-[40px]"
-                  />
-                  <p className="text-[16px] text-neutral900 font-semiBold">
-                    {data.header2}
-                  </p>
-                </div>
-                <div className="pl-[48px] flex gap-2 flex-wrap">
-                  {data.tags.map((tag: string, index: number) => (
-                    <div
-                      className="bg-[#E4E7EC] rounded-[4px] px-[6px] py-[8px] text-neutral800 text-[12px]"
-                      key={`${tag}-${index}`}
-                    >
-                      {tag}
-                    </div>
-                  ))}
-                </div>
-              </div>
+      {activeData && (
+        <div
+          key={activeData.header1}
+          className={`w-[420px] bg-[#FFFFFF57] p-[20px] flex flex-col rounded-[12px] gap-1 transition-opacity duration-500 transform transition-transform ease-in-out z-9999`}
+          style={{ boxShadow: 'var(--popups-shadow)' }}
+        >
+          <p className="text-[16px] text-neutral900">Diamond Journey</p>
+          <div className="rounded-[8px] bg-[#ffffff] p-[12px] flex flex-col gap-1">
+            <div className="flex gap-2">
+              <Image
+                src={activeData.icon}
+                alt="trace steps"
+                className="w-[40px] h-[40px]"
+              />
+              <p className="text-[16px] text-neutral900 font-semiBold">
+                {activeData.header1}
+              </p>
             </div>
-          )
+            <div className="flex gap-2">
+              <div className="min-w-[40px] pl-[20px]">
+                <div className="border-l border-dotted border-gray-400 h-[120%] mt-[-20px]"></div>
+              </div>
+              {activeData.timeStart !== 0 ? (
+                <ol className="list-disc pl-[20px]">
+                  {activeData.data.map((list: string, index: number) => (
+                    <li key={`list-${index}`}>{list}</li>
+                  ))}
+                </ol>
+              ) : (
+                <div className="flex flex-col gap-2">
+                  <ol className="list-disc pl-[20px]">
+                    <li>{activeData.data[0]}</li>
+                    <li>{activeData.data[1]}</li>
+                  </ol>
+                  <p className="font-semiBold text-[12px]">
+                    Splitting & Barcoding
+                  </p>
+                  <ol className="list-disc pl-[20px]">
+                    <li>{activeData.data[2]}</li>
+                    <li>{activeData.data[3]}</li>
+                  </ol>
+                </div>
+              )}
+            </div>
+            <div className="flex gap-2 items-center">
+              <Image
+                src={TraceEnd}
+                alt="trace steps"
+                className="w-[40px] h-[40px]"
+              />
+              <p className="text-[16px] text-neutral900 font-semiBold">
+                {activeData.header2}
+              </p>
+            </div>
+            <div className="pl-[48px] flex gap-2 flex-wrap">
+              {activeData.tags.map((tag: string, index: number) => (
+                <div
+                  className="bg-[#E4E7EC] rounded-[4px] px-[6px] py-[8px] text-neutral800 text-[12px]"
+                  key={`${tag}-${index}`}
+                >
+                  {tag}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       )}
     </>
   );
