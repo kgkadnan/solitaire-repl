@@ -97,6 +97,7 @@ const TraceabilityHtml = () => {
                 timeEnd,
                 index
               )}`}
+              style={{ boxShadow: 'var(--popups-shadow' }}
             >
               {/* {console.log(index)} */}
               {currentTime >= timeStart && currentTime <= timeEnd && (
@@ -153,7 +154,9 @@ const RightStructure = ({ currentTime }: any) => {
       {activeData && (
         <div
           key={activeData.header1}
-          className={`xl:w-[420px] lg:w-[320px] bg-[#FFFFFF57] p-[20px] flex flex-col rounded-[12px] xl:gap-1 transition-opacity duration-500 transform transition-transform ease-in-out z-9999`}
+          className={`xl:w-[420px] lg:w-[320px] bg-[#FFFFFF57] p-[20px] flex flex-col rounded-[12px] xl:gap-1 transition-all duration-700 ease-in-out transform opacity-0 translate-x-10 ${
+            activeData ? 'opacity-100 translate-x-0' : ''
+          }`}
           style={{ boxShadow: 'var(--popups-shadow)' }}
         >
           <p className="xl:text-[16px] lg:text-[14px] text-neutral900">
@@ -166,7 +169,7 @@ const RightStructure = ({ currentTime }: any) => {
                 alt="trace steps"
                 className="xl:w-[40px] xl:h-[40px] lg:w-[30px] lg:h-[30px]"
               />
-              <p className="xl:text-[16px]  lg:text-[14px] text-neutral900 font-semiBold">
+              <p className="xl:text-[16px] lg:text-[14px] text-neutral900 font-semiBold">
                 {activeData.header1}
               </p>
             </div>
