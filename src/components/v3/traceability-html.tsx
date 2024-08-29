@@ -186,51 +186,70 @@ const RightStructure = ({ currentTime }: any) => {
   );
 };
 
-const circularRevealStyles = `
-  @keyframes circularReveal {
-    0% {
-      clip-path: circle(0% at 50% 50%);
-    }
-    100% {
-      clip-path: circle(100% at 50% 50%);
-    }
+// Define custom CSS for the vertical gradient line
+const gradientLineStyles = `
+  .gradient-line-container {
+    position: absolute;
+    left: -10px; /* Adjust based on desired spacing */
+    top: 0;
+    bottom: 0;
+    width: 2px; /* Width of the line */
+    background: #D0D5DD; /* Default color */
+    display: flex;
+    align-items: flex-start; /* Align to top */
+    overflow: hidden; /* Ensure the gradient fill is confined */
+    border-radius:50%
   }
 
-  .reveal-image {
-    opacity: 0;
-    clip-path: circle(0% at 50% 50%);
-    transition: opacity 0.5s ease-in-out;
-  }
-
-  .reveal-visible {
-    opacity: 1;
-    animation: circularReveal 1s forwards ease-in-out;
+  .gradient-line-fill {
+    width: 100%;
+    height: 0; /* Start with 0 height */
+    background: linear-gradient(to bottom, #FFAD05, #168B85, #5995ED);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    transition: height 0.5s ease-in-out;
+    position: absolute;
+    top: 0; /* Position at the top to grow downwards */
   }
 `;
 
 const LeftStructure = ({ currentTime }: { currentTime: number }) => {
-  const [reveal, setReveal] = useState(false);
+  const [filledHeight, setFilledHeight] = useState(0);
 
   useEffect(() => {
-    setReveal(true);
+    // Calculate the height of the filled line based on currentTime
+    const totalItems = traceabilityData.length;
+    const visibleItems = traceabilityData.filter(
+      trace => currentTime > trace.timeStart
+    ).length;
+    setFilledHeight((visibleItems / totalItems) * 100);
   }, [currentTime]);
 
   return (
-    <>
-      <style>{circularRevealStyles}</style>
-      <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2">
+      <style>{gradientLineStyles}</style>
+      <div className="relative flex flex-col gap-2">
+        {/* Gradient Line Container */}
+        <div className="gradient-line-container mr-[20px]">
+          <div
+            className="gradient-line-fill"
+            style={{ height: `${filledHeight}%` }}
+          />
+        </div>
+
         {traceabilityData.map((trace, index) => (
           <div className="flex gap-2 items-center w-[150px]" key={index}>
             <div
               className={`w-[54px] h-[54px] bg-[white] rounded-[8px] flex items-center justify-center transition-opacity duration-500 ${
                 currentTime > trace.timeStart ? 'opacity-100' : 'opacity-50'
               }`}
+              style={{ boxShadow: 'var(--popups-shadow' }}
             >
               {currentTime > trace.timeStart && (
                 <Image
                   src={trace.indicator}
                   alt={trace.header1}
-                  className={`reveal-image ${reveal ? 'reveal-visible' : ''}`}
+                  // className={`reveal-image ${reveal ? 'reveal-visible' : ''}`}
                   layout="intrinsic" // Adjust layout as needed
                 />
               )}
@@ -240,9 +259,10 @@ const LeftStructure = ({ currentTime }: { currentTime: number }) => {
             </p>
           </div>
         ))}
-        <p className="pl-[15px] text-[14px] text-neutral700">{10}%</p>
+        {/*  */}
       </div>
-    </>
+      <p className="pl-[15px] text-[14px] text-neutral700">{filledHeight}%</p>
+    </div>
   );
 };
 
