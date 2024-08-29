@@ -36,10 +36,13 @@ const TraceabilityHtml = () => {
       setCurrentTime(videoRefHtml.current.currentTime);
     };
 
-    videoRefHtml.current.addEventListener('timeupdate', updateCurrentTime);
+    videoRefHtml.current.addEventListener('timeupdatehtml', updateCurrentTime);
 
     return () => {
-      videoRefHtml.current.removeEventListener('timeupdate', updateCurrentTime);
+      videoRefHtml.current.removeEventListener(
+        'timeupdatehtml',
+        updateCurrentTime
+      );
     };
   }, []);
 
