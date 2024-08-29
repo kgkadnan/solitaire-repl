@@ -85,6 +85,6 @@ Registration`,
     icon: TraceStart,
     indicator: Step5,
     timeStart: 26,
-    timeEnd: 29
+    timeEnd: 30
   }
 ];
