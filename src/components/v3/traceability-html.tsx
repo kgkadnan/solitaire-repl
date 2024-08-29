@@ -107,21 +107,24 @@ const TraceabilityHtml = () => {
 const RightStructure = ({ currentIndex }: any) => {
   return (
     <>
-      {traceabilityData.map((data, index) => (
-        <div
-          key={index}
-          className={`w-[420px] bg-[#FFFFFF57] p-[20px] flex flex-col rounded-[12px] gap-2 transition-opacity duration-500 ${
-            currentIndex === index ? 'opacity-100' : 'opacity-0 absolute'
-          }`}
-        >
-          <p className="text-[16px] text-neutral900">Diamond Journey</p>
-          <div className="rounded-[8px] bg-[#ffffff] p-[12px]">
-            <p className="text-[16px] text-neutral900 font-semiBold">
-              {data.header1}
-            </p>
-          </div>
-        </div>
-      ))}
+      {traceabilityData.map(
+        (data, index) =>
+          index === currentIndex && (
+            <div
+              key={index}
+              className={`w-[420px] bg-[#FFFFFF57] p-[20px] flex flex-col rounded-[12px] gap-2 transition-opacity duration-500 ${
+                currentIndex === index ? 'opacity-100' : 'opacity-0'
+              }`}
+            >
+              <p className="text-[16px] text-neutral900">Diamond Journey</p>
+              <div className="rounded-[8px] bg-[#ffffff] p-[12px]">
+                <p className="text-[16px] text-neutral900 font-semiBold">
+                  {data.header1}
+                </p>
+              </div>
+            </div>
+          )
+      )}
     </>
   );
 };
