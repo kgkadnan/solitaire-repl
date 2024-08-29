@@ -305,12 +305,7 @@ const NewArrivalDataTable = ({
 
   const renderTopToolbar = ({ table }: any) => (
     <div>
-      <div
-        className={` border-neutral200 ${
-          (activeTab !== 2 || (activeTab === 2 && historyCount === 0)) &&
-          'border-b-[1px]'
-        }`}
-      >
+      <div className={` border-neutral200 border-b-[1px]`}>
         <Box
           sx={{
             display: 'flex',
@@ -496,7 +491,7 @@ const NewArrivalDataTable = ({
         </Box>
       </div>
 
-      {rows.length > 0 && activeTab !== 2 && (
+      {rows.length > 0 && (
         <NewArrivalCalculatedField
           rows={rows}
           selectedProducts={rowSelection}

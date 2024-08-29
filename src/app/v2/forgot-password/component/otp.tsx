@@ -23,7 +23,8 @@ const OTPComponent = ({
   setDialogContent,
   setToken,
   setCurrentState,
-  token
+  token,
+  setIsLoading
 }: any) => {
   const router = useRouter();
   const [error, setError] = useState('');
@@ -64,7 +65,10 @@ const OTPComponent = ({
           {phoneNumber.phoneNumber}
           <div
             className="cursor-pointer"
-            onClick={() => setCurrentState('forgotPassword')}
+            onClick={() => {
+              setResendTimer(60);
+              setCurrentState('forgotPassword');
+            }}
           >
             <Image src={editNumber} alt="editNumber" width={16} height={16} />
           </div>
@@ -92,7 +96,8 @@ const OTPComponent = ({
                     setIsDialogOpen,
                     setDialogContent,
                     setToken,
-                    setOtpValues
+                    setOtpValues,
+                    setIsLoading
                   })
             }
           >
@@ -111,7 +116,8 @@ const OTPComponent = ({
                     setDialogContent,
                     verifyResetOTP,
                     phoneNumber,
-                    setToken
+                    setToken,
+                    setIsLoading
                   }),
                   setError(''))
                 : setError(
@@ -127,7 +133,10 @@ const OTPComponent = ({
           </IndividualActionButton>
 
           <IndividualActionButton
-            onClick={() => router.push('/v2/login')}
+            onClick={() => {
+              setResendTimer(60);
+              router.push('/v2/login');
+            }}
             variant={'secondary'}
             size={'custom'}
             className="border-none w-[100%]"
