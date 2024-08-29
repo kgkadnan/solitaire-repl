@@ -64,9 +64,14 @@ const TraceabilityHtml = () => {
     };
   }, []);
 
-  const dotClasses = (timeStart: any, timeEnd: any) =>
-    currentTime > timeStart && currentTime <= timeEnd
-      ? 'bg-neutral400 relative w-8 rounded-[8px]'
+  const dotClasses = (timeStart: any, timeEnd: any, index: number) =>
+    (currentTime >= timeStart && currentTime <= timeEnd) ||
+    (videoRefHtml.current?.currentTime >= 30 && index === 4)
+      ? `bg-neutral400 relative w-8 rounded-[8px] ${
+          videoRefHtml.current?.currentTime >= 30 &&
+          index === 4 &&
+          'bg-neutral700'
+        }`
       : 'bg-neutral400 w-2';
 
   return (
@@ -75,24 +80,26 @@ const TraceabilityHtml = () => {
         <source src="/v3/videos/traceability.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
-      <div className="absolute bottom-8 flex justify-between space-x-4 bg-[#FFFFFF24] border-[white] rounded-[8px] px-[24px] py-[12px] border-[1px] min-w-[200px]">
-        <div className="flex space-x-2 items-center">
+      <div className="absolute bottom-8 flex justify-between gap-4">
+        <div className="flex justify-around items-center h-[38px] bg-[#FFFFFF24] border-[white] rounded-[8px] px-[8px]  border-[1px] min-w-[150px]">
           {[
             { timeStart: 0, timeEnd: 3 },
             { timeStart: 3, timeEnd: 11 },
             { timeStart: 11, timeEnd: 14 },
             { timeStart: 14, timeEnd: 27 },
             { timeStart: 27, timeEnd: 30 }
-          ].map(({ timeStart, timeEnd }) => (
+          ].map(({ timeStart, timeEnd }, index) => (
             <div
               key={`${timeStart}-${timeEnd}`}
               onClick={() => handleReferenceClick(timeStart)}
               className={`relative h-2 rounded-[8px] cursor-pointer transition-all duration-300 ease-in-out overflow-hidden ${dotClasses(
                 timeStart,
-                timeEnd
+                timeEnd,
+                index
               )}`}
             >
-              {currentTime > timeStart && currentTime <= timeEnd && (
+              {/* {console.log(index)} */}
+              {currentTime >= timeStart && currentTime <= timeEnd && (
                 <div
                   className="absolute top-0 left-0 h-full bg-neutral700 transition-width duration-300 ease-in-out rounded-[12px]"
                   style={{
@@ -118,9 +125,10 @@ const TraceabilityHtml = () => {
           }
           onClick={handlePlayPause}
           alt="video control"
+          style={{ boxShadow: 'var(--popups-shadow)' }}
         />
       </div>
-      <div className="absolute flex justify-between w-full xl:px-[112px] lg:px-[32px] top-[150px]">
+      <div className="absolute flex justify-between w-full xl:px-[112px] lg:pl-[44px] lg:pr-[32px] xl:top-[150px] lg:top-[125px]">
         <LeftStructure currentTime={currentTime} />
         <RightStructure currentTime={currentTime} />
       </div>
@@ -145,27 +153,29 @@ const RightStructure = ({ currentTime }: any) => {
       {activeData && (
         <div
           key={activeData.header1}
-          className={`w-[420px] bg-[#FFFFFF57] p-[20px] flex flex-col rounded-[12px] gap-1 transition-opacity duration-500 transform transition-transform ease-in-out z-9999`}
+          className={`xl:w-[420px] lg:w-[320px] bg-[#FFFFFF57] p-[20px] flex flex-col rounded-[12px] xl:gap-1 transition-opacity duration-500 transform transition-transform ease-in-out z-9999`}
           style={{ boxShadow: 'var(--popups-shadow)' }}
         >
-          <p className="text-[16px] text-neutral900">Diamond Journey</p>
+          <p className="xl:text-[16px] lg:text-[14px] text-neutral900">
+            Diamond Journey
+          </p>
           <div className="rounded-[8px] bg-[#ffffff] p-[12px] flex flex-col gap-1">
             <div className="flex gap-2">
               <Image
                 src={activeData.icon}
                 alt="trace steps"
-                className="w-[40px] h-[40px]"
+                className="xl:w-[40px] xl:h-[40px] lg:w-[30px] lg:h-[30px]"
               />
-              <p className="text-[16px] text-neutral900 font-semiBold">
+              <p className="xl:text-[16px]  lg:text-[14px] text-neutral900 font-semiBold">
                 {activeData.header1}
               </p>
             </div>
             <div className="flex gap-2">
-              <div className="min-w-[40px] pl-[20px]">
-                <div className="border-l border-dotted border-gray-400 h-[120%] mt-[-20px]"></div>
+              <div className="min-w-[40px] xl:pl-[20px] lg:pl-[15px]">
+                <div className="border-l border-dotted border-gray-400 xl:h-[120%] lg:h-[110%] mt-[-20px]"></div>
               </div>
               {activeData.timeStart !== 0 ? (
-                <ol className="list-disc pl-[20px]">
+                <ol className="list-disc xl:pl-[20px] lg:pl-[10px]">
                   {activeData.data.map((list: string, index: number) => (
                     <li key={`list-${index}`}>{list}</li>
                   ))}
@@ -176,7 +186,7 @@ const RightStructure = ({ currentTime }: any) => {
                     <li>{activeData.data[0]}</li>
                     <li>{activeData.data[1]}</li>
                   </ol>
-                  <p className="font-semiBold text-[12px]">
+                  <p className="font-semiBold xl:text-[12px] lg:text-[10px]">
                     Splitting & Barcoding
                   </p>
                   <ol className="list-disc pl-[20px]">
@@ -190,16 +200,16 @@ const RightStructure = ({ currentTime }: any) => {
               <Image
                 src={TraceEnd}
                 alt="trace steps"
-                className="w-[40px] h-[40px]"
+                className="xl:w-[40px] xl:h-[40px] lg:w-[30px] lg:h-[30px]"
               />
-              <p className="text-[16px] text-neutral900 font-semiBold">
+              <p className="xl:text-[16px] lg:text-[14px] text-neutral900 font-semiBold">
                 {activeData.header2}
               </p>
             </div>
             <div className="pl-[48px] flex gap-2 flex-wrap">
               {activeData.tags.map((tag: string, index: number) => (
                 <div
-                  className="bg-[#E4E7EC] rounded-[4px] px-[6px] py-[8px] text-neutral800 text-[12px]"
+                  className="bg-[#E4E7EC] rounded-[4px] px-[6px] xl:py-[8px] lg:py-[2px] text-neutral800 xl:text-[12px] lg:text-[10px]"
                   key={`${tag}-${index}`}
                 >
                   {tag}
