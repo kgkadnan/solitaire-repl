@@ -25,7 +25,7 @@ export const traceabilityData = [
     icon: Icon1,
     indicator: Step1,
     timeStart: 0,
-    timeEnd: 2
+    timeEnd: 3
   },
   {
     short: 'Sorting & Planning',
@@ -39,8 +39,8 @@ export const traceabilityData = [
     tags: ['Carat', 'Color', 'Shape', 'Clarity'],
     icon: Icon2,
     indicator: Step2,
-    timeStart: 2,
-    timeEnd: 10
+    timeStart: 3,
+    timeEnd: 11
   },
   {
     short: `Sawing &
@@ -56,11 +56,11 @@ Laser cut`,
     tags: ['Carat', 'Color', 'Shape', 'Clarity', 'Cut'],
     icon: Icon3,
     indicator: Step3,
-    timeStart: 10,
-    timeEnd: 13
+    timeStart: 11,
+    timeEnd: 14
   },
   {
-    short: `Rough Birth
+    short: `Final Plan
 Registration`,
     header1: `Final Plan Registration
 (Final shaping polishing)`,
@@ -72,12 +72,12 @@ Registration`,
     tags: ['Carat', 'Color', 'Shape', 'Clarity', 'Cut'],
     icon: Icon4,
     indicator: Step4,
-    timeStart: 13,
-    timeEnd: 26
+    timeStart: 14,
+    timeEnd: 27
   },
   {
-    short: `Rough Birth
-    Registration`,
+    short: `Final Shaping 
+polishing`,
     header1: `Final Plan Registration
 (Final shaping polishing)`,
     data: [
@@ -89,7 +89,7 @@ Registration`,
     tags: ['Carat', 'Color', 'Shape', 'Clarity', 'Cut', 'QC details'],
     icon: Icon5,
     indicator: Step5,
-    timeStart: 26,
-    timeEnd: 29
+    timeStart: 27,
+    timeEnd: 30
   }
 ];

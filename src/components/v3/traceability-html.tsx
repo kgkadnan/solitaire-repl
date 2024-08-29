@@ -25,8 +25,9 @@ const TraceabilityHtml = () => {
   const [currentTime, setCurrentTime] = useState(0);
 
   const handlePlayPause = () => {
-    if (videoRefHtml.current.currentTime >= 29) {
+    if (videoRefHtml.current.currentTime >= 30) {
       handleReferenceClick(0);
+      videoRefHtml.current.play();
     } else if (videoRefHtml.current.paused) {
       videoRefHtml.current.play();
       setIsPlaying(true);
@@ -48,7 +49,7 @@ const TraceabilityHtml = () => {
 
   useEffect(() => {
     const updateCurrentTime = () => {
-      if (videoRefHtml.current?.currentTime >= 29) videoRefHtml.current.pause();
+      if (videoRefHtml.current?.currentTime >= 30) videoRefHtml.current.pause();
 
       setCurrentTime(videoRefHtml.current?.currentTime);
     };
@@ -77,11 +78,11 @@ const TraceabilityHtml = () => {
       <div className="absolute bottom-8 flex justify-between space-x-4 bg-[#FFFFFF24] border-[white] rounded-[8px] px-[24px] py-[12px] border-[1px] min-w-[200px]">
         <div className="flex space-x-2 items-center ">
           {[
-            { timeStart: 0, timeEnd: 2 },
-            { timeStart: 2, timeEnd: 10 },
-            { timeStart: 10, timeEnd: 13 },
-            { timeStart: 13, timeEnd: 26 },
-            { timeStart: 26, timeEnd: 29 }
+            { timeStart: 0, timeEnd: 3 },
+            { timeStart: 3, timeEnd: 11 },
+            { timeStart: 11, timeEnd: 14 },
+            { timeStart: 14, timeEnd: 27 },
+            { timeStart: 27, timeEnd: 30 }
           ].map(({ timeStart, timeEnd }) => (
             <div
               key={`${timeStart}-${timeEnd}`}
@@ -104,7 +105,7 @@ const TraceabilityHtml = () => {
           className="cursor-pointer "
           src={
             isPlaying
-              ? videoRefHtml.current?.currentTime >= 29
+              ? videoRefHtml.current?.currentTime >= 30
                 ? Restart
                 : Pause
               : Play
@@ -113,7 +114,7 @@ const TraceabilityHtml = () => {
           alt="video control"
         />
       </div>
-      <div className="absolute flex justify-between w-full xl:px-[112px] lg:px-[32px] items-center">
+      <div className="absolute flex justify-between w-full xl:px-[112px] lg:px-[32px] top-[150px]">
         <LeftStructure currentTime={currentTime} />
         <RightStructure currentTime={currentTime} />
       </div>
@@ -127,14 +128,14 @@ const RightStructure = ({ currentTime }: any) => {
       {traceabilityData.map(
         (data, index) =>
           currentTime > data.timeStart &&
-          (index === 4 ? currentTime <= 30 : currentTime <= data.timeEnd) && (
+          (index === 4 ? currentTime <= 31 : currentTime <= data.timeEnd) && (
             <div
               key={data.header1}
-              className={`w-[420px] bg-[#FFFFFF57] p-[20px] flex flex-col rounded-[12px] gap-2 transition-opacity duration-500 z-9999`}
+              className={`w-[420px] bg-[#FFFFFF57] p-[20px] flex flex-col rounded-[12px] gap-1 transition-opacity duration-500 z-9999`}
               style={{ boxShadow: 'var(--popups-shadow' }}
             >
               <p className="text-[16px] text-neutral900">Diamond Journey</p>
-              <div className="rounded-[8px] bg-[#ffffff] p-[12px] flex flex-col gap-2">
+              <div className="rounded-[8px] bg-[#ffffff] p-[12px] flex flex-col gap-1">
                 <div className="flex gap-2">
                   <Image
                     src={data.icon}
@@ -217,7 +218,6 @@ const gradientLineStyles = `
 
   .gradient-line-fill {
     width: 120%;
-    background: linear-gradient(to bottom, #FFAD05, #168B85, #5995ED);
     background-size: 100% 100%;
     background-repeat: no-repeat;
     transition: height 0.5s ease-in-out;
@@ -253,6 +253,7 @@ const LeftStructure = ({ currentTime }: { currentTime: number }) => {
               className={`gradient-line-container mr-[20px] ${
                 index !== 4 ? 'bottom-[-8px]' : 'bottom-0'
               }`}
+              style={{}}
             >
               <div
                 className="gradient-line-fill"
@@ -261,12 +262,22 @@ const LeftStructure = ({ currentTime }: { currentTime: number }) => {
                     trace.timeStart,
                     trace.timeEnd,
                     currentTime
-                  )
+                  ),
+                  background:
+                    index === 0
+                      ? 'linear-gradient(to bottom, #FFAD05, #FFAD05)'
+                      : index === 1
+                      ? 'linear-gradient(to bottom, #FFAD05, #168B85)'
+                      : index === 2
+                      ? 'linear-gradient(to bottom,  #168B85, #168B85)'
+                      : index === 3
+                      ? 'linear-gradient(to bottom,  #168B85, #5995ED)'
+                      : 'linear-gradient(to bottom, #5995ED, #5995ED)'
                   // bottom:'-8px'
                 }}
               />
             </div>
-            <div className="flex gap-2 items-center w-[150px]" key={index}>
+            <div className="flex gap-2 items-center " key={index}>
               <div
                 className={`w-[54px] h-[54px] bg-[white] rounded-[8px] flex items-center justify-center transition-opacity duration-500 ${
                   currentTime > trace.timeStart ? 'opacity-100' : 'opacity-50'
@@ -281,7 +292,7 @@ const LeftStructure = ({ currentTime }: { currentTime: number }) => {
                   />
                 )}
               </div>
-              <p className="w-[92px] text-neutral900 text-[14px]">
+              <p className="text-neutral900 text-[14px]">
                 {currentTime > trace.timeStart ? trace.short : ''}
               </p>
             </div>
