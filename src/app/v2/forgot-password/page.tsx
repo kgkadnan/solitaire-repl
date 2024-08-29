@@ -172,6 +172,7 @@ const ForgotPassword = () => {
             setToken={setToken}
             phoneNumber={phoneNumber}
             setIsLoading={setIsLoading}
+            isLoading={isLoading}
           />
         );
       case 'resetPassword':

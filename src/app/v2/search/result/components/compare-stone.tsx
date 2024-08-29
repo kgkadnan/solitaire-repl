@@ -112,7 +112,7 @@ const CompareStone = ({
     });
     // Remove the 'details' key from updatedObj
     delete updatedObj.details;
-    console.log('updatedObj', updatedObj);
+
     setMappingColumn(updatedObj); // Update the state with the updated object
   }
 
