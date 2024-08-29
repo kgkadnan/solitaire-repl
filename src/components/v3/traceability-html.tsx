@@ -81,7 +81,10 @@ const TraceabilityHtml = () => {
         Your browser does not support the video tag.
       </video>
       <div className="absolute bottom-8 flex justify-between gap-4">
-        <div className="flex justify-around items-center h-[38px] bg-[#FFFFFF24] border-[white] rounded-[8px] px-[8px]  border-[1px] min-w-[150px]">
+        <div
+          className="flex justify-around items-center h-[38px] bg-[#FFFFFF24] border-[white] rounded-[8px] px-[8px]  border-[1px] min-w-[150px]"
+          style={{ boxShadow: 'var(--popups-shadow' }}
+        >
           {[
             { timeStart: 0, timeEnd: 3 },
             { timeStart: 3, timeEnd: 11 },
@@ -97,7 +100,6 @@ const TraceabilityHtml = () => {
                 timeEnd,
                 index
               )}`}
-              style={{ boxShadow: 'var(--popups-shadow' }}
             >
               {/* {console.log(index)} */}
               {currentTime >= timeStart && currentTime <= timeEnd && (
