@@ -4,14 +4,12 @@ import React, { useRef, useState, useEffect } from 'react';
 import Image from 'next/image';
 import Pause from '@public/v3/icons/pause.svg';
 import Play from '@public/v3/icons/play.svg';
-import TraceStart from '@public/v3/home/trace-start.png';
 import TraceEnd from '@public/v3/home/trace-last.png';
 
 const TraceabilityHtml = () => {
   const videoRefHtml: any = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
-  const [currentIndex, setCurrentIndex] = useState(0);
 
   const handlePlayPause = () => {
     if (videoRefHtml.current.paused) {
@@ -23,14 +21,13 @@ const TraceabilityHtml = () => {
     }
   };
 
-  const handleReferenceClick = (time: any, index: number) => {
+  const handleReferenceClick = (time: any) => {
     if (videoRefHtml.current) {
       videoRefHtml.current.currentTime = time;
       if (videoRefHtml.current.paused) {
         videoRefHtml.current.play();
         setIsPlaying(true);
       }
-      setCurrentIndex(index);
     }
   };
 
@@ -77,7 +74,7 @@ const TraceabilityHtml = () => {
           ].map(({ timeStart, timeEnd }, index) => (
             <div
               key={index}
-              onClick={() => handleReferenceClick(timeStart, index)}
+              onClick={() => handleReferenceClick(timeStart)}
               className={` h-2 rounded-[8px] rounded-full cursor-pointer ${dotClasses(
                 timeStart,
                 timeEnd
@@ -98,8 +95,8 @@ const TraceabilityHtml = () => {
           alt="video control"
         />
       </div>
-      <div className="absolute flex justify-between w-full xl:px-[112px] lg:px-[32px]">
-        <div>hello</div>
+      <div className="absolute flex justify-between w-full xl:px-[112px] lg:px-[32px] items-center">
+        <LeftStructure currentTime={currentTime} />
         <RightStructure currentTime={currentTime} />
       </div>
     </div>
@@ -121,7 +118,7 @@ const RightStructure = ({ currentTime }: any) => {
               <div className="rounded-[8px] bg-[#ffffff] p-[12px] flex flex-col gap-2">
                 <div className="flex gap-2">
                   <Image
-                    src={TraceStart}
+                    src={data.icon}
                     alt="trace steps"
                     className="w-[40px] h-[40px]"
                   />
@@ -178,6 +175,29 @@ const RightStructure = ({ currentTime }: any) => {
           )
       )}
     </>
+  );
+};
+
+const LeftStructure = ({ currentTime }: any) => {
+  return (
+    <div className="flex flex-col gap-2">
+      {traceabilityData.map(trace =>
+        currentTime > trace.timeStart ? (
+          <div className="flex gap-2 items-center w-[150px]">
+            <div className="w-[54px] h-[54px] bg-[white] rounded-[8px] flex items-center justify-center">
+              <Image src={trace.indicator} alt={trace.header1} />
+            </div>
+            <p className="w-[92px] text-neutral900 text-[14px]">
+              {trace.short}
+            </p>
+          </div>
+        ) : (
+          <div className="flex gap-2 items-center w-[150px]">
+            <div className="w-[54px] h-[54px] bg-[#FFFFFF] rounded-[8px] opacity-50"></div>
+          </div>
+        )
+      )}
+    </div>
   );
 };
 

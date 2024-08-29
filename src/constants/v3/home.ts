@@ -1,5 +1,13 @@
+import TraceStart from '@public/v3/home/trace-start.png';
+import Step1 from '@public/v3/home/trace-step-1.png';
+import Step2 from '@public/v3/home/trace-step-2.png';
+import Step3 from '@public/v3/home/trace-step-3.png';
+import Step4 from '@public/v3/home/trace-step-4.png';
+import Step5 from '@public/v3/home/trace-step-5.png';
+
 export const traceabilityData = [
   {
+    short: 'Rough Birth Registration',
     header1: 'Rough Birth Registration',
     data: [
       'Each rough diamond parcel is assigned a unique identification code upon receiving.',
@@ -9,11 +17,13 @@ export const traceabilityData = [
     ],
     header2: 'Data Uploaded to ERP',
     tags: ['Kimberley Process Certification', 'Invoice', 'Barcode ID'],
-    icon: 'tets',
+    icon: TraceStart,
+    indicator: Step1,
     timeStart: 0,
     timeEnd: 2
   },
   {
+    short: 'Sorting & Planning',
     header1: `Rough Source Verification
 (Sorting & Planning)`,
     data: [
@@ -22,11 +32,14 @@ export const traceabilityData = [
     ],
     header2: 'Data Uploaded to ERP',
     tags: ['Carat', 'Color', 'Shape', 'Clarity'],
-    icon: 'tets',
+    icon: TraceStart,
+    indicator: Step2,
     timeStart: 2,
     timeEnd: 10
   },
   {
+    short: `Sawing &
+Laser cut`,
     header1: `Manufacturing Stage Validation
 (Sawing - Laser cut)`,
     data: [
@@ -36,11 +49,14 @@ export const traceabilityData = [
     ],
     header2: 'Data Uploaded to ERP',
     tags: ['Carat', 'Color', 'Shape', 'Clarity', 'Cut'],
-    icon: 'tets',
+    icon: TraceStart,
+    indicator: Step3,
     timeStart: 10,
     timeEnd: 13
   },
   {
+    short: `Rough Birth
+Registration`,
     header1: `Final Plan Registration
 (Final shaping polishing)`,
     data: [
@@ -49,11 +65,14 @@ export const traceabilityData = [
     ],
     header2: 'Data Uploaded to ERP',
     tags: ['Carat', 'Color', 'Shape', 'Clarity', 'Cut'],
-    icon: 'tets',
+    icon: TraceStart,
+    indicator: Step4,
     timeStart: 13,
     timeEnd: 26
   },
   {
+    short: `Rough Birth
+    Registration`,
     header1: `Final Plan Registration
 (Final shaping polishing)`,
     data: [
@@ -63,7 +82,8 @@ export const traceabilityData = [
     ],
     header2: 'Data Uploaded to ERP',
     tags: ['Carat', 'Color', 'Shape', 'Clarity', 'Cut', 'QC details'],
-    icon: 'tets',
+    icon: TraceStart,
+    indicator: Step5,
     timeStart: 26,
     timeEnd: 29
   }
