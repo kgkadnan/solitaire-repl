@@ -73,7 +73,7 @@ const TraceabilityHtml = () => {
             { timeStart: 26, timeEnd: 29 }
           ].map(({ timeStart, timeEnd }, index) => (
             <div
-              key={index}
+              key={`${timeStart}-${timeEnd}`}
               onClick={() => handleReferenceClick(timeStart)}
               className={` h-2 rounded-[8px] rounded-full cursor-pointer ${dotClasses(
                 timeStart,
@@ -111,7 +111,7 @@ const RightStructure = ({ currentTime }: any) => {
           currentTime > data.timeStart &&
           currentTime < data.timeEnd && (
             <div
-              key={index}
+              key={data.header1}
               className={`w-[420px] bg-[#FFFFFF57] p-[20px] flex flex-col rounded-[12px] gap-2 transition-opacity duration-500 `}
             >
               <p className="text-[16px] text-neutral900">Diamond Journey</p>
@@ -164,8 +164,11 @@ const RightStructure = ({ currentTime }: any) => {
                   </p>
                 </div>
                 <div className="pl-[48px] flex gap-2 flex-wrap">
-                  {data.tags.map(tag => (
-                    <div className="bg-[#E4E7EC] rounded-[4px] px-[6px] py-[8px] text-neutral800 text-[12px]">
+                  {data.tags.map((tag: string, index: number) => (
+                    <div
+                      className="bg-[#E4E7EC] rounded-[4px] px-[6px] py-[8px] text-neutral800 text-[12px]"
+                      key={`${tag}-${index}`}
+                    >
                       {tag}
                     </div>
                   ))}
