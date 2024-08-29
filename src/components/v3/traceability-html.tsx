@@ -33,14 +33,14 @@ const TraceabilityHtml = () => {
 
   useEffect(() => {
     const updateCurrentTime = () => {
-      setCurrentTime(videoRefHtml.current.currentTime);
+      setCurrentTime(videoRefHtml.current?.currentTime);
     };
 
-    videoRefHtml.current.addEventListener('timeupdatehtml', updateCurrentTime);
+    videoRefHtml.current.addEventListener('timeupdate', updateCurrentTime);
 
     return () => {
-      videoRefHtml.current.removeEventListener(
-        'timeupdatehtml',
+      videoRefHtml.current?.removeEventListener(
+        'timeupdate',
         updateCurrentTime
       );
     };
