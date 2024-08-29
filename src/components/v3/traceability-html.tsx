@@ -2,17 +2,32 @@
 import { traceabilityData } from '@/constants/v3/home';
 import React, { useRef, useState, useEffect } from 'react';
 import Image from 'next/image';
-import Pause from '@public/v3/icons/pause.svg';
-import Play from '@public/v3/icons/play.svg';
+import Pause from '@public/v3/home/pause.svg';
+import Play from '@public/v3/home/play.svg';
 import TraceEnd from '@public/v3/home/trace-last.png';
+import Restart from '@public/v3/home/restart.svg';
 
+const calculateProgressWidth = (
+  timeStart: any,
+  timeEnd: any,
+  currentTime: any
+) => {
+  if (currentTime >= timeStart && currentTime <= timeEnd) {
+    const duration = timeEnd - timeStart;
+    const elapsedTime = currentTime - timeStart;
+    return `${(elapsedTime / duration) * 100}%`;
+  }
+  return '0%';
+};
 const TraceabilityHtml = () => {
   const videoRefHtml: any = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
 
   const handlePlayPause = () => {
-    if (videoRefHtml.current.paused) {
+    if (videoRefHtml.current.currentTime >= 29) {
+      handleReferenceClick(0);
+    } else if (videoRefHtml.current.paused) {
       videoRefHtml.current.play();
       setIsPlaying(true);
     } else {
@@ -33,6 +48,8 @@ const TraceabilityHtml = () => {
 
   useEffect(() => {
     const updateCurrentTime = () => {
+      if (videoRefHtml.current?.currentTime >= 29) videoRefHtml.current.pause();
+
       setCurrentTime(videoRefHtml.current?.currentTime);
     };
 
@@ -46,17 +63,9 @@ const TraceabilityHtml = () => {
     };
   }, []);
 
-  const calculateProgressWidth = (timeStart: any, timeEnd: any) => {
-    if (currentTime >= timeStart && currentTime <= timeEnd) {
-      const duration = timeEnd - timeStart;
-      const elapsedTime = currentTime - timeStart;
-      return `${(elapsedTime / duration) * 100}%`;
-    }
-    return '0%';
-  };
 
   const dotClasses = (timeStart: any, timeEnd: any) =>
-    currentTime >= timeStart && currentTime < timeEnd
+    currentTime > timeStart && currentTime <= timeEnd
       ? 'bg-neutral400 relative w-8 rounded-[8px]'
       : 'bg-neutral400 w-2';
 
@@ -86,15 +95,21 @@ const TraceabilityHtml = () => {
               <div
                 className="absolute top-0 left-0 h-full bg-neutral700 rounded-[16px]"
                 style={{
-                  width: calculateProgressWidth(timeStart, timeEnd)
+                  width: calculateProgressWidth(timeStart, timeEnd, currentTime)
                 }}
               />
             </div>
           ))}
         </div>
         <Image
-          className="cursor-pointer"
-          src={isPlaying ? Pause : Play}
+          className="cursor-pointer "
+          src={
+            isPlaying
+              ? videoRefHtml.current?.currentTime >= 29
+                ? Restart
+                : Pause
+              : Play
+          }
           onClick={handlePlayPause}
           alt="video control"
         />
@@ -113,7 +128,7 @@ const RightStructure = ({ currentTime }: any) => {
       {traceabilityData.map(
         (data, index) =>
           currentTime > data.timeStart &&
-          currentTime < data.timeEnd && (
+          (index === 4 ? currentTime <= 30 : currentTime <= data.timeEnd) && (
             <div
               key={data.header1}
               className={`w-[420px] bg-[#FFFFFF57] p-[20px] flex flex-col rounded-[12px] gap-2 transition-opacity duration-500 z-9999`}
@@ -192,18 +207,17 @@ const gradientLineStyles = `
     position: absolute;
     left: -10px; /* Adjust based on desired spacing */
     top: 0;
-    bottom: 0;
+    
     width: 2px; /* Width of the line */
     background: #D0D5DD; /* Default color */
     display: flex;
     align-items: flex-start; /* Align to top */
     overflow: hidden; /* Ensure the gradient fill is confined */
-    border-radius:50%
+    border-radius:10%
   }
 
   .gradient-line-fill {
-    width: 100%;
-    height: 0; /* Start with 0 height */
+    width: 120%;
     background: linear-gradient(to bottom, #FFAD05, #168B85, #5995ED);
     background-size: 100% 100%;
     background-repeat: no-repeat;
@@ -213,55 +227,79 @@ const gradientLineStyles = `
   }
 `;
 
+const calculateProgressHeight = (
+  timeStart: number,
+  timeEnd: number,
+  currentTime: number
+) => {
+  if (currentTime >= timeStart && currentTime <= timeEnd) {
+    const duration = timeEnd - timeStart;
+    const elapsedTime = currentTime - timeStart;
+    return `${(elapsedTime / duration) * 100}%`;
+  } else if (currentTime > timeEnd) {
+    return '100%';
+  }
+  return '0%';
+};
+
 const LeftStructure = ({ currentTime }: { currentTime: number }) => {
-  const [filledHeight, setFilledHeight] = useState(0);
-
-  useEffect(() => {
-    // Calculate the height of the filled line based on currentTime
-    const totalItems = traceabilityData.length;
-    const visibleItems = traceabilityData.filter(
-      trace => currentTime > trace.timeStart
-    ).length;
-    setFilledHeight((visibleItems / totalItems) * 100);
-  }, [currentTime]);
-
   return (
     <div className="flex flex-col gap-2">
       <style>{gradientLineStyles}</style>
-      <div className="relative flex flex-col gap-2">
-        {/* Gradient Line Container */}
-        <div className="gradient-line-container mr-[20px]">
-          <div
-            className="gradient-line-fill"
-            style={{ height: `${filledHeight}%` }}
-          />
-        </div>
-
-        {traceabilityData.map((trace, index) => (
-          <div className="flex gap-2 items-center w-[150px]" key={index}>
+      {/* Gradient Line Container */}
+      {currentTime > 0 &&
+        traceabilityData.map((trace, index) => (
+          <div key={index} className="relative flex flex-col gap-2">
             <div
-              className={`w-[54px] h-[54px] bg-[white] rounded-[8px] flex items-center justify-center transition-opacity duration-500 ${
-                currentTime > trace.timeStart ? 'opacity-100' : 'opacity-50'
+              className={`gradient-line-container mr-[20px] ${
+                index !== 4 ? 'bottom-[-8px]' : 'bottom-0'
               }`}
-              style={{ boxShadow: 'var(--popups-shadow' }}
             >
-              {currentTime > trace.timeStart && (
-                <Image
-                  src={trace.indicator}
-                  alt={trace.header1}
-                  // className={`reveal-image ${reveal ? 'reveal-visible' : ''}`}
-                  layout="intrinsic" // Adjust layout as needed
-                />
-              )}
+              <div
+                className="gradient-line-fill"
+                style={{
+                  height: calculateProgressHeight(
+                    trace.timeStart,
+                    trace.timeEnd,
+                    currentTime
+                  )
+                  // bottom:'-8px'
+                }}
+              />
             </div>
-            <p className="w-[92px] text-neutral900 text-[14px]">
-              {currentTime > trace.timeStart ? trace.short : ''}
-            </p>
+            <div className="flex gap-2 items-center w-[150px]" key={index}>
+              <div
+                className={`w-[54px] h-[54px] bg-[white] rounded-[8px] flex items-center justify-center transition-opacity duration-500 ${
+                  currentTime > trace.timeStart ? 'opacity-100' : 'opacity-50'
+                }`}
+                style={{ boxShadow: 'var(--popups-shadow' }}
+              >
+                {currentTime > trace.timeStart && (
+                  <Image
+                    src={trace.indicator}
+                    alt={trace.header1}
+                    layout="intrinsic"
+                  />
+                )}
+              </div>
+              <p className="w-[92px] text-neutral900 text-[14px]">
+                {currentTime > trace.timeStart ? trace.short : ''}
+              </p>
+            </div>
           </div>
         ))}
-        {/*  */}
-      </div>
-      <p className="pl-[15px] text-[14px] text-neutral700">{filledHeight}%</p>
+      {currentTime > 0 && (
+        <p className="pl-[15px] text-[14px] text-neutral700">
+          {Math.min(
+            (traceabilityData.filter(trace => currentTime > trace.timeEnd)
+              .length /
+              traceabilityData.length) *
+              100,
+            100
+          ).toFixed(0)}
+          %
+        </p>
+      )}
     </div>
   );
 };

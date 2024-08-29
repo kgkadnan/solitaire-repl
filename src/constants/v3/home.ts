@@ -90,6 +90,6 @@ Registration`,
     icon: Icon5,
     indicator: Step5,
     timeStart: 26,
-    timeEnd: 30
+    timeEnd: 29
   }
 ];
