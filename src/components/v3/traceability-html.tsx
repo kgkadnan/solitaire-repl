@@ -186,7 +186,10 @@ const LeftStructure = ({ currentTime }: any) => {
     <div className="flex flex-col gap-2">
       {traceabilityData.map(trace =>
         currentTime > trace.timeStart ? (
-          <div className="flex gap-2 items-center w-[150px]">
+          <div
+            className="flex gap-2 items-center w-[150px]"
+            key={trace.header1}
+          >
             <div className="w-[54px] h-[54px] bg-[white] rounded-[8px] flex items-center justify-center">
               <Image src={trace.indicator} alt={trace.header1} />
             </div>
@@ -195,7 +198,10 @@ const LeftStructure = ({ currentTime }: any) => {
             </p>
           </div>
         ) : (
-          <div className="flex gap-2 items-center w-[150px]">
+          <div
+            className="flex gap-2 items-center w-[150px]"
+            key={trace.header1}
+          >
             <div className="w-[54px] h-[54px] bg-[#FFFFFF] rounded-[8px] opacity-50"></div>
           </div>
         )
