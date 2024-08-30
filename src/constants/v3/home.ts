@@ -28,9 +28,8 @@ export const traceabilityData = [
     timeEnd: 3
   },
   {
-    short: 'Sorting & Planning',
-    header1: `Rough Source Verification
-(Sorting & Planning)`,
+    short: 'Scanning & Planning',
+    header1: `Scanning & Planning`,
     data: [
       `The unique identification code links to each diamond throughout the sorting and planning processes. `,
       'Any splitting or division of rough diamonds is documented with weight updates, maintaining the unique identification in the system.'
@@ -43,10 +42,8 @@ export const traceabilityData = [
     timeEnd: 11
   },
   {
-    short: `Sawing &
-Laser cut`,
-    header1: `Manufacturing Stage Validation
-(Sawing - Laser cut)`,
+    short: `Laser Cutting`,
+    header1: `Laser Cutting`,
     data: [
       'During manufacturing (cutting, bruting, polishing, etc.), each stage is recorded in the ERP system. ',
       'The system validates the status of each stone as it progresses, ensuring traceability with the unique identification code and weight logs. ',
@@ -60,10 +57,8 @@ Laser cut`,
     timeEnd: 14
   },
   {
-    short: `Final Plan
-Registration`,
-    header1: `Final Plan Registration
-(Final shaping polishing)`,
+    short: `Plan Registration`,
+    header1: `Plan Registration`,
     data: [
       'Once manufacturing is complete, the finished polished diamond is weighed and graded, with all details recorded in the ERP system. ',
       'The system captures multiple properties of the rough part and the planned polish to ensure they match.'
@@ -76,10 +71,8 @@ Registration`,
     timeEnd: 27
   },
   {
-    short: `Final Shaping &
-polishing`,
-    header1: `Final Plan Registration
-(Final shaping & polishing)`,
+    short: `Shaping & Polishing`,
+    header1: `Shaping & Polishing`,
     data: [
       'Before the final grading, each polished diamond undergoes a quality control check.',
       'The QC details are recorded in the ERP system, ensuring traceability and confirming that all manufacturing standards and specifications have been met.',
