@@ -16,22 +16,22 @@ import Head15 from '@public/v3/sustainability/head15.png';
 import Head16 from '@public/v3/sustainability/head16.png';
 import Head17 from '@public/v3/sustainability/head17.png';
 
-import Sus1 from '@public/v3/sustainability/1.png';
-import Sus2 from '@public/v3/sustainability/2.png';
-import Sus3 from '@public/v3/sustainability/3.png';
-import Sus4 from '@public/v3/sustainability/4.png';
-import Sus5 from '@public/v3/sustainability/5.png';
-import Sus6 from '@public/v3/sustainability/6.png';
-import Sus7 from '@public/v3/sustainability/7.png';
-import Sus8 from '@public/v3/sustainability/8.png';
-import Sus9 from '@public/v3/sustainability/9.png';
-import Sus10 from '@public/v3/sustainability/10.png';
-import Sus11 from '@public/v3/sustainability/11.png';
-import Sus12 from '@public/v3/sustainability/12.png';
-import Sus13 from '@public/v3/sustainability/13.png';
-import Sus16 from '@public/v3/sustainability/16.png';
-import Sus15 from '@public/v3/sustainability/15.png';
-import Sus17 from '@public/v3/sustainability/17.png';
+import Sus1 from '@public/v3/sustainability/1.webp';
+import Sus2 from '@public/v3/sustainability/2.webp';
+import Sus3 from '@public/v3/sustainability/3.webp';
+import Sus4 from '@public/v3/sustainability/4.webp';
+import Sus5 from '@public/v3/sustainability/5.webp';
+import Sus6 from '@public/v3/sustainability/6.webp';
+import Sus7 from '@public/v3/sustainability/7.webp';
+import Sus8 from '@public/v3/sustainability/8.webp';
+import Sus9 from '@public/v3/sustainability/9.webp';
+import Sus10 from '@public/v3/sustainability/10.webp';
+import Sus11 from '@public/v3/sustainability/11.webp';
+import Sus12 from '@public/v3/sustainability/12.webp';
+import Sus13 from '@public/v3/sustainability/13.webp';
+import Sus16 from '@public/v3/sustainability/16.webp';
+import Sus15 from '@public/v3/sustainability/15.webp';
+import Sus17 from '@public/v3/sustainability/17.webp';
 
 export const sustainabilitySection = [
   {

@@ -101,7 +101,6 @@ const TraceabilityHtml = () => {
                 index
               )}`}
             >
-              {/* {console.log(index)} */}
               {currentTime >= timeStart && currentTime <= timeEnd && (
                 <div
                   className="absolute top-0 left-0 h-full bg-neutral700 transition-width duration-300 ease-in-out rounded-[12px]"

@@ -76,10 +76,10 @@ Registration`,
     timeEnd: 27
   },
   {
-    short: `Final Shaping 
+    short: `Final Shaping &
 polishing`,
     header1: `Final Plan Registration
-(Final shaping polishing)`,
+(Final shaping & polishing)`,
     data: [
       'Before the final grading, each polished diamond undergoes a quality control check.',
       'The QC details are recorded in the ERP system, ensuring traceability and confirming that all manufacturing standards and specifications have been met.',

@@ -225,7 +225,6 @@ export default function Layout({ children }: ILayoutProps) {
   //     document.body.removeChild(cursor);
   //   };
   // }, []);
-  console.log(path, 'path');
   return (
     <>
       {path === '/v3/test' ? (

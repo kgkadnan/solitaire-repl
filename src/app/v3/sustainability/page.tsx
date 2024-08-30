@@ -105,8 +105,8 @@ const App: React.FC = () => {
         <p className="lg:text-headingM xl:text-headingXL font-bold">
           A Journey Towards a Sustainable Future
         </p>
-        <div className="w-full !h-[750px] xl:px-[112px] lg:px-[32px] mt-[20px]">
-          <div className="flex !h-[750px] justify-between w-full ">
+        <div className="w-full  xl:px-[112px] lg:px-[32px] my-[20px]">
+          <div className="flex  justify-between w-full ">
             <div className="flex-1 flex max-w-[450px] ">
               {typeof sustainabilitySection.filter(
                 data => data.id === carouselIndex
