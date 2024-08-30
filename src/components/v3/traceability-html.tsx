@@ -73,7 +73,6 @@ const TraceabilityHtml = () => {
           'bg-neutral700'
         }`
       : 'bg-neutral400 w-2';
-  console.log(videoRefHtml.current?.currentTime, '------------', isPlaying);
   return (
     <div className="relative flex flex-col items-center justify-center w-full h-screen bg-black">
       <video
@@ -295,10 +294,45 @@ const calculateProgressHeight = (
   }
   return '0%';
 };
+const calculateProgress = (
+  timeStart: number,
+  timeEnd: number,
+  currentTime: number
+) => {
+  if (currentTime >= timeStart && currentTime <= timeEnd) {
+    const duration = timeEnd - timeStart;
+    const elapsedTime = currentTime - timeStart;
+    return ((elapsedTime / duration) * 20).toFixed(0);
+  } else if (currentTime > timeEnd) {
+    return 100;
+  }
+  return 0;
+};
+
 
 const LeftStructure = ({ currentTime }: { currentTime: number }) => {
   const [isVisible, setIsVisible] = useState(false);
+  const sections = [
+    { timeStart: 0, timeEnd: 3 },
+    { timeStart: 3, timeEnd: 11 },
+    { timeStart: 11, timeEnd: 14 },
+    { timeStart: 14, timeEnd: 27 },
+    { timeStart: 27, timeEnd: 30 }
+  ];
+  const maxPercentagePerSection = 20; // Maximum percentage for each section
 
+const calculateProgress = (start:any, end:any, currentTime:any) => {
+  if (currentTime < start) return 0;
+  if (currentTime >= end) return maxPercentagePerSection;
+
+  const sectionDuration = end - start;
+  const coveredDuration = currentTime - start;
+  return (coveredDuration / sectionDuration) * maxPercentagePerSection;
+};
+
+  const [percentages, setPercentages] = useState(
+    sections.map(sec => calculateProgress(sec.timeStart, sec.timeEnd, currentTime))
+  );
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsVisible(true);
@@ -306,10 +340,21 @@ const LeftStructure = ({ currentTime }: { currentTime: number }) => {
 
     return () => clearTimeout(timer); // Cleanup the timer if the component unmounts
   }, []);
+
+
+
+
+const totalDuration = 30; // Total duration of the video in seconds
+
+
+  useEffect(() => {
+    setPercentages(sections.map(sec => calculateProgress(sec.timeStart, sec.timeEnd, currentTime)));
+  }, [currentTime]);
+  console.log(percentages,"percentages")
   return (
     <div
       className={`flex flex-col gap-2 transition-opacity duration-1000 ${
-        isVisible && currentTime > 0 ? 'opacity-100' : 'opacity-25 '
+        isVisible && currentTime >= 0 ? 'opacity-100' : 'opacity-25 '
       }`}
     >
       <style>{gradientLineStyles}</style>
@@ -344,20 +389,6 @@ const LeftStructure = ({ currentTime }: { currentTime: number }) => {
               />
             </div>
             <div className="flex gap-2 items-center " key={index}>
-              {/* <div
-                className={`w-[54px] h-[54px] bg-[white] rounded-[8px] flex items-center justify-center transition-opacity duration-500 ${
-                  currentTime >= trace.timeStart ? 'opacity-100' : 'opacity-50'
-                }`}
-                style={{ boxShadow: 'var(--popups-shadow)' }}
-              >
-                {currentTime > trace.timeStart && (
-                  <Image
-                    src={trace.indicator}
-                    alt={trace.header1}
-                    layout="intrinsic"
-                  />
-                )}
-              </div> */}
               <div
                 className={`w-[54px] h-[54px] bg-[white] rounded-[8px] flex items-center justify-center transition-opacity duration-500 relative overflow-hidden ${
                   currentTime >= trace.timeStart ? 'opacity-100' : 'opacity-50'
@@ -395,7 +426,7 @@ const LeftStructure = ({ currentTime }: { currentTime: number }) => {
         ))}
       {currentTime > 0 && (
         <p className="pl-[15px] text-[14px] text-neutral700">
-          {calculateProgressHeight(0, 30, currentTime)}
+          {(percentages[0]+percentages[1]+percentages[2]+percentages[3]+percentages[4]).toFixed(0)}%
         </p>
       )}
     </div>
