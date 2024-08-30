@@ -340,7 +340,7 @@ const LeftStructure = ({ currentTime }: { currentTime: number }) => {
               />
             </div>
             <div className="flex gap-2 items-center " key={index}>
-              <div
+              {/* <div
                 className={`w-[54px] h-[54px] bg-[white] rounded-[8px] flex items-center justify-center transition-opacity duration-500 ${
                   currentTime >= trace.timeStart ? 'opacity-100' : 'opacity-50'
                 }`}
@@ -353,7 +353,32 @@ const LeftStructure = ({ currentTime }: { currentTime: number }) => {
                     layout="intrinsic"
                   />
                 )}
+              </div> */}
+              <div
+                className={`w-[54px] h-[54px] bg-[white] rounded-[8px] flex items-center justify-center transition-opacity duration-500 relative overflow-hidden ${
+                  currentTime >= trace.timeStart ? 'opacity-100' : 'opacity-50'
+                }`}
+                style={{ boxShadow: 'var(--popups-shadow)' }}
+              >
+                <div
+                  className={`absolute inset-0 rounded-full transition-opacity duration-1000 ${
+                    currentTime >= trace.timeStart ? 'opacity-100' : 'opacity-0'
+                  }`}
+                >
+                  {currentTime >= trace.timeStart && (
+                    <div className="absolute inset-0 rounded-full overflow-hidden">
+                      <div className="absolute inset-0 bg-white animate-clock-reveal"></div>
+                      <Image
+                        src={trace.indicator}
+                        alt={trace.header1}
+                        layout="intrinsic"
+                        className="w-full h-full absolute inset-0"
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
+
               <p
                 className={`text-neutral900 text-[14px] transition-opacity duration-500 ${
                   currentTime >= trace.timeStart ? 'opacity-100' : 'opacity-50'

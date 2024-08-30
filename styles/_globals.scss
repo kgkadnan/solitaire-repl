@@ -475,3 +475,30 @@
 .blog-carousel .carousel .control-prev.control-arrow:hover {
   background-color: transparent !important;
 }
+
+@keyframes clock-reveal {
+  0% {
+    transform: rotate(0deg);
+    clip-path: polygon(50% 50%, 50% 0%, 50% 0%, 50% 50%);
+  }
+  25% {
+    transform: rotate(90deg);
+    clip-path: polygon(50% 50%, 100% 50%, 100% 0%, 50% 0%);
+  }
+  50% {
+    transform: rotate(180deg);
+    clip-path: polygon(50% 50%, 50% 100%, 100% 100%, 100% 0%);
+  }
+  75% {
+    transform: rotate(270deg);
+    clip-path: polygon(50% 50%, 0% 50%, 100% 100%, 100% 0%);
+  }
+  100% {
+    transform: rotate(360deg);
+    clip-path: polygon(50% 50%, 50% 0%, 100% 100%, 0% 100%);
+  }
+}
+
+.animate-clock-reveal {
+  animation: clock-reveal 1s linear forwards;
+}
