@@ -51,7 +51,16 @@ const App: React.FC = () => {
     const preloaded = preloadImages(imagesToPreload);
     setPreloadedImages(preloaded);
   }, []);
-  console.log(preloadedImages, 'preloadedImages');
+
+  useEffect(() => {
+    setTimeout(() => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }, 0);
+  }, []);
+
   return (
     <div className="flex flex-col gap-5">
       <MainLayout setCarouselIndex={setCarouselIndex} />
