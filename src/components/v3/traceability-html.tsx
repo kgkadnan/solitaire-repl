@@ -207,7 +207,7 @@ const RightStructure = ({ currentTime }: any) => {
                       {activeData.data[1]}
                     </li>
                   </ol>
-                  <p className="font-semiBold xl:text-[16px] lg:text-[10px] xl:leading-[20px]">
+                  <p className="font-semiBold xl:text-[14px] lg:text-[10px] xl:leading-[20px]">
                     Splitting & Barcoding
                   </p>
                   <ol className="list-disc pl-[20px]">
