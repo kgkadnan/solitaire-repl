@@ -116,8 +116,8 @@ const App: React.FC = () => {
                     sustainabilitySection.filter(
                       data => data.id === carouselIndex
                     )[0].id === '03'
-                      ? 'mt-[80px]'
-                      : 'mt-[200px]'
+                      ? 'mt-[40px]'
+                      : 'mt-[100px]'
                   }`}
                 >
                   <div className="lg:text-headingM xl:text-headingL font-bold text-neutral900 leading-10">
@@ -251,7 +251,7 @@ const App: React.FC = () => {
             </div>
           </div>
         </div>
-        <div className="absolute left-[50%] bottom-[25%] flex flex-col gap-2">
+        <div className="absolute left-[50%] bottom-[40%] flex flex-col gap-2">
           <div
             className="cursor-pointer"
             onClick={() =>
