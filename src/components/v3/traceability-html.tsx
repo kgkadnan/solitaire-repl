@@ -21,7 +21,7 @@ const calculateProgressWidth = (
 };
 const TraceabilityHtml = () => {
   const videoRefHtml: any = useRef(null);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
   const [currentTime, setCurrentTime] = useState(0);
 
   const handlePlayPause = () => {
@@ -73,10 +73,18 @@ const TraceabilityHtml = () => {
           'bg-neutral700'
         }`
       : 'bg-neutral400 w-2';
-
+  console.log(videoRefHtml.current?.currentTime, '------------', isPlaying);
   return (
     <div className="relative flex flex-col items-center justify-center w-full h-screen bg-black">
-      <video ref={videoRefHtml} className="w-full h-full object-cover">
+      <video
+        ref={videoRefHtml}
+        className="w-full h-full object-cover"
+        autoPlay
+        preload="auto"
+        muted
+        role="img"
+        playsInline
+      >
         <source src="/v3/videos/traceability.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
@@ -119,10 +127,10 @@ const TraceabilityHtml = () => {
         <Image
           className="cursor-pointer "
           src={
-            isPlaying
-              ? videoRefHtml.current?.currentTime >= 30
-                ? Restart
-                : Pause
+            videoRefHtml.current?.currentTime >= 30
+              ? Restart
+              : isPlaying
+              ? Pause
               : Play
           }
           onClick={handlePlayPause}
