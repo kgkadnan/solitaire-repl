@@ -110,7 +110,7 @@ const HtmlAnimation = () => {
         <div
           className={`relative w-[460px] h-[1200px] bg-no-repeat bg-contain transition-transform duration-700 ease-in-out z-10 ${
             phoneVisible
-              ? ' lg:translate-y-[-250px]  xl:translate-y-[-220px] 2xl:translate-y-[-220px] 3xl:translate-y-[-60px]'
+              ? ' lg:translate-y-[-262px]  xl:translate-y-[-220px] 2xl:translate-y-[-220px] 3xl:translate-y-[-60px]'
               : 'translate-y-full'
           }`}
           style={{
