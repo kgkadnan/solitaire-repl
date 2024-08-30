@@ -141,7 +141,7 @@ const HtmlAnimation = () => {
                 <img
                   src={src}
                   alt={`Slide ${index + 1}`}
-                  className={`w-full mx-auto my-[8px] ${
+                  className={`w-full mx-auto py-[8px] ${
                     scrollIndex !== 0 && ''
                   }`}
                 />
