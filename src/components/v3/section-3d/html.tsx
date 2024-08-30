@@ -330,7 +330,7 @@ const HtmlAnimation = () => {
 
         {/* Scrolling Cards */}
         <div
-          className={`absolute  lg:top-[120px] xl:top-[170px] 2xl:top-[170px] 3xl:top-[330px]  left-1/2 transform -translate-x-1/2 w-[370px] h-[700px] overflow-hidden transition-transform duration-700 ease-in-out z-0 ${
+          className={`absolute  lg:top-[135px] xl:top-[170px] 2xl:top-[180px] 3xl:top-[330px]  left-1/2 transform -translate-x-1/2 w-[370px] h-[700px] overflow-hidden transition-transform duration-700 ease-in-out z-0 ${
             phoneVisible ? 'translate-y-0' : 'translate-y-full'
           }`}
           style={{

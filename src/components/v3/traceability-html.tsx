@@ -87,7 +87,9 @@ const TraceabilityHtml = () => {
     observer.observe(targetRef.current);
 
     return () => {
-      observer?.unobserve(targetRef.current!); // Clean up observer on component unmount
+      if (targetRef.current!) {
+        observer?.unobserve(targetRef.current!); // Clean up observer on component unmount
+      }
     };
   }, []);
 

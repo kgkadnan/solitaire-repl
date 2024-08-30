@@ -1,23 +1,33 @@
 'use client';
 
 import MainLayout from '@/components/v3/scroller/main-layout';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Landscape from '@public/v3/sustainability/landscape.png';
 import Image from 'next/image';
 import DownloadReport from '@public/v3/sustainability/download-report.png';
-// import { handleDownloadReport } from '@/utils/download-sustainability-report';
 import { sustainabilitySection } from '@/constants/v3/sustainability';
 import Prev from '@public/v3/icons/previous.svg?url';
 import Next from '@public/v3/icons/next.svg?url';
-// import { getAllPostsForHome } from '@/features/v3/api/blogs';
-// import { BlogCarousel } from '@/components/v3/blog-carousel';
-// import AnimationSection from '@/components/v3/animated-text/scroll';
+
+const preloadImages = (imageUrls: any[]): Record<string, string> => {
+  const preloaded: Record<string, string> = {};
+
+  imageUrls.forEach(url => {
+    const img = new window.Image();
+    img.src = url.src;
+    preloaded[url.src] = url; // Store the URL as a key-value pair
+  });
+
+  return preloaded;
+};
 
 const App: React.FC = () => {
   const [carouselIndex, setCarouselIndex] = useState('01'); // Default to the first index
-  // const [allPosts, setAllPosts] = useState([]);
   const [isHoveredNext, setIsHoveredNext] = useState(false);
   const [isHoveredPrev, setIsHoveredPrev] = useState(false);
+  const [preloadedImages, setPreloadedImages] = useState<
+    Record<string, string>
+  >({});
 
   const prevClick = (id: number) => {
     if (id === 0) {
@@ -25,12 +35,6 @@ const App: React.FC = () => {
     }
     if (id > 0) {
       setCarouselIndex(sustainabilitySection[id - 1].id);
-      // setTimeout(() => {
-      //   window.scrollTo({
-      //     top: 780,
-      //     behavior: 'smooth'
-      //   });
-      // }, 0);
     }
   };
 
@@ -39,66 +43,19 @@ const App: React.FC = () => {
       setCarouselIndex(sustainabilitySection[0].id);
     } else if (id < sustainabilitySection.length - 1) {
       setCarouselIndex(sustainabilitySection[id + 1].id);
-      // setTimeout(() => {
-      //   window.scrollTo({
-      //     top: 780,
-      //     behavior: 'smooth'
-      //   });
-      // }, 0);
     }
   };
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const posts = await getAllPostsForHome(false);
-  //     setAllPosts(posts?.edges);
-  //   };
-  //   fetchData();
-  // }, []);
-
-  //   useEffect(() => {
-  //     const handleScroll = (e: Event) => {
-  //       e.preventDefault(); // Prevent default scroll behavior
-  //       const currentScrollY = window.scrollY;
-  //       const scrollDifference = Math.abs(currentScrollY - lastScrollY.current);
-  //       // Only trigger carousel update if the scroll exceeds a threshold
-  //       if (scrollDifference > 400 && carouselIndex < '17') {
-  //         if (currentScrollY > lastScrollY.current) {
-  //           // Scrolling down
-  //           nextClick(
-  //             sustainabilitySection.findIndex(
-  //               section => section.id === carouselIndex
-  //             )
-  //           );
-  //         } else if (currentScrollY < lastScrollY.current && carouselIndex > '01') {
-  //           // Scrolling up
-  //           prevClick(
-  //             sustainabilitySection.findIndex(
-  //               section => section.id === carouselIndex
-  //             )
-  //           );
-  //         }
-  //         lastScrollY.current = currentScrollY;
-  //       }
-
-  //       // Reset scroll position to prevent unwanted UI movement
-  //       window.scrollTo(0, 0);
-  //     };
-
-  //     window.addEventListener('scroll', handleScroll, { passive: false });
-
-  //     return () => {
-  //       window.removeEventListener('scroll', handleScroll);
-  //     };
-  //   }, [carouselIndex]);
-
+  useEffect(() => {
+    const imagesToPreload = sustainabilitySection.map(data => data.images);
+    const preloaded = preloadImages(imagesToPreload);
+    setPreloadedImages(preloaded);
+  }, []);
+  console.log(preloadedImages, 'preloadedImages');
   return (
     <div className="flex flex-col gap-5">
-      {/* {carouselIndex === '01' && ( // Render the landscape section only when carouselIndex is '17' */}
       <MainLayout setCarouselIndex={setCarouselIndex} />
-      {/* )} */}
 
-      {/* {carouselIndex !== '' && ( */}
       <div
         className={`relative flex justify-center flex-col text-headingXL bold items-center mt-[20px] bg-[length:200%_200%] bg-no-repeat `}
       >
@@ -236,9 +193,11 @@ const App: React.FC = () => {
               <div className="flex justify-around w-full ">
                 <Image
                   src={
-                    sustainabilitySection.filter(
-                      data => data.id === carouselIndex
-                    )[0].images
+                    preloadedImages[
+                      sustainabilitySection.filter(
+                        data => data.id === carouselIndex
+                      )[0].images.src
+                    ]
                   }
                   alt={
                     sustainabilitySection.filter(
@@ -246,11 +205,14 @@ const App: React.FC = () => {
                     )[0].imageTitle
                   }
                   className={` w-full `}
+                  // width={100}
+                  // height={100}
                 />
               </div>
             </div>
           </div>
         </div>
+
         <div className="absolute left-[50%] bottom-[40%] flex flex-col gap-2">
           <div
             className="cursor-pointer"
@@ -284,9 +246,7 @@ const App: React.FC = () => {
           </div>
         </div>
       </div>
-      {/* )} */}
 
-      {/* {carouselIndex === '17' && ( // Render the landscape section only when carouselIndex is '17' */}
       <div className="flex flex-col gap-10">
         <div className="relative">
           <Image
@@ -300,32 +260,10 @@ const App: React.FC = () => {
               <p className="text-[16px]">
                 The report will be available starting in November 2024.
               </p>
-              {/* <Image
-                src={DownloadReportCTA}
-                alt={'button'}
-                className="cursor-pointer -ml-[9px] lg:!w-[250px]  xl:!w-[300px] "
-                onClick={handleDownloadReport}
-                // width={300}
-              /> */}
-              {/* <div className="flex gap-2">
-                <p>Download</p>
-                <Image src={Download} alt="download" />
-              </div> */}
             </div>
           </div>
         </div>
-        {/* <div className="flex w-full flex-col items-center gap-12">
-          <p className="lg:text-headingM xl:text-headingXL font-bold flex text-center">
-            <AnimationSection>
-              Read the Latest Sustainability News
-            </AnimationSection>
-          </p>
-          <div className="w-[1000px] pb-[48px]">
-            {allPosts?.length > 0 && <BlogCarousel posts={allPosts} />}
-          </div>
-        </div> */}
       </div>
-      {/* )} */}
     </div>
   );
 };
