@@ -5,7 +5,7 @@ const NotificationSkeleton = () => {
   return (
     <div className="bg-neutral25 w-[447px] border-[1px] border-solid border-primaryBorder  shadow-popupsShadow  rounded-[8px] relative top-[5px] right-[13%]">
       <div className="border-solid border-b-[1px] border-neutral200">
-        <h1 className="px-[24px] py-[16px]">
+        <div className="px-[16px] py-[16px]">
           <Skeleton
             variant="rectangular"
             height={'26px'}
@@ -14,7 +14,7 @@ const NotificationSkeleton = () => {
             className="w-full rounded-[4px]"
             sx={{ bgcolor: 'var(--neutral-200)' }}
           />
-        </h1>
+        </div>
       </div>
 
       <div className="max-h-[70vh] overflow-y-scroll">
@@ -24,7 +24,7 @@ const NotificationSkeleton = () => {
             className={`flex p-[16px] w-[100%] gap-[15px] cursor-pointer border-b-[1px] border-neutral200 hover:bg-neutral50 `}
           >
             <div
-              className={` w-[40px] h-[40px] flex items-center justify-center rounded-[4px] bg-neutral0 `}
+              className={`flex items-center justify-center rounded-[4px] bg-neutral0 `}
             >
               <Skeleton
                 variant="rectangular"
