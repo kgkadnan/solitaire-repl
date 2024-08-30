@@ -363,7 +363,6 @@ const LeftStructure = ({ currentTime }: { currentTime: number }) => {
       )
     );
   }, [currentTime]);
-  console.log(percentages, 'percentages');
   return (
     <div
       className={`flex flex-col gap-2 transition-opacity duration-1000 ${
