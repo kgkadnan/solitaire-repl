@@ -87,8 +87,6 @@ const BookAppointment: React.FC<IBookAppointment> = ({
   const [stones, setStones] = useState<string[]>([]);
   const { setIsError, setErrorText } = errorSetState;
 
-  console.log('selectedSlot', selectedSlot);
-
   const hasDataOnRescheduleAppointment = () => {
     return rescheduleAppointmentData
       ? Object.keys(rescheduleAppointmentData).length > 0
@@ -499,7 +497,10 @@ const BookAppointment: React.FC<IBookAppointment> = ({
                   ? handleRescheduleAppointment()
                   : handleAddMyAppointment();
               },
-              isDisable: !selectedSlot.length
+              isDisable:
+                !selectedSlot.length ||
+                (hasDataOnRescheduleAppointment() &&
+                  selectedSlot === rescheduleAppointmentData?.selectedSlot)
             }
           ]}
         />
