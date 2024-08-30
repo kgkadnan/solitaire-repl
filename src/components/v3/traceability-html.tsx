@@ -23,6 +23,7 @@ const TraceabilityHtml = () => {
   const videoRefHtml: any = useRef(null);
   const [isPlaying, setIsPlaying] = useState(true);
   const [currentTime, setCurrentTime] = useState(0);
+  const targetRef = useRef<HTMLDivElement | null>(null);
 
   const handlePlayPause = () => {
     if (videoRefHtml.current.currentTime >= 30) {
@@ -64,6 +65,32 @@ const TraceabilityHtml = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (!targetRef.current || !videoRefHtml.current) return;
+
+    const options = {
+      root: null, // Use the viewport as the root
+      rootMargin: '0px',
+      threshold: 0.5 // Trigger when 50% of the target is visible
+    };
+
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        // Play video when the target div is in view
+        videoRefHtml.current?.play();
+      } else {
+        // Pause video when the target div is not in view
+        videoRefHtml.current?.pause();
+      }
+    }, options);
+
+    observer.observe(targetRef.current);
+
+    return () => {
+      observer.unobserve(targetRef.current!); // Clean up observer on component unmount
+    };
+  }, []);
+
   const dotClasses = (timeStart: any, timeEnd: any, index: number) =>
     (currentTime >= timeStart && currentTime <= timeEnd) ||
     (videoRefHtml.current?.currentTime >= 30 && index === 4)
@@ -91,6 +118,7 @@ const TraceabilityHtml = () => {
         <div
           className="flex justify-around items-center h-[38px] bg-[#FFFFFF24] border-[white] rounded-[8px] px-[8px]  border-[1px] min-w-[150px]"
           style={{ boxShadow: 'var(--popups-shadow' }}
+          ref={targetRef}
         >
           {[
             { timeStart: 0, timeEnd: 3 },
@@ -294,20 +322,6 @@ const calculateProgressHeight = (
   }
   return '0%';
 };
-const calculateProgress = (
-  timeStart: number,
-  timeEnd: number,
-  currentTime: number
-) => {
-  if (currentTime >= timeStart && currentTime <= timeEnd) {
-    const duration = timeEnd - timeStart;
-    const elapsedTime = currentTime - timeStart;
-    return ((elapsedTime / duration) * 20).toFixed(0);
-  } else if (currentTime > timeEnd) {
-    return 100;
-  }
-  return 0;
-};
 
 const LeftStructure = ({ currentTime }: { currentTime: number }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -341,8 +355,6 @@ const LeftStructure = ({ currentTime }: { currentTime: number }) => {
 
     return () => clearTimeout(timer); // Cleanup the timer if the component unmounts
   }, []);
-
-  const totalDuration = 30; // Total duration of the video in seconds
 
   useEffect(() => {
     setPercentages(
