@@ -123,8 +123,8 @@ const TraceabilityHtml = () => {
           {[
             { timeStart: 0, timeEnd: 3 },
             { timeStart: 3, timeEnd: 11 },
-            { timeStart: 11, timeEnd: 14 },
-            { timeStart: 14, timeEnd: 27 },
+            { timeStart: 11, timeEnd: 17 },
+            { timeStart: 17, timeEnd: 27 },
             { timeStart: 27, timeEnd: 30 }
           ].map(({ timeStart, timeEnd }, index) => (
             <div
@@ -328,8 +328,8 @@ const LeftStructure = ({ currentTime }: { currentTime: number }) => {
   const sections = [
     { timeStart: 0, timeEnd: 3 },
     { timeStart: 3, timeEnd: 11 },
-    { timeStart: 11, timeEnd: 14 },
-    { timeStart: 14, timeEnd: 27 },
+    { timeStart: 11, timeEnd: 17 },
+    { timeStart: 17, timeEnd: 27 },
     { timeStart: 27, timeEnd: 30 }
   ];
   const maxPercentagePerSection = 20; // Maximum percentage for each section

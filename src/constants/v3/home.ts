@@ -54,7 +54,7 @@ export const traceabilityData = [
     icon: Icon3,
     indicator: Step3,
     timeStart: 11,
-    timeEnd: 14
+    timeEnd: 17
   },
   {
     short: `Plan Registration`,
@@ -67,7 +67,7 @@ export const traceabilityData = [
     tags: ['Carat', 'Color', 'Shape', 'Clarity', 'Cut'],
     icon: Icon4,
     indicator: Step4,
-    timeStart: 14,
+    timeStart: 17,
     timeEnd: 27
   },
   {
