@@ -146,7 +146,7 @@ const RightStructure = ({ currentTime }: any) => {
   useEffect(() => {
     const matchedData = traceabilityData.find(
       (data, index) =>
-        currentTime > data.timeStart &&
+        currentTime >= data.timeStart &&
         (index === 4 ? currentTime <= 31 : currentTime <= data.timeEnd)
     );
     setActiveData(matchedData);
@@ -161,7 +161,6 @@ const RightStructure = ({ currentTime }: any) => {
       return () => clearTimeout(timer); // Cleanup the timer if the component unmounts
     }
   }, [activeData]);
-  console.log(isVisible, 'jjjjj', activeData);
 
   return (
     <>
@@ -169,7 +168,7 @@ const RightStructure = ({ currentTime }: any) => {
         <div
           key={activeData.header1}
           className={`xl:w-[420px] lg:w-[320px] bg-[#FFFFFF57] p-[20px] flex flex-col rounded-[12px] xl:gap-1 transition-opacity duration-1000 ${
-            isVisible ? 'opacity-100' : 'opacity-25'
+            isVisible && currentTime > 0 ? 'opacity-100' : 'opacity-25 '
           } `}
           style={{ boxShadow: 'var(--popups-shadow)', height: 'fit-content' }}
         >
@@ -294,18 +293,30 @@ const calculateProgressHeight = (
 };
 
 const LeftStructure = ({ currentTime }: { currentTime: number }) => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 1000);
+
+    return () => clearTimeout(timer); // Cleanup the timer if the component unmounts
+  }, []);
   return (
-    <div className="flex flex-col gap-2">
+    <div
+      className={`flex flex-col gap-2 transition-opacity duration-1000 ${
+        isVisible && currentTime > 0 ? 'opacity-100' : 'opacity-25 '
+      }`}
+    >
       <style>{gradientLineStyles}</style>
       {/* Gradient Line Container */}
-      {currentTime > 0 &&
+      {currentTime >= 0 &&
         traceabilityData.map((trace, index) => (
           <div key={index} className="relative flex flex-col gap-2">
             <div
               className={`gradient-line-container mr-[20px] ${
                 index !== 4 ? 'bottom-[-8px]' : 'bottom-0'
               }`}
-              style={{}}
             >
               <div
                 className="gradient-line-fill"
@@ -325,16 +336,15 @@ const LeftStructure = ({ currentTime }: { currentTime: number }) => {
                       : index === 3
                       ? 'linear-gradient(to bottom,  #168B85, #5995ED)'
                       : 'linear-gradient(to bottom, #5995ED, #5995ED)'
-                  // bottom:'-8px'
                 }}
               />
             </div>
             <div className="flex gap-2 items-center " key={index}>
               <div
                 className={`w-[54px] h-[54px] bg-[white] rounded-[8px] flex items-center justify-center transition-opacity duration-500 ${
-                  currentTime > trace.timeStart ? 'opacity-100' : 'opacity-50'
+                  currentTime >= trace.timeStart ? 'opacity-100' : 'opacity-50'
                 }`}
-                style={{ boxShadow: 'var(--popups-shadow' }}
+                style={{ boxShadow: 'var(--popups-shadow)' }}
               >
                 {currentTime > trace.timeStart && (
                   <Image
@@ -344,22 +354,19 @@ const LeftStructure = ({ currentTime }: { currentTime: number }) => {
                   />
                 )}
               </div>
-              <p className="text-neutral900 text-[14px]">
-                {currentTime > trace.timeStart ? trace.short : ''}
+              <p
+                className={`text-neutral900 text-[14px] transition-opacity duration-500 ${
+                  currentTime >= trace.timeStart ? 'opacity-100' : 'opacity-50'
+                }`}
+              >
+                {trace.short}
               </p>
             </div>
           </div>
         ))}
       {currentTime > 0 && (
         <p className="pl-[15px] text-[14px] text-neutral700">
-          {calculateProgressHeight(0, 31, currentTime)}
-          {/* {Math.min(
-            (traceabilityData.filter(trace => currentTime > trace.timeEnd)
-              .length /
-              traceabilityData.length) *
-              100,
-            100
-          ).toFixed(0)} */}
+          {calculateProgressHeight(0, 30, currentTime)}
         </p>
       )}
     </div>
