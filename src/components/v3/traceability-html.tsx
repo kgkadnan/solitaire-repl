@@ -141,6 +141,7 @@ const TraceabilityHtml = () => {
 
 const RightStructure = ({ currentTime }: any) => {
   const [activeData, setActiveData] = useState<any>(null);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const matchedData = traceabilityData.find(
@@ -151,14 +152,25 @@ const RightStructure = ({ currentTime }: any) => {
     setActiveData(matchedData);
   }, [currentTime]);
 
+  useEffect(() => {
+    if (activeData) {
+      const timer = setTimeout(() => {
+        setIsVisible(true);
+      }, 1000);
+
+      return () => clearTimeout(timer); // Cleanup the timer if the component unmounts
+    }
+  }, [activeData]);
+  console.log(isVisible, 'jjjjj', activeData);
+
   return (
     <>
       {activeData && (
         <div
           key={activeData.header1}
-          className={`xl:w-[420px] lg:w-[320px] bg-[#FFFFFF57] p-[20px] flex flex-col rounded-[12px] xl:gap-1 transition-all duration-700 ease-in-out transform opacity-0 ${
-            activeData ? 'opacity-100 translate-x-0' : ''
-          }`}
+          className={`xl:w-[420px] lg:w-[320px] bg-[#FFFFFF57] p-[20px] flex flex-col rounded-[12px] xl:gap-1 transition-opacity duration-1000 ${
+            isVisible ? 'opacity-100' : 'opacity-25'
+          } `}
           style={{ boxShadow: 'var(--popups-shadow)', height: 'fit-content' }}
         >
           <p className="xl:text-[16px] lg:text-[14px] text-neutral900">
