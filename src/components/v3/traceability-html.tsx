@@ -177,7 +177,7 @@ const RightStructure = ({ currentTime }: any) => {
             </div>
             <div className="flex gap-2">
               <div className="min-w-[40px] xl:pl-[20px] lg:pl-[15px]">
-                <div className="border-l border-dotted border-gray-400 xl:h-[120%] lg:h-[110%] "></div>
+                <div className="border-l border-dotted border-gray-400 xl:h-[115%] lg:h-[110%] xl:mt-[-15px] lg:mt-[-10px]"></div>
               </div>
               {activeData.timeStart !== 0 ? (
                 <ol className="list-disc xl:pl-[20px] lg:pl-[10px] ">
