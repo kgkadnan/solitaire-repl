@@ -274,7 +274,7 @@ const calculateProgressHeight = (
   if (currentTime >= timeStart && currentTime <= timeEnd) {
     const duration = timeEnd - timeStart;
     const elapsedTime = currentTime - timeStart;
-    return `${(elapsedTime / duration) * 100}%`;
+    return `${((elapsedTime / duration) * 100).toFixed(0)}%`;
   } else if (currentTime > timeEnd) {
     return '100%';
   }
@@ -340,14 +340,14 @@ const LeftStructure = ({ currentTime }: { currentTime: number }) => {
         ))}
       {currentTime > 0 && (
         <p className="pl-[15px] text-[14px] text-neutral700">
-          {Math.min(
+          {calculateProgressHeight(0, 31, currentTime)}
+          {/* {Math.min(
             (traceabilityData.filter(trace => currentTime > trace.timeEnd)
               .length /
               traceabilityData.length) *
               100,
             100
-          ).toFixed(0)}
-          %
+          ).toFixed(0)} */}
         </p>
       )}
     </div>
