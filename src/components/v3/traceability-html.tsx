@@ -309,7 +309,6 @@ const calculateProgress = (
   return 0;
 };
 
-
 const LeftStructure = ({ currentTime }: { currentTime: number }) => {
   const [isVisible, setIsVisible] = useState(false);
   const sections = [
@@ -321,17 +320,19 @@ const LeftStructure = ({ currentTime }: { currentTime: number }) => {
   ];
   const maxPercentagePerSection = 20; // Maximum percentage for each section
 
-const calculateProgress = (start:any, end:any, currentTime:any) => {
-  if (currentTime < start) return 0;
-  if (currentTime >= end) return maxPercentagePerSection;
+  const calculateProgress = (start: any, end: any, currentTime: any) => {
+    if (currentTime < start) return 0;
+    if (currentTime >= end) return maxPercentagePerSection;
 
-  const sectionDuration = end - start;
-  const coveredDuration = currentTime - start;
-  return (coveredDuration / sectionDuration) * maxPercentagePerSection;
-};
+    const sectionDuration = end - start;
+    const coveredDuration = currentTime - start;
+    return (coveredDuration / sectionDuration) * maxPercentagePerSection;
+  };
 
   const [percentages, setPercentages] = useState(
-    sections.map(sec => calculateProgress(sec.timeStart, sec.timeEnd, currentTime))
+    sections.map(sec =>
+      calculateProgress(sec.timeStart, sec.timeEnd, currentTime)
+    )
   );
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -341,16 +342,16 @@ const calculateProgress = (start:any, end:any, currentTime:any) => {
     return () => clearTimeout(timer); // Cleanup the timer if the component unmounts
   }, []);
 
-
-
-
-const totalDuration = 30; // Total duration of the video in seconds
-
+  const totalDuration = 30; // Total duration of the video in seconds
 
   useEffect(() => {
-    setPercentages(sections.map(sec => calculateProgress(sec.timeStart, sec.timeEnd, currentTime)));
+    setPercentages(
+      sections.map(sec =>
+        calculateProgress(sec.timeStart, sec.timeEnd, currentTime)
+      )
+    );
   }, [currentTime]);
-  console.log(percentages,"percentages")
+  console.log(percentages, 'percentages');
   return (
     <div
       className={`flex flex-col gap-2 transition-opacity duration-1000 ${
@@ -426,7 +427,14 @@ const totalDuration = 30; // Total duration of the video in seconds
         ))}
       {currentTime > 0 && (
         <p className="pl-[15px] text-[14px] text-neutral700">
-          {(percentages[0]+percentages[1]+percentages[2]+percentages[3]+percentages[4]).toFixed(0)}%
+          {(
+            percentages[0] +
+            percentages[1] +
+            percentages[2] +
+            percentages[3] +
+            percentages[4]
+          ).toFixed(0)}
+          %
         </p>
       )}
     </div>
