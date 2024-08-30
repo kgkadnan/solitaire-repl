@@ -80,7 +80,7 @@ const TraceabilityHtml = () => {
         <source src="/v3/videos/traceability.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
-      <div className="absolute bottom-12 flex justify-between gap-4">
+      <div className="absolute bottom-14 flex justify-between gap-4">
         <div
           className="flex justify-around items-center h-[38px] bg-[#FFFFFF24] border-[white] rounded-[8px] px-[8px]  border-[1px] min-w-[150px]"
           style={{ boxShadow: 'var(--popups-shadow' }}
@@ -171,9 +171,6 @@ const RightStructure = ({ currentTime }: any) => {
           } `}
           style={{ boxShadow: 'var(--popups-shadow)', height: 'fit-content' }}
         >
-          <p className="xl:text-[16px] lg:text-[14px] text-neutral900">
-            Diamond Journey
-          </p>
           <div className="rounded-[8px] bg-[#ffffff] p-[12px] flex flex-col ">
             <div className="flex gap-2">
               <Image
