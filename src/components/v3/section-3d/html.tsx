@@ -110,7 +110,7 @@ const HtmlAnimation = () => {
         <div
           className={`relative w-[460px] h-[1200px] bg-no-repeat bg-contain transition-transform duration-700 ease-in-out z-10 ${
             phoneVisible
-              ? ' lg:translate-y-[-262px]  xl:translate-y-[-220px] 2xl:translate-y-[-220px] 3xl:translate-y-[-60px]'
+              ? ' lg:translate-y-[-262px]  xl:translate-y-[-205px] 2xl:translate-y-[-205px] 3xl:translate-y-[-60px]'
               : 'translate-y-full'
           }`}
           style={{
@@ -121,7 +121,7 @@ const HtmlAnimation = () => {
 
         {/* Scrolling Cards */}
         <div
-          className={`absolute  lg:top-[120px] xl:top-[170px] 2xl:top-[170px] 3xl:top-[330px]  left-1/2 transform -translate-x-1/2 w-[370px] h-[700px] overflow-hidden transition-transform duration-700 ease-in-out z-0 ${
+          className={`absolute  lg:top-[120px] xl:top-[180px] 2xl:top-[180px] 3xl:top-[330px]  left-1/2 transform -translate-x-1/2 w-[370px] h-[700px] overflow-hidden transition-transform duration-700 ease-in-out z-0 ${
             phoneVisible ? 'translate-y-0' : 'translate-y-full'
           }`}
           style={{
