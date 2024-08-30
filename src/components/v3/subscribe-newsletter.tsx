@@ -1,8 +1,9 @@
 'use client';
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
-import RegisterNow from '@public/v3/home/register-now.svg';
+// import Image from 'next/image';
+// import RegisterNow from '@public/v3/home/register-now.svg';
+import ShimmerButton from './animated-button';
 
 // import ShimmerButton from './animated-button';
 // import { InputField } from './input/input';
@@ -71,14 +72,20 @@ const SubscribeNewsLetter = () => {
           Subscribe
         </CommonButton>
       </div> */}
-      <div className="mb-[-30px]">
+      {/* <div className="mb-[-30px]">
         <Image
           src={RegisterNow}
           alt="register now"
           onClick={() => router.push('/v2/register')}
           className="cursor-pointer"
         />
-      </div>
+      </div> */}
+      <ShimmerButton
+        className="!rounded-[8px] w-[200px] h-[44px]"
+        onClick={() => router.push('/v2/register')}
+      >
+        Register Now
+      </ShimmerButton>
     </div>
   );
 };

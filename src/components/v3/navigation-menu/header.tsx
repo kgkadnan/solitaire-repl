@@ -6,7 +6,8 @@ import kgkLogo from '@public/v3/kgklogo.svg';
 import { usePathname, useRouter } from 'next/navigation';
 // import ShimmerButton from '../animated-button';
 import Image from 'next/image';
-import Register from '@public/v3/home/register.svg';
+// import Register from '@public/v3/home/register.svg';
+import ShimmerButton from '../animated-button';
 
 const CommonHeader = () => {
   const currentRoute = usePathname();
@@ -58,7 +59,7 @@ const CommonHeader = () => {
           />
           {NavigationMenuDemo(selectedHeader, setSelectedHeader)}
         </div>
-        <div className="flex gap-4 mt-[20px]">
+        <div className="flex gap-4 ">
           <CommonButton
             onClick={() => router.push('/v2/login')}
             variant={'secondary'}
@@ -67,21 +68,29 @@ const CommonHeader = () => {
           >
             Login
           </CommonButton>
-          <Image
+          {/* <CommonButton
+            onClick={() => router.push('/v2/register')}
+            variant={'prima'}
+            size={'custom'}
+            className="rounded-[8px] w-[80px] h-[44px]"
+          >
+            Register
+          </CommonButton> */}
+          {/* <Image
             src={Register}
             alt="register"
             onClick={() => {
               router.push('/v2/register');
             }}
             className="cursor-pointer"
-          />
+          /> */}
 
-          {/* <ShimmerButton
+          <ShimmerButton
             className="!rounded-[8px] w-[120px] h-[44px]"
             onClick={() => router.push('/v2/register')}
           >
             Register
-          </ShimmerButton> */}
+          </ShimmerButton>
         </div>
       </div>
     </div>
