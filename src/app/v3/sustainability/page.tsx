@@ -82,8 +82,8 @@ const App: React.FC = () => {
                     sustainabilitySection.filter(
                       data => data.id === carouselIndex
                     )[0].id === '03'
-                      ? 'mt-[40px]'
-                      : 'mt-[100px]'
+                      ? 'mt-[20px]'
+                      : 'mt-[60px]'
                   }`}
                 >
                   <div className="lg:text-headingM xl:text-headingL font-bold text-neutral900 leading-10">
@@ -165,6 +165,25 @@ const App: React.FC = () => {
                       )[0].description[1]
                     }
                   </p>
+                  <div className="flex flex-wrap gap-10">
+                    {/* {sustainabilitySection[0]} */}
+                    {sustainabilitySection[4]?.metadata?.map(figure => (
+                      <div className="flex items-start" key={figure.key}>
+                        {/* Gradient line */}
+                        <div className="w-[2px] h-full bg-gradient-to-b from-[#FFAD05] via-[#168B85] to-[#5995ED] mr-2 rounded-full"></div>
+
+                        {/* Text content */}
+                        <div className="flex flex-col w-[150px]">
+                          <p className="text-primaryMain text-headingM font-semiBold">
+                            {figure.value}
+                          </p>
+                          <p className="text-[12px] text-neutral600">
+                            {figure.key}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>

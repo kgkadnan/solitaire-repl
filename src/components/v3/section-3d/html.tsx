@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-// import ExploreNow from '@public/v3/home/explore.svg';
+import ExploreNow from '@public/v3/home/explore.svg';
 import { useRouter } from 'next/navigation';
 import US from '@public/v3/home/map/usa.svg';
 import India from '@public/v3/home/map/india.svg';
 import Belgium from '@public/v3/home/map/belgium.svg';
 import Dubai from '@public/v3/home/map/dubai.svg';
-import ShimmerButton from '../animated-button';
+// import ShimmerButton from '../animated-button';
 
 const HtmlAnimation = () => {
   const [phoneVisible, setPhoneVisible] = useState(false);
@@ -194,23 +194,24 @@ const HtmlAnimation = () => {
       >
         <div className="bg-white py-5 w-[800px] h-full relative flex flex-col justify-center items-center">
           <h1 className="text-[36px] text-neutral900 font-semiBold">
-            Trusted by Thousands of Buyers and Sellers
+            A trusted brand for Corporations, Wholesalers & Retailers across the
+            globe
           </h1>
-          <p className="text-[20px] text-[#475467] mb-[20px] px-[75px]">
+          {/* <p className="text-[20px] text-[#475467] mb-[20px] px-[75px]">
             The world’s largest and most trusted marketplace for diamonds!
-          </p>
-          {/* <Image
+          </p> */}
+          <Image
             src={ExploreNow}
             alt="explore now"
             onClick={() => router.push('/v2/register')}
             className="cursor-pointer"
-          /> */}
-          <ShimmerButton
+          />
+          {/* <ShimmerButton
             className="!rounded-[8px] w-[200px] h-[44px]"
             onClick={() => router.push('/v2/register')}
           >
             Explore Now!
-          </ShimmerButton>
+          </ShimmerButton> */}
         </div>
       </div>
     </div>

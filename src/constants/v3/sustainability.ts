@@ -158,7 +158,7 @@ export const sustainabilitySection = [
       },
       {
         key: 'Million Ltrs Water Recycled Annually',
-        value: '2+'
+        value: '5+'
       }
     ]
   },
@@ -178,8 +178,8 @@ KGK Botswana leads the charge in sustainable energy use with its impressive 462 
         value: '647,000+'
       },
       {
-        key: 'Annual Reduction of Carbon Footprint',
-        value: '300 tonnes'
+        key: 'Tonnes of Annual Reduction of Carbon Footprint',
+        value: '300+'
       }
     ]
   },
@@ -244,8 +244,8 @@ These diverse efforts, combined with our sustainable business practices, help cr
     color: '#E0E0E0',
     metadata: [
       {
-        key: 'Blood Transfused Annually',
-        value: '100 Units'
+        key: 'Units of Blood Transfused Annually',
+        value: '100+'
       }
     ]
   },
@@ -261,17 +261,7 @@ By implementing a robust 4R strategy (Reduce, Reuse, Recycle, Recover), we achie
 `,
     images: Sus12,
     head: Head12,
-    color: '#E8F5E9',
-    metadata: [
-      {
-        key: 'Assisted  girls with the skills to land a government job',
-        value: '1,500+'
-      },
-      {
-        key: 'Female employees in Botswana ',
-        value: '51%'
-      }
-    ]
+    color: '#E8F5E9'
   },
   {
     id: '13',
@@ -284,12 +274,12 @@ By implementing a robust 4R strategy (Reduce, Reuse, Recycle, Recover), we achie
     color: '#E0E0E0',
     metadata: [
       {
-        key: 'GHG Emission Factor for KGK Botswana from Scope 1 & Scope 2 Emissions',
-        value: '1.42 Tonnes Per Employee'
+        key: 'Tonnes Per Employee GHG Emission Factor for KGK Botswana from Scope 1 & Scope 2 Emissions',
+        value: '1.42+'
       },
       {
-        key: 'GHG Emission Factor for KGK Botswana from Scope 1 & Scope 2 Emissions',
-        value: '1.42 Tonnes Per Employee'
+        key: 'Million Litres Rainwater Harvesting and Grey Water Recycling Save Water Annually',
+        value: '7+'
       }
     ]
   },
@@ -304,12 +294,12 @@ By implementing a robust 4R strategy (Reduce, Reuse, Recycle, Recover), we achie
     color: '#E8F5E9',
     metadata: [
       {
-        key: 'Assisted  girls with the skills to land a government job',
-        value: '1,500+'
+        key: 'Trees Planted Annually',
+        value: '100+'
       },
       {
-        key: 'Female employees in Botswana ',
-        value: '51%'
+        key: 'Sq Metres of Green Cover',
+        value: '30,000+'
       }
     ]
   },
@@ -324,12 +314,16 @@ By implementing a robust 4R strategy (Reduce, Reuse, Recycle, Recover), we achie
     color: '#F4F4F4',
     metadata: [
       {
-        key: 'Assisted  girls with the skills to land a government job',
-        value: '1,500+'
+        key: 'Child Labour',
+        value: '0'
       },
       {
-        key: 'Female employees in Botswana ',
-        value: '51%'
+        key: 'Forced Labour',
+        value: '0'
+      },
+      {
+        key: 'Bribery',
+        value: '0'
       }
     ]
   },
@@ -343,16 +337,6 @@ By fostering these multifaceted relationships, we drive collective action toward
 `,
     images: Sus17,
     head: Head17,
-    color: '#DDEFF2',
-    metadata: [
-      {
-        key: 'Assisted  girls with the skills to land a government job',
-        value: '1,500+'
-      },
-      {
-        key: 'Female employees in Botswana ',
-        value: '51%'
-      }
-    ]
+    color: '#DDEFF2'
   }
 ];

@@ -1,17 +1,17 @@
 import Timeline1905 from '@public/v3/timeline/1905.png';
-import Timeline1915 from '@public/v3/timeline/1915.png';
-import Timeline1960 from '@public/v3/timeline/1960.png';
-import Timeline1962 from '@public/v3/timeline/1962.png';
-import Timeline1972 from '@public/v3/timeline/1972.png';
+// import Timeline1915 from '@public/v3/timeline/1915.png';
+// import Timeline1960 from '@public/v3/timeline/1960.png';
+// import Timeline1962 from '@public/v3/timeline/1962.png';
+// import Timeline1972 from '@public/v3/timeline/1972.png';
 import Timeline1975 from '@public/v3/timeline/1975.png';
 import Timeline1986 from '@public/v3/timeline/1986.png';
 import Timeline1997 from '@public/v3/timeline/1997.png';
 import Timeline2000 from '@public/v3/timeline/2000.png';
-import Timeline2009 from '@public/v3/timeline/2009.png';
+// import Timeline2009 from '@public/v3/timeline/2009.png';
 import Timeline2014 from '@public/v3/timeline/2014.png';
-import Timeline2015 from '@public/v3/timeline/2015.png';
-import Timeline2016 from '@public/v3/timeline/2016.png';
-import Timeline2018 from '@public/v3/timeline/2018.png';
+// import Timeline2015 from '@public/v3/timeline/2015.png';
+// import Timeline2016 from '@public/v3/timeline/2016.png';
+// import Timeline2018 from '@public/v3/timeline/2018.png';
 import Timeline2019 from '@public/v3/timeline/2019.png';
 import Timeline2021 from '@public/v3/timeline/2021.png';
 import Timeline2023 from '@public/v3/timeline/2023.png';
@@ -50,30 +50,30 @@ export const timelineData = [
     image: Timeline1905,
     year: '1905',
     content:
-      'Shri Keshrimal Kothari commenced the trading of colored gemstones between Jaipur, India, and Rangoon, Burma.'
+      'KGK Group started as a gemstone trading company, with sales offices in Hong Kong, New York, Chennai, and Jaipur.'
   },
-  {
-    image: Timeline1915,
-    year: '1915',
-    content: 'KGK expanded its trading of colored gemstones to Chennai, India.'
-  },
-  {
-    image: Timeline1960,
-    year: '1960',
-    content:
-      'Mr. Navrattan Kothari joined the KGK Group, marking a new era of leadership.'
-  },
-  {
-    image: Timeline1962,
-    year: '1962',
-    content:
-      'KGK established an office in Hong Kong, significantly expanding its global presence.'
-  },
-  {
-    image: Timeline1972,
-    year: '1972',
-    content: 'KGK launched colored gemstone operations in the USA.'
-  },
+  // {
+  //   image: Timeline1915,
+  //   year: '1915',
+  //   content: 'KGK expanded its trading of colored gemstones to Chennai, India.'
+  // },
+  // {
+  //   image: Timeline1960,
+  //   year: '1960',
+  //   content:
+  //     'Mr. Navrattan Kothari joined the KGK Group, marking a new era of leadership.'
+  // },
+  // {
+  //   image: Timeline1962,
+  //   year: '1962',
+  //   content:
+  //     'KGK established an office in Hong Kong, significantly expanding its global presence.'
+  // },
+  // {
+  //   image: Timeline1972,
+  //   year: '1972',
+  //   content: 'KGK launched colored gemstone operations in the USA.'
+  // },
   {
     image: Timeline1975,
     year: '1975',
@@ -93,35 +93,49 @@ export const timelineData = [
   {
     image: Timeline2000,
     year: '2000',
-    content: 'KGK established a diamond manufacturing unit in South Africa.'
+    content:
+      'KGK established a diamond manufacturing unit in South Africa, being one of the first diamond companies to expand manufacturing into Africa.'
   },
   {
-    image: Timeline2009,
-    year: '2009',
-    content: 'The first Entice boutique was launched in Jaipur, India.'
+    image: Timeline2000,
+    year: '2001',
+    content:
+      'KGK Group expanded its presence to Europe with a Sales office in the Diamond Capital of the world - Antwerp, Belgium.'
   },
+  {
+    image: Timeline2000,
+    year: '2005',
+    content:
+      'KGK Group opened their sales office in Dubai, United Arab Emirates.'
+  },
+  // {
+  //   image: Timeline2009,
+  //   year: '2009',
+  //   content: 'The first Entice boutique was launched in Jaipur, India.'
+  // },
   {
     image: Timeline2014,
     year: '2014',
-    content: 'KGK opened a diamond manufacturing unit in Botswana, Africa.'
-  },
-  {
-    image: Timeline2015,
-    year: '2015',
     content:
-      'KGK Diamonds Botswana Pty Ltd achieved De Beers Sightholder status.'
+      'KGK continued to expand its presence in the producer nations, establishing a manufacturing plant in Botswana.'
   },
-  {
-    image: Timeline2016,
-    year: '2016',
-    content:
-      'KGK unveiled its new corporate identity and launched a group website.'
-  },
-  {
-    image: Timeline2018,
-    year: '2018',
-    content: 'KGK inaugurated a diamond manufacturing facility in Namibia.'
-  },
+  // {
+  //   image: Timeline2015,
+  //   year: '2015',
+  //   content:
+  //     'KGK Diamonds Botswana Pty Ltd achieved De Beers Sightholder status.'
+  // },
+  // {
+  //   image: Timeline2016,
+  //   year: '2016',
+  //   content:
+  //     'KGK unveiled its new corporate identity and launched a group website.'
+  // },
+  // {
+  //   image: Timeline2018,
+  //   year: '2018',
+  //   content: 'KGK inaugurated a diamond manufacturing facility in Namibia.'
+  // },
   {
     image: Timeline2019,
     year: '2019',
@@ -136,7 +150,7 @@ export const timelineData = [
     image: Timeline2023,
     year: '2023',
     content:
-      'KGK established a diamond and jewelry manufacturing facility in Gaborone, Botswana.'
+      'KGK launched a diamond and jewellery manufacturing facility in Gaborone, Botswana.'
   }
 ];
 
@@ -144,7 +158,7 @@ export const leadership = [
   {
     name: 'Navrattan Kothari',
     image: Navrattan,
-    position: 'Patriarch (India)',
+    position: 'Patriarch (International)',
     description:
       'Mr Navrattan Kothari has managed KGK since 1962. Under his astute guidance KGK has evolved into a modern multinational that operates to world-class standards with state-of-the-art infrastructure. His leadership has enabled KGK to innovate and expand into numerous markets and achieve global growth and recognition. Mr Kothari has built a company that is inspired by life and humanity, which places the highest value on trust, integrity, ethics and corporate responsibility. As Patriarch, Mr Kothari steers the company and enlightens and inspires our team worldwide with his insights, experience and acumen.',
     linkedin: 'in/navrattan-kothari'
@@ -153,15 +167,17 @@ export const leadership = [
   {
     name: 'Sandeep Kothari',
     image: Sandeep,
-    position: 'Managing Director (India)',
-    description: `After joining the group in 1990, Sandeep became involved in diamond procurement and processing and was responsible for growing the business considerably worldwide. Now based in Antwerp, the world’s largest diamond centre, he has been instrumental in expanding our polished diamond sales in Europe. His many successful initiatives include developing trusted supplier relationships with world renowned mining companies.`,
+    position: 'Group Managing Director (International)',
+    description: `Sandeep joined the group in 1990 with a clear vision: to make KGK the largest diamond manufacturing company in the world. Driven by this goal, he played a pivotal role in expanding manufacturing into producer nations, setting a new standard in the industry. This strategic move had far-reaching effects, influencing both manufacturing and retail, and shaping a new narrative for the sector. Over his career, Sandeep has transformed KGK Diamonds from a 500-person company into a globally reputed enterprise with 14,000 employees worldwide.
+`,
     linkedin: 'in/sandeep-kothari-475a5314'
   },
   {
     name: 'Sanjay Kothari',
     image: Sanjay,
-    position: 'Vice Chairman (India)',
-    description: `Based in Hong Kong, Sanjay is taking the group to the next level of growth as we expand into new markets. He manages the gems and jewellery business, from mining to retail brands. His first initiative with the group involved establishing diamond manufacturing in Mumbai. Since then he has developed many verticals, including international sales and marketing, jewellery manufacturing, gemstone mining, jewellery retailing and real estate. He also leads the group’s IT and corporate identity initiatives.`,
+    position: 'Vice Chairman (International)',
+    description: `Based in Hong Kong, Sanjay is driving the group’s growth as we expand into new markets. He focuses on overseeing the jewellery business, including the luxury brand Entice, and several jewellery sales offices across East Asia, including Japan, China, and Bangkok. Additionally, he leads the development of the group’s real estate ventures, which include numerous large-scale projects across India. His work has been instrumental in establishing and expanding these key verticals.
+`,
     linkedin: 'in/sanjay-kothari-kgk/'
   },
   {
