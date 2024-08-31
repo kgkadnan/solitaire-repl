@@ -119,7 +119,9 @@ const HtmlAnimation = () => {
           style={{
             backgroundImage: `url('/v3/home/phone-skeleton.png')`,
             zIndex: 10, // Ensure phone skeleton is on top
-            transform:`${phoneVisible ? 'translateY(-220px)' : 'translateY(100vh)'}`
+            transform: `${
+              phoneVisible ? 'translateY(-220px)' : 'translateY(100vh)'
+            }`
           }}
         ></div>
 
@@ -190,18 +192,18 @@ const HtmlAnimation = () => {
           showBanner ? 'translate-y-0' : 'translate-y-full'
         }`}
         style={{
-          height: '240px',
+          height: '280px',
           zIndex: 999,
           boxShadow: '0 4px 20px rgba(44, 110, 110, 0.38)'
         }}
       >
-        <div className="bg-white py-5 w-[800px] h-full relative flex flex-col justify-center items-center">
-          <h1 className="text-[36px] text-neutral900 font-semiBold">
-            A Trusted Brand for Wholesalers & Retailers Globally
+        <div className="bg-white py-5 w-full h-full relative flex flex-col justify-center items-center">
+          <h1 className="xl:text-[52px] lg:text-[42px] text-neutral900 font-black">
+            A Trusted Brand for Businesses Globally
           </h1>
-          {/* <p className="text-[20px] text-[#475467] mb-[20px] px-[75px]">
-            The world’s largest and most trusted marketplace for diamonds!
-          </p> */}
+          <p className="xl:text-[36px] lg:text-[28px] text-neutral900  mb-[20px] font-semiBold">
+            Simplifying Diamond Buying with Our Seamless Platform
+          </p>
           <Image
             src={ExploreNow}
             alt="explore now"

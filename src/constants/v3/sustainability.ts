@@ -166,7 +166,7 @@ export const sustainabilitySection = [
     id: '07',
     header: 'Harnessing Solar Energy',
     imageTitle: 'Affordable &  <br/> Clean Energy',
-    description: `KGK Group is committed to advancing the global goal of affordable and clean energy by integrating sustainable practices across our operations, investing in renewable energy initiatives, and reducing our carbon footprint to foster a more energy-efficient and environmentally responsible future for the communities we serve.<br/>
+    description: `KGK Group is committed to advancing the global goal of affordable and clean energy by integrating sustainable practices across our operations, investing in renewable energy initiatives, and reducing our carbon footprint to foster a more energy-efficient and environmentally responsible future for the communities we serve.<br/><br/>
 KGK Botswana leads the charge in sustainable energy use with its impressive 462 kWh solar rooftop installation. This approach not only supports our ambitious sustainability goals but also sets a new industry standard for responsible energy consumption. We're continually exploring innovative ways to expand our renewable energy portfolio and minimize our environmental impact.
 `,
     images: Sus7,
@@ -235,7 +235,7 @@ KGK Botswana leads the charge in sustainable energy use with its impressive 462 
     id: '11',
     header: 'Jal Mahal reconstruction',
     imageTitle: 'Sustainable <br/> Cities & Communities',
-    description: `KGK Group contributes significantly to building sustainable cities and communities through various impactful initiatives. We've meticulously restored the historic Jal Mahal Palace, preserving vital cultural heritage while employing eco-friendly restoration practices. <br/>
+    description: `KGK Group contributes significantly to building sustainable cities and communities through various impactful initiatives. We've meticulously restored the historic Jal Mahal Palace, preserving vital cultural heritage while employing eco-friendly restoration practices. <br/><br/>
 Our comprehensive CSR activities include donating a solar rooftop to the Ramotswa Centre for Deaf Education, enhancing access to sustainable energy, and organizing annual blood donation for the National Blood Transfusion Laboratory of Botswana. 
 These diverse efforts, combined with our sustainable business practices, help create resilient, inclusive, and culturally rich communities. We believe in harmonizing cultural preservation with modern sustainability to build better living environments for all.
 `,
@@ -253,10 +253,10 @@ These diverse efforts, combined with our sustainable business practices, help cr
     id: '12',
     header: 'Championing Responsible Consumption and Production',
     imageTitle: 'Responsible <br/> Consumption & Production',
-    description: `KGK Group exemplifies responsible consumption and production through comprehensive initiatives across our operations. <br/>
-We participate in programs like TRACR, Sarine journey & Everledger to ensure proper traceability, authenticity & provenance of our diamonds. <br/>
+    description: `KGK Group exemplifies responsible consumption and production through comprehensive initiatives across our operations. <br/><br/>
+We participate in programs like TRACR, Sarine journey & Everledger to ensure proper traceability, authenticity & provenance of our diamonds. <br/><br/>
 Our Botswana facility utilises green energy, harvests rainwater, and employs efficient drip irrigation systems. We practice meticulous waste segregation, compost kitchen waste, and promote a zero-waste culture among our employees and stakeholders.
-<br/>
+<br/><br/>
 By implementing a robust 4R strategy (Reduce, Reuse, Recycle, Recover), we achieve material circularity, abiding the benchmarks for sustainable practices in the diamond industry. 
 `,
     images: Sus12,
@@ -331,8 +331,8 @@ By implementing a robust 4R strategy (Reduce, Reuse, Recycle, Recover), we achie
     id: '17',
     header: 'Building Partnerships for Sustainable Development',
     imageTitle: 'Partnerships <br/> for the Goals',
-    description: `KGK Group recognizes the transformative power of partnerships in achieving sustainable development goals. Our long-standing sightholdership with De Beers exemplifies our commitment to industry collaboration and sustainable practices. We actively contribute to economic growth in host countries like Namibia and Botswana by creating quality jobs and exporting value-added products. <br/>
-Our strategic partnerships extend to various organisations including OD College of Arts & Sciences, Business Botswana, and the American Business Council. <br/>
+    description: `KGK Group recognizes the transformative power of partnerships in achieving sustainable development goals. Our long-standing sightholdership with De Beers exemplifies our commitment to industry collaboration and sustainable practices. We actively contribute to economic growth in host countries like Namibia and Botswana by creating quality jobs and exporting value-added products. <br/><br/>
+Our strategic partnerships extend to various organisations including OD College of Arts & Sciences, Business Botswana, and the American Business Council. <br/><br/>
 By fostering these multifaceted relationships, we drive collective action towards sustainable development across multiple sectors and regions, leveraging shared expertise and resources to create lasting positive impact.
 `,
     images: Sus17,

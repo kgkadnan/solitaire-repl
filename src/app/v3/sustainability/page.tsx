@@ -93,13 +93,14 @@ const App: React.FC = () => {
                       )[0].header
                     }
                   </div>
-                  <div className="lg:text-mRegular xl:text-lRegular  text-neutral800">
-                    {
-                      sustainabilitySection.filter(
+                  <div
+                    className="lg:text-mRegular xl:text-lRegular  text-neutral800"
+                    dangerouslySetInnerHTML={{
+                      __html: sustainabilitySection.filter(
                         data => data.id === carouselIndex
                       )[0].description
-                    }
-                  </div>
+                    }}
+                  ></div>
                   {sustainabilitySection.filter(
                     data => data.id === carouselIndex
                   )[0].metadata && (
