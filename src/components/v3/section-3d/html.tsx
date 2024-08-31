@@ -110,7 +110,7 @@ const HtmlAnimation = () => {
         <div
           className={`relative w-[460px] h-[1200px] bg-no-repeat bg-contain transition-transform duration-700 ease-in-out z-10 ${
             phoneVisible
-              ? 'translate-y-[-210px] 2xl:translate-y-[-210px] lg:translate-y-[-290px]'
+              ? 'translate-y-[-210px] 2xl:translate-y-[-210px] lg:translate-y-[-290px] 1600px:translate-y-[-180px] 1920px:translate-y-[-180px]'
               : // ? ' lg:translate-y-[-262px]  xl:translate-y-[-200px] 2xl:translate-y-[-200px] 3xl:translate-y-[-60px]'
                 'translate-y-full'
           }`}
@@ -123,7 +123,7 @@ const HtmlAnimation = () => {
         {/* Scrolling Cards */}
         {/* lg:top-[120px] xl:top-[180px] 2xl:top-[180px] 3xl:top-[330px]  */}
         <div
-          className={`absolute  top-[170px] 2xl:top-[170px] lg:top-[90px]  left-1/2 transform -translate-x-1/2 w-[370px] h-[700px] overflow-hidden transition-transform duration-700 ease-in-out z-0 ${
+          className={`absolute 1600px:top-[205px]  top-[170px] 2xl:top-[170px] lg:top-[90px]  left-1/2 transform -translate-x-1/2 w-[370px] h-[700px] overflow-hidden transition-transform duration-700 ease-in-out z-0 ${
             phoneVisible ? 'translate-y-0' : 'translate-y-full'
           }`}
           style={{
@@ -194,8 +194,7 @@ const HtmlAnimation = () => {
       >
         <div className="bg-white py-5 w-[800px] h-full relative flex flex-col justify-center items-center">
           <h1 className="text-[36px] text-neutral900 font-semiBold">
-            A trusted brand for Corporations, Wholesalers & Retailers across the
-            globe
+            A Trusted Brand for Wholesalers & Retailers Globally
           </h1>
           {/* <p className="text-[20px] text-[#475467] mb-[20px] px-[75px]">
             The world’s largest and most trusted marketplace for diamonds!
