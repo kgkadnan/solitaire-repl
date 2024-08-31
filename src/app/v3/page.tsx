@@ -16,7 +16,7 @@ const Index = () => {
     <div className="relative ">
       {isHtml ? (
         <div className="flex flex-col">
-          <div className="overflow-hidden	w-full flex justify-center pt-[100px] bg-[#FCFDFD] ">
+          <div className="overflow-hidden	w-full flex justify-center pt-[80px] bg-[#FCFDFD] ">
             <HtmlAnimation />
           </div>
           <div className="xl:px-[112px] lg:px-[32px]  pb-[100px] flex flex-col bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom items-center">

@@ -81,7 +81,7 @@ const HtmlAnimation = () => {
   ];
 
   return (
-    <div className="relative w-full" style={{ height: 'calc(100vh - 50px)' }}>
+    <div className="relative w-full" style={{ height: 'calc(100vh - 80px)' }}>
       <div className="flex justify-around relative px-[50px]">
         {/* Left div */}
         <div
@@ -110,7 +110,7 @@ const HtmlAnimation = () => {
         <div
           className={`relative w-[460px] h-[1200px] bg-no-repeat bg-contain transition-transform duration-700 ease-in-out z-10 ${
             phoneVisible
-              ? 'translate-y-[-200px]'
+              ? 'translate-y-[-210px] 2xl:translate-y-[-210px] lg:translate-y-[-290px]'
               : // ? ' lg:translate-y-[-262px]  xl:translate-y-[-200px] 2xl:translate-y-[-200px] 3xl:translate-y-[-60px]'
                 'translate-y-full'
           }`}
@@ -123,7 +123,7 @@ const HtmlAnimation = () => {
         {/* Scrolling Cards */}
         {/* lg:top-[120px] xl:top-[180px] 2xl:top-[180px] 3xl:top-[330px]  */}
         <div
-          className={`absolute  top-[180px]  left-1/2 transform -translate-x-1/2 w-[370px] h-[700px] overflow-hidden transition-transform duration-700 ease-in-out z-0 ${
+          className={`absolute  top-[170px] 2xl:top-[170px] lg:top-[90px]  left-1/2 transform -translate-x-1/2 w-[370px] h-[700px] overflow-hidden transition-transform duration-700 ease-in-out z-0 ${
             phoneVisible ? 'translate-y-0' : 'translate-y-full'
           }`}
           style={{
@@ -143,7 +143,7 @@ const HtmlAnimation = () => {
                 <img
                   src={src}
                   alt={`Slide ${index + 1}`}
-                  className={`w-full mx-auto py-[8px] ${
+                  className={`w-full mx-auto py-[6px] ${
                     scrollIndex !== 0 && ''
                   }`}
                 />
@@ -187,7 +187,7 @@ const HtmlAnimation = () => {
           showBanner ? 'translate-y-0' : 'translate-y-full'
         }`}
         style={{
-          height: '260px',
+          height: '240px',
           zIndex: 999,
           boxShadow: '0 4px 20px rgba(44, 110, 110, 0.38)'
         }}
