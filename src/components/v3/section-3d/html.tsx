@@ -105,26 +105,29 @@ const HtmlAnimation = () => {
             ))}
           </div>
         </div>
-
+        {/* // phoneVisible
+            //   ? 'translate-y-[-210px] 2xl:translate-y-[-210px] lg:translate-y-[-290px] 1600px:translate-y-[-180px] 1920px:translate-y-[-180px]'
+            //   : // ? ' lg:translate-y-[-262px]  xl:translate-y-[-200px] 2xl:translate-y-[-200px] 3xl:translate-y-[-60px]'
+                // 'translate-y-[calc(1200px - 100vh)]'
+          // } */}
         {/* Phone Skeleton */}
         <div
-          className={`relative w-[460px] h-[1200px] bg-no-repeat bg-contain transition-transform duration-700 ease-in-out z-10 ${
-            phoneVisible
-              ? 'translate-y-[-210px] 2xl:translate-y-[-210px] lg:translate-y-[-290px] 1600px:translate-y-[-180px] 1920px:translate-y-[-180px]'
-              : // ? ' lg:translate-y-[-262px]  xl:translate-y-[-200px] 2xl:translate-y-[-200px] 3xl:translate-y-[-60px]'
-                'translate-y-full'
-          }`}
+          className={`relative w-[460px] h-[1200px] bg-no-repeat bg-contain transition-transform duration-700 ease-in-out z-10
+            
+            
+          `}
           style={{
             backgroundImage: `url('/v3/home/phone-skeleton.png')`,
-            zIndex: 10 // Ensure phone skeleton is on top
+            zIndex: 10, // Ensure phone skeleton is on top
+            transform:`${phoneVisible ? 'translateY(-220px)' : 'translateY(100vh)'}`
           }}
         ></div>
 
         {/* Scrolling Cards */}
         {/* lg:top-[120px] xl:top-[180px] 2xl:top-[180px] 3xl:top-[330px]  */}
         <div
-          className={`absolute 1600px:top-[205px]  top-[170px] 2xl:top-[170px] lg:top-[90px]  left-1/2 transform -translate-x-1/2 w-[370px] h-[700px] overflow-hidden transition-transform duration-700 ease-in-out z-0 ${
-            phoneVisible ? 'translate-y-0' : 'translate-y-full'
+          className={`absolute  left-1/2 transform -translate-x-1/2 w-[370px] h-[700px] overflow-hidden transition-transform duration-700 ease-in-out z-0 ${
+            phoneVisible ? 'translate-y-[170px]' : 'translate-y-full'
           }`}
           style={{
             zIndex: 0 // Ensure cards are beneath the phone skeleton
