@@ -251,9 +251,9 @@ const RightStructure = ({ currentTime }: any) => {
                     <li className="xl:text-[14px] lg:text-[10px] xl:leading-[20px] lg:leading-[14px]">
                       {activeData.data[2]}
                     </li>
-                    <li className="xl:text-[14px] lg:text-[10px] xl:leading-[20px] lg:leading-[14px]">
+                    {/* <li className="xl:text-[14px] lg:text-[10px] xl:leading-[20px] lg:leading-[14px]">
                       {activeData.data[3]}
-                    </li>
+                    </li> */}
                   </ol>
                 </div>
               )}
