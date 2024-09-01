@@ -9,6 +9,7 @@ const SmoothVideoPlayer = () => {
   const videoRef: any = useRef<HTMLVideoElement>(null);
   const [scrollPosition, setScrollPosition] = useState(1);
   const [isPlaying, setIsPlaying] = useState(true);
+  const targetRef = useRef<HTMLDivElement | null>(null);
 
   const handlePlayPause = () => {
     if (isPlaying) {
@@ -19,6 +20,33 @@ const SmoothVideoPlayer = () => {
     setIsPlaying(!isPlaying);
   };
 
+  useEffect(() => {
+    if (!targetRef.current || !videoRef.current) return;
+
+    const options = {
+      root: null, // Use the viewport as the root
+      rootMargin: '0px',
+      threshold: 0.5 // Trigger when 50% of the target is visible
+    };
+
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        // Play video when the target div is in view
+        videoRef.current?.play();
+      } else {
+        // Pause video when the target div is not in view
+        videoRef.current?.pause();
+      }
+    }, options);
+
+    observer.observe(targetRef.current);
+
+    return () => {
+      if (targetRef.current!) {
+        observer?.unobserve(targetRef.current!); // Clean up observer on component unmount
+      }
+    };
+  }, []);
   useEffect(() => {
     const handleScroll = () => {
       const videoElement = videoRef.current;
@@ -101,6 +129,7 @@ const SmoothVideoPlayer = () => {
           alt="video control"
         />
       </div>
+      <div className="absolute bottom-8 right-20" ref={targetRef}></div>
     </div>
   );
 };

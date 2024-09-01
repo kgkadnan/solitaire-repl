@@ -55,7 +55,7 @@ const CommonHeader = () => {
           <Image
             src={kgkLogo}
             alt="KGK logo"
-            onClick={() => router.push('/')}
+            onClick={() => router.push('/v3')}
           />
           {NavigationMenuDemo(selectedHeader, setSelectedHeader)}
         </div>

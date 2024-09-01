@@ -120,7 +120,6 @@ const TraceabilityHtml = () => {
         <div
           className="flex justify-around items-center h-[38px] bg-[#FFFFFF24] border-[white] rounded-[8px] px-[8px]  border-[1px] min-w-[150px]"
           style={{ boxShadow: 'var(--popups-shadow' }}
-          ref={targetRef}
         >
           {[
             { timeStart: 0, timeEnd: 3 },
@@ -167,6 +166,7 @@ const TraceabilityHtml = () => {
           style={{ boxShadow: 'var(--popups-shadow)' }}
         />
       </div>
+      <div className="absolute bottom-[50px]" ref={targetRef}></div>
       <div className="absolute flex justify-between w-full xl:px-[112px] lg:pl-[44px] lg:pr-[32px] xl:top-[150px] lg:top-[125px]">
         <LeftStructure currentTime={currentTime} />
         <RightStructure currentTime={currentTime} />
