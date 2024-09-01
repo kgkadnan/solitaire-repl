@@ -217,13 +217,12 @@ const HtmlAnimation = () => {
           boxShadow: '0 4px 20px rgba(44, 110, 110, 0.38)'
         }}
       >
-        <div className="bg-white pt-5 w-[1200px] h-full relative flex flex-col justify-center items-center">
+        <div className="bg-white pt-5 h-full relative flex flex-col justify-center items-center">
           <h1 className="xl:text-[52px] lg:text-[42px] text-neutral900 font-black leading-[48px]">
-            Retailers and wholesalers can directly access KGK's global diamond
-            inventory
+            Direct Access to KGK’s Global Diamond Inventory
           </h1>
           <p className="xl:text-[36px] lg:text-[28px] text-neutral900  mb-[20px] font-semiBold">
-            Create a Guest Account and Start Exploring Today
+            Retailers and Wholesalers: Create a Guest Account
           </p>
           <Image
             src={ExploreNow}
