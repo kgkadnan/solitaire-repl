@@ -331,7 +331,7 @@ const MatchPairTable = ({
 
                 if (isAlreadyOpenIndex >= 0 && isAlreadyOpenIndex !== null) {
                   router.push(
-                    `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
+                    `${Routes.MATCHING_PAIR}?active-tab=${SubRoutes.RESULT}-${
                       isAlreadyOpenIndex + 1
                     }`
                   );
@@ -359,7 +359,7 @@ const MatchPairTable = ({
                           label: ManageLocales('app.modal.manageTabs'),
                           handler: () => {
                             router.push(
-                              `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-1`
+                              `${Routes.MATCHING_PAIR}?active-tab=${SubRoutes.RESULT}-1`
                             );
                             modalSetState.setIsDialogOpen(false);
                           },
@@ -382,11 +382,11 @@ const MatchPairTable = ({
                   ];
 
                   localStorage.setItem(
-                    'Search',
+                    'MatchingPair',
                     JSON.stringify(localStorageData)
                   );
                   router.push(
-                    `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
+                    `${Routes.MATCHING_PAIR}?active-tab=${SubRoutes.RESULT}-${
                       data.length + 1
                     }`
                   );
@@ -449,7 +449,7 @@ const MatchPairTable = ({
       isSavedSearch: true,
       queryParams: yourSelection[activeTab - 1].queryParams
     };
-    localStorage.setItem('Search', JSON.stringify(yourSelection));
+    localStorage.setItem('MatchingPair', JSON.stringify(yourSelection));
     setSearchParameters(yourSelection);
     updateSavedSearch(updateSaveSearchData);
   };
