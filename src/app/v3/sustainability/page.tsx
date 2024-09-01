@@ -237,12 +237,14 @@ const App: React.FC = () => {
                     )[0].imageTitle
                   }
                   className={` w-full`}
-                  style={{
-                    userSelect: 'none',
-                    outline: 'none',
-                    WebkitUserDrag: 'none',
-                    userDrag: 'none'
-                  }}
+                  style={
+                    {
+                      userSelect: 'none',
+                      outline: 'none',
+                      WebkitUserDrag: 'none',
+                      userDrag: 'none'
+                    } as any
+                  }
                   draggable="false"
                   onContextMenu={e => e.preventDefault()} // Disable right-click
                 />
