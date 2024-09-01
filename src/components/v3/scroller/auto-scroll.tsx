@@ -27,6 +27,16 @@ const ScrollableSection = ({ section, onClick }: any) => (
           height={250}
           width={350}
           className="object-cover transition-transform duration-300 transform hover:scale-110"
+          style={
+            {
+              userSelect: 'none',
+              outline: 'none',
+              WebkitUserDrag: 'none',
+              userDrag: 'none'
+            } as any
+          }
+          draggable="false"
+          onContextMenu={e => e.preventDefault()}
         />
       </div>
     </div>

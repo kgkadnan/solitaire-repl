@@ -293,13 +293,31 @@ const App: React.FC = () => {
             src={Landscape}
             alt="download report background"
             className="w-full"
-            style={{ userSelect: 'none', outline: 'none' }}
+            style={
+              {
+                userSelect: 'none',
+                outline: 'none',
+                WebkitUserDrag: 'none',
+                userDrag: 'none'
+              } as any
+            }
+            draggable="false"
+            onContextMenu={e => e.preventDefault()}
           />
           <div className="absolute left-[38%] lg:top-[8%] xl:top-[15%] lg:w-[300px] xl:w-[350px] flex flex-col gap-2 text-neutral0">
             <Image
               src={DownloadReport}
               alt="download report"
-              style={{ userSelect: 'none', outline: 'none' }}
+              style={
+                {
+                  userSelect: 'none',
+                  outline: 'none',
+                  WebkitUserDrag: 'none',
+                  userDrag: 'none'
+                } as any
+              }
+              draggable="false"
+              onContextMenu={e => e.preventDefault()}
             />
             <div className="ml-[25px] mt-[-40px]">
               <p className="text-[16px]">
