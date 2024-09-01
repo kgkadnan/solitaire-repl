@@ -125,7 +125,10 @@ const BookAppointment: React.FC<IBookAppointment> = ({
   }, [appointmentPayload]);
 
   const handleSelectData = ({ date }: { date: string }) => {
-    setSelectedDate(Number(date));
+    if (Number(date) !== selectedDate) {
+      setSelectedDate(Number(date));
+      setSelectedSlot('');
+    }
   };
 
   const handleSelectSlot = ({ slot }: { slot: string }) => {
@@ -494,7 +497,10 @@ const BookAppointment: React.FC<IBookAppointment> = ({
                   ? handleRescheduleAppointment()
                   : handleAddMyAppointment();
               },
-              isDisable: !selectedSlot.length
+              isDisable:
+                !selectedSlot.length ||
+                (hasDataOnRescheduleAppointment() &&
+                  selectedSlot === rescheduleAppointmentData?.selectedSlot)
             }
           ]}
         />
