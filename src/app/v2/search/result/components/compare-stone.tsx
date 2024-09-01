@@ -504,8 +504,9 @@ const CompareStone = ({
         <ActionButton
           actionButtonData={[
             {
-              variant: 'secondary',
+              variant: !selectedCheckboxes.length ? 'disable' : 'secondary',
               label: 'Add to Cart',
+              isDisable: !selectedCheckboxes.length,
               handler: () => {
                 handleAddToCartFromCompareStone();
               }
@@ -514,6 +515,15 @@ const CompareStone = ({
             {
               variant: 'primary',
               label: ManageLocales('app.confirmStone.footer.confirmStone'),
+              isDisable: !Object.keys(
+                selectedCheckboxes.reduce(
+                  (obj, item) => {
+                    obj[item] = true;
+                    return obj;
+                  },
+                  {} as { [key: string]: boolean }
+                )
+              ).length,
               handler: () => {
                 // setIsCompare
                 const result = selectedCheckboxes.reduce(
