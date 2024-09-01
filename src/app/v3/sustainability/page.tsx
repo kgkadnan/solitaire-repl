@@ -81,7 +81,10 @@ const App: React.FC = () => {
                   className={`flex flex-col  gap-5 ${
                     sustainabilitySection.filter(
                       data => data.id === carouselIndex
-                    )[0].id === '03'
+                    )[0].id === '03' ||
+                    sustainabilitySection.filter(
+                      data => data.id === carouselIndex
+                    )[0].id === '16'
                       ? 'mt-[20px]'
                       : 'mt-[60px]'
                   }`}
@@ -104,7 +107,11 @@ const App: React.FC = () => {
                   {sustainabilitySection.filter(
                     data => data.id === carouselIndex
                   )[0].metadata && (
-                    <div className="flex flex-wrap gap-10">
+                    <div
+                      className={`flex flex-wrap  ${
+                        carouselIndex === '16' ? 'gap-5 pr-5' : 'gap-10'
+                      }`}
+                    >
                       {sustainabilitySection
                         .filter(data => data.id === carouselIndex)[0]
                         .metadata?.map(figure => (
@@ -135,37 +142,33 @@ const App: React.FC = () => {
                       )[0].header[0]
                     }
                   </h1>
-                  <p className="lg:text-mRegular xl:text-lRegular text-neutral800">
-                    {
-                      sustainabilitySection.filter(
-                        data => data.id === carouselIndex
-                      )[0].description[0]
-                    }
-                  </p>
-                  <div className="lg:text-mRegular xl:text-lRegular text-neutral800">
-                    For more details, visit&nbsp;
-                    <a
-                      href="https://www.khiltipari.org/"
-                      target="_blank"
-                      className="underline text-infoMain"
-                    >
-                      Khilti Pari Foundation.
-                    </a>
+                  <div className="flex flex-col gap-1">
+                    <p className="lg:text-mRegular xl:text-lRegular text-neutral800">
+                      {
+                        sustainabilitySection.filter(
+                          data => data.id === carouselIndex
+                        )[0].description[0]
+                      }
+                    </p>
+                    <div className="lg:text-mRegular xl:text-lRegular text-neutral800 pb-1">
+                      For more details, visit&nbsp;
+                      <a
+                        href="https://www.khiltipari.org/"
+                        target="_blank"
+                        className="underline text-infoMain"
+                      >
+                        Khilti Pari Foundation.
+                      </a>
+                    </div>
+
+                    <p className="lg:text-mRegular xl:text-lRegular text-neutral800">
+                      {
+                        sustainabilitySection.filter(
+                          data => data.id === carouselIndex
+                        )[0].description[1]
+                      }
+                    </p>
                   </div>
-                  <h1 className="lg:text-headingS xl:text-headingM font-bold text-neutral900 leading-8">
-                    {
-                      sustainabilitySection.filter(
-                        data => data.id === carouselIndex
-                      )[0].header[1]
-                    }
-                  </h1>
-                  <p className="text-lRegular text-neutral800">
-                    {
-                      sustainabilitySection.filter(
-                        data => data.id === carouselIndex
-                      )[0].description[1]
-                    }
-                  </p>
                   <div className="flex flex-wrap gap-10">
                     {/* {sustainabilitySection[0]} */}
                     {sustainabilitySection[4]?.metadata?.map(figure => (
@@ -189,7 +192,7 @@ const App: React.FC = () => {
               )}
             </div>
             <div
-              className=" flex flex-col rounded-[8px] px-[50px] pb-[50px] items-center pt-[20px] h-auto"
+              className=" flex flex-col rounded-[8px] px-[50px] pb-[50px] items-center pt-[20px] h-auto "
               style={{
                 height: 'fit-content',
                 width: 'calc(50% - 27px)',
@@ -233,7 +236,9 @@ const App: React.FC = () => {
                       data => data.id === carouselIndex
                     )[0].imageTitle
                   }
-                  className={` w-full `}
+                  className={` w-full`}
+                  style={{ userSelect: 'none', outline: 'none' }}
+
                   // width={100}
                   // height={100}
                 />
@@ -282,9 +287,14 @@ const App: React.FC = () => {
             src={Landscape}
             alt="download report background"
             className="w-full"
+            style={{ userSelect: 'none', outline: 'none' }}
           />
           <div className="absolute left-[38%] lg:top-[8%] xl:top-[15%] lg:w-[300px] xl:w-[350px] flex flex-col gap-2 text-neutral0">
-            <Image src={DownloadReport} alt="download report" />
+            <Image
+              src={DownloadReport}
+              alt="download report"
+              style={{ userSelect: 'none', outline: 'none' }}
+            />
             <div className="ml-[25px] mt-[-40px]">
               <p className="text-[16px]">
                 The report will be available in November 2024.
