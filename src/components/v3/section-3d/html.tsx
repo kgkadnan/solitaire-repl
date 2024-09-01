@@ -91,7 +91,7 @@ const HtmlAnimation = () => {
               : 'opacity-0 scale-90 translate-x-1/2'
           }`}
         >
-          <p className="text-[30px] font-semiBold text-neutral900">
+          <p className="text-[32px] font-semiBold text-neutral900 leading-[36px]">
             KGK Inventory Locations
           </p>
           <div className="flex gap-4">
@@ -100,7 +100,7 @@ const HtmlAnimation = () => {
                 <div className="w-[44px] h-[44px]">
                   <Image src={data.image} alt={data.name} />
                 </div>
-                <p className="text-[14px] text-neutral900">{data.name}</p>
+                <p className="text-[20px] text-neutral900">{data.name}</p>
               </div>
             ))}
           </div>
@@ -217,12 +217,13 @@ const HtmlAnimation = () => {
           boxShadow: '0 4px 20px rgba(44, 110, 110, 0.38)'
         }}
       >
-        <div className="bg-white pt-5 w-full h-full relative flex flex-col justify-center items-center">
-          <h1 className="xl:text-[52px] lg:text-[42px] text-neutral900 font-black">
-            A Trusted Brand for Businesses Globally
+        <div className="bg-white pt-5 w-[1200px] h-full relative flex flex-col justify-center items-center">
+          <h1 className="xl:text-[52px] lg:text-[42px] text-neutral900 font-black leading-[48px]">
+            Retailers and wholesalers can directly access KGK's global diamond
+            inventory
           </h1>
           <p className="xl:text-[36px] lg:text-[28px] text-neutral900  mb-[20px] font-semiBold">
-            Simplifying Diamond Buying with Our Seamless Platform
+            Create a Guest Account and Start Exploring Today
           </p>
           <Image
             src={ExploreNow}
