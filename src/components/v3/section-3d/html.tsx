@@ -116,11 +116,18 @@ const HtmlAnimation = () => {
           style={{
             backgroundImage: `url('/v3/home/phone-skeleton.png')`,
             zIndex: 10, // Ensure phone skeleton is on top
-            transform: `${
-              phoneVisible
-                ? 'translateY(calc(100vh - 1000px))'
-                : 'translateY(100vh)'
-            }`
+            // transform: `${
+            //   phoneVisible
+            //     ? 'translateY(calc(100vh - 1000px))'
+            //     : 'translateY(100vh)'
+            // }`
+            transform: phoneVisible
+              ? window.innerWidth >= 1280 // xl breakpoint (1280px and above)
+                ? 'translateY(calc(100vh - 950px))'
+                : window.innerWidth >= 1024 // lg breakpoint (1024px and above)
+                ? 'translateY(calc(100vh - 895px))'
+                : 'translateY(calc(100vh - 800px))' // Default for smaller screens
+              : 'translateY(100vh)'
           }}
         ></div>
 
@@ -134,11 +141,18 @@ const HtmlAnimation = () => {
           style={{
             zIndex: 0, // Ensure cards are beneath the phone skeleton
             // left:'35% !important',
-            transform: `${
-              phoneVisible
-                ? 'translateY(calc(100vh - 610px))'
-                : 'translateY(100vh)'
-            }`
+            // transform: `${
+            //   phoneVisible
+            //     ? 'translateY(calc(100vh - 610px))'
+            //     : 'translateY(100vh)'
+            // }`
+            transform: phoneVisible
+              ? window.innerWidth >= 1280 // xl breakpoint (1280px and above)
+                ? 'translateY(calc(100vh - 565px))'
+                : window.innerWidth >= 1024 // lg breakpoint (1024px and above)
+                ? 'translateY(calc(100vh - 510px))'
+                : 'translateY(calc(100vh - 410px))' // Default for smaller screens
+              : 'translateY(100vh)'
           }}
         >
           <ul
@@ -194,16 +208,16 @@ const HtmlAnimation = () => {
 
       {/* Banner that appears after the phone and cards scroll up */}
       <div
-        className={`absolute bottom-0 w-full text-center bg-white flex justify-center shadow-lg transition-transform duration-700 ease-in-out ${
+        className={`xl:h-[240px] lg:h-[190px] absolute bottom-0 w-full text-center bg-white flex justify-center shadow-lg transition-transform duration-700 ease-in-out ${
           showBanner ? 'translate-y-0' : 'translate-y-full'
         }`}
         style={{
-          height: '280px',
+          // height: '280px',
           zIndex: 999,
           boxShadow: '0 4px 20px rgba(44, 110, 110, 0.38)'
         }}
       >
-        <div className="bg-white py-5 w-full h-full relative flex flex-col justify-center items-center">
+        <div className="bg-white pt-5 w-full h-full relative flex flex-col justify-center items-center">
           <h1 className="xl:text-[52px] lg:text-[42px] text-neutral900 font-black">
             A Trusted Brand for Businesses Globally
           </h1>
@@ -214,7 +228,7 @@ const HtmlAnimation = () => {
             src={ExploreNow}
             alt="explore now"
             onClick={() => router.push('/v2/register')}
-            className="cursor-pointer"
+            className="cursor-pointer lg:w-[224px]"
           />
           {/* <ShimmerButton
             className="!rounded-[8px] w-[200px] h-[44px]"
