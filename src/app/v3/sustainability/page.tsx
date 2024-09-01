@@ -287,7 +287,7 @@ const App: React.FC = () => {
             <Image src={DownloadReport} alt="download report" />
             <div className="ml-[25px] mt-[-40px]">
               <p className="text-[16px]">
-                The report will be available starting in November 2024.
+                The report will be available in November 2024.
               </p>
             </div>
           </div>

@@ -227,7 +227,7 @@ KGK Botswana leads the charge in sustainable energy use with its impressive 462 
     metadata: [
       {
         key: 'African Employees from Sportsperson Fraternity',
-        value: '1200+'
+        value: '3%'
       }
     ]
   },
@@ -235,19 +235,17 @@ KGK Botswana leads the charge in sustainable energy use with its impressive 462 
     id: '11',
     header: 'Jal Mahal reconstruction',
     imageTitle: 'Sustainable <br/> Cities & Communities',
-    description: `KGK Group contributes significantly to building sustainable cities and communities through various impactful initiatives. We've meticulously restored the historic Jal Mahal Palace, preserving vital cultural heritage while employing eco-friendly restoration practices. <br/><br/>
-Our comprehensive CSR activities include donating a solar rooftop to the Ramotswa Centre for Deaf Education, enhancing access to sustainable energy, and organizing annual blood donation for the National Blood Transfusion Laboratory of Botswana. 
-These diverse efforts, combined with our sustainable business practices, help create resilient, inclusive, and culturally rich communities. We believe in harmonizing cultural preservation with modern sustainability to build better living environments for all.
+    description: `KGK Group contributes significantly to building sustainable cities and communities through various impactful initiatives. We've meticulously restored the historic Jal Mahal Palace, preserving vital cultural heritage while employing eco-friendly restoration practices.
 `,
     images: Sus11,
     head: Head11,
-    color: '#E0E0E0',
-    metadata: [
-      {
-        key: 'Units of Blood Transfused Annually',
-        value: '100+'
-      }
-    ]
+    color: '#E0E0E0'
+    // metadata: [
+    //   {
+    //     key: 'Units of Blood Transfused Annually',
+    //     value: '100+'
+    //   }
+    // ]
   },
   {
     id: '12',
