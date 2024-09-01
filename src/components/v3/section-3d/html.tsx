@@ -112,27 +112,33 @@ const HtmlAnimation = () => {
           // } */}
         {/* Phone Skeleton */}
         <div
-          className={`relative w-[460px] h-[1200px] bg-no-repeat bg-contain transition-transform duration-700 ease-in-out z-10
-            
-            
-          `}
+          className={`relative w-[460px] h-[1200px] bg-no-repeat bg-contain transition-transform duration-700 ease-in-out z-10  `}
           style={{
             backgroundImage: `url('/v3/home/phone-skeleton.png')`,
             zIndex: 10, // Ensure phone skeleton is on top
             transform: `${
-              phoneVisible ? 'translateY(-220px)' : 'translateY(100vh)'
+              phoneVisible
+                ? 'translateY(calc(100vh - 1000px))'
+                : 'translateY(100vh)'
             }`
           }}
         ></div>
 
         {/* Scrolling Cards */}
         {/* lg:top-[120px] xl:top-[180px] 2xl:top-[180px] 3xl:top-[330px]  */}
+        {/* ${
+            phoneVisible ? 'translate-y-[120px]' : 'translate-y-full'
+          } */}
         <div
-          className={`absolute  left-1/2 transform -translate-x-1/2 w-[370px] h-[700px] overflow-hidden transition-transform duration-700 ease-in-out z-0 ${
-            phoneVisible ? 'translate-y-[170px]' : 'translate-y-full'
-          }`}
+          className={`absolute  transform -translate-x-1/2 w-[370px] h-[700px] overflow-hidden transition-transform duration-700 ease-in-out z-0`}
           style={{
-            zIndex: 0 // Ensure cards are beneath the phone skeleton
+            zIndex: 0, // Ensure cards are beneath the phone skeleton
+            // left:'35% !important',
+            transform: `${
+              phoneVisible
+                ? 'translateY(calc(100vh - 610px))'
+                : 'translateY(100vh)'
+            }`
           }}
         >
           <ul
