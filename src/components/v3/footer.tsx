@@ -9,7 +9,7 @@ const Footer = () => {
   return (
     <div className="xl:px-[112px] lg:px-[32px] bg-[#F9FAFB] flex justify-between py-12">
       <p className="text-neutral500 ">
-        Copyright © {new Date().getFullYear()} KGK Live. All rights reserved.
+        Copyright © {new Date().getFullYear()} KGK Diamonds. All rights reserved.
       </p>
       <div className="flex gap-8">
         <a
