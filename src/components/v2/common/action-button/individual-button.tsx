@@ -14,7 +14,7 @@ const buttonVariants = cva(
         secondary:
           'border border-solid border-neutral200 border-[1px] bg-neutral0 text-neutral900',
         disable:
-          'border border-solid border-neutral200 border-[1px] bg-neutral0 text-neutral900',
+          'border border-solid border-neutral200  border-[1px] bg-neutral100 text-neutral400 !shadow-none cursor-not-allowed ',
         link: 'text-primary underline-offset-4 '
       },
       size: {

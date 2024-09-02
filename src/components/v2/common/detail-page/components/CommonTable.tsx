@@ -66,7 +66,6 @@ const ResponsiveTable: React.FC<IResponsiveTableProps> = ({
               className="font-medium sm:text-10px lg:text-[14px] leading-5 text-left text-rgba-101828"
             >
               {tableHead.map(column => {
-                console.log('column: ', column);
                 return (
                   <td
                     key={column.key}

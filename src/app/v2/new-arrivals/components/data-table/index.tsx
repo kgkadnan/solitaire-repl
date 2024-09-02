@@ -173,9 +173,10 @@ const NewArrivalDataTable = ({
   filterData,
   setBid,
   dispatch,
-  isLoading,
   setIsSkeletonLoading,
-  isSkeletonLoading
+  isSkeletonLoading,
+  isTabSwitch,
+  setIsTabSwitch
 }: any) => {
   // Fetching saved search data
 
@@ -305,12 +306,7 @@ const NewArrivalDataTable = ({
 
   const renderTopToolbar = ({ table }: any) => (
     <div>
-      <div
-        className={` border-neutral200 ${
-          (activeTab !== 2 || (activeTab === 2 && historyCount === 0)) &&
-          'border-b-[1px]'
-        }`}
-      >
+      <div className={` border-neutral200 border-b-[1px]`}>
         <Box
           sx={{
             display: 'flex',
@@ -496,7 +492,7 @@ const NewArrivalDataTable = ({
         </Box>
       </div>
 
-      {rows.length > 0 && activeTab !== 2 && (
+      {rows.length > 0 && (
         <NewArrivalCalculatedField
           rows={rows}
           selectedProducts={rowSelection}
@@ -530,7 +526,7 @@ const NewArrivalDataTable = ({
     </div>
   );
   useEffect(() => {
-    setIsLoading(false);
+    setIsTabSwitch(false);
   }, [paginatedData]);
 
   let isNudge = localStorage.getItem('show-nudge') === 'MINI';
@@ -538,7 +534,7 @@ const NewArrivalDataTable = ({
   //pass table options to useMaterialReactTable
   const table = useMaterialReactTable({
     columns,
-    data: isLoading ? [] : paginatedData, //must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
+    data: isTabSwitch ? [] : paginatedData, //must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
 
     getRowId: originalRow => originalRow.id,
     onRowSelectionChange: setRowSelection,
@@ -839,9 +835,7 @@ const NewArrivalDataTable = ({
             fontWeight: 500,
             textAlign:
               column.id === 'girdle_percentage' ? 'center !important' : 'left',
-            paddingRight: ['shape_full', 'location', 'details'].includes(
-              column.id
-            )
+            paddingRight: ['shape_full', 'details'].includes(column.id)
               ? '12px'
               : '0px'
           }

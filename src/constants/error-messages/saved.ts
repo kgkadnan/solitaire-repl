@@ -1,5 +1,7 @@
 export const MODIFY_SEARCH_STONES_EXCEEDS_LIMIT =
-  'Please modify your search, the stones exceeds the limit.';
+  'This saved search exceeds 300 stones. Please modify your search criteria and try again.';
+
+export const NO_PRODUCT_FOUND = 'No diamonds match your saved search criteria.';
 
 export const MAX_SEARCH_LIMIT_EXCEED =
   'Max search limit reached. Please remove existing searches';

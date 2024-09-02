@@ -1,9 +1,14 @@
-import { HOLD_STATUS, MEMO_STATUS } from '@/constants/business-logic';
+import {
+  AVAILABLE_STATUS,
+  HOLD_STATUS,
+  MEMO_STATUS
+} from '@/constants/business-logic';
 
 import {
   SELECT_STONE_TO_PERFORM_ACTION,
   SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH,
-  STONE_NOT_AVAILABLE
+  STONE_NOT_AVAILABLE,
+  STONE_NOT_AVAILABLE_MODIFY_SEARCH
 } from '@/constants/error-messages/confirm-stone';
 import { Dispatch, SetStateAction } from 'react';
 import { IProduct } from '../../interface';
@@ -37,6 +42,8 @@ interface IHandleConfirmStone {
   modalSetState?: any;
   router?: any;
   setIsLoading: any;
+  refreshSearchResults?: any;
+  setSelectedCheckboxes?: any;
 }
 export const handleConfirmStone = ({
   selectedRows,
@@ -52,7 +59,9 @@ export const handleConfirmStone = ({
   checkProductAvailability,
   modalSetState,
   router,
-  setIsLoading
+  setIsLoading,
+  refreshSearchResults,
+  setSelectedCheckboxes
 }: IHandleConfirmStone) => {
   let selectedIds = Object.keys(selectedRows);
   const hasMemoOut = selectedIds?.some(id => {
@@ -66,12 +75,21 @@ export const handleConfirmStone = ({
       row => row.id === id && row.diamond_status === HOLD_STATUS
     );
   });
+  // Check for stones with AVAILABLE_STATUS
+  const hasAvailable = selectedIds.some(id => {
+    return rows.some(
+      row => row.id === id && row.diamond_status === AVAILABLE_STATUS
+    );
+  });
 
-  if (hasMemoOut) {
+  if ((hasHold && hasAvailable) || (hasMemoOut && hasAvailable)) {
+    setErrorText(SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH);
+    setIsError(true);
+  } else if (hasMemoOut) {
     setErrorText(
       identifier === 'detailPage'
         ? STONE_NOT_AVAILABLE
-        : SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH
+        : STONE_NOT_AVAILABLE_MODIFY_SEARCH
     );
     setIsError(true);
   } else if (hasHold) {
@@ -79,7 +97,7 @@ export const handleConfirmStone = ({
     setErrorText(
       identifier === 'detailPage'
         ? STONE_NOT_AVAILABLE
-        : SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH
+        : STONE_NOT_AVAILABLE_MODIFY_SEARCH
     );
   } else if (selectedIds?.length) {
     setIsLoading(true);
@@ -133,7 +151,19 @@ export const handleConfirmStone = ({
                   label: ManageLocales('app.confirmStone.refreshSearchResults'),
                   handler: () => {
                     modalSetState.setIsDialogOpen(false);
-                    router.refresh();
+                    if (
+                      (identifier === 'dashboard' ||
+                        identifier === 'detailPage' ||
+                        identifier === 'compare-stone' ||
+                        identifier === 'match-pair-detail') &&
+                      refreshSearchResults
+                    ) {
+                      setSelectedCheckboxes && setSelectedCheckboxes([]);
+                      setIsLoading(true);
+                      refreshSearchResults();
+                    } else {
+                      router.refresh();
+                    }
                   },
                   customStyle: 'flex-1'
                 }

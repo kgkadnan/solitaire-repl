@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import React, { useState } from 'react';
-import keyIcon from '@public/v2/assets/icons/modal/password-lock.svg';
+import keyIcon from '@public/v2/assets/icons/modal/key.svg';
 import backArrow from '@public/v2/assets/icons/back-arrow.svg';
 
 import { ManageLocales } from '@/utils/v2/translate';

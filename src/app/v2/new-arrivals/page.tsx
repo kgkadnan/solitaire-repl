@@ -50,10 +50,15 @@ import { IAppointmentPayload } from '../my-appointments/page';
 import { useLazyGetAvailableMyAppointmentSlotsQuery } from '@/features/api/my-appointments';
 import {
   SELECT_STONE_TO_PERFORM_ACTION,
-  SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH
+  SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH,
+  STONE_NOT_AVAILABLE_MODIFY_SEARCH
 } from '@/constants/error-messages/confirm-stone';
 import BookAppointment from '../my-appointments/components/book-appointment/book-appointment';
-import { HOLD_STATUS, MEMO_STATUS } from '@/constants/business-logic';
+import {
+  AVAILABLE_STATUS,
+  HOLD_STATUS,
+  MEMO_STATUS
+} from '@/constants/business-logic';
 import { kycStatus } from '@/constants/enums/kyc';
 import BiddingSkeleton from '@/components/v2/skeleton/bidding';
 import { useAppDispatch, useAppSelector } from '@/hooks/hook';
@@ -79,6 +84,7 @@ const NewArrivals = () => {
   const [validImages, setValidImages] = useState<any>([]);
   const pathName = useSearchParams().get('path');
   const [isLoading, setIsLoading] = useState(false); // State to track loading
+  const [isTabSwitch, setIsTabSwitch] = useState(false); // State to track
   const [searchLoading, setSearchLoading] = useState(false);
 
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
@@ -111,8 +117,7 @@ const NewArrivals = () => {
           enableSorting:
             accessor !== 'shape_full' &&
             accessor !== 'details' &&
-            accessor !== 'fire_icon' &&
-            accessor !== 'location',
+            accessor !== 'fire_icon',
           minSize: 5,
           maxSize: accessor === 'details' ? 100 : 200,
           size: 5,
@@ -223,7 +228,8 @@ const NewArrivals = () => {
   const handleTabClick = (index: number) => {
     setActiveTab(index);
     if (index !== activeTab) {
-      setIsLoading(true);
+      // setIsLoading(true);
+      setIsTabSwitch(true);
     }
 
     setRowSelection({});
@@ -424,12 +430,21 @@ const NewArrivals = () => {
         setAppointmentPayload(data);
       });
 
-      if (hasMemoOut) {
+      // Check for stones with AVAILABLE_STATUS
+      const hasAvailable = selectedIds?.some((id: string) => {
+        const stone = data.find((row: any) => row?.id === id);
+        return stone?.diamond_status === AVAILABLE_STATUS;
+      });
+
+      if ((hasHold && hasAvailable) || (hasMemoOut && hasAvailable)) {
         setErrorText(SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH);
+        setIsError(true);
+      } else if (hasMemoOut) {
+        setErrorText(STONE_NOT_AVAILABLE_MODIFY_SEARCH);
         setIsError(true);
       } else if (hasHold) {
+        setErrorText(STONE_NOT_AVAILABLE_MODIFY_SEARCH);
         setIsError(true);
-        setErrorText(SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH);
       } else {
         const lotIdsWithCountry = selectedIds?.map((id: string) => {
           const foundProduct: any =
@@ -741,7 +756,7 @@ const NewArrivals = () => {
       {isError && (
         <Toast show={isError} message={errorText} isSuccess={false} />
       )}
-      {isLoading && <CustomKGKLoader />}
+      {(isLoading || isTabSwitch) && <CustomKGKLoader />}
 
       <ImageModal
         isOpen={isModalOpen}
@@ -863,11 +878,7 @@ const NewArrivals = () => {
                     : 'border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow'
                 } `}
               >
-                <div
-                  className={` ${
-                    isSkeletonLoading ? ' ' : 'border-[1px] border-neutral200'
-                  }  `}
-                >
+                <div>
                   <NewArrivalDataTable
                     dispatch={dispatch}
                     filterData={filterData}
@@ -888,6 +899,8 @@ const NewArrivals = () => {
                             (data: any) => data.accessorKey !== 'last_bid_date'
                           )
                     }
+                    isTabSwitch={isTabSwitch}
+                    setIsTabSwitch={setIsTabSwitch}
                     modalSetState={modalSetState}
                     setErrorText={setErrorText}
                     downloadExcel={downloadExcel}
@@ -904,7 +917,6 @@ const NewArrivals = () => {
                     }
                     isSkeletonLoading={isSkeletonLoading}
                     setIsSkeletonLoading={setIsSkeletonLoading}
-                    isLoading={isLoading}
                     activeCount={activeBid?.length}
                     setBid={setBid}
                     bidCount={bid?.length}

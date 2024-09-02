@@ -26,13 +26,18 @@ export interface IModalSetState {
   setIsInputDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function getInitials(name: string): string {
+function getInitials(name: string | null | undefined): string {
+  if (!name) {
+    return '';
+  }
+
   const salutations = ['Mr.', 'Ms.', 'Mrs.', 'Dr.', 'Prof.'];
   const initials = name
     .split(' ')
     .filter(word => !salutations.includes(word)) // Exclude salutations
     .map(word => word.charAt(0).toUpperCase())
     .join('');
+
   return initials;
 }
 interface IBookAppointment {
@@ -120,7 +125,10 @@ const BookAppointment: React.FC<IBookAppointment> = ({
   }, [appointmentPayload]);
 
   const handleSelectData = ({ date }: { date: string }) => {
-    setSelectedDate(Number(date));
+    if (Number(date) !== selectedDate) {
+      setSelectedDate(Number(date));
+      setSelectedSlot('');
+    }
   };
 
   const handleSelectSlot = ({ slot }: { slot: string }) => {
@@ -489,7 +497,10 @@ const BookAppointment: React.FC<IBookAppointment> = ({
                   ? handleRescheduleAppointment()
                   : handleAddMyAppointment();
               },
-              isDisable: !selectedSlot.length
+              isDisable:
+                !selectedSlot.length ||
+                (hasDataOnRescheduleAppointment() &&
+                  selectedSlot === rescheduleAppointmentData?.selectedSlot)
             }
           ]}
         />

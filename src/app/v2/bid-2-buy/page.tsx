@@ -69,6 +69,7 @@ const BidToBuy = () => {
   const [isLoading, setIsLoading] = useState(false); // State to track loading
   const [searchLoading, setSearchLoading] = useState(false);
   const [isSkeletonLoading, setIsSkeletonLoading] = useState(true);
+  const [isTabSwitch, setIsTabSwitch] = useState(false); // State to track
 
   const [checkStatus, setCheckStatus] = useState(false);
 
@@ -104,8 +105,7 @@ const BidToBuy = () => {
           enableSorting:
             accessor !== 'shape_full' &&
             accessor !== 'details' &&
-            accessor !== 'fire_icon' &&
-            accessor !== 'location',
+            accessor !== 'fire_icon',
           minSize: 5,
           maxSize: accessor === 'details' ? 100 : 200,
           size: 5,
@@ -240,7 +240,7 @@ const BidToBuy = () => {
 
   const handleTabClick = (index: number) => {
     if (index !== activeTab) {
-      setIsLoading(true);
+      setIsTabSwitch(true);
     }
     setActiveTab(index);
     setRowSelection({});
@@ -628,7 +628,7 @@ const BidToBuy = () => {
       {isError && (
         <Toast show={isError} message={errorText} isSuccess={false} />
       )}
-      {isLoading && <CustomKGKLoader />}
+      {(isLoading || isTabSwitch) && <CustomKGKLoader />}
 
       <ImageModal
         isOpen={isModalOpen}
@@ -744,11 +744,7 @@ const BidToBuy = () => {
                     : 'border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow'
                 } `}
               >
-                <div
-                  className={` ${
-                    isSkeletonLoading ? ' ' : 'border-[1px] border-neutral200'
-                  }  `}
-                >
+                <div>
                   <BidToBuyDataTable
                     dispatch={dispatch}
                     filterData={filterData}
@@ -789,6 +785,8 @@ const BidToBuy = () => {
                     }
                     activeCount={activeBid?.length}
                     bidCount={bid?.length}
+                    isTabSwitch={isTabSwitch}
+                    setIsTabSwitch={setIsTabSwitch}
                     historyCount={bidHistory?.data?.length}
                     socketManager={socketManager}
                     rowSelection={rowSelection}

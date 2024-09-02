@@ -66,6 +66,7 @@ const Search = () => {
       skip: !searchUrl
     }
   );
+
   useEffect(() => {
     let selection = JSON.parse(localStorage.getItem('Search')!) || [];
     const filteredSelection = selection.filter(

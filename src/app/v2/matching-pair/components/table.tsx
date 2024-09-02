@@ -27,10 +27,7 @@ import {
   useUpdateSavedSearchMutation
 } from '@/features/api/saved-searches';
 import { useEffect, useState } from 'react';
-import {
-  useCheckProductAvailabilityMutation,
-  useLazyGetProductCountQuery
-} from '@/features/api/product';
+import { useCheckProductAvailabilityMutation } from '@/features/api/product';
 import { constructUrlParams } from '@/utils/v2/construct-url-params';
 import {
   MAX_SAVED_SEARCH_COUNT,
@@ -54,6 +51,8 @@ import Breadcrum from '@/components/v2/common/search-breadcrum/breadcrum';
 import Tooltip from '@/components/v2/common/tooltip';
 import { Dropdown } from '@/components/v2/common/dropdown-menu';
 import Share from '@/components/v2/common/copy-and-share/share';
+import MathPairSkeleton from '@/components/v2/skeleton/match-pair';
+import { useLazyGetMatchingPairCountQuery } from '@/features/api/match-pair';
 
 const theme = createTheme({
   typography: {
@@ -191,13 +190,16 @@ const MatchPairTable = ({
   setCompareStoneData,
   setIsInputDialogOpen,
   handleCreateAppointment,
-  originalData
+  originalData,
+  setIsSkeletonLoading,
+  isSkeletonLoading
 }: any) => {
   // Fetching saved search data
   const router = useRouter();
   const [triggerSavedSearch] = useLazyGetAllSavedSearchesQuery({});
   const [checkProductAvailability] = useCheckProductAvailabilityMutation({});
-  let [triggerProductCountApi] = useLazyGetProductCountQuery();
+
+  let [triggerMatchingPairCountApi] = useLazyGetMatchingPairCountQuery();
   const [isDropDownOpen, setIsDropDownOpen] = useState(false);
   const handleDropdown = () => {
     setIsDropDownOpen(!isDropDownOpen);
@@ -240,6 +242,9 @@ const MatchPairTable = ({
     const newData = rows.slice(startIndex, endIndex);
     // Update the paginated data state
     setPaginatedData(newData);
+    if (newData.length > 0 && setIsSkeletonLoading) {
+      setIsSkeletonLoading(false);
+    }
   }, [
     rows,
     pagination.pageIndex, //re-fetch when page index changes
@@ -288,8 +293,8 @@ const MatchPairTable = ({
         }
 
         const searchUrl = constructUrlParams(searchData.meta_data);
-        setIsLoading(false);
-        triggerProductCountApi({ searchUrl })
+
+        triggerMatchingPairCountApi({ searchUrl })
           .then(response => {
             if (response?.data?.count > MAX_SAVED_SEARCH_COUNT) {
               setIsLoading(false);
@@ -325,7 +330,7 @@ const MatchPairTable = ({
 
                 if (isAlreadyOpenIndex >= 0 && isAlreadyOpenIndex !== null) {
                   router.push(
-                    `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
+                    `${Routes.MATCHING_PAIR}?active-tab=${SubRoutes.RESULT}-${
                       isAlreadyOpenIndex + 1
                     }`
                   );
@@ -353,7 +358,7 @@ const MatchPairTable = ({
                           label: ManageLocales('app.modal.manageTabs'),
                           handler: () => {
                             router.push(
-                              `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-1`
+                              `${Routes.MATCHING_PAIR}?active-tab=${SubRoutes.RESULT}-1`
                             );
                             modalSetState.setIsDialogOpen(false);
                           },
@@ -367,20 +372,20 @@ const MatchPairTable = ({
                   const localStorageData = [
                     ...data,
                     {
-                      saveSearchName: res.data.savedSearches[0].name,
+                      saveSearchName: searchData.name,
                       isSavedSearch: true,
                       searchId: response?.data?.search_id,
-                      queryParams: res.data.savedSearches[0].meta_data,
-                      id: res.data.savedSearches[0].id
+                      queryParams: searchData.meta_data,
+                      id: searchData.id
                     }
                   ];
 
                   localStorage.setItem(
-                    'Search',
+                    'MatchingPair',
                     JSON.stringify(localStorageData)
                   );
                   router.push(
-                    `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
+                    `${Routes.MATCHING_PAIR}?active-tab=${SubRoutes.RESULT}-${
                       data.length + 1
                     }`
                   );
@@ -388,6 +393,7 @@ const MatchPairTable = ({
               }
               setIsLoading(false);
             }
+            setIsLoading(false);
           })
           .catch(() => {
             setIsLoading(false);
@@ -439,11 +445,11 @@ const MatchPairTable = ({
     yourSelection[activeTab - 1] = {
       id: yourSelection[activeTab - 1]?.id,
       saveSearchName: yourSelection[activeTab - 1]?.saveSearchName,
-      searchId: matchingPairData?.search_id,
+      searchId: yourSelection[activeTab - 1]?.searchId,
       isSavedSearch: true,
       queryParams: yourSelection[activeTab - 1].queryParams
     };
-    localStorage.setItem('Search', JSON.stringify(yourSelection));
+    localStorage.setItem('MatchingPair', JSON.stringify(yourSelection));
     setSearchParameters(yourSelection);
     updateSavedSearch(updateSaveSearchData);
   };
@@ -486,6 +492,7 @@ const MatchPairTable = ({
       modalSetState,
       setRowSelection,
       router,
+      fromMatchingPair: true,
       setIsLoading: setIsLoading,
       page: 'Match_Pair'
     });
@@ -852,7 +859,9 @@ const MatchPairTable = ({
               <SavedSearchDropDown
                 handleClose={handleDropdown}
                 isOpen={isDropDownOpen}
-                options={searchList}
+                options={searchList.filter(
+                  (item: any) => item.is_matching_pair !== false
+                )}
                 onDropDownClick={onDropDownClick}
               />
             </div>
@@ -1080,6 +1089,7 @@ const MatchPairTable = ({
                     label: ManageLocales(
                       'app.search.actionButton.bookAppointment'
                     ),
+
                     handler: () => {
                       handleCreateAppointment();
                     },
@@ -1101,9 +1111,13 @@ const MatchPairTable = ({
 
   return (
     <>
-      <ThemeProvider theme={theme}>
-        <MaterialReactTable table={table} />
-      </ThemeProvider>
+      {isSkeletonLoading ? (
+        <MathPairSkeleton />
+      ) : (
+        <ThemeProvider theme={theme}>
+          <MaterialReactTable table={table} />
+        </ThemeProvider>
+      )}
     </>
   );
 };

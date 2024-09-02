@@ -2,9 +2,13 @@ import { constructUrlParams } from '@/utils/v2/construct-url-params';
 import { ISavedSearchData } from '../saved-search-interface';
 import {
   MAX_SAVED_SEARCH_COUNT,
-  MAX_SEARCH_TAB_LIMIT
+  MAX_SEARCH_TAB_LIMIT,
+  MIN_SAVED_SEARCH_COUNT
 } from '@/constants/business-logic';
-import { MODIFY_SEARCH_STONES_EXCEEDS_LIMIT } from '@/constants/error-messages/saved';
+import {
+  MODIFY_SEARCH_STONES_EXCEEDS_LIMIT,
+  NO_PRODUCT_FOUND
+} from '@/constants/error-messages/saved';
 import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
 import { ManageLocales } from '@/utils/v2/translate';
 import { ReactNode } from 'react';
@@ -26,7 +30,8 @@ export const handleCardClick = ({
   triggerProductCountApi,
   setDialogContent,
   setIsDialogOpen,
-  isMatchingPair
+  isMatchingPair,
+  setIsLoading
 }: {
   id: string;
   savedSearchData: ISavedSearchData[];
@@ -34,10 +39,11 @@ export const handleCardClick = ({
   triggerProductCountApi: any;
   setDialogContent: React.Dispatch<React.SetStateAction<ReactNode>>;
   setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   isMatchingPair?: boolean;
 }) => {
   // Filter the saved search data to get the clicked card's data
-
+  setIsLoading(true);
   const cardClickData: any = savedSearchData.filter(
     (items: ISavedSearchData) => {
       return items.id === id;
@@ -56,6 +62,7 @@ export const handleCardClick = ({
       );
       // Check if the product data count exceeds the maximum limit
       if (response?.data?.count > MAX_SAVED_SEARCH_COUNT) {
+        setIsLoading(false);
         setIsDialogOpen(true);
         setDialogContent(
           <CommonPoppup
@@ -63,6 +70,27 @@ export const handleCardClick = ({
             content={''}
             customPoppupBodyStyle="!mt-[70px]"
             header={MODIFY_SEARCH_STONES_EXCEEDS_LIMIT}
+            actionButtonData={[
+              {
+                variant: 'primary',
+                label: ManageLocales('app.modal.okay'),
+                handler: () => {
+                  setIsDialogOpen(false);
+                },
+                customStyle: 'flex-1 h-10'
+              }
+            ]}
+          />
+        );
+      } else if (response?.data?.count <= MIN_SAVED_SEARCH_COUNT) {
+        setIsLoading(false);
+        setIsDialogOpen(true);
+        setDialogContent(
+          <CommonPoppup
+            status="warning"
+            content={''}
+            customPoppupBodyStyle="!mt-[70px]"
+            header={NO_PRODUCT_FOUND}
             actionButtonData={[
               {
                 variant: 'primary',
@@ -168,6 +196,7 @@ export const handleCardClick = ({
                   }`
                 );
           }
+          setIsLoading(false);
         } else {
           // If no data in local storage, create a new entry and navigate to the search result page
           let localStorageData = [
@@ -191,6 +220,8 @@ export const handleCardClick = ({
             : router.push(
                 `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${1}`
               );
+
+          setIsLoading(false);
         }
       }
     }

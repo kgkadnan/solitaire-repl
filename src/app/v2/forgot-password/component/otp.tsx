@@ -2,7 +2,7 @@ import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import keyIcon from '@public/v2/assets/icons/modal/key.svg';
 import backArrow from '@public/v2/assets/icons/back-arrow.svg';
-
+import editNumber from '@public/v2/assets/icons/edit-number.svg';
 import { ManageLocales } from '@/utils/v2/translate';
 import { IndividualActionButton } from '@/components/v2/common/action-button/individual-button';
 import { useRouter } from 'next/navigation';
@@ -23,7 +23,9 @@ const OTPComponent = ({
   setDialogContent,
   setToken,
   setCurrentState,
-  token
+  token,
+  setIsLoading,
+  isLoading
 }: any) => {
   const router = useRouter();
   const [error, setError] = useState('');
@@ -59,13 +61,18 @@ const OTPComponent = ({
           {ManageLocales('app.forgotPassword')}
         </div>
 
-        <div className="text-mRegular text-neutral900">
-          OTP has been sent to {phoneNumber.phoneNumber}
+        <div className="text-mRegular text-neutral900 flex items-center justify-center gap-[3px]">
+          OTP has been sent to +{phoneNumber.countryCode}{' '}
+          {phoneNumber.phoneNumber}
           <div
             className="cursor-pointer"
-            onClick={() => setCurrentState('forgotPassword')}
+            onClick={() => {
+              setResendTimer(60);
+              setOtpValues(['', '', '', '', '', '']);
+              setCurrentState('forgotPassword');
+            }}
           >
-            Not My Number
+            <Image src={editNumber} alt="editNumber" width={16} height={16} />
           </div>
         </div>
 
@@ -90,7 +97,9 @@ const OTPComponent = ({
                     sendOtp,
                     setIsDialogOpen,
                     setDialogContent,
-                    setToken
+                    setToken,
+                    setOtpValues,
+                    setIsLoading
                   })
             }
           >
@@ -109,14 +118,18 @@ const OTPComponent = ({
                     setDialogContent,
                     verifyResetOTP,
                     phoneNumber,
-                    setToken
+                    setToken,
+                    setIsLoading
                   }),
                   setError(''))
                 : setError(
                     `We're sorry, but the OTP you entered is incorrect or has expired`
                   )
             }
-            variant={'primary'}
+            disabled={!checkOTPEntry(otpValues) || isLoading}
+            variant={
+              !checkOTPEntry(otpValues) || isLoading ? 'disable' : 'primary'
+            }
             size={'custom'}
             className="rounded-[4px] w-[100%]"
           >
@@ -124,7 +137,10 @@ const OTPComponent = ({
           </IndividualActionButton>
 
           <IndividualActionButton
-            onClick={() => router.push('/v2/login')}
+            onClick={() => {
+              setResendTimer(60);
+              router.push('/v2/login');
+            }}
             variant={'secondary'}
             size={'custom'}
             className="border-none w-[100%]"

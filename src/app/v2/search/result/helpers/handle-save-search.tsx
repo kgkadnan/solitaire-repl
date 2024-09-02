@@ -38,7 +38,7 @@ export const handleSaveSearch = async ({
 
     await addSavedSearch({
       name: saveSearchName,
-      diamond_count: parseInt(data?.count),
+      diamond_count: Number(data?.count),
       meta_data: parseData[activeTab - 1]?.queryParams,
       is_deleted: false,
       is_matching_pair: isMatchingPair
@@ -49,7 +49,7 @@ export const handleSaveSearch = async ({
           id: res?.id,
           saveSearchName,
           isSavedSearch: true,
-          searchId: data?.search_id,
+          searchId: parseData[activeTab - 1].searchId,
           queryParams: parseData[activeTab - 1].queryParams
         };
         isMatchingPair

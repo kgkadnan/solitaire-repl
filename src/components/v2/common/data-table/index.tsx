@@ -199,7 +199,8 @@ const DataTable = ({
   setIsDetailPage,
   handleCreateAppointment,
   setIsSkeletonLoading,
-  isSkeletonLoading
+  isSkeletonLoading,
+  refreshSearchResults
 }: any) => {
   // Fetching saved search data
   const router = useRouter();
@@ -297,13 +298,14 @@ const DataTable = ({
           let filteredData = savedSearchData.filter((savedSearch: any) => {
             return savedSearch.name.toLowerCase() === value.value.toLowerCase();
           })[0];
+
           searchData = filteredData;
         } else {
           searchData = res.data.savedSearches[0];
         }
 
         const searchUrl = constructUrlParams(searchData.meta_data);
-        setIsLoading(false);
+
         triggerProductCountApi({ searchUrl })
           .then(response => {
             if (response?.data?.count > MAX_SAVED_SEARCH_COUNT) {
@@ -380,11 +382,11 @@ const DataTable = ({
                   const localStorageData = [
                     ...data,
                     {
-                      saveSearchName: res.data.savedSearches[0].name,
+                      saveSearchName: searchData.name,
                       isSavedSearch: true,
                       searchId: response?.data?.search_id,
-                      queryParams: res.data.savedSearches[0].meta_data,
-                      id: res.data.savedSearches[0].id
+                      queryParams: searchData.meta_data,
+                      id: searchData.id
                     }
                   ];
 
@@ -401,6 +403,7 @@ const DataTable = ({
               }
               setIsLoading(false);
             }
+            setIsLoading(false);
           })
           .catch(() => {
             setIsLoading(false);
@@ -451,7 +454,7 @@ const DataTable = ({
     yourSelection[activeTab - 1] = {
       id: yourSelection[activeTab - 1]?.id,
       saveSearchName: yourSelection[activeTab - 1]?.saveSearchName,
-      searchId: data?.search_id,
+      searchId: yourSelection[activeTab - 1]?.searchId,
       isSavedSearch: true,
       queryParams: yourSelection[activeTab - 1].queryParams
     };
@@ -784,9 +787,7 @@ const DataTable = ({
             borderTop: '1px solid var(--neutral-200)',
             fontSize: '12px !important',
             fontWeight: 500,
-            paddingRight: ['shape_full', 'location', 'details'].includes(
-              column.id
-            )
+            paddingRight: ['shape_full', 'details'].includes(column.id)
               ? '12px'
               : '0px',
             textAlign:
@@ -896,7 +897,9 @@ const DataTable = ({
               <SavedSearchDropDown
                 handleClose={handleDropdown}
                 isOpen={isDropDownOpen}
-                options={searchList}
+                options={searchList.filter(
+                  (item: any) => item.is_matching_pair === false
+                )}
                 onDropDownClick={onDropDownClick}
               />
             </div>
@@ -1094,7 +1097,9 @@ const DataTable = ({
                             checkProductAvailability,
                             modalSetState,
                             router,
-                            setIsLoading
+                            identifier: 'dashboard',
+                            setIsLoading,
+                            refreshSearchResults
                           })
                         : handleConfirmStone({
                             selectedRows: rowSelection,

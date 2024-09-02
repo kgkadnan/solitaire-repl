@@ -24,6 +24,8 @@ import { formatNumber } from '@/utils/fix-two-digit-number';
 import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
 import { RednderLocation } from '@/components/v2/table/helpers/render-cell';
 import { useCheckProductAvailabilityMutation } from '@/features/api/product';
+import { HOLD_STATUS, MEMO_STATUS } from '@/constants/business-logic';
+import { getShapeDisplayName } from '@/utils/v2/detail-page';
 
 const CompareStone = ({
   rows,
@@ -43,16 +45,33 @@ const CompareStone = ({
   setConfirmStoneData,
   setIsDetailPage,
   isMatchingPair = false,
-  modalSetState
+  modalSetState,
+  refreshCompareStone
 }: any) => {
   const [mappingColumn, setMappingColumn] = useState<any>({});
   const [checkProductAvailability] = useCheckProductAvailabilityMutation({});
   const [breadCrumLabel, setBreadCrumLabel] = useState('');
+  const [imageLoadingStatus, setImageLoadingStatus] = useState<any>([]);
   const { checkboxState, checkboxSetState } = useCheckboxStateManagement();
   const { selectedCheckboxes } = checkboxState;
   const { setSelectedCheckboxes } = checkboxSetState;
   const [addCart] = useAddCartMutation();
   const router = useRouter();
+
+  useEffect(() => {
+    if (rows.length > 0) {
+      setImageLoadingStatus(new Array(rows.length).fill(true));
+    }
+  }, []);
+
+  const handleImageLoad = (index: number) => {
+    // Set the specific image as loaded
+    setImageLoadingStatus((prevState: any) => {
+      const newStatus = [...prevState];
+      newStatus[index] = false;
+      return newStatus;
+    });
+  };
 
   useEffect(() => {
     if (isFrom === 'My Cart') {
@@ -91,6 +110,9 @@ const CompareStone = ({
         updatedObj[obj.accessor] = obj.short_label; // Use the dynamic key to update the object
       }
     });
+    // Remove the 'details' key from updatedObj
+    delete updatedObj.details;
+
     setMappingColumn(updatedObj); // Update the state with the updated object
   }
 
@@ -109,6 +131,7 @@ const CompareStone = ({
   };
   const handleClose: HandleCloseType = (event, id) => {
     const filterData = rows.filter((item: IProduct) => item.id !== id);
+
     setCompareStoneData(filterData);
   };
   const handleAddToCartFromCompareStone = () => {
@@ -200,6 +223,31 @@ const CompareStone = ({
       // }
     }
   };
+  const renderLotId = (row: any) => {
+    let statusClass = '';
+    let borderClass = '';
+
+    if (row.diamond_status === MEMO_STATUS) {
+      statusClass = 'bg-legendMemoFill text-legendMemo';
+      borderClass = 'border-lengendMemoBorder border-[1px] px-[8px]';
+    } else if (row.diamond_status === HOLD_STATUS) {
+      statusClass = 'bg-legendHoldFill  text-legendHold';
+
+      borderClass = 'border-lengendHoldBorder border-[1px] px-[8px]';
+    } else if (row?.in_cart && Object.keys(row.in_cart).length) {
+      statusClass = 'bg-legendInCartFill text-legendInCart';
+      borderClass = 'border-lengendInCardBorder border-[1px] px-[8px]';
+    }
+    return (
+      <>
+        <span
+          className={`rounded-[4px] ${statusClass}   py-[3px] ${borderClass} `}
+        >
+          {row.lot_id}
+        </span>
+      </>
+    );
+  };
   const handleImageError = (event: any) => {
     event.target.src = NoImageFound.src; // Set the fallback image when the original image fails to load
   };
@@ -232,7 +280,7 @@ const CompareStone = ({
       <div className="flex  h-[calc(100%-120px)] overflow-auto border-t-[1px] border-b-[1px] border-neutral200">
         <div className="flex ">
           <div
-            className="sticky left-0  min-h-[2080px] text-neutral700 text-mMedium font-medium w-[175px] !z-5"
+            className="sticky left-0  min-h-[2024px] text-neutral700 text-mMedium font-medium w-[175px] !z-5"
             style={{ zIndex: 5 }}
           >
             <div className="h-[234px] sticky top-0  items-center flex px-4 border-[0.5px] border-neutral200 bg-neutral50">
@@ -249,14 +297,43 @@ const CompareStone = ({
               ))}
             </div>
           </div>
-          <div className=" bg-neutral0 text-neutral900 text-mMedium font-medium min-h-[2080px] !z-2">
+          <div className=" bg-neutral0 text-neutral900 text-mMedium font-medium min-h-[2024px] !z-2">
             <div className="flex h-[234px] sticky top-0 ">
-              {rows.map((items: IProduct) => (
+              {rows.map((items: IProduct, index: number) => (
                 <div key={items.id} className="w-[198px]">
                   <div
                     className={`h-[234px] flex flex-col border-[0.5px] border-neutral200 bg-neutral0 p-2 gap-[10px]`}
                   >
-                    <div className="w-[180px] h-[175px]">
+                    <div className="w-[180px] h-[175px] relative">
+                      {imageLoadingStatus[index] && (
+                        <div
+                          className={` w-[180px] h-[145px] absolute z-[2]  bg-[#F2F4F7]  flex flex-col gap-[6px] items-center justify-center`}
+                        >
+                          <div role="status">
+                            <svg
+                              aria-hidden="true"
+                              className="inline w-8 h-8 text-neutral200 animate-spin fill-primaryMain"
+                              viewBox="0 0 100 101"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                                fill="currentColor"
+                              />
+                              <path
+                                d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                                fill="currentFill"
+                              />
+                            </svg>
+                            <span className="sr-only">Loading...</span>
+                          </div>
+                          <div className="text-neutral900 font-medium text-sMedium">
+                            Loading {getShapeDisplayName(items?.shape ?? '')}
+                            &nbsp;Image...
+                          </div>
+                        </div>
+                      )}
                       <img
                         // className="!h-[175px] !w-[180px]"
                         src={`${FILE_URLS.IMG.replace(
@@ -270,7 +347,11 @@ const CompareStone = ({
                           () => {}
                           // handleCheckboxClick(items.id)
                         }
+                        onLoad={() => {
+                          handleImageLoad(index);
+                        }}
                         onError={e => {
+                          handleImageLoad(index);
                           handleImageError(e);
                         }}
                       />
@@ -327,7 +408,9 @@ const CompareStone = ({
                       className="py-2 px-4 border-[1px] border-neutral200 h-[38px] whitespace-nowrap overflow-hidden overflow-ellipsis  bg-neutral0"
                     >
                       {key !== 'id' ? (
-                        key === 'report_comments' ? (
+                        key === 'lot_id' ? (
+                          <div>{renderLotId(diamond)}</div>
+                        ) : key === 'report_comments' ? (
                           diamond[key]?.length > 0 ? (
                             diamond[key]?.toString()
                           ) : (
@@ -421,8 +504,9 @@ const CompareStone = ({
         <ActionButton
           actionButtonData={[
             {
-              variant: 'secondary',
+              variant: !selectedCheckboxes.length ? 'disable' : 'secondary',
               label: 'Add to Cart',
+              isDisable: !selectedCheckboxes.length,
               handler: () => {
                 handleAddToCartFromCompareStone();
               }
@@ -431,6 +515,15 @@ const CompareStone = ({
             {
               variant: 'primary',
               label: ManageLocales('app.confirmStone.footer.confirmStone'),
+              isDisable: !Object.keys(
+                selectedCheckboxes.reduce(
+                  (obj, item) => {
+                    obj[item] = true;
+                    return obj;
+                  },
+                  {} as { [key: string]: boolean }
+                )
+              ).length,
               handler: () => {
                 // setIsCompare
                 const result = selectedCheckboxes.reduce(
@@ -449,9 +542,12 @@ const CompareStone = ({
                   setConfirmStoneData,
                   setIsDetailPage,
                   router,
+                  identifier: 'compare-stone',
                   modalSetState,
                   checkProductAvailability,
-                  setIsLoading
+                  setIsLoading,
+                  setSelectedCheckboxes,
+                  refreshSearchResults: refreshCompareStone
                 });
               }
             }

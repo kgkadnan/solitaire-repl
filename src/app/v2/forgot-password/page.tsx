@@ -20,6 +20,7 @@ import ResetComponent from './component/reset-password';
 import { useGetCountryCodeQuery } from '@/features/api/current-ip';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import { ManageLocales } from '@/utils/v2/translate';
+import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 
 const initialTokenState = {
   token: '',
@@ -35,6 +36,7 @@ const ForgotPassword = () => {
   const [currentState, setCurrentState] = useState('forgotPassword');
   const { dialogContent, isDialogOpen } = modalState;
   const [phoneErrorText, setPhoneErrorText] = useState<string>('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const { setIsDialogOpen, setDialogContent } = modalSetState;
 
@@ -80,6 +82,7 @@ const ForgotPassword = () => {
   }, [currentCountryCode, error]);
 
   const handleForgotPassword = async () => {
+    setIsLoading(true);
     if (
       phoneNumber.phoneNumber.length &&
       isPhoneNumberValid(phoneNumber.phoneNumber)
@@ -122,8 +125,10 @@ const ForgotPassword = () => {
           />
         );
       }
+      setIsLoading(false);
     } else {
       setPhoneErrorText(INVALID_PHONE);
+      setIsLoading(false);
     }
   };
   const { otpVericationState, otpVerificationSetState } =
@@ -166,6 +171,8 @@ const ForgotPassword = () => {
             setResendTimer={setResendTimer}
             setToken={setToken}
             phoneNumber={phoneNumber}
+            setIsLoading={setIsLoading}
+            isLoading={isLoading}
           />
         );
       case 'resetPassword':
@@ -190,6 +197,7 @@ const ForgotPassword = () => {
             currentState === 'resetPassword' ? 'min-h-[250px]' : 'min-h-[222px]'
         }}
       />
+      {isLoading && <CustomKGKLoader />}
 
       <UserAuthenticationLayout
         formData={renderForgotPasswordContent()}

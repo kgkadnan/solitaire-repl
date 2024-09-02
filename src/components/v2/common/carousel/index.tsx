@@ -100,13 +100,13 @@ const DashboardCarousel: React.FC<IDashboardCarouselProps> = ({
                         className="w-full h-[400px] rounded-[8px]"
                         onError={handleImageError}
                       />
-                      <div className="absolute bottom-0 left-0 w-full min-h-[60px] bg-black bg-opacity-50 flex justify-between items-center rounded-b-[8px] text-neutral0 p-4">
+                      <div className="absolute bottom-0 left-0 w-full min-h-[48px] bg-black bg-opacity-50 flex justify-between items-center rounded-b-[8px] text-neutral0 p-4">
                         {/* <div className='flex justify-between'> */}
                         <div className="flex flex-col">
-                          <p className="text-headingS medium">
+                          <p className="text-lRegular font-medium">
                             {data.tag_line}
                           </p>
-                          <p className="text-lMedium medium">
+                          <p className="text-sMedium font-medium">
                             {data.description_line}
                           </p>
                         </div>
@@ -123,7 +123,8 @@ const DashboardCarousel: React.FC<IDashboardCarouselProps> = ({
                                   ? router.push(data.link)
                                   : window.open(data.link);
                               },
-                              customStyle: 'flex-1 w-full h-10 '
+                              customStyle: 'flex-1 w-full h-[34px] ',
+                              customCtaStyle: 'h-[34px]'
                             }
                           ]}
                         />
@@ -145,11 +146,13 @@ const DashboardCarousel: React.FC<IDashboardCarouselProps> = ({
                   className="w-full h-[400px] rounded-[8px]"
                   onError={handleImageError}
                 />
-                <div className="absolute bottom-0 left-0 w-full h-[60px] bg-black bg-opacity-50 flex justify-between items-center rounded-b-[8px] text-neutral0 p-4">
+                <div className="absolute bottom-0 left-0 w-full h-[48px] bg-black bg-opacity-50 flex justify-between items-center rounded-b-[8px] text-neutral0 p-4">
                   {/* <div className='flex justify-between'> */}
                   <div className="flex flex-col">
-                    <p className="text-headingS medium">{images[0].tag_line}</p>
-                    <p className="text-lMedium medium">
+                    <p className="text-lRegular font-medium">
+                      {images[0].tag_line}
+                    </p>
+                    <p className="text-sMedium font-medium">
                       {images[0].description_line}
                     </p>
                   </div>
@@ -166,7 +169,8 @@ const DashboardCarousel: React.FC<IDashboardCarouselProps> = ({
                             ? router.push(images[0].link)
                             : window.open(images[0].link);
                         },
-                        customStyle: 'flex-1 w-full h-10 '
+                        customStyle: 'flex-1 w-full h-[34px] ',
+                        customCtaStyle: 'h-[34px]  '
                       }
                     ]}
                   />
