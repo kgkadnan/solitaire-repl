@@ -492,6 +492,7 @@ const MatchPairTable = ({
       modalSetState,
       setRowSelection,
       router,
+      fromMatchingPair: true,
       setIsLoading: setIsLoading,
       page: 'Match_Pair'
     });
