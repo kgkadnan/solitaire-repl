@@ -3,6 +3,7 @@ import { createBaseQuery } from './base-query';
 
 export const savedSearchesApi = createApi({
   reducerPath: 'savedSearchReducer',
+
   baseQuery: createBaseQuery(),
   tagTypes: ['SavedSearch'],
 
@@ -52,5 +53,6 @@ export const {
   useUpdateSavedSearchMutation,
   useGetSavedSearchListQuery,
   useAddSavedSearchMutation,
-  useDeleteSavedSearchMutation
+  useDeleteSavedSearchMutation,
+  util
 } = savedSearchesApi;
