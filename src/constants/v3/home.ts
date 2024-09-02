@@ -79,6 +79,6 @@ export const traceabilityData = [
     icon: Icon5,
     indicator: Step5,
     timeStart: 27,
-    timeEnd: 30
+    timeEnd: 31
   }
 ];

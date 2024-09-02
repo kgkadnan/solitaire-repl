@@ -26,7 +26,7 @@ const TraceabilityHtml = () => {
   const targetRef = useRef<HTMLDivElement | null>(null);
 
   const handlePlayPause = () => {
-    if (videoRefHtml.current.currentTime >= 30) {
+    if (videoRefHtml.current.currentTime >= 31) {
       handleReferenceClick(0);
       videoRefHtml.current.play();
     } else if (videoRefHtml.current.paused) {
@@ -50,7 +50,7 @@ const TraceabilityHtml = () => {
 
   useEffect(() => {
     const updateCurrentTime = () => {
-      if (videoRefHtml.current?.currentTime >= 30) videoRefHtml.current.pause();
+      if (videoRefHtml.current?.currentTime >= 31) videoRefHtml.current.pause();
 
       setCurrentTime(videoRefHtml.current?.currentTime);
     };
@@ -95,9 +95,9 @@ const TraceabilityHtml = () => {
 
   const dotClasses = (timeStart: any, timeEnd: any, index: number) =>
     (currentTime >= timeStart && currentTime <= timeEnd) ||
-    (videoRefHtml.current?.currentTime >= 30 && index === 4)
+    (videoRefHtml.current?.currentTime >= 31 && index === 4)
       ? `bg-neutral400 relative w-8 rounded-[8px] ${
-          videoRefHtml.current?.currentTime >= 30 &&
+          videoRefHtml.current?.currentTime >= 31 &&
           index === 4 &&
           'bg-neutral700'
         }`
@@ -126,7 +126,7 @@ const TraceabilityHtml = () => {
             { timeStart: 3, timeEnd: 11 },
             { timeStart: 11, timeEnd: 17 },
             { timeStart: 17, timeEnd: 27 },
-            { timeStart: 27, timeEnd: 30 }
+            { timeStart: 27, timeEnd: 31 }
           ].map(({ timeStart, timeEnd }, index) => (
             <div
               key={`${timeStart}-${timeEnd}`}
@@ -155,7 +155,7 @@ const TraceabilityHtml = () => {
         <Image
           className="cursor-pointer "
           src={
-            videoRefHtml.current?.currentTime >= 30
+            videoRefHtml.current?.currentTime >= 31
               ? Restart
               : isPlaying
               ? Pause
@@ -332,7 +332,7 @@ const LeftStructure = ({ currentTime }: { currentTime: number }) => {
     { timeStart: 3, timeEnd: 11 },
     { timeStart: 11, timeEnd: 17 },
     { timeStart: 17, timeEnd: 27 },
-    { timeStart: 27, timeEnd: 30 }
+    { timeStart: 27, timeEnd: 31 }
   ];
   const maxPercentagePerSection = 20; // Maximum percentage for each section
 
