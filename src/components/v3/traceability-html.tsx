@@ -183,7 +183,7 @@ const RightStructure = ({ currentTime }: any) => {
     const matchedData = traceabilityData.find(
       (data, index) =>
         currentTime >= data.timeStart &&
-        (index === 4 ? currentTime <= 31 : currentTime <= data.timeEnd)
+        (index === 4 ? currentTime <= 32 : currentTime <= data.timeEnd)
     );
     setActiveData(matchedData);
   }, [currentTime]);
