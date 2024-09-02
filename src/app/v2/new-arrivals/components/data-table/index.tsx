@@ -173,9 +173,10 @@ const NewArrivalDataTable = ({
   filterData,
   setBid,
   dispatch,
-  isLoading,
   setIsSkeletonLoading,
-  isSkeletonLoading
+  isSkeletonLoading,
+  isTabSwitch,
+  setIsTabSwitch
 }: any) => {
   // Fetching saved search data
 
@@ -525,7 +526,7 @@ const NewArrivalDataTable = ({
     </div>
   );
   useEffect(() => {
-    setIsLoading(false);
+    setIsTabSwitch(false);
   }, [paginatedData]);
 
   let isNudge = localStorage.getItem('show-nudge') === 'MINI';
@@ -533,7 +534,7 @@ const NewArrivalDataTable = ({
   //pass table options to useMaterialReactTable
   const table = useMaterialReactTable({
     columns,
-    data: isLoading ? [] : paginatedData, //must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
+    data: isTabSwitch ? [] : paginatedData, //must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
 
     getRowId: originalRow => originalRow.id,
     onRowSelectionChange: setRowSelection,

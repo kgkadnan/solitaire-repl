@@ -84,6 +84,7 @@ const NewArrivals = () => {
   const [validImages, setValidImages] = useState<any>([]);
   const pathName = useSearchParams().get('path');
   const [isLoading, setIsLoading] = useState(false); // State to track loading
+  const [isTabSwitch, setIsTabSwitch] = useState(false); // State to track
   const [searchLoading, setSearchLoading] = useState(false);
 
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
@@ -227,7 +228,8 @@ const NewArrivals = () => {
   const handleTabClick = (index: number) => {
     setActiveTab(index);
     if (index !== activeTab) {
-      setIsLoading(true);
+      // setIsLoading(true);
+      setIsTabSwitch(true);
     }
 
     setRowSelection({});
@@ -754,7 +756,7 @@ const NewArrivals = () => {
       {isError && (
         <Toast show={isError} message={errorText} isSuccess={false} />
       )}
-      {isLoading && <CustomKGKLoader />}
+      {(isLoading || isTabSwitch) && <CustomKGKLoader />}
 
       <ImageModal
         isOpen={isModalOpen}
@@ -897,6 +899,8 @@ const NewArrivals = () => {
                             (data: any) => data.accessorKey !== 'last_bid_date'
                           )
                     }
+                    isTabSwitch={isTabSwitch}
+                    setIsTabSwitch={setIsTabSwitch}
                     modalSetState={modalSetState}
                     setErrorText={setErrorText}
                     downloadExcel={downloadExcel}
@@ -913,7 +917,6 @@ const NewArrivals = () => {
                     }
                     isSkeletonLoading={isSkeletonLoading}
                     setIsSkeletonLoading={setIsSkeletonLoading}
-                    isLoading={isLoading}
                     activeCount={activeBid?.length}
                     setBid={setBid}
                     bidCount={bid?.length}
