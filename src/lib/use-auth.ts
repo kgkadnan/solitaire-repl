@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { util } from '@/features/api/saved-searches';
 
 const useUser = () => {
+  const dispatch = useDispatch();
   const [authToken, setAuthToken] = useState<string | null>(null);
   const [isTokenChecked, setIsTokenChecked] = useState(false); // New state
 
@@ -20,6 +23,7 @@ const useUser = () => {
 
   const userLoggedOut = () => {
     setAuthToken(null);
+    dispatch(util.resetApiState());
     localStorage.removeItem('auth');
     localStorage.removeItem('user');
     localStorage.removeItem('Search');
