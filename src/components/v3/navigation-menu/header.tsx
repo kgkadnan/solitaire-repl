@@ -64,7 +64,7 @@ const CommonHeader = () => {
             onClick={() => router.push('/v2/login')}
             variant={'secondary'}
             size={'custom'}
-            className="rounded-[8px] w-[80px] h-[44px] border-primaryMain text-primaryMain"
+            className="rounded-[8px] w-[80px] h-[44px] border-primaryMain text-primaryMain text-[16px]"
             style={{ boxShadow: '0px 1px 2px 0px #1018281F' }}
           >
             Login
@@ -87,7 +87,7 @@ const CommonHeader = () => {
           /> */}
 
           <ShimmerButton
-            className="!rounded-[8px] w-[120px] h-[44px]"
+            className="!rounded-[8px] w-[120px] h-[44px] text-[16px]"
             onClick={() => router.push('/v2/register')}
             style={{ boxShadow: '0px 1px 2px 0px #1018281F' }}
           >
