@@ -69,6 +69,7 @@ const BidToBuy = () => {
   const [isLoading, setIsLoading] = useState(false); // State to track loading
   const [searchLoading, setSearchLoading] = useState(false);
   const [isSkeletonLoading, setIsSkeletonLoading] = useState(true);
+  const [isTabSwitch, setIsTabSwitch] = useState(false); // State to track
 
   const [checkStatus, setCheckStatus] = useState(false);
 
@@ -239,7 +240,7 @@ const BidToBuy = () => {
 
   const handleTabClick = (index: number) => {
     if (index !== activeTab) {
-      setIsLoading(true);
+      setIsTabSwitch(true);
     }
     setActiveTab(index);
     setRowSelection({});
@@ -627,7 +628,7 @@ const BidToBuy = () => {
       {isError && (
         <Toast show={isError} message={errorText} isSuccess={false} />
       )}
-      {isLoading && <CustomKGKLoader />}
+      {(isLoading || isTabSwitch) && <CustomKGKLoader />}
 
       <ImageModal
         isOpen={isModalOpen}
@@ -784,6 +785,8 @@ const BidToBuy = () => {
                     }
                     activeCount={activeBid?.length}
                     bidCount={bid?.length}
+                    isTabSwitch={isTabSwitch}
+                    setIsTabSwitch={setIsTabSwitch}
                     historyCount={bidHistory?.data?.length}
                     socketManager={socketManager}
                     rowSelection={rowSelection}

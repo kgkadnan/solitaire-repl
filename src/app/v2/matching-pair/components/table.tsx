@@ -27,10 +27,7 @@ import {
   useUpdateSavedSearchMutation
 } from '@/features/api/saved-searches';
 import { useEffect, useState } from 'react';
-import {
-  useCheckProductAvailabilityMutation,
-  useLazyGetProductCountQuery
-} from '@/features/api/product';
+import { useCheckProductAvailabilityMutation } from '@/features/api/product';
 import { constructUrlParams } from '@/utils/v2/construct-url-params';
 import {
   MAX_SAVED_SEARCH_COUNT,
@@ -55,6 +52,7 @@ import Tooltip from '@/components/v2/common/tooltip';
 import { Dropdown } from '@/components/v2/common/dropdown-menu';
 import Share from '@/components/v2/common/copy-and-share/share';
 import MathPairSkeleton from '@/components/v2/skeleton/match-pair';
+import { useLazyGetMatchingPairCountQuery } from '@/features/api/match-pair';
 
 const theme = createTheme({
   typography: {
@@ -200,7 +198,8 @@ const MatchPairTable = ({
   const router = useRouter();
   const [triggerSavedSearch] = useLazyGetAllSavedSearchesQuery({});
   const [checkProductAvailability] = useCheckProductAvailabilityMutation({});
-  let [triggerProductCountApi] = useLazyGetProductCountQuery();
+
+  let [triggerMatchingPairCountApi] = useLazyGetMatchingPairCountQuery();
   const [isDropDownOpen, setIsDropDownOpen] = useState(false);
   const handleDropdown = () => {
     setIsDropDownOpen(!isDropDownOpen);
@@ -295,7 +294,7 @@ const MatchPairTable = ({
 
         const searchUrl = constructUrlParams(searchData.meta_data);
         setIsLoading(false);
-        triggerProductCountApi({ searchUrl })
+        triggerMatchingPairCountApi({ searchUrl })
           .then(response => {
             if (response?.data?.count > MAX_SAVED_SEARCH_COUNT) {
               setIsLoading(false);
@@ -492,6 +491,7 @@ const MatchPairTable = ({
       modalSetState,
       setRowSelection,
       router,
+      fromMatchingPair: true,
       setIsLoading: setIsLoading,
       page: 'Match_Pair'
     });

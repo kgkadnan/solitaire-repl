@@ -173,7 +173,8 @@ const BidToBuyDataTable = ({
   dispatch,
   isSkeletonLoading,
   setIsSkeletonLoading,
-  isLoading
+  isTabSwitch,
+  setIsTabSwitch
 }: any) => {
   // Fetching saved search data
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -229,7 +230,7 @@ const BidToBuyDataTable = ({
   ]);
 
   useEffect(() => {
-    setIsLoading(false);
+    setIsTabSwitch(false);
   }, [paginatedData]);
 
   const toggleFullScreen = () => {
@@ -548,7 +549,7 @@ const BidToBuyDataTable = ({
   //pass table options to useMaterialReactTable
   const table = useMaterialReactTable({
     columns,
-    data: isLoading ? [] : paginatedData, //must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
+    data: isTabSwitch ? [] : paginatedData, //must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
 
     //state
     getRowId: originalRow => originalRow.id,
