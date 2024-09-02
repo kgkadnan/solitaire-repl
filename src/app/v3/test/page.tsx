@@ -1,14 +1,10 @@
-// import VideoScrollComponentNew from '@/components/v3/dummy';
-// import LandingPage from '@/components/v3/dummy';
-import VideoScrollComponent from '@/components/v3/video-scroll';
+import Tracebility3d from '@/components/v3/traceability-3d';
 import React from 'react';
 
 const page = () => {
   return (
     <div className="flex justify-center top-150">
-      <VideoScrollComponent />
-      {/* <VideoScrollComponentNew /> */}
-      {/* <LandingPage/> */}
+      <Tracebility3d />
     </div>
   );
 };
