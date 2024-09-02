@@ -24,11 +24,11 @@ export function filterBidData(data: any[], query: any): any[] {
           const symbols = query[key] as string[];
 
           if (searchType === 'contain') {
-            if (!symbols.some(symbol => item[key].includes(symbol))) {
+            if (symbols.some(symbol => item[key].includes(symbol))) {
               return false;
             }
           } else if (searchType === 'doesNotContain') {
-            if (symbols.some(symbol => item[key].includes(symbol))) {
+            if (!symbols.some(symbol => item[key].includes(symbol))) {
               return false;
             }
           }
