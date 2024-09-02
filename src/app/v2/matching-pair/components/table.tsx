@@ -293,7 +293,7 @@ const MatchPairTable = ({
         }
 
         const searchUrl = constructUrlParams(searchData.meta_data);
-        setIsLoading(false);
+
         triggerMatchingPairCountApi({ searchUrl })
           .then(response => {
             if (response?.data?.count > MAX_SAVED_SEARCH_COUNT) {
@@ -393,6 +393,7 @@ const MatchPairTable = ({
               }
               setIsLoading(false);
             }
+            setIsLoading(false);
           })
           .catch(() => {
             setIsLoading(false);
@@ -1088,6 +1089,7 @@ const MatchPairTable = ({
                     label: ManageLocales(
                       'app.search.actionButton.bookAppointment'
                     ),
+
                     handler: () => {
                       handleCreateAppointment();
                     },
