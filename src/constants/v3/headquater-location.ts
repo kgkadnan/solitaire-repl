@@ -10,7 +10,7 @@ import Belgium from '@public/v3/flags/belgium.svg';
 import NorthAmerica from '@public/v3/flags/north-america.svg';
 import Israel from '@public/v3/flags/israel.svg';
 import Dubai from '@public/v3/flags/dubai.svg';
-import Hongkong from '@public/v3/flags/hongkong.svg';
+import Hongkong1 from '@public/v3/flags/hongkong1.svg';
 
 import Avatar from '@public/v3/avatar/test.svg';
 import Vivek from '@public/v3/avatar/vivek.png';
@@ -75,7 +75,7 @@ export const HeadquaterLocation = [
       },
       {
         country: 'Hong Kong SAR',
-        flag: Hongkong,
+        flag: Hongkong1,
         name: 'Mr. Vivek Mehta',
         office: 'Hong Kong',
         phone: '+852-27332201',

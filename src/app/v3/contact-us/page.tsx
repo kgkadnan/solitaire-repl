@@ -29,6 +29,19 @@ import { useGetCountryCodeQuery } from '@/features/api/current-ip';
 const LocateUs = dynamic(() => import('../../../components/v3/locate-us'), {
   ssr: false
 });
+
+const preloadImages = (imageUrls: any[]): Record<string, string> => {
+  const preloaded: Record<string, string> = {};
+
+  imageUrls.forEach(url => {
+    const img = new window.Image();
+    img.src = url.src;
+    preloaded[url.src] = url; // Store the URL as a key-value pair
+  });
+
+  return preloaded;
+};
+
 const ContactUs = () => {
   const [selectedRegion, setSelectedRegion] = useState('ASIA PACIFIC');
   const [defaultCountry, setDefaultCountry] = useState('india');
@@ -54,6 +67,20 @@ const ContactUs = () => {
   const [officeCoords, setOfficeCoords] = useState<any>([]);
   const [, setTooltipData] = useState('KGK Office, BKC, Mumbai');
 
+  const [headOfficeImages, setHeadOfficeImages] = useState<
+    Record<string, string>
+  >({});
+
+  useEffect(() => {
+    const imagesToPreload = HeadquaterLocation.map(data =>
+      data.location.map(i => i.flag)
+    );
+    const preloaded = preloadImages(imagesToPreload.flat());
+    setHeadOfficeImages(preloaded);
+  }, []);
+
+
+
   useEffect(() => {
     if (currentCountryCode?.country_name) {
       let country = currentCountryCode?.country_name.toLowerCase();
@@ -70,11 +97,6 @@ const ContactUs = () => {
       } else if (country === 'belgium' || country === 'switzerland') {
         setSelectedRegion('EUROPE');
         setOfficeCoords([51.2158277, 4.4159125]); //final
-        // if (country === 'switzerland') {
-        //   setOfficeCoords([]);
-        // } else {
-        //   setOfficeCoords([51.2158277,4.4159125]);
-        // }
       } else if (country === 'south africa') {
         setSelectedRegion('AFRICA');
         setOfficeCoords([-26.2053825, 28.0536787]); //final
@@ -235,7 +257,12 @@ const ContactUs = () => {
                     <div className="flex gap-1  items-center">
                       <div className="w-[40px] flex justify-center">
                         <Image
-                          src={selectedPointer[0].kam.countryFlag}
+                          src={
+                            headOfficeImages[
+                              selectedPointer[0].kam.countryFlag.src
+                            ]
+                          }
+                          // src={selectedPointer[0].kam.countryFlag}
                           alt={`country flag image`}
                         />
                       </div>
@@ -357,7 +384,10 @@ const ContactUs = () => {
                   <div className="flex flex-col gap-[6px]">
                     <div className="flex gap-1">
                       <div className="w-10 flex items-center justify-center">
-                        <Image src={loc.flag} alt={loc.country} />
+                        <Image
+                          src={headOfficeImages[loc.flag.src]}
+                          alt={loc.country}
+                        />
                       </div>
                       <p className="font-semiBold text-headingS text-neutral600">
                         {loc.country}
