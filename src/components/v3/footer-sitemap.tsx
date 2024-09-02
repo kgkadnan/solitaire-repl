@@ -42,21 +42,25 @@ Bandra East, Mumbai - 400051`,
         <Image src={Globe} alt="KGK Globe presence" width={250} />
       </div>
       <div className="w-[70%] flex flex-col justify-center gap-2">
-        <Image src={kgkLogo} alt="KGK logo" />
+        <Image
+          src={kgkLogo}
+          alt="KGK logo"
+          className="ml-2 h-[48px] w-[36px]"
+        />
         <div className="flex justify-between">
           {/* <div className=" flex w-[60%]  justify-between gap-2"> */}
           {sitemap.map(site => (
             <div className="flex gap-4 flex-col" key={site.title}>
-              <p className="text-[#667085] text-mMedium font-semiBold">
+              <p className="text-[#667085] text-mMedium font-semiBold pl-2">
                 {site.title}
               </p>
-              <div className="flex flex-col gap-3">
+              <div className="flex flex-col gap-0">
                 {site.content.map(link => (
-                  <div className="flex gap-2" key={link.data}>
+                  <div className="flex" key={link.data}>
                     {' '}
                     <a
                       href={link.link}
-                      className="text-[#475467] hover:text-neutral900 text-lMedium"
+                      className="text-[#475467] hover:text-neutral900 hover:bg-neutral50 px-[8px] rounded-[8px] h-[38px] text-lMedium flex items-center"
                     >
                       {link.data}
                     </a>{' '}
