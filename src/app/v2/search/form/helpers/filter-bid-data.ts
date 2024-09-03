@@ -1,3 +1,5 @@
+import { keyToSymbolWithoutAll } from '@/constants/v2/form';
+
 export function filterBidData(data: any[], query: any): any[] {
   const skipKeys = ['key_to_symbol_search_type'];
   const girdleOrder = [
@@ -21,14 +23,22 @@ export function filterBidData(data: any[], query: any): any[] {
       if (Array.isArray(query[key])) {
         if (key === 'key_to_symbol') {
           const searchType = query['key_to_symbol_search_type'] as string;
-          const symbols = query[key] as string[];
+          let symbols = query[key] as string[];
+
+          if (symbols[0] === 'All') {
+            symbols = keyToSymbolWithoutAll;
+          }
 
           if (searchType === 'contain') {
-            if (symbols.some(symbol => item[key].includes(symbol))) {
+            if (
+              !symbols.some(symbol => {
+                return item[key].includes(symbol);
+              })
+            ) {
               return false;
             }
           } else if (searchType === 'doesNotContain') {
-            if (!symbols.some(symbol => item[key].includes(symbol))) {
+            if (symbols.some(symbol => item[key].includes(symbol))) {
               return false;
             }
           }
