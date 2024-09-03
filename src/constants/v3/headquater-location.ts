@@ -185,7 +185,9 @@ export const HeadquaterLocation = [
         image: Yizhak,
         initial: 'YV',
         phone: '+972-54977864',
-        country_name: 'Israel'
+        country_name: 'Israel',
+        office: 'Ramat Gan',
+
       }
     ]
   },
@@ -342,7 +344,7 @@ export const WorldMapPointers = [
       name: 'Yizhak Vachtel',
       postion: 'Key Account Manager',
       countryFlag: Israel,
-      location: 'Israel',
+      location: 'Ramat Gan, Israel',
       image: Yizhak,
       phone: '+972-54977864',
       email: 'yizhak.vachtel@kgkmail.com',
