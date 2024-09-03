@@ -1,20 +1,64 @@
 'use client';
 import ShimmerButton from '@/components/v3/animated-button';
+import AirpodsScrollAnimation from '@/components/v3/globe-animation';
 import HtmlAnimation from '@/components/v3/section-3d/html';
 // import AnimationSection from '@/components/v3/animated-text/scroll';
 // import IphoneAnimation from '@/components/v3/section-3d/iphone';
 import SmoothVideoPlayer from '@/components/v3/smooth-video';
+import Tracebility3d from '@/components/v3/traceability-3d';
 import TraceabilityHtml from '@/components/v3/traceability-html';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 const Index = () => {
-  const [isHtml, setIsHtml] = useState(true);
+  // const [isHtml, setIsHtml] = useState(true);
   const [isManufactureBlurred, setIsManufactureBlurred] = useState(true);
   const [isGlobalSalesBlurred, setIsGlobalSalesBlurred] = useState(true);
+  const [canScrollGlobal, setCanScrollGlobal] = useState(false);
+  const tracebilityRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const tracebilityElement = tracebilityRef.current;
+      if (tracebilityElement) {
+        const { scrollTop, scrollHeight, clientHeight } = tracebilityElement;
+
+        // If the user has scrolled to the bottom of Tracebility3d, allow global scrolling
+        if (scrollTop + clientHeight >= scrollHeight) {
+          setCanScrollGlobal(true);
+        }
+      }
+    };
+
+    const tracebilityElement = tracebilityRef.current;
+    if (tracebilityElement) {
+      tracebilityElement.addEventListener('scroll', handleScroll);
+    }
+
+    // Cleanup event listener
+    return () => {
+      if (tracebilityElement) {
+        tracebilityElement.removeEventListener('scroll', handleScroll);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const preventGlobalScroll = (event: any) => {
+      if (!canScrollGlobal) {
+        event.preventDefault();
+      }
+    };
+
+    window.addEventListener('scroll', preventGlobalScroll, { passive: false });
+
+    return () => {
+      window.removeEventListener('scroll', preventGlobalScroll);
+    };
+  }, [canScrollGlobal]);
 
   return (
     <div className="relative ">
-      {isHtml ? (
+      {true ? (
         <div className="flex flex-col">
           <div className="overflow-hidden	w-full flex justify-center pt-[80px] bg-[#FCFDFD] ">
             <HtmlAnimation />
@@ -73,25 +117,10 @@ const Index = () => {
                 className={` transition-all duration-300 ease-in-out ${
                   isManufactureBlurred ? 'filter blur-sm' : 'filter-none'
                 } absolute inset-0`}
+                ref={tracebilityRef}
+                style={{ height: 'fit-content' }}
               >
-                <div className="flex items-center justify-center flex-col h-full bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom">
-                  <p>This content is initially blurred.</p>
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Phasellus imperdiet, nulla nec auctor.
-                  </p>
-                  <p>This content is initially blurred.</p>
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Phasellus imperdiet, nulla nec auctor.
-                  </p>
-                  <p>This content is initially blurred.</p>
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Phasellus imperdiet, nulla nec auctor.
-                  </p>
-                  {/* More content here */}
-                </div>
+                <Tracebility3d />
               </div>
               {/* Overlay with CTA */}
               {isManufactureBlurred && (
@@ -134,24 +163,7 @@ const Index = () => {
                   isGlobalSalesBlurred ? 'filter blur-sm' : 'filter-none'
                 } absolute inset-0`}
               >
-                <div className="flex items-center justify-center flex-col h-full bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom">
-                  <p>This content is initially blurred.</p>
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Phasellus imperdiet, nulla nec auctor.
-                  </p>
-                  <p>This content is initially blurred.</p>
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Phasellus imperdiet, nulla nec auctor.
-                  </p>
-                  <p>This content is initially blurred.</p>
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Phasellus imperdiet, nulla nec auctor.
-                  </p>
-                  {/* More content here */}
-                </div>
+                <AirpodsScrollAnimation />
               </div>
               {/* Overlay with CTA */}
               {isGlobalSalesBlurred && (
@@ -190,14 +202,14 @@ const Index = () => {
       )}
 
       {/* Toggle Button */}
-      <div className="fixed bottom-2 left-2 right-0 w-[200px]">
+      {/* <div className="fixed bottom-2 left-2 right-0 w-[200px] z-999">
         <button
           onClick={() => setIsHtml(!isHtml)}
           className=" rounded text-neutral600 text-[12px]"
         >
           Switch to {isHtml ? '3D' : 'HTML'} version
         </button>
-      </div>
+      </div> */}
     </div>
   );
 };

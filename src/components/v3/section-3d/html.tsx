@@ -213,7 +213,7 @@ const HtmlAnimation = () => {
         }`}
         style={{
           // height: '280px',
-          zIndex: 999,
+          zIndex: 10,
           boxShadow: '0 4px 20px rgba(44, 110, 110, 0.38)'
         }}
       >
