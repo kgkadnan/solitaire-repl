@@ -212,7 +212,7 @@ const HtmlAnimation = () => {
             >
               50K+
             </span>
-            <p className="text-[20px] text-neutral900">Stones in Stock</p>
+            <p className="text-[20px] text-neutral900">Stones in Inventory</p>
           </div>
         </div>
       </div>
