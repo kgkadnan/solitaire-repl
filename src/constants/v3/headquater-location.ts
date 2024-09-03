@@ -158,7 +158,7 @@ export const HeadquaterLocation = [
         phone: '+41-796796041',
         email: 'patrik@kgksuisse.ch',
         image: Patrik,
-        initial: 'P',
+        initial: 'PS',
         country_name: 'Switzerland'
       }
     ]
@@ -186,8 +186,7 @@ export const HeadquaterLocation = [
         initial: 'YV',
         phone: '+972-54977864',
         country_name: 'Israel',
-        office: 'Ramat Gan',
-
+        office: 'Ramat Gan'
       }
     ]
   },
@@ -248,7 +247,7 @@ export const WorldMapPointers = [
       image: Patrik,
       phone: '+41-796796041',
       email: 'patrik@kgksuisse.ch',
-      initial: 'P',
+      initial: 'PS',
       country: 'Switzerland'
     }
   },
