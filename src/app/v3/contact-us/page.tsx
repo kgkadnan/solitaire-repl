@@ -201,7 +201,10 @@ const ContactUs = () => {
         <div className="min-h-[800px] flex items-center justify-center">
           <div className="flex flex-wrap flex-col gap-12 pt-[160px] pb-[80px] justify-between items-center">
             <div className=" text-neutral900 text-[96px] font-bold text-center items-center  line leading-[110px] flowy-animate px-10 w-[1100px]">
-              <AnimationSection> We’d love to hear from you</AnimationSection>
+              <AnimationSection>
+                {' '}
+                We would love to hear from you
+              </AnimationSection>
             </div>
             <div className="flex flex-col gap-3 px-[40px] items-center">
               <div className="text-neutral800 text-lRegular text-center w-[800px] content">

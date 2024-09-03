@@ -89,7 +89,7 @@ const HtmlAnimation = () => {
 
   return (
     <div className="relative w-full" style={{ height: 'calc(100vh - 80px)' }}>
-      <div className="flex justify-around relative px-[50px]">
+      <div className="flex justify-between relative xl:px-[112px] lg:px-[32px]">
         {/* Left div */}
         <div
           className={`flex flex-col gap-4 mt-[100px] w-[250px] transition-opacity duration-700 ease-in-out transform ${
@@ -122,10 +122,10 @@ const HtmlAnimation = () => {
           // } */}
         {/* Phone Skeleton */}
         <div
-          className={`relative w-[460px] h-[1200px] bg-no-repeat bg-contain transition-transform duration-700 ease-in-out z-10  `}
+          className={`relative w-[460px] h-[1200px] bg-no-repeat bg-contain transition-transform duration-700 ease-in-out z-10  flex justify-center`}
           style={{
             backgroundImage: `url('/v3/home/phone-skeleton.png')`,
-            zIndex: 10, // Ensure phone skeleton is on top
+            zIndex: '10 !important', // Ensure phone skeleton is on top
             // transform: `${
             //   phoneVisible
             //     ? 'translateY(calc(100vh - 1000px))'
@@ -139,70 +139,66 @@ const HtmlAnimation = () => {
                 : 'translateY(calc(100vh - 800px))' // Default for smaller screens
               : 'translateY(100vh)'
           }}
-        ></div>
+        >
+          <div
+            className={`absolute  transform -translate-x-1/2 w-[370px] h-[700px] overflow-hidden transition-transform duration-700 ease-in-out z-0 flex flex-col items-center`}
+            style={{
+              zIndex: -1, // Ensure cards are beneath the phone skeleton
+
+              transform: phoneVisible
+                ? window.innerWidth >= 1280 // xl breakpoint (1280px and above)
+                  ? 'translateY(calc(100vh - 350px))'
+                  : window.innerWidth >= 1024 // lg breakpoint (1024px and above)
+                  ? 'translateY(calc(100vh - 250px))'
+                  : 'translateY(calc(100vh - 410px))' // Default for smaller screens
+                : 'translateY(100vh)'
+            }}
+          >
+            <ul
+              className="list-none p-0 transition-transform duration-700 ease-in-out"
+              style={{
+                transform: `translateY(-${
+                  scrollIndex * (100 / imageList.length)
+                }%)` // Adjust scroll position
+              }}
+            >
+              {imageList.map((src, index) => (
+                <li key={index}>
+                  <img
+                    src={src}
+                    alt={`Slide ${index + 1}`}
+                    className={`w-full mx-auto py-[6px] ${
+                      scrollIndex !== 0 && ''
+                    }`}
+                  />
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
 
         {/* Scrolling Cards */}
         {/* lg:top-[120px] xl:top-[180px] 2xl:top-[180px] 3xl:top-[330px]  */}
         {/* ${
             phoneVisible ? 'translate-y-[120px]' : 'translate-y-full'
           } */}
-        <div
-          className={`absolute  transform -translate-x-1/2 w-[370px] h-[700px] overflow-hidden transition-transform duration-700 ease-in-out z-0`}
-          style={{
-            zIndex: 0, // Ensure cards are beneath the phone skeleton
-            // left:'35% !important',
-            // transform: `${
-            //   phoneVisible
-            //     ? 'translateY(calc(100vh - 610px))'
-            //     : 'translateY(100vh)'
-            // }`
-            transform: phoneVisible
-              ? window.innerWidth >= 1280 // xl breakpoint (1280px and above)
-                ? 'translateY(calc(100vh - 565px))'
-                : window.innerWidth >= 1024 // lg breakpoint (1024px and above)
-                ? 'translateY(calc(100vh - 510px))'
-                : 'translateY(calc(100vh - 410px))' // Default for smaller screens
-              : 'translateY(100vh)'
-          }}
-        >
-          <ul
-            className="list-none p-0 transition-transform duration-700 ease-in-out"
-            style={{
-              transform: `translateY(-${
-                scrollIndex * (100 / imageList.length)
-              }%)` // Adjust scroll position
-            }}
-          >
-            {imageList.map((src, index) => (
-              <li key={index}>
-                <img
-                  src={src}
-                  alt={`Slide ${index + 1}`}
-                  className={`w-full mx-auto py-[6px] ${
-                    scrollIndex !== 0 && ''
-                  }`}
-                />
-              </li>
-            ))}
-          </ul>
-        </div>
 
         {/* Right div */}
         <div
-          className={`mt-[250px] w-[250px] transition-opacity duration-700 ease-in-out transform ${
+          className={`mt-[250px] text-neutral900 w-[250px] transition-opacity duration-700 ease-in-out transform ${
             showBanner
               ? 'opacity-100 scale-100 translate-x-0'
               : 'opacity-0 scale-90 translate-x-1/2'
           }`}
         >
-          <div className=" flex flex-col w-[180px] text-neutral900 items-center">
+          <div className=" flex flex-col  text-neutral900">
             {/* <span className="text-[48px] font-semiBold">2.0</span> */}
             {/* <span className="text-[20px]">
               Points
               <br /> below
             </span>{' '} */}
             <span
-              className="text-[48px] font-semiBold w-full text-center"
+              className="text-[48px] font-semiBold w-fit"
               style={{
                 background: 'linear-gradient(90deg, #DBF2FC, #E8E8FF, #FFF4E3)',
                 padding: '4px 8px',
@@ -212,7 +208,9 @@ const HtmlAnimation = () => {
             >
               50K+
             </span>
-            <p className="text-[20px] text-neutral900">Stones in Inventory</p>
+            <p className="text-[20px] text-neutral900 pl-2">
+              Stones in Inventory
+            </p>
           </div>
         </div>
       </div>
