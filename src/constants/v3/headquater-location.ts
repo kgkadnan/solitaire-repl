@@ -268,7 +268,7 @@ export const WorldMapPointers = [
     coords: 'left-[62%] top-[47%]',
     kam: {
       name: 'Hasmukh Ramani',
-      postion: 'Key Account Manager',
+      postion: 'Chief Commercial Officer',
       countryFlag: Dubai,
       location: 'Dubai, UAE',
       image: Hasmukh,
