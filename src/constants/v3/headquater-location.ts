@@ -280,7 +280,7 @@ export const WorldMapPointers = [
     }
   },
   {
-    coords: 'left-[68%] top-[48%]',
+    coords: 'left-[68%] top-[53%]',
     kam: {
       name: 'Ajay Ghiya',
       // location:
