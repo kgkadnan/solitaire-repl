@@ -222,7 +222,7 @@ const RightStructure = ({ currentTime }: any) => {
                 alt="trace steps"
                 className="xl:w-[40px] xl:h-[40px] lg:w-[30px] lg:h-[30px] flex items-center"
               />
-              <p className="xl:text-[16px] lg:text-[12px] text-neutral900 font-semiBold flex items-center lg:leading-[16px] xl:leading-[20px]">
+              <p className="text-[16px] text-neutral900 font-semiBold flex items-center">
                 {activeData.header1}
               </p>
             </div>
@@ -233,10 +233,7 @@ const RightStructure = ({ currentTime }: any) => {
               {activeData.timeStart !== 0 ? (
                 <ol className="list-disc xl:pl-[20px] lg:pl-[10px] ">
                   {activeData.data.map((list: string, index: number) => (
-                    <li
-                      key={`list-${index}`}
-                      className="xl:text-[14px] lg:text-[10px] xl:leading-[20px] lg:leading-[14px]"
-                    >
+                    <li key={`list-${index}`} className="text-[14px]">
                       {list}
                     </li>
                   ))}
@@ -244,21 +241,15 @@ const RightStructure = ({ currentTime }: any) => {
               ) : (
                 <div className="flex flex-col gap-2">
                   <ol className="list-disc pl-[20px]">
-                    <li className="xl:text-[14px] lg:text-[10px] xl:leading-[20px] lg:leading-[14px]">
-                      {activeData.data[0]}
-                    </li>
-                    <li className="xl:text-[14px] lg:text-[10px] xl:leading-[20px] lg:leading-[14px]">
-                      {activeData.data[1]}
-                    </li>
+                    <li className="text-[14px]">{activeData.data[0]}</li>
+                    <li className="text-[14px]">{activeData.data[1]}</li>
                   </ol>
-                  <p className="font-semiBold xl:text-[14px] lg:text-[10px] xl:leading-[20px]">
+                  <p className="font-semiBold text-[14px]">
                     Splitting & Barcoding
                   </p>
                   <ol className="list-disc pl-[20px]">
-                    <li className="xl:text-[14px] lg:text-[10px] xl:leading-[20px] lg:leading-[14px]">
-                      {activeData.data[2]}
-                    </li>
-                    {/* <li className="xl:text-[14px] lg:text-[10px] xl:leading-[20px] lg:leading-[14px]">
+                    <li className="text-[14px]">{activeData.data[2]}</li>
+                    {/* <li className="text-[14px]">
                       {activeData.data[3]}
                     </li> */}
                   </ol>
@@ -271,14 +262,14 @@ const RightStructure = ({ currentTime }: any) => {
                 alt="trace steps"
                 className="xl:w-[40px] xl:h-[40px] lg:w-[30px] lg:h-[30px]"
               />
-              <p className="xl:text-[16px] lg:text-[12px] text-neutral900 font-semiBold">
+              <p className="text-[16px] text-neutral900 font-semiBold">
                 {activeData.header2}
               </p>
             </div>
             <div className="pl-[48px] flex gap-2 flex-wrap">
               {activeData.tags.map((tag: string, index: number) => (
                 <div
-                  className="bg-[#E4E7EC] rounded-[4px] px-[6px] xl:py-[8px] lg:py-[2px] text-neutral800 xl:text-[12px] lg:text-[10px]"
+                  className="bg-[#E4E7EC] rounded-[4px] px-[6px] xl:py-[8px] lg:py-[4px] text-neutral800 text-[12px]"
                   key={`${tag}-${index}`}
                 >
                   {tag}
@@ -436,7 +427,7 @@ const LeftStructure = ({ currentTime }: { currentTime: number }) => {
               </div>
 
               <p
-                className={`text-neutral900 text-[14px] transition-opacity duration-500 ${
+                className={`text-neutral900 text-[16px] transition-opacity duration-500 ${
                   currentTime >= trace.timeStart ? 'opacity-100' : 'opacity-50'
                 }`}
               >
