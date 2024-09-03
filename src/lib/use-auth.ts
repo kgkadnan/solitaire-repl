@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { util } from '@/features/api/saved-searches';
+import { util as saveSearchUtil } from '@/features/api/saved-searches';
+import { util as dashboardUtil } from '@/features/api/dashboard';
 
 const useUser = () => {
   const dispatch = useDispatch();
@@ -23,7 +24,8 @@ const useUser = () => {
 
   const userLoggedOut = () => {
     setAuthToken(null);
-    dispatch(util.resetApiState());
+    dispatch(saveSearchUtil.resetApiState());
+    dispatch(dashboardUtil.resetApiState());
     localStorage.removeItem('auth');
     localStorage.removeItem('user');
     localStorage.removeItem('Search');
