@@ -195,14 +195,14 @@ const HtmlAnimation = () => {
               : 'opacity-0 scale-90 translate-x-1/2'
           }`}
         >
-          <div className="w-[180px] text-neutral900">
-            <span className="text-[48px] font-semiBold">2.0</span>
-            <span className="text-[20px]">
+          <div className=" flex flex-col w-[180px] text-neutral900 items-center">
+            {/* <span className="text-[48px] font-semiBold">2.0</span> */}
+            {/* <span className="text-[20px]">
               Points
               <br /> below
-            </span>{' '}
+            </span>{' '} */}
             <span
-              className="text-[20px] font-semiBold"
+              className="text-[48px] font-semiBold w-full text-center"
               style={{
                 background: 'linear-gradient(90deg, #DBF2FC, #E8E8FF, #FFF4E3)',
                 padding: '4px 8px',
@@ -210,8 +210,9 @@ const HtmlAnimation = () => {
                 backgroundColor: 'transparent'
               }}
             >
-              RAP Price
+              50K+
             </span>
+            <p className="text-[20px] text-neutral900">Stones in Stock</p>
           </div>
         </div>
       </div>
