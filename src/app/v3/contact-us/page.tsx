@@ -402,8 +402,8 @@ const ContactUs = () => {
                           src={loc.image}
                           alt={loc.name}
                           className={`h-10 w-10  rounded-[50%]  bg-radial-grad-kam  pt-1 ${
-                            loc.name === 'Mr. Maysey Isakov' ||
-                            (loc.name === 'Mr. Jitendra Baid' && 'pt-[6px]')
+                            loc.name === 'Maysey Isakov' ||
+                            (loc.name === 'Jitendra Baid' && 'pt-[6px]')
                           }`}
                          
                         /> */}

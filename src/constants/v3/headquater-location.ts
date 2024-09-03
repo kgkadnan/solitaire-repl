@@ -33,7 +33,7 @@ export const HeadquaterLocation = [
         country: 'INDIA',
         flag: India,
         office: 'Mumbai',
-        name: 'Mr. Ajay Ghiya',
+        name: 'Ajay Ghiya',
         phone: '+91-9892421286',
         email: 'ajay.ghiya@kgkmail.com',
         image: Ajay,
@@ -44,7 +44,7 @@ export const HeadquaterLocation = [
       {
         country: 'CHINESE TAIWAN',
         flag: Taiwan,
-        name: 'Mr. Shubham Jain',
+        name: 'Shubham Jain',
         office: 'Taipei',
         phone: '+886-227318242',
         email: 'shubham.jain@kgkmail.com',
@@ -55,7 +55,7 @@ export const HeadquaterLocation = [
       {
         country: 'SINGAPORE',
         flag: Singapore,
-        name: 'Mr. Ankush Mehta',
+        name: 'Ankush Mehta',
         phone: '+65-90536043',
         email: 'ankush.mehta@kgkmail.com',
         image: Ankush,
@@ -65,7 +65,7 @@ export const HeadquaterLocation = [
       {
         country: 'CHINA',
         flag: China,
-        name: 'Mr. Abhishek Golecha',
+        name: 'Abhishek Golecha',
         office: 'Shanghai',
         phone: '+86-2161002808',
         email: 'abhishek.golecha@kgkmail.com',
@@ -76,7 +76,7 @@ export const HeadquaterLocation = [
       {
         country: 'Hong Kong SAR',
         flag: Hongkong1,
-        name: 'Mr. Vivek Mehta',
+        name: 'Vivek Mehta',
         office: 'Hong Kong',
         phone: '+852-27332201',
         email: 'vivek.mehta@kgkmail.com',
@@ -87,7 +87,7 @@ export const HeadquaterLocation = [
       {
         country: 'JAPAN',
         flag: Japan,
-        name: 'Mr. Jitendra Baid',
+        name: 'Jitendra Baid',
         office: 'Tokyo',
         phone: '+81-338351445',
         email: 'jitendra.baid@kgkmail.com',
@@ -99,7 +99,7 @@ export const HeadquaterLocation = [
       {
         country: 'THAILAND',
         flag: Thailand,
-        name: 'Mr. Neeraj Jain',
+        name: 'Neeraj Jain',
         office: 'Bangkok',
         phone: '+66-22674528',
         email: 'neeraj.jain01@kgkmail.com',
@@ -110,7 +110,7 @@ export const HeadquaterLocation = [
       {
         country: 'CHINA',
         flag: China,
-        name: 'Mr. Deependra Kothari',
+        name: 'Deependra Kothari',
         office: 'Shenzhen',
         phone: '+86-75536909388',
         email: 'deependra.kothari@kgkmail.com',
@@ -126,7 +126,7 @@ export const HeadquaterLocation = [
       {
         country: 'SOUTH AFRICA',
         flag: SouthAfrica,
-        name: 'Mr. Nitesh Lunawat',
+        name: 'Nitesh Lunawat',
         office: 'Johannesburg',
         phone: '+27-112213113',
         email: 'nitesh.lunawat01@kgkmail.com',
@@ -142,7 +142,7 @@ export const HeadquaterLocation = [
       {
         country: 'BELGIUM',
         flag: Belgium,
-        name: 'Mr. Devanshu Jain',
+        name: 'Devanshu Jain',
         office: 'Antwerp',
         phone: '+32-32131157',
         email: 'devanshu.jain@kgkmail.com',
@@ -153,7 +153,7 @@ export const HeadquaterLocation = [
       {
         country: 'SWITZERLAND',
         flag: Switzerland,
-        name: 'Mr. Patrik',
+        name: 'Patrik Schaefer',
         office: 'Biel/Bienne',
         phone: '+41-796796041',
         email: 'patrik@kgksuisse.ch',
@@ -169,7 +169,7 @@ export const HeadquaterLocation = [
       {
         country: 'UAE',
         flag: Dubai,
-        name: 'Mr. Hasmukh Ramani ',
+        name: 'Hasmukh Ramani ',
         phone: '+971-4225 2729',
         email: 'hasmukh.ramani@kgkmail.com',
         image: Hasmukh,
@@ -180,10 +180,11 @@ export const HeadquaterLocation = [
       {
         country: 'ISRAEL',
         flag: Israel,
-        name: 'Mr. Yizhak Vachtel',
+        name: 'Yizhak Vachtel',
         email: 'yizhak.vachtel@kgkmail.com',
         image: Yizhak,
         initial: 'YV',
+        phone: '+972-54977864',
         country_name: 'Israel'
       }
     ]
@@ -194,7 +195,7 @@ export const HeadquaterLocation = [
       {
         country: 'USA',
         flag: NorthAmerica,
-        name: 'Mr. Maysey Isakov',
+        name: 'Maysey Isakov',
         office: 'New York',
         phone: '+1 (212) 279-1312',
         email: 'moshe.isakov@kgkmail.com',
@@ -210,7 +211,7 @@ export const WorldMapPointers = [
   {
     coords: 'left-[55%] top-[75%]',
     kam: {
-      name: 'Mr. Nitesh Lunawat',
+      name: 'Nitesh Lunawat',
       postion: 'Key Account Manager',
       countryFlag: SouthAfrica,
       location: 'Johannesburg, South Africa',
@@ -224,7 +225,7 @@ export const WorldMapPointers = [
   {
     coords: 'left-[29%] top-[36%]',
     kam: {
-      name: 'Mr. Maysey Isakov',
+      name: 'Maysey Isakov',
       postion: 'Key Account Manager',
       countryFlag: NorthAmerica,
       location: 'New York, USA',
@@ -238,7 +239,7 @@ export const WorldMapPointers = [
   {
     coords: 'left-[52%] top-[38%]',
     kam: {
-      name: 'Mr. Patrik',
+      name: 'Patrik Schaefer',
       postion: 'Key Account Manager',
       countryFlag: Switzerland,
       location: 'Biel/Bienne, Switzerland',
@@ -252,7 +253,7 @@ export const WorldMapPointers = [
   {
     coords: 'left-[51%] top-[26%]',
     kam: {
-      name: 'Mr. Devanshu Jain',
+      name: 'Devanshu Jain',
       postion: 'Key Account Manager',
       countryFlag: Belgium,
       location: 'Antwerp, Belgium',
@@ -266,7 +267,7 @@ export const WorldMapPointers = [
   {
     coords: 'left-[62%] top-[47%]',
     kam: {
-      name: 'Mr. Hasmukh Ramani',
+      name: 'Hasmukh Ramani',
       postion: 'Key Account Manager',
       countryFlag: Dubai,
       location: 'Dubai, UAE',
@@ -280,7 +281,7 @@ export const WorldMapPointers = [
   {
     coords: 'left-[68%] top-[48%]',
     kam: {
-      name: 'Mr. Ajay Ghiya',
+      name: 'Ajay Ghiya',
       // location:
       postion: 'Key Account Manager',
       countryFlag: India,
@@ -295,7 +296,7 @@ export const WorldMapPointers = [
   {
     coords: 'left-[79%] top-[49%]',
     kam: {
-      name: 'Mr. Deependra Kothari',
+      name: 'Deependra Kothari',
       postion: 'Key Account Manager',
       countryFlag: China,
       location: 'Shenzhen, China',
@@ -309,7 +310,7 @@ export const WorldMapPointers = [
   {
     coords: 'left-[81%] top-[42%]',
     kam: {
-      name: 'Mr. Abhishek Golecha',
+      name: 'Abhishek Golecha',
       postion: 'Key Account Manager',
       countryFlag: China,
       location: 'Shanghai, China',
@@ -323,7 +324,7 @@ export const WorldMapPointers = [
   {
     coords: 'left-[87%] top-[41%]',
     kam: {
-      name: 'Mr. Jitendra Baid',
+      name: 'Jitendra Baid',
       postion: 'Key Account Manager',
       countryFlag: Japan,
       location: 'Tokyo, Japan',
@@ -338,12 +339,12 @@ export const WorldMapPointers = [
   {
     coords: 'left-[57%] top-[44%]',
     kam: {
-      name: 'Mr. Yizhak Vachtel',
+      name: 'Yizhak Vachtel',
       postion: 'Key Account Manager',
       countryFlag: Israel,
       location: 'Israel',
       image: Yizhak,
-      // phone: '++91 910 876 6432',
+      phone: '+972-54977864',
       email: 'yizhak.vachtel@kgkmail.com',
       initial: 'YV',
       country: 'Israel'
@@ -352,7 +353,7 @@ export const WorldMapPointers = [
   {
     coords: 'left-[79%] top-[69%]',
     kam: {
-      name: 'Mr. Ankush Mehta',
+      name: 'Ankush Mehta',
       postion: 'Key Account Manager',
       countryFlag: Singapore,
       location: 'Singapore',
@@ -366,7 +367,7 @@ export const WorldMapPointers = [
   {
     coords: 'left-[75%] top-[58%]',
     kam: {
-      name: 'Mr. Neeraj Jain',
+      name: 'Neeraj Jain',
       postion: 'Key Account Manager',
       countryFlag: Thailand,
       location: 'Bangkok, Thailand',
@@ -380,7 +381,7 @@ export const WorldMapPointers = [
   {
     coords: 'left-[81%] top-[61%]',
     kam: {
-      name: 'Mr. Shubham Jain',
+      name: 'Shubham Jain',
       postion: 'Key Account Manager',
       countryFlag: Taiwan,
       location: 'Taipei, Chinese Taiwan',

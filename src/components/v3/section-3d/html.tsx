@@ -6,6 +6,8 @@ import US from '@public/v3/home/map/usa.svg';
 import India from '@public/v3/home/map/india.svg';
 import Belgium from '@public/v3/home/map/belgium.svg';
 import Dubai from '@public/v3/home/map/dubai.svg';
+import Hongkong from '@public/v3/home/map/hongkong.png';
+
 // import ShimmerButton from '../animated-button';
 
 const HtmlAnimation = () => {
@@ -77,6 +79,10 @@ const HtmlAnimation = () => {
     {
       name: 'UAE',
       image: Dubai
+    },
+    {
+      name: 'HONG KONG',
+      image: Hongkong
     }
   ];
 
@@ -94,9 +100,12 @@ const HtmlAnimation = () => {
           <p className="text-[32px] font-semiBold text-neutral900 leading-[36px]">
             KGK Inventory Locations
           </p>
-          <div className="flex gap-4">
+          <div className="flex gap-4 flex-wrap">
             {leftContainer.map(data => (
-              <div key={data.name}>
+              <div
+                key={data.name}
+                className="w-fit flex justify-center flex-col items-center"
+              >
                 <div className="w-[44px] h-[44px]">
                   <Image src={data.image} alt={data.name} />
                 </div>
@@ -222,7 +231,7 @@ const HtmlAnimation = () => {
             Direct Access to KGK’s Global Diamond Inventory
           </h1>
           <p className="xl:text-[36px] lg:text-[28px] text-neutral900  mb-[20px] font-semiBold">
-            Retailers and Wholesalers: Create a Guest Account
+            Create a Guest Account
           </p>
           <Image
             src={ExploreNow}
