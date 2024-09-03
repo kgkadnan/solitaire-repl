@@ -20,6 +20,7 @@ const HtmlAnimation = () => {
     '/v3/home/usa.png',
     '/v3/home/india.png',
     '/v3/home/belgium.png',
+    '/v3/home/hongkong.png',
     '/v3/home/dubai.png'
   ];
 
@@ -168,7 +169,7 @@ const HtmlAnimation = () => {
             className="list-none p-0 transition-transform duration-700 ease-in-out"
             style={{
               transform: `translateY(-${
-                scrollIndex * (100 / (imageList.length + 1))
+                scrollIndex * (100 / imageList.length)
               }%)` // Adjust scroll position
             }}
           >
