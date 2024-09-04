@@ -98,7 +98,10 @@ const HtmlAnimation = () => {
               : 'opacity-0 scale-90 translate-x-1/2'
           }`}
           style={{
-            marginBottom: 'calc(100% - 450px)',
+            marginBottom:
+              window.innerWidth >= 1280
+                ? 'calc(100% - 450px)'
+                : 'calc(100% - 100px)',
             marginTop: 'auto'
           }}
         >
@@ -150,11 +153,13 @@ const HtmlAnimation = () => {
               zIndex: -1, // Ensure cards are beneath the phone skeleton
 
               transform: phoneVisible
-                ? window.innerWidth >= 1280 // xl breakpoint (1280px and above)
-                  ? 'translateY(calc(100vh - 350px))'
-                  : window.innerWidth >= 1024 // lg breakpoint (1024px and above)
-                  ? 'translateY(calc(100vh - 250px))'
-                  : 'translateY(calc(100vh - 410px))' // Default for smaller screens
+                ? //   ? window.innerWidth >= 1280 // xl breakpoint (1280px and above)
+                  //     ? 'translateY(calc(100vh - 350px))'
+                  //     : window.innerWidth >= 1024 // lg breakpoint (1024px and above)
+                  //     ? 'translateY(calc(100vh - 250px))'
+                  //     : 'translateY(calc(100vh - 410px))' // Default for smaller screens
+                  //   :
+                  'translateY(385px)'
                 : 'translateY(100vh)'
             }}
           >
@@ -189,13 +194,16 @@ const HtmlAnimation = () => {
 
         {/* Right div */}
         <div
-          className={`mt-[250px] text-neutral900 w-[250px] transition-opacity duration-700 ease-in-out transform ${
+          className={`text-neutral900 w-[250px] transition-opacity duration-700 ease-in-out transform ${
             showBanner
               ? 'opacity-100 scale-100 translate-x-0'
               : 'opacity-0 scale-90 translate-x-1/2'
           }`}
           style={{
-            marginBottom: 'calc(100% - 450px)',
+            marginBottom:
+              window.innerWidth >= 1280
+                ? 'calc(100% - 450px)'
+                : 'calc(100% - 100px)',
             marginTop: 'auto'
           }}
         >
@@ -236,7 +244,7 @@ const HtmlAnimation = () => {
       >
         <div className="bg-white pt-5 h-full relative flex flex-col justify-center items-center">
           <h1 className="xl:text-[52px] lg:text-[42px] text-neutral900 font-black leading-[48px]">
-            Direct Access to KGK’s Global Diamond Inventory
+            Access KGK’s Global Diamond Inventory
           </h1>
           <p className="xl:text-[36px] lg:text-[28px] text-neutral900  mb-[20px] font-semiBold">
             Create a Guest Account
