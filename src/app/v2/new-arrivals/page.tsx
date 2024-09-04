@@ -500,9 +500,11 @@ const NewArrivals = () => {
                   label: ManageLocales(
                     'app.search.actionButton.bookAppointment'
                   ),
+
                   handler: () => {
                     handleCreateAppointment();
                   },
+                  isDisable: !Object.keys(rowSelection).length,
                   commingSoon:
                     isKycVerified?.customer?.kyc?.status ===
                       kycStatus.INPROGRESS ||

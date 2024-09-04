@@ -1040,12 +1040,14 @@ const MatchPairTable = ({
                   {
                     variant: 'secondary',
                     label: ManageLocales('app.searchResult.addToCart'),
+                    isDisable: !Object.keys(rowSelection).length,
                     handler: () => handleAddToCart()
                   },
 
                   {
                     variant: 'primary',
                     label: ManageLocales('app.searchResult.confirmStone'),
+                    isDisable: !Object.keys(rowSelection).length,
                     handler: () => {
                       handleConfirmStone({
                         selectedRows: rowSelection,
@@ -1075,6 +1077,7 @@ const MatchPairTable = ({
                 dropdownMenu={[
                   {
                     label: 'Compare Stone',
+                    isDisable: !Object.keys(rowSelection).length,
                     handler: () =>
                       handleCompareStone({
                         isCheck: rowSelection,
@@ -1095,6 +1098,7 @@ const MatchPairTable = ({
                     },
 
                     isDisable:
+                      !Object.keys(rowSelection).length ||
                       isKycVerified?.customer?.kyc?.status ===
                         kycStatus.INPROGRESS ||
                       isKycVerified?.customer?.kyc?.status ===
