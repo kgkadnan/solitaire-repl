@@ -286,6 +286,7 @@ const MatchingPair = () => {
               {
                 variant: 'primary',
                 label: ManageLocales('app.modal.save'),
+                isDisable: !saveSearchName.length,
                 handler: () => {
                   if (!saveSearchName.length) {
                     setInputError('Please enter name');
