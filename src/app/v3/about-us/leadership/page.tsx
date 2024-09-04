@@ -95,7 +95,7 @@ export default function Leadership() {
                 </div>
               ))}
               <div
-                className="flex flex-col gap-2 cursor-pointer invisible"
+                className="flex flex-col gap-2 cursor-pointer xl:invisible hidden xl:flex"
                 onClick={() => {
                   setSelectedProfile(leadership[0]);
                   setTimeout(() => {
@@ -106,6 +106,7 @@ export default function Leadership() {
                   }, 0);
                 }}
                 key={leadership[0].name}
+                // style={{visibility:window.innerWidth>1024?'none' :'hidden'}}
               >
                 <div>
                   {' '}
