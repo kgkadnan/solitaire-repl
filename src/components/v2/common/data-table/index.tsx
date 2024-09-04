@@ -897,7 +897,7 @@ const DataTable = ({
               <SavedSearchDropDown
                 handleClose={handleDropdown}
                 isOpen={isDropDownOpen}
-                options={searchList.filter(
+                options={searchList?.filter(
                   (item: any) => item.is_matching_pair === false
                 )}
                 onDropDownClick={onDropDownClick}
@@ -1078,12 +1078,14 @@ const DataTable = ({
                   {
                     variant: 'secondary',
                     label: ManageLocales('app.searchResult.addToCart'),
-                    handler: () => handleAddToCart()
+                    handler: () => handleAddToCart(),
+                    isDisable: !Object.keys(rowSelection).length
                   },
 
                   {
                     variant: 'primary',
                     label: ManageLocales('app.searchResult.confirmStone'),
+                    isDisable: !Object.keys(rowSelection).length,
                     handler: () => {
                       isDashboard
                         ? handleConfirmStone({
@@ -1137,7 +1139,8 @@ const DataTable = ({
                         activeCartRows: rows,
                         setIsCompareStone,
                         setCompareStoneData
-                      })
+                      }),
+                    isDisable: !Object.keys(rowSelection).length
                   },
                   {
                     label: ManageLocales(
@@ -1147,6 +1150,7 @@ const DataTable = ({
                       handleCreateAppointment();
                     },
                     isDisable:
+                      !Object.keys(rowSelection).length ||
                       isKycVerified?.customer?.kyc?.status ===
                         kycStatus.INPROGRESS ||
                       isKycVerified?.customer?.kyc?.status ===
@@ -1167,7 +1171,8 @@ const DataTable = ({
                   {
                     variant: 'secondary',
                     label: ManageLocales('app.myCart.actionButton.delete'),
-                    handler: deleteCartHandler
+                    handler: deleteCartHandler,
+                    isDisable: !Object.keys(rowSelection).length
                   },
 
                   {
@@ -1175,6 +1180,7 @@ const DataTable = ({
                     label: ManageLocales(
                       'app.myCart.actionButton.confirmStone'
                     ),
+                    isDisable: !Object.keys(rowSelection).length,
                     handler: () => {
                       handleConfirmStone({
                         selectedRows: rowSelection,
@@ -1210,6 +1216,7 @@ const DataTable = ({
                     handler: () => {
                       handleCreateAppointment();
                     },
+                    isDisable: !Object.keys(rowSelection).length,
                     commingSoon:
                       isKycVerified?.customer?.kyc?.status ===
                         kycStatus.INPROGRESS ||

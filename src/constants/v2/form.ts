@@ -203,6 +203,37 @@ export const keyToSymbol = [
   'Twinning Wisp'
 ];
 
+export const keyToSymbolWithoutAll = [
+  'Bearding',
+  'Brown patch of color',
+  'Bruise',
+  'Cavity',
+  'Chip',
+  'Cleavage',
+  'Cloud',
+  'Crystal',
+  'Crystal Surface',
+  'Etch Channel',
+  'Extra Facet',
+  'Feather',
+  'Flux Remnant',
+  'Indented Natural',
+  'Internal Graining',
+  'Internal Inscription',
+  'Internal Laser Drilling',
+  'Knot',
+  'Laser Drill Hole',
+  'Manufacturing Remnant',
+  'Minor Details of Polish',
+  'Natural',
+  'Needle',
+  'No Inclusion',
+  'Pinpoint',
+  'Reflecting Surface Graining',
+  'Surface Graining',
+  'Twinning Wisp'
+];
+
 export const shade = [
   'None',
   'White',

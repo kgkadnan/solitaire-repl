@@ -35,7 +35,6 @@ import { DiamondDetailsComponent } from '@/components/v2/common/detail-page';
 import ImageModal from '@/components/v2/common/detail-page/components/image-modal';
 import { FILE_URLS } from '@/constants/v2/detail-page';
 import { getShapeDisplayName } from '@/utils/v2/detail-page';
-import { formatNumber } from '@/utils/fix-two-digit-number';
 import { loadImages } from '@/components/v2/common/detail-page/helpers/load-images';
 import { checkImage } from '@/components/v2/common/detail-page/helpers/check-image';
 import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
@@ -536,7 +535,9 @@ const OrderDetail: React.FC<IOrderDetail> = ({
                               )}
                         </p>
                         <span className="text-neutral900 text-mMedium font-medium">
-                          {`$ ${formatNumber(productDetailData?.total)}`}
+                          {`$ ${formatNumberWithCommas(
+                            productDetailData?.total
+                          )}`}
                         </span>
                       </div>
                     </div>
