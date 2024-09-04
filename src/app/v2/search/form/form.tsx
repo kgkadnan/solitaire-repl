@@ -973,6 +973,7 @@ const Form = ({
     {
       variant: 'secondary',
       label: `${ManageLocales('app.advanceSearch.saveSearch')}`,
+      isDisable: !searchUrl.length,
       handler: () => {
         if (searchUrl) {
           if (
@@ -1049,17 +1050,18 @@ const Form = ({
           : handleFormSearch,
 
       isDisable:
-        !(
+        !searchUrl.length ||
+        (!(
           isLoading ||
           isLoadingProductApi ||
           isLoadingMatchPairApi ||
           isFetchingMatchPairApi ||
           isFetchingProductApi
         ) &&
-        (isMatchingPair
-          ? data?.count > MAX_SEARCH_FORM_COUNT / 2
-          : data?.count > MAX_SEARCH_FORM_COUNT) &&
-        data?.count > MIN_SEARCH_FORM_COUNT,
+          (isMatchingPair
+            ? data?.count > MAX_SEARCH_FORM_COUNT / 2
+            : data?.count > MAX_SEARCH_FORM_COUNT) &&
+          data?.count > MIN_SEARCH_FORM_COUNT),
 
       isLoading:
         isLoading ||
@@ -1132,6 +1134,7 @@ const Form = ({
               {
                 variant: 'primary',
                 label: ManageLocales('app.modal.save'),
+                isDisable: !saveSearchName.length,
                 handler: () => {
                   if (!saveSearchName.length) {
                     setInputError('Please enter name');
