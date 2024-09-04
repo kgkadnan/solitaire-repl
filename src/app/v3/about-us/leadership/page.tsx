@@ -63,7 +63,7 @@ export default function Leadership() {
                 {leadership[0].position}
               </p>
             </div>
-            <div className="px-[80px] py-[64px]  flex flex-wrap gap-[60px]">
+            <div className="px-[80px] pt-[64px]  flex flex-wrap gap-[60px]">
               {leadership.slice(1, 3).map(leader => (
                 <div
                   className="flex flex-col gap-2 cursor-pointer"
@@ -129,7 +129,7 @@ export default function Leadership() {
             </div>
           </div>
         ) : (
-          <div className="flex flex-col gap-6 px-[190px] mt-10">
+          <div className="flex flex-col gap-6 px-[190px] mt-24 mb-4">
             <div className="flex gap-6 items-end">
               <Image
                 src={selectedProfile['image']}

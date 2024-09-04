@@ -56,6 +56,7 @@ const CommonHeader = () => {
             src={kgkLogo}
             alt="KGK logo"
             onClick={() => router.push('/v3')}
+            className="cursor-pointer"
           />
           {NavigationMenuDemo(selectedHeader, setSelectedHeader)}
         </div>
