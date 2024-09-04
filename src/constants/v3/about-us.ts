@@ -77,7 +77,8 @@ export const timelineData = [
   {
     image: Timeline1975,
     year: '1975',
-    content: 'Mr. Navrattan Kothari initiated diamond sourcing operations in Mumbai, India.'
+    content:
+      'Mr. Navrattan Kothari initiated diamond sourcing operations in Mumbai, India.'
   },
   {
     image: Timeline1986,
