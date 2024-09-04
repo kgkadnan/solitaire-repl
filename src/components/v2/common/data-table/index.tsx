@@ -897,7 +897,7 @@ const DataTable = ({
               <SavedSearchDropDown
                 handleClose={handleDropdown}
                 isOpen={isDropDownOpen}
-                options={searchList.filter(
+                options={searchList?.filter(
                   (item: any) => item.is_matching_pair === false
                 )}
                 onDropDownClick={onDropDownClick}
