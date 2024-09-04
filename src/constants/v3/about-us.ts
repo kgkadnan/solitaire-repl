@@ -1,7 +1,7 @@
 import Timeline1905 from '@public/v3/timeline/1905.png';
 // import Timeline1915 from '@public/v3/timeline/1915.png';
 // import Timeline1960 from '@public/v3/timeline/1960.png';
-// import Timeline1962 from '@public/v3/timeline/1962.png';
+import Timeline1962 from '@public/v3/timeline/1962.png';
 // import Timeline1972 from '@public/v3/timeline/1972.png';
 import Timeline1975 from '@public/v3/timeline/1975.png';
 import Timeline1986 from '@public/v3/timeline/1986.png';
@@ -63,12 +63,12 @@ export const timelineData = [
   //   content:
   //     'Mr. Navrattan Kothari joined the KGK Group, marking a new era of leadership.'
   // },
-  // {
-  //   image: Timeline1962,
-  //   year: '1962',
-  //   content:
-  //     'KGK established an office in Hong Kong, significantly expanding its global presence.'
-  // },
+  {
+    image: Timeline1962,
+    year: '1962',
+    content:
+      'Mr. Ghisilal ji Kothari was one of the first Indians in the gemstone industry to expand to internationally(Hong Kong)'
+  },
   // {
   //   image: Timeline1972,
   //   year: '1972',
@@ -77,7 +77,7 @@ export const timelineData = [
   {
     image: Timeline1975,
     year: '1975',
-    content: 'KGK initiated diamond sourcing operations in Mumbai, India.'
+    content: 'Mr. Navrattan Kothari initiated diamond sourcing operations in Mumbai, India.'
   },
   {
     image: Timeline1986,
