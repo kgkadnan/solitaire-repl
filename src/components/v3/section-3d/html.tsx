@@ -92,11 +92,15 @@ const HtmlAnimation = () => {
       <div className="flex justify-between relative xl:px-[112px] lg:px-[32px]">
         {/* Left div */}
         <div
-          className={`flex flex-col gap-4 mt-[100px] w-[250px] transition-opacity duration-700 ease-in-out transform ${
+          className={`flex flex-col gap-4  w-[250px] transition-opacity duration-700 ease-in-out transform ${
             showBanner
               ? 'opacity-100 scale-100 translate-x-0'
               : 'opacity-0 scale-90 translate-x-1/2'
           }`}
+          style={{
+            marginBottom: 'calc(100% - 450px)',
+            marginTop: 'auto'
+          }}
         >
           <p className="text-[32px] font-semiBold text-neutral900 leading-[36px]">
             KGK Inventory Locations
@@ -190,6 +194,10 @@ const HtmlAnimation = () => {
               ? 'opacity-100 scale-100 translate-x-0'
               : 'opacity-0 scale-90 translate-x-1/2'
           }`}
+          style={{
+            marginBottom: 'calc(100% - 450px)',
+            marginTop: 'auto'
+          }}
         >
           <div className=" flex flex-col  text-neutral900">
             {/* <span className="text-[48px] font-semiBold">2.0</span> */}
