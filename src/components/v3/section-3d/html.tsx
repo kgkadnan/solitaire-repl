@@ -138,13 +138,14 @@ const HtmlAnimation = () => {
             //     ? 'translateY(calc(100vh - 1000px))'
             //     : 'translateY(100vh)'
             // }`
-            transform: phoneVisible
-              ? window?.innerWidth >= 1280 // xl breakpoint (1280px and above)
-                ? 'translateY(calc(100vh - 950px))'
-                : window?.innerWidth >= 1024 // lg breakpoint (1024px and above)
-                ? 'translateY(calc(100vh - 895px))'
-                : 'translateY(calc(100vh - 800px))' // Default for smaller screens
-              : 'translateY(100vh)'
+            transform:
+              phoneVisible && typeof window !== 'undefined'
+                ? window?.innerWidth >= 1280 // xl breakpoint (1280px and above)
+                  ? 'translateY(calc(100vh - 950px))'
+                  : window?.innerWidth >= 1024 // lg breakpoint (1024px and above)
+                  ? 'translateY(calc(100vh - 895px))'
+                  : 'translateY(calc(100vh - 800px))' // Default for smaller screens
+                : 'translateY(100vh)'
           }}
         >
           <div
@@ -201,8 +202,10 @@ const HtmlAnimation = () => {
           }`}
           style={{
             marginBottom:
-              window?.innerWidth >= 1280
-                ? 'calc(100% - 450px)'
+              typeof window !== 'undefined'
+                ? window?.innerWidth >= 1280
+                  ? 'calc(100% - 450px)'
+                  : 'calc(100% - 100px)'
                 : 'calc(100% - 100px)',
             marginTop: 'auto'
           }}
