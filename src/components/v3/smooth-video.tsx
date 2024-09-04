@@ -84,19 +84,21 @@ const SmoothVideoPlayer = () => {
 
   return (
     <div
-      className="welcome-video-wall-container h-[700px] relative "
+      className="welcome-video-wall-container h-fit relative flex items-center "
       style={{
-        width: '80%',
+        width: '80%'
 
-        clipPath: clipPathValue,
-        transition: 'clip-path 0.9s ease'
+        // clipPath: clipPathValue,
+        // transition: 'clip-path 0.9s ease'
       }}
     >
       <div
         className="welcome-video-content-container"
         style={{
-          transform: `matrix(1, 0, 0, 1, ${translateX}, ${translateY})`,
-          transition: 'transform 0.9s ease',
+          clipPath: clipPathValue,
+          transition: 'clip-path 0.9s ease',
+          // transform: `matrix(1, 0, 0, 1, ${translateX}, ${translateY})`,
+          // transition: 'transform 0.9s ease',
           position: 'relative'
         }}
       >
