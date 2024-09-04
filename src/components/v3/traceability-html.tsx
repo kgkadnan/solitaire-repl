@@ -78,9 +78,11 @@ const TraceabilityHtml = () => {
       if (entry.isIntersecting) {
         // Play video when the target div is in view
         videoRefHtml.current?.play();
+        setIsPlaying(true);
       } else {
         // Pause video when the target div is not in view
         videoRefHtml.current?.pause();
+        setIsPlaying(false);
       }
     }, options);
 
