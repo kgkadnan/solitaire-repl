@@ -36,7 +36,7 @@ export default function Leadership() {
         {Object.keys(selectedProfile).length === 0 ? (
           <div className="flex flex-col items-start ">
             <div
-              className="flex flex-col gap-2 cursor-pointer xl:px-[112px] lg:px-[32px]"
+              className="flex flex-col gap-2 cursor-pointer xl:px-[112px] lg:px-[42px] "
               onClick={() => {
                 setSelectedProfile(leadership[0]);
                 setTimeout(() => {
@@ -48,25 +48,27 @@ export default function Leadership() {
               }}
               key={leadership[0].name}
             >
-              <div>
-                {' '}
-                <Image
-                  src={leadership[0].image}
-                  alt={leadership[0].name}
-                  className="rounded-[8px] bg-[#D9D9D9] h-[375px] w-[375px]"
-                />
+              <div className="flex flex-col w-[420px] items-center">
+                <div>
+                  {' '}
+                  <Image
+                    src={leadership[0].image}
+                    alt={leadership[0].name}
+                    className="rounded-[8px] bg-[#D9D9D9] h-[375px] w-[375px]"
+                  />
+                </div>
+                <div className="text-neutral900 font-semiBold text-[20px]">
+                  {leadership[0].name}
+                </div>
+                <p className="text-neutral500 text-lRegular">
+                  {leadership[0].position}
+                </p>
               </div>
-              <div className="text-neutral900 font-semiBold text-[20px]">
-                {leadership[0].name}
-              </div>
-              <p className="text-neutral500 text-lRegular">
-                {leadership[0].position}
-              </p>
             </div>
-            <div className="xl:px-[112px] lg:px-[32px] py-[64px]  flex flex-wrap  justify-between w-full">
+            <div className="xl:px-[112px] lg:px-[42px] py-[64px]  flex flex-wrap  justify-between w-full">
               {leadership.slice(1, 3).map(leader => (
                 <div
-                  className={`flex flex-col gap-2 cursor-pointer`}
+                  className={`flex flex-col gap-2 cursor-pointer w-[420px] items-center`}
                   onClick={() => {
                     setSelectedProfile(leader);
                     setTimeout(() => {
@@ -95,7 +97,7 @@ export default function Leadership() {
                 </div>
               ))}
               <div
-                className="flex flex-col gap-2 cursor-pointer xl:invisible hidden xl:flex"
+                className="flex flex-col gap-2 cursor-pointer xl:invisible hidden xl:flex w-[420px] items-center"
                 onClick={() => {
                   setSelectedProfile(leadership[0]);
                   setTimeout(() => {
@@ -124,10 +126,10 @@ export default function Leadership() {
                 </p>
               </div>{' '}
             </div>
-            <div className="xl:px-[112px] lg:px-[32px] flex flex-wrap justify-between w-full">
+            <div className="xl:px-[112px] lg:px-[42px] flex flex-wrap justify-between w-full">
               {leadership.slice(3, 10).map(leader => (
                 <div
-                  className="flex flex-col gap-2 cursor-pointer pb-[64px]"
+                  className="flex flex-col gap-2 cursor-pointer pb-[64px] w-[420px] items-center"
                   onClick={() => {
                     setSelectedProfile(leader);
                     setTimeout(() => {
