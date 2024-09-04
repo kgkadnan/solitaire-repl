@@ -89,7 +89,7 @@ const HtmlAnimation = () => {
           }`}
           style={{
             marginBottom:
-              windowHeight >= 700 ? '85%' : windowHeight >= 600 ? '90%' : '95%',
+              windowHeight >= 700 ? '72%' : windowHeight >= 600 ? '90%' : '95%',
             marginTop: 'auto'
           }}
         >
@@ -167,7 +167,7 @@ const HtmlAnimation = () => {
           }`}
           style={{
             marginBottom:
-              windowHeight >= 800 ? '85%' : windowHeight >= 600 ? '90%' : '95%',
+              windowHeight >= 700 ? '72%' : windowHeight >= 600 ? '90%' : '95%',
             marginTop: 'auto'
           }}
         >
