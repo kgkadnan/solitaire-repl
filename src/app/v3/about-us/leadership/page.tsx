@@ -34,9 +34,9 @@ export default function Leadership() {
       )}
       <div className=" flex justify-center ">
         {Object.keys(selectedProfile).length === 0 ? (
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-start ">
             <div
-              className="flex flex-col gap-2 cursor-pointer"
+              className="flex flex-col gap-2 cursor-pointer xl:px-[112px] lg:px-[32px]"
               onClick={() => {
                 setSelectedProfile(leadership[0]);
                 setTimeout(() => {
@@ -63,10 +63,10 @@ export default function Leadership() {
                 {leadership[0].position}
               </p>
             </div>
-            <div className="px-[80px] pt-[64px]  flex flex-wrap gap-[60px]">
+            <div className="xl:px-[112px] lg:px-[32px] py-[64px]  flex flex-wrap  justify-between w-full">
               {leadership.slice(1, 3).map(leader => (
                 <div
-                  className="flex flex-col gap-2 cursor-pointer"
+                  className={`flex flex-col gap-2 cursor-pointer`}
                   onClick={() => {
                     setSelectedProfile(leader);
                     setTimeout(() => {
@@ -89,16 +89,44 @@ export default function Leadership() {
                   <div className="text-neutral900 font-semiBold text-[20px]">
                     {leader.name}
                   </div>
-                  <p className="text-neutral500 text-lRegular">
+                  <p className="text-neutral500 text-lRegular ">
                     {leader.position}
                   </p>
                 </div>
               ))}
+              <div
+                className="flex flex-col gap-2 cursor-pointer invisible"
+                onClick={() => {
+                  setSelectedProfile(leadership[0]);
+                  setTimeout(() => {
+                    window.scrollTo({
+                      top: 0,
+                      behavior: 'smooth'
+                    });
+                  }, 0);
+                }}
+                key={leadership[0].name}
+              >
+                <div>
+                  {' '}
+                  <Image
+                    src={leadership[0].image}
+                    alt={leadership[0].name}
+                    className="rounded-[8px] bg-[#D9D9D9] h-[375px] w-[375px]"
+                  />
+                </div>
+                <div className="text-neutral900 font-semiBold text-[20px]">
+                  {leadership[0].name}
+                </div>
+                <p className="text-neutral500 text-lRegular">
+                  {leadership[0].position}
+                </p>
+              </div>{' '}
             </div>
-            <div className="px-[80px] py-[64px]  flex flex-wrap gap-[60px] w-fit justify-center">
+            <div className="xl:px-[112px] lg:px-[32px] flex flex-wrap justify-between w-full">
               {leadership.slice(3, 10).map(leader => (
                 <div
-                  className="flex flex-col gap-2 cursor-pointer"
+                  className="flex flex-col gap-2 cursor-pointer pb-[64px]"
                   onClick={() => {
                     setSelectedProfile(leader);
                     setTimeout(() => {
