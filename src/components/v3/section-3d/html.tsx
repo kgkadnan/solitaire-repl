@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import ExploreNow from '@public/v3/home/explore.svg';
