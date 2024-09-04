@@ -99,9 +99,11 @@ const HtmlAnimation = () => {
           }`}
           style={{
             marginBottom:
-              window && window?.innerHeight >= 700
-                ? 'calc(100% - 450px)'
-                : 'calc(100% - 100px)',
+              window && window?.innerWidth >= 1600
+                ? '45%'
+                : window?.innerWidth >= 1280
+                ? '65%'
+                : '75%',
             marginTop: 'auto'
           }}
         >
@@ -202,10 +204,12 @@ const HtmlAnimation = () => {
           }`}
           style={{
             marginBottom:
-              window && window?.innerHeight >= 700
-                ? 'calc(100% - 450px)'
-                : 'calc(100% - 100px)',
-            // : 'calc(100% - 100px)',
+              window && window?.innerWidth >= 1600
+                ? '45%'
+                : window?.innerWidth >= 1280
+                ? '65%'
+                : '75%',
+
             marginTop: 'auto'
           }}
         >
