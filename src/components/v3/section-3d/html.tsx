@@ -13,6 +13,8 @@ const HtmlAnimation = () => {
   const [showBanner, setShowBanner] = useState(false);
   const [scrollIndex, setScrollIndex] = useState(0);
   const [windowWidth, setWindowWidth] = useState<any>(); // Track window width
+  const [windowHeight, setWindowHeight] = useState<any>(); // Track window width
+
   const router = useRouter();
 
   const imageList = [
@@ -26,6 +28,7 @@ const HtmlAnimation = () => {
   useEffect(() => {
     if (typeof window !== 'undefined') {
       setWindowWidth(window?.innerWidth || 0); // Set window width on mount
+      setWindowHeight(window?.innerHeight || 0); // Set window width on mount
 
       // Scroll to top on component mount
       window.scrollTo({
@@ -86,7 +89,7 @@ const HtmlAnimation = () => {
           }`}
           style={{
             marginBottom:
-              windowWidth >= 1650 ? '45%' : windowWidth >= 1280 ? '65%' : '75%',
+              windowHeight >= 700 ? '85%' : windowHeight >= 600 ? '90%' : '95%',
             marginTop: 'auto'
           }}
         >
@@ -164,7 +167,7 @@ const HtmlAnimation = () => {
           }`}
           style={{
             marginBottom:
-              windowWidth >= 1650 ? '45%' : windowWidth >= 1280 ? '65%' : '75%',
+              windowHeight >= 800 ? '85%' : windowHeight >= 600 ? '90%' : '95%',
             marginTop: 'auto'
           }}
         >
