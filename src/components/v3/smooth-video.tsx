@@ -82,6 +82,13 @@ const SmoothVideoPlayer = () => {
   const translateX = scrollPosition === 1 ? 0 : -59.3359 * (1 - scrollPosition);
   const translateY = scrollPosition === 1 ? 0 : -25 * (1 - scrollPosition);
 
+  useEffect(() => {
+    // Set the playback rate to slow down the video by 10%
+    if (videoRef.current) {
+      videoRef.current.playbackRate = 0.9;
+    }
+  }, []);
+
   return (
     <div
       className="welcome-video-wall-container h-fit relative flex items-center "
