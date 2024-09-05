@@ -34,7 +34,7 @@ export default function Leadership() {
       )}
       <div className=" flex justify-center ">
         {Object.keys(selectedProfile).length === 0 ? (
-          <div className="flex flex-col items-start ">
+          <div className="flex flex-col items-center ">
             <div
               className="flex flex-col gap-2 cursor-pointer xl:px-[112px] lg:px-[42px] "
               onClick={() => {
@@ -65,7 +65,7 @@ export default function Leadership() {
                 </p>
               </div>
             </div>
-            <div className="xl:px-[112px] lg:px-[42px] py-[64px]  flex flex-wrap  justify-between w-full">
+            <div className="xl:px-[112px] lg:px-[42px] py-[64px]  flex flex-wrap  justify-center w-full">
               {leadership.slice(1, 3).map(leader => (
                 <div
                   className={`flex flex-col gap-2 cursor-pointer w-[420px] items-center`}
@@ -96,7 +96,7 @@ export default function Leadership() {
                   </p>
                 </div>
               ))}
-              <div
+              {/* <div
                 className="flex flex-col gap-2 cursor-pointer xl:invisible hidden xl:flex w-[420px] items-center"
                 onClick={() => {
                   setSelectedProfile(leadership[0]);
@@ -124,9 +124,9 @@ export default function Leadership() {
                 <p className="text-neutral500 text-lRegular">
                   {leadership[0].position}
                 </p>
-              </div>{' '}
+              </div>{' '} */}
             </div>
-            <div className="xl:px-[112px] lg:px-[42px] flex flex-wrap justify-between w-full">
+            <div className="xl:px-[112px] lg:px-[42px] flex flex-wrap justify-center w-full">
               {leadership.slice(3, 10).map(leader => (
                 <div
                   className="flex flex-col gap-2 cursor-pointer pb-[64px] w-[420px] items-center"
