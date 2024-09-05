@@ -104,7 +104,7 @@ const SmoothVideoPlayer = () => {
       >
         <video
           ref={videoRef}
-          className="welcome-video-video"
+          className="welcome-video-video cursor-pointer"
           muted
           playsInline
           loop
