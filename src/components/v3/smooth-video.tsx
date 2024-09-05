@@ -117,6 +117,7 @@ const SmoothVideoPlayer = () => {
             width: '100%',
             height: 'auto'
           }}
+          onClick={handlePlayPause}
         ></video>
       </div>
       <div

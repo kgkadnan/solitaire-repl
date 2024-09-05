@@ -60,7 +60,8 @@ export const HeadquaterLocation = [
         email: 'ankush.mehta@kgkmail.com',
         image: Ankush,
         initial: 'AM',
-        country_name: 'Singapore'
+        country_name: 'Singapore',
+        office: 'Singapore'
       },
       {
         country: 'CHINA',

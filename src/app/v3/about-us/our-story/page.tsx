@@ -172,7 +172,7 @@ export default function AboutUs() {
                   <div className="h-[75px] mr-4 w-[2px] bg-[white] mx-auto"></div>
                 </div>
                 <div className="text-headingS ">
-                  KGK Group, founded by Shri Kesrimal Ji of Jaipur in 1905,
+                  KGK Group, founded by Shri Keshrimal Ji of Jaipur in 1905,
                   began with a humble task of trading coloured gemstones from
                   India.
                 </div>

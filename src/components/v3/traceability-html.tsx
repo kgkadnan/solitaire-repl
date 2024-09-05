@@ -105,7 +105,7 @@ const TraceabilityHtml = () => {
         }`
       : 'bg-neutral400 w-2';
   return (
-    <div className="relative flex flex-col items-center justify-center w-full h-screen bg-inherit">
+    <div className="relative flex flex-col items-center justify-center w-full  bg-inherit">
       <div>
         <video
           ref={videoRefHtml}
