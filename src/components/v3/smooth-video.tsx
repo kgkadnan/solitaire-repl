@@ -93,7 +93,7 @@ const SmoothVideoPlayer = () => {
     <div
       className="welcome-video-wall-container h-fit relative flex items-center "
       style={{
-        width: '80%'
+        width: '100%'
 
         // clipPath: clipPathValue,
         // transition: 'clip-path 0.9s ease'

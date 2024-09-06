@@ -67,7 +67,7 @@ export const timelineData = [
     image: Timeline1962,
     year: '1962',
     content:
-      'Mr. Ghisilal Ji Kothari was one of the first Indians in the gemstone industry to expand to internationally(Hong Kong)'
+      'Mr. Ghisilal Ji Kothari was one of the first Indians in the gemstone industry to expand internationally to Hong Kong'
   },
   // {
   //   image: Timeline1972,
