@@ -141,7 +141,7 @@ const SmoothVideoPlayer = () => {
           alt="video control"
         />
       </div>
-      <div className="absolute bottom-10 right-20" ref={targetRef}></div>
+      <div className="absolute bottom-11 right-20" ref={targetRef}></div>
     </div>
   );
 };
