@@ -172,7 +172,7 @@ const TraceabilityHtml = () => {
         />
       </div>
       <div className="absolute bottom-[50px]" ref={targetRef}></div>
-      <div className="absolute flex justify-between w-full xl:px-[112px] lg:pl-[44px] lg:pr-[32px] xl:top-[150px] lg:top-[125px] pointer-events-none">
+      <div className="absolute flex justify-between w-full xl:px-[112px] lg:pl-[44px] lg:pr-[32px] xl:top-[235px] lg:top-[160px] pointer-events-none">
         <div className="pointer-events-auto">
           <LeftStructure currentTime={currentTime} />
         </div>
