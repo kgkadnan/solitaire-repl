@@ -167,7 +167,7 @@ const HtmlAnimation = () => {
           }`}
           style={{
             marginBottom:
-              windowHeight >= 700 ? '60%' : windowHeight >= 600 ? '90%' : '95%',
+            windowHeight >= 700 ? '60%' : windowHeight >= 600 ? '75%' : '95%',
             marginTop: 'auto'
           }}
         >
