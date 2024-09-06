@@ -105,7 +105,7 @@ const TraceabilityHtml = () => {
         }`
       : 'bg-neutral400 w-2';
   return (
-    <div className="relative flex flex-col items-center justify-center w-full">
+    <div className="relative flex flex-col items-center justify-center w-full h-full">
       <div>
         <video
           ref={videoRefHtml}
@@ -172,7 +172,7 @@ const TraceabilityHtml = () => {
         />
       </div>
       <div className="absolute bottom-[50px]" ref={targetRef}></div>
-      <div className="absolute flex justify-between w-full xl:px-[112px] lg:pl-[44px] lg:pr-[32px] xl:top-[150px] lg:top-[125px] pointer-events-none">
+      <div className="absolute flex justify-between w-full xl:px-[112px] lg:pl-[44px] lg:pr-[32px] xl:top-[225px] lg:top-[185px] pointer-events-none">
         <div className="pointer-events-auto">
           <LeftStructure currentTime={currentTime} />
         </div>

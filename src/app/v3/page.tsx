@@ -235,7 +235,7 @@ const Index = () => {
             </p>
           </div>
         </div>
-        <div className="flex justify-center w-full h-screen items-start">
+        <div className="flex justify-center w-full h-fit">
           <TraceabilityHtml />
         </div>
         <div className="xl:px-[112px] lg:px-[32px]  pb-[40px] flex flex-col bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom items-center  justify-center">
