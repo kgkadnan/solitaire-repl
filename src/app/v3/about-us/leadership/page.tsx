@@ -48,7 +48,7 @@ export default function Leadership() {
               }}
               key={leadership[0].name}
             >
-              <div className="flex flex-col w-[420px] items-center">
+              <div className="flex flex-col w-fit items-center">
                 <div>
                   {' '}
                   <Image
@@ -65,10 +65,10 @@ export default function Leadership() {
                 </p>
               </div>
             </div>
-            <div className="xl:px-[112px] lg:px-[42px] py-[64px]  flex flex-wrap  justify-center w-full">
+            <div className="xl:px-[112px] lg:px-[42px] py-[64px]  flex flex-wrap  justify-center w-full gap-[60px]">
               {leadership.slice(1, 3).map(leader => (
                 <div
-                  className={`flex flex-col gap-2 cursor-pointer w-[420px] items-center`}
+                  className={`flex flex-col gap-2 cursor-pointer w-fit items-center`}
                   onClick={() => {
                     setSelectedProfile(leader);
                     setTimeout(() => {
@@ -97,7 +97,7 @@ export default function Leadership() {
                 </div>
               ))}
               {/* <div
-                className="flex flex-col gap-2 cursor-pointer xl:invisible hidden xl:flex w-[420px] items-center"
+                className="flex flex-col gap-2 cursor-pointer xl:invisible hidden xl:flex w-fit items-center"
                 onClick={() => {
                   setSelectedProfile(leadership[0]);
                   setTimeout(() => {
@@ -126,10 +126,10 @@ export default function Leadership() {
                 </p>
               </div>{' '} */}
             </div>
-            <div className="xl:px-[112px] lg:px-[42px] flex flex-wrap justify-center w-full">
+            <div className="xl:px-[112px] lg:px-[42px] flex flex-wrap justify-center w-full gap-[60px]">
               {leadership.slice(3, 10).map(leader => (
                 <div
-                  className="flex flex-col gap-2 cursor-pointer pb-[64px] w-[420px] items-center"
+                  className="flex flex-col gap-2 cursor-pointer pb-[64px] w-fit items-center"
                   onClick={() => {
                     setSelectedProfile(leader);
                     setTimeout(() => {
