@@ -606,7 +606,7 @@ const Dashboard = () => {
       const tabsCopy: ITabs[] = []; // Make a copy of the current tabs
 
       // Check for pending and active invoices
-      // if (customerData.customer?.orders?.length > 0) {
+      if (customerData.customer?.orders?.length > 0) {
         const pendingInvoices = customerData.customer.orders
           .filter((item: any) => item.invoice_id === null)
           .sort((a: any, b: any) => {
@@ -680,7 +680,7 @@ const Dashboard = () => {
         // Update the tabs state
         setTabs(tabsCopy);
         setActiveTab(tabsCopy[0].label);
-      // }
+      }
     }
   }, [customerData]);
 
