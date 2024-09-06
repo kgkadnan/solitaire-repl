@@ -105,7 +105,7 @@ const TraceabilityHtml = () => {
         }`
       : 'bg-neutral400 w-2';
   return (
-    <div className="relative flex flex-col items-center justify-center w-full  bg-inherit">
+    <div className="relative flex flex-col items-center justify-center w-full">
       <div>
         <video
           ref={videoRefHtml}
@@ -123,7 +123,7 @@ const TraceabilityHtml = () => {
       </div>
       <div className="absolute bottom-14 flex justify-between gap-4">
         <div
-          className="flex justify-around items-center h-[38px] bg-[#FFFFFF24] border-[white] rounded-[8px] px-[8px]  border-[1px] min-w-[150px]"
+          className="flex justify-around items-center h-[38px]  border-[white] rounded-[8px] px-[8px]  border-[1px] min-w-[150px]"
           style={{ boxShadow: 'var(--popups-shadow' }}
         >
           {[
@@ -172,7 +172,7 @@ const TraceabilityHtml = () => {
         />
       </div>
       <div className="absolute bottom-[50px]" ref={targetRef}></div>
-      <div className="absolute flex justify-between w-full xl:px-[112px] lg:pl-[44px] lg:pr-[32px] xl:top-[235px] lg:top-[160px] pointer-events-none">
+      <div className="absolute flex justify-between w-full xl:px-[112px] lg:pl-[44px] lg:pr-[32px] xl:top-[150px] lg:top-[125px] pointer-events-none">
         <div className="pointer-events-auto">
           <LeftStructure currentTime={currentTime} />
         </div>

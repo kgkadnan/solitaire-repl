@@ -216,7 +216,7 @@ const Index = () => {
         <div className="overflow-hidden	w-full flex justify-center pt-[80px] bg-[#FCFDFD] ">
           <HtmlAnimation />
         </div>
-        <div className="xl:px-[112px] lg:px-[32px]  pb-[40px] flex flex-col bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom items-center  justify-center">
+        <div className="xl:px-[112px] lg:px-[32px]  pb-[40px] flex flex-col bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient items-center blur-bottom  justify-center">
           <div className="flex flex-col gap-2 text-center w-[840px] py-[40px] justify-center">
             <div className="flex flex-col gap-2">
               <p className="xl:text-[52px] lg:text-[42px] text-neutral900 font-black">
@@ -235,7 +235,7 @@ const Index = () => {
             </p>
           </div>
         </div>
-        <div className="flex justify-center w-full">
+        <div className="flex justify-center w-full h-screen mt-[65px]">
           <TraceabilityHtml />
         </div>
         <div className="xl:px-[112px] lg:px-[32px]  pb-[40px] flex flex-col bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom items-center  justify-center">
