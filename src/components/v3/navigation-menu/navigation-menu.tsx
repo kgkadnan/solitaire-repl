@@ -1,4 +1,5 @@
 'use client';
+import { ChevronDown } from 'lucide-react';
 
 import * as React from 'react';
 import Link from 'next/link';
@@ -83,13 +84,18 @@ export function NavigationMenuDemo(
           </NavigationMenuTrigger> */}
           <div ref={aboutUsRef}>
             <div
-              className={`bg-neutral0 text-neutral700 !hover:bg-neutral50 !hover:text-neutral900 !focus:bg-neutral50 cursor-pointer rounded-[8px]  px-4 py-2 text-[16px] transition-colors hover:bg-neutral50 hover:text-neutral900 focus:bg-neutral0 focus:text-neutral700 ${
+              className={`flex gap-2  items-center bg-neutral0 text-neutral700 !hover:bg-neutral50 !hover:text-neutral900 !focus:bg-neutral50 cursor-pointer rounded-[8px]  px-4 py-2 text-[16px] transition-colors hover:bg-neutral50 hover:text-neutral900 focus:bg-neutral0 focus:text-neutral700 ${
                 selectedHeader === 'aboutUs' && 'text-neutral900 font-medium'
               }`}
               onClick={() => setIsAboutUsOpen(!isAboutUsOpen)}
             >
-              {' '}
               About Us
+              <ChevronDown
+                className={`relative top-[1px] ml-1 h-3 w-3 transition duration-200 group-data-[state=open]:rotate-180 transition-transform duration-300 ${
+                  isAboutUsOpen && 'rotate-180'
+                }`}
+                aria-hidden="true"
+              />
             </div>
             {isAboutUsOpen && (
               <div
