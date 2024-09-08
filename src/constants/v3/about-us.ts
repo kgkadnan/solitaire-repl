@@ -7,7 +7,8 @@ import Timeline1975 from '@public/v3/timeline/1975.png';
 import Timeline1986 from '@public/v3/timeline/1986.png';
 import Timeline1997 from '@public/v3/timeline/1997.png';
 import Timeline2000 from '@public/v3/timeline/2000.png';
-// import Timeline2009 from '@public/v3/timeline/2009.png';
+import Timeline2001 from '@public/v3/timeline/2001.png';
+import Timeline2005 from '@public/v3/timeline/2005.png';
 import Timeline2014 from '@public/v3/timeline/2014.png';
 // import Timeline2015 from '@public/v3/timeline/2015.png';
 // import Timeline2016 from '@public/v3/timeline/2016.png';
@@ -98,13 +99,13 @@ export const timelineData = [
       'KGK established a diamond manufacturing unit in South Africa, being one of the first diamond companies to expand manufacturing into Africa.'
   },
   {
-    image: Timeline2000,
+    image: Timeline2001,
     year: '2001',
     content:
       'KGK Group expanded its presence to Europe with a Sales office in the Diamond Capital of the world - Antwerp, Belgium.'
   },
   {
-    image: Timeline2000,
+    image: Timeline2005,
     year: '2005',
     content:
       'KGK Group opened their sales office in Dubai, United Arab Emirates.'

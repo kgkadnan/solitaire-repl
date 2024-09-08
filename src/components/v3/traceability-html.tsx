@@ -19,6 +19,22 @@ const calculateProgressWidth = (
   }
   return '0%';
 };
+
+const handleReferenceClick = (
+  time: any,
+  videoRefHtml: any,
+  setIsPlaying: any
+) => {
+  console.log('called', time);
+  if (videoRefHtml.current) {
+    videoRefHtml.current.currentTime = time;
+    if (videoRefHtml.current.paused) {
+      videoRefHtml.current.play();
+      setIsPlaying(true);
+    }
+  }
+};
+
 const TraceabilityHtml = () => {
   const videoRefHtml: any = useRef(null);
   const [isPlaying, setIsPlaying] = useState(true);
@@ -27,7 +43,7 @@ const TraceabilityHtml = () => {
 
   const handlePlayPause = () => {
     if (videoRefHtml.current.currentTime >= 31) {
-      handleReferenceClick(0);
+      handleReferenceClick(0, videoRefHtml, setIsPlaying);
       videoRefHtml.current.play();
     } else if (videoRefHtml.current.paused) {
       videoRefHtml.current.play();
@@ -35,16 +51,6 @@ const TraceabilityHtml = () => {
     } else {
       videoRefHtml.current.pause();
       setIsPlaying(false);
-    }
-  };
-
-  const handleReferenceClick = (time: any) => {
-    if (videoRefHtml.current) {
-      videoRefHtml.current.currentTime = time;
-      if (videoRefHtml.current.paused) {
-        videoRefHtml.current.play();
-        setIsPlaying(true);
-      }
     }
   };
 
@@ -135,7 +141,9 @@ const TraceabilityHtml = () => {
           ].map(({ timeStart, timeEnd }, index) => (
             <div
               key={`${timeStart}-${timeEnd}`}
-              onClick={() => handleReferenceClick(timeStart)}
+              onClick={() =>
+                handleReferenceClick(timeStart, videoRefHtml, setIsPlaying)
+              }
               className={`relative h-2 rounded-[8px] cursor-pointer transition-all duration-300 ease-in-out overflow-hidden ${dotClasses(
                 timeStart,
                 timeEnd,
@@ -178,7 +186,11 @@ const TraceabilityHtml = () => {
         } pointer-events-none`}
       >
         <div className="pointer-events-auto">
-          <LeftStructure currentTime={currentTime} />
+          <LeftStructure
+            currentTime={currentTime}
+            videoRefHtml={videoRefHtml}
+            setIsPlaying={setIsPlaying}
+          />
         </div>
         <div className="pointer-events-auto">
           <RightStructure currentTime={currentTime} />
@@ -329,7 +341,15 @@ const calculateProgressHeight = (
   return '0%';
 };
 
-const LeftStructure = ({ currentTime }: { currentTime: number }) => {
+const LeftStructure = ({
+  currentTime,
+  videoRefHtml,
+  setIsPlaying
+}: {
+  currentTime: number;
+  videoRefHtml: any;
+  setIsPlaying: any;
+}) => {
   const [isVisible, setIsVisible] = useState(false);
   const sections = [
     { timeStart: 0, timeEnd: 3 },
@@ -406,7 +426,17 @@ const LeftStructure = ({ currentTime }: { currentTime: number }) => {
                 }}
               />
             </div>
-            <div className="flex gap-2 items-center " key={index}>
+            <div
+              className="flex gap-2 items-center cursor-pointer"
+              key={index}
+              onClick={() =>
+                handleReferenceClick(
+                  trace.timeStart,
+                  videoRefHtml,
+                  setIsPlaying
+                )
+              }
+            >
               <div
                 className={`w-[54px] h-[54px] bg-[white] rounded-[8px] flex items-center justify-center transition-opacity duration-500 relative overflow-hidden ${
                   currentTime >= trace.timeStart ? 'opacity-100' : 'opacity-50'
