@@ -99,7 +99,7 @@ export function NavigationMenuDemo(
             </div>
             {isAboutUsOpen && (
               <div
-                className="!absolute !rounded-[8px] absolute left-[-30px] top-[50px] bg-neutral0 shadow-lg"
+                className="!absolute !rounded-[8px] absolute left-[-20px] top-[50px] bg-neutral0 shadow-lg"
                 style={{ boxShadow: 'var(--input-shadow) inset' }}
               >
                 <ul className="flex flex-col !rounded-[8px] border-[1px] border-neutral200">
