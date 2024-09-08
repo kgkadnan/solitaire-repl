@@ -188,8 +188,8 @@ const TraceabilityHtml = () => {
         <div className="pointer-events-auto">
           <LeftStructure
             currentTime={currentTime}
-            videoRefHtml={videoRefHtml}
-            setIsPlaying={setIsPlaying}
+            // videoRefHtml={videoRefHtml}
+            // setIsPlaying={setIsPlaying}
           />
         </div>
         <div className="pointer-events-auto">
@@ -342,13 +342,11 @@ const calculateProgressHeight = (
 };
 
 const LeftStructure = ({
-  currentTime,
-  videoRefHtml,
-  setIsPlaying
+  currentTime
 }: {
   currentTime: number;
-  videoRefHtml: any;
-  setIsPlaying: any;
+  // videoRefHtml: any;
+  // setIsPlaying: any;
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const sections = [
@@ -429,13 +427,13 @@ const LeftStructure = ({
             <div
               className="flex gap-2 items-center cursor-pointer"
               key={index}
-              onClick={() =>
-                handleReferenceClick(
-                  trace.timeStart,
-                  videoRefHtml,
-                  setIsPlaying
-                )
-              }
+              // onClick={() =>
+              //   handleReferenceClick(
+              //     trace.timeStart,
+              //     videoRefHtml,
+              //     setIsPlaying
+              //   )
+              // }
             >
               <div
                 className={`w-[54px] h-[54px] bg-[white] rounded-[8px] flex items-center justify-center transition-opacity duration-500 relative overflow-hidden ${
