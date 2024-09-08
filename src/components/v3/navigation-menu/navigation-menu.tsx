@@ -73,7 +73,7 @@ export function NavigationMenuDemo(
           </Link>
         </NavigationMenuItem>
 
-        <NavigationMenuItem className="relative" >
+        <NavigationMenuItem className="relative">
           {/* <NavigationMenuTrigger
             className={`bg-neutral0 text-neutral700 !hover:bg-neutral50 !hover:text-neutral900 !focus:bg-neutral50 ${
               selectedHeader === 'aboutUs' && 'text-neutral900 font-medium'
