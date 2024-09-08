@@ -425,7 +425,7 @@ const LeftStructure = ({
               />
             </div>
             <div
-              className="flex gap-2 items-center cursor-pointer"
+              className="flex gap-2 items-center"
               key={index}
               // onClick={() =>
               //   handleReferenceClick(
