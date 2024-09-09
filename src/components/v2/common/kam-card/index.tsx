@@ -44,14 +44,7 @@ const KAMCard: React.FC<IKAMCardProps> = ({
       setShowToast(false); // Hide the toast notification after some time
     }, 4000);
   };
-  console.log(
-    'location',
-    location,
-    RednderLocation({
-      renderedCellValue:
-        STONE_LOCATION_SHORT[location as keyof typeof STONE_LOCATION_SHORT]
-    })
-  );
+
   return (
     <>
       <Toast show={showToast} message="Copied Successfully" />

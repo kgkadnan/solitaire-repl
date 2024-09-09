@@ -16,7 +16,7 @@ export default function Error({
   reset: () => void;
 }) {
   console.log('---------------------------->>>>>>>>>', error);
-  log.error('This is an error message from ExampleComponent');
+  log.error(error);
 
   //   const pathname = usePathname()
   //   const log = useLogger({ source: "error.tsx" });
