@@ -79,6 +79,7 @@
     "eslint-config-next": "13.4.12",
     "file-loader": "^6.2.0",
     "fs": "0.0.1-security",
+    "loglevel": "^1.9.2",
     "lucide-react": "^0.263.1",
     "material-react-table": "^2.9.2",
     "next": "13.4.12",

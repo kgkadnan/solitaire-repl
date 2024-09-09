@@ -1,9 +1,12 @@
 'use client'; // Error components must be Client Components
 // import { LogLevel } from "@/next-axiom/logger";
-import { useLogger } from 'next-axiom';
-import { usePathname } from 'next/navigation';
+// import { useLogger } from 'next-axiom';
+// import { usePathname } from 'next/navigation';
 
 import CustomErrorComponent from '@/components/v2/common/error';
+import log from 'logging/log-util';
+
+// import { useEffect } from 'react';
 
 export default function Error({
   error,
@@ -13,6 +16,7 @@ export default function Error({
   reset: () => void;
 }) {
   console.log('---------------------------->>>>>>>>>', error);
+  log.error('This is an error message from ExampleComponent');
 
   //   const pathname = usePathname()
   //   const log = useLogger({ source: "error.tsx" });

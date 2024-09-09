@@ -1,30 +1,32 @@
-import pino from 'pino';
+// utils/logger.js
+import log from 'loglevel';
 
-// Define log level based on environment
-const logLevel = process.env.NODE_ENV === 'production' ? 'info' : 'debug';
+// Set the logging level (you can adjust this based on your environment)
+log.setLevel('info');
 
-const send = async function (level: any, logEvent: any) {
-  //Use this to ship application log
-  // const url = 'server-log-stream-url';
-  // const response = await fetch(url, {
-  //   method: 'POST',
-  //   headers: {
-  //     Authorization: 'token'
-  //   },
-  //   body: JSON.stringify([logEvent])
-  // });
+// Custom function to send logs to the server
+function sendLogToServer(level: any, message: any, additionalInfo = {}) {
+  fetch('/api/log', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ level, message, additionalInfo })
+  }).catch(error => console.error('Failed to send log to server', error));
+}
+
+// Override loglevel's method to send logs to the server
+const originalFactory = log.methodFactory;
+log.methodFactory = function (methodName, logLevel, loggerName) {
+  const rawMethod = originalFactory(methodName, logLevel, loggerName);
+
+  return function (message, ...optionalParams) {
+    rawMethod(message, ...optionalParams);
+    sendLogToServer(methodName, message, optionalParams);
+  };
 };
 
-// Configure logger with dynamic log level
-const logger = pino({
-  level: logLevel,
-  browser: {
-    serialize: true,
-    asObject: true,
-    transmit: {
-      send
-    }
-  }
-});
+// Initialize the method factory
+log.setLevel(log.getLevel());
 
-export default logger;
+export default log;
