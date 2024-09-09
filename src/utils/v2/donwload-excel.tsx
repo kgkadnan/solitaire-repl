@@ -95,7 +95,7 @@ export const downloadExcelHandler = async ({
       setIsLoading(false);
       if (modalSetState.setIsDialogOpen) modalSetState.setIsDialogOpen(true);
       if (modalSetState.setDialogContent) {
-        if (error.data.type === 'unauthorized') {
+        if (error.data?.type === 'unauthorized') {
           modalSetState.setDialogContent(
             <CommonPoppup
               content={
@@ -122,7 +122,7 @@ export const downloadExcelHandler = async ({
               ]}
             />
           );
-        } else if (error.data.type === 'not_allowed') {
+        } else if (error.data?.type === 'not_allowed') {
           modalSetState.setDialogContent(
             <CommonPoppup
               content={error?.data?.message}
@@ -146,7 +146,7 @@ export const downloadExcelHandler = async ({
             <CommonPoppup
               content={''}
               customPoppupBodyStyle="!mt-[70px]"
-              header={error?.data?.message}
+              header={error?.data?.message ?? 'Something went wrong'}
               actionButtonData={[
                 {
                   variant: 'primary',
