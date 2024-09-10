@@ -109,9 +109,9 @@
   "app.myCart.actionButton.viewSimilarStone": "View Similar Stone",
   "app.myCart.actionButton.compareStone": "Compare Stone",
 
-  "app.confirmStone.updateSelection" : "Update Selection",
-  "app.confirmStone.refreshSearchResults" : "Refresh Search Results",
-  "app.confirmStone.confirmRemainingStones" : "Confirm Remaining Stones",
+  "app.confirmStone.updateSelection": "Update Selection",
+  "app.confirmStone.refreshSearchResults": "Refresh Search Results",
+  "app.confirmStone.confirmRemainingStones": "Confirm Remaining Stones",
 
   "app.confirmStone": "Confirm Stone",
   "app.confirmStone.footer.back": "Back",

@@ -12,7 +12,9 @@ module.exports = {
       center: true,
       // padding: "2rem",
       screens: {
-        // "2xl": "1400 px",
+        '1530px': '1530px',
+        '1600px': '1600px',
+        '1920px': '1920px'
       }
     },
     extend: {
@@ -175,15 +177,82 @@ module.exports = {
         'accordion-up': {
           from: { height: 'var(--radix-accordion-content-height)' },
           to: { height: 0 }
+        },
+        zoom: {
+          '0%': { transform: 'scale(0.5)', opacity: '0' },
+          '100%': { transform: 'scale(1)', opacity: '1' }
+        },
+        gradientAnimation: {
+          '0%': { 'background-position': '0% 0%' },
+          '50%': { 'background-position': '100% 100%' },
+          '100%': { 'background-position': '0% 0%' }
+        },
+        worldMapPulse: {
+          '0%': {
+            boxShadow: '0 0 0 0 rgba(52, 68, 68, 0.7)' // Pulse starts from the center
+          },
+          '50%': {
+            boxShadow: '0 0 0 10px rgba(52, 68, 68, 0)' /* Fully transparent */
+          },
+          '100%': {
+            boxShadow: '0 0 0 0 rgba(52, 68, 68, 0)' /* Fully transparent */
+          }
+        },
+
+        'horizontal-reveal': {
+          '0%': { width: '0%', height: '0%' },
+          '30%': { width: '50px', height: '0%' },
+          '60%': { width: '50px', height: '80px' },
+          '100%': { width: '100%', height: '100%' }
+        },
+        'slide-left': {
+          from: {
+            marginLeft: '100%'
+          },
+          to: {
+            marginLeft: '0%'
+          }
+        },
+        shimmer: {
+          '0%': {
+            backgroundPosition: '0 0'
+          },
+          '100%': {
+            backgroundPosition: '-200% 0'
+          }
         }
       },
       boxShadow: {
         inputShadow: 'var(--input-shadow)',
         popupsShadow: 'var(--popups-shadow)'
       },
+
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
-        'accordion-up': 'accordion-up 0.2s ease-out'
+        'accordion-up': 'accordion-up 0.2s ease-out',
+        zoom: 'zoom 3s ease-in-out ',
+        gradient: 'gradientAnimation 10s ease infinite',
+        pulse: 'worldMapPulse 2s infinite',
+        'horizontal-reveal': 'horizontal-reveal 2s linear forwards',
+        slideLeft: 'slide-left 3s linear',
+        shimmer: 'shimmer 2s linear infinite'
+      },
+      backgroundImage: {
+        'animated-gradient': ` linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, white 100%),
+            linear-gradient(90deg, #FFD490,#A5A5FF, #92DEFF, #9EFFE8)`,
+
+        // linear-gradient(90deg, #44C4FC,#4AF6CD, #8989FD, #FFE0B0)`,
+        // 'linear-gradient(180deg, #ffffff, #FFF4E3, #E8E8FF, #DBF2FC, #FFFFFF,#FFFFFF)',
+        'timeline-gradient':
+          'linear-gradient(to bottom, #FFAD05, #168B85, #5995ED)',
+        'radial-grad-kam': 'radial-gradient(circle, #F9FAFB, #949495)'
+      },
+      backgroundSize: {
+        200: '200% 200%'
+      },
+      transitionProperty: {
+        height: 'height',
+        spacing: 'margin, padding'
       }
     }
   },

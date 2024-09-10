@@ -3,7 +3,7 @@ import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import Edit from '@public/v2/assets/icons/edit-number.svg?url';
 import { ManageLocales } from '@/utils/translate';
-import KgkIcon from '@public/v2/assets/icons/sidebar-icons/vector.svg';
+import KgkIcon from '@public/v2/assets/icons/sidebar-icons/hover-kgk-icon.svg?url';
 import { handleVerifyOtp } from './helpers/handle-verify-otp';
 import { IndividualActionButton } from '../action-button/individual-button';
 import OtpInput from '../otp';
@@ -61,6 +61,8 @@ const OTPVerification = ({
   const router = useRouter();
   const resendLabel = resendTimer > 0 ? `(${resendTimer}Sec)` : '';
   const [error, setError] = useState('');
+  const [isHovered, setIsHovered] = useState(false);
+
   useEffect(() => {
     let countdownInterval: NodeJS.Timeout;
 
@@ -85,8 +87,18 @@ const OTPVerification = ({
   return (
     <div className="flex  items-center">
       <div className="flex flex-col w-[450px] p-8 gap-[24px] rounded-[8px] border-[1px] border-neutral200">
-        <div className="flex flex-col items-center">
-          <Image src={KgkIcon} alt="KGKlogo" width={60} height={84} />
+        <div
+          className="flex flex-col items-center cursor-pointer"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          onClick={() => router.push('/v3')}
+        >
+          <KgkIcon
+            fill={isHovered ? '#5D6969' : '#23302C'}
+            alt="KGKlogo"
+            // width={60}
+            // height={84}
+          />
         </div>
 
         <div className="parent relative">

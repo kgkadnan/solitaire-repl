@@ -1,8 +1,17 @@
+export const v3Routes = [
+  '/v3/about-us/our-story',
+  '/v3/about-us/leadership',
+  '/v3/contact-us',
+  '/v3/blogs',
+  '/v3',
+  '/v3/sustainability'
+];
 export const headerlessRoutes = [
   '/v2/register',
   '/v2/login',
   '/v2/forgot-password',
-  '/privacy-policy'
+  '/privacy-policy',
+  ...v3Routes
 ];
 
 export const v2Routes = [

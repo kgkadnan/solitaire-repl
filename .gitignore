@@ -38,4 +38,4 @@ next-env.d.ts
 .vscode/settings.json
 .vscode/extensions.json
 /.scannerwork/
-public/v3/globe
+public/v3/globe/

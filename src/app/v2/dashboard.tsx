@@ -2445,7 +2445,7 @@ const Dashboard = () => {
               </p>
             </div>
             <p className="text-neutral500">
-              Copyright © {new Date().getFullYear()} KGK Live. All rights
+              Copyright © {new Date().getFullYear()} KGK Diamonds. All rights
               reserved.
             </p>
           </div>
