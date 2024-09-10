@@ -1,70 +1,71 @@
-// // utils/logger.js
-// import log from 'loglevel';
+// src/logging/log-util.ts
 
-// log.setLevel('info');
-
-// function sendLogToServer(level:any, message:any, additionalInfo = {}) {
-//   fetch('/api/log', {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/json',
-//     },
-//     body: JSON.stringify({ level, message, additionalInfo }),
-//   }).catch((error) => console.error('Failed to send log to server', error));
-// }
-
-// // Override loglevel's method to send logs to the server
-// const originalFactory = log.methodFactory;
-// log.methodFactory = function (methodName, logLevel, loggerName) {
-//   const rawMethod = originalFactory(methodName, logLevel, loggerName);
-
-//   return function (message, ...optionalParams) {
-//     rawMethod(message, ...optionalParams);
-//     sendLogToServer(methodName, message, optionalParams);
-//   };
-// };
-
-// // Initialize the method factory
-// log.setLevel(log.getLevel());
-
-// export default log;
-
-// utils/logger.js
-import log from 'loglevel';
 import * as Sentry from '@sentry/nextjs';
 
-// Set the logging level
-log.setLevel('info');
+type LogLevel = 'error' | 'warn' | 'info' | 'debug';
 
-// Custom function to send logs to Sentry
-function sendLogToSentry(level: any, message: any, additionalInfo = {}) {
-  if (level === 'error') {
-    // Capture the error in Sentry
-    Sentry.captureException(new Error(message), {
-      extra: additionalInfo
-    });
-  } else {
-    // Capture non-error messages as breadcrumbs or messages
-    Sentry.addBreadcrumb({
-      message,
-      level,
-      data: additionalInfo
-    });
+const levels: Record<LogLevel, number> = {
+  error: 0,
+  warn: 1,
+  info: 2,
+  debug: 3,
+};
+
+
+let currentLevel: number = levels.info;
+
+export function setLogLevel(level: LogLevel): void {
+  if (levels[level] !== undefined) {
+    currentLevel = levels[level];
   }
 }
 
-// Override loglevel's method to send logs to Sentry
-const originalFactory = log.methodFactory;
-log.methodFactory = function (methodName, logLevel, loggerName) {
-  const rawMethod = originalFactory(methodName, logLevel, loggerName);
+export function log(level: LogLevel, message: string): void {
+  if (levels[level] <= currentLevel) {
+    // console[level](message);
 
-  return function (message, ...optionalParams) {
-    rawMethod(message, ...optionalParams);
-    sendLogToSentry(methodName, message, optionalParams);
-  };
+    if (message) {  // Ensure message is not null or undefined
+      switch (level) {
+        case 'error':
+          Sentry.captureException(new Error(message));
+          break;
+        case 'warn':
+          Sentry.captureMessage(message, 'warning');
+          break;
+        case 'info':
+          Sentry.captureMessage(message, 'info');
+          break;
+        case 'debug':
+          Sentry.captureMessage(message, 'debug');
+          break;
+      }
+    } else {
+      console.error('Log message is null or undefined');
+    }
+  }
+}
+
+
+export function error(message: string): void {
+  log('error', message);
+}
+
+export function warn(message: string): void {
+  log('warn', message);
+}
+
+export function info(message: string): void {
+  log('info', message);
+}
+
+export function debug(message: string): void {
+  log('debug', message);
+}
+
+export default {
+  setLogLevel,
+  error,
+  warn,
+  info,
+  debug,
 };
-
-// Initialize the method factory
-log.setLevel(log.getLevel());
-
-export default log;

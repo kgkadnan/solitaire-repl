@@ -16,30 +16,8 @@ export default function Error({
   reset: () => void;
 }) {
   console.log('---------------------------->>>>>>>>>', error);
-  log.error(error);
+  log.error("error");
 
-  //   const pathname = usePathname()
-  //   const log = useLogger({ source: "error.tsx" });
-  //   let status =  error.message == 'Invalid URL' ? 404 : 500;
-  //   log.logHttpRequest(
-  //     3, //indicating error as per logHttpRequest
-  //     error.message,
-  //     {
-  //       host: window.location.href,
-  //       path: pathname,
-  //       statusCode: status,
-  //     },
-  //     {
-  //       error: error.name,
-  //       cause: error.cause,
-  //       stack: error.stack,
-  //       digest: error.digest,
-  //     },
-  //   );
-  // useEffect(() => {
-  //   // Log the error to an error reporting service
-  //   console.error(error);
-  // }, [error]);
 
   return <CustomErrorComponent reset={reset} />;
 }

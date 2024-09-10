@@ -7,9 +7,13 @@ export const metadata: Metadata = {
   description:
     'Simplify your diamond buying with KGK Diamonds. where you can manage your diamonds, orders, and preferences seamlessly.'
 };
-export default function Home() {
-  logger.info('test log! pinotest stream from reactjs application.');
 
+
+
+export default function Home() {
+  logger.setLogLevel('debug');
+
+  logger.info('This is an info message');
   return (
     <>
       <Dashboard />

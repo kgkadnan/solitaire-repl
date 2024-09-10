@@ -33,7 +33,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { SubRoutes } from '@/constants/v2/enums/routes';
 import { DialogComponent } from '@/components/v2/common/dialog';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
-import logger from 'logging/log-util';
+// import logger from 'logging/log-util';
 import { DatePickerWithRange } from '@/components/v2/common/date-picker';
 import { DateRange } from 'react-day-picker';
 import YourOrderSkeleton from '@/components/v2/skeleton/your-order';
@@ -112,7 +112,7 @@ const MyDiamonds = () => {
         setIsLoading(false);
       })
       .catch((e: any) => {
-        logger.error(e);
+       console.log(e);
         setIsLoading(false);
       });
     setIsLoading(false);
@@ -135,7 +135,7 @@ const MyDiamonds = () => {
         setIsLoading(false);
       })
       .catch((e: any) => {
-        logger.error(e);
+       console.log(e);
         setIsLoading(false);
       });
     setIsLoading(false);
@@ -149,7 +149,7 @@ const MyDiamonds = () => {
         setIsLoading(false);
       })
       .catch((e: any) => {
-        logger.error(e);
+       console.log(e);
         setIsLoading(false);
       });
   }, [previousConfirmStatus]);
@@ -299,7 +299,7 @@ const MyDiamonds = () => {
           setIsLoading(false);
         })
         .catch(e => {
-          logger.error(e), setIsLoading(false);
+         console.log(e), setIsLoading(false);
         });
     }
 

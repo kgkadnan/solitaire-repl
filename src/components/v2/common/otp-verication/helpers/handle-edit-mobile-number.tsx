@@ -1,5 +1,5 @@
 import { IOtp } from '..';
-import logger from 'logging/log-util';
+// import logger from 'logging/log-util';
 import CommonPoppup from '@/app/v2/login/component/common-poppup';
 import { IToken } from '@/app/v2/register/interface';
 import { INVALID_PHONE } from '@/constants/error-messages/register';
@@ -84,7 +84,7 @@ export const handleEditMobileNumber = ({
             handleClick={() => setIsDialogOpen(false)}
           />
         );
-        logger.error(`something went wrong while sending OTP ${e}`);
+        console.log(`something went wrong while sending OTP ${e}`);
       });
 
     setIsInputDialogOpen(false);
