@@ -34,7 +34,6 @@ export const sitemap = [
   //     }
   //   ]
   // },
-
   {
     title: 'Legal',
     content: [
