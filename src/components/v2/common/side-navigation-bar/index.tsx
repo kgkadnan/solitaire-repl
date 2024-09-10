@@ -41,7 +41,7 @@ const SideNavigationBar = ({
   const currentRoute = usePathname();
   const currentSubRoute = useSearchParams().get('active-tab');
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
-  const [showPulse, setShowPulse] = useState(false);
+  const [showPulse, setShowPulse] = useState(true);
 
   const router = useRouter();
   const SideNavigationData: ISideNavigationBar[] = [
