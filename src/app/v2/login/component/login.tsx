@@ -1,6 +1,6 @@
-import Image from 'next/image';
+// import Image from 'next/image';
 import React, { useState } from 'react';
-import KgkIcon from '@public/v2/assets/icons/sidebar-icons/vector.svg';
+// import KgkIcon from '@public/v2/assets/icons/sidebar-icons/vector.svg';
 import { handleLoginInputChange } from '../helpers/handle-login-input-change';
 import Link from 'next/link';
 import { MobileInput } from '@/components/v2/common/input-field/mobile';
@@ -11,6 +11,7 @@ import CheckboxComponent from '@/components/v2/common/checkbox';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { InputField } from '@/components/v2/common/input-field';
 import { useLazyTrackRegisterFlowQuery } from '@/features/api/register';
+import KgkIcon from '@public/v2/assets/icons/sidebar-icons/hover-kgk-icon.svg?url';
 
 const LoginComponent = ({
   setPhoneNumber,
@@ -33,6 +34,7 @@ const LoginComponent = ({
   const [isKeepSignedIn, setIsKeepSignedIn] = useState(false);
   const router = useRouter();
   const pathName = useSearchParams().get('path');
+  const [isHovered, setIsHovered] = useState(false);
 
   const [triggerRegisterFlowTrack] = useLazyTrackRegisterFlowQuery();
 
@@ -47,8 +49,18 @@ const LoginComponent = ({
         {' '}
         {/* Wrap with form and handle onSubmit */}
         <div className="flex flex-col w-[450px]  p-8 gap-[24px] rounded-[8px] border-[1px] border-neutral-200 ">
-          <div className="flex flex-col items-center">
-            <Image src={KgkIcon} alt="KGKlogo" width={60} height={84} />
+          <div
+            className="flex flex-col items-center cursor-pointer"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            onClick={() => router.push('/v3')}
+          >
+            <KgkIcon
+              fill={isHovered ? '#5D6969' : '#23302C'}
+              alt="KGKlogo"
+              width={60}
+              height={84}
+            />
           </div>
           <div className="parent relative">
             <hr className="absolute bottom-0 left-0 border-none h-[1px] w-full bg-neutral200" />

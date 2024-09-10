@@ -1,6 +1,6 @@
-import Image from 'next/image';
-import React from 'react';
-import KgkIcon from '@public/v2/assets/icons/sidebar-icons/vector.svg';
+// import Image from 'next/image';
+import React, { useState } from 'react';
+import KgkIcon from '@public/v2/assets/icons/sidebar-icons/hover-kgk-icon.svg?url';
 import { handleRegisterChange } from '../helpers/handle-register-change';
 import { handleRegister } from '../helpers/handle-register';
 import { IRegisterSetState, IRegisterState } from '../interface';
@@ -38,6 +38,7 @@ const RegisterComponent = ({
 }: IRegisterComponent) => {
   const router = useRouter();
   const pathName = useSearchParams().get('path');
+  const [isHovered, setIsHovered] = useState(false);
 
   const { registerFormState, registerFormErrors } = registerState;
   const { setRegisterFormState, setRegisterFormErrors } = registerSetState;
@@ -68,8 +69,18 @@ const RegisterComponent = ({
         className="flex items-center text-center"
       >
         <div className="flex flex-col w-[450px] min-h-[880px] p-8 gap-[24px] rounded-[8px] border-[1px] border-neutral200 mb-[20px]">
-          <div className="flex flex-col items-center">
-            <Image src={KgkIcon} alt="KGKlogo" width={60} height={84} />
+          <div
+            className="flex flex-col items-center cursor-pointer"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            onClick={() => router.push('/v3')}
+          >
+            <KgkIcon
+              fill={isHovered ? '#5D6969' : '#23302C'}
+              alt="KGKlogo"
+              width={60}
+              height={84}
+            />
           </div>
           <div className="parent relative">
             <hr className="absolute bottom-0 left-0 border-none h-[1px] w-full bg-neutral200" />
