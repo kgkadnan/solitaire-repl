@@ -50,7 +50,7 @@ const LoginComponent = ({
         {/* Wrap with form and handle onSubmit */}
         <div className="flex flex-col w-[450px]  p-8 gap-[24px] rounded-[8px] border-[1px] border-neutral-200 ">
           <div
-            className="flex flex-col items-center cursor-pointer"
+            className="flex flex-col items-center cursor-pointer "
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
             onClick={() => router.push('/v3')}
@@ -58,8 +58,9 @@ const LoginComponent = ({
             <KgkIcon
               fill={isHovered ? '#5D6969' : '#23302C'}
               alt="KGKlogo"
-              width={60}
-              height={84}
+              // className=""
+              // width={60}
+              // height={84}
             />
           </div>
           <div className="parent relative">

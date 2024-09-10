@@ -78,8 +78,8 @@ const RegisterComponent = ({
             <KgkIcon
               fill={isHovered ? '#5D6969' : '#23302C'}
               alt="KGKlogo"
-              width={60}
-              height={84}
+              // width={60}
+              // height={84}
             />
           </div>
           <div className="parent relative">
