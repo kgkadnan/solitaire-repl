@@ -447,13 +447,17 @@ const LeftStructure = ({
                   }`}
                 >
                   {currentTime >= trace.timeStart && (
-                    <div className="absolute inset-0 rounded-full overflow-hidden">
-                      <div className="absolute inset-0 bg-white animate-clock-reveal"></div>
+                    <div className="absolute inset-0 rounded-full overflow-hidden ">
+                      <div className="absolute inset-0 bg-white animate-clock-reveal "></div>
                       <Image
                         src={trace.indicator}
                         alt={trace.header1}
                         layout="intrinsic"
-                        className="w-full h-full absolute inset-0"
+                        className={`${
+                          index === 1
+                            ? 'w-[30px] h-[30px] m-[14px]'
+                            : 'w-[40px] h-[40px] m-[8px]'
+                        } absolute inset-0 `}
                       />
                     </div>
                   )}

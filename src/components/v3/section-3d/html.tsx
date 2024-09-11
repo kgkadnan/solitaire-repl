@@ -89,7 +89,13 @@ const HtmlAnimation = () => {
           }`}
           style={{
             marginBottom:
-              windowHeight >= 700 ? '60%' : windowHeight >= 600 ? '75%' : '95%',
+              windowHeight >= 800
+                ? '40%'
+                : windowHeight >= 700
+                ? '60%'
+                : windowHeight >= 600
+                ? '75%'
+                : '95%',
             marginTop: 'auto'
           }}
         >
@@ -167,7 +173,13 @@ const HtmlAnimation = () => {
           }`}
           style={{
             marginBottom:
-              windowHeight >= 700 ? '60%' : windowHeight >= 600 ? '75%' : '95%',
+              windowHeight >= 800
+                ? '40%'
+                : windowHeight >= 700
+                ? '60%'
+                : windowHeight >= 600
+                ? '75%'
+                : '95%',
             marginTop: 'auto'
           }}
         >
