@@ -4,5 +4,6 @@ export enum statusCode {
   NOT_FOUND = 404,
   NO_CONTENT = 204,
   DUPLICATE = 409,
-  LOGOUT = 419
+  LOGOUT = 419,
+  INVALID_DATA = 400
 }

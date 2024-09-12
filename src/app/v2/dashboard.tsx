@@ -821,7 +821,10 @@ const Dashboard = () => {
         .catch((_e: any) => {
           setIsLoading(false);
 
-          if (_e?.status === statusCode.NOT_FOUND) {
+          if (
+            _e?.status === statusCode.NOT_FOUND ||
+            _e?.status === statusCode.INVALID_DATA
+          ) {
             setError(`We couldn't find any results for this search`);
           } else if (_e?.status === statusCode.UNAUTHORIZED) {
             setError(_e?.data?.message?.message);
@@ -846,7 +849,10 @@ const Dashboard = () => {
         })
         .catch((_e: any) => {
           setIsLoading(false);
-          if (_e?.status === statusCode.NOT_FOUND) {
+          if (
+            _e?.status === statusCode.NOT_FOUND ||
+            _e?.status === statusCode.INVALID_DATA
+          ) {
             setError(`We couldn't find any results for this search`);
           } else if (_e?.status === statusCode.UNAUTHORIZED) {
             setError(_e?.data?.message?.message);
@@ -928,7 +934,10 @@ const Dashboard = () => {
               setIsDetailPage(true);
             })
             .catch((_e: any) => {
-              if (_e?.status === statusCode.NOT_FOUND) {
+              if (
+                _e?.status === statusCode.NOT_FOUND ||
+                _e?.status === statusCode.INVALID_DATA
+              ) {
                 setError(`We couldn't find any results for this search`);
               } else if (_e?.status === statusCode.UNAUTHORIZED) {
                 setError(_e?.data?.message?.message);
@@ -1242,7 +1251,10 @@ const Dashboard = () => {
         }
       })
       .catch((_e: any) => {
-        if (_e?.status === statusCode.NOT_FOUND) {
+        if (
+          _e?.status === statusCode.NOT_FOUND ||
+          _e?.status === statusCode.INVALID_DATA
+        ) {
           setError(`We couldn't find any results for this search`);
         } else if (_e?.status === statusCode.UNAUTHORIZED) {
           setError(_e?.data?.message?.message);
@@ -1566,7 +1578,10 @@ const Dashboard = () => {
                 setIsDetailPage(true);
               })
               .catch((_e: any) => {
-                if (_e?.status === statusCode.NOT_FOUND) {
+                if (
+                  _e?.status === statusCode.NOT_FOUND ||
+                  _e?.status === statusCode.INVALID_DATA
+                ) {
                   setError(`We couldn't find any results for this search`);
                 } else if (_e?.status === statusCode.UNAUTHORIZED) {
                   setError(_e?.data?.message?.message);
