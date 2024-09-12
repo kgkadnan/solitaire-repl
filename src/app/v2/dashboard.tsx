@@ -608,7 +608,10 @@ const Dashboard = () => {
       // Check for pending and active invoices
       if (customerData.customer?.orders?.length > 0) {
         const pendingInvoices = customerData.customer.orders
-          .filter((item: any) => item.invoice_id === null)
+          .filter(
+            (item: any) =>
+              item.invoice_id === null && item.status !== 'completed'
+          )
           .sort((a: any, b: any) => {
             const dateA = new Date(a.created_at as string);
             const dateB = new Date(b.created_at as string);
@@ -641,7 +644,8 @@ const Dashboard = () => {
               label: 'Pending',
               link: '/v2/your-orders',
               count: customerData.customer.orders.filter(
-                (item: any) => item.invoice_id === null
+                (item: any) =>
+                  item.invoice_id === null && item.status !== 'completed'
               ).length,
               data: pendingInvoices
             });
