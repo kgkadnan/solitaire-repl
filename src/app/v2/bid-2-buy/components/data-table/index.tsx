@@ -37,7 +37,7 @@ import { SubRoutes } from '@/constants/v2/enums/routes';
 import { ManageLocales } from '@/utils/v2/translate';
 import { filterBidToBuyFunction } from '@/features/filter-bid-to-buy/filter-bid-to-buy-slice';
 import BiddingSkeleton from '@/components/v2/skeleton/bidding';
-import debounce from 'lodash.debounce';
+// import debounce from 'lodash.debounce';
 
 const theme = createTheme({
   typography: {
@@ -547,10 +547,10 @@ const BidToBuyDataTable = ({
   );
   let isNudge = localStorage.getItem('show-nudge') === 'MINI';
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
-  const handleGlobalFilterChange = debounce((value: any) => {
-    console.log(value, 'value');
-    setGlobalFilter(value);
-  }, 300);
+  // const handleGlobalFilterChange = debounce((value: any) => {
+  //   console.log(value, 'value');
+  //   setGlobalFilter(value);
+  // }, 300);
   //pass table options to useMaterialReactTable
   const table = useMaterialReactTable({
     columns,
@@ -590,7 +590,7 @@ const BidToBuyDataTable = ({
     rowCount: rows.length,
     onPaginationChange: setPagination, //hoist pagination state to your state when it changes internally
     manualFiltering: true,
-    onGlobalFilterChange: handleGlobalFilterChange,
+    onGlobalFilterChange: setGlobalFilter,
     icons: {
       SearchIcon: () => (
         <Image src={searchIcon} alt={'searchIcon'} className="mr-[6px]" />
