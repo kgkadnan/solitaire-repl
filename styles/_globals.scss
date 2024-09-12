@@ -16,7 +16,7 @@
 
 @layer base {
   :root {
-    @apply bg-neutral0 text-foreground;
+    @apply bg-neutral0;
 
     --background: 180, 44%, 8%, 1;
 
@@ -229,4 +229,276 @@
     transition: background-color 5000s ease-in-out 0s !important; /* Adjust the transition to a long duration */
     font-size: inherit !important;
   }
+}
+@keyframes fadeIn {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    transform: translateY(100px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+.custom-fadeIn {
+  animation: fadeIn 0.5s ease-in-out forwards;
+}
+
+@keyframes flowyText {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  50% {
+    opacity: 0.5;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes zoomInOut {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.timeline-animate-zoom {
+  animation: zoomInOut 20s infinite;
+}
+
+/* styles/AnimatedText.module.css */
+.ml9 {
+  position: relative;
+}
+
+.ml9 .text-wrapper {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+}
+
+.ml9 .letter {
+  transform-origin: 50% 100%;
+  display: inline-block;
+}
+
+/* styles/AnimatedText.module.css */
+.ml10 {
+  position: relative;
+}
+
+.ml10 .text-wrapper {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+}
+
+.ml10 .letter {
+  display: inline-block;
+  transform-origin: 0 0;
+}
+
+.ml12 .letter {
+  display: inline-block;
+}
+.scroll-image.visible {
+  @apply opacity-100 scale-110;
+}
+
+.slow-transition {
+  transition:
+    opacity 3s ease-in-out,
+    transform 3s ease-in-out;
+}
+@layer utilities {
+  .char {
+    @apply inline-block opacity-0;
+    animation: fadeInFromLeft 1s forwards;
+    animation-delay: calc(var(--char-index) * 0.05s);
+  }
+}
+/* Custom styles for blur effect on bottom 20% */
+.blur-bottom {
+  position: relative;
+  overflow: hidden; /* Ensure pseudo-element does not overflow */
+}
+
+.blur-bottom::after {
+  content: '';
+  position: absolute;
+  bottom: -60px;
+  left: -30px;
+  right: 30px;
+  width: 120%;
+  height: 100px; /* Bottom 20% */
+  background: white; /* Semi-transparent background */
+  filter: blur(24px); /* Apply blur effect */
+  z-index: 1; /* Ensure it stays behind the content */
+}
+
+.blur-bottom .content {
+  position: relative;
+  z-index: 2; /* Ensure content is above the blur effect */
+}
+
+@keyframes continuousScrollUp {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-50%);
+  }
+}
+
+.continuousScroll {
+  animation: continuousScrollUp linear infinite;
+}
+
+// .landingPage {
+//   cursor: none;
+// }
+
+// .custom-cursor {
+//   position: fixed;
+//   top: 0;
+//   left: 0;
+//   width: 30px;
+//   height: 30px;
+//   border-radius: 50%;
+//   pointer-events: none; /* Ensures the cursor does not interfere with mouse events */
+//   transform: translate(-50%, -50%);
+//   transition:
+//     transform 0.1s ease,
+//     background-color 0.3s ease,
+//     width 0.3s ease,
+//     height 0.3s ease,
+//     border 0.3s ease,
+//     backdrop-filter 0.3s ease;
+//   z-index: 9999;
+// }
+
+// .custom-cursor.hover {
+//   width: 50px;
+//   height: 50px;
+//   background-color: rgba(255, 0, 0, 0.5); /* Default hover color */
+// }
+
+// .asset:hover .custom-cursor {
+//   background-color: transparent;
+//   border: 2px solid rgba(255, 255, 255, 0.5);
+//   // backdrop-filter: blur(5px);
+// }
+
+.disable-custom-cursor {
+  cursor: default;
+}
+
+@keyframes scrollUp {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-100%);
+  }
+}
+
+.circular-scroll-content {
+  // position: absolute;
+  // width: 100%;
+  animation: scrollUp linear infinite;
+  animation-duration: 300s; /* Adjust the duration for speed */
+}
+@keyframes scrollDown {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.downward-scroll-content {
+  position: absolute;
+  width: 100%;
+  animation: scrollDown linear infinite;
+  animation-duration: 300s; /* Adjust the duration for speed */
+}
+
+// .circular-scroll-content,
+// .downward-scroll-content {
+//   animation: scroll linear infinite;
+// }
+
+/* Pauses animation when the hovered state is active */
+.paused-animation .circular-scroll-content,
+.paused-animation .downward-scroll-content {
+  animation-play-state: paused;
+}
+.video-element::-webkit-media-controls {
+  display: none !important;
+}
+
+.video-element::-webkit-media-controls-enclosure {
+  display: none !important;
+}
+
+/* Custom CSS to remove the background color on hover */
+.blog-carousel .carousel .control-arrow:hover {
+  background-color: transparent !important;
+}
+
+.blog-carousel .carousel .control-next.control-arrow:hover,
+.blog-carousel .carousel .control-prev.control-arrow:hover {
+  background-color: transparent !important;
+}
+
+@keyframes clock-reveal {
+  0% {
+    transform: rotate(0deg);
+    clip-path: polygon(50% 50%, 50% 0%, 50% 0%, 50% 50%);
+  }
+  25% {
+    transform: rotate(90deg);
+    clip-path: polygon(50% 50%, 100% 50%, 100% 0%, 50% 0%);
+  }
+  50% {
+    transform: rotate(180deg);
+    clip-path: polygon(50% 50%, 50% 100%, 100% 100%, 100% 0%);
+  }
+  75% {
+    transform: rotate(270deg);
+    clip-path: polygon(50% 50%, 0% 50%, 100% 100%, 100% 0%);
+  }
+  100% {
+    transform: rotate(360deg);
+    clip-path: polygon(50% 50%, 50% 0%, 100% 100%, 0% 100%);
+  }
+}
+
+.animate-clock-reveal {
+  animation: clock-reveal 1s linear forwards;
 }
