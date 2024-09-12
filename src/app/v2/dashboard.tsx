@@ -1687,11 +1687,7 @@ const Dashboard = () => {
       );
     }
   };
-  console.log(
-    customerData,
-    'customerDatacustomerData',
-    customerData?.customer?.id
-  );
+
   return (
     <>
       {error !== '' && (

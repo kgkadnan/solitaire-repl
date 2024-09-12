@@ -44,6 +44,7 @@ import logger from 'logging/log-util';
 import { formatNumber } from '@/utils/fix-two-digit-number';
 import MatchPairDnaSkeleton from '@/components/v2/skeleton/match-pair/match-pair-dna-page';
 import { RednderLocation } from '@/components/v2/common/data-table/helpers/render-cell';
+import { SELECT_STONES } from '@/constants/error-messages/cart';
 
 export interface ITableColumn {
   key: string;
@@ -1057,9 +1058,7 @@ export function MatchPairDetails({
                                 originalData.length > 2
                                   ? handleClose(event, items.id)
                                   : (setShowToast(true),
-                                    setErrorText(
-                                      'Minimum of 2 stones needed for matching pairs'
-                                    ))
+                                    setErrorText(SELECT_STONES))
                               }
                             >
                               <Image
