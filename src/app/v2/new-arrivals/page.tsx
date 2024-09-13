@@ -252,7 +252,7 @@ const NewArrivals = () => {
   };
   const [activeBid, setActiveBid] = useState<any>();
   const [bid, setBid] = useState<any>();
-  const [time, setTime] = useState();
+  const [time, setTime] = useState<any>();
   useEffect(() => {
     const currentTime: any = new Date();
     const targetTime: any = new Date(time!);
@@ -367,7 +367,7 @@ const NewArrivals = () => {
             setBid(allProducts.bidStone);
           }
 
-          // setTime(allProducts?.endTime ?? null);
+          setTime(allProducts?.endTime ?? undefined);
           if (allProducts.activeStone) {
             allProducts.activeStone.map((row: any) => {
               if (row.current_max_bid > row.my_current_bid) {
