@@ -24,16 +24,16 @@ export const sitemap = [
       }
     ]
   },
-  // {
-  //   title: 'Resources',
-  //   content: [
-  //     {
-  //       data: 'Blog',
-  //       link: '/v3/blogs',
-  //       isNew: false
-  //     }
-  //   ]
-  // },
+  {
+    title: 'Resources',
+    content: [
+      {
+        data: 'Blog',
+        link: '/v3/blogs',
+        isNew: false
+      }
+    ]
+  },
   {
     title: 'Legal',
     content: [
