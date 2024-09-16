@@ -27,7 +27,7 @@ export default async function Post({ params }: { params: { slug: string } }) {
     notFound();
   }
 
-  const { post, posts } = data;
+  const { post } = data;
   // const morePosts = posts?.edges || [];
 
   return (
