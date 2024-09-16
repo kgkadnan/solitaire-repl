@@ -548,7 +548,6 @@ const BidToBuyDataTable = ({
   let isNudge = localStorage.getItem('show-nudge') === 'MINI';
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   // const handleGlobalFilterChange = debounce((value: any) => {
-  //   console.log(value, 'value');
   //   setGlobalFilter(value);
   // }, 300);
   //pass table options to useMaterialReactTable
