@@ -20,7 +20,7 @@ export async function getPreviewPost(id: any, idType = 'DATABASE_ID') {
 export async function getAllPostsWithSlug() {
   const data = await fetchAPI(`
     {
-      posts(first: 10000) {
+      posts(first: 10000, where: { status: PUBLISH }) {
         edges {
           node {
             slug
@@ -36,7 +36,7 @@ export async function getAllPostsForHome(preview: any) {
   const data = await fetchAPI(
     `
     query AllPosts {
-      posts(first: 20, where: { orderby: { field: DATE, order: DESC } }) {
+      posts(first: 20, where: {status: PUBLISH, orderby: { field: DATE, order: DESC } }) {
         edges {
           node {
             title
@@ -160,7 +160,7 @@ export async function getPostAndMorePosts(
             : ''
         }
       }
-      posts(first: 3, where: { orderby: { field: DATE, order: DESC } }) {
+      posts(first: 3, where: {status: PUBLISH, orderby: { field: DATE, order: DESC } }) {
         edges {
           node {
             ...PostFields
@@ -201,7 +201,7 @@ export async function searchPostByText(searchTerm: string) {
   const data = await fetchAPI(
     `
     query searchPostByText($searchTerm: String!) {
-      posts(first: 20, where: { orderby: { field: DATE, order: DESC }, search: $searchTerm  }) {
+      posts(first: 20, where: {status: PUBLISH, orderby: { field: DATE, order: DESC }, search: $searchTerm  }) {
         edges {
           node {
             title
