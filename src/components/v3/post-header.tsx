@@ -2,7 +2,7 @@ import Date from './date';
 
 export default function PostHeader({ title, date }: any) {
   return (
-    <div className="flex flex-col w-full justify-center">
+    <div className="flex flex-col max-w-[42rem] mx-auto justify-center">
       <div className="flex flex-col w-full justify-around text-[30px] mt-[100px]">
         {title}
       </div>

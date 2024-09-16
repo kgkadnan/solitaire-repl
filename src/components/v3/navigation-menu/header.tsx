@@ -17,7 +17,7 @@ const CommonHeader = () => {
   const lastScrollY = useRef(0);
 
   useEffect(() => {
-    if (currentRoute === '/v3') setSelectedHeader('home');
+    if (currentRoute === '/v3' || currentRoute === '/') setSelectedHeader('home');
     else if (currentRoute === '/v3/contact-us') setSelectedHeader('contactUs');
     else if (
       currentRoute === '/v3/about-us/our-story' ||
@@ -55,7 +55,7 @@ const CommonHeader = () => {
           <Image
             src={kgkLogo}
             alt="KGK logo"
-            onClick={() => router.push('/v3')}
+            onClick={() => router.push('/')}
             className="cursor-pointer"
           />
           {NavigationMenuDemo(selectedHeader, setSelectedHeader)}
