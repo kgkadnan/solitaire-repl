@@ -7,10 +7,10 @@ export const funnelApi = createApi({
   tagTypes: ['funnel'],
 
   endpoints: builder => ({
-    register: builder.query({
+    registerFunnel: builder.query({
       query: ({step,sessionId}) => `registration-funnel?funnel_step=${step}&session_id=${sessionId}`
     })
   })
 });
 
-export const { useRegisterQuery } = funnelApi;
+export const { useRegisterFunnelQuery } = funnelApi;
