@@ -29,7 +29,7 @@ export default async function Post({ params }: { params: { slug: string } }) {
 
   const { post, posts } = data;
   const morePosts = posts?.edges || [];
-  console.log(post, 'ooooooooooooooooooo');
+
   return (
     <Layout>
       <Container>
@@ -46,6 +46,7 @@ export default async function Post({ params }: { params: { slug: string } }) {
                 categories={post.categories}
               />
               <PostBody content={post.content} />
+
               <footer>
                 {post.tags.edges.length > 0 && <Tags tags={post.tags} />}
               </footer>

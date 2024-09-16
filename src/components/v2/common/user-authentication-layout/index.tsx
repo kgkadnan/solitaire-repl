@@ -54,7 +54,7 @@ const UserAuthenticationLayout: React.FC<IUserAuthenticationLayoutProps> = ({
 
   return (
     <div className="w-full flex">
-      <div className="w-[60%] h-[100vh] flex items-center bg-black">
+      <div className="w-[60%] h-[100vh] flex items-center bg-black px-2">
         <div className="h-full w-full flex items-center">
           <div className="youtube-container">
             <div className="youtube-overlay"></div>
@@ -62,7 +62,7 @@ const UserAuthenticationLayout: React.FC<IUserAuthenticationLayoutProps> = ({
           </div>
         </div>
       </div>
-      <div className="w-[40%] flex justify-center text-center h-[100vh] overflow-y-scroll border-l-[1px] border-neutral900">
+      <div className="w-[40%] flex justify-center text-center h-[100vh] overflow-y-scroll">
         {formData}
       </div>
     </div>
