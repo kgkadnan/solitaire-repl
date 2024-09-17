@@ -131,16 +131,19 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
         <Provider store={store}>
           <ThemeProviders>
             {isV3Route ? (
-              <main className="">
-                <Toaster />
-                <CommonHeader />
-                <div>{children}</div>
-                <div style={{ zIndex: 100 }}>
-                  <SubscribeNewsLetter />
-                  <FooterSiteMap />
-                  <Footer />
-                </div>
-              </main>
+              <>
+                <main className="">
+                  <Toaster />
+                  <CommonHeader />
+                  <div>{children}</div>
+                  <div style={{ zIndex: 100 }}>
+                    <SubscribeNewsLetter />
+                    <FooterSiteMap />
+                    <Footer />
+                  </div>
+                </main>
+                <AppDownloadPopup></AppDownloadPopup>
+              </>
             ) : isV2Route ? (
               <>
                 {showHeader ? (
