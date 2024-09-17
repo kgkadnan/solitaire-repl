@@ -25,7 +25,6 @@ const handleReferenceClick = (
   videoRefHtml: any,
   setIsPlaying: any
 ) => {
-  console.log('called', time);
   if (videoRefHtml.current) {
     videoRefHtml.current.currentTime = time;
     if (videoRefHtml.current.paused) {
