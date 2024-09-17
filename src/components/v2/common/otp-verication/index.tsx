@@ -133,7 +133,14 @@ const OTPVerification = ({
                 `+${otpVerificationFormState.codeAndNumber}`}
             </p>
             <div
-              onClick={() => setIsInputDialogOpen(true)}
+              onClick={() => {
+                funnelTrack({
+                  step: Tracking.Click_Mobile_Edit,
+                  sessionId: isSessionValid(),
+                  mobileNumber: `+${otpVerificationFormState.codeAndNumber}`
+                }),
+                  setIsInputDialogOpen(true);
+              }}
               className="font-bold pl-1"
             >
               <Edit />
@@ -153,7 +160,7 @@ const OTPVerification = ({
             className={`${
               resendTimer > 0 ? 'text-neutral500' : 'text-infoMain'
             } cursor-pointer`}
-            onClick={() =>
+            onClick={() => {
               resendTimer > 0
                 ? {}
                 : handleRegisterResendOTP({
@@ -164,8 +171,13 @@ const OTPVerification = ({
                     setDialogContent,
                     setToken,
                     token
-                  })
-            }
+                  });
+              funnelTrack({
+                step: Tracking.Click_Resend,
+                sessionId: isSessionValid(),
+                mobileNumber: `+${otpVerificationFormState.codeAndNumber}`
+              });
+            }}
           >
             {ManageLocales('app.OTPVerification.resend')} {resendLabel}
           </p>
@@ -209,11 +221,15 @@ const OTPVerification = ({
             size={'custom'}
             disabled={isLoading}
             className=" border-none w-[100%]"
-            onClick={() =>
-              role === 'login'
-                ? setCurrentState('login')
-                : router.push('/v2/login')
-            }
+            onClick={() => {
+              funnelTrack({
+                step: Tracking.Click_Login,
+                sessionId: isSessionValid()
+              }),
+                role === 'login'
+                  ? setCurrentState('login')
+                  : router.push('/v2/login');
+            }}
           >
             <div className="text-mMedium font-medium flex items-center gap-2">
               <Image src={backArrow} alt="backArrow" />
