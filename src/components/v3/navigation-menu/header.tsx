@@ -9,6 +9,7 @@ import Image from 'next/image';
 // import Register from '@public/v3/home/register.svg';
 import ShimmerButton from '../animated-button';
 import { useMediaQuery } from 'react-responsive';
+import useUser from '@/lib/use-auth';
 
 const CommonHeader = () => {
   const currentRoute = usePathname();
@@ -17,7 +18,7 @@ const CommonHeader = () => {
   const [showHeader, setShowHeader] = useState(true);
   const lastScrollY = useRef(0);
   const isMobile = useMediaQuery({ maxWidth: 1024 });
-
+  const { authToken } = useUser();
   if (isMobile) return null;
   useEffect(() => {
     if (currentRoute === '/v3' || currentRoute === '/')
@@ -66,7 +67,9 @@ const CommonHeader = () => {
         </div>
         <div className="flex gap-4 ">
           <CommonButton
-            onClick={() => router.push('/v2/login')}
+            onClick={() => {
+              authToken ? router.push('/v2') : router.push('/v2/login');
+            }}
             variant={'secondary'}
             size={'custom'}
             className="rounded-[8px] w-[80px] h-[44px] border-primaryMain text-primaryMain text-[16px]"
