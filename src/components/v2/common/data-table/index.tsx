@@ -337,7 +337,7 @@ const DataTable = ({
                   data,
                   searchData.name
                 );
-
+                console.log('herere');
                 if (isAlreadyOpenIndex >= 0 && isAlreadyOpenIndex !== null) {
                   router.push(
                     `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
