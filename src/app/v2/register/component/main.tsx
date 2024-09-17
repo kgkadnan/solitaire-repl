@@ -74,7 +74,7 @@ const Register = () => {
   } = otpVerificationSetState;
 
   //common states
-  const [currentState, setCurrentState] = useState('successfullyCreated');
+  const [currentState, setCurrentState] = useState('register');
   const [role, setRole] = useState('');
   const [isLoading, setIsLoading] = useState(false); // State to track loading
 
