@@ -1,6 +1,7 @@
 import logger from 'logging/log-util';
-import Dashboard from './v2/page';
+// import Dashboard from './v2/page';
 import { Metadata } from 'next';
+import LandingPage from './v3/page';
 
 export const metadata: Metadata = {
   title: 'Buy Diamonds in Few Clicks | KGK Diamonds',
@@ -12,7 +13,7 @@ export default function Home() {
 
   return (
     <>
-      <Dashboard />
+      <LandingPage />
     </>
   );
 }

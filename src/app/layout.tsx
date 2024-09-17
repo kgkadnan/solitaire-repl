@@ -11,13 +11,19 @@ import {
   headerlessRoutes,
   protectedRoutes,
   applicationRoutes,
-  v2Routes
+  v2Routes,
+  v3Routes
 } from '@/constants/routes';
 import { ThemeProviders } from './theme-providers';
 import Head from 'next/head';
 import AppDownloadPopup from '@/components/v2/common/alert-pop-for-mobile';
 import CommonPoppup from './v2/login/component/common-poppup';
 import { DialogComponent } from '@/components/v2/common/dialog';
+import Toaster from '@/components/v3/ui/toaster';
+import CommonHeader from '@/components/v3/navigation-menu/header';
+import SubscribeNewsLetter from '@/components/v3/subscribe-newsletter';
+import FooterSiteMap from '@/components/v3/footer-sitemap';
+import Footer from '@/components/v3/footer';
 // import Salesiq from '@/components/v2/common/sales-iq';
 
 const store = setupStore();
@@ -28,10 +34,12 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
   const path = usePathname();
   const isApplicationRoutes = applicationRoutes.includes(path);
   const isV2Route = v2Routes.includes(path);
+  const isV3Route = v3Routes.includes(path) || path.includes('/v3');
+
   const [open, setOpen] = useState(false);
 
-  const showHeader =
-    (isApplicationRoutes && !headerlessRoutes.includes(path)) || path === '/';
+  const showHeader = isApplicationRoutes && !headerlessRoutes.includes(path);
+  // || path === '/';
   // Create a component that just renders children, with children as an optional prop
   const ChildrenComponent: FC<{ children?: ReactNode }> = ({ children }) => (
     <>
@@ -121,7 +129,18 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
         </noscript>
         <Provider store={store}>
           <ThemeProviders>
-            {isV2Route ? (
+            {isV3Route ? (
+              <main className="">
+                <Toaster />
+                <CommonHeader />
+                <div>{children}</div>
+                <div style={{ zIndex: 100 }}>
+                  <SubscribeNewsLetter />
+                  <FooterSiteMap />
+                  <Footer />
+                </div>
+              </main>
+            ) : isV2Route ? (
               <>
                 {showHeader ? (
                   <SecureComponent>{children}</SecureComponent>

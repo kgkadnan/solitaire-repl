@@ -1,5 +1,4 @@
 import Date from './date';
-// import CoverImage from './cover-image';
 
 export default function PostHeader({ title, date }: any) {
   return (
