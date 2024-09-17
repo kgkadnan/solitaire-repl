@@ -9,6 +9,12 @@ import Image from 'next/image';
 // import Register from '@public/v3/home/register.svg';
 import ShimmerButton from '../animated-button';
 import { useMediaQuery } from 'react-responsive';
+import { isSessionValid } from '@/utils/manage-session';
+import { useLazyRegisterFunnelQuery } from '@/features/api/funnel';
+import {
+  Tracking,
+  Tracking_Click_RegisterPage
+} from '@/constants/funnel-tracking';
 
 const CommonHeader = () => {
   const currentRoute = usePathname();
@@ -17,6 +23,7 @@ const CommonHeader = () => {
   const [showHeader, setShowHeader] = useState(true);
   const lastScrollY = useRef(0);
   const isMobile = useMediaQuery({ maxWidth: 1024 });
+  let [funnelTrack] = useLazyRegisterFunnelQuery();
 
   if (isMobile) return null;
   useEffect(() => {
@@ -66,7 +73,15 @@ const CommonHeader = () => {
         </div>
         <div className="flex gap-4 ">
           <CommonButton
-            onClick={() => router.push('/v2/login')}
+            onClick={() => {
+              funnelTrack({
+                step: Tracking.Click_RegisterPage,
+
+                entryPoint: Tracking_Click_RegisterPage.LP_Top_Login,
+                sessionId: isSessionValid()
+              }),
+                router.push('/v2/login');
+            }}
             variant={'secondary'}
             size={'custom'}
             className="rounded-[8px] w-[80px] h-[44px] border-primaryMain text-primaryMain text-[16px]"
@@ -93,7 +108,15 @@ const CommonHeader = () => {
 
           <ShimmerButton
             className="!rounded-[8px] w-[120px] h-[44px] text-[16px]"
-            onClick={() => router.push('/v2/register')}
+            onClick={() => {
+              funnelTrack({
+                step: Tracking.Click_RegisterPage,
+
+                entryPoint: Tracking_Click_RegisterPage.LP_Top_Register,
+                sessionId: isSessionValid()
+              }),
+                router.push('/v2/register');
+            }}
             style={{ boxShadow: '0px 1px 2px 0px #1018281F' }}
           >
             Register

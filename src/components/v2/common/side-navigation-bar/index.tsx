@@ -24,6 +24,7 @@ import useUser from '@/lib/use-auth';
 import { kycStatus } from '@/constants/enums/kyc';
 import { useAppDispatch } from '@/hooks/hook';
 import { setStartTime } from '@/features/track-page-event/track-page-event-slice';
+import pako from 'pako';
 
 interface ISideNavigationBar {
   src?: React.ReactNode;
@@ -41,7 +42,7 @@ const SideNavigationBar = ({
   const currentRoute = usePathname();
   const currentSubRoute = useSearchParams().get('active-tab');
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
-  const [showPulse, setShowPulse] = useState(false);
+  const [showPulse, setShowPulse] = useState(true);
 
   const router = useRouter();
   const SideNavigationData: ISideNavigationBar[] = [
@@ -128,14 +129,70 @@ const SideNavigationBar = ({
     if (authToken) useSocket(socketManager, authToken);
   }, [authToken]);
 
-  const handleBidStones = useCallback((data: any) => {
-    if (data.endTime) {
-      setShowPulse(true);
-    } else {
-      setShowPulse(false);
+  // const handleBidStones = useCallback((data: any) => {
+  //   if (data.endTime) {
+  //     setShowPulse(true);
+  //   } else {
+  //     setShowPulse(false);
+  //   }
+  //   // Set other related state here
+  // }, []);
+
+  async function decompressData<T = unknown>(
+    compressedData: Uint8Array | ArrayBuffer | any
+  ): Promise<T> {
+    try {
+      // Ensure compressedData is a Uint8Array
+      const uint8Array: Uint8Array =
+        compressedData instanceof Uint8Array
+          ? compressedData
+          : new Uint8Array(compressedData);
+
+      // Decompress the data using pako
+      const decompressed: string = await new Promise<string>(
+        (resolve, reject) => {
+          try {
+            const result = pako.ungzip(uint8Array, { to: 'string' });
+            resolve(result);
+          } catch (error) {
+            reject(error);
+          }
+        }
+      );
+
+      // Parse the decompressed string into JSON
+      const data: T = JSON.parse(decompressed);
+      return data;
+    } catch (err: unknown) {
+      // Ensure we have proper type checking for error
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      console.error(`Decompression failed: ${errorMessage}`);
+      throw err;
     }
-    // Set other related state here
-  }, []);
+  }
+
+  const handleBidStones = useCallback(
+    async ({ part, message_id, data }: any) => {
+      try {
+        const decompressedPart: any = await decompressData(data);
+
+        if (part === 1) {
+          if (decompressedPart?.endTime ?? '') {
+            setShowPulse(true);
+          } else {
+            setShowPulse(false);
+          }
+        }
+      } catch (error) {
+        console.error(
+          `Failed to decompress part ${part} of message ${message_id}:`,
+          error
+        );
+      }
+    },
+    []
+  );
+
   useEffect(() => {
     const handleRequestGetBidStones = (_data: any) => {
       socketManager.emit('get_bidtobuy_stones');
