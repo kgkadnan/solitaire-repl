@@ -139,6 +139,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
                   <FooterSiteMap />
                   <Footer />
                 </div>
+                <AppDownloadPopup></AppDownloadPopup>
               </main>
             ) : isV2Route ? (
               <>
