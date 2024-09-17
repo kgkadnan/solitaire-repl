@@ -895,7 +895,7 @@ export function MatchPairDetails({
                                   onLoad={() => {
                                     handleImageLoad(index);
                                   }}
-                                  className={`${'w-[285px] h-[305px]'} `}
+                                  className={`${'w-[300px] h-[330px]'} `}
                                 />
                               ) : (
                                 <img
