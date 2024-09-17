@@ -7,7 +7,7 @@ import SmoothVideoPlayer from '@/components/v3/smooth-video';
 import TraceabilityHtml from '@/components/v3/traceability-html';
 import React, { useEffect, useRef, useState } from 'react';
 
-const Index = () => {
+const LandingPage = () => {
   // const [isHtml, setIsHtml] = useState(true);
   // const [isManufactureBlurred, setIsManufactureBlurred] = useState(true);
   // const [isGlobalSalesBlurred, setIsGlobalSalesBlurred] = useState(true);
@@ -265,4 +265,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default LandingPage;

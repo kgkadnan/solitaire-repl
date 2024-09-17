@@ -6,7 +6,7 @@ import PostHeader from '@/components/v3/post-header';
 import PostBody from '@/components/v3/post-body';
 import Tags from '@/components/v3/tags';
 import SectionSeparator from '@/components/v3/section-separator';
-import MoreStories from '@/components/v3/more-stories';
+// import MoreStories from '@/components/v3/more-stories';
 import {
   getAllPostsWithSlug,
   getPostAndMorePosts
@@ -27,8 +27,8 @@ export default async function Post({ params }: { params: { slug: string } }) {
     notFound();
   }
 
-  const { post, posts } = data;
-  const morePosts = posts?.edges || [];
+  const { post } = data;
+  // const morePosts = posts?.edges || [];
 
   return (
     <Layout>
@@ -54,7 +54,7 @@ export default async function Post({ params }: { params: { slug: string } }) {
           </article>
 
           <SectionSeparator />
-          {morePosts.length > 0 && (
+          {/* {morePosts.length > 0 && (
             <div>
               <p className="text-neutral600 font-semiBold text-headingL">
                 From the blog
@@ -64,7 +64,7 @@ export default async function Post({ params }: { params: { slug: string } }) {
               </p>
               <MoreStories posts={morePosts.slice(0, 4)} />
             </div>
-          )}
+          )} */}
         </div>
       </Container>
     </Layout>
