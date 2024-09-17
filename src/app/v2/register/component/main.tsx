@@ -30,6 +30,9 @@ import { handleOTPChange } from '@/components/v2/common/otp-verication/helpers/h
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import { useRegisterStateManagement } from '../hooks/register-state-management';
+import { isSessionValid } from '@/utils/manage-session';
+import { Tracking } from '@/constants/funnel-tracking';
+import { useLazyRegisterFunnelQuery } from '@/features/api/funnel';
 
 export interface IOtp {
   otpMobileNumber: string;
@@ -92,6 +95,8 @@ const Register = () => {
   const [register] = useRegisterMutation();
   const [verifyOTP] = useVerifyOTPMutation();
   const [sendOtp] = useSendOtpMutation();
+  let [funnelTrack] = useLazyRegisterFunnelQuery();
+
   useEffect(() => {
     const userIp = JSON.parse(localStorage.getItem('userIp')!);
 
@@ -165,6 +170,10 @@ const Register = () => {
               setOTPVerificationFormState(prev => ({ ...prev }));
               setOTPVerificationFormErrors(initialOTPFormState);
               setIsInputDialogOpen(false);
+              funnelTrack({
+                step: Tracking.Click_Mobile_Edit_Cancel,
+                sessionId: isSessionValid()
+              });
             }}
             variant={'secondary'}
             size={'custom'}
@@ -184,7 +193,8 @@ const Register = () => {
                 setDialogContent,
                 sendOtp,
                 setToken,
-                token
+                token,
+                funnelTrack
               });
             }}
             variant={'primary'}

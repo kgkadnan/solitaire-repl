@@ -1,5 +1,7 @@
 import CommonPoppup from '@/app/v2/login/component/common-poppup';
 import { IToken } from '@/app/v2/register/interface';
+import { Tracking } from '@/constants/funnel-tracking';
+import { isSessionValid } from '@/utils/manage-session';
 
 interface IHandleVerifyOtp {
   otpValues: string[];
@@ -13,6 +15,8 @@ interface IHandleVerifyOtp {
   setToken?: React.Dispatch<React.SetStateAction<IToken>>;
   setError: any;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  funnelTrack?: any;
+  phone?: any;
 }
 export const handleVerifyOtp = ({
   otpValues,
@@ -25,7 +29,9 @@ export const handleVerifyOtp = ({
   role,
   setToken,
   setError,
-  setIsLoading
+  setIsLoading,
+  funnelTrack,
+  phone
 }: IHandleVerifyOtp) => {
   const enteredOtp = otpValues.join('');
   setIsLoading(true);
@@ -52,6 +58,14 @@ export const handleVerifyOtp = ({
           userLoggedIn(res.access_token);
           localStorage.setItem('user', JSON.stringify(res));
         }
+        funnelTrack &&
+          phone &&
+          funnelTrack({
+            step: Tracking.Click_Verify,
+            status: 'Success',
+            sessionId: isSessionValid(),
+            mobileNumber: `+${phone}`
+          });
       }
     })
     .catch((e: any) => {
@@ -67,5 +81,13 @@ export const handleVerifyOtp = ({
           handleClick={() => setIsDialogOpen(false)}
         />
       );
+      funnelTrack &&
+        phone &&
+        funnelTrack({
+          step: Tracking.Click_Verify,
+          status: 'Fail',
+          sessionId: isSessionValid(),
+          mobileNumber: `+${phone}`
+        });
     });
 };

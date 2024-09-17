@@ -4,6 +4,8 @@ import CommonPoppup from '@/app/v2/login/component/common-poppup';
 import { IToken } from '@/app/v2/register/interface';
 import { INVALID_PHONE } from '@/constants/error-messages/register';
 import { PHONE_REGEX } from '@/constants/validation-regex/regex';
+import { Tracking } from '@/constants/funnel-tracking';
+import { isSessionValid } from '@/utils/manage-session';
 interface IHandleEditMobileNumber {
   otpVerificationFormState: IOtp;
   setOTPVerificationFormErrors: React.Dispatch<React.SetStateAction<IOtp>>;
@@ -14,6 +16,7 @@ interface IHandleEditMobileNumber {
   sendOtp: any;
   setToken: React.Dispatch<React.SetStateAction<IToken>>;
   token?: any;
+  funnelTrack?: any;
 }
 export const handleEditMobileNumber = ({
   otpVerificationFormState,
@@ -24,7 +27,8 @@ export const handleEditMobileNumber = ({
   setDialogContent,
   sendOtp,
   setToken,
-  token
+  token,
+  funnelTrack
 }: IHandleEditMobileNumber) => {
   if (
     !otpVerificationFormState.countryCode ||
@@ -74,6 +78,13 @@ export const handleEditMobileNumber = ({
             ]}
           />
         );
+        funnelTrack &&
+          funnelTrack({
+            step: Tracking.Click_Mobile_Edit_Save,
+            status: 'Success',
+            sessionId: isSessionValid(),
+            mobileNumber: `+${otpVerificationFormState.countryCode} ${otpVerificationFormState.otpMobileNumber}`
+          });
       })
       .catch((e: any) => {
         setIsDialogOpen(true);
@@ -84,6 +95,13 @@ export const handleEditMobileNumber = ({
             handleClick={() => setIsDialogOpen(false)}
           />
         );
+        funnelTrack &&
+          funnelTrack({
+            step: Tracking.Click_Mobile_Edit_Save,
+            status: 'Fail',
+            sessionId: isSessionValid(),
+            mobileNumber: `+${otpVerificationFormState.countryCode} ${otpVerificationFormState.otpMobileNumber}`
+          });
         logger.error(`something went wrong while sending OTP ${e}`);
       });
 
