@@ -6,6 +6,7 @@ import kgkLogo from '@public/v3/kgklogo.svg';
 import { usePathname, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import ShimmerButton from '../animated-button';
+import useUser from '@/lib/use-auth';
 
 const CommonHeader = () => {
   const currentRoute = usePathname();
@@ -13,7 +14,7 @@ const CommonHeader = () => {
   const [selectedHeader, setSelectedHeader] = useState<string>('');
   const [showHeader, setShowHeader] = useState(true);
   const lastScrollY = useRef(0);
-
+  const { authToken } = useUser();
   useEffect(() => {
     if (currentRoute === '/v3' || currentRoute === '/')
       setSelectedHeader('home');
@@ -61,7 +62,9 @@ const CommonHeader = () => {
         </div>
         <div className="flex gap-4 ">
           <CommonButton
-            onClick={() => router.push('/v2/login')}
+            onClick={() => {
+              authToken ? router.push('/v2') : router.push('/v2/login');
+            }}
             variant={'secondary'}
             size={'custom'}
             className="rounded-[8px] w-[80px] h-[44px] border-primaryMain text-primaryMain text-[16px]"
