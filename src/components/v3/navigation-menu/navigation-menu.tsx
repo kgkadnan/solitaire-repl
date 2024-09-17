@@ -60,7 +60,7 @@ export function NavigationMenuDemo(
     <NavigationMenu>
       <NavigationMenuList>
         <NavigationMenuItem className="bg-neutral0 text-neutral700 !hover:bg-neutral50 !hover:text-neutral900 !focus:bg-neutral50">
-          <Link href="/v3" legacyBehavior passHref>
+          <Link href="/" legacyBehavior passHref>
             <NavigationMenuLink
               className={`${navigationMenuTriggerStyle()} ${
                 selectedHeader === 'home' && 'text-neutral900 font-medium'

@@ -456,9 +456,6 @@ export function MatchPairDetails({
     return { updatedData, updatedImageLoadingStatus };
   };
 
-  // console.log('validImages', validImages);
-  // console.log('originalData', originalData);
-
   useEffect(() => {
     if (validImages.length > 0) {
       setIsDiamondDetailLoading && setIsDiamondDetailLoading(false);

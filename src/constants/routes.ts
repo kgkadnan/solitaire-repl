@@ -4,7 +4,8 @@ export const v3Routes = [
   '/v3/contact-us',
   '/v3/blogs',
   '/v3',
-  '/v3/sustainability'
+  '/v3/sustainability',
+  '/'
 ];
 export const headerlessRoutes = [
   '/v2/register',
@@ -15,7 +16,6 @@ export const headerlessRoutes = [
 ];
 
 export const v2Routes = [
-  '/',
   '/v2',
   '/v2/search',
   '/v2/kyc',
