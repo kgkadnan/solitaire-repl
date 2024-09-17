@@ -1,5 +1,5 @@
 // Define the type for session data
-interface SessionData {
+interface ISessionData {
   id: string;
   expiresAt: number;
 }
@@ -17,7 +17,7 @@ export function storeSessionId(): string {
     const sessionId: string = generateSessionId();
     const expirationTime: number = Date.now() + 60 * 60 * 1000; // 1 hour in milliseconds
 
-    const sessionData: SessionData = {
+    const sessionData: ISessionData = {
       id: sessionId,
       expiresAt: expirationTime
     };
@@ -44,7 +44,7 @@ export function isSessionValid(): string {
       return storeSessionId();
     }
 
-    const sessionData: SessionData = JSON.parse(sessionDataStr);
+    const sessionData: ISessionData = JSON.parse(sessionDataStr);
     const currentTime = Date.now();
 
     if (currentTime > sessionData.expiresAt) {
