@@ -7,6 +7,9 @@ import India from '@public/v3/home/map/india.svg';
 import Belgium from '@public/v3/home/map/belgium.svg';
 import Dubai from '@public/v3/home/map/dubai.svg';
 import Hongkong from '@public/v3/home/map/hongkong.png';
+import { Tracking_Click_RegisterPages } from '@/constants/funnel-tracking';
+import { isSessionValid } from '@/utils/manage-session';
+import { useLazyRegisterFunnelQuery } from '@/features/api/funnel';
 
 const HtmlAnimation = () => {
   const [phoneVisible, setPhoneVisible] = useState(false);
@@ -16,6 +19,7 @@ const HtmlAnimation = () => {
   const [windowHeight, setWindowHeight] = useState<any>(); // Track window width
 
   const router = useRouter();
+  let [funnelTrack] = useLazyRegisterFunnelQuery();
 
   const imageList = [
     '/v3/home/usa.png',
@@ -222,7 +226,13 @@ const HtmlAnimation = () => {
           <Image
             src={ExploreNow}
             alt="explore now"
-            onClick={() => router.push('/v2/register')}
+            onClick={() => {
+              funnelTrack({
+                step: Tracking_Click_RegisterPages.LP_Home_Explore_Now_Register,
+                sessionId: isSessionValid()
+              }),
+                router.push('/v2/register');
+            }}
             className="cursor-pointer lg:w-[224px]"
           />
         </div>
