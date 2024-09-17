@@ -91,8 +91,7 @@ const rootReducer = combineReducers({
   [trackApi.reducerPath]: trackApi.reducer,
   [matchingPairApi.reducerPath]: matchingPairApi.reducer,
   [trackPageApi.reducerPath]: trackPageApi.reducer,
-  [funnelApi.reducerPath]: funnelApi.reducer,
-
+  [funnelApi.reducerPath]: funnelApi.reducer
 });
 
 const handle410Middleware =
