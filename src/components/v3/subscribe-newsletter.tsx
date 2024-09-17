@@ -3,7 +3,10 @@ import React from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import RegisterNow from '@public/v3/home/register-now.svg';
-import { Tracking_Click_RegisterPages } from '@/constants/funnel-tracking';
+import {
+  Tracking,
+  Tracking_Click_RegisterPages
+} from '@/constants/funnel-tracking';
 import { isSessionValid } from '@/utils/manage-session';
 import { useLazyRegisterFunnelQuery } from '@/features/api/funnel';
 // import ShimmerButton from './animated-button';
@@ -99,7 +102,9 @@ const SubscribeNewsLetter = () => {
           alt="register now"
           onClick={() => {
             funnelTrack({
-              step: trackPath(),
+              step: Tracking.Click_RegisterPages,
+
+              entryPoint: trackPath(),
               sessionId: isSessionValid()
             }),
               router.push('/v2/register');

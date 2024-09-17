@@ -8,8 +8,10 @@ export const funnelApi = createApi({
 
   endpoints: builder => ({
     registerFunnel: builder.query({
-      query: ({ step, sessionId }) =>
-        `registration-funnel?funnel_step=${step}&session_id=${sessionId}`
+      query: ({ step, sessionId, entryPoint, mobileNumber }) =>
+        `registration-funnel?funnel_step=${step}&session_id=${sessionId}${
+          entryPoint ? `&entry_point=${entryPoint}` : ''
+        }${mobileNumber ? `&mobile_number=${mobileNumber}` : ''}`
     })
   })
 });

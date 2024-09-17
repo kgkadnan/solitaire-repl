@@ -7,7 +7,10 @@ import India from '@public/v3/home/map/india.svg';
 import Belgium from '@public/v3/home/map/belgium.svg';
 import Dubai from '@public/v3/home/map/dubai.svg';
 import Hongkong from '@public/v3/home/map/hongkong.png';
-import { Tracking_Click_RegisterPages } from '@/constants/funnel-tracking';
+import {
+  Tracking,
+  Tracking_Click_RegisterPages
+} from '@/constants/funnel-tracking';
 import { isSessionValid } from '@/utils/manage-session';
 import { useLazyRegisterFunnelQuery } from '@/features/api/funnel';
 
@@ -228,7 +231,9 @@ const HtmlAnimation = () => {
             alt="explore now"
             onClick={() => {
               funnelTrack({
-                step: Tracking_Click_RegisterPages.LP_Home_Explore_Now_Register,
+                step: Tracking.Click_RegisterPages,
+                entryPoint:
+                  Tracking_Click_RegisterPages.LP_Home_Explore_Now_Register,
                 sessionId: isSessionValid()
               }),
                 router.push('/v2/register');

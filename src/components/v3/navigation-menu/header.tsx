@@ -10,7 +10,10 @@ import Image from 'next/image';
 import ShimmerButton from '../animated-button';
 import { isSessionValid } from '@/utils/manage-session';
 import { useLazyRegisterFunnelQuery } from '@/features/api/funnel';
-import { Tracking_Click_RegisterPages } from '@/constants/funnel-tracking';
+import {
+  Tracking,
+  Tracking_Click_RegisterPages
+} from '@/constants/funnel-tracking';
 
 const CommonHeader = () => {
   const currentRoute = usePathname();
@@ -69,7 +72,9 @@ const CommonHeader = () => {
           <CommonButton
             onClick={() => {
               funnelTrack({
-                step: Tracking_Click_RegisterPages.LP_Top_Login,
+                step: Tracking.Click_RegisterPages,
+
+                entryPoint: Tracking_Click_RegisterPages.LP_Top_Login,
                 sessionId: isSessionValid()
               }),
                 router.push('/v2/login');
@@ -102,7 +107,9 @@ const CommonHeader = () => {
             className="!rounded-[8px] w-[120px] h-[44px] text-[16px]"
             onClick={() => {
               funnelTrack({
-                step: Tracking_Click_RegisterPages.LP_Top_Register,
+                step: Tracking.Click_RegisterPages,
+
+                entryPoint: Tracking_Click_RegisterPages.LP_Top_Register,
                 sessionId: isSessionValid()
               }),
                 router.push('/v2/register');

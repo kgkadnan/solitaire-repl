@@ -1,3 +1,6 @@
+export const Tracking = {
+  Click_RegisterPages: 'Click_RegisterPages'
+};
 export const Tracking_Click_RegisterPages = {
   LP_Top_Register: 'LP_Top_Register',
   LP_Top_Login: 'LP_Top_Login',
