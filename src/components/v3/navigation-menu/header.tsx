@@ -15,6 +15,7 @@ import {
   Tracking,
   Tracking_Click_RegisterPage
 } from '@/constants/funnel-tracking';
+import useUser from '@/lib/use-auth';
 
 const CommonHeader = () => {
   const currentRoute = usePathname();
@@ -25,6 +26,7 @@ const CommonHeader = () => {
   const isMobile = useMediaQuery({ maxWidth: 1024 });
   let [funnelTrack] = useLazyRegisterFunnelQuery();
 
+  const { authToken } = useUser();
   if (isMobile) return null;
   useEffect(() => {
     if (currentRoute === '/v3' || currentRoute === '/')
@@ -80,7 +82,7 @@ const CommonHeader = () => {
                 entryPoint: Tracking_Click_RegisterPage.LP_Top_Login,
                 sessionId: isSessionValid()
               }),
-                router.push('/v2/login');
+                authToken ? router.push('/v2') : router.push('/v2/login');
             }}
             variant={'secondary'}
             size={'custom'}
