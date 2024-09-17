@@ -1,8 +1,11 @@
 'use client';
 import React from 'react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import RegisterNow from '@public/v3/home/register-now.svg';
+import { Tracking_Click_RegisterPages } from '@/constants/funnel-tracking';
+import { isSessionValid } from '@/utils/manage-session';
+import { useLazyRegisterFunnelQuery } from '@/features/api/funnel';
 // import ShimmerButton from './animated-button';
 
 // import ShimmerButton from './animated-button';
@@ -13,6 +16,8 @@ import RegisterNow from '@public/v3/home/register-now.svg';
 
 const SubscribeNewsLetter = () => {
   const router = useRouter();
+  const path = usePathname();
+  let [funnelTrack] = useLazyRegisterFunnelQuery();
 
   // const [email, setEmail] = useState<string>('');
   // const [emailError, setEmailError] = useState<string>('');
@@ -38,6 +43,22 @@ const SubscribeNewsLetter = () => {
   //     });
   //   }
   // };
+
+  const trackPath = () => {
+    if (path.includes('/v3/about-us/our-story')) {
+      return Tracking_Click_RegisterPages.LP_OurStory_Bottom_Register;
+    } else if (path.includes('/v3/about-us/leadership')) {
+      return Tracking_Click_RegisterPages.LP_Leadership_Bottom_Register;
+    } else if (path.includes('/v3/sustainability')) {
+      return Tracking_Click_RegisterPages.LP_Sustainability_Bottom_Register;
+    } else if (path.includes('/v3/contact-us')) {
+      return Tracking_Click_RegisterPages.LP_ContactUs_Bottom_Register;
+    } else if (path.includes('/v3/blogs')) {
+      return Tracking_Click_RegisterPages.LP_Blogs_Bottom_Register;
+    } else {
+      return Tracking_Click_RegisterPages.LP_Home_Bottom_Register;
+    }
+  };
   return (
     <div className="flex w-full xl:px-[112px] lg:px-[32px] bg-[#F9FAFB] justify-between items-center py-4">
       <div className="flex flex-col gap-2">
@@ -76,7 +97,13 @@ const SubscribeNewsLetter = () => {
         <Image
           src={RegisterNow}
           alt="register now"
-          onClick={() => router.push('/v2/register')}
+          onClick={() => {
+            funnelTrack({
+              step: trackPath(),
+              sessionId: isSessionValid()
+            }),
+              router.push('/v2/register');
+          }}
           className="cursor-pointer"
         />
       </div>

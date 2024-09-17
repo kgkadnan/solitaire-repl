@@ -7,5 +7,6 @@ export const Tracking_Click_RegisterPages = {
   LP_OurStory_Bottom_Register: 'LP_OurStory_Bottom_Register',
   LP_Sustainability_Bottom_Register: 'LP_Sustainability_Bottom_Register',
   LP_ContactUs_Bottom_Register: 'LP_ContactUs_Bottom_Register',
-  Login_Register: 'Login_Register'
+  Login_Register: 'Login_Register',
+  LP_Blogs_Bottom_Register: 'LP_Blogs_Bottom_Register'
 };
