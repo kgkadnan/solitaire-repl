@@ -8,6 +8,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import Image from 'next/image';
 // import Register from '@public/v3/home/register.svg';
 import ShimmerButton from '../animated-button';
+import { useMediaQuery } from 'react-responsive';
 
 const CommonHeader = () => {
   const currentRoute = usePathname();
@@ -15,7 +16,9 @@ const CommonHeader = () => {
   const [selectedHeader, setSelectedHeader] = useState<string>('');
   const [showHeader, setShowHeader] = useState(true);
   const lastScrollY = useRef(0);
+  const isMobile = useMediaQuery({ maxWidth: 1024 });
 
+  if (isMobile) return null;
   useEffect(() => {
     if (currentRoute === '/v3' || currentRoute === '/')
       setSelectedHeader('home');
