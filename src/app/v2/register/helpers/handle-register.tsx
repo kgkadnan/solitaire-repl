@@ -4,6 +4,8 @@ import { IRegister } from '../interface';
 import CommonPoppup from '../../login/component/common-poppup';
 import { statusCode } from '@/constants/enums/status-code';
 import { IOtp, IToken } from '../component/main';
+import { isSessionValid } from '@/utils/manage-session';
+import { Tracking } from '@/constants/funnel-tracking';
 
 interface IHandleRegister {
   role: string;
@@ -17,6 +19,7 @@ interface IHandleRegister {
   setToken: React.Dispatch<React.SetStateAction<IToken>>;
   setOTPVerificationFormState: React.Dispatch<React.SetStateAction<IOtp>>;
   setIsLoading: any;
+  funnelTrack: any;
 }
 export const handleRegister = async ({
   role,
@@ -29,7 +32,8 @@ export const handleRegister = async ({
   setIsDialogOpen,
   setDialogContent,
   setOTPVerificationFormState,
-  setIsLoading
+  setIsLoading,
+  funnelTrack
 }: IHandleRegister) => {
   const isFormValid = validateAllFields({
     formState: registerFormState,
@@ -67,11 +71,21 @@ export const handleRegister = async ({
           phoneToken: res.customer.phone_token,
           tempToken: res.customer.temp_token
         }));
+        funnelTrack({
+          step: Tracking.Click_Register,
+          status: 'Success',
+          sessionId: isSessionValid()
+        });
       }
     })
     .catch((e: any) => {
       setIsLoading(false);
       setIsDialogOpen(true);
+      funnelTrack({
+        step: Tracking.Click_Register,
+        status: 'Fail',
+        sessionId: isSessionValid()
+      });
       if (e.status === statusCode.DUPLICATE && e.data.field === 'email') {
         setDialogContent(
           <CommonPoppup

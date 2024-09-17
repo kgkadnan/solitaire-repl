@@ -12,7 +12,7 @@ import { isSessionValid } from '@/utils/manage-session';
 import { useLazyRegisterFunnelQuery } from '@/features/api/funnel';
 import {
   Tracking,
-  Tracking_Click_RegisterPages
+  Tracking_Click_RegisterPage
 } from '@/constants/funnel-tracking';
 
 const CommonHeader = () => {
@@ -72,9 +72,9 @@ const CommonHeader = () => {
           <CommonButton
             onClick={() => {
               funnelTrack({
-                step: Tracking.Click_RegisterPages,
+                step: Tracking.Click_RegisterPage,
 
-                entryPoint: Tracking_Click_RegisterPages.LP_Top_Login,
+                entryPoint: Tracking_Click_RegisterPage.LP_Top_Login,
                 sessionId: isSessionValid()
               }),
                 router.push('/v2/login');
@@ -107,9 +107,9 @@ const CommonHeader = () => {
             className="!rounded-[8px] w-[120px] h-[44px] text-[16px]"
             onClick={() => {
               funnelTrack({
-                step: Tracking.Click_RegisterPages,
+                step: Tracking.Click_RegisterPage,
 
-                entryPoint: Tracking_Click_RegisterPages.LP_Top_Register,
+                entryPoint: Tracking_Click_RegisterPage.LP_Top_Register,
                 sessionId: isSessionValid()
               }),
                 router.push('/v2/register');

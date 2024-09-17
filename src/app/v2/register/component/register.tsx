@@ -1,5 +1,5 @@
 // import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import KgkIcon from '@public/v2/assets/icons/sidebar-icons/hover-kgk-icon.svg?url';
 import { handleRegisterChange } from '../helpers/handle-register-change';
 import { handleRegister } from '../helpers/handle-register';
@@ -11,6 +11,9 @@ import { IndividualActionButton } from '@/components/v2/common/action-button/ind
 import { useRouter, useSearchParams } from 'next/navigation';
 import { MobileInput } from '@/components/v2/common/input-field/mobile';
 import { IOtp, IToken } from './main';
+import { isSessionValid } from '@/utils/manage-session';
+import { Tracking } from '@/constants/funnel-tracking';
+import { useLazyRegisterFunnelQuery } from '@/features/api/funnel';
 
 interface IRegisterComponent {
   registerSetState: IRegisterSetState;
@@ -42,6 +45,7 @@ const RegisterComponent = ({
 
   const { registerFormState, registerFormErrors } = registerState;
   const { setRegisterFormState, setRegisterFormErrors } = registerSetState;
+  let [funnelTrack] = useLazyRegisterFunnelQuery();
 
   const handleRegisterSubmit = (e: any) => {
     e.preventDefault();
@@ -57,10 +61,18 @@ const RegisterComponent = ({
       setIsDialogOpen,
       setDialogContent,
       setOTPVerificationFormState,
-      setIsLoading
+      setIsLoading,
+      funnelTrack
     });
   };
 
+  useEffect(() => {
+    funnelTrack({
+      step: Tracking.Register_PageView,
+
+      sessionId: isSessionValid()
+    });
+  }, []);
   return (
     <div className="my-[20px] ">
       <form

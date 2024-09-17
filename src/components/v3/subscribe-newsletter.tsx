@@ -5,7 +5,7 @@ import Image from 'next/image';
 import RegisterNow from '@public/v3/home/register-now.svg';
 import {
   Tracking,
-  Tracking_Click_RegisterPages
+  Tracking_Click_RegisterPage
 } from '@/constants/funnel-tracking';
 import { isSessionValid } from '@/utils/manage-session';
 import { useLazyRegisterFunnelQuery } from '@/features/api/funnel';
@@ -49,17 +49,17 @@ const SubscribeNewsLetter = () => {
 
   const trackPath = () => {
     if (path.includes('/v3/about-us/our-story')) {
-      return Tracking_Click_RegisterPages.LP_OurStory_Bottom_Register;
+      return Tracking_Click_RegisterPage.LP_OurStory_Bottom_Register;
     } else if (path.includes('/v3/about-us/leadership')) {
-      return Tracking_Click_RegisterPages.LP_Leadership_Bottom_Register;
+      return Tracking_Click_RegisterPage.LP_Leadership_Bottom_Register;
     } else if (path.includes('/v3/sustainability')) {
-      return Tracking_Click_RegisterPages.LP_Sustainability_Bottom_Register;
+      return Tracking_Click_RegisterPage.LP_Sustainability_Bottom_Register;
     } else if (path.includes('/v3/contact-us')) {
-      return Tracking_Click_RegisterPages.LP_ContactUs_Bottom_Register;
+      return Tracking_Click_RegisterPage.LP_ContactUs_Bottom_Register;
     } else if (path.includes('/v3/blogs')) {
-      return Tracking_Click_RegisterPages.LP_Blogs_Bottom_Register;
+      return Tracking_Click_RegisterPage.LP_Blogs_Bottom_Register;
     } else {
-      return Tracking_Click_RegisterPages.LP_Home_Bottom_Register;
+      return Tracking_Click_RegisterPage.LP_Home_Bottom_Register;
     }
   };
   return (
@@ -102,7 +102,7 @@ const SubscribeNewsLetter = () => {
           alt="register now"
           onClick={() => {
             funnelTrack({
-              step: Tracking.Click_RegisterPages,
+              step: Tracking.Click_RegisterPage,
 
               entryPoint: trackPath(),
               sessionId: isSessionValid()

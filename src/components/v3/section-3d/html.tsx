@@ -9,7 +9,7 @@ import Dubai from '@public/v3/home/map/dubai.svg';
 import Hongkong from '@public/v3/home/map/hongkong.png';
 import {
   Tracking,
-  Tracking_Click_RegisterPages
+  Tracking_Click_RegisterPage
 } from '@/constants/funnel-tracking';
 import { isSessionValid } from '@/utils/manage-session';
 import { useLazyRegisterFunnelQuery } from '@/features/api/funnel';
@@ -231,9 +231,9 @@ const HtmlAnimation = () => {
             alt="explore now"
             onClick={() => {
               funnelTrack({
-                step: Tracking.Click_RegisterPages,
+                step: Tracking.Click_RegisterPage,
                 entryPoint:
-                  Tracking_Click_RegisterPages.LP_Home_Explore_Now_Register,
+                  Tracking_Click_RegisterPage.LP_Home_Explore_Now_Register,
                 sessionId: isSessionValid()
               }),
                 router.push('/v2/register');
