@@ -74,7 +74,8 @@ export const handleRegister = async ({
         funnelTrack({
           step: Tracking.Click_Register,
           status: 'Success',
-          sessionId: isSessionValid()
+          sessionId: isSessionValid(),
+          mobileNumber: `+${registerFormState.countryCode} ${registerFormState.mobileNumber}`
         });
       }
     })
@@ -84,7 +85,8 @@ export const handleRegister = async ({
       funnelTrack({
         step: Tracking.Click_Register,
         status: 'Fail',
-        sessionId: isSessionValid()
+        sessionId: isSessionValid(),
+        mobileNumber: `+${registerFormState.countryCode} ${registerFormState.mobileNumber}`
       });
       if (e.status === statusCode.DUPLICATE && e.data.field === 'email') {
         setDialogContent(

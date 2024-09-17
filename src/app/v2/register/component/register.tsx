@@ -85,7 +85,13 @@ const RegisterComponent = ({
             className="flex flex-col items-center cursor-pointer"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            onClick={() => router.push('/v3')}
+            onClick={() => {
+              funnelTrack({
+                step: Tracking.Click_KGK_Logo,
+                sessionId: isSessionValid()
+              }),
+                router.push('/v3');
+            }}
           >
             <KgkIcon
               fill={isHovered ? '#5D6969' : '#23302C'}
@@ -254,9 +260,13 @@ const RegisterComponent = ({
               </IndividualActionButton>
               <IndividualActionButton
                 onClick={() => {
-                  pathName === 'login'
-                    ? router.back()
-                    : router.push(`/v2/login?path=register`);
+                  funnelTrack({
+                    step: Tracking.Click_Login,
+                    sessionId: isSessionValid()
+                  }),
+                    pathName === 'login'
+                      ? router.back()
+                      : router.push(`/v2/login?path=register`);
                 }}
                 className="rounded-[4px] text-neutral600"
                 size={'custom'}
