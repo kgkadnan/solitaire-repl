@@ -10,12 +10,7 @@
     //  Code Style
     "quotes": ["error", "single", { "allowTemplateLiterals": true }],
     "semi": ["error", "always"],
-    "no-undef": "off",
-    "react-hooks/exhaustive-deps": "off",
-    "no-case-declarations": "off",
-    "no-unescaped-entities": "off",
-    "react/no-unescaped-entities": "off",
-    "react-hooks/rules-of-hooks": "off",
+
     //  Avoid Unused Variables and Imports
     "no-unused-vars": [
       "error",
