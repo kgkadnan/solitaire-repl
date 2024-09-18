@@ -64,7 +64,8 @@ export const handleVerifyOtp = ({
             step: Tracking.Click_Verify,
             status: 'Success',
             sessionId: isSessionValid(),
-            mobileNumber: `+${phone}`
+            mobileNumber: `+${phone}`,
+            entryPoint: localStorage.getItem('entryPoint') || ''
           });
       }
     })
@@ -87,7 +88,8 @@ export const handleVerifyOtp = ({
           step: Tracking.Click_Verify,
           status: 'Fail',
           sessionId: isSessionValid(),
-          mobileNumber: `+${phone}`
+          mobileNumber: `+${phone}`,
+          entryPoint: localStorage.getItem('entryPoint') || ''
         });
     });
 };

@@ -236,7 +236,12 @@ const HtmlAnimation = () => {
                   Tracking_Click_RegisterPage.LP_Home_Explore_Now_Register,
                 sessionId: isSessionValid()
               }),
-                router.push('/v2/register');
+                localStorage.setItem(
+                  'entryPoint',
+                  Tracking_Click_RegisterPage.LP_Home_Explore_Now_Register
+                );
+
+              router.push('/v2/register');
             }}
             className="cursor-pointer lg:w-[224px]"
           />

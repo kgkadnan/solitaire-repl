@@ -33,6 +33,7 @@ import { useRegisterStateManagement } from '../hooks/register-state-management';
 import { isSessionValid } from '@/utils/manage-session';
 import { Tracking } from '@/constants/funnel-tracking';
 import { useLazyRegisterFunnelQuery } from '@/features/api/funnel';
+// import { useRouter } from 'next/navigation';
 
 export interface IOtp {
   otpMobileNumber: string;
@@ -97,6 +98,7 @@ const Register = () => {
   const [sendOtp] = useSendOtpMutation();
   let [funnelTrack] = useLazyRegisterFunnelQuery();
 
+  // const router = useRouter();
   useEffect(() => {
     const userIp = JSON.parse(localStorage.getItem('userIp')!);
 
@@ -126,6 +128,27 @@ const Register = () => {
       console.error('Error fetching country code', error);
     }
   }, [data, error]);
+
+  // useEffect(() => {
+  //   // Check if browser history and pushState are available
+  //   if (window.history && window.history.replaceState) {
+  //     // Simulate a state push to add an entry to the history
+  //     window.history.replaceState({ forward: true }, '', '');
+
+  //     // Function to handle popstate events
+  //     const handlePopState = () => {
+  //       alert('Back button was pressed.');
+  //     };
+
+  //     // Add the event listener for popstate
+  //     window.addEventListener('popstate', handlePopState);
+
+  //     // Cleanup the event listener when the component unmounts
+  //     return () => {
+  //       window.removeEventListener('popstate', handlePopState);
+  //     };
+  //   }
+  // }, []);
 
   useEffect(() => {
     if (userData) {
@@ -172,7 +195,8 @@ const Register = () => {
               setIsInputDialogOpen(false);
               funnelTrack({
                 step: Tracking.Click_Mobile_Edit_Cancel,
-                sessionId: isSessionValid()
+                sessionId: isSessionValid(),
+                entryPoint: localStorage.getItem('entryPoint') || ''
               });
             }}
             variant={'secondary'}

@@ -75,7 +75,8 @@ export const handleRegister = async ({
           step: Tracking.Click_Register,
           status: 'Success',
           sessionId: isSessionValid(),
-          mobileNumber: `+${registerFormState.countryCode} ${registerFormState.mobileNumber}`
+          mobileNumber: `+${registerFormState.countryCode} ${registerFormState.mobileNumber}`,
+          entryPoint: localStorage.getItem('entryPoint') || ''
         });
       }
     })
@@ -86,7 +87,8 @@ export const handleRegister = async ({
         step: Tracking.Click_Register,
         status: 'Fail',
         sessionId: isSessionValid(),
-        mobileNumber: `+${registerFormState.countryCode} ${registerFormState.mobileNumber}`
+        mobileNumber: `+${registerFormState.countryCode} ${registerFormState.mobileNumber}`,
+        entryPoint: localStorage.getItem('entryPoint') || ''
       });
       if (e.status === statusCode.DUPLICATE && e.data.field === 'email') {
         setDialogContent(
