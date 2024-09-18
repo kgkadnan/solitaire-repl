@@ -45,7 +45,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
   // || path === '/';
   // Create a component that just renders children, with children as an optional prop
   const ChildrenComponent: FC<{ children?: ReactNode }> = ({ children }) => (
-    <>{isMobile ? <AppDownloadPopup></AppDownloadPopup> : children}</>
+    <>{children}</>
   );
 
   useEffect(() => {
@@ -174,7 +174,9 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
               </>
             ) : isV2Route ? (
               <>
-                {showHeader ? (
+                {isMobile ? (
+                  <AppDownloadPopup></AppDownloadPopup>
+                ) : showHeader ? (
                   <SecureComponent>{children}</SecureComponent>
                 ) : (
                   <ChildrenComponent>{children}</ChildrenComponent>
