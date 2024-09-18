@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ManageLocales } from '@/utils/translate';
 import { useRegisterMutation } from '@/features/api/register';
 import { useGetCountryCodeQuery } from '@/features/api/current-ip';
@@ -33,7 +33,7 @@ import { useRegisterStateManagement } from '../hooks/register-state-management';
 import { isSessionValid } from '@/utils/manage-session';
 import { Tracking } from '@/constants/funnel-tracking';
 import { useLazyRegisterFunnelQuery } from '@/features/api/funnel';
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
 
 export interface IOtp {
   otpMobileNumber: string;
@@ -98,7 +98,7 @@ const Register = () => {
   const [sendOtp] = useSendOtpMutation();
   let [funnelTrack] = useLazyRegisterFunnelQuery();
 
-  const router = useRouter();
+  // const router = useRouter();
   useEffect(() => {
     const userIp = JSON.parse(localStorage.getItem('userIp')!);
 
