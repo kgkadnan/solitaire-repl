@@ -340,8 +340,8 @@ const DataTable = ({
                 );
                 if (isAlreadyOpenIndex >= 0 && isAlreadyOpenIndex !== null) {
                   if (
-                    isAlreadyOpenIndex + 1 ==
-                    (path?.match(/result-(\d+)/) || [])[1]
+                    isAlreadyOpenIndex + 1 ===
+                    Number((path?.match(/result-(\d+)/) || [])[1])
                   ) {
                     setIsLoading(false);
                   } else {
