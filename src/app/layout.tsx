@@ -87,7 +87,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
       const disableDevtool = require('disable-devtool');
       disableDevtool({
         disableMenu: true,
-        ondevtoolopen(_type: any, _next: any) {
+        ondevtoolopen(_type: string, _next: () => void) {
           setOpen(true);
         },
         ignore: () => {

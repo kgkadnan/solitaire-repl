@@ -203,7 +203,11 @@ const TopNavigationBar = ({
               <div className="flex items-center border-b-[1px] border-solid border-primaryBorder p-[16px] gap-[8px]">
                 <Avatar className="bg-primaryMain flex items-center justify-center">
                   {imageUrl.length ? (
-                    <img src={imageUrl} alt="profile" />
+                    <img
+                      src={imageUrl}
+                      alt="profile"
+                      className="w-[40px] h-[40px] rounded-full object-cover border-none"
+                    />
                   ) : (
                     <p className="text-center text-mRegular text-neutral0">
                       {`${userAccountInfo?.customer?.first_name
