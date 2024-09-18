@@ -18,7 +18,7 @@ const AppDownloadPopup = () => {
 
       <Dialog open={true} defaultOpen={true}>
         <DialogContent
-          className={`max-w-[100%] min-h-[100%] bg-neutral25 max-h-[90%] flex flex-col overflow-y-auto align-center justify-center  p-[24px] items-center`}
+          className={`max-w-[100%] min-h-[100%] bg-neutral25 max-h-[90%] flex flex-col overflow-y-auto align-center justify-center  p-[24px] items-center z-[999999]`}
           style={{
             background:
               'linear-gradient(135deg, #DBF2FC 0%, #E8E8FF 30%, #FFF4E3 100%)'

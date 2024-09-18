@@ -37,7 +37,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
   const isV3Route = v3Routes.includes(path) || path.includes('/v3');
 
   const [open, setOpen] = useState(false);
-
+  const [showLPHeader, setShowLPHeader] = useState(false);
   const showHeader = isApplicationRoutes && !headerlessRoutes.includes(path);
   // || path === '/';
   // Create a component that just renders children, with children as an optional prop
@@ -47,6 +47,15 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
       <AppDownloadPopup></AppDownloadPopup>
     </>
   );
+
+  useEffect(() => {
+    // Show header after 2 seconds
+    const timer = setTimeout(() => {
+      setShowLPHeader(true);
+    }, 500);
+
+    return () => clearTimeout(timer); // Cleanup on unmount
+  }, []);
   // Wrap the ChildrenComponent with authorizedLogin if it's a secure page
   const SecureComponent = protectedRoutes.includes(path)
     ? authorizedLogin(ChildrenComponent)
@@ -134,7 +143,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
               <>
                 <main className="">
                   <Toaster />
-                  <CommonHeader />
+                  {showLPHeader && <CommonHeader />}
                   <div>{children}</div>
                   <div style={{ zIndex: 100 }}>
                     <SubscribeNewsLetter />

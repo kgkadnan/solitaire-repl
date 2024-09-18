@@ -4,11 +4,8 @@ import { NavigationMenuDemo } from './navigation-menu';
 import { CommonButton } from '../button';
 import kgkLogo from '@public/v3/kgklogo.svg';
 import { usePathname, useRouter } from 'next/navigation';
-// import ShimmerButton from '../animated-button';
 import Image from 'next/image';
-// import Register from '@public/v3/home/register.svg';
 import ShimmerButton from '../animated-button';
-import { useMediaQuery } from 'react-responsive';
 import { isSessionValid } from '@/utils/manage-session';
 import { useLazyRegisterFunnelQuery } from '@/features/api/funnel';
 import {
@@ -23,11 +20,9 @@ const CommonHeader = () => {
   const [selectedHeader, setSelectedHeader] = useState<string>('');
   const [showHeader, setShowHeader] = useState(true);
   const lastScrollY = useRef(0);
-  const isMobile = useMediaQuery({ maxWidth: 1024 });
   let [funnelTrack] = useLazyRegisterFunnelQuery();
 
   const { authToken } = useUser();
-  if (isMobile) return null;
   useEffect(() => {
     if (currentRoute === '/v3' || currentRoute === '/')
       setSelectedHeader('home');
@@ -91,22 +86,6 @@ const CommonHeader = () => {
           >
             Login
           </CommonButton>
-          {/* <CommonButton
-            onClick={() => router.push('/v2/register')}
-            variant={'prima'}
-            size={'custom'}
-            className="rounded-[8px] w-[80px] h-[44px]"
-          >
-            Register
-          </CommonButton> */}
-          {/* <Image
-            src={Register}
-            alt="register"
-            onClick={() => {
-              router.push('/v2/register');
-            }}
-            className="cursor-pointer"
-          /> */}
 
           <ShimmerButton
             className="!rounded-[8px] w-[120px] h-[44px] text-[16px]"
