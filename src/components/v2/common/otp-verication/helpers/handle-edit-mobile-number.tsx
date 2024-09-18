@@ -83,7 +83,8 @@ export const handleEditMobileNumber = ({
             step: Tracking.Click_Mobile_Edit_Save,
             status: 'Success',
             sessionId: isSessionValid(),
-            mobileNumber: `+${otpVerificationFormState.countryCode} ${otpVerificationFormState.otpMobileNumber}`
+            mobileNumber: `+${otpVerificationFormState.countryCode} ${otpVerificationFormState.otpMobileNumber}`,
+            entryPoint: localStorage.getItem('entryPoint') || ''
           });
       })
       .catch((e: any) => {
@@ -100,7 +101,8 @@ export const handleEditMobileNumber = ({
             step: Tracking.Click_Mobile_Edit_Save,
             status: 'Fail',
             sessionId: isSessionValid(),
-            mobileNumber: `+${otpVerificationFormState.countryCode} ${otpVerificationFormState.otpMobileNumber}`
+            mobileNumber: `+${otpVerificationFormState.countryCode} ${otpVerificationFormState.otpMobileNumber}`,
+            entryPoint: localStorage.getItem('entryPoint') || ''
           });
         logger.error(`something went wrong while sending OTP ${e}`);
       });
