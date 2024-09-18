@@ -24,6 +24,7 @@ import CommonHeader from '@/components/v3/navigation-menu/header';
 import SubscribeNewsLetter from '@/components/v3/subscribe-newsletter';
 import FooterSiteMap from '@/components/v3/footer-sitemap';
 import Footer from '@/components/v3/footer';
+import { useMediaQuery } from 'react-responsive';
 // import Salesiq from '@/components/v2/common/sales-iq';
 
 const store = setupStore();
@@ -39,13 +40,12 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
   const [open, setOpen] = useState(false);
   const [showLPHeader, setShowLPHeader] = useState(false);
   const showHeader = isApplicationRoutes && !headerlessRoutes.includes(path);
+  const isMobile = useMediaQuery({ maxWidth: 1024 });
+
   // || path === '/';
   // Create a component that just renders children, with children as an optional prop
   const ChildrenComponent: FC<{ children?: ReactNode }> = ({ children }) => (
-    <>
-      {children}
-      <AppDownloadPopup></AppDownloadPopup>
-    </>
+    <>{isMobile ? <AppDownloadPopup></AppDownloadPopup> : children}</>
   );
 
   useEffect(() => {
@@ -157,17 +157,20 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
           <ThemeProviders>
             {isV3Route ? (
               <>
-                <main className="">
-                  <Toaster />
-                  {showLPHeader && <CommonHeader />}
-                  <div>{children}</div>
-                  <div style={{ zIndex: 100 }}>
-                    <SubscribeNewsLetter />
-                    <FooterSiteMap />
-                    <Footer />
-                  </div>
-                </main>
-                <AppDownloadPopup></AppDownloadPopup>
+                {isMobile ? (
+                  <AppDownloadPopup></AppDownloadPopup>
+                ) : (
+                  <main className="">
+                    <Toaster />
+                    {showLPHeader && <CommonHeader />}
+                    <div>{children}</div>
+                    <div style={{ zIndex: 100 }}>
+                      <SubscribeNewsLetter />
+                      <FooterSiteMap />
+                      <Footer />
+                    </div>
+                  </main>
+                )}
               </>
             ) : isV2Route ? (
               <>
