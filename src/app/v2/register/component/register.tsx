@@ -69,8 +69,8 @@ const RegisterComponent = ({
   useEffect(() => {
     funnelTrack({
       step: Tracking.Register_PageView,
-
-      sessionId: isSessionValid()
+      sessionId: isSessionValid(),
+      entryPoint: localStorage.getItem('entryPoint') || ''
     });
   }, []);
   return (
@@ -88,7 +88,8 @@ const RegisterComponent = ({
             onClick={() => {
               funnelTrack({
                 step: Tracking.Click_KGK_Logo,
-                sessionId: isSessionValid()
+                sessionId: isSessionValid(),
+                entryPoint: localStorage.getItem('entryPoint') || ''
               }),
                 router.push('/v3');
             }}
@@ -262,7 +263,8 @@ const RegisterComponent = ({
                 onClick={() => {
                   funnelTrack({
                     step: Tracking.Click_Login,
-                    sessionId: isSessionValid()
+                    sessionId: isSessionValid(),
+                    entryPoint: localStorage.getItem('entryPoint') || ''
                   }),
                     pathName === 'login'
                       ? router.back()

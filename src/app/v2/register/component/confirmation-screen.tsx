@@ -16,8 +16,8 @@ const ConfirmScreen = () => {
   useEffect(() => {
     funnelTrack({
       step: Tracking.Mobile_Verified_PageView,
-
-      sessionId: isSessionValid()
+      sessionId: isSessionValid(),
+      entryPoint: localStorage.getItem('entryPoint') || ''
     });
   }, []);
   return (
@@ -37,7 +37,8 @@ const ConfirmScreen = () => {
               triggerRegisterFlowTrack({ event: 'complete-kyc' });
               funnelTrack({
                 step: Tracking.Click_Finsih_KYC,
-                sessionId: isSessionValid()
+                sessionId: isSessionValid(),
+                entryPoint: localStorage.getItem('entryPoint') || ''
               }),
                 router.push(`/v2/kyc`);
             }}
@@ -52,7 +53,8 @@ const ConfirmScreen = () => {
               triggerRegisterFlowTrack({ event: 'go-to-dashboard' });
               funnelTrack({
                 step: Tracking.Click_Continue_Guest,
-                sessionId: isSessionValid()
+                sessionId: isSessionValid(),
+                entryPoint: localStorage.getItem('entryPoint') || ''
               }),
                 router.push(`/v2/`);
             }}

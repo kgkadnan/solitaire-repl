@@ -77,7 +77,12 @@ const CommonHeader = () => {
                 entryPoint: Tracking_Click_RegisterPage.LP_Top_Login,
                 sessionId: isSessionValid()
               }),
-                authToken ? router.push('/v2') : router.push('/v2/login');
+                localStorage.setItem(
+                  'entryPoint',
+                  Tracking_Click_RegisterPage.LP_Top_Login
+                );
+
+              authToken ? router.push('/v2') : router.push('/v2/login');
             }}
             variant={'secondary'}
             size={'custom'}
@@ -96,7 +101,12 @@ const CommonHeader = () => {
                 entryPoint: Tracking_Click_RegisterPage.LP_Top_Register,
                 sessionId: isSessionValid()
               }),
-                router.push('/v2/register');
+                localStorage.setItem(
+                  'entryPoint',
+                  Tracking_Click_RegisterPage.LP_Top_Register
+                );
+
+              router.push('/v2/register');
             }}
             style={{ boxShadow: '0px 1px 2px 0px #1018281F' }}
           >

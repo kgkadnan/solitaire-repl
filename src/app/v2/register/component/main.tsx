@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ManageLocales } from '@/utils/translate';
 import { useRegisterMutation } from '@/features/api/register';
 import { useGetCountryCodeQuery } from '@/features/api/current-ip';
@@ -96,7 +96,6 @@ const Register = () => {
   const [verifyOTP] = useVerifyOTPMutation();
   const [sendOtp] = useSendOtpMutation();
   let [funnelTrack] = useLazyRegisterFunnelQuery();
-
   useEffect(() => {
     const userIp = JSON.parse(localStorage.getItem('userIp')!);
 
@@ -172,7 +171,8 @@ const Register = () => {
               setIsInputDialogOpen(false);
               funnelTrack({
                 step: Tracking.Click_Mobile_Edit_Cancel,
-                sessionId: isSessionValid()
+                sessionId: isSessionValid(),
+                entryPoint: localStorage.getItem('entryPoint') || ''
               });
             }}
             variant={'secondary'}

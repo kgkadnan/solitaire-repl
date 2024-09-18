@@ -91,10 +91,11 @@ const OTPVerification = ({
   useEffect(() => {
     funnelTrack({
       step: Tracking.Mobile_Verification_PageView,
-
-      sessionId: isSessionValid()
+      sessionId: isSessionValid(),
+      entryPoint: localStorage.getItem('entryPoint') || ''
     });
   }, []);
+
   return (
     <div className="flex  items-center">
       <div className="flex flex-col w-[450px] p-8 gap-[24px] rounded-[8px] border-[1px] border-neutral200">
@@ -105,7 +106,8 @@ const OTPVerification = ({
           onClick={() => {
             funnelTrack({
               step: Tracking.Click_KGK_Logo,
-              sessionId: isSessionValid()
+              sessionId: isSessionValid(),
+              entryPoint: localStorage.getItem('entryPoint') || ''
             }),
               router.push('/v3');
           }}
@@ -137,7 +139,8 @@ const OTPVerification = ({
                 funnelTrack({
                   step: Tracking.Click_Mobile_Edit,
                   sessionId: isSessionValid(),
-                  mobileNumber: `+${otpVerificationFormState.codeAndNumber}`
+                  mobileNumber: `+${otpVerificationFormState.codeAndNumber}`,
+                  entryPoint: localStorage.getItem('entryPoint') || ''
                 }),
                   setIsInputDialogOpen(true);
               }}
@@ -175,7 +178,8 @@ const OTPVerification = ({
               funnelTrack({
                 step: Tracking.Click_Resend,
                 sessionId: isSessionValid(),
-                mobileNumber: `+${otpVerificationFormState.codeAndNumber}`
+                mobileNumber: `+${otpVerificationFormState.codeAndNumber}`,
+                entryPoint: localStorage.getItem('entryPoint') || ''
               });
             }}
           >
@@ -224,7 +228,8 @@ const OTPVerification = ({
             onClick={() => {
               funnelTrack({
                 step: Tracking.Click_Login,
-                sessionId: isSessionValid()
+                sessionId: isSessionValid(),
+                entryPoint: localStorage.getItem('entryPoint') || ''
               }),
                 role === 'login'
                   ? setCurrentState('login')

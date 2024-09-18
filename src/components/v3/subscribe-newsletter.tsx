@@ -107,7 +107,9 @@ const SubscribeNewsLetter = () => {
               entryPoint: trackPath(),
               sessionId: isSessionValid()
             }),
-              router.push('/v2/register');
+              localStorage.setItem('entryPoint', trackPath());
+
+            router.push('/v2/register');
           }}
           className="cursor-pointer"
         />
