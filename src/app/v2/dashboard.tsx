@@ -608,7 +608,10 @@ const Dashboard = () => {
       // Check for pending and active invoices
       if (customerData.customer?.orders?.length > 0) {
         const pendingInvoices = customerData.customer.orders
-          .filter((item: any) => item.invoice_id === null)
+          .filter(
+            (item: any) =>
+              item.invoice_id === null && item.status !== 'completed'
+          )
           .sort((a: any, b: any) => {
             const dateA = new Date(a.created_at as string);
             const dateB = new Date(b.created_at as string);
@@ -641,7 +644,8 @@ const Dashboard = () => {
               label: 'Pending',
               link: '/v2/your-orders',
               count: customerData.customer.orders.filter(
-                (item: any) => item.invoice_id === null
+                (item: any) =>
+                  item.invoice_id === null && item.status !== 'completed'
               ).length,
               data: pendingInvoices
             });
@@ -817,7 +821,10 @@ const Dashboard = () => {
         .catch((_e: any) => {
           setIsLoading(false);
 
-          if (_e?.status === statusCode.NOT_FOUND) {
+          if (
+            _e?.status === statusCode.NOT_FOUND ||
+            _e?.status === statusCode.INVALID_DATA
+          ) {
             setError(`We couldn't find any results for this search`);
           } else if (_e?.status === statusCode.UNAUTHORIZED) {
             setError(_e?.data?.message?.message);
@@ -842,7 +849,10 @@ const Dashboard = () => {
         })
         .catch((_e: any) => {
           setIsLoading(false);
-          if (_e?.status === statusCode.NOT_FOUND) {
+          if (
+            _e?.status === statusCode.NOT_FOUND ||
+            _e?.status === statusCode.INVALID_DATA
+          ) {
             setError(`We couldn't find any results for this search`);
           } else if (_e?.status === statusCode.UNAUTHORIZED) {
             setError(_e?.data?.message?.message);
@@ -924,7 +934,10 @@ const Dashboard = () => {
               setIsDetailPage(true);
             })
             .catch((_e: any) => {
-              if (_e?.status === statusCode.NOT_FOUND) {
+              if (
+                _e?.status === statusCode.NOT_FOUND ||
+                _e?.status === statusCode.INVALID_DATA
+              ) {
                 setError(`We couldn't find any results for this search`);
               } else if (_e?.status === statusCode.UNAUTHORIZED) {
                 setError(_e?.data?.message?.message);
@@ -1238,7 +1251,10 @@ const Dashboard = () => {
         }
       })
       .catch((_e: any) => {
-        if (_e?.status === statusCode.NOT_FOUND) {
+        if (
+          _e?.status === statusCode.NOT_FOUND ||
+          _e?.status === statusCode.INVALID_DATA
+        ) {
           setError(`We couldn't find any results for this search`);
         } else if (_e?.status === statusCode.UNAUTHORIZED) {
           setError(_e?.data?.message?.message);
@@ -1562,7 +1578,10 @@ const Dashboard = () => {
                 setIsDetailPage(true);
               })
               .catch((_e: any) => {
-                if (_e?.status === statusCode.NOT_FOUND) {
+                if (
+                  _e?.status === statusCode.NOT_FOUND ||
+                  _e?.status === statusCode.INVALID_DATA
+                ) {
                   setError(`We couldn't find any results for this search`);
                 } else if (_e?.status === statusCode.UNAUTHORIZED) {
                   setError(_e?.data?.message?.message);
@@ -1668,6 +1687,7 @@ const Dashboard = () => {
       );
     }
   };
+
   return (
     <>
       {error !== '' && (
@@ -1969,7 +1989,9 @@ const Dashboard = () => {
               className={`bg-cover ml-[-20px] mr-[-16px]  bg-no-repeat flex justify-center flex-col items-center h-[126px] gap-5`}
               style={{
                 backgroundImage:
-                  customerData === undefined ? '' : 'url(/gradient.png)'
+                  customerData === undefined || !customerData?.customer?.id
+                    ? ''
+                    : 'url(/gradient.png)'
               }}
             >
               {customerData !== undefined ? (
@@ -2003,7 +2025,7 @@ const Dashboard = () => {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-4 gap-4">
-              {customerData === undefined
+              {customerData === undefined || !customerData?.customer?.id
                 ? Array(4)
                     .fill(null)
                     .map((_, index) => (
@@ -2073,7 +2095,7 @@ const Dashboard = () => {
             </div>
             {tabs.length > 0 && (
               <div className="flex gap-4 ">
-                {customerData === undefined ? (
+                {customerData === undefined || !customerData?.customer?.id ? (
                   <Skeleton
                     height={400}
                     width={'100%'}
@@ -2221,7 +2243,7 @@ const Dashboard = () => {
             )}
 
             <div className="flex gap-4 ">
-              {customerData === undefined ? (
+              {customerData === undefined || !customerData?.customer?.id ? (
                 <Skeleton
                   height={420}
                   width={'100%'}
@@ -2351,7 +2373,7 @@ const Dashboard = () => {
                 </div>
               )}
               <div className="w-[300px]">
-                {customerData === undefined ? (
+                {customerData === undefined || !customerData?.customer?.id ? (
                   <Skeleton
                     height={420}
                     width={300}
@@ -2401,7 +2423,7 @@ const Dashboard = () => {
               </div>
               {/* KAMCard Container - Prevent it from shrinking and assign a max width */}
               <div className="flex-shrink-0 w-[300px] max-w-full">
-                {customerData === undefined ? (
+                {customerData === undefined || !customerData?.customer?.id ? (
                   <Skeleton
                     animation="wave"
                     width={'100%'}
@@ -2445,7 +2467,7 @@ const Dashboard = () => {
               </p>
             </div>
             <p className="text-neutral500">
-              Copyright © {new Date().getFullYear()} KGK Live. All rights
+              Copyright © {new Date().getFullYear()} KGK Diamonds. All rights
               reserved.
             </p>
           </div>

@@ -96,6 +96,7 @@ import { useLazyGetCustomerQuery } from '@/features/api/dashboard';
 import { kamLocationAction } from '@/features/kam-location/kam-location';
 import { STONE_LOCATION } from '@/constants/v2/enums/location';
 import { handleCompareStone } from './helpers/handle-compare-stone';
+import { NO_PRODUCT_FOUND } from '@/constants/error-messages/saved';
 
 // Column mapper outside the component to avoid re-creation on each render
 
@@ -204,7 +205,35 @@ const Result = ({
             dataTableSetState.setRows([]);
           } else {
             setHasLimitExceeded(false);
-            dataTableSetState.setRows(res.data?.products);
+            if (res.data?.products.length > 0) {
+              dataTableSetState.setRows(res.data?.products);
+            } else {
+              modalSetState.setIsDialogOpen(true);
+              modalSetState.setDialogContent(
+                <CommonPoppup
+                  status="warning"
+                  content={''}
+                  customPoppupBodyStyle="!mt-[70px]"
+                  header={NO_PRODUCT_FOUND}
+                  actionButtonData={[
+                    {
+                      variant: 'primary',
+                      label: ManageLocales('app.modal.okay'),
+                      handler: () => {
+                        closeSearch(
+                          activeTab,
+                          JSON.parse(localStorage.getItem('Search')!)
+                        );
+
+                        modalSetState.setIsDialogOpen(false);
+                      },
+                      customStyle: 'flex-1 h-10'
+                    }
+                  ]}
+                />
+              );
+            }
+            res.data?.products;
           }
 
           setRowSelection({});
@@ -222,7 +251,36 @@ const Result = ({
       limit: LISTING_PAGE_DATA_LIMIT,
       offset: 0
     }).then(res => {
-      dataTableSetState.setRows(res.data?.products);
+      if (res.data?.products.length > 0)
+        if (res.data?.products.length > 0) {
+          dataTableSetState.setRows(res.data?.products);
+        } else {
+          modalSetState.setIsDialogOpen(true);
+          modalSetState.setDialogContent(
+            <CommonPoppup
+              status="warning"
+              content={''}
+              customPoppupBodyStyle="!mt-[70px]"
+              header={NO_PRODUCT_FOUND}
+              actionButtonData={[
+                {
+                  variant: 'primary',
+                  label: ManageLocales('app.modal.okay'),
+                  handler: () => {
+                    closeSearch(
+                      activeTab,
+                      JSON.parse(localStorage.getItem('Search')!)
+                    );
+
+                    modalSetState.setIsDialogOpen(false);
+                  },
+                  customStyle: 'flex-1 h-10'
+                }
+              ]}
+            />
+          );
+        }
+      res.data?.products;
       setRowSelection({});
       setErrorText('');
       setData(res.data);
@@ -539,7 +597,32 @@ const Result = ({
 
     fetchColumns();
   }, [dataTableState.rows]);
+  const closeSearch = (
+    removeDataIndex: number,
+    yourSelection: ISavedSearch[]
+  ) => {
+    let closeSpecificSearch = yourSelection.filter(
+      (_items: ISavedSearch, index: number) => {
+        return index !== removeDataIndex - 1;
+      }
+    );
 
+    if (removeDataIndex === 1) {
+      setSearchParameters([]);
+      // setAddSearches([]);
+      // handleReset(setState, errorSetState);
+      router.push(`${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`);
+    } else {
+      setSearchParameters(closeSpecificSearch);
+      // setAddSearches(closeSpecificSearch);
+      setActiveTab(removeDataIndex);
+      router.push(
+        `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${removeDataIndex - 1}`
+      );
+    }
+
+    localStorage.setItem('Search', JSON.stringify(closeSpecificSearch));
+  };
   const memoizedRows = useMemo(() => {
     return Array.isArray(dataTableState.rows) ? dataTableState.rows : [];
   }, [dataTableState.rows]);
@@ -680,7 +763,35 @@ const Result = ({
               limit: LISTING_PAGE_DATA_LIMIT,
               offset: 0
             }).then(res => {
-              dataTableSetState.setRows(res.data?.products);
+              if (res.data?.products.length > 0) {
+                dataTableSetState.setRows(res.data?.products);
+              } else {
+                modalSetState.setIsDialogOpen(true);
+                modalSetState.setDialogContent(
+                  <CommonPoppup
+                    status="warning"
+                    content={''}
+                    customPoppupBodyStyle="!mt-[70px]"
+                    header={NO_PRODUCT_FOUND}
+                    actionButtonData={[
+                      {
+                        variant: 'primary',
+                        label: ManageLocales('app.modal.okay'),
+                        handler: () => {
+                          closeSearch(
+                            activeTab,
+                            JSON.parse(localStorage.getItem('Search')!)
+                          );
+
+                          modalSetState.setIsDialogOpen(false);
+                        },
+                        customStyle: 'flex-1 h-10'
+                      }
+                    ]}
+                  />
+                );
+              }
+              res.data?.products;
               setRowSelection({});
               setErrorText('');
               setData(res.data);
@@ -781,7 +892,35 @@ const Result = ({
             limit: LISTING_PAGE_DATA_LIMIT,
             offset: 0
           }).then(res => {
-            dataTableSetState.setRows(res.data?.products);
+            if (res.data?.products.length > 0) {
+              dataTableSetState.setRows(res.data?.products);
+            } else {
+              modalSetState.setIsDialogOpen(true);
+              modalSetState.setDialogContent(
+                <CommonPoppup
+                  status="warning"
+                  content={''}
+                  customPoppupBodyStyle="!mt-[70px]"
+                  header={NO_PRODUCT_FOUND}
+                  actionButtonData={[
+                    {
+                      variant: 'primary',
+                      label: ManageLocales('app.modal.okay'),
+                      handler: () => {
+                        closeSearch(
+                          activeTab,
+                          JSON.parse(localStorage.getItem('Search')!)
+                        );
+
+                        modalSetState.setIsDialogOpen(false);
+                      },
+                      customStyle: 'flex-1 h-10'
+                    }
+                  ]}
+                />
+              );
+            }
+            res.data?.products;
             setRowSelection({});
             setErrorText('');
             setData(res.data);
@@ -966,7 +1105,35 @@ const Result = ({
               limit: LISTING_PAGE_DATA_LIMIT,
               offset: 0
             }).then(res => {
-              dataTableSetState.setRows(res.data?.products);
+              if (res.data?.products.length > 0) {
+                dataTableSetState.setRows(res.data?.products);
+              } else {
+                modalSetState.setIsDialogOpen(true);
+                modalSetState.setDialogContent(
+                  <CommonPoppup
+                    status="warning"
+                    content={''}
+                    customPoppupBodyStyle="!mt-[70px]"
+                    header={NO_PRODUCT_FOUND}
+                    actionButtonData={[
+                      {
+                        variant: 'primary',
+                        label: ManageLocales('app.modal.okay'),
+                        handler: () => {
+                          closeSearch(
+                            activeTab,
+                            JSON.parse(localStorage.getItem('Search')!)
+                          );
+
+                          modalSetState.setIsDialogOpen(false);
+                        },
+                        customStyle: 'flex-1 h-10'
+                      }
+                    ]}
+                  />
+                );
+              }
+              res.data?.products;
               setRowSelection({});
               setErrorText('');
               setData(res.data);

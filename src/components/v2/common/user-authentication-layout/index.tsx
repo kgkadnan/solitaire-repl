@@ -24,7 +24,7 @@ const UserAuthenticationLayout: React.FC<IUserAuthenticationLayoutProps> = ({
       playerRef.current = new window.YT.Player('youtube-player', {
         height: '550',
         width: '100%',
-        videoId: 'rXjbNpi79FI',
+        videoId: 'awoG54PaWPg', // 'rXjbNpi79FI',
         playerVars: {
           autoplay: 1,
           mute: 1,
@@ -33,7 +33,7 @@ const UserAuthenticationLayout: React.FC<IUserAuthenticationLayoutProps> = ({
           rel: 0,
           iv_load_policy: 3,
           loop: 1,
-          playlist: 'rXjbNpi79FI',
+          playlist: 'awoG54PaWPg', // 'rXjbNpi79FI',
           disablekb: 1 // Disable keyboard controls
         },
         events: {
@@ -54,7 +54,7 @@ const UserAuthenticationLayout: React.FC<IUserAuthenticationLayoutProps> = ({
 
   return (
     <div className="w-full flex">
-      <div className="w-[60%] h-[100vh] flex items-center bg-black">
+      <div className="w-[60%] h-[100vh] flex items-center bg-black px-2">
         <div className="h-full w-full flex items-center">
           <div className="youtube-container">
             <div className="youtube-overlay"></div>

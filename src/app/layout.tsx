@@ -11,13 +11,20 @@ import {
   headerlessRoutes,
   protectedRoutes,
   applicationRoutes,
-  v2Routes
+  v2Routes,
+  v3Routes
 } from '@/constants/routes';
 import { ThemeProviders } from './theme-providers';
 import Head from 'next/head';
 import AppDownloadPopup from '@/components/v2/common/alert-pop-for-mobile';
 import CommonPoppup from './v2/login/component/common-poppup';
 import { DialogComponent } from '@/components/v2/common/dialog';
+import Toaster from '@/components/v3/ui/toaster';
+import CommonHeader from '@/components/v3/navigation-menu/header';
+import SubscribeNewsLetter from '@/components/v3/subscribe-newsletter';
+import FooterSiteMap from '@/components/v3/footer-sitemap';
+import Footer from '@/components/v3/footer';
+import { useMediaQuery } from 'react-responsive';
 // import Salesiq from '@/components/v2/common/sales-iq';
 import * as Sentry from '@sentry/nextjs';
 
@@ -34,17 +41,43 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
   const path = usePathname();
   const isApplicationRoutes = applicationRoutes.includes(path);
   const isV2Route = v2Routes.includes(path);
-  const [open, setOpen] = useState(false);
+  const isV3Route = v3Routes.includes(path) || path.includes('/v3');
 
-  const showHeader =
-    (isApplicationRoutes && !headerlessRoutes.includes(path)) || path === '/';
+  const [open, setOpen] = useState(false);
+  const [showLPHeader, setShowLPHeader] = useState(false);
+  const showHeader = isApplicationRoutes && !headerlessRoutes.includes(path);
+  const isMobile = useMediaQuery({ maxWidth: 1024 });
+
+  // || path === '/';
   // Create a component that just renders children, with children as an optional prop
   const ChildrenComponent: FC<{ children?: ReactNode }> = ({ children }) => (
-    <>
-      {children}
-      <AppDownloadPopup></AppDownloadPopup>
-    </>
+    <>{children}</>
   );
+
+  useEffect(() => {
+    // Show header after 2 seconds
+    const timer = setTimeout(() => {
+      setShowLPHeader(true);
+    }, 500);
+
+    return () => clearTimeout(timer); // Cleanup on unmount
+  }, []);
+
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      // Remove the specific localStorage item
+      localStorage.removeItem('entryPoint');
+    };
+
+    // Listen for the beforeunload event
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      // Clean up the event listener on component unmount
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
+
   // Wrap the ChildrenComponent with authorizedLogin if it's a secure page
   const SecureComponent = protectedRoutes.includes(path)
     ? authorizedLogin(ChildrenComponent)
@@ -60,7 +93,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
       const disableDevtool = require('disable-devtool');
       disableDevtool({
         disableMenu: true,
-        ondevtoolopen(_type: any, _next: any) {
+        ondevtoolopen(_type: string, _next: () => void) {
           setOpen(true);
         },
         ignore: () => {
@@ -129,9 +162,28 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
         </noscript>
         <Provider store={store}>
           <ThemeProviders>
-            {isV2Route ? (
+            {isV3Route ? (
               <>
-                {showHeader ? (
+                {isMobile ? (
+                  <AppDownloadPopup></AppDownloadPopup>
+                ) : (
+                  <main className="">
+                    <Toaster />
+                    {showLPHeader && <CommonHeader />}
+                    <div>{children}</div>
+                    <div style={{ zIndex: 100 }}>
+                      <SubscribeNewsLetter />
+                      <FooterSiteMap />
+                      <Footer />
+                    </div>
+                  </main>
+                )}
+              </>
+            ) : isV2Route ? (
+              <>
+                {isMobile ? (
+                  <AppDownloadPopup></AppDownloadPopup>
+                ) : showHeader ? (
                   <SecureComponent>{children}</SecureComponent>
                 ) : (
                   <ChildrenComponent>{children}</ChildrenComponent>

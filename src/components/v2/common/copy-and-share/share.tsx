@@ -57,7 +57,7 @@ const Share = ({
     { name: 'Rap Val ($)', state: 'rap_value' },
     { name: 'Rap ($)', state: 'rap' },
     {
-      name: 'Disc%',
+      name: 'Disc %',
       state: identifier === 'Bid to Buy' ? 'original_discount' : 'discount'
     },
     { name: 'Pr/Ct', state: 'price_per_carat' },
@@ -183,6 +183,50 @@ const Share = ({
                   : `$${formatNumberWithCommas(rapValue)}`
               }`;
             }
+            if (
+              attribute === 'table_percentage' &&
+              selectedAttributes['table_percentage']
+            ) {
+              const rapValue = product.table_percentage;
+              return `Table %:  ${
+                rapValue === undefined || rapValue === null
+                  ? '-'
+                  : `${formatNumberWithCommas(rapValue)}%`
+              }`;
+            }
+            if (
+              attribute === 'depth_percentage' &&
+              selectedAttributes['depth_percentage']
+            ) {
+              const rapValue = product.depth_percentage;
+              return `Depth %:  ${
+                rapValue === undefined || rapValue === null
+                  ? '-'
+                  : `${formatNumberWithCommas(rapValue)}%`
+              }`;
+            }
+            if (identifier === 'Bid to Buy') {
+              if (
+                attribute === 'original_discount' &&
+                selectedAttributes['original_discount']
+              ) {
+                const rapValue = product.original_discount;
+                return `Disc %:  ${
+                  rapValue === undefined || rapValue === null
+                    ? '-'
+                    : `${formatNumberWithCommas(rapValue)}%`
+                }`;
+              }
+            } else {
+              if (attribute === 'discount' && selectedAttributes['discount']) {
+                const rapValue = product.discount;
+                return `Disc %:  ${
+                  rapValue === undefined || rapValue === null
+                    ? '-'
+                    : `${formatNumberWithCommas(rapValue)}%`
+                }`;
+              }
+            }
             if (attribute === 'rap' && selectedAttributes['rap']) {
               const rap = product.rap;
               return `Rap ($): ${
@@ -208,7 +252,7 @@ const Share = ({
             ) {
               return `Current Max Bid %: ${formatNumber(
                 product?.current_max_bid
-              )}`;
+              )}%`;
             }
             if (
               attribute === 'table_percentage' &&
@@ -233,7 +277,7 @@ const Share = ({
             }
 
             if (attribute === 'discount' && selectedAttributes['discount']) {
-              return `Max Disc %: ${formatNumber(product?.discount)}`;
+              return `Max Disc %: ${formatNumber(product?.discount)}%`;
             }
             if (
               attribute === 'last_bid_date' &&

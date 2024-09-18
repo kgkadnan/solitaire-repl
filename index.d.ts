@@ -6,3 +6,7 @@ declare module '@components/ui/progress';
 declare module 'react-switch-selector';
 declare module '@next/third-parties/google';
 declare module 'react-responsive';
+declare module 'react-leaflet';
+declare module 'split-type';
+declare module 'file-saver';
+declare module 'react-responsive-carousel';

@@ -30,6 +30,7 @@ const useUser = () => {
     localStorage.removeItem('user');
     localStorage.removeItem('Search');
     localStorage.removeItem('MatchingPair');
+    localStorage.removeItem('entryPoint');
   };
 
   return { authToken, isTokenChecked, userLoggedIn, userLoggedOut };

@@ -44,6 +44,7 @@ import { useLazyGetSimilarMatchingPairQuery } from '@/features/api/match-pair';
 import { formatNumber } from '@/utils/fix-two-digit-number';
 import MatchPairDnaSkeleton from '@/components/v2/skeleton/match-pair/match-pair-dna-page';
 import { RednderLocation } from '@/components/v2/common/data-table/helpers/render-cell';
+import { SELECT_STONES } from '@/constants/error-messages/cart';
 
 export interface ITableColumn {
   key: string;
@@ -140,22 +141,6 @@ export function MatchPairDetails({
       return newStatus;
     });
   };
-
-  // useEffect(() => {
-  //   if ('serviceWorker' in navigator) {
-  //     navigator.serviceWorker.register('/service-worker.js').then(
-  //       registration => {
-  //         console.log(
-  //           'Service Worker registered with scope:',
-  //           registration.scope
-  //         );
-  //       },
-  //       error => {
-  //         console.error('Service Worker registration failed:', error);
-  //       }
-  //     );
-  //   }
-  // }, []);
 
   useEffect(() => {
     if (originalData.length >= 2) {
@@ -470,9 +455,6 @@ export function MatchPairDetails({
 
     return { updatedData, updatedImageLoadingStatus };
   };
-
-  // console.log('validImages', validImages);
-  // console.log('originalData', originalData);
 
   useEffect(() => {
     if (validImages.length > 0) {
@@ -898,7 +880,7 @@ export function MatchPairDetails({
                                   onLoad={() => {
                                     handleImageLoad(index);
                                   }}
-                                  className={`${'w-[285px] h-[305px]'} `}
+                                  className={`${'w-[300px] h-[330px]'} `}
                                 />
                               ) : (
                                 <img
@@ -1057,9 +1039,7 @@ export function MatchPairDetails({
                                 originalData.length > 2
                                   ? handleClose(event, items.id)
                                   : (setShowToast(true),
-                                    setErrorText(
-                                      'Minimum of 2 stones needed for matching pairs'
-                                    ))
+                                    setErrorText(SELECT_STONES))
                               }
                             >
                               <Image
