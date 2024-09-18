@@ -34,7 +34,7 @@ import {
   MAX_SEARCH_TAB_LIMIT
 } from '@/constants/business-logic';
 import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { MODIFY_SEARCH_STONES_EXCEEDS_LIMIT } from '@/constants/error-messages/saved';
 import { isSearchAlreadyExist } from '@/app/v2/search/saved-search/helpers/handle-card-click';
 import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
@@ -217,6 +217,8 @@ const MatchPairTable = ({
 
   const [paginatedData, setPaginatedData] = useState<any>([]);
   const [globalFilter, setGlobalFilter] = useState('');
+  const path = useSearchParams().get('active-tab');
+
   useEffect(() => {
     if (globalFilter !== '') {
       // Remove all whitespace characters from globalFilter
@@ -329,11 +331,18 @@ const MatchPairTable = ({
                 );
 
                 if (isAlreadyOpenIndex >= 0 && isAlreadyOpenIndex !== null) {
-                  router.push(
-                    `${Routes.MATCHING_PAIR}?active-tab=${SubRoutes.RESULT}-${
-                      isAlreadyOpenIndex + 1
-                    }`
-                  );
+                  if (
+                    isAlreadyOpenIndex + 1 ==
+                    (path?.match(/result-(\d+)/) || [])[1]
+                  ) {
+                    setIsLoading(false);
+                  } else {
+                    router.push(
+                      `${Routes.MATCHING_PAIR}?active-tab=${SubRoutes.RESULT}-${
+                        isAlreadyOpenIndex + 1
+                      }`
+                    );
+                  }
                   return;
                 } else if (data?.length >= MAX_SEARCH_TAB_LIMIT) {
                   modalSetState.setDialogContent(
