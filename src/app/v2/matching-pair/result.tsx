@@ -18,7 +18,7 @@ import noImageFound from '@public/v2/assets/icons/detail-page/fall-back-img.svg'
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ManageLocales } from '@/utils/v2/translate';
 import ActionButton from '@/components/v2/common/action-button';
-import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
+import { MatchSubRoutes, Routes, SubRoutes } from '@/constants/v2/enums/routes';
 import Tooltip from '@/components/v2/common/tooltip';
 import crossIcon from '@public/v2/assets/icons/modal/cross.svg';
 import {
@@ -98,6 +98,7 @@ import { STONE_LOCATION } from '@/constants/v2/enums/location';
 import { useLazyGetCustomerQuery } from '@/features/api/dashboard';
 import { kamLocationAction } from '@/features/kam-location/kam-location';
 import { handleCompareStone } from '../search/result/helpers/handle-compare-stone';
+import { NO_PRODUCT_FOUND } from '@/constants/error-messages/saved';
 
 // Column mapper outside the component to avoid re-creation on each render
 
@@ -211,7 +212,34 @@ const MatchingPairResult = ({
         } else {
           setHasLimitExceeded(false);
           let matchingPair = res.data?.products.flat();
-          dataTableSetState.setRows(matchingPair);
+          if (matchingPair.length > 0) {
+            dataTableSetState.setRows(matchingPair);
+          } else {
+            modalSetState.setIsDialogOpen(true);
+            modalSetState.setDialogContent(
+              <CommonPoppup
+                status="warning"
+                content={''}
+                customPoppupBodyStyle="!mt-[70px]"
+                header={NO_PRODUCT_FOUND}
+                actionButtonData={[
+                  {
+                    variant: 'primary',
+                    label: ManageLocales('app.modal.okay'),
+                    handler: () => {
+                      closeSearch(
+                        activeTab,
+                        JSON.parse(localStorage.getItem('MatchingPair')!)
+                      );
+
+                      modalSetState.setIsDialogOpen(false);
+                    },
+                    customStyle: 'flex-1 h-10'
+                  }
+                ]}
+              />
+            );
+          }
           setOriginalData(res.data?.products);
         }
 
@@ -221,6 +249,36 @@ const MatchingPairResult = ({
         setIsLoading(false);
       }
     });
+  };
+  const closeSearch = (
+    removeDataIndex: number,
+    yourSelection: ISavedSearch[]
+  ) => {
+    let closeSpecificSearch = yourSelection.filter(
+      (_items: ISavedSearch, index: number) => {
+        return index !== removeDataIndex - 1;
+      }
+    );
+
+    if (removeDataIndex === 1) {
+      setSearchParameters([]);
+      // setAddSearches([]);
+      // handleReset(setState, errorSetState);
+      router.push(
+        `${Routes.MATCHING_PAIR}?active-tab=${MatchSubRoutes.NEW_SEARCH}`
+      );
+    } else {
+      setSearchParameters(closeSpecificSearch);
+      // setAddSearches(closeSpecificSearch);
+      setActiveTab(removeDataIndex);
+      router.push(
+        `${Routes.MATCHING_PAIR}?active-tab=${MatchSubRoutes.RESULT}-${
+          removeDataIndex - 1
+        }`
+      );
+    }
+
+    localStorage.setItem('MatchingPair', JSON.stringify(closeSpecificSearch));
   };
   const handleDetailPage = ({ row }: { row: any }) => {
     if (isConfirmStone) {
@@ -595,7 +653,34 @@ const MatchingPairResult = ({
       offset: 0
     }).then(res => {
       let matchingPair = res.data?.products.flat();
-      dataTableSetState.setRows(matchingPair);
+      if (matchingPair.length > 0) {
+        dataTableSetState.setRows(matchingPair);
+      } else {
+        modalSetState.setIsDialogOpen(true);
+        modalSetState.setDialogContent(
+          <CommonPoppup
+            status="warning"
+            content={''}
+            customPoppupBodyStyle="!mt-[70px]"
+            header={NO_PRODUCT_FOUND}
+            actionButtonData={[
+              {
+                variant: 'primary',
+                label: ManageLocales('app.modal.okay'),
+                handler: () => {
+                  closeSearch(
+                    activeTab,
+                    JSON.parse(localStorage.getItem('MatchingPair')!)
+                  );
+
+                  modalSetState.setIsDialogOpen(false);
+                },
+                customStyle: 'flex-1 h-10'
+              }
+            ]}
+          />
+        );
+      }
       setOriginalData(res.data?.products);
 
       setRowSelection({});
@@ -687,7 +772,34 @@ const MatchingPairResult = ({
               offset: 0
             }).then(res => {
               let matchingPair = res.data?.products.flat();
-              dataTableSetState.setRows(matchingPair);
+              if (matchingPair.length > 0) {
+                dataTableSetState.setRows(matchingPair);
+              } else {
+                modalSetState.setIsDialogOpen(true);
+                modalSetState.setDialogContent(
+                  <CommonPoppup
+                    status="warning"
+                    content={''}
+                    customPoppupBodyStyle="!mt-[70px]"
+                    header={NO_PRODUCT_FOUND}
+                    actionButtonData={[
+                      {
+                        variant: 'primary',
+                        label: ManageLocales('app.modal.okay'),
+                        handler: () => {
+                          closeSearch(
+                            activeTab,
+                            JSON.parse(localStorage.getItem('MatchingPair')!)
+                          );
+
+                          modalSetState.setIsDialogOpen(false);
+                        },
+                        customStyle: 'flex-1 h-10'
+                      }
+                    ]}
+                  />
+                );
+              }
               setOriginalData(res.data?.products);
 
               setRowSelection({});
@@ -880,7 +992,34 @@ const MatchingPairResult = ({
             }).then(res => {
               let matchingPair = res.data?.products.flat();
 
-              dataTableSetState.setRows(matchingPair);
+              if (matchingPair.length > 0) {
+                dataTableSetState.setRows(matchingPair);
+              } else {
+                modalSetState.setIsDialogOpen(true);
+                modalSetState.setDialogContent(
+                  <CommonPoppup
+                    status="warning"
+                    content={''}
+                    customPoppupBodyStyle="!mt-[70px]"
+                    header={NO_PRODUCT_FOUND}
+                    actionButtonData={[
+                      {
+                        variant: 'primary',
+                        label: ManageLocales('app.modal.okay'),
+                        handler: () => {
+                          closeSearch(
+                            activeTab,
+                            JSON.parse(localStorage.getItem('MatchingPair')!)
+                          );
+
+                          modalSetState.setIsDialogOpen(false);
+                        },
+                        customStyle: 'flex-1 h-10'
+                      }
+                    ]}
+                  />
+                );
+              }
               setOriginalData(res.data?.products);
 
               setRowSelection({});

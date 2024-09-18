@@ -39,11 +39,15 @@ import { constructUrlParams } from '@/utils/v2/construct-url-params';
 import {
   AVAILABLE_STATUS,
   MAX_SAVED_SEARCH_COUNT,
-  MAX_SEARCH_TAB_LIMIT
+  MAX_SEARCH_TAB_LIMIT,
+  MIN_SAVED_SEARCH_COUNT
 } from '@/constants/business-logic';
 import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { MODIFY_SEARCH_STONES_EXCEEDS_LIMIT } from '@/constants/error-messages/saved';
+import {
+  MODIFY_SEARCH_STONES_EXCEEDS_LIMIT,
+  NO_PRODUCT_FOUND
+} from '@/constants/error-messages/saved';
 import { isSearchAlreadyExist } from '@/app/v2/search/saved-search/helpers/handle-card-click';
 import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
 import Share from '../copy-and-share/share';
@@ -326,6 +330,27 @@ const DataTable = ({
                         modalSetState.setIsDialogOpen(false);
                       },
                       customStyle: 'flex-1'
+                    }
+                  ]}
+                />
+              );
+            } else if (response?.data?.count === MIN_SAVED_SEARCH_COUNT) {
+              setIsLoading(false);
+              modalSetState.setIsDialogOpen(true);
+              modalSetState.setDialogContent(
+                <CommonPoppup
+                  status="warning"
+                  content={''}
+                  customPoppupBodyStyle="!mt-[70px]"
+                  header={NO_PRODUCT_FOUND}
+                  actionButtonData={[
+                    {
+                      variant: 'primary',
+                      label: ManageLocales('app.modal.okay'),
+                      handler: () => {
+                        modalSetState.setIsDialogOpen(false);
+                      },
+                      customStyle: 'flex-1 h-10'
                     }
                   ]}
                 />
