@@ -42,7 +42,7 @@ import {
   MAX_SEARCH_TAB_LIMIT
 } from '@/constants/business-logic';
 import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { MODIFY_SEARCH_STONES_EXCEEDS_LIMIT } from '@/constants/error-messages/saved';
 import { isSearchAlreadyExist } from '@/app/v2/search/saved-search/helpers/handle-card-click';
 import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
@@ -340,8 +340,8 @@ const DataTable = ({
                 );
                 if (isAlreadyOpenIndex >= 0 && isAlreadyOpenIndex !== null) {
                   if (
-                    isAlreadyOpenIndex + 1 ==
-                    (path?.match(/result-(\d+)/) || [])[1]
+                    isAlreadyOpenIndex + 1 ===
+                    Number((path?.match(/result-(\d+)/) || [])[1])
                   ) {
                     setIsLoading(false);
                   } else {
