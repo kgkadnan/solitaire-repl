@@ -9,8 +9,6 @@ export const metadata: Metadata = {
     'Simplify your diamond buying with KGK Diamonds. where you can manage your diamonds, orders, and preferences seamlessly.'
 };
 
-
-
 export default function Home() {
   logger.setLogLevel('debug');
 

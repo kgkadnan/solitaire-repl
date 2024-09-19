@@ -33,10 +33,10 @@ const store = setupStore();
 
 const inter = Inter({ subsets: ['latin'] });
 
-// Sentry.init({
-//   dsn: 'https://83c93f8910ea999b056ed8c379d8ff26@o4507921461870592.ingest.us.sentry.io/4507923823919104', // Replace with your Sentry DSN
-//   tracesSampleRate: 1.0,  // Adjust the sample rate for performance monitoring
-// });
+Sentry.init({
+  dsn: process.env.NEXT_PUBLIC_SENTRY_DSN, // Replace with your Sentry DSN
+  tracesSampleRate: 1.0 // Adjust the sample rate for performance monitoring
+});
 
 export default function RootLayout({ children }: { children?: ReactNode }) {
   const path = usePathname();
@@ -105,7 +105,6 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
     }
   });
 
-  
   return (
     <html lang="en">
       <head>

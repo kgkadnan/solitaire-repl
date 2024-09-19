@@ -112,7 +112,7 @@ const MyDiamonds = () => {
         setIsLoading(false);
       })
       .catch((e: any) => {
-       console.log(e);
+        console.log(e);
         setIsLoading(false);
       });
     setIsLoading(false);
@@ -135,7 +135,7 @@ const MyDiamonds = () => {
         setIsLoading(false);
       })
       .catch((e: any) => {
-       console.log(e);
+        console.log(e);
         setIsLoading(false);
       });
     setIsLoading(false);
@@ -149,7 +149,7 @@ const MyDiamonds = () => {
         setIsLoading(false);
       })
       .catch((e: any) => {
-       console.log(e);
+        console.log(e);
         setIsLoading(false);
       });
   }, [previousConfirmStatus]);
@@ -299,7 +299,7 @@ const MyDiamonds = () => {
           setIsLoading(false);
         })
         .catch(e => {
-         console.log(e), setIsLoading(false);
+          console.log(e), setIsLoading(false);
         });
     }
 

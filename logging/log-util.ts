@@ -8,9 +8,8 @@ const levels: Record<LogLevel, number> = {
   error: 0,
   warn: 1,
   info: 2,
-  debug: 3,
+  debug: 3
 };
-
 
 let currentLevel: number = levels.info;
 
@@ -20,11 +19,12 @@ export function setLogLevel(level: LogLevel): void {
   }
 }
 
-export function log(level: LogLevel, message: string): void {
+export function log(level: LogLevel, message: any): void {
   if (levels[level] <= currentLevel) {
     // console[level](message);
 
-    if (message) {  // Ensure message is not null or undefined
+    if (message) {
+      // Ensure message is not null or undefined
       switch (level) {
         case 'error':
           Sentry.captureException(new Error(message));
@@ -45,20 +45,19 @@ export function log(level: LogLevel, message: string): void {
   }
 }
 
-
-export function error(message: string): void {
+export function error(message: any): void {
   log('error', message);
 }
 
-export function warn(message: string): void {
+export function warn(message: any): void {
   log('warn', message);
 }
 
-export function info(message: string): void {
+export function info(message: any): void {
   log('info', message);
 }
 
-export function debug(message: string): void {
+export function debug(message: any): void {
   log('debug', message);
 }
 
@@ -67,5 +66,5 @@ export default {
   error,
   warn,
   info,
-  debug,
+  debug
 };

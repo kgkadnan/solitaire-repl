@@ -15,9 +15,7 @@ export default function Error({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  console.log('---------------------------->>>>>>>>>', error);
-  log.error("error");
-
+  log.error(error);
 
   return <CustomErrorComponent reset={reset} />;
 }
