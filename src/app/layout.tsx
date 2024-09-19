@@ -26,6 +26,7 @@ import FooterSiteMap from '@/components/v3/footer-sitemap';
 import Footer from '@/components/v3/footer';
 import { useMediaQuery } from 'react-responsive';
 // import Salesiq from '@/components/v2/common/sales-iq';
+import Script from 'next/script';
 
 const store = setupStore();
 
@@ -41,6 +42,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
   const [showLPHeader, setShowLPHeader] = useState(false);
   const showHeader = isApplicationRoutes && !headerlessRoutes.includes(path);
   const isMobile = useMediaQuery({ maxWidth: 1024 });
+  const GA_TRACKING_ID = 'G-LPLMZ43388'; // Replace with your GA4 Measurement ID
 
   // || path === '/';
   // Create a component that just renders children, with children as an optional prop
@@ -110,6 +112,24 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
           'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
           })(window,document,'script','dataLayer','GTM-W85XMPHM');
         `
+          }}
+        />
+        <Script
+          strategy="afterInteractive"
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
+        />
+        <Script
+          id="ga4-init"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_TRACKING_ID}', {
+              page_path: window.location.pathname,
+            });
+          `
           }}
         />
       </head>
