@@ -92,7 +92,9 @@ export const handleEditMobileNumber = ({
           label: Tracking.Click_Mobile_Edit_Save,
           // value: {
           mobile_number: `+${otpVerificationFormState.countryCode} ${otpVerificationFormState.otpMobileNumber}`,
-          status: 'Success'
+          status: 'Success',
+          entry_point: localStorage.getItem('entryPoint') || ''
+
           // }
         });
       })
@@ -119,7 +121,9 @@ export const handleEditMobileNumber = ({
           label: Tracking.Click_Mobile_Edit_Save,
           // value: {
           mobile_number: `+${otpVerificationFormState.countryCode} ${otpVerificationFormState.otpMobileNumber}`,
-          status: 'Fail'
+          status: 'Fail',
+          entry_point: localStorage.getItem('entryPoint') || ''
+
           // }
         });
       });

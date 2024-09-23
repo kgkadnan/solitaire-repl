@@ -21,7 +21,8 @@ const ConfirmScreen = () => {
       entryPoint: localStorage.getItem('entryPoint') || ''
     });
     trackEvent({
-      action: Tracking.Mobile_Verified_PageView
+      action: Tracking.Mobile_Verified_PageView,
+      entry_point: localStorage.getItem('entryPoint') || ''
     });
   }, []);
   return (
@@ -45,7 +46,8 @@ const ConfirmScreen = () => {
                 entryPoint: localStorage.getItem('entryPoint') || ''
               }),
                 trackEvent({
-                  action: Tracking.Click_Finsih_KYC
+                  action: Tracking.Click_Finsih_KYC,
+                  entry_point: localStorage.getItem('entryPoint') || ''
                 });
               router.push(`/v2/kyc`);
             }}
@@ -64,7 +66,8 @@ const ConfirmScreen = () => {
                 entryPoint: localStorage.getItem('entryPoint') || ''
               }),
                 trackEvent({
-                  action: Tracking.Click_Continue_Guest
+                  action: Tracking.Click_Continue_Guest,
+                  entry_point: localStorage.getItem('entryPoint') || ''
                 });
               router.push(`/v2/`);
             }}

@@ -74,7 +74,8 @@ const RegisterComponent = ({
       entryPoint: localStorage.getItem('entryPoint') || ''
     });
     trackEvent({
-      action: Tracking.Register_PageView
+      action: Tracking.Register_PageView,
+      entry_point: localStorage.getItem('entryPoint') || ''
     });
   }, []);
   return (
@@ -96,7 +97,8 @@ const RegisterComponent = ({
                 entryPoint: localStorage.getItem('entryPoint') || ''
               }),
                 trackEvent({
-                  action: Tracking.Click_KGK_Logo
+                  action: Tracking.Click_KGK_Logo,
+                  entry_point: localStorage.getItem('entryPoint') || ''
                 });
               router.push('/v3');
             }}
@@ -274,7 +276,8 @@ const RegisterComponent = ({
                     entryPoint: localStorage.getItem('entryPoint') || ''
                   }),
                     trackEvent({
-                      action: Tracking.Click_Login
+                      action: Tracking.Click_Login,
+                      entry_point: localStorage.getItem('entryPoint') || ''
                     });
                   pathName === 'login'
                     ? router.back()

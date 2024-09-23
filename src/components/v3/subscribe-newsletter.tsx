@@ -109,7 +109,8 @@ const SubscribeNewsLetter = () => {
               sessionId: isSessionValid()
             }),
               trackEvent({
-                action: trackPath()
+                action: Tracking.Click_RegisterPage,
+                entry_point: trackPath()
               });
             localStorage.setItem('entryPoint', trackPath());
 
