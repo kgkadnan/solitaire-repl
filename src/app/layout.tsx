@@ -48,7 +48,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
   const [showLPHeader, setShowLPHeader] = useState(false);
   const showHeader = isApplicationRoutes && !headerlessRoutes.includes(path);
   const isMobile = useMediaQuery({ maxWidth: 1024 });
-  const GA_TRACKING_ID = process.env.NEXT_PUBLIC_GA; // Replace with your GA4 Measurement ID
+  // const GA_TRACKING_ID = process.env.NEXT_PUBLIC_GA; // Replace with your GA4 Measurement ID
 
   // || path === '/';
   // Create a component that just renders children, with children as an optional prop
@@ -122,7 +122,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
         />
         <Script
           strategy="afterInteractive"
-          src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
+          src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA}`}
         />
         <Script
           id="ga4-init"
@@ -132,7 +132,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', '${GA_TRACKING_ID}', {
+            gtag('config', '${process.env.NEXT_PUBLIC_GA}', {
               page_path: window.location.pathname,
             });
           `

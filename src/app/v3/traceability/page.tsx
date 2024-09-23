@@ -1,205 +1,102 @@
 'use client';
-import React, { useState } from 'react';
+import {
+  leadingPrograms,
+  traceabilityMatters
+} from '@/constants/v3/traceability';
+import React from 'react';
 import Image from 'next/image';
-import Linkedin from '@public/v3/social-media/linkedin.svg';
-import { leadership } from '@/constants/v3/about-us';
-import { CommonButton } from '@/components/v3/button';
-import AnimationSection from '@/components/v3/animated-text/scroll';
-
+import TraceabilityHtml from '@/components/v3/traceability-html';
 export default function Traceability() {
-  const [selectedProfile, setSelectedProfile] = useState<any>({});
   return (
     <div>
-      {Object.keys(selectedProfile).length === 0 && (
-        <div className="min-h-[800px] pt-[160px] pb-[80px] flex items-center  bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom">
-          <div className="scroll-container flex overflow-hidden  w-full justify-center">
-            <div className="flex flex-col gap-12 flex-none w-full flex-shrink-0 snap-center items-center">
-              <div className="text-neutral900 text-[96px] font-bold text-center leading-[110px] custom-fadeIn">
-                <AnimationSection>Meet KGK Leadership</AnimationSection>
-              </div>
-              <div className="flex gap-2">
-                <div className="flex gap-3 flex-col items-center">
-                  <div className="text-neutral800 text-lRegular px-4 pt-[14px] w-[800px] text-center content">
-                    <AnimationSection animationDelay={0.5}>
-                      Our team is the backbone of our success. Get to know the
-                      talented individuals who helped make KGK Diamonds what it
-                      is today.
-                    </AnimationSection>
-                  </div>
+      <div className="min-h-[800px] pt-[160px] pb-[80px] flex items-center  bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom">
+        <div className="scroll-container flex overflow-hidden  w-full justify-center">
+          <div className="flex flex-col gap-2 flex-none w-full flex-shrink-0 snap-center items-center">
+            <div className="text-neutral900 text-[52px] font-bold text-center leading-[110px] custom-fadeIn">
+              What is Diamond Traceability?
+            </div>
+            <div className="flex gap-2">
+              <div className="flex gap-3 flex-col items-center">
+                <div className="text-neutral800 text-[16px] px-4 pt-[14px] w-[832px] text-center content">
+                  {/* <AnimationSection animationDelay={0.5}> */}
+                  In the diamond industry, traceability refers to the
+                  comprehensive tracking of a diamond's journey from the mine to
+                  the final consumer. This process ensures transparency,
+                  authenticity, and ethical sourcing, allowing both businesses
+                  and consumers to verify the origins and history of each
+                  diamond.
+                  {/* </AnimationSection> */}
                 </div>
               </div>
             </div>
           </div>
         </div>
-      )}
-      <div className=" flex justify-center ">
-        {Object.keys(selectedProfile).length === 0 ? (
-          <div className="flex flex-col items-center ">
-            <div
-              className="flex flex-col gap-2 cursor-pointer xl:px-[112px] lg:px-[42px] "
-              onClick={() => {
-                setSelectedProfile(leadership[0]);
-                setTimeout(() => {
-                  window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
-                  });
-                }, 0);
-              }}
-              key={leadership[0].name}
-            >
-              <div className="flex flex-col w-fit items-center">
-                <div>
-                  {' '}
-                  <Image
-                    src={leadership[0].image}
-                    alt={leadership[0].name}
-                    className="rounded-[8px] bg-[#D9D9D9] h-[375px] w-[375px]"
-                  />
-                </div>
-                <div className="text-neutral900 font-semiBold text-[20px]">
-                  {leadership[0].name}
-                </div>
-                <p className="text-neutral500 text-lRegular">
-                  {leadership[0].position}
+      </div>
+      <div className="flex flex-col items-center xl:px-[112px] lg:px-[32px] pb-[40px]">
+        <div className="xl:w-[1100px] lg:w-[950px]  ">
+          <div className="text-neutral900 text-[52px] font-bold text-center leading-[110px] custom-fadeIn">
+            Why Diamond Traceability Matters?
+          </div>
+          <div className="flex flex-wrap gap-[60px] items-center justify-center">
+            {traceabilityMatters.map(matter => (
+              <div className="flex flex-col items-center w-[400px] gap-4">
+                <Image src={matter.icon} alt={matter.heading} />
+                <p className="text-neutral900 text-[20px]">{matter.heading}</p>
+                <p className="text-justify text-[16px] text-neutral800 ">
+                  {matter.description}
                 </p>
               </div>
-            </div>
-            <div className="xl:px-[112px] lg:px-[42px] py-[64px]  flex flex-wrap  justify-center w-full gap-[60px]">
-              {leadership.slice(1, 3).map(leader => (
+            ))}
+          </div>
+        </div>
+      </div>
+      <div className="xl:px-[112px] lg:px-[32px]  pb-[40px] flex flex-col bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient items-center blur-bottom  justify-center">
+        <div className="flex flex-col gap-2 text-center w-[840px] py-[40px] justify-center">
+          <div className="flex flex-col gap-2">
+            <p className="xl:text-[52px] lg:text-[42px] text-neutral900 font-black">
+              How Traceability Works in KGK{' '}
+            </p>
+          </div>
+        </div>
+      </div>
+      <div className="flex justify-center w-full h-fit">
+        <TraceabilityHtml />
+      </div>
+
+      <div className="flex flex-col items-center xl:px-[112px] lg:px-[32px] pb-[40px]">
+        <div className="w-[1200px]">
+          <div className="text-neutral900 text-[52px] font-bold text-center leading-[110px] custom-fadeIn">
+            Leading Traceability Programs We use
+          </div>
+          <div className="flex flex-wrap gap-[60px] items-center justify-center">
+            {leadingPrograms.map(program => (
+              <div className="flex flex-col w-[560px] items-center gap-4">
                 <div
-                  className={`flex flex-col gap-2 cursor-pointer w-fit items-center`}
-                  onClick={() => {
-                    setSelectedProfile(leader);
-                    setTimeout(() => {
-                      window.scrollTo({
-                        top: 0,
-                        behavior: 'smooth'
-                      });
-                    }, 0);
-                  }}
-                  key={leader.name}
+                  className="w-[560px] h-[240px] rounded-[12px] bg-white flex items-center justify-center"
+                  style={{ boxShadow: 'var(--popups-shadow' }}
                 >
-                  <div>
-                    {' '}
-                    <Image
-                      src={leader.image}
-                      alt={leader.name}
-                      className="rounded-[8px] bg-[#D9D9D9] h-[375px] w-[375px]"
-                    />
-                  </div>
-                  <div className="text-neutral900 font-semiBold text-[20px]">
-                    {leader.name}
-                  </div>
-                  <p className="text-neutral500 text-lRegular ">
-                    {leader.position}
-                  </p>
-                </div>
-              ))}
-              {/* <div
-                className="flex flex-col gap-2 cursor-pointer xl:invisible hidden xl:flex w-fit items-center"
-                onClick={() => {
-                  setSelectedProfile(leadership[0]);
-                  setTimeout(() => {
-                    window.scrollTo({
-                      top: 0,
-                      behavior: 'smooth'
-                    });
-                  }, 0);
-                }}
-                key={leadership[0].name}
-                // style={{visibility:window.innerWidth>1024?'none' :'hidden'}}
-              >
-                <div>
                   {' '}
                   <Image
-                    src={leadership[0].image}
-                    alt={leadership[0].name}
-                    className="rounded-[8px] bg-[#D9D9D9] h-[375px] w-[375px]"
+                    src={program.icon}
+                    alt={program.heading}
+                    className="rounded-[12px]"
                   />
                 </div>
-                <div className="text-neutral900 font-semiBold text-[20px]">
-                  {leadership[0].name}
-                </div>
-                <p className="text-neutral500 text-lRegular">
-                  {leadership[0].position}
-                </p>
-              </div>{' '} */}
-            </div>
-            <div className="xl:px-[112px] lg:px-[42px] flex flex-wrap justify-center w-full gap-[60px]">
-              {leadership.slice(3, 10).map(leader => (
                 <div
-                  className="flex flex-col gap-2 cursor-pointer pb-[64px] w-fit items-center"
-                  onClick={() => {
-                    setSelectedProfile(leader);
-                    setTimeout(() => {
-                      window.scrollTo({
-                        top: 0,
-                        behavior: 'smooth'
-                      });
-                    }, 0);
-                  }}
-                  key={leader.name}
+                  className="w-[528px] rounded-[8px] bg-white p-2 mt-[-120px] h-[220px] gap-2 flex flex-col"
+                  style={{ boxShadow: 'var(--popups-shadow' }}
                 >
-                  <div>
-                    {' '}
-                    <Image
-                      src={leader.image}
-                      alt={leader.name}
-                      className="rounded-[8px] bg-[#D9D9D9] h-[375px] w-[375px]"
-                    />
-                  </div>
-                  <div className="text-neutral900 font-semiBold text-[20px]">
-                    {leader.name}
-                  </div>
-                  <p className="text-neutral500 text-lRegular">
-                    {leader.position}
+                  <p className="text-neutral900 text-[28px]">
+                    {program.heading}
+                  </p>
+                  <p className="text-neutral800 text-[16px]">
+                    {program.description}
                   </p>
                 </div>
-              ))}
-            </div>
-          </div>
-        ) : (
-          <div className="flex flex-col gap-6 px-[190px] mt-24 mb-4">
-            <div className="flex gap-6 items-end">
-              <Image
-                src={selectedProfile['image']}
-                alt={selectedProfile['name']}
-                className="rounded-[8px] bg-[#D9D9D9]"
-              />
-              <div className="border-b-[2px] border-neutral900 w-full">
-                <div className="text-neutral900 font-semiBold text-[20px] ">
-                  <AnimationSection>{selectedProfile['name']}</AnimationSection>
-                </div>
-                <div className="text-neutral500 text-lRegular">
-                  <AnimationSection animationDelay={0.5}>
-                    {selectedProfile['position']}
-                  </AnimationSection>
-                </div>
               </div>
-            </div>
-            <div className="text-neutral800 text-[20px]">
-              {/* <AnimationSection animationDelay={1}> */}
-              {selectedProfile['description']}
-              {/* </AnimationSection> */}
-            </div>
-            <a
-              href={`https://www.linkedin.com/${selectedProfile['linkedin']}`}
-              target="_blank"
-            >
-              {' '}
-              <Image src={Linkedin} alt={'Linkedin'} />
-            </a>
-            <CommonButton
-              onClick={() => setSelectedProfile({})}
-              variant={'secondary'}
-              size={'custom'}
-              className="rounded-[8px] w-[150px] h-[44px]"
-            >
-              &lt;- Back to Team
-            </CommonButton>
+            ))}
           </div>
-        )}
+        </div>
       </div>
     </div>
   );

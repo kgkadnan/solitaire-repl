@@ -96,7 +96,8 @@ const OTPVerification = ({
       entryPoint: localStorage.getItem('entryPoint') || ''
     });
     trackEvent({
-      action: Tracking.Mobile_Verification_PageView
+      action: Tracking.Mobile_Verification_PageView,
+      entry_point: localStorage.getItem('entryPoint') || ''
     });
   }, []);
 
@@ -114,7 +115,8 @@ const OTPVerification = ({
               entryPoint: localStorage.getItem('entryPoint') || ''
             }),
               trackEvent({
-                action: Tracking.Click_KGK_Logo
+                action: Tracking.Click_KGK_Logo,
+                entry_point: localStorage.getItem('entryPoint') || ''
               });
             router.push('/v3');
           }}
@@ -152,7 +154,8 @@ const OTPVerification = ({
                   trackEvent({
                     action: Tracking.Click_Mobile_Edit,
                     label: Tracking.Click_Mobile_Edit,
-                    // value: {
+                    entry_point: localStorage.getItem('entryPoint') || '',
+
                     mobile_number: `+${otpVerificationFormState.codeAndNumber}`
                     // }
                   });
@@ -198,7 +201,7 @@ const OTPVerification = ({
               trackEvent({
                 action: Tracking.Click_Resend,
                 label: Tracking.Click_Resend,
-                // value: {
+                entry_point: localStorage.getItem('entryPoint') || '',
                 mobile_number: `+${otpVerificationFormState.codeAndNumber}`
                 // }
               });
@@ -253,7 +256,8 @@ const OTPVerification = ({
                 entryPoint: localStorage.getItem('entryPoint') || ''
               }),
                 trackEvent({
-                  action: Tracking.Click_Login
+                  action: Tracking.Click_Login,
+                  entry_point: localStorage.getItem('entryPoint') || ''
                 });
               role === 'login'
                 ? setCurrentState('login')

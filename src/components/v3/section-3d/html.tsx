@@ -238,7 +238,8 @@ const HtmlAnimation = () => {
                 sessionId: isSessionValid()
               }),
                 trackEvent({
-                  action:
+                  action: Tracking.Click_RegisterPage,
+                  entryPoint:
                     Tracking_Click_RegisterPage.LP_Home_Explore_Now_Register
                 });
               localStorage.setItem(
