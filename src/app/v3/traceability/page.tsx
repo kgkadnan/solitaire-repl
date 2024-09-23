@@ -41,8 +41,10 @@ export default function Traceability() {
             {traceabilityMatters.map(matter => (
               <div className="flex flex-col items-center w-[400px] gap-4">
                 <Image src={matter.icon} alt={matter.heading} />
-                <p className='text-neutral900 text-[20px]'>{matter.heading}</p>
-                <p className="text-justify text-[16px] text-neutral800 ">{matter.description}</p>
+                <p className="text-neutral900 text-[20px]">{matter.heading}</p>
+                <p className="text-justify text-[16px] text-neutral800 ">
+                  {matter.description}
+                </p>
               </div>
             ))}
           </div>
@@ -84,8 +86,12 @@ export default function Traceability() {
                   className="w-[528px] rounded-[8px] bg-white p-2 mt-[-120px] h-[220px] gap-2 flex flex-col"
                   style={{ boxShadow: 'var(--popups-shadow' }}
                 >
-                  <p className='text-neutral900 text-[28px]'>{program.heading}</p>
-                  <p className='text-neutral800 text-[16px]'>{program.description}</p>
+                  <p className="text-neutral900 text-[28px]">
+                    {program.heading}
+                  </p>
+                  <p className="text-neutral800 text-[16px]">
+                    {program.description}
+                  </p>
                 </div>
               </div>
             ))}

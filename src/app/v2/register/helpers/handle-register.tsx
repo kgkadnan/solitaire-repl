@@ -82,7 +82,7 @@ export const handleRegister = async ({
         trackEvent({
           action: Tracking.Click_Register,
           label: Tracking.Click_Register,
-          // value: {
+          entry_point: localStorage.getItem('entryPoint') || '',
           mobile_number: `+${registerFormState.countryCode} ${registerFormState.mobileNumber}`,
           status: 'Success'
           // }
@@ -102,7 +102,7 @@ export const handleRegister = async ({
       trackEvent({
         action: Tracking.Click_Register,
         label: Tracking.Click_Register,
-        // value: {
+        entry_point: localStorage.getItem('entryPoint') || '',
         mobile_number: `+${registerFormState.countryCode} ${registerFormState.mobileNumber}`,
         status: 'Fail'
         // }

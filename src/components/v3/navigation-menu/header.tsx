@@ -79,7 +79,9 @@ const CommonHeader = () => {
                 sessionId: isSessionValid()
               }),
                 trackEvent({
-                  action: Tracking_Click_RegisterPage.LP_Top_Login
+                  action: Tracking.Click_RegisterPage,
+
+                  entry_point: Tracking_Click_RegisterPage.LP_Top_Login
                 });
               localStorage.setItem(
                 'entryPoint',
@@ -106,7 +108,8 @@ const CommonHeader = () => {
                 sessionId: isSessionValid()
               }),
                 trackEvent({
-                  action: Tracking_Click_RegisterPage.LP_Top_Register
+                  action: Tracking.Click_RegisterPage,
+                  entry_point: Tracking_Click_RegisterPage.LP_Top_Register
                 });
               localStorage.setItem(
                 'entryPoint',

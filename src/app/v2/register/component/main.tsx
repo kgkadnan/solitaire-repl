@@ -200,7 +200,8 @@ const Register = () => {
                 entryPoint: localStorage.getItem('entryPoint') || ''
               });
               trackEvent({
-                action: Tracking.Click_Mobile_Edit_Cancel
+                action: Tracking.Click_Mobile_Edit_Cancel,
+                entry_point: localStorage.getItem('entryPoint') || ''
               });
             }}
             variant={'secondary'}
