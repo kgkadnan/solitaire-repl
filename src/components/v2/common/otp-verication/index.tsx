@@ -152,9 +152,9 @@ const OTPVerification = ({
                   trackEvent({
                     action: Tracking.Click_Mobile_Edit,
                     label: Tracking.Click_Mobile_Edit,
-                    value: {
-                      mobileNumber: `+${otpVerificationFormState.codeAndNumber}`
-                    }
+                    // value: {
+                    mobile_number: `+${otpVerificationFormState.codeAndNumber}`
+                    // }
                   });
                 setIsInputDialogOpen(true);
               }}
@@ -198,9 +198,9 @@ const OTPVerification = ({
               trackEvent({
                 action: Tracking.Click_Resend,
                 label: Tracking.Click_Resend,
-                value: {
-                  mobileNumber: `+${otpVerificationFormState.codeAndNumber}`
-                }
+                // value: {
+                mobile_number: `+${otpVerificationFormState.codeAndNumber}`
+                // }
               });
             }}
           >

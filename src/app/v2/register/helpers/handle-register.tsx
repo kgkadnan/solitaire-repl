@@ -82,10 +82,10 @@ export const handleRegister = async ({
         trackEvent({
           action: Tracking.Click_Register,
           label: Tracking.Click_Register,
-          value: {
-            mobileNumber: `+${registerFormState.countryCode} ${registerFormState.mobileNumber}`,
-            status: 'Success'
-          }
+          // value: {
+          mobile_number: `+${registerFormState.countryCode} ${registerFormState.mobileNumber}`,
+          status: 'Success'
+          // }
         });
       }
     })
@@ -102,10 +102,10 @@ export const handleRegister = async ({
       trackEvent({
         action: Tracking.Click_Register,
         label: Tracking.Click_Register,
-        value: {
-          mobileNumber: `+${registerFormState.countryCode} ${registerFormState.mobileNumber}`,
-          status: 'Fail'
-        }
+        // value: {
+        mobile_number: `+${registerFormState.countryCode} ${registerFormState.mobileNumber}`,
+        status: 'Fail'
+        // }
       });
       if (e.status === statusCode.DUPLICATE && e.data.field === 'email') {
         setDialogContent(
