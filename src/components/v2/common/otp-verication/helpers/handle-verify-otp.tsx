@@ -71,7 +71,8 @@ export const handleVerifyOtp = ({
         trackEvent({
           action: Tracking.Click_Verify,
           label: Tracking.Click_Verify,
-          value: { mobileNumber: `+${phone}`, status: 'Success' }
+          mobile_number: `+${phone}`,
+          status: 'Fail'
         });
       }
     })
@@ -100,7 +101,8 @@ export const handleVerifyOtp = ({
       trackEvent({
         action: Tracking.Click_Verify,
         label: Tracking.Click_Verify,
-        value: { mobileNumber: `+${phone}`, status: 'Fail' }
+        mobile_number: `+${phone}`,
+        status: 'Fail'
       });
     });
 };

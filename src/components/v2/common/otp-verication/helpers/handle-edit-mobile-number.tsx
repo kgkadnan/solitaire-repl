@@ -90,10 +90,10 @@ export const handleEditMobileNumber = ({
         trackEvent({
           action: Tracking.Click_Mobile_Edit_Save,
           label: Tracking.Click_Mobile_Edit_Save,
-          value: {
-            mobileNumber: `+${otpVerificationFormState.countryCode} ${otpVerificationFormState.otpMobileNumber}`,
-            status: 'Success'
-          }
+          // value: {
+          mobile_number: `+${otpVerificationFormState.countryCode} ${otpVerificationFormState.otpMobileNumber}`,
+          status: 'Success'
+          // }
         });
       })
       .catch((e: any) => {
@@ -117,10 +117,10 @@ export const handleEditMobileNumber = ({
         trackEvent({
           action: Tracking.Click_Mobile_Edit_Save,
           label: Tracking.Click_Mobile_Edit_Save,
-          value: {
-            mobileNumber: `+${otpVerificationFormState.countryCode} ${otpVerificationFormState.otpMobileNumber}`,
-            status: 'Fail'
-          }
+          // value: {
+          mobile_number: `+${otpVerificationFormState.countryCode} ${otpVerificationFormState.otpMobileNumber}`,
+          status: 'Fail'
+          // }
         });
       });
 
