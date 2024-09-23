@@ -14,6 +14,7 @@ import { IOtp, IToken } from './main';
 import { isSessionValid } from '@/utils/manage-session';
 import { Tracking } from '@/constants/funnel-tracking';
 import { useLazyRegisterFunnelQuery } from '@/features/api/funnel';
+import { trackEvent } from '@/utils/ga';
 
 interface IRegisterComponent {
   registerSetState: IRegisterSetState;
@@ -72,6 +73,9 @@ const RegisterComponent = ({
       sessionId: isSessionValid(),
       entryPoint: localStorage.getItem('entryPoint') || ''
     });
+    trackEvent({
+      action: Tracking.Register_PageView
+    });
   }, []);
   return (
     <div className="my-[20px] ">
@@ -91,7 +95,10 @@ const RegisterComponent = ({
                 sessionId: isSessionValid(),
                 entryPoint: localStorage.getItem('entryPoint') || ''
               }),
-                router.push('/v3');
+                trackEvent({
+                  action: Tracking.Click_KGK_Logo
+                });
+              router.push('/v3');
             }}
           >
             <KgkIcon
@@ -266,9 +273,12 @@ const RegisterComponent = ({
                     sessionId: isSessionValid(),
                     entryPoint: localStorage.getItem('entryPoint') || ''
                   }),
-                    pathName === 'login'
-                      ? router.back()
-                      : router.push(`/v2/login?path=register`);
+                    trackEvent({
+                      action: Tracking.Click_Login
+                    });
+                  pathName === 'login'
+                    ? router.back()
+                    : router.push(`/v2/login?path=register`);
                 }}
                 className="rounded-[4px] text-neutral600"
                 size={'custom'}
