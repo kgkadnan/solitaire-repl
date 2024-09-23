@@ -78,10 +78,13 @@ const CommonHeader = () => {
                 entryPoint: Tracking_Click_RegisterPage.LP_Top_Login,
                 sessionId: isSessionValid()
               }),
-                localStorage.setItem(
-                  'entryPoint',
-                  Tracking_Click_RegisterPage.LP_Top_Login
-                );
+                trackEvent({
+                  action: Tracking_Click_RegisterPage.LP_Top_Login
+                });
+              localStorage.setItem(
+                'entryPoint',
+                Tracking_Click_RegisterPage.LP_Top_Login
+              );
 
               authToken ? router.push('/v2') : router.push('/v2/login');
             }}
@@ -103,10 +106,7 @@ const CommonHeader = () => {
                 sessionId: isSessionValid()
               }),
                 trackEvent({
-                  action: 'click',
-                  category: 'register-button-lp',
-                  label: 'Test Button',
-                  value: 1
+                  action: Tracking_Click_RegisterPage.LP_Top_Register
                 });
               localStorage.setItem(
                 'entryPoint',
