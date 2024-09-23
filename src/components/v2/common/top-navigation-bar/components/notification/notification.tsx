@@ -20,7 +20,7 @@ import {
 } from '@/features/api/notification';
 import { formatDistanceToNow } from 'date-fns';
 import Link from 'next/link';
-import logger from 'logging/log-util';
+// import logger from 'logging/log-util';
 import { SocketManager, useSocket } from '@/hooks/v2/socket-manager';
 import useUser from '@/lib/use-auth';
 import { useRouter } from 'next/navigation';
@@ -134,7 +134,7 @@ const Notification = ({
         }
       })
       .catch(error => {
-        logger.error(error);
+        console.log(error);
       });
   };
 
@@ -173,10 +173,10 @@ const Notification = ({
       if (notSeenIds.length > 0) {
         seenNotification({ notice_ids: notSeenIds })
           .then(res => {
-            logger.info(res);
+            console.log(res);
           })
           .catch(error => {
-            logger.error(error);
+            console.log(error);
           });
       }
     });

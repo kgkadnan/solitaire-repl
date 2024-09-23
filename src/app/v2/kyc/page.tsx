@@ -42,7 +42,7 @@ import { RenderOffline } from './components/render-offline';
 import { useLazyGetAuthDataQuery } from '@/features/api/login';
 import { isEditingKYC } from '@/features/kyc/is-editing-kyc';
 import { KycStatusScreen } from '@/components/v2/common/kyc-status-screen';
-import logger from 'logging/log-util';
+// import logger from 'logging/log-util';
 import { statusCode } from '@/constants/enums/status-code';
 import { useRouter } from 'next/navigation';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
@@ -282,7 +282,8 @@ const KYC = () => {
         }
       })
       .catch((e: any) => {
-        logger.error(`something went wrong while restart kyc ${e}`);
+        console.log(`something went wrong while restart kyc ${e}`);
+        // logger.error(`something went wrong while restart kyc ${e}`);
       });
   };
 

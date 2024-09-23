@@ -13,7 +13,7 @@ import {
   Tracking_Click_RegisterPage
 } from '@/constants/funnel-tracking';
 import useUser from '@/lib/use-auth';
-import { trackEvent } from '@/utils/ga';
+// import { trackEvent } from '@/utils/ga';
 
 const CommonHeader = () => {
   const currentRoute = usePathname();
@@ -102,16 +102,16 @@ const CommonHeader = () => {
                 entryPoint: Tracking_Click_RegisterPage.LP_Top_Register,
                 sessionId: isSessionValid()
               }),
-                trackEvent({
-                  action: 'click',
-                  category: 'Button',
-                  label: 'Test Button',
-                  value: 1
-                });
-              localStorage.setItem(
-                'entryPoint',
-                Tracking_Click_RegisterPage.LP_Top_Register
-              );
+                // trackEvent({
+                //   action: 'click',
+                //   category: 'Button',
+                //   label: 'Test Button',
+                //   value: 1
+                // });
+                localStorage.setItem(
+                  'entryPoint',
+                  Tracking_Click_RegisterPage.LP_Top_Register
+                );
 
               router.push('/v2/register');
             }}

@@ -1,5 +1,5 @@
 import { IOtp } from '..';
-import logger from 'logging/log-util';
+// import logger from 'logging/log-util';
 import CommonPoppup from '@/app/v2/login/component/common-poppup';
 import { IToken } from '@/app/v2/register/interface';
 import { INVALID_PHONE } from '@/constants/error-messages/register';
@@ -96,6 +96,7 @@ export const handleEditMobileNumber = ({
             handleClick={() => setIsDialogOpen(false)}
           />
         );
+        console.log(`something went wrong while sending OTP ${e}`);
         funnelTrack &&
           funnelTrack({
             step: Tracking.Click_Mobile_Edit_Save,
@@ -104,7 +105,6 @@ export const handleEditMobileNumber = ({
             mobileNumber: `+${otpVerificationFormState.countryCode} ${otpVerificationFormState.otpMobileNumber}`,
             entryPoint: localStorage.getItem('entryPoint') || ''
           });
-        logger.error(`something went wrong while sending OTP ${e}`);
       });
 
     setIsInputDialogOpen(false);
