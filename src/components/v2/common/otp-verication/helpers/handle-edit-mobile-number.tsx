@@ -6,6 +6,7 @@ import { INVALID_PHONE } from '@/constants/error-messages/register';
 import { PHONE_REGEX } from '@/constants/validation-regex/regex';
 import { Tracking } from '@/constants/funnel-tracking';
 import { isSessionValid } from '@/utils/manage-session';
+import { trackEvent } from '@/utils/ga';
 interface IHandleEditMobileNumber {
   otpVerificationFormState: IOtp;
   setOTPVerificationFormErrors: React.Dispatch<React.SetStateAction<IOtp>>;
@@ -86,6 +87,14 @@ export const handleEditMobileNumber = ({
             mobileNumber: `+${otpVerificationFormState.countryCode} ${otpVerificationFormState.otpMobileNumber}`,
             entryPoint: localStorage.getItem('entryPoint') || ''
           });
+        trackEvent({
+          action: Tracking.Click_Mobile_Edit_Save,
+          label: Tracking.Click_Mobile_Edit_Save,
+          value: {
+            mobileNumber: `+${otpVerificationFormState.countryCode} ${otpVerificationFormState.otpMobileNumber}`,
+            status: 'Success'
+          }
+        });
       })
       .catch((e: any) => {
         setIsDialogOpen(true);
@@ -105,6 +114,14 @@ export const handleEditMobileNumber = ({
             mobileNumber: `+${otpVerificationFormState.countryCode} ${otpVerificationFormState.otpMobileNumber}`,
             entryPoint: localStorage.getItem('entryPoint') || ''
           });
+        trackEvent({
+          action: Tracking.Click_Mobile_Edit_Save,
+          label: Tracking.Click_Mobile_Edit_Save,
+          value: {
+            mobileNumber: `+${otpVerificationFormState.countryCode} ${otpVerificationFormState.otpMobileNumber}`,
+            status: 'Fail'
+          }
+        });
       });
 
     setIsInputDialogOpen(false);

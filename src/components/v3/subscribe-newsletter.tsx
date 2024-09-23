@@ -9,6 +9,7 @@ import {
 } from '@/constants/funnel-tracking';
 import { isSessionValid } from '@/utils/manage-session';
 import { useLazyRegisterFunnelQuery } from '@/features/api/funnel';
+import { trackEvent } from '@/utils/ga';
 // import ShimmerButton from './animated-button';
 
 // import ShimmerButton from './animated-button';
@@ -107,7 +108,10 @@ const SubscribeNewsLetter = () => {
               entryPoint: trackPath(),
               sessionId: isSessionValid()
             }),
-              localStorage.setItem('entryPoint', trackPath());
+              trackEvent({
+                action: trackPath()
+              });
+            localStorage.setItem('entryPoint', trackPath());
 
             router.push('/v2/register');
           }}

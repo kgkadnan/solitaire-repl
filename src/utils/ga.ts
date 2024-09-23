@@ -4,9 +4,9 @@ export const GA_TRACKING_ID = process.env.NEXT_PUBLIC_GA; // Replace with your G
 // Event type definition for tracking events
 interface EventParams {
   action: string;
-  category: string;
+  category?: string;
   label?: string;
-  value?: number;
+  value?: any;
 }
 
 // Function to track events in Google Analytics 4
