@@ -33,6 +33,7 @@ import { useRegisterStateManagement } from '../hooks/register-state-management';
 import { isSessionValid } from '@/utils/manage-session';
 import { Tracking } from '@/constants/funnel-tracking';
 import { useLazyRegisterFunnelQuery } from '@/features/api/funnel';
+import { trackEvent } from '@/utils/ga';
 // import { useRouter } from 'next/navigation';
 
 export interface IOtp {
@@ -197,6 +198,9 @@ const Register = () => {
                 step: Tracking.Click_Mobile_Edit_Cancel,
                 sessionId: isSessionValid(),
                 entryPoint: localStorage.getItem('entryPoint') || ''
+              });
+              trackEvent({
+                action: Tracking.Click_Mobile_Edit_Cancel
               });
             }}
             variant={'secondary'}

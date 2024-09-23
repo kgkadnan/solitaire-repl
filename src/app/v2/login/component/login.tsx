@@ -15,6 +15,7 @@ import KgkIcon from '@public/v2/assets/icons/sidebar-icons/hover-kgk-icon.svg?ur
 import { isSessionValid } from '@/utils/manage-session';
 import { Tracking_Click_RegisterPage } from '@/constants/funnel-tracking';
 import { useLazyRegisterFunnelQuery } from '@/features/api/funnel';
+import { trackEvent } from '@/utils/ga';
 
 const LoginComponent = ({
   setPhoneNumber,
@@ -249,6 +250,9 @@ const LoginComponent = ({
                 funnelTrack({
                   step: Tracking_Click_RegisterPage.Login_Register,
                   sessionId: isSessionValid()
+                });
+                trackEvent({
+                  action: Tracking_Click_RegisterPage.Login_Register
                 });
                 localStorage.setItem(
                   'entryPoint',
