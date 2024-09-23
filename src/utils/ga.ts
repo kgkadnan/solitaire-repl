@@ -1,5 +1,5 @@
 // utils/ga.ts
-export const GA_TRACKING_ID = 'G-XXXXXXXXXX'; // Replace with your GA4 Measurement ID
+export const GA_TRACKING_ID = process.env.NEXT_PUBLIC_GA; // Replace with your GA4 Measurement ID
 
 // Event type definition for tracking events
 interface EventParams {

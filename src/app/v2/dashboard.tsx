@@ -527,7 +527,6 @@ const Dashboard = () => {
     () => mapColumns(searchColumn),
     [searchColumn]
   );
-
   const handleEdit = (stone: string, identifier = false) => {
     let savedSearchEditData = customerData?.customer?.saved_searches?.filter(
       (items: any) => {

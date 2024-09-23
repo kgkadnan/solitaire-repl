@@ -1,8 +1,5 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { createBaseQuery } from './base-query';
-import { getDeviceDetails } from '../../utils/get-device-details';
-
-const { screenSize, deviceType, os } = getDeviceDetails();
 
 export const funnelApi = createApi({
   reducerPath: 'funnelReducer',
@@ -16,15 +13,7 @@ export const funnelApi = createApi({
           entryPoint ? `&entry_point=${entryPoint}` : ''
         }${mobileNumber ? `&mobile_number=${mobileNumber}` : ''}${
           status ? `&status=${status}` : ''
-        }`,
-        headers: {
-          'tracking-header': JSON.stringify({
-            platform: 'Web',
-            screen_size: screenSize,
-            os: os,
-            device_type: deviceType
-          })
-        }
+        }`
       })
     })
   })
