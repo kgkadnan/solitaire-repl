@@ -104,7 +104,7 @@ const CommonHeader = () => {
               }),
                 trackEvent({
                   action: 'click',
-                  category: 'Button',
+                  category: 'register-button-lp',
                   label: 'Test Button',
                   value: 1
                 });
