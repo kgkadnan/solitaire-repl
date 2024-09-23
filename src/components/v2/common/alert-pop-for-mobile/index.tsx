@@ -18,13 +18,14 @@ const AppDownloadPopup = () => {
 
       {/* <Dialog open={true} defaultOpen={true}> */}
       <div
-        className={`w-[100vw] h-[100vh] flex flex-col overflow-y-auto align-center justify-center  p-[24px] items-center z-[999999]`}
+        className={`w-[100%] min-h-[100vh] flex flex-col overflow-y-auto align-center justify-center  p-[24px] items-center z-[999999]`}
         style={{
           background:
-            'linear-gradient(135deg, #DBF2FC 0%, #E8E8FF 30%, #FFF4E3 100%)'
+            'linear-gradient(135deg, #DBF2FC 0%, #E8E8FF 30%, #FFF4E3 100%)',
+          paddingBottom: 'env(safe-area-inset-bottom)' // Adds support for safe areas like the iOS notch.
         }}
       >
-        <div className="flex flex-col items-center justify-center text-center gap-2 max-w-[350px] min-w-[250px]">
+        <div className="flex flex-col items-center justify-center text-center gap-2 max-w-[350px] min-w-[250px] h-[80%]">
           <p className="text-primaryPressed text-headingM font-semibold leading-[30px] w-[250px]">
             Search on the go, at your speed.
           </p>
