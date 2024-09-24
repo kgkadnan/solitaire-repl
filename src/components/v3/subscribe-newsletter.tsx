@@ -110,7 +110,8 @@ const SubscribeNewsLetter = () => {
             }),
               trackEvent({
                 action: Tracking.Click_RegisterPage,
-                entry_point: trackPath()
+                entry_point: trackPath(),
+                category: 'Register'
               });
             localStorage.setItem('entryPoint', trackPath());
 

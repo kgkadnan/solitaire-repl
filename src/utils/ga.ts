@@ -17,6 +17,7 @@ export const trackEvent = ({
     window.gtag('event', action, {
       event_category: category,
       event_label: label,
+      platform: 'Web',
       ...params // Dynamically include all other custom parameters
     });
   }

@@ -84,7 +84,9 @@ export const handleRegister = async ({
           label: Tracking.Click_Register,
           entry_point: localStorage.getItem('entryPoint') || '',
           mobile_number: `+${registerFormState.countryCode} ${registerFormState.mobileNumber}`,
-          status: 'Success'
+          status: 'Success',
+          category: 'Register'
+
           // }
         });
       }
@@ -104,7 +106,9 @@ export const handleRegister = async ({
         label: Tracking.Click_Register,
         entry_point: localStorage.getItem('entryPoint') || '',
         mobile_number: `+${registerFormState.countryCode} ${registerFormState.mobileNumber}`,
-        status: 'Fail'
+        status: 'Fail',
+        category: 'Register'
+
         // }
       });
       if (e.status === statusCode.DUPLICATE && e.data.field === 'email') {
