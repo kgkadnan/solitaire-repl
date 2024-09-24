@@ -252,7 +252,8 @@ const LoginComponent = ({
                   sessionId: isSessionValid()
                 });
                 trackEvent({
-                  action: Tracking_Click_RegisterPage.Login_Register
+                  action: Tracking_Click_RegisterPage.Login_Register,
+                  category: 'Register'
                 });
                 localStorage.setItem(
                   'entryPoint',

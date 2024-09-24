@@ -22,7 +22,8 @@ const ConfirmScreen = () => {
     });
     trackEvent({
       action: Tracking.Mobile_Verified_PageView,
-      entry_point: localStorage.getItem('entryPoint') || ''
+      entry_point: localStorage.getItem('entryPoint') || '',
+      category: 'Register'
     });
   }, []);
   return (
@@ -47,7 +48,8 @@ const ConfirmScreen = () => {
               }),
                 trackEvent({
                   action: Tracking.Click_Finsih_KYC,
-                  entry_point: localStorage.getItem('entryPoint') || ''
+                  entry_point: localStorage.getItem('entryPoint') || '',
+                  category: 'Register'
                 });
               router.push(`/v2/kyc`);
             }}
@@ -67,7 +69,8 @@ const ConfirmScreen = () => {
               }),
                 trackEvent({
                   action: Tracking.Click_Continue_Guest,
-                  entry_point: localStorage.getItem('entryPoint') || ''
+                  entry_point: localStorage.getItem('entryPoint') || '',
+                  category: 'Register'
                 });
               router.push(`/v2/`);
             }}

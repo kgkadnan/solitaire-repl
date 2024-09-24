@@ -97,7 +97,8 @@ const OTPVerification = ({
     });
     trackEvent({
       action: Tracking.Mobile_Verification_PageView,
-      entry_point: localStorage.getItem('entryPoint') || ''
+      entry_point: localStorage.getItem('entryPoint') || '',
+      category: 'Register'
     });
   }, []);
 
@@ -116,7 +117,8 @@ const OTPVerification = ({
             }),
               trackEvent({
                 action: Tracking.Click_KGK_Logo,
-                entry_point: localStorage.getItem('entryPoint') || ''
+                entry_point: localStorage.getItem('entryPoint') || '',
+                category: 'Register'
               });
             router.push('/v3');
           }}
@@ -156,7 +158,9 @@ const OTPVerification = ({
                     label: Tracking.Click_Mobile_Edit,
                     entry_point: localStorage.getItem('entryPoint') || '',
 
-                    mobile_number: `+${otpVerificationFormState.codeAndNumber}`
+                    mobile_number: `+${otpVerificationFormState.codeAndNumber}`,
+                    category: 'Register'
+
                     // }
                   });
                 setIsInputDialogOpen(true);
@@ -202,7 +206,9 @@ const OTPVerification = ({
                 action: Tracking.Click_Resend,
                 label: Tracking.Click_Resend,
                 entry_point: localStorage.getItem('entryPoint') || '',
-                mobile_number: `+${otpVerificationFormState.codeAndNumber}`
+                mobile_number: `+${otpVerificationFormState.codeAndNumber}`,
+                category: 'Register'
+
                 // }
               });
             }}
@@ -257,7 +263,8 @@ const OTPVerification = ({
               }),
                 trackEvent({
                   action: Tracking.Click_Login,
-                  entry_point: localStorage.getItem('entryPoint') || ''
+                  entry_point: localStorage.getItem('entryPoint') || '',
+                  category: 'Register'
                 });
               role === 'login'
                 ? setCurrentState('login')

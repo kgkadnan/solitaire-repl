@@ -81,7 +81,8 @@ const CommonHeader = () => {
                 trackEvent({
                   action: Tracking.Click_RegisterPage,
 
-                  entry_point: Tracking_Click_RegisterPage.LP_Top_Login
+                  entry_point: Tracking_Click_RegisterPage.LP_Top_Login,
+                  category: 'Register'
                 });
               localStorage.setItem(
                 'entryPoint',
@@ -109,7 +110,8 @@ const CommonHeader = () => {
               }),
                 trackEvent({
                   action: Tracking.Click_RegisterPage,
-                  entry_point: Tracking_Click_RegisterPage.LP_Top_Register
+                  entry_point: Tracking_Click_RegisterPage.LP_Top_Register,
+                  category: 'Register'
                 });
               localStorage.setItem(
                 'entryPoint',
