@@ -541,10 +541,10 @@ const NewArrivals = () => {
     }
 
     if (selectedIds.length > 0) {
-      const hasMemoOut = selectedIds?.some((id: string) => {
-        const stone = data.find((row: any) => row?.id === id);
-        return stone?.diamond_status === MEMO_STATUS;
-      });
+      // const hasMemoOut = selectedIds?.some((id: string) => {
+      //   const stone = data.find((row: any) => row?.id === id);
+      //   return stone?.diamond_status === MEMO_STATUS;
+      // });
 
       const hasHold = selectedIds?.some((id: string) => {
         const stone = data.find((row: any) => row?.id === id);
@@ -563,12 +563,12 @@ const NewArrivals = () => {
         return stone?.diamond_status === AVAILABLE_STATUS;
       });
 
-      if ((hasHold && hasAvailable) || (hasMemoOut && hasAvailable)) {
+      if (hasHold && hasAvailable) {
         setErrorText(SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH);
         setIsError(true);
-      } else if (hasMemoOut) {
-        setErrorText(STONE_NOT_AVAILABLE_MODIFY_SEARCH);
-        setIsError(true);
+        // } else if (hasMemoOut) {
+        //   setErrorText(STONE_NOT_AVAILABLE_MODIFY_SEARCH);
+        //   setIsError(true);
       } else if (hasHold) {
         setErrorText(STONE_NOT_AVAILABLE_MODIFY_SEARCH);
         setIsError(true);
