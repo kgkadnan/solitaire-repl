@@ -240,7 +240,8 @@ const HtmlAnimation = () => {
                 trackEvent({
                   action: Tracking.Click_RegisterPage,
                   entry_point:
-                    Tracking_Click_RegisterPage.LP_Home_Explore_Now_Register
+                    Tracking_Click_RegisterPage.LP_Home_Explore_Now_Register,
+                  category: 'Register'
                 });
               localStorage.setItem(
                 'entryPoint',

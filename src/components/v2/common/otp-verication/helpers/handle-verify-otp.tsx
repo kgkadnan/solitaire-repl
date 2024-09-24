@@ -73,7 +73,8 @@ export const handleVerifyOtp = ({
           label: Tracking.Click_Verify,
           mobile_number: `+${phone}`,
           status: 'Fail',
-          entry_point: localStorage.getItem('entryPoint') || ''
+          entry_point: localStorage.getItem('entryPoint') || '',
+          category: 'Register'
         });
       }
     })
@@ -104,7 +105,8 @@ export const handleVerifyOtp = ({
         label: Tracking.Click_Verify,
         mobile_number: `+${phone}`,
         status: 'Fail',
-        entry_point: localStorage.getItem('entryPoint') || ''
+        entry_point: localStorage.getItem('entryPoint') || '',
+        category: 'Register'
       });
     });
 };
