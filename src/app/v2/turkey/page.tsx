@@ -9,12 +9,12 @@ import {
   RenderShape,
   RenderMeasurements,
   RenderTracerId,
-  RenderNewArrivalPrice,
   RenderNewArrivalBidDiscount,
   RenderNewArrivalPricePerCarat,
   RenderBidDate,
   RenderNumericFields,
-  RenderLotId
+  RenderLotId,
+  RenderAmount
 } from '@/components/v2/common/data-table/helpers/render-cell';
 import Tooltip from '@/components/v2/common/tooltip';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
@@ -173,7 +173,7 @@ const Turkey = () => {
           case 'rap_value':
             return { ...commonProps, Cell: RenderNumericFields };
           case 'amount':
-            return { ...commonProps, Cell: RenderNewArrivalPrice };
+            return { ...commonProps, Cell: RenderAmount };
           case 'measurements':
             return { ...commonProps, Cell: RenderMeasurements };
           case 'shape_full':
@@ -613,6 +613,126 @@ const Turkey = () => {
         setRowSelection({});
       }
       // }
+    }
+  };
+
+  const handleAddToCartDetailPage = () => {
+    setIsLoading(true);
+    // Extract variant IDs for selected stones
+    const variantIds = [detailPageData.id]
+      ?.map((_id: string) => {
+        const myCartCheck: IProduct | object =
+          bid.find((row: IProduct) => {
+            return row?.id === detailPageData.id;
+          }) ?? {};
+
+        if (myCartCheck && 'variants' in myCartCheck) {
+          return myCartCheck.variants[0]?.id;
+        }
+        return '';
+      })
+      .filter(Boolean);
+
+    // If there are variant IDs, add to the cart
+    if (variantIds.length) {
+      addCart({
+        variants: variantIds
+      })
+        .unwrap()
+        .then((res: any) => {
+          setIsLoading(false);
+          modalSetState.setIsDialogOpen(true);
+          modalSetState.setDialogContent(
+            <CommonPoppup
+              content={''}
+              status="success"
+              customPoppupBodyStyle="!mt-[70px]"
+              header={res?.message}
+              actionButtonData={[
+                {
+                  variant: 'secondary',
+                  label: ManageLocales('app.modal.continue'),
+                  handler: () => {
+                    modalSetState.setIsDialogOpen(false);
+                    setIsDetailPage(false);
+                  },
+                  customStyle: 'flex-1 w-full h-10'
+                },
+                {
+                  variant: 'primary',
+                  label: 'Go to "My Cart"',
+                  handler: () => {
+                    router.push('/v2/my-cart');
+                  },
+                  customStyle: 'flex-1 w-full h-10'
+                }
+              ]}
+            />
+          );
+
+          // On success, show confirmation dialog and update badge
+          setIsError(false);
+          setErrorText('');
+          triggerTurkeyProductApi({
+            url: searchUrl,
+            limit: LISTING_PAGE_DATA_LIMIT,
+            offset: 0
+          }).then(res => {
+            if (res.data?.products.length > 0) {
+              setBid(res.data?.products);
+            } else {
+              modalSetState.setIsDialogOpen(true);
+              modalSetState.setDialogContent(
+                <CommonPoppup
+                  status="warning"
+                  content={''}
+                  customPoppupBodyStyle="!mt-[70px]"
+                  header={NO_PRODUCT_FOUND}
+                  actionButtonData={[
+                    {
+                      variant: 'primary',
+                      label: ManageLocales('app.modal.okay'),
+                      handler: () => {
+                        modalSetState.setIsDialogOpen(false);
+                      },
+                      customStyle: 'flex-1 h-10'
+                    }
+                  ]}
+                />
+              );
+            }
+            res.data?.products;
+            setRowSelection({});
+            setErrorText('');
+            setBid(res.data?.products);
+          });
+          dispatch(notificationBadge(true));
+        })
+        .catch(error => {
+          setIsLoading(false);
+          // On error, set error state and error message
+
+          modalSetState.setIsDialogOpen(true);
+          modalSetState.setDialogContent(
+            <CommonPoppup
+              content={''}
+              customPoppupBodyStyle="!mt-[70px]"
+              header={error?.data?.message}
+              actionButtonData={[
+                {
+                  variant: 'primary',
+                  label: ManageLocales('app.modal.okay'),
+                  handler: () => {
+                    modalSetState.setIsDialogOpen(false);
+                  },
+                  customStyle: 'flex-1 w-full h-10'
+                }
+              ]}
+            />
+          );
+        });
+      // Clear the selected checkboxes
+      setRowSelection({});
     }
   };
   const renderFooter = (table: any) => {
@@ -1196,22 +1316,63 @@ const Turkey = () => {
       />
       {isDetailPage ? (
         <div className="mt-[16px]">
-          <DiamondDetailsComponent
-            data={
-              activeTab === 0
-                ? bid
-                : activeTab === 1
-                ? activeBid
-                : bidHistory?.data
-            }
-            filterData={detailPageData}
-            goBackToListView={goBack}
-            handleDetailPage={handleDetailPage}
-            breadCrumLabel={'Diamond List'}
-            modalSetState={modalSetState}
-            setIsLoading={setIsLoading}
-            activeTab={activeTab}
-          />
+          <div>
+            <DiamondDetailsComponent
+              data={
+                activeTab === 0
+                  ? bid
+                  : activeTab === 1
+                  ? activeBid
+                  : bidHistory?.data
+              }
+              filterData={detailPageData}
+              goBackToListView={goBack}
+              handleDetailPage={handleDetailPage}
+              breadCrumLabel={'Diamond List'}
+              modalSetState={modalSetState}
+              setIsLoading={setIsLoading}
+              activeTab={activeTab}
+            />
+            <div className="p-[8px] flex justify-end items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow mb-1">
+              <ActionButton
+                actionButtonData={[
+                  {
+                    variant: isConfirmStone ? 'primary' : 'secondary',
+                    label: ManageLocales('app.searchResult.addToCart'),
+                    handler: handleAddToCartDetailPage
+                  },
+
+                  {
+                    variant: 'primary',
+                    label: ManageLocales('app.searchResult.confirmStone'),
+                    isHidden: isConfirmStone,
+                    handler: () => {
+                      // setBreadCrumLabel('Detail Page');
+                      const { id } = detailPageData;
+                      const selectedRows = { [id]: true };
+                      handleConfirmStone({
+                        selectedRows: selectedRows,
+                        rows: bid,
+                        setIsError,
+                        setErrorText,
+                        setIsConfirmStone,
+                        setConfirmStoneData,
+                        setIsDetailPage,
+                        identifier: 'detailPage',
+                        confirmStoneTrack: 'DNA',
+                        dispatch,
+                        router,
+                        modalSetState,
+                        checkProductAvailability,
+                        setIsLoading
+                        // refreshSearchResults
+                      });
+                    }
+                  }
+                ]}
+              />
+            </div>
+          </div>
         </div>
       ) : isConfirmStone ? (
         <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow">
