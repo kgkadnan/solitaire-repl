@@ -244,6 +244,8 @@ const Form = ({
   const { setIsInputDialogOpen } = modalSetState;
   const [data, setData] = useState<any>();
   const [error, setError] = useState<any>();
+  const queryParamsData = useAppSelector(state => state.queryParams);
+
   let [
     triggerProductCountApi,
     { isLoading: isLoadingProductApi, isFetching: isFetchingProductApi }
@@ -518,6 +520,12 @@ const Form = ({
       handleFormReset();
     }
   }, [subRoute]);
+
+  useEffect(() => {
+    if (isTurkey) {
+      setSearchUrl(queryParamsData.queryParams);
+    }
+  }, [queryParamsData]);
   const handleFormSearch = async (
     isSavedParams: boolean = false,
     id?: string,
