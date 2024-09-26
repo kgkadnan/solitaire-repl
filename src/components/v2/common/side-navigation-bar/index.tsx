@@ -12,7 +12,7 @@ import BookmarkIcon from '@public/v2/assets/icons/sidebar-icons/bookmark.svg?url
 import MyAppointments from '@public/v2/assets/icons/sidebar-icons/my-appointments.svg?url';
 import FaqsIcon from '@public/v2/assets/icons/sidebar-icons/faqs.svg?url';
 import CartIcon from '@public/v2/assets/icons/sidebar-icons/shopping-cart.svg?url';
-// import SettingIcon from '@public/v2/assets/icons/sidebar-icons/setting.svg?url';
+import TurkeyIcon from '@public/v2/assets/icons/sidebar-icons/turkey.svg?url';
 import styles from './side-navigation.module.scss';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
@@ -63,6 +63,12 @@ const SideNavigationBar = ({
       title: ManageLocales('app.sideNavigationBar.bidToBuy'),
       link: Routes.BID_TO_BUY,
       isActive: currentRoute === Routes.BID_TO_BUY
+    },
+    {
+      src: <TurkeyIcon />,
+      title: 'Turkey',
+      link: Routes.TURKEY,
+      isActive: currentRoute === Routes.TURKEY
     },
     {
       title: 'line-separator-1'
@@ -267,7 +273,11 @@ const SideNavigationBar = ({
                             router.push(items.link!);
                           }}
                           className={`${
-                            items.isActive && !isInMaintenanceMode
+                            items.link === Routes.TURKEY
+                              ? currentRoute === Routes.TURKEY
+                                ? `px-[2px] py-[5px]  rounded stroke-[#5D6A6A]`
+                                : `px-[2px] py-[5px] stroke-neutral300 rounded hover:bg-neutral50 `
+                              : items.isActive && !isInMaintenanceMode
                               ? `bg-primaryMain p-[8px] rounded stroke-neutral25 `
                               : `p-[8px] stroke-primaryIconColor rounded hover:bg-neutral50 `
                           } disabled:bg-neutral100`}

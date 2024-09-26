@@ -33,7 +33,8 @@ export const v2Routes = [
   '/v2/my-account',
   '/v2/faqs',
   '/v2/my-appointments',
-  '/v2/matching-pair'
+  '/v2/matching-pair',
+  '/v2/turkey'
 ];
 export const protectedRoutes = ['/', ...v2Routes];
 
