@@ -22,10 +22,7 @@ import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
 import { columnHeaders } from './constant';
 import noImageFound from '@public/v2/assets/icons/detail-page/fall-back-img.svg';
-import {
-  useGetBidHistoryQuery,
-  useLazyGetCustomerQuery
-} from '@/features/api/dashboard';
+import { useLazyGetCustomerQuery } from '@/features/api/dashboard';
 import CommonPoppup from '../login/component/common-poppup';
 import { DialogComponent } from '@/components/v2/common/dialog';
 import ActionButton from '@/components/v2/common/action-button';
@@ -34,7 +31,6 @@ import {
   MRT_TablePagination
 } from 'material-react-table';
 import Image from 'next/image';
-import useUser from '@/lib/use-auth';
 import { DiamondDetailsComponent } from '@/components/v2/common/detail-page';
 import { getShapeDisplayName } from '@/utils/v2/detail-page';
 import ImageModal from '@/components/v2/common/detail-page/components/image-modal';
@@ -62,7 +58,7 @@ import {
 } from '@/constants/business-logic';
 import { kycStatus } from '@/constants/enums/kyc';
 import BiddingSkeleton from '@/components/v2/skeleton/bidding';
-import { useAppDispatch, useAppSelector } from '@/hooks/hook';
+import { useAppSelector } from '@/hooks/hook';
 import Form from '../search/form/form';
 import useValidationStateManagement from '../search/hooks/validation-state-management';
 import useFormStateManagement from '../search/form/hooks/form-state';
@@ -105,10 +101,8 @@ const Turkey = () => {
   const [detailImageData, setDetailImageData] = useState<any>({});
   const [validImages, setValidImages] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(false); // State to track loading
-  const [isTabSwitch, setIsTabSwitch] = useState(false); // State to track
   const [searchLoading, setSearchLoading] = useState(false);
-  const [triggerTurkeyProductApi, { data: productData }] =
-    useLazyGetAllTurkeyProductQuery();
+  const [triggerTurkeyProductApi] = useLazyGetAllTurkeyProductQuery();
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
 
   const { setSearchUrl, searchUrl } = useValidationStateManagement();
@@ -122,6 +116,7 @@ const Turkey = () => {
   const [commentValue, setCommentValue] = useState('');
   const kamLocation = useAppSelector(state => state.kamLocation);
   const confirmTrack = useAppSelector(state => state.setConfirmStoneTrack);
+  const queryParamsData = useAppSelector(state => state.queryParams);
 
   const [isConfirmStone, setIsConfirmStone] = useState(false);
   const [confirmStoneData, setConfirmStoneData] = useState<IProduct[]>([]);
@@ -138,7 +133,9 @@ const Turkey = () => {
     setIsModalOpen(true);
   };
 
-  const { data: bidHistory } = useGetBidHistoryQuery({});
+  useEffect(() => {
+    setSearchUrl(queryParamsData.queryParams), fetchProducts();
+  }, [queryParamsData]);
 
   const [triggerColumn, { data: columnData }] =
     useLazyGetManageListingSequenceQuery<IManageListingSequenceResponse>();
@@ -200,17 +197,6 @@ const Turkey = () => {
           case 'last_bid_date':
             return { ...commonProps, Cell: RenderBidDate };
 
-          // case 'lot_id':
-          //   return {
-          //     ...commonProps,
-          //     Cell: ({ renderedCellValue, row }: any) => {
-          //       return RenderCartLotId({
-          //         renderedCellValue,
-          //         row,
-          //         handleDetailPage
-          //       });
-          //     }
-          //   };
           case 'lot_id':
             return {
               ...commonProps,
@@ -261,8 +247,6 @@ const Turkey = () => {
         }
       });
   const [activeTab, setActiveTab] = useState(0);
-  const tabLabels = ['Bid Stone', 'Active Bid', 'Bid History'];
-  const [timeDifference, setTimeDifference] = useState(null);
 
   const fetchProducts = async () => {
     triggerTurkeyProductApi({ url: searchUrl, limit: 300, offset: 0 }).then(
@@ -313,19 +297,7 @@ const Turkey = () => {
     fetchProducts();
   }, []);
 
-  // useEffect(() => {
-  //   fetchProducts();
-  // }, [searchUrl]);
-
   const [bid, setBid] = useState<any>();
-  const [time, setTime] = useState<any>();
-  useEffect(() => {
-    const currentTime: any = new Date();
-    const targetTime: any = new Date(time!);
-    const timeDiff: any = targetTime - currentTime;
-
-    setTimeDifference(timeDiff);
-  }, [time]);
 
   useEffect(() => {
     const fetchColumns = async () => {
@@ -1259,7 +1231,7 @@ const Turkey = () => {
       {isError && (
         <Toast show={isError} message={errorText} isSuccess={false} />
       )}
-      {(isLoading || isTabSwitch) && <CustomKGKLoader />}
+      {isLoading && <CustomKGKLoader />}
 
       <ImageModal
         isOpen={isModalOpen}
