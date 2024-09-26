@@ -1,4 +1,4 @@
-import logger from 'logging/log-util';
+// import logger from 'logging/log-util';
 import {
   kycAttachmentIdentifier,
   kycScreenIdentifierNames,
@@ -121,7 +121,7 @@ export const validateScreen = async (
             break;
 
           default:
-            logger.error('something went wrong on KYC company details screen');
+            console.log('something went wrong on KYC company details screen');
             break;
         }
         break;
@@ -165,12 +165,12 @@ export const validateScreen = async (
             );
             break;
           default:
-            logger.error('something went wrong on KYC banking details screen');
+            console.log('something went wrong on KYC banking details screen');
             break;
         }
         break;
       default:
-        logger.error('something went wrong on KYC screen');
+        console.log('something went wrong on KYC screen');
         break;
     }
     validationErrors = await validate(kycForm!);

@@ -7,6 +7,7 @@ import { useLazyTrackRegisterFlowQuery } from '@/features/api/register';
 import { isSessionValid } from '@/utils/manage-session';
 import { Tracking } from '@/constants/funnel-tracking';
 import { useLazyRegisterFunnelQuery } from '@/features/api/funnel';
+import { trackEvent } from '@/utils/ga';
 
 const ConfirmScreen = () => {
   const router = useRouter();
@@ -18,6 +19,11 @@ const ConfirmScreen = () => {
       step: Tracking.Mobile_Verified_PageView,
       sessionId: isSessionValid(),
       entryPoint: localStorage.getItem('entryPoint') || ''
+    });
+    trackEvent({
+      action: Tracking.Mobile_Verified_PageView,
+      entry_point: localStorage.getItem('entryPoint') || '',
+      category: 'Register'
     });
   }, []);
   return (
@@ -40,7 +46,12 @@ const ConfirmScreen = () => {
                 sessionId: isSessionValid(),
                 entryPoint: localStorage.getItem('entryPoint') || ''
               }),
-                router.push(`/v2/kyc`);
+                trackEvent({
+                  action: Tracking.Click_Finsih_KYC,
+                  entry_point: localStorage.getItem('entryPoint') || '',
+                  category: 'Register'
+                });
+              router.push(`/v2/kyc`);
             }}
             variant={'primary'}
             size={'custom'}
@@ -56,7 +67,12 @@ const ConfirmScreen = () => {
                 sessionId: isSessionValid(),
                 entryPoint: localStorage.getItem('entryPoint') || ''
               }),
-                router.push(`/v2/`);
+                trackEvent({
+                  action: Tracking.Click_Continue_Guest,
+                  entry_point: localStorage.getItem('entryPoint') || '',
+                  category: 'Register'
+                });
+              router.push(`/v2/`);
             }}
             className="rounded-[4px] text-neutral600 w-[450px]"
             size={'custom'}

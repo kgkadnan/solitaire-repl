@@ -1,30 +1,164 @@
-import pino from 'pino';
+// // src/logging/log-util.ts
 
-// Define log level based on environment
-const logLevel = process.env.NODE_ENV === 'production' ? 'info' : 'debug';
+// import * as Sentry from '@sentry/nextjs';
 
-const send = async function (level: any, logEvent: any) {
-  //Use this to ship application log
-  // const url = 'server-log-stream-url';
-  // const response = await fetch(url, {
-  //   method: 'POST',
-  //   headers: {
-  //     Authorization: 'token'
-  //   },
-  //   body: JSON.stringify([logEvent])
-  // });
+// type LogLevel = 'error' | 'warn' | 'info' | 'debug';
+
+// const levels: Record<LogLevel, number> = {
+//   error: 0,
+//   warn: 1,
+//   info: 2,
+//   debug: 3
+// };
+
+// let currentLevel: number = levels.info;
+
+// export function setLogLevel(level: LogLevel): void {
+//   if (levels[level] !== undefined) {
+//     currentLevel = levels[level];
+//   }
+// }
+
+// export function log(level: LogLevel, message: any): void {
+//   if (levels[level] <= currentLevel) {
+//     // console[level](message);
+
+//     if (message) {
+//       // Ensure message is not null or undefined
+//       switch (level) {
+//         case 'error':
+//           Sentry.captureException(new Error(message));
+//           break;
+//         case 'warn':
+//           Sentry.captureMessage(message, 'warning');
+//           break;
+//         case 'info':
+//           Sentry.captureMessage(message, 'info');
+//           break;
+//         case 'debug':
+//           Sentry.captureMessage(message, 'debug');
+//           break;
+//       }
+//     } else {
+//       console.error('Log message is null or undefined');
+//     }
+//   }
+// }
+
+// export function error(message: any): void {
+//   log('error', message);
+// }
+
+// export function warn(message: any): void {
+//   log('warn', message);
+// }
+
+// export function info(message: any): void {
+//   log('info', message);
+// }
+
+// export function debug(message: any): void {
+//   log('debug', message);
+// }
+
+// export default {
+//   setLogLevel,
+//   error,
+//   warn,
+//   info,
+//   debug
+// };
+
+// src/logging/log-util.ts
+
+import * as Sentry from '@sentry/nextjs';
+
+type LogLevel = 'error' | 'warn' | 'info' | 'debug';
+
+const levels: Record<LogLevel, number> = {
+  error: 0,
+  warn: 1,
+  info: 2,
+  debug: 3
 };
 
-// Configure logger with dynamic log level
-const logger = pino({
-  level: logLevel,
-  browser: {
-    serialize: true,
-    asObject: true,
-    transmit: {
-      send
+let currentLevel: number = levels.info;
+
+export function setLogLevel(level: LogLevel): void {
+  if (levels[level] !== undefined) {
+    currentLevel = levels[level];
+  }
+}
+
+function getUserFromLocalStorage() {
+  try {
+    const user = localStorage.getItem('user');
+    return user ? JSON.parse(user) : null;
+  } catch (error) {
+    console.error('Error parsing user data from localStorage:', error);
+    return null;
+  }
+}
+
+export function log(level: LogLevel, message: any): void {
+  if (levels[level] <= currentLevel) {
+    // Optionally log to console
+    // console[level](message);
+
+    if (message) {
+      const user = getUserFromLocalStorage();
+
+      // Set user information in Sentry
+      if (user) {
+        Sentry.setUser({
+          id: user.customer.id,
+          username: user.customer.first_name,
+          email: user.customer.email
+        });
+      } else {
+        Sentry.setUser(null); // Clear user data if not available
+      }
+
+      switch (level) {
+        case 'error':
+          Sentry.captureException(new Error(message));
+          break;
+        case 'warn':
+          Sentry.captureMessage(message, 'warning');
+          break;
+        case 'info':
+          Sentry.captureMessage(message, 'info');
+          break;
+        case 'debug':
+          Sentry.captureMessage(message, 'debug');
+          break;
+      }
+    } else {
+      console.error('Log message is null or undefined');
     }
   }
-});
+}
 
-export default logger;
+export function error(message: any): void {
+  log('error', message);
+}
+
+export function warn(message: any): void {
+  log('warn', message);
+}
+
+export function info(message: any): void {
+  log('info', message);
+}
+
+export function debug(message: any): void {
+  log('debug', message);
+}
+
+export default {
+  setLogLevel,
+  error,
+  warn,
+  info,
+  debug
+};

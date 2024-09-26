@@ -28,7 +28,7 @@ import {
   profileUpdate,
   deleteProfileStore
 } from '@/features/profile/profile-update-slice';
-import logger from 'logging/log-util';
+// import logger from 'logging/log-util';
 
 interface IUserAccountInfo {
   customer: {
@@ -133,7 +133,7 @@ const MyAccount = () => {
         dispatch(deleteProfileStore(!updatePhoto.deleteStatus));
       })
       .catch(error => {
-        logger.info(error);
+        console.log(error);
       });
   };
 

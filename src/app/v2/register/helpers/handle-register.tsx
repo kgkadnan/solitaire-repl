@@ -6,6 +6,7 @@ import { statusCode } from '@/constants/enums/status-code';
 import { IOtp, IToken } from '../component/main';
 import { isSessionValid } from '@/utils/manage-session';
 import { Tracking } from '@/constants/funnel-tracking';
+import { trackEvent } from '@/utils/ga';
 
 interface IHandleRegister {
   role: string;
@@ -78,6 +79,16 @@ export const handleRegister = async ({
           mobileNumber: `+${registerFormState.countryCode} ${registerFormState.mobileNumber}`,
           entryPoint: localStorage.getItem('entryPoint') || ''
         });
+        trackEvent({
+          action: Tracking.Click_Register,
+          label: Tracking.Click_Register,
+          entry_point: localStorage.getItem('entryPoint') || '',
+          mobile_number: `+${registerFormState.countryCode} ${registerFormState.mobileNumber}`,
+          status: 'Success',
+          category: 'Register'
+
+          // }
+        });
       }
     })
     .catch((e: any) => {
@@ -89,6 +100,16 @@ export const handleRegister = async ({
         sessionId: isSessionValid(),
         mobileNumber: `+${registerFormState.countryCode} ${registerFormState.mobileNumber}`,
         entryPoint: localStorage.getItem('entryPoint') || ''
+      });
+      trackEvent({
+        action: Tracking.Click_Register,
+        label: Tracking.Click_Register,
+        entry_point: localStorage.getItem('entryPoint') || '',
+        mobile_number: `+${registerFormState.countryCode} ${registerFormState.mobileNumber}`,
+        status: 'Fail',
+        category: 'Register'
+
+        // }
       });
       if (e.status === statusCode.DUPLICATE && e.data.field === 'email') {
         setDialogContent(

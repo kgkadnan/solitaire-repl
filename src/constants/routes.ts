@@ -5,7 +5,8 @@ export const v3Routes = [
   '/v3/blogs',
   '/v3',
   '/v3/sustainability',
-  '/'
+  '/',
+  '/v3/traceability'
 ];
 export const headerlessRoutes = [
   '/v2/register',

@@ -40,7 +40,7 @@ import backWardArrowDisable from '@public/v2/assets/icons/detail-page/back-ward-
 import forWardAarrowDisable from '@public/v2/assets/icons/detail-page/forward-arrow-disable.svg';
 import { handleDownloadImage } from '@/utils/v2/detail-page';
 import { useLazyGetSimilarMatchingPairQuery } from '@/features/api/match-pair';
-import logger from 'logging/log-util';
+// import logger from 'logging/log-util';
 import { formatNumber } from '@/utils/fix-two-digit-number';
 import MatchPairDnaSkeleton from '@/components/v2/skeleton/match-pair/match-pair-dna-page';
 import { RednderLocation } from '@/components/v2/common/data-table/helpers/render-cell';
@@ -150,7 +150,7 @@ export function MatchPairDetails({
       })
         .unwrap()
         .then(res => setSimilarData(res))
-        .catch(e => logger.error(e));
+        .catch(e => console.log(e));
     }
     if (originalData.length === 2) {
       setBreadCrumMatchPair(
@@ -386,10 +386,11 @@ export function MatchPairDetails({
     let statusClass = '';
     let borderClass = '';
 
-    if (row.diamond_status === MEMO_STATUS) {
-      statusClass = 'bg-legendMemoFill text-legendMemo';
-      borderClass = 'border-lengendMemoBorder border-[1px] px-[8px]';
-    } else if (row.diamond_status === HOLD_STATUS) {
+    // if (row.diamond_status === MEMO_STATUS) {
+    //   statusClass = 'bg-legendMemoFill text-legendMemo';
+    //   borderClass = 'border-lengendMemoBorder border-[1px] px-[8px]';
+    // } else
+    if (row.diamond_status === HOLD_STATUS) {
       statusClass = 'bg-legendHoldFill  text-legendHold';
 
       borderClass = 'border-lengendHoldBorder border-[1px] px-[8px]';
