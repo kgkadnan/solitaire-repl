@@ -22,10 +22,7 @@ import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
 import { columnHeaders } from './constant';
 import noImageFound from '@public/v2/assets/icons/detail-page/fall-back-img.svg';
-import {
-  useGetBidHistoryQuery,
-  useLazyGetCustomerQuery
-} from '@/features/api/dashboard';
+import { useLazyGetCustomerQuery } from '@/features/api/dashboard';
 import CommonPoppup from '../login/component/common-poppup';
 import { DialogComponent } from '@/components/v2/common/dialog';
 import ActionButton from '@/components/v2/common/action-button';
@@ -34,7 +31,6 @@ import {
   MRT_TablePagination
 } from 'material-react-table';
 import Image from 'next/image';
-import useUser from '@/lib/use-auth';
 import { DiamondDetailsComponent } from '@/components/v2/common/detail-page';
 import { getShapeDisplayName } from '@/utils/v2/detail-page';
 import ImageModal from '@/components/v2/common/detail-page/components/image-modal';
@@ -62,7 +58,7 @@ import {
 } from '@/constants/business-logic';
 import { kycStatus } from '@/constants/enums/kyc';
 import BiddingSkeleton from '@/components/v2/skeleton/bidding';
-import { useAppDispatch, useAppSelector } from '@/hooks/hook';
+import { useAppSelector } from '@/hooks/hook';
 import Form from '../search/form/form';
 import useValidationStateManagement from '../search/hooks/validation-state-management';
 import useFormStateManagement from '../search/form/hooks/form-state';
@@ -105,10 +101,8 @@ const Turkey = () => {
   const [detailImageData, setDetailImageData] = useState<any>({});
   const [validImages, setValidImages] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(false); // State to track loading
-  const [isTabSwitch, setIsTabSwitch] = useState(false); // State to track
   const [searchLoading, setSearchLoading] = useState(false);
-  const [triggerTurkeyProductApi, { data: productData }] =
-    useLazyGetAllTurkeyProductQuery();
+  const [triggerTurkeyProductApi] = useLazyGetAllTurkeyProductQuery();
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
 
   const { setSearchUrl, searchUrl } = useValidationStateManagement();
@@ -122,6 +116,7 @@ const Turkey = () => {
   const [commentValue, setCommentValue] = useState('');
   const kamLocation = useAppSelector(state => state.kamLocation);
   const confirmTrack = useAppSelector(state => state.setConfirmStoneTrack);
+  const queryParamsData = useAppSelector(state => state.queryParams);
 
   const [isConfirmStone, setIsConfirmStone] = useState(false);
   const [confirmStoneData, setConfirmStoneData] = useState<IProduct[]>([]);
@@ -138,7 +133,10 @@ const Turkey = () => {
     setIsModalOpen(true);
   };
 
-  const { data: bidHistory } = useGetBidHistoryQuery({});
+  useEffect(() => {
+    setSearchUrl(queryParamsData.queryParams),
+      fetchProducts(queryParamsData.queryParams);
+  }, [queryParamsData]);
 
   const [triggerColumn, { data: columnData }] =
     useLazyGetManageListingSequenceQuery<IManageListingSequenceResponse>();
@@ -200,17 +198,6 @@ const Turkey = () => {
           case 'last_bid_date':
             return { ...commonProps, Cell: RenderBidDate };
 
-          // case 'lot_id':
-          //   return {
-          //     ...commonProps,
-          //     Cell: ({ renderedCellValue, row }: any) => {
-          //       return RenderCartLotId({
-          //         renderedCellValue,
-          //         row,
-          //         handleDetailPage
-          //       });
-          //     }
-          //   };
           case 'lot_id':
             return {
               ...commonProps,
@@ -261,99 +248,60 @@ const Turkey = () => {
         }
       });
   const [activeTab, setActiveTab] = useState(0);
-  const tabLabels = ['Bid Stone', 'Active Bid', 'Bid History'];
-  const [timeDifference, setTimeDifference] = useState(null);
 
-  const fetchProducts = async () => {
-    triggerTurkeyProductApi({ url: searchUrl, limit: 300, offset: 0 }).then(
-      (res: any) => {
-        if (columnHeaders?.length > 0) {
-          if (res?.error?.status === statusCode.UNAUTHORIZED) {
-            // setHasLimitExceeded(true);
-            setBid([]);
+  const fetchProducts = async (query?: string) => {
+    setIsSkeletonLoading(true);
+    triggerTurkeyProductApi({
+      url: query ?? searchUrl,
+      limit: 300,
+      offset: 0
+    }).then((res: any) => {
+      if (columnHeaders?.length > 0) {
+        if (res?.error?.status === statusCode.UNAUTHORIZED) {
+          // setHasLimitExceeded(true);
+          setBid([]);
+        } else {
+          // setHasLimitExceeded(false);
+          if (res.data?.products.length > 0) {
+            setBid(res.data?.products);
+            setIsSkeletonLoading(false);
           } else {
-            // setHasLimitExceeded(false);
-            if (res.data?.products.length > 0) {
-              console.log('hererererererer');
-              setBid(res.data?.products);
-            } else {
-              modalSetState.setIsDialogOpen(true);
-              modalSetState.setDialogContent(
-                <CommonPoppup
-                  status="warning"
-                  content={''}
-                  customPoppupBodyStyle="!mt-[70px]"
-                  header={NO_PRODUCT_FOUND}
-                  actionButtonData={[
-                    {
-                      variant: 'primary',
-                      label: ManageLocales('app.modal.okay'),
-                      handler: () => {
-                        modalSetState.setIsDialogOpen(false);
-                      },
-                      customStyle: 'flex-1 h-10'
-                    }
-                  ]}
-                />
-              );
-            }
-            // res.data?.products;
+            modalSetState.setIsDialogOpen(true);
+            modalSetState.setDialogContent(
+              <CommonPoppup
+                status="warning"
+                content={''}
+                customPoppupBodyStyle="!mt-[70px]"
+                header={NO_PRODUCT_FOUND}
+                actionButtonData={[
+                  {
+                    variant: 'primary',
+                    label: ManageLocales('app.modal.okay'),
+                    handler: () => {
+                      modalSetState.setIsDialogOpen(false);
+                    },
+                    customStyle: 'flex-1 h-10'
+                  }
+                ]}
+              />
+            );
           }
-
-          setRowSelection({});
-          setErrorText('');
-          setBid(res.data?.products);
-          setIsLoading(false);
+          // res.data?.products;
         }
+
+        setRowSelection({});
+        setErrorText('');
+        setBid(res.data?.products);
+        setIsLoading(false);
       }
-    );
+    });
   };
   useEffect(() => {
     // setIsLoading(true)
-    fetchProducts();
+    queryParamsData.queryParams === '' && fetchProducts();
   }, []);
 
-  useEffect(() => {
-    // setIsLoading(true)
-    fetchProducts();
-  }, [searchUrl]);
-  const handleTabClick = (index: number) => {
-    setActiveTab(index);
-    if (index !== activeTab) {
-      // setIsLoading(true);
-      setIsTabSwitch(true);
-    }
-
-    setRowSelection({});
-    if (index === 1 && activeBid.length > 0) {
-      activeBid.map((row: any) => {
-        if (row.current_max_bid > row.my_current_bid) {
-          setRowSelection(prev => {
-            return { ...prev, [row.id]: true };
-          });
-        } else {
-          setRowSelection((prev: any) => {
-            let prevRows = { ...prev };
-            delete prevRows[row.id];
-            return prevRows;
-          });
-        }
-      });
-    }
-  };
-
-  const [activeBid, setActiveBid] = useState<any>();
   const [bid, setBid] = useState<any>();
-  const [time, setTime] = useState<any>();
-  useEffect(() => {
-    const currentTime: any = new Date();
-    const targetTime: any = new Date(time!);
-    const timeDiff: any = targetTime - currentTime;
-
-    setTimeDifference(timeDiff);
-  }, [time]);
-  const { authToken } = useUser();
-  console.log(bid, 'kkkkkkkkkkkkkkkkkk');
 
   useEffect(() => {
     const fetchColumns = async () => {
@@ -427,12 +375,7 @@ const Turkey = () => {
   const handleCreateAppointment = () => {
     let selectedIds = Object.keys(rowSelection);
 
-    let data: any;
-    if (activeTab === 1) {
-      data = activeBid;
-    } else if (activeTab === 0) {
-      data = bid;
-    }
+    let data: any = bid;
 
     if (selectedIds.length > 0) {
       const hasMemoOut = selectedIds?.some((id: string) => {
@@ -1292,7 +1235,7 @@ const Turkey = () => {
       {isError && (
         <Toast show={isError} message={errorText} isSuccess={false} />
       )}
-      {(isLoading || isTabSwitch) && <CustomKGKLoader />}
+      {isLoading && <CustomKGKLoader />}
 
       <ImageModal
         isOpen={isModalOpen}
@@ -1318,13 +1261,7 @@ const Turkey = () => {
         <div className="mt-[16px]">
           <div>
             <DiamondDetailsComponent
-              data={
-                activeTab === 0
-                  ? bid
-                  : activeTab === 1
-                  ? activeBid
-                  : bidHistory?.data
-              }
+              data={bid}
               filterData={detailPageData}
               goBackToListView={goBack}
               handleDetailPage={handleDetailPage}
@@ -1511,19 +1448,15 @@ const Turkey = () => {
                   <TurkeyDataTable
                     searchUrl={searchUrl}
                     setSearchUrl={setSearchUrl}
-                    // dispatch={dispatch}
-                    // filterData={filterData}
                     columns={memoizedColumns}
                     modalSetState={modalSetState}
                     setErrorText={setErrorText}
                     downloadExcel={downloadExcel}
                     setIsError={setIsError}
-                    activeTab={activeTab}
-                    handleTabClick={handleTabClick}
+                    activeTab={0}
                     rows={bid}
                     isSkeletonLoading={isSkeletonLoading}
                     setIsSkeletonLoading={setIsSkeletonLoading}
-                    // setBid={setBid}
                     rowSelection={rowSelection}
                     setRowSelection={setRowSelection}
                     setIsLoading={setIsLoading}

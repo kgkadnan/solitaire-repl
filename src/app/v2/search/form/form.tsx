@@ -80,6 +80,7 @@ import { filterFunction } from '@/features/filter-new-arrival/filter-new-arrival
 import { parseQueryString } from './helpers/parse-query-string';
 import { filterBidData } from './helpers/filter-bid-data';
 import { filterBidToBuyFunction } from '@/features/filter-bid-to-buy/filter-bid-to-buy-slice';
+import { queryParamsFunction } from '@/features/event-params/event-param-slice';
 
 export interface ISavedSearch {
   saveSearchName: string;
@@ -243,6 +244,8 @@ const Form = ({
   const { setIsInputDialogOpen } = modalSetState;
   const [data, setData] = useState<any>();
   const [error, setError] = useState<any>();
+  const queryParamsData = useAppSelector(state => state.queryParams);
+
   let [
     triggerProductCountApi,
     { isLoading: isLoadingProductApi, isFetching: isFetchingProductApi }
@@ -320,8 +323,7 @@ const Form = ({
       });
 
       setError('');
-    }
-    if (isTurkey) {
+    } else if (isTurkey) {
       setErrorText('');
       setIsLoading(true);
       triggerProductCountApi({ searchUrl: `${searchUrl}&turkey_event=true` })
@@ -518,6 +520,12 @@ const Form = ({
       handleFormReset();
     }
   }, [subRoute]);
+
+  useEffect(() => {
+    if (isTurkey) {
+      setSearchUrl(queryParamsData.queryParams);
+    }
+  }, [queryParamsData]);
   const handleFormSearch = async (
     isSavedParams: boolean = false,
     id?: string,
@@ -565,6 +573,11 @@ const Form = ({
       router.push(`/v2/bid-2-buy`);
       setSearchUrl('');
     } else if (isTurkey) {
+      dispatch(
+        queryParamsFunction({
+          queryParams: searchUrl
+        })
+      );
       router.push(`/v2/turkey`);
     } else if (
       JSON.parse(localStorage.getItem(formIdentifier)!)?.length >=
@@ -1068,18 +1081,20 @@ const Form = ({
           : handleFormSearch,
 
       isDisable:
-        !searchUrl.length ||
-        (!(
-          isLoading ||
-          isLoadingProductApi ||
-          isLoadingMatchPairApi ||
-          isFetchingMatchPairApi ||
-          isFetchingProductApi
-        ) &&
-          (isMatchingPair
-            ? data?.count > MAX_SEARCH_FORM_COUNT / 2
-            : data?.count > MAX_SEARCH_FORM_COUNT) &&
-          data?.count > MIN_SEARCH_FORM_COUNT),
+        !searchUrl.length || minMaxError.length > 0
+          ? true
+          : false ||
+            (!(
+              isLoading ||
+              isLoadingProductApi ||
+              isLoadingMatchPairApi ||
+              isFetchingMatchPairApi ||
+              isFetchingProductApi
+            ) &&
+              (isMatchingPair
+                ? data?.count > MAX_SEARCH_FORM_COUNT / 2
+                : data?.count > MAX_SEARCH_FORM_COUNT) &&
+              data?.count > MIN_SEARCH_FORM_COUNT),
 
       isLoading:
         isLoading ||

@@ -49,6 +49,7 @@ import { trackApi } from './features/api/track-interaction';
 import { matchingPairApi } from './features/api/match-pair';
 import trackPageApi from './features/api/track-page';
 import { funnelApi } from './features/api/funnel';
+import queryParamsReducer from './features/event-params/event-param-slice';
 
 const rootReducer = combineReducers({
   notificationBadge: notificationBadgeReducer,
@@ -56,6 +57,8 @@ const rootReducer = combineReducers({
   pageTimeTracking: trackPageEventReducer,
   filterNewArrival: filterNewArrivalReducer,
   filterBidToBuy: filterBidToBuyReducer,
+  queryParams: queryParamsReducer,
+
   isEditingKYC: isEditingKycSlice,
   searchResult: searchResultReducer,
   searchList: searchListReducer,

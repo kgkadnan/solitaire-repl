@@ -29,6 +29,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ManageLocales } from '@/utils/v2/translate';
 import BiddingSkeleton from '@/components/v2/skeleton/bidding';
 import CalculatedField from '@/components/v2/common/calculated-field';
+import { queryParamsFunction } from '@/features/event-params/event-param-slice';
+import { useAppDispatch } from '@/hooks/hook';
 
 const theme = createTheme({
   typography: {
@@ -151,9 +153,6 @@ const TurkeyDataTable = ({
   setIsLoading,
   renderFooter,
   router,
-  // filterData,
-  // setBid,
-  // dispatch,
   setIsSkeletonLoading,
   isSkeletonLoading,
   searchUrl,
@@ -166,6 +165,7 @@ const TurkeyDataTable = ({
     pageIndex: 0,
     pageSize: 20 //customize the default page size
   });
+  const dispatch = useAppDispatch();
 
   const [paginatedData, setPaginatedData] = useState<any>([]);
   const [globalFilter, setGlobalFilter] = useState('');
@@ -344,6 +344,11 @@ const TurkeyDataTable = ({
                     onClick={e => {
                       e.stopPropagation();
                       setSearchUrl('');
+                      dispatch(
+                        queryParamsFunction({
+                          queryParams: ''
+                        })
+                      );
                       // setBid(filterData.bidData);
                       // dispatch(filterFunction({}));
                     }}
@@ -437,7 +442,6 @@ const TurkeyDataTable = ({
                 setErrorText={setErrorText}
                 setIsError={setIsError}
                 identifier={'Turkey'}
-                // activeTab={activeTab}
                 shareTrackIdentifier={'Turkey'}
               />
             </div>
@@ -536,9 +540,6 @@ const TurkeyDataTable = ({
     },
 
     muiTableBodyRowProps: ({ row }) => {
-      const isHighlightBackground =
-        activeTab !== 0 && RenderNewArrivalLotIdColor({ row });
-
       return {
         onClick: row.id.includes('shape')
           ? row.getToggleExpandedHandler()
@@ -555,9 +556,7 @@ const TurkeyDataTable = ({
             // Target the specific cell that matches the lot_id column within a hovered row
             '& .MuiTableCell-root[data-index="1"]::after': {
               // Change the background color to red if isHighlightBackground is true, otherwise maintain the default hover color
-              backgroundColor: isHighlightBackground
-                ? `${isHighlightBackground.background} !important`
-                : 'var(--neutral-50)'
+              backgroundColor: 'var(--neutral-50)'
             }
           },
           '&.MuiTableRow-root .MuiTableCell-root::after': {
