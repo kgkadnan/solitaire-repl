@@ -32,7 +32,7 @@ interface ISideNavigationBar {
   title: string;
   link?: string;
   isActive?: boolean;
-  isVisible?:boolean
+  isVisible?: boolean;
 }
 const SideNavigationBar = ({
   isInMaintenanceMode
@@ -45,11 +45,13 @@ const SideNavigationBar = ({
   const currentSubRoute = useSearchParams().get('active-tab');
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   const [showPulse, setShowPulse] = useState(true);
-const [showEvent,setShowEvent]=useState(false)
+  const [showEvent, setShowEvent] = useState(false);
   const router = useRouter();
   const { data: event } = useGetNavigationQuery({});
 
-  useEffect(()=>{setShowEvent(event?.turkey_event)},[event])
+  useEffect(() => {
+    setShowEvent(event?.turkey_event);
+  }, [event]);
   const CustomSVG = () => (
     <svg
       width="40"
@@ -80,23 +82,21 @@ const [showEvent,setShowEvent]=useState(false)
       title: ManageLocales('app.sideNavigationBar.dashboard'),
       link: Routes.DASHBOARD,
       isActive: currentRoute === Routes.DASHBOARD || currentRoute === '/',
-      isVisible:true
+      isVisible: true
     },
     {
       src: <ArrivalIcon />,
       title: ManageLocales('app.sideNavigationBar.newArrivals'),
       link: Routes.NEW_ARRIVAL,
       isActive: currentRoute === Routes.NEW_ARRIVAL,
-      isVisible:true
-
+      isVisible: true
     },
     {
       src: <Bid2BuyIcon />,
       title: ManageLocales('app.sideNavigationBar.bidToBuy'),
       link: Routes.BID_TO_BUY,
       isActive: currentRoute === Routes.BID_TO_BUY,
-      isVisible:true
-
+      isVisible: true
     },
     {
       src:
@@ -112,11 +112,11 @@ const [showEvent,setShowEvent]=useState(false)
       title: 'Turkey Show',
       link: Routes.TURKEY,
       isActive: currentRoute === Routes.TURKEY,
-      isVisible:showEvent
+      isVisible: showEvent
     },
     {
       title: 'line-separator-1',
-      isVisible:true
+      isVisible: true
     },
     {
       src: <SearchIcon />,
@@ -125,8 +125,7 @@ const [showEvent,setShowEvent]=useState(false)
       isActive:
         currentRoute === Routes.SEARCH &&
         currentSubRoute !== SubRoutes.SAVED_SEARCH,
-        isVisible:true
-
+      isVisible: true
     },
     {
       src: <MatchingPairIcon />,
@@ -135,8 +134,7 @@ const [showEvent,setShowEvent]=useState(false)
       isActive:
         currentRoute === Routes.MATCHING_PAIR &&
         currentSubRoute !== MatchSubRoutes.SAVED_SEARCH,
-        isVisible:true
-
+      isVisible: true
     },
 
     {
@@ -147,8 +145,7 @@ const [showEvent,setShowEvent]=useState(false)
         (currentRoute === Routes.SEARCH ||
           currentRoute === Routes.MATCHING_PAIR) &&
         currentSubRoute === SubRoutes.SAVED_SEARCH,
-        isVisible:true
-
+      isVisible: true
     },
 
     {
@@ -156,24 +153,21 @@ const [showEvent,setShowEvent]=useState(false)
       title: ManageLocales('app.sideNavigationBar.myCart'),
       link: Routes.MY_CART,
       isActive: currentRoute === Routes.MY_CART,
-      isVisible:true
-
+      isVisible: true
     },
     {
       src: <MyDaimondsIcon />,
       title: ManageLocales('app.sideNavigationBar.yourOrders'),
       link: Routes.YOUR_ORDERS,
       isActive: currentRoute === Routes.YOUR_ORDERS,
-      isVisible:true
-
+      isVisible: true
     },
     {
       src: <MyAppointments />,
       title: ManageLocales('app.sideNavigationBar.myAppointments'),
       link: Routes.MY_APPOINTMENTS,
       isActive: currentRoute === Routes.MY_APPOINTMENTS,
-      isVisible:true
-
+      isVisible: true
     }
   ];
 
@@ -288,76 +282,80 @@ const [showEvent,setShowEvent]=useState(false)
         <div className="z-50 flex flex-col gap-2">
           {SideNavigationData.map((items: ISideNavigationBar) => {
             return (
-            items.isVisible &&  <div
-                className={` border-neutral200 ${
-                  (items.link === Routes.MY_APPOINTMENTS &&
-                    (isKycVerified?.customer?.kyc?.status ===
-                      kycStatus.INPROGRESS ||
-                      isKycVerified?.customer?.kyc?.status ===
-                        kycStatus.REJECTED)) ||
-                  isInMaintenanceMode
-                    ? '!cursor-not-allowed'
-                    : 'cursor-pointer'
-                }`}
-                key={items.title}
-              >
-                {items.link ? (
-                  <Tooltip
-                    tooltipContentSide="right"
-                    tooltipTrigger={
-                      <div
-                        className={` ${
-                          items.link === Routes.BID_TO_BUY &&
-                          !isInMaintenanceMode &&
-                          showPulse &&
-                          styles.notification_dot
-                        } ${
-                          items.link === Routes.BID_TO_BUY &&
-                          !isInMaintenanceMode &&
-                          showPulse &&
-                          styles.pulse
-                        }`}
-                      >
-                        <Button
-                          onClick={() => {
-                            if (
-                              items.link ===
-                              `${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`
-                            ) {
-                              dispatch(setStartTime(new Date().toISOString()));
-                            }
-
-                            router.push(items.link!);
-                          }}
-                          className={`${
-                            items.link === Routes.TURKEY
-                              ? currentRoute === Routes.TURKEY
-                                ? `px-[3px] py-[6px]  rounded `
-                                : `px-[3px] py-[6px]  rounded hover:bg-neutral50 `
-                              : items.isActive && !isInMaintenanceMode
-                              ? `bg-primaryMain p-[8px] rounded stroke-neutral25 `
-                              : `p-[8px] stroke-primaryIconColor rounded hover:bg-neutral50 `
-                          } disabled:bg-neutral100`}
-                          disabled={
-                            (items.link === Routes.MY_APPOINTMENTS &&
-                              (isKycVerified?.customer?.kyc?.status ===
-                                kycStatus.INPROGRESS ||
-                                isKycVerified?.customer?.kyc?.status ===
-                                  kycStatus.REJECTED)) ||
-                            isInMaintenanceMode
-                          }
+              items.isVisible && (
+                <div
+                  className={` border-neutral200 ${
+                    (items.link === Routes.MY_APPOINTMENTS &&
+                      (isKycVerified?.customer?.kyc?.status ===
+                        kycStatus.INPROGRESS ||
+                        isKycVerified?.customer?.kyc?.status ===
+                          kycStatus.REJECTED)) ||
+                    isInMaintenanceMode
+                      ? '!cursor-not-allowed'
+                      : 'cursor-pointer'
+                  }`}
+                  key={items.title}
+                >
+                  {items.link ? (
+                    <Tooltip
+                      tooltipContentSide="right"
+                      tooltipTrigger={
+                        <div
+                          className={` ${
+                            items.link === Routes.BID_TO_BUY &&
+                            !isInMaintenanceMode &&
+                            showPulse &&
+                            styles.notification_dot
+                          } ${
+                            items.link === Routes.BID_TO_BUY &&
+                            !isInMaintenanceMode &&
+                            showPulse &&
+                            styles.pulse
+                          }`}
                         >
-                          {items.src}
-                        </Button>
-                      </div>
-                    }
-                    tooltipContentStyles={'z-50 text-sMedium'}
-                    tooltipContent={items.title}
-                  />
-                ) : (
-                  <hr className="border-none h-[1px] bg-neutral200" />
-                )}
-              </div>
+                          <Button
+                            onClick={() => {
+                              if (
+                                items.link ===
+                                `${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`
+                              ) {
+                                dispatch(
+                                  setStartTime(new Date().toISOString())
+                                );
+                              }
+
+                              router.push(items.link!);
+                            }}
+                            className={`${
+                              items.link === Routes.TURKEY
+                                ? currentRoute === Routes.TURKEY
+                                  ? `px-[3px] py-[6px]  rounded `
+                                  : `px-[3px] py-[6px]  rounded hover:bg-neutral50 `
+                                : items.isActive && !isInMaintenanceMode
+                                ? `bg-primaryMain p-[8px] rounded stroke-neutral25 `
+                                : `p-[8px] stroke-primaryIconColor rounded hover:bg-neutral50 `
+                            } disabled:bg-neutral100`}
+                            disabled={
+                              (items.link === Routes.MY_APPOINTMENTS &&
+                                (isKycVerified?.customer?.kyc?.status ===
+                                  kycStatus.INPROGRESS ||
+                                  isKycVerified?.customer?.kyc?.status ===
+                                    kycStatus.REJECTED)) ||
+                              isInMaintenanceMode
+                            }
+                          >
+                            {items.src}
+                          </Button>
+                        </div>
+                      }
+                      tooltipContentStyles={'z-50 text-sMedium'}
+                      tooltipContent={items.title}
+                    />
+                  ) : (
+                    <hr className="border-none h-[1px] bg-neutral200" />
+                  )}
+                </div>
+              )
             );
           })}
         </div>
