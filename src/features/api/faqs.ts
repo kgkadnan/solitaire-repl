@@ -9,8 +9,14 @@ export const faqsApi = createApi({
   endpoints: builder => ({
     getAllFaqs: builder.query({
       query: () => `public/data/faqs`
-    })
+    }),
+    getNavigation :builder.query({
+      query: () => `public/data/side_bar_config`
+    }),
+
+
+    
   })
 });
 
-export const { useGetAllFaqsQuery } = faqsApi;
+export const { useGetAllFaqsQuery,useGetNavigationQuery } = faqsApi;
