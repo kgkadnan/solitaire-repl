@@ -9,12 +9,12 @@ import {
   RenderShape,
   RenderMeasurements,
   RenderTracerId,
-  RenderNewArrivalPrice,
   RenderNewArrivalBidDiscount,
   RenderNewArrivalPricePerCarat,
   RenderBidDate,
   RenderNumericFields,
-  RenderLotId
+  RenderLotId,
+  RenderAmount
 } from '@/components/v2/common/data-table/helpers/render-cell';
 import Tooltip from '@/components/v2/common/tooltip';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
@@ -173,7 +173,7 @@ const Turkey = () => {
           case 'rap_value':
             return { ...commonProps, Cell: RenderNumericFields };
           case 'amount':
-            return { ...commonProps, Cell: RenderNewArrivalPrice };
+            return { ...commonProps, Cell: RenderAmount };
           case 'measurements':
             return { ...commonProps, Cell: RenderMeasurements };
           case 'shape_full':
