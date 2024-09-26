@@ -2,11 +2,11 @@ import { getDeviceDetails } from '@/utils/get-device-details';
 import { fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 const apiURL = process.env.NEXT_PUBLIC_API_URL;
-const { screenSize, deviceType, os } = getDeviceDetails();
 
 type ICustomHeaders = {
   [key: string]: string | number | boolean;
 };
+const { screenSize, deviceType, os } = getDeviceDetails();
 
 export const createBaseQuery = (
   auth = true,

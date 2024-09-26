@@ -14,6 +14,7 @@ import { useRouter } from 'next/navigation';
 import { Tracking } from '@/constants/funnel-tracking';
 import { isSessionValid } from '@/utils/manage-session';
 import { useLazyRegisterFunnelQuery } from '@/features/api/funnel';
+import { trackEvent } from '@/utils/ga';
 
 export interface IOtp {
   otpMobileNumber: string;
@@ -94,6 +95,11 @@ const OTPVerification = ({
       sessionId: isSessionValid(),
       entryPoint: localStorage.getItem('entryPoint') || ''
     });
+    trackEvent({
+      action: Tracking.Mobile_Verification_PageView,
+      entry_point: localStorage.getItem('entryPoint') || '',
+      category: 'Register'
+    });
   }, []);
 
   return (
@@ -109,7 +115,12 @@ const OTPVerification = ({
               sessionId: isSessionValid(),
               entryPoint: localStorage.getItem('entryPoint') || ''
             }),
-              router.push('/v3');
+              trackEvent({
+                action: Tracking.Click_KGK_Logo,
+                entry_point: localStorage.getItem('entryPoint') || '',
+                category: 'Register'
+              });
+            router.push('/v3');
           }}
         >
           <KgkIcon
@@ -142,7 +153,17 @@ const OTPVerification = ({
                   mobileNumber: `+${otpVerificationFormState.codeAndNumber}`,
                   entryPoint: localStorage.getItem('entryPoint') || ''
                 }),
-                  setIsInputDialogOpen(true);
+                  trackEvent({
+                    action: Tracking.Click_Mobile_Edit,
+                    label: Tracking.Click_Mobile_Edit,
+                    entry_point: localStorage.getItem('entryPoint') || '',
+
+                    mobile_number: `+${otpVerificationFormState.codeAndNumber}`,
+                    category: 'Register'
+
+                    // }
+                  });
+                setIsInputDialogOpen(true);
               }}
               className="font-bold pl-1"
             >
@@ -180,6 +201,15 @@ const OTPVerification = ({
                 sessionId: isSessionValid(),
                 mobileNumber: `+${otpVerificationFormState.codeAndNumber}`,
                 entryPoint: localStorage.getItem('entryPoint') || ''
+              });
+              trackEvent({
+                action: Tracking.Click_Resend,
+                label: Tracking.Click_Resend,
+                entry_point: localStorage.getItem('entryPoint') || '',
+                mobile_number: `+${otpVerificationFormState.codeAndNumber}`,
+                category: 'Register'
+
+                // }
               });
             }}
           >
@@ -231,9 +261,14 @@ const OTPVerification = ({
                 sessionId: isSessionValid(),
                 entryPoint: localStorage.getItem('entryPoint') || ''
               }),
-                role === 'login'
-                  ? setCurrentState('login')
-                  : router.push('/v2/login');
+                trackEvent({
+                  action: Tracking.Click_Login,
+                  entry_point: localStorage.getItem('entryPoint') || '',
+                  category: 'Register'
+                });
+              role === 'login'
+                ? setCurrentState('login')
+                : router.push('/v2/login');
             }}
           >
             <div className="text-mMedium font-medium flex items-center gap-2">

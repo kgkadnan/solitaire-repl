@@ -264,11 +264,11 @@ const MyCart = () => {
       status: AVAILABLE_STATUS,
       count: diamondStatusCounts.Available + diamondStatusCounts.BidToBuy
     },
-    {
-      label: 'Memo',
-      status: MEMO_STATUS,
-      count: diamondStatusCounts.Memo
-    },
+    // {
+    //   label: 'Memo',
+    //   status: MEMO_STATUS,
+    //   count: diamondStatusCounts.Memo
+    // },
     {
       label: 'Hold',
       status: HOLD_STATUS,
