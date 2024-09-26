@@ -71,7 +71,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
       'https://apps.apple.com/in/app/kgk-diamond/id6479595403';
     const playStoreURL =
       'https://play.google.com/store/apps/details?id=com.kgk.diamonds&hl=en_IN';
-    const desktopURL = 'https://kgkdiamonds.com/';
+    const desktopURL = 'https://solitaire.kgkit.net/'; //'https://kgkdiamonds.com/';
 
     // Check if the device is iOS
     const isIOS = () => /iPhone|iPad|iPod/i.test(navigator.userAgent);
