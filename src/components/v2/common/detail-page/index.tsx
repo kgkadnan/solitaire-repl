@@ -218,11 +218,12 @@ export function DiamondDetailsComponent({
     let statusClass = '';
     let borderClass = '';
 
-    if (tableData.diamond_status === MEMO_STATUS) {
-      statusClass = 'bg-legendMemoFill text-legendMemo';
-      borderClass = 'border-lengendMemoBorder';
-      statusValue = 'Memo';
-    } else if (tableData.diamond_status === HOLD_STATUS) {
+    // if (tableData.diamond_status === MEMO_STATUS) {
+    //   statusClass = 'bg-legendMemoFill text-legendMemo';
+    //   borderClass = 'border-lengendMemoBorder';
+    //   statusValue = 'Memo';
+    // } else
+    if (tableData.diamond_status === HOLD_STATUS) {
       statusClass = 'bg-legendHoldFill  text-legendHold';
 
       borderClass = 'border-lengendHoldBorder';
