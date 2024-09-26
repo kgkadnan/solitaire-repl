@@ -249,6 +249,7 @@ const Turkey = () => {
   const [activeTab, setActiveTab] = useState(0);
 
   const fetchProducts = async () => {
+    setIsSkeletonLoading(true);
     triggerTurkeyProductApi({ url: searchUrl, limit: 300, offset: 0 }).then(
       (res: any) => {
         if (columnHeaders?.length > 0) {
@@ -258,8 +259,8 @@ const Turkey = () => {
           } else {
             // setHasLimitExceeded(false);
             if (res.data?.products.length > 0) {
-              console.log('hererererererer');
               setBid(res.data?.products);
+              setIsSkeletonLoading(false);
             } else {
               modalSetState.setIsDialogOpen(true);
               modalSetState.setDialogContent(
