@@ -1,6 +1,5 @@
 'use client';
 import React, { useEffect, useMemo, useState } from 'react';
-import NewArrivalDataTable from './components/data-table';
 import {
   RenderCarat,
   RenderDiscount,
@@ -23,7 +22,6 @@ import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
 import { columnHeaders } from './constant';
 import noImageFound from '@public/v2/assets/icons/detail-page/fall-back-img.svg';
-import CountdownTimer from '@components/v2/common/timer/index';
 import { useGetBidHistoryQuery } from '@/features/api/dashboard';
 import CommonPoppup from '../login/component/common-poppup';
 import { DialogComponent } from '@/components/v2/common/dialog';
@@ -65,7 +63,6 @@ import Form from '../search/form/form';
 import useValidationStateManagement from '../search/hooks/validation-state-management';
 import useFormStateManagement from '../search/form/hooks/form-state';
 import useNumericFieldValidation from '../search/form/hooks/numeric-field-validation-management';
-import { SubRoutes } from '@/constants/v2/enums/routes';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import { useLazyGetAllTurkeyProductQuery } from '@/features/api/product';
 import { statusCode } from '@/constants/enums/status-code';
@@ -85,7 +82,6 @@ const Turkey = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [detailImageData, setDetailImageData] = useState<any>({});
   const [validImages, setValidImages] = useState<any>([]);
-  const pathName = useSearchParams().get('path');
   const [isLoading, setIsLoading] = useState(false); // State to track loading
   const [isTabSwitch, setIsTabSwitch] = useState(false); // State to track
   const [searchLoading, setSearchLoading] = useState(false);
@@ -354,10 +350,7 @@ const Turkey = () => {
 
     fetchColumns();
   }, [bid]);
-  const memoizedColumns = useMemo(
-    () => mapColumns(columnHeaders),
-    [columnHeaders]
-  );
+  const memoizedColumns = useMemo(() => mapColumns(column), [column]);
   const { modalState, modalSetState } = useModalStateManagement();
   const { errorState, errorSetState } = useErrorStateManagement();
   const formErrorState = useNumericFieldValidation();
@@ -845,9 +838,10 @@ const Turkey = () => {
                 <div>
                   <TurkeyDataTable
                     searchUrl={searchUrl}
-                    dispatch={dispatch}
-                    filterData={filterData}
-                    columns={column}
+                    setSearchUrl={setSearchUrl}
+                    // dispatch={dispatch}
+                    // filterData={filterData}
+                    columns={memoizedColumns}
                     modalSetState={modalSetState}
                     setErrorText={setErrorText}
                     downloadExcel={downloadExcel}
@@ -857,7 +851,7 @@ const Turkey = () => {
                     rows={bid}
                     isSkeletonLoading={isSkeletonLoading}
                     setIsSkeletonLoading={setIsSkeletonLoading}
-                    setBid={setBid}
+                    // setBid={setBid}
                     rowSelection={rowSelection}
                     setRowSelection={setRowSelection}
                     setIsLoading={setIsLoading}

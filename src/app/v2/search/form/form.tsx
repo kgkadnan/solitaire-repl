@@ -1026,7 +1026,9 @@ const Form = ({
       },
 
       isHidden:
-        subRoute === SubRoutes.NEW_ARRIVAL || subRoute === SubRoutes.BID_TO_BUY
+        subRoute === SubRoutes.NEW_ARRIVAL ||
+        subRoute === SubRoutes.BID_TO_BUY ||
+        isTurkey
     },
     {
       variant: 'primary',

@@ -27,7 +27,6 @@ import Tooltip from '@/components/v2/common/tooltip';
 import { kycStatus } from '@/constants/enums/kyc';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ManageLocales } from '@/utils/v2/translate';
-import { filterFunction } from '@/features/filter-new-arrival/filter-new-arrival-slice';
 import BiddingSkeleton from '@/components/v2/skeleton/bidding';
 
 const theme = createTheme({
@@ -151,12 +150,13 @@ const TurkeyDataTable = ({
   setIsLoading,
   renderFooter,
   router,
-  filterData,
-  setBid,
-  dispatch,
+  // filterData,
+  // setBid,
+  // dispatch,
   setIsSkeletonLoading,
   isSkeletonLoading,
-  searchUrl
+  searchUrl,
+  setSearchUrl
 }: any) => {
   // Fetching saved search data
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -187,10 +187,23 @@ const TurkeyDataTable = ({
       setIsSkeletonLoading(false);
     }
   }, [globalFilter]);
+
   useEffect(() => {
-    setPaginatedData(rows);
-    setIsSkeletonLoading(false);
-  }, [rows]);
+    // Calculate the start and end indices for the current page
+    const startIndex = pagination.pageIndex * pagination.pageSize;
+    const endIndex = startIndex + pagination.pageSize;
+    // Slice the data to get the current page's data
+    const newData = rows.slice(startIndex, endIndex);
+    // Update the paginated data state
+    setPaginatedData(newData);
+    if (newData.length > 0 && setIsSkeletonLoading) {
+      setIsSkeletonLoading(false);
+    }
+  }, [
+    rows,
+    pagination.pageIndex, //re-fetch when page index changes
+    pagination.pageSize //re-fetch when page size changes
+  ]);
   const toggleFullScreen = () => {
     setIsFullScreen(!isFullScreen);
   };
@@ -329,8 +342,9 @@ const TurkeyDataTable = ({
                     className="w-[17%] cursor-pointer"
                     onClick={e => {
                       e.stopPropagation();
-                      setBid(filterData.bidData);
-                      dispatch(filterFunction({}));
+                      setSearchUrl('');
+                      // setBid(filterData.bidData);
+                      // dispatch(filterFunction({}));
                     }}
                   >
                     <Image src={crossIcon} alt="crossIcon" />
@@ -339,11 +353,11 @@ const TurkeyDataTable = ({
               ) : (
                 <button
                   onClick={() => {
-                    dispatch(
-                      filterFunction({
-                        bidData: rows
-                      })
-                    );
+                    // dispatch(
+                    //   filterFunction({
+                    //     bidData: rows
+                    //   })
+                    // );
                     router.push(`/v2/turkey?active-tab=form`);
                   }}
                   disabled={!rows.length}
@@ -421,9 +435,9 @@ const TurkeyDataTable = ({
                 selectedProducts={rowSelection}
                 setErrorText={setErrorText}
                 setIsError={setIsError}
-                identifier={'New Arrival'}
-                activeTab={activeTab}
-                shareTrackIdentifier={'New Arrival'}
+                identifier={'Turkey'}
+                // activeTab={activeTab}
+                shareTrackIdentifier={'Turkey'}
               />
             </div>
           </div>
