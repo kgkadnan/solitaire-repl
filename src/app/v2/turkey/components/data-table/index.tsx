@@ -28,6 +28,7 @@ import { kycStatus } from '@/constants/enums/kyc';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ManageLocales } from '@/utils/v2/translate';
 import BiddingSkeleton from '@/components/v2/skeleton/bidding';
+import CalculatedField from '@/components/v2/common/calculated-field';
 
 const theme = createTheme({
   typography: {
@@ -445,10 +446,7 @@ const TurkeyDataTable = ({
       </div>
 
       {rows.length > 0 && (
-        <NewArrivalCalculatedField
-          rows={rows}
-          selectedProducts={rowSelection}
-        />
+        <CalculatedField rows={rows} selectedProducts={rowSelection} />
       )}
     </div>
   );
