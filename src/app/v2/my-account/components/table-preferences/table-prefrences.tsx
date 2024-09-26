@@ -15,7 +15,7 @@ import { ListManager } from 'react-beautiful-dnd-grid';
 import { ITablePrefrences } from './interface';
 import styles from './table-prefrences.module.scss';
 
-import logger from 'logging/log-util';
+// import logger from 'logging/log-util';
 
 import ActionButton from '@/components/v2/common/action-button';
 import { ManageLocales } from '@/utils/v2/translate';
@@ -158,7 +158,7 @@ and `nonManageableListings` whenever the `data` variable changes. */
           setIsDialogOpen(true);
         })
         .catch(error => {
-          logger.error(error);
+          console.log(error);
         });
     }
     // Perform actions on update

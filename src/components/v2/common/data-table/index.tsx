@@ -1096,12 +1096,12 @@ const DataTable = ({
                   Hold
                 </p>
               </div>
-              <div className="border-[1px] border-lengendMemoBorder rounded-[4px] bg-legendMemoFill text-legendMemo">
+              {/* <div className="border-[1px] border-lengendMemoBorder rounded-[4px] bg-legendMemoFill text-legendMemo">
                 <p className="text-mMedium font-medium px-[6px] py-[4px]">
                   {' '}
                   Memo
                 </p>
-              </div>
+              </div> */}
             </div>
             <MRT_TablePagination table={table} />
             <div className="flex items-center gap-3">

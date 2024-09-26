@@ -1,21 +1,24 @@
 // utils/ga.ts
-export const GA_TRACKING_ID = 'G-XXXXXXXXXX'; // Replace with your GA4 Measurement ID
-
-// Event type definition for tracking events
-interface EventParams {
-  action: string;
-  category: string;
-  label?: string;
-  value?: number;
-}
+export const GA_TRACKING_ID = process.env.NEXT_PUBLIC_GA; // Replace with your GA4 Measurement ID
 
 // Function to track events in Google Analytics 4
-export const trackEvent = ({ action, category, label, value }: EventParams) => {
+export const trackEvent = ({
+  action,
+  category,
+  label,
+  ...params
+}: {
+  action: string;
+  category?: string;
+  label?: string;
+  [key: string]: any;
+}) => {
   if (typeof window !== 'undefined' && window.gtag) {
     window.gtag('event', action, {
       event_category: category,
       event_label: label,
-      value: value
+      platform: 'Web',
+      ...params // Dynamically include all other custom parameters
     });
   }
 };
