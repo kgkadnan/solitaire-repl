@@ -329,8 +329,8 @@ const SideNavigationBar = ({
                             className={`${
                               items.link === Routes.TURKEY
                                 ? currentRoute === Routes.TURKEY
-                                  ? `px-[3px] py-[6px]  rounded `
-                                  : `px-[3px] py-[6px]  rounded hover:bg-neutral50 `
+                                  ? `px-[3px] py-[6px]  rounded h-[40px] w-[40px]`
+                                  : `rounded hover:bg-neutral50 h-[40px] w-[40px]`
                                 : items.isActive && !isInMaintenanceMode
                                 ? `bg-primaryMain p-[8px] rounded stroke-neutral25 `
                                 : `p-[8px] stroke-primaryIconColor rounded hover:bg-neutral50 `

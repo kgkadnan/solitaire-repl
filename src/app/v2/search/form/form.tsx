@@ -320,8 +320,7 @@ const Form = ({
       });
 
       setError('');
-    }
-    if (isTurkey) {
+    } else if (isTurkey) {
       setErrorText('');
       setIsLoading(true);
       triggerProductCountApi({ searchUrl: `${searchUrl}&turkey_event=true` })
@@ -1068,18 +1067,20 @@ const Form = ({
           : handleFormSearch,
 
       isDisable:
-        !searchUrl.length ||
-        (!(
-          isLoading ||
-          isLoadingProductApi ||
-          isLoadingMatchPairApi ||
-          isFetchingMatchPairApi ||
-          isFetchingProductApi
-        ) &&
-          (isMatchingPair
-            ? data?.count > MAX_SEARCH_FORM_COUNT / 2
-            : data?.count > MAX_SEARCH_FORM_COUNT) &&
-          data?.count > MIN_SEARCH_FORM_COUNT),
+        !searchUrl.length || minMaxError.length > 0
+          ? true
+          : false ||
+            (!(
+              isLoading ||
+              isLoadingProductApi ||
+              isLoadingMatchPairApi ||
+              isFetchingMatchPairApi ||
+              isFetchingProductApi
+            ) &&
+              (isMatchingPair
+                ? data?.count > MAX_SEARCH_FORM_COUNT / 2
+                : data?.count > MAX_SEARCH_FORM_COUNT) &&
+              data?.count > MIN_SEARCH_FORM_COUNT),
 
       isLoading:
         isLoading ||
