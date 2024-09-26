@@ -12,9 +12,9 @@ import {
   RenderNewArrivalPrice,
   RenderNewArrivalBidDiscount,
   RenderNewArrivalPricePerCarat,
-  RenderCartLotId,
   RenderBidDate,
-  RenderNumericFields
+  RenderNumericFields,
+  RenderLotId
 } from '@/components/v2/common/data-table/helpers/render-cell';
 import Tooltip from '@/components/v2/common/tooltip';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
@@ -22,7 +22,10 @@ import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
 import { columnHeaders } from './constant';
 import noImageFound from '@public/v2/assets/icons/detail-page/fall-back-img.svg';
-import { useGetBidHistoryQuery } from '@/features/api/dashboard';
+import {
+  useGetBidHistoryQuery,
+  useLazyGetCustomerQuery
+} from '@/features/api/dashboard';
 import CommonPoppup from '../login/component/common-poppup';
 import { DialogComponent } from '@/components/v2/common/dialog';
 import ActionButton from '@/components/v2/common/action-button';
@@ -54,6 +57,7 @@ import BookAppointment from '../my-appointments/components/book-appointment/book
 import {
   AVAILABLE_STATUS,
   HOLD_STATUS,
+  LISTING_PAGE_DATA_LIMIT,
   MEMO_STATUS
 } from '@/constants/business-logic';
 import { kycStatus } from '@/constants/enums/kyc';
@@ -64,17 +68,35 @@ import useValidationStateManagement from '../search/hooks/validation-state-manag
 import useFormStateManagement from '../search/form/hooks/form-state';
 import useNumericFieldValidation from '../search/form/hooks/numeric-field-validation-management';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
-import { useLazyGetAllTurkeyProductQuery } from '@/features/api/product';
+import {
+  useCheckProductAvailabilityMutation,
+  useConfirmProductMutation,
+  useLazyGetAllTurkeyProductQuery
+} from '@/features/api/product';
 import { statusCode } from '@/constants/enums/status-code';
 import { NO_PRODUCT_FOUND } from '@/constants/error-messages/saved';
 import TurkeyDataTable from './components/data-table';
 import { useLazyGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
-import { IManageListingSequenceResponse } from '../search/interface';
+import { IManageListingSequenceResponse, IProduct } from '../search/interface';
+import { NOT_MORE_THAN_300 } from '@/constants/error-messages/search';
+import { handleConfirmStone } from '../search/result/helpers/handle-confirm-stone';
+import { handleCompareStone } from '../search/result/helpers/handle-compare-stone';
+import { NO_STONES_SELECTED } from '@/constants/error-messages/cart';
+import { notificationBadge } from '@/features/notification/notification-slice';
+import { useDispatch } from 'react-redux';
+import { useAddCartMutation } from '@/features/api/cart';
+import ConfirmStone from '../search/result/components';
+import CompareStone from '../search/result/components/compare-stone';
+import { STONE_LOCATION } from '@/constants/v2/enums/location';
+import { kamLocationAction } from '@/features/kam-location/kam-location';
+import { setConfirmStoneTrack } from '@/features/confirm-stone-track/confirm-stone-track-slice';
+import { AddCommentDialog } from '@/components/v2/common/comment-dialog';
+import crossIcon from '@public/v2/assets/icons/modal/cross.svg';
+import { handleComment } from '../search/result/helpers/handle-comment';
 
 const Turkey = () => {
   const router = useRouter();
-  const dispatch = useAppDispatch();
-  const filterData = useAppSelector(state => state.filterNewArrival);
+  const dispatch = useDispatch();
 
   const subRoute = useSearchParams().get('active-tab');
   const [isDetailPage, setIsDetailPage] = useState(false);
@@ -94,6 +116,18 @@ const Turkey = () => {
   const [isSkeletonLoading, setIsSkeletonLoading] = useState(false);
   const [isAddDemand, setIsAddDemand] = useState(false);
   const [column, setColumn] = useState<any>([]);
+  const [isAddCommentDialogOpen, setIsAddCommentDialogOpen] = useState(false);
+  const [textAreaValue, setTextAreaValue] = useState('');
+
+  const [commentValue, setCommentValue] = useState('');
+  const kamLocation = useAppSelector(state => state.kamLocation);
+  const confirmTrack = useAppSelector(state => state.setConfirmStoneTrack);
+
+  const [isConfirmStone, setIsConfirmStone] = useState(false);
+  const [confirmStoneData, setConfirmStoneData] = useState<IProduct[]>([]);
+  const [compareStoneData, setCompareStoneData] = useState<IProduct[]>([]);
+  const [isCompareStone, setIsCompareStone] = useState(false);
+
   const handleDetailPage = ({ row }: { row: any }) => {
     setIsDetailPage(true);
     setDetailPageData(row);
@@ -166,11 +200,22 @@ const Turkey = () => {
           case 'last_bid_date':
             return { ...commonProps, Cell: RenderBidDate };
 
+          // case 'lot_id':
+          //   return {
+          //     ...commonProps,
+          //     Cell: ({ renderedCellValue, row }: any) => {
+          //       return RenderCartLotId({
+          //         renderedCellValue,
+          //         row,
+          //         handleDetailPage
+          //       });
+          //     }
+          //   };
           case 'lot_id':
             return {
               ...commonProps,
               Cell: ({ renderedCellValue, row }: any) => {
-                return RenderCartLotId({
+                return RenderLotId({
                   renderedCellValue,
                   row,
                   handleDetailPage
@@ -257,7 +302,7 @@ const Turkey = () => {
 
           setRowSelection({});
           setErrorText('');
-          // setBid(res.data);
+          setBid(res.data?.products);
           setIsLoading(false);
         }
       }
@@ -367,12 +412,17 @@ const Turkey = () => {
   const [triggerAvailableSlots] = useLazyGetAvailableMyAppointmentSlotsQuery(
     {}
   );
+  const [checkProductAvailability] = useCheckProductAvailabilityMutation({});
+  const [triggerGetCustomer] = useLazyGetCustomerQuery({});
+  const [confirmProduct] = useConfirmProductMutation();
+
   const [lotIds, setLotIds] = useState<string[]>([]);
 
   const { setIsError, setErrorText } = errorSetState;
   const { isError, errorText } = errorState;
 
   const [downloadExcel] = useDownloadExcelMutation();
+  const [addCart] = useAddCartMutation();
 
   const handleCreateAppointment = () => {
     let selectedIds = Object.keys(rowSelection);
@@ -438,22 +488,179 @@ const Turkey = () => {
     }
   };
 
+  const handleAddToCart = () => {
+    let selectedIds = Object.keys(rowSelection);
+
+    if (selectedIds.length > 300) {
+      setIsError(true);
+      setErrorText(NOT_MORE_THAN_300);
+    } else if (!selectedIds.length) {
+      setIsError(true);
+      setErrorText(NO_STONES_SELECTED);
+    } else {
+      setIsLoading(true);
+      const variantIds = selectedIds
+        ?.map((id: string) => {
+          const myCartCheck: IProduct | object =
+            bid?.find((row: IProduct) => {
+              return row?.id === id;
+            }) ?? {};
+
+          if (myCartCheck && 'variants' in myCartCheck) {
+            return myCartCheck.variants[0]?.id;
+          }
+          return '';
+        })
+        .filter(Boolean);
+
+      // If there are variant IDs, add to the cart
+      if (variantIds.length) {
+        addCart({
+          variants: variantIds
+        })
+          .unwrap()
+          .then((res: any) => {
+            setIsLoading(false);
+            modalSetState.setIsDialogOpen(true);
+            modalSetState.setDialogContent(
+              <CommonPoppup
+                content={''}
+                status="success"
+                customPoppupBodyStyle="!mt-[70px]"
+                header={res?.message}
+                actionButtonData={[
+                  {
+                    variant: 'secondary',
+                    label: ManageLocales('app.modal.continue'),
+                    handler: () => modalSetState.setIsDialogOpen(false),
+                    customStyle: 'flex-1 w-full h-10'
+                  },
+                  {
+                    variant: 'primary',
+                    label: 'Go to "My Cart"',
+                    handler: () => {
+                      router.push('/v2/my-cart');
+                    },
+                    customStyle: 'flex-1 w-full h-10'
+                  }
+                ]}
+              />
+            );
+            // On success, show confirmation dialog and update badge
+            setIsError(false);
+            setErrorText('');
+            triggerTurkeyProductApi({
+              url: searchUrl,
+              limit: LISTING_PAGE_DATA_LIMIT,
+              offset: 0
+            }).then(res => {
+              if (res.data?.products.length > 0) {
+                setBid(res.data?.products);
+              } else {
+                modalSetState.setIsDialogOpen(true);
+                modalSetState.setDialogContent(
+                  <CommonPoppup
+                    status="warning"
+                    content={''}
+                    customPoppupBodyStyle="!mt-[70px]"
+                    header={NO_PRODUCT_FOUND}
+                    actionButtonData={[
+                      {
+                        variant: 'primary',
+                        label: ManageLocales('app.modal.okay'),
+                        handler: () => {
+                          modalSetState.setIsDialogOpen(false);
+                        },
+                        customStyle: 'flex-1 h-10'
+                      }
+                    ]}
+                  />
+                );
+              }
+              // res.data?.products;
+              setRowSelection({});
+              setErrorText('');
+              setBid(res.data?.products);
+            });
+            dispatch(notificationBadge(true));
+
+            // refetchRow();
+          })
+          .catch(error => {
+            setIsLoading(false);
+            // On error, set error state and error message
+
+            modalSetState.setIsDialogOpen(true);
+            modalSetState.setDialogContent(
+              <CommonPoppup
+                content={''}
+                customPoppupBodyStyle="!mt-[70px]"
+                header={error?.data?.message}
+                actionButtonData={[
+                  {
+                    variant: 'primary',
+                    label: ManageLocales('app.modal.okay'),
+                    handler: () => {
+                      modalSetState.setIsDialogOpen(false);
+                    },
+                    customStyle: 'flex-1 w-full h-10'
+                  }
+                ]}
+              />
+            );
+          });
+        // Clear the selected checkboxes
+        setRowSelection({});
+      }
+      // }
+    }
+  };
   const renderFooter = (table: any) => {
-    if (activeTab === 0 && bid?.length > 0) {
+    if (bid?.length > 0) {
       return (
         <div className="flex items-center justify-between px-4 py-0">
-          <div></div>
+          <div className="flex gap-2">
+            <div className=" border-[1px] border-lengendInCardBorder rounded-[4px] bg-legendInCartFill text-legendInCart">
+              <p className="text-mMedium font-medium px-[6px] py-[4px]">
+                In Cart
+              </p>
+            </div>
+            <div className=" border-[1px] border-lengendHoldBorder rounded-[4px] bg-legendHoldFill text-legendHold">
+              <p className="text-mMedium font-medium px-[6px] py-[4px]">
+                {' '}
+                Hold
+              </p>
+            </div>
+          </div>
           <MRT_TablePagination table={table} />
           <div className="flex items-center gap-3">
             <ActionButton
               actionButtonData={[
                 {
                   variant: 'secondary',
-                  label: 'Clear All',
-                  handler: () => {
-                    setRowSelection({});
-                  },
+                  label: ManageLocales('app.searchResult.addToCart'),
+                  handler: () => handleAddToCart(),
                   isDisable: !Object.keys(rowSelection).length
+                },
+
+                {
+                  variant: 'primary',
+                  label: ManageLocales('app.searchResult.confirmStone'),
+                  isDisable: !Object.keys(rowSelection).length,
+                  handler: () => {
+                    handleConfirmStone({
+                      selectedRows: rowSelection,
+                      rows: bid,
+                      setIsError,
+                      setErrorText,
+                      setIsConfirmStone,
+                      setConfirmStoneData,
+                      checkProductAvailability,
+                      modalSetState,
+                      router,
+                      setIsLoading
+                    });
+                  }
                 }
               ]}
             />
@@ -468,108 +675,27 @@ const Turkey = () => {
               }
               dropdownMenu={[
                 {
-                  label: ManageLocales(
-                    'app.search.actionButton.bookAppointment'
-                  ),
-
-                  handler: () => {
-                    handleCreateAppointment();
-                  },
-                  isDisable: !Object.keys(rowSelection).length,
-                  commingSoon:
-                    isKycVerified?.customer?.kyc?.status ===
-                      kycStatus.INPROGRESS ||
-                    isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED
-                }
-              ]}
-            />
-          </div>
-        </div>
-      );
-    } else if (activeTab === 1 && activeBid?.length > 0) {
-      return (
-        <div className="flex items-center justify-between px-4 py-0">
-          <div className="flex gap-4">
-            <div className=" border-[1px] border-successBorder rounded-[4px] bg-successSurface text-successMain">
-              <p className="text-mMedium font-medium px-[6px] py-[4px]">
-                Winning
-              </p>
-            </div>
-            <div className=" border-[1px] border-dangerBorder rounded-[4px] bg-dangerSurface text-dangerMain">
-              <p className="text-mMedium font-medium px-[6px] py-[4px]">
-                {' '}
-                Losing
-              </p>
-            </div>
-          </div>
-          <MRT_TablePagination table={table} />
-          <div className="flex items-center gap-3">
-            <ActionButton
-              actionButtonData={[
-                {
-                  variant: 'secondary',
-                  label: 'Clear All',
-                  handler: () => {
-                    setRowSelection({});
-                  },
+                  label: 'Compare Stone',
+                  handler: () =>
+                    handleCompareStone({
+                      isCheck: rowSelection,
+                      setIsError,
+                      setErrorText,
+                      activeCartRows: bid,
+                      setIsCompareStone,
+                      setCompareStoneData
+                    }),
                   isDisable: !Object.keys(rowSelection).length
                 },
                 {
-                  variant: 'primary',
-                  label: 'Cancel Bid',
-                  handler: () => {
-                    modalSetState.setIsDialogOpen(true);
-                    modalSetState.setDialogContent(
-                      <CommonPoppup
-                        content={''}
-                        status="warning"
-                        customPoppupBodyStyle="mt-[70px]"
-                        header={`Are you sure you want to cancel this bid?`}
-                        actionButtonData={[
-                          {
-                            variant: 'secondary',
-                            label: 'Go Back',
-                            handler: () => {
-                              modalSetState.setIsDialogOpen(false);
-                            },
-                            customStyle: 'flex-1 w-full'
-                          },
-                          {
-                            variant: 'primary',
-                            label: 'Cancel Bid',
-                            handler: () => {
-                              // socketManager.emit('cancel_bid', {
-                              //   product_ids: Object.keys(rowSelection)
-                              // });
-                            },
-                            customStyle: 'flex-1 w-full'
-                          }
-                        ]}
-                      />
-                    );
-                  },
-                  isDisable: !Object.keys(rowSelection).length
-                }
-              ]}
-            />
-            <Dropdown
-              dropdownTrigger={
-                <Image
-                  src={threeDotsSvg}
-                  alt="threeDotsSvg"
-                  width={43}
-                  height={43}
-                />
-              }
-              dropdownMenu={[
-                {
                   label: ManageLocales(
                     'app.search.actionButton.bookAppointment'
                   ),
                   handler: () => {
                     handleCreateAppointment();
                   },
-                  commingSoon:
+                  isDisable:
+                    !Object.keys(rowSelection).length ||
                     isKycVerified?.customer?.kyc?.status ===
                       kycStatus.INPROGRESS ||
                     isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED
@@ -577,24 +703,6 @@ const Turkey = () => {
               ]}
             />
           </div>
-        </div>
-      );
-    } else if (activeTab === 2 && bidHistory?.data?.length > 0) {
-      return (
-        <div className="flex items-center justify-between px-4 py-0">
-          <div className="flex gap-4 py-2">
-            <div className=" border-[1px] border-successBorder rounded-[4px] bg-successSurface text-successMain">
-              <p className="text-mMedium font-medium px-[6px] py-[4px]">Won</p>
-            </div>
-            <div className=" border-[1px] border-dangerBorder rounded-[4px] bg-dangerSurface text-dangerMain">
-              <p className="text-mMedium font-medium px-[6px] py-[4px]">
-                {' '}
-                Lost
-              </p>
-            </div>
-          </div>
-          {/* <MRT_TablePagination table={table} /> */}
-          <div></div>
         </div>
       );
     } else {
@@ -724,6 +832,341 @@ const Turkey = () => {
       ]);
     }
   }, [validImages]);
+
+  const goBackToListView = (isFrom?: string) => {
+    if (isFrom === 'Detail Page') {
+      setIsDetailPage(true);
+      // setBreadCrumLabel('');
+    }
+    setIsConfirmStone(false);
+    setConfirmStoneData([]);
+    setIsCompareStone(false);
+    setCompareStoneData([]);
+    setShowAppointmentForm(false);
+    setAppointmentPayload({
+      kam: { kam_name: '', image: '' },
+      storeAddresses: [],
+      timeSlots: { dates: [{ date: '', day: '' }], slots: {} }
+    });
+  };
+
+  const confirmStone = () => {
+    const variantIds: string[] = [];
+
+    confirmStoneData.forEach((ids: any) => {
+      variantIds.push(ids.variants[0].id);
+    });
+
+    if (!kamLocation.location) {
+      triggerGetCustomer({}).then(res => {
+        let kamLocation = res.data.customer.kam.location;
+        dispatch(kamLocationAction(kamLocation));
+        checkLocation({ kamLocation, variantIds });
+      });
+    } else {
+      checkLocation({ kamLocation: kamLocation.location, variantIds });
+    }
+  };
+
+  const checkLocation = ({
+    kamLocation,
+    variantIds
+  }: {
+    kamLocation: string;
+    variantIds: string[];
+  }) => {
+    // Compare Stone locations with KAM location
+    let locationMismatch = false;
+    confirmStoneData.forEach((stones: any) => {
+      const location = stones.location as keyof typeof STONE_LOCATION;
+      if (
+        STONE_LOCATION[location].toLowerCase() !== kamLocation.toLowerCase()
+      ) {
+        locationMismatch = true;
+      }
+    });
+    if (locationMismatch) {
+      modalSetState.setIsDialogOpen(true);
+      modalSetState.setDialogContent(
+        <CommonPoppup
+          content={
+            <div className="flex flex-col gap-1">
+              <div>
+                You are trying to confirm some of the stones from another
+                region. This might lead to additional charges. By confirming
+                your order, you acknowledge and agree to the following:
+              </div>
+
+              <div>
+                <p>
+                  {' '}
+                  &#8226; Customs Duties and Taxes: You are responsible for
+                  paying any applicable customs duties, taxes, and other charges
+                  that may be incurred when importing stones from outside your
+                  location.
+                </p>
+
+                <p>
+                  {' '}
+                  &#8226; Import Regulations: Ensure you are aware of and comply
+                  with all relevant import regulations and requirements for your
+                  region.
+                </p>
+                <p>
+                  {' '}
+                  &#8226; Delivery Times: Delivery times may vary due to customs
+                  clearance procedures.
+                </p>
+              </div>
+            </div>
+          }
+          status="warning"
+          customPoppupStyle="!h-[475px]"
+          customPoppupBodyStyle="!mt-[70px]"
+          header={'Disclaimer'}
+          actionButtonData={[
+            {
+              variant: 'secondary',
+              label: ManageLocales('app.modal.cancel'),
+              handler: () => modalSetState.setIsDialogOpen(false),
+              customStyle: 'flex-1 w-full h-10'
+            },
+            {
+              variant: 'primary',
+              label: 'Confirm Order',
+              handler: () => {
+                modalSetState.setIsDialogOpen(false);
+                confirmStoneApiCall({ variantIds });
+              },
+              customStyle: 'flex-1 w-full h-10'
+            }
+          ]}
+        />
+      );
+    } else {
+      confirmStoneApiCall({ variantIds });
+    }
+  };
+
+  const confirmStoneApiCall = ({ variantIds }: { variantIds: string[] }) => {
+    if (variantIds.length) {
+      setIsLoading(true);
+      confirmProduct({
+        variants: variantIds,
+        comments: commentValue,
+        identifier: confirmTrack.confirmStoneTrack
+          ? confirmTrack.confirmStoneTrack
+          : 'Searching'
+      })
+        .unwrap()
+        .then(res => {
+          if (res) {
+            setIsLoading(false);
+            setCommentValue('');
+            modalSetState.setIsDialogOpen(true);
+            setRowSelection({});
+            dispatch(setConfirmStoneTrack(''));
+
+            const formatMessage = (message: string) => {
+              return message.split('\n').map((line: string, index: number) => (
+                <span key={index}>
+                  <span dangerouslySetInnerHTML={{ __html: line }} />
+                  <br />
+                </span>
+              ));
+            };
+            modalSetState.setDialogContent(
+              <CommonPoppup
+                content={<div>{formatMessage(res.message)}</div>}
+                status={
+                  res.status === 'success'
+                    ? 'success'
+                    : res.status === 'processing'
+                    ? 'info'
+                    : ''
+                }
+                customPoppupBodyStyle="!mt-[70px]"
+                header={res.title}
+                actionButtonData={[
+                  {
+                    variant: 'secondary',
+                    label: ManageLocales('app.modal.continue'),
+                    handler: () => {
+                      goBackToListView();
+                      setIsAddCommentDialogOpen(false);
+                      modalSetState.setIsDialogOpen(false);
+                    },
+                    customStyle: 'flex-1 w-full h-10'
+                  },
+                  {
+                    variant: 'primary',
+                    label: ManageLocales('app.modal.goToYourOrder'),
+                    handler: () => {
+                      router.push('/v2/your-orders');
+                    },
+                    customStyle: 'flex-1 w-full h-10'
+                  }
+                ]}
+              />
+            );
+
+            setCommentValue('');
+
+            triggerTurkeyProductApi({
+              url: searchUrl,
+              limit: LISTING_PAGE_DATA_LIMIT,
+              offset: 0
+            }).then(res => {
+              if (res.data?.products.length > 0) {
+                setBid(res.data?.products);
+              } else {
+                modalSetState.setIsDialogOpen(true);
+                modalSetState.setDialogContent(
+                  <CommonPoppup
+                    status="warning"
+                    content={''}
+                    customPoppupBodyStyle="!mt-[70px]"
+                    header={NO_PRODUCT_FOUND}
+                    actionButtonData={[
+                      {
+                        variant: 'primary',
+                        label: ManageLocales('app.modal.okay'),
+                        handler: () => {
+                          modalSetState.setIsDialogOpen(false);
+                        },
+                        customStyle: 'flex-1 h-10'
+                      }
+                    ]}
+                  />
+                );
+              }
+              res.data?.products;
+              setRowSelection({});
+              setErrorText('');
+              setBid(res.data?.products);
+            });
+          }
+        })
+        .catch(e => {
+          setIsLoading(false);
+          setCommentValue('');
+          dispatch(setConfirmStoneTrack(''));
+
+          if (e.data.type === 'unauthorized') {
+            modalSetState.setIsDialogOpen(true);
+            modalSetState.setDialogContent(
+              <CommonPoppup
+                content={
+                  'To confirm a stone or make a purchase, KYC verification is mandatory. Without verification, access to certain features is restricted.'
+                }
+                customPoppupStyle="h-[260px]"
+                customPoppupBodyStyle="!mt-[62px]"
+                header={`Important KYC Verification Required!`}
+                actionButtonData={[
+                  {
+                    variant: 'secondary',
+                    label: ManageLocales('app.modal.cancel'),
+                    handler: () => modalSetState.setIsDialogOpen(false),
+                    customStyle: 'w-full flex-1'
+                  },
+                  {
+                    variant: 'primary',
+                    label: ManageLocales('app.modal.verifyMyKYCNow'),
+                    handler: () => {
+                      router.push('/v2/kyc');
+                    },
+                    customStyle: 'w-full flex-1'
+                  }
+                ]}
+              />
+            );
+          } else {
+            modalSetState.setIsDialogOpen(true);
+            modalSetState.setDialogContent(
+              <CommonPoppup
+                content={e?.data?.message}
+                customPoppupBodyStyle="!mt-[70px]"
+                header={``}
+                actionButtonData={[
+                  {
+                    variant: 'primary',
+                    label: ManageLocales('app.modal.okay'),
+                    handler: () => {
+                      modalSetState.setIsDialogOpen(false);
+                    },
+                    customStyle: 'flex-1 w-full h-10'
+                  }
+                ]}
+              />
+            );
+          }
+        });
+    }
+  };
+
+  const renderAddCommentDialogs = () => {
+    return (
+      <>
+        {' '}
+        <div className="flex flex-col gap-[15px] px-[24px] pt-[24px]">
+          <div>
+            <div className="flex justify-between pb-[16px]">
+              <h1 className="text-headingS text-neutral900">
+                {' '}
+                {ManageLocales('app.modal.addComment')}
+              </h1>
+              <button
+                onClick={() => {
+                  setIsAddCommentDialogOpen(false);
+                }}
+              >
+                <Image src={crossIcon} alt="crossIcon" />
+              </button>
+            </div>
+            <p className="text-neutral600 text-mRegular">
+              {ManageLocales('app.modal.addComment.content')}
+            </p>
+          </div>
+          <div className="pt-[4px]">
+            <textarea
+              value={textAreaValue}
+              name="textarea"
+              rows={10}
+              className="w-full bg-neutral0 text-neutral900 rounded-[4px] resize-none focus:outline-none p-2 border-neutral-200 border-[1px] mt-2"
+              style={{ boxShadow: 'var(--input-shadow) inset' }}
+              onChange={e => handleComment(e, setTextAreaValue)}
+            />
+          </div>
+        </div>
+        <div
+          className="border-t-neutral-200 border-t-[1px] rounded-b-[8px] p-[24px]"
+          style={{ background: 'var(--neutral-25)' }}
+        >
+          <ActionButton
+            actionButtonData={[
+              {
+                variant: 'secondary',
+                label: ManageLocales('app.modal.addComment.cancel'),
+                handler: () => {
+                  setIsAddCommentDialogOpen(false);
+                },
+                customStyle: 'flex-1'
+              },
+              {
+                variant: 'primary',
+                label: ManageLocales('app.modal.addComment.saveComment'),
+                handler: () => {
+                  setCommentValue(textAreaValue);
+                  setIsAddCommentDialogOpen(false);
+                },
+                customStyle: 'flex-1'
+              }
+            ]}
+          />
+        </div>
+      </>
+    );
+  };
   return (
     <div className="mb-[4px] relative">
       {isError && (
@@ -746,7 +1189,11 @@ const Turkey = () => {
         isOpens={modalState.isDialogOpen}
         dialogStyle={{ dialogContent: isAddDemand ? 'min-h-[280px]' : '' }}
       />
-
+      <AddCommentDialog
+        isOpen={isAddCommentDialogOpen}
+        onClose={() => setIsAddCommentDialogOpen(false)}
+        renderContent={renderAddCommentDialogs}
+      />
       {isDetailPage ? (
         <div className="mt-[16px]">
           <DiamondDetailsComponent
@@ -760,10 +1207,74 @@ const Turkey = () => {
             filterData={detailPageData}
             goBackToListView={goBack}
             handleDetailPage={handleDetailPage}
-            breadCrumLabel={'New Arrival'}
+            breadCrumLabel={'Diamond List'}
             modalSetState={modalSetState}
             setIsLoading={setIsLoading}
             activeTab={activeTab}
+          />
+        </div>
+      ) : isConfirmStone ? (
+        <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow">
+          <ConfirmStone
+            rows={confirmStoneData}
+            columns={columnData}
+            goBackToListView={goBackToListView}
+            activeTab={activeTab}
+            isFrom={'Diamond List'}
+            handleDetailImage={handleDetailImage}
+            handleDetailPage={handleDetailPage}
+            identifier={'Event'}
+          />
+          <div className="px-4 py-2">
+            <ActionButton
+              actionButtonData={[
+                {
+                  variant: 'secondary',
+                  label: ManageLocales('app.confirmStone.footer.back'),
+                  handler: () => {
+                    goBackToListView();
+                  }
+                },
+
+                {
+                  variant: 'secondary',
+                  label: ManageLocales('app.confirmStone.footer.addComment'),
+                  handler: () => {
+                    setCommentValue('');
+                    setIsAddCommentDialogOpen(true);
+                  }
+                },
+
+                {
+                  variant: 'primary',
+                  label: ManageLocales('app.confirmStone.footer.confirmStone'),
+                  handler: () => confirmStone()
+                }
+              ]}
+            />
+          </div>
+        </div>
+      ) : isCompareStone ? (
+        <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow">
+          <CompareStone
+            rows={compareStoneData}
+            columns={columnData}
+            goBackToListView={goBackToListView}
+            activeTab={activeTab}
+            isFrom={'Diamond List'}
+            handleDetailImage={handleDetailImage}
+            setCompareStoneData={setCompareStoneData}
+            compareStoneData={compareStoneData}
+            setIsError={setIsError}
+            setErrorText={setErrorText}
+            setIsLoading={setIsLoading}
+            setIsDialogOpen={modalSetState.setIsDialogOpen}
+            setDialogContent={modalSetState.setDialogContent}
+            setIsConfirmStone={setIsConfirmStone}
+            setConfirmStoneData={setConfirmStoneData}
+            setIsDetailPage={setIsDetailPage}
+            modalSetState={modalSetState}
+            // refreshCompareStone={refreshSearchResults}
           />
         </div>
       ) : showAppointmentForm ? (
@@ -859,7 +1370,6 @@ const Turkey = () => {
                     router={router}
                   />
                 </div>
-                {/* {renderFooter()} */}
               </div>
             </>
           )}

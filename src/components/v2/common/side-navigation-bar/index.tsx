@@ -65,7 +65,7 @@ const SideNavigationBar = ({
       isActive: currentRoute === Routes.BID_TO_BUY
     },
     {
-      src: <Bid2BuyIcon />, //<TurkeyIcon />,
+      src: <TurkeyIcon />,
       title: 'Turkey',
       link: Routes.TURKEY,
       isActive: currentRoute === Routes.TURKEY
@@ -273,7 +273,11 @@ const SideNavigationBar = ({
                             router.push(items.link!);
                           }}
                           className={`${
-                            items.isActive && !isInMaintenanceMode
+                            items.link === Routes.TURKEY
+                              ? currentRoute === Routes.TURKEY
+                                ? `px-[2px] py-[5px]  rounded stroke-[#5D6A6A]`
+                                : `px-[2px] py-[5px] stroke-neutral300 rounded hover:bg-neutral50 `
+                              : items.isActive && !isInMaintenanceMode
                               ? `bg-primaryMain p-[8px] rounded stroke-neutral25 `
                               : `p-[8px] stroke-primaryIconColor rounded hover:bg-neutral50 `
                           } disabled:bg-neutral100`}

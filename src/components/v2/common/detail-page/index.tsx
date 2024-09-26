@@ -286,7 +286,7 @@ export function DiamondDetailsComponent({
               className="text-neutral600 text-sMedium font-regular cursor-pointer"
               onClick={() => {
                 goBackToListView!();
-                setIsDiamondDetailLoading(true);
+                setIsDiamondDetailLoading && setIsDiamondDetailLoading(true);
               }}
             >
               {breadCrumLabel}

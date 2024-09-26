@@ -215,6 +215,8 @@ const Table = ({
             ? 'calc(100vh - 266px)'
             : isMatchingPair
             ? 'calc(100vh - 240px)'
+            : identifier === 'Event'
+            ? 'calc(100vh - 200px)'
             : 'calc(100vh - 310px)',
         maxHeight:
           isNudge &&
@@ -229,6 +231,8 @@ const Table = ({
             ? 'calc(100vh - 240px)'
             : identifier === 'Dashboard'
             ? 'calc(100vh - 220px)'
+            : identifier === 'Event'
+            ? 'calc(100vh - 200px)'
             : 'calc(100vh - 310px)'
       }
     },
