@@ -298,7 +298,7 @@ const Turkey = () => {
   };
   useEffect(() => {
     // setIsLoading(true)
-    fetchProducts();
+    queryParamsData.queryParams === '' && fetchProducts();
   }, []);
 
   const [bid, setBid] = useState<any>();
