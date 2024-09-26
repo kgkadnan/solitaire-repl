@@ -29,6 +29,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ManageLocales } from '@/utils/v2/translate';
 import BiddingSkeleton from '@/components/v2/skeleton/bidding';
 import CalculatedField from '@/components/v2/common/calculated-field';
+import { queryParamsFunction } from '@/features/event-params/event-param-slice';
+import { useAppDispatch } from '@/hooks/hook';
 
 const theme = createTheme({
   typography: {
@@ -163,6 +165,7 @@ const TurkeyDataTable = ({
     pageIndex: 0,
     pageSize: 20 //customize the default page size
   });
+  const dispatch = useAppDispatch();
 
   const [paginatedData, setPaginatedData] = useState<any>([]);
   const [globalFilter, setGlobalFilter] = useState('');
@@ -341,6 +344,11 @@ const TurkeyDataTable = ({
                     onClick={e => {
                       e.stopPropagation();
                       setSearchUrl('');
+                      dispatch(
+                        queryParamsFunction({
+                          queryParams: ''
+                        })
+                      );
                       // setBid(filterData.bidData);
                       // dispatch(filterFunction({}));
                     }}

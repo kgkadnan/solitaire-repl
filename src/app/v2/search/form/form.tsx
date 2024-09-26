@@ -80,6 +80,7 @@ import { filterFunction } from '@/features/filter-new-arrival/filter-new-arrival
 import { parseQueryString } from './helpers/parse-query-string';
 import { filterBidData } from './helpers/filter-bid-data';
 import { filterBidToBuyFunction } from '@/features/filter-bid-to-buy/filter-bid-to-buy-slice';
+import { queryParamsFunction } from '@/features/event-params/event-param-slice';
 
 export interface ISavedSearch {
   saveSearchName: string;
@@ -564,6 +565,11 @@ const Form = ({
       router.push(`/v2/bid-2-buy`);
       setSearchUrl('');
     } else if (isTurkey) {
+      dispatch(
+        queryParamsFunction({
+          queryParams: searchUrl
+        })
+      );
       router.push(`/v2/turkey`);
     } else if (
       JSON.parse(localStorage.getItem(formIdentifier)!)?.length >=
