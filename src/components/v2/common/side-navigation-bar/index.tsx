@@ -12,7 +12,7 @@ import BookmarkIcon from '@public/v2/assets/icons/sidebar-icons/bookmark.svg?url
 import MyAppointments from '@public/v2/assets/icons/sidebar-icons/my-appointments.svg?url';
 import FaqsIcon from '@public/v2/assets/icons/sidebar-icons/faqs.svg?url';
 import CartIcon from '@public/v2/assets/icons/sidebar-icons/shopping-cart.svg?url';
-// import SettingIcon from '@public/v2/assets/icons/sidebar-icons/setting.svg?url';
+import TurkeyIcon from '@public/v2/assets/icons/sidebar-icons/turkey.svg?url';
 import styles from './side-navigation.module.scss';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
@@ -63,6 +63,12 @@ const SideNavigationBar = ({
       title: ManageLocales('app.sideNavigationBar.bidToBuy'),
       link: Routes.BID_TO_BUY,
       isActive: currentRoute === Routes.BID_TO_BUY
+    },
+    {
+      src: <Bid2BuyIcon />, //<TurkeyIcon />,
+      title: 'Turkey',
+      link: Routes.TURKEY,
+      isActive: currentRoute === Routes.TURKEY
     },
     {
       title: 'line-separator-1'
