@@ -844,25 +844,20 @@ const Turkey = () => {
               >
                 <div>
                   <TurkeyDataTable
+                    searchUrl={searchUrl}
                     dispatch={dispatch}
                     filterData={filterData}
                     columns={column}
-                    // isTabSwitch={isTabSwitch}
-                    setIsTabSwitch={setIsTabSwitch}
                     modalSetState={modalSetState}
                     setErrorText={setErrorText}
                     downloadExcel={downloadExcel}
                     setIsError={setIsError}
-                    tabLabels={tabLabels}
                     activeTab={activeTab}
                     handleTabClick={handleTabClick}
                     rows={bid}
                     isSkeletonLoading={isSkeletonLoading}
                     setIsSkeletonLoading={setIsSkeletonLoading}
-                    activeCount={activeBid?.length}
                     setBid={setBid}
-                    bidCount={bid?.length}
-                    historyCount={bidHistory?.data?.length}
                     rowSelection={rowSelection}
                     setRowSelection={setRowSelection}
                     setIsLoading={setIsLoading}

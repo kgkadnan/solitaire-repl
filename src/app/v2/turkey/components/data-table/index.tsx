@@ -10,7 +10,6 @@ import CollapsIcon from '@public/v2/assets/icons/collapse-icon.svg?url';
 import ExportExcel from '@public/v2/assets/icons/detail-page/export-excel.svg?url';
 import crossIcon from '@public/v2/assets/icons/new-arrivals/cross-icon.svg';
 import Image from 'next/image';
-import DisableDecrementIcon from '@public/v2/assets/icons/new-arrivals/disable-decrement.svg?url';
 import searchIcon from '@public/v2/assets/icons/data-table/search-icon.svg';
 import { faSort, faSortDown } from '@fortawesome/free-solid-svg-icons';
 // theme.js
@@ -20,23 +19,14 @@ import { useEffect, useState } from 'react';
 
 import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
 import Share from '@/components/v2/common/copy-and-share/share';
-import ActionButton from '@/components/v2/common/action-button';
 import NewArrivalCalculatedField from '../new-arrival-calculated-field';
-import Tab from '@components/v2/common/bid-tabs/index';
-import { InputField } from '@/components/v2/common/input-field';
-import DecrementIcon from '@public/v2/assets/icons/new-arrivals/decrement.svg?url';
-import IncrementIcon from '@public/v2/assets/icons/new-arrivals/increment.svg?url';
 import empty from '@public/v2/assets/icons/data-table/empty-new-arrivals.svg';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import { RenderNewArrivalLotIdColor } from '@/components/v2/common/data-table/helpers/render-cell';
 import Tooltip from '@/components/v2/common/tooltip';
 import { kycStatus } from '@/constants/enums/kyc';
-import { formatNumber } from '@/utils/fix-two-digit-number';
-import { handleIncrementDiscount } from '@/utils/v2/handle-increment-discount';
-import { handleDecrementDiscount } from '@/utils/v2/handle-decrement-discount';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ManageLocales } from '@/utils/v2/translate';
-import { SubRoutes } from '@/constants/v2/enums/routes';
 import { filterFunction } from '@/features/filter-new-arrival/filter-new-arrival-slice';
 import BiddingSkeleton from '@/components/v2/skeleton/bidding';
 
@@ -147,10 +137,7 @@ const theme = createTheme({
     }
   }
 });
-console.log('called');
-interface IBidValues {
-  [key: string]: number;
-}
+
 const TurkeyDataTable = ({
   columns,
   modalSetState,
@@ -159,9 +146,6 @@ const TurkeyDataTable = ({
   setIsError,
   activeTab,
   rows = [],
-  activeCount,
-  bidCount,
-  historyCount,
   rowSelection,
   setRowSelection,
   setIsLoading,
@@ -172,16 +156,11 @@ const TurkeyDataTable = ({
   dispatch,
   setIsSkeletonLoading,
   isSkeletonLoading,
-  // isTabSwitch,
-  setIsTabSwitch
+  searchUrl
 }: any) => {
-  console.log('calllededde');
   // Fetching saved search data
-  console.log('isss', isSkeletonLoading, rows);
   const [isFullScreen, setIsFullScreen] = useState(false);
-  const [bidError, setBidError] = useState<{
-    [key: string]: string;
-  }>({});
+
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 20 //customize the default page size
@@ -209,25 +188,9 @@ const TurkeyDataTable = ({
     }
   }, [globalFilter]);
   useEffect(() => {
-    if (activeTab !== 2) {
-      // Calculate the start and end indices for the current page
-      const startIndex = pagination.pageIndex * pagination.pageSize;
-      const endIndex = startIndex + pagination.pageSize;
-      // Slice the data to get the current page's data
-      const newData = rows.slice(startIndex, endIndex);
-      // Update the paginated data state
-      setPaginatedData(newData);
-      setIsSkeletonLoading(false);
-    } else {
-      setPaginatedData(rows);
-      setIsSkeletonLoading(false);
-    }
-  }, [
-    rows,
-    pagination.pageIndex, //re-fetch when page index changes
-    pagination.pageSize, //re-fetch when page size changes
-    activeTab
-  ]);
+    setPaginatedData(rows);
+    setIsSkeletonLoading(false);
+  }, [rows]);
   const toggleFullScreen = () => {
     setIsFullScreen(!isFullScreen);
   };
@@ -286,13 +249,10 @@ const TurkeyDataTable = ({
       setRowSelection,
       router,
       setIsLoading: setIsLoading,
-      [activeTab === 2 ? 'fromNewArrivalBidHistory' : 'fromNewArrivalBid']:
-        true,
-      page: 'New_Arrival'
+      page: 'Turkey'
     });
   };
 
-  const [bidValues, setBidValues] = useState<IBidValues>({});
   const [columnOrder] = useState(
     [
       'mrt-row-select',
@@ -313,16 +273,6 @@ const TurkeyDataTable = ({
             padding: '12px 16px'
           }}
         >
-          {/* <div className="w-[450px]">
-            <Tab
-              labels={tabLabels}
-              activeIndex={activeTab}
-              onTabClick={handleTabClick}
-              activeCount={activeCount}
-              bidCount={bidCount}
-              historyCount={historyCount}
-            />
-          </div> */}
           <MRT_GlobalFilterTextField
             table={table}
             autoComplete="false"
@@ -364,59 +314,51 @@ const TurkeyDataTable = ({
           />
 
           <div className="flex gap-[12px]" style={{ alignItems: 'inherit' }}>
-            {activeTab === 0 && (
-              <div className="">
-                {filterData?.bidFilterData?.length > 0 ? (
-                  <button
-                    onClick={() => {
-                      router.push(
-                        `/v2/new-arrivals?active-tab=${SubRoutes.NEW_ARRIVAL}`
-                      );
-                    }}
-                    className={`flex w-full  shadow-sm justify-center py-[8px] h-[39px] px-[16px]  items-center font-medium  rounded-[4px] gap-1  border-[1px]  border-solid border-neutral200 text-mMedium  cursor-pointer  ${'bg-primaryMain text-neutral0 hover:bg-primaryHover'}`}
-                  >
-                    <FilterIcon stroke={`${'var(--neutral-0)'}`} />
+            <div className="">
+              {searchUrl !== '' ? (
+                <button
+                  onClick={() => {
+                    router.push(`/v2/turkey?active-tab=form`);
+                  }}
+                  className={`flex w-full  shadow-sm justify-center py-[8px] h-[39px] px-[16px]  items-center font-medium  rounded-[4px] gap-1  border-[1px]  border-solid border-neutral200 text-mMedium  cursor-pointer  ${'bg-primaryMain text-neutral0 hover:bg-primaryHover'}`}
+                >
+                  <FilterIcon stroke={`${'var(--neutral-0)'}`} />
 
-                    <p className="w-[60%]">
-                      {ManageLocales('app.modifyFilter')}
-                    </p>
-                    <div
-                      className="w-[17%] cursor-pointer"
-                      onClick={e => {
-                        e.stopPropagation();
-                        setBid(filterData.bidData);
-                        dispatch(filterFunction({}));
-                      }}
-                    >
-                      <Image src={crossIcon} alt="crossIcon" />
-                    </div>
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => {
-                      dispatch(
-                        filterFunction({
-                          bidData: rows
-                        })
-                      );
-                      router.push(`/v2/turkey?active-tab=form`);
+                  <p className="w-[60%]">{ManageLocales('app.modifyFilter')}</p>
+                  <div
+                    className="w-[17%] cursor-pointer"
+                    onClick={e => {
+                      e.stopPropagation();
+                      setBid(filterData.bidData);
+                      dispatch(filterFunction({}));
                     }}
-                    disabled={!rows.length}
-                    className={`flex justify-center  shadow-sm disabled:!bg-neutral100 disabled:cursor-not-allowed disabled:text-neutral400 py-[8px] h-[39px] px-[16px] items-center font-medium  rounded-[4px] gap-1  border-[1px]  border-solid border-neutral200 text-mMedium  cursor-pointer  ${'text-neutral900 bg-neutral0 hover:bg-neutral50'}`}
                   >
-                    <FilterIcon
-                      stroke={`${
-                        !rows.length
-                          ? 'var(--neutral-400)'
-                          : 'var(--neutral-900)'
-                      }`}
-                    />
+                    <Image src={crossIcon} alt="crossIcon" />
+                  </div>
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    dispatch(
+                      filterFunction({
+                        bidData: rows
+                      })
+                    );
+                    router.push(`/v2/turkey?active-tab=form`);
+                  }}
+                  disabled={!rows.length}
+                  className={`flex justify-center  shadow-sm disabled:!bg-neutral100 disabled:cursor-not-allowed disabled:text-neutral400 py-[8px] h-[39px] px-[16px] items-center font-medium  rounded-[4px] gap-1  border-[1px]  border-solid border-neutral200 text-mMedium  cursor-pointer  ${'text-neutral900 bg-neutral0 hover:bg-neutral50'}`}
+                >
+                  <FilterIcon
+                    stroke={`${
+                      !rows.length ? 'var(--neutral-400)' : 'var(--neutral-900)'
+                    }`}
+                  />
 
-                    <p>{ManageLocales('app.applyFilter')}</p>
-                  </button>
-                )}
-              </div>
-            )}
+                  <p>{ManageLocales('app.applyFilter')}</p>
+                </button>
+              )}
+            </div>
 
             <div
               className=" rounded-[4px] cursor-pointer"
@@ -503,10 +445,7 @@ const TurkeyDataTable = ({
         isFullScreen ? 'h-[69vh]' : !rows.length ? 'h-[55vh]' : 'h-[60vh]'
       }  mt-[50px]`}
     >
-      {(activeTab === 1 && activeCount === 0) ||
-      (activeTab === 0 && bidCount === 0) ||
-      (activeTab === 2 && historyCount === 0) ||
-      rows.length === 0 ? (
+      {rows.length === 0 ? (
         <>
           <Image src={empty} alt={'empty'} />
           <p className="text-neutral900  w-[320px] text-center ">
@@ -521,9 +460,6 @@ const TurkeyDataTable = ({
       )}
     </div>
   );
-  useEffect(() => {
-    setIsTabSwitch(false);
-  }, [paginatedData]);
 
   let isNudge = localStorage.getItem('show-nudge') === 'MINI';
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
@@ -646,13 +582,7 @@ const TurkeyDataTable = ({
               // marginLeft:!cell.id.includes('shape') && '-12px',
               borderBottom: '1px solid var(--neutral-50)',
               padding: '0px',
-              // padding: ['discount', 'price_per_carat', 'rap'].includes(
-              //   cell.column.id
-              // )
-              //   ? '0px 6px'
-              //   : '0px 2px',
-              // height: '20px !important',
-              // fontSize: '12px !important',
+
               ':hover': {
                 border: 'none',
                 background: 'red'
