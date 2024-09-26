@@ -107,7 +107,8 @@ const Form = ({
   setIsAddDemand,
   isMatchingPair = false,
   isLoading,
-  setIsCommonLoading
+  setIsCommonLoading,
+  isTurkey = false
 }: {
   searchUrl: string;
   setSearchUrl: Dispatch<SetStateAction<string>>;
@@ -130,6 +131,7 @@ const Form = ({
   isMatchingPair: boolean;
   isLoading: boolean;
   setIsCommonLoading: Dispatch<SetStateAction<boolean>>;
+  isTurkey?: boolean;
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -318,6 +320,18 @@ const Form = ({
       });
 
       setError('');
+    }
+    if (isTurkey) {
+      setErrorText('');
+      setIsLoading(true);
+      triggerProductCountApi({ searchUrl: `${searchUrl}&turkey_event=true` })
+        .unwrap()
+        .then((response: any) => {
+          setData(response), setError(''), setIsLoading(false);
+        })
+        .catch(e => {
+          setError(e), setIsLoading(false);
+        });
     } else if (searchUrl.length > 0) {
       setErrorText('');
       setIsLoading(true);
@@ -550,6 +564,8 @@ const Form = ({
       );
       router.push(`/v2/bid-2-buy`);
       setSearchUrl('');
+    } else if (isTurkey) {
+      router.push(`/v2/turkey`);
     } else if (
       JSON.parse(localStorage.getItem(formIdentifier)!)?.length >=
         MAX_SEARCH_TAB_LIMIT &&
@@ -1010,7 +1026,9 @@ const Form = ({
       },
 
       isHidden:
-        subRoute === SubRoutes.NEW_ARRIVAL || subRoute === SubRoutes.BID_TO_BUY
+        subRoute === SubRoutes.NEW_ARRIVAL ||
+        subRoute === SubRoutes.BID_TO_BUY ||
+        isTurkey
     },
     {
       variant: 'primary',

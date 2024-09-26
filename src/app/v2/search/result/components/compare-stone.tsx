@@ -254,7 +254,13 @@ const CompareStone = ({
   };
 
   return (
-    <div className="w-[calc(100vw-116px)] h-[calc(100vh-120px)] ">
+    <div
+      className={
+        isFrom === 'Diamond List'
+          ? 'w-[calc(100vw-116px)] h-[calc(100vh-80px)] '
+          : 'w-[calc(100vw-116px)] h-[calc(100vh-120px)] '
+      }
+    >
       {' '}
       <div className="flex gap-[8px] items-center p-4">
         <Image

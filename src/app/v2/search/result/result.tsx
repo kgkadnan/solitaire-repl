@@ -597,6 +597,7 @@ const Result = ({
 
     fetchColumns();
   }, [dataTableState.rows]);
+
   const closeSearch = (
     removeDataIndex: number,
     yourSelection: ISavedSearch[]

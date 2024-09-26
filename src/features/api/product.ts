@@ -54,6 +54,12 @@ export const productApi = createApi({
         body: data
       }),
       invalidatesTags: ['Product']
+    }),
+    getAllTurkeyProduct: builder.query({
+      query: ({ offset, limit, url }) => ({
+        url: `/store/products?limit=${limit}&offset=${offset}&turkey_event=true&${url}`
+      })
+      // providesTags: ['Product']
     })
   })
 });
@@ -66,5 +72,6 @@ export const {
   useConfirmProductMutation,
   useGetProductByIdMutation,
   useAddDemandMutation,
-  useCheckProductAvailabilityMutation
+  useCheckProductAvailabilityMutation,
+  useLazyGetAllTurkeyProductQuery
 } = productApi;

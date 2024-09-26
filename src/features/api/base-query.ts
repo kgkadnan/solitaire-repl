@@ -22,9 +22,6 @@ export const createBaseQuery = (
       if (auth && token) {
         headers.set('Authorization', `Bearer ${token}`);
       }
-
-      // Add tracking-header
-
       headers.set(
         'tracking-header',
         JSON.stringify({
@@ -34,7 +31,6 @@ export const createBaseQuery = (
           device_type: deviceType
         })
       );
-
       // Merge custom headers with existing headers
       customHeaders &&
         Object.keys(customHeaders).forEach(key => {
