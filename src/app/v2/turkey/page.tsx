@@ -313,36 +313,10 @@ const Turkey = () => {
     fetchProducts();
   }, []);
 
-  useEffect(() => {
-    // setIsLoading(true)
-    fetchProducts();
-  }, [searchUrl]);
-  const handleTabClick = (index: number) => {
-    setActiveTab(index);
-    if (index !== activeTab) {
-      // setIsLoading(true);
-      setIsTabSwitch(true);
-    }
+  // useEffect(() => {
+  //   fetchProducts();
+  // }, [searchUrl]);
 
-    setRowSelection({});
-    if (index === 1 && activeBid.length > 0) {
-      activeBid.map((row: any) => {
-        if (row.current_max_bid > row.my_current_bid) {
-          setRowSelection(prev => {
-            return { ...prev, [row.id]: true };
-          });
-        } else {
-          setRowSelection((prev: any) => {
-            let prevRows = { ...prev };
-            delete prevRows[row.id];
-            return prevRows;
-          });
-        }
-      });
-    }
-  };
-
-  const [activeBid, setActiveBid] = useState<any>();
   const [bid, setBid] = useState<any>();
   const [time, setTime] = useState<any>();
   useEffect(() => {
@@ -352,8 +326,6 @@ const Turkey = () => {
 
     setTimeDifference(timeDiff);
   }, [time]);
-  const { authToken } = useUser();
-  console.log(bid, 'kkkkkkkkkkkkkkkkkk');
 
   useEffect(() => {
     const fetchColumns = async () => {
@@ -427,12 +399,7 @@ const Turkey = () => {
   const handleCreateAppointment = () => {
     let selectedIds = Object.keys(rowSelection);
 
-    let data: any;
-    if (activeTab === 1) {
-      data = activeBid;
-    } else if (activeTab === 0) {
-      data = bid;
-    }
+    let data: any = bid;
 
     if (selectedIds.length > 0) {
       const hasMemoOut = selectedIds?.some((id: string) => {
@@ -1318,13 +1285,7 @@ const Turkey = () => {
         <div className="mt-[16px]">
           <div>
             <DiamondDetailsComponent
-              data={
-                activeTab === 0
-                  ? bid
-                  : activeTab === 1
-                  ? activeBid
-                  : bidHistory?.data
-              }
+              data={bid}
               filterData={detailPageData}
               goBackToListView={goBack}
               handleDetailPage={handleDetailPage}
@@ -1511,19 +1472,15 @@ const Turkey = () => {
                   <TurkeyDataTable
                     searchUrl={searchUrl}
                     setSearchUrl={setSearchUrl}
-                    // dispatch={dispatch}
-                    // filterData={filterData}
                     columns={memoizedColumns}
                     modalSetState={modalSetState}
                     setErrorText={setErrorText}
                     downloadExcel={downloadExcel}
                     setIsError={setIsError}
-                    activeTab={activeTab}
-                    handleTabClick={handleTabClick}
+                    activeTab={0}
                     rows={bid}
                     isSkeletonLoading={isSkeletonLoading}
                     setIsSkeletonLoading={setIsSkeletonLoading}
-                    // setBid={setBid}
                     rowSelection={rowSelection}
                     setRowSelection={setRowSelection}
                     setIsLoading={setIsLoading}

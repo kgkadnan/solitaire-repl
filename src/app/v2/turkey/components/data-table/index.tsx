@@ -151,9 +151,6 @@ const TurkeyDataTable = ({
   setIsLoading,
   renderFooter,
   router,
-  // filterData,
-  // setBid,
-  // dispatch,
   setIsSkeletonLoading,
   isSkeletonLoading,
   searchUrl,
@@ -437,7 +434,6 @@ const TurkeyDataTable = ({
                 setErrorText={setErrorText}
                 setIsError={setIsError}
                 identifier={'Turkey'}
-                // activeTab={activeTab}
                 shareTrackIdentifier={'Turkey'}
               />
             </div>
@@ -536,9 +532,6 @@ const TurkeyDataTable = ({
     },
 
     muiTableBodyRowProps: ({ row }) => {
-      const isHighlightBackground =
-        activeTab !== 0 && RenderNewArrivalLotIdColor({ row });
-
       return {
         onClick: row.id.includes('shape')
           ? row.getToggleExpandedHandler()
@@ -555,9 +548,7 @@ const TurkeyDataTable = ({
             // Target the specific cell that matches the lot_id column within a hovered row
             '& .MuiTableCell-root[data-index="1"]::after': {
               // Change the background color to red if isHighlightBackground is true, otherwise maintain the default hover color
-              backgroundColor: isHighlightBackground
-                ? `${isHighlightBackground.background} !important`
-                : 'var(--neutral-50)'
+              backgroundColor: 'var(--neutral-50)'
             }
           },
           '&.MuiTableRow-root .MuiTableCell-root::after': {
