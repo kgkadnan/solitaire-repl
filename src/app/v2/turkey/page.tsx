@@ -134,7 +134,8 @@ const Turkey = () => {
   };
 
   useEffect(() => {
-    setSearchUrl(queryParamsData.queryParams), fetchProducts();
+    setSearchUrl(queryParamsData.queryParams),
+      fetchProducts(queryParamsData.queryParams);
   }, [queryParamsData]);
 
   const [triggerColumn, { data: columnData }] =
@@ -248,49 +249,52 @@ const Turkey = () => {
       });
   const [activeTab, setActiveTab] = useState(0);
 
-  const fetchProducts = async () => {
-    triggerTurkeyProductApi({ url: searchUrl, limit: 300, offset: 0 }).then(
-      (res: any) => {
-        if (columnHeaders?.length > 0) {
-          if (res?.error?.status === statusCode.UNAUTHORIZED) {
-            // setHasLimitExceeded(true);
-            setBid([]);
+  const fetchProducts = async (query?: string) => {
+    setIsSkeletonLoading(true);
+    triggerTurkeyProductApi({
+      url: query ?? searchUrl,
+      limit: 300,
+      offset: 0
+    }).then((res: any) => {
+      if (columnHeaders?.length > 0) {
+        if (res?.error?.status === statusCode.UNAUTHORIZED) {
+          // setHasLimitExceeded(true);
+          setBid([]);
+        } else {
+          // setHasLimitExceeded(false);
+          if (res.data?.products.length > 0) {
+            setBid(res.data?.products);
+            setIsSkeletonLoading(false);
           } else {
-            // setHasLimitExceeded(false);
-            if (res.data?.products.length > 0) {
-              console.log('hererererererer');
-              setBid(res.data?.products);
-            } else {
-              modalSetState.setIsDialogOpen(true);
-              modalSetState.setDialogContent(
-                <CommonPoppup
-                  status="warning"
-                  content={''}
-                  customPoppupBodyStyle="!mt-[70px]"
-                  header={NO_PRODUCT_FOUND}
-                  actionButtonData={[
-                    {
-                      variant: 'primary',
-                      label: ManageLocales('app.modal.okay'),
-                      handler: () => {
-                        modalSetState.setIsDialogOpen(false);
-                      },
-                      customStyle: 'flex-1 h-10'
-                    }
-                  ]}
-                />
-              );
-            }
-            // res.data?.products;
+            modalSetState.setIsDialogOpen(true);
+            modalSetState.setDialogContent(
+              <CommonPoppup
+                status="warning"
+                content={''}
+                customPoppupBodyStyle="!mt-[70px]"
+                header={NO_PRODUCT_FOUND}
+                actionButtonData={[
+                  {
+                    variant: 'primary',
+                    label: ManageLocales('app.modal.okay'),
+                    handler: () => {
+                      modalSetState.setIsDialogOpen(false);
+                    },
+                    customStyle: 'flex-1 h-10'
+                  }
+                ]}
+              />
+            );
           }
-
-          setRowSelection({});
-          setErrorText('');
-          setBid(res.data?.products);
-          setIsLoading(false);
+          // res.data?.products;
         }
+
+        setRowSelection({});
+        setErrorText('');
+        setBid(res.data?.products);
+        setIsLoading(false);
       }
-    );
+    });
   };
   useEffect(() => {
     // setIsLoading(true)
