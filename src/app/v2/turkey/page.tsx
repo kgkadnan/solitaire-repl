@@ -251,7 +251,6 @@ const Turkey = () => {
   const [activeTab, setActiveTab] = useState(0);
 
   const fetchProducts = async (query?: string) => {
-    console.log(searchUrl, '=============', query);
     setIsSkeletonLoading(true);
     triggerTurkeyProductApi({
       url: query ?? searchUrl,
