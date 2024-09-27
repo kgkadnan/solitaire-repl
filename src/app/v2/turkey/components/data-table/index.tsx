@@ -346,7 +346,7 @@ const TurkeyDataTable = ({
                       setSearchUrl('');
                       dispatch(
                         queryParamsFunction({
-                          queryParams: ''
+                          queryParams: {}
                         })
                       );
                       // setBid(filterData.bidData);

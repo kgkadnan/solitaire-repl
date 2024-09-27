@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const queryParamsSlice = createSlice({
   name: 'queryParams',
   initialState: {
-    queryParams: ''
+    queryParams: {}
   },
   reducers: {
     queryParamsFunction: (state, action) => {
