@@ -524,7 +524,7 @@ const Form = ({
   useEffect(() => {
     if (isTurkey) {
       let queryData = constructUrlParams(queryParamsData.queryParams);
-      setModifySearch(queryData, setState);
+      setModifySearch(queryParamsData.queryParams, setState);
       setSearchUrl(queryData);
     }
   }, [queryParamsData]);
