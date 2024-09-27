@@ -80,6 +80,7 @@ import { filterFunction } from '@/features/filter-new-arrival/filter-new-arrival
 import { parseQueryString } from './helpers/parse-query-string';
 import { filterBidData } from './helpers/filter-bid-data';
 import { filterBidToBuyFunction } from '@/features/filter-bid-to-buy/filter-bid-to-buy-slice';
+import { queryParamsFunction } from '@/features/event-params/event-param-slice';
 
 export interface ISavedSearch {
   saveSearchName: string;
@@ -107,7 +108,8 @@ const Form = ({
   setIsAddDemand,
   isMatchingPair = false,
   isLoading,
-  setIsCommonLoading
+  setIsCommonLoading,
+  isTurkey = false
 }: {
   searchUrl: string;
   setSearchUrl: Dispatch<SetStateAction<string>>;
@@ -130,6 +132,7 @@ const Form = ({
   isMatchingPair: boolean;
   isLoading: boolean;
   setIsCommonLoading: Dispatch<SetStateAction<boolean>>;
+  isTurkey?: boolean;
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -241,6 +244,8 @@ const Form = ({
   const { setIsInputDialogOpen } = modalSetState;
   const [data, setData] = useState<any>();
   const [error, setError] = useState<any>();
+  const queryParamsData = useAppSelector(state => state.queryParams);
+
   let [
     triggerProductCountApi,
     { isLoading: isLoadingProductApi, isFetching: isFetchingProductApi }
@@ -318,6 +323,17 @@ const Form = ({
       });
 
       setError('');
+    } else if (isTurkey) {
+      setErrorText('');
+      setIsLoading(true);
+      triggerProductCountApi({ searchUrl: `${searchUrl}&turkey_event=true` })
+        .unwrap()
+        .then((response: any) => {
+          setData(response), setError(''), setIsLoading(false);
+        })
+        .catch(e => {
+          setError(e), setIsLoading(false);
+        });
     } else if (searchUrl.length > 0) {
       setErrorText('');
       setIsLoading(true);
@@ -504,6 +520,14 @@ const Form = ({
       handleFormReset();
     }
   }, [subRoute]);
+
+  useEffect(() => {
+    if (isTurkey) {
+      let queryData = constructUrlParams(queryParamsData.queryParams);
+      setModifySearch(queryParamsData.queryParams, setState);
+      setSearchUrl(queryData);
+    }
+  }, [queryParamsData]);
   const handleFormSearch = async (
     isSavedParams: boolean = false,
     id?: string,
@@ -550,6 +574,13 @@ const Form = ({
       );
       router.push(`/v2/bid-2-buy`);
       setSearchUrl('');
+    } else if (isTurkey) {
+      dispatch(
+        queryParamsFunction({
+          queryParams: generateQueryParams(state)
+        })
+      );
+      router.push(`/v2/turkey`);
     } else if (
       JSON.parse(localStorage.getItem(formIdentifier)!)?.length >=
         MAX_SEARCH_TAB_LIMIT &&
@@ -1010,7 +1041,9 @@ const Form = ({
       },
 
       isHidden:
-        subRoute === SubRoutes.NEW_ARRIVAL || subRoute === SubRoutes.BID_TO_BUY
+        subRoute === SubRoutes.NEW_ARRIVAL ||
+        subRoute === SubRoutes.BID_TO_BUY ||
+        isTurkey
     },
     {
       variant: 'primary',
@@ -1050,18 +1083,20 @@ const Form = ({
           : handleFormSearch,
 
       isDisable:
-        !searchUrl.length ||
-        (!(
-          isLoading ||
-          isLoadingProductApi ||
-          isLoadingMatchPairApi ||
-          isFetchingMatchPairApi ||
-          isFetchingProductApi
-        ) &&
-          (isMatchingPair
-            ? data?.count > MAX_SEARCH_FORM_COUNT / 2
-            : data?.count > MAX_SEARCH_FORM_COUNT) &&
-          data?.count > MIN_SEARCH_FORM_COUNT),
+        !searchUrl.length || minMaxError.length > 0
+          ? true
+          : false ||
+            (!(
+              isLoading ||
+              isLoadingProductApi ||
+              isLoadingMatchPairApi ||
+              isFetchingMatchPairApi ||
+              isFetchingProductApi
+            ) &&
+              (isMatchingPair
+                ? data?.count > MAX_SEARCH_FORM_COUNT / 2
+                : data?.count > MAX_SEARCH_FORM_COUNT) &&
+              data?.count > MIN_SEARCH_FORM_COUNT),
 
       isLoading:
         isLoading ||
