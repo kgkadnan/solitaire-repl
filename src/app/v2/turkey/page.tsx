@@ -89,6 +89,8 @@ import { setConfirmStoneTrack } from '@/features/confirm-stone-track/confirm-sto
 import { AddCommentDialog } from '@/components/v2/common/comment-dialog';
 import crossIcon from '@public/v2/assets/icons/modal/cross.svg';
 import { handleComment } from '../search/result/helpers/handle-comment';
+import { generateQueryParams } from '../search/form/helpers/generate-query-parameters';
+import { constructUrlParams } from '@/utils/v2/construct-url-params';
 
 const Turkey = () => {
   const router = useRouter();
@@ -132,15 +134,14 @@ const Turkey = () => {
     setDetailImageData(row);
     setIsModalOpen(true);
   };
+  let queryData = constructUrlParams(queryParamsData.queryParams);
 
   useEffect(() => {
-    setSearchUrl(queryParamsData.queryParams),
-      fetchProducts(queryParamsData.queryParams);
-  }, [queryParamsData]);
+    setSearchUrl(queryData), fetchProducts(queryData);
+  }, [queryData]);
 
   const [triggerColumn, { data: columnData }] =
     useLazyGetManageListingSequenceQuery<IManageListingSequenceResponse>();
-
   const mapColumns = (columns: any) =>
     columns
       ?.filter(({ is_disabled }: any) => !is_disabled)
@@ -250,6 +251,7 @@ const Turkey = () => {
   const [activeTab, setActiveTab] = useState(0);
 
   const fetchProducts = async (query?: string) => {
+    console.log(searchUrl, '=============', query);
     setIsSkeletonLoading(true);
     triggerTurkeyProductApi({
       url: query ?? searchUrl,
@@ -298,7 +300,9 @@ const Turkey = () => {
   };
   useEffect(() => {
     // setIsLoading(true)
-    queryParamsData.queryParams === '' && fetchProducts();
+    // let queryData=generateQueryParams(queryParamsData.queryParams)
+
+    queryData === '' && fetchProducts();
   }, []);
 
   const [bid, setBid] = useState<any>();
