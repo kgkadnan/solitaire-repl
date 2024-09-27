@@ -523,7 +523,8 @@ const Form = ({
 
   useEffect(() => {
     if (isTurkey) {
-      setSearchUrl(queryParamsData.queryParams);
+      let queryData = constructUrlParams(queryParamsData.queryParams);
+      setSearchUrl(queryData);
     }
   }, [queryParamsData]);
   const handleFormSearch = async (
@@ -575,7 +576,7 @@ const Form = ({
     } else if (isTurkey) {
       dispatch(
         queryParamsFunction({
-          queryParams: searchUrl
+          queryParams: generateQueryParams(state)
         })
       );
       router.push(`/v2/turkey`);
