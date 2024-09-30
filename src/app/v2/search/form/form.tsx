@@ -1058,6 +1058,7 @@ const Form = ({
               !isLoading &&
               !isFetchingProductApi &&
               minMaxError.length === 0 &&
+              validationError.length === 0 &&
               errorText === NO_STONE_FOUND &&
               isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
             ? 'Add Demand'
@@ -1077,13 +1078,16 @@ const Form = ({
             !isLoading &&
             !isFetchingProductApi &&
             minMaxError.length === 0 &&
+            validationError.length === 0 &&
             errorText === NO_STONE_FOUND &&
             isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
           ? handleAddDemand
           : handleFormSearch,
 
       isDisable:
-        !searchUrl.length || minMaxError.length > 0
+        !searchUrl.length ||
+        minMaxError.length > 0 ||
+        validationError.length > 0
           ? true
           : false ||
             (!(
