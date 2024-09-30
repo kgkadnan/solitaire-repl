@@ -51,13 +51,13 @@ export const Carat = ({
 }: ICaratProps) => {
   const handleMaxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (/^\d*\.?\d{0,2}$/.test(event.target.value)) {
-      setCaratError('');
+      setValidationError('');
       setCaratMax(event.target.value);
     }
   };
   const handleMinChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (/^\d*\.?\d{0,2}$/.test(event.target.value)) {
-      setCaratError('');
+      setValidationError('');
       setCaratMin(event.target.value);
     }
   };
@@ -67,23 +67,23 @@ export const Carat = ({
     const caratRange = value.split('-');
 
     if (caratRange[0] === '' && caratRange[1] === '') {
-      setCaratError(
+      setValidationError(
         `Please enter a range between ${formatNumber(
           carat.range.gte
         )} to ${formatNumber(carat.range.lte)} only`
       );
       return;
     } else if (caratRange[0] === '') {
-      setCaratError(`"From" field cannot be empty`);
+      setValidationError(`"From" field cannot be empty`);
       return;
     } else if (caratRange[1] === '') {
-      setCaratError(`"To" field cannot be empty`);
+      setValidationError(`"To" field cannot be empty`);
       return;
     } else if (
       Number(caratRange[0]) < carat.range.gte ||
       Number(caratRange[1]) > carat.range.lte
     ) {
-      setCaratError(
+      setValidationError(
         `Please enter a range between ${formatNumber(
           carat.range.gte
         )} to ${formatNumber(carat.range.lte)} only`
@@ -92,12 +92,12 @@ export const Carat = ({
     }
 
     if (Number(caratRange[0]) > Number(caratRange[1])) {
-      setCaratError('“From” should be less than “To”');
+      setValidationError('“From” should be less than “To”');
       return;
     }
 
     if (caratRange[0] === '' || caratRange[1] === '') {
-      setCaratError(`Please enter a valid carat range.`);
+      setValidationError(`Please enter a valid carat range.`);
       return;
     } else if (caratRange.length === 2) {
       const caratFrom = parseFloat(caratRange[0]).toFixed(2);
@@ -175,7 +175,8 @@ export const Carat = ({
                       }
                     }}
                     inputGap="gap-[10px] !mb-[0px]"
-                    errorText={caratError}
+                    errorText={validationError}
+                    isShowError={false}
                   />
                 </div>
                 <div className="">
@@ -305,9 +306,9 @@ export const Carat = ({
                 </AccordionItem>
               </Accordion>
             </div>
-            <div className="h-[1vh] mt-1 text-dangerMain">
+            {/* <div className="h-[1vh] mt-1 text-dangerMain">
               {validationError ?? validationError}
-            </div>
+            </div> */}
           </div>
         }
         accordionTrigger={'Carats'}
