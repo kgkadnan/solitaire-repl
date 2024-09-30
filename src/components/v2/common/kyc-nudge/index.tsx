@@ -7,6 +7,7 @@ import ActionButton from '../action-button';
 import { useRouter } from 'next/navigation';
 import tick from '@public/v2/assets/icons/stepper/completed.svg';
 import benefit from '@public/v2/assets/icons/nudge-benefit.svg';
+import { Tracking_KYC_Entry_Point } from '@/constants/funnel-tracking';
 
 const KycNudgeModal = ({ onClose }: any) => {
   const router = useRouter();
@@ -68,7 +69,11 @@ const KycNudgeModal = ({ onClose }: any) => {
                   label: 'Complete KYC Now',
                   handler: () => {
                     localStorage.setItem('show-nudge', 'MINI'),
-                      router.push('/v2/kyc');
+                      localStorage.setItem(
+                        'kyc_entryPoint',
+                        Tracking_KYC_Entry_Point.KYC_Bottom_Sheet
+                      );
+                    router.push('/v2/kyc');
                   },
                   customStyle: 'flex-1 w-full'
                 }

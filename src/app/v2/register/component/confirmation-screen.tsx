@@ -5,7 +5,10 @@ import { IndividualActionButton } from '@/components/v2/common/action-button/ind
 import { useRouter } from 'next/navigation';
 import { useLazyTrackRegisterFlowQuery } from '@/features/api/register';
 import { isSessionValid } from '@/utils/manage-session';
-import { Tracking } from '@/constants/funnel-tracking';
+import {
+  Tracking,
+  Tracking_KYC_Entry_Point
+} from '@/constants/funnel-tracking';
 import { useLazyRegisterFunnelQuery } from '@/features/api/funnel';
 import { trackEvent } from '@/utils/ga';
 
@@ -51,6 +54,11 @@ const ConfirmScreen = () => {
                   entry_point: localStorage.getItem('entryPoint') || '',
                   category: 'Register'
                 });
+              localStorage.setItem(
+                'kyc_entryPoint',
+                Tracking_KYC_Entry_Point.KYC_Registration_Page
+              );
+
               router.push(`/v2/kyc`);
             }}
             variant={'primary'}
