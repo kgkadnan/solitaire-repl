@@ -46,6 +46,8 @@ import { KycStatusScreen } from '@/components/v2/common/kyc-status-screen';
 import { statusCode } from '@/constants/enums/status-code';
 import { useRouter } from 'next/navigation';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
+import { trackEvent } from '@/utils/ga';
+import { Tracking_KYC } from '@/constants/funnel-tracking';
 
 const initialTokenState = {
   token: '',
@@ -86,6 +88,26 @@ const KYC = () => {
   const { setOtpValues, setResendTimer } = otpVerificationSetState;
 
   const dispatch = useAppDispatch();
+
+  const trackCountry = (country: string) => {
+    if (country === countries.INDIA) {
+      localStorage.setItem('country', countries.INDIA);
+
+      return Tracking_KYC.KYC_Country_India;
+    } else if (country === countries.BELGIUM) {
+      localStorage.setItem('country', countries.BELGIUM);
+
+      return Tracking_KYC.KYC_Country_Belgium;
+    } else if (country === countries.USA) {
+      localStorage.setItem('country', 'US');
+
+      return Tracking_KYC.KYC_Country_US;
+    } else {
+      localStorage.setItem('country', 'Dubai');
+
+      return Tracking_KYC.KYC_Country_Dubai;
+    }
+  };
   const handleCountrySelection = (country: string) => {
     if (formState.country === country) {
       setSelectedCountry(country);
@@ -106,6 +128,11 @@ const KYC = () => {
         value: country
       })
     );
+    trackEvent({
+      action: trackCountry(country),
+      entry_point: localStorage.getItem('kyc_entryPoint') || '',
+      category: 'KYC'
+    });
   };
 
   const handleSubmissionOptionClick = (selection: string) => {
@@ -128,6 +155,15 @@ const KYC = () => {
         value: selection !== 'online'
       })
     );
+    trackEvent({
+      action:
+        selection === 'online'
+          ? Tracking_KYC.KYC_Form_Online_Form_Selection
+          : Tracking_KYC.KYC_Form_Offline_Form_Selection,
+      entry_point: localStorage.getItem('kyc_entryPoint') || '',
+      category: 'KYC',
+      country: localStorage.getItem('country') || ''
+    });
   };
 
   const handleBack = (currentState: string) => {
@@ -136,6 +172,12 @@ const KYC = () => {
     } else {
       setCurrentState(currentState);
     }
+    trackEvent({
+      action: Tracking_KYC.Click_Back_KYC_Form,
+      entry_point: localStorage.getItem('kyc_entryPoint') || '',
+      category: 'KYC',
+      country: localStorage.getItem('country') || ''
+    });
   };
 
   const resendLabel = resendTimer > 0 ? `(${resendTimer}Sec)` : '';
