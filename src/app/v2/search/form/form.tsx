@@ -1352,15 +1352,20 @@ const Form = ({
       >
         <div
           className={` flex items-center w-full  ${
-            isError || minMaxError ? 'justify-between' : 'justify-end'
+            isError || minMaxError || validationError
+              ? 'justify-between'
+              : 'justify-end'
           } `}
         >
-          {(isError || minMaxError.length > 0) && (
+          {(isError ||
+            minMaxError.length > 0 ||
+            validationError.length > 0) && (
             <div>
               <span className="hidden  text-successMain" />
               <span
                 className={`text-mRegular font-medium text-${
                   minMaxError.length > 0 ||
+                  validationError.length > 0 ||
                   errorText === EXCEEDS_LIMITS ||
                   errorText === EXCEEDS_LIMITS_MATCHING_PAIR ||
                   errorText === NO_MATCHING_PAIRS_FOUND ||
@@ -1377,6 +1382,8 @@ const Form = ({
                   ? ''
                   : minMaxError.length
                   ? minMaxError
+                  : validationError.length
+                  ? validationError
                   : !isValidationError && errorText}
               </span>
             </div>
