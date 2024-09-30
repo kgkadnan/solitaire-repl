@@ -105,7 +105,6 @@ const Tracebility3d: React.FC = () => {
     };
   }, []);
 
-  console.log(currentFrame, 'jyoti');
   return (
     <div className="min-h-screen">
       <canvas ref={canvasRef3d} />

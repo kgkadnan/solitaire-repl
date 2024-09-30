@@ -48,6 +48,8 @@ import { copyURLApi } from './features/api/track-public-url-copy';
 import { trackApi } from './features/api/track-interaction';
 import { matchingPairApi } from './features/api/match-pair';
 import trackPageApi from './features/api/track-page';
+import { funnelApi } from './features/api/funnel';
+import queryParamsReducer from './features/event-params/event-param-slice';
 
 const rootReducer = combineReducers({
   notificationBadge: notificationBadgeReducer,
@@ -55,6 +57,8 @@ const rootReducer = combineReducers({
   pageTimeTracking: trackPageEventReducer,
   filterNewArrival: filterNewArrivalReducer,
   filterBidToBuy: filterBidToBuyReducer,
+  queryParams: queryParamsReducer,
+
   isEditingKYC: isEditingKycSlice,
   searchResult: searchResultReducer,
   searchList: searchListReducer,
@@ -89,7 +93,8 @@ const rootReducer = combineReducers({
   [copyURLApi.reducerPath]: copyURLApi.reducer,
   [trackApi.reducerPath]: trackApi.reducer,
   [matchingPairApi.reducerPath]: matchingPairApi.reducer,
-  [trackPageApi.reducerPath]: trackPageApi.reducer
+  [trackPageApi.reducerPath]: trackPageApi.reducer,
+  [funnelApi.reducerPath]: funnelApi.reducer
 });
 
 const handle410Middleware =
@@ -137,6 +142,7 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
         trackApi.middleware,
         matchingPairApi.middleware,
         trackPageApi.middleware,
+        funnelApi.middleware,
         handle410Middleware
       ),
     preloadedState

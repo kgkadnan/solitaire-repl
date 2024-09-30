@@ -24,7 +24,9 @@ import CommonHeader from '@/components/v3/navigation-menu/header';
 import SubscribeNewsLetter from '@/components/v3/subscribe-newsletter';
 import FooterSiteMap from '@/components/v3/footer-sitemap';
 import Footer from '@/components/v3/footer';
+import { useMediaQuery } from 'react-responsive';
 // import Salesiq from '@/components/v2/common/sales-iq';
+// import Script from 'next/script';
 
 const store = setupStore();
 
@@ -39,13 +41,13 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
   const [open, setOpen] = useState(false);
   const [showLPHeader, setShowLPHeader] = useState(false);
   const showHeader = isApplicationRoutes && !headerlessRoutes.includes(path);
+  const isMobile = useMediaQuery({ maxWidth: 1024 });
+  // const GA_TRACKING_ID = process.env.NEXT_PUBLIC_GA; // Replace with your GA4 Measurement ID
+
   // || path === '/';
   // Create a component that just renders children, with children as an optional prop
   const ChildrenComponent: FC<{ children?: ReactNode }> = ({ children }) => (
-    <>
-      {children}
-      <AppDownloadPopup></AppDownloadPopup>
-    </>
+    <>{children}</>
   );
 
   useEffect(() => {
@@ -56,6 +58,22 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
 
     return () => clearTimeout(timer); // Cleanup on unmount
   }, []);
+
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      // Remove the specific localStorage item
+      localStorage.removeItem('entryPoint');
+    };
+
+    // Listen for the beforeunload event
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      // Clean up the event listener on component unmount
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
+
   // Wrap the ChildrenComponent with authorizedLogin if it's a secure page
   const SecureComponent = protectedRoutes.includes(path)
     ? authorizedLogin(ChildrenComponent)
@@ -71,7 +89,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
       const disableDevtool = require('disable-devtool');
       disableDevtool({
         disableMenu: true,
-        ondevtoolopen(_type: any, _next: any) {
+        ondevtoolopen(_type: string, _next: () => void) {
           setOpen(true);
         },
         ignore: () => {
@@ -80,6 +98,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
       });
     }
   });
+
   return (
     <html lang="en">
       <head>
@@ -95,6 +114,24 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
         `
           }}
         />
+        {/* <Script
+          strategy="afterInteractive"
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
+        /> */}
+        {/* <Script
+          id="ga4-init"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_TRACKING_ID}', {
+              page_path: window.location.pathname,
+            });
+          `
+          }}
+        /> */}
       </head>
       <Head>
         <link
@@ -140,21 +177,26 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
           <ThemeProviders>
             {isV3Route ? (
               <>
-                <main className="">
-                  <Toaster />
-                  {showLPHeader && <CommonHeader />}
-                  <div>{children}</div>
-                  <div style={{ zIndex: 100 }}>
-                    <SubscribeNewsLetter />
-                    <FooterSiteMap />
-                    <Footer />
-                  </div>
-                </main>
-                <AppDownloadPopup></AppDownloadPopup>
+                {isMobile ? (
+                  <AppDownloadPopup></AppDownloadPopup>
+                ) : (
+                  <main className="">
+                    <Toaster />
+                    {showLPHeader && <CommonHeader />}
+                    <div>{children}</div>
+                    <div style={{ zIndex: 100 }}>
+                      <SubscribeNewsLetter />
+                      <FooterSiteMap />
+                      <Footer />
+                    </div>
+                  </main>
+                )}
               </>
             ) : isV2Route ? (
               <>
-                {showHeader ? (
+                {isMobile ? (
+                  <AppDownloadPopup></AppDownloadPopup>
+                ) : showHeader ? (
                   <SecureComponent>{children}</SecureComponent>
                 ) : (
                   <ChildrenComponent>{children}</ChildrenComponent>

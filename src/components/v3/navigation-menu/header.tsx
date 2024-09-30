@@ -6,7 +6,14 @@ import kgkLogo from '@public/v3/kgklogo.svg';
 import { usePathname, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import ShimmerButton from '../animated-button';
+import { isSessionValid } from '@/utils/manage-session';
+import { useLazyRegisterFunnelQuery } from '@/features/api/funnel';
+import {
+  Tracking,
+  Tracking_Click_RegisterPage
+} from '@/constants/funnel-tracking';
 import useUser from '@/lib/use-auth';
+// import { trackEvent } from '@/utils/ga';
 
 const CommonHeader = () => {
   const currentRoute = usePathname();
@@ -14,6 +21,8 @@ const CommonHeader = () => {
   const [selectedHeader, setSelectedHeader] = useState<string>('');
   const [showHeader, setShowHeader] = useState(true);
   const lastScrollY = useRef(0);
+  let [funnelTrack] = useLazyRegisterFunnelQuery();
+
   const { authToken } = useUser();
   useEffect(() => {
     if (currentRoute === '/v3' || currentRoute === '/')
@@ -63,6 +72,17 @@ const CommonHeader = () => {
         <div className="flex gap-4 ">
           <CommonButton
             onClick={() => {
+              funnelTrack({
+                step: Tracking.Click_RegisterPage,
+
+                entryPoint: Tracking_Click_RegisterPage.LP_Top_Login,
+                sessionId: isSessionValid()
+              }),
+                localStorage.setItem(
+                  'entryPoint',
+                  Tracking_Click_RegisterPage.LP_Top_Login
+                );
+
               authToken ? router.push('/v2') : router.push('/v2/login');
             }}
             variant={'secondary'}
@@ -75,7 +95,26 @@ const CommonHeader = () => {
 
           <ShimmerButton
             className="!rounded-[8px] w-[120px] h-[44px] text-[16px]"
-            onClick={() => router.push('/v2/register')}
+            onClick={() => {
+              funnelTrack({
+                step: Tracking.Click_RegisterPage,
+
+                entryPoint: Tracking_Click_RegisterPage.LP_Top_Register,
+                sessionId: isSessionValid()
+              }),
+                // trackEvent({
+                //   action: 'click',
+                //   category: 'Button',
+                //   label: 'Test Button',
+                //   value: 1
+                // });
+                localStorage.setItem(
+                  'entryPoint',
+                  Tracking_Click_RegisterPage.LP_Top_Register
+                );
+
+              router.push('/v2/register');
+            }}
             style={{ boxShadow: '0px 1px 2px 0px #1018281F' }}
           >
             Register

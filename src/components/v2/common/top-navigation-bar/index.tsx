@@ -25,6 +25,7 @@ import {
 import { DialogComponent } from '../dialog';
 import logoutConfirmIcon from '@public/v2/assets/icons/modal/logout.svg';
 import crossIcon from '@public/v2/assets/icons/modal/cross.svg';
+import { Skeleton } from '@mui/material';
 
 export interface IUserAccountInfo {
   customer: {
@@ -167,19 +168,34 @@ const TopNavigationBar = ({
 
         <Popover>
           <PopoverTrigger className="flex justify-center">
-            <Avatar className="bg-primaryMain flex items-center justify-center">
-              {imageUrl?.length ? (
-                <img src={imageUrl} alt="profile" />
-              ) : (
-                <p className="text-center text-mRegular text-neutral0">
-                  {`${userAccountInfo?.customer?.first_name
-                    ?.charAt(0)
-                    .toUpperCase()}${userAccountInfo?.customer?.last_name
-                    ?.charAt(0)
-                    .toUpperCase()}`}
-                </p>
-              )}
-            </Avatar>
+            {userAccountInfo?.customer?.first_name !== undefined ? (
+              <Avatar className="bg-primaryMain flex items-center justify-center">
+                {imageUrl?.length ? (
+                  <img
+                    src={imageUrl}
+                    alt="profile"
+                    className="w-[40px] h-[40px] rounded-full object-cover border-none"
+                  />
+                ) : (
+                  <p className="text-center text-mRegular text-neutral0">
+                    {`${userAccountInfo?.customer?.first_name
+                      ?.charAt(0)
+                      .toUpperCase()}${userAccountInfo?.customer?.last_name
+                      ?.charAt(0)
+                      .toUpperCase()}`}
+                  </p>
+                )}
+              </Avatar>
+            ) : (
+              <Skeleton
+                width={40}
+                sx={{ bgcolor: 'var(--neutral-200)' }}
+                height={40}
+                variant="rectangular"
+                animation="wave"
+                className="rounded-[50%]"
+              />
+            )}
           </PopoverTrigger>
           {/* Popover content with radio buttons */}
           <PopoverContent className="z-[999]">
@@ -187,7 +203,11 @@ const TopNavigationBar = ({
               <div className="flex items-center border-b-[1px] border-solid border-primaryBorder p-[16px] gap-[8px]">
                 <Avatar className="bg-primaryMain flex items-center justify-center">
                   {imageUrl.length ? (
-                    <img src={imageUrl} alt="profile" />
+                    <img
+                      src={imageUrl}
+                      alt="profile"
+                      className="w-[40px] h-[40px] rounded-full object-cover border-none"
+                    />
                   ) : (
                     <p className="text-center text-mRegular text-neutral0">
                       {`${userAccountInfo?.customer?.first_name

@@ -37,6 +37,7 @@ import { SubRoutes } from '@/constants/v2/enums/routes';
 import { ManageLocales } from '@/utils/v2/translate';
 import { filterBidToBuyFunction } from '@/features/filter-bid-to-buy/filter-bid-to-buy-slice';
 import BiddingSkeleton from '@/components/v2/skeleton/bidding';
+// import debounce from 'lodash.debounce';
 
 const theme = createTheme({
   typography: {
@@ -355,9 +356,12 @@ const BidToBuyDataTable = ({
                     }}
                     className={`flex w-full shadow-sm justify-center py-[8px] h-[39px] px-[16px]  items-center font-medium  rounded-[4px] gap-1  border-[1px]  border-solid border-neutral200 text-mMedium  cursor-pointer  ${'bg-primaryMain text-neutral0 hover:bg-primaryHover'}`}
                   >
-                    <FilterIcon stroke={`${'var(--neutral-0)'}`} />
+                    <FilterIcon
+                      stroke={`${'var(--neutral-0)'}`}
+                      fill={`${'var(--neutral-0)'}`}
+                    />
 
-                    <p className="w-[60%]">
+                    <p className="w-[70%]">
                       {ManageLocales('app.modifyFilter')}
                     </p>
                     <div
@@ -546,6 +550,9 @@ const BidToBuyDataTable = ({
   );
   let isNudge = localStorage.getItem('show-nudge') === 'MINI';
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
+  // const handleGlobalFilterChange = debounce((value: any) => {
+  //   setGlobalFilter(value);
+  // }, 300);
   //pass table options to useMaterialReactTable
   const table = useMaterialReactTable({
     columns,

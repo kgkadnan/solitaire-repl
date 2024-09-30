@@ -53,6 +53,7 @@ import Form from '../search/form/form';
 import { SubRoutes } from '@/constants/v2/enums/routes';
 import useNumericFieldValidation from '../search/form/hooks/numeric-field-validation-management';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
+import pako from 'pako';
 
 const BidToBuy = () => {
   const router = useRouter();
@@ -283,43 +284,129 @@ const BidToBuy = () => {
     }
   }, [filterData]);
 
-  const handleBidStones = useCallback((data: any) => {
-    setCheckStatus(true);
-    setActiveBid(data.activeStone);
-    if (filterData?.queryParams) {
-      const filteredData =
-        filterData?.bidFilterData?.length > 0
-          ? filterData?.bidFilterData
-          : filterBidData(data.bidStone, filterData.queryParams);
-      dispatch(
-        filterBidToBuyFunction({
-          bidData: data.bidStone,
-          queryParams: filterData.queryParams,
-          bidFilterData: filteredData
-        })
-      );
-      setBid(filteredData);
-    } else {
-      setBid(data.bidStone);
-    }
-    setTime(data.endTime);
-    if (data.activeStone) {
-      data.activeStone.map((row: any) => {
-        if (row.discount > row.my_current_bid) {
-          setRowSelection(prev => {
-            return { ...prev, [row.id]: true };
-          });
-        } else {
-          setRowSelection((prev: any) => {
-            let prevRows = { ...prev };
-            delete prevRows[row.id];
-            return prevRows;
-          });
+  async function decompressData<T = unknown>(
+    compressedData: Uint8Array | ArrayBuffer | any
+  ): Promise<T> {
+    try {
+      // Ensure compressedData is a Uint8Array
+      const uint8Array: Uint8Array =
+        compressedData instanceof Uint8Array
+          ? compressedData
+          : new Uint8Array(compressedData);
+
+      // Decompress the data using pako
+      const decompressed: string = await new Promise<string>(
+        (resolve, reject) => {
+          try {
+            const result = pako.ungzip(uint8Array, { to: 'string' });
+            resolve(result);
+          } catch (error) {
+            reject(error);
+          }
         }
-      });
+      );
+
+      // Parse the decompressed string into JSON
+      const data: T = JSON.parse(decompressed);
+      return data;
+    } catch (err: unknown) {
+      // Ensure we have proper type checking for error
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      console.error(`Decompression failed: ${errorMessage}`);
+      throw err;
     }
-    // Set other related state here
-  }, []);
+  }
+
+  type Part = {
+    endTime: string | null;
+    bidStone: any[]; // Use the actual type if you know it
+    activeStone: any[]; // Use the actual type if you know it
+  };
+
+  async function mergeParts(parts: Part[]) {
+    const mergedProductData = {
+      endTime: parts[0]?.endTime ?? null,
+      bidStone: [] as any[], // Define the type of bidStone properly
+      activeStone: [] as any[] // Define the type of activeStone properly
+    };
+    for (const part of parts) {
+      mergedProductData.bidStone.push(...(part.bidStone ?? []));
+      part.activeStone.length &&
+        mergedProductData.activeStone.push(...(part.activeStone ?? []));
+    }
+
+    return mergedProductData;
+  }
+
+  const receivedPartsMapBidToBuy: any = {};
+  const totalPartsMapBidToBuy: any = {};
+  const handleBidStones = useCallback(
+    async ({ part, total_parts, message_id, data }: any) => {
+      try {
+        const decompressedPart = await decompressData(data);
+
+        if (!receivedPartsMapBidToBuy[message_id]) {
+          receivedPartsMapBidToBuy[message_id] = [];
+          totalPartsMapBidToBuy[message_id] = total_parts;
+        }
+        receivedPartsMapBidToBuy[message_id].push(decompressedPart);
+
+        if (part === total_parts) {
+          const allProducts = await mergeParts(
+            receivedPartsMapBidToBuy[message_id]
+          );
+
+          // Optionally update UI or process allProducts here
+
+          setCheckStatus(true);
+          setActiveBid(allProducts.activeStone);
+          if (filterData?.queryParams) {
+            const filteredData =
+              filterData?.bidFilterData?.length > 0
+                ? filterData?.bidFilterData
+                : filterBidData(allProducts.bidStone, filterData.queryParams);
+            dispatch(
+              filterBidToBuyFunction({
+                bidData: allProducts.bidStone,
+                queryParams: filterData.queryParams,
+                bidFilterData: filteredData
+              })
+            );
+            setBid(filteredData);
+          } else {
+            setBid(allProducts.bidStone);
+          }
+          setTime(allProducts?.endTime ?? '');
+          if (allProducts.activeStone) {
+            allProducts.activeStone.map((row: any) => {
+              if (row.discount > row.my_current_bid) {
+                setRowSelection(prev => {
+                  return { ...prev, [row.id]: true };
+                });
+              } else {
+                setRowSelection((prev: any) => {
+                  let prevRows = { ...prev };
+                  delete prevRows[row.id];
+                  return prevRows;
+                });
+              }
+            });
+          }
+
+          // Clean up
+          delete receivedPartsMapBidToBuy[message_id];
+          delete totalPartsMapBidToBuy[message_id];
+        }
+      } catch (error) {
+        console.error(
+          `Failed to decompress part ${part} of message ${message_id}:`,
+          error
+        );
+      }
+    },
+    []
+  );
+
   const handleError = useCallback((data: any) => {
     if (data) {
       modalSetState.setIsDialogOpen(true);

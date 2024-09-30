@@ -10,7 +10,6 @@ import CollapsIcon from '@public/v2/assets/icons/collapse-icon.svg?url';
 import ExportExcel from '@public/v2/assets/icons/detail-page/export-excel.svg?url';
 import crossIcon from '@public/v2/assets/icons/new-arrivals/cross-icon.svg';
 import Image from 'next/image';
-import DisableDecrementIcon from '@public/v2/assets/icons/new-arrivals/disable-decrement.svg?url';
 import searchIcon from '@public/v2/assets/icons/data-table/search-icon.svg';
 import { faSort, faSortDown } from '@fortawesome/free-solid-svg-icons';
 // theme.js
@@ -20,25 +19,18 @@ import { useEffect, useState } from 'react';
 
 import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
 import Share from '@/components/v2/common/copy-and-share/share';
-import ActionButton from '@/components/v2/common/action-button';
 import NewArrivalCalculatedField from '../new-arrival-calculated-field';
-import Tab from '@components/v2/common/bid-tabs/index';
-import { InputField } from '@/components/v2/common/input-field';
-import DecrementIcon from '@public/v2/assets/icons/new-arrivals/decrement.svg?url';
-import IncrementIcon from '@public/v2/assets/icons/new-arrivals/increment.svg?url';
 import empty from '@public/v2/assets/icons/data-table/empty-new-arrivals.svg';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import { RenderNewArrivalLotIdColor } from '@/components/v2/common/data-table/helpers/render-cell';
 import Tooltip from '@/components/v2/common/tooltip';
 import { kycStatus } from '@/constants/enums/kyc';
-import { formatNumber } from '@/utils/fix-two-digit-number';
-import { handleIncrementDiscount } from '@/utils/v2/handle-increment-discount';
-import { handleDecrementDiscount } from '@/utils/v2/handle-decrement-discount';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ManageLocales } from '@/utils/v2/translate';
-import { SubRoutes } from '@/constants/v2/enums/routes';
-import { filterFunction } from '@/features/filter-new-arrival/filter-new-arrival-slice';
 import BiddingSkeleton from '@/components/v2/skeleton/bidding';
+import CalculatedField from '@/components/v2/common/calculated-field';
+import { queryParamsFunction } from '@/features/event-params/event-param-slice';
+import { useAppDispatch } from '@/hooks/hook';
 
 const theme = createTheme({
   typography: {
@@ -148,46 +140,32 @@ const theme = createTheme({
   }
 });
 
-interface IBidValues {
-  [key: string]: number;
-}
-const NewArrivalDataTable = ({
+const TurkeyDataTable = ({
   columns,
   modalSetState,
   downloadExcel,
   setErrorText,
   setIsError,
-  tabLabels,
   activeTab,
-  handleTabClick,
   rows = [],
-  activeCount,
-  bidCount,
-  historyCount,
-  socketManager,
   rowSelection,
   setRowSelection,
   setIsLoading,
   renderFooter,
   router,
-  filterData,
-  setBid,
-  dispatch,
   setIsSkeletonLoading,
   isSkeletonLoading,
-  isTabSwitch,
-  setIsTabSwitch
+  searchUrl,
+  setSearchUrl
 }: any) => {
   // Fetching saved search data
-
   const [isFullScreen, setIsFullScreen] = useState(false);
-  const [bidError, setBidError] = useState<{
-    [key: string]: string;
-  }>({});
+
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 20 //customize the default page size
   });
+  const dispatch = useAppDispatch();
 
   const [paginatedData, setPaginatedData] = useState<any>([]);
   const [globalFilter, setGlobalFilter] = useState('');
@@ -210,25 +188,22 @@ const NewArrivalDataTable = ({
       setIsSkeletonLoading(false);
     }
   }, [globalFilter]);
+
   useEffect(() => {
-    if (activeTab !== 2) {
-      // Calculate the start and end indices for the current page
-      const startIndex = pagination.pageIndex * pagination.pageSize;
-      const endIndex = startIndex + pagination.pageSize;
-      // Slice the data to get the current page's data
-      const newData = rows.slice(startIndex, endIndex);
-      // Update the paginated data state
-      setPaginatedData(newData);
-      setIsSkeletonLoading(false);
-    } else {
-      setPaginatedData(rows);
+    // Calculate the start and end indices for the current page
+    const startIndex = pagination.pageIndex * pagination.pageSize;
+    const endIndex = startIndex + pagination.pageSize;
+    // Slice the data to get the current page's data
+    const newData = rows.slice(startIndex, endIndex);
+    // Update the paginated data state
+    setPaginatedData(newData);
+    if (newData.length > 0 && setIsSkeletonLoading) {
       setIsSkeletonLoading(false);
     }
   }, [
     rows,
     pagination.pageIndex, //re-fetch when page index changes
-    pagination.pageSize, //re-fetch when page size changes
-    activeTab
+    pagination.pageSize //re-fetch when page size changes
   ]);
   const toggleFullScreen = () => {
     setIsFullScreen(!isFullScreen);
@@ -288,13 +263,10 @@ const NewArrivalDataTable = ({
       setRowSelection,
       router,
       setIsLoading: setIsLoading,
-      [activeTab === 2 ? 'fromNewArrivalBidHistory' : 'fromNewArrivalBid']:
-        true,
-      page: 'New_Arrival'
+      page: 'Turkey'
     });
   };
 
-  const [bidValues, setBidValues] = useState<IBidValues>({});
   const [columnOrder] = useState(
     [
       'mrt-row-select',
@@ -315,116 +287,102 @@ const NewArrivalDataTable = ({
             padding: '12px 16px'
           }}
         >
-          <div className="w-[450px]">
-            <Tab
-              labels={tabLabels}
-              activeIndex={activeTab}
-              onTabClick={handleTabClick}
-              activeCount={activeCount}
-              bidCount={bidCount}
-              historyCount={historyCount}
-            />
-          </div>
+          <MRT_GlobalFilterTextField
+            table={table}
+            autoComplete="false"
+            className="max-[1092px]:w-[110px]   max-[1160px]:w-[180px] max-xl:w-auto"
+            sx={{
+              boxShadow: 'var(--input-shadow) inset',
+              border: 'none',
+              borderRadius: '4px',
+              ':hover': {
+                border: 'none'
+              },
+              '& .MuiOutlinedInput-input': {
+                color: 'var(--neutral-900)',
+                fontSize: '14px !important',
+                paddingTop: '10px'
+              },
+              '& .MuiOutlinedInput-notchedOutline': {
+                borderColor: 'var(--neutral-200) !important'
+              },
+
+              '& :hover .MuiOutlinedInput-notchedOutline': {
+                borderColor: 'var(--neutral-200) !important'
+              },
+
+              '& .Mui-focused .MuiOutlinedInput-notchedOutline': {
+                borderColor: 'var(--neutral-200) !important'
+              },
+              '& :focus .MuiOutlinedInput-notchedOutline': {
+                borderColor: 'var(--neutral-200) !important'
+              },
+
+              '& .MuiOutlinedInput-notchedOutline:hover': {
+                borderColor: 'var(--neutral-200) !important'
+              },
+              '& .MuiInputAdornment-root': {
+                display: 'none'
+              }
+            }}
+          />
 
           <div className="flex gap-[12px]" style={{ alignItems: 'inherit' }}>
-            {activeTab === 0 && (
-              <div className="">
-                {filterData?.bidFilterData?.length > 0 ? (
-                  <button
-                    onClick={() => {
-                      router.push(
-                        `/v2/new-arrivals?active-tab=${SubRoutes.NEW_ARRIVAL}`
-                      );
-                    }}
-                    className={`flex w-full  shadow-sm justify-center py-[8px] h-[39px] px-[16px]  items-center font-medium  rounded-[4px] gap-1  border-[1px]  border-solid border-neutral200 text-mMedium  cursor-pointer  ${'bg-primaryMain text-neutral0 hover:bg-primaryHover'}`}
-                  >
-                    <FilterIcon
-                      stroke={`${'var(--neutral-0)'}`}
-                      fill={`${'var(--neutral-0)'}`}
-                    />
+            <div className="">
+              {searchUrl !== '' ? (
+                <button
+                  onClick={() => {
+                    router.push(`/v2/turkey?active-tab=form`);
+                  }}
+                  className={`flex w-full  shadow-sm justify-center py-[8px] h-[39px] px-[16px]  items-center font-medium  rounded-[4px] gap-1  border-[1px]  border-solid border-neutral200 text-mMedium  cursor-pointer  ${'bg-primaryMain text-neutral0 hover:bg-primaryHover'}`}
+                >
+                  <FilterIcon
+                    stroke={`${'var(--neutral-0)'}`}
+                    fill={`${'var(--neutral-0)'}`}
+                  />
 
-                    <p className="w-[70%]">
-                      {ManageLocales('app.modifyFilter')}
-                    </p>
-                    <div
-                      className="w-[17%] cursor-pointer"
-                      onClick={e => {
-                        e.stopPropagation();
-                        setBid(filterData.bidData);
-                        dispatch(filterFunction({}));
-                      }}
-                    >
-                      <Image src={crossIcon} alt="crossIcon" />
-                    </div>
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => {
+                  <p className="w-[70%]">{ManageLocales('app.modifyFilter')}</p>
+                  <div
+                    className="w-[17%] cursor-pointer"
+                    onClick={e => {
+                      e.stopPropagation();
+                      setSearchUrl('');
                       dispatch(
-                        filterFunction({
-                          bidData: rows
+                        queryParamsFunction({
+                          queryParams: {}
                         })
                       );
-                      router.push(
-                        `/v2/new-arrivals?active-tab=${SubRoutes.NEW_ARRIVAL}`
-                      );
+                      // setBid(filterData.bidData);
+                      // dispatch(filterFunction({}));
                     }}
-                    disabled={!rows.length}
-                    className={`flex justify-center  shadow-sm disabled:!bg-neutral100 disabled:cursor-not-allowed disabled:text-neutral400 py-[8px] h-[39px] px-[16px] items-center font-medium  rounded-[4px] gap-1  border-[1px]  border-solid border-neutral200 text-mMedium  cursor-pointer  ${'text-neutral900 bg-neutral0 hover:bg-neutral50'}`}
                   >
-                    <FilterIcon
-                      stroke={`${
-                        !rows.length
-                          ? 'var(--neutral-400)'
-                          : 'var(--neutral-900)'
-                      }`}
-                    />
+                    <Image src={crossIcon} alt="crossIcon" />
+                  </div>
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    // dispatch(
+                    //   filterFunction({
+                    //     bidData: rows
+                    //   })
+                    // );
+                    router.push(`/v2/turkey?active-tab=form`);
+                  }}
+                  disabled={!rows.length}
+                  className={`flex justify-center  shadow-sm disabled:!bg-neutral100 disabled:cursor-not-allowed disabled:text-neutral400 py-[8px] h-[39px] px-[16px] items-center font-medium  rounded-[4px] gap-1  border-[1px]  border-solid border-neutral200 text-mMedium  cursor-pointer  ${'text-neutral900 bg-neutral0 hover:bg-neutral50'}`}
+                >
+                  <FilterIcon
+                    stroke={`${
+                      !rows.length ? 'var(--neutral-400)' : 'var(--neutral-900)'
+                    }`}
+                  />
 
-                    <p>{ManageLocales('app.applyFilter')}</p>
-                  </button>
-                )}
-              </div>
-            )}
+                  <p>{ManageLocales('app.applyFilter')}</p>
+                </button>
+              )}
+            </div>
 
-            <MRT_GlobalFilterTextField
-              table={table}
-              autoComplete="false"
-              className="max-[1092px]:w-[110px]   max-[1160px]:w-[180px] max-xl:w-auto"
-              sx={{
-                boxShadow: 'var(--input-shadow) inset',
-                border: 'none',
-                borderRadius: '4px',
-                ':hover': {
-                  border: 'none'
-                },
-                '& .MuiOutlinedInput-input': {
-                  color: 'var(--neutral-900)',
-                  fontSize: '14px !important',
-                  paddingTop: '10px'
-                },
-                '& .MuiOutlinedInput-notchedOutline': {
-                  borderColor: 'var(--neutral-200) !important'
-                },
-
-                '& :hover .MuiOutlinedInput-notchedOutline': {
-                  borderColor: 'var(--neutral-200) !important'
-                },
-
-                '& .Mui-focused .MuiOutlinedInput-notchedOutline': {
-                  borderColor: 'var(--neutral-200) !important'
-                },
-                '& :focus .MuiOutlinedInput-notchedOutline': {
-                  borderColor: 'var(--neutral-200) !important'
-                },
-
-                '& .MuiOutlinedInput-notchedOutline:hover': {
-                  borderColor: 'var(--neutral-200) !important'
-                },
-                '& .MuiInputAdornment-root': {
-                  display: 'none'
-                }
-              }}
-            />
             <div
               className=" rounded-[4px] cursor-pointer"
               onClick={handleDownloadExcel}
@@ -486,9 +444,8 @@ const NewArrivalDataTable = ({
                 selectedProducts={rowSelection}
                 setErrorText={setErrorText}
                 setIsError={setIsError}
-                identifier={'New Arrival'}
-                activeTab={activeTab}
-                shareTrackIdentifier={'New Arrival'}
+                identifier={'Turkey'}
+                shareTrackIdentifier={'Turkey'}
               />
             </div>
           </div>
@@ -496,10 +453,7 @@ const NewArrivalDataTable = ({
       </div>
 
       {rows.length > 0 && (
-        <NewArrivalCalculatedField
-          rows={rows}
-          selectedProducts={rowSelection}
-        />
+        <CalculatedField rows={rows} selectedProducts={rowSelection} />
       )}
     </div>
   );
@@ -510,10 +464,7 @@ const NewArrivalDataTable = ({
         isFullScreen ? 'h-[69vh]' : !rows.length ? 'h-[55vh]' : 'h-[60vh]'
       }  mt-[50px]`}
     >
-      {(activeTab === 1 && activeCount === 0) ||
-      (activeTab === 0 && bidCount === 0) ||
-      (activeTab === 2 && historyCount === 0) ||
-      rows.length === 0 ? (
+      {rows.length === 0 ? (
         <>
           <Image src={empty} alt={'empty'} />
           <p className="text-neutral900  w-[320px] text-center ">
@@ -528,16 +479,13 @@ const NewArrivalDataTable = ({
       )}
     </div>
   );
-  useEffect(() => {
-    setIsTabSwitch(false);
-  }, [paginatedData]);
 
   let isNudge = localStorage.getItem('show-nudge') === 'MINI';
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   //pass table options to useMaterialReactTable
   const table = useMaterialReactTable({
     columns,
-    data: isTabSwitch ? [] : paginatedData, //must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
+    data: paginatedData, //must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
 
     getRowId: originalRow => originalRow.id,
     onRowSelectionChange: setRowSelection,
@@ -595,9 +543,6 @@ const NewArrivalDataTable = ({
     },
 
     muiTableBodyRowProps: ({ row }) => {
-      const isHighlightBackground =
-        activeTab !== 0 && RenderNewArrivalLotIdColor({ row });
-
       return {
         onClick: row.id.includes('shape')
           ? row.getToggleExpandedHandler()
@@ -614,9 +559,7 @@ const NewArrivalDataTable = ({
             // Target the specific cell that matches the lot_id column within a hovered row
             '& .MuiTableCell-root[data-index="1"]::after': {
               // Change the background color to red if isHighlightBackground is true, otherwise maintain the default hover color
-              backgroundColor: isHighlightBackground
-                ? `${isHighlightBackground.background} !important`
-                : 'var(--neutral-50)'
+              backgroundColor: 'var(--neutral-50)'
             }
           },
           '&.MuiTableRow-root .MuiTableCell-root::after': {
@@ -653,13 +596,7 @@ const NewArrivalDataTable = ({
               // marginLeft:!cell.id.includes('shape') && '-12px',
               borderBottom: '1px solid var(--neutral-50)',
               padding: '0px',
-              // padding: ['discount', 'price_per_carat', 'rap'].includes(
-              //   cell.column.id
-              // )
-              //   ? '0px 6px'
-              //   : '0px 2px',
-              // height: '20px !important',
-              // fontSize: '12px !important',
+
               ':hover': {
                 border: 'none',
                 background: 'red'
@@ -894,244 +831,7 @@ const NewArrivalDataTable = ({
         border: 'none'
       }
     },
-    muiTableHeadProps: rows?.length === 0 ? { style: { display: 'none' } } : {},
-
-    renderDetailPanel: ({ row }) => {
-      // Check if the current row's ID is in the rowSelection state
-      if (
-        activeTab !== 2 &&
-        rowSelection[row.id] &&
-        !(
-          isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
-          isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED
-        )
-      ) {
-        const bidValue =
-          bidValues[row.id] !== undefined
-            ? bidValues[row.id]
-            : parseFloat(row.original.current_max_bid).toFixed(2);
-
-        // If the row is selected, return the detail panel content
-        return (
-          <div>
-            <div
-              className="flex gap-6"
-              onClick={event => event.stopPropagation()}
-            >
-              <div className="w-[110px] ml-7">
-                <div className="text-sRegular text-neutral700">
-                  Current Max Bid%
-                </div>
-
-                <InputField
-                  type="text"
-                  styles={{
-                    inputMain: 'h-[30px]',
-                    input:
-                      '!bg-infoSurface !border-infoBorder !text-infoMain !h-[30px]  text-sMedium'
-                  }}
-                  value={`${formatNumber(row.original.current_max_bid)}%`}
-                  disabled
-                />
-              </div>
-              <div className="w-[110px]">
-                <div className="text-sRegular text-neutral700">Bid Pr/Ct</div>
-
-                <InputField
-                  type="text"
-                  value={
-                    bidValues[row.id] !== undefined
-                      ? !bidValue || bidValue <= row.original.current_max_bid
-                        ? formatNumber(row.original.price_per_carat)
-                        : formatNumber(
-                            row.original.rap * (1 + bidValues[row.id] / 100)
-                          )
-                      : formatNumber(row.original.price_per_carat)
-                  }
-                  styles={{
-                    inputMain: 'h-[30px]',
-                    input:
-                      '!bg-neutral100 !border-neutral200 !text-neutral700 !h-[30px]  text-sMedium'
-                  }}
-                  disabled
-                />
-              </div>
-              <div className="w-[110px]">
-                <div className="text-sRegular text-neutral700">Bid Amt $</div>
-
-                <InputField
-                  type="text"
-                  styles={{
-                    inputMain: '!h-[30px]  text-sMedium',
-                    input:
-                      '!bg-neutral100 !border-neutral200 !text-neutral700 !h-[30px]  text-sMedium'
-                  }}
-                  value={
-                    bidValues[row.id] !== undefined
-                      ? !bidValue || bidValue <= row.original.current_max_bid
-                        ? formatNumber(row.original.price)
-                        : formatNumber(
-                            row.original.rap *
-                              (1 + bidValues[row.id] / 100) *
-                              row.original.carats
-                          )
-                      : formatNumber(row.original.price)
-                  }
-                  disabled
-                />
-              </div>
-              <div className="">
-                <div className="text-sRegular text-neutral700">Bid Disc%</div>
-                <div className="gap-6 flex">
-                  <div className="h-[30px] flex gap-1">
-                    {bidValue <= row.original.current_max_bid ? (
-                      <div className="cursor-not-allowed">
-                        <DisableDecrementIcon />
-                      </div>
-                    ) : (
-                      <div
-                        onClick={() =>
-                          handleDecrementDiscount(
-                            row.id,
-                            row.original.current_max_bid,
-                            setBidError,
-                            setBidValues
-                          )
-                        }
-                      >
-                        <DecrementIcon />
-                      </div>
-                    )}
-                    <div className="w-[110px]">
-                      <InputField
-                        type="number"
-                        styles={{
-                          inputMain: 'h-[54px]',
-                          input: '!h-[30px]  text-sMedium'
-                        }}
-                        value={bidValue}
-                        onChange={e => {
-                          const newValue = e.target.value;
-                          if (newValue < row.original.current_max_bid) {
-                            setBidError(prevError => {
-                              return {
-                                ...prevError,
-                                [row.id]:
-                                  'Bid value cannot be less than current maximum bid.'
-                              };
-                            });
-                            setBidValues((prevValues: any) => {
-                              // If there's already a bid value for this row, increment it
-                              return {
-                                ...prevValues,
-                                [row.id]: newValue
-                              };
-                            });
-                          } else {
-                            setBidError(prevError => {
-                              return {
-                                ...prevError,
-                                [row.id]: ''
-                              };
-                            });
-                            setBidValues((prevValues: any) => {
-                              // If there's already a bid value for this row, increment it
-                              return {
-                                ...prevValues,
-                                [row.id]: newValue
-                              };
-                            });
-                          }
-                        }}
-                        // onChange={e => {
-                        //   setBidValues((prevValues: any) => {
-                        //     // If there's already a bid value for this row, increment it
-                        //     return {
-                        //       ...prevValues,
-                        //       [row.id]: e.target.value
-                        //     };
-
-                        //     // If no bid value for this row yet, start from current_max_bid and add 0.5
-                        //   });
-                        // }}
-                      />
-                    </div>
-                    <div
-                      onClick={() =>
-                        handleIncrementDiscount(
-                          row.id,
-                          row.original.current_max_bid,
-                          setBidError,
-                          setBidValues
-                        )
-                      }
-                    >
-                      <IncrementIcon />
-                    </div>
-                  </div>
-                  <div className="flex items-end">
-                    <ActionButton
-                      actionButtonData={[
-                        {
-                          variant:
-                            bidValue <= row.original.current_max_bid
-                              ? 'disable'
-                              : 'primary',
-
-                          label: activeTab === 0 ? 'Add Bid' : 'Update Bid',
-                          handler: () => {
-                            if (!bidError[row.id]) {
-                              if (bidValue < row.original.current_max_bid) {
-                                setBidError(prevError => {
-                                  return {
-                                    ...prevError,
-                                    [row.id]:
-                                      'Bid value cannot be less than current maximum bid.'
-                                  };
-                                });
-                                return; // Exit early, do not update bidValues
-                              }
-
-                              socketManager.emit('place_bid', {
-                                product_id: row.id,
-                                bid_value: bidValues[row.id]
-                              });
-
-                              activeTab === 0 &&
-                                setRowSelection((prev: any) => {
-                                  let prevRows = { ...prev };
-                                  delete prevRows[row.id];
-                                  return prevRows;
-                                });
-                              setBidError(prevError => {
-                                return {
-                                  ...prevError,
-                                  [row.id]: ''
-                                };
-                              });
-                            }
-                          },
-                          isDisable: bidValue <= row.original.current_max_bid,
-                          customStyle: 'flex-1 w-full h-[30px] text-sMedium',
-                          customCtaStyle: '!h-[30px] !text-[12px]'
-                        }
-                      ]}
-                    />
-                  </div>
-                </div>
-                <div className=" text-dangerMain text-sRegular">
-                  {bidError[row.id]}
-                </div>
-              </div>
-            </div>
-            {/* <div className="pl-10 text-dangerMain text-mRegular">
-              {bidError}
-            </div> */}
-          </div>
-        );
-      }
-      return null;
-    }
+    muiTableHeadProps: rows?.length === 0 ? { style: { display: 'none' } } : {}
   });
   return (
     <>
@@ -1146,4 +846,4 @@ const NewArrivalDataTable = ({
   );
 };
 
-export default NewArrivalDataTable;
+export default TurkeyDataTable;

@@ -11,6 +11,9 @@ import { handleRegisterResendOTP } from './helpers/handle-register-resent';
 import { IToken } from '@/app/v2/register/interface';
 import backArrow from '@public/v2/assets/icons/back-arrow.svg';
 import { useRouter } from 'next/navigation';
+import { Tracking } from '@/constants/funnel-tracking';
+import { isSessionValid } from '@/utils/manage-session';
+import { useLazyRegisterFunnelQuery } from '@/features/api/funnel';
 
 export interface IOtp {
   otpMobileNumber: string;
@@ -62,6 +65,7 @@ const OTPVerification = ({
   const resendLabel = resendTimer > 0 ? `(${resendTimer}Sec)` : '';
   const [error, setError] = useState('');
   const [isHovered, setIsHovered] = useState(false);
+  let [funnelTrack] = useLazyRegisterFunnelQuery();
 
   useEffect(() => {
     let countdownInterval: NodeJS.Timeout;
@@ -84,6 +88,14 @@ const OTPVerification = ({
     return true;
   }
 
+  useEffect(() => {
+    funnelTrack({
+      step: Tracking.Mobile_Verification_PageView,
+      sessionId: isSessionValid(),
+      entryPoint: localStorage.getItem('entryPoint') || ''
+    });
+  }, []);
+
   return (
     <div className="flex  items-center">
       <div className="flex flex-col w-[450px] p-8 gap-[24px] rounded-[8px] border-[1px] border-neutral200">
@@ -91,7 +103,14 @@ const OTPVerification = ({
           className="flex flex-col items-center cursor-pointer"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
-          onClick={() => router.push('/v3')}
+          onClick={() => {
+            funnelTrack({
+              step: Tracking.Click_KGK_Logo,
+              sessionId: isSessionValid(),
+              entryPoint: localStorage.getItem('entryPoint') || ''
+            }),
+              router.push('/v3');
+          }}
         >
           <KgkIcon
             fill={isHovered ? '#5D6969' : '#23302C'}
@@ -116,7 +135,15 @@ const OTPVerification = ({
                 `+${otpVerificationFormState.codeAndNumber}`}
             </p>
             <div
-              onClick={() => setIsInputDialogOpen(true)}
+              onClick={() => {
+                funnelTrack({
+                  step: Tracking.Click_Mobile_Edit,
+                  sessionId: isSessionValid(),
+                  mobileNumber: `+${otpVerificationFormState.codeAndNumber}`,
+                  entryPoint: localStorage.getItem('entryPoint') || ''
+                }),
+                  setIsInputDialogOpen(true);
+              }}
               className="font-bold pl-1"
             >
               <Edit />
@@ -136,7 +163,7 @@ const OTPVerification = ({
             className={`${
               resendTimer > 0 ? 'text-neutral500' : 'text-infoMain'
             } cursor-pointer`}
-            onClick={() =>
+            onClick={() => {
               resendTimer > 0
                 ? {}
                 : handleRegisterResendOTP({
@@ -147,8 +174,14 @@ const OTPVerification = ({
                     setDialogContent,
                     setToken,
                     token
-                  })
-            }
+                  });
+              funnelTrack({
+                step: Tracking.Click_Resend,
+                sessionId: isSessionValid(),
+                mobileNumber: `+${otpVerificationFormState.codeAndNumber}`,
+                entryPoint: localStorage.getItem('entryPoint') || ''
+              });
+            }}
           >
             {ManageLocales('app.OTPVerification.resend')} {resendLabel}
           </p>
@@ -174,7 +207,9 @@ const OTPVerification = ({
                     role,
                     setToken,
                     setError,
-                    setIsLoading
+                    setIsLoading,
+                    funnelTrack,
+                    phone: `+${otpVerificationFormState.codeAndNumber}`
                   }),
                   setError(''))
                 : setError(
@@ -190,11 +225,16 @@ const OTPVerification = ({
             size={'custom'}
             disabled={isLoading}
             className=" border-none w-[100%]"
-            onClick={() =>
-              role === 'login'
-                ? setCurrentState('login')
-                : router.push('/v2/login')
-            }
+            onClick={() => {
+              funnelTrack({
+                step: Tracking.Click_Login,
+                sessionId: isSessionValid(),
+                entryPoint: localStorage.getItem('entryPoint') || ''
+              }),
+                role === 'login'
+                  ? setCurrentState('login')
+                  : router.push('/v2/login');
+            }}
           >
             <div className="text-mMedium font-medium flex items-center gap-2">
               <Image src={backArrow} alt="backArrow" />

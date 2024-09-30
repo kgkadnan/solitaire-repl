@@ -30,6 +30,10 @@ import { handleOTPChange } from '@/components/v2/common/otp-verication/helpers/h
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import { useRegisterStateManagement } from '../hooks/register-state-management';
+import { isSessionValid } from '@/utils/manage-session';
+import { Tracking } from '@/constants/funnel-tracking';
+import { useLazyRegisterFunnelQuery } from '@/features/api/funnel';
+// import { useRouter } from 'next/navigation';
 
 export interface IOtp {
   otpMobileNumber: string;
@@ -92,6 +96,9 @@ const Register = () => {
   const [register] = useRegisterMutation();
   const [verifyOTP] = useVerifyOTPMutation();
   const [sendOtp] = useSendOtpMutation();
+  let [funnelTrack] = useLazyRegisterFunnelQuery();
+
+  // const router = useRouter();
   useEffect(() => {
     const userIp = JSON.parse(localStorage.getItem('userIp')!);
 
@@ -121,6 +128,27 @@ const Register = () => {
       console.error('Error fetching country code', error);
     }
   }, [data, error]);
+
+  // useEffect(() => {
+  //   // Check if browser history and pushState are available
+  //   if (window.history && window.history.replaceState) {
+  //     // Simulate a state push to add an entry to the history
+  //     window.history.replaceState({ forward: true }, '', '');
+
+  //     // Function to handle popstate events
+  //     const handlePopState = () => {
+  //       alert('Back button was pressed.');
+  //     };
+
+  //     // Add the event listener for popstate
+  //     window.addEventListener('popstate', handlePopState);
+
+  //     // Cleanup the event listener when the component unmounts
+  //     return () => {
+  //       window.removeEventListener('popstate', handlePopState);
+  //     };
+  //   }
+  // }, []);
 
   useEffect(() => {
     if (userData) {
@@ -165,6 +193,11 @@ const Register = () => {
               setOTPVerificationFormState(prev => ({ ...prev }));
               setOTPVerificationFormErrors(initialOTPFormState);
               setIsInputDialogOpen(false);
+              funnelTrack({
+                step: Tracking.Click_Mobile_Edit_Cancel,
+                sessionId: isSessionValid(),
+                entryPoint: localStorage.getItem('entryPoint') || ''
+              });
             }}
             variant={'secondary'}
             size={'custom'}
@@ -184,7 +217,8 @@ const Register = () => {
                 setDialogContent,
                 sendOtp,
                 setToken,
-                token
+                token,
+                funnelTrack
               });
             }}
             variant={'primary'}

@@ -1,14 +1,25 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Image from 'next/image';
 import successIcon from '@public/v2/assets/icons/modal/confirm.svg';
 import { IndividualActionButton } from '@/components/v2/common/action-button/individual-button';
 import { useRouter } from 'next/navigation';
 import { useLazyTrackRegisterFlowQuery } from '@/features/api/register';
+import { isSessionValid } from '@/utils/manage-session';
+import { Tracking } from '@/constants/funnel-tracking';
+import { useLazyRegisterFunnelQuery } from '@/features/api/funnel';
 
 const ConfirmScreen = () => {
   const router = useRouter();
   const [triggerRegisterFlowTrack] = useLazyTrackRegisterFlowQuery();
+  let [funnelTrack] = useLazyRegisterFunnelQuery();
 
+  useEffect(() => {
+    funnelTrack({
+      step: Tracking.Mobile_Verified_PageView,
+      sessionId: isSessionValid(),
+      entryPoint: localStorage.getItem('entryPoint') || ''
+    });
+  }, []);
   return (
     <div className="flex items-center text-center text-neutral900 ">
       <div className="flex flex-col w-[500px] p-8 gap-[24px] items-center text-center">
@@ -24,7 +35,12 @@ const ConfirmScreen = () => {
           <IndividualActionButton
             onClick={() => {
               triggerRegisterFlowTrack({ event: 'complete-kyc' });
-              router.push(`/v2/kyc`);
+              funnelTrack({
+                step: Tracking.Click_Finsih_KYC,
+                sessionId: isSessionValid(),
+                entryPoint: localStorage.getItem('entryPoint') || ''
+              }),
+                router.push(`/v2/kyc`);
             }}
             variant={'primary'}
             size={'custom'}
@@ -35,7 +51,12 @@ const ConfirmScreen = () => {
           <IndividualActionButton
             onClick={() => {
               triggerRegisterFlowTrack({ event: 'go-to-dashboard' });
-              router.push(`/v2/`);
+              funnelTrack({
+                step: Tracking.Click_Continue_Guest,
+                sessionId: isSessionValid(),
+                entryPoint: localStorage.getItem('entryPoint') || ''
+              }),
+                router.push(`/v2/`);
             }}
             className="rounded-[4px] text-neutral600 w-[450px]"
             size={'custom'}
