@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import phoneIcon from '@public/v2/assets/icons/kyc/phone.svg';
 import whatsappIcon from '@public/v2/assets/icons/kyc/whatsapp.svg';
 import copyIcon from '@public/v2/assets/icons/kyc/copy.svg';
@@ -13,6 +13,8 @@ import pendingIcon from '@public/v2/assets/icons/kyc/pending.svg';
 import rejectedIcon from '@public/v2/assets/icons/kyc/rejected.svg';
 import approvedIcon from '@public/v2/assets/icons/kyc/completed.svg';
 import { Toast } from '../copy-and-share/toast';
+import { Tracking_KYC } from '@/constants/funnel-tracking';
+import { trackEvent } from '@/utils/ga';
 
 interface IKycStatusScreen {
   status: string;
@@ -29,6 +31,17 @@ export const KycStatusScreen: React.FC<IKycStatusScreen> = ({ status }) => {
       setShowToast(false); // Hide the toast notification after some time
     }, 4000);
   };
+
+  
+  useEffect(() => {
+    status===kycStatus.PENDING &&  trackEvent({
+      action: Tracking_KYC.KYC_Status_Pending_Pageview,
+      entry_point: localStorage.getItem('kyc_entryPoint') || '',
+      category: 'KYC',
+      country: localStorage.getItem('country') || ''
+    });
+  }, []);
+
   return (
     <div className="relative w-full h-[calc(100vh-60px)]">
       <Toast show={showToast} message="Copied Successfully" />

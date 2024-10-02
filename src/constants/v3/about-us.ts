@@ -124,7 +124,7 @@ export const timelineData = [
   {
     image: Timeline2017,
     year: '2017',
-    content: 'KGK opened a diamond manufacturing facility in Windhoek, Namibia'
+    content: 'KGK opened a diamond manufacturing facility in Windhoek, Namibia.'
   },
   // {
   //   image: Timeline2016,
