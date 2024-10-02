@@ -14,7 +14,8 @@ import {
   RenderNewArrivalPricePerCarat,
   RenderBidDate,
   RenderNumericFields,
-  RenderLotId
+  RenderLotId,
+  RenderAmount
 } from '@/components/v2/common/data-table/helpers/render-cell';
 import Tooltip from '@/components/v2/common/tooltip';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
@@ -172,10 +173,10 @@ const Turkey = () => {
           case 'rap_value':
             return { ...commonProps, Cell: RenderNumericFields };
           case 'amount':
-            return { ...commonProps, Cell: RenderNewArrivalPrice };
+            return { ...commonProps, Cell: RenderAmount };
           case 'measurements':
             return { ...commonProps, Cell: RenderMeasurements };
-          case 'shape_full':
+          case 'shape':
             return { ...commonProps, Cell: RenderShape };
           case 'carats':
           case 'table_percentage':
@@ -309,35 +310,35 @@ const Turkey = () => {
   useEffect(() => {
     const fetchColumns = async () => {
       const response = await triggerColumn({});
-      const shapeColumn = response.data?.find(
-        (column: any) => column.accessor === 'shape'
-      );
+      // const shapeColumn = response.data?.find(
+      //   (column: any) => column.accessor === 'shape'
+      // );
 
       if (response.data?.length) {
-        let additionalColumn = {
-          accessor: 'shape_full',
-          id: shapeColumn?.id,
-          is_disabled: shapeColumn?.is_disabled,
-          is_fixed: shapeColumn?.is_fixed,
-          label: shapeColumn?.label,
-          sequence: shapeColumn?.sequence,
-          short_label: shapeColumn?.short_label
-        };
+        // let additionalColumn = {
+        //   accessor: 'shape_full',
+        //   id: shapeColumn?.id,
+        //   is_disabled: shapeColumn?.is_disabled,
+        //   is_fixed: shapeColumn?.is_fixed,
+        //   label: shapeColumn?.label,
+        //   sequence: shapeColumn?.sequence,
+        //   short_label: shapeColumn?.short_label
+        // };
 
-        let addFireIconCol = {
-          accessor: 'fire_icon',
-          id: 'sub_col_13a',
-          is_disabled: false,
-          is_fixed: false,
-          label: '',
-          sequence: 0,
-          short_label: ''
-        };
+        // let addFireIconCol = {
+        //   accessor: 'fire_icon',
+        //   id: 'sub_col_13a',
+        //   is_disabled: false,
+        //   is_fixed: false,
+        //   label: '',
+        //   sequence: 0,
+        //   short_label: ''
+        // };
 
         const updatedColumns = [
-          ...response.data,
-          additionalColumn,
-          addFireIconCol
+          ...response.data
+          // additionalColumn,
+          // addFireIconCol
         ];
 
         setColumn(updatedColumns);
@@ -697,6 +698,12 @@ const Turkey = () => {
                 Hold
               </p>
             </div>
+            <div className="border-[1px] border-lengendMemoBorder rounded-[4px] bg-legendMemoFill text-legendMemo">
+              <p className="text-mMedium font-medium px-[6px] py-[4px]">
+                {' '}
+                Memo
+              </p>
+            </div>
           </div>
           <MRT_TablePagination table={table} />
           <div className="flex items-center gap-3">
@@ -706,13 +713,13 @@ const Turkey = () => {
                   variant: 'secondary',
                   label: ManageLocales('app.searchResult.addToCart'),
                   handler: () => handleAddToCart(),
-                  isDisable: !Object.keys(rowSelection).length
+                  isDisable: true //!Object.keys(rowSelection).length
                 },
 
                 {
                   variant: 'primary',
                   label: ManageLocales('app.searchResult.confirmStone'),
-                  isDisable: !Object.keys(rowSelection).length,
+                  isDisable: true, //!Object.keys(rowSelection).length,
                   handler: () => {
                     handleConfirmStone({
                       selectedRows: rowSelection,
@@ -751,7 +758,7 @@ const Turkey = () => {
                       setIsCompareStone,
                       setCompareStoneData
                     }),
-                  isDisable: !Object.keys(rowSelection).length
+                  isDisable: true // !Object.keys(rowSelection).length
                 },
                 {
                   label: ManageLocales(
@@ -760,11 +767,11 @@ const Turkey = () => {
                   handler: () => {
                     handleCreateAppointment();
                   },
-                  isDisable:
-                    !Object.keys(rowSelection).length ||
-                    isKycVerified?.customer?.kyc?.status ===
-                      kycStatus.INPROGRESS ||
-                    isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED
+                  isDisable: true
+                  // !Object.keys(rowSelection).length ||
+                  // isKycVerified?.customer?.kyc?.status ===
+                  //   kycStatus.INPROGRESS ||
+                  // isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED
                 }
               ]}
             />
@@ -1279,13 +1286,15 @@ const Turkey = () => {
                   {
                     variant: isConfirmStone ? 'primary' : 'secondary',
                     label: ManageLocales('app.searchResult.addToCart'),
-                    handler: handleAddToCartDetailPage
+                    handler: handleAddToCartDetailPage,
+                    isDisable: true
                   },
 
                   {
                     variant: 'primary',
                     label: ManageLocales('app.searchResult.confirmStone'),
                     isHidden: isConfirmStone,
+                    isDisable: true,
                     handler: () => {
                       // setBreadCrumLabel('Detail Page');
                       const { id } = detailPageData;
