@@ -592,7 +592,7 @@ const TurkeyDataTable = ({
         muiTableBodyCellProps: ({ cell }) => {
           return {
             sx: {
-              display: !cell.id.includes('shape') ? 'none' : 'flex',
+              display: 'flex',
               // marginLeft:!cell.id.includes('shape') && '-12px',
               borderBottom: '1px solid var(--neutral-50)',
               padding: '0px',
@@ -632,7 +632,7 @@ const TurkeyDataTable = ({
       // globalFilter,
       showGlobalFilter: true,
       expanded: true,
-      grouping: ['shape'],
+      // grouping: ['shape'],
       columnPinning: {
         left: ['mrt-row-select', 'lot_id', 'mrt-row-expand']
       },
