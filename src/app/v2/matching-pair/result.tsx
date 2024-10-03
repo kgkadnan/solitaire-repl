@@ -584,12 +584,12 @@ const MatchingPairResult = ({
     let selectedIds = Object.keys(rowSelection);
 
     if (selectedIds.length > 0) {
-      // const hasMemoOut = selectedIds?.some((id: string) => {
-      //   const stone = dataTableState.rows.find(
-      //     (row: IProduct) => row?.id === id
-      //   );
-      //   return stone?.diamond_status === MEMO_STATUS;
-      // });
+      const hasMemoOut = selectedIds?.some((id: string) => {
+        const stone = dataTableState.rows.find(
+          (row: IProduct) => row?.id === id
+        );
+        return stone?.diamond_status === MEMO_STATUS;
+      });
 
       const hasHold = selectedIds?.some((id: string) => {
         const stone = dataTableState.rows.find(
@@ -606,12 +606,12 @@ const MatchingPairResult = ({
         return stone?.diamond_status === AVAILABLE_STATUS;
       });
 
-      if (hasHold && hasAvailable) {
+      if ((hasHold && hasAvailable) || (hasMemoOut && hasAvailable)) {
         setErrorText(SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH);
         setIsError(true);
-        // } else if (hasMemoOut) {
-        //   setErrorText(STONE_NOT_AVAILABLE_MODIFY_SEARCH);
-        //   setIsError(true);
+      } else if (hasMemoOut) {
+        setErrorText(STONE_NOT_AVAILABLE_MODIFY_SEARCH);
+        setIsError(true);
       } else if (hasHold) {
         setErrorText(STONE_NOT_AVAILABLE_MODIFY_SEARCH);
         setIsError(true);
@@ -1213,13 +1213,13 @@ const MatchingPairResult = ({
       category: 'Video'
     },
     {
-      name: 'B2B Sparkle',
+      name: 'Sparkle',
       url: `${FILE_URLS.B2B_SPARKLE.replace(
         '***',
         detailImageData?.lot_id ?? ''
       )}`,
       url_check: detailImageData?.assets_pre_check?.B2B_SPARKLE_CHECK,
-      category: 'B2B Sparkle'
+      category: 'Sparkle'
     },
 
     {
@@ -1420,12 +1420,12 @@ const MatchingPairResult = ({
                       Hold
                     </p>
                   </div>
-                  {/* <div className="border-[1px] border-lengendMemoBorder rounded-[4px] bg-legendMemoFill text-legendMemo">
+                  <div className="border-[1px] border-lengendMemoBorder rounded-[4px] bg-legendMemoFill text-legendMemo">
                     <p className="text-mMedium font-medium px-[6px] py-[4px]">
                       {' '}
                       Memo
                     </p>
-                  </div> */}
+                  </div>
                 </>
               )}
             </div>

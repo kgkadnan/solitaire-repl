@@ -1101,13 +1101,13 @@ const Dashboard = () => {
       category: 'Video'
     },
     {
-      name: 'B2B Sparkle',
+      name: 'Sparkle',
       url: `${FILE_URLS.B2B_SPARKLE.replace(
         '***',
         detailImageData?.lot_id ?? ''
       )}`,
       url_check: detailImageData?.assets_pre_check?.B2B_SPARKLE_CHECK,
-      category: 'B2B Sparkle'
+      category: 'Sparkle'
     },
 
     {
@@ -1164,12 +1164,12 @@ const Dashboard = () => {
     let selectedIds = Object.keys(rowSelection);
 
     if (selectedIds.length > 0) {
-      // const hasMemoOut = selectedIds?.some((id: string) => {
-      //   const stone = searchData?.foundProducts.find(
-      //     (row: IProduct) => row?.id === id
-      //   );
-      //   return stone?.diamond_status === MEMO_STATUS;
-      // });
+      const hasMemoOut = selectedIds?.some((id: string) => {
+        const stone = searchData?.foundProducts.find(
+          (row: IProduct) => row?.id === id
+        );
+        return stone?.diamond_status === MEMO_STATUS;
+      });
 
       const hasHold = selectedIds?.some((id: string) => {
         const stone = searchData?.foundProducts.find(
@@ -1186,10 +1186,10 @@ const Dashboard = () => {
         return stone?.diamond_status === AVAILABLE_STATUS;
       });
 
-      if (hasHold && hasAvailable) {
+      if ((hasHold && hasAvailable) || (hasMemoOut && hasAvailable)) {
         setError(SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH);
-        // } else if (hasMemoOut) {
-        //   setError(STONE_NOT_AVAILABLE_MODIFY_SEARCH);
+      } else if (hasMemoOut) {
+        setError(STONE_NOT_AVAILABLE_MODIFY_SEARCH);
       } else if (hasHold) {
         setError(STONE_NOT_AVAILABLE_MODIFY_SEARCH);
       } else {

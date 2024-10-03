@@ -33,3 +33,46 @@ export const Tracking_Click_RegisterPage = {
   Login_Register: 'Login_Register',
   LP_Blogs_Bottom_Register: 'LP_Blogs_Bottom_Register'
 };
+
+export const Tracking_KYC = {
+  Click_KYC: 'Click_KYC',
+  KYC_Country_PageView: 'KYC_Country_PageView',
+  KYC_Country_India: 'KYC_Country_India',
+  KYC_Country_Dubai: 'KYC_Country_Dubai',
+  KYC_Country_Belgium: 'KYC_Country_Belgium',
+  KYC_Country_US: 'KYC_Country_US',
+  KYC_Form_PageView: 'KYC_Form_PageView',
+  KYC_Form_Online_Form_Selection: 'KYC_Form_Online_Form_Selection',
+  KYC_Form_Offline_Form_Selection: 'KYC_Form_Offline_Form_Selection',
+  Click_Back_KYC_Form: 'Click_Back_KYC_Form',
+  Click_Back_KYC_Personal_Details: 'Click_Back_KYC_Personal_Details',
+  KYC_Form_Personal_Details_PageView: 'KYC_Form_Personal_Details_PageView',
+  Click_Verify_Email: 'Click_Verify_Email',
+  Email_OTP_Sent: 'Email_OTP_Sent',
+  KYC_Email_Verification_PageView: 'KYC_Email_Verification_PageView',
+  KYC_Email_Verification_Resend_OTP: 'KYC_Email_Verification_Resend_OTP',
+  KYC_Email_Verification_Click_Verify: 'KYC_Email_Verification_Click_Verify',
+  Email_OTP_Resent: 'Email_OTP_Resent',
+  Click_Next_KYC_Personal_Details: 'Click_Next_KYC_Personal_Details',
+  KYC_Company_Details_PageView: 'KYC_Company_Details_PageView',
+  Click_Next_KYC_Company_Details: 'Click_Next_KYC_Company_Details',
+  Click_Back_KYC_Company_Details: 'Click_Back_KYC_Company_Details',
+  KYC_Owner_Details_PageView: 'KYC_Owner_Details_PageView',
+  Click_Next_KYC_Owner_Details: 'Click_Next_KYC_Owner_Details',
+  Click_Back_KYC_Owner_Details: 'Click_Back_KYC_Owner_Details',
+  KYC_Banking_Details_PageView: 'KYC_Banking_Details_PageView',
+  Click_Next_KYC_Banking_Details: 'Click_Next_KYC_Banking_Details',
+  Click_Back_KYC_Banking_Details: 'Click_Back_KYC_Banking_Details',
+  KYC_Attachment_PageView: 'KYC_Attachment_PageView',
+  Click_Submit_KYC_Attachment: 'Click_Submit_KYC_Attachment',
+  Click_Back_KYC_Attachment: 'Click_Back_KYC_Attachment',
+  KYC_Status_Pending_Pageview: 'KYC_Status_Pending_Pageview',
+  KYC_Offline_Form_Pageview: 'KYC_Offline_Form_Pageview',
+  KYC_Offline_Form_Submit: 'KYC_Offline_Form_Submit',
+  KYC_Offline_Form_Back: 'KYC_Offline_Form_Back'
+};
+export const Tracking_KYC_Entry_Point = {
+  KYC_Bottom_Sheet: 'KYC_Bottom_Sheet',
+  KYC_Top_Button: 'KYC_Top_Button',
+  KYC_Registration_Page: 'KYC_Registration_Page'
+};

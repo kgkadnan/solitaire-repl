@@ -64,11 +64,11 @@ export const handleConfirmStone = ({
   setSelectedCheckboxes
 }: IHandleConfirmStone) => {
   let selectedIds = Object.keys(selectedRows);
-  // const hasMemoOut = selectedIds?.some(id => {
-  //   return rows?.some(
-  //     row => row.id === id && row.diamond_status === MEMO_STATUS
-  //   );
-  // });
+  const hasMemoOut = selectedIds?.some(id => {
+    return rows?.some(
+      row => row.id === id && row.diamond_status === MEMO_STATUS
+    );
+  });
 
   const hasHold = selectedIds?.some(id => {
     return rows?.some(
@@ -82,16 +82,16 @@ export const handleConfirmStone = ({
     );
   });
 
-  if (hasHold && hasAvailable) {
+  if ((hasHold && hasAvailable) || (hasMemoOut && hasAvailable)) {
     setErrorText(SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH);
     setIsError(true);
-    // } else if (hasMemoOut) {
-    //   setErrorText(
-    //     identifier === 'detailPage'
-    //       ? STONE_NOT_AVAILABLE
-    //       : STONE_NOT_AVAILABLE_MODIFY_SEARCH
-    //   );
-    //   setIsError(true);
+  } else if (hasMemoOut) {
+    setErrorText(
+      identifier === 'detailPage'
+        ? STONE_NOT_AVAILABLE
+        : STONE_NOT_AVAILABLE_MODIFY_SEARCH
+    );
+    setIsError(true);
   } else if (hasHold) {
     setIsError(true);
     setErrorText(

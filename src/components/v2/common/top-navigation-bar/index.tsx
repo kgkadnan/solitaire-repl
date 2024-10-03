@@ -26,6 +26,11 @@ import { DialogComponent } from '../dialog';
 import logoutConfirmIcon from '@public/v2/assets/icons/modal/logout.svg';
 import crossIcon from '@public/v2/assets/icons/modal/cross.svg';
 import { Skeleton } from '@mui/material';
+import {
+  Tracking_KYC,
+  Tracking_KYC_Entry_Point
+} from '@/constants/funnel-tracking';
+import { trackEvent } from '@/utils/ga';
 
 export interface IUserAccountInfo {
   customer: {
@@ -156,7 +161,19 @@ const TopNavigationBar = ({
                 {
                   variant: 'secondary',
                   label: 'Complete KYC Now',
-                  handler: () => router.push('/v2/kyc'),
+                  handler: () => {
+                    localStorage.setItem(
+                      'kyc_entryPoint',
+                      Tracking_KYC_Entry_Point.KYC_Top_Button
+                    ),
+                      trackEvent({
+                        action: Tracking_KYC.Click_KYC,
+                        entry_point:
+                          localStorage.getItem('kyc_entryPoint') || '',
+                        category: 'KYC'
+                      });
+                    router.push('/v2/kyc');
+                  },
                   customStyle: 'flex-1 w-full'
                 }
               ]}

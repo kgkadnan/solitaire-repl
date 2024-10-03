@@ -1,10 +1,12 @@
 import { ManageLocales } from '@/utils/v2/translate';
 import Image from 'next/image';
-import React from 'react';
+import React, { useEffect } from 'react';
 import arrowForward from '@public/v2/assets/icons/kyc/arrow-forward.svg';
 import notepad from '@public/v2/assets/icons/kyc/notepad.svg';
 import computer from '@public/v2/assets/icons/kyc/computer.svg';
 import ActionButton from '@/components/v2/common/action-button';
+import { Tracking_KYC } from '@/constants/funnel-tracking';
+import { trackEvent } from '@/utils/ga';
 
 interface ISubmissionOptionProps {
   handleSubmissionOptionClick: (_option: string) => void;
@@ -17,6 +19,15 @@ const SubmissionOption = ({
   handleBack
 }: ISubmissionOptionProps) => {
   const renderImage = (src: string) => <Image src={src} alt={src} />;
+
+  useEffect(() => {
+    trackEvent({
+      action: Tracking_KYC.KYC_Form_PageView,
+      entry_point: localStorage.getItem('kyc_entryPoint') || '',
+      category: 'KYC',
+      country: localStorage.getItem('country') || ''
+    });
+  }, []);
 
   return (
     <div className="flex flex-col gap-[16px] px-[110px] pt-[32px] h-[93.6vh] min-h-[70vh]">
