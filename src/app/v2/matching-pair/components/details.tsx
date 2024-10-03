@@ -421,10 +421,7 @@ export function MatchPairDetails({
         image.category === 'Certificate'
       )
         return true;
-      if (
-        activePreviewTab === 'Sparkle' &&
-        image.category === 'Sparkle'
-      )
+      if (activePreviewTab === 'Sparkle' && image.category === 'Sparkle')
         return true;
       if (activePreviewTab === 'Image' && image.category === 'Image')
         return true;

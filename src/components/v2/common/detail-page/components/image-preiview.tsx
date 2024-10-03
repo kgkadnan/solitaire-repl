@@ -278,8 +278,7 @@ const ImagePreview: React.FC<IImagePreviewProps> = ({
                 )}
               <div className="flex gap-2">
                 {!(
-                  activePreviewTab === 'Video' ||
-                  activePreviewTab === 'Sparkle'
+                  activePreviewTab === 'Video' || activePreviewTab === 'Sparkle'
                 ) && (
                   <Tooltip
                     tooltipTrigger={

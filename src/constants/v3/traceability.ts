@@ -33,26 +33,39 @@ export const traceabilityMatters = [
 export const leadingPrograms = [
   {
     icon: Program1,
-    heading: 'GIA Source Verification Service (SVS)',
+    heading: 'GemTrac by KGK',
     description:
-      "The GIA SVS provides an additional layer of assurance by verifying the country of origin and the entire journey of a diamond. This service uses a combination of advanced scientific techniques and a rigorous chain of custody protocols to ensure the integrity and transparency of the diamond's origin and history. Discover GIA SVS."
-  },
-  {
-    icon: Program1,
-    heading: 'DB Origin & Origin Story by De Beers',
-    description:
-      'The Origin suite of services from De Beers includes Origin and Grading Reports and a digital look-up to connect clients with the origin and impact of their diamond. The Origin Story digital experience supports retailers with immersive storytelling, celebrating the uniqueness and personal journey of each diamond.'
+      'GemTrac by KGK features in-house traceability programs that document the manufacturing process and track each diamond’s journey from mines to market.'
   },
   {
     icon: Program1,
     heading: 'Tracr by De Beers',
-    description:
-      'A blockchain-based platform that records the provenance and journey of diamonds, ensuring secure and transparent traceability. Read more on Tracr'
+    description: `TRACR is a leading traceability platform developed by De Beers Group. It utilizes a combination of technologies like blockchain, artificial intelligence, and the Internet of Things (IoT) to track a diamond's journey from mine to market.`
   },
   {
     icon: Program1,
+    heading: 'GIA Source Verification Service (SVS)',
+    description: `GIA, a trusted gem institute, verifies the reported source country of polished diamonds using existing documents and audits participating manufacturers. This program boosts consumer confidence by adding a layer of verification. It relies on documentation accuracy, GIA SVS is a valuable step towards a more transparent diamond industry.`
+  },
+  {
+    icon: Program1,
+    heading: 'DB Origin & Origin Story by De Beers',
+    description: `Origin Story is an extension of De Beers' broader Origin suite, which combines diamond traceability from source
+(powered by TRACR) with information about the diamond's impact on people and the planet.
+De Beers Origin Story goes beyond just providing basic traceability data. It aims to create a more engaging experience for retailers and ultimately, consumers.
+`
+  },
+
+  {
+    icon: Program1,
     heading: 'Sarine Diamond Journey',
-    description:
-      'Uses advanced scanning and mapping technologies to create a unique digital fingerprint for each diamond, ensuring complete traceability from rough to polished stages. Explore Sarine Diamond Journey'
+    description: `At the mine, rough diamonds are registered using AutoScan™ Plus capturing their unique characteristics. In cutting and polishing stages, ownership and location information are updated within the Diamond Journey program. The diamond's journey continues to be tracked as it travels through wholesalers and retailers.
+`
+  },
+
+  {
+    icon: Program1,
+    heading: 'Everledger',
+    description: `Everledger uses blockchain technology to create a traceability program for diamonds, aiming to bring transparency & trust to the diamond industry. The program tracks a diamond's journey from mine to consumer, recording details like origin, characteristics, & ownership history on a secure blockchain ledger that creates an immutable record of the diamond's journey.`
   }
 ];
