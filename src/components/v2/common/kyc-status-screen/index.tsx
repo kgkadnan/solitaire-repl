@@ -32,14 +32,14 @@ export const KycStatusScreen: React.FC<IKycStatusScreen> = ({ status }) => {
     }, 4000);
   };
 
-  
   useEffect(() => {
-    status===kycStatus.PENDING &&  trackEvent({
-      action: Tracking_KYC.KYC_Status_Pending_Pageview,
-      entry_point: localStorage.getItem('kyc_entryPoint') || '',
-      category: 'KYC',
-      country: localStorage.getItem('country') || ''
-    });
+    status === kycStatus.PENDING &&
+      trackEvent({
+        action: Tracking_KYC.KYC_Status_Pending_Pageview,
+        entry_point: localStorage.getItem('kyc_entryPoint') || '',
+        category: 'KYC',
+        country: localStorage.getItem('country') || ''
+      });
   }, []);
 
   return (

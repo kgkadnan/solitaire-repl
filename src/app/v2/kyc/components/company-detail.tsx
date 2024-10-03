@@ -80,8 +80,6 @@ const computeCountryDropdownField = (cities: any) => {
   }));
 };
 
-
-
 const CompanyDetail = ({
   formErrorState,
   formState,
@@ -132,7 +130,7 @@ const CompanyDetail = ({
       }
     }
   }, [data, error]);
-  
+
   useEffect(() => {
     trackEvent({
       action: Tracking_KYC.KYC_Company_Details_PageView,

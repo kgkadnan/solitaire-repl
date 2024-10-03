@@ -96,7 +96,6 @@ export const RenderOffline = ({
       });
   };
 
-  
   useEffect(() => {
     trackEvent({
       action: Tracking_KYC.KYC_Offline_Form_Pageview,

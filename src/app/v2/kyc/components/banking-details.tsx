@@ -13,7 +13,6 @@ const BankingDetails = ({
   country,
   currentStepperStep
 }: any) => {
-  
   useEffect(() => {
     trackEvent({
       action: Tracking_KYC.KYC_Banking_Details_PageView,
@@ -22,7 +21,7 @@ const BankingDetails = ({
       country: localStorage.getItem('country') || ''
     });
   }, []);
-  
+
   return (
     <div className="flex flex-col gap-[16px]">
       <div className="flex items-center gap-[16px]">
