@@ -867,7 +867,13 @@ const KYC = () => {
               setToken((prev: any) => ({
                 ...prev,
                 token: response?.data?.data?.token ?? ''
-              })))
+              })),
+              trackEvent({
+                action: Tracking_KYC.Click_Verify_Email,
+                entry_point: localStorage.getItem('kyc_entryPoint') || '',
+                category: 'KYC',
+                country: localStorage.getItem('country') || ''
+              }))
             : {};
           formState.isEmailVerified && goToNextStep();
           if (
@@ -950,8 +956,21 @@ const KYC = () => {
   const handleStepperBack = () => {
     if (currentStepperStep === 0) {
       setCurrentState('submission_option');
+      trackEvent({
+        action: Tracking_KYC.Click_Next_KYC_Personal_Details,
+        entry_point: localStorage.getItem('kyc_entryPoint') || '',
+        category: 'KYC',
+        country: localStorage.getItem('country') || ''
+      });
     } else {
       setCurrentStepperStep(prevStep => (prevStep > 0 ? prevStep - 1 : 0));
+      console.log(filteredSteps[currentStepperStep].identifier);
+      trackEvent({
+        action: trackBackStep(filteredSteps[currentStepperStep].identifier),
+        entry_point: localStorage.getItem('kyc_entryPoint') || '',
+        category: 'KYC',
+        country: localStorage.getItem('country') || ''
+      });
     }
   };
 
@@ -1016,6 +1035,15 @@ const KYC = () => {
           />
         );
       });
+    trackEvent({
+      action:
+        selectedSubmissionOption === 'offline'
+          ? Tracking_KYC.KYC_Offline_Form_Submit
+          : Tracking_KYC.Click_Submit_KYC_Attachment,
+      entry_point: localStorage.getItem('kyc_entryPoint') || '',
+      category: 'KYC',
+      country: localStorage.getItem('country') || ''
+    });
   };
 
   const handleSubmit = async () => {
@@ -1124,7 +1152,18 @@ const KYC = () => {
               {
                 variant: 'secondary',
                 label: ManageLocales('app.modal.cancel'),
-                handler: () => setIsDialogOpen(false),
+                handler: () => {
+                  setIsDialogOpen(false);
+                  trackEvent({
+                    action:
+                      selectedSubmissionOption === 'offline'
+                        ? Tracking_KYC.KYC_Offline_Form_Back
+                        : Tracking_KYC.Click_Back_KYC_Attachment,
+                    entry_point: localStorage.getItem('kyc_entryPoint') || '',
+                    category: 'KYC',
+                    country: localStorage.getItem('country') || ''
+                  });
+                },
                 customStyle: 'w-full flex-1'
               },
               {
@@ -1168,17 +1207,50 @@ const KYC = () => {
       selectedCountry === countries.INDIA
   );
 
+  const trackNextStep = (identifier: string) => {
+    if (identifier === 'personal_details') {
+      return Tracking_KYC.Click_Next_KYC_Personal_Details;
+    } else if (identifier === 'company_details') {
+      return Tracking_KYC.Click_Next_KYC_Company_Details;
+    } else if (identifier === 'company_owner_details') {
+      return Tracking_KYC.Click_Next_KYC_Owner_Details;
+    } else if (identifier === 'banking_details') {
+      return Tracking_KYC.Click_Next_KYC_Banking_Details;
+    } else {
+      return Tracking_KYC.Click_Submit_KYC_Attachment;
+    }
+  };
+
+  const trackBackStep = (identifier: string) => {
+    if (identifier === 'personal_details') {
+      return Tracking_KYC.Click_Back_KYC_Personal_Details;
+    } else if (identifier === 'company_details') {
+      return Tracking_KYC.Click_Back_KYC_Company_Details;
+    } else if (identifier === 'company_owner_details') {
+      return Tracking_KYC.Click_Back_KYC_Owner_Details;
+    } else if (identifier === 'banking_details') {
+      return Tracking_KYC.Click_Back_KYC_Banking_Details;
+    } else {
+      return Tracking_KYC.Click_Back_KYC_Attachment;
+    }
+  };
+
   function goToNextStep() {
     // Find the index of the current step, ignoring case
     let currentIndex = filteredSteps.findIndex(
       (_step, index) => index === currentStepperStep
     );
-
     // If currentStep is found and it is not the last element in the array
     if (currentIndex !== -1 && currentIndex < steps.length - 1) {
       // Set currentStep to the next element in the array
 
       setCurrentStepperStep(currentIndex + 1);
+      trackEvent({
+        action: trackNextStep(filteredSteps[currentIndex].identifier),
+        entry_point: localStorage.getItem('kyc_entryPoint') || '',
+        category: 'KYC',
+        country: localStorage.getItem('country') || ''
+      });
     } else {
       console.log('You are on the last step or current step was not found.');
     }
@@ -1335,6 +1407,16 @@ const KYC = () => {
     }
   };
 
+  useEffect(() => {
+    isInputDialogOpen &&
+      trackEvent({
+        action: Tracking_KYC.KYC_Email_Verification_PageView,
+        entry_point: localStorage.getItem('kyc_entryPoint') || '',
+        category: 'KYC',
+        country: localStorage.getItem('country') || ''
+      });
+  }, [isInputDialogOpen]);
+
   const renderContentWithInput = () => {
     return (
       <div className="flex flex-col gap-[18px] items-center">
@@ -1452,7 +1534,13 @@ const KYC = () => {
                         />
                       );
                     }),
-                  setOtpError(''))
+                  setOtpError(''),
+                  trackEvent({
+                    action: Tracking_KYC.KYC_Email_Verification_Click_Verify,
+                    entry_point: localStorage.getItem('kyc_entryPoint') || '',
+                    category: 'KYC',
+                    country: localStorage.getItem('country') || ''
+                  }))
                 : setOtpError(
                     `We're sorry, but the OTP you entered is incorrect or has expired`
                   );
@@ -1467,6 +1555,12 @@ const KYC = () => {
           <IndividualActionButton
             onClick={() => {
               setIsInputDialogOpen(false);
+              trackEvent({
+                action: Tracking_KYC.KYC_Email_Verification_Resend_OTP,
+                entry_point: localStorage.getItem('kyc_entryPoint') || '',
+                category: 'KYC',
+                country: localStorage.getItem('country') || ''
+              });
             }}
             variant={'secondary'}
             size={'custom'}

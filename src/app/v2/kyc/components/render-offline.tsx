@@ -49,6 +49,7 @@ export const RenderOffline = ({
 
     return formData;
   };
+
   const fileUpload = ({ acceptedFiles, key }: any) => {
     handleFileupload({
       acceptedFiles,
