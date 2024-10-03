@@ -1,8 +1,10 @@
 import { InputField } from '@/components/v2/common/input-field';
 import { countries, kycScreenIdentifierNames } from '@/constants/enums/kyc';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { handleInputChange } from '../helper/handle-change';
 import { ManageLocales } from '@/utils/v2/translate';
+import { Tracking_KYC } from '@/constants/funnel-tracking';
+import { trackEvent } from '@/utils/ga';
 
 const BankingDetails = ({
   formErrorState,
@@ -11,6 +13,15 @@ const BankingDetails = ({
   country,
   currentStepperStep
 }: any) => {
+  useEffect(() => {
+    trackEvent({
+      action: Tracking_KYC.KYC_Banking_Details_PageView,
+      entry_point: localStorage.getItem('kyc_entryPoint') || '',
+      category: 'KYC',
+      country: localStorage.getItem('country') || ''
+    });
+  }, []);
+
   return (
     <div className="flex flex-col gap-[16px]">
       <div className="flex items-center gap-[16px]">

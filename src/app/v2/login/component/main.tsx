@@ -145,8 +145,6 @@ const Login = () => {
 
   useEffect(() => {
     if (isTokenChecked) {
-      console.log('called2');
-
       authToken && router && router.push('/v2/');
     }
   }, [isTokenChecked]);
@@ -166,7 +164,6 @@ const Login = () => {
         localStorage.removeItem('MatchingPair');
 
         userLoggedIn(token.token);
-        console.log('called1');
         router && router.push('/v2/');
       } else {
         setCurrentState('otpVerification');

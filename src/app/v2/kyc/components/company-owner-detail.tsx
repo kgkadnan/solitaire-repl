@@ -7,6 +7,8 @@ import { DynamicMobileInput } from '@/components/v2/common/input-field/dynamic-m
 import { ManageLocales } from '@/utils/v2/translate';
 import { useGetCountryCodeQuery } from '@/features/api/current-ip';
 import { useLazyGetAllCountryCodeQuery } from '@/features/api/get-country-code';
+import { Tracking_KYC } from '@/constants/funnel-tracking';
+import { trackEvent } from '@/utils/ga';
 
 const CompanyOwnerDetail = ({
   formErrorState,
@@ -58,6 +60,15 @@ const CompanyOwnerDetail = ({
       }
     }
   }, [data, error]);
+
+  useEffect(() => {
+    trackEvent({
+      action: Tracking_KYC.KYC_Owner_Details_PageView,
+      entry_point: localStorage.getItem('kyc_entryPoint') || '',
+      category: 'KYC',
+      country: localStorage.getItem('country') || ''
+    });
+  }, []);
 
   return (
     <div className="flex flex-col gap-[16px]">

@@ -14,6 +14,8 @@ import CheckboxWithInput from '@/components/v2/common/check';
 import RadioButtonWithInput from '@/components/v2/common/radio-with-input';
 import { useGetCountryCodeQuery } from '@/features/api/current-ip';
 import { useLazyGetAllCountryCodeQuery } from '@/features/api/get-country-code';
+import { Tracking_KYC } from '@/constants/funnel-tracking';
+import { trackEvent } from '@/utils/ga';
 
 const cities = [
   'AHMEDABAD',
@@ -128,6 +130,15 @@ const CompanyDetail = ({
       }
     }
   }, [data, error]);
+
+  useEffect(() => {
+    trackEvent({
+      action: Tracking_KYC.KYC_Company_Details_PageView,
+      entry_point: localStorage.getItem('kyc_entryPoint') || '',
+      category: 'KYC',
+      country: localStorage.getItem('country') || ''
+    });
+  }, []);
 
   const [selectedCountryIso, setSelectedCountryIso] = useState('');
 

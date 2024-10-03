@@ -42,7 +42,7 @@ const ImagePreview: React.FC<IImagePreviewProps> = ({
     if (activePreviewTab === 'Video' && image.category === 'Video') return true;
     if (activePreviewTab === 'Certificate' && image.category === 'Certificate')
       return true;
-    if (activePreviewTab === 'B2B Sparkle' && image.category === 'B2B Sparkle')
+    if (activePreviewTab === 'Sparkle' && image.category === 'Sparkle')
       return true;
     if (activePreviewTab === 'Image' && image.category === 'Image') return true;
     return false;
@@ -116,7 +116,7 @@ const ImagePreview: React.FC<IImagePreviewProps> = ({
                   ? ''
                   : filteredImages[imageIndex]?.name}{' '}
                 {filteredImages[imageIndex]?.category === 'Video' ||
-                filteredImages[imageIndex]?.category === 'B2B Sparkle'
+                filteredImages[imageIndex]?.category === 'Sparkle'
                   ? 'Video...'
                   : 'Image...'}
               </div>
@@ -125,7 +125,7 @@ const ImagePreview: React.FC<IImagePreviewProps> = ({
           {images.length > 0 ? (
             filteredImages.length > 0 ? (
               filteredImages[imageIndex]?.category === 'Video' ||
-              filteredImages[imageIndex]?.category === 'B2B Sparkle' ? (
+              filteredImages[imageIndex]?.category === 'Sparkle' ? (
                 <iframe
                   src={filteredImages[0].url}
                   className="w-[370px] h-[370px]"
@@ -278,8 +278,7 @@ const ImagePreview: React.FC<IImagePreviewProps> = ({
                 )}
               <div className="flex gap-2">
                 {!(
-                  activePreviewTab === 'Video' ||
-                  activePreviewTab === 'B2B Sparkle'
+                  activePreviewTab === 'Video' || activePreviewTab === 'Sparkle'
                 ) && (
                   <Tooltip
                     tooltipTrigger={

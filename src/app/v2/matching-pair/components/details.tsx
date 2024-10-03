@@ -212,10 +212,10 @@ export function MatchPairDetails({
       category: 'Video'
     },
     {
-      name: 'B2B Sparkle',
+      name: 'Sparkle',
       url: `${FILE_URLS.B2B_SPARKLE.replace('***', tableData?.lot_id ?? '')}`,
       url_check: tableData?.assets_pre_check?.B2B_SPARKLE_CHECK,
-      category: 'B2B Sparkle'
+      category: 'Sparkle'
     },
 
     {
@@ -386,11 +386,10 @@ export function MatchPairDetails({
     let statusClass = '';
     let borderClass = '';
 
-    // if (row.diamond_status === MEMO_STATUS) {
-    //   statusClass = 'bg-legendMemoFill text-legendMemo';
-    //   borderClass = 'border-lengendMemoBorder border-[1px] px-[8px]';
-    // } else
-    if (row.diamond_status === HOLD_STATUS) {
+    if (row.diamond_status === MEMO_STATUS) {
+      statusClass = 'bg-legendMemoFill text-legendMemo';
+      borderClass = 'border-lengendMemoBorder border-[1px] px-[8px]';
+    } else if (row.diamond_status === HOLD_STATUS) {
       statusClass = 'bg-legendHoldFill  text-legendHold';
 
       borderClass = 'border-lengendHoldBorder border-[1px] px-[8px]';
@@ -422,10 +421,7 @@ export function MatchPairDetails({
         image.category === 'Certificate'
       )
         return true;
-      if (
-        activePreviewTab === 'B2B Sparkle' &&
-        image.category === 'B2B Sparkle'
-      )
+      if (activePreviewTab === 'Sparkle' && image.category === 'Sparkle')
         return true;
       if (activePreviewTab === 'Image' && image.category === 'Image')
         return true;
@@ -595,7 +591,7 @@ export function MatchPairDetails({
                         filteredImages[0][imageIndex].category === 'Image' &&
                         !(
                           activePreviewTab === 'Video' ||
-                          activePreviewTab === 'B2B Sparkle' ||
+                          activePreviewTab === 'Sparkle' ||
                           activePreviewTab === 'Certificate'
                         ) && (
                           <>
@@ -669,7 +665,7 @@ export function MatchPairDetails({
                       <div className="flex gap-2">
                         {!(
                           activePreviewTab === 'Video' ||
-                          activePreviewTab === 'B2B Sparkle'
+                          activePreviewTab === 'Sparkle'
                         ) && (
                           <Tooltip
                             tooltipTrigger={
@@ -859,14 +855,14 @@ export function MatchPairDetails({
                                   {filteredImages[index][imageIndex]
                                     ?.category === 'Video' ||
                                   filteredImages[index][imageIndex]
-                                    ?.category === 'B2B Sparkle'
+                                    ?.category === 'Sparkle'
                                     ? 'Video...'
                                     : 'Image...'}
                                 </div>
                               </div>
                             )}
                             {activePreviewTab === 'Video' ||
-                            activePreviewTab === 'B2B Sparkle' ? (
+                            activePreviewTab === 'Sparkle' ? (
                               allImages[index].filter(
                                 (data: any) =>
                                   data.category === activePreviewTab

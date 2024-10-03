@@ -227,11 +227,10 @@ const CompareStone = ({
     let statusClass = '';
     let borderClass = '';
 
-    // if (row.diamond_status === MEMO_STATUS) {
-    //   statusClass = 'bg-legendMemoFill text-legendMemo';
-    //   borderClass = 'border-lengendMemoBorder border-[1px] px-[8px]';
-    // } else
-    if (row.diamond_status === HOLD_STATUS) {
+    if (row.diamond_status === MEMO_STATUS) {
+      statusClass = 'bg-legendMemoFill text-legendMemo';
+      borderClass = 'border-lengendMemoBorder border-[1px] px-[8px]';
+    } else if (row.diamond_status === HOLD_STATUS) {
       statusClass = 'bg-legendHoldFill  text-legendHold';
 
       borderClass = 'border-lengendHoldBorder border-[1px] px-[8px]';

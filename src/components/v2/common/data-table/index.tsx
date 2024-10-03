@@ -38,6 +38,7 @@ import {
 import { constructUrlParams } from '@/utils/v2/construct-url-params';
 import {
   AVAILABLE_STATUS,
+  HOLD_STATUS,
   MAX_SAVED_SEARCH_COUNT,
   MAX_SEARCH_TAB_LIMIT,
   MIN_SAVED_SEARCH_COUNT
@@ -1096,12 +1097,12 @@ const DataTable = ({
                   Hold
                 </p>
               </div>
-              {/* <div className="border-[1px] border-lengendMemoBorder rounded-[4px] bg-legendMemoFill text-legendMemo">
+              <div className="border-[1px] border-lengendMemoBorder rounded-[4px] bg-legendMemoFill text-legendMemo">
                 <p className="text-mMedium font-medium px-[6px] py-[4px]">
                   {' '}
                   Memo
                 </p>
-              </div> */}
+              </div>
             </div>
             <MRT_TablePagination table={table} />
             <div className="flex items-center gap-3">
@@ -1254,7 +1255,10 @@ const DataTable = ({
                         kycStatus.INPROGRESS ||
                       isKycVerified?.customer?.kyc?.status ===
                         kycStatus.REJECTED,
-                    isHidden: activeCartTab !== AVAILABLE_STATUS
+                    isHidden: !(
+                      activeCartTab === AVAILABLE_STATUS ||
+                      activeCartTab === HOLD_STATUS
+                    )
                   },
                   {
                     label: ManageLocales(

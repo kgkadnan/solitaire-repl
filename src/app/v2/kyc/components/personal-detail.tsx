@@ -1,12 +1,14 @@
 import { InputField } from '@/components/v2/common/input-field';
 import { kycScreenIdentifierNames } from '@/constants/enums/kyc';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { handleInputChange } from '../helper/handle-change';
 import { RANGE_VALIDATION } from '@/constants/error-messages/kyc';
 import { updateFormState } from '@/features/kyc/kyc';
 
 import { DynamicMobileInput } from '@/components/v2/common/input-field/dynamic-mobile';
 import { ManageLocales } from '@/utils/v2/translate';
+import { trackEvent } from '@/utils/ga';
+import { Tracking_KYC } from '@/constants/funnel-tracking';
 
 const PersonalDetail = ({
   formErrorState,
@@ -77,6 +79,15 @@ const PersonalDetail = ({
     '972': 'IL',
     '1-684': 'AS'
   };
+
+  useEffect(() => {
+    trackEvent({
+      action: Tracking_KYC.KYC_Form_Personal_Details_PageView,
+      entry_point: localStorage.getItem('kyc_entryPoint') || '',
+      category: 'KYC',
+      country: localStorage.getItem('country') || ''
+    });
+  }, []);
 
   return (
     <div className="flex flex-col gap-[16px]">

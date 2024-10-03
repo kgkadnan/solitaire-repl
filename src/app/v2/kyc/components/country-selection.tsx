@@ -1,5 +1,5 @@
 import { RadioButton } from '@/components/v2/common/radio';
-import React from 'react';
+import React, { useEffect } from 'react';
 import IND from '@public/v2/assets/png/data-table/IND.png';
 import DUB from '@public/v2/assets/png/data-table/DUB.png';
 import BEL from '@public/v2/assets/png/data-table/BEL.png';
@@ -7,6 +7,8 @@ import USA from '@public/v2/assets/png/data-table/USA.png';
 import Image from 'next/image';
 import { ManageLocales } from '@/utils/v2/translate';
 import { countries } from '@/constants/enums/kyc';
+import { trackEvent } from '@/utils/ga';
+import { Tracking_KYC } from '@/constants/funnel-tracking';
 
 interface ICountrySelectionProps {
   handleCountrySelection: (_country: string) => void;
@@ -73,6 +75,15 @@ const CountrySelection = ({
       checked: selectedCountry === countries.OTHER
     }
   ];
+
+  useEffect(() => {
+    trackEvent({
+      action: Tracking_KYC.KYC_Country_PageView,
+      entry_point: localStorage.getItem('kyc_entryPoint') || '',
+      category: 'KYC'
+    });
+  }, []);
+
   return (
     <div className="flex flex-col gap-[16px] px-[110px] pt-[32px] h-[calc(100vh-60px)] min-h-[70vh]">
       <div className="flex flex-col gap-[8px]">
