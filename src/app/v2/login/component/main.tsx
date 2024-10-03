@@ -145,7 +145,6 @@ const Login = () => {
 
   useEffect(() => {
     if (isTokenChecked) {
-
       authToken && router && router.push('/v2/');
     }
   }, [isTokenChecked]);
