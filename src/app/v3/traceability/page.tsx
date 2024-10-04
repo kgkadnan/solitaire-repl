@@ -43,7 +43,7 @@ export default function Traceability() {
           </div>
         </div>
       </div> */}
-      <div className="xl:px-[112px] lg:px-[32px]  pb-[40px] flex flex-col bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient items-center blur-bottom  justify-center">
+      <div className="xl:px-[112px] lg:px-[32px] bg-neutral0 flex flex-col  items-center justify-center">
         <div className="flex flex-col gap-2 text-center w-[840px] py-[40px] justify-center">
           <div className="flex flex-col gap-2">
             <p className="xl:text-[52px] lg:text-[42px] text-neutral900 font-black">
@@ -57,13 +57,13 @@ export default function Traceability() {
       </div>
 
       <div className="flex flex-col items-center xl:px-[112px] lg:px-[32px] pb-[40px]">
-        <div className="w-[1200px]">
+        <div className="w-full">
           <div className="text-neutral900 text-[52px] font-bold text-center leading-[110px] custom-fadeIn">
-            Leading Traceability Programs We use
+            Leading Traceability Programs We Use
           </div>
           <div className="flex flex-wrap gap-[60px] items-center justify-center">
             {leadingPrograms.map(program => (
-              <div className="flex flex-col w-[560px] items-center gap-4">
+              <div className="flex flex-col min-w-[560px] items-center gap-4">
                 <div
                   className="w-[560px] h-[240px] rounded-[12px] bg-white flex items-center justify-center"
                   style={{ boxShadow: 'var(--popups-shadow' }}
