@@ -3,6 +3,11 @@ import Trace2 from '@public/v3/traceability/transparency.svg';
 import Trace3 from '@public/v3/traceability/quality.svg';
 import Trace4 from '@public/v3/traceability/environment.svg';
 import Program1 from '@public/v3/traceability/program1.png';
+import Program2 from '@public/v3/traceability/program2.png';
+import Program3 from '@public/v3/traceability/program3.png';
+import Program4 from '@public/v3/traceability/program4.png';
+import Program5 from '@public/v3/traceability/program5.png';
+import Program6 from '@public/v3/traceability/program6.png';
 
 export const traceabilityMatters = [
   {
@@ -38,17 +43,17 @@ export const leadingPrograms = [
       'GemTrac by KGK features in-house traceability programs that document the manufacturing process and track each diamond’s journey from mines to market.'
   },
   {
-    icon: Program1,
+    icon: Program2,
     heading: 'Tracr by De Beers',
     description: `TRACR is a leading traceability platform developed by De Beers Group. It utilizes a combination of technologies like blockchain, artificial intelligence, and the Internet of Things (IoT) to track a diamond's journey from mine to market.`
   },
   {
-    icon: Program1,
+    icon: Program3,
     heading: 'GIA Source Verification Service (SVS)',
     description: `GIA, a trusted gem institute, verifies the reported source country of polished diamonds using existing documents and audits participating manufacturers. This program boosts consumer confidence by adding a layer of verification. It relies on documentation accuracy, GIA SVS is a valuable step towards a more transparent diamond industry.`
   },
   {
-    icon: Program1,
+    icon: Program4,
     heading: 'DB Origin & Origin Story by De Beers',
     description: `Origin Story is an extension of De Beers' broader Origin suite, which combines diamond traceability from source
 (powered by TRACR) with information about the diamond's impact on people and the planet.
@@ -57,14 +62,14 @@ De Beers Origin Story goes beyond just providing basic traceability data. It aim
   },
 
   {
-    icon: Program1,
+    icon: Program5,
     heading: 'Sarine Diamond Journey',
     description: `At the mine, rough diamonds are registered using AutoScan™ Plus capturing their unique characteristics. In cutting and polishing stages, ownership and location information are updated within the Diamond Journey program. The diamond's journey continues to be tracked as it travels through wholesalers and retailers.
 `
   },
 
   {
-    icon: Program1,
+    icon: Program6,
     heading: 'Everledger',
     description: `Everledger uses blockchain technology to create a traceability program for diamonds, aiming to bring transparency & trust to the diamond industry. The program tracks a diamond's journey from mine to consumer, recording details like origin, characteristics, & ownership history on a secure blockchain ledger that creates an immutable record of the diamond's journey.`
   }
