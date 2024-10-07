@@ -3,6 +3,7 @@ import { leadingPrograms } from '@/constants/v3/traceability';
 import React from 'react';
 import Image from 'next/image';
 import TraceabilityHtml from '@/components/v3/traceability-html';
+import AnimationSection from '@/components/v3/animated-text/scroll';
 export default function Traceability() {
   return (
     <div>
@@ -10,15 +11,18 @@ export default function Traceability() {
         <div className="scroll-container flex overflow-hidden  w-full justify-center">
           <div className="flex flex-col gap-2 flex-none w-full flex-shrink-0 snap-center items-center">
             <div className="text-neutral900 text-[52px] font-black text-center leading-[110px] custom-fadeIn">
-              What is Diamond Traceability?
+              <AnimationSection>What is Diamond Traceability?</AnimationSection>
             </div>
             <div className="flex gap-2">
               <div className="flex gap-3 flex-col items-center">
                 <div className="text-neutral800 text-[16px] px-4 pt-[14px] w-[832px] text-center content">
-                  Diamond traceability refers to the ability to track the origin
-                  and movement of a diamond throughout its entire supply chain.
-                  This involves maintaining a record of the diamond's history
-                  from initial rough stage to manufacturing till it is polished.
+                  <AnimationSection animationDelay={0.5}>
+                    Diamond traceability refers to the ability to track the
+                    origin and movement of a diamond throughout its entire
+                    supply chain. This involves maintaining a record of the
+                    diamond's history from initial rough stage to manufacturing
+                    till it is polished.
+                  </AnimationSection>
                 </div>
               </div>
             </div>
@@ -62,7 +66,7 @@ export default function Traceability() {
             Leading Traceability Programs We Use
           </div>
           <div className="flex flex-wrap gap-[60px] items-center justify-center">
-            {leadingPrograms.map(program => (
+            {leadingPrograms.map((program, index) => (
               <div className="flex flex-col min-w-[560px] items-center gap-4">
                 <div
                   className="w-[560px] h-[240px] rounded-[12px] bg-white flex items-center justify-center"
@@ -76,7 +80,9 @@ export default function Traceability() {
                   />
                 </div>
                 <div
-                  className="w-[528px] rounded-[8px] bg-white p-2 mt-[-120px] h-[220px] gap-2 flex flex-col"
+                  className={`w-[528px] rounded-[8px] bg-white p-2 mt-[-120px] ${
+                    index < 2 ? 'h-[170px]' : 'h-[220px]'
+                  } gap-2 flex flex-col`}
                   style={{ boxShadow: 'var(--popups-shadow' }}
                 >
                   <p className="text-neutral900 text-[28px]">

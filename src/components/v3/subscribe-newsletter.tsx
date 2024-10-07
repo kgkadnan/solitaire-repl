@@ -55,6 +55,8 @@ const SubscribeNewsLetter = () => {
       return Tracking_Click_RegisterPage.LP_Leadership_Bottom_Register;
     } else if (path.includes('/v3/sustainability')) {
       return Tracking_Click_RegisterPage.LP_Sustainability_Bottom_Register;
+    } else if (path.includes('/v3/traceability')) {
+      return Tracking_Click_RegisterPage.LP_Traceability_Bottom_Register;
     } else if (path.includes('/v3/contact-us')) {
       return Tracking_Click_RegisterPage.LP_ContactUs_Bottom_Register;
     } else if (path.includes('/v3/blogs')) {

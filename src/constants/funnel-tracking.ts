@@ -29,6 +29,7 @@ export const Tracking_Click_RegisterPage = {
   LP_Leadership_Bottom_Register: 'LP_Leadership_Bottom_Register',
   LP_OurStory_Bottom_Register: 'LP_OurStory_Bottom_Register',
   LP_Sustainability_Bottom_Register: 'LP_Sustainability_Bottom_Register',
+  LP_Traceability_Bottom_Register: 'LP_Traceability_Bottom_Register',
   LP_ContactUs_Bottom_Register: 'LP_ContactUs_Bottom_Register',
   Login_Register: 'Login_Register',
   LP_Blogs_Bottom_Register: 'LP_Blogs_Bottom_Register'
