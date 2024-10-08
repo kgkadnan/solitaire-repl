@@ -1,10 +1,19 @@
 'use client';
 import { leadingPrograms } from '@/constants/v3/traceability';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import TraceabilityHtml from '@/components/v3/traceability-html';
 import AnimationSection from '@/components/v3/animated-text/scroll';
 export default function Traceability() {
+  const [showControls, setShowControls] = useState(false);
+  useEffect(() => {
+    // Show header after 2 seconds
+    const timer = setTimeout(() => {
+      setShowControls(true);
+    }, 100);
+
+    return () => clearTimeout(timer); // Cleanup on unmount
+  }, []);
   return (
     <div>
       <div className="-[320px] pt-[160px] pb-[80px] flex items-center  bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom">
@@ -29,24 +38,7 @@ export default function Traceability() {
           </div>
         </div>
       </div>
-      {/* <div className="flex flex-col items-center xl:px-[112px] lg:px-[32px] pb-[40px]">
-        <div className="xl:w-[1100px] lg:w-[950px]  ">
-          <div className="text-neutral900 text-[52px] font-bold text-center leading-[110px] custom-fadeIn">
-            Why Diamond Traceability Matters?
-          </div>
-          <div className="flex flex-wrap gap-[60px] items-center justify-center">
-            {traceabilityMatters.map(matter => (
-              <div className="flex flex-col items-center w-[400px] gap-4">
-                <Image src={matter.icon} alt={matter.heading} />
-                <p className="text-neutral900 text-[20px]">{matter.heading}</p>
-                <p className="text-justify text-[16px] text-neutral800 ">
-                  {matter.description}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div> */}
+
       <div className="xl:px-[112px] lg:px-[32px] bg-neutral0 flex flex-col  items-center justify-center">
         <div className="flex flex-col gap-2 text-center w-[840px] py-[40px] justify-center">
           <div className="flex flex-col gap-2">
@@ -57,7 +49,7 @@ export default function Traceability() {
         </div>
       </div>
       <div className="flex justify-center w-full h-fit">
-        <TraceabilityHtml />
+        <TraceabilityHtml showControls={showControls} />
       </div>
 
       <div className="flex flex-col items-center xl:px-[112px] lg:px-[32px] pb-[40px]">
