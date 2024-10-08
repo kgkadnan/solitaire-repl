@@ -864,6 +864,8 @@ const KYC = () => {
           screenName === kycScreenIdentifierNames.PERSONAL_DETAILS &&
           !formState.isEmailVerified
             ? (setIsInputDialogOpen(true),
+              setResendTimer(60),
+              setOtpValues(['', '', '', '', '', '']),
               setToken((prev: any) => ({
                 ...prev,
                 token: response?.data?.data?.token ?? ''
@@ -1453,6 +1455,11 @@ const KYC = () => {
                     .unwrap()
                     .then((res: any) => {
                       if (res) {
+                        console.log('res', res);
+                        setToken((prev: any) => ({
+                          ...prev,
+                          token: res?.token ?? ''
+                        }));
                         setResendTimer(60);
                         //  setIsInputDialogOpen(false)
                       }
