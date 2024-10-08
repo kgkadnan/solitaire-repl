@@ -211,6 +211,35 @@ export const handleConfirmStone = ({
       })
       .catch((err: any) => {
         setIsLoading(false);
+        if (err.data.type === 'unauthorized') {
+          modalSetState.setIsDialogOpen(true);
+          modalSetState.setDialogContent(
+            <CommonPoppup
+              content="To confirm a stone or make a purchase, KYC verification is
+              mandatory. Without verification, access to certain
+              features is restricted."
+              customPoppupStyle="!h-[220px]"
+              customPoppupBodyStyle="!mt-[62px]"
+              header={'Important KYC Verification Required!'}
+              actionButtonData={[
+                {
+                  variant: 'secondary',
+                  label: ManageLocales('app.modal.cancel'),
+                  handler: () => modalSetState.setIsDialogOpen(false),
+                  customStyle: 'w-full flex-1'
+                },
+                {
+                  variant: 'primary',
+                  label: ManageLocales('app.modal.verifyMyKYCNow'),
+                  handler: () => {
+                    router.push('/v2/kyc');
+                  },
+                  customStyle: 'w-full flex-1'
+                }
+              ]}
+            />
+          );
+        }
         console.log('err', err);
       });
   } else {
