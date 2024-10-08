@@ -957,7 +957,7 @@ const KYC = () => {
     if (currentStepperStep === 0) {
       setCurrentState('submission_option');
       trackEvent({
-        action: Tracking_KYC.Click_Next_KYC_Personal_Details,
+        action: Tracking_KYC.Click_Back_KYC_Personal_Details,
         entry_point: localStorage.getItem('kyc_entryPoint') || '',
         category: 'KYC',
         country: localStorage.getItem('country') || ''
