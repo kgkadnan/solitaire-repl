@@ -70,7 +70,7 @@ export const kycApi = createApi({
     }),
     resendEmailOTP: builder.mutation({
       query: ({ trackEvent, ...data }) => ({
-        url: `/store/customers/email/otp/send&event_type=KYC`,
+        url: `/store/customers/email/otp/send?event_type=KYC`,
         method: 'POST',
         body: data
       }),
