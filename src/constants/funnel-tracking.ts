@@ -17,7 +17,7 @@ export const Tracking = {
   Click_Mobile_Edit_Cancel: 'Click_Mobile_Edit_Cancel',
   Mobile_Verified_PageView: 'Mobile_Verified_PageView',
   Click_Back_Mobile_Verified_Page: 'Click_Back_Mobile_Verified_Page',
-  Click_Finsih_KYC: 'Click_Finsih_KYC',
+  Click_Finish_KYC: 'Click_Finish_KYC',
   Click_Continue_Guest: 'Click_Continue_Guest'
 };
 

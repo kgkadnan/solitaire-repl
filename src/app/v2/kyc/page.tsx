@@ -966,6 +966,10 @@ const KYC = () => {
       });
     } else {
       setCurrentStepperStep(prevStep => (prevStep > 0 ? prevStep - 1 : 0));
+      console.log(
+        filteredSteps[currentStepperStep].identifier,
+        'filteredSteps[currentStepperStep].identifier'
+      );
       trackEvent({
         action: trackBackStep(filteredSteps[currentStepperStep].identifier),
         entry_point: localStorage.getItem('kyc_entryPoint') || '',
@@ -1225,8 +1229,10 @@ const KYC = () => {
   const trackBackStep = (identifier: string) => {
     if (identifier === 'personal_details') {
       return Tracking_KYC.Click_Back_KYC_Personal_Details;
-    } else if (identifier === 'company_details') {
+    } else if (identifier === 'company_details' && currentState === 'online') {
       return Tracking_KYC.Click_Back_KYC_Company_Details;
+    } else if (identifier === 'company_details' && currentState === 'offline') {
+      return Tracking_KYC.KYC_Offline_Form_Back;
     } else if (identifier === 'company_owner_details') {
       return Tracking_KYC.Click_Back_KYC_Owner_Details;
     } else if (identifier === 'banking_details') {
