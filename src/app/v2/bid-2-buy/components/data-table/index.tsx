@@ -443,6 +443,13 @@ const BidToBuyDataTable = ({
                         className="stroke-neutral900 cursor-pointer"
                         onClick={() => {
                           setSearchableId('');
+                          const startIndex =
+                            pagination.pageIndex * pagination.pageSize;
+                          const endIndex = startIndex + pagination.pageSize;
+                          // Slice the data to get the current page's data
+                          const newData = rows.slice(startIndex, endIndex);
+                          // Update the paginated data state
+                          setPaginatedData(newData);
                         }}
                       />
                     </div>
