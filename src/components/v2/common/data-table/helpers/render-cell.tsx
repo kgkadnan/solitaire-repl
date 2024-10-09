@@ -35,11 +35,10 @@ export const RenderLotId = ({
 }: any) => {
   let statusClass = '';
   let borderClass = '';
-  // if (row.original.diamond_status === MEMO_STATUS) {
-  //   statusClass = 'bg-legendMemoFill';
-  //   borderClass = 'border-lengendMemoBorder';
-  // } else
-  if (row.original.diamond_status === HOLD_STATUS) {
+  if (row.original.diamond_status === MEMO_STATUS) {
+    statusClass = 'bg-legendMemoFill';
+    borderClass = 'border-lengendMemoBorder';
+  } else if (row.original.diamond_status === HOLD_STATUS) {
     statusClass = 'bg-legendHoldFill';
     borderClass = 'border-lengendHoldBorder';
   } else if (
