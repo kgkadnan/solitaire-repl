@@ -46,12 +46,12 @@ const ConfirmScreen = () => {
             onClick={() => {
               triggerRegisterFlowTrack({ event: 'complete-kyc' });
               funnelTrack({
-                step: Tracking.Click_Finsih_KYC,
+                step: Tracking.Click_Finish_KYC,
                 sessionId: isSessionValid(),
                 entryPoint: localStorage.getItem('entryPoint') || ''
               }),
                 trackEvent({
-                  action: Tracking.Click_Finsih_KYC,
+                  action: Tracking.Click_Finish_KYC,
                   entry_point: localStorage.getItem('entryPoint') || '',
                   category: 'Register'
                 });
