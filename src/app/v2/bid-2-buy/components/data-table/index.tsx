@@ -37,7 +37,9 @@ import { SubRoutes } from '@/constants/v2/enums/routes';
 import { ManageLocales } from '@/utils/v2/translate';
 import { filterBidToBuyFunction } from '@/features/filter-bid-to-buy/filter-bid-to-buy-slice';
 import BiddingSkeleton from '@/components/v2/skeleton/bidding';
+import SearchInputField from '@/components/v2/common/search-input/search-input';
 // import debounce from 'lodash.debounce';
+import ClearIcon from '@public/v2/assets/icons/close-outline.svg?url';
 
 const theme = createTheme({
   typography: {
@@ -190,6 +192,13 @@ const BidToBuyDataTable = ({
 
   const [paginatedData, setPaginatedData] = useState<any>([]);
   const [globalFilter, setGlobalFilter] = useState('');
+
+  const [searchableId, setSearchableId] = useState('');
+
+  const handleFilterSearch = () => {
+    let searchData = rows.filter((data: any) => data.lot_id === searchableId);
+    setPaginatedData(searchData);
+  };
   useEffect(() => {
     if (globalFilter !== '') {
       // Remove all whitespace characters from globalFilter
@@ -210,7 +219,7 @@ const BidToBuyDataTable = ({
     }
   }, [globalFilter]);
   useEffect(() => {
-    if (activeTab !== 2) {
+    if ((activeTab === 0 && searchableId === '') || activeTab === 1) {
       // Calculate the start and end indices for the current page
       const startIndex = pagination.pageIndex * pagination.pageSize;
       const endIndex = startIndex + pagination.pageSize;
@@ -219,7 +228,7 @@ const BidToBuyDataTable = ({
       // Update the paginated data state
       setPaginatedData(newData);
       setIsSkeletonLoading(false);
-    } else {
+    } else if (activeTab === 2) {
       setPaginatedData(rows);
       setIsSkeletonLoading(false);
     }
@@ -227,7 +236,8 @@ const BidToBuyDataTable = ({
     rows,
     pagination.pageIndex, //re-fetch when page index changes
     pagination.pageSize, //re-fetch when page size changes
-    activeTab
+    activeTab,
+    searchableId
   ]);
 
   useEffect(() => {
@@ -337,7 +347,9 @@ const BidToBuyDataTable = ({
             <Tab
               labels={tabLabels}
               activeIndex={activeTab}
-              onTabClick={handleTabClick}
+              onTabClick={id => {
+                handleTabClick(id), setSearchableId('');
+              }}
               activeCount={activeCount}
               bidCount={bidCount}
               historyCount={historyCount}
@@ -402,47 +414,95 @@ const BidToBuyDataTable = ({
                 )}
               </div>
             )}
-            <MRT_GlobalFilterTextField
-              table={table}
-              autoComplete="false"
-              className="max-[1092px]:w-[110px]   max-[1160px]:w-[180px] max-xl:w-auto"
-              sx={{
-                boxShadow: 'var(--input-shadow) inset',
-                border: 'none',
-                color: 'var(--neutral-400)',
-                borderRadius: '4px',
+            {activeTab === 0 ? (
+              <div className="flex relative">
+                <SearchInputField
+                  type="text"
+                  name="Search"
+                  value={searchableId}
+                  onChange={e => {
+                    setSearchableId(e.target.value);
+                  }}
+                  placeholder={'Search'}
+                  customStyle={`${searchableId && '!pr-[110px]'} !w-[250px]`}
+                />
+                {searchableId && (
+                  <>
+                    <ActionButton
+                      actionButtonData={[
+                        {
+                          variant: 'primary',
+                          label: 'Search',
+                          handler: handleFilterSearch,
+                          customCtaStyle: '!h-[30px] !text-[12px]',
 
-                '& .MuiOutlinedInput-input': {
-                  color: 'var(--neutral-900)',
-                  fontSize: '14px !important',
-                  paddingTop: '10px'
-                },
-                ':hover': {
-                  border: 'none'
-                },
-                '& .MuiOutlinedInput-notchedOutline': {
-                  borderColor: 'var(--neutral-200) !important'
-                },
+                          customStyle:
+                            'flex-1 w-[60px] h-[30px] absolute top-[6px] right-[32px]'
+                        }
+                      ]}
+                    />
+                    <div className="absolute inset-y-0 right-0 flex items-center pr-1">
+                      <ClearIcon
+                        className="stroke-neutral900 cursor-pointer"
+                        onClick={() => {
+                          setSearchableId('');
+                          const startIndex =
+                            pagination.pageIndex * pagination.pageSize;
+                          const endIndex = startIndex + pagination.pageSize;
+                          // Slice the data to get the current page's data
+                          const newData = rows.slice(startIndex, endIndex);
+                          // Update the paginated data state
+                          setPaginatedData(newData);
+                        }}
+                      />
+                    </div>
+                  </>
+                )}
+              </div>
+            ) : (
+              <MRT_GlobalFilterTextField
+                table={table}
+                autoComplete="false"
+                className="max-[1092px]:w-[110px]   max-[1160px]:w-[180px] max-xl:w-auto"
+                sx={{
+                  boxShadow: 'var(--input-shadow) inset',
+                  border: 'none',
+                  color: 'var(--neutral-400)',
+                  borderRadius: '4px',
 
-                '& :hover .MuiOutlinedInput-notchedOutline': {
-                  borderColor: 'var(--neutral-200) !important'
-                },
+                  '& .MuiOutlinedInput-input': {
+                    color: 'var(--neutral-900)',
+                    fontSize: '14px !important',
+                    paddingTop: '10px'
+                  },
+                  ':hover': {
+                    border: 'none'
+                  },
+                  '& .MuiOutlinedInput-notchedOutline': {
+                    borderColor: 'var(--neutral-200) !important'
+                  },
 
-                '& .Mui-focused .MuiOutlinedInput-notchedOutline': {
-                  borderColor: 'var(--neutral-200) !important'
-                },
-                '& :focus .MuiOutlinedInput-notchedOutline': {
-                  borderColor: 'var(--neutral-200) !important'
-                },
+                  '& :hover .MuiOutlinedInput-notchedOutline': {
+                    borderColor: 'var(--neutral-200) !important'
+                  },
 
-                '& .MuiOutlinedInput-notchedOutline:hover': {
-                  borderColor: 'var(--neutral-200) !important'
-                },
-                '& .MuiInputAdornment-root': {
-                  display: 'none'
-                }
-              }}
-            />
+                  '& .Mui-focused .MuiOutlinedInput-notchedOutline': {
+                    borderColor: 'var(--neutral-200) !important'
+                  },
+                  '& :focus .MuiOutlinedInput-notchedOutline': {
+                    borderColor: 'var(--neutral-200) !important'
+                  },
+
+                  '& .MuiOutlinedInput-notchedOutline:hover': {
+                    borderColor: 'var(--neutral-200) !important'
+                  },
+                  '& .MuiInputAdornment-root': {
+                    display: 'none'
+                  }
+                }}
+              />
+            )}
+
             <div
               className=" rounded-[4px] cursor-pointer"
               onClick={handleDownloadExcel}
