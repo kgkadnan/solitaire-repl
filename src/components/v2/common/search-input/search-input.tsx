@@ -60,7 +60,7 @@ const SearchInputField: React.FC<ISearchInputProps> = ({
 
   const handleInputBlur = () => {
     setTimeout(() => {
-      setShowSuggestions(false);
+      setShowSuggestions && setShowSuggestions(false);
     }, 200);
   };
 
@@ -80,7 +80,7 @@ const SearchInputField: React.FC<ISearchInputProps> = ({
           value={value}
           onChange={onChange}
           placeholder={placeholder}
-          onFocus={() => setShowSuggestions(true)}
+          onFocus={() => setShowSuggestions && setShowSuggestions(true)}
           onBlur={handleInputBlur}
           onKeyDown={handleKeyPress ? handleKeyPress : handleKeyDown}
         />
