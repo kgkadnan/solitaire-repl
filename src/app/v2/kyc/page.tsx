@@ -838,7 +838,8 @@ const KYC = () => {
             ? updatedCompanyDetails
             : { ...formState.online.sections[screenName] }
       },
-      ID: currentState + 1
+      ID: currentState + 1,
+      entryPoint: localStorage.getItem('kyc_entryPoint') || ''
     })
       .then((response: any) => {
         if (

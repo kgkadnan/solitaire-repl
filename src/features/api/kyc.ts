@@ -8,8 +8,8 @@ export const kycApi = createApi({
 
   endpoints: builder => ({
     kyc: builder.mutation({
-      query: ({ data, ID }) => ({
-        url: `/store/kyc/step/${ID}`,
+      query: ({ data, ID, entryPoint }) => ({
+        url: `/store/kyc/step/${ID}?entry_point=${entryPoint}`,
         method: 'PUT',
         body: data
       }),
@@ -70,7 +70,9 @@ export const kycApi = createApi({
     }),
     resendEmailOTP: builder.mutation({
       query: ({ trackEvent, ...data }) => ({
-        url: `/store/customers/email/otp/send?event_type=KYC`,
+        url: `/store/customers/email/otp/send?event_type=KYC&entry_point=${
+          localStorage.getItem('kyc_entryPoint') || ''
+        }`,
         method: 'POST',
         body: data
       }),
