@@ -838,7 +838,8 @@ const KYC = () => {
             ? updatedCompanyDetails
             : { ...formState.online.sections[screenName] }
       },
-      ID: currentState + 1
+      ID: currentState + 1,
+      entryPoint: localStorage.getItem('kyc_entryPoint') || ''
     })
       .then((response: any) => {
         if (
@@ -864,6 +865,8 @@ const KYC = () => {
           screenName === kycScreenIdentifierNames.PERSONAL_DETAILS &&
           !formState.isEmailVerified
             ? (setIsInputDialogOpen(true),
+              setResendTimer(60),
+              setOtpValues(['', '', '', '', '', '']),
               setToken((prev: any) => ({
                 ...prev,
                 token: response?.data?.data?.token ?? ''
@@ -964,6 +967,10 @@ const KYC = () => {
       });
     } else {
       setCurrentStepperStep(prevStep => (prevStep > 0 ? prevStep - 1 : 0));
+      console.log(
+        filteredSteps[currentStepperStep].identifier,
+        'filteredSteps[currentStepperStep].identifier'
+      );
       trackEvent({
         action: trackBackStep(filteredSteps[currentStepperStep].identifier),
         entry_point: localStorage.getItem('kyc_entryPoint') || '',
@@ -1223,8 +1230,10 @@ const KYC = () => {
   const trackBackStep = (identifier: string) => {
     if (identifier === 'personal_details') {
       return Tracking_KYC.Click_Back_KYC_Personal_Details;
-    } else if (identifier === 'company_details') {
+    } else if (identifier === 'company_details' && currentState === 'online') {
       return Tracking_KYC.Click_Back_KYC_Company_Details;
+    } else if (identifier === 'company_details' && currentState === 'offline') {
+      return Tracking_KYC.KYC_Offline_Form_Back;
     } else if (identifier === 'company_owner_details') {
       return Tracking_KYC.Click_Back_KYC_Owner_Details;
     } else if (identifier === 'banking_details') {
@@ -1453,6 +1462,11 @@ const KYC = () => {
                     .unwrap()
                     .then((res: any) => {
                       if (res) {
+                        console.log('res', res);
+                        setToken((prev: any) => ({
+                          ...prev,
+                          token: res?.token ?? ''
+                        }));
                         setResendTimer(60);
                         //  setIsInputDialogOpen(false)
                       }

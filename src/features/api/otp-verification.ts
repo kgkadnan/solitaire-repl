@@ -21,7 +21,9 @@ export const otpVerificationApi = createApi({
     }),
     sendOtp: builder.mutation({
       query: filter => ({
-        url: `/store/customers/sms/otp/send`,
+        url: `/store/customers/sms/otp/send?entry_point=${
+          localStorage.getItem('entryPoint') || ''
+        }`,
         method: 'POST',
         body: filter
       }),
