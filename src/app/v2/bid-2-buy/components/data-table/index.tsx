@@ -219,7 +219,7 @@ const BidToBuyDataTable = ({
     }
   }, [globalFilter]);
   useEffect(() => {
-    if (activeTab !== 2) {
+    if ((activeTab === 0 && searchableId === '') || activeTab === 1) {
       // Calculate the start and end indices for the current page
       const startIndex = pagination.pageIndex * pagination.pageSize;
       const endIndex = startIndex + pagination.pageSize;
@@ -228,7 +228,7 @@ const BidToBuyDataTable = ({
       // Update the paginated data state
       setPaginatedData(newData);
       setIsSkeletonLoading(false);
-    } else {
+    } else if (activeTab === 2) {
       setPaginatedData(rows);
       setIsSkeletonLoading(false);
     }
@@ -236,7 +236,8 @@ const BidToBuyDataTable = ({
     rows,
     pagination.pageIndex, //re-fetch when page index changes
     pagination.pageSize, //re-fetch when page size changes
-    activeTab
+    activeTab,
+    searchableId
   ]);
 
   useEffect(() => {
@@ -346,7 +347,9 @@ const BidToBuyDataTable = ({
             <Tab
               labels={tabLabels}
               activeIndex={activeTab}
-              onTabClick={handleTabClick}
+              onTabClick={id => {
+                handleTabClick(id), setSearchableId('');
+              }}
               activeCount={activeCount}
               bidCount={bidCount}
               historyCount={historyCount}
