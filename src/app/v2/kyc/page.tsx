@@ -87,6 +87,7 @@ const KYC = () => {
   const { otpValues, resendTimer } = otpVericationState;
   const { setOtpValues, setResendTimer } = otpVerificationSetState;
 
+  const [completeKyc, setCompleteKyc] = useState(false);
   const dispatch = useAppDispatch();
 
   const trackCountry = (country: string) => {
@@ -1002,23 +1003,24 @@ const KYC = () => {
           localStorage.setItem('user', JSON.stringify(res?.data));
         });
         dispatch(isEditingKYC(false));
-        setIsDialogOpen(true);
-        setDialogContent(
-          <CommonPoppup
-            content={''}
-            customPoppupBodyStyle="!mt-[70px]"
-            status="success"
-            header={'Your KYC has been submitted for approval'}
-            actionButtonData={[
-              {
-                variant: 'secondary',
-                label: ManageLocales('app.modal.browseWebsite'),
-                handler: () => router.push('/v2'),
-                customStyle: 'w-full flex-1'
-              }
-            ]}
-          />
-        );
+        setCompleteKyc(true);
+        // setIsDialogOpen(true);
+        // setDialogContent(
+        //   <CommonPoppup
+        //     content={''}
+        //     customPoppupBodyStyle="!mt-[70px]"
+        //     status="success"
+        //     header={'Your KYC has been submitted for approval'}
+        //     actionButtonData={[
+        //       {
+        //         variant: 'secondary',
+        //         label: ManageLocales('app.modal.browseWebsite'),
+        //         handler: () => router.push('/v2'),
+        //         customStyle: 'w-full flex-1'
+        //       }
+        //     ]}
+        //   />
+        // );
       })
       .catch(e => {
         setIsLoading(false);
@@ -1601,7 +1603,11 @@ const KYC = () => {
         renderContent={renderContentWithInput}
         dialogStyle={'max-w-[450px] min-h-[460px]'}
       />
-      {renderContent()}
+      {completeKyc ? (
+        <KycStatusScreen status={kycStatus.PENDING} />
+      ) : (
+        renderContent()
+      )}
     </div>
   );
 };
