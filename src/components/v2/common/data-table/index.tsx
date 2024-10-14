@@ -38,6 +38,7 @@ import {
 import { constructUrlParams } from '@/utils/v2/construct-url-params';
 import {
   AVAILABLE_STATUS,
+  HOLD_STATUS,
   MAX_SAVED_SEARCH_COUNT,
   MAX_SEARCH_TAB_LIMIT,
   MIN_SAVED_SEARCH_COUNT
@@ -1254,7 +1255,10 @@ const DataTable = ({
                         kycStatus.INPROGRESS ||
                       isKycVerified?.customer?.kyc?.status ===
                         kycStatus.REJECTED,
-                    isHidden: activeCartTab !== AVAILABLE_STATUS
+                    isHidden: !(
+                      activeCartTab === AVAILABLE_STATUS ||
+                      activeCartTab === HOLD_STATUS
+                    )
                   },
                   {
                     label: ManageLocales(

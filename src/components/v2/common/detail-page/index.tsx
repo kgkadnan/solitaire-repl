@@ -141,10 +141,10 @@ export function DiamondDetailsComponent({
       category: 'Video'
     },
     {
-      name: 'B2B Sparkle',
+      name: 'Sparkle',
       url: `${FILE_URLS.B2B_SPARKLE.replace('***', tableData?.lot_id ?? '')}`,
       url_check: tableData?.assets_pre_check?.B2B_SPARKLE_CHECK,
-      category: 'B2B Sparkle'
+      category: 'Sparkle'
     },
 
     {
@@ -218,11 +218,12 @@ export function DiamondDetailsComponent({
     let statusClass = '';
     let borderClass = '';
 
-    if (tableData.diamond_status === MEMO_STATUS) {
-      statusClass = 'bg-legendMemoFill text-legendMemo';
-      borderClass = 'border-lengendMemoBorder';
-      statusValue = 'Memo';
-    } else if (tableData.diamond_status === HOLD_STATUS) {
+    // if (tableData.diamond_status === MEMO_STATUS) {
+    //   statusClass = 'bg-legendMemoFill text-legendMemo';
+    //   borderClass = 'border-lengendMemoBorder';
+    //   statusValue = 'Memo';
+    // } else
+    if (tableData.diamond_status === HOLD_STATUS) {
       statusClass = 'bg-legendHoldFill  text-legendHold';
 
       borderClass = 'border-lengendHoldBorder';

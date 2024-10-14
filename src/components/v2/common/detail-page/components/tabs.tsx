@@ -58,7 +58,7 @@ const DetailPageTabs = ({
         : !validImages.some((image: any) => image.category === 'Video')
     },
     {
-      label: 'B2B Sparkle',
+      label: 'Sparkle',
       svg: <VideoSvg />,
       isDisable: isMatchingPair
         ? !validImages.some(
@@ -66,10 +66,10 @@ const DetailPageTabs = ({
               Array.isArray(innerArray) &&
               innerArray.some(
                 (image: any) =>
-                  image.category === 'B2B Sparkle' && image.url_check === true
+                  image.category === 'Sparkle' && image.url_check === true
               )
           )
-        : !validImages.some((image: any) => image.category === 'B2B Sparkle')
+        : !validImages.some((image: any) => image.category === 'Sparkle')
     },
     {
       label: 'Certificate',

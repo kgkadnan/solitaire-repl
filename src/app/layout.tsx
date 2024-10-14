@@ -26,11 +26,17 @@ import FooterSiteMap from '@/components/v3/footer-sitemap';
 import Footer from '@/components/v3/footer';
 import { useMediaQuery } from 'react-responsive';
 // import Salesiq from '@/components/v2/common/sales-iq';
-// import Script from 'next/script';
+import * as Sentry from '@sentry/nextjs';
+import Script from 'next/script';
 
 const store = setupStore();
 
 const inter = Inter({ subsets: ['latin'] });
+
+Sentry.init({
+  dsn: process.env.NEXT_PUBLIC_SENTRY_DSN, // Replace with your Sentry DSN
+  tracesSampleRate: 1.0 // Adjust the sample rate for performance monitoring
+});
 
 export default function RootLayout({ children }: { children?: ReactNode }) {
   const path = usePathname();
@@ -57,6 +63,29 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
     }, 500);
 
     return () => clearTimeout(timer); // Cleanup on unmount
+  }, []);
+
+  useEffect(() => {
+    // Define the URLs
+    const appStoreURL =
+      'https://apps.apple.com/in/app/kgk-diamond/id6479595403';
+    const playStoreURL =
+      'https://play.google.com/store/apps/details?id=com.kgk.diamonds&hl=en_IN';
+
+    // Check if the device is iOS
+    const isIOS = () => /iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+    // Check if the device is Android
+    const isAndroid = () => /Android/i.test(navigator.userAgent);
+
+    // Perform the redirect based on the platform
+    if (path.includes('/v3') || path.includes('/v2') || path === '/') {
+      if (isIOS()) {
+        window.location.href = appStoreURL;
+      } else if (isAndroid()) {
+        window.location.href = playStoreURL;
+      }
+    }
   }, []);
 
   useEffect(() => {
@@ -125,11 +154,11 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
         `
           }}
         />
-        {/* <Script
+        <Script
           strategy="afterInteractive"
-          src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
-        /> */}
-        {/* <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA}`}
+        />
+        <Script
           id="ga4-init"
           strategy="afterInteractive"
           dangerouslySetInnerHTML={{
@@ -137,12 +166,12 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', '${GA_TRACKING_ID}', {
+            gtag('config', '${process.env.NEXT_PUBLIC_GA}', {
               page_path: window.location.pathname,
             });
           `
           }}
-        /> */}
+        />
       </head>
       <Head>
         <link
@@ -226,7 +255,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
             )}
           </ThemeProviders>
         </Provider>
-        <SpeedInsights />
+        {/* <SpeedInsights /> */}
 
         {/* <Salesiq /> */}
       </body>

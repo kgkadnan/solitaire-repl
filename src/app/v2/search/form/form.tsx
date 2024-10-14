@@ -51,7 +51,7 @@ import {
 import { useRouter, useSearchParams } from 'next/navigation';
 import { setModifySearch } from './helpers/modify-search';
 import { useAppSelector } from '@/hooks/hook';
-import logger from 'logging/log-util';
+// import logger from 'logging/log-util';
 import {
   useAddSavedSearchMutation,
   useUpdateSavedSearchMutation
@@ -286,7 +286,7 @@ const Form = ({
 
           dispatch(resetTimeTracking());
         } catch (error) {
-          logger.error(`Error logging time on drop-off: ${error}`);
+          console.log(`Error logging time on drop-off: ${error}`);
         }
       }
     };
@@ -891,7 +891,7 @@ const Form = ({
                 : handleFormSearch(true);
             })
             .catch((error: any) => {
-              logger.error(error);
+              console.log(error);
             });
         } else {
           await addSavedSearch({

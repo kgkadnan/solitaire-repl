@@ -13,7 +13,7 @@ import {
   Tracking_Click_RegisterPage
 } from '@/constants/funnel-tracking';
 import useUser from '@/lib/use-auth';
-// import { trackEvent } from '@/utils/ga';
+import { trackEvent } from '@/utils/ga';
 
 const CommonHeader = () => {
   const currentRoute = usePathname();
@@ -78,10 +78,16 @@ const CommonHeader = () => {
                 entryPoint: Tracking_Click_RegisterPage.LP_Top_Login,
                 sessionId: isSessionValid()
               }),
-                localStorage.setItem(
-                  'entryPoint',
-                  Tracking_Click_RegisterPage.LP_Top_Login
-                );
+                trackEvent({
+                  action: Tracking.Click_RegisterPage,
+
+                  entry_point: Tracking_Click_RegisterPage.LP_Top_Login,
+                  category: 'Register'
+                });
+              localStorage.setItem(
+                'entryPoint',
+                Tracking_Click_RegisterPage.LP_Top_Login
+              );
 
               authToken ? router.push('/v2') : router.push('/v2/login');
             }}
@@ -102,16 +108,15 @@ const CommonHeader = () => {
                 entryPoint: Tracking_Click_RegisterPage.LP_Top_Register,
                 sessionId: isSessionValid()
               }),
-                // trackEvent({
-                //   action: 'click',
-                //   category: 'Button',
-                //   label: 'Test Button',
-                //   value: 1
-                // });
-                localStorage.setItem(
-                  'entryPoint',
-                  Tracking_Click_RegisterPage.LP_Top_Register
-                );
+                trackEvent({
+                  action: Tracking.Click_RegisterPage,
+                  entry_point: Tracking_Click_RegisterPage.LP_Top_Register,
+                  category: 'Register'
+                });
+              localStorage.setItem(
+                'entryPoint',
+                Tracking_Click_RegisterPage.LP_Top_Register
+              );
 
               router.push('/v2/register');
             }}

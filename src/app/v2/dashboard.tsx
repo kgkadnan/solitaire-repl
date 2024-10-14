@@ -527,7 +527,6 @@ const Dashboard = () => {
     () => mapColumns(searchColumn),
     [searchColumn]
   );
-
   const handleEdit = (stone: string, identifier = false) => {
     let savedSearchEditData = customerData?.customer?.saved_searches?.filter(
       (items: any) => {
@@ -1102,13 +1101,13 @@ const Dashboard = () => {
       category: 'Video'
     },
     {
-      name: 'B2B Sparkle',
+      name: 'Sparkle',
       url: `${FILE_URLS.B2B_SPARKLE.replace(
         '***',
         detailImageData?.lot_id ?? ''
       )}`,
       url_check: detailImageData?.assets_pre_check?.B2B_SPARKLE_CHECK,
-      category: 'B2B Sparkle'
+      category: 'Sparkle'
     },
 
     {
@@ -1656,7 +1655,8 @@ const Dashboard = () => {
           <div className="mt-1 flex items-center  gap-2 rounded-[4px] px-1 h-[26px] bg-[#F1FAF8]">
             <Image src={BidHammer} alt="Bid to Buy" className="mb-2" />
             <p className="m-0 p-0 text-neutral-900 sm:text-mMedium text-lRegular">
-              Stay tuned
+              Bid starts on {formatDateString(data.start_at)}
+              {/* Stay tuned */}
             </p>
           </div>
         );

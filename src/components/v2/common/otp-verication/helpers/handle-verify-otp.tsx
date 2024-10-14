@@ -1,6 +1,7 @@
 import CommonPoppup from '@/app/v2/login/component/common-poppup';
 import { IToken } from '@/app/v2/register/interface';
 import { Tracking } from '@/constants/funnel-tracking';
+import { trackEvent } from '@/utils/ga';
 import { isSessionValid } from '@/utils/manage-session';
 
 interface IHandleVerifyOtp {
@@ -67,6 +68,14 @@ export const handleVerifyOtp = ({
             mobileNumber: `+${phone}`,
             entryPoint: localStorage.getItem('entryPoint') || ''
           });
+        trackEvent({
+          action: Tracking.Click_Verify,
+          label: Tracking.Click_Verify,
+          mobile_number: `+${phone}`,
+          status: 'Fail',
+          entry_point: localStorage.getItem('entryPoint') || '',
+          category: 'Register'
+        });
       }
     })
     .catch((e: any) => {
@@ -91,5 +100,13 @@ export const handleVerifyOtp = ({
           mobileNumber: `+${phone}`,
           entryPoint: localStorage.getItem('entryPoint') || ''
         });
+      trackEvent({
+        action: Tracking.Click_Verify,
+        label: Tracking.Click_Verify,
+        mobile_number: `+${phone}`,
+        status: 'Fail',
+        entry_point: localStorage.getItem('entryPoint') || '',
+        category: 'Register'
+      });
     });
 };

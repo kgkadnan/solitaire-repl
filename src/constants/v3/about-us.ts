@@ -10,7 +10,7 @@ import Timeline2000 from '@public/v3/timeline/2000.png';
 import Timeline2001 from '@public/v3/timeline/2001.png';
 import Timeline2005 from '@public/v3/timeline/2005.png';
 import Timeline2014 from '@public/v3/timeline/2014.png';
-// import Timeline2015 from '@public/v3/timeline/2015.png';
+import Timeline2017 from '@public/v3/timeline/2017.png';
 // import Timeline2016 from '@public/v3/timeline/2016.png';
 // import Timeline2018 from '@public/v3/timeline/2018.png';
 import Timeline2019 from '@public/v3/timeline/2019.png';
@@ -121,12 +121,11 @@ export const timelineData = [
     content:
       'KGK continued to expand its presence in the producer nations, establishing a manufacturing plant in Botswana.'
   },
-  // {
-  //   image: Timeline2015,
-  //   year: '2015',
-  //   content:
-  //     'KGK Diamonds Botswana Pty Ltd achieved De Beers Sightholder status.'
-  // },
+  {
+    image: Timeline2017,
+    year: '2017',
+    content: 'KGK opened a diamond manufacturing facility in Windhoek, Namibia.'
+  },
   // {
   //   image: Timeline2016,
   //   year: '2016',
