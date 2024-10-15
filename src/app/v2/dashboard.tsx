@@ -1848,7 +1848,9 @@ const Dashboard = () => {
                   variant: 'secondary',
                   label: ManageLocales('app.confirmStone.footer.back'),
                   handler: () => {
-                    setIsDetailPage(true);
+                    goBackToListView(
+                      isCompareStone ? 'Compare Stone' : 'Dashboard'
+                    );
                   }
                 },
 
