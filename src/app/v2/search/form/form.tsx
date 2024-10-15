@@ -1304,9 +1304,7 @@ const Form = ({
             selectedShade={selectedShade}
             setSelectedShade={setSelectedShade}
           />
-          {isKycVerified?.customer?.kyc?.status === kycStatus.PENDING ||
-          isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
-          isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED ? (
+          {isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED ? (
             <></>
           ) : (
             <DiscountPrice

@@ -1133,12 +1133,8 @@ const MatchPairTable = ({
 
                     isDisable:
                       !Object.keys(rowSelection).length ||
-                      isKycVerified?.customer?.kyc?.status ===
-                        kycStatus.PENDING ||
-                      isKycVerified?.customer?.kyc?.status ===
-                        kycStatus.INPROGRESS ||
-                      isKycVerified?.customer?.kyc?.status ===
-                        kycStatus.REJECTED
+                      isKycVerified?.customer?.kyc?.status !==
+                        kycStatus.APPROVED
                   }
                 ]}
               />

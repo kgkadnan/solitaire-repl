@@ -238,9 +238,7 @@ const Dashboard = () => {
       count: customerData?.customer?.upcoming_appointments_count,
       isAvailable: true,
       isKycNotVerified:
-        isKycVerified?.customer?.kyc?.status === kycStatus.PENDING ||
-        isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
-        isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED,
+        isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED,
       link: '/v2/my-appointments'
     }
   ];

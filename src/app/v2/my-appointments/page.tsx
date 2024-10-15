@@ -399,11 +399,7 @@ const MyAppointments = () => {
                   customStyle: 'flex-1 w-full h-10',
                   svg: bookAppointment,
                   isDisable:
-                    isKycVerified?.customer?.kyc?.status ===
-                      kycStatus.PENDING ||
-                    isKycVerified?.customer?.kyc?.status ===
-                      kycStatus.INPROGRESS ||
-                    isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED
+                    isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED
                 }
               ]}
             />

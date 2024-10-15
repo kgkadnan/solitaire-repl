@@ -1184,12 +1184,8 @@ const DataTable = ({
                     },
                     isDisable:
                       !Object.keys(rowSelection).length ||
-                      isKycVerified?.customer?.kyc?.status ===
-                        kycStatus.PENDING ||
-                      isKycVerified?.customer?.kyc?.status ===
-                        kycStatus.INPROGRESS ||
-                      isKycVerified?.customer?.kyc?.status ===
-                        kycStatus.REJECTED
+                      isKycVerified?.customer?.kyc?.status !==
+                        kycStatus.APPROVED
                   }
                 ]}
               />
@@ -1253,12 +1249,9 @@ const DataTable = ({
                     },
                     isDisable: !Object.keys(rowSelection).length,
                     commingSoon:
-                      isKycVerified?.customer?.kyc?.status ===
-                        kycStatus.PENDING ||
-                      isKycVerified?.customer?.kyc?.status ===
-                        kycStatus.INPROGRESS ||
-                      isKycVerified?.customer?.kyc?.status ===
-                        kycStatus.REJECTED,
+                      isKycVerified?.customer?.kyc?.status !==
+                      kycStatus.APPROVED,
+
                     isHidden: !(
                       activeCartTab === AVAILABLE_STATUS ||
                       activeCartTab === HOLD_STATUS
