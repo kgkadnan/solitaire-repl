@@ -1667,7 +1667,8 @@ const Dashboard = () => {
           <div className="mt-1 flex items-center  gap-2 rounded-[4px] px-1 h-[26px] bg-[#F1FAF8]">
             <Image src={BidHammer} alt="Bid to Buy" className="mb-2" />
             <p className="m-0 p-0 text-neutral-900 sm:text-mMedium text-lRegular">
-              Stay tuned
+              Bid starts on {formatDateString(data.start_at)}
+              {/* Stay tuned */}
             </p>
           </div>
         );
