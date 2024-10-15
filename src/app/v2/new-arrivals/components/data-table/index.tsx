@@ -902,6 +902,7 @@ const NewArrivalDataTable = ({
         activeTab !== 2 &&
         rowSelection[row.id] &&
         !(
+          isKycVerified?.customer?.kyc?.status === kycStatus.PENDING ||
           isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
           isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED
         )

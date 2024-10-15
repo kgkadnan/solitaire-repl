@@ -634,6 +634,8 @@ const NewArrivals = () => {
                   isDisable: !Object.keys(rowSelection).length,
                   commingSoon:
                     isKycVerified?.customer?.kyc?.status ===
+                      kycStatus.PENDING ||
+                    isKycVerified?.customer?.kyc?.status ===
                       kycStatus.INPROGRESS ||
                     isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED
                 }
@@ -726,6 +728,8 @@ const NewArrivals = () => {
                     handleCreateAppointment();
                   },
                   commingSoon:
+                    isKycVerified?.customer?.kyc?.status ===
+                      kycStatus.PENDING ||
                     isKycVerified?.customer?.kyc?.status ===
                       kycStatus.INPROGRESS ||
                     isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED

@@ -640,9 +640,9 @@ const MatchPairTable = ({
         }
       },
       'mrt-row-select': {
-        size: 40,
-        minSize: 40,
-        maxSize: 40
+        size: 15,
+        minSize: 15,
+        maxSize: 15
       }
     },
 
@@ -1133,6 +1133,8 @@ const MatchPairTable = ({
 
                     isDisable:
                       !Object.keys(rowSelection).length ||
+                      isKycVerified?.customer?.kyc?.status ===
+                        kycStatus.PENDING ||
                       isKycVerified?.customer?.kyc?.status ===
                         kycStatus.INPROGRESS ||
                       isKycVerified?.customer?.kyc?.status ===

@@ -238,6 +238,7 @@ const Dashboard = () => {
       count: customerData?.customer?.upcoming_appointments_count,
       isAvailable: true,
       isKycNotVerified:
+        isKycVerified?.customer?.kyc?.status === kycStatus.PENDING ||
         isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
         isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED,
       link: '/v2/my-appointments'
@@ -350,9 +351,9 @@ const Dashboard = () => {
               enableSorting: false,
               accessorKey: 'fire_icon',
               header: '',
-              minSize: 26,
-              size: 26,
-              maxSize: 26,
+              minSize: 20,
+              size: 20,
+              maxSize: 20,
               Cell: ({ row }: { row: any }) => {
                 return row.original.in_high_demand ? (
                   <Tooltip
@@ -980,16 +981,22 @@ const Dashboard = () => {
     }
     setRowSelection({});
     setIsDetailPage(true);
+
     setIsConfirmStone(false);
     setConfirmStoneData([]);
-    setIsCompareStone(false);
-    setCompareStoneData([]);
+
     setShowAppointmentForm(false);
     setAppointmentPayload({
       kam: { kam_name: '', image: '' },
       storeAddresses: [],
       timeSlots: { dates: [{ date: '', day: '' }], slots: {} }
     });
+    setBreadCrumLabel('Dashboard');
+
+    if (isFrom !== 'Compare Stone') {
+      setIsCompareStone(false);
+      setCompareStoneData([]);
+    }
   };
 
   const renderAddCommentDialogs = () => {
@@ -1186,11 +1193,13 @@ const Dashboard = () => {
         return stone?.diamond_status === AVAILABLE_STATUS;
       });
 
-      if ((hasHold && hasAvailable) || (hasMemoOut && hasAvailable)) {
+      if (hasHold && hasAvailable) {
         setError(SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH);
-      } else if (hasMemoOut) {
-        setError(STONE_NOT_AVAILABLE_MODIFY_SEARCH);
-      } else if (hasHold) {
+      }
+      // else if (hasMemoOut) {
+      //   setError(STONE_NOT_AVAILABLE_MODIFY_SEARCH);
+      // }
+      else if (hasHold) {
         setError(STONE_NOT_AVAILABLE_MODIFY_SEARCH);
       } else {
         setShowAppointmentForm(true);
@@ -1622,6 +1631,9 @@ const Dashboard = () => {
     }
   };
 
+  console.log('confirmStoneData', confirmStoneData);
+  console.log('isConfirmStone', isConfirmStone);
+
   useEffect(() => {
     if (images?.length > 0 && images[0]?.name?.length)
       loadImages(images, setValidImages, checkImage, false);
@@ -1818,6 +1830,47 @@ const Dashboard = () => {
             )}
           </div>
         </div>
+      ) : isConfirmStone ? (
+        <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow mt-[16px]">
+          <ConfirmStone
+            rows={confirmStoneData}
+            columns={columnData}
+            goBackToListView={goBackToListView}
+            // activeTab={activeTab}
+            isFrom={isCompareStone ? 'Compare Stone' : 'Dashboard'}
+            handleDetailImage={handleDetailImage}
+            handleDetailPage={handleDetailPage}
+            identifier="Dashboard"
+          />
+          <div className="px-4 py-2">
+            <ActionButton
+              actionButtonData={[
+                {
+                  variant: 'secondary',
+                  label: ManageLocales('app.confirmStone.footer.back'),
+                  handler: () => {
+                    setIsDetailPage(true);
+                  }
+                },
+
+                {
+                  variant: 'secondary',
+                  label: ManageLocales('app.confirmStone.footer.addComment'),
+                  handler: () => {
+                    setCommentValue('');
+                    setIsAddCommentDialogOpen(true);
+                  }
+                },
+
+                {
+                  variant: 'primary',
+                  label: ManageLocales('app.confirmStone.footer.confirmStone'),
+                  handler: () => confirmStone()
+                }
+              ]}
+            />
+          </div>
+        </div>
       ) : isCompareStone ? (
         <div>
           <div className="flex py-[8px] items-center ">
@@ -1845,6 +1898,7 @@ const Dashboard = () => {
               setIsDetailPage={setIsDetailPage}
               modalSetState={modalSetState}
               refreshCompareStone={refreshSearchResults}
+              setIsCompareStone={setIsCompareStone}
             />
           </div>
         </div>
@@ -1928,47 +1982,6 @@ const Dashboard = () => {
               setCompareStoneData={setCompareStoneData}
               handleCreateAppointment={handleCreateAppointment}
               refreshSearchResults={refreshSearchResults}
-            />
-          </div>
-        </div>
-      ) : isConfirmStone ? (
-        <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow mt-[16px]">
-          <ConfirmStone
-            rows={confirmStoneData}
-            columns={columnData}
-            goBackToListView={goBackToListView}
-            // activeTab={activeTab}
-            isFrom={'Dashboard'}
-            handleDetailImage={handleDetailImage}
-            handleDetailPage={handleDetailPage}
-            identifier="Dashboard"
-          />
-          <div className="px-4 py-2">
-            <ActionButton
-              actionButtonData={[
-                {
-                  variant: 'secondary',
-                  label: ManageLocales('app.confirmStone.footer.back'),
-                  handler: () => {
-                    setIsDetailPage(true);
-                  }
-                },
-
-                {
-                  variant: 'secondary',
-                  label: ManageLocales('app.confirmStone.footer.addComment'),
-                  handler: () => {
-                    setCommentValue('');
-                    setIsAddCommentDialogOpen(true);
-                  }
-                },
-
-                {
-                  variant: 'primary',
-                  label: ManageLocales('app.confirmStone.footer.confirmStone'),
-                  handler: () => confirmStone()
-                }
-              ]}
             />
           </div>
         </div>
@@ -2307,7 +2320,7 @@ const Dashboard = () => {
                                   .map((word: string) => word.charAt(0)) // Extract the first character of each word
                                   .join('')}
                               </div>
-                              <div className="flex flex-col gap-[18px]">
+                              <div className="flex flex-col gap-[4px]">
                                 <h1 className="text-neutral900 font-medium text-mMedium capitalize">
                                   {searchData.name}
                                 </h1>

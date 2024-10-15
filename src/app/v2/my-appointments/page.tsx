@@ -400,6 +400,8 @@ const MyAppointments = () => {
                   svg: bookAppointment,
                   isDisable:
                     isKycVerified?.customer?.kyc?.status ===
+                      kycStatus.PENDING ||
+                    isKycVerified?.customer?.kyc?.status ===
                       kycStatus.INPROGRESS ||
                     isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED
                 }

@@ -977,7 +977,6 @@ const Form = ({
       })
       .catch(_err => setIsLoading(false));
   };
-  let isNudge = localStorage.getItem('show-nudge') === 'MINI';
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
 
   let actionButtonData: IActionButtonDataItem[] = [
@@ -1305,9 +1304,9 @@ const Form = ({
             selectedShade={selectedShade}
             setSelectedShade={setSelectedShade}
           />
-          {isNudge &&
-          (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
-            isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED) ? (
+          {isKycVerified?.customer?.kyc?.status === kycStatus.PENDING ||
+          isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+          isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED ? (
             <></>
           ) : (
             <DiscountPrice

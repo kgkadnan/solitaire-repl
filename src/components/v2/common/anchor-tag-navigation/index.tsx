@@ -67,8 +67,9 @@ const AnchorLinkNavigation: React.FC<IAnchorLinkNavigation> = ({
               !(
                 links === 'Discount% Price/Ct Amount Range' &&
                 isNudge &&
-                (isKycVerified?.customer?.kyc?.status ===
-                  kycStatus.INPROGRESS ||
+                (isKycVerified?.customer?.kyc?.status === kycStatus.PENDING ||
+                  isKycVerified?.customer?.kyc?.status ===
+                    kycStatus.INPROGRESS ||
                   isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
               )
           )
@@ -84,8 +85,9 @@ const AnchorLinkNavigation: React.FC<IAnchorLinkNavigation> = ({
                 smooth={true}
                 offset={
                   isNudge &&
-                  (isKycVerified?.customer?.kyc?.status ===
-                    kycStatus.INPROGRESS ||
+                  (isKycVerified?.customer?.kyc?.status === kycStatus.PENDING ||
+                    isKycVerified?.customer?.kyc?.status ===
+                      kycStatus.INPROGRESS ||
                     isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
                     ? -170
                     : -120

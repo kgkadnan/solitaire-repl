@@ -287,7 +287,9 @@ const SideNavigationBar = ({
                   className={` border-neutral200 ${
                     (items.link === Routes.MY_APPOINTMENTS &&
                       (isKycVerified?.customer?.kyc?.status ===
-                        kycStatus.INPROGRESS ||
+                        kycStatus.PENDING ||
+                        isKycVerified?.customer?.kyc?.status ===
+                          kycStatus.INPROGRESS ||
                         isKycVerified?.customer?.kyc?.status ===
                           kycStatus.REJECTED)) ||
                     isInMaintenanceMode
@@ -338,7 +340,9 @@ const SideNavigationBar = ({
                             disabled={
                               (items.link === Routes.MY_APPOINTMENTS &&
                                 (isKycVerified?.customer?.kyc?.status ===
-                                  kycStatus.INPROGRESS ||
+                                  kycStatus.PENDING ||
+                                  isKycVerified?.customer?.kyc?.status ===
+                                    kycStatus.INPROGRESS ||
                                   isKycVerified?.customer?.kyc?.status ===
                                     kycStatus.REJECTED)) ||
                               isInMaintenanceMode
