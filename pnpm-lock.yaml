@@ -147,8 +147,8 @@ dependencies:
     specifier: ^2.30.0
     version: 2.30.0
   disable-devtool:
-    specifier: ^0.3.7
-    version: 0.3.7
+    specifier: ^0.3.8
+    version: 0.3.8
   embla-carousel:
     specifier: 8.0.0-rc19
     version: 8.0.0-rc19
@@ -11806,8 +11806,8 @@ packages:
     dependencies:
       path-type: 4.0.0
 
-  /disable-devtool@0.3.7:
-    resolution: {integrity: sha512-xF5uyEpBhDuy7b4Bb88GQG4IB+2CwuQfkJK9vB/ym+85NQp/f7Wc6hnT40Jy2SkKvEf1xAKpvJUJU3LykTXxKg==}
+  /disable-devtool@0.3.8:
+    resolution: {integrity: sha512-spwifiBbcgDTVEdzoWyH3NjZ1he/OgJmUNXvMgEffJ8Fh2B6mEJjCCEV25wlJSyNXEdGyzKFFRXh4kVDRK/wCg==}
     dev: false
 
   /dlv@1.1.3:

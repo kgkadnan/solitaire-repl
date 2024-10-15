@@ -57,7 +57,7 @@ const initialTokenState = {
 const KYC = () => {
   const router = useRouter();
   const { formState, formErrorState } = useSelector((state: any) => state.kyc);
-  const [currentState, setCurrentState] = useState('country_selection');
+  const [currentState, setCurrentState] = useState('');
   const [selectedCountry, setSelectedCountry] = useState('');
   const [selectedSubmissionOption, setSelectedSubmissionOption] = useState('');
   const { modalState, modalSetState } = useModalStateManagement();
@@ -360,6 +360,8 @@ const KYC = () => {
 
   useEffect(() => {
     triggerKycDetail({}).then(res => {
+      setIsLoading(true);
+
       let kycDetails = res?.data;
       if (kycDetails?.kyc?.status) {
         switch (kycDetails?.kyc?.status) {
@@ -558,6 +560,7 @@ const KYC = () => {
             setCurrentState(kycStatus.REJECTED);
             break;
         }
+        setIsLoading(false);
       }
     });
   }, []);
