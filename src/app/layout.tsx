@@ -48,9 +48,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
   const [showLPHeader, setShowLPHeader] = useState(false);
   const showHeader = isApplicationRoutes && !headerlessRoutes.includes(path);
   const isMobile = useMediaQuery({ maxWidth: 1024 });
-  // const GA_TRACKING_ID = process.env.NEXT_PUBLIC_GA; // Replace with your GA4 Measurement ID
 
-  // || path === '/';
   // Create a component that just renders children, with children as an optional prop
   const ChildrenComponent: FC<{ children?: ReactNode }> = ({ children }) => (
     <>{children}</>
@@ -118,8 +116,18 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
       const disableDevtool = require('disable-devtool');
       disableDevtool({
         disableMenu: true,
-        ondevtoolopen(_type: string, _next: () => void) {
-          setOpen(true);
+        ondevtoolopen(_type: any, _next: any) {
+          // if ( _type === 5) {
+          // Additional check: Confirm if dev tools are really open (optional)
+          if (
+            window.outerWidth - window.innerWidth > 100 ||
+            window.outerHeight - window.innerHeight > 100
+          ) {
+            // This checks if the window has shrunk in size due to dev tools being opened
+            console.log('DevTools likely open');
+            setOpen(true);
+          }
+          // }
         },
         ignore: () => {
           return process.env.NEXT_PUBLIC_ENV !== 'production';
@@ -255,7 +263,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
             )}
           </ThemeProviders>
         </Provider>
-        {/* <SpeedInsights /> */}
+        <SpeedInsights />
 
         {/* <Salesiq /> */}
       </body>
