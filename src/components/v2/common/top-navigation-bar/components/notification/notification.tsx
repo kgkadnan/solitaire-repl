@@ -91,8 +91,8 @@ const Notification = ({
           if (splitData[0] === 'my-cart') {
             if (splitData[1] === 'active') {
               router.push(`/v2/my-cart?path=${AVAILABLE_STATUS}`);
-              // } else if (splitData[1] === 'memo') {
-              //   router.push(`/v2/my-cart?path=${MEMO_STATUS}`);
+            } else if (splitData[1] === 'memo') {
+              router.push(`/v2/my-cart?path=${MEMO_STATUS}`);
             } else if (splitData[1] === 'hold') {
               router.push(`/v2/my-cart?path=${HOLD_STATUS}`);
             } else if (splitData[1] === 'sold') {
