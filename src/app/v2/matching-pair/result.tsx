@@ -340,9 +340,9 @@ const MatchingPairResult = ({
               enableSorting: false,
               accessorKey: 'fire_icon',
               header: '',
-              minSize: 26,
-              size: 26,
-              maxSize: 26,
+              minSize: 20,
+              size: 20,
+              maxSize: 20,
 
               Cell: ({ row }: { row: any }) => {
                 return row.original.in_high_demand ? (

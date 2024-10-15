@@ -66,15 +66,7 @@ const StepperComponent: React.FC<IStepperComponentProps> = ({
 
   return (
     <div
-      className={`flex w-full flex-col gap-[32px] h-[calc(100vh-60px)]  px-[110px] pt-[32px] ${
-        filteredSteps[currentStepperStep]?.identifier ===
-          kycScreenIdentifierNames.COMPANY_DETAILS &&
-        (country === countries.USA
-          ? '!h-[194.9vh]'
-          : country === countries.BELGIUM
-          ? '!h-[164.55vh]'
-          : '!h-[179.8vh]')
-      }`}
+      className={`flex w-full flex-col gap-[32px] min-h-[calc(100vh-60px)] px-[110px] pt-[32px]`}
     >
       <div className={styles.stepperContainer}>
         {filteredSteps.map((step: any, index: number) => {
@@ -102,10 +94,10 @@ const StepperComponent: React.FC<IStepperComponentProps> = ({
           );
         })}
       </div>
-      <div className="">
+      <div className="flex-grow">
         {renderStepperComponent(filteredSteps[currentStepperStep]?.identifier)}
       </div>
-      <div className="h-[72px] bg-neutral0 border-[1px] border-solid border-neutral200  sticky bottom-0 rounded-t-[8px] mt-auto p-[16px]">
+      <div className="h-[72px] bg-neutral0 border-[1px] border-solid border-neutral200 sticky bottom-0 rounded-t-[8px] mt-auto p-[16px]">
         {' '}
         <ActionButton
           actionButtonData={[

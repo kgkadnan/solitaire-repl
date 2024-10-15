@@ -66,12 +66,17 @@ const TopNavigationBar = ({
     localStorage.getItem('show-nudge')
   );
   const [isLogout, setIsLogout] = useState<boolean>(false);
-  const [triggerGetProfilePhoto] = useLazyGetProfilePhotoQuery({});
+  const [triggerGetProfilePhoto, { isSuccess }] = useLazyGetProfilePhotoQuery(
+    {}
+  );
   const [triggerLogout] = useLazyGetLogoutQuery({});
   const [triggerLogoutAll] = useLazyGetLogoutAllQuery({});
   const { userLoggedOut } = useUser();
   const [modalContent, setModalContent] = useState<any>();
   const [userAccountInfo, setUserAccountInfo] = useState<IUserAccountInfo>();
+  const [imageUrl, setImageUrl] = useState('');
+  const [isImageApiLoaded, setIsImageApiLoaded] = useState(false);
+
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   useEffect(() => {
     const fetchMyAPI = async () => {
@@ -95,8 +100,6 @@ const TopNavigationBar = ({
     }
   }, []);
 
-  const [imageUrl, setImageUrl] = useState('');
-
   useEffect(() => {
     setImageUrl('');
   }, [updatePhoto?.deleteStatus]);
@@ -107,6 +110,10 @@ const TopNavigationBar = ({
         .unwrap()
         .then((res: any) => {
           setImageUrl(res);
+          setIsImageApiLoaded(true);
+        })
+        .catch(e => {
+          setIsImageApiLoaded(true);
         });
     };
     getPhoto();
@@ -185,8 +192,12 @@ const TopNavigationBar = ({
 
         <Popover>
           <PopoverTrigger className="flex justify-center">
-            {userAccountInfo?.customer?.first_name !== undefined ? (
-              <Avatar className="bg-primaryMain flex items-center justify-center">
+            {isImageApiLoaded ? (
+              <Avatar
+                className={`${
+                  imageUrl.length <= 0 && 'bg-primaryMain'
+                } flex items-center justify-center`}
+              >
                 {imageUrl?.length ? (
                   <img
                     src={imageUrl}

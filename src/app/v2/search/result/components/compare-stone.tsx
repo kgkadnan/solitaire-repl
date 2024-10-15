@@ -46,6 +46,7 @@ const CompareStone = ({
   setIsDetailPage,
   isMatchingPair = false,
   modalSetState,
+  setIsCompareStone,
   refreshCompareStone
 }: any) => {
   const [mappingColumn, setMappingColumn] = useState<any>({});
