@@ -67,9 +67,7 @@ const AnchorLinkNavigation: React.FC<IAnchorLinkNavigation> = ({
               !(
                 links === 'Discount% Price/Ct Amount Range' &&
                 isNudge &&
-                (isKycVerified?.customer?.kyc?.status ===
-                  kycStatus.INPROGRESS ||
-                  isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+                isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED
               )
           )
           .map(links => (
@@ -84,9 +82,7 @@ const AnchorLinkNavigation: React.FC<IAnchorLinkNavigation> = ({
                 smooth={true}
                 offset={
                   isNudge &&
-                  (isKycVerified?.customer?.kyc?.status ===
-                    kycStatus.INPROGRESS ||
-                    isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+                  isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED
                     ? -170
                     : -120
                 }
