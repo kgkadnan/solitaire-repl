@@ -386,16 +386,15 @@ export function MatchPairDetails({
     let statusClass = '';
     let borderClass = '';
 
-    if (row.diamond_status === MEMO_STATUS) {
+    if (row?.in_cart && Object.keys(row.in_cart).length) {
+      statusClass = 'bg-legendInCartFill text-legendInCart';
+      borderClass = 'border-lengendInCardBorder border-[1px] px-[8px]';
+    } else if (row.diamond_status === MEMO_STATUS) {
       statusClass = 'bg-legendMemoFill text-legendMemo';
       borderClass = 'border-lengendMemoBorder border-[1px] px-[8px]';
     } else if (row.diamond_status === HOLD_STATUS) {
       statusClass = 'bg-legendHoldFill  text-legendHold';
-
       borderClass = 'border-lengendHoldBorder border-[1px] px-[8px]';
-    } else if (row?.in_cart && Object.keys(row.in_cart).length) {
-      statusClass = 'bg-legendInCartFill text-legendInCart';
-      borderClass = 'border-lengendInCardBorder border-[1px] px-[8px]';
     }
     return (
       <>
@@ -428,6 +427,7 @@ export function MatchPairDetails({
       return false;
     })
   );
+
   const updateDataAsPerSimilarData = (
     originalData: any,
     similarData: any,
@@ -596,68 +596,94 @@ export function MatchPairDetails({
                         ) && (
                           <>
                             <div className="flex gap-2">
-                              <button
-                                onClick={() => {
-                                  // setIsImageLoading(true);
-                                  setImageLoadingStatus(
-                                    new Array(originalData.length).fill(true)
-                                  );
-                                  setZoomPosition({ x: 0, y: 0 });
-                                  setZoomLevel(1);
-                                  setImageIndex(imageIndex - 1);
-                                }}
-                                disabled={!(imageIndex > 0)}
-                                className={` rounded-[4px]  hover:bg-neutral50 w-[37px] h-[37px] text-center px-2 border-[1px] border-solid border-neutral200 shadow-sm ${
-                                  imageIndex <= 0
-                                    ? '!bg-neutral100 cursor-not-allowed'
-                                    : 'bg-neutral0'
-                                }`}
-                              >
-                                <Image
-                                  src={
-                                    !(imageIndex > 0)
-                                      ? backWardArrowDisable
-                                      : backwardArrow
-                                  }
-                                  alt={
-                                    !(imageIndex > 0)
-                                      ? 'backWardArrowDisable'
-                                      : 'backwardArrow'
-                                  }
-                                />
-                              </button>
-                              <button
-                                onClick={() => {
-                                  // setIsImageLoading(true);
-                                  setImageLoadingStatus(
-                                    new Array(originalData.length).fill(true)
-                                  );
-                                  setZoomPosition({ x: 0, y: 0 });
-                                  setZoomLevel(1);
-                                  setImageIndex(imageIndex + 1);
-                                }}
-                                disabled={
-                                  !(imageIndex < filteredImages[0].length - 1)
+                              <Tooltip
+                                tooltipTrigger={
+                                  <button
+                                    onClick={() => {
+                                      // setIsImageLoading(true);
+                                      setImageLoadingStatus(
+                                        new Array(originalData.length).fill(
+                                          true
+                                        )
+                                      );
+                                      setZoomPosition({ x: 0, y: 0 });
+                                      setZoomLevel(1);
+                                      setImageIndex(imageIndex - 1);
+                                    }}
+                                    disabled={!(imageIndex > 0)}
+                                    className={` rounded-[4px]  hover:bg-neutral50 w-[37px] h-[37px] text-center px-2 border-[1px] border-solid border-neutral200 shadow-sm ${
+                                      imageIndex <= 0
+                                        ? '!bg-neutral100 cursor-not-allowed'
+                                        : 'bg-neutral0'
+                                    }`}
+                                  >
+                                    <Image
+                                      src={
+                                        !(imageIndex > 0)
+                                          ? backWardArrowDisable
+                                          : backwardArrow
+                                      }
+                                      alt={
+                                        !(imageIndex > 0)
+                                          ? 'backWardArrowDisable'
+                                          : 'backwardArrow'
+                                      }
+                                    />
+                                  </button>
                                 }
-                                className={`rounded-[4px] hover:bg-neutral50 w-[37px] h-[37px] text-center px-2 border-[1px] border-solid border-neutral200 shadow-sm ${
-                                  imageIndex >= filteredImages[0].length - 1
-                                    ? '!bg-neutral100 cursor-not-allowed'
-                                    : 'bg-neutral0'
-                                }`}
-                              >
-                                <Image
-                                  src={
-                                    !(imageIndex < filteredImages[0].length - 1)
-                                      ? forWardAarrowDisable
-                                      : forwardArrow
-                                  }
-                                  alt={
-                                    !(imageIndex < filteredImages[0].length - 1)
-                                      ? 'forWardAarrowDisable'
-                                      : 'forwardArrow'
-                                  }
-                                />
-                              </button>
+                                tooltipContent={'Previous Image'}
+                                tooltipContentStyles={'z-[1000]'}
+                              />
+
+                              <Tooltip
+                                tooltipTrigger={
+                                  <button
+                                    onClick={() => {
+                                      // setIsImageLoading(true);
+                                      setImageLoadingStatus(
+                                        new Array(originalData.length).fill(
+                                          true
+                                        )
+                                      );
+                                      setZoomPosition({ x: 0, y: 0 });
+                                      setZoomLevel(1);
+                                      setImageIndex(imageIndex + 1);
+                                    }}
+                                    disabled={
+                                      !(
+                                        imageIndex <
+                                        filteredImages[0].length - 1
+                                      )
+                                    }
+                                    className={`rounded-[4px] hover:bg-neutral50 w-[37px] h-[37px] text-center px-2 border-[1px] border-solid border-neutral200 shadow-sm ${
+                                      imageIndex >= filteredImages[0].length - 1
+                                        ? '!bg-neutral100 cursor-not-allowed'
+                                        : 'bg-neutral0'
+                                    }`}
+                                  >
+                                    <Image
+                                      src={
+                                        !(
+                                          imageIndex <
+                                          filteredImages[0].length - 1
+                                        )
+                                          ? forWardAarrowDisable
+                                          : forwardArrow
+                                      }
+                                      alt={
+                                        !(
+                                          imageIndex <
+                                          filteredImages[0].length - 1
+                                        )
+                                          ? 'forWardAarrowDisable'
+                                          : 'forwardArrow'
+                                      }
+                                    />
+                                  </button>
+                                }
+                                tooltipContent={'Next Image'}
+                                tooltipContentStyles={'z-[1000]'}
+                              />
                             </div>
                             <div className="border-r-[1px] h-[40px] border-neutral200"></div>
                           </>
