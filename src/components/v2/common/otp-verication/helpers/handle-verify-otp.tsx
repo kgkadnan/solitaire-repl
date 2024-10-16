@@ -74,7 +74,7 @@ export const handleVerifyOtp = ({
           mobile_number: `+${phone}`,
           status: 'Fail',
           entry_point: localStorage.getItem('entryPoint') || '',
-          category: 'Register'
+          category: 'Registration'
         });
       }
     })
@@ -106,7 +106,7 @@ export const handleVerifyOtp = ({
         mobile_number: `+${phone}`,
         status: 'Fail',
         entry_point: localStorage.getItem('entryPoint') || '',
-        category: 'Register'
+        category: 'Registration'
       });
     });
 };

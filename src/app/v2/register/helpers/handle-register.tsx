@@ -85,7 +85,7 @@ export const handleRegister = async ({
           entry_point: localStorage.getItem('entryPoint') || '',
           mobile_number: `+${registerFormState.countryCode} ${registerFormState.mobileNumber}`,
           status: 'Success',
-          category: 'Register'
+          category: 'Registration'
 
           // }
         });
@@ -107,7 +107,7 @@ export const handleRegister = async ({
         entry_point: localStorage.getItem('entryPoint') || '',
         mobile_number: `+${registerFormState.countryCode} ${registerFormState.mobileNumber}`,
         status: 'Fail',
-        category: 'Register'
+        category: 'Registration'
 
         // }
       });
