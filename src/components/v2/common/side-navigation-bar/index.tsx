@@ -94,7 +94,7 @@ const SideNavigationBar = ({
     {
       src: <Bid2BuyIcon />,
       title: ManageLocales('app.sideNavigationBar.bidToBuy'),
-      link: Routes.BID_TO_BUY,
+      link: `${Routes.BID_TO_BUY}`,
       isActive: currentRoute === Routes.BID_TO_BUY,
       isVisible: true
     },

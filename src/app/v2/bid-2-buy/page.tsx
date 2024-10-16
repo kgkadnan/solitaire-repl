@@ -759,28 +759,7 @@ const BidToBuy = () => {
         <BiddingSkeleton />
       ) : (
         <>
-          {subRoute === SubRoutes.BID_TO_BUY ? (
-            <Form
-              searchUrl={searchUrl}
-              setSearchUrl={setSearchUrl}
-              state={state}
-              setState={setState}
-              carat={carat}
-              handleCloseAllTabs={() => {}}
-              handleCloseSpecificTab={() => {}}
-              activeTab={activeTab}
-              setActiveTab={setActiveTab}
-              errorState={formErrorState.errorState}
-              errorSetState={formErrorState.errorSetState}
-              setIsDialogOpen={modalSetState.setIsDialogOpen}
-              setDialogContent={modalSetState.setDialogContent}
-              setIsLoading={setSearchLoading}
-              setIsAddDemand={setIsAddDemand}
-              isMatchingPair={false}
-              isLoading={searchLoading}
-              setIsCommonLoading={setIsLoading}
-            />
-          ) : (
+          {subRoute === SubRoutes.BID_TO_BUY_RESULT ? (
             <>
               {isSkeletonLoading ? (
                 ''
@@ -888,6 +867,27 @@ const BidToBuy = () => {
                 </div>
               </div>
             </>
+          ) : (
+            <Form
+              searchUrl={searchUrl}
+              setSearchUrl={setSearchUrl}
+              state={state}
+              setState={setState}
+              carat={carat}
+              handleCloseAllTabs={() => {}}
+              handleCloseSpecificTab={() => {}}
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
+              errorState={formErrorState.errorState}
+              errorSetState={formErrorState.errorSetState}
+              setIsDialogOpen={modalSetState.setIsDialogOpen}
+              setDialogContent={modalSetState.setDialogContent}
+              setIsLoading={setSearchLoading}
+              setIsAddDemand={setIsAddDemand}
+              isMatchingPair={false}
+              isLoading={searchLoading}
+              setIsCommonLoading={setIsLoading}
+            />
           )}
         </>
       )}

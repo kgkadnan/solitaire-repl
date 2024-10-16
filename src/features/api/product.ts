@@ -60,6 +60,12 @@ export const productApi = createApi({
         url: `/store/products?limit=${limit}&offset=${offset}&turkey_event=true&${url}`
       })
       // providesTags: ['Product']
+    }),
+    getAllBidStones: builder.query({
+      query: ({ limit, searchUrl }) => ({
+        url: `/store/bid-to-buy?limit=${limit}&${searchUrl}`
+      })
+      // providesTags: ['Product']
     })
   })
 });
@@ -73,5 +79,6 @@ export const {
   useGetProductByIdMutation,
   useAddDemandMutation,
   useCheckProductAvailabilityMutation,
-  useLazyGetAllTurkeyProductQuery
+  useLazyGetAllTurkeyProductQuery,
+  useLazyGetAllBidStonesQuery
 } = productApi;

@@ -14,6 +14,7 @@ import { Carat } from './components/carat';
 import { Color } from './components/color';
 import {
   useAddDemandMutation,
+  useLazyGetAllBidStonesQuery,
   useLazyGetProductCountQuery
 } from '@/features/api/product';
 import useValidationStateManagement from '../hooks/validation-state-management';
@@ -48,7 +49,7 @@ import {
   SELECT_SOME_PARAM,
   SOMETHING_WENT_WRONG
 } from '@/constants/error-messages/form';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { setModifySearch } from './helpers/modify-search';
 import { useAppSelector } from '@/hooks/hook';
 // import logger from 'logging/log-util';
@@ -137,7 +138,7 @@ const Form = ({
   const router = useRouter();
   const searchParams = useSearchParams();
   const subRoute = useSearchParams().get('active-tab');
-
+  const routePath = usePathname();
   const modifySearchFrom = searchParams.get('edit');
   const savedSearch: any = useAppSelector(
     (store: { savedSearch: any }) => store.savedSearch
@@ -251,6 +252,10 @@ const Form = ({
     { isLoading: isLoadingProductApi, isFetching: isFetchingProductApi }
   ] = useLazyGetProductCountQuery();
   let [
+    triggerBidToBuyApi,
+    { isLoading: isLoadingBidToBuyApi, isFetching: isFetchingBidToBuyApi }
+  ] = useLazyGetAllBidStonesQuery();
+  let [
     triggerMatchingPairCountApi,
     { isLoading: isLoadingMatchPairApi, isFetching: isFetchingMatchPairApi }
   ] = useLazyGetMatchingPairCountQuery();
@@ -310,17 +315,27 @@ const Form = ({
       });
 
       setError('');
-    } else if (subRoute === SubRoutes.BID_TO_BUY) {
-      const query = parseQueryString(searchUrl);
+    } else if (routePath === Routes.BID_TO_BUY) {
+      // const query = parseQueryString(searchUrl);
+      setErrorText('');
+      setIsLoading(true);
+      triggerBidToBuyApi({ searchUrl: searchUrl, limit: 300 })
+        .unwrap()
+        .then((response: any) => {
+          setData(response), setError(''), setIsLoading(false);
+        })
+        .catch(e => {
+          setError(e), setIsLoading(false);
+        });
+      // console.log("here",routePath)
+      //       const filteredData =
+      //         bidToBuyFilterData?.bidData &&
+      //         filterBidData(bidToBuyFilterData?.bidData, query);
 
-      const filteredData =
-        bidToBuyFilterData?.bidData &&
-        filterBidData(bidToBuyFilterData?.bidData, query);
-
-      setData({
-        count: filteredData.length,
-        products: filteredData
-      });
+      //       setData({
+      //         count: filteredData.length,
+      //         products: filteredData
+      //       });
 
       setError('');
     } else if (isTurkey) {
