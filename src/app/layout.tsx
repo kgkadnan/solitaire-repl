@@ -88,21 +88,6 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
     }
   }, []);
 
-  useEffect(() => {
-    const handleBeforeUnload = () => {
-      // Remove the specific localStorage item
-      localStorage.removeItem('entryPoint');
-    };
-
-    // Listen for the beforeunload event
-    window.addEventListener('beforeunload', handleBeforeUnload);
-
-    return () => {
-      // Clean up the event listener on component unmount
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
-  }, []);
-
   // Wrap the ChildrenComponent with authorizedLogin if it's a secure page
   const SecureComponent = protectedRoutes.includes(path)
     ? authorizedLogin(ChildrenComponent)
