@@ -76,7 +76,7 @@ const RegisterComponent = ({
     trackEvent({
       action: Tracking.Register_PageView,
       entry_point: localStorage.getItem('entryPoint') || '',
-      category: 'Register'
+      category: 'Registration'
     });
   }, []);
   return (
@@ -100,7 +100,7 @@ const RegisterComponent = ({
                 trackEvent({
                   action: Tracking.Click_KGK_Logo,
                   entry_point: localStorage.getItem('entryPoint') || '',
-                  category: 'Register'
+                  category: 'Registration'
                 });
               router.push('/v3');
             }}
@@ -280,7 +280,7 @@ const RegisterComponent = ({
                     trackEvent({
                       action: Tracking.Click_Login,
                       entry_point: localStorage.getItem('entryPoint') || '',
-                      category: 'Register'
+                      category: 'Registration'
                     });
                   pathName === 'login'
                     ? router.back()
