@@ -218,20 +218,18 @@ export function DiamondDetailsComponent({
     let statusClass = '';
     let borderClass = '';
 
-    // if (tableData.diamond_status === MEMO_STATUS) {
-    //   statusClass = 'bg-legendMemoFill text-legendMemo';
-    //   borderClass = 'border-lengendMemoBorder';
-    //   statusValue = 'Memo';
-    // } else
-    if (tableData.diamond_status === HOLD_STATUS) {
-      statusClass = 'bg-legendHoldFill  text-legendHold';
-
-      borderClass = 'border-lengendHoldBorder';
-      statusValue = 'Hold';
-    } else if (tableData?.in_cart && Object.keys(tableData.in_cart).length) {
+    if (tableData?.in_cart && Object.keys(tableData.in_cart).length) {
       statusClass = 'bg-legendInCartFill text-legendInCart';
       borderClass = 'border-lengendInCardBorder';
       statusValue = 'InCart';
+    } else if (tableData.diamond_status === MEMO_STATUS) {
+      statusClass = 'bg-legendMemoFill text-legendMemo';
+      borderClass = 'border-lengendMemoBorder';
+      statusValue = 'Memo';
+    } else if (tableData.diamond_status === HOLD_STATUS) {
+      statusClass = 'bg-legendHoldFill  text-legendHold';
+      borderClass = 'border-lengendHoldBorder';
+      statusValue = 'Hold';
     }
     return (
       <>
