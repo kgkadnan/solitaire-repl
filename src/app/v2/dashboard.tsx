@@ -329,6 +329,14 @@ const Dashboard = () => {
     return () => clearTimeout(timeout);
   }, [isDetailPage, isConfirmStone, isCompareStone, searchData?.foundProducts]);
 
+  const handleTrackEvent = () => {
+    trackEvent({
+      action: Tracking_Search_By_Text.click_stone_lab_result_page,
+      category: 'SearchByText',
+      mobile_number: customerMobileNumber
+    });
+  };
+
   const mapColumns = (columns: any) =>
     columns
       ?.filter(({ is_disabled }: any) => !is_disabled)
@@ -477,14 +485,7 @@ const Dashboard = () => {
             return {
               ...commonProps,
               Cell: ({ row }: any) => {
-                trackEvent({
-                  action:
-                    Tracking_Search_By_Text.click_stone_assets_result_page,
-                  category: 'SearchByText',
-                  mobile_number: customerMobileNumber
-                });
-                setIsResultPageDetails(true);
-                return RenderDetails({ row, handleDetailImage });
+                return RenderDetails({ row, handleDetailImageWithTrack });
               }
             };
 
@@ -515,14 +516,10 @@ const Dashboard = () => {
             return {
               ...commonProps,
               Cell: ({ renderedCellValue, row }: any) => {
-                trackEvent({
-                  action: Tracking_Search_By_Text.click_stone_lab_result_page,
-                  category: 'SearchByText',
-                  mobile_number: customerMobileNumber
-                });
                 return RenderLab({
                   renderedCellValue,
-                  row
+                  row,
+                  handleTrackEvent
                 });
               }
             };
@@ -1162,6 +1159,16 @@ const Dashboard = () => {
   };
 
   const handleDetailImage = ({ row }: any) => {
+    setDetailImageData(row);
+    setIsModalOpen(true);
+  };
+  const handleDetailImageWithTrack = ({ row }: any) => {
+    trackEvent({
+      action: Tracking_Search_By_Text.click_stone_assets_result_page,
+      category: 'SearchByText',
+      mobile_number: customerMobileNumber
+    });
+    setIsResultPageDetails(true);
     setDetailImageData(row);
     setIsModalOpen(true);
   };
