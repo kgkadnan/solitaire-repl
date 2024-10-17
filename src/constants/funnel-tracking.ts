@@ -72,6 +72,49 @@ export const Tracking_KYC = {
   KYC_Offline_Form_Submit: 'KYC_Offline_Form_Submit',
   KYC_Offline_Form_Back: 'KYC_Offline_Form_Back'
 };
+
+export const Tracking_Search_By_Text = {
+  search_by_text_initiated: 'search_by_text_initiated',
+  search_by_text_executed: 'search_by_text_executed',
+  results_page_pageview: 'results_page_pageview',
+  click_back_results_page: 'click_back_results_page',
+  click_stone_dna_page: 'click_stone_dna_page',
+  dna_page_pageview: 'dna_page_pageview',
+  click_stone_image_arrow_dna_page: 'click_stone_image_arrow_dna_page',
+  click_stone_b2b_dna_page: 'click_stone_b2b_dna_page',
+  click_stone_sparkle_dna_page: 'click_stone_sparkle_dna_page',
+  click_stone_certificate_dna_page: 'click_stone_certificate_dna_page',
+  click_back_dna_page: 'click_back_dna_page',
+  click_confirm_stone_dna_page: 'click_confirm_stone_dna_page',
+  click_add_to_cart_dna_page: 'click_add_to_cart_dna_page',
+  click_download_excel_dna_page: 'click_download_excel_dna_page',
+  click_share_dna_page: 'click_share_dna_page',
+  click_media_link_dna_page: 'click_media_link_dna_page',
+  click_stone_lab_result_page: 'click_stone_lab_result_page',
+  click_stone_assets_result_page: 'click_stone_assets_result_page',
+  click_stone_image_arrow_result_page: 'click_stone_image_arrow_result_page',
+  click_stone_b2b_result_page: 'click_stone_b2b_result_page',
+  click_stone_sparkle_result_page: 'click_stone_sparkle_result_page',
+  click_stone_certificate_result_page: 'click_stone_certificate_result_page',
+  click_download_excel_result_page: 'click_download_excel_result_page',
+  click_share_result_page: 'click_share_result_page',
+  click_add_to_cart_result_page: 'click_add_to_cart_result_page',
+  click_confirm_stone_result_page: 'click_confirm_stone_result_page',
+  click_compare_stone_result_page: 'click_compare_stone_result_page',
+  click_book_appointment_result_page: 'click_book_appointment_result_page',
+  confirm_page_pageview: 'confirm_page_pageview',
+  click_back_confirm_page: 'click_back_confirm_page',
+  click_add_comment_confirm_page: 'click_add_comment_confirm_page',
+  click_confirm_stone_confirm_page: 'click_confirm_stone_confirm_page',
+  disclaimer_pop_up_opens: 'disclaimer_pop_up_opens',
+  click_confirm_order_disclaimer_pop_up:
+    'click_confirm_order_disclaimer_pop_up',
+  order_executed_pop_up: 'order_executed_pop_up',
+  click_go_to_your_order_order_executed_pop_up:
+    'click_go_to_your_order_order_executed_pop_up',
+  click_continue_order_executed_pop_up: 'click_continue_order_executed_pop_up'
+};
+
 export const Tracking_KYC_Entry_Point = {
   KYC_Bottom_Sheet: 'KYC_Bottom_Sheet',
   KYC_Top_Button: 'KYC_Top_Button',
