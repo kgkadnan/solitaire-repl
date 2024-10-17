@@ -485,7 +485,10 @@ const Dashboard = () => {
             return {
               ...commonProps,
               Cell: ({ row }: any) => {
-                return RenderDetails({ row, handleDetailImageWithTrack });
+                return RenderDetails({
+                  row,
+                  handleDetailImage: handleDetailImageWithTrack
+                });
               }
             };
 
@@ -837,7 +840,7 @@ const Dashboard = () => {
 
   const handleStoneId = (e: any) => {
     console.log('e', e);
-    if (e.target.value.length === 1 && canTrackEvent()) {
+    if (e.target.value.length >= 1 && canTrackEvent()) {
       setLastEventTime(Date.now()); // Update the timestamp in state
       console.log('herereres im amd');
       trackEvent({

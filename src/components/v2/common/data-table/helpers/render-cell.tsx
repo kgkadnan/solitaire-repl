@@ -171,7 +171,9 @@ export const RenderLab = ({
           target="_blank"
           className={className}
           onClick={() => {
-            handleTrackEvent();
+            if (handleTrackEvent) {
+              handleTrackEvent();
+            }
           }}
         >
           {renderedCellValue}
