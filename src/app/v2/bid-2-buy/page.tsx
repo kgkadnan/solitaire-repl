@@ -367,9 +367,9 @@ const BidToBuy = () => {
                 : filterBidData(allProducts.bidStone, filterData.queryParams);
             dispatch(
               filterBidToBuyFunction({
-                bidData: allProducts.bidStone,
-                queryParams: filterData.queryParams,
-                bidFilterData: filteredData
+                // bidData: allProducts.bidStone,
+                queryParams: filterData.queryParams
+                // bidFilterData: filteredData
               })
             );
             setBid(filteredData);

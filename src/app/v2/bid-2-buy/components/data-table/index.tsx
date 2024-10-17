@@ -359,24 +359,22 @@ const BidToBuyDataTable = ({
           <div className="flex gap-[12px]" style={{ alignItems: 'inherit' }}>
             {activeTab === 0 && (
               <div className="">
-                {filterData?.bidFilterData?.length > 0 ? (
-                  <button
-                    onClick={() => {
-                      router.push(
-                        `/v2/bid-2-buy?active-tab=${SubRoutes.BID_TO_BUY}`
-                      );
-                    }}
-                    className={`flex w-full shadow-sm justify-center py-[8px] h-[39px] px-[16px]  items-center font-medium  rounded-[4px] gap-1  border-[1px]  border-solid border-neutral200 text-mMedium  cursor-pointer  ${'bg-primaryMain text-neutral0 hover:bg-primaryHover'}`}
-                  >
-                    <FilterIcon
-                      stroke={`${'var(--neutral-0)'}`}
-                      fill={`${'var(--neutral-0)'}`}
-                    />
+                {/* {filterData?.bidFilterData?.length > 0 ? ( */}
+                <button
+                  onClick={() => {
+                    router.push(
+                      `/v2/bid-2-buy?active-tab=${SubRoutes.BID_TO_BUY}`
+                    );
+                  }}
+                  className={`flex w-full shadow-sm justify-center py-[8px] h-[39px] px-[16px]  items-center font-medium  rounded-[4px] gap-1  border-[1px]  border-solid border-neutral200 text-mMedium  cursor-pointer  ${'bg-primaryMain text-neutral0 hover:bg-primaryHover'}`}
+                >
+                  <FilterIcon
+                    stroke={`${'var(--neutral-0)'}`}
+                    fill={`${'var(--neutral-0)'}`}
+                  />
 
-                    <p className="w-[70%]">
-                      {ManageLocales('app.modifyFilter')}
-                    </p>
-                    <div
+                  <p className="w-[80%]">{ManageLocales('app.modifyFilter')}</p>
+                  {/* <div
                       className="w-[17%] cursor-pointer"
                       onClick={e => {
                         e.stopPropagation();
@@ -385,33 +383,8 @@ const BidToBuyDataTable = ({
                       }}
                     >
                       <Image src={crossIcon} alt="crossIcon" />
-                    </div>
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => {
-                      dispatch(
-                        filterBidToBuyFunction({
-                          bidData: rows
-                        })
-                      );
-                      router.push(
-                        `/v2/bid-2-buy?active-tab=${SubRoutes.BID_TO_BUY}`
-                      );
-                    }}
-                    disabled={!rows.length}
-                    className={`flex justify-center disabled:!bg-neutral100 disabled:cursor-not-allowed disabled:text-neutral400  shadow-sm py-[8px] h-[39px] px-[16px] items-center font-medium  rounded-[4px] gap-1  border-[1px]  border-solid border-neutral200 text-mMedium  cursor-pointer  ${'text-neutral900 bg-neutral0 hover:bg-neutral50'}`}
-                  >
-                    <FilterIcon
-                      stroke={`${
-                        !rows.length
-                          ? 'var(--neutral-400)'
-                          : 'var(--neutral-900)'
-                      }`}
-                    />
-                    <p>{ManageLocales('app.applyFilter')}</p>
-                  </button>
-                )}
+                    </div> */}
+                </button>
               </div>
             )}
             {activeTab === 0 ? (

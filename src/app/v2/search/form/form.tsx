@@ -82,6 +82,8 @@ import { parseQueryString } from './helpers/parse-query-string';
 import { filterBidData } from './helpers/filter-bid-data';
 import { filterBidToBuyFunction } from '@/features/filter-bid-to-buy/filter-bid-to-buy-slice';
 import { queryParamsFunction } from '@/features/event-params/event-param-slice';
+import CountdownTimer from '@/components/v2/common/timer';
+import Tab from '@/components/v2/common/bid-tabs';
 
 export interface ISavedSearch {
   saveSearchName: string;
@@ -245,6 +247,18 @@ const Form = ({
   const { setIsInputDialogOpen } = modalSetState;
   const [data, setData] = useState<any>();
   const [error, setError] = useState<any>();
+  const [timeDifference, setTimeDifference] = useState(null);
+  const [time, setTime] = useState('');
+  const [checkStatus, setCheckStatus] = useState(true);
+
+  useEffect(() => {
+    const currentTime: any = new Date();
+    const targetTime: any = new Date(time!);
+    const timeDiff: any = targetTime - currentTime;
+
+    setTimeDifference(timeDiff);
+  }, [time]);
+
   const queryParamsData = useAppSelector(state => state.queryParams);
 
   let [
@@ -322,7 +336,10 @@ const Form = ({
       triggerBidToBuyApi({ searchUrl: searchUrl, limit: 300 })
         .unwrap()
         .then((response: any) => {
-          setData(response), setError(''), setIsLoading(false);
+          setData(response),
+            setTime(response.endTime),
+            setError(''),
+            setIsLoading(false);
         })
         .catch(e => {
           setError(e), setIsLoading(false);
@@ -337,7 +354,7 @@ const Form = ({
       //         products: filteredData
       //       });
 
-      setError('');
+      // setError('');
     } else if (isTurkey) {
       setErrorText('');
       setIsLoading(true);
@@ -535,7 +552,7 @@ const Form = ({
       handleFormReset();
     }
   }, [subRoute]);
-
+  console.log('entime', time);
   useEffect(() => {
     if (isTurkey) {
       let queryData = constructUrlParams(queryParamsData.queryParams);
@@ -577,18 +594,31 @@ const Form = ({
       );
       router.push(`/v2/new-arrivals`);
       setSearchUrl('');
-    } else if (subRoute === SubRoutes.BID_TO_BUY) {
+    } else if (routePath === Routes.BID_TO_BUY) {
       const queryParams = generateQueryParams(state);
 
       dispatch(
         filterBidToBuyFunction({
-          queryParams,
-          bidData: bidToBuyFilterData.bidData,
-          bidFilterData: data?.products
+          queryParams
+          // bidData: bidToBuyFilterData.bidData,
+          // bidFilterData: data?.products
         })
       );
-      router.push(`/v2/bid-2-buy`);
-      setSearchUrl('');
+      setErrorText('');
+      setIsLoading(true);
+      triggerBidToBuyApi({ searchUrl: searchUrl, limit: 300 })
+        .unwrap()
+        .then((response: any) => {
+          setData(response),
+            setTime(response.endTime),
+            setError(''),
+            setIsLoading(false);
+        })
+        .catch(e => {
+          setError(e), setIsLoading(false);
+        });
+      router.push(`/v2/bid-2-buy?active-tab=result`);
+      // setSearchUrl('');
     } else if (isTurkey) {
       dispatch(
         queryParamsFunction({
@@ -1214,15 +1244,72 @@ const Form = ({
       <div>
         <div className="py-2">
           <span className="text-neutral900 text-lRegular font-medium grid gap-[24px]">
-            Search for{' '}
-            {subRoute === SubRoutes.NEW_ARRIVAL
-              ? 'New Arrivals'
-              : subRoute === SubRoutes.BID_TO_BUY
-              ? 'Bid To Buy'
-              : isMatchingPair
-              ? 'Match Pair'
-              : 'Diamonds'}
+            {routePath === Routes.BID_TO_BUY ? (
+              <div className="flex  py-[4px] items-center justify-between">
+                <>
+                  {' '}
+                  <div className="flex gap-3 items-center">
+                    <p className="text-lMedium font-medium text-neutral900">
+                      Bid to Buy
+                    </p>
+                    {checkStatus ? (
+                      time && time?.length ? (
+                        <div className="text-successMain text-lMedium font-medium">
+                          ACTIVE
+                        </div>
+                      ) : (
+                        <div className="text-visRed text-lMedium font-medium">
+                          INACTIVE
+                        </div>
+                      )
+                    ) : (
+                      ''
+                    )}
+                  </div>
+                  <div className="h-[38px]">
+                    {timeDifference !== null && timeDifference >= 0 && (
+                      <CountdownTimer
+                        initialHours={Math.floor(
+                          timeDifference / (1000 * 60 * 60)
+                        )}
+                        initialMinutes={Math.floor(
+                          (timeDifference % (1000 * 60 * 60)) / (1000 * 60)
+                        )}
+                        initialSeconds={Math.floor(
+                          (timeDifference % (1000 * 60)) / 1000
+                        )}
+                      />
+                    )}
+                  </div>
+                </>
+              </div>
+            ) : (
+              <>
+                Search for{' '}
+                {subRoute === SubRoutes.NEW_ARRIVAL
+                  ? 'New Arrivals'
+                  : // : subRoute === SubRoutes.BID_TO_BUY
+                  // ? 'Bid To Buy'
+                  isMatchingPair
+                  ? 'Match Pair'
+                  : 'Diamonds'}
+              </>
+            )}
           </span>
+        </div>
+        <div>
+          <div className="w-[450px]">
+            {/* <Tab
+              labels={tabLabels}
+              activeIndex={activeTab}
+              onTabClick={id => {
+                handleTabClick(id), setSearchableId('');
+              }}
+              activeCount={activeCount}
+              bidCount={bidCount}
+              historyCount={historyCount}
+            /> */}
+          </div>
         </div>
         <div className="flex flex-col gap-[16px]">
           {searchParameters?.length > 0 ? (
