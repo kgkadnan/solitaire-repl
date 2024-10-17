@@ -14,7 +14,9 @@ import {
   RenderDiscount,
   RenderLab
 } from '@/components/v2/table/helpers/render-cell';
+import { Tracking_Search_By_Text } from '@/constants/funnel-tracking';
 import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
+import { trackEvent } from '@/utils/ga';
 
 import React, { useEffect, useMemo, useState } from 'react';
 
@@ -27,7 +29,8 @@ const ConfirmStone = ({
   handleDetailImage,
   handleDetailPage,
   identifier,
-  isMatchingPair
+  isMatchingPair,
+  customerMobileNumber
 }: any) => {
   const [rowSelection, setRowSelection] = useState({});
 
@@ -57,6 +60,16 @@ const ConfirmStone = ({
       } else {
         setBreadCrumLabel(`Result ${activeTab}`);
       }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (identifier === 'Dashboard') {
+      trackEvent({
+        action: Tracking_Search_By_Text.confirm_page_pageview,
+        category: 'SearchByText',
+        mobile_number: customerMobileNumber
+      });
     }
   }, []);
 
@@ -176,6 +189,13 @@ const ConfirmStone = ({
           isEnableTopToolBar={true}
           showGloablFilter={true}
           goBackToListView={() => {
+            if (identifier === 'Dashboard') {
+              trackEvent({
+                action: Tracking_Search_By_Text.click_back_confirm_page,
+                category: 'SearchByText',
+                mobile_number: customerMobileNumber
+              });
+            }
             goBackToListView(isFrom);
           }}
           breadCrumLabel={breadCrumLabel}
