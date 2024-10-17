@@ -10,7 +10,7 @@ import BidToBuyIcon from '@public/v2/assets/icons/sidebar-icons/bid-to-buy.svg?u
 import { useRouter } from 'next/navigation';
 import { useGetCustomerQuery } from '@/features/api/dashboard';
 import fireSvg from '@public/v2/assets/icons/data-table/fire-icon.svg';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import searchIcon from '@public/v2/assets/icons/data-table/search-icon.svg';
 import noImageFound from '@public/v2/assets/icons/detail-page/fall-back-img.svg';
 import editIcon from '@public/v2/assets/icons/saved-search/edit-button.svg';
@@ -118,6 +118,8 @@ import { setConfirmStoneTrack } from '@/features/confirm-stone-track/confirm-sto
 import { STONE_LOCATION } from '@/constants/v2/enums/location';
 import { kamLocationAction } from '@/features/kam-location/kam-location';
 import { handleCompareStone } from './search/result/helpers/handle-compare-stone';
+import { trackEvent } from '@/utils/ga';
+import { Tracking_Search_By_Text } from '@/constants/funnel-tracking';
 
 interface ITabs {
   label: string;
@@ -125,6 +127,8 @@ interface ITabs {
   count: number;
   data: any;
 }
+
+export const dashboardIndentifier = 'Dashboard';
 
 function formatDate(dateString: string): string {
   const date = new Date(dateString);
@@ -184,6 +188,8 @@ const Dashboard = () => {
   const [isDiamondDetail, setIsDiamondDetail] = useState(false);
   const [isDiamondDetailLoading, setIsDiamondDetailLoading] = useState(true); //
 
+  const [lastEventTime, setLastEventTime] = useState<number | null>(null);
+
   const [showAppointmentForm, setShowAppointmentForm] = useState(false);
   const [appointmentPayload, setAppointmentPayload] =
     useState<IAppointmentPayload>({
@@ -193,6 +199,9 @@ const Dashboard = () => {
     });
   const [lotIds, setLotIds] = useState<string[]>([]);
   const [isHovered, setIsHovered] = useState('');
+
+  const [customerMobileNumber, setCustomerMobileNumber] = useState('');
+  const [isResultPageDetails, setIsResultPageDetails] = useState(false);
 
   const [triggerAvailableSlots] = useLazyGetAvailableMyAppointmentSlotsQuery(
     {}
@@ -468,6 +477,13 @@ const Dashboard = () => {
             return {
               ...commonProps,
               Cell: ({ row }: any) => {
+                trackEvent({
+                  action:
+                    Tracking_Search_By_Text.click_stone_assets_result_page,
+                  category: 'SearchByText',
+                  mobile_number: customerMobileNumber
+                });
+                setIsResultPageDetails(true);
                 return RenderDetails({ row, handleDetailImage });
               }
             };
@@ -496,7 +512,20 @@ const Dashboard = () => {
               )
             };
           case 'lab':
-            return { ...commonProps, Cell: RenderLab };
+            return {
+              ...commonProps,
+              Cell: ({ renderedCellValue, row }: any) => {
+                trackEvent({
+                  action: Tracking_Search_By_Text.click_stone_lab_result_page,
+                  category: 'SearchByText',
+                  mobile_number: customerMobileNumber
+                });
+                return RenderLab({
+                  renderedCellValue,
+                  row
+                });
+              }
+            };
           case 'location':
             return { ...commonProps, Cell: RednderLocation };
           case 'lot_id':
@@ -600,6 +629,9 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (customerData) {
+      setCustomerMobileNumber(
+        `+${customerData.customer.country_code}${customerData.customer.phone}`
+      );
       // setIsLoading(false);
       const tabsCopy: ITabs[] = []; // Make a copy of the current tabs
 
@@ -800,9 +832,26 @@ const Dashboard = () => {
   const [triggerColumn, { data: columnData }] =
     useLazyGetManageListingSequenceQuery<IManageListingSequenceResponse>();
 
+  // Check if 10 minutes have passed since the last event
+  const canTrackEvent = useCallback(() => {
+    if (!lastEventTime) return true;
+    return Date.now() - lastEventTime >= 10 * 60 * 1000; // 10 minutes in ms
+  }, [lastEventTime]);
+
   const handleStoneId = (e: any) => {
+    console.log('e', e);
+    if (e.target.value.length === 1 && canTrackEvent()) {
+      setLastEventTime(Date.now()); // Update the timestamp in state
+      console.log('herereres im amd');
+      trackEvent({
+        action: Tracking_Search_By_Text.search_by_text_initiated,
+        category: 'SearchByText',
+        mobile_number: customerMobileNumber
+      });
+    }
     setStoneId(e.target.value);
   };
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       setIsLoading(true);
@@ -815,10 +864,23 @@ const Dashboard = () => {
           setSearchData(res);
           setError('');
           setIsDetailPage(true);
+          setLastEventTime(null);
+          trackEvent({
+            action: Tracking_Search_By_Text.search_by_text_executed,
+            category: 'SearchByText',
+            mobile_number: customerMobileNumber,
+            status: 'Success'
+          });
         })
         .catch((_e: any) => {
           setIsLoading(false);
-
+          setLastEventTime(null);
+          trackEvent({
+            action: Tracking_Search_By_Text.search_by_text_executed,
+            category: 'SearchByText',
+            mobile_number: customerMobileNumber,
+            status: 'Fail'
+          });
           if (
             _e?.status === statusCode.NOT_FOUND ||
             _e?.status === statusCode.INVALID_DATA
@@ -844,9 +906,23 @@ const Dashboard = () => {
           setSearchData(res);
           setError('');
           setIsDetailPage(true);
+          setLastEventTime(null);
+          trackEvent({
+            action: Tracking_Search_By_Text.search_by_text_executed,
+            category: 'SearchByText',
+            mobile_number: customerMobileNumber,
+            status: 'Success'
+          });
         })
         .catch((_e: any) => {
           setIsLoading(false);
+          setLastEventTime(null);
+          trackEvent({
+            action: Tracking_Search_By_Text.search_by_text_executed,
+            category: 'SearchByText',
+            mobile_number: customerMobileNumber,
+            status: 'Fail'
+          });
           if (
             _e?.status === statusCode.NOT_FOUND ||
             _e?.status === statusCode.INVALID_DATA
@@ -871,10 +947,12 @@ const Dashboard = () => {
 
   const goBack = () => {
     setIsDiamondDetail(false);
+    setDetailPageData({});
   };
 
   const handleAddToCartDetailPage = () => {
     setIsLoading(true);
+
     // Extract variant IDs for selected stones
     const variantIds = [detailPageData?.id]
       ?.map((_id: string) => {
@@ -886,6 +964,11 @@ const Dashboard = () => {
       ?.filter(Boolean);
     // If there are variant IDs, add to the cart
     if (variantIds.length) {
+      trackEvent({
+        action: Tracking_Search_By_Text.click_add_to_cart_dna_page,
+        category: 'SearchByText',
+        mobile_number: customerMobileNumber
+      });
       addCart({
         variants: variantIds
       })
@@ -974,7 +1057,7 @@ const Dashboard = () => {
 
   const goBackToListView = (isFrom?: string) => {
     if (isFrom === 'Detail Page') {
-      setIsDetailPage(true);
+      setIsDiamondDetail(true);
       setBreadCrumLabel('');
     }
     setRowSelection({});
@@ -1070,6 +1153,12 @@ const Dashboard = () => {
     setIsError(false);
     setError('');
     setDetailPageData(row);
+
+    trackEvent({
+      action: Tracking_Search_By_Text.click_stone_dna_page,
+      category: 'SearchByText',
+      mobile_number: customerMobileNumber
+    });
   };
 
   const handleDetailImage = ({ row }: any) => {
@@ -1200,6 +1289,12 @@ const Dashboard = () => {
       else if (hasHold) {
         setError(STONE_NOT_AVAILABLE_MODIFY_SEARCH);
       } else {
+        trackEvent({
+          action: Tracking_Search_By_Text.click_book_appointment_result_page,
+          category: 'SearchByText',
+          mobile_number: customerMobileNumber
+        });
+
         setShowAppointmentForm(true);
         triggerAvailableSlots({}).then(payload => {
           let { data } = payload.data;
@@ -1296,6 +1391,19 @@ const Dashboard = () => {
                 </span>
               ));
             };
+
+            trackEvent({
+              action: Tracking_Search_By_Text.order_executed_pop_up,
+              category: 'SearchByText',
+              mobile_number: customerMobileNumber,
+              status:
+                res.status === 'success'
+                  ? 'Success'
+                  : res.status === 'processing'
+                  ? 'Processing'
+                  : ''
+            });
+
             setDialogContent(
               <CommonPoppup
                 content={<div>{formatMessage(res.message)}</div>}
@@ -1313,6 +1421,12 @@ const Dashboard = () => {
                     variant: 'secondary',
                     label: ManageLocales('app.modal.continue'),
                     handler: () => {
+                      trackEvent({
+                        action:
+                          Tracking_Search_By_Text.click_continue_order_executed_pop_up,
+                        category: 'SearchByText',
+                        mobile_number: customerMobileNumber
+                      });
                       goBackToListView();
                       setIsDetailPage(false);
                       setRowSelection({});
@@ -1327,6 +1441,12 @@ const Dashboard = () => {
                     variant: 'primary',
                     label: ManageLocales('app.modal.goToYourOrder'),
                     handler: () => {
+                      trackEvent({
+                        action:
+                          Tracking_Search_By_Text.click_go_to_your_order_order_executed_pop_up,
+                        category: 'SearchByText',
+                        mobile_number: customerMobileNumber
+                      });
                       router.push('/v2/your-orders');
                     },
                     customStyle: 'flex-1 w-full h-10'
@@ -1434,6 +1554,11 @@ const Dashboard = () => {
       }
     });
     if (locationMismatch) {
+      trackEvent({
+        action: Tracking_Search_By_Text.disclaimer_pop_up_opens,
+        category: 'SearchByText',
+        mobile_number: customerMobileNumber
+      });
       setIsDialogOpen(true);
       setDialogContent(
         <CommonPoppup
@@ -1483,6 +1608,12 @@ const Dashboard = () => {
               variant: 'primary',
               label: 'Confirm Order',
               handler: () => {
+                trackEvent({
+                  action:
+                    Tracking_Search_By_Text.click_confirm_order_disclaimer_pop_up,
+                  category: 'SearchByText',
+                  mobile_number: customerMobileNumber
+                });
                 setIsDialogOpen(false);
                 confirmStoneApiCall({ variantIds });
               },
@@ -1498,6 +1629,12 @@ const Dashboard = () => {
 
   const confirmStone = () => {
     const variantIds: string[] = [];
+
+    trackEvent({
+      action: Tracking_Search_By_Text.click_confirm_stone_confirm_page,
+      category: 'SearchByText',
+      mobile_number: customerMobileNumber
+    });
 
     confirmStoneData.forEach((ids: any) => {
       variantIds.push(ids.variants[0].id);
@@ -1537,6 +1674,11 @@ const Dashboard = () => {
 
       // If there are variant IDs, add to the cart
       if (variantIds.length) {
+        trackEvent({
+          action: Tracking_Search_By_Text.click_add_to_cart_result_page,
+          category: 'SearchByText',
+          mobile_number: customerMobileNumber
+        });
         addCart({
           variants: variantIds
         })
@@ -1629,9 +1771,6 @@ const Dashboard = () => {
     }
   };
 
-  console.log('confirmStoneData', confirmStoneData);
-  console.log('isConfirmStone', isConfirmStone);
-
   useEffect(() => {
     if (images?.length > 0 && images[0]?.name?.length)
       loadImages(images, setValidImages, checkImage, false);
@@ -1707,10 +1846,13 @@ const Dashboard = () => {
       <ImageModal
         setIsLoading={setIsLoading}
         isOpen={isModalOpen}
+        isResultPageDetails={isResultPageDetails}
+        customerMobileNumber={customerMobileNumber}
         onClose={() => {
           setValidImages([]);
           setDetailImageData({});
           setIsModalOpen(!isModalOpen);
+          setIsResultPageDetails(false);
         }}
         images={validImages}
       />
@@ -1732,9 +1874,11 @@ const Dashboard = () => {
             breadCrumLabel={
               breadCrumLabel.length ? breadCrumLabel : 'Search Results'
             }
+            identifier={dashboardIndentifier}
             modalSetState={modalSetState}
             setIsLoading={setIsLoading}
             setIsDiamondDetailLoading={setIsDiamondDetailLoading}
+            customerMobileNumber={customerMobileNumber}
           />
           <div className="p-[8px] flex justify-end items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow mb-1">
             {isDiamondDetailLoading ? (
@@ -1785,6 +1929,12 @@ const Dashboard = () => {
                         setIsDetailPage(false);
                         const { id } = detailPageData;
                         const selectedRows = { [id]: true };
+                        trackEvent({
+                          action:
+                            Tracking_Search_By_Text.click_confirm_stone_dna_page,
+                          category: 'SearchByText',
+                          mobile_number: customerMobileNumber
+                        });
                         handleConfirmStone({
                           selectedRows: selectedRows,
                           rows: searchData?.foundProducts,
@@ -1836,10 +1986,17 @@ const Dashboard = () => {
             columns={columnData}
             goBackToListView={goBackToListView}
             // activeTab={activeTab}
-            isFrom={isCompareStone ? 'Compare Stone' : 'Dashboard'}
+            isFrom={
+              detailPageData?.length
+                ? 'Detail Page'
+                : isCompareStone
+                ? 'Compare Stone'
+                : 'Dashboard'
+            }
             handleDetailImage={handleDetailImage}
             handleDetailPage={handleDetailPage}
             identifier="Dashboard"
+            customerMobileNumber={customerMobileNumber}
           />
           <div className="px-4 py-2">
             <ActionButton
@@ -1848,6 +2005,12 @@ const Dashboard = () => {
                   variant: 'secondary',
                   label: ManageLocales('app.confirmStone.footer.back'),
                   handler: () => {
+                    trackEvent({
+                      action: Tracking_Search_By_Text.click_back_confirm_page,
+                      category: 'SearchByText',
+                      mobile_number: customerMobileNumber
+                    });
+
                     goBackToListView(
                       isCompareStone ? 'Compare Stone' : 'Dashboard'
                     );
@@ -1858,6 +2021,12 @@ const Dashboard = () => {
                   variant: 'secondary',
                   label: ManageLocales('app.confirmStone.footer.addComment'),
                   handler: () => {
+                    trackEvent({
+                      action:
+                        Tracking_Search_By_Text.click_add_comment_confirm_page,
+                      category: 'SearchByText',
+                      mobile_number: customerMobileNumber
+                    });
                     setCommentValue('');
                     setIsAddCommentDialogOpen(true);
                   }
@@ -1942,6 +2111,11 @@ const Dashboard = () => {
                 onClick={() => {
                   setIsDetailPage(false);
                   setRowSelection({});
+                  trackEvent({
+                    action: Tracking_Search_By_Text.click_back_results_page,
+                    category: 'SearchByText',
+                    mobile_number: customerMobileNumber
+                  });
                 }}
                 className="cursor-pointer"
               />
@@ -1951,6 +2125,11 @@ const Dashboard = () => {
                   onClick={() => {
                     setIsDetailPage(false);
                     setRowSelection({});
+                    trackEvent({
+                      action: Tracking_Search_By_Text.click_back_results_page,
+                      category: 'SearchByText',
+                      mobile_number: customerMobileNumber
+                    });
                   }}
                 >
                   {breadCrumLabel}
@@ -1983,6 +2162,7 @@ const Dashboard = () => {
               setCompareStoneData={setCompareStoneData}
               handleCreateAppointment={handleCreateAppointment}
               refreshSearchResults={refreshSearchResults}
+              customerMobileNumber={customerMobileNumber}
             />
           </div>
         </div>

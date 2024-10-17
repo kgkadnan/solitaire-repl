@@ -13,6 +13,9 @@ import Tooltip from '../tooltip';
 import { formatNumber } from '@/utils/fix-two-digit-number';
 import { useLazyShareEventQuery } from '@/features/api/track-interaction';
 import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
+import { dashboardIndentifier } from '@/app/v2/dashboard';
+import { Tracking_Search_By_Text } from '@/constants/funnel-tracking';
+import { trackEvent } from '@/utils/ga';
 
 const Share = ({
   rows,
@@ -21,7 +24,9 @@ const Share = ({
   setIsError,
   identifier,
   activeTab = 0,
-  shareTrackIdentifier
+  shareTrackIdentifier,
+  dynamicTrackIdentifier,
+  customerMobileNumber
 }: any) => {
   const [selectedRows, setSelectedRows] = useState<IProduct[]>(
     rows?.filter((row: IProduct) => row.id in selectedProducts)
@@ -420,6 +425,16 @@ const Share = ({
             setIsError(false);
             setErrorText('');
             setIsInputDialogOpen(true);
+            if (
+              dynamicTrackIdentifier === dashboardIndentifier ||
+              shareTrackIdentifier === 'Dashboard'
+            ) {
+              trackEvent({
+                action: Tracking_Search_By_Text.click_share_dna_page,
+                category: 'SearchByText',
+                mobile_number: customerMobileNumber
+              });
+            }
           } else {
             setIsError(true);
             setErrorText(SELECT_STONE_TO_PERFORM_ACTION);
