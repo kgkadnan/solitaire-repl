@@ -27,7 +27,7 @@ const ConfirmScreen = () => {
     trackEvent({
       action: Tracking.Mobile_Verified_PageView,
       entry_point: localStorage.getItem('entryPoint') || '',
-      category: 'Register'
+      category: 'Registration'
     });
   }, []);
   return (
@@ -53,7 +53,7 @@ const ConfirmScreen = () => {
                 trackEvent({
                   action: Tracking.Click_Finish_KYC,
                   entry_point: localStorage.getItem('entryPoint') || '',
-                  category: 'Register'
+                  category: 'Registration'
                 });
               localStorage.setItem(
                 'kyc_entryPoint',
@@ -83,7 +83,7 @@ const ConfirmScreen = () => {
                 trackEvent({
                   action: Tracking.Click_Continue_Guest,
                   entry_point: localStorage.getItem('entryPoint') || '',
-                  category: 'Register'
+                  category: 'Registration'
                 });
               router.push(`/v2/`);
             }}

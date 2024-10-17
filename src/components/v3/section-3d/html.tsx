@@ -241,7 +241,7 @@ const HtmlAnimation = () => {
                   action: Tracking.Click_RegisterPage,
                   entry_point:
                     Tracking_Click_RegisterPage.LP_Home_Explore_Now_Register,
-                  category: 'Register'
+                  category: 'Registration'
                 });
               localStorage.setItem(
                 'entryPoint',
