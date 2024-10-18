@@ -4,6 +4,8 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import TraceabilityHtml from '@/components/v3/traceability-html';
 import AnimationSection from '@/components/v3/animated-text/scroll';
+import arrowUpRight from '@public/v3/traceability/arrow-up-right.svg';
+import Link from 'next/link';
 export default function Traceability() {
   const [showControls, setShowControls] = useState(false);
   useEffect(() => {
@@ -20,17 +22,16 @@ export default function Traceability() {
         <div className="scroll-container flex overflow-hidden  w-full justify-center">
           <div className="flex flex-col gap-2 flex-none w-full flex-shrink-0 snap-center items-center">
             <div className="text-neutral900 text-[52px] font-black text-center leading-[110px] custom-fadeIn">
-              <AnimationSection>What is Diamond Traceability?</AnimationSection>
+              <AnimationSection>How Traceability Works in KGK</AnimationSection>
             </div>
             <div className="flex gap-2">
               <div className="flex gap-3 flex-col items-center">
                 <div className="text-neutral800 text-[16px] px-4 pt-[14px] w-[832px] text-center content">
                   <AnimationSection animationDelay={0.5}>
-                    Diamond traceability refers to the ability to track the
-                    origin and movement of a diamond throughout its entire
-                    supply chain. This involves maintaining a record of the
-                    diamond's history from initial rough stage to manufacturing
-                    till it is polished.
+                    At KGK, every diamond undergoes a traceable journey through
+                    our GemTrac program, ensuring transparency at each stage.
+                    The video below highlights this process, and additional
+                    traceability options are available upon request.
                   </AnimationSection>
                 </div>
               </div>
@@ -39,7 +40,7 @@ export default function Traceability() {
         </div>
       </div>
 
-      <div className="xl:px-[112px] lg:px-[32px] bg-neutral0 flex flex-col  items-center justify-center">
+      {/* <div className="xl:px-[112px] lg:px-[32px] bg-neutral0 flex flex-col  items-center justify-center">
         <div className="flex flex-col gap-2 text-center w-[840px] py-[40px] justify-center">
           <div className="flex flex-col gap-2">
             <p className="xl:text-[52px] lg:text-[42px] text-neutral900 font-black">
@@ -47,15 +48,21 @@ export default function Traceability() {
             </p>
           </div>
         </div>
-      </div>
+      </div> */}
       <div className="flex justify-center w-full h-fit">
         <TraceabilityHtml showControls={showControls} />
       </div>
 
       <div className="flex flex-col items-center xl:px-[112px] lg:px-[32px] pb-[40px]">
         <div className="w-full">
-          <div className="text-neutral900 text-[52px] font-bold text-center leading-[110px] custom-fadeIn">
-            Leading Traceability Programs We Use
+          <div className="flex flex-col justify-center  items-center">
+            <div className="text-neutral900 text-[52px] font-bold text-center leading-[110px] custom-fadeIn">
+              Traceability Programs We Offer
+            </div>
+            <p className="text-[14px] text-neutral900 font-regular">
+              To request a traceability program for any stone, please get in
+              touch with our sales team.
+            </p>
           </div>
           <div className="flex flex-wrap gap-[60px] items-center justify-center">
             {leadingPrograms.map((program, index) => (
@@ -83,6 +90,12 @@ export default function Traceability() {
                   <p className="text-neutral800 text-[16px]">
                     {program.description}
                   </p>
+                  {program.refLink && (
+                    <div className=" flex items-center justify-end text-infoMain font-medium text-[14px]">
+                      <Link href={program.refLink}>Read more</Link>
+                      <Image src={arrowUpRight} alt="arrowUpRight" />
+                    </div>
+                  )}
                 </div>
               </div>
             ))}

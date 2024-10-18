@@ -427,10 +427,13 @@ const Share = ({
             setIsInputDialogOpen(true);
             if (
               dynamicTrackIdentifier === dashboardIndentifier ||
-              shareTrackIdentifier === 'Dashboard'
+              dynamicTrackIdentifier === 'dashboardSearchResult'
             ) {
               trackEvent({
-                action: Tracking_Search_By_Text.click_share_dna_page,
+                action:
+                  dynamicTrackIdentifier === 'dashboardSearchResult'
+                    ? Tracking_Search_By_Text.click_share_result_page
+                    : Tracking_Search_By_Text.click_share_dna_page,
                 category: 'SearchByText',
                 mobile_number: customerMobileNumber
               });
