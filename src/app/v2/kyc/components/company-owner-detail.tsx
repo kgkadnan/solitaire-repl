@@ -25,6 +25,12 @@ const CompanyOwnerDetail = ({
         'owner_country_code'
       ];
 
+    let getCountryCodeFromLocalStorage = localStorage.getItem('userIp');
+    let parsedData;
+    if (getCountryCodeFromLocalStorage) {
+      parsedData = JSON.parse(getCountryCodeFromLocalStorage); // Parse the JSON string
+    }
+
     if (isCountryCodeAvbl?.length) {
       triggerGetAllCountryCode({}).then(data => {
         let getSpecificCountryData = data.data.filter((country: any) => {
@@ -32,6 +38,16 @@ const CompanyOwnerDetail = ({
         });
         setSelectedCountryIso(getSpecificCountryData[0].iso);
       });
+    } else if (parsedData.countryCode && parsedData.iso) {
+      dispatch(
+        updateFormState({
+          name: `formState.online.sections[${[
+            kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
+          ]}][owner_country_code]`,
+          value: parsedData.countryCode
+        })
+      );
+      setSelectedCountryIso(parsedData?.iso);
     } else {
       const userIp = JSON.parse(localStorage.getItem('userIp')!);
 
