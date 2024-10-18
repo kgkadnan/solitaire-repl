@@ -94,7 +94,7 @@ export const handleEditMobileNumber = ({
           mobile_number: `+${otpVerificationFormState.countryCode} ${otpVerificationFormState.otpMobileNumber}`,
           status: 'Success',
           entry_point: localStorage.getItem('entryPoint') || '',
-          category: 'Register'
+          category: 'Registration'
 
           // }
         });
@@ -124,7 +124,7 @@ export const handleEditMobileNumber = ({
           mobile_number: `+${otpVerificationFormState.countryCode} ${otpVerificationFormState.otpMobileNumber}`,
           status: 'Fail',
           entry_point: localStorage.getItem('entryPoint') || '',
-          category: 'Register'
+          category: 'Registration'
 
           // }
         });

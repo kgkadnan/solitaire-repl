@@ -202,7 +202,7 @@ const Register = () => {
               trackEvent({
                 action: Tracking.Click_Mobile_Edit_Cancel,
                 entry_point: localStorage.getItem('entryPoint') || '',
-                category: 'Register'
+                category: 'Registration'
               });
             }}
             variant={'secondary'}

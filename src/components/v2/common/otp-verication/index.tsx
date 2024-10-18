@@ -98,7 +98,7 @@ const OTPVerification = ({
     trackEvent({
       action: Tracking.Mobile_Verification_PageView,
       entry_point: localStorage.getItem('entryPoint') || '',
-      category: 'Register'
+      category: 'Registration'
     });
   }, []);
 
@@ -118,7 +118,7 @@ const OTPVerification = ({
               trackEvent({
                 action: Tracking.Click_KGK_Logo,
                 entry_point: localStorage.getItem('entryPoint') || '',
-                category: 'Register'
+                category: 'Registration'
               });
             router.push('/v3');
           }}
@@ -159,7 +159,7 @@ const OTPVerification = ({
                     entry_point: localStorage.getItem('entryPoint') || '',
 
                     mobile_number: `+${otpVerificationFormState.codeAndNumber}`,
-                    category: 'Register'
+                    category: 'Registration'
 
                     // }
                   });
@@ -207,7 +207,7 @@ const OTPVerification = ({
                 label: Tracking.Click_Resend,
                 entry_point: localStorage.getItem('entryPoint') || '',
                 mobile_number: `+${otpVerificationFormState.codeAndNumber}`,
-                category: 'Register'
+                category: 'Registration'
 
                 // }
               });
@@ -264,7 +264,7 @@ const OTPVerification = ({
                 trackEvent({
                   action: Tracking.Click_Login,
                   entry_point: localStorage.getItem('entryPoint') || '',
-                  category: 'Register'
+                  category: 'Registration'
                 });
               role === 'login'
                 ? setCurrentState('login')
