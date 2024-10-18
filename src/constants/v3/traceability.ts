@@ -40,7 +40,8 @@ export const leadingPrograms = [
     icon: Program1,
     heading: 'GemTrac by KGK',
     description:
-      'GemTrac by KGK features in-house traceability programs that document the manufacturing process and track each diamond’s journey from mines to market.'
+      'GemTrac by KGK features in-house traceability programs that document the manufacturing process and track each diamond’s journey from mines to market.',
+    refLink: '/v3/traceability/gemtrac'
   },
   {
     icon: Program2,
