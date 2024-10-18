@@ -55,7 +55,7 @@ export default function Traceability() {
 
       <div className="flex flex-col items-center xl:px-[112px] lg:px-[32px] pb-[40px]">
         <div className="w-full">
-          <div className="flex flex-col justify-center  items-center">
+          <div className="flex flex-col justify-center pb-[20px]  items-center">
             <div className="text-neutral900 text-[52px] font-bold text-center leading-[110px] custom-fadeIn">
               Traceability Programs We Offer
             </div>
@@ -92,8 +92,13 @@ export default function Traceability() {
                   </p>
                   {program.refLink && (
                     <div className=" flex items-center justify-end text-infoMain font-medium text-[14px]">
-                      <Link href={program.refLink}>Read more</Link>
-                      <Image src={arrowUpRight} alt="arrowUpRight" />
+                      <Link
+                        href={program.refLink}
+                        className="flex items-center"
+                      >
+                        Read more
+                        <Image src={arrowUpRight} alt="arrowUpRight" />
+                      </Link>
                     </div>
                   )}
                 </div>

@@ -74,7 +74,7 @@ const page = () => {
               return (
                 <div
                   id={gemTrac.id}
-                  className="flex  items-start justify-between min-h-[420px]"
+                  className="flex  pb-[15px] items-start justify-between min-h-[420px]"
                   key={gemTrac.id}
                 >
                   <div className="flex flex-col w-[528px]">
@@ -94,10 +94,10 @@ const page = () => {
                           <div
                             className={`border-l border-dotted border-gray-400 ${
                               index === 0
-                                ? 'xl:h-[140%] lg:h-[135%]'
+                                ? 'xl:h-[165%] lg:h-[158%]'
                                 : index === 2
-                                ? 'xl:h-[125%] lg:h-[120%]'
-                                : 'xl:h-[115%] lg:h-[110%]'
+                                ? 'xl:h-[130%] lg:h-[125%]'
+                                : 'xl:h-[125%] lg:h-[120%]'
                             }  xl:mt-[-15px] lg:mt-[-10px]`}
                           ></div>
                         </div>
@@ -107,7 +107,7 @@ const page = () => {
                           index !== traceabilityGemTrac.length - 1
                             ? 'pl-[18px]'
                             : 'pl-[43px]'
-                        }  pb-[35px] lg:w-[450px] xl:w-full w-full`}
+                        }  lg:w-[450px] xl:w-full w-full`}
                       >
                         <div className="flex flex-col gap-2">
                           <p className="lg:text-[14px] xl:text-[16px] text-primaryMain font-medium">
