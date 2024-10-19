@@ -56,7 +56,7 @@ export default function Traceability() {
       <div className="flex flex-col items-center xl:px-[112px] lg:px-[32px] pb-[40px]">
         <div className="w-full">
           <div className="flex flex-col justify-center pb-[20px]  items-center">
-            <div className="text-neutral900 text-[52px] font-bold text-center leading-[110px] custom-fadeIn">
+            <div className="text-neutral900 text-[52px] font-bold text-center leading-[110px] ">
               Traceability Programs We Offer
             </div>
             <p className="text-[14px] text-neutral900 font-regular">

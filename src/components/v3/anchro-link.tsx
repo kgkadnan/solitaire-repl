@@ -15,7 +15,7 @@ const AnchorLink: React.FC<IAnchorLink> = ({ anchorNavigations }) => {
   return (
     <div className={`flex items-center w-full`}>
       <div className="flex overflow-x-auto no-scrollbar py-[10px]">
-        {anchorNavigations.map(links => (
+        {anchorNavigations.map((links, index) => (
           <div key={`keys-${links}`}>
             <Link
               activeStyle={{
@@ -28,7 +28,10 @@ const AnchorLink: React.FC<IAnchorLink> = ({ anchorNavigations }) => {
               offset={-20}
               duration={100}
               delay={0}
-              className={`flex-shrink-0 px-[12px] py-[8px] text-center text-mMedium font-medium capitalize cursor-pointer whitespace-nowrap text-neutral600`}
+              className={`${
+                index === 0 &&
+                'text-neutral900 border-solid border-neutral900 border-b-[2px]'
+              } flex-shrink-0 px-[12px] py-[8px] text-center text-mMedium font-medium capitalize cursor-pointer whitespace-nowrap text-neutral600`}
               onClick={() => handleLinkClick(links)}
             >
               {links}
