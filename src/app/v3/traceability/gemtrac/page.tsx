@@ -42,7 +42,7 @@ const page = () => {
           </div>
         </div>
       </div>
-      <div className="xl:px-[112px] lg:px-[32px] bg-neutral0 flex flex-col  items-center justify-center">
+      <div className="xl:px-[112px] lg:px-[32px] bg-neutral25 flex flex-col  items-center justify-center">
         <div className="flex flex-col gap-2 text-center w-[950px] py-[40px] justify-center">
           <div className="flex flex-col gap-2">
             <p className="xl:text-[36px] lg:text-[30px] text-neutral900 font-black">
@@ -60,12 +60,12 @@ const page = () => {
           </div>
         </div>
       </div>
-      <div className="xl:px-[112px] lg:px-[32px] bg-neutral0 flex flex-col  items-center justify-center">
+      <div className="px-[32px] pt-[8px] border-[1px]  rounded-t-[8px] border-solid border-neutral200 bg-neutral0 flex flex-col  items-center justify-center">
         <AnchorLink anchorNavigations={traceabilityAnchorLink} />
       </div>
 
       <div
-        className="border-y-[1px] border-solid border-neutral200 bg-neutral25"
+        className="border-b-[1px] border-solid border-neutral200 bg-neutral25"
         style={{ boxShadow: '0px 1px 2px 0px #1018281F' }}
       >
         <div className="flex flex-col items-center xl:px-[112px] lg:px-[50px] pt-[10px]">
@@ -96,8 +96,10 @@ const page = () => {
                               index === 0
                                 ? 'xl:h-[165%] lg:h-[158%]'
                                 : index === 2
-                                ? 'xl:h-[130%] lg:h-[125%]'
-                                : 'xl:h-[125%] lg:h-[120%]'
+                                ? 'xl:h-[129%] lg:h-[124%]'
+                                : index === 4
+                                ? 'xl:h-[120%] lg:h-[115%]'
+                                : 'xl:h-[125%] lg:h-[120.5%]'
                             }  xl:mt-[-15px] lg:mt-[-10px]`}
                           ></div>
                         </div>
@@ -107,7 +109,11 @@ const page = () => {
                           index !== traceabilityGemTrac.length - 1
                             ? 'pl-[18px]'
                             : 'pl-[43px]'
-                        }  lg:w-[450px] xl:w-full w-full`}
+                        } ${
+                          index === traceabilityGemTrac.length - 1
+                            ? 'lg:w-[474px]'
+                            : 'lg:w-[450px]'
+                        }   xl:w-full w-full`}
                       >
                         <div className="flex flex-col gap-2">
                           <p className="lg:text-[14px] xl:text-[16px] text-primaryMain font-medium">

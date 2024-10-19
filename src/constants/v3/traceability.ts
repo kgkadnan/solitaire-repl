@@ -10,20 +10,19 @@ import Program5 from '@public/v3/traceability/program5.png';
 import Program6 from '@public/v3/traceability/program6.png';
 
 //Gem Trac Imports
-import step1 from '@public/v3/traceability/gem-trac/step-1.svg';
-import step2 from '@public/v3/traceability/gem-trac/step-2.svg';
-import step3 from '@public/v3/traceability/gem-trac/step-3.svg';
-import step4 from '@public/v3/traceability/gem-trac/step-4.svg';
-import step5 from '@public/v3/traceability/gem-trac/step-5.svg';
-import step6 from '@public/v3/traceability/gem-trac/step-6.svg';
-import testImg from '@public/v3/traceability/test-image.svg';
+import step1 from '@public/v3/traceability/gem-trac/step-1.png';
+import step2 from '@public/v3/traceability/gem-trac/step-2.png';
+import step3 from '@public/v3/traceability/gem-trac/step-3.png';
+import step4 from '@public/v3/traceability/gem-trac/step-4.png';
+import step5 from '@public/v3/traceability/gem-trac/step-5.png';
+import step6 from '@public/v3/traceability/gem-trac/step-6.png';
 
 import url1 from '@public/v3/traceability/gem-trac/diamond.svg';
 import url2 from '@public/v3/traceability/gem-trac/hrd.svg';
 import url3 from '@public/v3/traceability/gem-trac/map.svg';
 import url4 from '@public/v3/traceability/gem-trac/micro.svg';
-import gifTest from '@public/v3/traceability/gem-trac/pol.gif';
-import gifTest2 from '@public/v3/traceability/gem-trac/LS.gif';
+import polGif from '@public/v3/traceability/gem-trac/pol.gif';
+import lsGif from '@public/v3/traceability/gem-trac/LS.gif';
 
 export const traceabilityMatters = [
   {
@@ -153,7 +152,7 @@ export const traceabilityGemTrac = [
     description: `A precise and powerful laser beam is set on the planned markings on the diamond by an expert. The laser divides the rough diamond into two and are forwarded to the faceting department.`,
     chosenBy: '', // Person who made the choice
     details: ``,
-    url: gifTest,
+    url: polGif,
     icon: step3,
     metadata: [
       {
@@ -186,7 +185,7 @@ export const traceabilityGemTrac = [
 
     chosenBy: '', // Person who made the choice
     details: ``,
-    url: gifTest2,
+    url: lsGif,
     icon: step4,
     metadata: [
       {
