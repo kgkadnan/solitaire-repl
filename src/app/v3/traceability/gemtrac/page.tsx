@@ -60,7 +60,7 @@ const page = () => {
           </div>
         </div>
       </div>
-      <div className="px-[32px] pt-[8px] border-[1px]  rounded-t-[8px] border-solid border-neutral200 bg-neutral0 flex flex-col  items-center justify-center">
+      <div className="xl:px-[112px] lg:px-[32px] pt-[8px] border-[1px]  rounded-t-[8px] border-solid border-neutral200 bg-neutral0 flex flex-col  items-center justify-center">
         <AnchorLink anchorNavigations={traceabilityAnchorLink} />
       </div>
 
@@ -94,13 +94,13 @@ const page = () => {
                           <div
                             className={`border-l border-dotted border-gray-400 ${
                               index === 0
-                                ? 'xl:h-[165%] lg:h-[158%]'
+                                ? 'xl:h-[139%] lg:h-[158%]'
                                 : index === 2
-                                ? 'xl:h-[129%] lg:h-[124%]'
+                                ? 'xl:h-[120%] lg:h-[124%]'
                                 : index === 4
-                                ? 'xl:h-[120%] lg:h-[115%]'
-                                : 'xl:h-[125%] lg:h-[120.5%]'
-                            }  xl:mt-[-15px] lg:mt-[-10px]`}
+                                ? 'xl:h-[116%] lg:h-[115%]'
+                                : 'xl:h-[120%] lg:h-[120.5%]'
+                            }  xl:mt-[-12px] lg:mt-[-10px]`}
                           ></div>
                         </div>
                       )}
