@@ -240,17 +240,19 @@ const BidToBuy = () => {
   useEffect(() => {
     getBidToBuyHistoryData();
     setIsLoading(true);
-    triggerBidToBuyApi({ searchUrl: searchUrl, limit: 300 })
-      .unwrap()
-      .then((response: any) => {
-        setTime(response?.endTime), setActiveBid(response?.activeStone);
-        setBid(response?.bidStone);
+    console.log(searchUrl, 'searchUrlsearchUrlsearchUrl');
+    searchUrl === '' &&
+      triggerBidToBuyApi({ searchUrl: searchUrl, limit: 300 })
+        .unwrap()
+        .then((response: any) => {
+          setTime(response?.endTime), setActiveBid(response?.activeStone);
+          setBid(response?.bidStone);
 
-        setIsLoading(false);
-      })
-      .catch(e => {
-        setIsLoading(false);
-      });
+          setIsLoading(false);
+        })
+        .catch(e => {
+          setIsLoading(false);
+        });
   }, []);
 
   useEffect(() => {
