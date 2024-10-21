@@ -1308,7 +1308,7 @@ const Form = ({
             )}
           </span>
         </div>
-        <div className="p-2 border-[1px] rounded-t-[8px]">
+       {routePath.includes('v2/bid-2-buy') && <div className="p-2 border-[1px] rounded-t-[8px]">
           <div className="w-[450px]">
             <Tab
               labels={['Bid Stone', 'Active Bid', 'Bid History']}
@@ -1326,7 +1326,7 @@ const Form = ({
               historyCount={historyCount}
             />
           </div>
-        </div>
+        </div>}
         <div className="flex flex-col gap-[16px]">
           {searchParameters?.length > 0 ? (
             <div className="flex justify-between border-[1px] border-neutral200  px-[16px] py-[8px]">
