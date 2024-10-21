@@ -230,30 +230,30 @@ const BidToBuy = () => {
       setTime(filterData?.bidData?.endTime);
     }
   }, [filterData?.bidData]);
-
+  console.log(filterData, 'filterDatafilterDatafilterData');
   useEffect(() => {
     if (activeTab === 2) {
       getBidToBuyHistoryData();
     }
   }, [activeTab]);
 
-  useEffect(() => {
-    getBidToBuyHistoryData();
-    setIsLoading(true);
-    console.log(searchUrl, 'searchUrlsearchUrlsearchUrl');
-    searchUrl === '' &&
-      triggerBidToBuyApi({ searchUrl: searchUrl, limit: 300 })
-        .unwrap()
-        .then((response: any) => {
-          setTime(response?.endTime), setActiveBid(response?.activeStone);
-          setBid(response?.bidStone);
+  // useEffect(() => {
+  //   getBidToBuyHistoryData();
+  //   setIsLoading(true);
+  //   console.log(searchUrl, 'searchUrlsearchUrlsearchUrl');
+  //   searchUrl === '' &&
+  //     triggerBidToBuyApi({ searchUrl: searchUrl, limit: 300 })
+  //       .unwrap()
+  //       .then((response: any) => {
+  //         setTime(response?.endTime), setActiveBid(response?.activeStone);
+  //         setBid(response?.bidStone);
 
-          setIsLoading(false);
-        })
-        .catch(e => {
-          setIsLoading(false);
-        });
-  }, []);
+  //         setIsLoading(false);
+  //       })
+  //       .catch(e => {
+  //         setIsLoading(false);
+  //       });
+  // }, []);
 
   useEffect(() => {
     if (pathName === 'bidHistory') {
