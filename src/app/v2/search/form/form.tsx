@@ -14,6 +14,7 @@ import { Carat } from './components/carat';
 import { Color } from './components/color';
 import {
   useAddDemandMutation,
+  useLazyGetAllBidStonesQuery,
   useLazyGetProductCountQuery
 } from '@/features/api/product';
 import useValidationStateManagement from '../hooks/validation-state-management';
@@ -48,7 +49,7 @@ import {
   SELECT_SOME_PARAM,
   SOMETHING_WENT_WRONG
 } from '@/constants/error-messages/form';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { setModifySearch } from './helpers/modify-search';
 import { useAppSelector } from '@/hooks/hook';
 // import logger from 'logging/log-util';
@@ -81,6 +82,9 @@ import { parseQueryString } from './helpers/parse-query-string';
 import { filterBidData } from './helpers/filter-bid-data';
 import { filterBidToBuyFunction } from '@/features/filter-bid-to-buy/filter-bid-to-buy-slice';
 import { queryParamsFunction } from '@/features/event-params/event-param-slice';
+import CountdownTimer from '@/components/v2/common/timer';
+import Tab from '@/components/v2/common/bid-tabs';
+import { useLazyGetBidToBuyHistoryQuery } from '@/features/api/dashboard';
 
 export interface ISavedSearch {
   saveSearchName: string;
@@ -137,7 +141,7 @@ const Form = ({
   const router = useRouter();
   const searchParams = useSearchParams();
   const subRoute = useSearchParams().get('active-tab');
-
+  const routePath = usePathname();
   const modifySearchFrom = searchParams.get('edit');
   const savedSearch: any = useAppSelector(
     (store: { savedSearch: any }) => store.savedSearch
@@ -244,12 +248,28 @@ const Form = ({
   const { setIsInputDialogOpen } = modalSetState;
   const [data, setData] = useState<any>();
   const [error, setError] = useState<any>();
+  const [timeDifference, setTimeDifference] = useState(null);
+  const [time, setTime] = useState('');
+  // const [checkStatus, setCheckStatus] = useState(false);
+
+  useEffect(() => {
+    const currentTime: any = new Date();
+    const targetTime: any = new Date(time!);
+    const timeDiff: any = targetTime - currentTime;
+
+    setTimeDifference(timeDiff);
+  }, [time]);
+
   const queryParamsData = useAppSelector(state => state.queryParams);
 
   let [
     triggerProductCountApi,
     { isLoading: isLoadingProductApi, isFetching: isFetchingProductApi }
   ] = useLazyGetProductCountQuery();
+  let [
+    triggerBidToBuyApi,
+    { isLoading: isLoadingBidToBuyApi, isFetching: isFetchingBidToBuyApi }
+  ] = useLazyGetAllBidStonesQuery();
   let [
     triggerMatchingPairCountApi,
     { isLoading: isLoadingMatchPairApi, isFetching: isFetchingMatchPairApi }
@@ -310,19 +330,28 @@ const Form = ({
       });
 
       setError('');
-    } else if (subRoute === SubRoutes.BID_TO_BUY) {
+    } else if (routePath === Routes.BID_TO_BUY) {
       const query = parseQueryString(searchUrl);
-
-      const filteredData =
-        bidToBuyFilterData?.bidData &&
-        filterBidData(bidToBuyFilterData?.bidData, query);
-
-      setData({
-        count: filteredData.length,
-        products: filteredData
-      });
-
-      setError('');
+      setErrorText('');
+      setIsLoading(true);
+      triggerBidToBuyApi({ searchUrl: searchUrl, limit: 1 })
+        .unwrap()
+        .then((response: any) => {
+          setData(response),
+            setTime(response?.endTime),
+            setActiveCount(response?.activeStone?.length);
+          setError(''), setIsLoading(false);
+          dispatch(
+            filterBidToBuyFunction({
+              queryParams: query,
+              bidData: response
+              // bidFilterData: data?.products
+            })
+          );
+        })
+        .catch(e => {
+          setError(e), setIsLoading(false);
+        });
     } else if (isTurkey) {
       setErrorText('');
       setIsLoading(true);
@@ -520,7 +549,6 @@ const Form = ({
       handleFormReset();
     }
   }, [subRoute]);
-
   useEffect(() => {
     if (isTurkey) {
       let queryData = constructUrlParams(queryParamsData.queryParams);
@@ -562,18 +590,31 @@ const Form = ({
       );
       router.push(`/v2/new-arrivals`);
       setSearchUrl('');
-    } else if (subRoute === SubRoutes.BID_TO_BUY) {
+    } else if (routePath === Routes.BID_TO_BUY) {
       const queryParams = generateQueryParams(state);
 
-      dispatch(
-        filterBidToBuyFunction({
-          queryParams,
-          bidData: bidToBuyFilterData.bidData,
-          bidFilterData: data?.products
+      setErrorText('');
+      setIsLoading(true);
+      triggerBidToBuyApi({ searchUrl: searchUrl, limit: 300 })
+        .unwrap()
+        .then((response: any) => {
+          setData(response),
+            setTime(response.endTime),
+            setError(''),
+            setIsLoading(false);
+          dispatch(
+            filterBidToBuyFunction({
+              queryParams,
+              bidData: response
+              // bidFilterData: data?.products
+            })
+          );
         })
-      );
-      router.push(`/v2/bid-2-buy`);
-      setSearchUrl('');
+        .catch(e => {
+          setError(e), setIsLoading(false);
+        });
+      router.push(`/v2/bid-2-buy?active-tab=result`);
+      // setSearchUrl('');
     } else if (isTurkey) {
       dispatch(
         queryParamsFunction({
@@ -1120,6 +1161,25 @@ const Form = ({
       setInputError('Input cannot exceed 20 characters');
     }
   };
+  const [historyCount, setHistoryCount] = useState(0);
+  const [activeCount, setActiveCount] = useState(0);
+  const [triggerBidToBuyHistory, { data: historyData }] =
+    useLazyGetBidToBuyHistoryQuery({});
+
+  const getBidToBuyHistoryData = () => {
+    triggerBidToBuyHistory({})
+      .then(res => {
+        setIsLoading(false);
+        setHistoryCount(res.data?.data?.length);
+      })
+      .catch(() => {
+        setIsLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    getBidToBuyHistoryData();
+  }, []);
 
   const renderContentWithInput = () => {
     return (
@@ -1199,15 +1259,73 @@ const Form = ({
       <div>
         <div className="py-2">
           <span className="text-neutral900 text-lRegular font-medium grid gap-[24px]">
-            Search for{' '}
-            {subRoute === SubRoutes.NEW_ARRIVAL
-              ? 'New Arrivals'
-              : subRoute === SubRoutes.BID_TO_BUY
-              ? 'Bid To Buy'
-              : isMatchingPair
-              ? 'Match Pair'
-              : 'Diamonds'}
+            {routePath === Routes.BID_TO_BUY ? (
+              <div className="flex  py-[4px] items-center justify-between">
+                <>
+                  {' '}
+                  <div className="flex gap-3 items-center">
+                    <p className="text-lMedium font-medium text-neutral900">
+                      Bid to Buy
+                    </p>
+                    {time && time?.length ? (
+                      <div className="text-successMain text-lMedium font-medium">
+                        ACTIVE
+                      </div>
+                    ) : (
+                      <div className="text-visRed text-lMedium font-medium">
+                        INACTIVE
+                      </div>
+                    )}
+                  </div>
+                  <div className="h-[38px]">
+                    {timeDifference !== null && timeDifference >= 0 && (
+                      <CountdownTimer
+                        initialHours={Math.floor(
+                          timeDifference / (1000 * 60 * 60)
+                        )}
+                        initialMinutes={Math.floor(
+                          (timeDifference % (1000 * 60 * 60)) / (1000 * 60)
+                        )}
+                        initialSeconds={Math.floor(
+                          (timeDifference % (1000 * 60)) / 1000
+                        )}
+                      />
+                    )}
+                  </div>
+                </>
+              </div>
+            ) : (
+              <>
+                Search for{' '}
+                {subRoute === SubRoutes.NEW_ARRIVAL
+                  ? 'New Arrivals'
+                  : // : subRoute === SubRoutes.BID_TO_BUY
+                  // ? 'Bid To Buy'
+                  isMatchingPair
+                  ? 'Match Pair'
+                  : 'Diamonds'}
+              </>
+            )}
           </span>
+        </div>
+        <div className="p-2 border-[1px] rounded-t-[8px]">
+          <div className="w-[450px]">
+            <Tab
+              labels={['Bid Stone', 'Active Bid', 'Bid History']}
+              activeIndex={activeTab}
+              onTabClick={id => {
+                // console.log(id)
+                setActiveTab(id);
+                if (id !== 0) {
+                  router.push(`/v2/bid-2-buy?active-tab=result`);
+                }
+                // handleTabClick(id)
+              }}
+              activeCount={activeCount}
+              bidCount={' '}
+              historyCount={historyCount}
+            />
+          </div>
         </div>
         <div className="flex flex-col gap-[16px]">
           {searchParameters?.length > 0 ? (

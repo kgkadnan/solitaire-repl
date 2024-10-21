@@ -971,10 +971,7 @@ const KYC = () => {
       });
     } else {
       setCurrentStepperStep(prevStep => (prevStep > 0 ? prevStep - 1 : 0));
-      console.log(
-        filteredSteps[currentStepperStep].identifier,
-        'filteredSteps[currentStepperStep].identifier'
-      );
+
       trackEvent({
         action: trackBackStep(filteredSteps[currentStepperStep].identifier),
         entry_point: localStorage.getItem('kyc_entryPoint') || '',
@@ -1467,7 +1464,6 @@ const KYC = () => {
                     .unwrap()
                     .then((res: any) => {
                       if (res) {
-                        console.log('res', res);
                         setToken((prev: any) => ({
                           ...prev,
                           token: res?.token ?? ''

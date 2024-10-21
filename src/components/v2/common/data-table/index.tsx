@@ -1094,6 +1094,7 @@ const DataTable = ({
                 shareTrackIdentifier={
                   myCart ? 'Cart' : isDashboard ? 'Dashboard' : 'Search Results'
                 }
+                dynamicTrackIdentifier={isDashboard && 'dashboardSearchResult'}
               />
             </div>
           </div>
