@@ -32,7 +32,8 @@ export const Tracking_Click_RegisterPage = {
   LP_Traceability_Bottom_Register: 'LP_Traceability_Bottom_Register',
   LP_ContactUs_Bottom_Register: 'LP_ContactUs_Bottom_Register',
   Login_Register: 'Login_Register',
-  LP_Blogs_Bottom_Register: 'LP_Blogs_Bottom_Register'
+  LP_Blogs_Bottom_Register: 'LP_Blogs_Bottom_Register',
+  LP_GemTrac_Bottom_Register: 'LP_GemTrac_Bottom_Register'
 };
 
 export const Tracking_KYC = {
