@@ -33,7 +33,7 @@ const CommonHeader = () => {
       currentRoute === '/v3/about-us/leadership'
     )
       setSelectedHeader('aboutUs');
-    else if (currentRoute === '/v3/traceability')
+    else if (currentRoute.includes('/v3/traceability'))
       setSelectedHeader('traceability');
     else if (currentRoute === '/v3/sustainability')
       setSelectedHeader('sustainability');
