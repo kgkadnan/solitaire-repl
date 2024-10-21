@@ -10,6 +10,8 @@ import {
 import ExpandImg from '@public/v2/assets/icons/detail-page/expand.svg?url';
 import CollapsIcon from '@public/v2/assets/icons/collapse-icon.svg?url';
 import ExportExcel from '@public/v2/assets/icons/detail-page/export-excel.svg?url';
+import Setting from '@public/v2/assets/icons/match-pair-setting.svg?url';
+
 import saveIcon from '@public/v2/assets/icons/data-table/bookmark.svg';
 import BinIcon from '@public/v2/assets/icons/bin.svg';
 import DownloadAllIcon from '@public/v2/assets/icons/download-all.svg';
@@ -975,6 +977,23 @@ const MatchPairTable = ({
                 ''
               )
             }
+
+<div
+              className=" rounded-[4px] cursor-pointer"
+              onClick={handleDownloadExcel}
+            >
+              <Tooltip
+                tooltipTrigger={
+                  <button
+                    className={`rounded-[4px] hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm ${'bg-neutral0'}`}
+                  >
+                    <Setting className={`${'stroke-neutral900'}`} />
+                  </button>
+                }
+                tooltipContent={'Download Excel'}
+                tooltipContentStyles={'z-[1000]'}
+              />
+            </div>
 
             <div
               className=" rounded-[4px] cursor-pointer"
