@@ -242,8 +242,6 @@ const BidToBuy = () => {
     }
   }, [activeTab]);
 
-
-
   useEffect(() => {
     if (pathName === 'bidHistory') {
       setActiveTab(2);
@@ -576,7 +574,7 @@ const BidToBuy = () => {
       ]);
     }
   }, [validImages]);
-
+  console.log(filterData?.bidData);
   return (
     <div className="mb-[4px] relative">
       {isError && (
@@ -627,7 +625,7 @@ const BidToBuy = () => {
         //   <BiddingSkeleton />
         <>
           {subRoute === SubRoutes.BID_TO_BUY_RESULT &&
-          !filterData?.bidData?.bidStone?.length ? (
+          filterData?.bidData?.bidStone?.length ? (
             <>
               {isSkeletonLoading ? (
                 ''
