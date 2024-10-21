@@ -574,7 +574,7 @@ const BidToBuy = () => {
       ]);
     }
   }, [validImages]);
-  console.log(filterData?.bidData);
+  // console.log(filterData?.bidData);
   return (
     <div className="mb-[4px] relative">
       {isError && (
@@ -624,8 +624,7 @@ const BidToBuy = () => {
         //   activeBid === undefined ? (
         //   <BiddingSkeleton />
         <>
-          {subRoute === SubRoutes.BID_TO_BUY_RESULT &&
-          filterData?.bidData?.bidStone?.length ? (
+          {subRoute === SubRoutes.BID_TO_BUY_RESULT ? (
             <>
               {isSkeletonLoading ? (
                 ''
