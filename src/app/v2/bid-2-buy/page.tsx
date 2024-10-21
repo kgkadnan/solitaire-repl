@@ -226,37 +226,38 @@ const BidToBuy = () => {
   };
 
   useEffect(() => {
-    if (filterData?.bidData?.bidStone.length) {
+    if (filterData?.bidData?.bidStone?.length) {
       setBid(filterData?.bidData?.bidStone);
       setActiveBid(filterData?.bidData?.activeStone);
       setTime(filterData?.bidData?.endTime);
-    } else {
-      router.push('/v2/bid-2-buy?active-tab=bid_to_buy');
     }
-  }, [filterData?.bidData]);
+    // else {
+    //   console.log("herer")
+    //   router.push('/v2/bid-2-buy');
+    // }
+  }, [filterData?.bidData, router]);
   useEffect(() => {
     if (activeTab === 2) {
       getBidToBuyHistoryData();
     }
   }, [activeTab]);
 
-  // useEffect(() => {
-  //   getBidToBuyHistoryData();
-  //   setIsLoading(true);
-  //   console.log(searchUrl, 'searchUrlsearchUrlsearchUrl');
-  //   searchUrl === '' &&
-  //     triggerBidToBuyApi({ searchUrl: searchUrl, limit: 300 })
-  //       .unwrap()
-  //       .then((response: any) => {
-  //         setTime(response?.endTime), setActiveBid(response?.activeStone);
-  //         setBid(response?.bidStone);
+  useEffect(() => {
+    getBidToBuyHistoryData();
+    setIsLoading(true);
+    constructUrlParams(filterData?.queryParams) === '' &&
+      triggerBidToBuyApi({ searchUrl: searchUrl, limit: 300 })
+        .unwrap()
+        .then((response: any) => {
+          setTime(response?.endTime), setActiveBid(response?.activeStone);
+          setBid(response?.bidStone);
 
-  //         setIsLoading(false);
-  //       })
-  //       .catch(e => {
-  //         setIsLoading(false);
-  //       });
-  // }, []);
+          setIsLoading(false);
+        })
+        .catch(e => {
+          setIsLoading(false);
+        });
+  }, []);
 
   useEffect(() => {
     if (pathName === 'bidHistory') {
