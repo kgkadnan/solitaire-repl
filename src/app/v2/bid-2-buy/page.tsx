@@ -226,7 +226,7 @@ const BidToBuy = () => {
   };
 
   useEffect(() => {
-    if (filterData?.bidData) {
+    if (filterData?.bidData?.bidStone.length) {
       setBid(filterData?.bidData?.bidStone);
       setActiveBid(filterData?.bidData?.activeStone);
       setTime(filterData?.bidData?.endTime);
@@ -235,7 +235,7 @@ const BidToBuy = () => {
       router.push('/v2/bid-2-buy?active-tab=bid_to_buy');
     }
   }, [filterData?.bidData]);
-  // console.log(filterData, 'filterDatafilterDatafilterData');
+  console.log(filterData, 'filterDatafilterDatafilterData');
   useEffect(() => {
     if (activeTab === 2) {
       getBidToBuyHistoryData();
