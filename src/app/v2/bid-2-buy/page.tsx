@@ -58,6 +58,7 @@ import {
   useDeleteBidMutation,
   useLazyGetAllBidStonesQuery
 } from '@/features/api/product';
+import { constructUrlParams } from '@/utils/v2/construct-url-params';
 
 const BidToBuy = () => {
   const router = useRouter();
@@ -93,6 +94,7 @@ const BidToBuy = () => {
     setDetailImageData(row);
     setIsModalOpen(true);
   };
+  const filterDataState: any = useAppSelector(state => state.filterBidToBuy);
 
   const [bidHistory, setBidHistory] = useState<any>({});
 
@@ -228,9 +230,12 @@ const BidToBuy = () => {
       setBid(filterData?.bidData?.bidStone);
       setActiveBid(filterData?.bidData?.activeStone);
       setTime(filterData?.bidData?.endTime);
+    } else {
+      console.log("ooooooooooooooouuuuuuuuuuuuuuuuutttttttttttttttttt")
+      router.push('/v2/bid-2-buy?active-tab=bid_to_buy');
     }
   }, [filterData?.bidData]);
-  console.log(filterData, 'filterDatafilterDatafilterData');
+  // console.log(filterData, 'filterDatafilterDatafilterData');
   useEffect(() => {
     if (activeTab === 2) {
       getBidToBuyHistoryData();
@@ -406,7 +411,9 @@ const BidToBuy = () => {
                                     />
                                   );
                                   triggerBidToBuyApi({
-                                    searchUrl: searchUrl,
+                                    searchUrl: constructUrlParams(
+                                      filterDataState?.queryParams
+                                    ),
                                     limit: 300
                                   })
                                     .unwrap()
@@ -736,7 +743,7 @@ const BidToBuy = () => {
                     isSkeletonLoading={isSkeletonLoading}
                     setIsSkeletonLoading={setIsSkeletonLoading}
                     isLoading={isLoading}
-                    searchUrl={searchUrl}
+                    // searchUrl={searchUrl}
                   />
                 </div>
               </div>

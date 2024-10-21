@@ -43,6 +43,8 @@ import {
   useLazyGetAllBidStonesQuery
 } from '@/features/api/product';
 import CommonPoppup from '@/app/v2/login/component/common-poppup';
+import { useAppSelector } from '@/hooks/hook';
+import { constructUrlParams } from '@/utils/v2/construct-url-params';
 
 const theme = createTheme({
   typography: {
@@ -179,8 +181,7 @@ const BidToBuyDataTable = ({
   setIsSkeletonLoading,
   isTabSwitch,
   setIsTabSwitch,
-  setActiveBid,
-  searchUrl
+  setActiveBid // searchUrl
 }: any) => {
   // Fetching saved search data
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -202,6 +203,8 @@ const BidToBuyDataTable = ({
     let searchData = rows.filter((data: any) => data.lot_id === searchableId);
     setPaginatedData(searchData);
   };
+  const filterDataState: any = useAppSelector(state => state.filterBidToBuy);
+
   useEffect(() => {
     if (globalFilter !== '') {
       // Remove all whitespace characters from globalFilter
@@ -1171,7 +1174,9 @@ const BidToBuyDataTable = ({
                                     />
                                   );
                                   triggerBidToBuyApi({
-                                    searchUrl: searchUrl,
+                                    searchUrl: constructUrlParams(
+                                      filterDataState?.queryParams
+                                    ),
                                     limit: 300
                                   })
                                     .unwrap()
