@@ -40,6 +40,8 @@ import BiddingSkeleton from '@/components/v2/skeleton/bidding';
 import SearchInputField from '@/components/v2/common/search-input/search-input';
 // import debounce from 'lodash.debounce';
 import ClearIcon from '@public/v2/assets/icons/close-outline.svg?url';
+import { useAddBidMutation } from '@/features/api/product';
+import CommonPoppup from '@/app/v2/login/component/common-poppup';
 
 const theme = createTheme({
   typography: {
@@ -165,7 +167,7 @@ const BidToBuyDataTable = ({
   activeCount,
   bidCount,
   historyCount,
-  socketManager,
+  // socketManager,
   rowSelection,
   setRowSelection,
   setIsLoading,
@@ -348,7 +350,13 @@ const BidToBuyDataTable = ({
               labels={tabLabels}
               activeIndex={activeTab}
               onTabClick={id => {
+                // if(id===0){
+                //   router.push(`/v2/bid-2-buy?active-tab=bid_to_bid`);
+                // }
+                // else{
                 handleTabClick(id), setSearchableId('');
+
+                // }
               }}
               activeCount={activeCount}
               bidCount={bidCount}
@@ -587,6 +595,9 @@ const BidToBuyDataTable = ({
   //   setGlobalFilter(value);
   // }, 300);
   //pass table options to useMaterialReactTable
+
+  const [addBid] = useAddBidMutation();
+
   const table = useMaterialReactTable({
     columns,
     data: isTabSwitch ? [] : paginatedData, //must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
@@ -1147,11 +1158,47 @@ const BidToBuyDataTable = ({
                                 });
                                 return; // Exit early, do not update bidValues
                               }
-
-                              socketManager.emit('place_bidtobuy', {
+                              addBid({
                                 product_id: row.id,
-                                bid_value: bidValues[row.id]
-                              });
+                                bid_value: Number(bidValues[row.id])
+                              })
+                                .unwrap()
+                                .then(res => {
+                                  if (res?.status === 200) {
+                                    modalSetState.setIsDialogOpen(true);
+                                    modalSetState.setDialogContent(
+                                      <CommonPoppup
+                                        content=""
+                                        header={'Bid Placed Successfully'}
+                                        handleClick={() =>
+                                          modalSetState.setIsDialogOpen(false)
+                                        }
+                                        buttonText="Okay"
+                                        status="success"
+                                      />
+                                    );
+                                  }
+                                })
+                                .catch(e => {
+                                  modalSetState.setIsDialogOpen(true);
+                                  modalSetState.setDialogContent(
+                                    <CommonPoppup
+                                      header={e?.data?.message}
+                                      content={''}
+                                      handleClick={() =>
+                                        modalSetState.setIsDialogOpen(false)
+                                      }
+                                      buttonText="Okay"
+                                      // status="success"
+                                    />
+                                  );
+                                  // }
+                                });
+
+                              // socketManager.emit('place_bidtobuy', {
+                              //   product_id: row.id,
+                              //   bid_value: bidValues[row.id]
+                              // });
                               activeTab === 0 &&
                                 setRowSelection((prev: any) => {
                                   let prevRows = { ...prev };

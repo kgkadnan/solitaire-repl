@@ -5,7 +5,7 @@ export interface ITabProps {
   activeIndex: number; // Index of the currently active tab
   onTabClick: (_index: number) => void; // Function to handle tab click
   activeCount: number;
-  bidCount: number;
+  bidCount?: any;
   historyCount: number;
 }
 
@@ -24,7 +24,7 @@ const Tab: React.FC<ITabProps> = ({
           index === 0 ? bidCount : index === 1 ? activeCount : historyCount;
 
         const formattedLabel =
-          count !== undefined ? `${label} (${count})` : label;
+          count !== undefined && count !== ' ' ? `${label} (${count})` : label;
 
         return (
           <div

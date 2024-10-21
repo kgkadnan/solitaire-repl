@@ -839,10 +839,8 @@ const Dashboard = () => {
   }, [lastEventTime]);
 
   const handleStoneId = (e: any) => {
-    console.log('e', e);
     if (e.target.value.length >= 1 && canTrackEvent()) {
       setLastEventTime(Date.now()); // Update the timestamp in state
-      console.log('herereres im amd');
       trackEvent({
         action: Tracking_Search_By_Text.search_by_text_initiated,
         category: 'SearchByText',

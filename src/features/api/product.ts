@@ -66,6 +66,20 @@ export const productApi = createApi({
         url: `/store/bid-to-buy?limit=${limit}&${searchUrl}`
       })
       // providesTags: ['Product']
+    }),
+    addBid: builder.mutation({
+      query: data => ({
+        url: `/store/bid-to-buy`,
+        method: 'POST',
+        body: data
+      })
+    }),
+    deleteBid: builder.mutation({
+      query: data => ({
+        url: `/store/bid-to-buy`,
+        method: 'DELETE',
+        body: data
+      })
     })
   })
 });
@@ -80,5 +94,7 @@ export const {
   useAddDemandMutation,
   useCheckProductAvailabilityMutation,
   useLazyGetAllTurkeyProductQuery,
-  useLazyGetAllBidStonesQuery
+  useLazyGetAllBidStonesQuery,
+  useAddBidMutation,
+  useDeleteBidMutation
 } = productApi;

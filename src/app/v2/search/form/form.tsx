@@ -84,6 +84,7 @@ import { filterBidToBuyFunction } from '@/features/filter-bid-to-buy/filter-bid-
 import { queryParamsFunction } from '@/features/event-params/event-param-slice';
 import CountdownTimer from '@/components/v2/common/timer';
 import Tab from '@/components/v2/common/bid-tabs';
+import { useLazyGetBidToBuyHistoryQuery } from '@/features/api/dashboard';
 
 export interface ISavedSearch {
   saveSearchName: string;
@@ -249,7 +250,7 @@ const Form = ({
   const [error, setError] = useState<any>();
   const [timeDifference, setTimeDifference] = useState(null);
   const [time, setTime] = useState('');
-  const [checkStatus, setCheckStatus] = useState(true);
+  // const [checkStatus, setCheckStatus] = useState(false);
 
   useEffect(() => {
     const currentTime: any = new Date();
@@ -289,6 +290,11 @@ const Form = ({
     isAllowedToUnloadRef.current = isAllowedToUnload;
   }, [isAllowedToUnload]);
 
+  console.log(
+    isLoadingBidToBuyApi,
+    'isLoadingBidToBuyApi',
+    isFetchingBidToBuyApi
+  );
   useEffect(() => {
     const handleBeforeUnload = async () => {
       if (isAllowedToUnloadRef.current && startTime && !endTime) {
@@ -330,31 +336,27 @@ const Form = ({
 
       setError('');
     } else if (routePath === Routes.BID_TO_BUY) {
-      // const query = parseQueryString(searchUrl);
+      const query = parseQueryString(searchUrl);
       setErrorText('');
       setIsLoading(true);
-      triggerBidToBuyApi({ searchUrl: searchUrl, limit: 300 })
+      triggerBidToBuyApi({ searchUrl: searchUrl, limit: 1 })
         .unwrap()
         .then((response: any) => {
           setData(response),
-            setTime(response.endTime),
-            setError(''),
-            setIsLoading(false);
+            setTime(response?.endTime),
+            setActiveCount(response?.activeStone?.length);
+          setError(''), setIsLoading(false);
+          dispatch(
+            filterBidToBuyFunction({
+              queryParams: query,
+              bidData: response
+              // bidFilterData: data?.products
+            })
+          );
         })
         .catch(e => {
           setError(e), setIsLoading(false);
         });
-      // console.log("here",routePath)
-      //       const filteredData =
-      //         bidToBuyFilterData?.bidData &&
-      //         filterBidData(bidToBuyFilterData?.bidData, query);
-
-      //       setData({
-      //         count: filteredData.length,
-      //         products: filteredData
-      //       });
-
-      // setError('');
     } else if (isTurkey) {
       setErrorText('');
       setIsLoading(true);
@@ -597,13 +599,6 @@ const Form = ({
     } else if (routePath === Routes.BID_TO_BUY) {
       const queryParams = generateQueryParams(state);
 
-      dispatch(
-        filterBidToBuyFunction({
-          queryParams
-          // bidData: bidToBuyFilterData.bidData,
-          // bidFilterData: data?.products
-        })
-      );
       setErrorText('');
       setIsLoading(true);
       triggerBidToBuyApi({ searchUrl: searchUrl, limit: 300 })
@@ -613,6 +608,13 @@ const Form = ({
             setTime(response.endTime),
             setError(''),
             setIsLoading(false);
+          dispatch(
+            filterBidToBuyFunction({
+              queryParams,
+              bidData: response
+              // bidFilterData: data?.products
+            })
+          );
         })
         .catch(e => {
           setError(e), setIsLoading(false);
@@ -1165,6 +1167,25 @@ const Form = ({
       setInputError('Input cannot exceed 20 characters');
     }
   };
+  const [historyCount, setHistoryCount] = useState(0);
+  const [activeCount, setActiveCount] = useState(0);
+  const [triggerBidToBuyHistory, { data: historyData }] =
+    useLazyGetBidToBuyHistoryQuery({});
+
+  const getBidToBuyHistoryData = () => {
+    triggerBidToBuyHistory({})
+      .then(res => {
+        setIsLoading(false);
+        setHistoryCount(res.data?.data?.length);
+      })
+      .catch(() => {
+        setIsLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    getBidToBuyHistoryData();
+  }, []);
 
   const renderContentWithInput = () => {
     return (
@@ -1252,18 +1273,14 @@ const Form = ({
                     <p className="text-lMedium font-medium text-neutral900">
                       Bid to Buy
                     </p>
-                    {checkStatus ? (
-                      time && time?.length ? (
-                        <div className="text-successMain text-lMedium font-medium">
-                          ACTIVE
-                        </div>
-                      ) : (
-                        <div className="text-visRed text-lMedium font-medium">
-                          INACTIVE
-                        </div>
-                      )
+                    {time && time?.length ? (
+                      <div className="text-successMain text-lMedium font-medium">
+                        ACTIVE
+                      </div>
                     ) : (
-                      ''
+                      <div className="text-visRed text-lMedium font-medium">
+                        INACTIVE
+                      </div>
                     )}
                   </div>
                   <div className="h-[38px]">
@@ -1297,18 +1314,23 @@ const Form = ({
             )}
           </span>
         </div>
-        <div>
+        <div className="p-2 border-[1px] rounded-t-[8px]">
           <div className="w-[450px]">
-            {/* <Tab
-              labels={tabLabels}
+            <Tab
+              labels={['Bid Stone', 'Active Bid', 'Bid History']}
               activeIndex={activeTab}
               onTabClick={id => {
-                handleTabClick(id), setSearchableId('');
+                // console.log(id)
+                setActiveTab(id);
+                if (id !== 0) {
+                  router.push(`/v2/bid-2-buy?active-tab=result`);
+                }
+                // handleTabClick(id)
               }}
               activeCount={activeCount}
-              bidCount={bidCount}
+              bidCount={' '}
               historyCount={historyCount}
-            /> */}
+            />
           </div>
         </div>
         <div className="flex flex-col gap-[16px]">

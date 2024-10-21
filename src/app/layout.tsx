@@ -109,7 +109,6 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
             window.outerHeight - window.innerHeight > 100
           ) {
             // This checks if the window has shrunk in size due to dev tools being opened
-            console.log('DevTools likely open');
             setOpen(true);
           }
           // }

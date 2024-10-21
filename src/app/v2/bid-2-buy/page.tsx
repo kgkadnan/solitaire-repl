@@ -54,12 +54,16 @@ import { SubRoutes } from '@/constants/v2/enums/routes';
 import useNumericFieldValidation from '../search/form/hooks/numeric-field-validation-management';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import pako from 'pako';
+import {
+  useDeleteBidMutation,
+  useLazyGetAllBidStonesQuery
+} from '@/features/api/product';
 
 const BidToBuy = () => {
   const router = useRouter();
 
   const dispatch = useAppDispatch();
-  const filterData = useAppSelector(state => state.filterBidToBuy);
+  const filterData: any = useAppSelector(state => state.filterBidToBuy);
 
   const [isDetailPage, setIsDetailPage] = useState(false);
   const [detailPageData, setDetailPageData] = useState<any>({});
@@ -72,7 +76,7 @@ const BidToBuy = () => {
   const [isSkeletonLoading, setIsSkeletonLoading] = useState(true);
   const [isTabSwitch, setIsTabSwitch] = useState(false); // State to track
 
-  const [checkStatus, setCheckStatus] = useState(false);
+  // const [checkStatus, setCheckStatus] = useState(false);
 
   const { setSearchUrl, searchUrl } = useValidationStateManagement();
   const { state, setState, carat } = useFormStateManagement();
@@ -220,6 +224,14 @@ const BidToBuy = () => {
   };
 
   useEffect(() => {
+    if (filterData?.bidData) {
+      setBid(filterData?.bidData?.bidStone);
+      setActiveBid(filterData?.bidData?.activeStone);
+      setTime(filterData?.bidData?.endTime);
+    }
+  }, [filterData?.bidData]);
+
+  useEffect(() => {
     if (activeTab === 2) {
       getBidToBuyHistoryData();
     }
@@ -227,6 +239,18 @@ const BidToBuy = () => {
 
   useEffect(() => {
     getBidToBuyHistoryData();
+    setIsLoading(true);
+    triggerBidToBuyApi({ searchUrl: searchUrl, limit: 300 })
+      .unwrap()
+      .then((response: any) => {
+        setTime(response?.endTime), setActiveBid(response?.activeStone);
+        setBid(response?.bidStone);
+
+        setIsLoading(false);
+      })
+      .catch(e => {
+        setIsLoading(false);
+      });
   }, []);
 
   useEffect(() => {
@@ -272,205 +296,6 @@ const BidToBuy = () => {
 
     setTimeDifference(timeDiff);
   }, [time]);
-  const { authToken } = useUser();
-  const socketManager = useMemo(() => new SocketManager(), []);
-  useEffect(() => {
-    if (authToken) useSocket(socketManager, authToken);
-  }, [authToken]);
-
-  useEffect(() => {
-    if (filterData?.bidFilterData?.length > 0) {
-      setBid(filterData.bidFilterData);
-    }
-  }, [filterData]);
-
-  async function decompressData<T = unknown>(
-    compressedData: Uint8Array | ArrayBuffer | any
-  ): Promise<T> {
-    try {
-      // Ensure compressedData is a Uint8Array
-      const uint8Array: Uint8Array =
-        compressedData instanceof Uint8Array
-          ? compressedData
-          : new Uint8Array(compressedData);
-
-      // Decompress the data using pako
-      const decompressed: string = await new Promise<string>(
-        (resolve, reject) => {
-          try {
-            const result = pako.ungzip(uint8Array, { to: 'string' });
-            resolve(result);
-          } catch (error) {
-            reject(error);
-          }
-        }
-      );
-
-      // Parse the decompressed string into JSON
-      const data: T = JSON.parse(decompressed);
-      return data;
-    } catch (err: unknown) {
-      // Ensure we have proper type checking for error
-      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-      console.error(`Decompression failed: ${errorMessage}`);
-      throw err;
-    }
-  }
-
-  type Part = {
-    endTime: string | null;
-    bidStone: any[]; // Use the actual type if you know it
-    activeStone: any[]; // Use the actual type if you know it
-  };
-
-  async function mergeParts(parts: Part[]) {
-    const mergedProductData = {
-      endTime: parts[0]?.endTime ?? null,
-      bidStone: [] as any[], // Define the type of bidStone properly
-      activeStone: [] as any[] // Define the type of activeStone properly
-    };
-    for (const part of parts) {
-      mergedProductData.bidStone.push(...(part.bidStone ?? []));
-      part.activeStone.length &&
-        mergedProductData.activeStone.push(...(part.activeStone ?? []));
-    }
-
-    return mergedProductData;
-  }
-
-  const receivedPartsMapBidToBuy: any = {};
-  const totalPartsMapBidToBuy: any = {};
-  const handleBidStones = useCallback(
-    async ({ part, total_parts, message_id, data }: any) => {
-      try {
-        const decompressedPart = await decompressData(data);
-
-        if (!receivedPartsMapBidToBuy[message_id]) {
-          receivedPartsMapBidToBuy[message_id] = [];
-          totalPartsMapBidToBuy[message_id] = total_parts;
-        }
-        receivedPartsMapBidToBuy[message_id].push(decompressedPart);
-
-        if (part === total_parts) {
-          const allProducts = await mergeParts(
-            receivedPartsMapBidToBuy[message_id]
-          );
-
-          // Optionally update UI or process allProducts here
-
-          setCheckStatus(true);
-          setActiveBid(allProducts.activeStone);
-          if (filterData?.queryParams) {
-            const filteredData =
-              filterData?.bidFilterData?.length > 0
-                ? filterData?.bidFilterData
-                : filterBidData(allProducts.bidStone, filterData.queryParams);
-            dispatch(
-              filterBidToBuyFunction({
-                // bidData: allProducts.bidStone,
-                queryParams: filterData.queryParams
-                // bidFilterData: filteredData
-              })
-            );
-            setBid(filteredData);
-          } else {
-            setBid(allProducts.bidStone);
-          }
-          setTime(allProducts?.endTime ?? '');
-          if (allProducts.activeStone) {
-            allProducts.activeStone.map((row: any) => {
-              if (row.discount > row.my_current_bid) {
-                setRowSelection(prev => {
-                  return { ...prev, [row.id]: true };
-                });
-              } else {
-                setRowSelection((prev: any) => {
-                  let prevRows = { ...prev };
-                  delete prevRows[row.id];
-                  return prevRows;
-                });
-              }
-            });
-          }
-
-          // Clean up
-          delete receivedPartsMapBidToBuy[message_id];
-          delete totalPartsMapBidToBuy[message_id];
-        }
-      } catch (error) {
-        console.error(
-          `Failed to decompress part ${part} of message ${message_id}:`,
-          error
-        );
-      }
-    },
-    []
-  );
-
-  const handleError = useCallback((data: any) => {
-    if (data) {
-      modalSetState.setIsDialogOpen(true);
-      modalSetState.setDialogContent(
-        <CommonPoppup
-          content=""
-          header={data}
-          handleClick={() => modalSetState.setIsDialogOpen(false)}
-          buttonText="Okay"
-        />
-      );
-    }
-  }, []);
-
-  const handleBidPlaced = useCallback((data: any) => {
-    if (data && data['status'] === 'success') {
-      modalSetState.setIsDialogOpen(true);
-      modalSetState.setDialogContent(
-        <CommonPoppup
-          content=""
-          header={'Bid Placed Successfully'}
-          handleClick={() => modalSetState.setIsDialogOpen(false)}
-          buttonText="Okay"
-          status="success"
-        />
-      );
-    }
-  }, []);
-  const handleBidCanceled = useCallback((data: any) => {
-    if (data && data['status'] === 'success') {
-      modalSetState.setIsDialogOpen(true);
-      modalSetState.setDialogContent(
-        <CommonPoppup
-          content=""
-          header={'Bid Canceled Successfully'}
-          handleClick={() => modalSetState.setIsDialogOpen(false)}
-          buttonText="Okay"
-          status="success"
-        />
-      );
-    }
-  }, []);
-  useEffect(() => {
-    const handleRequestGetBidStones = (_data: any) => {
-      socketManager.emit('get_bidtobuy_stones');
-    };
-    socketManager.on('bidtobuy_stones', handleBidStones);
-    socketManager.on('error', handleError);
-    socketManager.on('bidtobuy_placed', handleBidPlaced);
-    socketManager.on('bidtobuy_canceled', handleBidCanceled);
-
-    // Setting up the event listener for "request_get_bid_stones"
-    socketManager.on('request_get_bidtobuy_stones', handleRequestGetBidStones);
-
-    // Return a cleanup function to remove the listeners
-    return () => {
-      socketManager.off('bidtobuy_stones', handleBidStones);
-      socketManager.off('error', handleError);
-      socketManager.off(
-        'request_get_bidtobuy_stones',
-        handleRequestGetBidStones
-      );
-    };
-  }, [socketManager, handleBidStones, handleError, authToken]);
 
   const memoizedColumns = useMemo(
     () => mapColumns(columnHeaders),
@@ -484,6 +309,11 @@ const BidToBuy = () => {
   const { isError, errorText } = errorState;
 
   const [downloadExcel] = useDownloadExcelMutation();
+  const [deleteBid] = useDeleteBidMutation();
+  let [
+    triggerBidToBuyApi,
+    { isLoading: isLoadingBidToBuyApi, isFetching: isFetchingBidToBuyApi }
+  ] = useLazyGetAllBidStonesQuery();
 
   const renderFooter = (table: any) => {
     if (activeTab === 0 && bid?.length > 0) {
@@ -553,9 +383,40 @@ const BidToBuy = () => {
                             variant: 'primary',
                             label: 'Cancel Bid',
                             handler: () => {
-                              socketManager.emit('cancel_bidtobuy', {
+                              // socketManager.emit('cancel_bidtobuy', {
+                              //   product_ids: Object.keys(rowSelection)
+                              // });
+                              deleteBid({
                                 product_ids: Object.keys(rowSelection)
-                              });
+                              })
+                                .unwrap()
+                                .then(res => {
+                                  modalSetState.setIsDialogOpen(true);
+                                  modalSetState.setDialogContent(
+                                    <CommonPoppup
+                                      content=""
+                                      header={'Bid Canceled Successfully'}
+                                      handleClick={() =>
+                                        modalSetState.setIsDialogOpen(false)
+                                      }
+                                      buttonText="Okay"
+                                      status="success"
+                                    />
+                                  );
+                                })
+                                .catch(e => {
+                                  modalSetState.setIsDialogOpen(true);
+                                  modalSetState.setDialogContent(
+                                    <CommonPoppup
+                                      header={e?.data?.message}
+                                      content={''}
+                                      handleClick={() =>
+                                        modalSetState.setIsDialogOpen(false)
+                                      }
+                                      buttonText="Okay"
+                                    />
+                                  );
+                                });
                               modalSetState.setIsDialogOpen(false);
                             },
                             customStyle: 'flex-1 w-full'
@@ -753,11 +614,11 @@ const BidToBuy = () => {
             activeTab={activeTab}
           />
         </div>
-      ) : bid === undefined ||
-        historyData === undefined ||
-        activeBid === undefined ? (
-        <BiddingSkeleton />
       ) : (
+        // ) : bid === undefined ||
+        //   historyData === undefined ||
+        //   activeBid === undefined ? (
+        //   <BiddingSkeleton />
         <>
           {subRoute === SubRoutes.BID_TO_BUY_RESULT ? (
             <>
@@ -771,18 +632,14 @@ const BidToBuy = () => {
                       <p className="text-lMedium font-medium text-neutral900">
                         Bid to Buy
                       </p>
-                      {checkStatus ? (
-                        time && time?.length ? (
-                          <div className="text-successMain text-lMedium font-medium">
-                            ACTIVE
-                          </div>
-                        ) : (
-                          <div className="text-visRed text-lMedium font-medium">
-                            INACTIVE
-                          </div>
-                        )
+                      {time && time?.length ? (
+                        <div className="text-successMain text-lMedium font-medium">
+                          ACTIVE
+                        </div>
                       ) : (
-                        ''
+                        <div className="text-visRed text-lMedium font-medium">
+                          INACTIVE
+                        </div>
                       )}
                     </div>
                     <div className="h-[38px]">
@@ -813,7 +670,7 @@ const BidToBuy = () => {
                 <div>
                   <BidToBuyDataTable
                     dispatch={dispatch}
-                    filterData={filterData}
+                    // filterData={filterData}
                     setBid={setBid}
                     columns={
                       activeTab === 2
@@ -854,7 +711,7 @@ const BidToBuy = () => {
                     isTabSwitch={isTabSwitch}
                     setIsTabSwitch={setIsTabSwitch}
                     historyCount={bidHistory?.data?.length}
-                    socketManager={socketManager}
+                    // socketManager={socketManager}
                     rowSelection={rowSelection}
                     setRowSelection={setRowSelection}
                     setIsLoading={setIsLoading}

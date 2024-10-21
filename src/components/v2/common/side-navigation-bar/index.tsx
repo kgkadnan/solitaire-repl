@@ -186,15 +186,6 @@ const SideNavigationBar = ({
     if (authToken) useSocket(socketManager, authToken);
   }, [authToken]);
 
-  // const handleBidStones = useCallback((data: any) => {
-  //   if (data.endTime) {
-  //     setShowPulse(true);
-  //   } else {
-  //     setShowPulse(false);
-  //   }
-  //   // Set other related state here
-  // }, []);
-
   async function decompressData<T = unknown>(
     compressedData: Uint8Array | ArrayBuffer | any
   ): Promise<T> {
