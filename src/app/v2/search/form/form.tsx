@@ -290,11 +290,6 @@ const Form = ({
     isAllowedToUnloadRef.current = isAllowedToUnload;
   }, [isAllowedToUnload]);
 
-  console.log(
-    isLoadingBidToBuyApi,
-    'isLoadingBidToBuyApi',
-    isFetchingBidToBuyApi
-  );
   useEffect(() => {
     const handleBeforeUnload = async () => {
       if (isAllowedToUnloadRef.current && startTime && !endTime) {
@@ -554,7 +549,6 @@ const Form = ({
       handleFormReset();
     }
   }, [subRoute]);
-  console.log('entime', time);
   useEffect(() => {
     if (isTurkey) {
       let queryData = constructUrlParams(queryParamsData.queryParams);

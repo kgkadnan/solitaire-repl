@@ -32,15 +32,16 @@ import { handleDecrementDiscount } from '@/utils/v2/handle-decrement-discount';
 import { handleIncrementDiscount } from '@/utils/v2/handle-increment-discount';
 import { RenderBidToBuyLotIdColor } from '@/components/v2/common/data-table/helpers/render-cell';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import crossIcon from '@public/v2/assets/icons/new-arrivals/cross-icon.svg';
 import { SubRoutes } from '@/constants/v2/enums/routes';
 import { ManageLocales } from '@/utils/v2/translate';
-import { filterBidToBuyFunction } from '@/features/filter-bid-to-buy/filter-bid-to-buy-slice';
 import BiddingSkeleton from '@/components/v2/skeleton/bidding';
 import SearchInputField from '@/components/v2/common/search-input/search-input';
 // import debounce from 'lodash.debounce';
 import ClearIcon from '@public/v2/assets/icons/close-outline.svg?url';
-import { useAddBidMutation } from '@/features/api/product';
+import {
+  useAddBidMutation,
+  useLazyGetAllBidStonesQuery
+} from '@/features/api/product';
 import CommonPoppup from '@/app/v2/login/component/common-poppup';
 
 const theme = createTheme({
@@ -167,7 +168,6 @@ const BidToBuyDataTable = ({
   activeCount,
   bidCount,
   historyCount,
-  // socketManager,
   rowSelection,
   setRowSelection,
   setIsLoading,
@@ -175,11 +175,12 @@ const BidToBuyDataTable = ({
   router,
   filterData,
   setBid,
-  dispatch,
   isSkeletonLoading,
   setIsSkeletonLoading,
   isTabSwitch,
-  setIsTabSwitch
+  setIsTabSwitch,
+  setActiveBid,
+  searchUrl
 }: any) => {
   // Fetching saved search data
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -367,7 +368,6 @@ const BidToBuyDataTable = ({
           <div className="flex gap-[12px]" style={{ alignItems: 'inherit' }}>
             {activeTab === 0 && (
               <div className="">
-                {/* {filterData?.bidFilterData?.length > 0 ? ( */}
                 <button
                   onClick={() => {
                     router.push(
@@ -382,16 +382,6 @@ const BidToBuyDataTable = ({
                   />
 
                   <p className="w-[80%]">{ManageLocales('app.modifyFilter')}</p>
-                  {/* <div
-                      className="w-[17%] cursor-pointer"
-                      onClick={e => {
-                        e.stopPropagation();
-                        setBid(filterData.bidData);
-                        dispatch(filterBidToBuyFunction({}));
-                      }}
-                    >
-                      <Image src={crossIcon} alt="crossIcon" />
-                    </div> */}
                 </button>
               </div>
             )}
@@ -597,7 +587,10 @@ const BidToBuyDataTable = ({
   //pass table options to useMaterialReactTable
 
   const [addBid] = useAddBidMutation();
-
+  let [
+    triggerBidToBuyApi
+    // { isLoading: isLoadingBidToBuyApi, isFetching: isFetchingBidToBuyApi }
+  ] = useLazyGetAllBidStonesQuery();
   const table = useMaterialReactTable({
     columns,
     data: isTabSwitch ? [] : paginatedData, //must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
@@ -1164,20 +1157,32 @@ const BidToBuyDataTable = ({
                               })
                                 .unwrap()
                                 .then(res => {
-                                  if (res?.status === 200) {
-                                    modalSetState.setIsDialogOpen(true);
-                                    modalSetState.setDialogContent(
-                                      <CommonPoppup
-                                        content=""
-                                        header={'Bid Placed Successfully'}
-                                        handleClick={() =>
-                                          modalSetState.setIsDialogOpen(false)
-                                        }
-                                        buttonText="Okay"
-                                        status="success"
-                                      />
-                                    );
-                                  }
+                                  // if (res?.status === 200) {
+                                  modalSetState.setIsDialogOpen(true);
+                                  modalSetState.setDialogContent(
+                                    <CommonPoppup
+                                      content=""
+                                      header={'Bid Placed Successfully'}
+                                      handleClick={() =>
+                                        modalSetState.setIsDialogOpen(false)
+                                      }
+                                      buttonText="Okay"
+                                      status="success"
+                                    />
+                                  );
+                                  triggerBidToBuyApi({
+                                    searchUrl: searchUrl,
+                                    limit: 300
+                                  })
+                                    .unwrap()
+                                    .then((response: any) => {
+                                      setBid(response?.bidStone);
+                                      setActiveBid(response?.activeStone);
+                                      setIsLoading(false);
+                                    })
+                                    .catch(e => {
+                                      setIsLoading(false);
+                                    });
                                 })
                                 .catch(e => {
                                   modalSetState.setIsDialogOpen(true);

@@ -1,5 +1,5 @@
 import { ManageLocales } from '@/utils/v2/translate';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import KgkIcon from '@public/v2/assets/icons/sidebar-icons/vector.svg';
 import DashboardIcon from '@public/v2/assets/icons/sidebar-icons/dashboard-square.svg?url';
 import ArrivalIcon from '@public/v2/assets/icons/sidebar-icons/new-arrivals.svg?url';
@@ -12,20 +12,17 @@ import BookmarkIcon from '@public/v2/assets/icons/sidebar-icons/bookmark.svg?url
 import MyAppointments from '@public/v2/assets/icons/sidebar-icons/my-appointments.svg?url';
 import FaqsIcon from '@public/v2/assets/icons/sidebar-icons/faqs.svg?url';
 import CartIcon from '@public/v2/assets/icons/sidebar-icons/shopping-cart.svg?url';
-import TurkeyIcon from '@public/v2/assets/icons/sidebar-icons/turkey.svg?url';
 import styles from './side-navigation.module.scss';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import Tooltip from '../tooltip';
 import { MatchSubRoutes, Routes, SubRoutes } from '@/constants/v2/enums/routes';
 import { Button } from '../../ui/button';
-import { SocketManager, useSocket } from '@/hooks/v2/socket-manager';
-import useUser from '@/lib/use-auth';
 import { kycStatus } from '@/constants/enums/kyc';
 import { useAppDispatch } from '@/hooks/hook';
 import { setStartTime } from '@/features/track-page-event/track-page-event-slice';
-import pako from 'pako';
 import { useGetNavigationQuery } from '@/features/api/faqs';
+import { useLazyGetAllBidStonesQuery } from '@/features/api/product';
 
 interface ISideNavigationBar {
   src?: React.ReactNode;
@@ -48,10 +45,25 @@ const SideNavigationBar = ({
   const [showEvent, setShowEvent] = useState(false);
   const router = useRouter();
   const { data: event } = useGetNavigationQuery({});
-
+  let [
+    triggerBidToBuyApi
+    // { isLoading: isLoadingBidToBuyApi, isFetching: isFetchingBidToBuyApi }
+  ] = useLazyGetAllBidStonesQuery();
   useEffect(() => {
     setShowEvent(event?.turkey_event);
   }, [event]);
+
+  useEffect(() => {
+    triggerBidToBuyApi({ searchUrl: '', limit: 1 })
+      .unwrap()
+      .then((response: any) => {
+        response?.endTime && setShowPulse(true);
+      })
+      .catch(e => {
+        setShowPulse(false);
+      });
+  }, []);
+
   const CustomSVG = () => (
     <svg
       width="40"
@@ -179,86 +191,6 @@ const SideNavigationBar = ({
       isActive: currentRoute === Routes.FAQS
     }
   ];
-  const { authToken } = useUser();
-
-  const socketManager = useMemo(() => new SocketManager(), []);
-  useEffect(() => {
-    if (authToken) useSocket(socketManager, authToken);
-  }, [authToken]);
-
-  async function decompressData<T = unknown>(
-    compressedData: Uint8Array | ArrayBuffer | any
-  ): Promise<T> {
-    try {
-      // Ensure compressedData is a Uint8Array
-      const uint8Array: Uint8Array =
-        compressedData instanceof Uint8Array
-          ? compressedData
-          : new Uint8Array(compressedData);
-
-      // Decompress the data using pako
-      const decompressed: string = await new Promise<string>(
-        (resolve, reject) => {
-          try {
-            const result = pako.ungzip(uint8Array, { to: 'string' });
-            resolve(result);
-          } catch (error) {
-            reject(error);
-          }
-        }
-      );
-
-      // Parse the decompressed string into JSON
-      const data: T = JSON.parse(decompressed);
-      return data;
-    } catch (err: unknown) {
-      // Ensure we have proper type checking for error
-      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-      console.error(`Decompression failed: ${errorMessage}`);
-      throw err;
-    }
-  }
-
-  const handleBidStones = useCallback(
-    async ({ part, message_id, data }: any) => {
-      try {
-        const decompressedPart: any = await decompressData(data);
-
-        if (part === 1) {
-          if (decompressedPart?.endTime ?? '') {
-            setShowPulse(true);
-          } else {
-            setShowPulse(false);
-          }
-        }
-      } catch (error) {
-        console.error(
-          `Failed to decompress part ${part} of message ${message_id}:`,
-          error
-        );
-      }
-    },
-    []
-  );
-
-  useEffect(() => {
-    const handleRequestGetBidStones = (_data: any) => {
-      socketManager.emit('get_bidtobuy_stones');
-    };
-    socketManager.on('bidtobuy_stones', handleBidStones);
-
-    // Setting up the event listener for "request_get_bid_stones"
-    socketManager.on('request_get_bidtobuy_stones', handleRequestGetBidStones);
-
-    // Return a cleanup function to remove the listeners
-    return () => {
-      socketManager.off('bidtobuy_stones', handleBidStones);
-      socketManager.off(
-        'request_get_bidtobuy_stones',
-        handleRequestGetBidStones
-      );
-    };
-  }, [socketManager, handleBidStones, authToken]);
 
   return (
     <div className="w-[84px] border-r-[1px] border-neutral200 overflow-hidden h-[100vh] fixed z-50 pt-[8px] flex flex-col items-center bg-neutral0">

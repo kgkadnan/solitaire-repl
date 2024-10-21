@@ -311,8 +311,8 @@ const BidToBuy = () => {
   const [downloadExcel] = useDownloadExcelMutation();
   const [deleteBid] = useDeleteBidMutation();
   let [
-    triggerBidToBuyApi,
-    { isLoading: isLoadingBidToBuyApi, isFetching: isFetchingBidToBuyApi }
+    triggerBidToBuyApi
+    // { isLoading: isLoadingBidToBuyApi, isFetching: isFetchingBidToBuyApi }
   ] = useLazyGetAllBidStonesQuery();
 
   const renderFooter = (table: any) => {
@@ -403,6 +403,19 @@ const BidToBuy = () => {
                                       status="success"
                                     />
                                   );
+                                  triggerBidToBuyApi({
+                                    searchUrl: searchUrl,
+                                    limit: 300
+                                  })
+                                    .unwrap()
+                                    .then((response: any) => {
+                                      setBid(response?.bidStone);
+                                      setActiveBid(response?.activeStone);
+                                      setIsLoading(false);
+                                    })
+                                    .catch(e => {
+                                      setIsLoading(false);
+                                    });
                                 })
                                 .catch(e => {
                                   modalSetState.setIsDialogOpen(true);
@@ -672,6 +685,7 @@ const BidToBuy = () => {
                     dispatch={dispatch}
                     // filterData={filterData}
                     setBid={setBid}
+                    setActiveBid={setActiveBid}
                     columns={
                       activeTab === 2
                         ? memoizedColumns.filter(
@@ -720,6 +734,7 @@ const BidToBuy = () => {
                     isSkeletonLoading={isSkeletonLoading}
                     setIsSkeletonLoading={setIsSkeletonLoading}
                     isLoading={isLoading}
+                    searchUrl={searchUrl}
                   />
                 </div>
               </div>
