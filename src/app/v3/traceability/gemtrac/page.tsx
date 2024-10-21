@@ -60,7 +60,7 @@ const page = () => {
           </div>
         </div>
       </div>
-      <div className="xl:px-[112px] lg:px-[32px] pt-[8px] border-[1px]  rounded-t-[8px] border-solid border-neutral200 bg-neutral0 flex flex-col  items-center justify-center">
+      <div className="xl:px-[112px] lg:px-[56px] pt-[8px] border-[1px]  rounded-t-[8px] border-solid border-neutral200 bg-neutral0 flex flex-col  items-center justify-center">
         <AnchorLink anchorNavigations={traceabilityAnchorLink} />
       </div>
 
