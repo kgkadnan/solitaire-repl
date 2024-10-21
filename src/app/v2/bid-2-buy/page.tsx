@@ -242,22 +242,22 @@ const BidToBuy = () => {
     }
   }, [activeTab]);
 
-  useEffect(() => {
-    getBidToBuyHistoryData();
-    setIsLoading(true);
-    constructUrlParams(filterData?.queryParams) === '' &&
-      triggerBidToBuyApi({ searchUrl: searchUrl, limit: 300 })
-        .unwrap()
-        .then((response: any) => {
-          setTime(response?.endTime), setActiveBid(response?.activeStone);
-          setBid(response?.bidStone);
+  // useEffect(() => {
+  //   getBidToBuyHistoryData();
+  //   setIsLoading(true);
+  //   constructUrlParams(filterData?.queryParams) === '' &&
+  //     triggerBidToBuyApi({ searchUrl: searchUrl, limit: 300 })
+  //       .unwrap()
+  //       .then((response: any) => {
+  //         setTime(response?.endTime), setActiveBid(response?.activeStone);
+  //         setBid(response?.bidStone);
 
-          setIsLoading(false);
-        })
-        .catch(e => {
-          setIsLoading(false);
-        });
-  }, []);
+  //         setIsLoading(false);
+  //       })
+  //       .catch(e => {
+  //         setIsLoading(false);
+  //       });
+  // }, []);
 
   useEffect(() => {
     if (pathName === 'bidHistory') {
@@ -641,7 +641,8 @@ const BidToBuy = () => {
         //   activeBid === undefined ? (
         //   <BiddingSkeleton />
         <>
-          {subRoute === SubRoutes.BID_TO_BUY_RESULT ? (
+          {subRoute === SubRoutes.BID_TO_BUY_RESULT &&
+          filterData?.bidData?.bidStone ? (
             <>
               {isSkeletonLoading ? (
                 ''
