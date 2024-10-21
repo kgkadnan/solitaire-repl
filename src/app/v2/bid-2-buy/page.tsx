@@ -242,23 +242,6 @@ const BidToBuy = () => {
     }
   }, [activeTab]);
 
-  // useEffect(() => {
-  //   getBidToBuyHistoryData();
-  //   setIsLoading(true);
-  //   constructUrlParams(filterData?.queryParams) === '' &&
-  //     triggerBidToBuyApi({ searchUrl: searchUrl, limit: 300 })
-  //       .unwrap()
-  //       .then((response: any) => {
-  //         setTime(response?.endTime), setActiveBid(response?.activeStone);
-  //         setBid(response?.bidStone);
-
-  //         setIsLoading(false);
-  //       })
-  //       .catch(e => {
-  //         setIsLoading(false);
-  //       });
-  // }, []);
-
   useEffect(() => {
     if (pathName === 'bidHistory') {
       setActiveTab(2);
@@ -591,7 +574,7 @@ const BidToBuy = () => {
       ]);
     }
   }, [validImages]);
-
+  console.log(filterData?.bidData);
   return (
     <div className="mb-[4px] relative">
       {isError && (
@@ -642,7 +625,7 @@ const BidToBuy = () => {
         //   <BiddingSkeleton />
         <>
           {subRoute === SubRoutes.BID_TO_BUY_RESULT &&
-          filterData?.bidData?.bidStone ? (
+          filterData?.bidData?.bidStone?.length ? (
             <>
               {isSkeletonLoading ? (
                 ''
