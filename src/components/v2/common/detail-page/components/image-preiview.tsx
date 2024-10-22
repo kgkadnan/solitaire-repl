@@ -373,6 +373,7 @@ const ImagePreview: React.FC<IImagePreviewProps> = ({
         onClose={() => {
           setIsModalOpen(!isModalOpen);
         }}
+        trackIdentifier={identifier}
         selectedImageIndex={imageIndex}
         images={images}
         activeTab={activePreviewTab}
