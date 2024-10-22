@@ -32,14 +32,19 @@ import { handleDecrementDiscount } from '@/utils/v2/handle-decrement-discount';
 import { handleIncrementDiscount } from '@/utils/v2/handle-increment-discount';
 import { RenderBidToBuyLotIdColor } from '@/components/v2/common/data-table/helpers/render-cell';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import crossIcon from '@public/v2/assets/icons/new-arrivals/cross-icon.svg';
 import { SubRoutes } from '@/constants/v2/enums/routes';
 import { ManageLocales } from '@/utils/v2/translate';
-import { filterBidToBuyFunction } from '@/features/filter-bid-to-buy/filter-bid-to-buy-slice';
 import BiddingSkeleton from '@/components/v2/skeleton/bidding';
 import SearchInputField from '@/components/v2/common/search-input/search-input';
 // import debounce from 'lodash.debounce';
 import ClearIcon from '@public/v2/assets/icons/close-outline.svg?url';
+import {
+  useAddBidMutation,
+  useLazyGetAllBidStonesQuery
+} from '@/features/api/product';
+import CommonPoppup from '@/app/v2/login/component/common-poppup';
+import { useAppSelector } from '@/hooks/hook';
+import { constructUrlParams } from '@/utils/v2/construct-url-params';
 
 const theme = createTheme({
   typography: {
@@ -165,7 +170,6 @@ const BidToBuyDataTable = ({
   activeCount,
   bidCount,
   historyCount,
-  socketManager,
   rowSelection,
   setRowSelection,
   setIsLoading,
@@ -173,11 +177,11 @@ const BidToBuyDataTable = ({
   router,
   filterData,
   setBid,
-  dispatch,
   isSkeletonLoading,
   setIsSkeletonLoading,
   isTabSwitch,
-  setIsTabSwitch
+  setIsTabSwitch,
+  setActiveBid // searchUrl
 }: any) => {
   // Fetching saved search data
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -199,6 +203,8 @@ const BidToBuyDataTable = ({
     let searchData = rows.filter((data: any) => data.lot_id === searchableId);
     setPaginatedData(searchData);
   };
+  const filterDataState: any = useAppSelector(state => state.filterBidToBuy);
+
   useEffect(() => {
     if (globalFilter !== '') {
       // Remove all whitespace characters from globalFilter
@@ -348,7 +354,13 @@ const BidToBuyDataTable = ({
               labels={tabLabels}
               activeIndex={activeTab}
               onTabClick={id => {
+                // if(id===0){
+                //   router.push(`/v2/bid-2-buy?active-tab=bid_to_bid`);
+                // }
+                // else{
                 handleTabClick(id), setSearchableId('');
+
+                // }
               }}
               activeCount={activeCount}
               bidCount={bidCount}
@@ -359,59 +371,21 @@ const BidToBuyDataTable = ({
           <div className="flex gap-[12px]" style={{ alignItems: 'inherit' }}>
             {activeTab === 0 && (
               <div className="">
-                {filterData?.bidFilterData?.length > 0 ? (
-                  <button
-                    onClick={() => {
-                      router.push(
-                        `/v2/bid-2-buy?active-tab=${SubRoutes.BID_TO_BUY}`
-                      );
-                    }}
-                    className={`flex w-full shadow-sm justify-center py-[8px] h-[39px] px-[16px]  items-center font-medium  rounded-[4px] gap-1  border-[1px]  border-solid border-neutral200 text-mMedium  cursor-pointer  ${'bg-primaryMain text-neutral0 hover:bg-primaryHover'}`}
-                  >
-                    <FilterIcon
-                      stroke={`${'var(--neutral-0)'}`}
-                      fill={`${'var(--neutral-0)'}`}
-                    />
+                <button
+                  onClick={() => {
+                    router.push(
+                      `/v2/bid-2-buy?active-tab=${SubRoutes.BID_TO_BUY}`
+                    );
+                  }}
+                  className={`flex w-full shadow-sm justify-center py-[8px] h-[39px] px-[16px]  items-center font-medium  rounded-[4px] gap-1  border-[1px]  border-solid border-neutral200 text-mMedium  cursor-pointer  ${'bg-primaryMain text-neutral0 hover:bg-primaryHover'}`}
+                >
+                  <FilterIcon
+                    stroke={`${'var(--neutral-0)'}`}
+                    fill={`${'var(--neutral-0)'}`}
+                  />
 
-                    <p className="w-[70%]">
-                      {ManageLocales('app.modifyFilter')}
-                    </p>
-                    <div
-                      className="w-[17%] cursor-pointer"
-                      onClick={e => {
-                        e.stopPropagation();
-                        setBid(filterData.bidData);
-                        dispatch(filterBidToBuyFunction({}));
-                      }}
-                    >
-                      <Image src={crossIcon} alt="crossIcon" />
-                    </div>
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => {
-                      dispatch(
-                        filterBidToBuyFunction({
-                          bidData: rows
-                        })
-                      );
-                      router.push(
-                        `/v2/bid-2-buy?active-tab=${SubRoutes.BID_TO_BUY}`
-                      );
-                    }}
-                    disabled={!rows.length}
-                    className={`flex justify-center disabled:!bg-neutral100 disabled:cursor-not-allowed disabled:text-neutral400  shadow-sm py-[8px] h-[39px] px-[16px] items-center font-medium  rounded-[4px] gap-1  border-[1px]  border-solid border-neutral200 text-mMedium  cursor-pointer  ${'text-neutral900 bg-neutral0 hover:bg-neutral50'}`}
-                  >
-                    <FilterIcon
-                      stroke={`${
-                        !rows.length
-                          ? 'var(--neutral-400)'
-                          : 'var(--neutral-900)'
-                      }`}
-                    />
-                    <p>{ManageLocales('app.applyFilter')}</p>
-                  </button>
-                )}
+                  <p className="w-[80%]">{ManageLocales('app.modifyFilter')}</p>
+                </button>
               </div>
             )}
             {activeTab === 0 ? (
@@ -614,6 +588,12 @@ const BidToBuyDataTable = ({
   //   setGlobalFilter(value);
   // }, 300);
   //pass table options to useMaterialReactTable
+
+  const [addBid] = useAddBidMutation();
+  let [
+    triggerBidToBuyApi
+    // { isLoading: isLoadingBidToBuyApi, isFetching: isFetchingBidToBuyApi }
+  ] = useLazyGetAllBidStonesQuery();
   const table = useMaterialReactTable({
     columns,
     data: isTabSwitch ? [] : paginatedData, //must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
@@ -1174,11 +1154,61 @@ const BidToBuyDataTable = ({
                                 });
                                 return; // Exit early, do not update bidValues
                               }
-
-                              socketManager.emit('place_bidtobuy', {
+                              addBid({
                                 product_id: row.id,
-                                bid_value: bidValues[row.id]
-                              });
+                                bid_value: Number(bidValues[row.id])
+                              })
+                                .unwrap()
+                                .then(res => {
+                                  // if (res?.status === 200) {
+                                  modalSetState.setIsDialogOpen(true);
+                                  modalSetState.setDialogContent(
+                                    <CommonPoppup
+                                      content=""
+                                      header={'Bid Placed Successfully'}
+                                      handleClick={() =>
+                                        modalSetState.setIsDialogOpen(false)
+                                      }
+                                      buttonText="Okay"
+                                      status="success"
+                                    />
+                                  );
+                                  triggerBidToBuyApi({
+                                    searchUrl: constructUrlParams(
+                                      filterDataState?.queryParams
+                                    ),
+                                    limit: 300
+                                  })
+                                    .unwrap()
+                                    .then((response: any) => {
+                                      setBid(response?.bidStone);
+                                      setActiveBid(response?.activeStone);
+                                      setIsLoading(false);
+                                    })
+                                    .catch(e => {
+                                      setIsLoading(false);
+                                    });
+                                })
+                                .catch(e => {
+                                  modalSetState.setIsDialogOpen(true);
+                                  modalSetState.setDialogContent(
+                                    <CommonPoppup
+                                      header={e?.data?.message}
+                                      content={''}
+                                      handleClick={() =>
+                                        modalSetState.setIsDialogOpen(false)
+                                      }
+                                      buttonText="Okay"
+                                      // status="success"
+                                    />
+                                  );
+                                  // }
+                                });
+
+                              // socketManager.emit('place_bidtobuy', {
+                              //   product_id: row.id,
+                              //   bid_value: bidValues[row.id]
+                              // });
                               activeTab === 0 &&
                                 setRowSelection((prev: any) => {
                                   let prevRows = { ...prev };

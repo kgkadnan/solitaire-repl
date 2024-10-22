@@ -86,21 +86,6 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
     }
   }, []);
 
-  useEffect(() => {
-    const handleBeforeUnload = () => {
-      // Remove the specific localStorage item
-      localStorage.removeItem('entryPoint');
-    };
-
-    // Listen for the beforeunload event
-    window.addEventListener('beforeunload', handleBeforeUnload);
-
-    return () => {
-      // Clean up the event listener on component unmount
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
-  }, []);
-
   // Wrap the ChildrenComponent with authorizedLogin if it's a secure page
   const SecureComponent = protectedRoutes.includes(path)
     ? authorizedLogin(ChildrenComponent)
@@ -124,7 +109,6 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
             window.outerHeight - window.innerHeight > 100
           ) {
             // This checks if the window has shrunk in size due to dev tools being opened
-            console.log('DevTools likely open');
             setOpen(true);
           }
           // }

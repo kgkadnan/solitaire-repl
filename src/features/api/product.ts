@@ -60,6 +60,26 @@ export const productApi = createApi({
         url: `/store/products?limit=${limit}&offset=${offset}&turkey_event=true&${url}`
       })
       // providesTags: ['Product']
+    }),
+    getAllBidStones: builder.query({
+      query: ({ limit, searchUrl }) => ({
+        url: `/store/bid-to-buy?limit=${limit}&${searchUrl}`
+      })
+      // providesTags: ['Product']
+    }),
+    addBid: builder.mutation({
+      query: data => ({
+        url: `/store/bid-to-buy`,
+        method: 'POST',
+        body: data
+      })
+    }),
+    deleteBid: builder.mutation({
+      query: data => ({
+        url: `/store/bid-to-buy`,
+        method: 'DELETE',
+        body: data
+      })
     })
   })
 });
@@ -73,5 +93,8 @@ export const {
   useGetProductByIdMutation,
   useAddDemandMutation,
   useCheckProductAvailabilityMutation,
-  useLazyGetAllTurkeyProductQuery
+  useLazyGetAllTurkeyProductQuery,
+  useLazyGetAllBidStonesQuery,
+  useAddBidMutation,
+  useDeleteBidMutation
 } = productApi;

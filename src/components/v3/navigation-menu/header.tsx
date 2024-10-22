@@ -78,18 +78,18 @@ const CommonHeader = () => {
                 entryPoint: Tracking_Click_RegisterPage.LP_Top_Login,
                 sessionId: isSessionValid()
               }),
-                trackEvent({
-                  action: Tracking.Click_RegisterPage,
+                //   trackEvent({
+                //     action: Tracking.Click_RegisterPage,
 
-                  entry_point: Tracking_Click_RegisterPage.LP_Top_Login,
-                  category: 'Register'
-                });
-              localStorage.setItem(
-                'entryPoint',
-                Tracking_Click_RegisterPage.LP_Top_Login
-              );
+                //     entry_point: Tracking_Click_RegisterPage.LP_Top_Login,
+                //     category: 'Registration'
+                //   });
+                // localStorage.setItem(
+                //   'entryPoint',
+                //   Tracking_Click_RegisterPage.LP_Top_Login
+                // );
 
-              authToken ? router.push('/v2') : router.push('/v2/login');
+                authToken ? router.push('/v2') : router.push('/v2/login');
             }}
             variant={'secondary'}
             size={'custom'}
@@ -111,7 +111,7 @@ const CommonHeader = () => {
                 trackEvent({
                   action: Tracking.Click_RegisterPage,
                   entry_point: Tracking_Click_RegisterPage.LP_Top_Register,
-                  category: 'Register'
+                  category: 'Registration'
                 });
               localStorage.setItem(
                 'entryPoint',
