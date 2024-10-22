@@ -1241,6 +1241,7 @@ const MatchPairTable = ({
     }));
 
     setMps(updatedItems);
+    setIsModified(true);
   };
 
   const [initialMps, setInitialMps] = useState(mps); // Store the initial MPS state
@@ -1379,11 +1380,11 @@ const MatchPairTable = ({
           </div>
         </div>
         <div className="w-full flex justify-between items-center bg-[#F9FAFB] h-[50px] border-t-[1px] border-b-[1px] border-neutral200">
-          <p className="w-[50px]">Priority </p>
+          <p className="w-[60px] px-2">Priority </p>
           <p className="w-[150px]">Name</p>
-          <div className="w-[80px]">Equal</div>
-          <p className="w-[80px]">Up</p>
-          <p className="w-[80px]"> Down</p>
+          <div className="w-[80px] flex justify-center">Equal</div>
+          <p className="w-[80px] flex justify-center">Up</p>
+          <p className="w-[80px] flex justify-center"> Down</p>
           <div className="w-[80px]">Action</div>
         </div>
         <div>
@@ -1402,12 +1403,12 @@ const MatchPairTable = ({
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
-                          className=" flex justify-between p-2 text-[14px] rounded-lg"
+                          className=" flex justify-between  text-[14px] rounded-lg border-b-[1px]"
                         >
-                          <p className="w-[50px] flex items-center">
+                          <p className="w-[60px] flex items-center bg-[#F9FAFB] justify-center">
                             {item.priority}{' '}
                           </p>
-                          <p className="w-[150px] flex items-center">
+                          <p className="w-[150px] flex items-center ">
                             {item.display}
                           </p>
                           <div className="w-[80px] flex items-center justify-center">
@@ -1416,7 +1417,7 @@ const MatchPairTable = ({
                               isChecked={item.is_equal}
                             />
                           </div>
-                          <div className="w-[80px]">
+                          <div className="w-[80px] py-1">
                             <InputField
                               onChange={e =>
                                 handleInputChange(
@@ -1432,7 +1433,7 @@ const MatchPairTable = ({
                               disabled={item.is_equal}
                             />
                           </div>
-                          <div className="w-[80px]">
+                          <div className="w-[80px] py-1">
                             <InputField
                               onChange={e =>
                                 handleInputChange(
@@ -1461,14 +1462,13 @@ const MatchPairTable = ({
           </DragDropContext>
         </div>
 
-        <div className="flex p-4 h-[56px] items-center gap-4 border-t-[1px] border-neutral200">
+        <div className="flex p-4 h-[56px] items-center gap-4">
           <IndividualActionButton
             onClick={handleResetMPS}
             variant={'secondary'}
             size={'custom'}
             className="rounded-[4px] w-[100%] h-[40px]"
             disabled={!isModified}
-
           >
             Reset
           </IndividualActionButton>
