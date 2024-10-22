@@ -21,6 +21,11 @@ export const sitemap = [
         data: 'Sustainability',
         link: '/v3/sustainability',
         isNew: false
+      },
+      {
+        data: 'Traceability',
+        link: '/v3/traceability',
+        isNew: false
       }
     ]
   },
