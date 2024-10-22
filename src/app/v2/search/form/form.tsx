@@ -1308,25 +1308,27 @@ const Form = ({
             )}
           </span>
         </div>
-       {routePath.includes('v2/bid-2-buy') && <div className="p-2 border-[1px] rounded-t-[8px]">
-          <div className="w-[450px]">
-            <Tab
-              labels={['Bid Stone', 'Active Bid', 'Bid History']}
-              activeIndex={activeTab}
-              onTabClick={id => {
-                // console.log(id)
-                setActiveTab(id);
-                if (id !== 0) {
-                  router.push(`/v2/bid-2-buy?active-tab=result`);
-                }
-                // handleTabClick(id)
-              }}
-              activeCount={activeCount}
-              bidCount={' '}
-              historyCount={historyCount}
-            />
+        {routePath.includes('v2/bid-2-buy') && (
+          <div className="p-2 border-[1px] rounded-t-[8px]">
+            <div className="w-[450px]">
+              <Tab
+                labels={['Bid Stone', 'Active Bid', 'Bid History']}
+                activeIndex={activeTab}
+                onTabClick={id => {
+                  // console.log(id)
+                  setActiveTab(id);
+                  if (id !== 0) {
+                    router.push(`/v2/bid-2-buy?active-tab=result`);
+                  }
+                  // handleTabClick(id)
+                }}
+                activeCount={activeCount}
+                bidCount={' '}
+                historyCount={historyCount}
+              />
+            </div>
           </div>
-        </div>}
+        )}
         <div className="flex flex-col gap-[16px]">
           {searchParameters?.length > 0 ? (
             <div className="flex justify-between border-[1px] border-neutral200  px-[16px] py-[8px]">
