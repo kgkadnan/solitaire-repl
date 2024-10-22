@@ -11,6 +11,19 @@ import { useRouter } from 'next/navigation';
 export default function Traceability() {
   const router = useRouter();
   const [showControls, setShowControls] = useState(false);
+
+  const [isCtaVisible, setIsCtaVisible] = useState(false); // Initial state: button invisible
+
+  useEffect(() => {
+    // Set a delay to change opacity after 3 seconds (3000 milliseconds)
+    const timer = setTimeout(() => {
+      setIsCtaVisible(true);
+    }, 3500);
+
+    // Cleanup the timer when the component unmounts
+    return () => clearTimeout(timer);
+  }, []);
+
   useEffect(() => {
     // Show header after 2 seconds
     const timer = setTimeout(() => {
@@ -24,7 +37,7 @@ export default function Traceability() {
       <div className="-[320px] pt-[160px] pb-[80px] flex items-center  bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom">
         <div className="scroll-container flex overflow-hidden  w-full justify-center">
           <div className="flex flex-col gap-2 flex-none w-full flex-shrink-0 snap-center items-center">
-            <div className="text-neutral900 text-[52px] font-black text-center leading-[110px] custom-fadeIn">
+            <div className="text-neutral900 text-[52px] font-black text-center leading-[110px]">
               <AnimationSection>How Traceability Works in KGK</AnimationSection>
             </div>
             <div className="flex gap-2">
@@ -41,7 +54,9 @@ export default function Traceability() {
             </div>
             <div className="pt-[14px]">
               <ShimmerButton
-                className="!rounded-[8px]  w-[250px] h-[44px] text-[16px]"
+                className={`!rounded-[8px] w-[250px] h-[44px] text-[16px] transition-opacity duration-500 ${
+                  isCtaVisible ? 'opacity-100' : 'opacity-0'
+                }`}
                 onClick={() => {
                   router.push('/v3/traceability/gemtrac');
                 }}
