@@ -24,8 +24,8 @@ interface IModalProps {
   images: IImagesType[];
   setIsLoading?: any;
   activeTab?: string;
-  isResultPageDetails?: boolean;
   customerMobileNumber?: string;
+  trackIdentifier?: string;
 }
 
 const ImageModal: React.FC<IModalProps> = ({
@@ -35,8 +35,8 @@ const ImageModal: React.FC<IModalProps> = ({
   selectedImageIndex = 0,
   setIsLoading,
   activeTab,
-  isResultPageDetails,
-  customerMobileNumber
+  customerMobileNumber,
+  trackIdentifier
 }) => {
   const [imageIndex, setImageIndex] = useState<number>(0);
   const [showToast, setShowToast] = useState(false);
@@ -108,7 +108,7 @@ const ImageModal: React.FC<IModalProps> = ({
                   setImageIndex={setImageIndex}
                   setIsImageLoaded={setIsImageLoaded}
                   customerMobileNumber={customerMobileNumber}
-                  identifier={isResultPageDetails ? 'resultPageDetails' : ''}
+                  identifier={trackIdentifier}
                 />
                 <button
                   onClick={() => {
@@ -298,10 +298,17 @@ const ImageModal: React.FC<IModalProps> = ({
                               onClick={() => {
                                 setIsImageLoaded(false);
                                 setImageIndex(imageIndex - 1);
-                                if (isResultPageDetails) {
+                                if (trackIdentifier === 'resultPageDetails') {
                                   trackEvent({
                                     action:
                                       Tracking_Search_By_Text.click_stone_image_arrow_result_page,
+                                    category: 'SearchByText',
+                                    mobile_number: customerMobileNumber
+                                  });
+                                } else if (trackIdentifier === 'Dashboard') {
+                                  trackEvent({
+                                    action:
+                                      Tracking_Search_By_Text.click_stone_image_arrow_dna_page,
                                     category: 'SearchByText',
                                     mobile_number: customerMobileNumber
                                   });
@@ -331,10 +338,17 @@ const ImageModal: React.FC<IModalProps> = ({
                               onClick={() => {
                                 setIsImageLoaded(false);
                                 setImageIndex(imageIndex + 1);
-                                if (isResultPageDetails) {
+                                if (trackIdentifier === 'resultPageDetails') {
                                   trackEvent({
                                     action:
                                       Tracking_Search_By_Text.click_stone_image_arrow_result_page,
+                                    category: 'SearchByText',
+                                    mobile_number: customerMobileNumber
+                                  });
+                                } else if (trackIdentifier === 'Dashboard') {
+                                  trackEvent({
+                                    action:
+                                      Tracking_Search_By_Text.click_stone_image_arrow_dna_page,
                                     category: 'SearchByText',
                                     mobile_number: customerMobileNumber
                                   });
