@@ -1467,6 +1467,8 @@ const MatchPairTable = ({
             variant={'secondary'}
             size={'custom'}
             className="rounded-[4px] w-[100%] h-[40px]"
+            disabled={!isModified}
+
           >
             Reset
           </IndividualActionButton>
@@ -1475,6 +1477,7 @@ const MatchPairTable = ({
             variant={'primary'}
             size={'custom'}
             className="rounded-[4px] w-[100%] h-[40px]"
+            disabled={!isModified}
           >
             Apply
           </IndividualActionButton>
