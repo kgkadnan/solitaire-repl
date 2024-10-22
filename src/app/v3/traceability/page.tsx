@@ -4,9 +4,12 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import TraceabilityHtml from '@/components/v3/traceability-html';
 import AnimationSection from '@/components/v3/animated-text/scroll';
-import arrowUpRight from '@public/v3/traceability/arrow-up-right.svg';
-import Link from 'next/link';
+// import arrowUpRight from '@public/v3/traceability/arrow-up-right.svg';
+// import Link from 'next/link';
+import ShimmerButton from '@/components/v3/animated-button';
+import { useRouter } from 'next/navigation';
 export default function Traceability() {
+  const router = useRouter();
   const [showControls, setShowControls] = useState(false);
   useEffect(() => {
     // Show header after 2 seconds
@@ -26,7 +29,7 @@ export default function Traceability() {
             </div>
             <div className="flex gap-2">
               <div className="flex gap-3 flex-col items-center">
-                <div className="text-neutral800 text-[16px] px-4 pt-[14px] w-[832px] text-center content">
+                <div className="text-neutral800 text-[16px] px-4 pt-[14px] w-[900px] text-center content">
                   <AnimationSection animationDelay={0.5}>
                     At KGK, every diamond undergoes a traceable journey through
                     our GemTrac program, ensuring transparency at each stage.
@@ -35,6 +38,17 @@ export default function Traceability() {
                   </AnimationSection>
                 </div>
               </div>
+            </div>
+            <div className="pt-[14px]">
+              <ShimmerButton
+                className="!rounded-[8px]  w-[250px] h-[44px] text-[16px]"
+                onClick={() => {
+                  router.push('/v3/traceability/gemtrac');
+                }}
+                style={{ boxShadow: '0px 1px 2px 0px #1018281F' }}
+              >
+                Explore a Real Example!
+              </ShimmerButton>
             </div>
           </div>
         </div>
@@ -80,7 +94,7 @@ export default function Traceability() {
                 </div>
                 <div
                   className={`w-[528px] rounded-[8px] bg-white p-2 mt-[-120px] ${
-                    index < 2 ? 'h-[170px]' : 'h-[220px]'
+                    index > 3 ? 'h-[170px]' : 'h-[220px]'
                   } gap-2 flex flex-col`}
                   style={{ boxShadow: 'var(--popups-shadow' }}
                 >
@@ -90,7 +104,7 @@ export default function Traceability() {
                   <p className="text-neutral800 text-[16px]">
                     {program.description}
                   </p>
-                  {program.refLink && (
+                  {/* {program.refLink && (
                     <div className=" flex items-center justify-end text-infoMain font-medium text-[14px]">
                       <Link
                         href={program.refLink}
@@ -100,7 +114,7 @@ export default function Traceability() {
                         <Image src={arrowUpRight} alt="arrowUpRight" />
                       </Link>
                     </div>
-                  )}
+                  )} */}
                 </div>
               </div>
             ))}
