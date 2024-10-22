@@ -10,6 +10,8 @@ import {
 import ExpandImg from '@public/v2/assets/icons/detail-page/expand.svg?url';
 import CollapsIcon from '@public/v2/assets/icons/collapse-icon.svg?url';
 import ExportExcel from '@public/v2/assets/icons/detail-page/export-excel.svg?url';
+import Setting from '@public/v2/assets/icons/match-pair-setting.svg?url';
+
 import saveIcon from '@public/v2/assets/icons/data-table/bookmark.svg';
 import BinIcon from '@public/v2/assets/icons/bin.svg';
 import DownloadAllIcon from '@public/v2/assets/icons/download-all.svg';
@@ -18,6 +20,9 @@ import chevronDown from '@public/v2/assets/icons/save-search-dropdown/chevronDow
 import Image from 'next/image';
 import searchIcon from '@public/v2/assets/icons/data-table/search-icon.svg';
 import threeDotsSvg from '@public/v2/assets/icons/threedots.svg';
+import Cross from '@public/v2/assets/icons/cross.svg?url';
+import Drag from '@public/v2/assets/icons/drag.svg';
+import NoDataSvg from '@public/v2/assets/icons/no-matching-pair.svg';
 
 // theme.js
 import { ThemeProvider, createTheme } from '@mui/material/styles';
@@ -56,7 +61,18 @@ import Tooltip from '@/components/v2/common/tooltip';
 import { Dropdown } from '@/components/v2/common/dropdown-menu';
 import Share from '@/components/v2/common/copy-and-share/share';
 import MathPairSkeleton from '@/components/v2/skeleton/match-pair';
-import { useLazyGetMatchingPairCountQuery } from '@/features/api/match-pair';
+import {
+  useApplyMatchingPairSettingMutation,
+  useLazyGetMatchingPairCountQuery,
+  useLazyGetResetMatchingPairSettingQuery
+} from '@/features/api/match-pair';
+import { MPSDialogComponent } from './mps';
+import { IndividualActionButton } from '@/components/v2/common/action-button/individual-button';
+import { ListManager } from 'react-beautiful-dnd-grid';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import CheckboxComponent from '@/components/v2/common/checkbox';
+import { InputField } from '@/components/v2/common/input-field';
+import EmptyScreen from '@/components/v2/common/empty-screen';
 
 const theme = createTheme({
   typography: {
@@ -196,12 +212,17 @@ const MatchPairTable = ({
   handleCreateAppointment,
   originalData,
   setIsSkeletonLoading,
-  isSkeletonLoading
+  isSkeletonLoading,
+  mps,
+  setMps,
+  setSettingApplied
 }: any) => {
   // Fetching saved search data
   const router = useRouter();
   const [triggerSavedSearch] = useLazyGetAllSavedSearchesQuery({});
   const [checkProductAvailability] = useCheckProductAvailabilityMutation({});
+  const [resetMPS] = useLazyGetResetMatchingPairSettingQuery({});
+  const [applyMPS] = useApplyMatchingPairSettingMutation({});
 
   let [triggerMatchingPairCountApi] = useLazyGetMatchingPairCountQuery();
   const [isDropDownOpen, setIsDropDownOpen] = useState(false);
@@ -222,6 +243,8 @@ const MatchPairTable = ({
   const [paginatedData, setPaginatedData] = useState<any>([]);
   const [globalFilter, setGlobalFilter] = useState('');
   const path = useSearchParams().get('active-tab');
+
+  const [isMPSOpen, setIsMPSOpen] = useState(false);
 
   useEffect(() => {
     if (globalFilter !== '') {
@@ -534,7 +557,41 @@ const MatchPairTable = ({
 
   let isNudge = localStorage.getItem('show-nudge') === 'MINI';
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
-  const NoResultsComponent = () => <></>;
+  const NoResultsComponent = () => (
+    <div className="w-[100vw] flex justify-center">
+      <div>
+        <div className="w-[500px] flex justify-center">
+          <Image src={NoDataSvg} alt={'empty'} />
+        </div>
+        <div className="flex flex-col justify-center items-center w-[500px]">
+          <h1 className="text-neutral600 font-medium text-headingM w-[500px] text-center">
+            We don't have any stones according to your selection. Please modify
+            the filters or change the match pair settings.
+          </h1>
+
+          <ActionButton
+            actionButtonData={[
+              {
+                variant: 'secondary',
+                label: 'Edit Filter',
+                handler: () => {
+                  router.push(
+                    `/v2/matching-pair?active-tab=${path}&edit=result`
+                  );
+                }
+              },
+
+              {
+                variant: 'primary',
+                label: 'Edit Match Pair Settings',
+                handler: () => setIsMPSOpen(true)
+              }
+            ]}
+          />
+        </div>
+      </div>
+    </div>
+  );
   //pass table options to useMaterialReactTable
   const table = useMaterialReactTable({
     columns,
@@ -975,6 +1032,30 @@ const MatchPairTable = ({
                 ''
               )
             }
+            <div className="h-[37px] mr-[-8px]">
+              <p className="bg-infoMain rounded-[12px] px-[6px] py-[1px] border-[2px] border-[#D9E8FF] text-neutral0 text-[10px]">
+                New
+              </p>
+            </div>
+
+            <div
+              className=" rounded-[4px] cursor-pointer"
+              onClick={() => {
+                setIsMPSOpen(true);
+              }}
+            >
+              <Tooltip
+                tooltipTrigger={
+                  <button
+                    className={`rounded-[4px] hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm ${'bg-neutral0'}`}
+                  >
+                    <Setting className={`${'stroke-neutral900'}`} />
+                  </button>
+                }
+                tooltipContent={'Setting'}
+                tooltipContentStyles={'z-[1000]'}
+              />
+            </div>
 
             <div
               className=" rounded-[4px] cursor-pointer"
@@ -1146,15 +1227,280 @@ const MatchPairTable = ({
     )
   });
 
+  const handleOnDragEnd = (result: any) => {
+    if (!result.destination) return;
+
+    const newItems = Array.from(mps);
+    const [reorderedItem] = newItems.splice(result.source.index, 1);
+    newItems.splice(result.destination.index, 0, reorderedItem);
+
+    // Update priority based on new position
+    const updatedItems = newItems.map((item: any, index) => ({
+      ...item,
+      priority: index + 1 // Priority is set to index+1 to reflect the new order
+    }));
+
+    setMps(updatedItems);
+  };
+
+  const [initialMps, setInitialMps] = useState(mps); // Store the initial MPS state
+  const [isModified, setIsModified] = useState(false); // Track whether there are any changes
+
+  // This useEffect sets the initialMps state once MPS data is loaded
+  useEffect(() => {
+    setInitialMps(mps);
+  }, [mps]);
+
+  // Function to compare the current MPS state with the initial state
+  const checkForChanges = (currentMps: any[]) => {
+    return JSON.stringify(currentMps) !== JSON.stringify(initialMps);
+  };
+
+  const handleResetMPS = () => {
+    resetMPS({})
+      .unwrap()
+      .then(res => {
+        const resMap = new Map(res.map((itemB: any) => [itemB.key, itemB]));
+
+        const updatedMps = mps.map((itemA: any) => {
+          const itemB: any = resMap.get(itemA.key);
+
+          if (itemB) {
+            const updatedItem = { ...itemA };
+            Object.keys(itemB).forEach(key => {
+              if (itemA[key] !== itemB[key]) {
+                updatedItem[key] = itemB[key];
+              }
+            });
+            return updatedItem;
+          }
+
+          return itemA;
+        });
+
+        updatedMps.sort((a: any, b: any) => a.priority - b.priority);
+
+        // Update state with the new array and reset isModified
+        setMps(updatedMps);
+        setInitialMps(updatedMps); // Update the initial state to the new reset state
+        setIsModified(false); // Disable the buttons
+        console.log(res, 'Reset data');
+      });
+  };
+
+  const handleApplyMPS = () => {
+    applyMPS({ setting: mps }).unwrap();
+    setSettingApplied(true);
+    setIsMPSOpen(false);
+    setInitialMps(mps); // Set the current MPS as the new initial state after applying changes
+    setIsModified(false); // Disable the buttons
+  };
+
+  const handleInputChange = (
+    index: number,
+    newValue: number,
+    field: string
+  ) => {
+    const endValue = mps[index].end;
+    let validatedValue = newValue;
+
+    if (newValue < 0) validatedValue = 0;
+    if (newValue > endValue) validatedValue = endValue;
+
+    const updatedMps = [...mps];
+    updatedMps[index] = { ...updatedMps[index], [field]: validatedValue };
+
+    setMps(updatedMps);
+    setIsModified(checkForChanges(updatedMps)); // Check if the state has been modified
+  };
+
+  const handleIsEqualChange = (index: number) => {
+    const updatedMps = [...mps];
+    updatedMps[index] = {
+      ...updatedMps[index],
+      is_equal: !updatedMps[index].is_equal
+    };
+
+    setMps(updatedMps);
+    setIsModified(checkForChanges(updatedMps)); // Check if the state has been modified
+  };
+
+  const renderContentMPS = () => {
+    return (
+      <div>
+        <div className="flex justify-between w-full p-4 items-center">
+          <p className="text-headingS font-medium text-neutral900">
+            Match Pair Settings
+          </p>
+          <div
+            className="cursor-pointer"
+            onClick={() => {
+              if (isModified) {
+                modalSetState.setIsDialogOpen(true);
+                modalSetState.setDialogContent(
+                  <CommonPoppup
+                    content={
+                      'You have unsaved changes. Are you sure you want to exit?'
+                    }
+                    status="warning"
+                    customPoppupBodyStyle="!mt-[70px]"
+                    header="Exit Without Saving?"
+                    actionButtonData={[
+                      {
+                        variant: 'secondary',
+                        label: 'No, Stay',
+                        handler: () => {
+                          modalSetState.setIsDialogOpen(false);
+                        },
+                        customStyle: 'flex-1'
+                      },
+                      {
+                        variant: 'primary',
+                        label: 'Yes, Exit',
+                        handler: () => {
+                          modalSetState.setIsDialogOpen(false);
+                          setIsMPSOpen(false);
+                        },
+                        customStyle: 'flex-1'
+                      }
+                    ]}
+                  />
+                );
+              } else {
+                setIsMPSOpen(false);
+              }
+            }}
+          >
+            <Cross
+              style={{
+                stroke: 'var(--neutral-900)'
+              }}
+            />
+          </div>
+        </div>
+        <div className="w-full flex justify-between items-center bg-[#F9FAFB] h-[50px] border-t-[1px] border-b-[1px] border-neutral200">
+          <p className="w-[50px]">Priority </p>
+          <p className="w-[150px]">Name</p>
+          <div className="w-[80px]">Equal</div>
+          <p className="w-[80px]">Up</p>
+          <p className="w-[80px]"> Down</p>
+          <div className="w-[80px]">Action</div>
+        </div>
+        <div>
+          <DragDropContext onDragEnd={handleOnDragEnd}>
+            <Droppable droppableId="items">
+              {provided => (
+                <div {...provided.droppableProps} ref={provided.innerRef}>
+                  {mps.map((item: any, index: number) => (
+                    <Draggable
+                      key={item.key}
+                      draggableId={item.key}
+                      index={index}
+                    >
+                      {provided => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          className=" flex justify-between p-2 text-[14px] rounded-lg"
+                        >
+                          <p className="w-[50px] flex items-center">
+                            {item.priority}{' '}
+                          </p>
+                          <p className="w-[150px] flex items-center">
+                            {item.display}
+                          </p>
+                          <div className="w-[80px] flex items-center justify-center">
+                            <CheckboxComponent
+                              onClick={() => handleIsEqualChange(index)} // Call the function to toggle `is_equal`
+                              isChecked={item.is_equal}
+                            />
+                          </div>
+                          <div className="w-[80px]">
+                            <InputField
+                              onChange={e =>
+                                handleInputChange(
+                                  index,
+                                  Number(e.target.value),
+                                  'up'
+                                )
+                              } // Update `up` field on change
+                              type="number"
+                              value={item.up}
+                              placeholder={'0.0'}
+                              styles={{ inputMain: 'h-[40px]' }}
+                              disabled={item.is_equal}
+                            />
+                          </div>
+                          <div className="w-[80px]">
+                            <InputField
+                              onChange={e =>
+                                handleInputChange(
+                                  index,
+                                  Number(e.target.value),
+                                  'down'
+                                )
+                              } // Update `up` field on change
+                              type="number"
+                              value={item.down}
+                              placeholder={'0.0'}
+                              styles={{ inputMain: 'h-[40px]' }}
+                              disabled={item.is_equal}
+                            />
+                          </div>{' '}
+                          <div className="w-[80px] flex justify-center">
+                            <Image src={Drag} alt="MPS drag" />
+                          </div>
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
+        </div>
+
+        <div className="flex p-4 h-[56px] items-center gap-4 border-t-[1px] border-neutral200">
+          <IndividualActionButton
+            onClick={handleResetMPS}
+            variant={'secondary'}
+            size={'custom'}
+            className="rounded-[4px] w-[100%] h-[40px]"
+            disabled={!isModified}
+
+          >
+            Reset
+          </IndividualActionButton>
+          <IndividualActionButton
+            onClick={handleApplyMPS}
+            variant={'primary'}
+            size={'custom'}
+            className="rounded-[4px] w-[100%] h-[40px]"
+            disabled={!isModified}
+          >
+            Apply
+          </IndividualActionButton>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <>
-      {isSkeletonLoading ? (
+      <MPSDialogComponent
+        isOpen={isMPSOpen}
+        onClose={() => setIsMPSOpen(false)}
+        renderContent={renderContentMPS}
+        // dialogStyle={'max-w-[450px] min-h-[460px]'}
+      />
+      {/* {(isSkeletonLoading) ? (
         <MathPairSkeleton />
-      ) : (
-        <ThemeProvider theme={theme}>
-          <MaterialReactTable table={table} />
-        </ThemeProvider>
-      )}
+      ) : ( */}
+      <ThemeProvider theme={theme}>
+        <MaterialReactTable table={table} />
+      </ThemeProvider>
+      {/* )}  */}
     </>
   );
 };
