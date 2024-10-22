@@ -58,12 +58,17 @@ import { kycStatus } from '@/constants/enums/kyc';
 import { handleConfirmStone } from '@app/v2/search/result/helpers/handle-confirm-stone';
 import { handleCompareStone } from '@/app/v2/search/result/helpers/handle-compare-stone';
 import CommonPoppup from '@/app/v2/login/component/common-poppup';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSort, faSortDown } from '@fortawesome/free-solid-svg-icons';
 import DataTableSkeleton from '../../skeleton/data-table';
 import { Tracking_Search_By_Text } from '@/constants/funnel-tracking';
 import { trackEvent } from '@/utils/ga';
 import { dashboardIndentifier } from '@/app/v2/dashboard';
+import {
+  clarity,
+  fluorescenceSortOrder,
+  sideBlackSortOrder,
+  tableBlackSortOrder,
+  tableInclusionSortOrder
+} from '@/constants/v2/form';
 
 const theme = createTheme({
   typography: {
@@ -80,8 +85,8 @@ const theme = createTheme({
         root: {
           // Default state for the badge inside the cell - sorting icon not visible by default
           '& .MuiBadge-root': {
-            width: '15px !important',
-            marginLeft: '-3px',
+            width: '0px !important',
+            // marginLeft: '-3px',
             visibility: 'hidden'
           },
           // Hover state for the cell
@@ -188,6 +193,8 @@ const DataTable = ({
   handleNewSearch,
   setSearchParameters,
   modalSetState,
+  setSorting,
+  sorting,
   downloadExcel,
   data,
   setErrorText,
@@ -562,6 +569,129 @@ const DataTable = ({
     });
   };
 
+  const nonSortableAccessors = ['shape_full', 'details', 'fire_icon'];
+
+  const sortData = (data: any, sorting: any) => {
+    if (!sorting.length) return data; // If no sorting is applied, return the data as-is
+
+    const sortedData = [...data].sort((rowA, rowB) => {
+      for (let sort of sorting) {
+        const columnId = sort.id;
+        const isDesc = sort.desc;
+
+        // Skip sorting for non-sortable accessors
+        if (nonSortableAccessors.includes(columnId)) {
+          continue; // Move to the next sorting criteria or return unsorted data
+        }
+
+        const valueA = rowA[columnId];
+        const valueB = rowB[columnId];
+
+        let compareValue = 0;
+
+        switch (columnId) {
+          case 'clarity':
+            compareValue = clarity.indexOf(valueA) - clarity.indexOf(valueB);
+
+            break;
+          case 'table_inclusion':
+            compareValue =
+              tableInclusionSortOrder.indexOf(valueA) -
+              tableInclusionSortOrder.indexOf(valueB);
+            break;
+          case 'table_black':
+            compareValue =
+              tableBlackSortOrder.indexOf(valueA) -
+              tableBlackSortOrder.indexOf(valueB);
+            break;
+          case 'side_black':
+            compareValue =
+              sideBlackSortOrder.indexOf(valueA) -
+              sideBlackSortOrder.indexOf(valueB);
+            break;
+          case 'fluorescence':
+            compareValue =
+              fluorescenceSortOrder.indexOf(valueA) -
+              fluorescenceSortOrder.indexOf(valueB);
+
+            break;
+          default:
+            // Fallback to default comparison for other columns (numbers or strings)
+            if (typeof valueA === 'string' && typeof valueB === 'string') {
+              compareValue = valueA.localeCompare(valueB, undefined, {
+                sensitivity: 'base'
+              });
+            } else {
+              compareValue = valueA > valueB ? 1 : valueA < valueB ? -1 : 0;
+            }
+        }
+
+        // Handle cases where the value might not be found in the custom array (indexOf returns -1)
+        if (compareValue === 0) {
+          continue; // If equal, move to the next sorting condition
+        }
+
+        // Apply sorting direction (ascending or descending)
+        return isDesc ? -compareValue : compareValue;
+      }
+      return 0;
+    });
+
+    return sortedData;
+  };
+
+  // Handle sorting and pagination
+  useEffect(() => {
+    // Apply the sorting logic to the full dataset
+    const sortedFullData = sortData(rows, sorting);
+
+    // Pagination logic
+    const startIndex = pagination.pageIndex * pagination.pageSize;
+    const endIndex = startIndex + pagination.pageSize;
+    const newData = sortedFullData.slice(startIndex, endIndex);
+
+    // Update the paginated data state
+    setPaginatedData(newData);
+
+    // Optional skeleton loading logic
+    if (isResult && setIsSkeletonLoading && newData.length > 0) {
+      setIsSkeletonLoading(false);
+    } else if (myCart && setIsSkeletonLoading) {
+      setIsSkeletonLoading(false);
+    }
+  }, [
+    rows,
+    sorting, // Trigger sorting when sorting state changes
+    pagination.pageIndex, // Re-fetch when page index changes
+    pagination.pageSize // Re-fetch when page size changes
+  ]);
+
+  const handleSortingChange = (newSorting: any) => {
+    setSorting((currentSorting: any) => {
+      const existingSort = currentSorting.find(
+        (sort: any) => sort.id === newSorting()[0].id
+      );
+
+      if (existingSort) {
+        // If the current sort is ascending, change it to descending
+        if (!existingSort.desc) {
+          return currentSorting.map((sort: any) =>
+            sort.id === newSorting()[0].id ? { ...sort, desc: true } : sort
+          );
+        }
+        // If the current sort is descending, remove the sorting
+        else {
+          return currentSorting.filter(
+            (sort: any) => sort.id !== newSorting()[0].id
+          );
+        }
+      } else {
+        // If no sorting exists for the column, set sorting to ascending (default)
+        return [...currentSorting, { id: newSorting()[0].id, desc: false }];
+      }
+    });
+  };
+
   let isNudge = localStorage.getItem('show-nudge') === 'MINI';
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   const NoResultsComponent = () => <></>;
@@ -598,26 +728,32 @@ const DataTable = ({
     rowCount: rows.length,
     onPaginationChange: setPagination, //hoist pagination state to your state when it changes internally
     manualFiltering: true,
+
     onGlobalFilterChange: setGlobalFilter,
+    manualSorting: true, // Enable manual sorting
+    onSortingChange: handleSortingChange, // Handle sorting change
     icons: {
       SearchIcon: () => (
         <Image src={searchIcon} alt={'searchIcon'} className="mr-[6px]" />
       ),
-      SortIcon: (props: any) => (
-        <FontAwesomeIcon icon={faSort} width={8} height={8} {...props} />
-      ), //best practice
-      SyncAltIcon: (props: any) => (
-        <FontAwesomeIcon
-          icon={faSort}
-          {...props}
-          // width={8} height={8}
-          style={{ color: 'neutral400' }}
-          className="transform !rotate-0 !pl-1"
-        />
-      ),
-      ArrowDownwardIcon: (props: any) => (
-        <FontAwesomeIcon icon={faSortDown} {...props} width={8} height={8} />
-      )
+      SortIcon: () => null,
+      SyncAltIcon: () => null,
+      ArrowDownwardIcon: () => null
+      // SortIcon: (props: any) => (
+      //   <FontAwesomeIcon icon={faSort} width={8} height={8} {...props} />
+      // ), //best practice
+      // SyncAltIcon: (props: any) => (
+      //   <FontAwesomeIcon
+      //     icon={faSort}
+      //     {...props}
+      //     // width={8} height={8}
+      //     style={{ color: 'neutral400' }}
+      //     className="transform !rotate-0 !pl-1"
+      //   />
+      // )
+      // ArrowDownwardIcon: (props: any) => (
+      //   <FontAwesomeIcon icon={faSortDown} {...props} width={8} height={8} />
+      // )
     },
     // headerSortico
     muiTableBodyRowProps: ({ row }) => {
@@ -690,7 +826,7 @@ const DataTable = ({
       }
     },
 
-    sortDescFirst: false,
+    // sortDescFirst: false,
     initialState: {
       showGlobalFilter: true,
       expanded: true,
@@ -698,7 +834,8 @@ const DataTable = ({
       columnPinning: {
         left: ['mrt-row-select', 'fire_icon', 'lot_id', 'mrt-row-expand']
       },
-      pagination: pagination
+      pagination: pagination,
+      sorting: sorting
     },
 
     positionGlobalFilter: 'left',
@@ -773,7 +910,7 @@ const DataTable = ({
               cell.column.id
             )
               ? '0px 6px'
-              : '0px 2px',
+              : '0px 1px',
             textAlign:
               cell.column.id === 'girdle_percentage'
                 ? 'center !important'
@@ -836,7 +973,7 @@ const DataTable = ({
               column.id
             )
               ? '0px 6px'
-              : '0px 2px',
+              : '0px 1px',
             height: '20px',
             background: 'var(--neutral-50)',
             opacity: 1,
@@ -904,7 +1041,7 @@ const DataTable = ({
     renderTopToolbar: ({ table }) => (
       <div>
         {isResult && (
-          <div className="flex min-h-[55px] items-center justify-between border-b-[1px] border-neutral200 flex px-[16px] py-[8px]">
+          <div className="flex min-h-[55px] items-center justify-between border-b-[1px] border-neutral200  px-[16px] py-[8px]">
             <div className="flex lg-w-[calc(100%-500px)] gap-[12px] flex-wrap">
               <Breadcrum
                 searchParameters={searchParameters}
