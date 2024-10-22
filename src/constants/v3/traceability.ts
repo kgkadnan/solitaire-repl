@@ -51,18 +51,14 @@ export const traceabilityMatters = [
 ];
 
 export const leadingPrograms = [
-  {
-    icon: Program1,
-    heading: 'GemTrac by KGK',
-    description:
-      'GemTrac by KGK features in-house traceability programs that document the manufacturing process and track each diamond’s journey from mines to market.',
-    refLink: '/v3/traceability/gemtrac'
-  },
-  {
-    icon: Program2,
-    heading: 'Tracr by De Beers',
-    description: `TRACR is a leading traceability platform developed by De Beers Group. It utilizes a combination of technologies like blockchain, artificial intelligence, and the Internet of Things (IoT) to track a diamond's journey from mine to market.`
-  },
+  // {
+  //   icon: Program1,
+  //   heading: 'GemTrac by KGK',
+  //   description:
+  //     'GemTrac by KGK features in-house traceability programs that document the manufacturing process and track each diamond’s journey from mines to market.',
+  //   refLink: '/v3/traceability/gemtrac'
+  // },
+
   {
     icon: Program3,
     heading: 'GIA Source Verification Service (SVS)',
@@ -88,6 +84,11 @@ De Beers Origin Story goes beyond just providing basic traceability data. It aim
     icon: Program6,
     heading: 'Everledger',
     description: `Everledger uses blockchain technology to create a traceability program for diamonds, aiming to bring transparency & trust to the diamond industry. The program tracks a diamond's journey from mine to consumer, recording details like origin, characteristics, & ownership history on a secure blockchain ledger that creates an immutable record of the diamond's journey.`
+  },
+  {
+    icon: Program2,
+    heading: 'Tracr by De Beers',
+    description: `TRACR is a leading traceability platform developed by De Beers Group. It utilizes a combination of technologies like blockchain, artificial intelligence, and the Internet of Things (IoT) to track a diamond's journey from mine to market.`
   }
 ];
 
