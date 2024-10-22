@@ -1854,7 +1854,7 @@ const Dashboard = () => {
       <ImageModal
         setIsLoading={setIsLoading}
         isOpen={isModalOpen}
-        isResultPageDetails={isResultPageDetails}
+        trackIdentifier={'resultPageDetails'}
         customerMobileNumber={customerMobileNumber}
         onClose={() => {
           setValidImages([]);
