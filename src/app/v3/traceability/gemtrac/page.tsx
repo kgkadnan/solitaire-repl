@@ -10,7 +10,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 
-const page = () => {
+const GemTrac = () => {
   const router = useRouter();
   return (
     <div>
@@ -238,4 +238,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default GemTrac;
