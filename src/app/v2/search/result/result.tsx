@@ -197,8 +197,8 @@ const Result = ({
 
     const url = constructUrlParams(selections[activeTab - 1]?.queryParams);
     setSearchUrl(url);
-    triggerProductApi({ url, limit: LISTING_PAGE_DATA_LIMIT, offset: 0 }).then(
-      (res: any) => {
+    triggerProductApi({ url, limit: LISTING_PAGE_DATA_LIMIT, offset: 0 })
+      .then((res: any) => {
         if (columnData?.length > 0) {
           if (res?.error?.status === statusCode.UNAUTHORIZED) {
             setHasLimitExceeded(true);
@@ -241,8 +241,8 @@ const Result = ({
           setData(res.data);
           setIsLoading(false);
         }
-      }
-    );
+      })
+      .catch(e => setIsLoading(false));
   };
 
   const refreshSearchResults = () => {
