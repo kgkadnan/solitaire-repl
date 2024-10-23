@@ -18,7 +18,7 @@ export default function Traceability() {
     // Set a delay to change opacity after 3 seconds (3000 milliseconds)
     const timer = setTimeout(() => {
       setIsCtaVisible(true);
-    }, 3500);
+    }, 1300);
 
     // Cleanup the timer when the component unmounts
     return () => clearTimeout(timer);
