@@ -244,7 +244,7 @@ const MatchPairTable = ({
   const path = useSearchParams().get('active-tab');
 
   const [isMPSOpen, setIsMPSOpen] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(true);
+  const [isLoaded, setIsLoaded] = useState(false);
   useEffect(() => {
     if (globalFilter !== '') {
       // Remove all whitespace characters from globalFilter
@@ -258,10 +258,8 @@ const MatchPairTable = ({
       const newData = data.slice(startIndex, endIndex);
       // Update the paginated data state
       setPaginatedData(newData);
-      setIsLoaded(false);
     } else {
       setPaginatedData(rows);
-      setIsLoaded(false);
     }
   }, [globalFilter]);
   useEffect(() => {
@@ -272,11 +270,9 @@ const MatchPairTable = ({
     const newData = rows.slice(startIndex, endIndex);
     // Update the paginated data state
     setPaginatedData(newData);
-    setIsLoaded(false);
 
     if (newData.length > 0 && setIsSkeletonLoading) {
       setIsSkeletonLoading(false);
-      // setIsLoaded(false)
     }
   }, [
     rows,
@@ -562,39 +558,44 @@ const MatchPairTable = ({
   let isNudge = localStorage.getItem('show-nudge') === 'MINI';
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   const NoResultsComponent = () => (
-    <div className="w-[100vw] flex justify-center">
-      <div>
-        <div className="w-[500px] flex justify-center">
-          <Image src={NoDataSvg} alt={'empty'} />
-        </div>
-        <div className="flex flex-col justify-center items-center w-[500px]">
-          <h1 className="text-neutral600 font-medium text-headingM w-[500px] text-center">
-            We don't have any stones according to your selection. Please modify
-            the filters or change the match pair settings.
-          </h1>
+    <>
+      {' '}
+      {isLoaded && (
+        <div className="w-[100vw] flex justify-center">
+          <div>
+            <div className="w-[500px] flex justify-center">
+              <Image src={NoDataSvg} alt={'empty'} />
+            </div>
+            <div className="flex flex-col justify-center items-center w-[500px]">
+              <h1 className="text-neutral600 font-medium text-[16px] w-[500px] text-center">
+                We don't have any stones according to your selection. Please
+                modify the filters or change the match pair settings.
+              </h1>
 
-          <ActionButton
-            actionButtonData={[
-              {
-                variant: 'secondary',
-                label: 'Edit Filter',
-                handler: () => {
-                  router.push(
-                    `/v2/matching-pair?active-tab=${path}&edit=result`
-                  );
-                }
-              },
+              <ActionButton
+                actionButtonData={[
+                  {
+                    variant: 'secondary',
+                    label: 'Edit Filter',
+                    handler: () => {
+                      router.push(
+                        `/v2/matching-pair?active-tab=${path}&edit=result`
+                      );
+                    }
+                  },
 
-              {
-                variant: 'primary',
-                label: 'Edit Match Pair Settings',
-                handler: () => setIsMPSOpen(true)
-              }
-            ]}
-          />
+                  {
+                    variant: 'primary',
+                    label: 'Edit Match Pair Settings',
+                    handler: () => setIsMPSOpen(true)
+                  }
+                ]}
+              />
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
   //pass table options to useMaterialReactTable
   const table = useMaterialReactTable({
@@ -1262,6 +1263,12 @@ const MatchPairTable = ({
     return JSON.stringify(currentMps) !== JSON.stringify(initialMps);
   };
 
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoaded(true), 0); // Small delay to ensure rendering phase is completed
+
+    return () => clearTimeout(timer); // Cleanup the timer
+  }, []);
+
   const handleResetMPS = () => {
     resetMPS({})
       .unwrap()
@@ -1512,7 +1519,7 @@ const MatchPairTable = ({
             variant={'secondary'}
             size={'custom'}
             className="rounded-[4px] w-[100%] h-[40px]"
-            disabled={!isModified}
+            // disabled={!isModified}
           >
             Reset
           </IndividualActionButton>
@@ -1537,7 +1544,7 @@ const MatchPairTable = ({
         onClose={() => setIsMPSOpen(false)}
         renderContent={renderContentMPS}
       />
-      {isLoaded || isLoading ? (
+      {!isLoaded ? (
         <MathPairSkeleton />
       ) : (
         <ThemeProvider theme={theme}>

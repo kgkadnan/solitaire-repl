@@ -1175,7 +1175,7 @@ const BidToBuyDataTable = ({
                                   );
                                   triggerBidToBuyApi({
                                     searchUrl: constructUrlParams(
-                                      filterDataState?.queryParams
+                                      JSON.parse(localStorage.getItem('bid')!)
                                     ),
                                     limit: 300
                                   })
