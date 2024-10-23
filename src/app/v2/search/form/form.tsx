@@ -395,6 +395,7 @@ const Form = ({
   useEffect(() => {
     // Function to execute after debounce delay
     const handleSearchUrlUpdate = () => {
+      console.log('called');
       // setErrorText('');
       const queryParams = generateQueryParams(state);
 
@@ -485,7 +486,8 @@ const Form = ({
 
     if (subRoute === SubRoutes.NEW_ARRIVAL && newArrivalBidDataQuery) {
       setModifySearch(newArrivalBidDataQuery, setState);
-    } else if (subRoute === SubRoutes.BID_TO_BUY && bidToBuyBidDataQuery) {
+    } else if (routePath === Routes.BID_TO_BUY && bidToBuyBidDataQuery) {
+      console.log('hrerer', bidToBuyBidDataQuery);
       setModifySearch(bidToBuyBidDataQuery, setState);
     } else if (
       modifySearchFrom === `${SubRoutes.SAVED_SEARCH}` &&
@@ -508,6 +510,10 @@ const Form = ({
       );
     }
   }, [modifySearchFrom]);
+  // useEffect(()=>{
+  //   setModifySearch(JSON.parse(localStorage.getItem('bid')!), setState);
+
+  // },[localStorage.getItem('bid')])
 
   useEffect(() => {
     let data: ISavedSearch[] | [] =
@@ -1323,9 +1329,9 @@ const Form = ({
                 onTabClick={id => {
                   // console.log(id)
                   setActiveTab(id);
-                  // if (id !== 0) {
-                  //   router.push(`/v2/bid-2-buy?active-tab=result`);
-                  // }
+                  if (id !== 0) {
+                    router.push(`/v2/bid-2-buy?active-tab=result`);
+                  }
                   // handleTabClick(id)
                 }}
                 activeCount={activeCount}

@@ -17,10 +17,10 @@ import step4 from '@public/v3/traceability/gem-trac/step-4.png';
 import step5 from '@public/v3/traceability/gem-trac/step-5.png';
 import step6 from '@public/v3/traceability/gem-trac/step-6.png';
 
-import url1 from '@public/v3/traceability/gem-trac/diamond.svg';
-import url2 from '@public/v3/traceability/gem-trac/hrd.svg';
-import url3 from '@public/v3/traceability/gem-trac/map.svg';
-import url4 from '@public/v3/traceability/gem-trac/micro.svg';
+import url1 from '@public/v3/traceability/gem-trac/diamond.webp';
+import url2 from '@public/v3/traceability/gem-trac/hrd.webp';
+import url3 from '@public/v3/traceability/gem-trac/map.webp';
+import url4 from '@public/v3/traceability/gem-trac/micro.webp';
 import polGif from '@public/v3/traceability/gem-trac/pol.gif';
 import lsGif from '@public/v3/traceability/gem-trac/LS.gif';
 
