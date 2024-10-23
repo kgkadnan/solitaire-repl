@@ -113,7 +113,8 @@ const MatchingPairResult = ({
   setIsLoading,
   setIsInputDialogOpen,
   mps,
-  setMps
+  setMps,
+  isLoading
 }: {
   activeTab: number;
   searchParameters: any;
@@ -195,7 +196,7 @@ const MatchingPairResult = ({
   // Fetch Products
 
   const fetchProducts = async () => {
-    // setIsLoading(true);
+    setIsLoading(true);
     const storedSelection = localStorage.getItem('MatchingPair');
 
     if (!storedSelection) return;
@@ -221,7 +222,7 @@ const MatchingPairResult = ({
           // if (matchingPair.length > 0 || settingApplied) {
           console.log('herer');
           dataTableSetState.setRows(matchingPair ?? []);
-          // setSettingApplied(false);
+          setSettingApplied(false);
           // }
           // else {
           //   modalSetState.setIsDialogOpen(true);
@@ -1611,6 +1612,7 @@ const MatchingPairResult = ({
                   mps={mps}
                   setMps={setMps}
                   setSettingApplied={setSettingApplied}
+                  isLoading={isLoading}
                 />
               )}
             </div>
