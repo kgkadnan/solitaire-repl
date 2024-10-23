@@ -1933,7 +1933,6 @@ const Dashboard = () => {
                       label: ManageLocales('app.searchResult.confirmStone'),
                       // isHidden: isConfirmStone,
                       handler: () => {
-                        setBreadCrumLabel('Detail Page');
                         setIsDetailPage(false);
                         const { id } = detailPageData;
                         const selectedRows = { [id]: true };
@@ -2020,7 +2019,11 @@ const Dashboard = () => {
                     });
 
                     goBackToListView(
-                      isCompareStone ? 'Compare Stone' : 'Dashboard'
+                      detailPageData?.length
+                        ? 'Detail Page'
+                        : isCompareStone
+                        ? 'Compare Stone'
+                        : 'Dashboard'
                     );
                   }
                 },

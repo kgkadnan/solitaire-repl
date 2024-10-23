@@ -46,9 +46,9 @@ const IndividualActionButton = React.forwardRef<
 
   // Determine hover, focus, and active states based on variant
   const hoverStyles =
-    variant === 'primary' ? 'hover:bg-primary-hover' : 'hover:bg-neutral-50';
+    variant === 'primary' ? 'hover:bg-primaryHover' : 'hover:bg-neutral-50';
   const focusStyles =
-    variant === 'primary' ? 'focus:bg-primary-main' : 'focus:bg-neutral-50';
+    variant === 'primary' ? 'focus:bg-primaryMain' : 'focus:bg-neutral-50';
   const activeStyles =
     variant === 'primary'
       ? 'active:bg-primary-pressed'
