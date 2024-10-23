@@ -68,11 +68,9 @@ import {
 } from '@/features/api/match-pair';
 import { MPSDialogComponent } from './mps';
 import { IndividualActionButton } from '@/components/v2/common/action-button/individual-button';
-import { ListManager } from 'react-beautiful-dnd-grid';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import CheckboxComponent from '@/components/v2/common/checkbox';
 import { InputField } from '@/components/v2/common/input-field';
-import EmptyScreen from '@/components/v2/common/empty-screen';
 
 const theme = createTheme({
   typography: {
@@ -215,7 +213,8 @@ const MatchPairTable = ({
   isSkeletonLoading,
   mps,
   setMps,
-  setSettingApplied
+  setSettingApplied,
+  isLoading
 }: any) => {
   // Fetching saved search data
   const router = useRouter();
@@ -245,7 +244,7 @@ const MatchPairTable = ({
   const path = useSearchParams().get('active-tab');
 
   const [isMPSOpen, setIsMPSOpen] = useState(false);
-
+  const [isLoaded, setIsLoaded] = useState(true);
   useEffect(() => {
     if (globalFilter !== '') {
       // Remove all whitespace characters from globalFilter
@@ -259,8 +258,10 @@ const MatchPairTable = ({
       const newData = data.slice(startIndex, endIndex);
       // Update the paginated data state
       setPaginatedData(newData);
+      setIsLoaded(false);
     } else {
       setPaginatedData(rows);
+      setIsLoaded(false);
     }
   }, [globalFilter]);
   useEffect(() => {
@@ -271,8 +272,11 @@ const MatchPairTable = ({
     const newData = rows.slice(startIndex, endIndex);
     // Update the paginated data state
     setPaginatedData(newData);
+    setIsLoaded(false);
+
     if (newData.length > 0 && setIsSkeletonLoading) {
       setIsSkeletonLoading(false);
+      // setIsLoaded(false)
     }
   }, [
     rows,
@@ -1246,6 +1250,7 @@ const MatchPairTable = ({
 
   const [initialMps, setInitialMps] = useState(mps); // Store the initial MPS state
   const [isModified, setIsModified] = useState(false); // Track whether there are any changes
+  const [initialMpsState, setInitialMpsState] = useState(mps); // Store the initial MPS state
 
   // This useEffect sets the initialMps state once MPS data is loaded
   useEffect(() => {
@@ -1286,6 +1291,7 @@ const MatchPairTable = ({
         setInitialMps(updatedMps); // Update the initial state to the new reset state
         setIsModified(false); // Disable the buttons
         console.log(res, 'Reset data');
+        setSettingApplied(true);
       });
   };
 
@@ -1297,22 +1303,46 @@ const MatchPairTable = ({
     setIsModified(false); // Disable the buttons
   };
 
+  // const handleInputChange = (
+  //   index: number,
+  //   newValue: number,
+  //   field: string
+  // ) => {
+  //   const endValue = mps[index].end;
+  //   let validatedValue = newValue;
+
+  //   if (newValue < 0) validatedValue = 0;
+  //   if (newValue > endValue) validatedValue = endValue;
+
+  //   const updatedMps = [...mps];
+  //   updatedMps[index] = { ...updatedMps[index], [field]: validatedValue };
+
+  //   setMps(updatedMps);
+  //   setIsModified(checkForChanges(updatedMps)); // Check if the state has been modified
+  // };
   const handleInputChange = (
     index: number,
-    newValue: number,
+    newValue: string,
     field: string
   ) => {
-    const endValue = mps[index].end;
-    let validatedValue = newValue;
+    // Allow input to be freely typed, even with leading zeros
+    const updatedMps = [...mps];
+    updatedMps[index] = { ...updatedMps[index], [field]: newValue }; // Keep as string while typing
+    setMps(updatedMps);
+    setIsModified(checkForChanges(updatedMps));
+  };
 
-    if (newValue < 0) validatedValue = 0;
-    if (newValue > endValue) validatedValue = endValue;
+  const handleInputBlur = (index: number, field: string) => {
+    const endValue = mps[index].end;
+    let value = parseFloat(mps[index][field]) || 0; // Convert to number on blur
+
+    // Validate the value
+    if (value < 0) value = 0;
+    if (value > endValue) value = endValue;
 
     const updatedMps = [...mps];
-    updatedMps[index] = { ...updatedMps[index], [field]: validatedValue };
-
+    updatedMps[index] = { ...updatedMps[index], [field]: value.toString() }; // Set final validated value as string
     setMps(updatedMps);
-    setIsModified(checkForChanges(updatedMps)); // Check if the state has been modified
   };
 
   const handleIsEqualChange = (index: number) => {
@@ -1325,7 +1355,6 @@ const MatchPairTable = ({
     setMps(updatedMps);
     setIsModified(checkForChanges(updatedMps)); // Check if the state has been modified
   };
-
   const renderContentMPS = () => {
     return (
       <div>
@@ -1360,7 +1389,11 @@ const MatchPairTable = ({
                         label: 'Yes, Exit',
                         handler: () => {
                           modalSetState.setIsDialogOpen(false);
+
                           setIsMPSOpen(false);
+                          setMps(initialMpsState);
+                          setIsModified(false);
+                          setInitialMps(initialMpsState);
                         },
                         customStyle: 'flex-1'
                       }
@@ -1393,68 +1426,79 @@ const MatchPairTable = ({
               {provided => (
                 <div {...provided.droppableProps} ref={provided.innerRef}>
                   {mps.map((item: any, index: number) => (
-                    <Draggable
-                      key={item.key}
-                      draggableId={item.key}
-                      index={index}
-                    >
-                      {provided => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          className=" flex justify-between  text-[14px] rounded-lg border-b-[1px]"
-                        >
-                          <p className="w-[60px] flex items-center bg-[#F9FAFB] justify-center">
-                            {item.priority}{' '}
-                          </p>
-                          <p className="w-[150px] flex items-center ">
-                            {item.display}
-                          </p>
-                          <div className="w-[80px] flex items-center justify-center">
-                            <CheckboxComponent
-                              onClick={() => handleIsEqualChange(index)} // Call the function to toggle `is_equal`
-                              isChecked={item.is_equal}
-                            />
-                          </div>
-                          <div className="w-[80px] py-1">
-                            <InputField
-                              onChange={e =>
-                                handleInputChange(
-                                  index,
-                                  Number(e.target.value),
-                                  'up'
-                                )
-                              } // Update `up` field on change
-                              type="number"
-                              value={item.up}
-                              placeholder={'0.0'}
-                              styles={{ inputMain: 'h-[40px]' }}
-                              disabled={item.is_equal}
-                            />
-                          </div>
-                          <div className="w-[80px] py-1">
-                            <InputField
-                              onChange={e =>
-                                handleInputChange(
-                                  index,
-                                  Number(e.target.value),
-                                  'down'
-                                )
-                              } // Update `up` field on change
-                              type="number"
-                              value={item.down}
-                              placeholder={'0.0'}
-                              styles={{ inputMain: 'h-[40px]' }}
-                              disabled={item.is_equal}
-                            />
-                          </div>{' '}
-                          <div className="w-[80px] flex justify-center">
+                    // {provided => (
+                    <div className=" flex justify-between  text-[14px] rounded-lg border-b-[1px]">
+                      <p className="w-[60px] flex items-center bg-[#F9FAFB] justify-center">
+                        {item.priority}{' '}
+                      </p>
+                      <p className="w-[150px] flex items-center ">
+                        {item.display}
+                      </p>
+                      <div className="w-[80px] flex items-center justify-center">
+                        <CheckboxComponent
+                          onClick={() => handleIsEqualChange(index)} // Call the function to toggle `is_equal`
+                          isChecked={item.is_equal}
+                        />
+                      </div>
+                      <div className="w-[80px] py-1">
+                        <InputField
+                          // onChange={e =>
+                          //   handleInputChange(
+                          //     index,
+                          //     Number(e.target.value),
+                          //     'up'
+                          //   )
+                          // } // Update `up` field on change
+                          onChange={e =>
+                            handleInputChange(index, e.target.value, 'up')
+                          }
+                          onBlur={() => handleInputBlur(index, 'up')} // Validate on blur
+                          type="number"
+                          value={item.up}
+                          placeholder={'0.0'}
+                          styles={{ inputMain: 'h-[40px]' }}
+                          disabled={item.is_equal}
+                        />
+                      </div>
+                      <div className="w-[80px] py-1">
+                        <InputField
+                          // onChange={e =>
+                          //   handleInputChange(
+                          //     index,
+                          //     Number(e.target.value),
+                          //     'down'
+                          //   )
+                          // } // Update `up` field on change
+                          onChange={e =>
+                            handleInputChange(index, e.target.value, 'down')
+                          }
+                          onBlur={() => handleInputBlur(index, 'down')} // Validate on blur
+                          type="number"
+                          value={item.down}
+                          placeholder={'0.0'}
+                          styles={{ inputMain: 'h-[40px]' }}
+                          disabled={item.is_equal}
+                        />
+                      </div>{' '}
+                      <Draggable
+                        key={item.key}
+                        draggableId={item.key}
+                        index={index}
+                      >
+                        {provided => (
+                          <div
+                            className="w-[80px] flex justify-center"
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                          >
                             <Image src={Drag} alt="MPS drag" />
                           </div>
-                        </div>
-                      )}
-                    </Draggable>
+                        )}
+                      </Draggable>
+                    </div>
+                    // )}
+                    // </Draggable>
                   ))}
                 </div>
               )}
@@ -1492,15 +1536,14 @@ const MatchPairTable = ({
         isOpen={isMPSOpen}
         onClose={() => setIsMPSOpen(false)}
         renderContent={renderContentMPS}
-        // dialogStyle={'max-w-[450px] min-h-[460px]'}
       />
-      {/* {(isSkeletonLoading) ? (
+      {isLoaded || isLoading ? (
         <MathPairSkeleton />
-      ) : ( */}
-      <ThemeProvider theme={theme}>
-        <MaterialReactTable table={table} />
-      </ThemeProvider>
-      {/* )}  */}
+      ) : (
+        <ThemeProvider theme={theme}>
+          <MaterialReactTable table={table} />
+        </ThemeProvider>
+      )}
     </>
   );
 };

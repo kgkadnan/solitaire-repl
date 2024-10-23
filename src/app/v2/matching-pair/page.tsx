@@ -80,7 +80,7 @@ const MatchingPair = () => {
       is_equal: true,
       priority: 1,
       start: 0,
-      end: 100
+      end: 10
     },
     {
       up: 0,
@@ -90,7 +90,7 @@ const MatchingPair = () => {
       is_equal: true,
       priority: 2,
       start: 0,
-      end: 100
+      end: 10
     },
     {
       up: 0,
@@ -100,47 +100,47 @@ const MatchingPair = () => {
       is_equal: false,
       priority: 3,
       start: 0,
-      end: 100
+      end: 10
     },
     {
-      up: 0,
+      up: 0.0,
       key: 'length',
-      down: 0,
+      down: 0.0,
       display: 'Length',
       is_equal: false,
       priority: 4,
       start: 0,
-      end: 10
+      end: 100
     },
     {
-      up: 0,
+      up: 0.0,
       key: 'width',
-      down: 0,
+      down: 0.0,
       display: 'Width',
       is_equal: false,
       priority: 5,
       start: 0,
-      end: 10
+      end: 100
     },
     {
-      up: 1,
+      up: 1.0,
       key: 'table_percentage',
-      down: 1,
+      down: 0.0,
       display: 'Table %',
       is_equal: false,
       priority: 6,
       start: 0,
-      end: 10
+      end: 100
     },
     {
-      up: 1,
+      up: 1.0,
       key: 'depth_percentage',
-      down: 1,
+      down: 0.0,
       display: 'Depth %',
       is_equal: false,
       priority: 7,
       start: 0,
-      end: 10
+      end: 100
     },
     {
       up: 0,
@@ -150,20 +150,20 @@ const MatchingPair = () => {
       is_equal: true,
       priority: 8,
       start: 0,
-      end: 100
+      end: 10
     },
 
     {
-      up: 0,
+      up: 0.0,
       key: 'carats',
-      down: 0,
+      down: 0.0,
       display: 'Carat',
       is_equal: false,
       priority: 9,
       range_to: 50,
       range_from: 5,
       start: 0,
-      end: 10
+      end: 100
     }
   ]);
 
