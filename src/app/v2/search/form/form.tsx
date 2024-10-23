@@ -113,7 +113,8 @@ const Form = ({
   isMatchingPair = false,
   isLoading,
   setIsCommonLoading,
-  isTurkey = false
+  isTurkey = false,
+  time
 }: {
   searchUrl: string;
   setSearchUrl: Dispatch<SetStateAction<string>>;
@@ -137,6 +138,7 @@ const Form = ({
   isLoading: boolean;
   setIsCommonLoading: Dispatch<SetStateAction<boolean>>;
   isTurkey?: boolean;
+  time?: any;
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -249,7 +251,6 @@ const Form = ({
   const [data, setData] = useState<any>();
   const [error, setError] = useState<any>();
   const [timeDifference, setTimeDifference] = useState(null);
-  const [time, setTime] = useState('');
   // const [checkStatus, setCheckStatus] = useState(false);
 
   useEffect(() => {
@@ -332,14 +333,14 @@ const Form = ({
       setError('');
     } else if (routePath === Routes.BID_TO_BUY) {
       const query = parseQueryString(searchUrl);
+      // localStorage.setItem('bid',JSON.stringify(query))
       setErrorText('');
       setIsLoading(true);
       triggerBidToBuyApi({ searchUrl: searchUrl, limit: 1 })
         .unwrap()
         .then((response: any) => {
-          setData(response),
-            setTime(response?.endTime),
-            setActiveCount(response?.activeStone?.length);
+          setData(response), setActiveCount(response?.activeStone?.length);
+          setBidCount(response?.bidStone?.length);
           setError(''), setIsLoading(false);
           dispatch(
             filterBidToBuyFunction({
@@ -479,7 +480,7 @@ const Form = ({
 
     let modifysavedSearchData = savedSearch?.savedSearch?.meta_data;
     let newArrivalBidDataQuery = newArrivalFilterData.queryParams;
-    let bidToBuyBidDataQuery = bidToBuyFilterData.queryParams;
+    let bidToBuyBidDataQuery = JSON.parse(localStorage.getItem('bid')!);
     setSelectedCaratRange([]);
 
     if (subRoute === SubRoutes.NEW_ARRIVAL && newArrivalBidDataQuery) {
@@ -592,14 +593,17 @@ const Form = ({
       setSearchUrl('');
     } else if (routePath === Routes.BID_TO_BUY) {
       const queryParams = generateQueryParams(state);
+      console.log(queryParams, 'queryParamsqueryParamsqueryParams');
+      localStorage.setItem('bid', JSON.stringify(queryParams));
 
       setErrorText('');
       setIsLoading(true);
-      triggerBidToBuyApi({ searchUrl: searchUrl, limit: 300 })
+      triggerBidToBuyApi({ searchUrl: searchUrl })
         .unwrap()
         .then((response: any) => {
           setData(response),
-            setTime(response.endTime),
+            //         setBid(response?.bidStone),
+            // setActiveBid(response?.activeStone)
             setError(''),
             setIsLoading(false);
           dispatch(
@@ -1082,7 +1086,7 @@ const Form = ({
 
       isHidden:
         subRoute === SubRoutes.NEW_ARRIVAL ||
-        subRoute === SubRoutes.BID_TO_BUY ||
+        routePath === Routes.BID_TO_BUY ||
         isTurkey
     },
     {
@@ -1163,6 +1167,8 @@ const Form = ({
   };
   const [historyCount, setHistoryCount] = useState(0);
   const [activeCount, setActiveCount] = useState(0);
+
+  const [bidCount, setBidCount] = useState(0);
   const [triggerBidToBuyHistory, { data: historyData }] =
     useLazyGetBidToBuyHistoryQuery({});
 
@@ -1317,9 +1323,9 @@ const Form = ({
                 onTabClick={id => {
                   // console.log(id)
                   setActiveTab(id);
-                  if (id !== 0) {
-                    router.push(`/v2/bid-2-buy?active-tab=result`);
-                  }
+                  // if (id !== 0) {
+                  //   router.push(`/v2/bid-2-buy?active-tab=result`);
+                  // }
                   // handleTabClick(id)
                 }}
                 activeCount={activeCount}

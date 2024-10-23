@@ -63,7 +63,9 @@ export const productApi = createApi({
     }),
     getAllBidStones: builder.query({
       query: ({ limit, searchUrl }) => ({
-        url: `/store/bid-to-buy?limit=${limit}&${searchUrl}`
+        url: `/store/bid-to-buy?${searchUrl}${
+          limit ? `&limit=${limit}` : `&limit=${300}`
+        }`
       })
       // providesTags: ['Product']
     }),
