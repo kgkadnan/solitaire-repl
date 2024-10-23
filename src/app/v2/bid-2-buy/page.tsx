@@ -228,7 +228,7 @@ const BidToBuy = () => {
   useEffect(() => {
     let queryNew = constructUrlParams(JSON.parse(localStorage.getItem('bid')!));
 
-    triggerBidToBuyApi({ searchUrl: queryNew, limit: 300 })
+    triggerBidToBuyApi({ searchUrl: queryNew })
       .unwrap()
       .then((response: any) => {
         setTime(response?.endTime), setBid(response?.bidStone);
@@ -243,7 +243,7 @@ const BidToBuy = () => {
   useEffect(() => {
     let queryNew = constructUrlParams(JSON.parse(localStorage.getItem('bid')!));
     console.log(queryNew, 'queryNew');
-    triggerBidToBuyApi({ searchUrl: queryNew, limit: 300 })
+    triggerBidToBuyApi({ searchUrl: queryNew })
       .unwrap()
       .then((response: any) => {
         setBid(response?.bidStone);
@@ -413,7 +413,7 @@ const BidToBuy = () => {
                                   );
                                   triggerBidToBuyApi({
                                     searchUrl: constructUrlParams(
-                                      filterDataState?.queryParams
+                                      JSON.parse(localStorage.getItem('bid')!)
                                     ),
                                     limit: 300
                                   })

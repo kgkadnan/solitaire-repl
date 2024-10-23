@@ -336,7 +336,7 @@ const Form = ({
       // localStorage.setItem('bid',JSON.stringify(query))
       setErrorText('');
       setIsLoading(true);
-      triggerBidToBuyApi({ searchUrl: searchUrl, limit: 300 })
+      triggerBidToBuyApi({ searchUrl: searchUrl, limit: 1 })
         .unwrap()
         .then((response: any) => {
           setData(response), setActiveCount(response?.activeStone?.length);
@@ -598,7 +598,7 @@ const Form = ({
 
       setErrorText('');
       setIsLoading(true);
-      triggerBidToBuyApi({ searchUrl: searchUrl, limit: 300 })
+      triggerBidToBuyApi({ searchUrl: searchUrl })
         .unwrap()
         .then((response: any) => {
           setData(response),
@@ -1329,7 +1329,7 @@ const Form = ({
                   // handleTabClick(id)
                 }}
                 activeCount={activeCount}
-                bidCount={bidCount}
+                bidCount={' '}
                 historyCount={historyCount}
               />
             </div>
