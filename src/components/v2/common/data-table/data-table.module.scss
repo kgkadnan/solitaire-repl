@@ -44,7 +44,6 @@
 
 .pulse {
   animation: pulse 2s infinite;
-
 }
 
 @keyframes pulse {
@@ -58,4 +57,3 @@
     box-shadow: 0 0 0 0 hsla(216, 90%, 44%, 0); /* Fully transparent */
   }
 }
-
