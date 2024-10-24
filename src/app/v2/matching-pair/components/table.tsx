@@ -72,6 +72,101 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import CheckboxComponent from '@/components/v2/common/checkbox';
 import { InputField } from '@/components/v2/common/input-field';
 
+const defaultMatchPairSetting = [
+  {
+    up: 0,
+    key: 'shape',
+    down: 0,
+    display: 'Shape',
+    is_equal: true,
+    priority: 1,
+    start: 0,
+    end: 10
+  },
+  {
+    up: 0,
+    key: 'color',
+    down: 0,
+    display: 'Color',
+    is_equal: true,
+    priority: 2,
+    start: 0,
+    end: 10
+  },
+  {
+    up: 1,
+    key: 'clarity',
+    down: 1,
+    display: 'Clarity',
+    is_equal: false,
+    priority: 3,
+    start: 0,
+    end: 10
+  },
+  {
+    up: 0.05,
+    key: 'length',
+    down: 0.05,
+    display: 'Length',
+    is_equal: false,
+    priority: 4,
+    start: 0,
+    end: 100
+  },
+  {
+    up: 0.05,
+    key: 'width',
+    down: 0.05,
+    display: 'Width',
+    is_equal: false,
+    priority: 5,
+    start: 0,
+    end: 100
+  },
+  {
+    up: 2,
+    key: 'table_percentage',
+    down: 2,
+    display: 'Table%',
+    is_equal: false,
+    priority: 6,
+    start: 0,
+    end: 100
+  },
+  {
+    up: 1.7,
+    key: 'depth_percentage',
+    down: 1.7,
+    display: 'Depth%',
+    is_equal: false,
+    priority: 7,
+    start: 0,
+    end: 100
+  },
+  {
+    up: 0,
+    key: 'fluorescence',
+    down: 0,
+    display: 'Fluorescence',
+    is_equal: true,
+    priority: 8,
+    start: 0,
+    end: 10
+  },
+  {
+    up: 0.05,
+    key: 'carats',
+    down: 0.05,
+    display: 'Carats',
+    is_equal: false,
+    priority: 9,
+    range_to: 50,
+    range_from: 5,
+    start: 0,
+    end: 100
+  }
+];
+
 const theme = createTheme({
   typography: {
     fontFamily: ['inherit'].join(','),
@@ -1262,7 +1357,12 @@ const MatchPairTable = ({
 
   // Function to compare the current MPS state with the initial state
   const checkForChanges = (currentMps: any[]) => {
+    console.log('currentMps', currentMps);
     return JSON.stringify(currentMps) !== JSON.stringify(initialMps);
+  };
+  // Function to compare the current MPS state with the initial state
+  const isDefaultSetting = () => {
+    return JSON.stringify(mps) !== JSON.stringify(defaultMatchPairSetting);
   };
 
   useEffect(() => {
@@ -1294,6 +1394,8 @@ const MatchPairTable = ({
         });
 
         updatedMps.sort((a: any, b: any) => a.priority - b.priority);
+
+        console.log('updatedMps', updatedMps);
 
         // Update state with the new array and reset isModified
         setMps(updatedMps);
@@ -1521,7 +1623,7 @@ const MatchPairTable = ({
             variant={'secondary'}
             size={'custom'}
             className="rounded-[4px] w-[100%] h-[40px]"
-            // disabled={!isModified}
+            disabled={!isDefaultSetting()}
           >
             Reset
           </IndividualActionButton>

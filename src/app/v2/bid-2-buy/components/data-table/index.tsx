@@ -200,7 +200,15 @@ const BidToBuyDataTable = ({
   const [searchableId, setSearchableId] = useState('');
 
   const handleFilterSearch = () => {
-    let searchData = rows.filter((data: any) => data.lot_id === searchableId);
+    // Trim the searchableId to remove any extra spaces
+    let trimmedSearchableId = searchableId.trim();
+
+    // Filter the rows based on the trimmed searchableId
+    let searchData = rows.filter(
+      (data: any) => data.lot_id === trimmedSearchableId
+    );
+
+    // Update the paginated data state
     setPaginatedData(searchData);
   };
   const filterDataState: any = useAppSelector(state => state.filterBidToBuy);
