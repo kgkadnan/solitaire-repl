@@ -80,7 +80,8 @@ const MatchingPair = () => {
       is_equal: true,
       priority: 1,
       start: 0,
-      end: 10
+      end: 10,
+      placeHolder: '0'
     },
     {
       up: 0,
@@ -90,7 +91,8 @@ const MatchingPair = () => {
       is_equal: true,
       priority: 2,
       start: 0,
-      end: 10
+      end: 10,
+      placeHolder: '0'
     },
     {
       up: 0,
@@ -100,7 +102,8 @@ const MatchingPair = () => {
       is_equal: false,
       priority: 3,
       start: 0,
-      end: 10
+      end: 10,
+      placeHolder: '0'
     },
     {
       up: 0.0,
@@ -110,7 +113,8 @@ const MatchingPair = () => {
       is_equal: false,
       priority: 4,
       start: 0,
-      end: 100
+      end: 100,
+      placeHolder: '0.00'
     },
     {
       up: 0.0,
@@ -120,7 +124,8 @@ const MatchingPair = () => {
       is_equal: false,
       priority: 5,
       start: 0,
-      end: 100
+      end: 100,
+      placeHolder: '0.00'
     },
     {
       up: 1.0,
@@ -130,7 +135,8 @@ const MatchingPair = () => {
       is_equal: false,
       priority: 6,
       start: 0,
-      end: 100
+      end: 100,
+      placeHolder: '0.00'
     },
     {
       up: 1.0,
@@ -140,7 +146,8 @@ const MatchingPair = () => {
       is_equal: false,
       priority: 7,
       start: 0,
-      end: 100
+      end: 100,
+      placeHolder: '0.00'
     },
     {
       up: 0,
@@ -150,7 +157,8 @@ const MatchingPair = () => {
       is_equal: true,
       priority: 8,
       start: 0,
-      end: 10
+      end: 10,
+      placeHolder: '0'
     },
 
     {
@@ -163,7 +171,8 @@ const MatchingPair = () => {
       range_to: 50,
       range_from: 5,
       start: 0,
-      end: 100
+      end: 100,
+      placeHolder: '0.00'
     }
   ]);
 
