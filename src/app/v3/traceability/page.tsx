@@ -42,7 +42,7 @@ export default function Traceability() {
             </div>
             <div className="flex gap-2">
               <div className="flex gap-3 flex-col items-center">
-                <div className="text-neutral800 text-[16px] px-4 pt-[14px] w-[900px] text-center content">
+                <div className="text-neutral800 text-[16px] px-4 w-[900px] text-center content">
                   <AnimationSection animationDelay={0.5}>
                     At KGK, every diamond undergoes a traceable journey through
                     our GemTrac program, ensuring transparency at each stage.
