@@ -311,7 +311,8 @@ const MatchPairTable = ({
   mps,
   setMps,
   setSettingApplied,
-  isLoading
+  isLoading,
+  countLimitReached
 }: any) => {
   // Fetching saved search data
   const router = useRouter();
@@ -664,9 +665,11 @@ const MatchPairTable = ({
               <Image src={NoDataSvg} alt={'empty'} />
             </div>
             <div className="flex flex-col justify-center items-center w-[350px]">
-              <h1 className="text-neutral600 font-medium text-[16px] w-[340px] text-center">
-                We don't have any stones according to your selection. Please
-                modify the filters or change the match pair settings.
+              <h1 className="text-neutral600 font-medium text-[16px] w-[340px] text-center mb-[10px]">
+                {countLimitReached
+                  ? `Your selection has more than 150 matching pairs. Please modify the filters or adjust the match pair settings to reduce the selection to fewer than 150 matching pairs.`
+                  : `We don't have any stones according to your selection. Please
+                modify the filters or change the match pair settings.`}
               </h1>
 
               <ActionButton
