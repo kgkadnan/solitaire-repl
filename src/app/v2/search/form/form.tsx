@@ -114,7 +114,8 @@ const Form = ({
   isLoading,
   setIsCommonLoading,
   isTurkey = false,
-  time
+  time,
+  setRowSelection
 }: {
   searchUrl: string;
   setSearchUrl: Dispatch<SetStateAction<string>>;
@@ -139,6 +140,7 @@ const Form = ({
   setIsCommonLoading: Dispatch<SetStateAction<boolean>>;
   isTurkey?: boolean;
   time?: any;
+  setRowSelection?: any;
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -1115,7 +1117,7 @@ const Form = ({
         } `,
       handler:
         // errorText === NO_STONE_FOUND ? () => {} : handleFormSearch
-        isMatchingPair
+        isMatchingPair || routePath === Routes.BID_TO_BUY
           ? minMaxError.length === 0 &&
             errorText === NO_MATCHING_PAIRS_FOUND &&
             isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
@@ -1136,7 +1138,8 @@ const Form = ({
       isDisable:
         !searchUrl.length ||
         minMaxError.length > 0 ||
-        validationError.length > 0
+        validationError.length > 0 ||
+        errorText.length > 0
           ? true
           : false ||
             (!(
@@ -1332,6 +1335,8 @@ const Form = ({
                     router.push(
                       `/v2/bid-2-buy?active-tab=result&active-bid-tab=${id}`
                     );
+
+                    setRowSelection({});
                   }
                   // handleTabClick(id)
                 }}

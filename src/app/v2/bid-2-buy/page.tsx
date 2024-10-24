@@ -681,6 +681,7 @@ const BidToBuy = () => {
               isLoading={searchLoading}
               setIsCommonLoading={setIsLoading}
               time={time}
+              setRowSelection={setRowSelection}
               // setBid={setBid}
               // setActiveBid={setActiveBid}
             />
