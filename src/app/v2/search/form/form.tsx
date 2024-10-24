@@ -395,7 +395,6 @@ const Form = ({
   useEffect(() => {
     // Function to execute after debounce delay
     const handleSearchUrlUpdate = () => {
-      console.log('called');
       // setErrorText('');
       const queryParams = generateQueryParams(state);
 
@@ -487,7 +486,7 @@ const Form = ({
     if (subRoute === SubRoutes.NEW_ARRIVAL && newArrivalBidDataQuery) {
       setModifySearch(newArrivalBidDataQuery, setState);
     } else if (routePath === Routes.BID_TO_BUY && bidToBuyBidDataQuery) {
-      console.log('hrerer', bidToBuyBidDataQuery);
+      console.log('hrerer');
       setModifySearch(bidToBuyBidDataQuery, setState);
     } else if (
       modifySearchFrom === `${SubRoutes.SAVED_SEARCH}` &&
@@ -510,10 +509,10 @@ const Form = ({
       );
     }
   }, [modifySearchFrom]);
-  // useEffect(()=>{
-  //   setModifySearch(JSON.parse(localStorage.getItem('bid')!), setState);
-
-  // },[localStorage.getItem('bid')])
+  useEffect(() => {
+    routePath === Routes.BID_TO_BUY &&
+      setModifySearch(JSON.parse(localStorage.getItem('bid')!), setState);
+  }, []);
 
   useEffect(() => {
     let data: ISavedSearch[] | [] =
@@ -1100,7 +1099,7 @@ const Form = ({
       label:
         // 'Search',
         `${
-          isMatchingPair
+          isMatchingPair || routePath === Routes.BID_TO_BUY
             ? 'Search'
             : !isLoadingProductApi &&
               !isLoadingMatchPairApi &&

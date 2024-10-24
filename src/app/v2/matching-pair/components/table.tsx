@@ -1,5 +1,7 @@
 import { Box, Stack } from '@mui/material';
 import styles from '../../../../components/v2/common/data-table/data-table.module.scss';
+import stylesPulse from '../../../../components/v2/common/side-navigation-bar/side-navigation.module.scss';
+
 import {
   MRT_ExpandButton,
   MRT_GlobalFilterTextField,
@@ -561,13 +563,13 @@ const MatchPairTable = ({
     <>
       {' '}
       {isLoaded && (
-        <div className="w-[100vw] flex justify-center">
+        <div className="w-[100vw] flex justify-center mt-[px]">
           <div>
-            <div className="w-[500px] flex justify-center">
+            <div className="w-[350px] flex justify-center">
               <Image src={NoDataSvg} alt={'empty'} />
             </div>
-            <div className="flex flex-col justify-center items-center w-[500px]">
-              <h1 className="text-neutral600 font-medium text-[16px] w-[500px] text-center">
+            <div className="flex flex-col justify-center items-center w-[350px]">
+              <h1 className="text-neutral600 font-medium text-[16px] w-[350px] text-center">
                 We don't have any stones according to your selection. Please
                 modify the filters or change the match pair settings.
               </h1>
@@ -1038,7 +1040,9 @@ const MatchPairTable = ({
               )
             }
             <div className="h-[37px] mr-[-8px]">
-              <p className="bg-infoMain rounded-[12px] px-[6px] py-[1px] border-[2px] border-[#D9E8FF] text-neutral0 text-[10px]">
+              <p
+                className={`bg-infoMain rounded-[12px] px-[6px] py-[1px] border-[2px] border-[#D9E8FF] text-neutral0 text-[10px] ${stylesPulse.mpsNew}`}
+              >
                 New
               </p>
             </div>
@@ -1310,23 +1314,6 @@ const MatchPairTable = ({
     setIsModified(false); // Disable the buttons
   };
 
-  // const handleInputChange = (
-  //   index: number,
-  //   newValue: number,
-  //   field: string
-  // ) => {
-  //   const endValue = mps[index].end;
-  //   let validatedValue = newValue;
-
-  //   if (newValue < 0) validatedValue = 0;
-  //   if (newValue > endValue) validatedValue = endValue;
-
-  //   const updatedMps = [...mps];
-  //   updatedMps[index] = { ...updatedMps[index], [field]: validatedValue };
-
-  //   setMps(updatedMps);
-  //   setIsModified(checkForChanges(updatedMps)); // Check if the state has been modified
-  // };
   const handleInputChange = (
     index: number,
     newValue: string,
@@ -1339,6 +1326,19 @@ const MatchPairTable = ({
     setIsModified(checkForChanges(updatedMps));
   };
 
+  // const handleInputBlur = (index: number, field: string) => {
+  //   const endValue = mps[index].end;
+  //   let value = parseFloat(mps[index][field]) || 0; // Convert to number on blur
+
+  //   // Validate the value
+  //   if (value < 0) value = 0;
+  //   if (value > endValue) value = endValue;
+
+  //   const updatedMps = [...mps];
+  //   updatedMps[index] = { ...updatedMps[index], [field]: value.toString() }; // Set final validated value as string
+  //   setMps(updatedMps);
+  // };
+
   const handleInputBlur = (index: number, field: string) => {
     const endValue = mps[index].end;
     let value = parseFloat(mps[index][field]) || 0; // Convert to number on blur
@@ -1346,6 +1346,14 @@ const MatchPairTable = ({
     // Validate the value
     if (value < 0) value = 0;
     if (value > endValue) value = endValue;
+
+    // If endValue is 10, ensure the input is an integer
+    if (endValue === 10) {
+      value = Math.round(value); // Round to nearest integer
+    } else {
+      // If endValue is not 10, allow up to 2 decimal places
+      value = parseFloat(value.toFixed(2)); // Limit to 2 decimal places
+    }
 
     const updatedMps = [...mps];
     updatedMps[index] = { ...updatedMps[index], [field]: value.toString() }; // Set final validated value as string
