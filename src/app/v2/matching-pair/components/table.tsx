@@ -1478,7 +1478,9 @@ const MatchPairTable = ({
     const updatedMps = [...mps];
     updatedMps[index] = {
       ...updatedMps[index],
-      is_equal: !updatedMps[index].is_equal
+      is_equal: !updatedMps[index].is_equal,
+      up: updatedMps[index].end === 100 ? '0.00' : '0',
+      down: updatedMps[index].end === 100 ? '0.00' : '0'
     };
 
     setMps(updatedMps);
@@ -1594,7 +1596,7 @@ const MatchPairTable = ({
                                 onBlur={() => handleInputBlur(index, 'up')}
                                 type="number"
                                 value={item.up}
-                                placeholder="0.0"
+                                placeholder={item.placeHolder}
                                 styles={{ inputMain: 'h-[40px]' }}
                                 disabled={item.is_equal}
                               />
@@ -1612,7 +1614,7 @@ const MatchPairTable = ({
                                 onBlur={() => handleInputBlur(index, 'down')}
                                 type="number"
                                 value={item.down}
-                                placeholder="0.0"
+                                placeholder={item.placeHolder}
                                 styles={{ inputMain: 'h-[40px]' }}
                                 disabled={item.is_equal}
                               />
