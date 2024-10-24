@@ -17,10 +17,10 @@ import step4 from '@public/v3/traceability/gem-trac/step-4.png';
 import step5 from '@public/v3/traceability/gem-trac/step-5.png';
 import step6 from '@public/v3/traceability/gem-trac/step-6.png';
 
-import url1 from '@public/v3/traceability/gem-trac/diamond.svg';
-import url2 from '@public/v3/traceability/gem-trac/hrd.svg';
-import url3 from '@public/v3/traceability/gem-trac/map.svg';
-import url4 from '@public/v3/traceability/gem-trac/micro.svg';
+import url1 from '@public/v3/traceability/gem-trac/diamond.webp';
+import url2 from '@public/v3/traceability/gem-trac/hrd.webp';
+import url3 from '@public/v3/traceability/gem-trac/map.webp';
+import url4 from '@public/v3/traceability/gem-trac/micro.webp';
 import polGif from '@public/v3/traceability/gem-trac/pol.gif';
 import lsGif from '@public/v3/traceability/gem-trac/LS.gif';
 
@@ -216,8 +216,7 @@ export const traceabilityGemTrac = [
     id: 'Grooming',
     header: 'Groomed by',
     title: 'KANTILAL PRAJAPATI',
-    description: `An experienced diamond grader checks around 50 parameters beyond 4Cs in a polished diamond to give it a grade. Any changes needed or imperfection in faceting is sent back for re-faceting. Below are the final grades given by the Quality Check Artisan`,
-
+    description: `An experienced diamond grader evaluates 50 parameters beyond the 4Cs in a polished diamond to assign a grade. Any faceting issues are sent back for correction. Below are the final grades given by the Quality Check Artisan.`,
     chosenBy: '', // Person who made the choice
     details: ``,
     url: url4,

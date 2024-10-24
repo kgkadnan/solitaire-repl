@@ -10,7 +10,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 
-const page = () => {
+const GemTrac = () => {
   const router = useRouter();
   return (
     <div>
@@ -98,7 +98,7 @@ const page = () => {
                                 : index === 2
                                 ? 'xl:h-[120%] lg:h-[124%]'
                                 : index === 4
-                                ? 'xl:h-[116%] lg:h-[115%]'
+                                ? 'xl:h-[116%] lg:h-[121%]'
                                 : 'xl:h-[120%] lg:h-[120.5%]'
                             }  xl:mt-[-12px] lg:mt-[-10px]`}
                           ></div>
@@ -199,16 +199,16 @@ const page = () => {
                     </div>
                   </div>
                   <div
-                    className={`h-[420px] ${
-                      !(index === 2 || index === 3) ? 'w-[480px]' : 'w-[605px] '
-                    }${index === 2 || (index === 3 && '')} `}
+                    className={`lg:h-[397px] xl:h-[420px] lg:w-[580px] xl:w-[605px] ${
+                      index === 2 || (index === 3 && '')
+                    } `}
                   >
                     <Image
                       src={gemTrac.url}
                       alt="images"
                       //   width={580}
                       //   height={420}
-                      className={`h-[420px] w-[605px] ${
+                      className={`lg:h-[397px] xl:h-[420px] object-fill lg:w-[580px] xl:w-[605px] ${
                         index === 2 || index === 3
                           ? 'rounded-[5px]'
                           : 'rounded-[8px]'
@@ -238,4 +238,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default GemTrac;

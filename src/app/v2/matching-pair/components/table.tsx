@@ -1041,7 +1041,7 @@ const MatchPairTable = ({
             }
             <div className="h-[37px] mr-[-8px]">
               <p
-                className={`bg-infoMain rounded-[12px] px-[6px] py-[1px] border-[2px] border-[#D9E8FF] text-neutral0 text-[10px] ${stylesPulse.mpsNew}`}
+                className={`bg-infoMain rounded-[12px] px-[6px] py-[1px]  text-neutral0 text-[10px] ${styles.pulse}`}
               >
                 New
               </p>
