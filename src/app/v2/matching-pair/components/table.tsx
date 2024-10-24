@@ -658,13 +658,13 @@ const MatchPairTable = ({
     <>
       {' '}
       {isLoaded && (
-        <div className="w-[100vw] flex justify-center mt-[px]">
+        <div className="w-[100vw] flex justify-center mt-[50px]">
           <div>
             <div className="w-[350px] flex justify-center">
               <Image src={NoDataSvg} alt={'empty'} />
             </div>
             <div className="flex flex-col justify-center items-center w-[350px]">
-              <h1 className="text-neutral600 font-medium text-[16px] w-[350px] text-center">
+              <h1 className="text-neutral600 font-medium text-[16px] w-[340px] text-center">
                 We don't have any stones according to your selection. Please
                 modify the filters or change the match pair settings.
               </h1>
@@ -1368,7 +1368,9 @@ const MatchPairTable = ({
   };
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoaded(true), 0); // Small delay to ensure rendering phase is completed
+    const timer = setTimeout(() => {
+      setIsLoaded(true), setIsSkeletonLoading(false);
+    }, 0); // Small delay to ensure rendering phase is completed
 
     return () => clearTimeout(timer); // Cleanup the timer
   }, []);
@@ -1506,7 +1508,6 @@ const MatchPairTable = ({
                         label: 'Yes, Exit',
                         handler: () => {
                           modalSetState.setIsDialogOpen(false);
-
                           setIsMPSOpen(false);
                           setMps(initialMpsState);
                           setIsModified(false);
@@ -1522,81 +1523,37 @@ const MatchPairTable = ({
               }
             }}
           >
-            <Cross
-              style={{
-                stroke: 'var(--neutral-900)'
-              }}
-            />
+            <Cross style={{ stroke: 'var(--neutral-900)' }} />
           </div>
         </div>
+
+        {/* Header for the table */}
         <div className="w-full flex justify-between items-center bg-[#F9FAFB] h-[50px] border-t-[1px] border-b-[1px] border-neutral200">
-          <p className="w-[60px] px-2">Priority </p>
+          <p className="w-[60px] px-2">Priority</p>
           <p className="w-[150px]">Name</p>
           <div className="w-[80px] flex justify-center">Equal</div>
-          <p className="w-[80px] flex justify-center">Up</p>
-          <p className="w-[80px] flex justify-center"> Down</p>
-          <div className="w-[80px]">Action</div>
+          <p className="w-[67px] flex justify-start">Up</p>
+          <p className="w-[80px] flex justify-start mr-[12px]">Down</p>
+          <div className="w-[87px]">Action</div>
         </div>
-        <div>
+
+        {/* Main draggable container */}
+        <div className=" relative overflow-auto h-[441px]">
+          {' '}
+          {/* Add scroll and limit height */}
           <DragDropContext onDragEnd={handleOnDragEnd}>
             <Droppable droppableId="items">
               {provided => (
                 <div {...provided.droppableProps} ref={provided.innerRef}>
                   {mps.map((item: any, index: number) => (
-                    // {provided => (
-                    <div className=" flex justify-between  text-[14px] rounded-lg border-b-[1px]">
+                    <div
+                      className="flex gap-[23px] text-[14px] rounded-lg border-b-[1px]"
+                      key={item.key}
+                    >
                       <p className="w-[60px] flex items-center bg-[#F9FAFB] justify-center">
-                        {item.priority}{' '}
+                        {item.priority}
                       </p>
-                      <p className="w-[150px] flex items-center ">
-                        {item.display}
-                      </p>
-                      <div className="w-[80px] flex items-center justify-center">
-                        <CheckboxComponent
-                          onClick={() => handleIsEqualChange(index)} // Call the function to toggle `is_equal`
-                          isChecked={item.is_equal}
-                        />
-                      </div>
-                      <div className="w-[80px] py-1">
-                        <InputField
-                          // onChange={e =>
-                          //   handleInputChange(
-                          //     index,
-                          //     Number(e.target.value),
-                          //     'up'
-                          //   )
-                          // } // Update `up` field on change
-                          onChange={e =>
-                            handleInputChange(index, e.target.value, 'up')
-                          }
-                          onBlur={() => handleInputBlur(index, 'up')} // Validate on blur
-                          type="number"
-                          value={item.up}
-                          placeholder={'0.0'}
-                          styles={{ inputMain: 'h-[40px]' }}
-                          disabled={item.is_equal}
-                        />
-                      </div>
-                      <div className="w-[80px] py-1">
-                        <InputField
-                          // onChange={e =>
-                          //   handleInputChange(
-                          //     index,
-                          //     Number(e.target.value),
-                          //     'down'
-                          //   )
-                          // } // Update `up` field on change
-                          onChange={e =>
-                            handleInputChange(index, e.target.value, 'down')
-                          }
-                          onBlur={() => handleInputBlur(index, 'down')} // Validate on blur
-                          type="number"
-                          value={item.down}
-                          placeholder={'0.0'}
-                          styles={{ inputMain: 'h-[40px]' }}
-                          disabled={item.is_equal}
-                        />
-                      </div>{' '}
+
                       <Draggable
                         key={item.key}
                         draggableId={item.key}
@@ -1604,18 +1561,64 @@ const MatchPairTable = ({
                       >
                         {provided => (
                           <div
-                            className="w-[80px] flex justify-center"
+                            className="flex gap-[12px] bg-neutral0"
                             ref={provided.innerRef}
                             {...provided.draggableProps}
-                            {...provided.dragHandleProps}
                           >
-                            <Image src={Drag} alt="MPS drag" />
+                            <p className="w-[150px] flex items-center">
+                              {item.display}
+                            </p>
+
+                            <div className="w-[99px] flex items-center justify-center">
+                              <CheckboxComponent
+                                onClick={() => handleIsEqualChange(index)}
+                                isChecked={item.is_equal}
+                              />
+                            </div>
+
+                            <div className="w-[80px] py-1">
+                              <InputField
+                                onChange={e =>
+                                  handleInputChange(index, e.target.value, 'up')
+                                }
+                                onBlur={() => handleInputBlur(index, 'up')}
+                                type="number"
+                                value={item.up}
+                                placeholder="0.0"
+                                styles={{ inputMain: 'h-[40px]' }}
+                                disabled={item.is_equal}
+                              />
+                            </div>
+
+                            <div className="w-[80px] py-1">
+                              <InputField
+                                onChange={e =>
+                                  handleInputChange(
+                                    index,
+                                    e.target.value,
+                                    'down'
+                                  )
+                                }
+                                onBlur={() => handleInputBlur(index, 'down')}
+                                type="number"
+                                value={item.down}
+                                placeholder="0.0"
+                                styles={{ inputMain: 'h-[40px]' }}
+                                disabled={item.is_equal}
+                              />
+                            </div>
+
+                            {/* Apply dragHandleProps to the drag image */}
+                            <div
+                              className="w-[80px] flex justify-center"
+                              {...provided.dragHandleProps}
+                            >
+                              <Image src={Drag} alt="MPS drag" />
+                            </div>
                           </div>
                         )}
                       </Draggable>
                     </div>
-                    // )}
-                    // </Draggable>
                   ))}
                 </div>
               )}
@@ -1623,11 +1626,12 @@ const MatchPairTable = ({
           </DragDropContext>
         </div>
 
+        {/* Buttons at the bottom */}
         <div className="flex p-4 h-[56px] items-center gap-4">
           <IndividualActionButton
             onClick={handleResetMPS}
-            variant={'secondary'}
-            size={'custom'}
+            variant="secondary"
+            size="custom"
             className="rounded-[4px] w-[100%] h-[40px]"
             disabled={!isDefaultSetting()}
           >
@@ -1635,8 +1639,8 @@ const MatchPairTable = ({
           </IndividualActionButton>
           <IndividualActionButton
             onClick={handleApplyMPS}
-            variant={'primary'}
-            size={'custom'}
+            variant="primary"
+            size="custom"
             className="rounded-[4px] w-[100%] h-[40px]"
             disabled={!isModified}
           >
