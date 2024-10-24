@@ -72,6 +72,7 @@ const BidToBuy = () => {
   const [detailImageData, setDetailImageData] = useState<any>({});
   const [validImages, setValidImages] = useState<any>([]);
   const pathName = useSearchParams().get('path');
+  const getActiveTabParam = useSearchParams().get('active-bid-tab');
   const [isLoading, setIsLoading] = useState(false); // State to track loading
   const [searchLoading, setSearchLoading] = useState(false);
   const [isSkeletonLoading, setIsSkeletonLoading] = useState(true);
@@ -269,7 +270,14 @@ const BidToBuy = () => {
   }, []);
 
   useEffect(() => {
-    if (pathName === 'bidHistory') {
+    console.log('pathName', pathName);
+    if (
+      getActiveTabParam &&
+      (Number(getActiveTabParam) === 2 || Number(getActiveTabParam) === 1)
+    ) {
+      console.log('getActiveTabParam', getActiveTabParam);
+      setActiveTab(Number(getActiveTabParam));
+    } else if (pathName === 'bidHistory') {
       setActiveTab(2);
     } else if (pathName === 'bidStone') {
       setActiveTab(0);
@@ -600,11 +608,7 @@ const BidToBuy = () => {
       ]);
     }
   }, [validImages]);
-  // console.log(filterData?.bidData);
-  console.log(
-    Object?.keys(localStorage.getItem('bid') ?? {}).length,
-    'ppppppppppppppp'
-  );
+
   return (
     <div className="mb-[4px] relative">
       {isError && (

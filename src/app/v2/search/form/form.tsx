@@ -1326,10 +1326,12 @@ const Form = ({
                 labels={['Bid Stone', 'Active Bid', 'Bid History']}
                 activeIndex={activeTab}
                 onTabClick={id => {
-                  // console.log(id)
+                  console.log('id', id);
                   setActiveTab(id);
                   if (id !== 0) {
-                    router.push(`/v2/bid-2-buy?active-tab=result`);
+                    router.push(
+                      `/v2/bid-2-buy?active-tab=result&active-bid-tab=${id}`
+                    );
                   }
                   // handleTabClick(id)
                 }}
