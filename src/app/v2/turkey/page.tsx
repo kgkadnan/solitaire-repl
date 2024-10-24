@@ -562,6 +562,58 @@ const Turkey = () => {
     }
   };
 
+  const refreshSearchResults = () => {
+    triggerTurkeyProductApi({
+      url: searchUrl,
+      limit: 300,
+      offset: 0
+    }).then((res: any) => {
+      if (columnHeaders?.length > 0) {
+        // setHasLimitExceeded(false);
+        if (res.data?.products.length > 0) {
+          setBid(res.data?.products);
+          setIsSkeletonLoading(false);
+        } else {
+          modalSetState.setIsDialogOpen(true);
+          modalSetState.setDialogContent(
+            <CommonPoppup
+              status="warning"
+              content={''}
+              customPoppupBodyStyle="!mt-[70px]"
+              header={NO_PRODUCT_FOUND}
+              actionButtonData={[
+                {
+                  variant: 'primary',
+                  label: ManageLocales('app.modal.okay'),
+                  handler: () => {
+                    modalSetState.setIsDialogOpen(false);
+                  },
+                  customStyle: 'flex-1 h-10'
+                }
+              ]}
+            />
+          );
+        }
+        // res.data?.products;
+
+        setErrorText('');
+        setBid(res.data?.products);
+        setIsLoading(false);
+
+        if (isCompareStone) {
+          handleCompareStone({
+            isCheck: rowSelection,
+            setIsError,
+            setErrorText,
+            activeCartRows: res.data?.products,
+            setIsCompareStone,
+            setCompareStoneData
+          });
+        }
+      }
+    });
+  };
+
   const handleAddToCartDetailPage = () => {
     setIsLoading(true);
     // Extract variant IDs for selected stones
@@ -647,7 +699,7 @@ const Turkey = () => {
                 />
               );
             }
-            res.data?.products;
+
             setRowSelection({});
             setErrorText('');
             setBid(res.data?.products);
@@ -1383,7 +1435,7 @@ const Turkey = () => {
             setConfirmStoneData={setConfirmStoneData}
             setIsDetailPage={setIsDetailPage}
             modalSetState={modalSetState}
-            // refreshCompareStone={refreshSearchResults}
+            refreshCompareStone={refreshSearchResults}
           />
         </div>
       ) : showAppointmentForm ? (
