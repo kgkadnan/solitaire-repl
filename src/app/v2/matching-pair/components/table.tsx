@@ -563,13 +563,13 @@ const MatchPairTable = ({
     <>
       {' '}
       {isLoaded && (
-        <div className="w-[100vw] flex justify-center mt-[px]">
+        <div className="w-[100vw] flex justify-center mt-[50px]">
           <div>
             <div className="w-[350px] flex justify-center">
               <Image src={NoDataSvg} alt={'empty'} />
             </div>
             <div className="flex flex-col justify-center items-center w-[350px]">
-              <h1 className="text-neutral600 font-medium text-[16px] w-[350px] text-center">
+              <h1 className="text-neutral600 font-medium text-[16px] w-[340px] text-center">
                 We don't have any stones according to your selection. Please
                 modify the filters or change the match pair settings.
               </h1>
@@ -1268,7 +1268,9 @@ const MatchPairTable = ({
   };
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoaded(true), 0); // Small delay to ensure rendering phase is completed
+    const timer = setTimeout(() => {
+      setIsLoaded(true), setIsSkeletonLoading(false);
+    }, 0); // Small delay to ensure rendering phase is completed
 
     return () => clearTimeout(timer); // Cleanup the timer
   }, []);
@@ -1446,7 +1448,16 @@ const MatchPairTable = ({
                       <p className="w-[60px] flex items-center bg-[#F9FAFB] justify-center">
                         {item.priority}{' '}
                       </p>
-                      <p className="w-[150px] flex items-center ">
+                      
+                    {' '}
+                      <Draggable
+                        key={item.key}
+                        draggableId={item.key}
+                        index={index}
+                      >
+                        {provided => (
+                          <div className='flex' >
+                             <p className="w-[150px] flex items-center ">
                         {item.display}
                       </p>
                       <div className="w-[80px] flex items-center justify-center">
@@ -1495,19 +1506,14 @@ const MatchPairTable = ({
                           disabled={item.is_equal}
                         />
                       </div>{' '}
-                      <Draggable
-                        key={item.key}
-                        draggableId={item.key}
-                        index={index}
-                      >
-                        {provided => (
                           <div
-                            className="w-[80px] flex justify-center"
-                            ref={provided.innerRef}
+                            className="w-[80px] flex justify-center" ref={provided.innerRef}
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
+                            
                           >
                             <Image src={Drag} alt="MPS drag" />
+                          </div>
                           </div>
                         )}
                       </Draggable>
