@@ -273,9 +273,9 @@ const MatchPairTable = ({
     // Update the paginated data state
     setPaginatedData(newData);
 
-    if (newData.length > 0 && setIsSkeletonLoading) {
-      setIsSkeletonLoading(false);
-    }
+    // if (newData.length > 0 && setIsSkeletonLoading) {
+    //   setIsSkeletonLoading(false);
+    // }
   }, [
     rows,
     pagination.pageIndex, //re-fetch when page index changes
@@ -562,7 +562,7 @@ const MatchPairTable = ({
   const NoResultsComponent = () => (
     <>
       {' '}
-      {isLoaded && (
+      {isLoaded && !isLoading && !isSkeletonLoading && (
         <div className="w-[100vw] flex justify-center mt-[50px]">
           <div>
             <div className="w-[350px] flex justify-center">
@@ -1270,10 +1270,20 @@ const MatchPairTable = ({
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoaded(true), setIsSkeletonLoading(false);
-    }, 0); // Small delay to ensure rendering phase is completed
+    }, 1000); // Small delay to ensure rendering phase is completed
 
     return () => clearTimeout(timer); // Cleanup the timer
   }, []);
+  useEffect(() => {
+    // if(isLoading)
+    setIsLoaded(false);
+    setIsSkeletonLoading(true);
+    const timer = setTimeout(() => {
+      setIsLoaded(true), setIsSkeletonLoading(false);
+    }, 5000); // Small delay to ensure rendering phase is completed
+
+    return () => clearTimeout(timer);
+  }, [activeTab]);
 
   const handleResetMPS = () => {
     resetMPS({})
@@ -1447,73 +1457,75 @@ const MatchPairTable = ({
                     <div className=" flex justify-between  text-[14px] rounded-lg border-b-[1px]">
                       <p className="w-[60px] flex items-center bg-[#F9FAFB] justify-center">
                         {item.priority}{' '}
-                      </p>
-                      
-                    {' '}
+                      </p>{' '}
                       <Draggable
                         key={item.key}
                         draggableId={item.key}
                         index={index}
                       >
                         {provided => (
-                          <div className='flex' >
-                             <p className="w-[150px] flex items-center ">
-                        {item.display}
-                      </p>
-                      <div className="w-[80px] flex items-center justify-center">
-                        <CheckboxComponent
-                          onClick={() => handleIsEqualChange(index)} // Call the function to toggle `is_equal`
-                          isChecked={item.is_equal}
-                        />
-                      </div>
-                      <div className="w-[80px] py-1">
-                        <InputField
-                          // onChange={e =>
-                          //   handleInputChange(
-                          //     index,
-                          //     Number(e.target.value),
-                          //     'up'
-                          //   )
-                          // } // Update `up` field on change
-                          onChange={e =>
-                            handleInputChange(index, e.target.value, 'up')
-                          }
-                          onBlur={() => handleInputBlur(index, 'up')} // Validate on blur
-                          type="number"
-                          value={item.up}
-                          placeholder={'0.0'}
-                          styles={{ inputMain: 'h-[40px]' }}
-                          disabled={item.is_equal}
-                        />
-                      </div>
-                      <div className="w-[80px] py-1">
-                        <InputField
-                          // onChange={e =>
-                          //   handleInputChange(
-                          //     index,
-                          //     Number(e.target.value),
-                          //     'down'
-                          //   )
-                          // } // Update `up` field on change
-                          onChange={e =>
-                            handleInputChange(index, e.target.value, 'down')
-                          }
-                          onBlur={() => handleInputBlur(index, 'down')} // Validate on blur
-                          type="number"
-                          value={item.down}
-                          placeholder={'0.0'}
-                          styles={{ inputMain: 'h-[40px]' }}
-                          disabled={item.is_equal}
-                        />
-                      </div>{' '}
-                          <div
-                            className="w-[80px] flex justify-center" ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            
-                          >
-                            <Image src={Drag} alt="MPS drag" />
-                          </div>
+                          <div className="flex">
+                            <p className="w-[150px] flex items-center ">
+                              {item.display}
+                            </p>
+                            <div className="w-[80px] flex items-center justify-center">
+                              <CheckboxComponent
+                                onClick={() => handleIsEqualChange(index)} // Call the function to toggle `is_equal`
+                                isChecked={item.is_equal}
+                              />
+                            </div>
+                            <div className="w-[80px] py-1">
+                              <InputField
+                                // onChange={e =>
+                                //   handleInputChange(
+                                //     index,
+                                //     Number(e.target.value),
+                                //     'up'
+                                //   )
+                                // } // Update `up` field on change
+                                onChange={e =>
+                                  handleInputChange(index, e.target.value, 'up')
+                                }
+                                onBlur={() => handleInputBlur(index, 'up')} // Validate on blur
+                                type="number"
+                                value={item.up}
+                                placeholder={'0.0'}
+                                styles={{ inputMain: 'h-[40px]' }}
+                                disabled={item.is_equal}
+                              />
+                            </div>
+                            <div className="w-[80px] py-1">
+                              <InputField
+                                // onChange={e =>
+                                //   handleInputChange(
+                                //     index,
+                                //     Number(e.target.value),
+                                //     'down'
+                                //   )
+                                // } // Update `up` field on change
+                                onChange={e =>
+                                  handleInputChange(
+                                    index,
+                                    e.target.value,
+                                    'down'
+                                  )
+                                }
+                                onBlur={() => handleInputBlur(index, 'down')} // Validate on blur
+                                type="number"
+                                value={item.down}
+                                placeholder={'0.0'}
+                                styles={{ inputMain: 'h-[40px]' }}
+                                disabled={item.is_equal}
+                              />
+                            </div>{' '}
+                            <div
+                              className="w-[80px] flex justify-center"
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                            >
+                              <Image src={Drag} alt="MPS drag" />
+                            </div>
                           </div>
                         )}
                       </Draggable>
@@ -1558,7 +1570,7 @@ const MatchPairTable = ({
         onClose={() => setIsMPSOpen(false)}
         renderContent={renderContentMPS}
       />
-      {!isLoaded ? (
+      {isSkeletonLoading || !isLoaded || isLoading ? (
         <MathPairSkeleton />
       ) : (
         <ThemeProvider theme={theme}>
