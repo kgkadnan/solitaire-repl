@@ -123,7 +123,26 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
   return (
     <html lang="en">
       <head>
-        {' '}
+        <script
+          id="Cookiebot"
+          src="https://consent.cookiebot.com/uc.js"
+          data-cbid="86ce1cb4-4338-418c-acca-d54a1b81cccc"
+          type="text/javascript"
+        ></script>
+        <script
+          id="CookieDeclaration"
+          src="https://consent.cookiebot.com/86ce1cb4-4338-418c-acca-d54a1b81cccc/cd.js"
+          type="text/javascript"
+          async
+        ></script>{' '}
+        {/* <Script
+          id="cookiebot"
+          strategy="beforeInteractive"
+          src="https://consent.cookiebot.com/uc.js"
+          data-cbid="86ce1cb4-4338-418c-acca-d54a1b81cccc"
+          type="text/javascript"
+          async
+        /> */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
