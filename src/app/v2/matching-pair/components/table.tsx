@@ -368,9 +368,9 @@ const MatchPairTable = ({
     // Update the paginated data state
     setPaginatedData(newData);
 
-    if (newData.length > 0 && setIsSkeletonLoading) {
-      setIsSkeletonLoading(false);
-    }
+    // if (newData.length > 0 && setIsSkeletonLoading) {
+    //   setIsSkeletonLoading(false);
+    // }
   }, [
     rows,
     pagination.pageIndex, //re-fetch when page index changes
@@ -657,7 +657,7 @@ const MatchPairTable = ({
   const NoResultsComponent = () => (
     <>
       {' '}
-      {isLoaded && (
+      {isLoaded && !isLoading && !isSkeletonLoading && (
         <div className="w-[100vw] flex justify-center mt-[50px]">
           <div>
             <div className="w-[350px] flex justify-center">
@@ -1370,10 +1370,20 @@ const MatchPairTable = ({
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoaded(true), setIsSkeletonLoading(false);
-    }, 0); // Small delay to ensure rendering phase is completed
+    }, 1000); // Small delay to ensure rendering phase is completed
 
     return () => clearTimeout(timer); // Cleanup the timer
   }, []);
+  useEffect(() => {
+    // if(isLoading)
+    setIsLoaded(false);
+    setIsSkeletonLoading(true);
+    const timer = setTimeout(() => {
+      setIsLoaded(true), setIsSkeletonLoading(false);
+    }, 5000); // Small delay to ensure rendering phase is completed
+
+    return () => clearTimeout(timer);
+  }, [activeTab]);
 
   const handleResetMPS = () => {
     resetMPS({})
@@ -1658,7 +1668,7 @@ const MatchPairTable = ({
         onClose={() => setIsMPSOpen(false)}
         renderContent={renderContentMPS}
       />
-      {!isLoaded ? (
+      {isSkeletonLoading || !isLoaded || isLoading ? (
         <MathPairSkeleton />
       ) : (
         <ThemeProvider theme={theme}>
