@@ -1115,32 +1115,36 @@ const Form = ({
             ? 'Add Demand'
             : 'Search'
         } `,
-      handler:
-        // errorText === NO_STONE_FOUND ? () => {} : handleFormSearch
-        isMatchingPair || routePath === Routes.BID_TO_BUY
-          ? minMaxError.length === 0 &&
-            errorText === NO_MATCHING_PAIRS_FOUND &&
-            isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
-            ? () => {}
-            : handleMatchingPairSearch
-          : !isLoadingProductApi &&
-            !isLoadingMatchPairApi &&
-            !isFetchingMatchPairApi &&
-            !isLoading &&
-            !isFetchingProductApi &&
-            minMaxError.length === 0 &&
-            validationError.length === 0 &&
-            errorText === NO_STONE_FOUND &&
-            isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
-          ? handleAddDemand
-          : handleFormSearch,
+      handler: isMatchingPair
+        ? minMaxError.length === 0 &&
+          errorText === NO_MATCHING_PAIRS_FOUND &&
+          isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
+          ? () => {}
+          : handleMatchingPairSearch
+        : routePath === Routes.BID_TO_BUY
+        ? minMaxError.length === 0 &&
+          validationError.length === 0 &&
+          errorText === NO_STONE_FOUND
+          ? () => {}
+          : handleFormSearch
+        : !isLoadingProductApi &&
+          !isLoadingMatchPairApi &&
+          !isFetchingMatchPairApi &&
+          !isLoading &&
+          !isFetchingProductApi &&
+          minMaxError.length === 0 &&
+          validationError.length === 0 &&
+          errorText === NO_STONE_FOUND &&
+          isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
+        ? handleAddDemand
+        : handleFormSearch,
 
       isDisable:
         !searchUrl.length ||
         minMaxError.length > 0 ||
-        validationError.length > 0 ||
-        errorText.length > 0
-          ? true
+        validationError.length > 0
+          ? // errorText.length > 0
+            true
           : false ||
             (!(
               isLoading ||
