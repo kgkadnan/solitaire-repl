@@ -1331,23 +1331,6 @@ const MatchPairTable = ({
     )
   });
 
-  const handleOnDragEnd = (result: any) => {
-    if (!result.destination) return;
-
-    const newItems = Array.from(mps);
-    const [reorderedItem] = newItems.splice(result.source.index, 1);
-    newItems.splice(result.destination.index, 0, reorderedItem);
-
-    // Update priority based on new position
-    const updatedItems = newItems.map((item: any, index) => ({
-      ...item,
-      priority: index + 1 // Priority is set to index+1 to reflect the new order
-    }));
-
-    setMps(updatedItems);
-    setIsModified(true);
-  };
-
   const [initialMps, setInitialMps] = useState(mps); // Store the initial MPS state
   const [isModified, setIsModified] = useState(false); // Track whether there are any changes
   const [initialMpsState, setInitialMpsState] = useState(mps); // Store the initial MPS state
@@ -1486,6 +1469,35 @@ const MatchPairTable = ({
     setMps(updatedMps);
     setIsModified(checkForChanges(updatedMps)); // Check if the state has been modified
   };
+  const [items, setItems] = useState(mps);
+  const handleOnDragEnd = (result: any) => {
+    if (!result.destination) return;
+
+    const newItems = Array.from(mps);
+    const [reorderedItem] = newItems.splice(result.source.index, 1);
+    newItems.splice(result.destination.index, 0, reorderedItem);
+
+    // Update priority based on new position
+    const updatedItems = newItems.map((item: any, index) => ({
+      ...item,
+      priority: index + 1 // Priority is set to index+1 to reflect the new order
+    }));
+
+    setMps(updatedItems);
+    setIsModified(true);
+  };
+
+  // const handleDragEnd = (result: any) => {
+  //   const { destination, source } = result;
+
+  //   if (!destination) return;
+
+  //   const reorderedItems = Array.from(items);
+  //   const [removed] = reorderedItems.splice(source.index, 1);
+  //   reorderedItems.splice(destination.index, 0, removed);
+
+  //   setItems(reorderedItems);
+  // };
   const renderContentMPS = () => {
     return (
       <div>
@@ -1554,29 +1566,29 @@ const MatchPairTable = ({
           {' '}
           {/* Add scroll and limit height */}
           <DragDropContext onDragEnd={handleOnDragEnd}>
-            <Droppable droppableId="items">
+            <Droppable droppableId="droppable">
               {provided => (
                 <div {...provided.droppableProps} ref={provided.innerRef}>
                   {mps.map((item: any, index: number) => (
-                    <div
-                      className="flex gap-[23px] text-[14px] rounded-lg border-b-[1px]"
+                    <Draggable
                       key={item.key}
+                      draggableId={item.key.toString()}
+                      index={index}
                     >
-                      <p className="w-[60px] flex items-center bg-[#F9FAFB] justify-center">
-                        {item.priority}
-                      </p>
+                      {(provided, snapshot) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          className={`flex gap-[23px] bg-neutral0 text-[14px] rounded-lg border-b-[1px] ${
+                            snapshot.isDragging ? 'shadow-lg' : ''
+                          }`}
+                        >
+                          <p className="w-[60px] flex items-center justify-center">
+                            {item.priority}
+                          </p>
 
-                      <Draggable
-                        key={item.key}
-                        draggableId={item.key}
-                        index={index}
-                      >
-                        {provided => (
-                          <div
-                            className="flex gap-[12px] bg-neutral0"
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                          >
+                          <div className="flex gap-[12px] bg-neutral0">
                             <p className="w-[150px] flex items-center">
                               {item.display}
                             </p>
@@ -1620,7 +1632,6 @@ const MatchPairTable = ({
                               />
                             </div>
 
-                            {/* Apply dragHandleProps to the drag image */}
                             <div
                               className="w-[80px] flex justify-center"
                               {...provided.dragHandleProps}
@@ -1628,10 +1639,11 @@ const MatchPairTable = ({
                               <Image src={Drag} alt="MPS drag" />
                             </div>
                           </div>
-                        )}
-                      </Draggable>
-                    </div>
+                        </div>
+                      )}
+                    </Draggable>
                   ))}
+                  {provided.placeholder}
                 </div>
               )}
             </Droppable>
