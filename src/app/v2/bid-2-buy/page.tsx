@@ -215,6 +215,8 @@ const BidToBuy = () => {
   const [timeDifference, setTimeDifference] = useState(null);
 
   const getBidToBuyHistoryData = () => {
+    setIsLoading(true);
+
     triggerBidToBuyHistory({})
       .then(res => {
         setIsLoading(false);
@@ -227,7 +229,7 @@ const BidToBuy = () => {
 
   useEffect(() => {
     let queryNew = constructUrlParams(JSON.parse(localStorage.getItem('bid')!));
-
+    setIsLoading(true);
     triggerBidToBuyApi({ searchUrl: queryNew })
       .unwrap()
       .then((response: any) => {
@@ -243,6 +245,8 @@ const BidToBuy = () => {
   useEffect(() => {
     let queryNew = constructUrlParams(JSON.parse(localStorage.getItem('bid')!));
     console.log(queryNew, 'queryNew');
+    setIsLoading(true);
+
     triggerBidToBuyApi({ searchUrl: queryNew })
       .unwrap()
       .then((response: any) => {
@@ -260,6 +264,9 @@ const BidToBuy = () => {
       getBidToBuyHistoryData();
     }
   }, [activeTab]);
+  useEffect(() => {
+    getBidToBuyHistoryData();
+  }, []);
 
   useEffect(() => {
     if (pathName === 'bidHistory') {
@@ -319,8 +326,8 @@ const BidToBuy = () => {
   const [downloadExcel] = useDownloadExcelMutation();
   const [deleteBid] = useDeleteBidMutation();
   let [
-    triggerBidToBuyApi
-    // { isLoading: isLoadingBidToBuyApi, isFetching: isFetchingBidToBuyApi }
+    triggerBidToBuyApi,
+    { isLoading: isLoadingBidToBuyApi, isFetching: isFetchingBidToBuyApi }
   ] = useLazyGetAllBidStonesQuery();
 
   const renderFooter = (table: any) => {
@@ -641,11 +648,12 @@ const BidToBuy = () => {
             activeTab={activeTab}
           />
         </div>
+      ) : isLoading ||
+        // isLoadingBidToBuyApi ||
+        historyData === undefined ||
+        activeBid === undefined ? (
+        <BiddingSkeleton />
       ) : (
-        // ) : bid === undefined ||
-        //   historyData === undefined ||
-        //   activeBid === undefined ? (
-        //   <BiddingSkeleton />
         <>
           {(!Object?.keys(localStorage.getItem('bid') ?? {}).length && time) ||
           subRoute === SubRoutes.BID_TO_BUY ? (
