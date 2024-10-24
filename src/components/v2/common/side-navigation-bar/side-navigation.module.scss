@@ -27,3 +27,15 @@
     box-shadow: 0 0 0 0 rgba(255, 0, 0, 0); /* Fully transparent */
   }
 }
+
+@keyframes mpsNew {
+  0% {
+    box-shadow: 0 0 0 0 rgb(217, 232, 255); /* Slightly darker red */
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(255, 0, 0, 0); /* Fully transparent */
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 0, 0, 0); /* Fully transparent */
+  }
+}
