@@ -13,6 +13,7 @@ import {
   MEMO_STATUS
 } from '@/constants/business-logic';
 import unAuthorizedSvg from '@public/v2/assets/icons/data-table/unauthorized.svg';
+
 import { constructUrlParams } from '@/utils/v2/construct-url-params';
 import noImageFound from '@public/v2/assets/icons/detail-page/fall-back-img.svg';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -110,7 +111,10 @@ const MatchingPairResult = ({
   handleCloseSpecificTab,
   setSearchParameters,
   setIsLoading,
-  setIsInputDialogOpen
+  setIsInputDialogOpen,
+  mps,
+  setMps,
+  isLoading
 }: {
   activeTab: number;
   searchParameters: any;
@@ -121,6 +125,8 @@ const MatchingPairResult = ({
   setIsLoading: any;
   setIsInputDialogOpen: any;
   isLoading: boolean;
+  mps: any;
+  setMps: any;
 }) => {
   const dispatch = useAppDispatch();
   const confirmTrack = useAppSelector(state => state.setConfirmStoneTrack);
@@ -129,6 +135,7 @@ const MatchingPairResult = ({
   const [isSkeletonLoading, setIsSkeletonLoading] = useState<boolean>(true);
   const [activePreviewTab, setActivePreviewTab] = useState('Image');
   const [imageIndex, setImageIndex] = useState<number>(0);
+  const [settingApplied, setSettingApplied] = useState(false);
   const [triggerAvailableSlots] = useLazyGetAvailableMyAppointmentSlotsQuery(
     {}
   );
@@ -189,7 +196,7 @@ const MatchingPairResult = ({
   // Fetch Products
 
   const fetchProducts = async () => {
-    // setIsLoading(true);
+    setIsLoading(true);
     const storedSelection = localStorage.getItem('MatchingPair');
 
     if (!storedSelection) return;
@@ -212,34 +219,37 @@ const MatchingPairResult = ({
         } else {
           setHasLimitExceeded(false);
           let matchingPair = res.data?.products.flat();
-          if (matchingPair.length > 0) {
-            dataTableSetState.setRows(matchingPair);
-          } else {
-            modalSetState.setIsDialogOpen(true);
-            modalSetState.setDialogContent(
-              <CommonPoppup
-                status="warning"
-                content={''}
-                customPoppupBodyStyle="!mt-[70px]"
-                header={NO_PRODUCT_FOUND}
-                actionButtonData={[
-                  {
-                    variant: 'primary',
-                    label: ManageLocales('app.modal.okay'),
-                    handler: () => {
-                      closeSearch(
-                        activeTab,
-                        JSON.parse(localStorage.getItem('MatchingPair')!)
-                      );
+          // if (matchingPair.length > 0 || settingApplied) {
+          console.log('herer');
+          dataTableSetState.setRows(matchingPair ?? []);
+          setSettingApplied(false);
+          // }
+          // else {
+          //   modalSetState.setIsDialogOpen(true);
+          //   modalSetState.setDialogContent(
+          //     <CommonPoppup
+          //       status="warning"
+          //       content={''}
+          //       customPoppupBodyStyle="!mt-[70px]"
+          //       header={NO_PRODUCT_FOUND}
+          //       actionButtonData={[
+          //         {
+          //           variant: 'primary',
+          //           label: ManageLocales('app.modal.okay'),
+          //           handler: () => {
+          //             closeSearch(
+          //               activeTab,
+          //               JSON.parse(localStorage.getItem('MatchingPair')!)
+          //             );
 
-                      modalSetState.setIsDialogOpen(false);
-                    },
-                    customStyle: 'flex-1 h-10'
-                  }
-                ]}
-              />
-            );
-          }
+          //             modalSetState.setIsDialogOpen(false);
+          //           },
+          //           customStyle: 'flex-1 h-10'
+          //         }
+          //       ]}
+          //     />
+          //   );
+          // }
           setOriginalData(res.data?.products);
         }
 
@@ -485,7 +495,7 @@ const MatchingPairResult = ({
                 <span>{`${
                   renderedCellValue === 0
                     ? '$0.00'
-                    : `$${formatNumberWithCommas(renderedCellValue)}` ?? '$0.00'
+                    : `$${formatNumberWithCommas(renderedCellValue)}` || '$0.00'
                 }`}</span>
               )
             };
@@ -520,7 +530,8 @@ const MatchingPairResult = ({
   useEffect(() => {
     // setIsLoading(true)
     fetchProducts();
-  }, [activeTab, columnData]);
+    // setSettingApplied(false);
+  }, [activeTab, columnData, settingApplied]);
 
   useEffect(() => {
     setErrorText('');
@@ -1306,6 +1317,7 @@ const MatchingPairResult = ({
     }
   }, [validImages]);
 
+  console.log(matchingPairData);
   return (
     <div className="relative">
       {isError && (
@@ -1597,6 +1609,10 @@ const MatchingPairResult = ({
                   originalData={originalData}
                   setIsSkeletonLoading={setIsSkeletonLoading}
                   isSkeletonLoading={isSkeletonLoading}
+                  mps={mps}
+                  setMps={setMps}
+                  setSettingApplied={setSettingApplied}
+                  isLoading={isLoading}
                 />
               )}
             </div>

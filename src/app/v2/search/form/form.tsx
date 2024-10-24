@@ -113,7 +113,8 @@ const Form = ({
   isMatchingPair = false,
   isLoading,
   setIsCommonLoading,
-  isTurkey = false
+  isTurkey = false,
+  time
 }: {
   searchUrl: string;
   setSearchUrl: Dispatch<SetStateAction<string>>;
@@ -137,6 +138,7 @@ const Form = ({
   isLoading: boolean;
   setIsCommonLoading: Dispatch<SetStateAction<boolean>>;
   isTurkey?: boolean;
+  time?: any;
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -249,7 +251,6 @@ const Form = ({
   const [data, setData] = useState<any>();
   const [error, setError] = useState<any>();
   const [timeDifference, setTimeDifference] = useState(null);
-  const [time, setTime] = useState('');
   // const [checkStatus, setCheckStatus] = useState(false);
 
   useEffect(() => {
@@ -332,14 +333,14 @@ const Form = ({
       setError('');
     } else if (routePath === Routes.BID_TO_BUY) {
       const query = parseQueryString(searchUrl);
+      // localStorage.setItem('bid',JSON.stringify(query))
       setErrorText('');
       setIsLoading(true);
       triggerBidToBuyApi({ searchUrl: searchUrl, limit: 1 })
         .unwrap()
         .then((response: any) => {
-          setData(response),
-            setTime(response?.endTime),
-            setActiveCount(response?.activeStone?.length);
+          setData(response), setActiveCount(response?.activeStone?.length);
+          setBidCount(response?.bidStone?.length);
           setError(''), setIsLoading(false);
           dispatch(
             filterBidToBuyFunction({
@@ -394,6 +395,7 @@ const Form = ({
   useEffect(() => {
     // Function to execute after debounce delay
     const handleSearchUrlUpdate = () => {
+      console.log('called');
       // setErrorText('');
       const queryParams = generateQueryParams(state);
 
@@ -479,12 +481,13 @@ const Form = ({
 
     let modifysavedSearchData = savedSearch?.savedSearch?.meta_data;
     let newArrivalBidDataQuery = newArrivalFilterData.queryParams;
-    let bidToBuyBidDataQuery = bidToBuyFilterData.queryParams;
+    let bidToBuyBidDataQuery = JSON.parse(localStorage.getItem('bid')!);
     setSelectedCaratRange([]);
 
     if (subRoute === SubRoutes.NEW_ARRIVAL && newArrivalBidDataQuery) {
       setModifySearch(newArrivalBidDataQuery, setState);
-    } else if (subRoute === SubRoutes.BID_TO_BUY && bidToBuyBidDataQuery) {
+    } else if (routePath === Routes.BID_TO_BUY && bidToBuyBidDataQuery) {
+      console.log('hrerer', bidToBuyBidDataQuery);
       setModifySearch(bidToBuyBidDataQuery, setState);
     } else if (
       modifySearchFrom === `${SubRoutes.SAVED_SEARCH}` &&
@@ -507,6 +510,10 @@ const Form = ({
       );
     }
   }, [modifySearchFrom]);
+  // useEffect(()=>{
+  //   setModifySearch(JSON.parse(localStorage.getItem('bid')!), setState);
+
+  // },[localStorage.getItem('bid')])
 
   useEffect(() => {
     let data: ISavedSearch[] | [] =
@@ -592,14 +599,17 @@ const Form = ({
       setSearchUrl('');
     } else if (routePath === Routes.BID_TO_BUY) {
       const queryParams = generateQueryParams(state);
+      console.log(queryParams, 'queryParamsqueryParamsqueryParams');
+      localStorage.setItem('bid', JSON.stringify(queryParams));
 
       setErrorText('');
       setIsLoading(true);
-      triggerBidToBuyApi({ searchUrl: searchUrl, limit: 300 })
+      triggerBidToBuyApi({ searchUrl: searchUrl })
         .unwrap()
         .then((response: any) => {
           setData(response),
-            setTime(response.endTime),
+            //         setBid(response?.bidStone),
+            // setActiveBid(response?.activeStone)
             setError(''),
             setIsLoading(false);
           dispatch(
@@ -1082,7 +1092,7 @@ const Form = ({
 
       isHidden:
         subRoute === SubRoutes.NEW_ARRIVAL ||
-        subRoute === SubRoutes.BID_TO_BUY ||
+        routePath === Routes.BID_TO_BUY ||
         isTurkey
     },
     {
@@ -1163,6 +1173,8 @@ const Form = ({
   };
   const [historyCount, setHistoryCount] = useState(0);
   const [activeCount, setActiveCount] = useState(0);
+
+  const [bidCount, setBidCount] = useState(0);
   const [triggerBidToBuyHistory, { data: historyData }] =
     useLazyGetBidToBuyHistoryQuery({});
 
@@ -1308,25 +1320,27 @@ const Form = ({
             )}
           </span>
         </div>
-       {routePath.includes('v2/bid-2-buy') && <div className="p-2 border-[1px] rounded-t-[8px]">
-          <div className="w-[450px]">
-            <Tab
-              labels={['Bid Stone', 'Active Bid', 'Bid History']}
-              activeIndex={activeTab}
-              onTabClick={id => {
-                // console.log(id)
-                setActiveTab(id);
-                if (id !== 0) {
-                  router.push(`/v2/bid-2-buy?active-tab=result`);
-                }
-                // handleTabClick(id)
-              }}
-              activeCount={activeCount}
-              bidCount={' '}
-              historyCount={historyCount}
-            />
+        {routePath.includes('v2/bid-2-buy') && (
+          <div className="p-2 border-[1px] rounded-t-[8px]">
+            <div className="w-[450px]">
+              <Tab
+                labels={['Bid Stone', 'Active Bid', 'Bid History']}
+                activeIndex={activeTab}
+                onTabClick={id => {
+                  // console.log(id)
+                  setActiveTab(id);
+                  if (id !== 0) {
+                    router.push(`/v2/bid-2-buy?active-tab=result`);
+                  }
+                  // handleTabClick(id)
+                }}
+                activeCount={activeCount}
+                bidCount={' '}
+                historyCount={historyCount}
+              />
+            </div>
           </div>
-        </div>}
+        )}
         <div className="flex flex-col gap-[16px]">
           {searchParameters?.length > 0 ? (
             <div className="flex justify-between border-[1px] border-neutral200  px-[16px] py-[8px]">
