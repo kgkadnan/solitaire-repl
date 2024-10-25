@@ -34,7 +34,10 @@ const HtmlAnimation = () => {
   ];
 
   useEffect(() => {
-    if (typeof window.Cookiebot !== 'undefined') {
+    if (
+      typeof window !== 'undefined' &&
+      typeof window?.Cookiebot !== 'undefined'
+    ) {
       window.Cookiebot.renew();
     }
   }, [showBanner, phoneVisible, scrollIndex]); // Re-initialize on state change
@@ -136,7 +139,7 @@ const HtmlAnimation = () => {
           className={`relative w-[460px] h-[1200px] bg-no-repeat bg-contain transition-transform duration-700 ease-in-out z-10 flex justify-center`}
           style={{
             backgroundImage: `url('/v3/home/phone-skeleton.png')`,
-            zIndex: '10 ',
+            zIndex: '10 !important',
             transform: phoneVisible
               ? windowWidth >= 1280
                 ? 'translateY(calc(100vh - 950px))'
