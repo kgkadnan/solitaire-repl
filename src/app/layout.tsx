@@ -187,6 +187,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
               console.log("jyotiiiiii",Cookiebot)
               window.addEventListener("CookieConsentDeclaration", function() {
                 if (Cookiebot.consents.statistics) {
+                console.log("tiwariiiii")
                   loadGA();
                 }
               });

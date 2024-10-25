@@ -14,11 +14,15 @@ export const trackEvent = ({
   [key: string]: any;
 }) => {
   if (typeof window !== 'undefined' && window.gtag) {
+    console.log('tiwariiiii22222');
+
     if (
       window.Cookiebot &&
       window.Cookiebot.consents &&
       window.Cookiebot.consents.statistics
     ) {
+      console.log('tiwariiiii33333');
+
       window.gtag('event', action, {
         event_category: category,
         event_label: label,
