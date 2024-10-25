@@ -175,6 +175,7 @@ const MatchingPairResult = ({
       storeAddresses: [],
       timeSlots: { dates: [{ date: '', day: '' }], slots: {} }
     });
+  const [countLimitReached, setCountLimitReached] = useState(false);
   const [lotIds, setLotIds] = useState<string[]>([]);
   const [hasLimitExceeded, setHasLimitExceeded] = useState(false);
   // UseMutation to add items to the cart
@@ -216,6 +217,10 @@ const MatchingPairResult = ({
         if (res?.error?.status === statusCode.UNAUTHORIZED) {
           setHasLimitExceeded(true);
           dataTableSetState.setRows([]);
+        } else if (res?.error?.status === 400) {
+          setIsLoading(false);
+          setIsSkeletonLoading(false);
+          setCountLimitReached(true);
         } else {
           setHasLimitExceeded(false);
           let matchingPair = res.data?.products.flat();
@@ -1577,7 +1582,7 @@ const MatchingPairResult = ({
             </div>
           ) : (
             <div className="">
-              {matchingPairData === undefined ? (
+              {matchingPairData === undefined && !countLimitReached ? (
                 <MathPairSkeleton />
               ) : (
                 <MatchPairTable
@@ -1613,6 +1618,7 @@ const MatchingPairResult = ({
                   setMps={setMps}
                   setSettingApplied={setSettingApplied}
                   isLoading={isLoading}
+                  countLimitReached={countLimitReached}
                 />
               )}
             </div>
