@@ -4,7 +4,7 @@ declare global {
     YT: typeof YT;
     gtag: any;
     Cookiebot?: {
-      consents: {
+      consent: {
         statistics: boolean;
         preferences: boolean;
         marketing: boolean;
