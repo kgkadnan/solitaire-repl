@@ -234,7 +234,8 @@ const BidToBuy = () => {
     triggerBidToBuyApi({ searchUrl: queryNew })
       .unwrap()
       .then((response: any) => {
-        setTime(response?.endTime), setBid(response?.bidStone);
+        setTime(response?.endTime),
+          setBid(queryNew.length ? response?.bidStone : []);
         setActiveBid(response?.activeStone);
         setIsLoading(false);
       })
@@ -251,7 +252,7 @@ const BidToBuy = () => {
     triggerBidToBuyApi({ searchUrl: queryNew })
       .unwrap()
       .then((response: any) => {
-        setBid(response?.bidStone);
+        setBid(queryNew.length ? response?.bidStone : []);
         setActiveBid(response?.activeStone);
         setTime(response?.endTime), setIsLoading(false);
       })
@@ -287,8 +288,13 @@ const BidToBuy = () => {
   }, []);
 
   const handleTabClick = (index: number) => {
+    let queryNew = constructUrlParams(JSON.parse(localStorage.getItem('bid')!));
     if (index !== activeTab) {
-      setIsTabSwitch(true);
+      if (index === 0 && !queryNew.length) {
+        setIsTabSwitch(false);
+      } else {
+        setIsTabSwitch(true);
+      }
     }
     setActiveTab(index);
     setRowSelection({});
@@ -337,6 +343,8 @@ const BidToBuy = () => {
     triggerBidToBuyApi,
     { isLoading: isLoadingBidToBuyApi, isFetching: isFetchingBidToBuyApi }
   ] = useLazyGetAllBidStonesQuery();
+
+  console.log('isLoading', isLoading);
 
   const renderFooter = (table: any) => {
     if (activeTab === 0 && bid?.length > 0) {
@@ -609,6 +617,8 @@ const BidToBuy = () => {
     }
   }, [validImages]);
 
+  console.log('activeTab', activeTab);
+
   return (
     <div className="mb-[4px] relative">
       {isError && (
@@ -659,7 +669,9 @@ const BidToBuy = () => {
         <BiddingSkeleton />
       ) : (
         <>
-          {(!Object?.keys(localStorage.getItem('bid') ?? {}).length && time) ||
+          {(!Object?.keys(localStorage.getItem('bid') ?? {}).length &&
+            time &&
+            activeTab === 0) ||
           subRoute === SubRoutes.BID_TO_BUY ? (
             <Form
               searchUrl={searchUrl}
