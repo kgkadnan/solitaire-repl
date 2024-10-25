@@ -312,7 +312,8 @@ const MatchPairTable = ({
   setMps,
   setSettingApplied,
   isLoading,
-  countLimitReached
+  countLimitReached,
+  settingApplied
 }: any) => {
   // Fetching saved search data
   const router = useRouter();
@@ -659,7 +660,7 @@ const MatchPairTable = ({
     <>
       {' '}
       {isLoaded && !isLoading && !isSkeletonLoading && (
-        <div className="w-[100vw] flex justify-center mt-[50px]">
+        <div className="w-[110vw] flex justify-center mt-[50px]">
           <div>
             <div className="w-[350px] flex justify-center">
               <Image src={NoDataSvg} alt={'empty'} />
@@ -1402,16 +1403,16 @@ const MatchPairTable = ({
         setInitialMps(updatedMps); // Update the initial state to the new reset state
         setIsModified(false); // Disable the buttons
         console.log(res, 'Reset data');
-        setSettingApplied(true);
+        setSettingApplied(!settingApplied);
       });
   };
 
   const handleApplyMPS = () => {
     applyMPS({ setting: mps }).unwrap();
-    setSettingApplied(true);
     setIsMPSOpen(false);
     setInitialMps(mps); // Set the current MPS as the new initial state after applying changes
     setIsModified(false); // Disable the buttons
+    setSettingApplied(!settingApplied);
   };
 
   const handleInputChange = (
