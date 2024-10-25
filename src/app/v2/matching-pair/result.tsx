@@ -699,7 +699,6 @@ const MatchingPairResult = ({
       }
       setOriginalData(res.data?.products);
 
-      setRowSelection({});
       setErrorText('');
       setData(res.data);
       setIsLoading(false);
@@ -719,6 +718,8 @@ const MatchingPairResult = ({
           setCompareStoneData
         });
       }
+
+      setRowSelection({});
     });
   };
 
@@ -1358,7 +1359,9 @@ const MatchingPairResult = ({
             ''
           ) : hasLimitExceeded ? (
             ''
-          ) : isSkeletonLoading ? (
+          ) : isSkeletonLoading ||
+            isLoading ||
+            (matchingPairData === undefined && !countLimitReached) ? (
             <Skeleton
               variant="rectangular"
               height={'24px'}
@@ -1605,6 +1608,7 @@ const MatchingPairResult = ({
                   searchList={searchList}
                   setIsLoading={setIsLoading}
                   handleAddToCart={handleAddToCart}
+                  settingApplied={settingApplied}
                   setIsConfirmStone={setIsConfirmStone}
                   setConfirmStoneData={setConfirmStoneData}
                   setIsCompareStone={setIsCompareStone}
