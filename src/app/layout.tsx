@@ -146,9 +146,9 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
           type="text/javascript"
           async
         /> */}
-        <Script
+        <script
           id="cookie-consent"
-          strategy="afterInteractive"
+          // strategy="afterInteractive"
           data-cookieconsent="ignore"
           dangerouslySetInnerHTML={{
             __html: `
@@ -171,9 +171,9 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
             `
           }}
         />
-        <Script
+        <script
           id="ga-consent"
-          strategy="afterInteractive"
+          // strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
               function loadGA() {
@@ -184,8 +184,9 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
               }
               
               // Check Cookiebot Consent API
+              console.log("jyotiiiiii",Cookiebot)
               window.addEventListener("CookieConsentDeclaration", function() {
-                if (Cookiebot.consents.analytics) {
+                if (Cookiebot.consents.statistics) {
                   loadGA();
                 }
               });
