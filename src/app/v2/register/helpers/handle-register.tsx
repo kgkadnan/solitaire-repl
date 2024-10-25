@@ -6,6 +6,7 @@ import { statusCode } from '@/constants/enums/status-code';
 import { IOtp, IToken } from '../component/main';
 import { isSessionValid } from '@/utils/manage-session';
 import { Tracking } from '@/constants/funnel-tracking';
+import { trackEvent } from '@/utils/ga';
 
 interface IHandleRegister {
   role: string;
@@ -66,6 +67,13 @@ export const handleRegister = async ({
           countryCode: `${registerFormState.countryCode}`,
           codeAndNumber: `${registerFormState.countryCode} ${registerFormState.mobileNumber}`
         }));
+        localStorage.setItem(
+          'userIp',
+          JSON.stringify({
+            countryCode: registerFormState?.countryCode,
+            iso: registerFormState?.iso
+          })
+        );
         setToken(prev => ({
           ...prev,
           phoneToken: res.customer.phone_token,
@@ -75,7 +83,18 @@ export const handleRegister = async ({
           step: Tracking.Click_Register,
           status: 'Success',
           sessionId: isSessionValid(),
-          mobileNumber: `+${registerFormState.countryCode} ${registerFormState.mobileNumber}`
+          mobileNumber: `+${registerFormState.countryCode} ${registerFormState.mobileNumber}`,
+          entryPoint: localStorage.getItem('entryPoint') || ''
+        });
+        trackEvent({
+          action: Tracking.Click_Register,
+          label: Tracking.Click_Register,
+          entry_point: localStorage.getItem('entryPoint') || '',
+          mobile_number: `+${registerFormState.countryCode} ${registerFormState.mobileNumber}`,
+          status: 'Success',
+          category: 'Registration'
+
+          // }
         });
       }
     })
@@ -86,7 +105,18 @@ export const handleRegister = async ({
         step: Tracking.Click_Register,
         status: 'Fail',
         sessionId: isSessionValid(),
-        mobileNumber: `+${registerFormState.countryCode} ${registerFormState.mobileNumber}`
+        mobileNumber: `+${registerFormState.countryCode} ${registerFormState.mobileNumber}`,
+        entryPoint: localStorage.getItem('entryPoint') || ''
+      });
+      trackEvent({
+        action: Tracking.Click_Register,
+        label: Tracking.Click_Register,
+        entry_point: localStorage.getItem('entryPoint') || '',
+        mobile_number: `+${registerFormState.countryCode} ${registerFormState.mobileNumber}`,
+        status: 'Fail',
+        category: 'Registration'
+
+        // }
       });
       if (e.status === statusCode.DUPLICATE && e.data.field === 'email') {
         setDialogContent(

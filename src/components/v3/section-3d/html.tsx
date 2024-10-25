@@ -13,6 +13,7 @@ import {
 } from '@/constants/funnel-tracking';
 import { isSessionValid } from '@/utils/manage-session';
 import { useLazyRegisterFunnelQuery } from '@/features/api/funnel';
+import { trackEvent } from '@/utils/ga';
 
 const HtmlAnimation = () => {
   const [phoneVisible, setPhoneVisible] = useState(false);
@@ -236,7 +237,18 @@ const HtmlAnimation = () => {
                   Tracking_Click_RegisterPage.LP_Home_Explore_Now_Register,
                 sessionId: isSessionValid()
               }),
-                router.push('/v2/register');
+                trackEvent({
+                  action: Tracking.Click_RegisterPage,
+                  entry_point:
+                    Tracking_Click_RegisterPage.LP_Home_Explore_Now_Register,
+                  category: 'Registration'
+                });
+              localStorage.setItem(
+                'entryPoint',
+                Tracking_Click_RegisterPage.LP_Home_Explore_Now_Register
+              );
+
+              router.push('/v2/register');
             }}
             className="cursor-pointer lg:w-[224px]"
           />

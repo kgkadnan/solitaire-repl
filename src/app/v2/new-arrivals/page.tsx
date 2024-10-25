@@ -633,9 +633,7 @@ const NewArrivals = () => {
                   },
                   isDisable: !Object.keys(rowSelection).length,
                   commingSoon:
-                    isKycVerified?.customer?.kyc?.status ===
-                      kycStatus.INPROGRESS ||
-                    isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED
+                    isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED
                 }
               ]}
             />
@@ -726,9 +724,7 @@ const NewArrivals = () => {
                     handleCreateAppointment();
                   },
                   commingSoon:
-                    isKycVerified?.customer?.kyc?.status ===
-                      kycStatus.INPROGRESS ||
-                    isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED
+                    isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED
                 }
               ]}
             />
@@ -788,13 +784,13 @@ const NewArrivals = () => {
       category: 'Video'
     },
     {
-      name: 'B2B Sparkle',
+      name: 'Sparkle',
       url: `${FILE_URLS.B2B_SPARKLE.replace(
         '***',
         detailImageData?.lot_id ?? ''
       )}`,
       url_check: detailImageData?.assets_pre_check?.B2B_SPARKLE_CHECK,
-      category: 'B2B Sparkle'
+      category: 'Sparkle'
     },
 
     {

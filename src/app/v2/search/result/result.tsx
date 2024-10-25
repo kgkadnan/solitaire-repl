@@ -96,6 +96,7 @@ import { useLazyGetCustomerQuery } from '@/features/api/dashboard';
 import { kamLocationAction } from '@/features/kam-location/kam-location';
 import { STONE_LOCATION } from '@/constants/v2/enums/location';
 import { handleCompareStone } from './helpers/handle-compare-stone';
+import { NO_PRODUCT_FOUND } from '@/constants/error-messages/saved';
 
 // Column mapper outside the component to avoid re-creation on each render
 
@@ -196,15 +197,43 @@ const Result = ({
 
     const url = constructUrlParams(selections[activeTab - 1]?.queryParams);
     setSearchUrl(url);
-    triggerProductApi({ url, limit: LISTING_PAGE_DATA_LIMIT, offset: 0 }).then(
-      (res: any) => {
+    triggerProductApi({ url, limit: LISTING_PAGE_DATA_LIMIT, offset: 0 })
+      .then((res: any) => {
         if (columnData?.length > 0) {
           if (res?.error?.status === statusCode.UNAUTHORIZED) {
             setHasLimitExceeded(true);
             dataTableSetState.setRows([]);
           } else {
             setHasLimitExceeded(false);
-            dataTableSetState.setRows(res.data?.products);
+            if (res.data?.products.length > 0) {
+              dataTableSetState.setRows(res.data?.products);
+            } else {
+              modalSetState.setIsDialogOpen(true);
+              modalSetState.setDialogContent(
+                <CommonPoppup
+                  status="warning"
+                  content={''}
+                  customPoppupBodyStyle="!mt-[70px]"
+                  header={NO_PRODUCT_FOUND}
+                  actionButtonData={[
+                    {
+                      variant: 'primary',
+                      label: ManageLocales('app.modal.okay'),
+                      handler: () => {
+                        closeSearch(
+                          activeTab,
+                          JSON.parse(localStorage.getItem('Search')!)
+                        );
+
+                        modalSetState.setIsDialogOpen(false);
+                      },
+                      customStyle: 'flex-1 h-10'
+                    }
+                  ]}
+                />
+              );
+            }
+            res.data?.products;
           }
 
           setRowSelection({});
@@ -212,8 +241,8 @@ const Result = ({
           setData(res.data);
           setIsLoading(false);
         }
-      }
-    );
+      })
+      .catch(e => setIsLoading(false));
   };
 
   const refreshSearchResults = () => {
@@ -222,7 +251,36 @@ const Result = ({
       limit: LISTING_PAGE_DATA_LIMIT,
       offset: 0
     }).then(res => {
-      dataTableSetState.setRows(res.data?.products);
+      if (res.data?.products.length > 0)
+        if (res.data?.products.length > 0) {
+          dataTableSetState.setRows(res.data?.products);
+        } else {
+          modalSetState.setIsDialogOpen(true);
+          modalSetState.setDialogContent(
+            <CommonPoppup
+              status="warning"
+              content={''}
+              customPoppupBodyStyle="!mt-[70px]"
+              header={NO_PRODUCT_FOUND}
+              actionButtonData={[
+                {
+                  variant: 'primary',
+                  label: ManageLocales('app.modal.okay'),
+                  handler: () => {
+                    closeSearch(
+                      activeTab,
+                      JSON.parse(localStorage.getItem('Search')!)
+                    );
+
+                    modalSetState.setIsDialogOpen(false);
+                  },
+                  customStyle: 'flex-1 h-10'
+                }
+              ]}
+            />
+          );
+        }
+      res.data?.products;
       setRowSelection({});
       setErrorText('');
       setData(res.data);
@@ -312,9 +370,9 @@ const Result = ({
               enableSorting: false,
               accessorKey: 'fire_icon',
               header: '',
-              minSize: 26,
-              size: 26,
-              maxSize: 26,
+              minSize: 20,
+              size: 20,
+              maxSize: 20,
               Cell: ({ row }: { row: any }) => {
                 return row.original.in_high_demand ? (
                   <Tooltip
@@ -323,7 +381,7 @@ const Result = ({
                         id="blinking-image"
                         src={fireSvg}
                         alt="fireSvg"
-                        className={`${styles.blink} blink ml-[-5px]`}
+                        className={`${styles.blink} blink`}
                       />
                     }
                     tooltipContent={'In High Demand Now!'}
@@ -540,6 +598,32 @@ const Result = ({
     fetchColumns();
   }, [dataTableState.rows]);
 
+  const closeSearch = (
+    removeDataIndex: number,
+    yourSelection: ISavedSearch[]
+  ) => {
+    let closeSpecificSearch = yourSelection.filter(
+      (_items: ISavedSearch, index: number) => {
+        return index !== removeDataIndex - 1;
+      }
+    );
+
+    if (removeDataIndex === 1) {
+      setSearchParameters([]);
+      // setAddSearches([]);
+      // handleReset(setState, errorSetState);
+      router.push(`${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`);
+    } else {
+      setSearchParameters(closeSpecificSearch);
+      // setAddSearches(closeSpecificSearch);
+      setActiveTab(removeDataIndex);
+      router.push(
+        `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${removeDataIndex - 1}`
+      );
+    }
+
+    localStorage.setItem('Search', JSON.stringify(closeSpecificSearch));
+  };
   const memoizedRows = useMemo(() => {
     return Array.isArray(dataTableState.rows) ? dataTableState.rows : [];
   }, [dataTableState.rows]);
@@ -680,7 +764,35 @@ const Result = ({
               limit: LISTING_PAGE_DATA_LIMIT,
               offset: 0
             }).then(res => {
-              dataTableSetState.setRows(res.data?.products);
+              if (res.data?.products.length > 0) {
+                dataTableSetState.setRows(res.data?.products);
+              } else {
+                modalSetState.setIsDialogOpen(true);
+                modalSetState.setDialogContent(
+                  <CommonPoppup
+                    status="warning"
+                    content={''}
+                    customPoppupBodyStyle="!mt-[70px]"
+                    header={NO_PRODUCT_FOUND}
+                    actionButtonData={[
+                      {
+                        variant: 'primary',
+                        label: ManageLocales('app.modal.okay'),
+                        handler: () => {
+                          closeSearch(
+                            activeTab,
+                            JSON.parse(localStorage.getItem('Search')!)
+                          );
+
+                          modalSetState.setIsDialogOpen(false);
+                        },
+                        customStyle: 'flex-1 h-10'
+                      }
+                    ]}
+                  />
+                );
+              }
+              res.data?.products;
               setRowSelection({});
               setErrorText('');
               setData(res.data);
@@ -781,7 +893,35 @@ const Result = ({
             limit: LISTING_PAGE_DATA_LIMIT,
             offset: 0
           }).then(res => {
-            dataTableSetState.setRows(res.data?.products);
+            if (res.data?.products.length > 0) {
+              dataTableSetState.setRows(res.data?.products);
+            } else {
+              modalSetState.setIsDialogOpen(true);
+              modalSetState.setDialogContent(
+                <CommonPoppup
+                  status="warning"
+                  content={''}
+                  customPoppupBodyStyle="!mt-[70px]"
+                  header={NO_PRODUCT_FOUND}
+                  actionButtonData={[
+                    {
+                      variant: 'primary',
+                      label: ManageLocales('app.modal.okay'),
+                      handler: () => {
+                        closeSearch(
+                          activeTab,
+                          JSON.parse(localStorage.getItem('Search')!)
+                        );
+
+                        modalSetState.setIsDialogOpen(false);
+                      },
+                      customStyle: 'flex-1 h-10'
+                    }
+                  ]}
+                />
+              );
+            }
+            res.data?.products;
             setRowSelection({});
             setErrorText('');
             setData(res.data);
@@ -966,7 +1106,35 @@ const Result = ({
               limit: LISTING_PAGE_DATA_LIMIT,
               offset: 0
             }).then(res => {
-              dataTableSetState.setRows(res.data?.products);
+              if (res.data?.products.length > 0) {
+                dataTableSetState.setRows(res.data?.products);
+              } else {
+                modalSetState.setIsDialogOpen(true);
+                modalSetState.setDialogContent(
+                  <CommonPoppup
+                    status="warning"
+                    content={''}
+                    customPoppupBodyStyle="!mt-[70px]"
+                    header={NO_PRODUCT_FOUND}
+                    actionButtonData={[
+                      {
+                        variant: 'primary',
+                        label: ManageLocales('app.modal.okay'),
+                        handler: () => {
+                          closeSearch(
+                            activeTab,
+                            JSON.parse(localStorage.getItem('Search')!)
+                          );
+
+                          modalSetState.setIsDialogOpen(false);
+                        },
+                        customStyle: 'flex-1 h-10'
+                      }
+                    ]}
+                  />
+                );
+              }
+              res.data?.products;
               setRowSelection({});
               setErrorText('');
               setData(res.data);
@@ -1158,13 +1326,13 @@ const Result = ({
       category: 'Video'
     },
     {
-      name: 'B2B Sparkle',
+      name: 'Sparkle',
       url: `${FILE_URLS.B2B_SPARKLE.replace(
         '***',
         detailImageData?.lot_id ?? ''
       )}`,
       url_check: detailImageData?.assets_pre_check?.B2B_SPARKLE_CHECK,
-      category: 'B2B Sparkle'
+      category: 'Sparkle'
     },
 
     {

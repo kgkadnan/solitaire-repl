@@ -5,8 +5,13 @@ import { IndividualActionButton } from '@/components/v2/common/action-button/ind
 import { useRouter } from 'next/navigation';
 import { useLazyTrackRegisterFlowQuery } from '@/features/api/register';
 import { isSessionValid } from '@/utils/manage-session';
-import { Tracking } from '@/constants/funnel-tracking';
+import {
+  Tracking,
+  Tracking_KYC,
+  Tracking_KYC_Entry_Point
+} from '@/constants/funnel-tracking';
 import { useLazyRegisterFunnelQuery } from '@/features/api/funnel';
+import { trackEvent } from '@/utils/ga';
 
 const ConfirmScreen = () => {
   const router = useRouter();
@@ -16,8 +21,13 @@ const ConfirmScreen = () => {
   useEffect(() => {
     funnelTrack({
       step: Tracking.Mobile_Verified_PageView,
-
-      sessionId: isSessionValid()
+      sessionId: isSessionValid(),
+      entryPoint: localStorage.getItem('entryPoint') || ''
+    });
+    trackEvent({
+      action: Tracking.Mobile_Verified_PageView,
+      entry_point: localStorage.getItem('entryPoint') || '',
+      category: 'Registration'
     });
   }, []);
   return (
@@ -36,10 +46,25 @@ const ConfirmScreen = () => {
             onClick={() => {
               triggerRegisterFlowTrack({ event: 'complete-kyc' });
               funnelTrack({
-                step: Tracking.Click_Finsih_KYC,
-                sessionId: isSessionValid()
+                step: Tracking.Click_Finish_KYC,
+                sessionId: isSessionValid(),
+                entryPoint: localStorage.getItem('entryPoint') || ''
               }),
-                router.push(`/v2/kyc`);
+                trackEvent({
+                  action: Tracking.Click_Finish_KYC,
+                  entry_point: localStorage.getItem('entryPoint') || '',
+                  category: 'Registration'
+                });
+              localStorage.setItem(
+                'kyc_entryPoint',
+                Tracking_KYC_Entry_Point.KYC_Registration_Page
+              );
+              trackEvent({
+                action: Tracking_KYC.Click_KYC,
+                entry_point: localStorage.getItem('kyc_entryPoint') || '',
+                category: 'KYC'
+              });
+              router.push(`/v2/kyc`);
             }}
             variant={'primary'}
             size={'custom'}
@@ -52,9 +77,15 @@ const ConfirmScreen = () => {
               triggerRegisterFlowTrack({ event: 'go-to-dashboard' });
               funnelTrack({
                 step: Tracking.Click_Continue_Guest,
-                sessionId: isSessionValid()
+                sessionId: isSessionValid(),
+                entryPoint: localStorage.getItem('entryPoint') || ''
               }),
-                router.push(`/v2/`);
+                trackEvent({
+                  action: Tracking.Click_Continue_Guest,
+                  entry_point: localStorage.getItem('entryPoint') || '',
+                  category: 'Registration'
+                });
+              router.push(`/v2/`);
             }}
             className="rounded-[4px] text-neutral600 w-[450px]"
             size={'custom'}

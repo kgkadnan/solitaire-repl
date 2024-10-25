@@ -1,3 +1,4 @@
+import { getDeviceDetails } from '@/utils/get-device-details';
 import { fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 const apiURL = process.env.NEXT_PUBLIC_API_URL;
@@ -5,6 +6,7 @@ const apiURL = process.env.NEXT_PUBLIC_API_URL;
 type ICustomHeaders = {
   [key: string]: string | number | boolean;
 };
+const { screenSize, deviceType, os } = getDeviceDetails();
 
 export const createBaseQuery = (
   auth = true,
@@ -20,7 +22,15 @@ export const createBaseQuery = (
       if (auth && token) {
         headers.set('Authorization', `Bearer ${token}`);
       }
-
+      headers.set(
+        'tracking-header',
+        JSON.stringify({
+          platform: 'Web',
+          screen_size: screenSize,
+          os: os,
+          device_type: deviceType
+        })
+      );
       // Merge custom headers with existing headers
       customHeaders &&
         Object.keys(customHeaders).forEach(key => {

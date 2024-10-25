@@ -15,6 +15,8 @@ import { IProduct } from '../../interface';
 import { setConfirmStoneTrack } from '@/features/confirm-stone-track/confirm-stone-track-slice';
 import CommonPoppup from '@/app/v2/login/component/common-poppup';
 import { ManageLocales } from '@/utils/v2/translate';
+import { Tracking_Search_By_Text } from '@/constants/funnel-tracking';
+import { trackEvent } from '@/utils/ga';
 
 /**
  * Handles the confirmation of selected stones.
@@ -44,6 +46,7 @@ interface IHandleConfirmStone {
   setIsLoading: any;
   refreshSearchResults?: any;
   setSelectedCheckboxes?: any;
+  customerMobileNumber?: string;
 }
 export const handleConfirmStone = ({
   selectedRows,
@@ -61,7 +64,8 @@ export const handleConfirmStone = ({
   router,
   setIsLoading,
   refreshSearchResults,
-  setSelectedCheckboxes
+  setSelectedCheckboxes,
+  customerMobileNumber
 }: IHandleConfirmStone) => {
   let selectedIds = Object.keys(selectedRows);
   const hasMemoOut = selectedIds?.some(id => {
@@ -126,10 +130,26 @@ export const handleConfirmStone = ({
           setIsConfirmStone(true);
           setConfirmStoneData(confirmStone);
           setIsDetailPage && setIsDetailPage(false);
+          if (identifier === 'dashboard') {
+            trackEvent({
+              action: Tracking_Search_By_Text.click_confirm_stone_result_page,
+              category: 'SearchByText',
+              mobile_number: customerMobileNumber,
+              status: 'Success'
+            });
+          }
           confirmStoneTrack &&
             dispatch &&
             dispatch(setConfirmStoneTrack(confirmStoneTrack));
         } else if (res.status === 'unavailable') {
+          if (identifier === 'dashboard') {
+            trackEvent({
+              action: Tracking_Search_By_Text.click_confirm_stone_result_page,
+              category: 'SearchByText',
+              mobile_number: customerMobileNumber,
+              status: 'Fail'
+            });
+          }
           modalSetState.setIsDialogOpen(true);
           modalSetState.setDialogContent(
             <CommonPoppup
@@ -171,6 +191,14 @@ export const handleConfirmStone = ({
             />
           );
         } else if (res.status === 'some-available') {
+          if (identifier === 'dashboard') {
+            trackEvent({
+              action: Tracking_Search_By_Text.click_confirm_stone_result_page,
+              category: 'SearchByText',
+              mobile_number: customerMobileNumber,
+              status: 'Partial'
+            });
+          }
           modalSetState.setIsDialogOpen(true);
           modalSetState.setDialogContent(
             <CommonPoppup
@@ -211,6 +239,35 @@ export const handleConfirmStone = ({
       })
       .catch((err: any) => {
         setIsLoading(false);
+        if (err.data.type === 'unauthorized') {
+          modalSetState.setIsDialogOpen(true);
+          modalSetState.setDialogContent(
+            <CommonPoppup
+              content="To confirm a stone or make a purchase, KYC verification is
+              mandatory. Without verification, access to certain
+              features is restricted."
+              customPoppupStyle="!h-[220px]"
+              customPoppupBodyStyle="!mt-[62px]"
+              header={'Important KYC Verification Required!'}
+              actionButtonData={[
+                {
+                  variant: 'secondary',
+                  label: ManageLocales('app.modal.cancel'),
+                  handler: () => modalSetState.setIsDialogOpen(false),
+                  customStyle: 'w-full flex-1'
+                },
+                {
+                  variant: 'primary',
+                  label: ManageLocales('app.modal.verifyMyKYCNow'),
+                  handler: () => {
+                    router.push('/v2/kyc');
+                  },
+                  customStyle: 'w-full flex-1'
+                }
+              ]}
+            />
+          );
+        }
         console.log('err', err);
       });
   } else {

@@ -12,11 +12,13 @@ export enum Routes {
   MY_APPOINTMENTS = '/v2/my-appointments',
   MY_ACCOUNT = '/v2/my-account',
   FAQS = '/v2/faqs',
-  MATCHING_PAIR = '/v2/matching-pair'
+  MATCHING_PAIR = '/v2/matching-pair',
+  TURKEY = '/v2/turkey'
 }
 // Enum using the enum keyword
 export enum SubRoutes {
   BID_TO_BUY = 'bid_to_buy',
+  BID_TO_BUY_RESULT = 'result',
   NEW_SEARCH = 'new-search',
   RESULT = 'result',
   SAVED_SEARCH = 'saved-search',

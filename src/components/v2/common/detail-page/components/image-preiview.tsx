@@ -13,6 +13,8 @@ import forwardArrow from '@public/v2/assets/icons/arrow-forward.svg';
 import backwardArrow from '@public/v2/assets/icons/arrow-backword.svg';
 import backWardArrowDisable from '@public/v2/assets/icons/detail-page/back-ward-arrow-disable.svg';
 import forWardAarrowDisable from '@public/v2/assets/icons/detail-page/forward-arrow-disable.svg';
+import { Tracking_Search_By_Text } from '@/constants/funnel-tracking';
+import { trackEvent } from '@/utils/ga';
 
 interface IImagePreviewProps {
   images: IImagesType[];
@@ -22,6 +24,8 @@ interface IImagePreviewProps {
   activePreviewTab: string;
   setIsImageLoading: React.Dispatch<React.SetStateAction<boolean>>;
   isImageLoading: boolean;
+  identifier?: string;
+  customerMobileNumber?: string;
 }
 
 const ImagePreview: React.FC<IImagePreviewProps> = ({
@@ -31,7 +35,9 @@ const ImagePreview: React.FC<IImagePreviewProps> = ({
   imageIndex,
   setImageIndex,
   isImageLoading,
-  setIsImageLoading
+  setIsImageLoading,
+  identifier,
+  customerMobileNumber
 }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [zoomLevel, setZoomLevel] = useState(1);
@@ -42,7 +48,7 @@ const ImagePreview: React.FC<IImagePreviewProps> = ({
     if (activePreviewTab === 'Video' && image.category === 'Video') return true;
     if (activePreviewTab === 'Certificate' && image.category === 'Certificate')
       return true;
-    if (activePreviewTab === 'B2B Sparkle' && image.category === 'B2B Sparkle')
+    if (activePreviewTab === 'Sparkle' && image.category === 'Sparkle')
       return true;
     if (activePreviewTab === 'Image' && image.category === 'Image') return true;
     return false;
@@ -116,7 +122,7 @@ const ImagePreview: React.FC<IImagePreviewProps> = ({
                   ? ''
                   : filteredImages[imageIndex]?.name}{' '}
                 {filteredImages[imageIndex]?.category === 'Video' ||
-                filteredImages[imageIndex]?.category === 'B2B Sparkle'
+                filteredImages[imageIndex]?.category === 'Sparkle'
                   ? 'Video...'
                   : 'Image...'}
               </div>
@@ -125,7 +131,7 @@ const ImagePreview: React.FC<IImagePreviewProps> = ({
           {images.length > 0 ? (
             filteredImages.length > 0 ? (
               filteredImages[imageIndex]?.category === 'Video' ||
-              filteredImages[imageIndex]?.category === 'B2B Sparkle' ? (
+              filteredImages[imageIndex]?.category === 'Sparkle' ? (
                 <iframe
                   src={filteredImages[0].url}
                   className="w-[370px] h-[370px]"
@@ -224,6 +230,14 @@ const ImagePreview: React.FC<IImagePreviewProps> = ({
                           setZoomPosition({ x: 0, y: 0 });
                           setZoomLevel(1);
                           setImageIndex(imageIndex - 1);
+                          if (identifier === 'Dashboard') {
+                            trackEvent({
+                              action:
+                                Tracking_Search_By_Text.click_stone_image_arrow_dna_page,
+                              category: 'SearchByText',
+                              mobile_number: customerMobileNumber
+                            });
+                          }
                         }}
                         disabled={!(imageIndex > 0)}
                         className={` rounded-[4px]  hover:bg-neutral50 w-[37px] h-[37px] text-center px-2 border-[1px] border-solid border-neutral200 shadow-sm ${
@@ -251,6 +265,14 @@ const ImagePreview: React.FC<IImagePreviewProps> = ({
                           setZoomPosition({ x: 0, y: 0 });
                           setZoomLevel(1);
                           setImageIndex(imageIndex + 1);
+                          if (identifier === 'Dashboard') {
+                            trackEvent({
+                              action:
+                                Tracking_Search_By_Text.click_stone_image_arrow_dna_page,
+                              category: 'SearchByText',
+                              mobile_number: customerMobileNumber
+                            });
+                          }
                         }}
                         disabled={!(imageIndex < filteredImages.length - 1)}
                         className={`rounded-[4px] hover:bg-neutral50 w-[37px] h-[37px] text-center px-2 border-[1px] border-solid border-neutral200 shadow-sm ${
@@ -278,8 +300,7 @@ const ImagePreview: React.FC<IImagePreviewProps> = ({
                 )}
               <div className="flex gap-2">
                 {!(
-                  activePreviewTab === 'Video' ||
-                  activePreviewTab === 'B2B Sparkle'
+                  activePreviewTab === 'Video' || activePreviewTab === 'Sparkle'
                 ) && (
                   <Tooltip
                     tooltipTrigger={
@@ -352,6 +373,7 @@ const ImagePreview: React.FC<IImagePreviewProps> = ({
         onClose={() => {
           setIsModalOpen(!isModalOpen);
         }}
+        trackIdentifier={identifier}
         selectedImageIndex={imageIndex}
         images={images}
         activeTab={activePreviewTab}

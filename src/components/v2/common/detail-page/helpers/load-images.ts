@@ -13,7 +13,7 @@ export async function loadImages(
         if (
           image.name === 'Certificate' ||
           image.name === 'Video' ||
-          image.name === 'B2B Sparkle'
+          image.name === 'Sparkle'
         ) {
           isValid = image.url_check;
         } else {

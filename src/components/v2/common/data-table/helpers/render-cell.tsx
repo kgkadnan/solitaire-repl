@@ -143,7 +143,11 @@ export const RednderLocation = ({ renderedCellValue }: any) => {
   );
 };
 
-export const RenderLab = ({ renderedCellValue, row }: any) => {
+export const RenderLab = ({
+  renderedCellValue,
+  row,
+  handleTrackEvent
+}: any) => {
   let link = '';
   let className = '';
 
@@ -162,7 +166,16 @@ export const RenderLab = ({ renderedCellValue, row }: any) => {
   return (
     <>
       {link ? (
-        <Link href={link} target="_blank" className={className}>
+        <Link
+          href={link}
+          target="_blank"
+          className={className}
+          onClick={() => {
+            if (handleTrackEvent) {
+              handleTrackEvent();
+            }
+          }}
+        >
           {renderedCellValue}
         </Link>
       ) : (

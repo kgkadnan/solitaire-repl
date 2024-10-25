@@ -24,8 +24,12 @@ import useNumericFieldValidation from '../search/form/hooks/numeric-field-valida
 import useValidationStateManagement from '../search/hooks/validation-state-management';
 import SavedSearch from '../search/saved-search/saved-search';
 import MatchingPairResult from './result';
-import { useGetMatchingPairCountQuery } from '@/features/api/match-pair';
+import {
+  useGetMatchingPairCountQuery,
+  useLazyGetMatchingPairSettingQuery
+} from '@/features/api/match-pair';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
+import { MPSDialogComponent } from './components/mps';
 
 const MatchingPair = () => {
   const subRoute = useSearchParams().get('active-tab');
@@ -57,7 +61,7 @@ const MatchingPair = () => {
   const [searchLoading, setSearchLoading] = useState(false);
   const [saveSearchName, setSaveSearchName] = useState('');
   const [addSavedSearch] = useAddSavedSearchMutation();
-
+  const [getMatchingPairSetting] = useLazyGetMatchingPairSettingQuery();
   const { data } = useGetMatchingPairCountQuery(
     {
       searchUrl
@@ -66,6 +70,112 @@ const MatchingPair = () => {
       skip: !searchUrl
     }
   );
+
+  const [mps, setMps] = useState([
+    {
+      up: 0,
+      key: 'shape',
+      down: 0,
+      display: 'Shape',
+      is_equal: true,
+      priority: 1,
+      start: 0,
+      end: 10,
+      placeHolder: '0'
+    },
+    {
+      up: 0,
+      key: 'color',
+      down: 0,
+      display: 'Color',
+      is_equal: true,
+      priority: 2,
+      start: 0,
+      end: 10,
+      placeHolder: '0'
+    },
+    {
+      up: 0,
+      key: 'clarity',
+      down: 0,
+      display: 'Clarity',
+      is_equal: false,
+      priority: 3,
+      start: 0,
+      end: 10,
+      placeHolder: '0'
+    },
+    {
+      up: 0.0,
+      key: 'length',
+      down: 0.0,
+      display: 'Length',
+      is_equal: false,
+      priority: 4,
+      start: 0,
+      end: 100,
+      placeHolder: '0.00'
+    },
+    {
+      up: 0.0,
+      key: 'width',
+      down: 0.0,
+      display: 'Width',
+      is_equal: false,
+      priority: 5,
+      start: 0,
+      end: 100,
+      placeHolder: '0.00'
+    },
+    {
+      up: 1.0,
+      key: 'table_percentage',
+      down: 0.0,
+      display: 'Table %',
+      is_equal: false,
+      priority: 6,
+      start: 0,
+      end: 100,
+      placeHolder: '0.00'
+    },
+    {
+      up: 1.0,
+      key: 'depth_percentage',
+      down: 0.0,
+      display: 'Depth %',
+      is_equal: false,
+      priority: 7,
+      start: 0,
+      end: 100,
+      placeHolder: '0.00'
+    },
+    {
+      up: 0,
+      key: 'fluorescence',
+      down: 0,
+      display: 'Fluorescence',
+      is_equal: true,
+      priority: 8,
+      start: 0,
+      end: 10,
+      placeHolder: '0'
+    },
+
+    {
+      up: 0.0,
+      key: 'carats',
+      down: 0.0,
+      display: 'Carat',
+      is_equal: false,
+      priority: 9,
+      range_to: 50,
+      range_from: 5,
+      start: 0,
+      end: 100,
+      placeHolder: '0.00'
+    }
+  ]);
+
   useEffect(() => {
     let selection = JSON.parse(localStorage.getItem('MatchingPair')!) || [];
     const filteredSelection = selection.filter(
@@ -89,6 +199,35 @@ const MatchingPair = () => {
       setActiveTab(0);
     }
   }, [subRoute]);
+
+  useEffect(() => {
+    getMatchingPairSetting({})
+      .unwrap()
+      .then(res => {
+        let tempMps = mps;
+        tempMps.forEach(itemA => {
+          res.forEach((itemB: any) => {
+            if (itemA.key === itemB.key) {
+              // Update values in 'a' if they differ from 'b'
+              let itemACast = itemA as Record<string, any>;
+              let itemBCast = itemB as Record<string, any>;
+
+              // Update values in 'a' if they differ from 'b'
+              for (let key in itemBCast) {
+                if (itemACast[key] !== itemBCast[key]) {
+                  itemACast[key] = itemBCast[key];
+                }
+              }
+            }
+          });
+        });
+        tempMps.sort((a, b) => a.priority - b.priority);
+
+        setMps([...tempMps]);
+      })
+      .catch(e => console.log(e));
+  }, []);
+
   useEffect(() => {
     const fetchMyAPI = async () => {
       const yourSelection = localStorage.getItem('MatchingPair');
@@ -172,58 +311,7 @@ const MatchingPair = () => {
   const handleCloseSpecificTab = (id: number) => {
     let yourSelection = JSON.parse(localStorage.getItem('MatchingPair')!);
 
-    // if (!yourSelection[id - 1]?.isSavedSearch) {
-    //   setIsDialogOpen(true);
-    //   setDialogContent(
-    //     <CommonPoppup
-    //       content={`Do you want to save your "Matching Pair Result" for this session?`}
-    //       status="warning"
-    //       customPoppupStyle="h-[200px]"
-    //       customPoppupBodyStyle="!mt-[65px]"
-    //       header={ManageLocales('app.search.confirmHeader')}
-    //       actionButtonData={[
-    //         {
-    //           variant: 'secondary',
-    //           label: ManageLocales('app.modal.no'),
-    //           handler: () => {
-    //             setIsDialogOpen(false);
-    //             closeSearch(id, yourSelection);
-    //           },
-    //           customStyle: 'flex-1 h-10'
-    //         },
-    //         {
-    //           variant: 'primary',
-    //           label: ManageLocales('app.modal.yes'),
-    //           handler: () => {
-    //             if (yourSelection[id - 1]?.saveSearchName.length) {
-    //               //update logic comes here
-    //               const updateSaveSearchData = {
-    //                 id: yourSelection[id - 1]?.id,
-    //                 meta_data: yourSelection[id - 1]?.queryParams,
-    //                 diamond_count: data?.count
-    //               };
-    //               updateSavedSearch(updateSaveSearchData)
-    //                 .unwrap()
-    //                 .then(() => {
-    //                   setIsDialogOpen(false);
-    //                   closeSearch(id, yourSelection);
-    //                 })
-    //                 .catch((error: any) => {
-    //                   logger.error(error);
-    //                 });
-    //             } else {
-    //               setIsInputDialogOpen(true);
-    //               setIsDialogOpen(false);
-    //             }
-    //           },
-    //           customStyle: 'flex-1 h-10'
-    //         }
-    //       ]}
-    //     />
-    //   );
-    // } else {
     closeSearch(id, yourSelection);
-    // }
   };
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputError('');
@@ -328,6 +416,7 @@ const MatchingPair = () => {
         onClose={() => setIsInputDialogOpen(false)}
         renderContent={renderContentWithInput}
       />
+
       {subRoute === MatchSubRoutes.NEW_SEARCH ||
       // currentPath === Routes.MATCHING_PAIR ||
       editRoute === MatchSubRoutes.SAVED_SEARCH ||
@@ -382,6 +471,8 @@ const MatchingPair = () => {
           setIsLoading={setIsLoading}
           setIsInputDialogOpen={setIsInputDialogOpen}
           isLoading={isLoading}
+          mps={mps}
+          setMps={setMps}
         />
       )}
     </div>

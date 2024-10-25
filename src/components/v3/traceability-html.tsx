@@ -34,7 +34,7 @@ const handleReferenceClick = (
   }
 };
 
-const TraceabilityHtml = () => {
+const TraceabilityHtml = ({ showControls = true }) => {
   const videoRefHtml: any = useRef(null);
   const [isPlaying, setIsPlaying] = useState(true);
   const [currentTime, setCurrentTime] = useState(0);
@@ -126,58 +126,60 @@ const TraceabilityHtml = () => {
           Your browser does not support the video tag.
         </video>
       </div>
-      <div className="absolute bottom-14 flex justify-between gap-4">
-        <div
-          className="flex justify-around items-center h-[38px]  border-[white] rounded-[8px] px-[8px]  border-[1px] min-w-[150px]"
-          style={{ boxShadow: 'var(--popups-shadow' }}
-        >
-          {[
-            { timeStart: 0, timeEnd: 3 },
-            { timeStart: 3, timeEnd: 11 },
-            { timeStart: 11, timeEnd: 17 },
-            { timeStart: 17, timeEnd: 27 },
-            { timeStart: 27, timeEnd: 31 }
-          ].map(({ timeStart, timeEnd }, index) => (
-            <div
-              key={`${timeStart}-${timeEnd}`}
-              onClick={() =>
-                handleReferenceClick(timeStart, videoRefHtml, setIsPlaying)
-              }
-              className={`relative h-2 rounded-[8px] cursor-pointer transition-all duration-300 ease-in-out overflow-hidden ${dotClasses(
-                timeStart,
-                timeEnd,
-                index
-              )}`}
-            >
-              {currentTime >= timeStart && currentTime <= timeEnd && (
-                <div
-                  className="absolute top-0 left-0 h-full bg-neutral700 transition-width duration-300 ease-in-out rounded-[12px]"
-                  style={{
-                    width: calculateProgressWidth(
-                      timeStart,
-                      timeEnd,
-                      currentTime
-                    )
-                  }}
-                />
-              )}
-            </div>
-          ))}
+      {showControls && (
+        <div className="absolute bottom-14 flex justify-between gap-4">
+          <div
+            className="flex justify-around items-center h-[38px]  border-[white] rounded-[8px] px-[8px]  border-[1px] min-w-[150px]"
+            style={{ boxShadow: 'var(--popups-shadow' }}
+          >
+            {[
+              { timeStart: 0, timeEnd: 3 },
+              { timeStart: 3, timeEnd: 11 },
+              { timeStart: 11, timeEnd: 17 },
+              { timeStart: 17, timeEnd: 27 },
+              { timeStart: 27, timeEnd: 31 }
+            ].map(({ timeStart, timeEnd }, index) => (
+              <div
+                key={`${timeStart}-${timeEnd}`}
+                onClick={() =>
+                  handleReferenceClick(timeStart, videoRefHtml, setIsPlaying)
+                }
+                className={`relative h-2 rounded-[8px] cursor-pointer transition-all duration-300 ease-in-out overflow-hidden ${dotClasses(
+                  timeStart,
+                  timeEnd,
+                  index
+                )}`}
+              >
+                {currentTime >= timeStart && currentTime <= timeEnd && (
+                  <div
+                    className="absolute top-0 left-0 h-full bg-neutral700 transition-width duration-300 ease-in-out rounded-[12px]"
+                    style={{
+                      width: calculateProgressWidth(
+                        timeStart,
+                        timeEnd,
+                        currentTime
+                      )
+                    }}
+                  />
+                )}
+              </div>
+            ))}
+          </div>
+          <Image
+            className="cursor-pointer "
+            src={
+              videoRefHtml.current?.currentTime >= 31
+                ? Restart
+                : isPlaying
+                ? Pause
+                : Play
+            }
+            onClick={handlePlayPause}
+            alt="video control"
+            style={{ boxShadow: 'var(--popups-shadow)' }}
+          />
         </div>
-        <Image
-          className="cursor-pointer "
-          src={
-            videoRefHtml.current?.currentTime >= 31
-              ? Restart
-              : isPlaying
-              ? Pause
-              : Play
-          }
-          onClick={handlePlayPause}
-          alt="video control"
-          style={{ boxShadow: 'var(--popups-shadow)' }}
-        />
-      </div>
+      )}
       <div className="absolute bottom-[50px]" ref={targetRef}></div>
       <div
         className={`absolute flex justify-between w-full xl:px-[112px] lg:pl-[44px] lg:pr-[32px] xl:top-[225px] ${

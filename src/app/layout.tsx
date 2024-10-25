@@ -24,11 +24,19 @@ import CommonHeader from '@/components/v3/navigation-menu/header';
 import SubscribeNewsLetter from '@/components/v3/subscribe-newsletter';
 import FooterSiteMap from '@/components/v3/footer-sitemap';
 import Footer from '@/components/v3/footer';
+import { useMediaQuery } from 'react-responsive';
 // import Salesiq from '@/components/v2/common/sales-iq';
+import * as Sentry from '@sentry/nextjs';
+import Script from 'next/script';
 
 const store = setupStore();
 
 const inter = Inter({ subsets: ['latin'] });
+
+Sentry.init({
+  dsn: process.env.NEXT_PUBLIC_SENTRY_DSN, // Replace with your Sentry DSN
+  tracesSampleRate: 1.0 // Adjust the sample rate for performance monitoring
+});
 
 export default function RootLayout({ children }: { children?: ReactNode }) {
   const path = usePathname();
@@ -37,16 +45,47 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
   const isV3Route = v3Routes.includes(path) || path.includes('/v3');
 
   const [open, setOpen] = useState(false);
-
+  const [showLPHeader, setShowLPHeader] = useState(false);
   const showHeader = isApplicationRoutes && !headerlessRoutes.includes(path);
-  // || path === '/';
+  const isMobile = useMediaQuery({ maxWidth: 1024 });
+
   // Create a component that just renders children, with children as an optional prop
   const ChildrenComponent: FC<{ children?: ReactNode }> = ({ children }) => (
-    <>
-      {children}
-      <AppDownloadPopup></AppDownloadPopup>
-    </>
+    <>{children}</>
   );
+
+  useEffect(() => {
+    // Show header after 2 seconds
+    const timer = setTimeout(() => {
+      setShowLPHeader(true);
+    }, 500);
+
+    return () => clearTimeout(timer); // Cleanup on unmount
+  }, []);
+
+  useEffect(() => {
+    // Define the URLs
+    const appStoreURL =
+      'https://apps.apple.com/in/app/kgk-diamond/id6479595403';
+    const playStoreURL =
+      'https://play.google.com/store/apps/details?id=com.kgk.diamonds&hl=en_IN';
+
+    // Check if the device is iOS
+    const isIOS = () => /iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+    // Check if the device is Android
+    const isAndroid = () => /Android/i.test(navigator.userAgent);
+
+    // Perform the redirect based on the platform
+    if (path.includes('/v3') || path.includes('/v2') || path === '/') {
+      if (isIOS()) {
+        window.location.href = appStoreURL;
+      } else if (isAndroid()) {
+        window.location.href = playStoreURL;
+      }
+    }
+  }, []);
+
   // Wrap the ChildrenComponent with authorizedLogin if it's a secure page
   const SecureComponent = protectedRoutes.includes(path)
     ? authorizedLogin(ChildrenComponent)
@@ -63,7 +102,16 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
       disableDevtool({
         disableMenu: true,
         ondevtoolopen(_type: any, _next: any) {
-          setOpen(true);
+          // if ( _type === 5) {
+          // Additional check: Confirm if dev tools are really open (optional)
+          if (
+            window.outerWidth - window.innerWidth > 100 ||
+            window.outerHeight - window.innerHeight > 100
+          ) {
+            // This checks if the window has shrunk in size due to dev tools being opened
+            setOpen(true);
+          }
+          // }
         },
         ignore: () => {
           return process.env.NEXT_PUBLIC_ENV !== 'production';
@@ -71,11 +119,81 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
       });
     }
   });
-
+  console.log(path, '---------------------');
   return (
     <html lang="en">
       <head>
-        {' '}
+        <script
+          id="Cookiebot"
+          src="https://consent.cookiebot.com/uc.js"
+          data-cbid="86ce1cb4-4338-418c-acca-d54a1b81cccc"
+          data-blockingmode="auto"
+          type="text/javascript"
+        ></script>
+        {/* {path === '/privacy-policy' && (
+          <script
+            id="CookieDeclaration"
+            src="https://consent.cookiebot.com/86ce1cb4-4338-418c-acca-d54a1b81cccc/cd.js"
+            type="text/javascript"
+            async
+          ></script>
+        )} */}
+        {/* <Script
+          id="cookiebot"
+          strategy="beforeInteractive"
+          src="https://consent.cookiebot.com/uc.js"
+          data-cbid="86ce1cb4-4338-418c-acca-d54a1b81cccc"
+          type="text/javascript"
+          async
+        /> */}
+        <script
+          id="cookie-consent"
+          // strategy="afterInteractive"
+          data-cookieconsent="ignore"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag() {
+                dataLayer.push(arguments);
+              }
+              gtag("consent", "default", {
+                ad_personalization: "denied",
+                ad_storage: "denied",
+                ad_user_data: "denied",
+                analytics_storage: "denied",
+                functionality_storage: "denied",
+                personalization_storage: "denied",
+                security_storage: "granted",
+                wait_for_update: 500,
+              });
+              gtag("set", "ads_data_redaction", true);
+              gtag("set", "url_passthrough", false);
+            `
+          }}
+        />
+        <script
+          id="ga-consent"
+          // strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              function loadGA() {
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', ${process.env.NEXT_PUBLIC_GA}, { 'anonymize_ip': true });
+              }
+              
+              // Check Cookiebot Consent API
+              console.log("jyotiiiiii",Cookiebot)
+              window.addEventListener("CookieConsentDeclaration", function() {
+                if (Cookiebot.consent.statistics) {
+                console.log("tiwariiiii")
+                  loadGA();
+                }
+              });
+            `
+          }}
+        />
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -87,6 +205,35 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
         `
           }}
         />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+          (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+          new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+          j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+          'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+          })(window,document,'script','dataLayer','GTM-5J5J2RFB');
+        `
+          }}
+        />
+        <Script
+          strategy="afterInteractive"
+          src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA}`}
+        />
+        {/* <Script
+          id="ga4-init"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${process.env.NEXT_PUBLIC_GA}', {
+              page_path: window.location.pathname,
+            });
+          `
+          }}
+        /> */}
       </head>
       <Head>
         <link
@@ -128,25 +275,38 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
             style={{ display: 'none', visibility: 'hidden' }}
           ></iframe>
         </noscript>
+        <noscript>
+          <iframe
+            src={`https://www.googletagmanager.com/ns.html?id=GTM-5J5J2RFB`}
+            height="0"
+            width="0"
+            style={{ display: 'none', visibility: 'hidden' }}
+          ></iframe>
+        </noscript>
         <Provider store={store}>
           <ThemeProviders>
             {isV3Route ? (
               <>
-                <main className="">
-                  <Toaster />
-                  <CommonHeader />
-                  <div>{children}</div>
-                  <div style={{ zIndex: 100 }}>
-                    <SubscribeNewsLetter />
-                    <FooterSiteMap />
-                    <Footer />
-                  </div>
-                </main>
-                <AppDownloadPopup></AppDownloadPopup>
+                {isMobile ? (
+                  <AppDownloadPopup></AppDownloadPopup>
+                ) : (
+                  <main className="">
+                    <Toaster />
+                    {showLPHeader && <CommonHeader />}
+                    <div>{children}</div>
+                    <div style={{ zIndex: 100 }}>
+                      <SubscribeNewsLetter />
+                      <FooterSiteMap />
+                      <Footer />
+                    </div>
+                  </main>
+                )}
               </>
             ) : isV2Route ? (
               <>
-                {showHeader ? (
+                {isMobile ? (
+                  <AppDownloadPopup></AppDownloadPopup>
+                ) : showHeader ? (
                   <SecureComponent>{children}</SecureComponent>
                 ) : (
                   <ChildrenComponent>{children}</ChildrenComponent>

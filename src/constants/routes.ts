@@ -5,7 +5,8 @@ export const v3Routes = [
   '/v3/blogs',
   '/v3',
   '/v3/sustainability',
-  '/'
+  '/',
+  '/v3/traceability'
 ];
 export const headerlessRoutes = [
   '/v2/register',
@@ -32,7 +33,8 @@ export const v2Routes = [
   '/v2/my-account',
   '/v2/faqs',
   '/v2/my-appointments',
-  '/v2/matching-pair'
+  '/v2/matching-pair',
+  '/v2/turkey'
 ];
 export const protectedRoutes = ['/', ...v2Routes];
 

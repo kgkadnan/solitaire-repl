@@ -4,17 +4,16 @@ import { NavigationMenuDemo } from './navigation-menu';
 import { CommonButton } from '../button';
 import kgkLogo from '@public/v3/kgklogo.svg';
 import { usePathname, useRouter } from 'next/navigation';
-// import ShimmerButton from '../animated-button';
 import Image from 'next/image';
-// import Register from '@public/v3/home/register.svg';
 import ShimmerButton from '../animated-button';
-import { useMediaQuery } from 'react-responsive';
 import { isSessionValid } from '@/utils/manage-session';
 import { useLazyRegisterFunnelQuery } from '@/features/api/funnel';
 import {
   Tracking,
   Tracking_Click_RegisterPage
 } from '@/constants/funnel-tracking';
+import useUser from '@/lib/use-auth';
+import { trackEvent } from '@/utils/ga';
 
 const CommonHeader = () => {
   const currentRoute = usePathname();
@@ -22,10 +21,9 @@ const CommonHeader = () => {
   const [selectedHeader, setSelectedHeader] = useState<string>('');
   const [showHeader, setShowHeader] = useState(true);
   const lastScrollY = useRef(0);
-  const isMobile = useMediaQuery({ maxWidth: 1024 });
   let [funnelTrack] = useLazyRegisterFunnelQuery();
 
-  if (isMobile) return null;
+  const { authToken } = useUser();
   useEffect(() => {
     if (currentRoute === '/v3' || currentRoute === '/')
       setSelectedHeader('home');
@@ -35,7 +33,7 @@ const CommonHeader = () => {
       currentRoute === '/v3/about-us/leadership'
     )
       setSelectedHeader('aboutUs');
-    else if (currentRoute === '/v3/traceability')
+    else if (currentRoute.includes('/v3/traceability'))
       setSelectedHeader('traceability');
     else if (currentRoute === '/v3/sustainability')
       setSelectedHeader('sustainability');
@@ -80,7 +78,18 @@ const CommonHeader = () => {
                 entryPoint: Tracking_Click_RegisterPage.LP_Top_Login,
                 sessionId: isSessionValid()
               }),
-                router.push('/v2/login');
+                //   trackEvent({
+                //     action: Tracking.Click_RegisterPage,
+
+                //     entry_point: Tracking_Click_RegisterPage.LP_Top_Login,
+                //     category: 'Registration'
+                //   });
+                // localStorage.setItem(
+                //   'entryPoint',
+                //   Tracking_Click_RegisterPage.LP_Top_Login
+                // );
+
+                authToken ? router.push('/v2') : router.push('/v2/login');
             }}
             variant={'secondary'}
             size={'custom'}
@@ -89,22 +98,6 @@ const CommonHeader = () => {
           >
             Login
           </CommonButton>
-          {/* <CommonButton
-            onClick={() => router.push('/v2/register')}
-            variant={'prima'}
-            size={'custom'}
-            className="rounded-[8px] w-[80px] h-[44px]"
-          >
-            Register
-          </CommonButton> */}
-          {/* <Image
-            src={Register}
-            alt="register"
-            onClick={() => {
-              router.push('/v2/register');
-            }}
-            className="cursor-pointer"
-          /> */}
 
           <ShimmerButton
             className="!rounded-[8px] w-[120px] h-[44px] text-[16px]"
@@ -115,7 +108,17 @@ const CommonHeader = () => {
                 entryPoint: Tracking_Click_RegisterPage.LP_Top_Register,
                 sessionId: isSessionValid()
               }),
-                router.push('/v2/register');
+                trackEvent({
+                  action: Tracking.Click_RegisterPage,
+                  entry_point: Tracking_Click_RegisterPage.LP_Top_Register,
+                  category: 'Registration'
+                });
+              localStorage.setItem(
+                'entryPoint',
+                Tracking_Click_RegisterPage.LP_Top_Register
+              );
+
+              router.push('/v2/register');
             }}
             style={{ boxShadow: '0px 1px 2px 0px #1018281F' }}
           >

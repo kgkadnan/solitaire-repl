@@ -39,3 +39,21 @@
 .ctaLabel {
   text-transform: capitalize;
 }
+
+/* pulse.css */
+
+.pulse {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 hsla(216, 90%, 44%, 0.7); /* Slightly transparent blue */
+  }
+  50% {
+    box-shadow: 0 0 0 6px hsla(216, 90%, 44%, 0); /* Fully transparent */
+  }
+  100% {
+    box-shadow: 0 0 0 0 hsla(216, 90%, 44%, 0); /* Fully transparent */
+  }
+}

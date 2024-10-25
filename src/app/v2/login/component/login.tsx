@@ -12,6 +12,13 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { InputField } from '@/components/v2/common/input-field';
 import { useLazyTrackRegisterFlowQuery } from '@/features/api/register';
 import KgkIcon from '@public/v2/assets/icons/sidebar-icons/hover-kgk-icon.svg?url';
+import { isSessionValid } from '@/utils/manage-session';
+import {
+  Tracking,
+  Tracking_Click_RegisterPage
+} from '@/constants/funnel-tracking';
+import { useLazyRegisterFunnelQuery } from '@/features/api/funnel';
+import { trackEvent } from '@/utils/ga';
 
 const LoginComponent = ({
   setPhoneNumber,
@@ -37,6 +44,7 @@ const LoginComponent = ({
   const [isHovered, setIsHovered] = useState(false);
 
   const [triggerRegisterFlowTrack] = useLazyTrackRegisterFlowQuery();
+  let [funnelTrack] = useLazyRegisterFunnelQuery();
 
   const handleSubmit = (event: any) => {
     event.preventDefault(); // Prevent default form submission behavior
@@ -242,6 +250,20 @@ const LoginComponent = ({
                 triggerRegisterFlowTrack({
                   event: 'registration-button-click'
                 });
+                funnelTrack({
+                  step: Tracking_Click_RegisterPage.Login_Register,
+                  sessionId: isSessionValid()
+                });
+                trackEvent({
+                  action: Tracking.Click_RegisterPage,
+                  entry_point: Tracking_Click_RegisterPage.Login_Register,
+                  category: 'Registration'
+                });
+                localStorage.setItem(
+                  'entryPoint',
+                  Tracking_Click_RegisterPage.Login_Register
+                );
+
                 pathName === 'register'
                   ? router.back()
                   : router.push('/v2/register?path=login');

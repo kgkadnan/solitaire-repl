@@ -14,6 +14,8 @@ import CheckboxWithInput from '@/components/v2/common/check';
 import RadioButtonWithInput from '@/components/v2/common/radio-with-input';
 import { useGetCountryCodeQuery } from '@/features/api/current-ip';
 import { useLazyGetAllCountryCodeQuery } from '@/features/api/get-country-code';
+import { Tracking_KYC } from '@/constants/funnel-tracking';
+import { trackEvent } from '@/utils/ga';
 
 const cities = [
   'AHMEDABAD',
@@ -93,13 +95,30 @@ const CompanyDetail = ({
         'company_country_code'
       ];
 
+    let getCountryCodeFromLocalStorage = localStorage.getItem('userIp');
+    let parsedData;
+    if (getCountryCodeFromLocalStorage) {
+      parsedData = JSON.parse(getCountryCodeFromLocalStorage); // Parse the JSON string
+    }
+
     if (isCountryCodeAvbl?.length) {
       triggerGetAllCountryCode({}).then(data => {
         let getSpecificCountryData = data.data.filter((country: any) => {
           return country.code === isCountryCodeAvbl;
         });
+        console.log('isCountryCodeAvbl', getSpecificCountryData[0].iso);
         setSelectedCountryIso(getSpecificCountryData[0].iso);
       });
+    } else if (parsedData.countryCode && parsedData.iso) {
+      dispatch(
+        updateFormState({
+          name: `formState.online.sections[${[
+            kycScreenIdentifierNames.COMPANY_DETAILS
+          ]}][company_country_code]`,
+          value: parsedData.countryCode
+        })
+      );
+      setSelectedCountryIso(parsedData?.iso);
     } else {
       const userIp = JSON.parse(localStorage.getItem('userIp')!);
 
@@ -128,6 +147,15 @@ const CompanyDetail = ({
       }
     }
   }, [data, error]);
+
+  useEffect(() => {
+    trackEvent({
+      action: Tracking_KYC.KYC_Company_Details_PageView,
+      entry_point: localStorage.getItem('kyc_entryPoint') || '',
+      category: 'KYC',
+      country: localStorage.getItem('country') || ''
+    });
+  }, []);
 
   const [selectedCountryIso, setSelectedCountryIso] = useState('');
 

@@ -1,11 +1,12 @@
 import { IOtp } from '..';
-import logger from 'logging/log-util';
+// import logger from 'logging/log-util';
 import CommonPoppup from '@/app/v2/login/component/common-poppup';
 import { IToken } from '@/app/v2/register/interface';
 import { INVALID_PHONE } from '@/constants/error-messages/register';
 import { PHONE_REGEX } from '@/constants/validation-regex/regex';
 import { Tracking } from '@/constants/funnel-tracking';
 import { isSessionValid } from '@/utils/manage-session';
+import { trackEvent } from '@/utils/ga';
 interface IHandleEditMobileNumber {
   otpVerificationFormState: IOtp;
   setOTPVerificationFormErrors: React.Dispatch<React.SetStateAction<IOtp>>;
@@ -83,8 +84,20 @@ export const handleEditMobileNumber = ({
             step: Tracking.Click_Mobile_Edit_Save,
             status: 'Success',
             sessionId: isSessionValid(),
-            mobileNumber: `+${otpVerificationFormState.countryCode} ${otpVerificationFormState.otpMobileNumber}`
+            mobileNumber: `+${otpVerificationFormState.countryCode} ${otpVerificationFormState.otpMobileNumber}`,
+            entryPoint: localStorage.getItem('entryPoint') || ''
           });
+        trackEvent({
+          action: Tracking.Click_Mobile_Edit_Save,
+          label: Tracking.Click_Mobile_Edit_Save,
+          // value: {
+          mobile_number: `+${otpVerificationFormState.countryCode} ${otpVerificationFormState.otpMobileNumber}`,
+          status: 'Success',
+          entry_point: localStorage.getItem('entryPoint') || '',
+          category: 'Registration'
+
+          // }
+        });
       })
       .catch((e: any) => {
         setIsDialogOpen(true);
@@ -95,14 +108,26 @@ export const handleEditMobileNumber = ({
             handleClick={() => setIsDialogOpen(false)}
           />
         );
+        console.log(`something went wrong while sending OTP ${e}`);
         funnelTrack &&
           funnelTrack({
             step: Tracking.Click_Mobile_Edit_Save,
             status: 'Fail',
             sessionId: isSessionValid(),
-            mobileNumber: `+${otpVerificationFormState.countryCode} ${otpVerificationFormState.otpMobileNumber}`
+            mobileNumber: `+${otpVerificationFormState.countryCode} ${otpVerificationFormState.otpMobileNumber}`,
+            entryPoint: localStorage.getItem('entryPoint') || ''
           });
-        logger.error(`something went wrong while sending OTP ${e}`);
+        trackEvent({
+          action: Tracking.Click_Mobile_Edit_Save,
+          label: Tracking.Click_Mobile_Edit_Save,
+          // value: {
+          mobile_number: `+${otpVerificationFormState.countryCode} ${otpVerificationFormState.otpMobileNumber}`,
+          status: 'Fail',
+          entry_point: localStorage.getItem('entryPoint') || '',
+          category: 'Registration'
+
+          // }
+        });
       });
 
     setIsInputDialogOpen(false);

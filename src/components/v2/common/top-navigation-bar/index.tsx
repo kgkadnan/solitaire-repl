@@ -25,6 +25,12 @@ import {
 import { DialogComponent } from '../dialog';
 import logoutConfirmIcon from '@public/v2/assets/icons/modal/logout.svg';
 import crossIcon from '@public/v2/assets/icons/modal/cross.svg';
+import { Skeleton } from '@mui/material';
+import {
+  Tracking_KYC,
+  Tracking_KYC_Entry_Point
+} from '@/constants/funnel-tracking';
+import { trackEvent } from '@/utils/ga';
 
 export interface IUserAccountInfo {
   customer: {
@@ -60,12 +66,17 @@ const TopNavigationBar = ({
     localStorage.getItem('show-nudge')
   );
   const [isLogout, setIsLogout] = useState<boolean>(false);
-  const [triggerGetProfilePhoto] = useLazyGetProfilePhotoQuery({});
+  const [triggerGetProfilePhoto, { isSuccess }] = useLazyGetProfilePhotoQuery(
+    {}
+  );
   const [triggerLogout] = useLazyGetLogoutQuery({});
   const [triggerLogoutAll] = useLazyGetLogoutAllQuery({});
   const { userLoggedOut } = useUser();
   const [modalContent, setModalContent] = useState<any>();
   const [userAccountInfo, setUserAccountInfo] = useState<IUserAccountInfo>();
+  const [imageUrl, setImageUrl] = useState('');
+  const [isImageApiLoaded, setIsImageApiLoaded] = useState(false);
+
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   useEffect(() => {
     const fetchMyAPI = async () => {
@@ -89,8 +100,6 @@ const TopNavigationBar = ({
     }
   }, []);
 
-  const [imageUrl, setImageUrl] = useState('');
-
   useEffect(() => {
     setImageUrl('');
   }, [updatePhoto?.deleteStatus]);
@@ -101,6 +110,10 @@ const TopNavigationBar = ({
         .unwrap()
         .then((res: any) => {
           setImageUrl(res);
+          setIsImageApiLoaded(true);
+        })
+        .catch(e => {
+          setIsImageApiLoaded(true);
         });
     };
     getPhoto();
@@ -155,7 +168,19 @@ const TopNavigationBar = ({
                 {
                   variant: 'secondary',
                   label: 'Complete KYC Now',
-                  handler: () => router.push('/v2/kyc'),
+                  handler: () => {
+                    localStorage.setItem(
+                      'kyc_entryPoint',
+                      Tracking_KYC_Entry_Point.KYC_Top_Button
+                    ),
+                      trackEvent({
+                        action: Tracking_KYC.Click_KYC,
+                        entry_point:
+                          localStorage.getItem('kyc_entryPoint') || '',
+                        category: 'KYC'
+                      });
+                    router.push('/v2/kyc');
+                  },
                   customStyle: 'flex-1 w-full'
                 }
               ]}
@@ -167,19 +192,38 @@ const TopNavigationBar = ({
 
         <Popover>
           <PopoverTrigger className="flex justify-center">
-            <Avatar className="bg-primaryMain flex items-center justify-center">
-              {imageUrl?.length ? (
-                <img src={imageUrl} alt="profile" />
-              ) : (
-                <p className="text-center text-mRegular text-neutral0">
-                  {`${userAccountInfo?.customer?.first_name
-                    ?.charAt(0)
-                    .toUpperCase()}${userAccountInfo?.customer?.last_name
-                    ?.charAt(0)
-                    .toUpperCase()}`}
-                </p>
-              )}
-            </Avatar>
+            {isImageApiLoaded ? (
+              <Avatar
+                className={`${
+                  imageUrl.length <= 0 && 'bg-primaryMain'
+                } flex items-center justify-center`}
+              >
+                {imageUrl?.length ? (
+                  <img
+                    src={imageUrl}
+                    alt="profile"
+                    className="w-[40px] h-[40px] rounded-full object-cover border-none"
+                  />
+                ) : (
+                  <p className="text-center text-mRegular text-neutral0">
+                    {`${userAccountInfo?.customer?.first_name
+                      ?.charAt(0)
+                      .toUpperCase()}${userAccountInfo?.customer?.last_name
+                      ?.charAt(0)
+                      .toUpperCase()}`}
+                  </p>
+                )}
+              </Avatar>
+            ) : (
+              <Skeleton
+                width={40}
+                sx={{ bgcolor: 'var(--neutral-200)' }}
+                height={40}
+                variant="rectangular"
+                animation="wave"
+                className="rounded-[50%]"
+              />
+            )}
           </PopoverTrigger>
           {/* Popover content with radio buttons */}
           <PopoverContent className="z-[999]">
@@ -187,7 +231,11 @@ const TopNavigationBar = ({
               <div className="flex items-center border-b-[1px] border-solid border-primaryBorder p-[16px] gap-[8px]">
                 <Avatar className="bg-primaryMain flex items-center justify-center">
                   {imageUrl.length ? (
-                    <img src={imageUrl} alt="profile" />
+                    <img
+                      src={imageUrl}
+                      alt="profile"
+                      className="w-[40px] h-[40px] rounded-full object-cover border-none"
+                    />
                   ) : (
                     <p className="text-center text-mRegular text-neutral0">
                       {`${userAccountInfo?.customer?.first_name

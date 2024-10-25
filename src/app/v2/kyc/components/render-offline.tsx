@@ -1,5 +1,5 @@
 import { ManageLocales } from '@/utils/v2/translate';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AttachmentData } from './attachment-data/attachement-data';
 import FileAttachments from '@/components/v2/common/file-attachment';
 import CheckboxComponent from '@/components/v2/common/checkbox';
@@ -13,6 +13,8 @@ import { updateFormState } from '@/features/kyc/kyc';
 import { countries } from '@/constants/enums/kyc';
 import { DownloadAndUpload } from '@/components/v2/common/download-and-upload';
 import { TermsDialogComponent } from './terms-and-conditions';
+import { Tracking_KYC } from '@/constants/funnel-tracking';
+import { trackEvent } from '@/utils/ga';
 
 export const RenderOffline = ({
   formErrorState,
@@ -47,6 +49,7 @@ export const RenderOffline = ({
 
     return formData;
   };
+
   const fileUpload = ({ acceptedFiles, key }: any) => {
     handleFileupload({
       acceptedFiles,
@@ -93,6 +96,15 @@ export const RenderOffline = ({
         );
       });
   };
+
+  useEffect(() => {
+    trackEvent({
+      action: Tracking_KYC.KYC_Offline_Form_Pageview,
+      entry_point: localStorage.getItem('kyc_entryPoint') || '',
+      category: 'KYC',
+      country: localStorage.getItem('country') || ''
+    });
+  }, []);
 
   return (
     <div className="flex flex-col  items-center">
@@ -156,10 +168,10 @@ export const RenderOffline = ({
                 ? 'max-h-[660px]'
                 : country === countries.OTHER
                 ? 'max-h-[360px]'
-                : 'max-h-[200px]'
+                : 'max-h-[216px]'
             } w-[100%] flex justify-center`}
           >
-            <div className="w-[920px] flex flex-wrap flex-col  gap-[20px]">
+            <div className="w-[920px] flex flex-wrap flex-col  gap-x-[20px]">
               {AttachmentData &&
                 AttachmentData[country]?.map((attch: any) => {
                   return attch.key && Object?.keys(attch.key).length ? (

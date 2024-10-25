@@ -14,6 +14,7 @@ import { Carat } from './components/carat';
 import { Color } from './components/color';
 import {
   useAddDemandMutation,
+  useLazyGetAllBidStonesQuery,
   useLazyGetProductCountQuery
 } from '@/features/api/product';
 import useValidationStateManagement from '../hooks/validation-state-management';
@@ -48,10 +49,10 @@ import {
   SELECT_SOME_PARAM,
   SOMETHING_WENT_WRONG
 } from '@/constants/error-messages/form';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { setModifySearch } from './helpers/modify-search';
 import { useAppSelector } from '@/hooks/hook';
-import logger from 'logging/log-util';
+// import logger from 'logging/log-util';
 import {
   useAddSavedSearchMutation,
   useUpdateSavedSearchMutation
@@ -80,6 +81,10 @@ import { filterFunction } from '@/features/filter-new-arrival/filter-new-arrival
 import { parseQueryString } from './helpers/parse-query-string';
 import { filterBidData } from './helpers/filter-bid-data';
 import { filterBidToBuyFunction } from '@/features/filter-bid-to-buy/filter-bid-to-buy-slice';
+import { queryParamsFunction } from '@/features/event-params/event-param-slice';
+import CountdownTimer from '@/components/v2/common/timer';
+import Tab from '@/components/v2/common/bid-tabs';
+import { useLazyGetBidToBuyHistoryQuery } from '@/features/api/dashboard';
 
 export interface ISavedSearch {
   saveSearchName: string;
@@ -107,7 +112,10 @@ const Form = ({
   setIsAddDemand,
   isMatchingPair = false,
   isLoading,
-  setIsCommonLoading
+  setIsCommonLoading,
+  isTurkey = false,
+  time,
+  setRowSelection
 }: {
   searchUrl: string;
   setSearchUrl: Dispatch<SetStateAction<string>>;
@@ -130,11 +138,14 @@ const Form = ({
   isMatchingPair: boolean;
   isLoading: boolean;
   setIsCommonLoading: Dispatch<SetStateAction<boolean>>;
+  isTurkey?: boolean;
+  time?: any;
+  setRowSelection?: any;
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const subRoute = useSearchParams().get('active-tab');
-
+  const routePath = usePathname();
   const modifySearchFrom = searchParams.get('edit');
   const savedSearch: any = useAppSelector(
     (store: { savedSearch: any }) => store.savedSearch
@@ -241,10 +252,27 @@ const Form = ({
   const { setIsInputDialogOpen } = modalSetState;
   const [data, setData] = useState<any>();
   const [error, setError] = useState<any>();
+  const [timeDifference, setTimeDifference] = useState(null);
+  // const [checkStatus, setCheckStatus] = useState(false);
+
+  useEffect(() => {
+    const currentTime: any = new Date();
+    const targetTime: any = new Date(time!);
+    const timeDiff: any = targetTime - currentTime;
+
+    setTimeDifference(timeDiff);
+  }, [time]);
+
+  const queryParamsData = useAppSelector(state => state.queryParams);
+
   let [
     triggerProductCountApi,
     { isLoading: isLoadingProductApi, isFetching: isFetchingProductApi }
   ] = useLazyGetProductCountQuery();
+  let [
+    triggerBidToBuyApi,
+    { isLoading: isLoadingBidToBuyApi, isFetching: isFetchingBidToBuyApi }
+  ] = useLazyGetAllBidStonesQuery();
   let [
     triggerMatchingPairCountApi,
     { isLoading: isLoadingMatchPairApi, isFetching: isFetchingMatchPairApi }
@@ -281,7 +309,7 @@ const Form = ({
 
           dispatch(resetTimeTracking());
         } catch (error) {
-          logger.error(`Error logging time on drop-off: ${error}`);
+          console.log(`Error logging time on drop-off: ${error}`);
         }
       }
     };
@@ -305,19 +333,39 @@ const Form = ({
       });
 
       setError('');
-    } else if (subRoute === SubRoutes.BID_TO_BUY) {
+    } else if (routePath === Routes.BID_TO_BUY) {
       const query = parseQueryString(searchUrl);
-
-      const filteredData =
-        bidToBuyFilterData?.bidData &&
-        filterBidData(bidToBuyFilterData?.bidData, query);
-
-      setData({
-        count: filteredData.length,
-        products: filteredData
-      });
-
-      setError('');
+      // localStorage.setItem('bid',JSON.stringify(query))
+      setErrorText('');
+      setIsLoading(true);
+      triggerBidToBuyApi({ searchUrl: searchUrl, limit: 1 })
+        .unwrap()
+        .then((response: any) => {
+          setData(response), setActiveCount(response?.activeStone?.length);
+          setBidCount(response?.bidStone?.length);
+          setError(''), setIsLoading(false);
+          dispatch(
+            filterBidToBuyFunction({
+              queryParams: query,
+              bidData: response
+              // bidFilterData: data?.products
+            })
+          );
+        })
+        .catch(e => {
+          setError(e), setIsLoading(false);
+        });
+    } else if (isTurkey) {
+      setErrorText('');
+      setIsLoading(true);
+      triggerProductCountApi({ searchUrl: `${searchUrl}&turkey_event=true` })
+        .unwrap()
+        .then((response: any) => {
+          setData(response), setError(''), setIsLoading(false);
+        })
+        .catch(e => {
+          setError(e), setIsLoading(false);
+        });
     } else if (searchUrl.length > 0) {
       setErrorText('');
       setIsLoading(true);
@@ -434,12 +482,13 @@ const Form = ({
 
     let modifysavedSearchData = savedSearch?.savedSearch?.meta_data;
     let newArrivalBidDataQuery = newArrivalFilterData.queryParams;
-    let bidToBuyBidDataQuery = bidToBuyFilterData.queryParams;
+    let bidToBuyBidDataQuery = JSON.parse(localStorage.getItem('bid')!);
     setSelectedCaratRange([]);
 
     if (subRoute === SubRoutes.NEW_ARRIVAL && newArrivalBidDataQuery) {
       setModifySearch(newArrivalBidDataQuery, setState);
-    } else if (subRoute === SubRoutes.BID_TO_BUY && bidToBuyBidDataQuery) {
+    } else if (routePath === Routes.BID_TO_BUY && bidToBuyBidDataQuery) {
+      console.log('hrerer');
       setModifySearch(bidToBuyBidDataQuery, setState);
     } else if (
       modifySearchFrom === `${SubRoutes.SAVED_SEARCH}` &&
@@ -462,6 +511,10 @@ const Form = ({
       );
     }
   }, [modifySearchFrom]);
+  useEffect(() => {
+    routePath === Routes.BID_TO_BUY &&
+      setModifySearch(JSON.parse(localStorage.getItem('bid')!), setState);
+  }, []);
 
   useEffect(() => {
     let data: ISavedSearch[] | [] =
@@ -504,6 +557,13 @@ const Form = ({
       handleFormReset();
     }
   }, [subRoute]);
+  useEffect(() => {
+    if (isTurkey) {
+      let queryData = constructUrlParams(queryParamsData.queryParams);
+      setModifySearch(queryParamsData.queryParams, setState);
+      setSearchUrl(queryData);
+    }
+  }, [queryParamsData]);
   const handleFormSearch = async (
     isSavedParams: boolean = false,
     id?: string,
@@ -538,18 +598,41 @@ const Form = ({
       );
       router.push(`/v2/new-arrivals`);
       setSearchUrl('');
-    } else if (subRoute === SubRoutes.BID_TO_BUY) {
+    } else if (routePath === Routes.BID_TO_BUY) {
       const queryParams = generateQueryParams(state);
+      console.log(queryParams, 'queryParamsqueryParamsqueryParams');
+      localStorage.setItem('bid', JSON.stringify(queryParams));
 
+      setErrorText('');
+      setIsLoading(true);
+      triggerBidToBuyApi({ searchUrl: searchUrl })
+        .unwrap()
+        .then((response: any) => {
+          setData(response),
+            //         setBid(response?.bidStone),
+            // setActiveBid(response?.activeStone)
+            setError(''),
+            setIsLoading(false);
+          dispatch(
+            filterBidToBuyFunction({
+              queryParams,
+              bidData: response
+              // bidFilterData: data?.products
+            })
+          );
+        })
+        .catch(e => {
+          setError(e), setIsLoading(false);
+        });
+      router.push(`/v2/bid-2-buy?active-tab=result`);
+      // setSearchUrl('');
+    } else if (isTurkey) {
       dispatch(
-        filterBidToBuyFunction({
-          queryParams,
-          bidData: bidToBuyFilterData.bidData,
-          bidFilterData: data?.products
+        queryParamsFunction({
+          queryParams: generateQueryParams(state)
         })
       );
-      router.push(`/v2/bid-2-buy`);
-      setSearchUrl('');
+      router.push(`/v2/turkey`);
     } else if (
       JSON.parse(localStorage.getItem(formIdentifier)!)?.length >=
         MAX_SEARCH_TAB_LIMIT &&
@@ -860,7 +943,7 @@ const Form = ({
                 : handleFormSearch(true);
             })
             .catch((error: any) => {
-              logger.error(error);
+              console.log(error);
             });
         } else {
           await addSavedSearch({
@@ -946,7 +1029,6 @@ const Form = ({
       })
       .catch(_err => setIsLoading(false));
   };
-  let isNudge = localStorage.getItem('show-nudge') === 'MINI';
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
 
   let actionButtonData: IActionButtonDataItem[] = [
@@ -955,9 +1037,19 @@ const Form = ({
       label: ManageLocales('app.advanceSearch.cancel'),
       handler: () => {
         if (modifySearchFrom === `${SubRoutes.SAVED_SEARCH}`) {
-          router.push(`/v2/search?active-tab=${SubRoutes.SAVED_SEARCH}`);
+          isMatchingPair
+            ? router.push(
+                `/v2/matching-pair?active-tab=${SubRoutes.SAVED_SEARCH}`
+              )
+            : router.push(`/v2/search?active-tab=${SubRoutes.SAVED_SEARCH}`);
         } else if (modifySearchFrom === `${SubRoutes.RESULT}`) {
-          router.push(`/v2/search?active-tab=${SubRoutes.RESULT}-${activeTab}`);
+          isMatchingPair
+            ? router.push(
+                `/v2/matching-pair?active-tab=${SubRoutes.RESULT}-${activeTab}`
+              )
+            : router.push(
+                `/v2/search?active-tab=${SubRoutes.RESULT}-${activeTab}`
+              );
         }
       },
       isHidden:
@@ -1010,14 +1102,16 @@ const Form = ({
       },
 
       isHidden:
-        subRoute === SubRoutes.NEW_ARRIVAL || subRoute === SubRoutes.BID_TO_BUY
+        subRoute === SubRoutes.NEW_ARRIVAL ||
+        routePath === Routes.BID_TO_BUY ||
+        isTurkey
     },
     {
       variant: 'primary',
       label:
         // 'Search',
         `${
-          isMatchingPair
+          isMatchingPair || routePath === Routes.BID_TO_BUY
             ? 'Search'
             : !isLoadingProductApi &&
               !isLoadingMatchPairApi &&
@@ -1025,43 +1119,54 @@ const Form = ({
               !isLoading &&
               !isFetchingProductApi &&
               minMaxError.length === 0 &&
+              validationError.length === 0 &&
               errorText === NO_STONE_FOUND &&
               isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
             ? 'Add Demand'
             : 'Search'
         } `,
-      handler:
-        // errorText === NO_STONE_FOUND ? () => {} : handleFormSearch
-        isMatchingPair
-          ? minMaxError.length === 0 &&
-            errorText === NO_MATCHING_PAIRS_FOUND &&
-            isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
-            ? () => {}
-            : handleMatchingPairSearch
-          : !isLoadingProductApi &&
-            !isLoadingMatchPairApi &&
-            !isFetchingMatchPairApi &&
-            !isLoading &&
-            !isFetchingProductApi &&
-            minMaxError.length === 0 &&
-            errorText === NO_STONE_FOUND &&
-            isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
-          ? handleAddDemand
-          : handleFormSearch,
+      handler: isMatchingPair
+        ? minMaxError.length === 0 &&
+          errorText === NO_MATCHING_PAIRS_FOUND &&
+          isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
+          ? () => {}
+          : handleMatchingPairSearch
+        : routePath === Routes.BID_TO_BUY
+        ? minMaxError.length === 0 &&
+          validationError.length === 0 &&
+          errorText === NO_STONE_FOUND
+          ? () => {}
+          : handleFormSearch
+        : !isLoadingProductApi &&
+          !isLoadingMatchPairApi &&
+          !isFetchingMatchPairApi &&
+          !isLoading &&
+          !isFetchingProductApi &&
+          minMaxError.length === 0 &&
+          validationError.length === 0 &&
+          errorText === NO_STONE_FOUND &&
+          isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
+        ? handleAddDemand
+        : handleFormSearch,
 
       isDisable:
         !searchUrl.length ||
-        (!(
-          isLoading ||
-          isLoadingProductApi ||
-          isLoadingMatchPairApi ||
-          isFetchingMatchPairApi ||
-          isFetchingProductApi
-        ) &&
-          (isMatchingPair
-            ? data?.count > MAX_SEARCH_FORM_COUNT / 2
-            : data?.count > MAX_SEARCH_FORM_COUNT) &&
-          data?.count > MIN_SEARCH_FORM_COUNT),
+        minMaxError.length > 0 ||
+        validationError.length > 0
+          ? // errorText.length > 0
+            true
+          : false ||
+            (!(
+              isLoading ||
+              isLoadingProductApi ||
+              isLoadingMatchPairApi ||
+              isFetchingMatchPairApi ||
+              isFetchingProductApi
+            ) &&
+              (isMatchingPair
+                ? data?.count > MAX_SEARCH_FORM_COUNT / 2
+                : data?.count > MAX_SEARCH_FORM_COUNT) &&
+              data?.count > MIN_SEARCH_FORM_COUNT),
 
       isLoading:
         isLoading ||
@@ -1082,6 +1187,27 @@ const Form = ({
       setInputError('Input cannot exceed 20 characters');
     }
   };
+  const [historyCount, setHistoryCount] = useState(0);
+  const [activeCount, setActiveCount] = useState(0);
+
+  const [bidCount, setBidCount] = useState(0);
+  const [triggerBidToBuyHistory, { data: historyData }] =
+    useLazyGetBidToBuyHistoryQuery({});
+
+  const getBidToBuyHistoryData = () => {
+    triggerBidToBuyHistory({})
+      .then(res => {
+        setIsLoading(false);
+        setHistoryCount(res.data?.data?.length);
+      })
+      .catch(() => {
+        setIsLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    getBidToBuyHistoryData();
+  }, []);
 
   const renderContentWithInput = () => {
     return (
@@ -1161,16 +1287,80 @@ const Form = ({
       <div>
         <div className="py-2">
           <span className="text-neutral900 text-lRegular font-medium grid gap-[24px]">
-            Search for{' '}
-            {subRoute === SubRoutes.NEW_ARRIVAL
-              ? 'New Arrivals'
-              : subRoute === SubRoutes.BID_TO_BUY
-              ? 'Bid To Buy'
-              : isMatchingPair
-              ? 'Match Pair'
-              : 'Diamonds'}
+            {routePath === Routes.BID_TO_BUY ? (
+              <div className="flex  py-[4px] items-center justify-between">
+                <>
+                  {' '}
+                  <div className="flex gap-3 items-center">
+                    <p className="text-lMedium font-medium text-neutral900">
+                      Bid to Buy
+                    </p>
+                    {time && time?.length ? (
+                      <div className="text-successMain text-lMedium font-medium">
+                        ACTIVE
+                      </div>
+                    ) : (
+                      <div className="text-visRed text-lMedium font-medium">
+                        INACTIVE
+                      </div>
+                    )}
+                  </div>
+                  <div className="h-[38px]">
+                    {timeDifference !== null && timeDifference >= 0 && (
+                      <CountdownTimer
+                        initialHours={Math.floor(
+                          timeDifference / (1000 * 60 * 60)
+                        )}
+                        initialMinutes={Math.floor(
+                          (timeDifference % (1000 * 60 * 60)) / (1000 * 60)
+                        )}
+                        initialSeconds={Math.floor(
+                          (timeDifference % (1000 * 60)) / 1000
+                        )}
+                      />
+                    )}
+                  </div>
+                </>
+              </div>
+            ) : (
+              <>
+                Search for{' '}
+                {subRoute === SubRoutes.NEW_ARRIVAL
+                  ? 'New Arrivals'
+                  : // : subRoute === SubRoutes.BID_TO_BUY
+                  // ? 'Bid To Buy'
+                  isMatchingPair
+                  ? 'Match Pair'
+                  : 'Diamonds'}
+              </>
+            )}
           </span>
         </div>
+        {routePath.includes('v2/bid-2-buy') && (
+          <div className="p-2 border-[1px] rounded-t-[8px]">
+            <div className="w-[450px]">
+              <Tab
+                labels={['Bid Stone', 'Active Bid', 'Bid History']}
+                activeIndex={activeTab}
+                onTabClick={id => {
+                  console.log('id', id);
+                  setActiveTab(id);
+                  if (id !== 0) {
+                    router.push(
+                      `/v2/bid-2-buy?active-tab=result&active-bid-tab=${id}`
+                    );
+
+                    setRowSelection({});
+                  }
+                  // handleTabClick(id)
+                }}
+                activeCount={activeCount}
+                bidCount={' '}
+                historyCount={historyCount}
+              />
+            </div>
+          </div>
+        )}
         <div className="flex flex-col gap-[16px]">
           {searchParameters?.length > 0 ? (
             <div className="flex justify-between border-[1px] border-neutral200  px-[16px] py-[8px]">
@@ -1266,9 +1456,7 @@ const Form = ({
             selectedShade={selectedShade}
             setSelectedShade={setSelectedShade}
           />
-          {isNudge &&
-          (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
-            isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED) ? (
+          {isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED ? (
             <></>
           ) : (
             <DiscountPrice
@@ -1317,15 +1505,20 @@ const Form = ({
       >
         <div
           className={` flex items-center w-full  ${
-            isError || minMaxError ? 'justify-between' : 'justify-end'
+            isError || minMaxError || validationError
+              ? 'justify-between'
+              : 'justify-end'
           } `}
         >
-          {(isError || minMaxError.length > 0) && (
+          {(isError ||
+            minMaxError.length > 0 ||
+            validationError.length > 0) && (
             <div>
               <span className="hidden  text-successMain" />
               <span
                 className={`text-mRegular font-medium text-${
                   minMaxError.length > 0 ||
+                  validationError.length > 0 ||
                   errorText === EXCEEDS_LIMITS ||
                   errorText === EXCEEDS_LIMITS_MATCHING_PAIR ||
                   errorText === NO_MATCHING_PAIRS_FOUND ||
@@ -1342,6 +1535,8 @@ const Form = ({
                   ? ''
                   : minMaxError.length
                   ? minMaxError
+                  : validationError.length
+                  ? validationError
                   : !isValidationError && errorText}
               </span>
             </div>

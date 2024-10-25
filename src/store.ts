@@ -49,13 +49,16 @@ import { trackApi } from './features/api/track-interaction';
 import { matchingPairApi } from './features/api/match-pair';
 import trackPageApi from './features/api/track-page';
 import { funnelApi } from './features/api/funnel';
+import queryParamsReducer from './features/event-params/event-param-slice';
 
-const rootReducer = combineReducers({
+const appReducer = combineReducers({
   notificationBadge: notificationBadgeReducer,
   profileUpdate: profileUpdateReducer,
   pageTimeTracking: trackPageEventReducer,
   filterNewArrival: filterNewArrivalReducer,
   filterBidToBuy: filterBidToBuyReducer,
+  queryParams: queryParamsReducer,
+
   isEditingKYC: isEditingKycSlice,
   searchResult: searchResultReducer,
   searchList: searchListReducer,
@@ -93,6 +96,14 @@ const rootReducer = combineReducers({
   [trackPageApi.reducerPath]: trackPageApi.reducer,
   [funnelApi.reducerPath]: funnelApi.reducer
 });
+
+// Root reducer that resets state on logout
+const rootReducer = (state: any, action: any) => {
+  if (action.type === 'LOGOUT') {
+    state = undefined; // Resets the entire Redux state
+  }
+  return appReducer(state, action);
+};
 
 const handle410Middleware =
   (storeAPI: any) => (next: any) => async (action: any) => {

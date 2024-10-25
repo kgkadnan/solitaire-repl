@@ -9,6 +9,7 @@ import {
 } from '@/constants/funnel-tracking';
 import { isSessionValid } from '@/utils/manage-session';
 import { useLazyRegisterFunnelQuery } from '@/features/api/funnel';
+import { trackEvent } from '@/utils/ga';
 // import ShimmerButton from './animated-button';
 
 // import ShimmerButton from './animated-button';
@@ -54,6 +55,10 @@ const SubscribeNewsLetter = () => {
       return Tracking_Click_RegisterPage.LP_Leadership_Bottom_Register;
     } else if (path.includes('/v3/sustainability')) {
       return Tracking_Click_RegisterPage.LP_Sustainability_Bottom_Register;
+    } else if (path.includes('/v3/traceability/gemtrac')) {
+      return Tracking_Click_RegisterPage.LP_GemTrac_Bottom_Register;
+    } else if (path.includes('/v3/traceability')) {
+      return Tracking_Click_RegisterPage.LP_Traceability_Bottom_Register;
     } else if (path.includes('/v3/contact-us')) {
       return Tracking_Click_RegisterPage.LP_ContactUs_Bottom_Register;
     } else if (path.includes('/v3/blogs')) {
@@ -107,7 +112,14 @@ const SubscribeNewsLetter = () => {
               entryPoint: trackPath(),
               sessionId: isSessionValid()
             }),
-              router.push('/v2/register');
+              trackEvent({
+                action: Tracking.Click_RegisterPage,
+                entry_point: trackPath(),
+                category: 'Registration'
+              });
+            localStorage.setItem('entryPoint', trackPath());
+
+            router.push('/v2/register');
           }}
           className="cursor-pointer"
         />

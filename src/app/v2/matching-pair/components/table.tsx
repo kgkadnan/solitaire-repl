@@ -1,5 +1,7 @@
 import { Box, Stack } from '@mui/material';
 import styles from '../../../../components/v2/common/data-table/data-table.module.scss';
+import stylesPulse from '../../../../components/v2/common/side-navigation-bar/side-navigation.module.scss';
+
 import {
   MRT_ExpandButton,
   MRT_GlobalFilterTextField,
@@ -10,6 +12,8 @@ import {
 import ExpandImg from '@public/v2/assets/icons/detail-page/expand.svg?url';
 import CollapsIcon from '@public/v2/assets/icons/collapse-icon.svg?url';
 import ExportExcel from '@public/v2/assets/icons/detail-page/export-excel.svg?url';
+import Setting from '@public/v2/assets/icons/match-pair-setting.svg?url';
+
 import saveIcon from '@public/v2/assets/icons/data-table/bookmark.svg';
 import BinIcon from '@public/v2/assets/icons/bin.svg';
 import DownloadAllIcon from '@public/v2/assets/icons/download-all.svg';
@@ -18,6 +22,9 @@ import chevronDown from '@public/v2/assets/icons/save-search-dropdown/chevronDow
 import Image from 'next/image';
 import searchIcon from '@public/v2/assets/icons/data-table/search-icon.svg';
 import threeDotsSvg from '@public/v2/assets/icons/threedots.svg';
+import Cross from '@public/v2/assets/icons/cross.svg?url';
+import Drag from '@public/v2/assets/icons/drag.svg';
+import NoDataSvg from '@public/v2/assets/icons/no-matching-pair.svg';
 
 // theme.js
 import { ThemeProvider, createTheme } from '@mui/material/styles';
@@ -31,11 +38,15 @@ import { useCheckProductAvailabilityMutation } from '@/features/api/product';
 import { constructUrlParams } from '@/utils/v2/construct-url-params';
 import {
   MAX_SAVED_SEARCH_COUNT,
-  MAX_SEARCH_TAB_LIMIT
+  MAX_SEARCH_TAB_LIMIT,
+  MIN_SAVED_SEARCH_COUNT
 } from '@/constants/business-logic';
 import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
-import { useRouter } from 'next/navigation';
-import { MODIFY_SEARCH_STONES_EXCEEDS_LIMIT } from '@/constants/error-messages/saved';
+import { useRouter, useSearchParams } from 'next/navigation';
+import {
+  MODIFY_SEARCH_STONES_EXCEEDS_LIMIT,
+  NO_PRODUCT_FOUND
+} from '@/constants/error-messages/saved';
 import { isSearchAlreadyExist } from '@/app/v2/search/saved-search/helpers/handle-card-click';
 import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
 
@@ -52,7 +63,111 @@ import Tooltip from '@/components/v2/common/tooltip';
 import { Dropdown } from '@/components/v2/common/dropdown-menu';
 import Share from '@/components/v2/common/copy-and-share/share';
 import MathPairSkeleton from '@/components/v2/skeleton/match-pair';
-import { useLazyGetMatchingPairCountQuery } from '@/features/api/match-pair';
+import {
+  useApplyMatchingPairSettingMutation,
+  useLazyGetMatchingPairCountQuery,
+  useLazyGetResetMatchingPairSettingQuery
+} from '@/features/api/match-pair';
+import { MPSDialogComponent } from './mps';
+import { IndividualActionButton } from '@/components/v2/common/action-button/individual-button';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import CheckboxComponent from '@/components/v2/common/checkbox';
+import { InputField } from '@/components/v2/common/input-field';
+
+const defaultMatchPairSetting = [
+  {
+    up: 0,
+    key: 'shape',
+    down: 0,
+    display: 'Shape',
+    is_equal: true,
+    priority: 1,
+    start: 0,
+    end: 10
+  },
+  {
+    up: 0,
+    key: 'color',
+    down: 0,
+    display: 'Color',
+    is_equal: true,
+    priority: 2,
+    start: 0,
+    end: 10
+  },
+  {
+    up: 1,
+    key: 'clarity',
+    down: 1,
+    display: 'Clarity',
+    is_equal: false,
+    priority: 3,
+    start: 0,
+    end: 10
+  },
+  {
+    up: 0.05,
+    key: 'length',
+    down: 0.05,
+    display: 'Length',
+    is_equal: false,
+    priority: 4,
+    start: 0,
+    end: 100
+  },
+  {
+    up: 0.05,
+    key: 'width',
+    down: 0.05,
+    display: 'Width',
+    is_equal: false,
+    priority: 5,
+    start: 0,
+    end: 100
+  },
+  {
+    up: 2,
+    key: 'table_percentage',
+    down: 2,
+    display: 'Table%',
+    is_equal: false,
+    priority: 6,
+    start: 0,
+    end: 100
+  },
+  {
+    up: 1.7,
+    key: 'depth_percentage',
+    down: 1.7,
+    display: 'Depth%',
+    is_equal: false,
+    priority: 7,
+    start: 0,
+    end: 100
+  },
+  {
+    up: 0,
+    key: 'fluorescence',
+    down: 0,
+    display: 'Fluorescence',
+    is_equal: true,
+    priority: 8,
+    start: 0,
+    end: 10
+  },
+  {
+    up: 0.05,
+    key: 'carats',
+    down: 0.05,
+    display: 'Carats',
+    is_equal: false,
+    priority: 9,
+    range_to: 50,
+    range_from: 5,
+    start: 0,
+    end: 100
+  }
+];
 
 const theme = createTheme({
   typography: {
@@ -192,12 +307,19 @@ const MatchPairTable = ({
   handleCreateAppointment,
   originalData,
   setIsSkeletonLoading,
-  isSkeletonLoading
+  isSkeletonLoading,
+  mps,
+  setMps,
+  setSettingApplied,
+  isLoading,
+  countLimitReached
 }: any) => {
   // Fetching saved search data
   const router = useRouter();
   const [triggerSavedSearch] = useLazyGetAllSavedSearchesQuery({});
   const [checkProductAvailability] = useCheckProductAvailabilityMutation({});
+  const [resetMPS] = useLazyGetResetMatchingPairSettingQuery({});
+  const [applyMPS] = useApplyMatchingPairSettingMutation({});
 
   let [triggerMatchingPairCountApi] = useLazyGetMatchingPairCountQuery();
   const [isDropDownOpen, setIsDropDownOpen] = useState(false);
@@ -217,6 +339,10 @@ const MatchPairTable = ({
 
   const [paginatedData, setPaginatedData] = useState<any>([]);
   const [globalFilter, setGlobalFilter] = useState('');
+  const path = useSearchParams().get('active-tab');
+
+  const [isMPSOpen, setIsMPSOpen] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
   useEffect(() => {
     if (globalFilter !== '') {
       // Remove all whitespace characters from globalFilter
@@ -242,9 +368,10 @@ const MatchPairTable = ({
     const newData = rows.slice(startIndex, endIndex);
     // Update the paginated data state
     setPaginatedData(newData);
-    if (newData.length > 0 && setIsSkeletonLoading) {
-      setIsSkeletonLoading(false);
-    }
+
+    // if (newData.length > 0 && setIsSkeletonLoading) {
+    //   setIsSkeletonLoading(false);
+    // }
   }, [
     rows,
     pagination.pageIndex, //re-fetch when page index changes
@@ -317,6 +444,27 @@ const MatchPairTable = ({
                   ]}
                 />
               );
+            } else if (response?.data?.count === MIN_SAVED_SEARCH_COUNT) {
+              setIsLoading(false);
+              modalSetState.setIsDialogOpen(true);
+              modalSetState.setDialogContent(
+                <CommonPoppup
+                  status="warning"
+                  content={''}
+                  customPoppupBodyStyle="!mt-[70px]"
+                  header={NO_PRODUCT_FOUND}
+                  actionButtonData={[
+                    {
+                      variant: 'primary',
+                      label: ManageLocales('app.modal.okay'),
+                      handler: () => {
+                        modalSetState.setIsDialogOpen(false);
+                      },
+                      customStyle: 'flex-1 h-10'
+                    }
+                  ]}
+                />
+              );
             } else {
               const data: any = JSON.parse(
                 localStorage.getItem('MatchingPair')!
@@ -329,11 +477,18 @@ const MatchPairTable = ({
                 );
 
                 if (isAlreadyOpenIndex >= 0 && isAlreadyOpenIndex !== null) {
-                  router.push(
-                    `${Routes.MATCHING_PAIR}?active-tab=${SubRoutes.RESULT}-${
-                      isAlreadyOpenIndex + 1
-                    }`
-                  );
+                  if (
+                    isAlreadyOpenIndex + 1 ===
+                    Number((path?.match(/result-(\d+)/) || [])[1])
+                  ) {
+                    setIsLoading(false);
+                  } else {
+                    router.push(
+                      `${Routes.MATCHING_PAIR}?active-tab=${SubRoutes.RESULT}-${
+                        isAlreadyOpenIndex + 1
+                      }`
+                    );
+                  }
                   return;
                 } else if (data?.length >= MAX_SEARCH_TAB_LIMIT) {
                   modalSetState.setDialogContent(
@@ -500,7 +655,48 @@ const MatchPairTable = ({
 
   let isNudge = localStorage.getItem('show-nudge') === 'MINI';
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
-  const NoResultsComponent = () => <></>;
+  const NoResultsComponent = () => (
+    <>
+      {' '}
+      {isLoaded && !isLoading && !isSkeletonLoading && (
+        <div className="w-[100vw] flex justify-center mt-[50px]">
+          <div>
+            <div className="w-[350px] flex justify-center">
+              <Image src={NoDataSvg} alt={'empty'} />
+            </div>
+            <div className="flex flex-col justify-center items-center w-[350px]">
+              <h1 className="text-neutral600 font-medium text-[16px] w-[340px] text-center mb-[10px]">
+                {countLimitReached
+                  ? `Your selection has more than 150 matching pairs. Please modify the filters or adjust the match pair settings to reduce the selection to fewer than 150 matching pairs.`
+                  : `We don't have any stones according to your selection. Please
+                modify the filters or change the match pair settings.`}
+              </h1>
+
+              <ActionButton
+                actionButtonData={[
+                  {
+                    variant: 'secondary',
+                    label: 'Edit Filter',
+                    handler: () => {
+                      router.push(
+                        `/v2/matching-pair?active-tab=${path}&edit=result`
+                      );
+                    }
+                  },
+
+                  {
+                    variant: 'primary',
+                    label: 'Edit Match Pair Settings',
+                    handler: () => setIsMPSOpen(true)
+                  }
+                ]}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
   //pass table options to useMaterialReactTable
   const table = useMaterialReactTable({
     columns,
@@ -606,9 +802,9 @@ const MatchPairTable = ({
         }
       },
       'mrt-row-select': {
-        size: 40,
-        minSize: 40,
-        maxSize: 40
+        size: 15,
+        minSize: 15,
+        maxSize: 15
       }
     },
 
@@ -941,6 +1137,32 @@ const MatchPairTable = ({
                 ''
               )
             }
+            <div className="h-[37px] mr-[-8px]">
+              <p
+                className={`bg-infoMain rounded-[12px] px-[6px] py-[1px]  text-neutral0 text-[10px] ${styles.pulse}`}
+              >
+                New
+              </p>
+            </div>
+
+            <div
+              className=" rounded-[4px] cursor-pointer"
+              onClick={() => {
+                setIsMPSOpen(true);
+              }}
+            >
+              <Tooltip
+                tooltipTrigger={
+                  <button
+                    className={`rounded-[4px] hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm ${'bg-neutral0'}`}
+                  >
+                    <Setting className={`${'stroke-neutral900'}`} />
+                  </button>
+                }
+                tooltipContent={'Setting'}
+                tooltipContentStyles={'z-[1000]'}
+              />
+            </div>
 
             <div
               className=" rounded-[4px] cursor-pointer"
@@ -1099,10 +1321,8 @@ const MatchPairTable = ({
 
                     isDisable:
                       !Object.keys(rowSelection).length ||
-                      isKycVerified?.customer?.kyc?.status ===
-                        kycStatus.INPROGRESS ||
-                      isKycVerified?.customer?.kyc?.status ===
-                        kycStatus.REJECTED
+                      isKycVerified?.customer?.kyc?.status !==
+                        kycStatus.APPROVED
                   }
                 ]}
               />
@@ -1114,9 +1334,365 @@ const MatchPairTable = ({
     )
   });
 
+  const [initialMps, setInitialMps] = useState(mps); // Store the initial MPS state
+  const [isModified, setIsModified] = useState(false); // Track whether there are any changes
+  const [initialMpsState, setInitialMpsState] = useState(mps); // Store the initial MPS state
+
+  // This useEffect sets the initialMps state once MPS data is loaded
+  useEffect(() => {
+    setInitialMps(mps);
+  }, [mps]);
+
+  // Function to compare the current MPS state with the initial state
+  const checkForChanges = (currentMps: any[]) => {
+    console.log('currentMps', currentMps);
+    return JSON.stringify(currentMps) !== JSON.stringify(initialMps);
+  };
+  // Function to compare the current MPS state with the initial state
+  const isDefaultSetting = () => {
+    return JSON.stringify(mps) !== JSON.stringify(defaultMatchPairSetting);
+  };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoaded(true), setIsSkeletonLoading(false);
+    }, 1000); // Small delay to ensure rendering phase is completed
+
+    return () => clearTimeout(timer); // Cleanup the timer
+  }, []);
+  useEffect(() => {
+    // if(isLoading)
+    setIsLoaded(false);
+    setIsSkeletonLoading(true);
+    const timer = setTimeout(() => {
+      setIsLoaded(true), setIsSkeletonLoading(false);
+    }, 5000); // Small delay to ensure rendering phase is completed
+
+    return () => clearTimeout(timer);
+  }, [activeTab]);
+
+  const handleResetMPS = () => {
+    resetMPS({})
+      .unwrap()
+      .then(res => {
+        const resMap = new Map(res.map((itemB: any) => [itemB.key, itemB]));
+
+        const updatedMps = mps.map((itemA: any) => {
+          const itemB: any = resMap.get(itemA.key);
+
+          if (itemB) {
+            const updatedItem = { ...itemA };
+            Object.keys(itemB).forEach(key => {
+              if (itemA[key] !== itemB[key]) {
+                updatedItem[key] = itemB[key];
+              }
+            });
+            return updatedItem;
+          }
+
+          return itemA;
+        });
+
+        updatedMps.sort((a: any, b: any) => a.priority - b.priority);
+
+        console.log('updatedMps', updatedMps);
+
+        // Update state with the new array and reset isModified
+        setMps(updatedMps);
+        setInitialMps(updatedMps); // Update the initial state to the new reset state
+        setIsModified(false); // Disable the buttons
+        console.log(res, 'Reset data');
+        setSettingApplied(true);
+      });
+  };
+
+  const handleApplyMPS = () => {
+    applyMPS({ setting: mps }).unwrap();
+    setSettingApplied(true);
+    setIsMPSOpen(false);
+    setInitialMps(mps); // Set the current MPS as the new initial state after applying changes
+    setIsModified(false); // Disable the buttons
+  };
+
+  const handleInputChange = (
+    index: number,
+    newValue: string,
+    field: string
+  ) => {
+    // Allow input to be freely typed, even with leading zeros
+    const updatedMps = [...mps];
+    updatedMps[index] = { ...updatedMps[index], [field]: newValue }; // Keep as string while typing
+    setMps(updatedMps);
+    setIsModified(checkForChanges(updatedMps));
+  };
+
+  // const handleInputBlur = (index: number, field: string) => {
+  //   const endValue = mps[index].end;
+  //   let value = parseFloat(mps[index][field]) || 0; // Convert to number on blur
+
+  //   // Validate the value
+  //   if (value < 0) value = 0;
+  //   if (value > endValue) value = endValue;
+
+  //   const updatedMps = [...mps];
+  //   updatedMps[index] = { ...updatedMps[index], [field]: value.toString() }; // Set final validated value as string
+  //   setMps(updatedMps);
+  // };
+
+  const handleInputBlur = (index: number, field: string) => {
+    const endValue = mps[index].end;
+    let value = parseFloat(mps[index][field]) || 0; // Convert to number on blur
+
+    // Validate the value
+    if (value < 0) value = 0;
+    if (value > endValue) value = endValue;
+
+    // If endValue is 10, ensure the input is an integer
+    if (endValue === 10) {
+      value = Math.round(value); // Round to nearest integer
+    } else {
+      // If endValue is not 10, allow up to 2 decimal places
+      value = parseFloat(value.toFixed(2)); // Limit to 2 decimal places
+    }
+
+    const updatedMps = [...mps];
+    updatedMps[index] = { ...updatedMps[index], [field]: value.toString() }; // Set final validated value as string
+    setMps(updatedMps);
+  };
+
+  const handleIsEqualChange = (index: number) => {
+    const updatedMps = [...mps];
+    updatedMps[index] = {
+      ...updatedMps[index],
+      is_equal: !updatedMps[index].is_equal,
+      up: updatedMps[index].end === 100 ? '0.00' : '0',
+      down: updatedMps[index].end === 100 ? '0.00' : '0'
+    };
+
+    setMps(updatedMps);
+    setIsModified(checkForChanges(updatedMps)); // Check if the state has been modified
+  };
+  const [items, setItems] = useState(mps);
+  const handleOnDragEnd = (result: any) => {
+    if (!result.destination) return;
+
+    const newItems = Array.from(mps);
+    const [reorderedItem] = newItems.splice(result.source.index, 1);
+    newItems.splice(result.destination.index + 1, 0, reorderedItem);
+
+    // Update priority based on new position
+    const updatedItems = newItems.map((item: any, index) => ({
+      ...item,
+      priority: index + 1 // Priority is set to index+1 to reflect the new order
+    }));
+
+    setMps(updatedItems);
+    setIsModified(true);
+  };
+
+  // const handleDragEnd = (result: any) => {
+  //   const { destination, source } = result;
+
+  //   if (!destination) return;
+
+  //   const reorderedItems = Array.from(items);
+  //   const [removed] = reorderedItems.splice(source.index, 1);
+  //   reorderedItems.splice(destination.index, 0, removed);
+
+  //   setItems(reorderedItems);
+  // };
+  const renderContentMPS = () => {
+    return (
+      <div>
+        <div className="flex justify-between w-full p-4 items-center">
+          <p className="text-headingS font-medium text-neutral900">
+            Match Pair Settings
+          </p>
+          <div
+            className="cursor-pointer"
+            onClick={() => {
+              if (isModified) {
+                modalSetState.setIsDialogOpen(true);
+                modalSetState.setDialogContent(
+                  <CommonPoppup
+                    content={
+                      'You have unsaved changes. Are you sure you want to exit?'
+                    }
+                    status="warning"
+                    customPoppupBodyStyle="!mt-[70px]"
+                    header="Exit Without Saving?"
+                    actionButtonData={[
+                      {
+                        variant: 'secondary',
+                        label: 'No, Stay',
+                        handler: () => {
+                          modalSetState.setIsDialogOpen(false);
+                        },
+                        customStyle: 'flex-1'
+                      },
+                      {
+                        variant: 'primary',
+                        label: 'Yes, Exit',
+                        handler: () => {
+                          modalSetState.setIsDialogOpen(false);
+                          setIsMPSOpen(false);
+                          setMps(initialMpsState);
+                          setIsModified(false);
+                          setInitialMps(initialMpsState);
+                        },
+                        customStyle: 'flex-1'
+                      }
+                    ]}
+                  />
+                );
+              } else {
+                setIsMPSOpen(false);
+              }
+            }}
+          >
+            <Cross style={{ stroke: 'var(--neutral-900)' }} />
+          </div>
+        </div>
+
+        {/* Header for the table */}
+        <div className="w-full flex justify-between items-center bg-[#F9FAFB] h-[50px] border-t-[1px] border-b-[1px] border-neutral200">
+          <p className="w-[60px] px-2">Priority</p>
+          <p className="w-[150px]">Name</p>
+          <div className="w-[80px] flex justify-center">Equal</div>
+          <p className="w-[67px] flex justify-start">Up</p>
+          <p className="w-[80px] flex justify-start mr-[12px]">Down</p>
+          <div className="w-[87px]">Action</div>
+        </div>
+
+        {/* Main draggable container */}
+        <div className=" relative overflow-auto h-[441px]">
+          {' '}
+          {/* Add scroll and limit height */}
+          <DragDropContext onDragEnd={handleOnDragEnd}>
+            <Droppable droppableId="droppable">
+              {provided => (
+                <div {...provided.droppableProps} ref={provided.innerRef}>
+                  {mps.map((item: any, index: number) => (
+                    <div
+                      className={`flex gap-[23px] bg-neutral0 text-[14px] rounded-lg border-b-[1px] `}
+                    >
+                      <p className="w-[60px] flex items-center bg-[#F9FAFB] justify-center">
+                        {item.priority}
+                      </p>
+
+                      <Draggable
+                        key={item.key}
+                        draggableId={item.key.toString()}
+                        index={index}
+                      >
+                        {(provided, snapshot) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            className={`flex gap-[23px]  text-[14px]  ${
+                              snapshot.isDragging ? 'shadow-lg' : ''
+                            }`}
+                          >
+                            <div className="flex gap-[12px] bg-neutral0">
+                              <p className="w-[150px] flex items-center">
+                                {item.display}
+                              </p>
+
+                              <div className="w-[99px] flex items-center justify-center">
+                                <CheckboxComponent
+                                  onClick={() => handleIsEqualChange(index)}
+                                  isChecked={item.is_equal}
+                                />
+                              </div>
+
+                              <div className="w-[80px] py-1">
+                                <InputField
+                                  onChange={e =>
+                                    handleInputChange(
+                                      index,
+                                      e.target.value,
+                                      'up'
+                                    )
+                                  }
+                                  onBlur={() => handleInputBlur(index, 'up')}
+                                  type="number"
+                                  value={item.up}
+                                  placeholder={item.placeHolder}
+                                  styles={{ inputMain: 'h-[40px]' }}
+                                  disabled={item.is_equal}
+                                />
+                              </div>
+
+                              <div className="w-[80px] py-1">
+                                <InputField
+                                  onChange={e =>
+                                    handleInputChange(
+                                      index,
+                                      e.target.value,
+                                      'down'
+                                    )
+                                  }
+                                  onBlur={() => handleInputBlur(index, 'down')}
+                                  type="number"
+                                  value={item.down}
+                                  placeholder={item.placeHolder}
+                                  styles={{ inputMain: 'h-[40px]' }}
+                                  disabled={item.is_equal}
+                                />
+                              </div>
+
+                              <div
+                                className="w-[80px] flex justify-center"
+                                {...provided.dragHandleProps}
+                              >
+                                <Image src={Drag} alt="MPS drag" />
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </Draggable>
+                    </div>
+                  ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
+        </div>
+
+        {/* Buttons at the bottom */}
+        <div className="flex p-4 h-[56px] items-center gap-4">
+          <IndividualActionButton
+            onClick={handleResetMPS}
+            variant="secondary"
+            size="custom"
+            className="rounded-[4px] w-[100%] h-[40px]"
+            disabled={!isDefaultSetting()}
+          >
+            Reset
+          </IndividualActionButton>
+          <IndividualActionButton
+            onClick={handleApplyMPS}
+            variant="primary"
+            size="custom"
+            className="rounded-[4px] w-[100%] h-[40px]"
+            disabled={!isModified}
+          >
+            Apply
+          </IndividualActionButton>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <>
-      {isSkeletonLoading ? (
+      <MPSDialogComponent
+        isOpen={isMPSOpen}
+        onClose={() => setIsMPSOpen(false)}
+        renderContent={renderContentMPS}
+      />
+      {isSkeletonLoading || !isLoaded || isLoading ? (
         <MathPairSkeleton />
       ) : (
         <ThemeProvider theme={theme}>

@@ -32,12 +32,19 @@ import { handleDecrementDiscount } from '@/utils/v2/handle-decrement-discount';
 import { handleIncrementDiscount } from '@/utils/v2/handle-increment-discount';
 import { RenderBidToBuyLotIdColor } from '@/components/v2/common/data-table/helpers/render-cell';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import crossIcon from '@public/v2/assets/icons/new-arrivals/cross-icon.svg';
 import { SubRoutes } from '@/constants/v2/enums/routes';
 import { ManageLocales } from '@/utils/v2/translate';
-import { filterBidToBuyFunction } from '@/features/filter-bid-to-buy/filter-bid-to-buy-slice';
 import BiddingSkeleton from '@/components/v2/skeleton/bidding';
+import SearchInputField from '@/components/v2/common/search-input/search-input';
 // import debounce from 'lodash.debounce';
+import ClearIcon from '@public/v2/assets/icons/close-outline.svg?url';
+import {
+  useAddBidMutation,
+  useLazyGetAllBidStonesQuery
+} from '@/features/api/product';
+import CommonPoppup from '@/app/v2/login/component/common-poppup';
+import { useAppSelector } from '@/hooks/hook';
+import { constructUrlParams } from '@/utils/v2/construct-url-params';
 
 const theme = createTheme({
   typography: {
@@ -163,7 +170,6 @@ const BidToBuyDataTable = ({
   activeCount,
   bidCount,
   historyCount,
-  socketManager,
   rowSelection,
   setRowSelection,
   setIsLoading,
@@ -171,11 +177,11 @@ const BidToBuyDataTable = ({
   router,
   filterData,
   setBid,
-  dispatch,
   isSkeletonLoading,
   setIsSkeletonLoading,
   isTabSwitch,
-  setIsTabSwitch
+  setIsTabSwitch,
+  setActiveBid // searchUrl
 }: any) => {
   // Fetching saved search data
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -190,6 +196,23 @@ const BidToBuyDataTable = ({
 
   const [paginatedData, setPaginatedData] = useState<any>([]);
   const [globalFilter, setGlobalFilter] = useState('');
+
+  const [searchableId, setSearchableId] = useState('');
+
+  const handleFilterSearch = () => {
+    // Trim the searchableId to remove any extra spaces
+    let trimmedSearchableId = searchableId.trim();
+
+    // Filter the rows based on the trimmed searchableId
+    let searchData = rows.filter(
+      (data: any) => data.lot_id === trimmedSearchableId
+    );
+
+    // Update the paginated data state
+    setPaginatedData(searchData);
+  };
+  const filterDataState: any = useAppSelector(state => state.filterBidToBuy);
+
   useEffect(() => {
     if (globalFilter !== '') {
       // Remove all whitespace characters from globalFilter
@@ -210,7 +233,7 @@ const BidToBuyDataTable = ({
     }
   }, [globalFilter]);
   useEffect(() => {
-    if (activeTab !== 2) {
+    if ((activeTab === 0 && searchableId === '') || activeTab === 1) {
       // Calculate the start and end indices for the current page
       const startIndex = pagination.pageIndex * pagination.pageSize;
       const endIndex = startIndex + pagination.pageSize;
@@ -219,7 +242,7 @@ const BidToBuyDataTable = ({
       // Update the paginated data state
       setPaginatedData(newData);
       setIsSkeletonLoading(false);
-    } else {
+    } else if (activeTab === 2) {
       setPaginatedData(rows);
       setIsSkeletonLoading(false);
     }
@@ -227,7 +250,8 @@ const BidToBuyDataTable = ({
     rows,
     pagination.pageIndex, //re-fetch when page index changes
     pagination.pageSize, //re-fetch when page size changes
-    activeTab
+    activeTab,
+    searchableId
   ]);
 
   useEffect(() => {
@@ -337,7 +361,15 @@ const BidToBuyDataTable = ({
             <Tab
               labels={tabLabels}
               activeIndex={activeTab}
-              onTabClick={handleTabClick}
+              onTabClick={id => {
+                // if(id===0){
+                //   router.push(`/v2/bid-2-buy?active-tab=bid_to_bid`);
+                // }
+                // else{
+                handleTabClick(id), setSearchableId('');
+
+                // }
+              }}
               activeCount={activeCount}
               bidCount={bidCount}
               historyCount={historyCount}
@@ -347,99 +379,113 @@ const BidToBuyDataTable = ({
           <div className="flex gap-[12px]" style={{ alignItems: 'inherit' }}>
             {activeTab === 0 && (
               <div className="">
-                {filterData?.bidFilterData?.length > 0 ? (
-                  <button
-                    onClick={() => {
-                      router.push(
-                        `/v2/bid-2-buy?active-tab=${SubRoutes.BID_TO_BUY}`
-                      );
-                    }}
-                    className={`flex w-full shadow-sm justify-center py-[8px] h-[39px] px-[16px]  items-center font-medium  rounded-[4px] gap-1  border-[1px]  border-solid border-neutral200 text-mMedium  cursor-pointer  ${'bg-primaryMain text-neutral0 hover:bg-primaryHover'}`}
-                  >
-                    <FilterIcon stroke={`${'var(--neutral-0)'}`} />
+                <button
+                  onClick={() => {
+                    router.push(
+                      `/v2/bid-2-buy?active-tab=${SubRoutes.BID_TO_BUY}`
+                    );
+                  }}
+                  className={`flex w-full shadow-sm justify-center py-[8px] h-[39px] px-[16px]  items-center font-medium  rounded-[4px] gap-1  border-[1px]  border-solid border-neutral200 text-mMedium  cursor-pointer  ${'bg-primaryMain text-neutral0 hover:bg-primaryHover'}`}
+                >
+                  <FilterIcon
+                    stroke={`${'var(--neutral-0)'}`}
+                    fill={`${'var(--neutral-0)'}`}
+                  />
 
-                    <p className="w-[60%]">
-                      {ManageLocales('app.modifyFilter')}
-                    </p>
-                    <div
-                      className="w-[17%] cursor-pointer"
-                      onClick={e => {
-                        e.stopPropagation();
-                        setBid(filterData.bidData);
-                        dispatch(filterBidToBuyFunction({}));
-                      }}
-                    >
-                      <Image src={crossIcon} alt="crossIcon" />
-                    </div>
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => {
-                      dispatch(
-                        filterBidToBuyFunction({
-                          bidData: rows
-                        })
-                      );
-                      router.push(
-                        `/v2/bid-2-buy?active-tab=${SubRoutes.BID_TO_BUY}`
-                      );
-                    }}
-                    disabled={!rows.length}
-                    className={`flex justify-center disabled:!bg-neutral100 disabled:cursor-not-allowed disabled:text-neutral400  shadow-sm py-[8px] h-[39px] px-[16px] items-center font-medium  rounded-[4px] gap-1  border-[1px]  border-solid border-neutral200 text-mMedium  cursor-pointer  ${'text-neutral900 bg-neutral0 hover:bg-neutral50'}`}
-                  >
-                    <FilterIcon
-                      stroke={`${
-                        !rows.length
-                          ? 'var(--neutral-400)'
-                          : 'var(--neutral-900)'
-                      }`}
-                    />
-                    <p>{ManageLocales('app.applyFilter')}</p>
-                  </button>
-                )}
+                  <p className="w-[80%]">{ManageLocales('app.modifyFilter')}</p>
+                </button>
               </div>
             )}
-            <MRT_GlobalFilterTextField
-              table={table}
-              autoComplete="false"
-              className="max-[1092px]:w-[110px]   max-[1160px]:w-[180px] max-xl:w-auto"
-              sx={{
-                boxShadow: 'var(--input-shadow) inset',
-                border: 'none',
-                color: 'var(--neutral-400)',
-                borderRadius: '4px',
+            {activeTab === 0 ? (
+              <div className="flex relative">
+                <SearchInputField
+                  type="text"
+                  name="Search"
+                  value={searchableId}
+                  onChange={e => {
+                    setSearchableId(e.target.value);
+                  }}
+                  placeholder={'Search by stone id'}
+                  customStyle={`${searchableId && '!pr-[110px]'} !w-[250px]`}
+                />
+                {searchableId && (
+                  <>
+                    <ActionButton
+                      actionButtonData={[
+                        {
+                          variant: 'primary',
+                          label: 'Search',
+                          handler: handleFilterSearch,
+                          customCtaStyle: '!h-[30px] !text-[12px]',
 
-                '& .MuiOutlinedInput-input': {
-                  color: 'var(--neutral-900)',
-                  fontSize: '14px !important',
-                  paddingTop: '10px'
-                },
-                ':hover': {
-                  border: 'none'
-                },
-                '& .MuiOutlinedInput-notchedOutline': {
-                  borderColor: 'var(--neutral-200) !important'
-                },
+                          customStyle:
+                            'flex-1 w-[60px] h-[30px] absolute top-[6px] right-[32px]'
+                        }
+                      ]}
+                    />
+                    <div className="absolute inset-y-0 right-0 flex items-center pr-1">
+                      <ClearIcon
+                        className="stroke-neutral900 cursor-pointer"
+                        onClick={() => {
+                          setSearchableId('');
+                          const startIndex =
+                            pagination.pageIndex * pagination.pageSize;
+                          const endIndex = startIndex + pagination.pageSize;
+                          // Slice the data to get the current page's data
+                          const newData = rows.slice(startIndex, endIndex);
+                          // Update the paginated data state
+                          setPaginatedData(newData);
+                        }}
+                      />
+                    </div>
+                  </>
+                )}
+              </div>
+            ) : (
+              <MRT_GlobalFilterTextField
+                table={table}
+                autoComplete="false"
+                placeholder="Search by stone id"
+                className="max-[1092px]:w-[110px]   max-[1160px]:w-[180px] max-xl:w-auto"
+                sx={{
+                  boxShadow: 'var(--input-shadow) inset',
+                  border: 'none',
+                  color: 'var(--neutral-400)',
+                  borderRadius: '4px',
 
-                '& :hover .MuiOutlinedInput-notchedOutline': {
-                  borderColor: 'var(--neutral-200) !important'
-                },
+                  '& .MuiOutlinedInput-input': {
+                    color: 'var(--neutral-900)',
+                    fontSize: '14px !important',
+                    paddingTop: '10px'
+                  },
+                  ':hover': {
+                    border: 'none'
+                  },
+                  '& .MuiOutlinedInput-notchedOutline': {
+                    borderColor: 'var(--neutral-200) !important'
+                  },
 
-                '& .Mui-focused .MuiOutlinedInput-notchedOutline': {
-                  borderColor: 'var(--neutral-200) !important'
-                },
-                '& :focus .MuiOutlinedInput-notchedOutline': {
-                  borderColor: 'var(--neutral-200) !important'
-                },
+                  '& :hover .MuiOutlinedInput-notchedOutline': {
+                    borderColor: 'var(--neutral-200) !important'
+                  },
 
-                '& .MuiOutlinedInput-notchedOutline:hover': {
-                  borderColor: 'var(--neutral-200) !important'
-                },
-                '& .MuiInputAdornment-root': {
-                  display: 'none'
-                }
-              }}
-            />
+                  '& .Mui-focused .MuiOutlinedInput-notchedOutline': {
+                    borderColor: 'var(--neutral-200) !important'
+                  },
+                  '& :focus .MuiOutlinedInput-notchedOutline': {
+                    borderColor: 'var(--neutral-200) !important'
+                  },
+
+                  '& .MuiOutlinedInput-notchedOutline:hover': {
+                    borderColor: 'var(--neutral-200) !important'
+                  },
+                  '& .MuiInputAdornment-root': {
+                    display: 'none'
+                  }
+                }}
+              />
+            )}
+
             <div
               className=" rounded-[4px] cursor-pointer"
               onClick={handleDownloadExcel}
@@ -551,6 +597,12 @@ const BidToBuyDataTable = ({
   //   setGlobalFilter(value);
   // }, 300);
   //pass table options to useMaterialReactTable
+
+  const [addBid] = useAddBidMutation();
+  let [
+    triggerBidToBuyApi
+    // { isLoading: isLoadingBidToBuyApi, isFetching: isFetchingBidToBuyApi }
+  ] = useLazyGetAllBidStonesQuery();
   const table = useMaterialReactTable({
     columns,
     data: isTabSwitch ? [] : paginatedData, //must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
@@ -924,10 +976,7 @@ const BidToBuyDataTable = ({
       if (
         activeTab !== 2 &&
         rowSelection[row.id] &&
-        !(
-          isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
-          isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED
-        )
+        !(isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED)
       ) {
         const bidValue =
           bidValues[row.id] !== undefined
@@ -1114,11 +1163,61 @@ const BidToBuyDataTable = ({
                                 });
                                 return; // Exit early, do not update bidValues
                               }
-
-                              socketManager.emit('place_bidtobuy', {
+                              addBid({
                                 product_id: row.id,
-                                bid_value: bidValues[row.id]
-                              });
+                                bid_value: Number(bidValues[row.id])
+                              })
+                                .unwrap()
+                                .then(res => {
+                                  // if (res?.status === 200) {
+                                  modalSetState.setIsDialogOpen(true);
+                                  modalSetState.setDialogContent(
+                                    <CommonPoppup
+                                      content=""
+                                      header={'Bid Placed Successfully'}
+                                      handleClick={() =>
+                                        modalSetState.setIsDialogOpen(false)
+                                      }
+                                      buttonText="Okay"
+                                      status="success"
+                                    />
+                                  );
+                                  triggerBidToBuyApi({
+                                    searchUrl: constructUrlParams(
+                                      JSON.parse(localStorage.getItem('bid')!)
+                                    ),
+                                    limit: 300
+                                  })
+                                    .unwrap()
+                                    .then((response: any) => {
+                                      setBid(response?.bidStone);
+                                      setActiveBid(response?.activeStone);
+                                      setIsLoading(false);
+                                    })
+                                    .catch(e => {
+                                      setIsLoading(false);
+                                    });
+                                })
+                                .catch(e => {
+                                  modalSetState.setIsDialogOpen(true);
+                                  modalSetState.setDialogContent(
+                                    <CommonPoppup
+                                      header={e?.data?.message}
+                                      content={''}
+                                      handleClick={() =>
+                                        modalSetState.setIsDialogOpen(false)
+                                      }
+                                      buttonText="Okay"
+                                      // status="success"
+                                    />
+                                  );
+                                  // }
+                                });
+
+                              // socketManager.emit('place_bidtobuy', {
+                              //   product_id: row.id,
+                              //   bid_value: bidValues[row.id]
+                              // });
                               activeTab === 0 &&
                                 setRowSelection((prev: any) => {
                                   let prevRows = { ...prev };

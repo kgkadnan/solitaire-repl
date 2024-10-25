@@ -14,6 +14,7 @@ import { IOtp, IToken } from './main';
 import { isSessionValid } from '@/utils/manage-session';
 import { Tracking } from '@/constants/funnel-tracking';
 import { useLazyRegisterFunnelQuery } from '@/features/api/funnel';
+import { trackEvent } from '@/utils/ga';
 
 interface IRegisterComponent {
   registerSetState: IRegisterSetState;
@@ -69,8 +70,13 @@ const RegisterComponent = ({
   useEffect(() => {
     funnelTrack({
       step: Tracking.Register_PageView,
-
-      sessionId: isSessionValid()
+      sessionId: isSessionValid(),
+      entryPoint: localStorage.getItem('entryPoint') || ''
+    });
+    trackEvent({
+      action: Tracking.Register_PageView,
+      entry_point: localStorage.getItem('entryPoint') || '',
+      category: 'Registration'
     });
   }, []);
   return (
@@ -88,9 +94,15 @@ const RegisterComponent = ({
             onClick={() => {
               funnelTrack({
                 step: Tracking.Click_KGK_Logo,
-                sessionId: isSessionValid()
+                sessionId: isSessionValid(),
+                entryPoint: localStorage.getItem('entryPoint') || ''
               }),
-                router.push('/v3');
+                trackEvent({
+                  action: Tracking.Click_KGK_Logo,
+                  entry_point: localStorage.getItem('entryPoint') || '',
+                  category: 'Registration'
+                });
+              router.push('/v3');
             }}
           >
             <KgkIcon
@@ -262,11 +274,17 @@ const RegisterComponent = ({
                 onClick={() => {
                   funnelTrack({
                     step: Tracking.Click_Login,
-                    sessionId: isSessionValid()
+                    sessionId: isSessionValid(),
+                    entryPoint: localStorage.getItem('entryPoint') || ''
                   }),
-                    pathName === 'login'
-                      ? router.back()
-                      : router.push(`/v2/login?path=register`);
+                    trackEvent({
+                      action: Tracking.Click_Login,
+                      entry_point: localStorage.getItem('entryPoint') || '',
+                      category: 'Registration'
+                    });
+                  pathName === 'login'
+                    ? router.back()
+                    : router.push(`/v2/login?path=register`);
                 }}
                 className="rounded-[4px] text-neutral600"
                 size={'custom'}

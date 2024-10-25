@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
+const { withSentryConfig } = require('@sentry/nextjs');
+
 const nextConfig = {
   webpack(config) {
     // Grab the existing rule that handles SVG imports
@@ -43,5 +45,8 @@ const nextConfig = {
     ] // Add 'api.kgk.live' to the list of allowed domains
   }
 };
-
-module.exports = nextConfig;
+const SentryWebpackPluginOptions = {
+  silent: true // Suppresses all logs
+};
+// module.exports = nextConfig;
+module.exports = withSentryConfig(nextConfig, SentryWebpackPluginOptions);
