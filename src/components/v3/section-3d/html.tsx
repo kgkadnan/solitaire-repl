@@ -129,7 +129,7 @@ const HtmlAnimation = () => {
           className={`relative w-[460px] h-[1200px] bg-no-repeat bg-contain transition-transform duration-700 ease-in-out z-10 flex justify-center`}
           style={{
             backgroundImage: `url('/v3/home/phone-skeleton.png')`,
-            zIndex: '10 !important',
+            zIndex: '10 ',
             transform: phoneVisible
               ? windowWidth >= 1280
                 ? 'translateY(calc(100vh - 950px))'
