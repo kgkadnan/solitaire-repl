@@ -169,6 +169,27 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
             `
           }}
         />
+        <Script
+          id="ga-consent"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              function loadGA() {
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', ${process.env.NEXT_PUBLIC_GA}, { 'anonymize_ip': true });
+              }
+              
+              // Check Cookiebot Consent API
+              window.addEventListener("CookieConsentDeclaration", function() {
+                if (Cookiebot.consents.analytics) {
+                  loadGA();
+                }
+              });
+            `
+          }}
+        />
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -195,7 +216,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
           strategy="afterInteractive"
           src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA}`}
         />
-        <Script
+        {/* <Script
           id="ga4-init"
           strategy="afterInteractive"
           dangerouslySetInnerHTML={{
@@ -208,7 +229,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
             });
           `
           }}
-        />
+        /> */}
       </head>
       <Head>
         <link
