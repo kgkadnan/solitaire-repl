@@ -1,4 +1,3 @@
-// pages/cookie-declaration.js
 import { useEffect } from 'react';
 
 export default function CookieDeclaration() {
