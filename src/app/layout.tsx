@@ -130,14 +130,14 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
           data-blockingmode="auto"
           type="text/javascript"
         ></script>
-        {path === '/privacy-policy' && (
+        {/* {path === '/privacy-policy' && (
           <script
             id="CookieDeclaration"
             src="https://consent.cookiebot.com/86ce1cb4-4338-418c-acca-d54a1b81cccc/cd.js"
             type="text/javascript"
             async
           ></script>
-        )}
+        )} */}
         {/* <Script
           id="cookiebot"
           strategy="beforeInteractive"
