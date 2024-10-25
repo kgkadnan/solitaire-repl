@@ -18,8 +18,8 @@ export const trackEvent = ({
 
     if (
       window.Cookiebot &&
-      window.Cookiebot.consents &&
-      window.Cookiebot.consents.statistics
+      window.Cookiebot.consent &&
+      window.Cookiebot.consent.statistics
     ) {
       console.log('tiwariiiii33333');
 
