@@ -119,7 +119,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
       });
     }
   });
-
+  console.log(path, '---------------------');
   return (
     <html lang="en">
       <head>
@@ -130,12 +130,14 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
           data-blockingmode="auto"
           type="text/javascript"
         ></script>
-        <script
-          id="CookieDeclaration"
-          src="https://consent.cookiebot.com/86ce1cb4-4338-418c-acca-d54a1b81cccc/cd.js"
-          type="text/javascript"
-          async
-        ></script>{' '}
+        {/* {path === '/privacy-policy' && (
+          <script
+            id="CookieDeclaration"
+            src="https://consent.cookiebot.com/86ce1cb4-4338-418c-acca-d54a1b81cccc/cd.js"
+            type="text/javascript"
+            async
+          ></script>
+        )} */}
         {/* <Script
           id="cookiebot"
           strategy="beforeInteractive"
