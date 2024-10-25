@@ -405,7 +405,7 @@ const BidToBuyDataTable = ({
                   onChange={e => {
                     setSearchableId(e.target.value);
                   }}
-                  placeholder={'Search'}
+                  placeholder={'Search by stone id'}
                   customStyle={`${searchableId && '!pr-[110px]'} !w-[250px]`}
                 />
                 {searchableId && (
@@ -445,6 +445,7 @@ const BidToBuyDataTable = ({
               <MRT_GlobalFilterTextField
                 table={table}
                 autoComplete="false"
+                placeholder="Search by stone id"
                 className="max-[1092px]:w-[110px]   max-[1160px]:w-[180px] max-xl:w-auto"
                 sx={{
                   boxShadow: 'var(--input-shadow) inset',

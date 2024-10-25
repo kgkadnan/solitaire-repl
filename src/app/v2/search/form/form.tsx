@@ -1037,9 +1037,19 @@ const Form = ({
       label: ManageLocales('app.advanceSearch.cancel'),
       handler: () => {
         if (modifySearchFrom === `${SubRoutes.SAVED_SEARCH}`) {
-          router.push(`/v2/search?active-tab=${SubRoutes.SAVED_SEARCH}`);
+          isMatchingPair
+            ? router.push(
+                `/v2/matching-pair?active-tab=${SubRoutes.SAVED_SEARCH}`
+              )
+            : router.push(`/v2/search?active-tab=${SubRoutes.SAVED_SEARCH}`);
         } else if (modifySearchFrom === `${SubRoutes.RESULT}`) {
-          router.push(`/v2/search?active-tab=${SubRoutes.RESULT}-${activeTab}`);
+          isMatchingPair
+            ? router.push(
+                `/v2/matching-pair?active-tab=${SubRoutes.RESULT}-${activeTab}`
+              )
+            : router.push(
+                `/v2/search?active-tab=${SubRoutes.RESULT}-${activeTab}`
+              );
         }
       },
       isHidden:
