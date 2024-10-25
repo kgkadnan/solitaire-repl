@@ -14,11 +14,17 @@ export const trackEvent = ({
   [key: string]: any;
 }) => {
   if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('event', action, {
-      event_category: category,
-      event_label: label,
-      platform: 'Web',
-      ...params // Dynamically include all other custom parameters
-    });
+    if (
+      window.Cookiebot &&
+      window.Cookiebot.consents &&
+      window.Cookiebot.consents.statistics
+    ) {
+      window.gtag('event', action, {
+        event_category: category,
+        event_label: label,
+        platform: 'Web',
+        ...params // Dynamically include all other custom parameters
+      });
+    }
   }
 };
