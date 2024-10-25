@@ -1570,78 +1570,86 @@ const MatchPairTable = ({
               {provided => (
                 <div {...provided.droppableProps} ref={provided.innerRef}>
                   {mps.map((item: any, index: number) => (
-                    <Draggable
-                      key={item.key}
-                      draggableId={item.key.toString()}
-                      index={index}
+                    <div
+                      className={`flex gap-[23px] bg-neutral0 text-[14px] rounded-lg border-b-[1px] `}
                     >
-                      {(provided, snapshot) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          className={`flex gap-[23px] bg-neutral0 text-[14px] rounded-lg border-b-[1px] ${
-                            snapshot.isDragging ? 'shadow-lg' : ''
-                          }`}
-                        >
-                          <p className="w-[60px] flex items-center justify-center">
-                            {item.priority}
-                          </p>
+                      <p className="w-[60px] flex items-center bg-[#F9FAFB] justify-center">
+                        {item.priority}
+                      </p>
 
-                          <div className="flex gap-[12px] bg-neutral0">
-                            <p className="w-[150px] flex items-center">
-                              {item.display}
-                            </p>
+                      <Draggable
+                        key={item.key}
+                        draggableId={item.key.toString()}
+                        index={index}
+                      >
+                        {(provided, snapshot) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            className={`flex gap-[23px]  text-[14px]  ${
+                              snapshot.isDragging ? 'shadow-lg' : ''
+                            }`}
+                          >
+                            <div className="flex gap-[12px] bg-neutral0">
+                              <p className="w-[150px] flex items-center">
+                                {item.display}
+                              </p>
 
-                            <div className="w-[99px] flex items-center justify-center">
-                              <CheckboxComponent
-                                onClick={() => handleIsEqualChange(index)}
-                                isChecked={item.is_equal}
-                              />
-                            </div>
+                              <div className="w-[99px] flex items-center justify-center">
+                                <CheckboxComponent
+                                  onClick={() => handleIsEqualChange(index)}
+                                  isChecked={item.is_equal}
+                                />
+                              </div>
 
-                            <div className="w-[80px] py-1">
-                              <InputField
-                                onChange={e =>
-                                  handleInputChange(index, e.target.value, 'up')
-                                }
-                                onBlur={() => handleInputBlur(index, 'up')}
-                                type="number"
-                                value={item.up}
-                                placeholder={item.placeHolder}
-                                styles={{ inputMain: 'h-[40px]' }}
-                                disabled={item.is_equal}
-                              />
-                            </div>
+                              <div className="w-[80px] py-1">
+                                <InputField
+                                  onChange={e =>
+                                    handleInputChange(
+                                      index,
+                                      e.target.value,
+                                      'up'
+                                    )
+                                  }
+                                  onBlur={() => handleInputBlur(index, 'up')}
+                                  type="number"
+                                  value={item.up}
+                                  placeholder={item.placeHolder}
+                                  styles={{ inputMain: 'h-[40px]' }}
+                                  disabled={item.is_equal}
+                                />
+                              </div>
 
-                            <div className="w-[80px] py-1">
-                              <InputField
-                                onChange={e =>
-                                  handleInputChange(
-                                    index,
-                                    e.target.value,
-                                    'down'
-                                  )
-                                }
-                                onBlur={() => handleInputBlur(index, 'down')}
-                                type="number"
-                                value={item.down}
-                                placeholder={item.placeHolder}
-                                styles={{ inputMain: 'h-[40px]' }}
-                                disabled={item.is_equal}
-                              />
-                            </div>
+                              <div className="w-[80px] py-1">
+                                <InputField
+                                  onChange={e =>
+                                    handleInputChange(
+                                      index,
+                                      e.target.value,
+                                      'down'
+                                    )
+                                  }
+                                  onBlur={() => handleInputBlur(index, 'down')}
+                                  type="number"
+                                  value={item.down}
+                                  placeholder={item.placeHolder}
+                                  styles={{ inputMain: 'h-[40px]' }}
+                                  disabled={item.is_equal}
+                                />
+                              </div>
 
-                            <div
-                              className="w-[80px] flex justify-center"
-                              {...provided.dragHandleProps}
-                            >
-                              <Image src={Drag} alt="MPS drag" />
+                              <div
+                                className="w-[80px] flex justify-center"
+                                {...provided.dragHandleProps}
+                              >
+                                <Image src={Drag} alt="MPS drag" />
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      )}
-                    </Draggable>
+                        )}
+                      </Draggable>
+                    </div>
                   ))}
                   {provided.placeholder}
                 </div>
