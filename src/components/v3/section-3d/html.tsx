@@ -34,6 +34,12 @@ const HtmlAnimation = () => {
   ];
 
   useEffect(() => {
+    if (typeof window.Cookiebot !== 'undefined') {
+      window.Cookiebot.renew();
+    }
+  }, [showBanner, phoneVisible, scrollIndex]); // Re-initialize on state change
+
+  useEffect(() => {
     if (typeof window !== 'undefined') {
       setWindowWidth(window?.innerWidth || 0); // Set window width on mount
       setWindowHeight(window?.innerHeight || 0); // Set window width on mount

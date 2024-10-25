@@ -214,7 +214,7 @@ const LandingPage = () => {
       {' '}
       <div className="flex flex-col">
         <div className="overflow-hidden	w-full flex justify-center pt-[80px] bg-[#FCFDFD] ">
-          {/* <HtmlAnimation /> */}
+          <HtmlAnimation />
         </div>
         <div className="xl:px-[112px] lg:px-[32px]  pb-[40px] flex flex-col bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient items-center blur-bottom  justify-center">
           <div className="flex flex-col gap-2 text-center w-[840px] py-[40px] justify-center">
