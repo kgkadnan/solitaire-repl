@@ -10,6 +10,7 @@ declare global {
         marketing: boolean;
         necessary: boolean;
       };
+      renew?: any;
     };
   }
 }
