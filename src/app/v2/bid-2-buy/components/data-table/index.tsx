@@ -567,30 +567,40 @@ const BidToBuyDataTable = ({
   );
   const renderBottomToolbar = ({ table }: any) => renderFooter(table);
 
-  const NoResultsComponent = () => (
-    <div
-      className={`flex flex-col items-center justify-center gap-5 ${
-        isFullScreen ? 'h-[69vh]' : !rows.length ? 'h-[55vh]' : 'h-[60vh]'
-      }  mt-[50px]`}
-    >
-      {(activeTab === 1 && activeCount === 0) ||
-      (activeTab === 0 && bidCount === 0) ||
-      (activeTab === 2 && historyCount === 0) ||
-      rows.length === 0 ? (
-        <>
-          <Image src={empty} alt={'empty'} />
-          <p className="text-neutral900  w-[350px] text-center ">
-            Every month we provide an extra discount on a few stones which you
-            can bid to buy. Stay tuned.
-          </p>
-        </>
-      ) : rows.length ? (
-        ''
-      ) : (
-        <CustomKGKLoader />
-      )}
-    </div>
-  );
+  const NoResultsComponent = () => {
+    console.log('herererer', paginatedData, globalFilter);
+    return (
+      <div
+        className={`flex flex-col items-center justify-center gap-5 ${
+          isFullScreen ? 'h-[69vh]' : !rows.length ? 'h-[55vh]' : 'h-[60vh]'
+        }  mt-[50px]`}
+      >
+        {(activeTab === 1 && activeCount === 0) ||
+        (activeTab === 0 && bidCount === 0) ||
+        (activeTab === 2 && historyCount === 0) ||
+        rows.length === 0 ? (
+          <>
+            <Image src={empty} alt={'empty'} />
+            <p className="text-neutral900  w-[350px] text-center ">
+              Every month we provide an extra discount on a few stones which you
+              can bid to buy. Stay tuned.
+            </p>
+          </>
+        ) : !paginatedData.length && searchableId.length ? (
+          <div className="w-[110vw]  text-center">
+            <Image src={empty} alt={'empty'} />
+            <p className="text-neutral900  w-[220px] text-center ">
+              No matching stones found.
+            </p>
+          </div>
+        ) : rows.length ? (
+          ''
+        ) : (
+          <CustomKGKLoader />
+        )}
+      </div>
+    );
+  };
   let isNudge = localStorage.getItem('show-nudge') === 'MINI';
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   // const handleGlobalFilterChange = debounce((value: any) => {
