@@ -181,6 +181,7 @@ const BidToBuyDataTable = ({
   setIsSkeletonLoading,
   isTabSwitch,
   setIsTabSwitch,
+
   setActiveBid // searchUrl
 }: any) => {
   // Fetching saved search data
@@ -193,7 +194,6 @@ const BidToBuyDataTable = ({
     pageIndex: 0,
     pageSize: 20 //customize the default page size
   });
-
   const [paginatedData, setPaginatedData] = useState<any>([]);
   const [globalFilter, setGlobalFilter] = useState('');
 
@@ -565,15 +565,20 @@ const BidToBuyDataTable = ({
       )}
     </div>
   );
-  const renderBottomToolbar = ({ table }: any) => renderFooter(table);
+  const renderBottomToolbar = ({ table }: any) => {
+    if (!paginatedData.length) {
+      return null;
+    } else {
+      return renderFooter(table);
+    }
+  };
 
   const NoResultsComponent = () => {
-    console.log('herererer', paginatedData, globalFilter);
     return (
       <div
         className={`flex flex-col items-center justify-center gap-5 ${
           isFullScreen ? 'h-[69vh]' : !rows.length ? 'h-[55vh]' : 'h-[60vh]'
-        }  mt-[50px]`}
+        }   mt-[50px] ${!paginatedData.length && '!h-[47vh]  !mt-[20px]'}`}
       >
         {(activeTab === 1 && activeCount === 0) ||
         (activeTab === 0 && bidCount === 0) ||
@@ -587,9 +592,9 @@ const BidToBuyDataTable = ({
             </p>
           </>
         ) : !paginatedData.length && searchableId.length ? (
-          <div className="w-[110vw]  text-center">
-            <Image src={empty} alt={'empty'} />
-            <p className="text-neutral900  w-[220px] text-center ">
+          <div className="text-center">
+            <Image src={empty} alt="empty" />
+            <p className="text-neutral900 w-[220px] mx-auto">
               No matching stones found.
             </p>
           </div>
@@ -614,7 +619,7 @@ const BidToBuyDataTable = ({
     // { isLoading: isLoadingBidToBuyApi, isFetching: isFetchingBidToBuyApi }
   ] = useLazyGetAllBidStonesQuery();
   const table = useMaterialReactTable({
-    columns,
+    columns: paginatedData.length ? columns : [],
     data: isTabSwitch ? [] : paginatedData, //must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
 
     //state
@@ -645,6 +650,7 @@ const BidToBuyDataTable = ({
     globalFilterFn: 'startsWith',
     selectAllMode: 'page',
     renderTopToolbar,
+    enablePagination: !paginatedData.length ? false : true,
     renderBottomToolbar,
     renderEmptyRowsFallback: NoResultsComponent,
     manualPagination: true,

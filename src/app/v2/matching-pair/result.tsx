@@ -114,7 +114,10 @@ const MatchingPairResult = ({
   setIsInputDialogOpen,
   mps,
   setMps,
-  isLoading
+  isLoading,
+  setSettingApplied,
+  settingApplied,
+  setIsMPSOpen
 }: {
   activeTab: number;
   searchParameters: any;
@@ -127,6 +130,9 @@ const MatchingPairResult = ({
   isLoading: boolean;
   mps: any;
   setMps: any;
+  setSettingApplied: any;
+  settingApplied: any;
+  setIsMPSOpen: any;
 }) => {
   const dispatch = useAppDispatch();
   const confirmTrack = useAppSelector(state => state.setConfirmStoneTrack);
@@ -135,7 +141,7 @@ const MatchingPairResult = ({
   const [isSkeletonLoading, setIsSkeletonLoading] = useState<boolean>(true);
   const [activePreviewTab, setActivePreviewTab] = useState('Image');
   const [imageIndex, setImageIndex] = useState<number>(0);
-  const [settingApplied, setSettingApplied] = useState(false);
+
   const [triggerAvailableSlots] = useLazyGetAvailableMyAppointmentSlotsQuery(
     {}
   );
@@ -1608,7 +1614,6 @@ const MatchingPairResult = ({
                   searchList={searchList}
                   setIsLoading={setIsLoading}
                   handleAddToCart={handleAddToCart}
-                  settingApplied={settingApplied}
                   setIsConfirmStone={setIsConfirmStone}
                   setConfirmStoneData={setConfirmStoneData}
                   setIsCompareStone={setIsCompareStone}
@@ -1618,6 +1623,7 @@ const MatchingPairResult = ({
                   originalData={originalData}
                   setIsSkeletonLoading={setIsSkeletonLoading}
                   isSkeletonLoading={isSkeletonLoading}
+                  setIsMPSOpen={setIsMPSOpen}
                   mps={mps}
                   setMps={setMps}
                   setSettingApplied={setSettingApplied}

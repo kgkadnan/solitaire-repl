@@ -10,8 +10,10 @@ import React, {
   useState
 } from 'react';
 import { Shape } from './components/shape';
+import Setting from '@public/v2/assets/icons/match-pair-setting.svg?url';
 import { Carat } from './components/carat';
 import { Color } from './components/color';
+import styles from '@components/v2/common/data-table/data-table.module.scss';
 import {
   useAddDemandMutation,
   useLazyGetAllBidStonesQuery,
@@ -85,6 +87,7 @@ import { queryParamsFunction } from '@/features/event-params/event-param-slice';
 import CountdownTimer from '@/components/v2/common/timer';
 import Tab from '@/components/v2/common/bid-tabs';
 import { useLazyGetBidToBuyHistoryQuery } from '@/features/api/dashboard';
+import Tooltip from '@/components/v2/common/tooltip';
 
 export interface ISavedSearch {
   saveSearchName: string;
@@ -115,7 +118,8 @@ const Form = ({
   setIsCommonLoading,
   isTurkey = false,
   time,
-  setRowSelection
+  setRowSelection,
+  setIsMPSOpen
 }: {
   searchUrl: string;
   setSearchUrl: Dispatch<SetStateAction<string>>;
@@ -141,6 +145,7 @@ const Form = ({
   isTurkey?: boolean;
   time?: any;
   setRowSelection?: any;
+  setIsMPSOpen?: any;
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -1386,6 +1391,37 @@ const Form = ({
                     }
                   ]}
                 />
+                {routePath.includes('v2/matching-pair') && (
+                  <div className="flex gap-3">
+                    <div className="h-[37px] mr-[-8px]">
+                      <p
+                        className={`bg-infoMain rounded-[12px] px-[6px] py-[1px]  text-neutral0 text-[10px] ${styles.pulse}`}
+                      >
+                        New
+                      </p>
+                    </div>
+
+                    <div
+                      className=" rounded-[4px] cursor-pointer"
+                      onClick={() => {
+                        setIsMPSOpen(true);
+                      }}
+                    >
+                      <Tooltip
+                        tooltipTrigger={
+                          <button
+                            className={`rounded-[4px] hover:bg-neutral50 flex items-center gap-2 justify-center w-[180px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm ${'bg-neutral0'}`}
+                          >
+                            <Setting className={`${'stroke-neutral900'}`} />
+                            <div>Match Pair Setting</div>
+                          </button>
+                        }
+                        tooltipContent={'Match Pair Setting'}
+                        tooltipContentStyles={'z-[1000]'}
+                      />
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           ) : (
