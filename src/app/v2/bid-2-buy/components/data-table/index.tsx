@@ -587,11 +587,22 @@ const BidToBuyDataTable = ({
             </p>
           </>
         ) : !paginatedData.length && searchableId.length ? (
-          <div className="w-[110vw]  text-center">
-            <Image src={empty} alt={'empty'} />
-            <p className="text-neutral900  w-[220px] text-center ">
-              No matching stones found.
-            </p>
+          <div className="relative">
+            <div
+              className="absolute"
+              style={{
+                top: '-13vh',
+                left: '50vw',
+                transform: 'translate(-50%, -50%)'
+              }}
+            >
+              <div className="text-center">
+                <Image src={empty} alt="empty" />
+                <p className="text-neutral900 w-[220px] mx-auto">
+                  No matching stones found.
+                </p>
+              </div>
+            </div>
           </div>
         ) : rows.length ? (
           ''
