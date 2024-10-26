@@ -592,7 +592,7 @@ const BidToBuyDataTable = ({
               className="absolute"
               style={{
                 top: '-13vh',
-                left: '50vw',
+                left: '-46vw',
                 transform: 'translate(-50%, -50%)'
               }}
             >
