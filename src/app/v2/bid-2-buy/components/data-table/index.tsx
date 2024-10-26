@@ -589,10 +589,9 @@ const BidToBuyDataTable = ({
         ) : !paginatedData.length && searchableId.length ? (
           <div className="relative">
             <div
-              className="absolute"
+              className="absolute md:left-[-46vw] lg:left-[-58vw] xl:left-[-31vw]"
               style={{
                 top: '-13vh',
-                left: '-46vw',
                 transform: 'translate(-50%, -50%)'
               }}
             >
