@@ -36,11 +36,16 @@ const HtmlAnimation = () => {
   useEffect(() => {
     if (
       typeof window !== 'undefined' &&
-      typeof window?.Cookiebot !== 'undefined'
+      typeof window?.Cookiebot !== 'undefined' &&
+      typeof window?.Cookiebot?.consent !== 'undefined'
     ) {
-      window.Cookiebot.renew();
+      if (window?.Cookiebot?.consent?.stamp === '0') {
+        window?.Cookiebot?.renew();
+      }
     }
-  }, [showBanner, phoneVisible, scrollIndex]); // Re-initialize on state change
+  }, [phoneVisible]); // Re-initialize on state change
+
+  // }, [showBanner, phoneVisible, scrollIndex]); // Re-initialize on state change
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
