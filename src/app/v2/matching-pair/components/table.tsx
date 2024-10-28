@@ -553,7 +553,7 @@ const MatchPairTable = ({
     <>
       {' '}
       {isLoaded && !isLoading && !isSkeletonLoading && (
-        <div className="w-[110vw] flex justify-center mt-[50px]">
+        <div className="flex justify-center mt-[50px]">
           <div>
             <div className="w-[350px] flex justify-center">
               <Image src={NoDataSvg} alt={'empty'} />
@@ -593,7 +593,7 @@ const MatchPairTable = ({
   );
   //pass table options to useMaterialReactTable
   const table = useMaterialReactTable({
-    columns,
+    columns: paginatedData.length ? columns : [],
     data: paginatedData, //must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
 
     getRowId: originalRow => originalRow?.id,
@@ -1121,111 +1121,113 @@ const MatchPairTable = ({
         </Box>
       </div>
     ),
-    renderBottomToolbar: ({ table }) => (
-      <div
-        className={`px-[16px] border-t-[1px] border-neutral200 
-       
-        `}
-      >
-        {
-          // (isResult || isDashboard) && (
-          <div className="flex items-center justify-between">
-            <div className="flex gap-4 h-[30px]">
-              <div className=" border-[1px] border-lengendInCardBorder rounded-[4px] bg-legendInCartFill text-legendInCart">
-                <p className="text-mMedium font-medium px-[6px] py-[4px]">
-                  In Cart
-                </p>
-              </div>
-              <div className=" border-[1px] border-lengendHoldBorder rounded-[4px] bg-legendHoldFill text-legendHold">
-                <p className="text-mMedium font-medium px-[6px] py-[4px]">
-                  {' '}
-                  Hold
-                </p>
-              </div>
-              <div className="border-[1px] border-lengendMemoBorder rounded-[4px] bg-legendMemoFill text-legendMemo">
-                <p className="text-mMedium font-medium px-[6px] py-[4px]">
-                  {' '}
-                  Memo
-                </p>
-              </div>
-            </div>
-            <MRT_TablePagination table={table} />
-            <div className="flex items-center gap-3">
-              <ActionButton
-                actionButtonData={[
-                  {
-                    variant: 'secondary',
-                    label: ManageLocales('app.searchResult.addToCart'),
-                    isDisable: !Object.keys(rowSelection).length,
-                    handler: () => handleAddToCart()
-                  },
+    renderBottomToolbar: ({ table }) => {
+      if (!paginatedData.length) {
+        return null;
+      } else {
+        return (
+          <div className={`px-[16px] border-t-[1px] border-neutral200`}>
+            {
+              // (isResult || isDashboard) && (
+              <div className="flex items-center justify-between">
+                <div className="flex gap-4 h-[30px]">
+                  <div className=" border-[1px] border-lengendInCardBorder rounded-[4px] bg-legendInCartFill text-legendInCart">
+                    <p className="text-mMedium font-medium px-[6px] py-[4px]">
+                      In Cart
+                    </p>
+                  </div>
+                  <div className=" border-[1px] border-lengendHoldBorder rounded-[4px] bg-legendHoldFill text-legendHold">
+                    <p className="text-mMedium font-medium px-[6px] py-[4px]">
+                      {' '}
+                      Hold
+                    </p>
+                  </div>
+                  <div className="border-[1px] border-lengendMemoBorder rounded-[4px] bg-legendMemoFill text-legendMemo">
+                    <p className="text-mMedium font-medium px-[6px] py-[4px]">
+                      {' '}
+                      Memo
+                    </p>
+                  </div>
+                </div>
+                <MRT_TablePagination table={table} />
+                <div className="flex items-center gap-3">
+                  <ActionButton
+                    actionButtonData={[
+                      {
+                        variant: 'secondary',
+                        label: ManageLocales('app.searchResult.addToCart'),
+                        isDisable: !Object.keys(rowSelection).length,
+                        handler: () => handleAddToCart()
+                      },
 
-                  {
-                    variant: 'primary',
-                    label: ManageLocales('app.searchResult.confirmStone'),
-                    isDisable: !Object.keys(rowSelection).length,
-                    handler: () => {
-                      handleConfirmStone({
-                        selectedRows: rowSelection,
-                        rows: rows,
-                        setIsError,
-                        setErrorText,
-                        setIsConfirmStone,
-                        setConfirmStoneData,
-                        router,
-                        modalSetState,
-                        checkProductAvailability,
-                        setIsLoading
-                      });
-                    }
-                  }
-                ]}
-              />
-              <Dropdown
-                dropdownTrigger={
-                  <Image
-                    src={threeDotsSvg}
-                    alt="threeDotsSvg"
-                    width={43}
-                    height={43}
+                      {
+                        variant: 'primary',
+                        label: ManageLocales('app.searchResult.confirmStone'),
+                        isDisable: !Object.keys(rowSelection).length,
+                        handler: () => {
+                          handleConfirmStone({
+                            selectedRows: rowSelection,
+                            rows: rows,
+                            setIsError,
+                            setErrorText,
+                            setIsConfirmStone,
+                            setConfirmStoneData,
+                            router,
+                            modalSetState,
+                            checkProductAvailability,
+                            setIsLoading
+                          });
+                        }
+                      }
+                    ]}
                   />
-                }
-                dropdownMenu={[
-                  {
-                    label: 'Compare Stone',
-                    isDisable: !Object.keys(rowSelection).length,
-                    handler: () =>
-                      handleCompareStone({
-                        isCheck: rowSelection,
-                        setIsError,
-                        setErrorText,
-                        activeCartRows: rows,
-                        setIsCompareStone,
-                        setCompareStoneData
-                      })
-                  },
-                  {
-                    label: ManageLocales(
-                      'app.search.actionButton.bookAppointment'
-                    ),
+                  <Dropdown
+                    dropdownTrigger={
+                      <Image
+                        src={threeDotsSvg}
+                        alt="threeDotsSvg"
+                        width={43}
+                        height={43}
+                      />
+                    }
+                    dropdownMenu={[
+                      {
+                        label: 'Compare Stone',
+                        isDisable: !Object.keys(rowSelection).length,
+                        handler: () =>
+                          handleCompareStone({
+                            isCheck: rowSelection,
+                            setIsError,
+                            setErrorText,
+                            activeCartRows: rows,
+                            setIsCompareStone,
+                            setCompareStoneData
+                          })
+                      },
+                      {
+                        label: ManageLocales(
+                          'app.search.actionButton.bookAppointment'
+                        ),
 
-                    handler: () => {
-                      handleCreateAppointment();
-                    },
+                        handler: () => {
+                          handleCreateAppointment();
+                        },
 
-                    isDisable:
-                      !Object.keys(rowSelection).length ||
-                      isKycVerified?.customer?.kyc?.status !==
-                        kycStatus.APPROVED
-                  }
-                ]}
-              />
-            </div>
+                        isDisable:
+                          !Object.keys(rowSelection).length ||
+                          isKycVerified?.customer?.kyc?.status !==
+                            kycStatus.APPROVED
+                      }
+                    ]}
+                  />
+                </div>
+              </div>
+              // )
+            }
           </div>
-          // )
-        }
-      </div>
-    )
+        );
+      }
+    }
   });
 
   useEffect(() => {
