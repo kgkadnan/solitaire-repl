@@ -227,7 +227,7 @@ const MatchingPairResult = ({
           // if (matchingPair.length > 0 || settingApplied) {
 
           dataTableSetState.setRows(matchingPair ?? []);
-          setSettingApplied(false);
+          // setSettingApplied(false);
           // }
           // else {
           //   modalSetState.setIsDialogOpen(true);
@@ -545,15 +545,15 @@ const MatchingPairResult = ({
       });
 
   useEffect(() => {
-    // setIsLoading(true)
+    console.log('oooooooooooooooooooooooooooooooooooooooooooooooooooooooooo');
     fetchProducts();
-    // setSettingApplied(false);
   }, [activeTab, columnData, settingApplied]);
 
   useEffect(() => {
     setErrorText('');
     setIsError(false);
   }, [rowSelection]);
+  console.log(isLoading, 'jyotiiitiitititi');
 
   // Fetch Columns
   useEffect(() => {
