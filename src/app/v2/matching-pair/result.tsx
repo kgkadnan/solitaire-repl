@@ -231,7 +231,6 @@ const MatchingPairResult = ({
           setHasLimitExceeded(false);
           let matchingPair = res.data?.products.flat();
           // if (matchingPair.length > 0 || settingApplied) {
-          console.log('herer');
           dataTableSetState.setRows(matchingPair ?? []);
           setSettingApplied(false);
           // }
@@ -1329,7 +1328,6 @@ const MatchingPairResult = ({
     }
   }, [validImages]);
 
-  console.log(matchingPairData);
   return (
     <div className="relative">
       {isError && (

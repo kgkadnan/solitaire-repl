@@ -119,7 +119,6 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
       });
     }
   });
-  console.log(path, '---------------------');
   return (
     <html lang="en">
       <head>
@@ -184,10 +183,8 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
               }
               
               // Check Cookiebot Consent API
-              console.log("jyotiiiiii",Cookiebot)
               window.addEventListener("CookieConsentDeclaration", function() {
                 if (Cookiebot.consent.statistics) {
-                console.log("tiwariiiii")
                   loadGA();
                 }
               });

@@ -43,7 +43,7 @@ const HtmlAnimation = () => {
         window?.Cookiebot?.renew();
       }
     }
-  }, [phoneVisible]); // Re-initialize on state change
+  }, []); // Re-initialize on state change
 
   // }, [showBanner, phoneVisible, scrollIndex]); // Re-initialize on state change
 
