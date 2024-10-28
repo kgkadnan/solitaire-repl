@@ -267,12 +267,12 @@ const MatchingPairResult = ({
         console.log('e', e);
         if (e?.status === statusCode.UNAUTHORIZED) {
           setHasLimitExceeded(true);
-          dataTableSetState.setRows([]);
         } else if (e?.status === 400) {
           setIsLoading(false);
           setIsSkeletonLoading(false);
           setCountLimitReached(true);
         }
+        dataTableSetState.setRows([]);
         setIsLoading(false);
         setIsSkeletonLoading(false);
       });
