@@ -1332,7 +1332,6 @@ const MatchingPairResult = ({
     }
   }, [validImages]);
 
-  console.log(matchingPairData);
   return (
     <div className="relative">
       {isError && (

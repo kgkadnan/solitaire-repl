@@ -698,9 +698,9 @@ const MatchPairTable = ({
         }
       },
       'mrt-row-select': {
-        size: 15,
-        minSize: 15,
-        maxSize: 15
+        size: 40,
+        minSize: 40,
+        maxSize: 40
       }
     },
 
