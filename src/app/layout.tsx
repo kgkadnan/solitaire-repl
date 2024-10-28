@@ -119,12 +119,12 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
       });
     }
   });
-  useEffect(() => {
-    // Reinitialize Cookiebot after each path change
-    if (typeof window !== 'undefined' && window?.CookieConsent) {
-      window?.CookieConsent?.update(); // Reinitialize Cookiebot if it exists
-    }
-  }, [path]); //
+  // useEffect(() => {
+  //   // Reinitialize Cookiebot after each path change
+  //   if (typeof window !== 'undefined' && window?.CookieConsent) {
+  //     window?.CookieConsent?.update(); // Reinitialize Cookiebot if it exists
+  //   }
+  // }, [path]); //
   return (
     <html lang="en">
       <head>
