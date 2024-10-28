@@ -604,6 +604,7 @@ const MatchPairTable = ({
       pagination,
       globalFilter
     },
+    enablePagination: paginatedData.length ? true : false,
     positionToolbarAlertBanner: 'none',
     enableColumnActions: false,
     enableDensityToggle: false,
@@ -620,6 +621,7 @@ const MatchPairTable = ({
     enableToolbarInternalActions: true,
     globalFilterFn: 'startsWith',
     selectAllMode: 'page',
+
     renderEmptyRowsFallback: NoResultsComponent,
     manualPagination: true,
     rowCount: rows.length,
