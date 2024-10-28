@@ -128,21 +128,21 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
   return (
     <html lang="en">
       <head>
-        {/* <script
+        <script
           id="Cookiebot"
           src="https://consent.cookiebot.com/uc.js"
           data-cbid="86ce1cb4-4338-418c-acca-d54a1b81cccc"
           data-blockingmode="auto"
           type="text/javascript"
         ></script>
-         */}
-        <Script
+
+        {/* <Script
           id="Cookiebot"
           src="https://consent.cookiebot.com/uc.js"
           data-cbid="86ce1cb4-4338-418c-acca-d54a1b81cccc"
           data-blockingmode="auto"
           strategy="beforeInteractive" // Load script early for consent
-        />
+        /> */}
         <script
           id="cookie-consent"
           // strategy="afterInteractive"
