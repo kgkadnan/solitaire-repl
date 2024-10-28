@@ -246,7 +246,6 @@ const BidToBuy = () => {
 
   useEffect(() => {
     let queryNew = constructUrlParams(JSON.parse(localStorage.getItem('bid')!));
-    console.log(queryNew, 'queryNew');
     setIsLoading(true);
 
     triggerBidToBuyApi({ searchUrl: queryNew })
@@ -271,12 +270,10 @@ const BidToBuy = () => {
   }, []);
 
   useEffect(() => {
-    console.log('pathName', pathName);
     if (
       getActiveTabParam &&
       (Number(getActiveTabParam) === 2 || Number(getActiveTabParam) === 1)
     ) {
-      console.log('getActiveTabParam', getActiveTabParam);
       setActiveTab(Number(getActiveTabParam));
     } else if (pathName === 'bidHistory') {
       setActiveTab(2);
@@ -343,8 +340,6 @@ const BidToBuy = () => {
     triggerBidToBuyApi,
     { isLoading: isLoadingBidToBuyApi, isFetching: isFetchingBidToBuyApi }
   ] = useLazyGetAllBidStonesQuery();
-
-  console.log('isLoading', isLoading);
 
   const renderFooter = (table: any) => {
     if (activeTab === 0 && bid?.length > 0) {
@@ -616,8 +611,6 @@ const BidToBuy = () => {
       ]);
     }
   }, [validImages]);
-
-  console.log('activeTab', activeTab);
 
   return (
     <div className="mb-[4px] relative">

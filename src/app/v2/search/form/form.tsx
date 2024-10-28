@@ -493,7 +493,6 @@ const Form = ({
     if (subRoute === SubRoutes.NEW_ARRIVAL && newArrivalBidDataQuery) {
       setModifySearch(newArrivalBidDataQuery, setState);
     } else if (routePath === Routes.BID_TO_BUY && bidToBuyBidDataQuery) {
-      console.log('hrerer');
       setModifySearch(bidToBuyBidDataQuery, setState);
     } else if (
       modifySearchFrom === `${SubRoutes.SAVED_SEARCH}` &&
@@ -605,7 +604,6 @@ const Form = ({
       setSearchUrl('');
     } else if (routePath === Routes.BID_TO_BUY) {
       const queryParams = generateQueryParams(state);
-      console.log(queryParams, 'queryParamsqueryParamsqueryParams');
       localStorage.setItem('bid', JSON.stringify(queryParams));
 
       setErrorText('');
@@ -1348,7 +1346,6 @@ const Form = ({
                 labels={['Bid Stone', 'Active Bid', 'Bid History']}
                 activeIndex={activeTab}
                 onTabClick={id => {
-                  console.log('id', id);
                   setActiveTab(id);
                   if (id !== 0) {
                     router.push(

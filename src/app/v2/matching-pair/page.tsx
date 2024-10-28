@@ -434,20 +434,16 @@ const MatchingPair = () => {
 
         updatedMps.sort((a: any, b: any) => a.priority - b.priority);
 
-        console.log('updatedMps', updatedMps);
-
         // Update state with the new array and reset isModified
         setMps(updatedMps);
         setInitialMps(updatedMps); // Update the initial state to the new reset state
         setIsModified(false); // Disable the buttons
-        console.log(res, 'Reset data');
         setSettingApplied(!settingApplied);
       });
   };
 
   // Function to compare the current MPS state with the initial state
   const checkForChanges = (currentMps: any[]) => {
-    console.log('currentMps', currentMps);
     return JSON.stringify(currentMps) !== JSON.stringify(initialMps);
   };
   // Function to compare the current MPS state with the initial state
