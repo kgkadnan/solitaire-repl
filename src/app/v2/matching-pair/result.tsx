@@ -264,7 +264,6 @@ const MatchingPairResult = ({
         setIsLoading(false);
       })
       .catch(e => {
-        console.log('e', e);
         if (e?.status === statusCode.UNAUTHORIZED) {
           setHasLimitExceeded(true);
         } else if (e?.status === 400) {
@@ -545,7 +544,6 @@ const MatchingPairResult = ({
       });
 
   useEffect(() => {
-    console.log('oooooooooooooooooooooooooooooooooooooooooooooooooooooooooo');
     fetchProducts();
   }, [activeTab, columnData, settingApplied]);
 
@@ -553,7 +551,6 @@ const MatchingPairResult = ({
     setErrorText('');
     setIsError(false);
   }, [rowSelection]);
-  console.log(isLoading, 'jyotiiitiitititi');
 
   // Fetch Columns
   useEffect(() => {
@@ -1335,7 +1332,6 @@ const MatchingPairResult = ({
     }
   }, [validImages]);
 
-  console.log(matchingPairData);
   return (
     <div className="relative">
       {isError && (

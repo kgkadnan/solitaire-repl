@@ -439,7 +439,6 @@ const MatchingPair = () => {
         setInitialMps(updatedMps); // Update the initial state to the new reset state
         setIsModified(false); // Disable the buttons
         setIsMPSOpen(false);
-        console.log(res, 'Reset data');
         setSettingApplied(!settingApplied);
       });
   };

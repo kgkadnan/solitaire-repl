@@ -119,32 +119,30 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
       });
     }
   });
+  useEffect(() => {
+    // Reinitialize Cookiebot after each path change
+    if (typeof window !== 'undefined' && window?.CookieConsent) {
+      window?.CookieConsent?.update(); // Reinitialize Cookiebot if it exists
+    }
+  }, [path]); //
   return (
     <html lang="en">
       <head>
-        <script
+        {/* <script
           id="Cookiebot"
           src="https://consent.cookiebot.com/uc.js"
           data-cbid="86ce1cb4-4338-418c-acca-d54a1b81cccc"
           data-blockingmode="auto"
           type="text/javascript"
         ></script>
-        {/* {path === '/privacy-policy' && (
-          <script
-            id="CookieDeclaration"
-            src="https://consent.cookiebot.com/86ce1cb4-4338-418c-acca-d54a1b81cccc/cd.js"
-            type="text/javascript"
-            async
-          ></script>
-        )} */}
-        {/* <Script
-          id="cookiebot"
-          strategy="beforeInteractive"
+         */}
+        <Script
+          id="Cookiebot"
           src="https://consent.cookiebot.com/uc.js"
           data-cbid="86ce1cb4-4338-418c-acca-d54a1b81cccc"
-          type="text/javascript"
-          async
-        /> */}
+          data-blockingmode="auto"
+          strategy="beforeInteractive" // Load script early for consent
+        />
         <script
           id="cookie-consent"
           // strategy="afterInteractive"
