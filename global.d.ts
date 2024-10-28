@@ -13,6 +13,7 @@ declare global {
       };
       renew?: any;
     };
+    CookieConsent?: any;
   }
 }
 
