@@ -5,6 +5,7 @@ declare global {
     gtag: any;
     Cookiebot?: {
       consent: {
+        stamp: string;
         statistics: boolean;
         preferences: boolean;
         marketing: boolean;
