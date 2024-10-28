@@ -278,7 +278,7 @@ const SideNavigationBar = ({
             );
           })}
         </div>
-        <div className="z-50 flex flex-col gap-2 mb-[48px]">
+        <div className="z-50 flex flex-col gap-2 mb-[62px]">
           {SideNavigationBottomData.map((items: ISideNavigationBar) => {
             return (
               <div
