@@ -218,19 +218,14 @@ const MatchingPairResult = ({
       url,
       limit: MATCHING_PAIR_DATA_LIMIT,
       offset: 0
-    }).then((res: any) => {
-      if (columnData?.length > 0) {
-        if (res?.error?.status === statusCode.UNAUTHORIZED) {
-          setHasLimitExceeded(true);
-          dataTableSetState.setRows([]);
-        } else if (res?.error?.status === 400) {
-          setIsLoading(false);
-          setIsSkeletonLoading(false);
-          setCountLimitReached(true);
-        } else {
+    })
+      .unwrap()
+      .then((res: any) => {
+        if (columnData?.length > 0) {
           setHasLimitExceeded(false);
-          let matchingPair = res.data?.products.flat();
+          let matchingPair = res?.products.flat();
           // if (matchingPair.length > 0 || settingApplied) {
+
           dataTableSetState.setRows(matchingPair ?? []);
           setSettingApplied(false);
           // }
@@ -260,15 +255,27 @@ const MatchingPairResult = ({
           //     />
           //   );
           // }
-          setOriginalData(res.data?.products);
+          setOriginalData(res?.products);
         }
 
         setRowSelection({});
         setErrorText('');
         setData(res.data);
         setIsLoading(false);
-      }
-    });
+      })
+      .catch(e => {
+        console.log('e', e);
+        if (e?.status === statusCode.UNAUTHORIZED) {
+          setHasLimitExceeded(true);
+          dataTableSetState.setRows([]);
+        } else if (e?.status === 400) {
+          setIsLoading(false);
+          setIsSkeletonLoading(false);
+          setCountLimitReached(true);
+        }
+        setIsLoading(false);
+        setIsSkeletonLoading(false);
+      });
   };
   const closeSearch = (
     removeDataIndex: number,
@@ -1328,6 +1335,7 @@ const MatchingPairResult = ({
     }
   }, [validImages]);
 
+  console.log(matchingPairData);
   return (
     <div className="relative">
       {isError && (
