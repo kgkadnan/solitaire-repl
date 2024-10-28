@@ -54,7 +54,7 @@ export const SliderWithMinMaxInput: React.FC<ISliderWithMinMaxInputProps> = ({
           maxPlaceHolder: maxPlaceHolder,
           maxOnchange: handleMaxChange
         }}
-        inputGap="gap-[121px]"
+        inputGap="gap-[48px]"
         errorText={errorText}
         isShowError={false}
       />

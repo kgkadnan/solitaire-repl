@@ -106,7 +106,6 @@ const CompanyDetail = ({
         let getSpecificCountryData = data.data.filter((country: any) => {
           return country.code === isCountryCodeAvbl;
         });
-        console.log('isCountryCodeAvbl', getSpecificCountryData[0].iso);
         setSelectedCountryIso(getSpecificCountryData[0].iso);
       });
     } else if (parsedData.countryCode && parsedData.iso) {
