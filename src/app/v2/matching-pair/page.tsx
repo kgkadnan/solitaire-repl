@@ -593,7 +593,7 @@ const MatchingPair = () => {
         </div>
 
         {/* Main draggable container */}
-        <div className=" relative overflow-auto h-[441px]">
+        <div className=" relative overflow-auto h-[392px]">
           {' '}
           {/* Add scroll and limit height */}
           <DragDropContext onDragEnd={handleOnDragEnd}>
