@@ -119,12 +119,18 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
       });
     }
   });
-  // useEffect(() => {
-  //   // Reinitialize Cookiebot after each path change
-  //   if (typeof window !== 'undefined' && window?.CookieConsent) {
-  //     window?.CookieConsent?.update(); // Reinitialize Cookiebot if it exists
-  //   }
-  // }, [path]); //
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window?.CookieConsent) {
+      // Check if the current path is v2 or v3
+      if (isV2Route || isV3Route) {
+        window?.CookieConsent?.show(); // Show Cookiebot for v2 and v3 routes
+      } else {
+        window?.CookieConsent?.hide(); // Hide Cookiebot for other routes
+      }
+    }
+  }, [path, isV2Route, isV3Route]);
+
   return (
     <html lang="en">
       <head>
