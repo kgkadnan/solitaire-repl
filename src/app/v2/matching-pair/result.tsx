@@ -222,59 +222,59 @@ const MatchingPairResult = ({
       .unwrap()
       .then((res: any) => {
         if (columnData?.length > 0) {
-          if (res?.error?.status === statusCode.UNAUTHORIZED) {
-            setHasLimitExceeded(true);
-            dataTableSetState.setRows([]);
-          } else {
-            setHasLimitExceeded(false);
-            let matchingPair = res.data?.products.flat();
-            // if (matchingPair.length > 0 || settingApplied) {
-            dataTableSetState.setRows(matchingPair ?? []);
-            setSettingApplied(false);
-            // }
-            // else {
-            //   modalSetState.setIsDialogOpen(true);
-            //   modalSetState.setDialogContent(
-            //     <CommonPoppup
-            //       status="warning"
-            //       content={''}
-            //       customPoppupBodyStyle="!mt-[70px]"
-            //       header={NO_PRODUCT_FOUND}
-            //       actionButtonData={[
-            //         {
-            //           variant: 'primary',
-            //           label: ManageLocales('app.modal.okay'),
-            //           handler: () => {
-            //             closeSearch(
-            //               activeTab,
-            //               JSON.parse(localStorage.getItem('MatchingPair')!)
-            //             );
+          setHasLimitExceeded(false);
+          let matchingPair = res?.products.flat();
+          // if (matchingPair.length > 0 || settingApplied) {
 
-            //             modalSetState.setIsDialogOpen(false);
-            //           },
-            //           customStyle: 'flex-1 h-10'
-            //         }
-            //       ]}
-            //     />
-            //   );
-            // }
-            setOriginalData(res.data?.products);
-          }
+          dataTableSetState.setRows(matchingPair ?? []);
+          setSettingApplied(false);
+          // }
+          // else {
+          //   modalSetState.setIsDialogOpen(true);
+          //   modalSetState.setDialogContent(
+          //     <CommonPoppup
+          //       status="warning"
+          //       content={''}
+          //       customPoppupBodyStyle="!mt-[70px]"
+          //       header={NO_PRODUCT_FOUND}
+          //       actionButtonData={[
+          //         {
+          //           variant: 'primary',
+          //           label: ManageLocales('app.modal.okay'),
+          //           handler: () => {
+          //             closeSearch(
+          //               activeTab,
+          //               JSON.parse(localStorage.getItem('MatchingPair')!)
+          //             );
 
-          setRowSelection({});
-          setErrorText('');
-          setData(res.data);
-          setIsLoading(false);
+          //             modalSetState.setIsDialogOpen(false);
+          //           },
+          //           customStyle: 'flex-1 h-10'
+          //         }
+          //       ]}
+          //     />
+          //   );
+          // }
+          setOriginalData(res?.products);
         }
+
+        setRowSelection({});
+        setErrorText('');
+        setData(res.data);
+        setIsLoading(false);
       })
       .catch(e => {
-        if (e?.status === 400) {
+        console.log('e', e);
+        if (e?.status === statusCode.UNAUTHORIZED) {
+          setHasLimitExceeded(true);
+          dataTableSetState.setRows([]);
+        } else if (e?.status === 400) {
           setIsLoading(false);
           setIsSkeletonLoading(false);
           setCountLimitReached(true);
         }
-        setRowSelection({});
         setIsLoading(false);
+        setIsSkeletonLoading(false);
       });
   };
   const closeSearch = (
@@ -1335,6 +1335,7 @@ const MatchingPairResult = ({
     }
   }, [validImages]);
 
+  console.log(matchingPairData);
   return (
     <div className="relative">
       {isError && (
