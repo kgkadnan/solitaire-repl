@@ -1328,7 +1328,12 @@ const Form = ({
                 </>
               </div>
             ) : (
-              <>
+              <div
+                className={`${
+                  routePath.includes('v2/matching-pair') &&
+                  'flex justify-between items-center'
+                }`}
+              >
                 Search for{' '}
                 {subRoute === SubRoutes.NEW_ARRIVAL
                   ? 'New Arrivals'
@@ -1337,7 +1342,38 @@ const Form = ({
                   isMatchingPair
                   ? 'Match Pair'
                   : 'Diamonds'}
-              </>
+                {routePath.includes('v2/matching-pair') && (
+                  <div className="flex gap-3">
+                    <div className="h-[37px] mr-[-8px]">
+                      <p
+                        className={`bg-infoMain rounded-[12px] px-[6px] py-[1px]  text-neutral0 text-[10px] ${styles.pulse}`}
+                      >
+                        New
+                      </p>
+                    </div>
+
+                    <div
+                      className=" rounded-[4px] cursor-pointer"
+                      onClick={() => {
+                        setIsMPSOpen(true);
+                      }}
+                    >
+                      <Tooltip
+                        tooltipTrigger={
+                          <button
+                            className={`rounded-[4px] hover:bg-neutral50 flex items-center gap-2 justify-center w-[190px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm ${'bg-neutral0'}`}
+                          >
+                            <Setting className={`${'stroke-neutral900'}`} />
+                            <div>Match Pair Setting</div>
+                          </button>
+                        }
+                        tooltipContent={'Match Pair Setting'}
+                        tooltipContentStyles={'z-[1000]'}
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
             )}
           </span>
         </div>
@@ -1379,7 +1415,7 @@ const Form = ({
                   isMatchingPair={isMatchingPair}
                 />
               </div>
-              <div className="pr-[2px] flex gap-[12px]  justify-end flex-wrap">
+              <div className="pr-[2px] flex justify-end flex-wrap">
                 <ActionButton
                   actionButtonData={[
                     {
@@ -1391,37 +1427,6 @@ const Form = ({
                     }
                   ]}
                 />
-                {routePath.includes('v2/matching-pair') && (
-                  <div className="flex gap-3">
-                    <div className="h-[37px] mr-[-8px]">
-                      <p
-                        className={`bg-infoMain rounded-[12px] px-[6px] py-[1px]  text-neutral0 text-[10px] ${styles.pulse}`}
-                      >
-                        New
-                      </p>
-                    </div>
-
-                    <div
-                      className=" rounded-[4px] cursor-pointer"
-                      onClick={() => {
-                        setIsMPSOpen(true);
-                      }}
-                    >
-                      <Tooltip
-                        tooltipTrigger={
-                          <button
-                            className={`rounded-[4px] hover:bg-neutral50 flex items-center gap-2 justify-center w-[180px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm ${'bg-neutral0'}`}
-                          >
-                            <Setting className={`${'stroke-neutral900'}`} />
-                            <div>Match Pair Setting</div>
-                          </button>
-                        }
-                        tooltipContent={'Match Pair Setting'}
-                        tooltipContentStyles={'z-[1000]'}
-                      />
-                    </div>
-                  </div>
-                )}
               </div>
             </div>
           ) : (
