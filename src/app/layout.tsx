@@ -258,7 +258,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
           }
           isOpens={open}
         />
-        <CookieBot domainGroupId={'86ce1cb4-4338-418c-acca-d54a1b81cccc'} />,
+        <CookieBot domainGroupId={'86ce1cb4-4338-418c-acca-d54a1b81cccc'} />
         <noscript>
           <iframe
             src={`https://www.googletagmanager.com/ns.html?id=GTM-W85XMPHM`}
