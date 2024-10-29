@@ -52,7 +52,11 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
 
   // Create a component that just renders children, with children as an optional prop
   const ChildrenComponent: FC<{ children?: ReactNode }> = ({ children }) => (
-    <>{children}</>
+    <>
+      <CookieBot domainGroupId={'86ce1cb4-4338-418c-acca-d54a1b81cccc'} />
+
+      {children}
+    </>
   );
 
   useEffect(() => {
@@ -258,7 +262,6 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
           }
           isOpens={open}
         />
-        <CookieBot domainGroupId={'86ce1cb4-4338-418c-acca-d54a1b81cccc'} />
         <noscript>
           <iframe
             src={`https://www.googletagmanager.com/ns.html?id=GTM-W85XMPHM`}
@@ -283,6 +286,10 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
                   <AppDownloadPopup></AppDownloadPopup>
                 ) : (
                   <main className="">
+                    <CookieBot
+                      domainGroupId={'86ce1cb4-4338-418c-acca-d54a1b81cccc'}
+                    />
+
                     <Toaster />
                     {showLPHeader && <CommonHeader />}
                     <div>{children}</div>
