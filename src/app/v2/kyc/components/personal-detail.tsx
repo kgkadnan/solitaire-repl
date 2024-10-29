@@ -201,7 +201,7 @@ const PersonalDetail = ({
                         name: `formErrorState.online.sections[${[
                           kycScreenIdentifierNames.PERSONAL_DETAILS
                         ]}][phone]}`,
-                        value: RANGE_VALIDATION('Contact Number*', 0, 15)
+                        value: RANGE_VALIDATION('Contact Number*', 6, 15)
                       })
                     )
               }
