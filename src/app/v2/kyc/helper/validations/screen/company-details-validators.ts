@@ -171,7 +171,7 @@ export class KycPostCompanyDetailsValidation {
 
   @IsNotEmpty({ message: COMPANY_PHONE_NUMBER_MANDATORY })
   @Matches(PHONE_REGEX, {
-    message: RANGE_VALIDATION('Company Phone', 0, 15)
+    message: RANGE_VALIDATION('Company Phone', 6, 15)
   })
   company_phone_number: string;
 

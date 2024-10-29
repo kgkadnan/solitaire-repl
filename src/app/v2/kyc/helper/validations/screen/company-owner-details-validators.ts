@@ -48,7 +48,7 @@ export class IndiaKycPostCompanyOwnerInformation {
 
   @IsNotEmpty({ message: OWNER_PHONE_MANDATORY })
   @Matches(PHONE_REGEX, {
-    message: RANGE_VALIDATION('Owner Phone', 0, 15)
+    message: RANGE_VALIDATION('Owner Phone', 6, 15)
   })
   owner_phone: string;
 
