@@ -28,6 +28,7 @@ import { useMediaQuery } from 'react-responsive';
 // import Salesiq from '@/components/v2/common/sales-iq';
 import * as Sentry from '@sentry/nextjs';
 import Script from 'next/script';
+import CookieBot from 'react-cookiebot';
 
 const store = setupStore();
 
@@ -123,13 +124,13 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
   return (
     <html lang="en">
       <head>
-        <script
+        {/* <script
           id="Cookiebot"
           src="https://consent.cookiebot.com/uc.js"
           data-cbid="86ce1cb4-4338-418c-acca-d54a1b81cccc"
           data-blockingmode="auto"
           type="text/javascript"
-        ></script>
+        ></script> */}
 
         {/* <Script
           id="Cookiebot"
@@ -257,6 +258,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
           }
           isOpens={open}
         />
+        <CookieBot domainGroupId={'86ce1cb4-4338-418c-acca-d54a1b81cccc'} />,
         <noscript>
           <iframe
             src={`https://www.googletagmanager.com/ns.html?id=GTM-W85XMPHM`}
@@ -308,7 +310,6 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
           </ThemeProviders>
         </Provider>
         <SpeedInsights />
-
         {/* <Salesiq /> */}
       </body>
     </html>

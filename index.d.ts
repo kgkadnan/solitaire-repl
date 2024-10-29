@@ -10,3 +10,4 @@ declare module 'react-leaflet';
 declare module 'split-type';
 declare module 'file-saver';
 declare module 'react-responsive-carousel';
+declare module 'react-cookiebot';
