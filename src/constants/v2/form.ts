@@ -97,13 +97,13 @@ export const tableInclusionSortOrder = ['T0', 'T1', 'T2', 'T3'];
 export const tableBlackSortOrder = ['B0', 'BPP', 'B1', 'B2', 'B3'];
 export const sideBlackSortOrder = ['SB0', 'SBPP', 'SB1', 'SB2', 'SB3'];
 export const fluorescenceSortOrder = [
-  'None',
-  'Very Slight',
-  'Slight',
-  'Faint',
-  'Medium',
-  'Strong',
-  'Very Strong'
+  'NON',
+  'FNT',
+  'VSL',
+  'SLT',
+  'MED',
+  'STG',
+  'VSTG'
 ];
 
 export const white = ['D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N-Z'];

@@ -33,6 +33,7 @@ const useUser = () => {
     localStorage.removeItem('entryPoint');
     localStorage.removeItem('kyc_entryPoint');
     localStorage.removeItem('country');
+    localStorage.removeItem('bid');
 
     dispatch({ type: 'LOGOUT' });
   };

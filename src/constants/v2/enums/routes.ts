@@ -18,6 +18,7 @@ export enum Routes {
 // Enum using the enum keyword
 export enum SubRoutes {
   BID_TO_BUY = 'bid_to_buy',
+  BID_TO_BUY_RESULT = 'result',
   NEW_SEARCH = 'new-search',
   RESULT = 'result',
   SAVED_SEARCH = 'saved-search',

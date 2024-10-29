@@ -13,6 +13,7 @@ import {
   MEMO_STATUS
 } from '@/constants/business-logic';
 import unAuthorizedSvg from '@public/v2/assets/icons/data-table/unauthorized.svg';
+
 import { constructUrlParams } from '@/utils/v2/construct-url-params';
 import noImageFound from '@public/v2/assets/icons/detail-page/fall-back-img.svg';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -110,7 +111,13 @@ const MatchingPairResult = ({
   handleCloseSpecificTab,
   setSearchParameters,
   setIsLoading,
-  setIsInputDialogOpen
+  setIsInputDialogOpen,
+  mps,
+  setMps,
+  isLoading,
+  setSettingApplied,
+  settingApplied,
+  setIsMPSOpen
 }: {
   activeTab: number;
   searchParameters: any;
@@ -121,6 +128,11 @@ const MatchingPairResult = ({
   setIsLoading: any;
   setIsInputDialogOpen: any;
   isLoading: boolean;
+  mps: any;
+  setMps: any;
+  setSettingApplied: any;
+  settingApplied: any;
+  setIsMPSOpen: any;
 }) => {
   const dispatch = useAppDispatch();
   const confirmTrack = useAppSelector(state => state.setConfirmStoneTrack);
@@ -129,6 +141,7 @@ const MatchingPairResult = ({
   const [isSkeletonLoading, setIsSkeletonLoading] = useState<boolean>(true);
   const [activePreviewTab, setActivePreviewTab] = useState('Image');
   const [imageIndex, setImageIndex] = useState<number>(0);
+
   const [triggerAvailableSlots] = useLazyGetAvailableMyAppointmentSlotsQuery(
     {}
   );
@@ -168,6 +181,7 @@ const MatchingPairResult = ({
       storeAddresses: [],
       timeSlots: { dates: [{ date: '', day: '' }], slots: {} }
     });
+  const [countLimitReached, setCountLimitReached] = useState(false);
   const [lotIds, setLotIds] = useState<string[]>([]);
   const [hasLimitExceeded, setHasLimitExceeded] = useState(false);
   // UseMutation to add items to the cart
@@ -189,7 +203,7 @@ const MatchingPairResult = ({
   // Fetch Products
 
   const fetchProducts = async () => {
-    // setIsLoading(true);
+    setIsLoading(true);
     const storedSelection = localStorage.getItem('MatchingPair');
 
     if (!storedSelection) return;
@@ -204,51 +218,63 @@ const MatchingPairResult = ({
       url,
       limit: MATCHING_PAIR_DATA_LIMIT,
       offset: 0
-    }).then((res: any) => {
-      if (columnData?.length > 0) {
-        if (res?.error?.status === statusCode.UNAUTHORIZED) {
-          setHasLimitExceeded(true);
-          dataTableSetState.setRows([]);
-        } else {
+    })
+      .unwrap()
+      .then((res: any) => {
+        if (columnData?.length > 0) {
           setHasLimitExceeded(false);
-          let matchingPair = res.data?.products.flat();
-          if (matchingPair.length > 0) {
-            dataTableSetState.setRows(matchingPair);
-          } else {
-            modalSetState.setIsDialogOpen(true);
-            modalSetState.setDialogContent(
-              <CommonPoppup
-                status="warning"
-                content={''}
-                customPoppupBodyStyle="!mt-[70px]"
-                header={NO_PRODUCT_FOUND}
-                actionButtonData={[
-                  {
-                    variant: 'primary',
-                    label: ManageLocales('app.modal.okay'),
-                    handler: () => {
-                      closeSearch(
-                        activeTab,
-                        JSON.parse(localStorage.getItem('MatchingPair')!)
-                      );
+          let matchingPair = res?.products.flat();
+          // if (matchingPair.length > 0 || settingApplied) {
 
-                      modalSetState.setIsDialogOpen(false);
-                    },
-                    customStyle: 'flex-1 h-10'
-                  }
-                ]}
-              />
-            );
-          }
-          setOriginalData(res.data?.products);
+          dataTableSetState.setRows(matchingPair ?? []);
+          // setSettingApplied(false);
+          // }
+          // else {
+          //   modalSetState.setIsDialogOpen(true);
+          //   modalSetState.setDialogContent(
+          //     <CommonPoppup
+          //       status="warning"
+          //       content={''}
+          //       customPoppupBodyStyle="!mt-[70px]"
+          //       header={NO_PRODUCT_FOUND}
+          //       actionButtonData={[
+          //         {
+          //           variant: 'primary',
+          //           label: ManageLocales('app.modal.okay'),
+          //           handler: () => {
+          //             closeSearch(
+          //               activeTab,
+          //               JSON.parse(localStorage.getItem('MatchingPair')!)
+          //             );
+
+          //             modalSetState.setIsDialogOpen(false);
+          //           },
+          //           customStyle: 'flex-1 h-10'
+          //         }
+          //       ]}
+          //     />
+          //   );
+          // }
+          setOriginalData(res?.products);
         }
 
         setRowSelection({});
         setErrorText('');
         setData(res.data);
         setIsLoading(false);
-      }
-    });
+      })
+      .catch(e => {
+        if (e?.status === statusCode.UNAUTHORIZED) {
+          setHasLimitExceeded(true);
+        } else if (e?.status === 400) {
+          setIsLoading(false);
+          setIsSkeletonLoading(false);
+          setCountLimitReached(true);
+        }
+        dataTableSetState.setRows([]);
+        setIsLoading(false);
+        setIsSkeletonLoading(false);
+      });
   };
   const closeSearch = (
     removeDataIndex: number,
@@ -340,9 +366,9 @@ const MatchingPairResult = ({
               enableSorting: false,
               accessorKey: 'fire_icon',
               header: '',
-              minSize: 26,
-              size: 26,
-              maxSize: 26,
+              minSize: 20,
+              size: 20,
+              maxSize: 20,
 
               Cell: ({ row }: { row: any }) => {
                 return row.original.in_high_demand ? (
@@ -485,7 +511,7 @@ const MatchingPairResult = ({
                 <span>{`${
                   renderedCellValue === 0
                     ? '$0.00'
-                    : `$${formatNumberWithCommas(renderedCellValue)}` ?? '$0.00'
+                    : `$${formatNumberWithCommas(renderedCellValue)}` || '$0.00'
                 }`}</span>
               )
             };
@@ -518,9 +544,8 @@ const MatchingPairResult = ({
       });
 
   useEffect(() => {
-    // setIsLoading(true)
     fetchProducts();
-  }, [activeTab, columnData]);
+  }, [activeTab, columnData, settingApplied]);
 
   useEffect(() => {
     setErrorText('');
@@ -683,7 +708,6 @@ const MatchingPairResult = ({
       }
       setOriginalData(res.data?.products);
 
-      setRowSelection({});
       setErrorText('');
       setData(res.data);
       setIsLoading(false);
@@ -703,6 +727,8 @@ const MatchingPairResult = ({
           setCompareStoneData
         });
       }
+
+      setRowSelection({});
     });
   };
 
@@ -1341,7 +1367,9 @@ const MatchingPairResult = ({
             ''
           ) : hasLimitExceeded ? (
             ''
-          ) : isSkeletonLoading ? (
+          ) : isSkeletonLoading ||
+            isLoading ||
+            (matchingPairData === undefined && !countLimitReached) ? (
             <Skeleton
               variant="rectangular"
               height={'24px'}
@@ -1565,7 +1593,7 @@ const MatchingPairResult = ({
             </div>
           ) : (
             <div className="">
-              {matchingPairData === undefined ? (
+              {matchingPairData === undefined && !countLimitReached ? (
                 <MathPairSkeleton />
               ) : (
                 <MatchPairTable
@@ -1597,6 +1625,12 @@ const MatchingPairResult = ({
                   originalData={originalData}
                   setIsSkeletonLoading={setIsSkeletonLoading}
                   isSkeletonLoading={isSkeletonLoading}
+                  setIsMPSOpen={setIsMPSOpen}
+                  mps={mps}
+                  setMps={setMps}
+                  setSettingApplied={setSettingApplied}
+                  isLoading={isLoading}
+                  countLimitReached={countLimitReached}
                 />
               )}
             </div>

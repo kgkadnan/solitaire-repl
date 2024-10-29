@@ -48,6 +48,9 @@ import { useLazyTrackCopyUrlEventQuery } from '@/features/api/track-public-url-c
 import DetailPageTabs from './components/tabs';
 import { useRouter } from 'next/navigation';
 import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
+import { trackEvent } from '@/utils/ga';
+import { Tracking_Search_By_Text } from '@/constants/funnel-tracking';
+import { dashboardIndentifier } from '@/app/v2/dashboard';
 
 export function DiamondDetailsComponent({
   data,
@@ -59,7 +62,9 @@ export function DiamondDetailsComponent({
   setIsLoading,
   activeTab,
   fromBid,
-  setIsDiamondDetailLoading
+  setIsDiamondDetailLoading,
+  identifier,
+  customerMobileNumber
 }: {
   data: any;
   filterData: any;
@@ -71,6 +76,8 @@ export function DiamondDetailsComponent({
   activeTab?: number;
   fromBid?: boolean;
   setIsDiamondDetailLoading?: any;
+  identifier?: string;
+  customerMobileNumber?: string;
 }) {
   const router = useRouter();
 
@@ -201,6 +208,16 @@ export function DiamondDetailsComponent({
     }
   }, [validImages]);
 
+  useEffect(() => {
+    if (identifier === dashboardIndentifier) {
+      trackEvent({
+        action: Tracking_Search_By_Text.dna_page_pageview,
+        category: 'SearchByText',
+        mobile_number: customerMobileNumber
+      });
+    }
+  }, []);
+
   const copyLink = () => {
     const link = `${process.env.NEXT_PUBLIC_DNA_URL}${filterData?.public_url
       .split('/')
@@ -211,6 +228,13 @@ export function DiamondDetailsComponent({
         setShowToast(false); // Hide the toast notification after some time
       }, 4000);
     });
+    if (identifier === dashboardIndentifier) {
+      trackEvent({
+        action: Tracking_Search_By_Text.click_media_link_dna_page,
+        category: 'SearchByText',
+        mobile_number: customerMobileNumber
+      });
+    }
     trackCopyUrlEvent({ url: filterData?.public_url.split('/').pop() });
   };
   let statusValue = '';
@@ -218,20 +242,18 @@ export function DiamondDetailsComponent({
     let statusClass = '';
     let borderClass = '';
 
-    // if (tableData.diamond_status === MEMO_STATUS) {
-    //   statusClass = 'bg-legendMemoFill text-legendMemo';
-    //   borderClass = 'border-lengendMemoBorder';
-    //   statusValue = 'Memo';
-    // } else
-    if (tableData.diamond_status === HOLD_STATUS) {
-      statusClass = 'bg-legendHoldFill  text-legendHold';
-
-      borderClass = 'border-lengendHoldBorder';
-      statusValue = 'Hold';
-    } else if (tableData?.in_cart && Object.keys(tableData.in_cart).length) {
+    if (tableData?.in_cart && Object.keys(tableData.in_cart).length) {
       statusClass = 'bg-legendInCartFill text-legendInCart';
       borderClass = 'border-lengendInCardBorder';
       statusValue = 'InCart';
+    } else if (tableData.diamond_status === MEMO_STATUS) {
+      statusClass = 'bg-legendMemoFill text-legendMemo';
+      borderClass = 'border-lengendMemoBorder';
+      statusValue = 'Memo';
+    } else if (tableData.diamond_status === HOLD_STATUS) {
+      statusClass = 'bg-legendHoldFill  text-legendHold';
+      borderClass = 'border-lengendHoldBorder';
+      statusValue = 'Hold';
     }
     return (
       <>
@@ -246,6 +268,13 @@ export function DiamondDetailsComponent({
     );
   };
   const handleDownloadExcel = () => {
+    if (identifier === dashboardIndentifier) {
+      trackEvent({
+        action: Tracking_Search_By_Text.click_download_excel_dna_page,
+        category: 'SearchByText',
+        mobile_number: customerMobileNumber
+      });
+    }
     downloadExcelHandler({
       products: [filterData.id],
       downloadExcelApi: downloadExcel,
@@ -278,6 +307,13 @@ export function DiamondDetailsComponent({
           alt="backWardArrow"
           onClick={() => {
             goBackToListView!();
+            if (identifier === dashboardIndentifier) {
+              trackEvent({
+                action: Tracking_Search_By_Text.click_back_dna_page,
+                category: 'SearchByText',
+                mobile_number: customerMobileNumber
+              });
+            }
           }}
           className="cursor-pointer"
         />
@@ -287,6 +323,13 @@ export function DiamondDetailsComponent({
               className="text-neutral600 text-sMedium font-regular cursor-pointer"
               onClick={() => {
                 goBackToListView!();
+                if (identifier === dashboardIndentifier) {
+                  trackEvent({
+                    action: Tracking_Search_By_Text.click_back_dna_page,
+                    category: 'SearchByText',
+                    mobile_number: customerMobileNumber
+                  });
+                }
                 setIsDiamondDetailLoading && setIsDiamondDetailLoading(true);
               }}
             >
@@ -330,6 +373,8 @@ export function DiamondDetailsComponent({
               activePreviewTab={activePreviewTab}
               setImageIndex={setImageIndex}
               setIsImageLoading={setIsImageLoading}
+              identifier={identifier}
+              customerMobileNumber={customerMobileNumber}
             />
             <div
               className={`xl:overflow-y-auto ${
@@ -349,6 +394,8 @@ export function DiamondDetailsComponent({
                 activePreviewTab={activePreviewTab}
                 isImageLoading={isImageLoading}
                 setIsImageLoading={setIsImageLoading}
+                identifier={identifier}
+                customerMobileNumber={customerMobileNumber}
               />
             </div>
           </div>
@@ -422,6 +469,8 @@ export function DiamondDetailsComponent({
                         activeTab={activeTab}
                         identifier={breadCrumLabel}
                         shareTrackIdentifier="Details"
+                        dynamicTrackIdentifier={identifier}
+                        customerMobileNumber={customerMobileNumber}
                       />
                     </div>
                   </>

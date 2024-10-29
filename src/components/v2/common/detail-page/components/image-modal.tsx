@@ -14,6 +14,8 @@ import backWardArrowDisable from '@public/v2/assets/icons/detail-page/back-ward-
 import forWardAarrowDisable from '@public/v2/assets/icons/detail-page/forward-arrow-disable.svg';
 import { Skeleton } from '@mui/material';
 import DetailPageTabs from './tabs';
+import { Tracking_Search_By_Text } from '@/constants/funnel-tracking';
+import { trackEvent } from '@/utils/ga';
 
 interface IModalProps {
   isOpen: boolean;
@@ -22,6 +24,8 @@ interface IModalProps {
   images: IImagesType[];
   setIsLoading?: any;
   activeTab?: string;
+  customerMobileNumber?: string;
+  trackIdentifier?: string;
 }
 
 const ImageModal: React.FC<IModalProps> = ({
@@ -30,7 +34,9 @@ const ImageModal: React.FC<IModalProps> = ({
   images,
   selectedImageIndex = 0,
   setIsLoading,
-  activeTab
+  activeTab,
+  customerMobileNumber,
+  trackIdentifier
 }) => {
   const [imageIndex, setImageIndex] = useState<number>(0);
   const [showToast, setShowToast] = useState(false);
@@ -101,6 +107,8 @@ const ImageModal: React.FC<IModalProps> = ({
                   activePreviewTab={activePreviewTab}
                   setImageIndex={setImageIndex}
                   setIsImageLoaded={setIsImageLoaded}
+                  customerMobileNumber={customerMobileNumber}
+                  identifier={trackIdentifier}
                 />
                 <button
                   onClick={() => {
@@ -290,6 +298,21 @@ const ImageModal: React.FC<IModalProps> = ({
                               onClick={() => {
                                 setIsImageLoaded(false);
                                 setImageIndex(imageIndex - 1);
+                                if (trackIdentifier === 'resultPageDetails') {
+                                  trackEvent({
+                                    action:
+                                      Tracking_Search_By_Text.click_stone_image_arrow_result_page,
+                                    category: 'SearchByText',
+                                    mobile_number: customerMobileNumber
+                                  });
+                                } else if (trackIdentifier === 'Dashboard') {
+                                  trackEvent({
+                                    action:
+                                      Tracking_Search_By_Text.click_stone_image_arrow_dna_page,
+                                    category: 'SearchByText',
+                                    mobile_number: customerMobileNumber
+                                  });
+                                }
                               }}
                               disabled={!(imageIndex > 0)}
                               className={` rounded-[4px]  hover:bg-neutral50 w-[37px] h-[37px] text-center px-2 border-[1px] border-solid border-neutral200 shadow-sm ${
@@ -315,6 +338,21 @@ const ImageModal: React.FC<IModalProps> = ({
                               onClick={() => {
                                 setIsImageLoaded(false);
                                 setImageIndex(imageIndex + 1);
+                                if (trackIdentifier === 'resultPageDetails') {
+                                  trackEvent({
+                                    action:
+                                      Tracking_Search_By_Text.click_stone_image_arrow_result_page,
+                                    category: 'SearchByText',
+                                    mobile_number: customerMobileNumber
+                                  });
+                                } else if (trackIdentifier === 'Dashboard') {
+                                  trackEvent({
+                                    action:
+                                      Tracking_Search_By_Text.click_stone_image_arrow_dna_page,
+                                    category: 'SearchByText',
+                                    mobile_number: customerMobileNumber
+                                  });
+                                }
                               }}
                               disabled={
                                 !(imageIndex < filteredImages.length - 1)

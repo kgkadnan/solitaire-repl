@@ -168,10 +168,10 @@ export const RenderOffline = ({
                 ? 'max-h-[660px]'
                 : country === countries.OTHER
                 ? 'max-h-[360px]'
-                : 'max-h-[200px]'
+                : 'max-h-[216px]'
             } w-[100%] flex justify-center`}
           >
-            <div className="w-[920px] flex flex-wrap flex-col  gap-[20px]">
+            <div className="w-[920px] flex flex-wrap flex-col  gap-x-[20px]">
               {AttachmentData &&
                 AttachmentData[country]?.map((attch: any) => {
                   return attch.key && Object?.keys(attch.key).length ? (

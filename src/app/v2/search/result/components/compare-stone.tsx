@@ -26,6 +26,7 @@ import { RednderLocation } from '@/components/v2/table/helpers/render-cell';
 import { useCheckProductAvailabilityMutation } from '@/features/api/product';
 import { HOLD_STATUS, MEMO_STATUS } from '@/constants/business-logic';
 import { getShapeDisplayName } from '@/utils/v2/detail-page';
+import { statusCode } from '@/constants/enums/status-code';
 
 const CompareStone = ({
   rows,
@@ -46,6 +47,7 @@ const CompareStone = ({
   setIsDetailPage,
   isMatchingPair = false,
   modalSetState,
+  setIsCompareStone,
   refreshCompareStone
 }: any) => {
   const [mappingColumn, setMappingColumn] = useState<any>({});
@@ -190,6 +192,9 @@ const CompareStone = ({
                 ]}
               />
             );
+
+            refreshCompareStone();
+
             // On success, show confirmation dialog and update badge
             setIsError(false);
             setErrorText('');
@@ -227,16 +232,15 @@ const CompareStone = ({
     let statusClass = '';
     let borderClass = '';
 
-    if (row.diamond_status === MEMO_STATUS) {
+    if (row?.in_cart && Object.keys(row.in_cart).length) {
+      statusClass = 'bg-legendInCartFill text-legendInCart';
+      borderClass = 'border-lengendInCardBorder border-[1px] px-[8px]';
+    } else if (row.diamond_status === MEMO_STATUS) {
       statusClass = 'bg-legendMemoFill text-legendMemo';
       borderClass = 'border-lengendMemoBorder border-[1px] px-[8px]';
     } else if (row.diamond_status === HOLD_STATUS) {
       statusClass = 'bg-legendHoldFill  text-legendHold';
-
       borderClass = 'border-lengendHoldBorder border-[1px] px-[8px]';
-    } else if (row?.in_cart && Object.keys(row.in_cart).length) {
-      statusClass = 'bg-legendInCartFill text-legendInCart';
-      borderClass = 'border-lengendInCardBorder border-[1px] px-[8px]';
     }
     return (
       <>

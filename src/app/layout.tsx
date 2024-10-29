@@ -28,6 +28,7 @@ import { useMediaQuery } from 'react-responsive';
 // import Salesiq from '@/components/v2/common/sales-iq';
 import * as Sentry from '@sentry/nextjs';
 import Script from 'next/script';
+import CookieBot from 'react-cookiebot';
 
 const store = setupStore();
 
@@ -48,12 +49,14 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
   const [showLPHeader, setShowLPHeader] = useState(false);
   const showHeader = isApplicationRoutes && !headerlessRoutes.includes(path);
   const isMobile = useMediaQuery({ maxWidth: 1024 });
-  // const GA_TRACKING_ID = process.env.NEXT_PUBLIC_GA; // Replace with your GA4 Measurement ID
 
-  // || path === '/';
   // Create a component that just renders children, with children as an optional prop
   const ChildrenComponent: FC<{ children?: ReactNode }> = ({ children }) => (
-    <>{children}</>
+    <>
+      <CookieBot domainGroupId={'86ce1cb4-4338-418c-acca-d54a1b81cccc'} />
+
+      {children}
+    </>
   );
 
   useEffect(() => {
@@ -103,8 +106,17 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
       const disableDevtool = require('disable-devtool');
       disableDevtool({
         disableMenu: true,
-        ondevtoolopen(_type: string, _next: () => void) {
-          setOpen(true);
+        ondevtoolopen(_type: any, _next: any) {
+          // if ( _type === 5) {
+          // Additional check: Confirm if dev tools are really open (optional)
+          if (
+            window.outerWidth - window.innerWidth > 100 ||
+            window.outerHeight - window.innerHeight > 100
+          ) {
+            // This checks if the window has shrunk in size due to dev tools being opened
+            setOpen(true);
+          }
+          // }
         },
         ignore: () => {
           return process.env.NEXT_PUBLIC_ENV !== 'production';
@@ -116,7 +128,67 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
   return (
     <html lang="en">
       <head>
-        {' '}
+        {/* <script
+          id="Cookiebot"
+          src="https://consent.cookiebot.com/uc.js"
+          data-cbid="86ce1cb4-4338-418c-acca-d54a1b81cccc"
+          data-blockingmode="auto"
+          type="text/javascript"
+        ></script> */}
+
+        {/* <Script
+          id="Cookiebot"
+          src="https://consent.cookiebot.com/uc.js"
+          data-cbid="86ce1cb4-4338-418c-acca-d54a1b81cccc"
+          data-blockingmode="auto"
+          strategy="beforeInteractive" // Load script early for consent
+        /> */}
+        <script
+          id="cookie-consent"
+          // strategy="afterInteractive"
+          data-cookieconsent="ignore"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag() {
+                dataLayer.push(arguments);
+              }
+              gtag("consent", "default", {
+                ad_personalization: "denied",
+                ad_storage: "denied",
+                ad_user_data: "denied",
+                analytics_storage: "denied",
+                functionality_storage: "denied",
+                personalization_storage: "denied",
+                security_storage: "granted",
+                wait_for_update: 500,
+              });
+              gtag("set", "ads_data_redaction", true);
+              gtag("set", "url_passthrough", false);
+            `
+          }}
+        />
+        <script
+          id="ga-consent"
+          // strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              function loadGA() {
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', ${process.env.NEXT_PUBLIC_GA}, { 'anonymize_ip': true });
+              }
+              
+              // Check Cookiebot Consent API
+              window.addEventListener("CookieConsentDeclaration", function() {
+                if (Cookiebot.consent.statistics) {
+                  loadGA();
+                }
+              });
+            `
+          }}
+        />
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -143,7 +215,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
           strategy="afterInteractive"
           src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA}`}
         />
-        <Script
+        {/* <Script
           id="ga4-init"
           strategy="afterInteractive"
           dangerouslySetInnerHTML={{
@@ -156,7 +228,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
             });
           `
           }}
-        />
+        /> */}
       </head>
       <Head>
         <link
@@ -214,6 +286,10 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
                   <AppDownloadPopup></AppDownloadPopup>
                 ) : (
                   <main className="">
+                    <CookieBot
+                      domainGroupId={'86ce1cb4-4338-418c-acca-d54a1b81cccc'}
+                    />
+
                     <Toaster />
                     {showLPHeader && <CommonHeader />}
                     <div>{children}</div>
@@ -240,8 +316,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
             )}
           </ThemeProviders>
         </Provider>
-        {/* <SpeedInsights /> */}
-
+        <SpeedInsights />
         {/* <Salesiq /> */}
       </body>
     </html>

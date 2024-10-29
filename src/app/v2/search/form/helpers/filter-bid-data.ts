@@ -1,4 +1,4 @@
-import { keyToSymbolWithoutAll } from '@/constants/v2/form';
+import { keyToSymbolWithoutAll, shape } from '@/constants/v2/form';
 
 export function filterBidData(data: any[], query: any): any[] {
   const skipKeys = ['key_to_symbol_search_type'];
@@ -20,6 +20,25 @@ export function filterBidData(data: any[], query: any): any[] {
       if (skipKeys.includes(key)) {
         continue;
       }
+
+      // Check for shape key and handle 'All' case
+      if (key === 'shape') {
+        let shapes = query[key] as string[];
+
+        if (shapes.includes('All')) {
+          // Replace 'All' with all short_name values except 'All'
+          shapes = shape
+            .filter(s => s.short_name !== 'All')
+            .map(s => s.short_name);
+        }
+
+        // Check if the item's shape is in the selected shapes
+        if (!shapes.includes(item[key])) {
+          return false;
+        }
+        continue; // Move to the next key
+      }
+
       if (Array.isArray(query[key])) {
         if (key === 'key_to_symbol') {
           const searchType = query['key_to_symbol_search_type'] as string;

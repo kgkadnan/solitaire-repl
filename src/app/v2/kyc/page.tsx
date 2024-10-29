@@ -57,7 +57,7 @@ const initialTokenState = {
 const KYC = () => {
   const router = useRouter();
   const { formState, formErrorState } = useSelector((state: any) => state.kyc);
-  const [currentState, setCurrentState] = useState('country_selection');
+  const [currentState, setCurrentState] = useState('');
   const [selectedCountry, setSelectedCountry] = useState('');
   const [selectedSubmissionOption, setSelectedSubmissionOption] = useState('');
   const { modalState, modalSetState } = useModalStateManagement();
@@ -360,6 +360,8 @@ const KYC = () => {
 
   useEffect(() => {
     triggerKycDetail({}).then(res => {
+      setIsLoading(true);
+
       let kycDetails = res?.data;
       if (kycDetails?.kyc?.status) {
         switch (kycDetails?.kyc?.status) {
@@ -558,6 +560,7 @@ const KYC = () => {
             setCurrentState(kycStatus.REJECTED);
             break;
         }
+        setIsLoading(false);
       }
     });
   }, []);
@@ -968,10 +971,7 @@ const KYC = () => {
       });
     } else {
       setCurrentStepperStep(prevStep => (prevStep > 0 ? prevStep - 1 : 0));
-      console.log(
-        filteredSteps[currentStepperStep].identifier,
-        'filteredSteps[currentStepperStep].identifier'
-      );
+
       trackEvent({
         action: trackBackStep(filteredSteps[currentStepperStep].identifier),
         entry_point: localStorage.getItem('kyc_entryPoint') || '',
@@ -1464,7 +1464,6 @@ const KYC = () => {
                     .unwrap()
                     .then((res: any) => {
                       if (res) {
-                        console.log('res', res);
                         setToken((prev: any) => ({
                           ...prev,
                           token: res?.token ?? ''

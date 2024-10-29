@@ -2,6 +2,9 @@ import React, { useEffect } from 'react';
 import ImageSvg from '@public/v2/assets/icons/detail-page/image.svg?url';
 import VideoSvg from '@public/v2/assets/icons/detail-page/video.svg?url';
 import PdfSvg from '@public/v2/assets/icons/detail-page/pdf.svg?url';
+import { trackEvent } from '@/utils/ga';
+import { Tracking_Search_By_Text } from '@/constants/funnel-tracking';
+import { dashboardIndentifier } from '@/app/v2/dashboard';
 // import { IImagesType } from '../interface';
 
 interface IDetailPageTabs {
@@ -16,6 +19,8 @@ interface IDetailPageTabs {
   setIsImageLoaded?: React.Dispatch<React.SetStateAction<boolean>>;
   setImageLoadingStatus?: any;
   originalDataFromMatchPair?: any;
+  identifier?: string;
+  customerMobileNumber?: string;
 }
 
 const DetailPageTabs = ({
@@ -29,7 +34,9 @@ const DetailPageTabs = ({
   setIsImageLoaded,
   setIsImageLoading,
   setImageLoadingStatus,
-  originalDataFromMatchPair
+  originalDataFromMatchPair,
+  identifier,
+  customerMobileNumber
 }: IDetailPageTabs) => {
   let TabsData = [
     {
@@ -96,6 +103,37 @@ const DetailPageTabs = ({
 
   const handleTabs = (label: string) => {
     if (label !== activePreviewTab) {
+      if (identifier === dashboardIndentifier) {
+        if (label !== 'Image') {
+          trackEvent({
+            action:
+              label === 'Video'
+                ? Tracking_Search_By_Text.click_stone_b2b_dna_page
+                : label === 'Sparkle'
+                ? Tracking_Search_By_Text.click_stone_sparkle_dna_page
+                : label === 'Certificate'
+                ? Tracking_Search_By_Text.click_stone_certificate_dna_page
+                : '',
+            category: 'SearchByText',
+            mobile_number: customerMobileNumber
+          });
+        }
+      } else if (identifier === 'resultPageDetails') {
+        if (label !== 'Image') {
+          trackEvent({
+            action:
+              label === 'Video'
+                ? Tracking_Search_By_Text.click_stone_b2b_result_page
+                : label === 'Sparkle'
+                ? Tracking_Search_By_Text.click_stone_sparkle_result_page
+                : label === 'Certificate'
+                ? Tracking_Search_By_Text.click_stone_certificate_result_page
+                : '',
+            category: 'SearchByText',
+            mobile_number: customerMobileNumber
+          });
+        }
+      }
       setActivePreviewTab(label);
       setIsImageLoading && setIsImageLoading(true);
       setImageLoadingStatus &&

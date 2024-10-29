@@ -43,7 +43,7 @@ export const KycStatusScreen: React.FC<IKycStatusScreen> = ({ status }) => {
   }, []);
 
   return (
-    <div className="relative w-full h-[calc(100vh-60px)]">
+    <div className="relative w-full min-h-[calc(100vh-60px)]">
       <Toast show={showToast} message="Copied Successfully" />
       <div className="flex flex-col gap-y-10 justify-center items-center relative">
         <div className="">

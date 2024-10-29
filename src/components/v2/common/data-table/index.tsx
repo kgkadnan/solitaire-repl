@@ -61,6 +61,9 @@ import CommonPoppup from '@/app/v2/login/component/common-poppup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSort, faSortDown } from '@fortawesome/free-solid-svg-icons';
 import DataTableSkeleton from '../../skeleton/data-table';
+import { Tracking_Search_By_Text } from '@/constants/funnel-tracking';
+import { trackEvent } from '@/utils/ga';
+import { dashboardIndentifier } from '@/app/v2/dashboard';
 
 const theme = createTheme({
   typography: {
@@ -205,7 +208,8 @@ const DataTable = ({
   handleCreateAppointment,
   setIsSkeletonLoading,
   isSkeletonLoading,
-  refreshSearchResults
+  refreshSearchResults,
+  customerMobileNumber
 }: any) => {
   // Fetching saved search data
   const router = useRouter();
@@ -249,6 +253,17 @@ const DataTable = ({
       setPaginatedData(rows);
     }
   }, [globalFilter]);
+
+  useEffect(() => {
+    if (isDashboard) {
+      trackEvent({
+        action: Tracking_Search_By_Text.results_page_pageview,
+        category: 'SearchByText',
+        mobile_number: customerMobileNumber
+      });
+    }
+  }, []);
+
   useEffect(() => {
     // Calculate the start and end indices for the current page
     const startIndex = pagination.pageIndex * pagination.pageSize;
@@ -501,6 +516,14 @@ const DataTable = ({
     const allProductIds = rows.map(({ id }: { id: string }) => {
       return id;
     });
+
+    if (isDashboard) {
+      trackEvent({
+        action: Tracking_Search_By_Text.click_download_excel_result_page,
+        category: 'SearchByText',
+        mobile_number: customerMobileNumber
+      });
+    }
 
     downloadExcelHandler({
       products: selectedIds.length > 0 ? selectedIds : allProductIds,
@@ -1071,6 +1094,7 @@ const DataTable = ({
                 shareTrackIdentifier={
                   myCart ? 'Cart' : isDashboard ? 'Dashboard' : 'Search Results'
                 }
+                dynamicTrackIdentifier={isDashboard && 'dashboardSearchResult'}
               />
             </div>
           </div>
@@ -1120,34 +1144,37 @@ const DataTable = ({
                     label: ManageLocales('app.searchResult.confirmStone'),
                     isDisable: !Object.keys(rowSelection).length,
                     handler: () => {
-                      isDashboard
-                        ? handleConfirmStone({
-                            selectedRows: rowSelection,
-                            rows: rows,
-                            setIsError,
-                            setErrorText,
-                            setIsConfirmStone,
-                            setConfirmStoneData,
-                            setIsDetailPage,
-                            checkProductAvailability,
-                            modalSetState,
-                            router,
-                            identifier: 'dashboard',
-                            setIsLoading,
-                            refreshSearchResults
-                          })
-                        : handleConfirmStone({
-                            selectedRows: rowSelection,
-                            rows: rows,
-                            setIsError,
-                            setErrorText,
-                            setIsConfirmStone,
-                            setConfirmStoneData,
-                            checkProductAvailability,
-                            modalSetState,
-                            router,
-                            setIsLoading
-                          });
+                      if (isDashboard) {
+                        handleConfirmStone({
+                          selectedRows: rowSelection,
+                          rows: rows,
+                          setIsError,
+                          setErrorText,
+                          setIsConfirmStone,
+                          setConfirmStoneData,
+                          setIsDetailPage,
+                          checkProductAvailability,
+                          modalSetState,
+                          router,
+                          identifier: 'dashboard',
+                          customerMobileNumber,
+                          setIsLoading,
+                          refreshSearchResults
+                        });
+                      } else {
+                        handleConfirmStone({
+                          selectedRows: rowSelection,
+                          rows: rows,
+                          setIsError,
+                          setErrorText,
+                          setIsConfirmStone,
+                          setConfirmStoneData,
+                          checkProductAvailability,
+                          modalSetState,
+                          router,
+                          setIsLoading
+                        });
+                      }
                     }
                   }
                 ]}
@@ -1171,7 +1198,9 @@ const DataTable = ({
                         setErrorText,
                         activeCartRows: rows,
                         setIsCompareStone,
-                        setCompareStoneData
+                        setCompareStoneData,
+                        identifier: isDashboard ? dashboardIndentifier : '',
+                        customerMobileNumber
                       }),
                     isDisable: !Object.keys(rowSelection).length
                   },
@@ -1184,10 +1213,8 @@ const DataTable = ({
                     },
                     isDisable:
                       !Object.keys(rowSelection).length ||
-                      isKycVerified?.customer?.kyc?.status ===
-                        kycStatus.INPROGRESS ||
-                      isKycVerified?.customer?.kyc?.status ===
-                        kycStatus.REJECTED
+                      isKycVerified?.customer?.kyc?.status !==
+                        kycStatus.APPROVED
                   }
                 ]}
               />
@@ -1251,10 +1278,9 @@ const DataTable = ({
                     },
                     isDisable: !Object.keys(rowSelection).length,
                     commingSoon:
-                      isKycVerified?.customer?.kyc?.status ===
-                        kycStatus.INPROGRESS ||
-                      isKycVerified?.customer?.kyc?.status ===
-                        kycStatus.REJECTED,
+                      isKycVerified?.customer?.kyc?.status !==
+                      kycStatus.APPROVED,
+
                     isHidden: !(
                       activeCartTab === AVAILABLE_STATUS ||
                       activeCartTab === HOLD_STATUS
