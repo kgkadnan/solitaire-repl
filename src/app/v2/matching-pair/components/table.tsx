@@ -233,6 +233,7 @@ const MatchPairTable = ({
   });
 
   const [paginatedData, setPaginatedData] = useState<any>([]);
+
   const [globalFilter, setGlobalFilter] = useState('');
   const path = useSearchParams().get('active-tab');
 
@@ -1235,7 +1236,7 @@ const MatchPairTable = ({
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoaded(true), setIsSkeletonLoading(false);
-    }, 1000); // Small delay to ensure rendering phase is completed
+    }, 1500); // Small delay to ensure rendering phase is completed
 
     return () => clearTimeout(timer); // Cleanup the timer
   }, []);
