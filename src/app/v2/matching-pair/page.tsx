@@ -453,7 +453,8 @@ const MatchingPair = () => {
   };
 
   const handleApplyMPS = () => {
-    applyMPS({ setting: mps }).unwrap();
+    const filteredMps = mps.map(({ start, end, placeHolder, ...rest }) => rest);
+    applyMPS({ setting: filteredMps }).unwrap();
     setIsMPSOpen(false);
     setInitialMps(mps); // Set the current MPS as the new initial state after applying changes
     setIsModified(false); // Disable the buttons
