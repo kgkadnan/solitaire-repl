@@ -28,6 +28,7 @@ import { useMediaQuery } from 'react-responsive';
 // import Salesiq from '@/components/v2/common/sales-iq';
 import * as Sentry from '@sentry/nextjs';
 import Script from 'next/script';
+import CookieBot from 'react-cookiebot';
 
 const store = setupStore();
 
@@ -51,7 +52,11 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
 
   // Create a component that just renders children, with children as an optional prop
   const ChildrenComponent: FC<{ children?: ReactNode }> = ({ children }) => (
-    <>{children}</>
+    <>
+      <CookieBot domainGroupId={'86ce1cb4-4338-418c-acca-d54a1b81cccc'} />
+
+      {children}
+    </>
   );
 
   useEffect(() => {
@@ -119,12 +124,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
       });
     }
   });
-  useEffect(() => {
-    // Reinitialize Cookiebot after each path change
-    if (typeof window !== 'undefined' && window?.CookieConsent) {
-      window?.CookieConsent?.update(); // Reinitialize Cookiebot if it exists
-    }
-  }, [path]); //
+
   return (
     <html lang="en">
       <head>
@@ -134,15 +134,15 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
           data-cbid="86ce1cb4-4338-418c-acca-d54a1b81cccc"
           data-blockingmode="auto"
           type="text/javascript"
-        ></script>
-         */}
-        <Script
+        ></script> */}
+
+        {/* <Script
           id="Cookiebot"
           src="https://consent.cookiebot.com/uc.js"
           data-cbid="86ce1cb4-4338-418c-acca-d54a1b81cccc"
           data-blockingmode="auto"
           strategy="beforeInteractive" // Load script early for consent
-        />
+        /> */}
         <script
           id="cookie-consent"
           // strategy="afterInteractive"
@@ -286,6 +286,10 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
                   <AppDownloadPopup></AppDownloadPopup>
                 ) : (
                   <main className="">
+                    <CookieBot
+                      domainGroupId={'86ce1cb4-4338-418c-acca-d54a1b81cccc'}
+                    />
+
                     <Toaster />
                     {showLPHeader && <CommonHeader />}
                     <div>{children}</div>
@@ -313,7 +317,6 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
           </ThemeProviders>
         </Provider>
         <SpeedInsights />
-
         {/* <Salesiq /> */}
       </body>
     </html>
