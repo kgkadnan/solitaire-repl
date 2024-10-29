@@ -6,5 +6,6 @@ export const STONE_LOCATION = {
 
 export const STONE_LOCATION_SHORT = {
   India: 'IND',
-  Dubai: 'DUB'
+  Dubai: 'DUB',
+  Belgium: 'BEL'
 };
