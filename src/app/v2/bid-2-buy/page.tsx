@@ -214,7 +214,7 @@ const BidToBuy = () => {
   const [activeTab, setActiveTab] = useState(0);
   const tabLabels = ['Bid Stone', 'Active Bid', 'Bid History'];
   const [timeDifference, setTimeDifference] = useState(null);
-
+  const [isInActive, setIsInActive] = useState(false);
   const getBidToBuyHistoryData = () => {
     setIsLoading(true);
 
@@ -234,12 +234,20 @@ const BidToBuy = () => {
     triggerBidToBuyApi({ searchUrl: queryNew })
       .unwrap()
       .then((response: any) => {
+        setIsInActive(false);
+
         setTime(response?.endTime),
           setBid(queryNew.length ? response?.bidStone : []);
         setActiveBid(response?.activeStone);
         setIsLoading(false);
       })
       .catch(e => {
+        console.log(e, '---------------------------1');
+        if (e?.data?.error === 'INACTIVE_BID_TO_BUY') {
+          setIsInActive(true);
+        }
+        setActiveBid([]);
+        setBid([]);
         setIsLoading(false);
       });
   }, []);
@@ -251,11 +259,19 @@ const BidToBuy = () => {
     triggerBidToBuyApi({ searchUrl: queryNew })
       .unwrap()
       .then((response: any) => {
+        setIsInActive(false);
+
         setBid(queryNew.length ? response?.bidStone : []);
         setActiveBid(response?.activeStone);
         setTime(response?.endTime), setIsLoading(false);
       })
       .catch(e => {
+        console.log(e, '--------------------------2-');
+        if (e?.data?.error === 'INACTIVE_BID_TO_BUY') {
+          setIsInActive(true);
+        }
+        setActiveBid([]);
+        setBid([]);
         setIsLoading(false);
       });
   }, [localStorage.getItem('bid')]);
@@ -665,7 +681,8 @@ const BidToBuy = () => {
           {(!Object?.keys(localStorage.getItem('bid') ?? {}).length &&
             time &&
             activeTab === 0) ||
-          subRoute === SubRoutes.BID_TO_BUY ? (
+          subRoute === SubRoutes.BID_TO_BUY ||
+          !isInActive ? (
             <Form
               searchUrl={searchUrl}
               setSearchUrl={setSearchUrl}
@@ -791,6 +808,7 @@ const BidToBuy = () => {
                     isSkeletonLoading={isSkeletonLoading}
                     setIsSkeletonLoading={setIsSkeletonLoading}
                     isLoading={isLoading}
+                    inActive={isInActive}
                     // searchUrl={searchUrl}
                   />
                 </div>
