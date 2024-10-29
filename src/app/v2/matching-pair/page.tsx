@@ -581,7 +581,7 @@ const MatchingPair = () => {
 
         {/* Header for the table */}
         <div className="w-full flex justify-between items-center bg-[#F9FAFB] h-[50px] border-t-[1px] border-b-[1px] border-neutral200">
-          <p className="w-[60px] px-2">Priority</p>
+          <p className="w-[60px] px-3">Rank</p>
           <p className="w-[150px]">Name</p>
           <div className="w-[80px] flex justify-center">Equal</div>
           <p className="w-[67px] flex justify-start">Up</p>
