@@ -29,7 +29,6 @@ import { useMediaQuery } from 'react-responsive';
 import * as Sentry from '@sentry/nextjs';
 import Script from 'next/script';
 import CookieBot from 'react-cookiebot';
-
 const store = setupStore();
 
 const inter = Inter({ subsets: ['latin'] });
@@ -52,11 +51,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
 
   // Create a component that just renders children, with children as an optional prop
   const ChildrenComponent: FC<{ children?: ReactNode }> = ({ children }) => (
-    <>
-      <CookieBot domainGroupId={'86ce1cb4-4338-418c-acca-d54a1b81cccc'} />
-
-      {children}
-    </>
+    <>{children}</>
   );
 
   useEffect(() => {
@@ -106,15 +101,19 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
       const disableDevtool = require('disable-devtool');
       disableDevtool({
         disableMenu: true,
-        ondevtoolopen(_type: any, _next: any) {
+        ondevtoolopen(type: any, _next: any) {
           // if ( _type === 5) {
           // Additional check: Confirm if dev tools are really open (optional)
+          console.log(type, '------------------------', typeof type);
           if (
-            window.outerWidth - window.innerWidth > 100 ||
-            window.outerHeight - window.innerHeight > 100
+            type === 6
+            // window.outerWidth - window.innerWidth > 200 ||
+            // window.outerHeight - window.innerHeight > 200
           ) {
             // This checks if the window has shrunk in size due to dev tools being opened
             setOpen(true);
+            // }else{
+            //   setOpen(false)
           }
           // }
         },
@@ -128,21 +127,6 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
   return (
     <html lang="en">
       <head>
-        {/* <script
-          id="Cookiebot"
-          src="https://consent.cookiebot.com/uc.js"
-          data-cbid="86ce1cb4-4338-418c-acca-d54a1b81cccc"
-          data-blockingmode="auto"
-          type="text/javascript"
-        ></script> */}
-
-        {/* <Script
-          id="Cookiebot"
-          src="https://consent.cookiebot.com/uc.js"
-          data-cbid="86ce1cb4-4338-418c-acca-d54a1b81cccc"
-          data-blockingmode="auto"
-          strategy="beforeInteractive" // Load script early for consent
-        /> */}
         <script
           id="cookie-consent"
           // strategy="afterInteractive"
@@ -215,20 +199,6 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
           strategy="afterInteractive"
           src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA}`}
         />
-        {/* <Script
-          id="ga4-init"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', '${process.env.NEXT_PUBLIC_GA}', {
-              page_path: window.location.pathname,
-            });
-          `
-          }}
-        /> */}
       </head>
       <Head>
         <link
@@ -278,6 +248,9 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
             style={{ display: 'none', visibility: 'hidden' }}
           ></iframe>
         </noscript>
+        {(isV3Route || isV2Route) && (
+          <CookieBot domainGroupId={'86ce1cb4-4338-418c-acca-d54a1b81cccc'} />
+        )}
         <Provider store={store}>
           <ThemeProviders>
             {isV3Route ? (
@@ -286,10 +259,6 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
                   <AppDownloadPopup></AppDownloadPopup>
                 ) : (
                   <main className="">
-                    <CookieBot
-                      domainGroupId={'86ce1cb4-4338-418c-acca-d54a1b81cccc'}
-                    />
-
                     <Toaster />
                     {showLPHeader && <CommonHeader />}
                     <div>{children}</div>
