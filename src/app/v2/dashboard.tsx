@@ -1322,8 +1322,6 @@ const Dashboard = () => {
       .unwrap()
       .then((res: any) => {
         setSearchData(res);
-
-        setRowSelection({});
         setError('');
         setIsDetailPage(true);
         setIsLoading(false);
@@ -1344,6 +1342,7 @@ const Dashboard = () => {
             setCompareStoneData
           });
         }
+        setRowSelection({});
       })
       .catch((_e: any) => {
         if (

@@ -1237,9 +1237,9 @@ const MatchPairTable = ({
     const timer = setTimeout(() => {
       setIsLoaded(true), setIsSkeletonLoading(false);
     }, 1500); // Small delay to ensure rendering phase is completed
-
     return () => clearTimeout(timer); // Cleanup the timer
   }, []);
+
   useEffect(() => {
     // if(isLoading)
     setIsLoaded(false);
