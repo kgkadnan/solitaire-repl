@@ -63,6 +63,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
     return () => clearTimeout(timer); // Cleanup on unmount
   }, []);
 
+  console.log('Root Layout');
   useEffect(() => {
     // Define the URLs
     const appStoreURL =
@@ -165,16 +166,16 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
                 gtag('config', ${process.env.NEXT_PUBLIC_GA}, { 'anonymize_ip': true });
               }
 
-              
-              // Check Cookiebot Consent API
-              window.addEventListener("CookieConsentDeclaration", function() {
-                                              console.log("000000000000000000000000000000000000000000000")
+              loadGA();
+              // // Check Cookiebot Consent API
+              // window.addEventListener("CookieConsentDeclaration", function() {
+              //                                 console.log("000000000000000000000000000000000000000000000")
 
-                if (Cookiebot.consent.statistics) {
-                console.log("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiii")
-                  loadGA();
-                }
-              });
+              //   if (Cookiebot.consent.statistics) {
+              //   console.log("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiii")
+                  
+              //   }
+              // });
             `
           }}
         />
