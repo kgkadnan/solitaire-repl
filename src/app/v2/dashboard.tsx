@@ -82,7 +82,7 @@ import {
   RenderShape,
   RenderTracerId
 } from '@/components/v2/common/data-table/helpers/render-cell';
-import { MRT_RowSelectionState } from 'material-react-table';
+import { MRT_RowSelectionState, MRT_SortingState } from 'material-react-table';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import backWardArrow from '@public/v2/assets/icons/my-diamonds/backwardArrow.svg';
 import { NOT_MORE_THAN_300 } from '@/constants/error-messages/search';
@@ -120,6 +120,12 @@ import { kamLocationAction } from '@/features/kam-location/kam-location';
 import { handleCompareStone } from './search/result/helpers/handle-compare-stone';
 import { trackEvent } from '@/utils/ga';
 import { Tracking_Search_By_Text } from '@/constants/funnel-tracking';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faSort,
+  faSortDown,
+  faSortUp
+} from '@fortawesome/free-solid-svg-icons';
 
 interface ITabs {
   label: string;
@@ -187,6 +193,8 @@ const Dashboard = () => {
   const [isDetailPage, setIsDetailPage] = useState(false);
   const [isDiamondDetail, setIsDiamondDetail] = useState(false);
   const [isDiamondDetailLoading, setIsDiamondDetailLoading] = useState(true); //
+
+  const [sorting, setSorting] = useState<MRT_SortingState>([]);
 
   const [lastEventTime, setLastEventTime] = useState<number | null>(null);
 
@@ -342,21 +350,43 @@ const Dashboard = () => {
       ?.filter(({ is_disabled }: any) => !is_disabled)
       ?.sort(({ sequence: a }: any, { sequence: b }: any) => a - b)
       .map(({ accessor, short_label, label }: any) => {
+        const currentSort = sorting.find(sort => sort.id === accessor);
+        const nonSortableAccessors = ['shape_full', 'details', 'fire_icon'];
+
+        // Check if sorting should be disabled for the column's accessor
+        const isSortable = !nonSortableAccessors.includes(accessor);
         const commonProps = {
           accessorKey: accessor,
           header: short_label,
           enableGlobalFilter: accessor === 'lot_id',
-          // enableGrouping: accessor === 'shape',
-          enableSorting: accessor !== 'shape_full' && accessor !== 'details',
-          minSize: 5,
-          maxSize: accessor === 'details' ? 100 : 200,
-          size: 5,
+          minSize: 0,
+          maxSize: 0,
+          size: 0,
           Header: ({ column }: any) => (
-            <Tooltip
-              tooltipTrigger={<span>{column.columnDef.header}</span>}
-              tooltipContent={label}
-              tooltipContentStyles={'z-[1000]'}
-            />
+            <div className="flex items-center group">
+              <Tooltip
+                tooltipTrigger={<span>{column.columnDef.header}</span>}
+                tooltipContent={label}
+                tooltipContentStyles={'z-[1000]'}
+              />
+              {isSortable &&
+                (currentSort ? (
+                  <FontAwesomeIcon
+                    icon={currentSort.desc ? faSortDown : faSortUp}
+                    width={8}
+                    height={8}
+                    style={{ marginLeft: '2px' }} // Optional styling for spacing
+                  />
+                ) : (
+                  <FontAwesomeIcon
+                    icon={faSort} // Default icon when not sorted
+                    width={8}
+                    height={8}
+                    className="opacity-0 transition-opacity duration-300 group-hover:opacity-100" // Show on hover
+                    style={{ marginLeft: '2px' }}
+                  />
+                ))}
+            </div>
           )
         };
 
@@ -388,72 +418,28 @@ const Dashboard = () => {
                 );
               }
             };
-          case 'clarity':
-            return {
-              ...commonProps,
-              sortingFn: (rowA: any, rowB: any, columnId: string) => {
-                const indexA = clarity.indexOf(rowA.original[columnId]);
-                const indexB = clarity.indexOf(rowB.original[columnId]);
-                return indexA - indexB;
-              }
-            };
+
           case 'table_inclusion':
             return {
               ...commonProps,
-              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-',
-              sortingFn: (rowA: any, rowB: any, columnId: string) => {
-                const indexA = tableInclusionSortOrder.indexOf(
-                  rowA.original[columnId]
-                );
-                const indexB = tableInclusionSortOrder.indexOf(
-                  rowB.original[columnId]
-                );
-                return indexA - indexB;
-              }
+              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-'
             };
           case 'table_black':
             return {
               ...commonProps,
-              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-',
-              sortingFn: (rowA: any, rowB: any, columnId: string) => {
-                const indexA = tableBlackSortOrder.indexOf(
-                  rowA.original[columnId]
-                );
-                const indexB = tableBlackSortOrder.indexOf(
-                  rowB.original[columnId]
-                );
-                return indexA - indexB;
-              }
+              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-'
             };
 
           case 'side_black':
             return {
               ...commonProps,
-              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-',
-              sortingFn: (rowA: any, rowB: any, columnId: string) => {
-                const indexA = sideBlackSortOrder.indexOf(
-                  rowA.original[columnId]
-                );
-                const indexB = sideBlackSortOrder.indexOf(
-                  rowB.original[columnId]
-                );
-                return indexA - indexB;
-              }
+              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-'
             };
 
           case 'fluorescence':
             return {
               ...commonProps,
-              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-',
-              sortingFn: (rowA: any, rowB: any, columnId: string) => {
-                const indexA = fluorescenceSortOrder.indexOf(
-                  rowA.original[columnId]
-                );
-                const indexB = fluorescenceSortOrder.indexOf(
-                  rowB.original[columnId]
-                );
-                return indexA - indexB;
-              }
+              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-'
             };
           case 'amount':
             return { ...commonProps, Cell: RenderAmount };
@@ -553,7 +539,7 @@ const Dashboard = () => {
       });
   const memoizedColumns = useMemo(
     () => mapColumns(searchColumn),
-    [searchColumn]
+    [searchColumn, sorting]
   );
   const handleEdit = (stone: string, identifier = false) => {
     let savedSearchEditData = customerData?.customer?.saved_searches?.filter(
@@ -1336,8 +1322,6 @@ const Dashboard = () => {
       .unwrap()
       .then((res: any) => {
         setSearchData(res);
-
-        setRowSelection({});
         setError('');
         setIsDetailPage(true);
         setIsLoading(false);
@@ -1358,6 +1342,7 @@ const Dashboard = () => {
             setCompareStoneData
           });
         }
+        setRowSelection({});
       })
       .catch((_e: any) => {
         if (
@@ -2163,6 +2148,8 @@ const Dashboard = () => {
               modalSetState={modalSetState}
               setErrorText={setError}
               downloadExcel={downloadExcel}
+              setSorting={setSorting}
+              sorting={sorting}
               setIsError={setIsError}
               setIsLoading={setIsLoading}
               handleAddToCart={handleAddToCart}
