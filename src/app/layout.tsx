@@ -178,10 +178,11 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
           }}
         />
         <Script
+
           strategy="afterInteractive"
           src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA}`}
         />
-        <script
+        {/* <script
           dangerouslySetInnerHTML={{
             __html: `
             window.dataLayer = window.dataLayer || [];
@@ -190,8 +191,8 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
             gtag('config', '${process.env.NEXT_PUBLIC_GA}', { 'anonymize_ip': true });
           `
           }}
-        />
-        <script
+        /> */}
+        <Script
           id="cookie-consent"
           // strategy="afterInteractive"
           data-cookieconsent="ignore"
