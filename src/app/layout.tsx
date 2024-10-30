@@ -158,15 +158,20 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
           dangerouslySetInnerHTML={{
             __html: `
               function loadGA() {
+
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){dataLayer.push(arguments);}
                 gtag('js', new Date());
                 gtag('config', ${process.env.NEXT_PUBLIC_GA}, { 'anonymize_ip': true });
               }
+
               
               // Check Cookiebot Consent API
               window.addEventListener("CookieConsentDeclaration", function() {
+                                              console.log("000000000000000000000000000000000000000000000")
+
                 if (Cookiebot.consent.statistics) {
+                console.log("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiii")
                   loadGA();
                 }
               });
