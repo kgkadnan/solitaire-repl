@@ -1840,7 +1840,7 @@ const Dashboard = () => {
       <ImageModal
         setIsLoading={setIsLoading}
         isOpen={isModalOpen}
-        isResultPageDetails={isResultPageDetails}
+        trackIdentifier={isResultPageDetails ? 'resultPageDetails' : ''}
         customerMobileNumber={customerMobileNumber}
         onClose={() => {
           setValidImages([]);
@@ -1866,7 +1866,9 @@ const Dashboard = () => {
             goBackToListView={goBack}
             handleDetailPage={handleDetailPage}
             breadCrumLabel={
-              breadCrumLabel.length ? breadCrumLabel : 'Search Results'
+              breadCrumLabel.length && breadCrumLabel !== 'Dashboard'
+                ? breadCrumLabel
+                : 'Search Results'
             }
             identifier={dashboardIndentifier}
             modalSetState={modalSetState}
@@ -1919,7 +1921,6 @@ const Dashboard = () => {
                       label: ManageLocales('app.searchResult.confirmStone'),
                       // isHidden: isConfirmStone,
                       handler: () => {
-                        setBreadCrumLabel('Detail Page');
                         setIsDetailPage(false);
                         const { id } = detailPageData;
                         const selectedRows = { [id]: true };
@@ -1985,7 +1986,7 @@ const Dashboard = () => {
                 ? 'Detail Page'
                 : isCompareStone
                 ? 'Compare Stone'
-                : 'Dashboard'
+                : 'Search Results'
             }
             handleDetailImage={handleDetailImage}
             handleDetailPage={handleDetailPage}
@@ -2006,7 +2007,11 @@ const Dashboard = () => {
                     });
 
                     goBackToListView(
-                      isCompareStone ? 'Compare Stone' : 'Dashboard'
+                      detailPageData?.length
+                        ? 'Detail Page'
+                        : isCompareStone
+                        ? 'Compare Stone'
+                        : 'Dashboard'
                     );
                   }
                 },
@@ -2048,7 +2053,7 @@ const Dashboard = () => {
               columns={columnData}
               goBackToListView={goBackToListView}
               activeTab={activeTab}
-              isFrom={'Dashboard'}
+              isFrom={'Search Results'}
               handleDetailImage={handleDetailImage}
               setCompareStoneData={setCompareStoneData}
               compareStoneData={compareStoneData}

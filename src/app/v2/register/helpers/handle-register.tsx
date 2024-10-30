@@ -67,6 +67,13 @@ export const handleRegister = async ({
           countryCode: `${registerFormState.countryCode}`,
           codeAndNumber: `${registerFormState.countryCode} ${registerFormState.mobileNumber}`
         }));
+        localStorage.setItem(
+          'userIp',
+          JSON.stringify({
+            countryCode: registerFormState?.countryCode,
+            iso: registerFormState?.iso
+          })
+        );
         setToken(prev => ({
           ...prev,
           phoneToken: res.customer.phone_token,

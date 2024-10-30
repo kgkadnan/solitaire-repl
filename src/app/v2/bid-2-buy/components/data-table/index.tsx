@@ -181,6 +181,7 @@ const BidToBuyDataTable = ({
   setIsSkeletonLoading,
   isTabSwitch,
   setIsTabSwitch,
+
   setActiveBid // searchUrl
 }: any) => {
   // Fetching saved search data
@@ -193,14 +194,21 @@ const BidToBuyDataTable = ({
     pageIndex: 0,
     pageSize: 20 //customize the default page size
   });
-
   const [paginatedData, setPaginatedData] = useState<any>([]);
   const [globalFilter, setGlobalFilter] = useState('');
 
   const [searchableId, setSearchableId] = useState('');
 
   const handleFilterSearch = () => {
-    let searchData = rows.filter((data: any) => data.lot_id === searchableId);
+    // Trim the searchableId to remove any extra spaces
+    let trimmedSearchableId = searchableId.trim();
+
+    // Filter the rows based on the trimmed searchableId
+    let searchData = rows.filter(
+      (data: any) => data.lot_id === trimmedSearchableId
+    );
+
+    // Update the paginated data state
     setPaginatedData(searchData);
   };
   const filterDataState: any = useAppSelector(state => state.filterBidToBuy);
@@ -397,7 +405,7 @@ const BidToBuyDataTable = ({
                   onChange={e => {
                     setSearchableId(e.target.value);
                   }}
-                  placeholder={'Search'}
+                  placeholder={'Search by stone id'}
                   customStyle={`${searchableId && '!pr-[110px]'} !w-[250px]`}
                 />
                 {searchableId && (
@@ -437,6 +445,7 @@ const BidToBuyDataTable = ({
               <MRT_GlobalFilterTextField
                 table={table}
                 autoComplete="false"
+                placeholder="Search by stone id"
                 className="max-[1092px]:w-[110px]   max-[1160px]:w-[180px] max-xl:w-auto"
                 sx={{
                   boxShadow: 'var(--input-shadow) inset',
@@ -556,32 +565,47 @@ const BidToBuyDataTable = ({
       )}
     </div>
   );
-  const renderBottomToolbar = ({ table }: any) => renderFooter(table);
+  const renderBottomToolbar = ({ table }: any) => {
+    if (!paginatedData.length) {
+      return null;
+    } else {
+      return renderFooter(table);
+    }
+  };
 
-  const NoResultsComponent = () => (
-    <div
-      className={`flex flex-col items-center justify-center gap-5 ${
-        isFullScreen ? 'h-[69vh]' : !rows.length ? 'h-[55vh]' : 'h-[60vh]'
-      }  mt-[50px]`}
-    >
-      {(activeTab === 1 && activeCount === 0) ||
-      (activeTab === 0 && bidCount === 0) ||
-      (activeTab === 2 && historyCount === 0) ||
-      rows.length === 0 ? (
-        <>
-          <Image src={empty} alt={'empty'} />
-          <p className="text-neutral900  w-[350px] text-center ">
-            Every month we provide an extra discount on a few stones which you
-            can bid to buy. Stay tuned.
-          </p>
-        </>
-      ) : rows.length ? (
-        ''
-      ) : (
-        <CustomKGKLoader />
-      )}
-    </div>
-  );
+  const NoResultsComponent = () => {
+    return (
+      <div
+        className={`flex flex-col items-center justify-center gap-5 ${
+          isFullScreen ? 'h-[69vh]' : !rows.length ? 'h-[55vh]' : 'h-[60vh]'
+        }   mt-[50px] ${!paginatedData.length && '!h-[47vh]  !mt-[20px]'}`}
+      >
+        {(activeTab === 1 && activeCount === 0) ||
+        (activeTab === 0 && bidCount === 0) ||
+        (activeTab === 2 && historyCount === 0) ||
+        rows.length === 0 ? (
+          <>
+            <Image src={empty} alt={'empty'} />
+            <p className="text-neutral900  w-[350px] text-center ">
+              Every month we provide an extra discount on a few stones which you
+              can bid to buy. Stay tuned.
+            </p>
+          </>
+        ) : !paginatedData.length && searchableId.length ? (
+          <div className="text-center">
+            <Image src={empty} alt="empty" />
+            <p className="text-neutral900 w-[220px] mx-auto">
+              No matching stones found.
+            </p>
+          </div>
+        ) : rows.length ? (
+          ''
+        ) : (
+          <CustomKGKLoader />
+        )}
+      </div>
+    );
+  };
   let isNudge = localStorage.getItem('show-nudge') === 'MINI';
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   // const handleGlobalFilterChange = debounce((value: any) => {
@@ -595,7 +619,7 @@ const BidToBuyDataTable = ({
     // { isLoading: isLoadingBidToBuyApi, isFetching: isFetchingBidToBuyApi }
   ] = useLazyGetAllBidStonesQuery();
   const table = useMaterialReactTable({
-    columns,
+    columns: paginatedData.length ? columns : [],
     data: isTabSwitch ? [] : paginatedData, //must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
 
     //state
@@ -626,6 +650,7 @@ const BidToBuyDataTable = ({
     globalFilterFn: 'startsWith',
     selectAllMode: 'page',
     renderTopToolbar,
+    enablePagination: !paginatedData.length ? false : true,
     renderBottomToolbar,
     renderEmptyRowsFallback: NoResultsComponent,
     manualPagination: true,
@@ -1175,7 +1200,7 @@ const BidToBuyDataTable = ({
                                   );
                                   triggerBidToBuyApi({
                                     searchUrl: constructUrlParams(
-                                      filterDataState?.queryParams
+                                      JSON.parse(localStorage.getItem('bid')!)
                                     ),
                                     limit: 300
                                   })

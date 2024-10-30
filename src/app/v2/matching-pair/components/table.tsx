@@ -1,5 +1,6 @@
 import { Box, Stack } from '@mui/material';
 import styles from '../../../../components/v2/common/data-table/data-table.module.scss';
+
 import {
   MRT_ExpandButton,
   MRT_GlobalFilterTextField,
@@ -10,6 +11,8 @@ import {
 import ExpandImg from '@public/v2/assets/icons/detail-page/expand.svg?url';
 import CollapsIcon from '@public/v2/assets/icons/collapse-icon.svg?url';
 import ExportExcel from '@public/v2/assets/icons/detail-page/export-excel.svg?url';
+import Setting from '@public/v2/assets/icons/match-pair-setting.svg?url';
+
 import saveIcon from '@public/v2/assets/icons/data-table/bookmark.svg';
 import BinIcon from '@public/v2/assets/icons/bin.svg';
 import DownloadAllIcon from '@public/v2/assets/icons/download-all.svg';
@@ -18,6 +21,9 @@ import chevronDown from '@public/v2/assets/icons/save-search-dropdown/chevronDow
 import Image from 'next/image';
 import searchIcon from '@public/v2/assets/icons/data-table/search-icon.svg';
 import threeDotsSvg from '@public/v2/assets/icons/threedots.svg';
+import Cross from '@public/v2/assets/icons/cross.svg?url';
+import Drag from '@public/v2/assets/icons/drag.svg';
+import NoDataSvg from '@public/v2/assets/icons/no-matching-pair.svg';
 
 // theme.js
 import { ThemeProvider, createTheme } from '@mui/material/styles';
@@ -196,7 +202,14 @@ const MatchPairTable = ({
   handleCreateAppointment,
   originalData,
   setIsSkeletonLoading,
-  isSkeletonLoading
+  isSkeletonLoading,
+  mps,
+  setMps,
+  setSettingApplied,
+  isLoading,
+  countLimitReached,
+  settingApplied,
+  setIsMPSOpen
 }: any) => {
   // Fetching saved search data
   const router = useRouter();
@@ -220,9 +233,11 @@ const MatchPairTable = ({
   });
 
   const [paginatedData, setPaginatedData] = useState<any>([]);
+
   const [globalFilter, setGlobalFilter] = useState('');
   const path = useSearchParams().get('active-tab');
 
+  const [isLoaded, setIsLoaded] = useState(false);
   useEffect(() => {
     if (globalFilter !== '') {
       // Remove all whitespace characters from globalFilter
@@ -248,9 +263,10 @@ const MatchPairTable = ({
     const newData = rows.slice(startIndex, endIndex);
     // Update the paginated data state
     setPaginatedData(newData);
-    if (newData.length > 0 && setIsSkeletonLoading) {
-      setIsSkeletonLoading(false);
-    }
+
+    // if (newData.length > 0 && setIsSkeletonLoading) {
+    //   setIsSkeletonLoading(false);
+    // }
   }, [
     rows,
     pagination.pageIndex, //re-fetch when page index changes
@@ -534,10 +550,51 @@ const MatchPairTable = ({
 
   let isNudge = localStorage.getItem('show-nudge') === 'MINI';
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
-  const NoResultsComponent = () => <></>;
+  const NoResultsComponent = () => (
+    <>
+      {' '}
+      {isLoaded && !isLoading && !isSkeletonLoading && (
+        <div className="flex justify-center mt-[50px]">
+          <div>
+            <div className="w-[350px] flex justify-center">
+              <Image src={NoDataSvg} alt={'empty'} />
+            </div>
+            <div className="flex flex-col justify-center items-center w-[350px]">
+              <h1 className="text-neutral600 font-medium text-[16px] w-[340px] text-center mb-[10px]">
+                {countLimitReached
+                  ? `Your selection has more than 150 matching pairs. Please modify the filters or adjust the match pair settings to reduce the selection to fewer than 150 matching pairs.`
+                  : `We don't have any stones according to your selection. Please
+                modify the filters or change the match pair settings.`}
+              </h1>
+
+              <ActionButton
+                actionButtonData={[
+                  {
+                    variant: 'secondary',
+                    label: 'Edit Filter',
+                    handler: () => {
+                      router.push(
+                        `/v2/matching-pair?active-tab=${path}&edit=result`
+                      );
+                    }
+                  },
+
+                  {
+                    variant: 'primary',
+                    label: 'Edit Match Pair Settings',
+                    handler: () => setIsMPSOpen(true)
+                  }
+                ]}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
   //pass table options to useMaterialReactTable
   const table = useMaterialReactTable({
-    columns,
+    columns: paginatedData.length ? columns : [],
     data: paginatedData, //must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
 
     getRowId: originalRow => originalRow?.id,
@@ -548,6 +605,7 @@ const MatchPairTable = ({
       pagination,
       globalFilter
     },
+    enablePagination: paginatedData.length ? true : false,
     positionToolbarAlertBanner: 'none',
     enableColumnActions: false,
     enableDensityToggle: false,
@@ -564,6 +622,7 @@ const MatchPairTable = ({
     enableToolbarInternalActions: true,
     globalFilterFn: 'startsWith',
     selectAllMode: 'page',
+
     renderEmptyRowsFallback: NoResultsComponent,
     manualPagination: true,
     rowCount: rows.length,
@@ -640,9 +699,9 @@ const MatchPairTable = ({
         }
       },
       'mrt-row-select': {
-        size: 15,
-        minSize: 15,
-        maxSize: 15
+        size: 40,
+        minSize: 40,
+        maxSize: 40
       }
     },
 
@@ -975,9 +1034,35 @@ const MatchPairTable = ({
                 ''
               )
             }
+            <div className="h-[37px] mr-[-8px]">
+              <p
+                className={`bg-infoMain rounded-[12px] px-[6px] py-[1px]  text-neutral0 text-[10px] ${styles.pulse}`}
+              >
+                New
+              </p>
+            </div>
 
             <div
               className=" rounded-[4px] cursor-pointer"
+              onClick={() => {
+                setIsMPSOpen(true);
+              }}
+            >
+              <Tooltip
+                tooltipTrigger={
+                  <button
+                    className={`rounded-[4px] hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm ${'bg-neutral0'}`}
+                  >
+                    <Setting className={`${'stroke-neutral900'}`} />
+                  </button>
+                }
+                tooltipContent={'Match Pair Setting'}
+                tooltipContentStyles={'z-[1000]'}
+              />
+            </div>
+
+            <div
+              className="rounded-[4px] cursor-pointer"
               onClick={handleDownloadExcel}
             >
               <Tooltip
@@ -1039,116 +1124,161 @@ const MatchPairTable = ({
         </Box>
       </div>
     ),
-    renderBottomToolbar: ({ table }) => (
-      <div
-        className={`px-[16px] border-t-[1px] border-neutral200 
-       
-        `}
-      >
-        {
-          // (isResult || isDashboard) && (
-          <div className="flex items-center justify-between">
-            <div className="flex gap-4 h-[30px]">
-              <div className=" border-[1px] border-lengendInCardBorder rounded-[4px] bg-legendInCartFill text-legendInCart">
-                <p className="text-mMedium font-medium px-[6px] py-[4px]">
-                  In Cart
-                </p>
-              </div>
-              <div className=" border-[1px] border-lengendHoldBorder rounded-[4px] bg-legendHoldFill text-legendHold">
-                <p className="text-mMedium font-medium px-[6px] py-[4px]">
-                  {' '}
-                  Hold
-                </p>
-              </div>
-              <div className="border-[1px] border-lengendMemoBorder rounded-[4px] bg-legendMemoFill text-legendMemo">
-                <p className="text-mMedium font-medium px-[6px] py-[4px]">
-                  {' '}
-                  Memo
-                </p>
-              </div>
-            </div>
-            <MRT_TablePagination table={table} />
-            <div className="flex items-center gap-3">
-              <ActionButton
-                actionButtonData={[
-                  {
-                    variant: 'secondary',
-                    label: ManageLocales('app.searchResult.addToCart'),
-                    isDisable: !Object.keys(rowSelection).length,
-                    handler: () => handleAddToCart()
-                  },
+    renderBottomToolbar: ({ table }) => {
+      if (!paginatedData.length) {
+        return null;
+      } else {
+        return (
+          <div className={`px-[16px] border-t-[1px] border-neutral200`}>
+            {
+              // (isResult || isDashboard) && (
+              <div className="flex items-center justify-between">
+                <div className="flex gap-4 h-[30px]">
+                  <div className=" border-[1px] border-lengendInCardBorder rounded-[4px] bg-legendInCartFill text-legendInCart">
+                    <p className="text-mMedium font-medium px-[6px] py-[4px]">
+                      In Cart
+                    </p>
+                  </div>
+                  <div className=" border-[1px] border-lengendHoldBorder rounded-[4px] bg-legendHoldFill text-legendHold">
+                    <p className="text-mMedium font-medium px-[6px] py-[4px]">
+                      {' '}
+                      Hold
+                    </p>
+                  </div>
+                  <div className="border-[1px] border-lengendMemoBorder rounded-[4px] bg-legendMemoFill text-legendMemo">
+                    <p className="text-mMedium font-medium px-[6px] py-[4px]">
+                      {' '}
+                      Memo
+                    </p>
+                  </div>
+                </div>
+                <MRT_TablePagination table={table} />
+                <div className="flex items-center gap-3">
+                  <ActionButton
+                    actionButtonData={[
+                      {
+                        variant: 'secondary',
+                        label: ManageLocales('app.searchResult.addToCart'),
+                        isDisable: !Object.keys(rowSelection).length,
+                        handler: () => handleAddToCart()
+                      },
 
-                  {
-                    variant: 'primary',
-                    label: ManageLocales('app.searchResult.confirmStone'),
-                    isDisable: !Object.keys(rowSelection).length,
-                    handler: () => {
-                      handleConfirmStone({
-                        selectedRows: rowSelection,
-                        rows: rows,
-                        setIsError,
-                        setErrorText,
-                        setIsConfirmStone,
-                        setConfirmStoneData,
-                        router,
-                        modalSetState,
-                        checkProductAvailability,
-                        setIsLoading
-                      });
-                    }
-                  }
-                ]}
-              />
-              <Dropdown
-                dropdownTrigger={
-                  <Image
-                    src={threeDotsSvg}
-                    alt="threeDotsSvg"
-                    width={43}
-                    height={43}
+                      {
+                        variant: 'primary',
+                        label: ManageLocales('app.searchResult.confirmStone'),
+                        isDisable: !Object.keys(rowSelection).length,
+                        handler: () => {
+                          handleConfirmStone({
+                            selectedRows: rowSelection,
+                            rows: rows,
+                            setIsError,
+                            setErrorText,
+                            setIsConfirmStone,
+                            setConfirmStoneData,
+                            router,
+                            modalSetState,
+                            checkProductAvailability,
+                            setIsLoading
+                          });
+                        }
+                      }
+                    ]}
                   />
-                }
-                dropdownMenu={[
-                  {
-                    label: 'Compare Stone',
-                    isDisable: !Object.keys(rowSelection).length,
-                    handler: () =>
-                      handleCompareStone({
-                        isCheck: rowSelection,
-                        setIsError,
-                        setErrorText,
-                        activeCartRows: rows,
-                        setIsCompareStone,
-                        setCompareStoneData
-                      })
-                  },
-                  {
-                    label: ManageLocales(
-                      'app.search.actionButton.bookAppointment'
-                    ),
+                  <Dropdown
+                    dropdownTrigger={
+                      <Image
+                        src={threeDotsSvg}
+                        alt="threeDotsSvg"
+                        width={43}
+                        height={43}
+                      />
+                    }
+                    dropdownMenu={[
+                      {
+                        label: 'Compare Stone',
+                        isDisable: !Object.keys(rowSelection).length,
+                        handler: () =>
+                          handleCompareStone({
+                            isCheck: rowSelection,
+                            setIsError,
+                            setErrorText,
+                            activeCartRows: rows,
+                            setIsCompareStone,
+                            setCompareStoneData
+                          })
+                      },
+                      {
+                        label: ManageLocales(
+                          'app.search.actionButton.bookAppointment'
+                        ),
 
-                    handler: () => {
-                      handleCreateAppointment();
-                    },
+                        handler: () => {
+                          handleCreateAppointment();
+                        },
 
-                    isDisable:
-                      !Object.keys(rowSelection).length ||
-                      isKycVerified?.customer?.kyc?.status !==
-                        kycStatus.APPROVED
-                  }
-                ]}
-              />
-            </div>
+                        isDisable:
+                          !Object.keys(rowSelection).length ||
+                          isKycVerified?.customer?.kyc?.status !==
+                            kycStatus.APPROVED
+                      }
+                    ]}
+                  />
+                </div>
+              </div>
+              // )
+            }
           </div>
-          // )
-        }
-      </div>
-    )
+        );
+      }
+    }
   });
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoaded(true), setIsSkeletonLoading(false);
+    }, 1500); // Small delay to ensure rendering phase is completed
+
+    return () => clearTimeout(timer); // Cleanup the timer
+  }, []);
+  useEffect(() => {
+    // if(isLoading)
+    setIsLoaded(false);
+    setIsSkeletonLoading(true);
+    const timer = setTimeout(() => {
+      setIsLoaded(true), setIsSkeletonLoading(false);
+    }, 5000); // Small delay to ensure rendering phase is completed
+
+    return () => clearTimeout(timer);
+  }, [activeTab]);
+
+  // const handleInputBlur = (index: number, field: string) => {
+  //   const endValue = mps[index].end;
+  //   let value = parseFloat(mps[index][field]) || 0; // Convert to number on blur
+
+  //   // Validate the value
+  //   if (value < 0) value = 0;
+  //   if (value > endValue) value = endValue;
+
+  //   const updatedMps = [...mps];
+  //   updatedMps[index] = { ...updatedMps[index], [field]: value.toString() }; // Set final validated value as string
+  //   setMps(updatedMps);
+  // };
+
+  // const handleDragEnd = (result: any) => {
+  //   const { destination, source } = result;
+
+  //   if (!destination) return;
+
+  //   const reorderedItems = Array.from(items);
+  //   const [removed] = reorderedItems.splice(source.index, 1);
+  //   reorderedItems.splice(destination.index, 0, removed);
+
+  //   setItems(reorderedItems);
+  // };
 
   return (
     <>
-      {isSkeletonLoading ? (
+      {isSkeletonLoading || !isLoaded || isLoading ? (
         <MathPairSkeleton />
       ) : (
         <ThemeProvider theme={theme}>

@@ -108,7 +108,6 @@ export const handleEditMobileNumber = ({
             handleClick={() => setIsDialogOpen(false)}
           />
         );
-        console.log(`something went wrong while sending OTP ${e}`);
         funnelTrack &&
           funnelTrack({
             step: Tracking.Click_Mobile_Edit_Save,

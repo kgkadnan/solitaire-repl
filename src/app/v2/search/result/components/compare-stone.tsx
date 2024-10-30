@@ -26,6 +26,7 @@ import { RednderLocation } from '@/components/v2/table/helpers/render-cell';
 import { useCheckProductAvailabilityMutation } from '@/features/api/product';
 import { HOLD_STATUS, MEMO_STATUS } from '@/constants/business-logic';
 import { getShapeDisplayName } from '@/utils/v2/detail-page';
+import { statusCode } from '@/constants/enums/status-code';
 
 const CompareStone = ({
   rows,
@@ -191,6 +192,9 @@ const CompareStone = ({
                 ]}
               />
             );
+
+            refreshCompareStone();
+
             // On success, show confirmation dialog and update badge
             setIsError(false);
             setErrorText('');

@@ -4,10 +4,26 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import TraceabilityHtml from '@/components/v3/traceability-html';
 import AnimationSection from '@/components/v3/animated-text/scroll';
-import arrowUpRight from '@public/v3/traceability/arrow-up-right.svg';
-import Link from 'next/link';
+// import arrowUpRight from '@public/v3/traceability/arrow-up-right.svg';
+// import Link from 'next/link';
+import ShimmerButton from '@/components/v3/animated-button';
+import { useRouter } from 'next/navigation';
 export default function Traceability() {
+  const router = useRouter();
   const [showControls, setShowControls] = useState(false);
+
+  const [isCtaVisible, setIsCtaVisible] = useState(false); // Initial state: button invisible
+
+  useEffect(() => {
+    // Set a delay to change opacity after 3 seconds (3000 milliseconds)
+    const timer = setTimeout(() => {
+      setIsCtaVisible(true);
+    }, 1300);
+
+    // Cleanup the timer when the component unmounts
+    return () => clearTimeout(timer);
+  }, []);
+
   useEffect(() => {
     // Show header after 2 seconds
     const timer = setTimeout(() => {
@@ -21,12 +37,12 @@ export default function Traceability() {
       <div className="-[320px] pt-[160px] pb-[80px] flex items-center  bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom">
         <div className="scroll-container flex overflow-hidden  w-full justify-center">
           <div className="flex flex-col gap-2 flex-none w-full flex-shrink-0 snap-center items-center">
-            <div className="text-neutral900 text-[52px] font-black text-center leading-[110px] custom-fadeIn">
+            <div className="text-neutral900 text-[52px] font-black text-center leading-[110px]">
               <AnimationSection>How Traceability Works in KGK</AnimationSection>
             </div>
             <div className="flex gap-2">
               <div className="flex gap-3 flex-col items-center">
-                <div className="text-neutral800 text-[16px] px-4 pt-[14px] w-[832px] text-center content">
+                <div className="text-neutral800 text-[16px] px-4 w-[900px] text-center content">
                   <AnimationSection animationDelay={0.5}>
                     At KGK, every diamond undergoes a traceable journey through
                     our GemTrac program, ensuring transparency at each stage.
@@ -35,6 +51,19 @@ export default function Traceability() {
                   </AnimationSection>
                 </div>
               </div>
+            </div>
+            <div className="pt-[14px]">
+              <ShimmerButton
+                className={`!rounded-[8px] w-[250px] h-[44px] text-[16px] transition-opacity duration-500 ${
+                  isCtaVisible ? 'opacity-100' : 'opacity-0'
+                }`}
+                onClick={() => {
+                  router.push('/v3/traceability/gemtrac');
+                }}
+                style={{ boxShadow: '0px 1px 2px 0px #1018281F' }}
+              >
+                Explore a Real Example!
+              </ShimmerButton>
             </div>
           </div>
         </div>
@@ -80,7 +109,7 @@ export default function Traceability() {
                 </div>
                 <div
                   className={`w-[528px] rounded-[8px] bg-white p-2 mt-[-120px] ${
-                    index < 2 ? 'h-[170px]' : 'h-[220px]'
+                    index > 3 ? 'h-[170px]' : 'h-[220px]'
                   } gap-2 flex flex-col`}
                   style={{ boxShadow: 'var(--popups-shadow' }}
                 >
@@ -90,7 +119,7 @@ export default function Traceability() {
                   <p className="text-neutral800 text-[16px]">
                     {program.description}
                   </p>
-                  {program.refLink && (
+                  {/* {program.refLink && (
                     <div className=" flex items-center justify-end text-infoMain font-medium text-[14px]">
                       <Link
                         href={program.refLink}
@@ -100,7 +129,7 @@ export default function Traceability() {
                         <Image src={arrowUpRight} alt="arrowUpRight" />
                       </Link>
                     </div>
-                  )}
+                  )} */}
                 </div>
               </div>
             ))}

@@ -27,6 +27,19 @@ export const matchingPairApi = createApi({
         url: `/store/similar-product?product_id=${product_id}&matching_pair_product_id=${matching_product_id}`
       }),
       providesTags: ['MatchingPair']
+    }),
+    getMatchingPairSetting: builder.query({
+      query: () => '/store/matching-pair-setting'
+    }),
+    getResetMatchingPairSetting: builder.query({
+      query: () => '/store/matching-pair-setting?action=reset'
+    }),
+    applyMatchingPairSetting: builder.mutation({
+      query: data => ({
+        url: `/store/matching-pair-setting`,
+        method: 'POST',
+        body: data
+      })
     })
   })
 });
@@ -35,5 +48,8 @@ export const {
   useLazyGetAllMatchingPairQuery,
   useGetMatchingPairCountQuery,
   useLazyGetMatchingPairCountQuery,
-  useLazyGetSimilarMatchingPairQuery
+  useLazyGetSimilarMatchingPairQuery,
+  useLazyGetMatchingPairSettingQuery,
+  useLazyGetResetMatchingPairSettingQuery,
+  useApplyMatchingPairSettingMutation
 } = matchingPairApi;

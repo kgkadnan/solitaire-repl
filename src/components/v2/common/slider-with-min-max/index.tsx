@@ -54,18 +54,18 @@ export const SliderWithMinMaxInput: React.FC<ISliderWithMinMaxInputProps> = ({
           maxPlaceHolder: maxPlaceHolder,
           maxOnchange: handleMaxChange
         }}
-        inputGap="gap-[121px]"
+        inputGap="gap-[48px]"
         errorText={errorText}
         isShowError={false}
       />
-      <RangeSlider
+      {/* <RangeSlider
         handleSliderChange={handleSliderChange}
         handleSliderAfterChange={handleSliderAfterChange}
         sliderValue={sliderValue}
         rangeMax={rangeMax}
         rangeMin={rangeMin}
         steps={steps}
-      />
+      /> */}
     </div>
   );
 };

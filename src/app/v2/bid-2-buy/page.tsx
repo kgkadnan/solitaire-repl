@@ -72,6 +72,7 @@ const BidToBuy = () => {
   const [detailImageData, setDetailImageData] = useState<any>({});
   const [validImages, setValidImages] = useState<any>([]);
   const pathName = useSearchParams().get('path');
+  const getActiveTabParam = useSearchParams().get('active-bid-tab');
   const [isLoading, setIsLoading] = useState(false); // State to track loading
   const [searchLoading, setSearchLoading] = useState(false);
   const [isSkeletonLoading, setIsSkeletonLoading] = useState(true);
@@ -215,6 +216,8 @@ const BidToBuy = () => {
   const [timeDifference, setTimeDifference] = useState(null);
 
   const getBidToBuyHistoryData = () => {
+    setIsLoading(true);
+
     triggerBidToBuyHistory({})
       .then(res => {
         setIsLoading(false);
@@ -226,24 +229,53 @@ const BidToBuy = () => {
   };
 
   useEffect(() => {
-    if (filterData?.bidData?.bidStone?.length) {
-      setBid(filterData?.bidData?.bidStone);
-      setActiveBid(filterData?.bidData?.activeStone);
-      setTime(filterData?.bidData?.endTime);
-    }
-    // else {
-    //   console.log("herer")
-    //   router.push('/v2/bid-2-buy');
-    // }
-  }, [filterData?.bidData, router]);
+    let queryNew = constructUrlParams(JSON.parse(localStorage.getItem('bid')!));
+    setIsLoading(true);
+    triggerBidToBuyApi({ searchUrl: queryNew })
+      .unwrap()
+      .then((response: any) => {
+        setTime(response?.endTime),
+          setBid(queryNew.length ? response?.bidStone : []);
+        setActiveBid(response?.activeStone);
+        setIsLoading(false);
+      })
+      .catch(e => {
+        setIsLoading(false);
+      });
+  }, []);
+
+  useEffect(() => {
+    let queryNew = constructUrlParams(JSON.parse(localStorage.getItem('bid')!));
+    setIsLoading(true);
+
+    triggerBidToBuyApi({ searchUrl: queryNew })
+      .unwrap()
+      .then((response: any) => {
+        setBid(queryNew.length ? response?.bidStone : []);
+        setActiveBid(response?.activeStone);
+        setTime(response?.endTime), setIsLoading(false);
+      })
+      .catch(e => {
+        setIsLoading(false);
+      });
+  }, [localStorage.getItem('bid')]);
+
   useEffect(() => {
     if (activeTab === 2) {
       getBidToBuyHistoryData();
     }
   }, [activeTab]);
+  useEffect(() => {
+    getBidToBuyHistoryData();
+  }, []);
 
   useEffect(() => {
-    if (pathName === 'bidHistory') {
+    if (
+      getActiveTabParam &&
+      (Number(getActiveTabParam) === 2 || Number(getActiveTabParam) === 1)
+    ) {
+      setActiveTab(Number(getActiveTabParam));
+    } else if (pathName === 'bidHistory') {
       setActiveTab(2);
     } else if (pathName === 'bidStone') {
       setActiveTab(0);
@@ -253,8 +285,13 @@ const BidToBuy = () => {
   }, []);
 
   const handleTabClick = (index: number) => {
+    let queryNew = constructUrlParams(JSON.parse(localStorage.getItem('bid')!));
     if (index !== activeTab) {
-      setIsTabSwitch(true);
+      if (index === 0 && !queryNew.length) {
+        setIsTabSwitch(false);
+      } else {
+        setIsTabSwitch(true);
+      }
     }
     setActiveTab(index);
     setRowSelection({});
@@ -300,8 +337,8 @@ const BidToBuy = () => {
   const [downloadExcel] = useDownloadExcelMutation();
   const [deleteBid] = useDeleteBidMutation();
   let [
-    triggerBidToBuyApi
-    // { isLoading: isLoadingBidToBuyApi, isFetching: isFetchingBidToBuyApi }
+    triggerBidToBuyApi,
+    { isLoading: isLoadingBidToBuyApi, isFetching: isFetchingBidToBuyApi }
   ] = useLazyGetAllBidStonesQuery();
 
   const renderFooter = (table: any) => {
@@ -394,7 +431,7 @@ const BidToBuy = () => {
                                   );
                                   triggerBidToBuyApi({
                                     searchUrl: constructUrlParams(
-                                      filterDataState?.queryParams
+                                      JSON.parse(localStorage.getItem('bid')!)
                                     ),
                                     limit: 300
                                   })
@@ -574,7 +611,7 @@ const BidToBuy = () => {
       ]);
     }
   }, [validImages]);
-  // console.log(filterData?.bidData);
+
   return (
     <div className="mb-[4px] relative">
       {isError && (
@@ -618,13 +655,42 @@ const BidToBuy = () => {
             activeTab={activeTab}
           />
         </div>
+      ) : isLoading ||
+        // isLoadingBidToBuyApi ||
+        historyData === undefined ||
+        activeBid === undefined ? (
+        <BiddingSkeleton />
       ) : (
-        // ) : bid === undefined ||
-        //   historyData === undefined ||
-        //   activeBid === undefined ? (
-        //   <BiddingSkeleton />
         <>
-          {subRoute === SubRoutes.BID_TO_BUY_RESULT ? (
+          {(!Object?.keys(localStorage.getItem('bid') ?? {}).length &&
+            time &&
+            activeTab === 0) ||
+          subRoute === SubRoutes.BID_TO_BUY ? (
+            <Form
+              searchUrl={searchUrl}
+              setSearchUrl={setSearchUrl}
+              state={state}
+              setState={setState}
+              carat={carat}
+              handleCloseAllTabs={() => {}}
+              handleCloseSpecificTab={() => {}}
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
+              errorState={formErrorState.errorState}
+              errorSetState={formErrorState.errorSetState}
+              setIsDialogOpen={modalSetState.setIsDialogOpen}
+              setDialogContent={modalSetState.setDialogContent}
+              setIsLoading={setSearchLoading}
+              setIsAddDemand={setIsAddDemand}
+              isMatchingPair={false}
+              isLoading={searchLoading}
+              setIsCommonLoading={setIsLoading}
+              time={time}
+              setRowSelection={setRowSelection}
+              // setBid={setBid}
+              // setActiveBid={setActiveBid}
+            />
+          ) : (
             <>
               {isSkeletonLoading ? (
                 ''
@@ -730,27 +796,6 @@ const BidToBuy = () => {
                 </div>
               </div>
             </>
-          ) : (
-            <Form
-              searchUrl={searchUrl}
-              setSearchUrl={setSearchUrl}
-              state={state}
-              setState={setState}
-              carat={carat}
-              handleCloseAllTabs={() => {}}
-              handleCloseSpecificTab={() => {}}
-              activeTab={activeTab}
-              setActiveTab={setActiveTab}
-              errorState={formErrorState.errorState}
-              errorSetState={formErrorState.errorSetState}
-              setIsDialogOpen={modalSetState.setIsDialogOpen}
-              setDialogContent={modalSetState.setDialogContent}
-              setIsLoading={setSearchLoading}
-              setIsAddDemand={setIsAddDemand}
-              isMatchingPair={false}
-              isLoading={searchLoading}
-              setIsCommonLoading={setIsLoading}
-            />
           )}
         </>
       )}

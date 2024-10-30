@@ -41,7 +41,7 @@ export class PersonalDetails {
   country_code: string;
   @MinLength(3, { message: FIELD_INVALID('Phone') })
   @Matches(PHONE_REG, {
-    message: RANGE_VALIDATION('Phone', 0, 15)
+    message: RANGE_VALIDATION('Phone', 6, 15)
   })
   @IsNotEmpty({ message: PHONE_NUMBER_MANDATORY })
   phone: string;

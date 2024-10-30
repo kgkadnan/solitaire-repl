@@ -33,6 +33,20 @@ const HtmlAnimation = () => {
     '/v3/home/dubai.png'
   ];
 
+  // useEffect(() => {
+  //   if (
+  //     typeof window !== 'undefined' &&
+  //     typeof window?.Cookiebot !== 'undefined' &&
+  //     typeof window?.Cookiebot?.consent !== 'undefined'
+  //   ) {
+  //     if (window?.Cookiebot?.consent?.stamp === '0') {
+  //       window?.Cookiebot?.renew();
+  //     }
+  //   }
+  // }, []); // Re-initialize on state change
+
+  // }, [showBanner, phoneVisible, scrollIndex]); // Re-initialize on state change
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       setWindowWidth(window?.innerWidth || 0); // Set window width on mount
