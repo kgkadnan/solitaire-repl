@@ -128,31 +128,6 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
   return (
     <html lang="en">
       <head>
-        <script
-          id="cookie-consent"
-          // strategy="afterInteractive"
-          data-cookieconsent="ignore"
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag() {
-                dataLayer.push(arguments);
-              }
-              gtag("consent", "default", {
-                ad_personalization: "denied",
-                ad_storage: "denied",
-                ad_user_data: "denied",
-                analytics_storage: "denied",
-                functionality_storage: "denied",
-                personalization_storage: "denied",
-                security_storage: "granted",
-                wait_for_update: 500,
-              });
-              gtag("set", "ads_data_redaction", true);
-              gtag("set", "url_passthrough", false);
-            `
-          }}
-        />
         {/* <script
           id="ga-consent"
           // strategy="afterInteractive"
@@ -179,16 +154,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
             `
           }}
         /> */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', '${process.env.NEXT_PUBLIC_GA}', { 'anonymize_ip': true });
-          `
-          }}
-        />
+
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -214,6 +180,41 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
         <Script
           strategy="afterInteractive"
           src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA}`}
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${process.env.NEXT_PUBLIC_GA}', { 'anonymize_ip': true });
+          `
+          }}
+        />
+        <script
+          id="cookie-consent"
+          // strategy="afterInteractive"
+          data-cookieconsent="ignore"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag() {
+                dataLayer.push(arguments);
+              }
+              gtag("consent", "default", {
+                ad_personalization: "denied",
+                ad_storage: "denied",
+                ad_user_data: "denied",
+                analytics_storage: "denied",
+                functionality_storage: "denied",
+                personalization_storage: "denied",
+                security_storage: "granted",
+                wait_for_update: 500,
+              });
+              gtag("set", "ads_data_redaction", true);
+              gtag("set", "url_passthrough", false);
+            `
+          }}
         />
       </head>
       <Head>
