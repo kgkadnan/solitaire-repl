@@ -63,7 +63,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
     return () => clearTimeout(timer); // Cleanup on unmount
   }, []);
 
-  console.log("Root Layout")
+  console.log('Root Layout');
   useEffect(() => {
     // Define the URLs
     const appStoreURL =
@@ -153,7 +153,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
             `
           }}
         />
-        <script
+        {/* <script
           id="ga-consent"
           // strategy="afterInteractive"
           dangerouslySetInnerHTML={{
@@ -177,6 +177,16 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
               //   }
               // });
             `
+          }}
+        /> */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${process.env.NEXT_PUBLIC_GA}', { 'anonymize_ip': true });
+          `
           }}
         />
         <script
@@ -223,7 +233,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
               `
           }}
         />
-          <script
+        {/* <script
           id="ga-consent"
           // strategy="afterInteractive"
           dangerouslySetInnerHTML={{
@@ -248,7 +258,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
               // });
             `
           }}
-        />
+        /> */}
       </Head>
       <body className={inter.className}>
         <DialogComponent
