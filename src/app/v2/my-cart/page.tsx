@@ -10,7 +10,7 @@ import {
 } from '@/constants/business-logic';
 import { useLazyGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
 import { ManageLocales } from '@/utils/v2/translate';
-import { MRT_RowSelectionState } from 'material-react-table';
+import { MRT_RowSelectionState, MRT_SortingState } from 'material-react-table';
 import noImageFound from '@public/v2/assets/icons/detail-page/fall-back-img.svg';
 import crossIcon from '@public/v2/assets/icons/modal/cross.svg';
 import Image from 'next/image';
@@ -84,10 +84,17 @@ import { setConfirmStoneTrack } from '@/features/confirm-stone-track/confirm-sto
 import { useLazyGetCustomerQuery } from '@/features/api/dashboard';
 import { STONE_LOCATION } from '@/constants/v2/enums/location';
 import { kamLocationAction } from '@/features/kam-location/kam-location';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faSort,
+  faSortDown,
+  faSortUp
+} from '@fortawesome/free-solid-svg-icons';
 
 const MyCart = () => {
   const dispatch = useAppDispatch();
 
+  const [sorting, setSorting] = useState<MRT_SortingState>([]);
   const confirmTrack = useAppSelector(state => state.setConfirmStoneTrack);
   const kamLocation = useAppSelector(state => state.kamLocation);
   const [triggerGetCustomer] = useLazyGetCustomerQuery({});
@@ -256,7 +263,7 @@ const MyCart = () => {
     };
 
     fetchColumns();
-  }, []);
+  }, [sorting]);
 
   const myCartTabs = [
     {
@@ -821,90 +828,69 @@ const MyCart = () => {
       ?.filter(({ is_disabled }: any) => !is_disabled)
       ?.sort(({ sequence: a }: any, { sequence: b }: any) => a - b)
       .map(({ accessor, short_label, label }: any) => {
+        const currentSort = sorting.find(sort => sort.id === accessor);
+        const nonSortableAccessors = ['shape_full', 'details', 'fire_icon'];
+
+        // Check if sorting should be disabled for the column's accessor
+        const isSortable = !nonSortableAccessors.includes(accessor);
         const commonProps = {
           accessorKey: accessor,
           header: short_label,
           enableGlobalFilter: accessor === 'lot_id',
-          enableSorting: accessor !== 'shape_full' && accessor !== 'details',
-          minSize: 5,
-          maxSize: accessor === 'details' ? 100 : 200,
-          size: 5,
+
+          minSize: 0,
+          maxSize: 0,
+          size: 0,
           Header: ({ column }: any) => (
-            <Tooltip
-              tooltipTrigger={<span>{column.columnDef.header}</span>}
-              tooltipContent={label}
-              tooltipContentStyles={'z-[1000]'}
-            />
+            <div className="flex items-center group">
+              <Tooltip
+                tooltipTrigger={<span>{column.columnDef.header}</span>}
+                tooltipContent={label}
+                tooltipContentStyles={'z-[1000]'}
+              />
+              {isSortable &&
+                (currentSort ? (
+                  <FontAwesomeIcon
+                    icon={currentSort.desc ? faSortDown : faSortUp}
+                    width={8}
+                    height={8}
+                    style={{ marginLeft: '2px' }} // Optional styling for spacing
+                  />
+                ) : (
+                  <FontAwesomeIcon
+                    icon={faSort} // Default icon when not sorted
+                    width={8}
+                    height={8}
+                    className="opacity-0 transition-opacity duration-300 group-hover:opacity-100" // Show on hover
+                    style={{ marginLeft: '2px' }}
+                  />
+                ))}
+            </div>
           )
         };
 
         switch (accessor) {
-          case 'clarity':
-            return {
-              ...commonProps,
-              sortingFn: (rowA: any, rowB: any, columnId: string) => {
-                const indexA = clarity.indexOf(rowA.original[columnId]);
-                const indexB = clarity.indexOf(rowB.original[columnId]);
-                return indexA - indexB;
-              }
-            };
           case 'table_inclusion':
             return {
               ...commonProps,
-              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-',
-              sortingFn: (rowA: any, rowB: any, columnId: string) => {
-                const indexA = tableInclusionSortOrder.indexOf(
-                  rowA.original[columnId]
-                );
-                const indexB = tableInclusionSortOrder.indexOf(
-                  rowB.original[columnId]
-                );
-                return indexA - indexB;
-              }
+              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-'
             };
           case 'table_black':
             return {
               ...commonProps,
-              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-',
-              sortingFn: (rowA: any, rowB: any, columnId: string) => {
-                const indexA = tableBlackSortOrder.indexOf(
-                  rowA.original[columnId]
-                );
-                const indexB = tableBlackSortOrder.indexOf(
-                  rowB.original[columnId]
-                );
-                return indexA - indexB;
-              }
+              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-'
             };
 
           case 'side_black':
             return {
               ...commonProps,
-              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-',
-              sortingFn: (rowA: any, rowB: any, columnId: string) => {
-                const indexA = sideBlackSortOrder.indexOf(
-                  rowA.original[columnId]
-                );
-                const indexB = sideBlackSortOrder.indexOf(
-                  rowB.original[columnId]
-                );
-                return indexA - indexB;
-              }
+              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-'
             };
 
           case 'fluorescence':
             return {
               ...commonProps,
-              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-',
-              sortingFn: (rowA: any, rowB: any, columnId: string) => {
-                const indexA = fluorescenceSortOrder.indexOf(
-                  rowA.original[columnId]
-                );
-                const indexB = fluorescenceSortOrder.indexOf(
-                  rowB.original[columnId]
-                );
-                return indexA - indexB;
-              }
+              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-'
             };
 
           case 'lot_id':
@@ -1285,6 +1271,8 @@ const MyCart = () => {
                     setIsLoading={setIsLoading}
                     deleteCartHandler={deleteCartHandler}
                     activeCartTab={activeTab}
+                    setSorting={setSorting}
+                    sorting={sorting}
                     setIsConfirmStone={setIsConfirmStone}
                     setConfirmStoneData={setConfirmStoneData}
                     handleCreateAppointment={handleCreateAppointment}
