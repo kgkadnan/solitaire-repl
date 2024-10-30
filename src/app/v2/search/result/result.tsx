@@ -280,8 +280,7 @@ const Result = ({
             />
           );
         }
-      res.data?.products;
-      setRowSelection({});
+
       setErrorText('');
       setData(res.data);
 
@@ -303,6 +302,8 @@ const Result = ({
           setCompareStoneData
         });
       }
+
+      setRowSelection({});
     });
   };
 

@@ -21,11 +21,11 @@ export const basicDetailsHead1 = [
   { key: 'color', label: 'Color' },
   { key: 'clarity', label: 'Clarity' },
   { key: 'cut', label: 'Cut' },
-  { key: 'polish', label: 'Polish' }
+  { key: 'polish', label: 'Polish' },
+  { key: 'symmetry', label: 'Symmetry' }
 ];
 
 export const basicDetailsHead2 = [
-  { key: 'symmetry', label: 'Symmetry' },
   { key: 'fluorescence', label: 'Fluorescence' },
   { key: 'lab', label: 'Lab' },
   { key: 'location', label: 'Location' },
