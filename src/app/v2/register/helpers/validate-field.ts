@@ -39,7 +39,7 @@ export const validateField = ({
   let error = '';
 
   // Validation logic
-  if (value.trim() === '') {
+  if (value.trim() === '' && name !== 'referralCode') {
     error = `${formatFieldName(name)} is mandatory`;
   } else {
     switch (name) {

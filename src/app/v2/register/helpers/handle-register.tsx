@@ -52,7 +52,8 @@ export const handleRegister = async ({
     country_code: registerFormState.countryCode,
     phone: registerFormState.mobileNumber,
     company_name: registerFormState.companyName,
-    country_iso2_code: registerFormState.iso
+    country_iso2_code: registerFormState.iso,
+    referral_code: registerFormState.referralCode
   })
     .unwrap()
     .then((res: any) => {

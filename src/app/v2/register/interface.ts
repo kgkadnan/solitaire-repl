@@ -8,6 +8,7 @@ export interface IRegister {
   password: string;
   confirmPassword: string;
   iso: string;
+  referralCode: string;
 }
 
 export const initialFormState: IRegister = {
@@ -19,7 +20,8 @@ export const initialFormState: IRegister = {
   countryCode: '',
   password: '',
   confirmPassword: '',
-  iso: ''
+  iso: '',
+  referralCode: ''
 };
 
 export interface IRegisterSetState {
