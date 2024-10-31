@@ -573,6 +573,12 @@ const Form = ({
     id?: string,
     formIdentifier = 'Search'
   ) => {
+    let localStorageDataLength = JSON.parse(
+      localStorage.getItem(formIdentifier)!
+    );
+
+    console.log('localStorageData', localStorageDataLength);
+
     let caratFrom;
     let caratTo;
     if (caratMin || caratMax) {
@@ -710,6 +716,9 @@ const Form = ({
                 saveSearchName: savedSearch?.savedSearch?.name,
                 searchId: data?.search_id,
                 isSavedSearch: true,
+                label: `Result ${
+                  localStorageDataLength ? localStorageDataLength.length : 1
+                }`,
                 queryParams
               };
               let localStorageData = JSON.parse(
@@ -764,6 +773,9 @@ const Form = ({
             saveSearchName:
               modifySearchResult[activeTab - 1]?.saveSearchName ||
               saveSearchName,
+            label: `Result ${
+              localStorageDataLength ? localStorageDataLength.length + 1 : 1
+            }`,
             isSavedSearch: isSavedParams,
             searchId: data?.search_id,
             queryParams
@@ -786,6 +798,9 @@ const Form = ({
             id: id,
             saveSearchName: saveSearchName,
             searchId: data?.search_id,
+            label: `Result ${
+              localStorageDataLength ? localStorageDataLength.length + 1 : 1
+            }`,
             isSavedSearch: isSavedParams,
             queryParams
           };

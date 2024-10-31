@@ -1,5 +1,5 @@
 import Pill from '@/components/v2/common/search-breadcrum/pill';
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import Image from 'next/image';
 import Arrow from '@public/v2/assets/icons/chevron.svg';
 import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
@@ -7,6 +7,10 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { setStartTime } from '@/features/track-page-event/track-page-event-slice';
 import { useAppDispatch } from '@/hooks/hook';
+import { Dropdown } from '../dropdown-menu';
+
+import dropdownIcon from '@public/v2/assets/png/data-table/dropdown.png';
+const MAX_VISIBLE_PILLS = 2;
 
 const Breadcrum = ({
   searchParameters,
@@ -23,6 +27,33 @@ const Breadcrum = ({
 }) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
+  console.log('searchParameters', searchParameters);
+  const [visiblePills, setVisiblePills] = useState(
+    searchParameters.slice(0, MAX_VISIBLE_PILLS)
+  );
+  const [dropdownPills, setDropdownPills] = useState(
+    searchParameters.slice(MAX_VISIBLE_PILLS)
+  );
+
+  const handleDropdownSelect = (selectedIndex: any) => {
+    console.log('selectedIndex', selectedIndex);
+    console.log('dropdownPills', dropdownPills);
+    // Get the selected item from dropdownPills
+    const selectedPill = dropdownPills[selectedIndex];
+
+    // Create new visiblePills and dropdownPills arrays
+    const newVisiblePills = [...visiblePills];
+    const newDropdownPills = [...dropdownPills];
+
+    // Replace the last visible pill (Result 4) with the selected dropdown pill
+    newDropdownPills[selectedIndex] = newVisiblePills[MAX_VISIBLE_PILLS - 1];
+    newVisiblePills[MAX_VISIBLE_PILLS - 1] = selectedPill;
+
+    // Update the state
+    setVisiblePills(newVisiblePills);
+    setDropdownPills(newDropdownPills);
+  };
+  console.log('activeTab', activeTab);
   return (
     <>
       {searchParameters.length > 0 && (
@@ -41,23 +72,26 @@ const Breadcrum = ({
           <Image src={Arrow} alt={'search-breadcrum'} />
         </div>
       )}
-      {searchParameters.map((result: any, index: number) => {
+      {visiblePills.map((result: any, index: number) => {
+        console.log('index > MAX_VISIBLE_PILLS', result.label.split(' ')[1]);
         return (
           // Object.keys(result).length > 0 && (
           <div key={`breadcrum-${index}`} className="flex items-center">
             <Pill
-              isActive={activeTab === index + 1}
+              isActive={activeTab === Number(result.label.split(' ')[1])}
               label={
                 result.saveSearchName !== ''
                   ? result.saveSearchName
-                  : `Result ${index + 1}`
+                  : result.label
               }
               handlePillClick={() => {
                 // setIsLoading(true);
                 router.push(
                   `${
                     isMatchingPair ? Routes.MATCHING_PAIR : Routes.SEARCH
-                  }?active-tab=${SubRoutes.RESULT}-${index + 1}`
+                  }?active-tab=${SubRoutes.RESULT}-${Number(
+                    result.label.split(' ')[1]
+                  )}`
                 );
               }}
               handlePillEdit={() => {
@@ -78,6 +112,31 @@ const Breadcrum = ({
         );
         // );
       })}
+      {dropdownPills.length > 0 && (
+        <Dropdown
+          dropdownTrigger={
+            <button
+              className={`rounded-[4px] hover:bg-neutral50 flex items-center gap-1 justify-center w-[100px] h-[37px] text-center`}
+            >
+              <div className="pb-1"> +{dropdownPills.length} More</div>
+              <Image src={dropdownIcon} alt="dropdownIcon" />
+            </button>
+          }
+          dropdownMenu={dropdownPills.map((result: any, index: any) => ({
+            label: result.saveSearchName || result.label,
+            handler: () => {
+              handleDropdownSelect(index);
+              router.push(
+                `${
+                  isMatchingPair ? Routes.MATCHING_PAIR : Routes.SEARCH
+                }?active-tab=${SubRoutes.RESULT}-${Number(
+                  result.label.split(' ')[1]
+                )}`
+              );
+            }
+          }))}
+        />
+      )}
     </>
   );
 };
