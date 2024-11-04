@@ -277,6 +277,12 @@ const NewArrivalDataTable = ({
               fluorescenceSortOrder.indexOf(valueA) -
               fluorescenceSortOrder.indexOf(valueB);
             break;
+          case 'amount':
+            const amountA = rowA.original?.price ?? 0;
+            const amountB = rowB.original?.price ?? 0;
+            compareValue = amountA - amountB;
+
+            break;
           default:
             // Fallback to default comparison for other columns (numbers or strings)
             if (valueA == null && valueB == null) {
