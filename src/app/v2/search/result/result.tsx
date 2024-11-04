@@ -108,7 +108,8 @@ const Result = ({
   handleCloseSpecificTab,
   setSearchParameters,
   setIsLoading,
-  setIsInputDialogOpen
+  setIsInputDialogOpen,
+  showOnlyWithVideo
 }: {
   activeTab: number;
   searchParameters: any;
@@ -118,6 +119,7 @@ const Result = ({
   handleCloseSpecificTab: (_id: number) => void;
   setIsLoading: any;
   setIsInputDialogOpen: any;
+  showOnlyWithVideo?: any;
 }) => {
   const dispatch = useAppDispatch();
   const confirmTrack = useAppSelector(state => state.setConfirmStoneTrack);
@@ -196,8 +198,16 @@ const Result = ({
     const selections = JSON.parse(storedSelection);
 
     const url = constructUrlParams(selections[activeTab - 1]?.queryParams);
-    setSearchUrl(url);
-    triggerProductApi({ url, limit: LISTING_PAGE_DATA_LIMIT, offset: 0 })
+    setSearchUrl(
+      `${url}&all_asset_required=${selections[activeTab - 1]
+        ?.all_asset_required}`
+    );
+    triggerProductApi({
+      url: `${url}&all_asset_required=${selections[activeTab - 1]
+        ?.all_asset_required}`,
+      limit: LISTING_PAGE_DATA_LIMIT,
+      offset: 0
+    })
       .then((res: any) => {
         if (columnData?.length > 0) {
           if (res?.error?.status === statusCode.UNAUTHORIZED) {
@@ -1634,6 +1644,7 @@ const Result = ({
                   handleCreateAppointment={handleCreateAppointment}
                   setIsSkeletonLoading={setIsSkeletonLoading}
                   isSkeletonLoading={isSkeletonLoading}
+                  showOnlyWithVideo={showOnlyWithVideo}
                 />
               )}
             </div>

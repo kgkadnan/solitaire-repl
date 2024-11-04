@@ -88,6 +88,7 @@ import CountdownTimer from '@/components/v2/common/timer';
 import Tab from '@/components/v2/common/bid-tabs';
 import { useLazyGetBidToBuyHistoryQuery } from '@/features/api/dashboard';
 import Tooltip from '@/components/v2/common/tooltip';
+import { Switch } from '@/components/v2/ui/switch';
 
 export interface ISavedSearch {
   saveSearchName: string;
@@ -119,7 +120,9 @@ const Form = ({
   isTurkey = false,
   time,
   setRowSelection,
-  setIsMPSOpen
+  setIsMPSOpen,
+  setShowOnlyWithVideo,
+  showOnlyWithVideo
 }: {
   searchUrl: string;
   setSearchUrl: Dispatch<SetStateAction<string>>;
@@ -146,6 +149,8 @@ const Form = ({
   time?: any;
   setRowSelection?: any;
   setIsMPSOpen?: any;
+  showOnlyWithVideo?: any;
+  setShowOnlyWithVideo?: any;
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -343,7 +348,10 @@ const Form = ({
       // localStorage.setItem('bid',JSON.stringify(query))
       setErrorText('');
       setIsLoading(true);
-      triggerBidToBuyApi({ searchUrl: searchUrl, limit: 1 })
+      triggerBidToBuyApi({
+        searchUrl: `${searchUrl}&all_asset_required=${showOnlyWithVideo}`,
+        limit: 1
+      })
         .unwrap()
         .then((response: any) => {
           setData(response), setActiveCount(response?.activeStone?.length);
@@ -375,7 +383,9 @@ const Form = ({
       setErrorText('');
       setIsLoading(true);
       isMatchingPair
-        ? triggerMatchingPairCountApi({ searchUrl })
+        ? triggerMatchingPairCountApi({
+            searchUrl: `${searchUrl}&all_asset_required=${showOnlyWithVideo}`
+          })
             .unwrap()
             .then((response: any) => {
               setData(response), setError(''), setIsLoading(false);
@@ -383,7 +393,9 @@ const Form = ({
             .catch(e => {
               setError(e), setIsLoading(false);
             })
-        : triggerProductCountApi({ searchUrl })
+        : triggerProductCountApi({
+            searchUrl: `${searchUrl}&all_asset_required=${showOnlyWithVideo}`
+          })
             .unwrap()
             .then((response: any) => {
               setData(response), setError(''), setIsLoading(false);
@@ -608,7 +620,9 @@ const Form = ({
 
       setErrorText('');
       setIsLoading(true);
-      triggerBidToBuyApi({ searchUrl: searchUrl })
+      triggerBidToBuyApi({
+        searchUrl: `${searchUrl}&all_asset_required=${showOnlyWithVideo}`
+      })
         .unwrap()
         .then((response: any) => {
           setData(response),
@@ -701,7 +715,8 @@ const Form = ({
               id: savedSearch.savedSearch.id,
               meta_data: updatedMeta,
               diamond_count: parseInt(data?.count),
-              is_matching_pair: isMatchingPair
+              is_matching_pair: isMatchingPair,
+              all_asset_required: showOnlyWithVideo
             };
 
             updateSavedSearch(updateSavedSearchData).then(() => {
@@ -710,7 +725,8 @@ const Form = ({
                 saveSearchName: savedSearch?.savedSearch?.name,
                 searchId: data?.search_id,
                 isSavedSearch: true,
-                queryParams
+                queryParams,
+                all_asset_required: showOnlyWithVideo
               };
               let localStorageData = JSON.parse(
                 localStorage.getItem(formIdentifier)!
@@ -766,7 +782,8 @@ const Form = ({
               saveSearchName,
             isSavedSearch: isSavedParams,
             searchId: data?.search_id,
-            queryParams
+            queryParams,
+            all_asset_required: showOnlyWithVideo
           };
           if (modifySearchResult[activeTab - 1]) {
             const updatedData = [...modifySearchResult];
@@ -787,7 +804,8 @@ const Form = ({
             saveSearchName: saveSearchName,
             searchId: data?.search_id,
             isSavedSearch: isSavedParams,
-            queryParams
+            queryParams,
+            all_asset_required: showOnlyWithVideo
           };
 
           if (startTime && !endTime) {
@@ -893,7 +911,8 @@ const Form = ({
               id: savedSearch.savedSearch.id,
               meta_data: updatedMeta,
               diamond_count: parseInt(data?.count),
-              is_matching_pair: isMatchingPair
+              is_matching_pair: isMatchingPair,
+              all_asset_required: showOnlyWithVideo
             };
             updateSavedSearch(updateSavedData);
 
@@ -912,6 +931,7 @@ const Form = ({
               let setDataOnLocalStorage = {
                 id: savedSearch.savedSearch.id,
                 queryParams: updatedMeta,
+                all_asset_required: showOnlyWithVideo,
                 saveSearchName: savedSearch?.savedSearch?.name,
                 searchId: data?.search_id,
                 isSavedSearch: true
@@ -934,6 +954,7 @@ const Form = ({
           updatedMeta[activeTab - 1].queryParams = queryParams;
           let updateSaveSearchData = {
             id: updatedMeta[activeTab - 1].id,
+            all_asset_required: showOnlyWithVideo,
             meta_data: updatedMeta[activeTab - 1].queryParams,
             diamond_count: parseInt(data?.count),
             is_matching_pair: isMatchingPair
@@ -953,6 +974,7 @@ const Form = ({
             name: saveSearchName,
             diamond_count: parseInt(data?.count),
             meta_data: queryParams,
+            all_asset_required: showOnlyWithVideo,
             is_deleted: false,
             is_matching_pair: isMatchingPair
           })
@@ -1484,7 +1506,22 @@ const Form = ({
           </div>
 
           <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px]">
-            <Fluorescence state={state} setState={setState} />
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center  justify-between bg-neutral0 border-[1px] border-solid border-neutral200 rounded-[4px]">
+                <p className="font-medium py-[5px] rounded-l-[4px]  px-[15px] bg-neutral50 text-neutral900 text-mMedium">
+                   Image & Video Required
+                </p>
+                <div className="px-[15px] pt-1">
+                  <Switch
+                    onCheckedChange={(checked: boolean) => {
+                      setShowOnlyWithVideo(checked);
+                    }}
+                    checked={showOnlyWithVideo}
+                  />
+                </div>
+              </div>
+              <Fluorescence state={state} setState={setState} />
+            </div>
             <CountryOfOrigin
               selectedOrigin={selectedOrigin}
               setSelectedOrigin={setSelectedOrigin}

@@ -54,6 +54,7 @@ const Search = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false); // State to track loading
   const [searchLoading, setSearchLoading] = useState(false);
+  const [showOnlyWithVideo, setShowOnlyWithVideo] = useState(false);
 
   const [saveSearchName, setSaveSearchName] = useState('');
   const [addSavedSearch] = useAddSavedSearchMutation();
@@ -376,6 +377,8 @@ const Search = () => {
           setIsAddDemand={setIsAddDemand}
           isMatchingPair={false}
           isLoading={searchLoading}
+          showOnlyWithVideo={showOnlyWithVideo}
+          setShowOnlyWithVideo={setShowOnlyWithVideo}
         />
       ) : subRoute === SubRoutes.SAVED_SEARCH ? (
         <SavedSearch setIsLoading={setIsLoading} />
@@ -403,6 +406,7 @@ const Search = () => {
           handleCloseSpecificTab={handleCloseSpecificTab}
           setIsLoading={setIsLoading}
           setIsInputDialogOpen={setIsInputDialogOpen}
+          showOnlyWithVideo={showOnlyWithVideo}
         />
       )}
     </div>

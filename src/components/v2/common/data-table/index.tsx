@@ -218,7 +218,8 @@ const DataTable = ({
   setIsSkeletonLoading,
   isSkeletonLoading,
   refreshSearchResults,
-  customerMobileNumber
+  customerMobileNumber,
+  showOnlyWithVideo
 }: any) => {
   // Fetching saved search data
   const router = useRouter();
@@ -459,7 +460,9 @@ const DataTable = ({
 
         const searchUrl = constructUrlParams(searchData.meta_data);
 
-        triggerProductCountApi({ searchUrl })
+        triggerProductCountApi({
+          searchUrl: `${searchUrl}&all_asset_required=${searchData.all_asset_required}`
+        })
           .then(response => {
             if (response?.data?.count > MAX_SAVED_SEARCH_COUNT) {
               setIsLoading(false);
@@ -566,7 +569,8 @@ const DataTable = ({
                       isSavedSearch: true,
                       searchId: response?.data?.search_id,
                       queryParams: searchData.meta_data,
-                      id: searchData.id
+                      id: searchData.id,
+                      all_asset_required: searchData.all_asset_required
                     }
                   ];
 
@@ -628,7 +632,8 @@ const DataTable = ({
     const updateSaveSearchData = {
       id: yourSelection[activeTab - 1]?.id,
       meta_data: yourSelection[activeTab - 1]?.queryParams,
-      diamond_count: parseInt(data?.count)
+      diamond_count: parseInt(data?.count),
+      all_asset_required: yourSelection[activeTab - 1]?.all_asset_required
     };
 
     yourSelection[activeTab - 1] = {
@@ -636,7 +641,8 @@ const DataTable = ({
       saveSearchName: yourSelection[activeTab - 1]?.saveSearchName,
       searchId: yourSelection[activeTab - 1]?.searchId,
       isSavedSearch: true,
-      queryParams: yourSelection[activeTab - 1].queryParams
+      queryParams: yourSelection[activeTab - 1].queryParams,
+      all_asset_required: yourSelection[activeTab - 1]?.all_asset_required
     };
     localStorage.setItem('Search', JSON.stringify(yourSelection));
     setSearchParameters(yourSelection);

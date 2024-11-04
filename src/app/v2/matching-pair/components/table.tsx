@@ -220,6 +220,7 @@ const MatchPairTable = ({
   settingApplied,
   setIsMPSOpen
 }: any) => {
+  console.log('rows', rows);
   // Fetching saved search data
   const router = useRouter();
   const [triggerSavedSearch] = useLazyGetAllSavedSearchesQuery({});
@@ -325,7 +326,9 @@ const MatchPairTable = ({
 
         const searchUrl = constructUrlParams(searchData.meta_data);
 
-        triggerMatchingPairCountApi({ searchUrl })
+        triggerMatchingPairCountApi({
+          searchUrl: `${searchUrl}&all_asset_required=${searchData.all_asset_required}`
+        })
           .then(response => {
             if (response?.data?.count > MAX_SAVED_SEARCH_COUNT) {
               setIsLoading(false);
@@ -435,7 +438,8 @@ const MatchPairTable = ({
                       isSavedSearch: true,
                       searchId: response?.data?.search_id,
                       queryParams: searchData.meta_data,
-                      id: searchData.id
+                      id: searchData.id,
+                      all_asset_required: searchData.all_asset_required
                     }
                   ];
 
@@ -498,7 +502,8 @@ const MatchPairTable = ({
       id: yourSelection[activeTab - 1]?.id,
       meta_data: yourSelection[activeTab - 1]?.queryParams,
       diamond_count: parseInt(matchingPairData?.count),
-      is_matching_pair: true
+      is_matching_pair: true,
+      all_asset_required: yourSelection[activeTab - 1]?.all_asset_required
     };
 
     yourSelection[activeTab - 1] = {
@@ -506,7 +511,8 @@ const MatchPairTable = ({
       saveSearchName: yourSelection[activeTab - 1]?.saveSearchName,
       searchId: yourSelection[activeTab - 1]?.searchId,
       isSavedSearch: true,
-      queryParams: yourSelection[activeTab - 1].queryParams
+      queryParams: yourSelection[activeTab - 1].queryParams,
+      all_asset_required: yourSelection[activeTab - 1]?.all_asset_required
     };
     localStorage.setItem('MatchingPair', JSON.stringify(yourSelection));
     setSearchParameters(yourSelection);

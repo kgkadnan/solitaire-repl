@@ -84,6 +84,7 @@ const BidToBuy = () => {
   const [searchLoading, setSearchLoading] = useState(false);
   const [isSkeletonLoading, setIsSkeletonLoading] = useState(true);
   const [isTabSwitch, setIsTabSwitch] = useState(false); // State to track
+  const [showOnlyWithVideo, setShowOnlyWithVideo] = useState(false);
 
   // const [checkStatus, setCheckStatus] = useState(false);
 
@@ -717,6 +718,8 @@ const BidToBuy = () => {
               setIsCommonLoading={setIsLoading}
               time={time}
               setRowSelection={setRowSelection}
+              showOnlyWithVideo={showOnlyWithVideo}
+              setShowOnlyWithVideo={setShowOnlyWithVideo}
               // setBid={setBid}
               // setActiveBid={setActiveBid}
             />
