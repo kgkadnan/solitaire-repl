@@ -260,6 +260,23 @@ const RegisterComponent = ({
               )}
               isConfirmPassword={true}
             />
+            <InputField
+              label="Referral Name"
+              onChange={event =>
+                handleRegisterChange({
+                  event,
+                  setRegisterFormState,
+                  setRegisterFormErrors
+                })
+              }
+              type="text"
+              name="referralName"
+              value={registerFormState.referralName}
+              errorText={registerFormErrors.referralName}
+              placeholder={'Enter referral name'}
+              styles={{ inputMain: 'h-[64px]' }}
+              autoComplete="none"
+            />
             {/* </div> */}
             <div className="flex flex-col gap-1">
               <IndividualActionButton

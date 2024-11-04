@@ -191,7 +191,8 @@ const BidToBuyDataTable = ({
   isTabSwitch,
   setIsTabSwitch,
 
-  setActiveBid // searchUrl
+  setActiveBid, // searchUrl
+  inActive
 }: any) => {
   // Fetching saved search data
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -386,7 +387,7 @@ const BidToBuyDataTable = ({
           </div>
 
           <div className="flex gap-[12px]" style={{ alignItems: 'inherit' }}>
-            {activeTab === 0 && (
+            {activeTab === 0 && !inActive && (
               <div className="">
                 <button
                   onClick={() => {
