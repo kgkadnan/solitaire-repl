@@ -104,6 +104,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
         ondevtoolopen(type: any, _next: any) {
           // if ( _type === 5) {
           // Additional check: Confirm if dev tools are really open (optional)
+          console.log(type, '------------------------', typeof type);
           if (
             type === 6
             // window.outerWidth - window.innerWidth > 200 ||
@@ -126,6 +127,27 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
   return (
     <html lang="en">
       <head>
+        <script
+          id="ga-consent"
+          // strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              function loadGA() {
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', ${process.env.NEXT_PUBLIC_GA}, { 'anonymize_ip': true });
+              }
+              
+              // Check Cookiebot Consent API
+              window.addEventListener("CookieConsentDeclaration", function() {
+                if (Cookiebot.consent.statistics) {
+                  loadGA();
+                }
+              });
+            `
+          }}
+        />
         <script
           dangerouslySetInnerHTML={{
             __html: `
