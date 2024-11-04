@@ -221,6 +221,8 @@ const MatchPairTable = ({
   setIsMPSOpen
 }: any) => {
   // Fetching saved search data
+  console.log('rows', rows);
+  console.log('originalData', originalData);
   const router = useRouter();
   const [triggerSavedSearch] = useLazyGetAllSavedSearchesQuery({});
   const [checkProductAvailability] = useCheckProductAvailabilityMutation({});
@@ -602,19 +604,28 @@ const MatchPairTable = ({
     </>
   );
   const nonSortableAccessors = ['shape_full', 'details', 'fire_icon'];
-  const sortData = (data: any, sorting: any) => {
-    if (!sorting.length) return data; // If no sorting is applied, return the data as-is
-    const sortedData = [...data].sort((rowA, rowB) => {
+  const sortData = (data: any[][], sorting: any) => {
+    if (!data) return [];
+    if (!sorting.length) return data?.flat(); // If no sorting is applied, flatten and return data as-is
+
+    // Sort based on the first item of each sub-array
+    const sortedData = [...data].sort((groupA, groupB) => {
+      const rowA = groupA[0]; // Take the first item of groupA
+      const rowB = groupB[0]; // Take the first item of groupB
+
       for (let sort of sorting) {
         const columnId = sort.id;
         const isDesc = sort.desc;
+
         // Skip sorting for non-sortable accessors
         if (nonSortableAccessors.includes(columnId)) {
-          continue; // Move to the next sorting criteria or return unsorted data
+          continue;
         }
+
         const valueA = rowA[columnId];
         const valueB = rowB[columnId];
         let compareValue = 0;
+
         switch (columnId) {
           case 'clarity':
             compareValue = clarity.indexOf(valueA) - clarity.indexOf(valueB);
@@ -649,21 +660,26 @@ const MatchPairTable = ({
               compareValue = valueA > valueB ? 1 : valueA < valueB ? -1 : 0;
             }
         }
+
         // Handle cases where the value might not be found in the custom array (indexOf returns -1)
         if (compareValue === 0) {
           continue; // If equal, move to the next sorting condition
         }
+
         // Apply sorting direction (ascending or descending)
         return isDesc ? -compareValue : compareValue;
       }
       return 0;
     });
-    return sortedData;
+
+    // Flatten the sorted data before returning
+    return sortedData.flat();
   };
+
   // Handle sorting and pagination
   useEffect(() => {
     // Apply the sorting logic to the full dataset
-    const sortedFullData = sortData(rows, sorting);
+    const sortedFullData = sortData(originalData, sorting);
     console.log('sortedFullData', sortedFullData);
     // Pagination logic
     const startIndex = pagination.pageIndex * pagination.pageSize;
