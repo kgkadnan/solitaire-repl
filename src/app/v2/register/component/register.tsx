@@ -261,7 +261,7 @@ const RegisterComponent = ({
               isConfirmPassword={true}
             />
             <InputField
-              label="Referral Code"
+              label="Referral Name"
               onChange={event =>
                 handleRegisterChange({
                   event,
@@ -270,9 +270,9 @@ const RegisterComponent = ({
                 })
               }
               type="text"
-              name="referralCode"
-              value={registerFormState.referralCode}
-              errorText={registerFormErrors.referralCode}
+              name="referralName"
+              value={registerFormState.referralName}
+              errorText={registerFormErrors.referralName}
               placeholder={'Enter referral name'}
               styles={{ inputMain: 'h-[64px]' }}
               autoComplete="none"
