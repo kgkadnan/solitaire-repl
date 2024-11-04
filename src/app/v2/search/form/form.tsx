@@ -265,6 +265,8 @@ const Form = ({
   const [timeDifference, setTimeDifference] = useState(null);
   // const [checkStatus, setCheckStatus] = useState(false);
 
+  console.log('subRoute', subRoute);
+
   useEffect(() => {
     const currentTime: any = new Date();
     const targetTime: any = new Date(time!);
@@ -499,7 +501,11 @@ const Form = ({
 
     let modifysavedSearchData = savedSearch?.savedSearch?.meta_data;
     let newArrivalBidDataQuery = newArrivalFilterData.queryParams;
-    let bidToBuyBidDataQuery = JSON.parse(localStorage.getItem('bid')!);
+    let bidLocalStorageData = JSON.parse(localStorage.getItem('bid')!);
+    let bidToBuyBidDataQuery = constructUrlParams(
+      bidLocalStorageData.queryParams
+    );
+
     setSelectedCaratRange([]);
 
     if (subRoute === SubRoutes.NEW_ARRIVAL && newArrivalBidDataQuery) {
@@ -528,8 +534,11 @@ const Form = ({
     }
   }, [modifySearchFrom]);
   useEffect(() => {
+    let bidLocalStorageData = JSON.parse(localStorage.getItem('bid')!);
+    let bidToBuyBidDataQuery = bidLocalStorageData.queryParams;
+
     routePath === Routes.BID_TO_BUY &&
-      setModifySearch(JSON.parse(localStorage.getItem('bid')!), setState);
+      setModifySearch(bidToBuyBidDataQuery, setState);
   }, []);
 
   useEffect(() => {
@@ -616,7 +625,11 @@ const Form = ({
       setSearchUrl('');
     } else if (routePath === Routes.BID_TO_BUY) {
       const queryParams = generateQueryParams(state);
-      localStorage.setItem('bid', JSON.stringify(queryParams));
+      let localStorageData = {
+        queryParams,
+        all_asset_required: showOnlyWithVideo
+      };
+      localStorage.setItem('bid', JSON.stringify(localStorageData));
 
       setErrorText('');
       setIsLoading(true);
@@ -1507,19 +1520,24 @@ const Form = ({
 
           <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px]">
             <div className="flex flex-col gap-1">
-              <div className="flex items-center  justify-between bg-neutral0 border-[1px] border-solid border-neutral200 rounded-[4px]">
-                <p className="font-medium py-[5px] rounded-l-[4px]  px-[15px] bg-neutral50 text-neutral900 text-mMedium">
-                   Image & Video Required
-                </p>
-                <div className="px-[15px] pt-1">
-                  <Switch
-                    onCheckedChange={(checked: boolean) => {
-                      setShowOnlyWithVideo(checked);
-                    }}
-                    checked={showOnlyWithVideo}
-                  />
+              {(routePath.includes('v2/matching-pair') ||
+                routePath.includes('v2/bid-2-buy') ||
+                routePath.includes('v2/search')) && (
+                <div className="flex items-center  justify-between bg-neutral0 border-[1px] border-solid border-neutral200 rounded-[4px]">
+                  <p className="font-medium py-[5px] rounded-l-[4px]  px-[12px] bg-neutral50 text-neutral900 text-mMedium">
+                     Image & Video Required
+                  </p>
+                  <div className="px-[15px] pt-1">
+                    <Switch
+                      onCheckedChange={(checked: boolean) => {
+                        setShowOnlyWithVideo(checked);
+                      }}
+                      checked={showOnlyWithVideo}
+                    />
+                  </div>
                 </div>
-              </div>
+              )}
+
               <Fluorescence state={state} setState={setState} />
             </div>
             <CountryOfOrigin
