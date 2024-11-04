@@ -63,6 +63,13 @@ import { Dropdown } from '@/components/v2/common/dropdown-menu';
 import Share from '@/components/v2/common/copy-and-share/share';
 import MathPairSkeleton from '@/components/v2/skeleton/match-pair';
 import { useLazyGetMatchingPairCountQuery } from '@/features/api/match-pair';
+import {
+  clarity,
+  fluorescenceSortOrder,
+  sideBlackSortOrder,
+  tableBlackSortOrder,
+  tableInclusionSortOrder
+} from '@/constants/v2/form';
 
 const theme = createTheme({
   typography: {
@@ -79,8 +86,8 @@ const theme = createTheme({
         root: {
           // Default state for the badge inside the cell - sorting icon not visible by default
           '& .MuiBadge-root': {
-            width: '15px !important',
-            marginLeft: '-3px',
+            width: '0px !important',
+            // marginLeft: '-3px',
             visibility: 'hidden'
           },
           // Hover state for the cell
@@ -189,6 +196,8 @@ const MatchPairTable = ({
   modalSetState,
   downloadExcel,
   matchingPairData,
+  setSorting,
+  sorting,
   setErrorText,
   setIsError,
   searchList,
@@ -212,6 +221,8 @@ const MatchPairTable = ({
   setIsMPSOpen
 }: any) => {
   // Fetching saved search data
+  console.log('rows', rows);
+  console.log('originalData', originalData);
   const router = useRouter();
   const [triggerSavedSearch] = useLazyGetAllSavedSearchesQuery({});
   const [checkProductAvailability] = useCheckProductAvailabilityMutation({});
@@ -592,6 +603,130 @@ const MatchPairTable = ({
       )}
     </>
   );
+  const nonSortableAccessors = ['shape_full', 'details', 'fire_icon'];
+  const sortData = (data: any[][], sorting: any) => {
+    if (!data) return [];
+    if (!sorting.length) return data?.flat(); // If no sorting is applied, flatten and return data as-is
+
+    // Sort based on the first item of each sub-array
+    const sortedData = [...data].sort((groupA, groupB) => {
+      const rowA = groupA[0]; // Take the first item of groupA
+      const rowB = groupB[0]; // Take the first item of groupB
+
+      for (let sort of sorting) {
+        const columnId = sort.id;
+        const isDesc = sort.desc;
+
+        // Skip sorting for non-sortable accessors
+        if (nonSortableAccessors.includes(columnId)) {
+          continue;
+        }
+
+        const valueA = rowA[columnId];
+        const valueB = rowB[columnId];
+        let compareValue = 0;
+
+        switch (columnId) {
+          case 'clarity':
+            compareValue = clarity.indexOf(valueA) - clarity.indexOf(valueB);
+            break;
+          case 'table_inclusion':
+            compareValue =
+              tableInclusionSortOrder.indexOf(valueA) -
+              tableInclusionSortOrder.indexOf(valueB);
+            break;
+          case 'table_black':
+            compareValue =
+              tableBlackSortOrder.indexOf(valueA) -
+              tableBlackSortOrder.indexOf(valueB);
+            break;
+          case 'side_black':
+            compareValue =
+              sideBlackSortOrder.indexOf(valueA) -
+              sideBlackSortOrder.indexOf(valueB);
+            break;
+          case 'fluorescence':
+            compareValue =
+              fluorescenceSortOrder.indexOf(valueA) -
+              fluorescenceSortOrder.indexOf(valueB);
+            break;
+          default:
+            // Fallback to default comparison for other columns (numbers or strings)
+            if (valueA == null && valueB == null) {
+              compareValue = 0; // Both are null, considered equal
+            } else if (valueA == null) {
+              compareValue = -1; // Place null values before non-null values
+            } else if (valueB == null) {
+              compareValue = 1; // Place non-null values before null values
+            } else if (
+              typeof valueA === 'string' &&
+              typeof valueB === 'string'
+            ) {
+              compareValue = valueA.localeCompare(valueB, undefined, {
+                sensitivity: 'base'
+              });
+            } else {
+              compareValue = valueA > valueB ? 1 : valueA < valueB ? -1 : 0;
+            }
+        }
+
+        // Handle cases where the value might not be found in the custom array (indexOf returns -1)
+        if (compareValue === 0) {
+          continue; // If equal, move to the next sorting condition
+        }
+
+        // Apply sorting direction (ascending or descending)
+        return isDesc ? -compareValue : compareValue;
+      }
+      return 0;
+    });
+
+    // Flatten the sorted data before returning
+    return sortedData.flat();
+  };
+
+  // Handle sorting and pagination
+  useEffect(() => {
+    // Apply the sorting logic to the full dataset
+    const sortedFullData = sortData(originalData, sorting);
+    console.log('sortedFullData', sortedFullData);
+    // Pagination logic
+    const startIndex = pagination.pageIndex * pagination.pageSize;
+    const endIndex = startIndex + pagination.pageSize;
+    const newData = sortedFullData.slice(startIndex, endIndex);
+    // Update the paginated data state
+    setPaginatedData(newData);
+  }, [
+    rows,
+    sorting, // Trigger sorting when sorting state changes
+    pagination.pageIndex, // Re-fetch when page index changes
+    pagination.pageSize // Re-fetch when page size changes
+  ]);
+  const handleSortingChange = (newSorting: any) => {
+    console.log('newSorting', newSorting);
+    setSorting((currentSorting: any) => {
+      const existingSort = currentSorting.find(
+        (sort: any) => sort.id === newSorting()[0].id
+      );
+      if (existingSort) {
+        // If the current sort is ascending, change it to descending
+        if (!existingSort.desc) {
+          return currentSorting.map((sort: any) =>
+            sort.id === newSorting()[0].id ? { ...sort, desc: true } : sort
+          );
+        }
+        // If the current sort is descending, remove the sorting
+        else {
+          return currentSorting.filter(
+            (sort: any) => sort.id !== newSorting()[0].id
+          );
+        }
+      } else {
+        // If no sorting exists for the column, set sorting to ascending (default)
+        return [...currentSorting, { id: newSorting()[0].id, desc: false }];
+      }
+    });
+  };
   //pass table options to useMaterialReactTable
   const table = useMaterialReactTable({
     columns: paginatedData.length ? columns : [],
@@ -605,6 +740,7 @@ const MatchPairTable = ({
       pagination,
       globalFilter
     },
+
     enablePagination: paginatedData.length ? true : false,
     positionToolbarAlertBanner: 'none',
     enableColumnActions: false,
@@ -617,12 +753,14 @@ const MatchPairTable = ({
     enableExpandAll: false,
     enableColumnDragging: false,
     groupedColumnMode: 'remove',
-    enableSorting: false,
+    enableSorting: true,
     enableRowSelection: true,
     enableToolbarInternalActions: true,
     globalFilterFn: 'startsWith',
     selectAllMode: 'page',
 
+    manualSorting: true, // Enable manual sorting
+    onSortingChange: handleSortingChange, // Handle sorting change
     renderEmptyRowsFallback: NoResultsComponent,
     manualPagination: true,
     rowCount: rows.length,
@@ -632,7 +770,10 @@ const MatchPairTable = ({
     icons: {
       SearchIcon: () => (
         <Image src={searchIcon} alt={'searchIcon'} className="mr-[6px]" />
-      )
+      ),
+      SortIcon: () => null,
+      SyncAltIcon: () => null,
+      ArrowDownwardIcon: () => null
     },
     muiTableBodyRowProps: ({ row }) => {
       return {
@@ -713,7 +854,8 @@ const MatchPairTable = ({
       columnPinning: {
         left: ['mrt-row-select', 'fire_icon', 'lot_id', 'mrt-row-expand']
       },
-      pagination: pagination
+      pagination: pagination,
+      sorting: sorting
     },
 
     positionGlobalFilter: 'left',
@@ -768,7 +910,7 @@ const MatchPairTable = ({
               cell.column.id
             )
               ? '0px 6px'
-              : '0px 2px',
+              : '0px 1px',
             textAlign:
               cell.column.id === 'girdle_percentage'
                 ? 'center !important'
@@ -834,7 +976,7 @@ const MatchPairTable = ({
               column.id
             )
               ? '0px 6px'
-              : '0px 2px',
+              : '0px 1px',
             height: '20px',
             background: 'var(--neutral-50)',
             opacity: 1,
@@ -1237,9 +1379,9 @@ const MatchPairTable = ({
     const timer = setTimeout(() => {
       setIsLoaded(true), setIsSkeletonLoading(false);
     }, 1500); // Small delay to ensure rendering phase is completed
-
     return () => clearTimeout(timer); // Cleanup the timer
   }, []);
+
   useEffect(() => {
     // if(isLoading)
     setIsLoaded(false);

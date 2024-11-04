@@ -453,7 +453,15 @@ const MatchingPair = () => {
   };
 
   const handleApplyMPS = () => {
-    const filteredMps = mps.map(({ start, end, placeHolder, ...rest }) => rest);
+    const filteredMps = mps.map(
+      ({ start, end, placeHolder, up, down, ...rest }) => ({
+        ...rest,
+        // @ts-ignore
+        up: parseInt(up, 10),
+        // @ts-ignore
+        down: parseInt(down, 10)
+      })
+    );
     applyMPS({ setting: filteredMps }).unwrap();
     setIsMPSOpen(false);
     setInitialMps(mps); // Set the current MPS as the new initial state after applying changes

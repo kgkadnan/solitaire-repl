@@ -28,7 +28,8 @@ const mockRegisterState: IRegisterState = {
     password: '',
     confirmPassword: '',
     countryCode: '',
-    iso: ''
+    iso: '',
+    referralName:""
   },
   registerFormErrors: {
     firstName: '',
@@ -39,7 +40,8 @@ const mockRegisterState: IRegisterState = {
     password: '',
     confirmPassword: '',
     countryCode: '',
-    iso: ''
+    iso: '',
+    referralName:''
   }
 };
 

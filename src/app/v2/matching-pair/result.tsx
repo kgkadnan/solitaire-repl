@@ -40,20 +40,14 @@ import {
   useConfirmProductMutation
 } from '@/features/api/product';
 import { useLazyGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
-import { MRT_RowSelectionState } from 'material-react-table';
+import { MRT_RowSelectionState, MRT_SortingState } from 'material-react-table';
 import { notificationBadge } from '@/features/notification/notification-slice';
 import { useAddCartMutation } from '@/features/api/cart';
 import { useAppDispatch, useAppSelector } from '@/hooks/hook';
 import Image from 'next/image';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import { DialogComponent } from '@/components/v2/common/dialog';
-import {
-  clarity,
-  fluorescenceSortOrder,
-  sideBlackSortOrder,
-  tableBlackSortOrder,
-  tableInclusionSortOrder
-} from '@/constants/v2/form';
+
 import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
 import {
   SELECT_STONE_TO_PERFORM_ACTION,
@@ -100,6 +94,12 @@ import { useLazyGetCustomerQuery } from '@/features/api/dashboard';
 import { kamLocationAction } from '@/features/kam-location/kam-location';
 import { handleCompareStone } from '../search/result/helpers/handle-compare-stone';
 import { NO_PRODUCT_FOUND } from '@/constants/error-messages/saved';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faSort,
+  faSortDown,
+  faSortUp
+} from '@fortawesome/free-solid-svg-icons';
 
 // Column mapper outside the component to avoid re-creation on each render
 
@@ -141,6 +141,8 @@ const MatchingPairResult = ({
   const [isSkeletonLoading, setIsSkeletonLoading] = useState<boolean>(true);
   const [activePreviewTab, setActivePreviewTab] = useState('Image');
   const [imageIndex, setImageIndex] = useState<number>(0);
+
+  const [sorting, setSorting] = useState<MRT_SortingState>([]);
 
   const [triggerAvailableSlots] = useLazyGetAvailableMyAppointmentSlotsQuery(
     {}
@@ -343,21 +345,44 @@ const MatchingPairResult = ({
       ?.filter(({ is_disabled }: any) => !is_disabled)
       ?.sort(({ sequence: a }: any, { sequence: b }: any) => a - b)
       .map(({ accessor, short_label, label }: any) => {
+        const currentSort = sorting.find(sort => sort.id === accessor);
+        const nonSortableAccessors = ['shape_full', 'details', 'fire_icon'];
+        // Check if sorting should be disabled for the column's accessor
+        const isSortable = !nonSortableAccessors.includes(accessor);
         const commonProps = {
           accessorKey: accessor,
           header: short_label,
           enableGlobalFilter: accessor === 'lot_id',
           // enableGrouping: accessor === 'shape',
 
-          minSize: 5,
-          maxSize: accessor === 'details' ? 100 : 200,
-          size: 5,
+          minSize: 0,
+          maxSize: 0,
+          size: 0,
           Header: ({ column }: any) => (
-            <Tooltip
-              tooltipTrigger={<span>{column.columnDef.header}</span>}
-              tooltipContent={label}
-              tooltipContentStyles={'z-[1000]'}
-            />
+            <div className="flex items-center group">
+              <Tooltip
+                tooltipTrigger={<span>{column.columnDef.header}</span>}
+                tooltipContent={label}
+                tooltipContentStyles={'z-[1000]'}
+              />
+              {isSortable &&
+                (currentSort ? (
+                  <FontAwesomeIcon
+                    icon={currentSort.desc ? faSortDown : faSortUp}
+                    width={8}
+                    height={8}
+                    style={{ marginLeft: '2px' }} // Optional styling for spacing
+                  />
+                ) : (
+                  <FontAwesomeIcon
+                    icon={faSort} // Default icon when not sorted
+                    width={8}
+                    height={8}
+                    className="opacity-0 transition-opacity duration-300 group-hover:opacity-100" // Show on hover
+                    style={{ marginLeft: '2px' }}
+                  />
+                ))}
+            </div>
           )
         };
         switch (accessor) {
@@ -390,72 +415,27 @@ const MatchingPairResult = ({
               }
             };
 
-          case 'clarity':
-            return {
-              ...commonProps,
-              sortingFn: (rowA: any, rowB: any, columnId: string) => {
-                const indexA = clarity.indexOf(rowA.original[columnId]);
-                const indexB = clarity.indexOf(rowB.original[columnId]);
-                return indexA - indexB;
-              }
-            };
           case 'table_inclusion':
             return {
               ...commonProps,
-              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-',
-              sortingFn: (rowA: any, rowB: any, columnId: string) => {
-                const indexA = tableInclusionSortOrder.indexOf(
-                  rowA.original[columnId]
-                );
-                const indexB = tableInclusionSortOrder.indexOf(
-                  rowB.original[columnId]
-                );
-                return indexA - indexB;
-              }
+              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-'
             };
           case 'table_black':
             return {
               ...commonProps,
-              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-',
-              sortingFn: (rowA: any, rowB: any, columnId: string) => {
-                const indexA = tableBlackSortOrder.indexOf(
-                  rowA.original[columnId]
-                );
-                const indexB = tableBlackSortOrder.indexOf(
-                  rowB.original[columnId]
-                );
-                return indexA - indexB;
-              }
+              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-'
             };
 
           case 'side_black':
             return {
               ...commonProps,
-              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-',
-              sortingFn: (rowA: any, rowB: any, columnId: string) => {
-                const indexA = sideBlackSortOrder.indexOf(
-                  rowA.original[columnId]
-                );
-                const indexB = sideBlackSortOrder.indexOf(
-                  rowB.original[columnId]
-                );
-                return indexA - indexB;
-              }
+              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-'
             };
 
           case 'fluorescence':
             return {
               ...commonProps,
-              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-',
-              sortingFn: (rowA: any, rowB: any, columnId: string) => {
-                const indexA = fluorescenceSortOrder.indexOf(
-                  rowA.original[columnId]
-                );
-                const indexB = fluorescenceSortOrder.indexOf(
-                  rowB.original[columnId]
-                );
-                return indexA - indexB;
-              }
+              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-'
             };
           case 'amount':
             return { ...commonProps, Cell: RenderAmount };
@@ -599,7 +579,7 @@ const MatchingPairResult = ({
   }, [dataTableState.rows]);
   const memoizedColumns = useMemo(
     () => mapColumns(dataTableState.columns),
-    [dataTableState.columns]
+    [dataTableState.columns, sorting]
   );
   const handleNewSearch = () => {
     router.push(`${Routes.MATCHING_PAIR}?active-tab=${SubRoutes.NEW_SEARCH}`);
@@ -1614,6 +1594,8 @@ const MatchingPairResult = ({
                   downloadExcel={downloadExcel}
                   setIsError={setIsError}
                   searchList={searchList}
+                  setSorting={setSorting}
+                  sorting={sorting}
                   setIsLoading={setIsLoading}
                   handleAddToCart={handleAddToCart}
                   setIsConfirmStone={setIsConfirmStone}
