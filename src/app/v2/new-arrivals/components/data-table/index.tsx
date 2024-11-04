@@ -278,8 +278,8 @@ const NewArrivalDataTable = ({
               fluorescenceSortOrder.indexOf(valueB);
             break;
           case 'amount':
-            const amountA = rowA.variants?.[0]?.prices?.[0]?.amount ?? 0;
-            const amountB = rowB.variants?.[0]?.prices?.[0]?.amount ?? 0;
+            const amountA = rowA.original?.price ?? 0;
+            const amountB = rowB.original?.price ?? 0;
             compareValue = amountA - amountB;
 
             break;
