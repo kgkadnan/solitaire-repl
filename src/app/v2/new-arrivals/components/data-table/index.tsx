@@ -279,7 +279,16 @@ const NewArrivalDataTable = ({
             break;
           default:
             // Fallback to default comparison for other columns (numbers or strings)
-            if (typeof valueA === 'string' && typeof valueB === 'string') {
+            if (valueA == null && valueB == null) {
+              compareValue = 0; // Both are null, considered equal
+            } else if (valueA == null) {
+              compareValue = -1; // Place null values before non-null values
+            } else if (valueB == null) {
+              compareValue = 1; // Place non-null values before null values
+            } else if (
+              typeof valueA === 'string' &&
+              typeof valueB === 'string'
+            ) {
               compareValue = valueA.localeCompare(valueB, undefined, {
                 sensitivity: 'base'
               });
