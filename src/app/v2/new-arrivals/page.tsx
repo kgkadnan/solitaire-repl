@@ -31,6 +31,7 @@ import { DialogComponent } from '@/components/v2/common/dialog';
 import ActionButton from '@/components/v2/common/action-button';
 import {
   MRT_RowSelectionState,
+  MRT_SortingState,
   MRT_TablePagination
 } from 'material-react-table';
 import Image from 'next/image';
@@ -71,12 +72,18 @@ import useNumericFieldValidation from '../search/form/hooks/numeric-field-valida
 import { SubRoutes } from '@/constants/v2/enums/routes';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import pako from 'pako';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faSort,
+  faSortDown,
+  faSortUp
+} from '@fortawesome/free-solid-svg-icons';
 
 const NewArrivals = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const filterData = useAppSelector(state => state.filterNewArrival);
-
+  const [sorting, setSorting] = useState<MRT_SortingState>([]);
   const subRoute = useSearchParams().get('active-tab');
   const [isDetailPage, setIsDetailPage] = useState(false);
   const [detailPageData, setDetailPageData] = useState<any>({});
@@ -110,24 +117,47 @@ const NewArrivals = () => {
     columns
       ?.filter(({ is_disabled }: any) => !is_disabled)
       .map(({ accessor, short_label, label }: any) => {
+        const currentSort = sorting.find(sort => sort.id === accessor);
+        const nonSortableAccessors = ['shape_full', 'details', 'fire_icon'];
+        // Check if sorting should be disabled for the column's accessor
+        const isSortable = !nonSortableAccessors.includes(accessor);
         const commonProps = {
           accessorKey: accessor,
           header: short_label,
           enableGlobalFilter: accessor === 'lot_id',
           // enableGrouping: accessor === 'shape',
-          enableSorting:
-            accessor !== 'shape_full' &&
-            accessor !== 'details' &&
-            accessor !== 'fire_icon',
-          minSize: 5,
-          maxSize: accessor === 'details' ? 100 : 200,
-          size: 5,
+          // enableSorting:
+          //   accessor !== 'shape_full' &&
+          //   accessor !== 'details' &&
+          //   accessor !== 'fire_icon',
+          minSize: 0,
+          maxSize: 0,
+          size: 0,
           Header: ({ column }: any) => (
-            <Tooltip
-              tooltipTrigger={<span>{column.columnDef.header}</span>}
-              tooltipContent={label}
-              tooltipContentStyles={'z-[1000]'}
-            />
+            <div className="flex items-center group">
+              <Tooltip
+                tooltipTrigger={<span>{column.columnDef.header}</span>}
+                tooltipContent={label}
+                tooltipContentStyles={'z-[1000]'}
+              />
+              {isSortable &&
+                (currentSort ? (
+                  <FontAwesomeIcon
+                    icon={currentSort.desc ? faSortDown : faSortUp}
+                    width={8}
+                    height={8}
+                    style={{ marginLeft: '2px' }} // Optional styling for spacing
+                  />
+                ) : (
+                  <FontAwesomeIcon
+                    icon={faSort} // Default icon when not sorted
+                    width={8}
+                    height={8}
+                    className="opacity-0 transition-opacity duration-300 group-hover:opacity-100" // Show on hover
+                    style={{ marginLeft: '2px' }}
+                  />
+                ))}
+            </div>
           )
         };
 
@@ -505,7 +535,7 @@ const NewArrivals = () => {
 
   const memoizedColumns = useMemo(
     () => mapColumns(columnHeaders),
-    [columnHeaders]
+    [columnHeaders, sorting]
   );
   const { modalState, modalSetState } = useModalStateManagement();
   const { errorState, errorSetState } = useErrorStateManagement();
@@ -1044,6 +1074,8 @@ const NewArrivals = () => {
                     setIsSkeletonLoading={setIsSkeletonLoading}
                     activeCount={activeBid?.length}
                     setBid={setBid}
+                    setSorting={setSorting}
+                    sorting={sorting}
                     bidCount={bid?.length}
                     historyCount={bidHistory?.data?.length}
                     socketManager={socketManager}
