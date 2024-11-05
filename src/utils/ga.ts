@@ -15,9 +15,10 @@ export const trackEvent = ({
 }) => {
   if (typeof window !== 'undefined' && window.gtag) {
     if (
-      window.Cookiebot &&
-      window.Cookiebot.consent &&
-      window.Cookiebot.consent.statistics
+      (window.Cookiebot &&
+        window.Cookiebot.consent &&
+        window.Cookiebot.consent.statistics) ||
+      window?.Cookiebot?.consent?.stamp === '-1'
     ) {
       window.gtag('event', action, {
         event_category: category,
