@@ -156,7 +156,7 @@ const Dashboard = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const confirmTrack = useAppSelector(state => state.setConfirmStoneTrack);
-
+  const [showOnlyWithVideo, setShowOnlyWithVideo] = useState(false);
   const { data: customerData, refetch: refetchCustomerData } =
     useGetCustomerQuery({}, { refetchOnMountOrArgChange: true });
   const [validImages, setValidImages] = useState<any>([]);
@@ -2122,7 +2122,7 @@ const Dashboard = () => {
                   className="text-neutral600 text-sMedium font-regular cursor-pointer"
                   onClick={() => {
                     setIsDetailPage(false);
-                    setSorting([])
+                    setSorting([]);
                     setRowSelection({});
                     trackEvent({
                       action: Tracking_Search_By_Text.click_back_results_page,
@@ -2164,6 +2164,8 @@ const Dashboard = () => {
               handleCreateAppointment={handleCreateAppointment}
               refreshSearchResults={refreshSearchResults}
               customerMobileNumber={customerMobileNumber}
+              showOnlyWithVideo={showOnlyWithVideo}
+              setShowOnlyWithVideo={setShowOnlyWithVideo}
             />
           </div>
         </div>
