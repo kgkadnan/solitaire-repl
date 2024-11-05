@@ -2122,6 +2122,7 @@ const Dashboard = () => {
                   className="text-neutral600 text-sMedium font-regular cursor-pointer"
                   onClick={() => {
                     setIsDetailPage(false);
+                    setSorting([])
                     setRowSelection({});
                     trackEvent({
                       action: Tracking_Search_By_Text.click_back_results_page,
