@@ -1183,6 +1183,7 @@ const DataTable = ({
                     isOn={showOnlyWithVideo}
                     handleToggle={() => {
                       setShowOnlyWithVideo((prev: any) => !prev);
+                      refreshSearchResults(showOnlyWithVideo);
                     }}
                   />
                 </div>
