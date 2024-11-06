@@ -499,11 +499,7 @@ const Form = ({
 
     let modifysavedSearchData = savedSearch?.savedSearch?.meta_data;
     let newArrivalBidDataQuery = newArrivalFilterData.queryParams;
-    let bidLocalStorageData = JSON.parse(localStorage.getItem('bid')!);
-    let bidToBuyBidDataQuery = constructUrlParams(
-      bidLocalStorageData?.queryParams
-    );
-
+    let bidToBuyBidDataQuery = JSON.parse(localStorage.getItem('bid')!);
     setSelectedCaratRange([]);
 
     if (subRoute === SubRoutes.NEW_ARRIVAL && newArrivalBidDataQuery) {
@@ -532,8 +528,7 @@ const Form = ({
     }
   }, [modifySearchFrom]);
   useEffect(() => {
-    let bidLocalStorageData = JSON.parse(localStorage.getItem('bid')!);
-    let bidToBuyBidDataQuery = bidLocalStorageData?.queryParams;
+    let bidToBuyBidDataQuery = JSON.parse(localStorage.getItem('bid')!);
 
     subRoute === SubRoutes.BID_TO_BUY &&
       setModifySearch(bidToBuyBidDataQuery, setState);
@@ -605,11 +600,7 @@ const Form = ({
       setSearchUrl('');
     } else if (routePath === Routes.BID_TO_BUY) {
       const queryParams = generateQueryParams(state);
-      let localStorageData = {
-        queryParams
-      };
-      localStorage.setItem('bid', JSON.stringify(localStorageData));
-
+      localStorage.setItem('bid', JSON.stringify(queryParams));
       setErrorText('');
       setIsLoading(true);
       triggerBidToBuyApi({

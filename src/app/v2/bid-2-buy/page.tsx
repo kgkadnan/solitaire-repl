@@ -259,8 +259,7 @@ const BidToBuy = () => {
   };
 
   useEffect(() => {
-    let bidLocalStorageData = JSON.parse(localStorage.getItem('bid')!);
-    let queryNew = constructUrlParams(bidLocalStorageData?.queryParams);
+    let queryNew = constructUrlParams(JSON.parse(localStorage.getItem('bid')!));
     setIsLoading(true);
     triggerBidToBuyApi({
       searchUrl: `${queryNew}`
@@ -286,8 +285,7 @@ const BidToBuy = () => {
   }, []);
 
   useEffect(() => {
-    let bidLocalStorageData = JSON.parse(localStorage.getItem('bid')!);
-    let queryNew = constructUrlParams(bidLocalStorageData?.queryParams);
+    let queryNew = constructUrlParams(JSON.parse(localStorage.getItem('bid')!));
 
     setIsLoading(true);
 
@@ -338,8 +336,7 @@ const BidToBuy = () => {
   }, []);
 
   const handleTabClick = (index: number) => {
-    let bidLocalStorageData = JSON.parse(localStorage.getItem('bid')!);
-    let queryNew = constructUrlParams(bidLocalStorageData?.queryParams);
+    let queryNew = constructUrlParams(JSON.parse(localStorage.getItem('bid')!));
 
     if (index !== activeTab) {
       if (index === 0 && !queryNew.length) {
@@ -461,12 +458,6 @@ const BidToBuy = () => {
                             variant: 'primary',
                             label: 'Cancel Bid',
                             handler: () => {
-                              let bidLocalStorageData = JSON.parse(
-                                localStorage.getItem('bid')!
-                              );
-                              let queryNew = constructUrlParams(
-                                bidLocalStorageData?.queryParams
-                              );
                               // socketManager.emit('cancel_bidtobuy', {
                               //   product_ids: Object.keys(rowSelection)
                               // });
@@ -488,7 +479,9 @@ const BidToBuy = () => {
                                     />
                                   );
                                   triggerBidToBuyApi({
-                                    searchUrl: `${queryNew}`,
+                                    searchUrl: constructUrlParams(
+                                      JSON.parse(localStorage.getItem('bid')!)
+                                    ),
                                     limit: 300
                                   })
                                     .unwrap()
