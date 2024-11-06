@@ -738,8 +738,8 @@ const Dashboard = () => {
     activeTab === 'In-transit'
       ? 'activeInvoice'
       : activeTab === 'Pending'
-      ? 'pendingInvoice'
-      : ''
+        ? 'pendingInvoice'
+        : ''
   ] || { keys: [], data: [] };
 
   const redirectLink = () => {
@@ -1388,8 +1388,8 @@ const Dashboard = () => {
                 res.status === 'success'
                   ? 'Success'
                   : res.status === 'processing'
-                  ? 'Processing'
-                  : ''
+                    ? 'Processing'
+                    : ''
             });
 
             setDialogContent(
@@ -1399,8 +1399,8 @@ const Dashboard = () => {
                   res.status === 'success'
                     ? 'success'
                     : res.status === 'processing'
-                    ? 'info'
-                    : ''
+                      ? 'info'
+                      : ''
                 }
                 customPoppupBodyStyle="!mt-[70px]"
                 header={res.title}
@@ -1979,8 +1979,8 @@ const Dashboard = () => {
               detailPageData?.length
                 ? 'Detail Page'
                 : isCompareStone
-                ? 'Compare Stone'
-                : 'Search Results'
+                  ? 'Compare Stone'
+                  : 'Search Results'
             }
             handleDetailImage={handleDetailImage}
             handleDetailPage={handleDetailPage}
@@ -2004,8 +2004,8 @@ const Dashboard = () => {
                       detailPageData?.length
                         ? 'Detail Page'
                         : isCompareStone
-                        ? 'Compare Stone'
-                        : 'Dashboard'
+                          ? 'Compare Stone'
+                          : 'Dashboard'
                     );
                   }
                 },
@@ -2241,18 +2241,18 @@ const Dashboard = () => {
                         data.isKycNotVerified
                           ? 'cursor-not-allowed'
                           : data.isAvailable
-                          ? 'cursor-pointer'
-                          : 'cursor-default'
+                            ? 'cursor-pointer'
+                            : 'cursor-default'
                       }`}
                       key={index}
                       onClick={
                         data.isKycNotVerified
                           ? () => {}
                           : data.isAvailable
-                          ? () => {
-                              router.push(data.link);
-                            }
-                          : () => {}
+                            ? () => {
+                                router.push(data.link);
+                              }
+                            : () => {}
                       }
                     >
                       <div

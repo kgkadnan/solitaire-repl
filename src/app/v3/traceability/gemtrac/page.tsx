@@ -96,10 +96,10 @@ const GemTrac = () => {
                               index === 0
                                 ? 'xl:h-[139%] lg:h-[158%]'
                                 : index === 2
-                                ? 'xl:h-[120%] lg:h-[124%]'
-                                : index === 4
-                                ? 'xl:h-[116%] lg:h-[121%]'
-                                : 'xl:h-[120%] lg:h-[120.5%]'
+                                  ? 'xl:h-[120%] lg:h-[124%]'
+                                  : index === 4
+                                    ? 'xl:h-[116%] lg:h-[121%]'
+                                    : 'xl:h-[120%] lg:h-[120.5%]'
                             }  xl:mt-[-12px] lg:mt-[-10px]`}
                           ></div>
                         </div>
