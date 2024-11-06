@@ -285,13 +285,13 @@ export function DiamondDetailsComponent({
         ? breadCrumLabel === 'Bid to Buy'
           ? 'fromBidToBuyHistory'
           : breadCrumLabel === 'New Arrival'
-          ? 'fromNewArrivalBidHistory'
-          : ''
+            ? 'fromNewArrivalBidHistory'
+            : ''
         : breadCrumLabel === 'Bid to Buy'
-        ? 'fromBidToBuy'
-        : breadCrumLabel === 'New Arrival'
-        ? 'fromNewArrivalBid'
-        : '']: true,
+          ? 'fromBidToBuy'
+          : breadCrumLabel === 'New Arrival'
+            ? 'fromNewArrivalBid'
+            : '']: true,
       page: 'DNA_Page'
     });
   };
@@ -577,8 +577,8 @@ export function DiamondDetailsComponent({
                           }`
                         : ''
                       : tableData?.amount
-                      ? `$${formatNumberWithCommas(tableData?.amount) ?? ''}`
-                      : ''}
+                        ? `$${formatNumberWithCommas(tableData?.amount) ?? ''}`
+                        : ''}
                   </div>
                   <p
                     className={`text-successMain text-mMedium px-[8px] py-[2px] rounded-[4px]`}
@@ -591,11 +591,11 @@ export function DiamondDetailsComponent({
                           : formatNumber(tableData.original_discount) + '%'
                         : ''
                       : tableData.discount !== null &&
-                        tableData.discount !== undefined
-                      ? tableData.discount === 0
-                        ? '0.00%'
-                        : formatNumber(tableData.discount) + '%'
-                      : ''}
+                          tableData.discount !== undefined
+                        ? tableData.discount === 0
+                          ? '0.00%'
+                          : formatNumber(tableData.discount) + '%'
+                        : ''}
                   </p>
                 </div>
                 {statusValue.length > 0 && (

@@ -38,8 +38,8 @@ const StyledTrack = styled.div`
     props.index === 2
       ? 'var(--neutral-300)'
       : props.index === 1
-      ? 'var(--primary-main)'
-      : 'var(--neutral-300)'};
+        ? 'var(--primary-main)'
+        : 'var(--neutral-300)'};
   border-radius: 999px;
 `;
 

@@ -233,13 +233,17 @@ const PersonalDetail = ({
               }
               countryCodeValue={{
                 label:
-                  `+${formState?.online?.sections?.[
-                    kycScreenIdentifierNames.PERSONAL_DETAILS
-                  ]?.['country_code']}` ?? '',
+                  `+${
+                    formState?.online?.sections?.[
+                      kycScreenIdentifierNames.PERSONAL_DETAILS
+                    ]?.['country_code']
+                  }` ?? '',
                 value:
-                  `+${formState?.online?.sections?.[
-                    kycScreenIdentifierNames.PERSONAL_DETAILS
-                  ]?.['country_code']}` ?? ''
+                  `+${
+                    formState?.online?.sections?.[
+                      kycScreenIdentifierNames.PERSONAL_DETAILS
+                    ]?.['country_code']
+                  }` ?? ''
               }}
             />
             <InputField

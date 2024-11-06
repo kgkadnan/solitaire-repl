@@ -1116,16 +1116,16 @@ const Form = ({
           isMatchingPair || routePath === Routes.BID_TO_BUY
             ? 'Search'
             : !isLoadingProductApi &&
-              !isLoadingMatchPairApi &&
-              !isFetchingMatchPairApi &&
-              !isLoading &&
-              !isFetchingProductApi &&
-              minMaxError.length === 0 &&
-              validationError.length === 0 &&
-              errorText === NO_STONE_FOUND &&
-              isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
-            ? 'Add Demand'
-            : 'Search'
+                !isLoadingMatchPairApi &&
+                !isFetchingMatchPairApi &&
+                !isLoading &&
+                !isFetchingProductApi &&
+                minMaxError.length === 0 &&
+                validationError.length === 0 &&
+                errorText === NO_STONE_FOUND &&
+                isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
+              ? 'Add Demand'
+              : 'Search'
         } `,
       handler: isMatchingPair
         ? minMaxError.length === 0 &&
@@ -1134,22 +1134,22 @@ const Form = ({
           ? () => {}
           : handleMatchingPairSearch
         : routePath === Routes.BID_TO_BUY
-        ? minMaxError.length === 0 &&
-          validationError.length === 0 &&
-          errorText === NO_STONE_FOUND
-          ? () => {}
-          : handleFormSearch
-        : !isLoadingProductApi &&
-          !isLoadingMatchPairApi &&
-          !isFetchingMatchPairApi &&
-          !isLoading &&
-          !isFetchingProductApi &&
-          minMaxError.length === 0 &&
-          validationError.length === 0 &&
-          errorText === NO_STONE_FOUND &&
-          isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
-        ? handleAddDemand
-        : handleFormSearch,
+          ? minMaxError.length === 0 &&
+            validationError.length === 0 &&
+            errorText === NO_STONE_FOUND
+            ? () => {}
+            : handleFormSearch
+          : !isLoadingProductApi &&
+              !isLoadingMatchPairApi &&
+              !isFetchingMatchPairApi &&
+              !isLoading &&
+              !isFetchingProductApi &&
+              minMaxError.length === 0 &&
+              validationError.length === 0 &&
+              errorText === NO_STONE_FOUND &&
+              isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
+            ? handleAddDemand
+            : handleFormSearch,
 
       isDisable:
         !searchUrl.length ||
@@ -1335,10 +1335,10 @@ const Form = ({
                 {subRoute === SubRoutes.NEW_ARRIVAL
                   ? 'New Arrivals'
                   : // : subRoute === SubRoutes.BID_TO_BUY
-                  // ? 'Bid To Buy'
-                  isMatchingPair
-                  ? 'Match Pair'
-                  : 'Diamonds'}
+                    // ? 'Bid To Buy'
+                    isMatchingPair
+                    ? 'Match Pair'
+                    : 'Diamonds'}
                 {routePath.includes('v2/matching-pair') && (
                   <div className="flex gap-3">
                     <div className="h-[37px] mr-[-8px]">
@@ -1591,10 +1591,10 @@ const Form = ({
                 isFetchingProductApi
                   ? ''
                   : minMaxError.length
-                  ? minMaxError
-                  : validationError.length
-                  ? validationError
-                  : !isValidationError && errorText}
+                    ? minMaxError
+                    : validationError.length
+                      ? validationError
+                      : !isValidationError && errorText}
               </span>
             </div>
           )}

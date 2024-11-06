@@ -521,8 +521,8 @@ const MyCart = () => {
                   res.status === 'success'
                     ? 'success'
                     : res.status === 'processing'
-                    ? 'info'
-                    : ''
+                      ? 'info'
+                      : ''
                 }
                 customPoppupBodyStyle="!mt-[70px]"
                 header={res.title}
@@ -1143,11 +1143,11 @@ const MyCart = () => {
               ? showAppointmentForm
                 ? 'h-[calc(100vh-113px)]'
                 : isConfirmStone
-                ? 'h-[calc(100vh-184px)]'
-                : 'h-[calc(100vh-210px)]'
+                  ? 'h-[calc(100vh-184px)]'
+                  : 'h-[calc(100vh-210px)]'
               : showAppointmentForm
-              ? 'h-[calc(100vh-43px)]'
-              : 'h-[calc(100vh-132px)]'
+                ? 'h-[calc(100vh-43px)]'
+                : 'h-[calc(100vh-132px)]'
           }  shadow-inputShadow`}
         >
           {isConfirmStone ? (
