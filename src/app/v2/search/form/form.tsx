@@ -1498,7 +1498,7 @@ const Form = ({
                         setShowOnlyWithVideo(checked);
                       }}
                       checked={showOnlyWithVideo}
-                    /> */}
+                    />  */}
                     <CustomSwitch
                       isOn={showOnlyWithVideo}
                       handleToggle={() => {
