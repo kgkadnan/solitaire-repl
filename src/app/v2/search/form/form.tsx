@@ -535,7 +535,7 @@ const Form = ({
     let bidLocalStorageData = JSON.parse(localStorage.getItem('bid')!);
     let bidToBuyBidDataQuery = bidLocalStorageData?.queryParams;
 
-    routePath === Routes.BID_TO_BUY &&
+    subRoute === SubRoutes.BID_TO_BUY &&
       setModifySearch(bidToBuyBidDataQuery, setState);
   }, []);
 
@@ -550,24 +550,6 @@ const Form = ({
       setAddSearches(data);
     }
   }, []);
-
-  // useEffect(()=>{
-  //   if (
-  //     caratMin ||
-  //     caratMax
-  //   ) {
-  //     const caratFrom = parseFloat((caratMin&&caratMin >= 0.15 )? caratMin:0.15).toFixed(2);
-  //     const caratTo = parseFloat((caratMax&& caratMax <= 50)? caratMax : 50).toFixed(2);
-  //     setCaratRangeSelection([
-  //       ...caratRangeSelection,
-  //       `${caratFrom}-${caratTo}`
-  //     ]);
-  //     // setSelectedCaratRange([
-  //     //   ...selectedCaratRange,
-  //     //   `${caratFrom}-${caratTo}`
-  //     // ]);
-  //   }
-  // },[caratMin,caratMax])
 
   // Reset form when a new search is initiated
   useEffect(() => {

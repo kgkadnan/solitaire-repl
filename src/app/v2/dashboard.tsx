@@ -2103,6 +2103,7 @@ const Dashboard = () => {
                 alt="backWardArrow"
                 onClick={() => {
                   setIsDetailPage(false);
+                  setSorting([]);
                   setRowSelection({});
                   trackEvent({
                     action: Tracking_Search_By_Text.click_back_results_page,

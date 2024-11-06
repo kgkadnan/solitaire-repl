@@ -244,7 +244,7 @@ const BidToBuy = () => {
   const [activeTab, setActiveTab] = useState(0);
   const tabLabels = ['Bid Stone', 'Active Bid', 'Bid History'];
   const [timeDifference, setTimeDifference] = useState(null);
-  const [isInActive, setIsInActive] = useState(false);
+  const [isInActive, setIsInActive] = useState('');
   const getBidToBuyHistoryData = () => {
     setIsLoading(true);
 
@@ -267,7 +267,7 @@ const BidToBuy = () => {
     })
       .unwrap()
       .then((response: any) => {
-        setIsInActive(false);
+        setIsInActive('');
 
         setTime(response?.endTime),
           setBid(queryNew.length ? response?.bidStone : []);
@@ -275,9 +275,10 @@ const BidToBuy = () => {
         setIsLoading(false);
       })
       .catch(e => {
-        if (e?.data?.error === 'INACTIVE_BID_TO_BUY') {
-          setIsInActive(true);
-        }
+        console.log(e, 'weee', e?.data?.error);
+        // if (e?.data?.error === 'INACTIVE_BID_TO_BUY') {
+        setIsInActive(e?.data?.error);
+        // }
         setActiveBid([]);
         setBid([]);
         setIsLoading(false);
@@ -295,16 +296,17 @@ const BidToBuy = () => {
     })
       .unwrap()
       .then((response: any) => {
-        setIsInActive(false);
+        setIsInActive('');
 
         setBid(queryNew.length ? response?.bidStone : []);
         setActiveBid(response?.activeStone);
         setTime(response?.endTime), setIsLoading(false);
       })
       .catch(e => {
-        if (e?.data?.error === 'INACTIVE_BID_TO_BUY') {
-          setIsInActive(true);
-        }
+        // if (e?.data?.error === 'INACTIVE_BID_TO_BUY') {
+        //   setIsInActive('INACTIVE_BID_TO_BUY');
+        // }
+        setIsInActive(e?.data?.error);
         setActiveBid([]);
         setBid([]);
         setIsLoading(false);
@@ -665,6 +667,10 @@ const BidToBuy = () => {
       ]);
     }
   }, [validImages]);
+  console.log(
+    subRoute === SubRoutes.BID_TO_BUY,
+    'subRoute === SubRoutes.BID_TO_BUY'
+  );
 
   return (
     <div className="mb-[4px] relative">
@@ -718,9 +724,9 @@ const BidToBuy = () => {
         <>
           {(!Object?.keys(localStorage.getItem('bid') ?? {}).length &&
             time &&
-            activeTab === 0) ||
-          subRoute === SubRoutes.BID_TO_BUY ||
-          !isInActive ? (
+            activeTab === 0 &&
+            isInActive !== 'INACTIVE_BID_TO_BUY') ||
+          subRoute === SubRoutes.BID_TO_BUY ? (
             <Form
               searchUrl={searchUrl}
               setSearchUrl={setSearchUrl}
@@ -849,7 +855,7 @@ const BidToBuy = () => {
                     isSkeletonLoading={isSkeletonLoading}
                     setIsSkeletonLoading={setIsSkeletonLoading}
                     isLoading={isLoading}
-                    inActive={isInActive}
+                    isInActive={isInActive}
                     // searchUrl={searchUrl}
                   />
                 </div>
