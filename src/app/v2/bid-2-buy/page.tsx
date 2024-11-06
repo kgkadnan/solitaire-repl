@@ -84,7 +84,6 @@ const BidToBuy = () => {
   const [searchLoading, setSearchLoading] = useState(false);
   const [isSkeletonLoading, setIsSkeletonLoading] = useState(true);
   const [isTabSwitch, setIsTabSwitch] = useState(false); // State to track
-  const [showOnlyWithVideo, setShowOnlyWithVideo] = useState(false);
 
   // const [checkStatus, setCheckStatus] = useState(false);
 
@@ -261,10 +260,10 @@ const BidToBuy = () => {
 
   useEffect(() => {
     let bidLocalStorageData = JSON.parse(localStorage.getItem('bid')!);
-    let queryNew = constructUrlParams(bidLocalStorageData.queryParams);
+    let queryNew = constructUrlParams(bidLocalStorageData?.queryParams);
     setIsLoading(true);
     triggerBidToBuyApi({
-      searchUrl: `${queryNew}&all_asset_required=${bidLocalStorageData.all_asset_required}`
+      searchUrl: `${queryNew}`
     })
       .unwrap()
       .then((response: any) => {
@@ -287,12 +286,12 @@ const BidToBuy = () => {
 
   useEffect(() => {
     let bidLocalStorageData = JSON.parse(localStorage.getItem('bid')!);
-    let queryNew = constructUrlParams(bidLocalStorageData.queryParams);
+    let queryNew = constructUrlParams(bidLocalStorageData?.queryParams);
 
     setIsLoading(true);
 
     triggerBidToBuyApi({
-      searchUrl: `${queryNew}&all_asset_required=${bidLocalStorageData.all_asset_required}`
+      searchUrl: `${queryNew}`
     })
       .unwrap()
       .then((response: any) => {
@@ -338,7 +337,7 @@ const BidToBuy = () => {
 
   const handleTabClick = (index: number) => {
     let bidLocalStorageData = JSON.parse(localStorage.getItem('bid')!);
-    let queryNew = constructUrlParams(bidLocalStorageData.queryParams);
+    let queryNew = constructUrlParams(bidLocalStorageData?.queryParams);
 
     if (index !== activeTab) {
       if (index === 0 && !queryNew.length) {
@@ -390,10 +389,7 @@ const BidToBuy = () => {
 
   const [downloadExcel] = useDownloadExcelMutation();
   const [deleteBid] = useDeleteBidMutation();
-  let [
-    triggerBidToBuyApi,
-    { isLoading: isLoadingBidToBuyApi, isFetching: isFetchingBidToBuyApi }
-  ] = useLazyGetAllBidStonesQuery();
+  let [triggerBidToBuyApi] = useLazyGetAllBidStonesQuery();
 
   const renderFooter = (table: any) => {
     if (activeTab === 0 && bid?.length > 0) {
@@ -467,7 +463,7 @@ const BidToBuy = () => {
                                 localStorage.getItem('bid')!
                               );
                               let queryNew = constructUrlParams(
-                                bidLocalStorageData.queryParams
+                                bidLocalStorageData?.queryParams
                               );
                               // socketManager.emit('cancel_bidtobuy', {
                               //   product_ids: Object.keys(rowSelection)
@@ -490,7 +486,7 @@ const BidToBuy = () => {
                                     />
                                   );
                                   triggerBidToBuyApi({
-                                    searchUrl: `${queryNew}&all_asset_required=${bidLocalStorageData.all_asset_required}`,
+                                    searchUrl: `${queryNew}`,
                                     limit: 300
                                   })
                                     .unwrap()
@@ -746,8 +742,7 @@ const BidToBuy = () => {
               setIsCommonLoading={setIsLoading}
               time={time}
               setRowSelection={setRowSelection}
-              showOnlyWithVideo={showOnlyWithVideo}
-              setShowOnlyWithVideo={setShowOnlyWithVideo}
+
               // setBid={setBid}
               // setActiveBid={setActiveBid}
             />

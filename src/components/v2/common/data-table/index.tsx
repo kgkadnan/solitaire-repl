@@ -477,7 +477,7 @@ const DataTable = ({
         const searchUrl = constructUrlParams(searchData.meta_data);
 
         triggerProductCountApi({
-          searchUrl: `${searchUrl}&all_asset_required=${searchData.all_asset_required}`
+          searchUrl: `${searchUrl}`
         })
           .then(response => {
             if (response?.data?.count > MAX_SAVED_SEARCH_COUNT) {
@@ -585,8 +585,7 @@ const DataTable = ({
                       isSavedSearch: true,
                       searchId: response?.data?.search_id,
                       queryParams: searchData.meta_data,
-                      id: searchData.id,
-                      all_asset_required: searchData.all_asset_required
+                      id: searchData.id
                     }
                   ];
 
@@ -648,8 +647,7 @@ const DataTable = ({
     const updateSaveSearchData = {
       id: yourSelection[activeTab - 1]?.id,
       meta_data: yourSelection[activeTab - 1]?.queryParams,
-      diamond_count: parseInt(data?.count),
-      all_asset_required: yourSelection[activeTab - 1]?.all_asset_required
+      diamond_count: parseInt(data?.count)
     };
 
     yourSelection[activeTab - 1] = {
@@ -657,8 +655,7 @@ const DataTable = ({
       saveSearchName: yourSelection[activeTab - 1]?.saveSearchName,
       searchId: yourSelection[activeTab - 1]?.searchId,
       isSavedSearch: true,
-      queryParams: yourSelection[activeTab - 1].queryParams,
-      all_asset_required: yourSelection[activeTab - 1]?.all_asset_required
+      queryParams: yourSelection[activeTab - 1].queryParams
     };
     localStorage.setItem('Search', JSON.stringify(yourSelection));
     setSearchParameters(yourSelection);
@@ -1184,6 +1181,7 @@ const DataTable = ({
                   <Switch
                     onCheckedChange={(checked: boolean) => {
                       setShowOnlyWithVideo(checked);
+                      refreshSearchResults(checked);
                     }}
                     checked={showOnlyWithVideo}
                   />

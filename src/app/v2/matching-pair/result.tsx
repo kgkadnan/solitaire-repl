@@ -117,8 +117,7 @@ const MatchingPairResult = ({
   isLoading,
   setSettingApplied,
   settingApplied,
-  setIsMPSOpen,
-  showOnlyWithVideo
+  setIsMPSOpen
 }: {
   activeTab: number;
   searchParameters: any;
@@ -134,7 +133,6 @@ const MatchingPairResult = ({
   setSettingApplied: any;
   settingApplied: any;
   setIsMPSOpen: any;
-  showOnlyWithVideo: any;
 }) => {
   const dispatch = useAppDispatch();
   const confirmTrack = useAppSelector(state => state.setConfirmStoneTrack);
@@ -217,13 +215,9 @@ const MatchingPairResult = ({
     const selections = JSON.parse(storedSelection);
 
     const url = constructUrlParams(selections[activeTab - 1]?.queryParams);
-    setSearchUrl(
-      `${url}&all_asset_required=${selections[activeTab - 1]
-        ?.all_asset_required}`
-    );
+    setSearchUrl(`${url}`);
     triggerMatchingPairApi({
-      url: `${url}&all_asset_required=${selections[activeTab - 1]
-        ?.all_asset_required}`,
+      url: `${url}`,
       limit: MATCHING_PAIR_DATA_LIMIT,
       offset: 0
     })

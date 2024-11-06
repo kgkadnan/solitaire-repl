@@ -120,9 +120,7 @@ const Form = ({
   isTurkey = false,
   time,
   setRowSelection,
-  setIsMPSOpen,
-  setShowOnlyWithVideo,
-  showOnlyWithVideo
+  setIsMPSOpen
 }: {
   searchUrl: string;
   setSearchUrl: Dispatch<SetStateAction<string>>;
@@ -149,8 +147,6 @@ const Form = ({
   time?: any;
   setRowSelection?: any;
   setIsMPSOpen?: any;
-  showOnlyWithVideo?: any;
-  setShowOnlyWithVideo?: any;
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -204,7 +200,8 @@ const Form = ({
     selectedIntensity,
     selectedOvertone,
     selectionChecked,
-    isSliderActive
+    isSliderActive,
+    showOnlyWithVideo
   } = state;
   const {
     setCaratMin,
@@ -231,7 +228,8 @@ const Form = ({
     setSelectedKeyToSymbol,
     setSelectedCaratRange,
     setSelectionChecked,
-    setIsSliderActive
+    setIsSliderActive,
+    setShowOnlyWithVideo
   } = setState;
 
   const {
@@ -351,7 +349,7 @@ const Form = ({
       setErrorText('');
       setIsLoading(true);
       triggerBidToBuyApi({
-        searchUrl: `${searchUrl}&all_asset_required=${showOnlyWithVideo}`,
+        searchUrl: `${searchUrl}`,
         limit: 1
       })
         .unwrap()
@@ -386,7 +384,7 @@ const Form = ({
       setIsLoading(true);
       isMatchingPair
         ? triggerMatchingPairCountApi({
-            searchUrl: `${searchUrl}&all_asset_required=${showOnlyWithVideo}`
+            searchUrl: `${searchUrl}`
           })
             .unwrap()
             .then((response: any) => {
@@ -396,7 +394,7 @@ const Form = ({
               setError(e), setIsLoading(false);
             })
         : triggerProductCountApi({
-            searchUrl: `${searchUrl}&all_asset_required=${showOnlyWithVideo}`
+            searchUrl: `${searchUrl}`
           })
             .unwrap()
             .then((response: any) => {
@@ -503,7 +501,7 @@ const Form = ({
     let newArrivalBidDataQuery = newArrivalFilterData.queryParams;
     let bidLocalStorageData = JSON.parse(localStorage.getItem('bid')!);
     let bidToBuyBidDataQuery = constructUrlParams(
-      bidLocalStorageData.queryParams
+      bidLocalStorageData?.queryParams
     );
 
     setSelectedCaratRange([]);
@@ -535,7 +533,7 @@ const Form = ({
   }, [modifySearchFrom]);
   useEffect(() => {
     let bidLocalStorageData = JSON.parse(localStorage.getItem('bid')!);
-    let bidToBuyBidDataQuery = bidLocalStorageData.queryParams;
+    let bidToBuyBidDataQuery = bidLocalStorageData?.queryParams;
 
     routePath === Routes.BID_TO_BUY &&
       setModifySearch(bidToBuyBidDataQuery, setState);
@@ -626,15 +624,14 @@ const Form = ({
     } else if (routePath === Routes.BID_TO_BUY) {
       const queryParams = generateQueryParams(state);
       let localStorageData = {
-        queryParams,
-        all_asset_required: showOnlyWithVideo
+        queryParams
       };
       localStorage.setItem('bid', JSON.stringify(localStorageData));
 
       setErrorText('');
       setIsLoading(true);
       triggerBidToBuyApi({
-        searchUrl: `${searchUrl}&all_asset_required=${showOnlyWithVideo}`
+        searchUrl: `${searchUrl}`
       })
         .unwrap()
         .then((response: any) => {
@@ -728,8 +725,7 @@ const Form = ({
               id: savedSearch.savedSearch.id,
               meta_data: updatedMeta,
               diamond_count: parseInt(data?.count),
-              is_matching_pair: isMatchingPair,
-              all_asset_required: showOnlyWithVideo
+              is_matching_pair: isMatchingPair
             };
 
             updateSavedSearch(updateSavedSearchData).then(() => {
@@ -738,8 +734,7 @@ const Form = ({
                 saveSearchName: savedSearch?.savedSearch?.name,
                 searchId: data?.search_id,
                 isSavedSearch: true,
-                queryParams,
-                all_asset_required: showOnlyWithVideo
+                queryParams
               };
               let localStorageData = JSON.parse(
                 localStorage.getItem(formIdentifier)!
@@ -795,8 +790,7 @@ const Form = ({
               saveSearchName,
             isSavedSearch: isSavedParams,
             searchId: data?.search_id,
-            queryParams,
-            all_asset_required: showOnlyWithVideo
+            queryParams
           };
           if (modifySearchResult[activeTab - 1]) {
             const updatedData = [...modifySearchResult];
@@ -817,8 +811,7 @@ const Form = ({
             saveSearchName: saveSearchName,
             searchId: data?.search_id,
             isSavedSearch: isSavedParams,
-            queryParams,
-            all_asset_required: showOnlyWithVideo
+            queryParams
           };
 
           if (startTime && !endTime) {
@@ -924,8 +917,7 @@ const Form = ({
               id: savedSearch.savedSearch.id,
               meta_data: updatedMeta,
               diamond_count: parseInt(data?.count),
-              is_matching_pair: isMatchingPair,
-              all_asset_required: showOnlyWithVideo
+              is_matching_pair: isMatchingPair
             };
             updateSavedSearch(updateSavedData);
 
@@ -944,7 +936,7 @@ const Form = ({
               let setDataOnLocalStorage = {
                 id: savedSearch.savedSearch.id,
                 queryParams: updatedMeta,
-                all_asset_required: showOnlyWithVideo,
+
                 saveSearchName: savedSearch?.savedSearch?.name,
                 searchId: data?.search_id,
                 isSavedSearch: true
@@ -967,7 +959,7 @@ const Form = ({
           updatedMeta[activeTab - 1].queryParams = queryParams;
           let updateSaveSearchData = {
             id: updatedMeta[activeTab - 1].id,
-            all_asset_required: showOnlyWithVideo,
+
             meta_data: updatedMeta[activeTab - 1].queryParams,
             diamond_count: parseInt(data?.count),
             is_matching_pair: isMatchingPair
@@ -987,7 +979,6 @@ const Form = ({
             name: saveSearchName,
             diamond_count: parseInt(data?.count),
             meta_data: queryParams,
-            all_asset_required: showOnlyWithVideo,
             is_deleted: false,
             is_matching_pair: isMatchingPair
           })

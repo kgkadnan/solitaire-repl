@@ -62,13 +62,7 @@ import DataTable from '@/components/v2/common/data-table';
 import matchPairIcon from '@public/v2/assets/icons/match-pair-saved.svg';
 
 import Tooltip from '@/components/v2/common/tooltip';
-import {
-  clarity,
-  fluorescenceSortOrder,
-  sideBlackSortOrder,
-  tableBlackSortOrder,
-  tableInclusionSortOrder
-} from '@/constants/v2/form';
+
 import {
   RednderLocation,
   RenderAmount,
@@ -283,7 +277,7 @@ const Dashboard = () => {
       : [];
   }, [searchData?.foundProducts]);
   useEffect(() => {
-    if (searchData?.notFoundKeywords?.length > 0) {
+    if (searchData?.notFoundKeywords?.length > 0 && !showOnlyWithVideo) {
       setError('Some stones are not available');
     }
   }, [searchData?.notFoundKeywords]);
@@ -1315,9 +1309,10 @@ const Dashboard = () => {
     }
   };
 
-  const refreshSearchResults = () => {
+  const refreshSearchResults = (showOnlyWithVideo: boolean) => {
     getProductById({
-      search_keyword: stoneId
+      search_keyword: stoneId,
+      all_asset_required: showOnlyWithVideo
     })
       .unwrap()
       .then((res: any) => {

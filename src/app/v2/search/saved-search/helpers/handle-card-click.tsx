@@ -53,7 +53,7 @@ export const handleCardClick = ({
   // Construct the search URL from the card's metadata
   const searchUrl = constructUrlParams(cardClickData[0].meta_data);
   triggerProductCountApi({
-    searchUrl: `${searchUrl}&all_asset_required=${cardClickData[0].all_asset_required}`
+    searchUrl: `${searchUrl}`
   }).then((response: any) => {
     if (response.data !== undefined) {
       // Filter the saved search data to get the clicked card's data

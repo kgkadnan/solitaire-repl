@@ -72,7 +72,8 @@ export const handleReset = (setState: any, errorSetState: any) => {
     setPavilionAngleMin,
     setStarLengthMax,
     setStarLengthMin,
-    setSelectedGirdle
+    setSelectedGirdle,
+    setShowOnlyWithVideo
   } = setState;
 
   const {
@@ -169,6 +170,7 @@ export const handleReset = (setState: any, errorSetState: any) => {
   setSelectedKeyToSymbol([]);
   setSelectedGirdleStep('');
   setSelectedGirdle([]);
+  setShowOnlyWithVideo(false);
 
   //Empty Error States
   setTablePerError('');

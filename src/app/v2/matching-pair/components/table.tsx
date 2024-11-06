@@ -329,7 +329,7 @@ const MatchPairTable = ({
         const searchUrl = constructUrlParams(searchData.meta_data);
 
         triggerMatchingPairCountApi({
-          searchUrl: `${searchUrl}&all_asset_required=${searchData.all_asset_required}`
+          searchUrl: `${searchUrl}`
         })
           .then(response => {
             if (response?.data?.count > MAX_SAVED_SEARCH_COUNT) {
@@ -440,8 +440,7 @@ const MatchPairTable = ({
                       isSavedSearch: true,
                       searchId: response?.data?.search_id,
                       queryParams: searchData.meta_data,
-                      id: searchData.id,
-                      all_asset_required: searchData.all_asset_required
+                      id: searchData.id
                     }
                   ];
 
@@ -504,8 +503,7 @@ const MatchPairTable = ({
       id: yourSelection[activeTab - 1]?.id,
       meta_data: yourSelection[activeTab - 1]?.queryParams,
       diamond_count: parseInt(matchingPairData?.count),
-      is_matching_pair: true,
-      all_asset_required: yourSelection[activeTab - 1]?.all_asset_required
+      is_matching_pair: true
     };
 
     yourSelection[activeTab - 1] = {
@@ -513,8 +511,7 @@ const MatchPairTable = ({
       saveSearchName: yourSelection[activeTab - 1]?.saveSearchName,
       searchId: yourSelection[activeTab - 1]?.searchId,
       isSavedSearch: true,
-      queryParams: yourSelection[activeTab - 1].queryParams,
-      all_asset_required: yourSelection[activeTab - 1]?.all_asset_required
+      queryParams: yourSelection[activeTab - 1].queryParams
     };
     localStorage.setItem('MatchingPair', JSON.stringify(yourSelection));
     setSearchParameters(yourSelection);

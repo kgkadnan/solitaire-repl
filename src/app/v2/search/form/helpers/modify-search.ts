@@ -77,7 +77,8 @@ export const setModifySearch = (data: any, setState: any) => {
     setSelectedGirdle,
     setSelectionChecked,
     setCaratRangeSelection,
-    setCaratRangeSelectionTemp
+    setCaratRangeSelectionTemp,
+    setShowOnlyWithVideo
   } = setState;
   data?.shape && setSelectedShape(data?.shape);
 
@@ -165,4 +166,5 @@ export const setModifySearch = (data: any, setState: any) => {
   data?.key_to_symbol && setSelectedKeyToSymbol(data?.key_to_symbol);
   data?.key_to_symbol_search_type &&
     setSelectionChecked(data?.key_to_symbol_search_type);
+  data?.all_asset_required && setShowOnlyWithVideo(data?.all_asset_required);
 };

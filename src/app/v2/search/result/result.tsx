@@ -108,8 +108,7 @@ const Result = ({
   handleCloseSpecificTab,
   setSearchParameters,
   setIsLoading,
-  setIsInputDialogOpen,
-  showOnlyWithVideo
+  setIsInputDialogOpen
 }: {
   activeTab: number;
   searchParameters: any;
@@ -119,7 +118,6 @@ const Result = ({
   handleCloseSpecificTab: (_id: number) => void;
   setIsLoading: any;
   setIsInputDialogOpen: any;
-  showOnlyWithVideo?: any;
 }) => {
   const dispatch = useAppDispatch();
   const confirmTrack = useAppSelector(state => state.setConfirmStoneTrack);
@@ -198,13 +196,9 @@ const Result = ({
     const selections = JSON.parse(storedSelection);
 
     const url = constructUrlParams(selections[activeTab - 1]?.queryParams);
-    setSearchUrl(
-      `${url}&all_asset_required=${selections[activeTab - 1]
-        ?.all_asset_required}`
-    );
+    setSearchUrl(`${url}`);
     triggerProductApi({
-      url: `${url}&all_asset_required=${selections[activeTab - 1]
-        ?.all_asset_required}`,
+      url: `${url}`,
       limit: LISTING_PAGE_DATA_LIMIT,
       offset: 0
     })
@@ -1644,7 +1638,6 @@ const Result = ({
                   handleCreateAppointment={handleCreateAppointment}
                   setIsSkeletonLoading={setIsSkeletonLoading}
                   isSkeletonLoading={isSkeletonLoading}
-                  showOnlyWithVideo={showOnlyWithVideo}
                 />
               )}
             </div>

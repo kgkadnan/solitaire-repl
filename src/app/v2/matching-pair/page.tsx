@@ -128,7 +128,7 @@ const MatchingPair = () => {
   // const currentPath = usePathname();
   const [activeTab, setActiveTab] = useState(0);
   const [isAddDemand, setIsAddDemand] = useState(false);
-  const [showOnlyWithVideo, setShowOnlyWithVideo] = useState(false);
+
   const [searchParameters, setSearchParameters] = useState<ISavedSearch[] | []>(
     []
   );
@@ -850,8 +850,6 @@ const MatchingPair = () => {
           setIsCommonLoading={setIsLoading}
           isLoading={searchLoading}
           setIsMPSOpen={setIsMPSOpen}
-          showOnlyWithVideo={showOnlyWithVideo}
-          setShowOnlyWithVideo={setShowOnlyWithVideo}
         />
       ) : subRoute === MatchSubRoutes.SAVED_SEARCH ? (
         <SavedSearch setIsLoading={setIsLoading} />
@@ -885,7 +883,6 @@ const MatchingPair = () => {
           setSettingApplied={setSettingApplied}
           settingApplied={settingApplied}
           setIsMPSOpen={setIsMPSOpen}
-          showOnlyWithVideo={showOnlyWithVideo}
         />
       )}
     </div>
