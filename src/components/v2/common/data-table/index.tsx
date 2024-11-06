@@ -71,6 +71,7 @@ import {
   tableBlackSortOrder,
   tableInclusionSortOrder
 } from '@/constants/v2/form';
+import CustomSwitch from '../switch/switch';
 // import { Switch } from '../../ui/switch';
 
 const theme = createTheme({
@@ -1178,13 +1179,12 @@ const DataTable = ({
                    Image & Video Required
                 </p>
                 <div className="px-[15px] pt-1">
-                  {/* <Switch
-                    onCheckedChange={(checked: boolean) => {
-                      setShowOnlyWithVideo(checked);
-                      refreshSearchResults(checked);
+                  <CustomSwitch
+                    isOn={showOnlyWithVideo}
+                    handleToggle={() => {
+                      setShowOnlyWithVideo((prev: any) => !prev);
                     }}
-                    checked={showOnlyWithVideo}
-                  /> */}
+                  />
                 </div>
               </div>
             )}
