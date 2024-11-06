@@ -476,8 +476,8 @@ const CompanyDetail = ({
             country === 'Belgium'
               ? 'h-[121vh]'
               : country === 'India'
-                ? 'h-[137vh]'
-                : 'h-[1080px]'
+              ? 'h-[137vh]'
+              : 'h-[1080px]'
           }`}
         >
           <div className="w-[50%] flex flex-col gap-[16px]">
@@ -831,17 +831,13 @@ const CompanyDetail = ({
                   }
                   countryCodeValue={{
                     label:
-                      `+${
-                        formState?.online?.sections?.[
-                          kycScreenIdentifierNames.COMPANY_DETAILS
-                        ]?.['company_country_code']
-                      }` ?? '',
+                      `+${formState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['company_country_code']}` ?? '',
                     value:
-                      `+${
-                        formState?.online?.sections?.[
-                          kycScreenIdentifierNames.COMPANY_DETAILS
-                        ]?.['company_country_code']
-                      }` ?? ''
+                      `+${formState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['company_country_code']}` ?? ''
                   }}
                 />{' '}
               </div>
@@ -973,17 +969,13 @@ const CompanyDetail = ({
                   }
                   countryCodeValue={{
                     label:
-                      `+${
-                        formState?.online?.sections?.[
-                          kycScreenIdentifierNames.COMPANY_DETAILS
-                        ]?.['company_country_code']
-                      }` ?? '',
+                      `+${formState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['company_country_code']}` ?? '',
                     value:
-                      `+${
-                        formState?.online?.sections?.[
-                          kycScreenIdentifierNames.COMPANY_DETAILS
-                        ]?.['company_country_code']
-                      }` ?? ''
+                      `+${formState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['company_country_code']}` ?? ''
                   }}
                 />
               </div>

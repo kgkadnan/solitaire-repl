@@ -695,8 +695,8 @@ const BidToBuy = () => {
               activeTab === 0
                 ? bid
                 : activeTab === 1
-                  ? activeBid
-                  : bidHistory?.data
+                ? activeBid
+                : bidHistory?.data
             }
             filterData={detailPageData}
             goBackToListView={goBack}
@@ -808,17 +808,17 @@ const BidToBuy = () => {
                               data.accessorKey !== 'discount'
                           )
                         : activeTab === 1
-                          ? memoizedColumns.filter(
-                              (data: any) =>
-                                data.accessorKey !== 'last_bid_date' &&
-                                data.accessorKey !== 'shape' &&
-                                data.accessorKey !== 'discount'
-                            )
-                          : memoizedColumns.filter(
-                              (data: any) =>
-                                data.accessorKey !== 'my_current_bid' &&
-                                data.accessorKey !== 'last_bid_date'
-                            )
+                        ? memoizedColumns.filter(
+                            (data: any) =>
+                              data.accessorKey !== 'last_bid_date' &&
+                              data.accessorKey !== 'shape' &&
+                              data.accessorKey !== 'discount'
+                          )
+                        : memoizedColumns.filter(
+                            (data: any) =>
+                              data.accessorKey !== 'my_current_bid' &&
+                              data.accessorKey !== 'last_bid_date'
+                          )
                     }
                     modalSetState={modalSetState}
                     setErrorText={setErrorText}
@@ -831,8 +831,8 @@ const BidToBuy = () => {
                       activeTab === 0
                         ? bid
                         : activeTab === 1
-                          ? activeBid
-                          : bidHistory?.data
+                        ? activeBid
+                        : bidHistory?.data
                     }
                     activeCount={activeBid?.length}
                     bidCount={bid?.length}

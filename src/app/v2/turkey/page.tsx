@@ -1106,8 +1106,8 @@ const Turkey = () => {
                   res.status === 'success'
                     ? 'success'
                     : res.status === 'processing'
-                      ? 'info'
-                      : ''
+                    ? 'info'
+                    : ''
                 }
                 customPoppupBodyStyle="!mt-[70px]"
                 header={res.title}

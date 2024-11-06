@@ -475,15 +475,15 @@ const CompareStone = ({
                             diamond[key] === undefined || diamond[key] === null
                               ? '-'
                               : diamond[key] === 0
-                                ? '0.00%'
-                                : `${formatNumberWithCommas(diamond[key])}%`
+                              ? '0.00%'
+                              : `${formatNumberWithCommas(diamond[key])}%`
                           }`
                         ) : typeof diamond[key] === 'number' ? (
                           diamond[key] === null ||
                           diamond[key] === undefined ? (
                             '-'
                           ) : (
-                            (formatNumber(diamond[key]) ?? '-')
+                            formatNumber(diamond[key]) ?? '-'
                           )
                         ) : (
                           diamond[key] || '-'
