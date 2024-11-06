@@ -274,7 +274,6 @@ const BidToBuy = () => {
         setIsLoading(false);
       })
       .catch(e => {
-        console.log(e, 'weee', e?.data?.error);
         // if (e?.data?.error === 'INACTIVE_BID_TO_BUY') {
         setIsInActive(e?.data?.error);
         // }
