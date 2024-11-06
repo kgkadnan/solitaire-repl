@@ -88,6 +88,7 @@ import CountdownTimer from '@/components/v2/common/timer';
 import Tab from '@/components/v2/common/bid-tabs';
 import { useLazyGetBidToBuyHistoryQuery } from '@/features/api/dashboard';
 import Tooltip from '@/components/v2/common/tooltip';
+import { Switch } from '@/components/v2/ui/switch';
 
 export interface ISavedSearch {
   saveSearchName: string;
@@ -199,7 +200,8 @@ const Form = ({
     selectedIntensity,
     selectedOvertone,
     selectionChecked,
-    isSliderActive
+    isSliderActive,
+    showOnlyWithVideo
   } = state;
   const {
     setCaratMin,
@@ -226,7 +228,8 @@ const Form = ({
     setSelectedKeyToSymbol,
     setSelectedCaratRange,
     setSelectionChecked,
-    setIsSliderActive
+    setIsSliderActive,
+    setShowOnlyWithVideo
   } = setState;
 
   const {
@@ -259,6 +262,8 @@ const Form = ({
   const [error, setError] = useState<any>();
   const [timeDifference, setTimeDifference] = useState(null);
   // const [checkStatus, setCheckStatus] = useState(false);
+
+  console.log('subRoute', subRoute);
 
   useEffect(() => {
     const currentTime: any = new Date();
@@ -343,7 +348,10 @@ const Form = ({
       // localStorage.setItem('bid',JSON.stringify(query))
       setErrorText('');
       setIsLoading(true);
-      triggerBidToBuyApi({ searchUrl: searchUrl, limit: 1 })
+      triggerBidToBuyApi({
+        searchUrl: `${searchUrl}`,
+        limit: 1
+      })
         .unwrap()
         .then((response: any) => {
           setData(response), setActiveCount(response?.activeStone?.length);
@@ -375,7 +383,9 @@ const Form = ({
       setErrorText('');
       setIsLoading(true);
       isMatchingPair
-        ? triggerMatchingPairCountApi({ searchUrl })
+        ? triggerMatchingPairCountApi({
+            searchUrl: `${searchUrl}`
+          })
             .unwrap()
             .then((response: any) => {
               setData(response), setError(''), setIsLoading(false);
@@ -383,7 +393,9 @@ const Form = ({
             .catch(e => {
               setError(e), setIsLoading(false);
             })
-        : triggerProductCountApi({ searchUrl })
+        : triggerProductCountApi({
+            searchUrl: `${searchUrl}`
+          })
             .unwrap()
             .then((response: any) => {
               setData(response), setError(''), setIsLoading(false);
@@ -487,7 +499,11 @@ const Form = ({
 
     let modifysavedSearchData = savedSearch?.savedSearch?.meta_data;
     let newArrivalBidDataQuery = newArrivalFilterData.queryParams;
-    let bidToBuyBidDataQuery = JSON.parse(localStorage.getItem('bid')!);
+    let bidLocalStorageData = JSON.parse(localStorage.getItem('bid')!);
+    let bidToBuyBidDataQuery = constructUrlParams(
+      bidLocalStorageData?.queryParams
+    );
+
     setSelectedCaratRange([]);
 
     if (subRoute === SubRoutes.NEW_ARRIVAL && newArrivalBidDataQuery) {
@@ -516,8 +532,11 @@ const Form = ({
     }
   }, [modifySearchFrom]);
   useEffect(() => {
+    let bidLocalStorageData = JSON.parse(localStorage.getItem('bid')!);
+    let bidToBuyBidDataQuery = bidLocalStorageData?.queryParams;
+
     subRoute === SubRoutes.BID_TO_BUY &&
-      setModifySearch(JSON.parse(localStorage.getItem('bid')!), setState);
+      setModifySearch(bidToBuyBidDataQuery, setState);
   }, []);
 
   useEffect(() => {
@@ -586,11 +605,16 @@ const Form = ({
       setSearchUrl('');
     } else if (routePath === Routes.BID_TO_BUY) {
       const queryParams = generateQueryParams(state);
-      localStorage.setItem('bid', JSON.stringify(queryParams));
+      let localStorageData = {
+        queryParams
+      };
+      localStorage.setItem('bid', JSON.stringify(localStorageData));
 
       setErrorText('');
       setIsLoading(true);
-      triggerBidToBuyApi({ searchUrl: searchUrl })
+      triggerBidToBuyApi({
+        searchUrl: `${searchUrl}`
+      })
         .unwrap()
         .then((response: any) => {
           setData(response),
@@ -894,6 +918,7 @@ const Form = ({
               let setDataOnLocalStorage = {
                 id: savedSearch.savedSearch.id,
                 queryParams: updatedMeta,
+
                 saveSearchName: savedSearch?.savedSearch?.name,
                 searchId: data?.search_id,
                 isSavedSearch: true
@@ -916,6 +941,7 @@ const Form = ({
           updatedMeta[activeTab - 1].queryParams = queryParams;
           let updateSaveSearchData = {
             id: updatedMeta[activeTab - 1].id,
+
             meta_data: updatedMeta[activeTab - 1].queryParams,
             diamond_count: parseInt(data?.count),
             is_matching_pair: isMatchingPair
@@ -1466,7 +1492,27 @@ const Form = ({
           </div>
 
           <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px]">
-            <Fluorescence state={state} setState={setState} />
+            <div className="flex flex-col gap-1">
+              {(routePath.includes('v2/matching-pair') ||
+                routePath.includes('v2/bid-2-buy') ||
+                routePath.includes('v2/search')) && (
+                <div className="flex items-center  justify-between bg-neutral0 border-[1px] border-solid border-neutral200 rounded-[4px]">
+                  <p className="font-medium py-[5px] rounded-l-[4px]  px-[12px] bg-neutral50 text-neutral900 text-mMedium">
+                     Image & Video Required
+                  </p>
+                  <div className="px-[15px] pt-1">
+                    <Switch
+                      onCheckedChange={(checked: boolean) => {
+                        setShowOnlyWithVideo(checked);
+                      }}
+                      checked={showOnlyWithVideo}
+                    />
+                  </div>
+                </div>
+              )}
+
+              <Fluorescence state={state} setState={setState} />
+            </div>
             <CountryOfOrigin
               selectedOrigin={selectedOrigin}
               setSelectedOrigin={setSelectedOrigin}

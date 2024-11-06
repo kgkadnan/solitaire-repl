@@ -259,9 +259,12 @@ const BidToBuy = () => {
   };
 
   useEffect(() => {
-    let queryNew = constructUrlParams(JSON.parse(localStorage.getItem('bid')!));
+    let bidLocalStorageData = JSON.parse(localStorage.getItem('bid')!);
+    let queryNew = constructUrlParams(bidLocalStorageData?.queryParams);
     setIsLoading(true);
-    triggerBidToBuyApi({ searchUrl: queryNew })
+    triggerBidToBuyApi({
+      searchUrl: `${queryNew}`
+    })
       .unwrap()
       .then((response: any) => {
         setIsInActive('');
@@ -283,10 +286,14 @@ const BidToBuy = () => {
   }, []);
 
   useEffect(() => {
-    let queryNew = constructUrlParams(JSON.parse(localStorage.getItem('bid')!));
+    let bidLocalStorageData = JSON.parse(localStorage.getItem('bid')!);
+    let queryNew = constructUrlParams(bidLocalStorageData?.queryParams);
+
     setIsLoading(true);
 
-    triggerBidToBuyApi({ searchUrl: queryNew })
+    triggerBidToBuyApi({
+      searchUrl: `${queryNew}`
+    })
       .unwrap()
       .then((response: any) => {
         setIsInActive('');
@@ -331,7 +338,9 @@ const BidToBuy = () => {
   }, []);
 
   const handleTabClick = (index: number) => {
-    let queryNew = constructUrlParams(JSON.parse(localStorage.getItem('bid')!));
+    let bidLocalStorageData = JSON.parse(localStorage.getItem('bid')!);
+    let queryNew = constructUrlParams(bidLocalStorageData?.queryParams);
+
     if (index !== activeTab) {
       if (index === 0 && !queryNew.length) {
         setIsTabSwitch(false);
@@ -382,10 +391,7 @@ const BidToBuy = () => {
 
   const [downloadExcel] = useDownloadExcelMutation();
   const [deleteBid] = useDeleteBidMutation();
-  let [
-    triggerBidToBuyApi,
-    { isLoading: isLoadingBidToBuyApi, isFetching: isFetchingBidToBuyApi }
-  ] = useLazyGetAllBidStonesQuery();
+  let [triggerBidToBuyApi] = useLazyGetAllBidStonesQuery();
 
   const renderFooter = (table: any) => {
     if (activeTab === 0 && bid?.length > 0) {
@@ -455,6 +461,12 @@ const BidToBuy = () => {
                             variant: 'primary',
                             label: 'Cancel Bid',
                             handler: () => {
+                              let bidLocalStorageData = JSON.parse(
+                                localStorage.getItem('bid')!
+                              );
+                              let queryNew = constructUrlParams(
+                                bidLocalStorageData?.queryParams
+                              );
                               // socketManager.emit('cancel_bidtobuy', {
                               //   product_ids: Object.keys(rowSelection)
                               // });
@@ -476,9 +488,7 @@ const BidToBuy = () => {
                                     />
                                   );
                                   triggerBidToBuyApi({
-                                    searchUrl: constructUrlParams(
-                                      JSON.parse(localStorage.getItem('bid')!)
-                                    ),
+                                    searchUrl: `${queryNew}`,
                                     limit: 300
                                   })
                                     .unwrap()
@@ -738,6 +748,9 @@ const BidToBuy = () => {
               setIsCommonLoading={setIsLoading}
               time={time}
               setRowSelection={setRowSelection}
+
+              // setBid={setBid}
+              // setActiveBid={setActiveBid}
             />
           ) : (
             <>

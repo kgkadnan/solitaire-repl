@@ -220,6 +220,7 @@ const MatchPairTable = ({
   settingApplied,
   setIsMPSOpen
 }: any) => {
+  console.log('rows', rows);
   // Fetching saved search data
   console.log('rows', rows);
   console.log('originalData', originalData);
@@ -327,7 +328,9 @@ const MatchPairTable = ({
 
         const searchUrl = constructUrlParams(searchData.meta_data);
 
-        triggerMatchingPairCountApi({ searchUrl })
+        triggerMatchingPairCountApi({
+          searchUrl: `${searchUrl}`
+        })
           .then(response => {
             if (response?.data?.count > MAX_SAVED_SEARCH_COUNT) {
               setIsLoading(false);

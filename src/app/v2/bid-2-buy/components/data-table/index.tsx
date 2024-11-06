@@ -1308,6 +1308,12 @@ const BidToBuyDataTable = ({
                               })
                                 .unwrap()
                                 .then(res => {
+                                  let bidLocalStorageData = JSON.parse(
+                                    localStorage.getItem('bid')!
+                                  );
+                                  let queryNew = constructUrlParams(
+                                    bidLocalStorageData?.queryParams
+                                  );
                                   // if (res?.status === 200) {
                                   modalSetState.setIsDialogOpen(true);
                                   modalSetState.setDialogContent(
@@ -1322,9 +1328,8 @@ const BidToBuyDataTable = ({
                                     />
                                   );
                                   triggerBidToBuyApi({
-                                    searchUrl: constructUrlParams(
-                                      JSON.parse(localStorage.getItem('bid')!)
-                                    ),
+                                    searchUrl: `${queryNew}`,
+
                                     limit: 300
                                   })
                                     .unwrap()

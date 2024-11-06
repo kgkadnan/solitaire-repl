@@ -71,6 +71,7 @@ import {
   tableBlackSortOrder,
   tableInclusionSortOrder
 } from '@/constants/v2/form';
+import { Switch } from '../../ui/switch';
 
 const theme = createTheme({
   typography: {
@@ -218,7 +219,9 @@ const DataTable = ({
   setIsSkeletonLoading,
   isSkeletonLoading,
   refreshSearchResults,
-  customerMobileNumber
+  customerMobileNumber,
+  showOnlyWithVideo,
+  setShowOnlyWithVideo
 }: any) => {
   // Fetching saved search data
   const router = useRouter();
@@ -473,7 +476,9 @@ const DataTable = ({
 
         const searchUrl = constructUrlParams(searchData.meta_data);
 
-        triggerProductCountApi({ searchUrl })
+        triggerProductCountApi({
+          searchUrl: `${searchUrl}`
+        })
           .then(response => {
             if (response?.data?.count > MAX_SAVED_SEARCH_COUNT) {
               setIsLoading(false);
@@ -1167,6 +1172,22 @@ const DataTable = ({
           </div>
 
           <div className="flex gap-[12px]" style={{ alignItems: 'inherit' }}>
+            {isDashboard && (
+              <div className="flex items-center py-[2px]  justify-between bg-neutral0 border-[1px] border-solid border-neutral200 rounded-[4px]">
+                <p className="font-medium  rounded-l-[4px]  px-[12px] text-neutral900 text-mMedium">
+                   Image & Video Required
+                </p>
+                <div className="px-[15px] pt-1">
+                  <Switch
+                    onCheckedChange={(checked: boolean) => {
+                      setShowOnlyWithVideo(checked);
+                      refreshSearchResults(checked);
+                    }}
+                    checked={showOnlyWithVideo}
+                  />
+                </div>
+              </div>
+            )}
             {isResult &&
               (searchParameters &&
               !searchParameters[activeTab - 1]?.isSavedSearch ? (

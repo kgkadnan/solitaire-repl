@@ -215,9 +215,9 @@ const MatchingPairResult = ({
     const selections = JSON.parse(storedSelection);
 
     const url = constructUrlParams(selections[activeTab - 1]?.queryParams);
-    setSearchUrl(url);
+    setSearchUrl(`${url}`);
     triggerMatchingPairApi({
-      url,
+      url: `${url}`,
       limit: MATCHING_PAIR_DATA_LIMIT,
       offset: 0
     })
