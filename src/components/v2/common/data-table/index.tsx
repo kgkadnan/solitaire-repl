@@ -7,7 +7,7 @@ import {
   MaterialReactTable,
   useMaterialReactTable
 } from 'material-react-table';
-import empty from '@public/v2/assets/icons/data-table/empty-bid-to-buy.svg';
+import empty from '@public/v2/assets/icons/data-table/empty-table.svg';
 import ExpandImg from '@public/v2/assets/icons/detail-page/expand.svg?url';
 import CollapsIcon from '@public/v2/assets/icons/collapse-icon.svg?url';
 import ExportExcel from '@public/v2/assets/icons/detail-page/export-excel.svg?url';
