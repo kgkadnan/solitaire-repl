@@ -1384,6 +1384,7 @@ const MatchingPairResult = ({
             setImageIndex={setImageIndex}
             imageIndex={imageIndex}
             setIsDiamondDetailLoading={setIsDiamondDetailLoading}
+            activeTab={activeTab}
           />
           <div className="p-[8px] flex justify-between items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow mb-1">
             <div className="flex gap-4 h-[30px]">

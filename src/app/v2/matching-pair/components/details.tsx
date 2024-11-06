@@ -69,7 +69,8 @@ export function MatchPairDetails({
   activePreviewTab,
   setImageIndex,
   imageIndex,
-  setIsDiamondDetailLoading
+  setIsDiamondDetailLoading,
+  activeTab
 }: {
   data: any;
   filterData: any;
@@ -86,6 +87,7 @@ export function MatchPairDetails({
   activePreviewTab: any;
   setImageIndex: any;
   imageIndex: any;
+  activeTab: any;
   setIsDiamondDetailLoading?: any;
 }) {
   const router = useRouter();
@@ -143,10 +145,14 @@ export function MatchPairDetails({
   };
 
   useEffect(() => {
+    let showOnlyWithVideo = JSON.parse(localStorage.getItem('MatchingPair')!);
+
     if (originalData.length >= 2) {
       triggerSimilarMatchingPairApi({
         product_id: originalData[0].id,
-        matching_product_id: originalData[1].id
+        matching_product_id: originalData[1].id,
+        show_only_with_video:
+          showOnlyWithVideo[activeTab - 1]?.queryParams?.all_asset_required
       })
         .unwrap()
         .then(res => setSimilarData(res))

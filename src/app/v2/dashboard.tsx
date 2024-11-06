@@ -201,6 +201,7 @@ const Dashboard = () => {
     });
   const [lotIds, setLotIds] = useState<string[]>([]);
   const [isHovered, setIsHovered] = useState('');
+  const [showEmptyState, setShowEmptyState] = useState(false);
 
   const [customerMobileNumber, setCustomerMobileNumber] = useState('');
   const [isResultPageDetails, setIsResultPageDetails] = useState(false);
@@ -1316,6 +1317,7 @@ const Dashboard = () => {
     })
       .unwrap()
       .then((res: any) => {
+        setShowEmptyState(false);
         setSearchData(res);
         setError('');
         setIsDetailPage(true);
@@ -1344,7 +1346,10 @@ const Dashboard = () => {
           _e?.status === statusCode.NOT_FOUND ||
           _e?.status === statusCode.INVALID_DATA
         ) {
-          setError(`We couldn't find any results for this search`);
+          if (!showOnlyWithVideo) {
+            setError(`We couldn't find any results for this search`);
+          }
+          setShowEmptyState(true);
         } else if (_e?.status === statusCode.UNAUTHORIZED) {
           setError(_e?.data?.message?.message);
         } else {
@@ -2103,8 +2108,10 @@ const Dashboard = () => {
                 alt="backWardArrow"
                 onClick={() => {
                   setIsDetailPage(false);
+                  setShowEmptyState(false);
                   setSorting([]);
                   setRowSelection({});
+                  setShowOnlyWithVideo(false);
                   trackEvent({
                     action: Tracking_Search_By_Text.click_back_results_page,
                     category: 'SearchByText',
@@ -2118,8 +2125,10 @@ const Dashboard = () => {
                   className="text-neutral600 text-sMedium font-regular cursor-pointer"
                   onClick={() => {
                     setIsDetailPage(false);
+                    setShowEmptyState(false);
                     setSorting([]);
                     setRowSelection({});
+                    setShowOnlyWithVideo(false);
                     trackEvent({
                       action: Tracking_Search_By_Text.click_back_results_page,
                       category: 'SearchByText',
@@ -2162,6 +2171,7 @@ const Dashboard = () => {
               customerMobileNumber={customerMobileNumber}
               showOnlyWithVideo={showOnlyWithVideo}
               setShowOnlyWithVideo={setShowOnlyWithVideo}
+              showEmptyState={showEmptyState}
             />
           </div>
         </div>

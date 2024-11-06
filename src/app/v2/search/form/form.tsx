@@ -1490,15 +1490,9 @@ const Form = ({
                 routePath.includes('v2/search')) && (
                 <div className="flex items-center  justify-between bg-neutral0 border-[1px] border-solid border-neutral200 rounded-[4px]">
                   <p className="font-medium py-[5px] rounded-l-[4px]  px-[12px] bg-neutral50 text-neutral900 text-mMedium">
-                     Image & Video Required
+                     Images & Videos Required
                   </p>
                   <div className="px-[15px] pt-1">
-                    {/* <Switch
-                      onCheckedChange={(checked: boolean) => {
-                        setShowOnlyWithVideo(checked);
-                      }}
-                      checked={showOnlyWithVideo}
-                    />  */}
                     <CustomSwitch
                       isOn={showOnlyWithVideo}
                       handleToggle={() => {
