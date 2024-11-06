@@ -30,7 +30,7 @@ import { formatNumber } from '@/utils/fix-two-digit-number';
 import { handleDecrementDiscount } from '@/utils/v2/handle-decrement-discount';
 import { handleIncrementDiscount } from '@/utils/v2/handle-increment-discount';
 import { RenderBidToBuyLotIdColor } from '@/components/v2/common/data-table/helpers/render-cell';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import { SubRoutes } from '@/constants/v2/enums/routes';
 import { ManageLocales } from '@/utils/v2/translate';
 import BiddingSkeleton from '@/components/v2/skeleton/bidding';
