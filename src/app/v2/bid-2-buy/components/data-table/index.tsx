@@ -12,7 +12,6 @@ import Image from 'next/image';
 import searchIcon from '@public/v2/assets/icons/data-table/search-icon.svg';
 import FilterIcon from '@public/v2/assets/icons/new-arrivals/filter-icon.svg?url';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { faSort, faSortDown } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 import DisableDecrementIcon from '@public/v2/assets/icons/new-arrivals/disable-decrement.svg?url';
 import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
@@ -228,8 +227,8 @@ const BidToBuyDataTable = ({
     if (globalFilter !== '') {
       // Remove all whitespace characters from globalFilter
       const trimmedFilter = globalFilter.replace(/\s+/g, '');
-      let data = rows.filter(
-        (data: any) => data?.lot_id?.startsWith(trimmedFilter)
+      let data = rows.filter((data: any) =>
+        data?.lot_id?.startsWith(trimmedFilter)
       );
       const startIndex = pagination.pageIndex * pagination.pageSize;
       const endIndex = startIndex + pagination.pageSize;
@@ -922,35 +921,37 @@ const BidToBuyDataTable = ({
             ? 'calc(100vh - 123px)'
             : 'calc(100vh - 175px)'
           : activeTab === 2
-          ? isNudge &&
-            (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
-              isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-            ? 'calc(100vh - 254px)'
-            : 'calc(100vh - 260px)'
-          : isNudge &&
-            (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
-              isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-          ? 'calc(100vh - 254px)'
-          : !rows.length
-          ? 'calc(100vh - 260px)'
-          : !rows.length
-          ? 'calc(100vh - 260px)'
-          : 'calc(100vh - 255px)',
+            ? isNudge &&
+              (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+                isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+              ? 'calc(100vh - 254px)'
+              : 'calc(100vh - 260px)'
+            : isNudge &&
+                (isKycVerified?.customer?.kyc?.status ===
+                  kycStatus.INPROGRESS ||
+                  isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+              ? 'calc(100vh - 254px)'
+              : !rows.length
+                ? 'calc(100vh - 260px)'
+                : !rows.length
+                  ? 'calc(100vh - 260px)'
+                  : 'calc(100vh - 255px)',
         maxHeight: isFullScreen
           ? activeTab === 2
             ? 'calc(100vh - 123px)'
             : 'calc(100vh - 175px)'
           : activeTab === 2
-          ? isNudge &&
-            (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
-              isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-            ? 'calc(100vh - 362px)'
-            : 'calc(100vh - 260px)'
-          : isNudge &&
-            (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
-              isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-          ? 'calc(100vh - 362px)'
-          : 'calc(100vh - 260px)'
+            ? isNudge &&
+              (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+                isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+              ? 'calc(100vh - 362px)'
+              : 'calc(100vh - 260px)'
+            : isNudge &&
+                (isKycVerified?.customer?.kyc?.status ===
+                  kycStatus.INPROGRESS ||
+                  isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+              ? 'calc(100vh - 362px)'
+              : 'calc(100vh - 260px)'
       }
     },
     muiTableHeadRowProps: {
@@ -1121,8 +1122,8 @@ const BidToBuyDataTable = ({
           bidValues[row.id] !== undefined
             ? bidValues[row.id]
             : activeTab === 1
-            ? parseFloat(row.original.my_current_bid).toFixed(2)
-            : parseFloat(row.original.discount).toFixed(2);
+              ? parseFloat(row.original.my_current_bid).toFixed(2)
+              : parseFloat(row.original.discount).toFixed(2);
 
         // If the row is selected, return the detail panel content
         return (
