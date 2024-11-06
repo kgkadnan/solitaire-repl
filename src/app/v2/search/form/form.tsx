@@ -88,7 +88,8 @@ import CountdownTimer from '@/components/v2/common/timer';
 import Tab from '@/components/v2/common/bid-tabs';
 import { useLazyGetBidToBuyHistoryQuery } from '@/features/api/dashboard';
 import Tooltip from '@/components/v2/common/tooltip';
-import { Switch } from '@/components/v2/ui/switch';
+import CustomSwitch from '@/components/v2/common/switch/switch';
+// import { Switch } from '@/components/v2/ui/switch';
 
 export interface ISavedSearch {
   saveSearchName: string;
@@ -1116,30 +1117,6 @@ const Form = ({
           isMatchingPair || routePath === Routes.BID_TO_BUY
             ? 'Search'
             : !isLoadingProductApi &&
-                !isLoadingMatchPairApi &&
-                !isFetchingMatchPairApi &&
-                !isLoading &&
-                !isFetchingProductApi &&
-                minMaxError.length === 0 &&
-                validationError.length === 0 &&
-                errorText === NO_STONE_FOUND &&
-                isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
-              ? 'Add Demand'
-              : 'Search'
-        } `,
-      handler: isMatchingPair
-        ? minMaxError.length === 0 &&
-          errorText === NO_MATCHING_PAIRS_FOUND &&
-          isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
-          ? () => {}
-          : handleMatchingPairSearch
-        : routePath === Routes.BID_TO_BUY
-          ? minMaxError.length === 0 &&
-            validationError.length === 0 &&
-            errorText === NO_STONE_FOUND
-            ? () => {}
-            : handleFormSearch
-          : !isLoadingProductApi &&
               !isLoadingMatchPairApi &&
               !isFetchingMatchPairApi &&
               !isLoading &&
@@ -1148,8 +1125,32 @@ const Form = ({
               validationError.length === 0 &&
               errorText === NO_STONE_FOUND &&
               isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
-            ? handleAddDemand
-            : handleFormSearch,
+            ? 'Add Demand'
+            : 'Search'
+        } `,
+      handler: isMatchingPair
+        ? minMaxError.length === 0 &&
+          errorText === NO_MATCHING_PAIRS_FOUND &&
+          isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
+          ? () => {}
+          : handleMatchingPairSearch
+        : routePath === Routes.BID_TO_BUY
+        ? minMaxError.length === 0 &&
+          validationError.length === 0 &&
+          errorText === NO_STONE_FOUND
+          ? () => {}
+          : handleFormSearch
+        : !isLoadingProductApi &&
+          !isLoadingMatchPairApi &&
+          !isFetchingMatchPairApi &&
+          !isLoading &&
+          !isFetchingProductApi &&
+          minMaxError.length === 0 &&
+          validationError.length === 0 &&
+          errorText === NO_STONE_FOUND &&
+          isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED
+        ? handleAddDemand
+        : handleFormSearch,
 
       isDisable:
         !searchUrl.length ||
@@ -1335,10 +1336,10 @@ const Form = ({
                 {subRoute === SubRoutes.NEW_ARRIVAL
                   ? 'New Arrivals'
                   : // : subRoute === SubRoutes.BID_TO_BUY
-                    // ? 'Bid To Buy'
-                    isMatchingPair
-                    ? 'Match Pair'
-                    : 'Diamonds'}
+                  // ? 'Bid To Buy'
+                  isMatchingPair
+                  ? 'Match Pair'
+                  : 'Diamonds'}
                 {routePath.includes('v2/matching-pair') && (
                   <div className="flex gap-3">
                     <div className="h-[37px] mr-[-8px]">
@@ -1492,11 +1493,17 @@ const Form = ({
                      Image & Video Required
                   </p>
                   <div className="px-[15px] pt-1">
-                    <Switch
+                    {/* <Switch
                       onCheckedChange={(checked: boolean) => {
                         setShowOnlyWithVideo(checked);
                       }}
                       checked={showOnlyWithVideo}
+                    />  */}
+                    <CustomSwitch
+                      isOn={showOnlyWithVideo}
+                      handleToggle={() => {
+                        setShowOnlyWithVideo((prev: any) => !prev);
+                      }}
                     />
                   </div>
                 </div>
@@ -1591,10 +1598,10 @@ const Form = ({
                 isFetchingProductApi
                   ? ''
                   : minMaxError.length
-                    ? minMaxError
-                    : validationError.length
-                      ? validationError
-                      : !isValidationError && errorText}
+                  ? minMaxError
+                  : validationError.length
+                  ? validationError
+                  : !isValidationError && errorText}
               </span>
             </div>
           )}

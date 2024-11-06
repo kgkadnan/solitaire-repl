@@ -12,6 +12,7 @@ import Image from 'next/image';
 import searchIcon from '@public/v2/assets/icons/data-table/search-icon.svg';
 import FilterIcon from '@public/v2/assets/icons/new-arrivals/filter-icon.svg?url';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { faSort, faSortDown } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 import DisableDecrementIcon from '@public/v2/assets/icons/new-arrivals/disable-decrement.svg?url';
 import { downloadExcelHandler } from '@/utils/v2/donwload-excel';

@@ -119,9 +119,9 @@ const StepperComponent: React.FC<IStepperComponentProps> = ({
                     ? ManageLocales('app.kyc.footer.saveAndNext')
                     : 'Verify Email'
                   : filteredSteps[currentStepperStep]?.identifier ===
-                      kycScreenIdentifierNames.ATTACHMENT
-                    ? ManageLocales('app.kyc.footer.submit')
-                    : ManageLocales('app.kyc.footer.saveAndNext'),
+                    kycScreenIdentifierNames.ATTACHMENT
+                  ? ManageLocales('app.kyc.footer.submit')
+                  : ManageLocales('app.kyc.footer.saveAndNext'),
               handler: () => {
                 filteredSteps[currentStepperStep]?.identifier ===
                 kycScreenIdentifierNames.ATTACHMENT
