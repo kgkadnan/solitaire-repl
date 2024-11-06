@@ -1484,7 +1484,7 @@ const Form = ({
           </div>
 
           <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px]">
-            <div className="flex flex-col gap-1">
+            <div className="flex flex-col gap-[27px]">
               {(routePath.includes('v2/matching-pair') ||
                 routePath.includes('v2/bid-2-buy') ||
                 routePath.includes('v2/search')) && (
