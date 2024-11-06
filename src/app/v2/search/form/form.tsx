@@ -1492,12 +1492,12 @@ const Form = ({
                      Image & Video Required
                   </p>
                   <div className="px-[15px] pt-1">
-                    {/* <Switch
+                    <Switch
                       onCheckedChange={(checked: boolean) => {
                         setShowOnlyWithVideo(checked);
                       }}
                       checked={showOnlyWithVideo}
-                    /> */}
+                    />
                   </div>
                 </div>
               )}
