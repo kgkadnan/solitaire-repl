@@ -88,6 +88,7 @@ import CountdownTimer from '@/components/v2/common/timer';
 import Tab from '@/components/v2/common/bid-tabs';
 import { useLazyGetBidToBuyHistoryQuery } from '@/features/api/dashboard';
 import Tooltip from '@/components/v2/common/tooltip';
+import CustomSwitch from '@/components/v2/common/switch/switch';
 // import { Switch } from '@/components/v2/ui/switch';
 
 export interface ISavedSearch {
@@ -1498,6 +1499,12 @@ const Form = ({
                       }}
                       checked={showOnlyWithVideo}
                     /> */}
+                    <CustomSwitch
+                      isOn={showOnlyWithVideo}
+                      handleToggle={() => {
+                        setShowOnlyWithVideo((prev: any) => !prev);
+                      }}
+                    />
                   </div>
                 </div>
               )}
