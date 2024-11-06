@@ -252,8 +252,8 @@ const DataTable = ({
     if (globalFilter !== '') {
       // Remove all whitespace characters from globalFilter
       const trimmedFilter = globalFilter.replace(/\s+/g, '');
-      let data = rows.filter((data: any) =>
-        data?.lot_id?.startsWith(trimmedFilter)
+      let data = rows.filter(
+        (data: any) => data?.lot_id?.startsWith(trimmedFilter)
       );
       const startIndex = pagination.pageIndex * pagination.pageSize;
       const endIndex = startIndex + pagination.pageSize;
@@ -686,10 +686,10 @@ const DataTable = ({
       page: isResult
         ? 'Normal_Search'
         : myCart
-          ? 'My_Cart'
-          : isDashboard
-            ? 'Dashboard_Search'
-            : ''
+        ? 'My_Cart'
+        : isDashboard
+        ? 'Dashboard_Search'
+        : ''
     });
   };
 
@@ -706,10 +706,10 @@ const DataTable = ({
       page: isResult
         ? 'Normal_Search'
         : myCart
-          ? 'My_Cart'
-          : isDashboard
-            ? 'Dashboard_Search'
-            : ''
+        ? 'My_Cart'
+        : isDashboard
+        ? 'Dashboard_Search'
+        : ''
     });
   };
 
@@ -869,56 +869,50 @@ const DataTable = ({
               ? 'calc(100vh - 130px)'
               : 'calc(100vh - 90px)'
             : isDashboard
-              ? 'calc(100vh - 180px)'
-              : 'calc(100vh - 230px)'
+            ? 'calc(100vh - 180px)'
+            : 'calc(100vh - 230px)'
           : myCart
-            ? showCalculatedField
-              ? isNudge &&
-                (isKycVerified?.customer?.kyc?.status ===
-                  kycStatus.INPROGRESS ||
-                  isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-                ? 'calc(100vh - 420px)'
-                : 'calc(100vh - 343px)'
-              : isNudge &&
-                  (isKycVerified?.customer?.kyc?.status ===
-                    kycStatus.INPROGRESS ||
-                    isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-                ? 'calc(100vh - 380px)'
-                : 'calc(100vh - 303px)'
+          ? showCalculatedField
+            ? isNudge &&
+              (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+                isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+              ? 'calc(100vh - 420px)'
+              : 'calc(100vh - 343px)'
             : isNudge &&
-                (isKycVerified?.customer?.kyc?.status ===
-                  kycStatus.INPROGRESS ||
-                  isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-              ? 'calc(100vh - 405px)'
-              : 'calc(100vh - 300px)',
+              (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+                isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+            ? 'calc(100vh - 380px)'
+            : 'calc(100vh - 303px)'
+          : isNudge &&
+            (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+              isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+          ? 'calc(100vh - 405px)'
+          : 'calc(100vh - 300px)',
         maxHeight: isFullScreen
           ? myCart
             ? showCalculatedField
               ? 'calc(100vh - 130px)'
               : 'calc(100vh - 90px)'
             : isDashboard
-              ? 'calc(100vh - 180px)'
-              : 'calc(100vh - 230px)'
+            ? 'calc(100vh - 180px)'
+            : 'calc(100vh - 230px)'
           : myCart
-            ? showCalculatedField
-              ? isNudge &&
-                (isKycVerified?.customer?.kyc?.status ===
-                  kycStatus.INPROGRESS ||
-                  isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-                ? 'calc(100vh - 420px)'
-                : 'calc(100vh - 343px)'
-              : isNudge &&
-                  (isKycVerified?.customer?.kyc?.status ===
-                    kycStatus.INPROGRESS ||
-                    isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-                ? 'calc(100vh - 380px)'
-                : 'calc(100vh - 303px)'
+          ? showCalculatedField
+            ? isNudge &&
+              (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+                isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+              ? 'calc(100vh - 420px)'
+              : 'calc(100vh - 343px)'
             : isNudge &&
-                (isKycVerified?.customer?.kyc?.status ===
-                  kycStatus.INPROGRESS ||
-                  isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-              ? 'calc(100vh - 405px)'
-              : 'calc(100vh - 300px)'
+              (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+                isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+            ? 'calc(100vh - 380px)'
+            : 'calc(100vh - 303px)'
+          : isNudge &&
+            (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+              isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+          ? 'calc(100vh - 405px)'
+          : 'calc(100vh - 300px)'
       }
     },
     muiTableHeadRowProps: {
