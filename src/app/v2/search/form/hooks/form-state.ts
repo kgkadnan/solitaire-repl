@@ -89,6 +89,8 @@ const useFormStateManagement = () => {
   const [starLengthMin, setStarLengthMin] = useState<string>('');
 
   const [caratRangeData, setCaratRangeData] = useState<string[]>();
+
+  const [showOnlyWithVideo, setShowOnlyWithVideo] = useState(false);
   return {
     state: {
       isSliderActive,
@@ -165,7 +167,8 @@ const useFormStateManagement = () => {
       starLengthMin,
       selectedColor,
       selectedGirdle,
-      selectionChecked
+      selectionChecked,
+      showOnlyWithVideo
     },
     setState: {
       setIsSliderActive,
@@ -243,7 +246,8 @@ const useFormStateManagement = () => {
       setStarLengthMin,
       setSelectedColor,
       setSelectedGirdle,
-      setSelectionChecked
+      setSelectionChecked,
+      setShowOnlyWithVideo
     },
     carat: {
       caratRangeData: caratRangeData,
