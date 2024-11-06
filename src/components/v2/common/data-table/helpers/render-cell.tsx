@@ -38,7 +38,7 @@ export const RenderDetails = ({ row, handleDetailImage }: any) => {
             <Image src={disabledMedia} alt="Media" />
           </button>
         }
-        tooltipContent={'Assets for this stone are not available'}
+        tooltipContent={'Images & Videos for this stone are not available'}
         tooltipContentStyles={'z-[1000] w-[166px]'}
         tooltipContentSide="right"
       />

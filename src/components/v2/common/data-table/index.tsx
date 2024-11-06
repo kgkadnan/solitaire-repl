@@ -1197,7 +1197,7 @@ const DataTable = ({
             {isDashboard && (
               <div className="flex items-center py-[2px]  justify-between bg-neutral0 border-[1px] border-solid border-neutral200 rounded-[4px]">
                 <p className="font-medium  rounded-l-[4px]  px-[12px] text-neutral900 text-mMedium">
-                   Image & Video Required
+                   Images & Videos Required
                 </p>
                 <div className="px-[15px] pt-1">
                   <CustomSwitch
