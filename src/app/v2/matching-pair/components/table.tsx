@@ -220,10 +220,7 @@ const MatchPairTable = ({
   settingApplied,
   setIsMPSOpen
 }: any) => {
-  console.log('rows', rows);
   // Fetching saved search data
-  console.log('rows', rows);
-  console.log('originalData', originalData);
   const router = useRouter();
   const [triggerSavedSearch] = useLazyGetAllSavedSearchesQuery({});
   const [checkProductAvailability] = useCheckProductAvailabilityMutation({});
@@ -697,7 +694,6 @@ const MatchPairTable = ({
   useEffect(() => {
     // Apply the sorting logic to the full dataset
     const sortedFullData = sortData(originalData, sorting);
-    console.log('sortedFullData', sortedFullData);
     // Pagination logic
     const startIndex = pagination.pageIndex * pagination.pageSize;
     const endIndex = startIndex + pagination.pageSize;
@@ -711,7 +707,6 @@ const MatchPairTable = ({
     pagination.pageSize // Re-fetch when page size changes
   ]);
   const handleSortingChange = (newSorting: any) => {
-    console.log('newSorting', newSorting);
     setSorting((currentSorting: any) => {
       const existingSort = currentSorting.find(
         (sort: any) => sort.id === newSorting()[0].id

@@ -659,10 +659,6 @@ const BidToBuy = () => {
       ]);
     }
   }, [validImages]);
-  console.log(
-    subRoute === SubRoutes.BID_TO_BUY,
-    'subRoute === SubRoutes.BID_TO_BUY'
-  );
 
   return (
     <div className="mb-[4px] relative">
@@ -711,7 +707,11 @@ const BidToBuy = () => {
         // isLoadingBidToBuyApi ||
         historyData === undefined ||
         activeBid === undefined ? (
-        <BiddingSkeleton />
+        !Object?.keys(localStorage.getItem('bid') ?? {}).length ? (
+          <CustomKGKLoader />
+        ) : (
+          <BiddingSkeleton />
+        )
       ) : (
         <>
           {(!Object?.keys(localStorage.getItem('bid') ?? {}).length &&

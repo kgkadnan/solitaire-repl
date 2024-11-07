@@ -264,8 +264,6 @@ const Form = ({
   const [timeDifference, setTimeDifference] = useState(null);
   // const [checkStatus, setCheckStatus] = useState(false);
 
-  console.log('subRoute', subRoute);
-
   useEffect(() => {
     const currentTime: any = new Date();
     const targetTime: any = new Date(time!);
