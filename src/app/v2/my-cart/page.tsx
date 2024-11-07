@@ -466,18 +466,19 @@ const MyCart = () => {
             actionButtonData={[
               {
                 variant: 'secondary',
-                label: ManageLocales('app.modal.addComment.cancel'),
+                label: ManageLocales('app.modal.addComment.saveComment'),
                 handler: () => {
+                  setCommentValue(textAreaValue);
                   setIsAddCommentDialogOpen(false);
                 },
                 customStyle: 'flex-1'
               },
               {
                 variant: 'primary',
-                label: ManageLocales('app.modal.addComment.saveComment'),
+                label: 'Confirm Stone',
                 handler: () => {
-                  setCommentValue(textAreaValue);
                   setIsAddCommentDialogOpen(false);
+                  confirmStone();
                 },
                 customStyle: 'flex-1'
               }
@@ -521,8 +522,8 @@ const MyCart = () => {
                   res.status === 'success'
                     ? 'success'
                     : res.status === 'processing'
-                    ? 'info'
-                    : ''
+                      ? 'info'
+                      : ''
                 }
                 customPoppupBodyStyle="!mt-[70px]"
                 header={res.title}
@@ -1143,11 +1144,11 @@ const MyCart = () => {
               ? showAppointmentForm
                 ? 'h-[calc(100vh-113px)]'
                 : isConfirmStone
-                ? 'h-[calc(100vh-184px)]'
-                : 'h-[calc(100vh-210px)]'
+                  ? 'h-[calc(100vh-184px)]'
+                  : 'h-[calc(100vh-210px)]'
               : showAppointmentForm
-              ? 'h-[calc(100vh-43px)]'
-              : 'h-[calc(100vh-132px)]'
+                ? 'h-[calc(100vh-43px)]'
+                : 'h-[calc(100vh-132px)]'
           }  shadow-inputShadow`}
         >
           {isConfirmStone ? (

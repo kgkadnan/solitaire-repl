@@ -220,10 +220,7 @@ const MatchPairTable = ({
   settingApplied,
   setIsMPSOpen
 }: any) => {
-  console.log('rows', rows);
   // Fetching saved search data
-  console.log('rows', rows);
-  console.log('originalData', originalData);
   const router = useRouter();
   const [triggerSavedSearch] = useLazyGetAllSavedSearchesQuery({});
   const [checkProductAvailability] = useCheckProductAvailabilityMutation({});
@@ -254,8 +251,8 @@ const MatchPairTable = ({
     if (globalFilter !== '') {
       // Remove all whitespace characters from globalFilter
       const trimmedFilter = globalFilter.replace(/\s+/g, '');
-      let data = rows.filter(
-        (data: any) => data?.lot_id?.startsWith(trimmedFilter)
+      let data = rows.filter((data: any) =>
+        data?.lot_id?.startsWith(trimmedFilter)
       );
       const startIndex = pagination.pageIndex * pagination.pageSize;
       const endIndex = startIndex + pagination.pageSize;
@@ -697,7 +694,6 @@ const MatchPairTable = ({
   useEffect(() => {
     // Apply the sorting logic to the full dataset
     const sortedFullData = sortData(originalData, sorting);
-    console.log('sortedFullData', sortedFullData);
     // Pagination logic
     const startIndex = pagination.pageIndex * pagination.pageSize;
     const endIndex = startIndex + pagination.pageSize;
@@ -711,7 +707,6 @@ const MatchPairTable = ({
     pagination.pageSize // Re-fetch when page size changes
   ]);
   const handleSortingChange = (newSorting: any) => {
-    console.log('newSorting', newSorting);
     setSorting((currentSorting: any) => {
       const existingSort = currentSorting.find(
         (sort: any) => sort.id === newSorting()[0].id
@@ -876,31 +871,33 @@ const MatchPairTable = ({
             ? 'calc(100vh - 130px)'
             : 'calc(100vh - 230px)'
           : myCart
-          ? isNudge &&
-            (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
-              isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-            ? 'calc(100vh - 420px)'
-            : 'calc(100vh - 343px)'
-          : isNudge &&
-            (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
-              isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-          ? 'calc(100vh - 405px)'
-          : 'calc(100vh - 300px)',
+            ? isNudge &&
+              (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+                isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+              ? 'calc(100vh - 420px)'
+              : 'calc(100vh - 343px)'
+            : isNudge &&
+                (isKycVerified?.customer?.kyc?.status ===
+                  kycStatus.INPROGRESS ||
+                  isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+              ? 'calc(100vh - 405px)'
+              : 'calc(100vh - 300px)',
         maxHeight: isFullScreen
           ? myCart
             ? 'calc(100vh - 130px)'
             : 'calc(100vh - 230px)'
           : myCart
-          ? isNudge &&
-            (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
-              isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-            ? 'calc(100vh - 420px)'
-            : 'calc(100vh - 343px)'
-          : isNudge &&
-            (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
-              isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-          ? 'calc(100vh - 405px)'
-          : 'calc(100vh - 300px)'
+            ? isNudge &&
+              (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+                isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+              ? 'calc(100vh - 420px)'
+              : 'calc(100vh - 343px)'
+            : isNudge &&
+                (isKycVerified?.customer?.kyc?.status ===
+                  kycStatus.INPROGRESS ||
+                  isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+              ? 'calc(100vh - 405px)'
+              : 'calc(100vh - 300px)'
       }
     },
     muiTableHeadRowProps: {

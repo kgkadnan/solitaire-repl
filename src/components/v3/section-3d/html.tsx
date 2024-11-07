@@ -114,10 +114,10 @@ const HtmlAnimation = () => {
               windowHeight >= 850
                 ? '50%'
                 : windowHeight >= 700
-                ? '60%'
-                : windowHeight >= 600
-                ? '75%'
-                : '95%',
+                  ? '60%'
+                  : windowHeight >= 600
+                    ? '75%'
+                    : '95%',
             marginTop: 'auto'
           }}
         >
@@ -149,8 +149,8 @@ const HtmlAnimation = () => {
               ? windowWidth >= 1280
                 ? 'translateY(calc(100vh - 950px))'
                 : windowWidth >= 1024
-                ? 'translateY(calc(100vh - 895px))'
-                : 'translateY(calc(100vh - 800px))'
+                  ? 'translateY(calc(100vh - 895px))'
+                  : 'translateY(calc(100vh - 800px))'
               : 'translateY(100vh)'
           }}
         >
@@ -198,10 +198,10 @@ const HtmlAnimation = () => {
               windowHeight >= 850
                 ? '50%'
                 : windowHeight >= 700
-                ? '60%'
-                : windowHeight >= 600
-                ? '75%'
-                : '95%',
+                  ? '60%'
+                  : windowHeight >= 600
+                    ? '75%'
+                    : '95%',
             marginTop: 'auto'
           }}
         >

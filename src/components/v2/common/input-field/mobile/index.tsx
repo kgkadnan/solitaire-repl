@@ -62,7 +62,6 @@ export const MobileInput = ({
         width={24}
         height={24}
         onError={(e: any) => {
-          console.log('e', e);
           e.target.error = null; // prevents looping
           e.target.src = ind;
         }}

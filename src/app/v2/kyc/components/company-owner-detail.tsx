@@ -251,13 +251,17 @@ const CompanyOwnerDetail = ({
               }
               countryCodeValue={{
                 label:
-                  `+${formState?.online?.sections?.[
-                    kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
-                  ]?.['owner_country_code']}` ?? '',
+                  `+${
+                    formState?.online?.sections?.[
+                      kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
+                    ]?.['owner_country_code']
+                  }` ?? '',
                 value:
-                  `+${formState?.online?.sections?.[
-                    kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
-                  ]?.['owner_country_code']}` ?? ''
+                  `+${
+                    formState?.online?.sections?.[
+                      kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
+                    ]?.['owner_country_code']
+                  }` ?? ''
               }}
             />
           </div>

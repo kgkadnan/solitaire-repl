@@ -936,8 +936,8 @@ const NewArrivals = () => {
               activeTab === 0
                 ? bid
                 : activeTab === 1
-                ? activeBid
-                : bidHistory?.data
+                  ? activeBid
+                  : bidHistory?.data
             }
             filterData={detailPageData}
             goBackToListView={goBack}
@@ -1045,14 +1045,15 @@ const NewArrivals = () => {
                               data.accessorKey !== 'shape'
                           ) // Filter out data with accessor key 'current_max_bid'
                         : activeTab === 1
-                        ? memoizedColumns.filter(
-                            (data: any) =>
-                              data.accessorKey !== 'last_bid_date' &&
-                              data.accessorKey !== 'shape'
-                          )
-                        : memoizedColumns.filter(
-                            (data: any) => data.accessorKey !== 'last_bid_date'
-                          )
+                          ? memoizedColumns.filter(
+                              (data: any) =>
+                                data.accessorKey !== 'last_bid_date' &&
+                                data.accessorKey !== 'shape'
+                            )
+                          : memoizedColumns.filter(
+                              (data: any) =>
+                                data.accessorKey !== 'last_bid_date'
+                            )
                     }
                     isTabSwitch={isTabSwitch}
                     setIsTabSwitch={setIsTabSwitch}
@@ -1067,8 +1068,8 @@ const NewArrivals = () => {
                       activeTab === 0
                         ? bid
                         : activeTab === 1
-                        ? activeBid
-                        : bidHistory?.data
+                          ? activeBid
+                          : bidHistory?.data
                     }
                     isSkeletonLoading={isSkeletonLoading}
                     setIsSkeletonLoading={setIsSkeletonLoading}

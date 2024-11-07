@@ -659,10 +659,6 @@ const BidToBuy = () => {
       ]);
     }
   }, [validImages]);
-  console.log(
-    subRoute === SubRoutes.BID_TO_BUY,
-    'subRoute === SubRoutes.BID_TO_BUY'
-  );
 
   return (
     <div className="mb-[4px] relative">
@@ -694,8 +690,8 @@ const BidToBuy = () => {
               activeTab === 0
                 ? bid
                 : activeTab === 1
-                ? activeBid
-                : bidHistory?.data
+                  ? activeBid
+                  : bidHistory?.data
             }
             filterData={detailPageData}
             goBackToListView={goBack}
@@ -711,7 +707,12 @@ const BidToBuy = () => {
         // isLoadingBidToBuyApi ||
         historyData === undefined ||
         activeBid === undefined ? (
-        <BiddingSkeleton />
+        !Object?.keys(localStorage.getItem('bid') ?? {}).length ||
+        subRoute === SubRoutes.BID_TO_BUY ? (
+          <CustomKGKLoader />
+        ) : (
+          <BiddingSkeleton />
+        )
       ) : (
         <>
           {(!Object?.keys(localStorage.getItem('bid') ?? {}).length &&
@@ -807,17 +808,17 @@ const BidToBuy = () => {
                               data.accessorKey !== 'discount'
                           )
                         : activeTab === 1
-                        ? memoizedColumns.filter(
-                            (data: any) =>
-                              data.accessorKey !== 'last_bid_date' &&
-                              data.accessorKey !== 'shape' &&
-                              data.accessorKey !== 'discount'
-                          )
-                        : memoizedColumns.filter(
-                            (data: any) =>
-                              data.accessorKey !== 'my_current_bid' &&
-                              data.accessorKey !== 'last_bid_date'
-                          )
+                          ? memoizedColumns.filter(
+                              (data: any) =>
+                                data.accessorKey !== 'last_bid_date' &&
+                                data.accessorKey !== 'shape' &&
+                                data.accessorKey !== 'discount'
+                            )
+                          : memoizedColumns.filter(
+                              (data: any) =>
+                                data.accessorKey !== 'my_current_bid' &&
+                                data.accessorKey !== 'last_bid_date'
+                            )
                     }
                     modalSetState={modalSetState}
                     setErrorText={setErrorText}
@@ -830,8 +831,8 @@ const BidToBuy = () => {
                       activeTab === 0
                         ? bid
                         : activeTab === 1
-                        ? activeBid
-                        : bidHistory?.data
+                          ? activeBid
+                          : bidHistory?.data
                     }
                     activeCount={activeBid?.length}
                     bidCount={bid?.length}

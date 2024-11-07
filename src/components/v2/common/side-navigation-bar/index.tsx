@@ -253,8 +253,8 @@ const SideNavigationBar = ({
                                   ? `px-[3px] py-[6px]  rounded h-[40px] w-[40px]`
                                   : `rounded hover:bg-neutral50 h-[40px] w-[40px]`
                                 : items.isActive && !isInMaintenanceMode
-                                ? `bg-primaryMain p-[8px] rounded stroke-neutral25 `
-                                : `p-[8px] stroke-primaryIconColor rounded hover:bg-neutral50 `
+                                  ? `bg-primaryMain p-[8px] rounded stroke-neutral25 `
+                                  : `p-[8px] stroke-primaryIconColor rounded hover:bg-neutral50 `
                             } disabled:bg-neutral100`}
                             disabled={
                               (items.link === Routes.MY_APPOINTMENTS &&
