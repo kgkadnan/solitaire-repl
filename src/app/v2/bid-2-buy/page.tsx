@@ -707,7 +707,11 @@ const BidToBuy = () => {
         // isLoadingBidToBuyApi ||
         historyData === undefined ||
         activeBid === undefined ? (
-        <BiddingSkeleton />
+        !Object?.keys(localStorage.getItem('bid') ?? {}).length ? (
+          <CustomKGKLoader />
+        ) : (
+          <BiddingSkeleton />
+        )
       ) : (
         <>
           {(!Object?.keys(localStorage.getItem('bid') ?? {}).length &&

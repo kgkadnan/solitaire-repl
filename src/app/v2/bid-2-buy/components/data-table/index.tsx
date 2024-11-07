@@ -1401,7 +1401,11 @@ const BidToBuyDataTable = ({
   return (
     <>
       {isSkeletonLoading ? (
-        <BiddingSkeleton />
+        !Object?.keys(localStorage.getItem('bid') ?? {}).length ? (
+          <></>
+        ) : (
+          <BiddingSkeleton />
+        )
       ) : (
         <ThemeProvider theme={theme}>
           <MaterialReactTable table={table} />
