@@ -1387,7 +1387,7 @@ const MatchPairTable = ({
   }, []);
 
   useEffect(() => {
-    let timer;
+    let timer: any;
 
     setIsLoaded(false);
     setIsSkeletonLoading(true);
