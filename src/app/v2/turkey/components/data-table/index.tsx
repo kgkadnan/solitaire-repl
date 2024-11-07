@@ -173,8 +173,8 @@ const TurkeyDataTable = ({
     if (globalFilter !== '') {
       // Remove all whitespace characters from globalFilter
       const trimmedFilter = globalFilter.replace(/\s+/g, '');
-      let data = rows.filter(
-        (data: any) => data?.lot_id?.startsWith(trimmedFilter)
+      let data = rows.filter((data: any) =>
+        data?.lot_id?.startsWith(trimmedFilter)
       );
       const startIndex = pagination.pageIndex * pagination.pageSize;
       const endIndex = startIndex + pagination.pageSize;
@@ -650,35 +650,37 @@ const TurkeyDataTable = ({
             ? 'calc(100vh - 123px)'
             : 'calc(100vh - 175px)'
           : activeTab === 2
-          ? isNudge &&
-            (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
-              isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-            ? 'calc(100vh - 254px)'
-            : 'calc(100vh - 260px)'
-          : isNudge &&
-            (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
-              isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-          ? 'calc(100vh - 254px)'
-          : !rows.length
-          ? 'calc(100vh - 260px)'
-          : !rows.length
-          ? 'calc(100vh - 260px)'
-          : 'calc(100vh - 255px)',
+            ? isNudge &&
+              (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+                isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+              ? 'calc(100vh - 254px)'
+              : 'calc(100vh - 260px)'
+            : isNudge &&
+                (isKycVerified?.customer?.kyc?.status ===
+                  kycStatus.INPROGRESS ||
+                  isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+              ? 'calc(100vh - 254px)'
+              : !rows.length
+                ? 'calc(100vh - 260px)'
+                : !rows.length
+                  ? 'calc(100vh - 260px)'
+                  : 'calc(100vh - 255px)',
         maxHeight: isFullScreen
           ? activeTab === 2
             ? 'calc(100vh - 123px)'
             : 'calc(100vh - 175px)'
           : activeTab === 2
-          ? isNudge &&
-            (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
-              isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-            ? 'calc(100vh - 362px)'
-            : 'calc(100vh - 260px)'
-          : isNudge &&
-            (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
-              isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-          ? 'calc(100vh - 362px)'
-          : 'calc(100vh - 260px)'
+            ? isNudge &&
+              (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+                isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+              ? 'calc(100vh - 362px)'
+              : 'calc(100vh - 260px)'
+            : isNudge &&
+                (isKycVerified?.customer?.kyc?.status ===
+                  kycStatus.INPROGRESS ||
+                  isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+              ? 'calc(100vh - 362px)'
+              : 'calc(100vh - 260px)'
       }
     },
     muiTableHeadRowProps: {

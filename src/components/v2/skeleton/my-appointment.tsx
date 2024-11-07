@@ -44,12 +44,12 @@ const MyAppointmentSkeleton = () => {
                   data === 2
                     ? 'w-[25%]'
                     : data === 3
-                    ? 'w-[31%]'
-                    : data === 4
-                    ? 'w-[27%] pl-[17px]'
-                    : data === 5
-                    ? 'w-[20%]'
-                    : 'w-[25%]'
+                      ? 'w-[31%]'
+                      : data === 4
+                        ? 'w-[27%] pl-[17px]'
+                        : data === 5
+                          ? 'w-[20%]'
+                          : 'w-[25%]'
                 }  px-4 `}
                 key={data}
               >

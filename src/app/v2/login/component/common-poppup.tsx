@@ -50,21 +50,21 @@ const CommonPoppup: React.FC<ICommonPoppupProps> = ({
             status === 'success'
               ? successIcon
               : status === 'warning'
-              ? warningIcon
-              : status === 'delete'
-              ? deleteIcon
-              : status === 'info'
-              ? infoIcon
-              : errorIcon
+                ? warningIcon
+                : status === 'delete'
+                  ? deleteIcon
+                  : status === 'info'
+                    ? infoIcon
+                    : errorIcon
           }
           alt={
             status === 'success'
               ? 'successIcon'
               : status === 'warning'
-              ? 'warningIcon'
-              : status === 'delete'
-              ? 'deleteIcon'
-              : 'errorIcon'
+                ? 'warningIcon'
+                : status === 'delete'
+                  ? 'deleteIcon'
+                  : 'errorIcon'
           }
         />
       </div>
