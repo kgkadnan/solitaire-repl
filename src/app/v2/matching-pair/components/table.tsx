@@ -1388,7 +1388,6 @@ const MatchPairTable = ({
 
   useEffect(() => {
     let timer;
-    let delay = 4000; // Default delay
 
     setIsLoaded(false);
     setIsSkeletonLoading(true);
@@ -1400,7 +1399,7 @@ const MatchPairTable = ({
     timer = setTimeout(() => {
       setIsLoaded(true);
       setIsSkeletonLoading(false);
-    }, delay);
+    }, 4000);
 
     // Cleanup function to clear the timer on effect re-run or unmount
     return () => clearTimeout(timer);
