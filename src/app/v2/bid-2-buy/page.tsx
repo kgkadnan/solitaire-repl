@@ -659,10 +659,6 @@ const BidToBuy = () => {
       ]);
     }
   }, [validImages]);
-  console.log(
-    subRoute === SubRoutes.BID_TO_BUY,
-    'subRoute === SubRoutes.BID_TO_BUY'
-  );
 
   return (
     <div className="mb-[4px] relative">

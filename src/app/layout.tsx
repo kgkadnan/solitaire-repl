@@ -104,7 +104,6 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
         ondevtoolopen(type: any, _next: any) {
           // if ( _type === 5) {
           // Additional check: Confirm if dev tools are really open (optional)
-          console.log(type, '------------------------', typeof type);
           if (
             type === 6
             // window.outerWidth - window.innerWidth > 200 ||

@@ -194,7 +194,6 @@ const BidToBuyDataTable = ({
   setActiveBid, // searchUrl
   isInActive
 }: any) => {
-  console.log(isInActive, 'inActiveinActive');
   // Fetching saved search data
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [bidError, setBidError] = useState<{
@@ -391,7 +390,6 @@ const BidToBuyDataTable = ({
               <div className="">
                 <button
                   onClick={() => {
-                    console.log('hjhjh');
                     router.push(
                       `/v2/bid-2-buy?active-tab=${SubRoutes.BID_TO_BUY}`
                     );
