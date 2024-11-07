@@ -19,7 +19,11 @@ import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
 import Tooltip from '../../tooltip';
 
 export const RenderDetails = ({ row, handleDetailImage }: any) => {
-  if (row.original.is_eligible) {
+  const isEligible = Object.values(row.original.assets_pre_check).some(
+    value => value === true
+  );
+
+  if (isEligible) {
     return (
       <button
         onClick={e => {
