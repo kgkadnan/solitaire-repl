@@ -218,11 +218,10 @@ const MatchPairTable = ({
   isLoading,
   countLimitReached,
   settingApplied,
-  setIsMPSOpen
+  setIsMPSOpen,
+  isFetchingMatchPairData
 }: any) => {
   // Fetching saved search data
-  console.log('rows', rows);
-  console.log('originalData', originalData);
   const router = useRouter();
   const [triggerSavedSearch] = useLazyGetAllSavedSearchesQuery({});
   const [checkProductAvailability] = useCheckProductAvailabilityMutation({});
@@ -327,7 +326,9 @@ const MatchPairTable = ({
 
         const searchUrl = constructUrlParams(searchData.meta_data);
 
-        triggerMatchingPairCountApi({ searchUrl })
+        triggerMatchingPairCountApi({
+          searchUrl: `${searchUrl}`
+        })
           .then(response => {
             if (response?.data?.count > MAX_SAVED_SEARCH_COUNT) {
               setIsLoading(false);
@@ -694,7 +695,6 @@ const MatchPairTable = ({
   useEffect(() => {
     // Apply the sorting logic to the full dataset
     const sortedFullData = sortData(originalData, sorting);
-    console.log('sortedFullData', sortedFullData);
     // Pagination logic
     const startIndex = pagination.pageIndex * pagination.pageSize;
     const endIndex = startIndex + pagination.pageSize;
@@ -708,7 +708,6 @@ const MatchPairTable = ({
     pagination.pageSize // Re-fetch when page size changes
   ]);
   const handleSortingChange = (newSorting: any) => {
-    console.log('newSorting', newSorting);
     setSorting((currentSorting: any) => {
       const existingSort = currentSorting.find(
         (sort: any) => sort.id === newSorting()[0].id
@@ -1388,15 +1387,23 @@ const MatchPairTable = ({
   }, []);
 
   useEffect(() => {
-    // if(isLoading)
+    let timer: any;
+
     setIsLoaded(false);
     setIsSkeletonLoading(true);
-    const timer = setTimeout(() => {
-      setIsLoaded(true), setIsSkeletonLoading(false);
-    }, 5000); // Small delay to ensure rendering phase is completed
 
+    if (isFetchingMatchPairData) {
+      clearTimeout(timer);
+    }
+    // Set a new timer with the updated delay
+    timer = setTimeout(() => {
+      setIsLoaded(true);
+      setIsSkeletonLoading(false);
+    }, 4000);
+
+    // Cleanup function to clear the timer on effect re-run or unmount
     return () => clearTimeout(timer);
-  }, [activeTab]);
+  }, [activeTab, isFetchingMatchPairData]);
 
   // const handleInputBlur = (index: number, field: string) => {
   //   const endValue = mps[index].end;

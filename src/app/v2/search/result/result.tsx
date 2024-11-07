@@ -196,8 +196,12 @@ const Result = ({
     const selections = JSON.parse(storedSelection);
 
     const url = constructUrlParams(selections[activeTab - 1]?.queryParams);
-    setSearchUrl(url);
-    triggerProductApi({ url, limit: LISTING_PAGE_DATA_LIMIT, offset: 0 })
+    setSearchUrl(`${url}`);
+    triggerProductApi({
+      url: `${url}`,
+      limit: LISTING_PAGE_DATA_LIMIT,
+      offset: 0
+    })
       .then((res: any) => {
         if (columnData?.length > 0) {
           if (res?.error?.status === statusCode.UNAUTHORIZED) {
@@ -995,18 +999,19 @@ const Result = ({
             actionButtonData={[
               {
                 variant: 'secondary',
-                label: ManageLocales('app.modal.addComment.cancel'),
+                label: ManageLocales('app.modal.addComment.saveComment'),
                 handler: () => {
+                  setCommentValue(textAreaValue);
                   setIsAddCommentDialogOpen(false);
                 },
                 customStyle: 'flex-1'
               },
               {
                 variant: 'primary',
-                label: ManageLocales('app.modal.addComment.saveComment'),
+                label: 'Confirm Stone',
                 handler: () => {
-                  setCommentValue(textAreaValue);
                   setIsAddCommentDialogOpen(false);
+                  confirmStone();
                 },
                 customStyle: 'flex-1'
               }
@@ -1051,8 +1056,8 @@ const Result = ({
                   res.status === 'success'
                     ? 'success'
                     : res.status === 'processing'
-                    ? 'info'
-                    : ''
+                      ? 'info'
+                      : ''
                 }
                 customPoppupBodyStyle="!mt-[70px]"
                 header={res.title}

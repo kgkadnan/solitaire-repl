@@ -355,12 +355,12 @@ const LeftStructure = ({ currentFrame }: { currentFrame: number }) => {
                     index === 0
                       ? 'linear-gradient(to bottom, #FFAD05, #FFAD05)'
                       : index === 1
-                      ? 'linear-gradient(to bottom, #FFAD05, #168B85)'
-                      : index === 2
-                      ? 'linear-gradient(to bottom,  #168B85, #168B85)'
-                      : index === 3
-                      ? 'linear-gradient(to bottom,  #168B85, #5995ED)'
-                      : 'linear-gradient(to bottom, #5995ED, #5995ED)'
+                        ? 'linear-gradient(to bottom, #FFAD05, #168B85)'
+                        : index === 2
+                          ? 'linear-gradient(to bottom,  #168B85, #168B85)'
+                          : index === 3
+                            ? 'linear-gradient(to bottom,  #168B85, #5995ED)'
+                            : 'linear-gradient(to bottom, #5995ED, #5995ED)'
                 }}
               />
             </div>

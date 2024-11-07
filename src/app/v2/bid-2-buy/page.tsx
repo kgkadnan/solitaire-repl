@@ -244,7 +244,7 @@ const BidToBuy = () => {
   const [activeTab, setActiveTab] = useState(0);
   const tabLabels = ['Bid Stone', 'Active Bid', 'Bid History'];
   const [timeDifference, setTimeDifference] = useState(null);
-  const [isInActive, setIsInActive] = useState(false);
+  const [isInActive, setIsInActive] = useState('');
   const getBidToBuyHistoryData = () => {
     setIsLoading(true);
 
@@ -261,10 +261,12 @@ const BidToBuy = () => {
   useEffect(() => {
     let queryNew = constructUrlParams(JSON.parse(localStorage.getItem('bid')!));
     setIsLoading(true);
-    triggerBidToBuyApi({ searchUrl: queryNew })
+    triggerBidToBuyApi({
+      searchUrl: `${queryNew}`
+    })
       .unwrap()
       .then((response: any) => {
-        setIsInActive(false);
+        setIsInActive('');
 
         setTime(response?.endTime),
           setBid(queryNew.length ? response?.bidStone : []);
@@ -272,9 +274,9 @@ const BidToBuy = () => {
         setIsLoading(false);
       })
       .catch(e => {
-        if (e?.data?.error === 'INACTIVE_BID_TO_BUY') {
-          setIsInActive(true);
-        }
+        // if (e?.data?.error === 'INACTIVE_BID_TO_BUY') {
+        setIsInActive(e?.data?.error);
+        // }
         setActiveBid([]);
         setBid([]);
         setIsLoading(false);
@@ -283,21 +285,25 @@ const BidToBuy = () => {
 
   useEffect(() => {
     let queryNew = constructUrlParams(JSON.parse(localStorage.getItem('bid')!));
+
     setIsLoading(true);
 
-    triggerBidToBuyApi({ searchUrl: queryNew })
+    triggerBidToBuyApi({
+      searchUrl: `${queryNew}`
+    })
       .unwrap()
       .then((response: any) => {
-        setIsInActive(false);
+        setIsInActive('');
 
         setBid(queryNew.length ? response?.bidStone : []);
         setActiveBid(response?.activeStone);
         setTime(response?.endTime), setIsLoading(false);
       })
       .catch(e => {
-        if (e?.data?.error === 'INACTIVE_BID_TO_BUY') {
-          setIsInActive(true);
-        }
+        // if (e?.data?.error === 'INACTIVE_BID_TO_BUY') {
+        //   setIsInActive('INACTIVE_BID_TO_BUY');
+        // }
+        setIsInActive(e?.data?.error);
         setActiveBid([]);
         setBid([]);
         setIsLoading(false);
@@ -330,6 +336,7 @@ const BidToBuy = () => {
 
   const handleTabClick = (index: number) => {
     let queryNew = constructUrlParams(JSON.parse(localStorage.getItem('bid')!));
+
     if (index !== activeTab) {
       if (index === 0 && !queryNew.length) {
         setIsTabSwitch(false);
@@ -339,21 +346,6 @@ const BidToBuy = () => {
     }
     setActiveTab(index);
     setRowSelection({});
-    if (index === 1 && activeBid.length > 0) {
-      activeBid.map((row: any) => {
-        if (row.discount > row.my_current_bid) {
-          setRowSelection(prev => {
-            return { ...prev, [row.id]: true };
-          });
-        } else {
-          setRowSelection((prev: any) => {
-            let prevRows = { ...prev };
-            delete prevRows[row.id];
-            return prevRows;
-          });
-        }
-      });
-    }
   };
   const [activeBid, setActiveBid] = useState<any>();
   const [bid, setBid] = useState<any>();
@@ -380,10 +372,7 @@ const BidToBuy = () => {
 
   const [downloadExcel] = useDownloadExcelMutation();
   const [deleteBid] = useDeleteBidMutation();
-  let [
-    triggerBidToBuyApi,
-    { isLoading: isLoadingBidToBuyApi, isFetching: isFetchingBidToBuyApi }
-  ] = useLazyGetAllBidStonesQuery();
+  let [triggerBidToBuyApi] = useLazyGetAllBidStonesQuery();
 
   const renderFooter = (table: any) => {
     if (activeTab === 0 && bid?.length > 0) {
@@ -703,14 +692,19 @@ const BidToBuy = () => {
         // isLoadingBidToBuyApi ||
         historyData === undefined ||
         activeBid === undefined ? (
-        <BiddingSkeleton />
+        !Object?.keys(localStorage.getItem('bid') ?? {}).length ||
+        subRoute === SubRoutes.BID_TO_BUY ? (
+          <CustomKGKLoader />
+        ) : (
+          <BiddingSkeleton />
+        )
       ) : (
         <>
           {(!Object?.keys(localStorage.getItem('bid') ?? {}).length &&
             time &&
-            activeTab === 0) ||
-          subRoute === SubRoutes.BID_TO_BUY ||
-          !isInActive ? (
+            activeTab === 0 &&
+            isInActive !== 'INACTIVE_BID_TO_BUY') ||
+          subRoute === SubRoutes.BID_TO_BUY ? (
             <Form
               searchUrl={searchUrl}
               setSearchUrl={setSearchUrl}
@@ -732,6 +726,7 @@ const BidToBuy = () => {
               setIsCommonLoading={setIsLoading}
               time={time}
               setRowSelection={setRowSelection}
+
               // setBid={setBid}
               // setActiveBid={setActiveBid}
             />
@@ -838,7 +833,7 @@ const BidToBuy = () => {
                     isSkeletonLoading={isSkeletonLoading}
                     setIsSkeletonLoading={setIsSkeletonLoading}
                     isLoading={isLoading}
-                    inActive={isInActive}
+                    isInActive={isInActive}
                     // searchUrl={searchUrl}
                   />
                 </div>

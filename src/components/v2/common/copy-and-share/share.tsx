@@ -26,7 +26,8 @@ const Share = ({
   activeTab = 0,
   shareTrackIdentifier,
   dynamicTrackIdentifier,
-  customerMobileNumber
+  customerMobileNumber,
+  isDisable
 }: any) => {
   const [selectedRows, setSelectedRows] = useState<IProduct[]>(
     rows?.filter((row: IProduct) => row.id in selectedProducts)
@@ -421,26 +422,28 @@ const Share = ({
       <Toast show={showToast} message="Copied Successfully" />
       <div
         onClick={() => {
-          if (Object.keys(selectedProducts).length > 0) {
-            setIsError(false);
-            setErrorText('');
-            setIsInputDialogOpen(true);
-            if (
-              dynamicTrackIdentifier === dashboardIndentifier ||
-              dynamicTrackIdentifier === 'dashboardSearchResult'
-            ) {
-              trackEvent({
-                action:
-                  dynamicTrackIdentifier === 'dashboardSearchResult'
-                    ? Tracking_Search_By_Text.click_share_result_page
-                    : Tracking_Search_By_Text.click_share_dna_page,
-                category: 'SearchByText',
-                mobile_number: customerMobileNumber
-              });
+          if (!isDisable || !rows.length) {
+            if (Object.keys(selectedProducts).length > 0) {
+              setIsError(false);
+              setErrorText('');
+              setIsInputDialogOpen(true);
+              if (
+                dynamicTrackIdentifier === dashboardIndentifier ||
+                dynamicTrackIdentifier === 'dashboardSearchResult'
+              ) {
+                trackEvent({
+                  action:
+                    dynamicTrackIdentifier === 'dashboardSearchResult'
+                      ? Tracking_Search_By_Text.click_share_result_page
+                      : Tracking_Search_By_Text.click_share_dna_page,
+                  category: 'SearchByText',
+                  mobile_number: customerMobileNumber
+                });
+              }
+            } else {
+              setIsError(true);
+              setErrorText(SELECT_STONE_TO_PERFORM_ACTION);
             }
-          } else {
-            setIsError(true);
-            setErrorText(SELECT_STONE_TO_PERFORM_ACTION);
           }
         }}
         className="w-[39px] h-[39px]"
@@ -448,12 +451,14 @@ const Share = ({
         <Tooltip
           tooltipTrigger={
             <button
-              disabled={!rows.length}
+              disabled={!rows.length || isDisable}
               className={`disabled:!bg-neutral100 disabled:cursor-not-allowed disabled:text-neutral400 rounded-[4px] hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm ${'bg-neutral0'}`}
             >
               <ShareButtonSvg
                 className={`${
-                  !rows.length ? 'stroke-neutral400' : 'stroke-neutral900'
+                  !rows.length || isDisable
+                    ? 'stroke-neutral400'
+                    : 'stroke-neutral900'
                 }`}
               />
             </button>

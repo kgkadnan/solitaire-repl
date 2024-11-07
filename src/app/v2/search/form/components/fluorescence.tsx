@@ -69,7 +69,7 @@ export const Fluorescence = ({ state, setState }: any) => {
         value="Fluorescence"
         isDisable={true}
         accordionContent={
-          <div className="px-[16px] py-[24px]">
+          <div className="px-[16px] py-[12px]">
             <Tile
               tileData={fluorescence}
               selectedTile={selectedFluorescence}

@@ -62,13 +62,7 @@ import DataTable from '@/components/v2/common/data-table';
 import matchPairIcon from '@public/v2/assets/icons/match-pair-saved.svg';
 
 import Tooltip from '@/components/v2/common/tooltip';
-import {
-  clarity,
-  fluorescenceSortOrder,
-  sideBlackSortOrder,
-  tableBlackSortOrder,
-  tableInclusionSortOrder
-} from '@/constants/v2/form';
+
 import {
   RednderLocation,
   RenderAmount,
@@ -156,7 +150,7 @@ const Dashboard = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const confirmTrack = useAppSelector(state => state.setConfirmStoneTrack);
-
+  const [showOnlyWithVideo, setShowOnlyWithVideo] = useState(false);
   const { data: customerData, refetch: refetchCustomerData } =
     useGetCustomerQuery({}, { refetchOnMountOrArgChange: true });
   const [validImages, setValidImages] = useState<any>([]);
@@ -207,6 +201,7 @@ const Dashboard = () => {
     });
   const [lotIds, setLotIds] = useState<string[]>([]);
   const [isHovered, setIsHovered] = useState('');
+  const [showEmptyState, setShowEmptyState] = useState(false);
 
   const [customerMobileNumber, setCustomerMobileNumber] = useState('');
   const [isResultPageDetails, setIsResultPageDetails] = useState(false);
@@ -283,7 +278,7 @@ const Dashboard = () => {
       : [];
   }, [searchData?.foundProducts]);
   useEffect(() => {
-    if (searchData?.notFoundKeywords?.length > 0) {
+    if (searchData?.notFoundKeywords?.length > 0 && !showOnlyWithVideo) {
       setError('Some stones are not available');
     }
   }, [searchData?.notFoundKeywords]);
@@ -744,8 +739,8 @@ const Dashboard = () => {
     activeTab === 'In-transit'
       ? 'activeInvoice'
       : activeTab === 'Pending'
-      ? 'pendingInvoice'
-      : ''
+        ? 'pendingInvoice'
+        : ''
   ] || { keys: [], data: [] };
 
   const redirectLink = () => {
@@ -1107,19 +1102,20 @@ const Dashboard = () => {
             actionButtonData={[
               {
                 variant: 'secondary',
-                label: ManageLocales('app.modal.addComment.cancel'),
+                label: ManageLocales('app.modal.addComment.saveComment'),
                 handler: () => {
+                  setCommentValue(textAreaValue);
                   setIsAddCommentDialogOpen(false);
                 },
                 customStyle: 'flex-1'
               },
               {
                 variant: 'primary',
-                label: ManageLocales('app.modal.addComment.saveComment'),
+                label: 'Confirm Stone',
                 handler: () => {
-                  setCommentValue(textAreaValue);
-                  setIsAddCommentDialogOpen(false);
+                  setIsAddCommentDialogOpen(false), confirmStone();
                 },
+
                 customStyle: 'flex-1'
               }
             ]}
@@ -1315,12 +1311,14 @@ const Dashboard = () => {
     }
   };
 
-  const refreshSearchResults = () => {
+  const refreshSearchResults = (showOnlyWithVideo: boolean) => {
     getProductById({
-      search_keyword: stoneId
+      search_keyword: stoneId,
+      all_asset_required: showOnlyWithVideo
     })
       .unwrap()
       .then((res: any) => {
+        setShowEmptyState(false);
         setSearchData(res);
         setError('');
         setIsDetailPage(true);
@@ -1349,7 +1347,10 @@ const Dashboard = () => {
           _e?.status === statusCode.NOT_FOUND ||
           _e?.status === statusCode.INVALID_DATA
         ) {
-          setError(`We couldn't find any results for this search`);
+          if (!showOnlyWithVideo) {
+            setError(`We couldn't find any results for this search`);
+          }
+          setShowEmptyState(true);
         } else if (_e?.status === statusCode.UNAUTHORIZED) {
           setError(_e?.data?.message?.message);
         } else {
@@ -1393,8 +1394,8 @@ const Dashboard = () => {
                 res.status === 'success'
                   ? 'Success'
                   : res.status === 'processing'
-                  ? 'Processing'
-                  : ''
+                    ? 'Processing'
+                    : ''
             });
 
             setDialogContent(
@@ -1404,8 +1405,8 @@ const Dashboard = () => {
                   res.status === 'success'
                     ? 'success'
                     : res.status === 'processing'
-                    ? 'info'
-                    : ''
+                      ? 'info'
+                      : ''
                 }
                 customPoppupBodyStyle="!mt-[70px]"
                 header={res.title}
@@ -1984,8 +1985,8 @@ const Dashboard = () => {
               detailPageData?.length
                 ? 'Detail Page'
                 : isCompareStone
-                ? 'Compare Stone'
-                : 'Search Results'
+                  ? 'Compare Stone'
+                  : 'Search Results'
             }
             handleDetailImage={handleDetailImage}
             handleDetailPage={handleDetailPage}
@@ -2009,8 +2010,8 @@ const Dashboard = () => {
                       detailPageData?.length
                         ? 'Detail Page'
                         : isCompareStone
-                        ? 'Compare Stone'
-                        : 'Dashboard'
+                          ? 'Compare Stone'
+                          : 'Dashboard'
                     );
                   }
                 },
@@ -2108,7 +2109,10 @@ const Dashboard = () => {
                 alt="backWardArrow"
                 onClick={() => {
                   setIsDetailPage(false);
+                  setShowEmptyState(false);
+                  setSorting([]);
                   setRowSelection({});
+                  setShowOnlyWithVideo(false);
                   trackEvent({
                     action: Tracking_Search_By_Text.click_back_results_page,
                     category: 'SearchByText',
@@ -2122,7 +2126,10 @@ const Dashboard = () => {
                   className="text-neutral600 text-sMedium font-regular cursor-pointer"
                   onClick={() => {
                     setIsDetailPage(false);
+                    setShowEmptyState(false);
+                    setSorting([]);
                     setRowSelection({});
+                    setShowOnlyWithVideo(false);
                     trackEvent({
                       action: Tracking_Search_By_Text.click_back_results_page,
                       category: 'SearchByText',
@@ -2163,6 +2170,9 @@ const Dashboard = () => {
               handleCreateAppointment={handleCreateAppointment}
               refreshSearchResults={refreshSearchResults}
               customerMobileNumber={customerMobileNumber}
+              showOnlyWithVideo={showOnlyWithVideo}
+              setShowOnlyWithVideo={setShowOnlyWithVideo}
+              showEmptyState={showEmptyState}
             />
           </div>
         </div>
@@ -2242,18 +2252,18 @@ const Dashboard = () => {
                         data.isKycNotVerified
                           ? 'cursor-not-allowed'
                           : data.isAvailable
-                          ? 'cursor-pointer'
-                          : 'cursor-default'
+                            ? 'cursor-pointer'
+                            : 'cursor-default'
                       }`}
                       key={index}
                       onClick={
                         data.isKycNotVerified
                           ? () => {}
                           : data.isAvailable
-                          ? () => {
-                              router.push(data.link);
-                            }
-                          : () => {}
+                            ? () => {
+                                router.push(data.link);
+                              }
+                            : () => {}
                       }
                     >
                       <div

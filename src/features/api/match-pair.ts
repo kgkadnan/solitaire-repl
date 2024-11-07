@@ -23,8 +23,8 @@ export const matchingPairApi = createApi({
       providesTags: ['MatchingPair']
     }),
     getSimilarMatchingPair: builder.query({
-      query: ({ product_id, matching_product_id }) => ({
-        url: `/store/similar-product?product_id=${product_id}&matching_pair_product_id=${matching_product_id}`
+      query: ({ product_id, matching_product_id, show_only_with_video }) => ({
+        url: `/store/similar-product?product_id=${product_id}&matching_pair_product_id=${matching_product_id}&all_asset_required=${show_only_with_video}`
       }),
       providesTags: ['MatchingPair']
     }),

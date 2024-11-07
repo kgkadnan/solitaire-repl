@@ -61,18 +61,18 @@ export const PasswordField = ({
         'Use minimum 1 Number (0-9)': /\d/.test(password)
           ? true
           : password.length > 0
-          ? false
-          : null,
+            ? false
+            : null,
         'Use minimum 1 uppercase letter': /[A-Z]/.test(password)
           ? true
           : password.length > 0
-          ? false
-          : null,
+            ? false
+            : null,
         'Use minimum 1 lowercase letter': /[a-z]/.test(password)
           ? true
           : password.length > 0
-          ? false
-          : null
+            ? false
+            : null
       });
     };
 

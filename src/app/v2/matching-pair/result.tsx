@@ -197,10 +197,13 @@ const MatchingPairResult = ({
   const [downloadExcel] = useDownloadExcelMutation();
   const [confirmProduct] = useConfirmProductMutation();
 
-  const [triggerColumn, { data: columnData }] =
+  let [triggerColumn, { data: columnData }] =
     useLazyGetManageListingSequenceQuery<IManageListingSequenceResponse>();
-  const [triggerMatchingPairApi, { data: matchingPairData }] =
-    useLazyGetAllMatchingPairQuery();
+
+  const [
+    triggerMatchingPairApi,
+    { data: matchingPairData, isFetching: isFetchingMatchPairData }
+  ] = useLazyGetAllMatchingPairQuery();
 
   // Fetch Products
 
@@ -215,9 +218,9 @@ const MatchingPairResult = ({
     const selections = JSON.parse(storedSelection);
 
     const url = constructUrlParams(selections[activeTab - 1]?.queryParams);
-    setSearchUrl(url);
+    setSearchUrl(`${url}`);
     triggerMatchingPairApi({
-      url,
+      url: `${url}`,
       limit: MATCHING_PAIR_DATA_LIMIT,
       offset: 0
     })
@@ -906,18 +909,19 @@ const MatchingPairResult = ({
             actionButtonData={[
               {
                 variant: 'secondary',
-                label: ManageLocales('app.modal.addComment.cancel'),
+                label: ManageLocales('app.modal.addComment.saveComment'),
                 handler: () => {
+                  setCommentValue(textAreaValue);
                   setIsAddCommentDialogOpen(false);
                 },
                 customStyle: 'flex-1'
               },
               {
                 variant: 'primary',
-                label: ManageLocales('app.modal.addComment.saveComment'),
+                label: 'Confirm Stone',
                 handler: () => {
-                  setCommentValue(textAreaValue);
                   setIsAddCommentDialogOpen(false);
+                  confirmStone();
                 },
                 customStyle: 'flex-1'
               }
@@ -1384,6 +1388,7 @@ const MatchingPairResult = ({
             setImageIndex={setImageIndex}
             imageIndex={imageIndex}
             setIsDiamondDetailLoading={setIsDiamondDetailLoading}
+            activeTab={activeTab}
           />
           <div className="p-[8px] flex justify-between items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow mb-1">
             <div className="flex gap-4 h-[30px]">
@@ -1613,6 +1618,7 @@ const MatchingPairResult = ({
                   setSettingApplied={setSettingApplied}
                   isLoading={isLoading}
                   countLimitReached={countLimitReached}
+                  isFetchingMatchPairData={isFetchingMatchPairData}
                 />
               )}
             </div>

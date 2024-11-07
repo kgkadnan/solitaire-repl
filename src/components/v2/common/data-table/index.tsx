@@ -7,6 +7,7 @@ import {
   MaterialReactTable,
   useMaterialReactTable
 } from 'material-react-table';
+import empty from '@public/v2/assets/icons/data-table/empty-table.svg';
 import ExpandImg from '@public/v2/assets/icons/detail-page/expand.svg?url';
 import CollapsIcon from '@public/v2/assets/icons/collapse-icon.svg?url';
 import ExportExcel from '@public/v2/assets/icons/detail-page/export-excel.svg?url';
@@ -71,6 +72,8 @@ import {
   tableBlackSortOrder,
   tableInclusionSortOrder
 } from '@/constants/v2/form';
+import CustomSwitch from '../switch/switch';
+// import { Switch } from '../../ui/switch';
 
 const theme = createTheme({
   typography: {
@@ -218,7 +221,10 @@ const DataTable = ({
   setIsSkeletonLoading,
   isSkeletonLoading,
   refreshSearchResults,
-  customerMobileNumber
+  customerMobileNumber,
+  showOnlyWithVideo,
+  setShowOnlyWithVideo,
+  showEmptyState
 }: any) => {
   // Fetching saved search data
   const router = useRouter();
@@ -249,8 +255,8 @@ const DataTable = ({
     if (globalFilter !== '') {
       // Remove all whitespace characters from globalFilter
       const trimmedFilter = globalFilter.replace(/\s+/g, '');
-      let data = rows.filter(
-        (data: any) => data?.lot_id?.startsWith(trimmedFilter)
+      let data = rows.filter((data: any) =>
+        data?.lot_id?.startsWith(trimmedFilter)
       );
       const startIndex = pagination.pageIndex * pagination.pageSize;
       const endIndex = startIndex + pagination.pageSize;
@@ -473,7 +479,9 @@ const DataTable = ({
 
         const searchUrl = constructUrlParams(searchData.meta_data);
 
-        triggerProductCountApi({ searchUrl })
+        triggerProductCountApi({
+          searchUrl: `${searchUrl}`
+        })
           .then(response => {
             if (response?.data?.count > MAX_SAVED_SEARCH_COUNT) {
               setIsLoading(false);
@@ -681,10 +689,10 @@ const DataTable = ({
       page: isResult
         ? 'Normal_Search'
         : myCart
-        ? 'My_Cart'
-        : isDashboard
-        ? 'Dashboard_Search'
-        : ''
+          ? 'My_Cart'
+          : isDashboard
+            ? 'Dashboard_Search'
+            : ''
     });
   };
 
@@ -701,20 +709,39 @@ const DataTable = ({
       page: isResult
         ? 'Normal_Search'
         : myCart
-        ? 'My_Cart'
-        : isDashboard
-        ? 'Dashboard_Search'
-        : ''
+          ? 'My_Cart'
+          : isDashboard
+            ? 'Dashboard_Search'
+            : ''
     });
   };
 
   let isNudge = localStorage.getItem('show-nudge') === 'MINI';
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
-  const NoResultsComponent = () => <></>;
+  const NoResultsComponent = () => {
+    if (showEmptyState) {
+      return (
+        <div
+          className={`flex flex-col items-center justify-center gap-5 ${
+            isFullScreen ? 'h-[69vh]' : 'h-[60vh]'
+          }   mt-[50px] ${'!h-[47vh]  !mt-[20px]'}`}
+        >
+          <div className="text-center">
+            <Image src={empty} alt="empty" />
+            <p className="text-neutral900 w-[220px] mx-auto">
+              No matches found for your search.
+            </p>
+          </div>
+        </div>
+      );
+    } else {
+      return <></>;
+    }
+  };
   //pass table options to useMaterialReactTable
   const table = useMaterialReactTable({
-    columns,
-    data: paginatedData, //must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
+    columns: showEmptyState ? [] : columns,
+    data: showEmptyState ? [] : paginatedData, //must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
 
     getRowId: originalRow => originalRow?.id,
     onRowSelectionChange: setRowSelection,
@@ -740,7 +767,7 @@ const DataTable = ({
     globalFilterFn: 'startsWith',
     selectAllMode: 'page',
     renderEmptyRowsFallback: NoResultsComponent,
-    manualPagination: true,
+    manualPagination: showEmptyState ? false : true,
     rowCount: rows.length,
     onPaginationChange: setPagination, //hoist pagination state to your state when it changes internally
     manualFiltering: true,
@@ -864,50 +891,56 @@ const DataTable = ({
               ? 'calc(100vh - 130px)'
               : 'calc(100vh - 90px)'
             : isDashboard
-            ? 'calc(100vh - 180px)'
-            : 'calc(100vh - 230px)'
+              ? 'calc(100vh - 180px)'
+              : 'calc(100vh - 230px)'
           : myCart
-          ? showCalculatedField
-            ? isNudge &&
-              (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
-                isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-              ? 'calc(100vh - 420px)'
-              : 'calc(100vh - 343px)'
+            ? showCalculatedField
+              ? isNudge &&
+                (isKycVerified?.customer?.kyc?.status ===
+                  kycStatus.INPROGRESS ||
+                  isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+                ? 'calc(100vh - 420px)'
+                : 'calc(100vh - 343px)'
+              : isNudge &&
+                  (isKycVerified?.customer?.kyc?.status ===
+                    kycStatus.INPROGRESS ||
+                    isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+                ? 'calc(100vh - 380px)'
+                : 'calc(100vh - 303px)'
             : isNudge &&
-              (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
-                isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-            ? 'calc(100vh - 380px)'
-            : 'calc(100vh - 303px)'
-          : isNudge &&
-            (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
-              isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-          ? 'calc(100vh - 405px)'
-          : 'calc(100vh - 300px)',
+                (isKycVerified?.customer?.kyc?.status ===
+                  kycStatus.INPROGRESS ||
+                  isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+              ? 'calc(100vh - 405px)'
+              : 'calc(100vh - 300px)',
         maxHeight: isFullScreen
           ? myCart
             ? showCalculatedField
               ? 'calc(100vh - 130px)'
               : 'calc(100vh - 90px)'
             : isDashboard
-            ? 'calc(100vh - 180px)'
-            : 'calc(100vh - 230px)'
+              ? 'calc(100vh - 180px)'
+              : 'calc(100vh - 230px)'
           : myCart
-          ? showCalculatedField
-            ? isNudge &&
-              (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
-                isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-              ? 'calc(100vh - 420px)'
-              : 'calc(100vh - 343px)'
+            ? showCalculatedField
+              ? isNudge &&
+                (isKycVerified?.customer?.kyc?.status ===
+                  kycStatus.INPROGRESS ||
+                  isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+                ? 'calc(100vh - 420px)'
+                : 'calc(100vh - 343px)'
+              : isNudge &&
+                  (isKycVerified?.customer?.kyc?.status ===
+                    kycStatus.INPROGRESS ||
+                    isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+                ? 'calc(100vh - 380px)'
+                : 'calc(100vh - 303px)'
             : isNudge &&
-              (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
-                isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-            ? 'calc(100vh - 380px)'
-            : 'calc(100vh - 303px)'
-          : isNudge &&
-            (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
-              isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-          ? 'calc(100vh - 405px)'
-          : 'calc(100vh - 300px)'
+                (isKycVerified?.customer?.kyc?.status ===
+                  kycStatus.INPROGRESS ||
+                  isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+              ? 'calc(100vh - 405px)'
+              : 'calc(100vh - 300px)'
       }
     },
     muiTableHeadRowProps: {
@@ -1167,6 +1200,22 @@ const DataTable = ({
           </div>
 
           <div className="flex gap-[12px]" style={{ alignItems: 'inherit' }}>
+            {isDashboard && (
+              <div className="flex items-center py-[2px]  justify-between bg-neutral0 border-[1px] border-solid border-neutral200 rounded-[4px]">
+                <p className="font-medium  rounded-l-[4px]  px-[12px] text-neutral900 text-mMedium">
+                   Images & Videos Required
+                </p>
+                <div className="px-[15px] pt-1">
+                  <CustomSwitch
+                    isOn={showOnlyWithVideo}
+                    handleToggle={() => {
+                      setShowOnlyWithVideo((prev: any) => !prev);
+                      refreshSearchResults(!showOnlyWithVideo);
+                    }}
+                  />
+                </div>
+              </div>
+            )}
             {isResult &&
               (searchParameters &&
               !searchParameters[activeTab - 1]?.isSavedSearch ? (
@@ -1189,14 +1238,21 @@ const DataTable = ({
 
             <div
               className=" rounded-[4px] cursor-pointer"
-              onClick={handleDownloadExcel}
+              onClick={showEmptyState ? () => {} : handleDownloadExcel}
             >
               <Tooltip
                 tooltipTrigger={
                   <button
-                    className={`rounded-[4px] hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm ${'bg-neutral0'}`}
+                    disabled={showEmptyState}
+                    className={`disabled:!bg-neutral100 disabled:cursor-not-allowed disabled:text-neutral400 rounded-[4px] hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm ${'bg-neutral0'}`}
                   >
-                    <ExportExcel className={`${'stroke-neutral900'}`} />
+                    <ExportExcel
+                      className={`${
+                        showEmptyState
+                          ? 'stroke-neutral400'
+                          : 'stroke-neutral900'
+                      }`}
+                    />
                   </button>
                 }
                 tooltipContent={'Download Excel'}
@@ -1247,212 +1303,219 @@ const DataTable = ({
                   myCart ? 'Cart' : isDashboard ? 'Dashboard' : 'Search Results'
                 }
                 dynamicTrackIdentifier={isDashboard && 'dashboardSearchResult'}
+                isDisable={showEmptyState}
               />
             </div>
           </div>
         </Box>
       </div>
     ),
-    renderBottomToolbar: ({ table }) => (
-      <div
-        className={`px-[16px] border-t-[1px] border-neutral200 ${
-          isDashboard && 'border-b-[1px]'
-        }`}
-      >
-        {(isResult || isDashboard) && (
-          <div className="flex items-center justify-between">
-            <div className="flex gap-4 h-[30px]">
-              <div className=" border-[1px] border-lengendInCardBorder rounded-[4px] bg-legendInCartFill text-legendInCart">
-                <p className="text-mMedium font-medium px-[6px] py-[4px]">
-                  In Cart
-                </p>
-              </div>
-              <div className=" border-[1px] border-lengendHoldBorder rounded-[4px] bg-legendHoldFill text-legendHold">
-                <p className="text-mMedium font-medium px-[6px] py-[4px]">
-                  {' '}
-                  Hold
-                </p>
-              </div>
-              <div className="border-[1px] border-lengendMemoBorder rounded-[4px] bg-legendMemoFill text-legendMemo">
-                <p className="text-mMedium font-medium px-[6px] py-[4px]">
-                  {' '}
-                  Memo
-                </p>
-              </div>
-            </div>
-            <MRT_TablePagination table={table} />
-            <div className="flex items-center gap-3">
-              <ActionButton
-                actionButtonData={[
-                  {
-                    variant: 'secondary',
-                    label: ManageLocales('app.searchResult.addToCart'),
-                    handler: () => handleAddToCart(),
-                    isDisable: !Object.keys(rowSelection).length
-                  },
+    renderBottomToolbar: ({ table }) => {
+      if (showEmptyState) {
+        return <></>;
+      } else {
+        return (
+          <div
+            className={`px-[16px] border-t-[1px] border-neutral200 ${
+              isDashboard && 'border-b-[1px]'
+            }`}
+          >
+            {(isResult || isDashboard) && (
+              <div className="flex items-center justify-between">
+                <div className="flex gap-4 h-[30px]">
+                  <div className=" border-[1px] border-lengendInCardBorder rounded-[4px] bg-legendInCartFill text-legendInCart">
+                    <p className="text-mMedium font-medium px-[6px] py-[4px]">
+                      In Cart
+                    </p>
+                  </div>
+                  <div className=" border-[1px] border-lengendHoldBorder rounded-[4px] bg-legendHoldFill text-legendHold">
+                    <p className="text-mMedium font-medium px-[6px] py-[4px]">
+                      {' '}
+                      Hold
+                    </p>
+                  </div>
+                  <div className="border-[1px] border-lengendMemoBorder rounded-[4px] bg-legendMemoFill text-legendMemo">
+                    <p className="text-mMedium font-medium px-[6px] py-[4px]">
+                      {' '}
+                      Memo
+                    </p>
+                  </div>
+                </div>
+                <MRT_TablePagination table={table} />
+                <div className="flex items-center gap-3">
+                  <ActionButton
+                    actionButtonData={[
+                      {
+                        variant: 'secondary',
+                        label: ManageLocales('app.searchResult.addToCart'),
+                        handler: () => handleAddToCart(),
+                        isDisable: !Object.keys(rowSelection).length
+                      },
 
-                  {
-                    variant: 'primary',
-                    label: ManageLocales('app.searchResult.confirmStone'),
-                    isDisable: !Object.keys(rowSelection).length,
-                    handler: () => {
-                      if (isDashboard) {
-                        handleConfirmStone({
-                          selectedRows: rowSelection,
-                          rows: rows,
-                          setIsError,
-                          setErrorText,
-                          setIsConfirmStone,
-                          setConfirmStoneData,
-                          setIsDetailPage,
-                          checkProductAvailability,
-                          modalSetState,
-                          router,
-                          identifier: 'dashboard',
-                          customerMobileNumber,
-                          setIsLoading,
-                          refreshSearchResults
-                        });
-                      } else {
-                        handleConfirmStone({
-                          selectedRows: rowSelection,
-                          rows: rows,
-                          setIsError,
-                          setErrorText,
-                          setIsConfirmStone,
-                          setConfirmStoneData,
-                          checkProductAvailability,
-                          modalSetState,
-                          router,
-                          setIsLoading
-                        });
+                      {
+                        variant: 'primary',
+                        label: ManageLocales('app.searchResult.confirmStone'),
+                        isDisable: !Object.keys(rowSelection).length,
+                        handler: () => {
+                          if (isDashboard) {
+                            handleConfirmStone({
+                              selectedRows: rowSelection,
+                              rows: rows,
+                              setIsError,
+                              setErrorText,
+                              setIsConfirmStone,
+                              setConfirmStoneData,
+                              setIsDetailPage,
+                              checkProductAvailability,
+                              modalSetState,
+                              router,
+                              identifier: 'dashboard',
+                              customerMobileNumber,
+                              setIsLoading,
+                              refreshSearchResults
+                            });
+                          } else {
+                            handleConfirmStone({
+                              selectedRows: rowSelection,
+                              rows: rows,
+                              setIsError,
+                              setErrorText,
+                              setIsConfirmStone,
+                              setConfirmStoneData,
+                              checkProductAvailability,
+                              modalSetState,
+                              router,
+                              setIsLoading
+                            });
+                          }
+                        }
                       }
+                    ]}
+                  />
+                  <Dropdown
+                    dropdownTrigger={
+                      <Image
+                        src={threeDotsSvg}
+                        alt="threeDotsSvg"
+                        width={43}
+                        height={43}
+                      />
                     }
-                  }
-                ]}
-              />
-              <Dropdown
-                dropdownTrigger={
-                  <Image
-                    src={threeDotsSvg}
-                    alt="threeDotsSvg"
-                    width={43}
-                    height={43}
+                    dropdownMenu={[
+                      {
+                        label: 'Compare Stone',
+                        handler: () =>
+                          handleCompareStone({
+                            isCheck: rowSelection,
+                            setIsError,
+                            setErrorText,
+                            activeCartRows: rows,
+                            setIsCompareStone,
+                            setCompareStoneData,
+                            identifier: isDashboard ? dashboardIndentifier : '',
+                            customerMobileNumber
+                          }),
+                        isDisable: !Object.keys(rowSelection).length
+                      },
+                      {
+                        label: ManageLocales(
+                          'app.search.actionButton.bookAppointment'
+                        ),
+                        handler: () => {
+                          handleCreateAppointment();
+                        },
+                        isDisable:
+                          !Object.keys(rowSelection).length ||
+                          isKycVerified?.customer?.kyc?.status !==
+                            kycStatus.APPROVED
+                      }
+                    ]}
                   />
-                }
-                dropdownMenu={[
-                  {
-                    label: 'Compare Stone',
-                    handler: () =>
-                      handleCompareStone({
-                        isCheck: rowSelection,
-                        setIsError,
-                        setErrorText,
-                        activeCartRows: rows,
-                        setIsCompareStone,
-                        setCompareStoneData,
-                        identifier: isDashboard ? dashboardIndentifier : '',
-                        customerMobileNumber
-                      }),
-                    isDisable: !Object.keys(rowSelection).length
-                  },
-                  {
-                    label: ManageLocales(
-                      'app.search.actionButton.bookAppointment'
-                    ),
-                    handler: () => {
-                      handleCreateAppointment();
-                    },
-                    isDisable:
-                      !Object.keys(rowSelection).length ||
-                      isKycVerified?.customer?.kyc?.status !==
-                        kycStatus.APPROVED
-                  }
-                ]}
-              />
-            </div>
-          </div>
-        )}
-        {myCart && (
-          <div className="flex items-center  justify-between">
-            <div className=""></div>
-            <MRT_TablePagination table={table} />
-            <div className="flex gap-2">
-              <ActionButton
-                actionButtonData={[
-                  {
-                    variant: 'secondary',
-                    label: ManageLocales('app.myCart.actionButton.delete'),
-                    handler: deleteCartHandler,
-                    isDisable: !Object.keys(rowSelection).length
-                  },
+                </div>
+              </div>
+            )}
+            {myCart && (
+              <div className="flex items-center  justify-between">
+                <div className=""></div>
+                <MRT_TablePagination table={table} />
+                <div className="flex gap-2">
+                  <ActionButton
+                    actionButtonData={[
+                      {
+                        variant: 'secondary',
+                        label: ManageLocales('app.myCart.actionButton.delete'),
+                        handler: deleteCartHandler,
+                        isDisable: !Object.keys(rowSelection).length
+                      },
 
-                  {
-                    variant: 'primary',
-                    label: ManageLocales(
-                      'app.myCart.actionButton.confirmStone'
-                    ),
-                    isDisable: !Object.keys(rowSelection).length,
-                    handler: () => {
-                      handleConfirmStone({
-                        selectedRows: rowSelection,
-                        rows: rows,
-                        setIsError,
-                        setErrorText,
-                        setIsConfirmStone,
-                        setConfirmStoneData,
-                        checkProductAvailability,
-                        modalSetState,
-                        router,
-                        setIsLoading
-                      });
-                    },
-                    isHidden: activeCartTab !== AVAILABLE_STATUS
-                  }
-                ]}
-              />
-              <Dropdown
-                dropdownTrigger={
-                  <Image
-                    src={threeDotsSvg}
-                    alt="threeDotsSvg"
-                    width={43}
-                    height={43}
+                      {
+                        variant: 'primary',
+                        label: ManageLocales(
+                          'app.myCart.actionButton.confirmStone'
+                        ),
+                        isDisable: !Object.keys(rowSelection).length,
+                        handler: () => {
+                          handleConfirmStone({
+                            selectedRows: rowSelection,
+                            rows: rows,
+                            setIsError,
+                            setErrorText,
+                            setIsConfirmStone,
+                            setConfirmStoneData,
+                            checkProductAvailability,
+                            modalSetState,
+                            router,
+                            setIsLoading
+                          });
+                        },
+                        isHidden: activeCartTab !== AVAILABLE_STATUS
+                      }
+                    ]}
                   />
-                }
-                dropdownMenu={[
-                  {
-                    label: ManageLocales(
-                      'app.myCart.actionButton.bookAppointment'
-                    ),
-                    handler: () => {
-                      handleCreateAppointment();
-                    },
-                    isDisable: !Object.keys(rowSelection).length,
-                    commingSoon:
-                      isKycVerified?.customer?.kyc?.status !==
-                      kycStatus.APPROVED,
+                  <Dropdown
+                    dropdownTrigger={
+                      <Image
+                        src={threeDotsSvg}
+                        alt="threeDotsSvg"
+                        width={43}
+                        height={43}
+                      />
+                    }
+                    dropdownMenu={[
+                      {
+                        label: ManageLocales(
+                          'app.myCart.actionButton.bookAppointment'
+                        ),
+                        handler: () => {
+                          handleCreateAppointment();
+                        },
+                        isDisable: !Object.keys(rowSelection).length,
+                        commingSoon:
+                          isKycVerified?.customer?.kyc?.status !==
+                          kycStatus.APPROVED,
 
-                    isHidden: !(
-                      activeCartTab === AVAILABLE_STATUS ||
-                      activeCartTab === HOLD_STATUS
-                    )
-                  },
-                  {
-                    label: ManageLocales(
-                      'app.myCart.actionButton.viewSimilarStone'
-                    ),
-                    handler: () => {},
-                    isHidden: activeCartTab === AVAILABLE_STATUS,
-                    commingSoon: true
-                  }
-                ]}
-              />
-            </div>
+                        isHidden: !(
+                          activeCartTab === AVAILABLE_STATUS ||
+                          activeCartTab === HOLD_STATUS
+                        )
+                      },
+                      {
+                        label: ManageLocales(
+                          'app.myCart.actionButton.viewSimilarStone'
+                        ),
+                        handler: () => {},
+                        isHidden: activeCartTab === AVAILABLE_STATUS,
+                        commingSoon: true
+                      }
+                    ]}
+                  />
+                </div>
+              </div>
+            )}
           </div>
-        )}
-      </div>
-    )
+        );
+      }
+    }
   });
 
   return (
