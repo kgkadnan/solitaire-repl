@@ -417,7 +417,9 @@ const Form = ({
       const queryParams = generateQueryParams(state);
 
       if (!isValidationError && !isSliderActive && !minMaxError) {
-        setSearchUrl(constructUrlParams(queryParams));
+        if (Object.keys(queryParams).length > 1) {
+          setSearchUrl(constructUrlParams(queryParams));
+        }
       }
     };
 
