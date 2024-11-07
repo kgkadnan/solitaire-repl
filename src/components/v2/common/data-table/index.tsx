@@ -1232,14 +1232,21 @@ const DataTable = ({
 
             <div
               className=" rounded-[4px] cursor-pointer"
-              onClick={handleDownloadExcel}
+              onClick={showEmptyState ? () => {} : handleDownloadExcel}
             >
               <Tooltip
                 tooltipTrigger={
                   <button
-                    className={`rounded-[4px] hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm ${'bg-neutral0'}`}
+                    disabled={showEmptyState}
+                    className={`disabled:!bg-neutral100 disabled:cursor-not-allowed disabled:text-neutral400 rounded-[4px] hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm ${'bg-neutral0'}`}
                   >
-                    <ExportExcel className={`${'stroke-neutral900'}`} />
+                    <ExportExcel
+                      className={`${
+                        showEmptyState
+                          ? 'stroke-neutral400'
+                          : 'stroke-neutral900'
+                      }`}
+                    />
                   </button>
                 }
                 tooltipContent={'Download Excel'}
@@ -1290,6 +1297,7 @@ const DataTable = ({
                   myCart ? 'Cart' : isDashboard ? 'Dashboard' : 'Search Results'
                 }
                 dynamicTrackIdentifier={isDashboard && 'dashboardSearchResult'}
+                isDisable={showEmptyState}
               />
             </div>
           </div>
