@@ -197,10 +197,13 @@ const MatchingPairResult = ({
   const [downloadExcel] = useDownloadExcelMutation();
   const [confirmProduct] = useConfirmProductMutation();
 
-  const [triggerColumn, { data: columnData }] =
+  let [triggerColumn, { data: columnData }] =
     useLazyGetManageListingSequenceQuery<IManageListingSequenceResponse>();
-  const [triggerMatchingPairApi, { data: matchingPairData }] =
-    useLazyGetAllMatchingPairQuery();
+
+  const [
+    triggerMatchingPairApi,
+    { data: matchingPairData, isFetching: isFetchingMatchPairData }
+  ] = useLazyGetAllMatchingPairQuery();
 
   // Fetch Products
 
@@ -962,8 +965,8 @@ const MatchingPairResult = ({
                   res.status === 'success'
                     ? 'success'
                     : res.status === 'processing'
-                      ? 'info'
-                      : ''
+                    ? 'info'
+                    : ''
                 }
                 customPoppupBodyStyle="!mt-[70px]"
                 header={res.title}
@@ -1615,6 +1618,7 @@ const MatchingPairResult = ({
                   setSettingApplied={setSettingApplied}
                   isLoading={isLoading}
                   countLimitReached={countLimitReached}
+                  isFetchingMatchPairData={isFetchingMatchPairData}
                 />
               )}
             </div>
