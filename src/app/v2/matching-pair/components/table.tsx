@@ -218,7 +218,8 @@ const MatchPairTable = ({
   isLoading,
   countLimitReached,
   settingApplied,
-  setIsMPSOpen
+  setIsMPSOpen,
+  isFetchingMatchPairData
 }: any) => {
   // Fetching saved search data
   const router = useRouter();
@@ -251,8 +252,8 @@ const MatchPairTable = ({
     if (globalFilter !== '') {
       // Remove all whitespace characters from globalFilter
       const trimmedFilter = globalFilter.replace(/\s+/g, '');
-      let data = rows.filter((data: any) =>
-        data?.lot_id?.startsWith(trimmedFilter)
+      let data = rows.filter(
+        (data: any) => data?.lot_id?.startsWith(trimmedFilter)
       );
       const startIndex = pagination.pageIndex * pagination.pageSize;
       const endIndex = startIndex + pagination.pageSize;
@@ -871,33 +872,31 @@ const MatchPairTable = ({
             ? 'calc(100vh - 130px)'
             : 'calc(100vh - 230px)'
           : myCart
-            ? isNudge &&
-              (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
-                isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-              ? 'calc(100vh - 420px)'
-              : 'calc(100vh - 343px)'
-            : isNudge &&
-                (isKycVerified?.customer?.kyc?.status ===
-                  kycStatus.INPROGRESS ||
-                  isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-              ? 'calc(100vh - 405px)'
-              : 'calc(100vh - 300px)',
+          ? isNudge &&
+            (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+              isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+            ? 'calc(100vh - 420px)'
+            : 'calc(100vh - 343px)'
+          : isNudge &&
+            (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+              isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+          ? 'calc(100vh - 405px)'
+          : 'calc(100vh - 300px)',
         maxHeight: isFullScreen
           ? myCart
             ? 'calc(100vh - 130px)'
             : 'calc(100vh - 230px)'
           : myCart
-            ? isNudge &&
-              (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
-                isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-              ? 'calc(100vh - 420px)'
-              : 'calc(100vh - 343px)'
-            : isNudge &&
-                (isKycVerified?.customer?.kyc?.status ===
-                  kycStatus.INPROGRESS ||
-                  isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-              ? 'calc(100vh - 405px)'
-              : 'calc(100vh - 300px)'
+          ? isNudge &&
+            (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+              isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+            ? 'calc(100vh - 420px)'
+            : 'calc(100vh - 343px)'
+          : isNudge &&
+            (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+              isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+          ? 'calc(100vh - 405px)'
+          : 'calc(100vh - 300px)'
       }
     },
     muiTableHeadRowProps: {
@@ -1388,15 +1387,24 @@ const MatchPairTable = ({
   }, []);
 
   useEffect(() => {
-    // if(isLoading)
+    let timer;
+    let delay = 4000; // Default delay
+
     setIsLoaded(false);
     setIsSkeletonLoading(true);
-    const timer = setTimeout(() => {
-      setIsLoaded(true), setIsSkeletonLoading(false);
-    }, 5000); // Small delay to ensure rendering phase is completed
 
+    if (isFetchingMatchPairData) {
+      clearTimeout(timer);
+    }
+    // Set a new timer with the updated delay
+    timer = setTimeout(() => {
+      setIsLoaded(true);
+      setIsSkeletonLoading(false);
+    }, delay);
+
+    // Cleanup function to clear the timer on effect re-run or unmount
     return () => clearTimeout(timer);
-  }, [activeTab]);
+  }, [activeTab, isFetchingMatchPairData]);
 
   // const handleInputBlur = (index: number, field: string) => {
   //   const endValue = mps[index].end;
