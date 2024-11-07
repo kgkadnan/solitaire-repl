@@ -707,7 +707,8 @@ const BidToBuy = () => {
         // isLoadingBidToBuyApi ||
         historyData === undefined ||
         activeBid === undefined ? (
-        !Object?.keys(localStorage.getItem('bid') ?? {}).length ? (
+        !Object?.keys(localStorage.getItem('bid') ?? {}).length ||
+        subRoute === SubRoutes.BID_TO_BUY ? (
           <CustomKGKLoader />
         ) : (
           <BiddingSkeleton />
