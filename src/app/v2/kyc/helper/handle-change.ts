@@ -34,7 +34,7 @@ const citiesByState: any = {
 
 export const handleInputChange = async (
   path: string,
-  value: string | string[] | number,
+  value: string | string[] | number | null,
   dispatch: any,
   screenName: string,
   key: string
