@@ -117,7 +117,12 @@ const MatchingPairResult = ({
   isLoading,
   setSettingApplied,
   settingApplied,
-  setIsMPSOpen
+  setIsMPSOpen,
+  globalFilterActive,
+  setGlobalFilterActive,
+
+  setGlobalFilter,
+  globalFilter
 }: {
   activeTab: number;
   searchParameters: any;
@@ -133,6 +138,10 @@ const MatchingPairResult = ({
   setSettingApplied: any;
   settingApplied: any;
   setIsMPSOpen: any;
+  globalFilterActive: any;
+  setGlobalFilterActive: any;
+  setGlobalFilter: any;
+  globalFilter: any;
 }) => {
   const dispatch = useAppDispatch();
   const confirmTrack = useAppSelector(state => state.setConfirmStoneTrack);
@@ -1619,6 +1628,10 @@ const MatchingPairResult = ({
                   isLoading={isLoading}
                   countLimitReached={countLimitReached}
                   isFetchingMatchPairData={isFetchingMatchPairData}
+                  globalFilterActive={globalFilterActive}
+                  setGlobalFilterActive={setGlobalFilterActive}
+                  globalFilter={globalFilter}
+                  setGlobalFilter={setGlobalFilter}
                 />
               )}
             </div>

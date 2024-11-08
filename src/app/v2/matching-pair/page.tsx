@@ -128,6 +128,8 @@ const MatchingPair = () => {
   // const currentPath = usePathname();
   const [activeTab, setActiveTab] = useState(0);
   const [isAddDemand, setIsAddDemand] = useState(false);
+  const [globalFilterActive, setGlobalFilterActive] = useState(false);
+  const [globalFilter, setGlobalFilter] = useState('');
 
   const [searchParameters, setSearchParameters] = useState<ISavedSearch[] | []>(
     []
@@ -441,6 +443,8 @@ const MatchingPair = () => {
         setIsModified(false); // Disable the buttons
         setIsMPSOpen(false);
         setSettingApplied(!settingApplied);
+        setGlobalFilterActive(false);
+        setGlobalFilter('');
       });
   };
 
@@ -468,6 +472,8 @@ const MatchingPair = () => {
     setInitialMps(mps); // Set the current MPS as the new initial state after applying changes
     setIsModified(false); // Disable the buttons
     setSettingApplied(!settingApplied);
+    setGlobalFilterActive(false);
+    setGlobalFilter('');
   };
 
   const handleMPSInputChange = (
@@ -883,6 +889,10 @@ const MatchingPair = () => {
           setSettingApplied={setSettingApplied}
           settingApplied={settingApplied}
           setIsMPSOpen={setIsMPSOpen}
+          setGlobalFilterActive={setGlobalFilterActive}
+          globalFilterActive={globalFilterActive}
+          setGlobalFilter={setGlobalFilter}
+          globalFilter={globalFilter}
         />
       )}
     </div>

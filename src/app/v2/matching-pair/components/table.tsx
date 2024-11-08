@@ -219,7 +219,11 @@ const MatchPairTable = ({
   countLimitReached,
   settingApplied,
   setIsMPSOpen,
-  isFetchingMatchPairData
+  isFetchingMatchPairData,
+  globalFilterActive,
+  setGlobalFilterActive,
+  setGlobalFilter,
+  globalFilter
 }: any) => {
   // Fetching saved search data
   const router = useRouter();
@@ -244,10 +248,7 @@ const MatchPairTable = ({
 
   const [paginatedData, setPaginatedData] = useState<any>([]);
 
-  const [globalFilter, setGlobalFilter] = useState('');
   const path = useSearchParams().get('active-tab');
-
-  const [globalFilterActive, setGlobalFilterActive] = useState(false);
 
   const [isLoaded, setIsLoaded] = useState(false);
   useEffect(() => {
