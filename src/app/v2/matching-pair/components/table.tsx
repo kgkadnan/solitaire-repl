@@ -247,6 +247,8 @@ const MatchPairTable = ({
   const [globalFilter, setGlobalFilter] = useState('');
   const path = useSearchParams().get('active-tab');
 
+  const [globalFilterActive, setGlobalFilterActive] = useState(false);
+
   const [isLoaded, setIsLoaded] = useState(false);
   useEffect(() => {
     if (globalFilter !== '') {
@@ -271,6 +273,7 @@ const MatchPairTable = ({
       setPaginatedData(rows);
     }
   }, [globalFilter]);
+
   useEffect(() => {
     // Calculate the start and end indices for the current page
     const startIndex = pagination.pageIndex * pagination.pageSize;
@@ -579,31 +582,36 @@ const MatchPairTable = ({
             </div>
             <div className="flex flex-col justify-center items-center w-[350px]">
               <h1 className="text-neutral600 font-medium text-[16px] w-[340px] text-center mb-[10px]">
-                {countLimitReached
+                {globalFilter.length || globalFilterActive
+                  ? 'No matching stones found'
+                  : countLimitReached
                   ? `Your selection has more than 150 matching pairs. Please modify the filters or adjust the match pair settings to reduce the selection to fewer than 150 matching pairs.`
-                  : `We don't have any stones according to your selection. Please
+                  : !globalFilterActive &&
+                    `We don't have any stones according to your selection. Please
                 modify the filters or change the match pair settings.`}
               </h1>
 
-              <ActionButton
-                actionButtonData={[
-                  {
-                    variant: 'secondary',
-                    label: 'Edit Filter',
-                    handler: () => {
-                      router.push(
-                        `/v2/matching-pair?active-tab=${path}&edit=result`
-                      );
-                    }
-                  },
+              {!globalFilter.length && !globalFilterActive && (
+                <ActionButton
+                  actionButtonData={[
+                    {
+                      variant: 'secondary',
+                      label: 'Edit Filter',
+                      handler: () => {
+                        router.push(
+                          `/v2/matching-pair?active-tab=${path}&edit=result`
+                        );
+                      }
+                    },
 
-                  {
-                    variant: 'primary',
-                    label: 'Edit Match Pair Settings',
-                    handler: () => setIsMPSOpen(true)
-                  }
-                ]}
-              />
+                    {
+                      variant: 'primary',
+                      label: 'Edit Match Pair Settings',
+                      handler: () => setIsMPSOpen(true)
+                    }
+                  ]}
+                />
+              )}
             </div>
           </div>
         </div>
@@ -1125,6 +1133,12 @@ const MatchPairTable = ({
           <div>
             <MRT_GlobalFilterTextField
               table={table}
+              onFocus={() => {
+                setGlobalFilterActive(true);
+              }}
+              onBlur={() => {
+                setGlobalFilterActive(false);
+              }}
               autoComplete="false"
               sx={{
                 boxShadow: 'var(--input-shadow) inset',
