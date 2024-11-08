@@ -40,6 +40,9 @@ export const handleInputChange = async (
   key: string
   //   formState?: any
 ) => {
+  // Convert empty string to null
+  const normalizedValue = value === '' ? null : value;
+
   dispatch(
     updateFormState({
       name: `formErrorState.online.sections.${[screenName]}.${[key]}`,
@@ -47,7 +50,7 @@ export const handleInputChange = async (
     })
   );
 
-  dispatch(updateFormState({ name: path, value: value }));
+  dispatch(updateFormState({ name: path, value: normalizedValue }));
   dispatch(isEditingKYC(true));
 
   // Check if the path is for the city field
