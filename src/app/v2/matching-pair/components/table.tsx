@@ -250,19 +250,6 @@ const MatchPairTable = ({
   const [isLoaded, setIsLoaded] = useState(false);
   useEffect(() => {
     if (globalFilter !== '') {
-      // console.log('globalFilter', globalFilter);
-      // // Remove all whitespace characters from globalFilter
-      // const trimmedFilter = globalFilter.replace(/\s+/g, '');
-      // let data = rows.filter(
-      //   (data: any) => data?.lot_id?.startsWith(trimmedFilter)
-      // );
-      // const startIndex = pagination.pageIndex * pagination.pageSize;
-      // const endIndex = startIndex + pagination.pageSize;
-      // // Slice the data to get the current page's data
-      // const newData = data.slice(startIndex, endIndex);
-      // // Update the paginated data state
-      // setPaginatedData(newData);
-      console.log('globalFilter', globalFilter);
       // Remove all whitespace characters from globalFilter
       const trimmedFilter = globalFilter.replace(/\s+/g, '');
 
@@ -271,7 +258,6 @@ const MatchPairTable = ({
         innerArray.some((data: any) => data?.lot_id?.startsWith(trimmedFilter))
       );
 
-      console.log('filteredData', filteredData);
       // Flatten the filtered data to work with pagination
       let flattenedData = filteredData.flat();
 
