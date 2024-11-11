@@ -657,6 +657,7 @@ const DataTable = ({
       id: yourSelection[activeTab - 1]?.id,
       saveSearchName: yourSelection[activeTab - 1]?.saveSearchName,
       searchId: yourSelection[activeTab - 1]?.searchId,
+      label: yourSelection[activeTab - 1]?.label,
       isSavedSearch: true,
       queryParams: yourSelection[activeTab - 1].queryParams
     };
