@@ -331,6 +331,7 @@ const Form = ({
   useEffect(() => {
     if (subRoute === SubRoutes.NEW_ARRIVAL) {
       const query = parseQueryString(searchUrl);
+      delete query.all_asset_required;
 
       const filteredData =
         newArrivalFilterData?.bidData &&
