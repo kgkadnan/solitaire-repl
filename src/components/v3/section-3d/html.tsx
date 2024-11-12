@@ -146,7 +146,9 @@ const HtmlAnimation = () => {
             backgroundImage: `url('/v3/home/phone-skeleton.png')`,
             zIndex: '10 !important',
             transform: phoneVisible
-              ? windowWidth >= 1280
+              ? windowHeight <= 768
+                ? 'translateY(calc(100vh - 900px))'
+                : windowWidth >= 1280
                 ? 'translateY(calc(100vh - 950px))'
                 : windowWidth >= 1024
                   ? 'translateY(calc(100vh - 895px))'
