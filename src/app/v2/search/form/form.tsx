@@ -418,9 +418,9 @@ const Form = ({
       const queryParams = generateQueryParams(state);
 
       if (!isValidationError && !isSliderActive && !minMaxError) {
-        if (Object.keys(queryParams).length > 1) {
-          setSearchUrl(constructUrlParams(queryParams));
-        }
+        // if (Object.keys(queryParams).length > 1) {
+        setSearchUrl(constructUrlParams(queryParams));
+        // }
       }
     };
 

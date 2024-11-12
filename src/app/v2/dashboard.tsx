@@ -120,6 +120,8 @@ import {
   faSortDown,
   faSortUp
 } from '@fortawesome/free-solid-svg-icons';
+import GemTracPage from '@/components/v2/common/gem-trac';
+import { useLazyGetGemTracQuery } from '@/features/api/gem-trac';
 
 interface ITabs {
   label: string;
@@ -187,6 +189,11 @@ const Dashboard = () => {
   const [isDetailPage, setIsDetailPage] = useState(false);
   const [isDiamondDetail, setIsDiamondDetail] = useState(false);
   const [isDiamondDetailLoading, setIsDiamondDetailLoading] = useState(true); //
+
+  const [isGemTrac, setIsGemTrac] = useState(false);
+  const [gemTracData, setGemTracData] = useState([]);
+
+  const [triggerGemTracApi] = useLazyGetGemTracQuery({});
 
   const [sorting, setSorting] = useState<MRT_SortingState>([]);
 
@@ -739,8 +746,8 @@ const Dashboard = () => {
     activeTab === 'In-transit'
       ? 'activeInvoice'
       : activeTab === 'Pending'
-        ? 'pendingInvoice'
-        : ''
+      ? 'pendingInvoice'
+      : ''
   ] || { keys: [], data: [] };
 
   const redirectLink = () => {
@@ -1394,8 +1401,8 @@ const Dashboard = () => {
                 res.status === 'success'
                   ? 'Success'
                   : res.status === 'processing'
-                    ? 'Processing'
-                    : ''
+                  ? 'Processing'
+                  : ''
             });
 
             setDialogContent(
@@ -1405,8 +1412,8 @@ const Dashboard = () => {
                   res.status === 'success'
                     ? 'success'
                     : res.status === 'processing'
-                      ? 'info'
-                      : ''
+                    ? 'info'
+                    : ''
                 }
                 customPoppupBodyStyle="!mt-[70px]"
                 header={res.title}
@@ -1860,119 +1867,133 @@ const Dashboard = () => {
 
       {isDiamondDetail && detailPageData?.length ? (
         <div className="mt-[16px]">
-          <DiamondDetailsComponent
-            data={searchData?.foundProducts}
-            filterData={detailPageData}
-            goBackToListView={goBack}
-            handleDetailPage={handleDetailPage}
-            breadCrumLabel={
-              breadCrumLabel.length && breadCrumLabel !== 'Dashboard'
-                ? breadCrumLabel
-                : 'Search Results'
-            }
-            identifier={dashboardIndentifier}
-            modalSetState={modalSetState}
-            setIsLoading={setIsLoading}
-            setIsDiamondDetailLoading={setIsDiamondDetailLoading}
-            customerMobileNumber={customerMobileNumber}
-          />
-          <div className="p-[8px] flex justify-end items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow mb-1">
-            {isDiamondDetailLoading ? (
-              <>
-                {' '}
-                <Skeleton
-                  width={128}
-                  sx={{ bgcolor: 'var(--neutral-200)' }}
-                  height={40}
-                  variant="rectangular"
-                  animation="wave"
-                  className="rounded-[4px]"
-                />{' '}
-                <Skeleton
-                  width={128}
-                  sx={{ bgcolor: 'var(--neutral-200)' }}
-                  height={40}
-                  variant="rectangular"
-                  animation="wave"
-                  className="rounded-[4px]"
-                />
-                <Skeleton
-                  width={40}
-                  sx={{ bgcolor: 'var(--neutral-200)' }}
-                  height={40}
-                  variant="rectangular"
-                  animation="wave"
-                  className="rounded-[4px]"
-                />
-              </>
-            ) : (
-              <>
-                <ActionButton
-                  actionButtonData={[
-                    {
-                      variant: 'secondary',
-                      // variant: isConfirmStone ? 'primary' : 'secondary',
-                      label: ManageLocales('app.searchResult.addToCart'),
-                      handler: handleAddToCartDetailPage
-                    },
-
-                    {
-                      variant: 'primary',
-                      label: ManageLocales('app.searchResult.confirmStone'),
-                      // isHidden: isConfirmStone,
-                      handler: () => {
-                        setIsDetailPage(false);
-                        const { id } = detailPageData;
-                        const selectedRows = { [id]: true };
-                        trackEvent({
-                          action:
-                            Tracking_Search_By_Text.click_confirm_stone_dna_page,
-                          category: 'SearchByText',
-                          mobile_number: customerMobileNumber
-                        });
-                        handleConfirmStone({
-                          selectedRows: selectedRows,
-                          rows: searchData?.foundProducts,
-                          setIsError,
-                          setErrorText: setError,
-                          setIsConfirmStone,
-                          setConfirmStoneData,
-                          setIsDetailPage: setIsDiamondDetail,
-                          identifier: 'detailPage',
-                          confirmStoneTrack: 'DNA',
-                          dispatch,
-                          router,
-                          modalSetState,
-                          checkProductAvailability,
-                          setIsLoading,
-                          refreshSearchResults
-                        });
-                      }
-                    }
-                  ]}
-                />
-                <Dropdown
-                  dropdownTrigger={
-                    <Image
-                      src={threeDotsSvg}
-                      alt="threeDotsSvg"
-                      width={4}
-                      height={43}
+          {isGemTrac ? (
+            <GemTracPage
+              breadCrumLabel={'Search Results'}
+              setIsGemTrac={setIsGemTrac}
+              setGemTracData={setGemTracData}
+              gemTracData={gemTracData}
+            />
+          ) : (
+            <>
+              <DiamondDetailsComponent
+                data={searchData?.foundProducts}
+                filterData={detailPageData}
+                goBackToListView={goBack}
+                handleDetailPage={handleDetailPage}
+                breadCrumLabel={
+                  breadCrumLabel.length && breadCrumLabel !== 'Dashboard'
+                    ? breadCrumLabel
+                    : 'Search Results'
+                }
+                identifier={dashboardIndentifier}
+                modalSetState={modalSetState}
+                setIsLoading={setIsLoading}
+                setIsDiamondDetailLoading={setIsDiamondDetailLoading}
+                customerMobileNumber={customerMobileNumber}
+                setIsGemTrac={setIsGemTrac}
+                setGemTracData={setGemTracData}
+                triggerGemTracApi={triggerGemTracApi}
+              />
+              <div className="p-[8px] flex justify-end items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow mb-1">
+                {isDiamondDetailLoading ? (
+                  <>
+                    {' '}
+                    <Skeleton
+                      width={128}
+                      sx={{ bgcolor: 'var(--neutral-200)' }}
+                      height={40}
+                      variant="rectangular"
+                      animation="wave"
+                      className="rounded-[4px]"
+                    />{' '}
+                    <Skeleton
+                      width={128}
+                      sx={{ bgcolor: 'var(--neutral-200)' }}
+                      height={40}
+                      variant="rectangular"
+                      animation="wave"
+                      className="rounded-[4px]"
                     />
-                  }
-                  dropdownMenu={[
-                    {
-                      label: ManageLocales(
-                        'app.search.actionButton.bookAppointment'
-                      ),
-                      handler: () => {},
-                      commingSoon: true
-                    }
-                  ]}
-                />
-              </>
-            )}
-          </div>
+                    <Skeleton
+                      width={40}
+                      sx={{ bgcolor: 'var(--neutral-200)' }}
+                      height={40}
+                      variant="rectangular"
+                      animation="wave"
+                      className="rounded-[4px]"
+                    />
+                  </>
+                ) : (
+                  <>
+                    <ActionButton
+                      actionButtonData={[
+                        {
+                          variant: 'secondary',
+                          // variant: isConfirmStone ? 'primary' : 'secondary',
+                          label: ManageLocales('app.searchResult.addToCart'),
+                          handler: handleAddToCartDetailPage
+                        },
+
+                        {
+                          variant: 'primary',
+                          label: ManageLocales('app.searchResult.confirmStone'),
+                          // isHidden: isConfirmStone,
+                          handler: () => {
+                            setIsDetailPage(false);
+                            const { id } = detailPageData;
+                            const selectedRows = { [id]: true };
+                            trackEvent({
+                              action:
+                                Tracking_Search_By_Text.click_confirm_stone_dna_page,
+                              category: 'SearchByText',
+                              mobile_number: customerMobileNumber
+                            });
+                            handleConfirmStone({
+                              selectedRows: selectedRows,
+                              rows: searchData?.foundProducts,
+                              setIsError,
+                              setErrorText: setError,
+                              setIsConfirmStone,
+                              setConfirmStoneData,
+                              setIsDetailPage: setIsDiamondDetail,
+                              identifier: 'detailPage',
+                              confirmStoneTrack: 'DNA',
+                              dispatch,
+                              router,
+                              modalSetState,
+                              checkProductAvailability,
+                              setIsLoading,
+                              refreshSearchResults
+                            });
+                          }
+                        }
+                      ]}
+                    />
+                    <Dropdown
+                      dropdownTrigger={
+                        <Image
+                          src={threeDotsSvg}
+                          alt="threeDotsSvg"
+                          width={4}
+                          height={43}
+                        />
+                      }
+                      dropdownMenu={[
+                        {
+                          label: ManageLocales(
+                            'app.search.actionButton.bookAppointment'
+                          ),
+                          handler: () => {},
+                          commingSoon: true
+                        }
+                      ]}
+                    />
+                  </>
+                )}
+              </div>
+            </>
+          )}
         </div>
       ) : isConfirmStone ? (
         <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow mt-[16px]">
@@ -1985,8 +2006,8 @@ const Dashboard = () => {
               detailPageData?.length
                 ? 'Detail Page'
                 : isCompareStone
-                  ? 'Compare Stone'
-                  : 'Search Results'
+                ? 'Compare Stone'
+                : 'Search Results'
             }
             handleDetailImage={handleDetailImage}
             handleDetailPage={handleDetailPage}
@@ -2010,8 +2031,8 @@ const Dashboard = () => {
                       detailPageData?.length
                         ? 'Detail Page'
                         : isCompareStone
-                          ? 'Compare Stone'
-                          : 'Dashboard'
+                        ? 'Compare Stone'
+                        : 'Dashboard'
                     );
                   }
                 },
@@ -2252,18 +2273,18 @@ const Dashboard = () => {
                         data.isKycNotVerified
                           ? 'cursor-not-allowed'
                           : data.isAvailable
-                            ? 'cursor-pointer'
-                            : 'cursor-default'
+                          ? 'cursor-pointer'
+                          : 'cursor-default'
                       }`}
                       key={index}
                       onClick={
                         data.isKycNotVerified
                           ? () => {}
                           : data.isAvailable
-                            ? () => {
-                                router.push(data.link);
-                              }
-                            : () => {}
+                          ? () => {
+                              router.push(data.link);
+                            }
+                          : () => {}
                       }
                     >
                       <div
