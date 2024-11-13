@@ -136,7 +136,7 @@ const GemTracPage = ({
             <div className="flex items-ceter gap-[60px]">
               {keysToDisplay.map(({ key, value }) => {
                 return (
-                  <div className="flex items-start">
+                  <div className="flex items-start" key={key}>
                     {/* Gradient line */}
                     <div className="w-[2px] h-full bg-gradient-to-b from-[#FFAD05] via-[#168B85] to-[#5995ED] mr-2 rounded-full"></div>
 
