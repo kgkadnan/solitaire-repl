@@ -9,7 +9,7 @@ export const gemTracApi = createApi({
   endpoints: builder => ({
     getGemTrac: builder.query({
       query: ({ product_id }) =>
-        `/store/product/traceability?key=${product_id}&mock_key=VTJGc2RHVmtYMS9lOXk5dGNhVVV6MzVCRlhXYU10QnlpbURjUWdLTVE1Zz0%3D`,
+        `/store/product/traceability?key=${product_id}`,
       providesTags: ['gemTrac']
     })
   })
