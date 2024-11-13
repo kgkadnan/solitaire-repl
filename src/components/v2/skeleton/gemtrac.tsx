@@ -17,7 +17,7 @@ const GemTracSkeleton = () => {
           className="rounded-[4px] "
         />
         <div className="flex items-ceter gap-[60px]">
-          {Array.from({ length: 5 }).map((_, index) => (
+          {Array.from({ length: 6 }).map((_, index) => (
             <div className="flex items-start">
               {/* Gradient line */}
               <div className="w-[2px] h-full bg-neutral200 mr-2 rounded-full"></div>

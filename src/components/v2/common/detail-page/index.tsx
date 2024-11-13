@@ -6,6 +6,7 @@ import backWardArrow from '@public/v2/assets/icons/my-diamonds/backwardArrow.svg
 import LinkSvg from '@public/v2/assets/icons/detail-page/link.svg?url';
 import ExportExcel from '@public/v2/assets/icons/detail-page/export-excel.svg?url';
 import DragImage from '@public/v2/assets/icons/detail-page/drag.svg?url';
+import GemTracLogo from '@public/v2/assets/icons/detail-page/gem_trac_logo.svg?url';
 // import forwardArrow from '@public/v2/assets/icons/detail-page/forward-arrow.svg';
 // import backwardArrow from '@public/v2/assets/icons/detail-page/back-ward-arrow.svg';
 
@@ -31,6 +32,7 @@ import { Toast } from '../copy-and-share/toast';
 import Tooltip from '../tooltip';
 import ImagePreview from './components/image-preiview';
 import { getShapeDisplayName } from '@/utils/v2/detail-page';
+
 import ResponsiveTable from './components/CommonTable';
 import { HOLD_STATUS, MEMO_STATUS } from '@/constants/business-logic';
 // import ShowPopups from './components/popup';
@@ -652,9 +654,7 @@ export function DiamondDetailsComponent({
                   }}
                   className="ml-[10px] flex items-center justify-center gap-3 bg-primaryMain border-primaryBorder border-[1px] w-[134px] rounded-[4px] cursor-pointer"
                 >
-                  <span className="text-lMedium font-extrabold text-neutral0">
-                    GemTrac
-                  </span>
+                  <GemTracLogo />
                   <DragImage />
                 </button>
               </>

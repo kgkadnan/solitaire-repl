@@ -1391,7 +1391,7 @@ const MatchingPairResult = ({
               setIsGemTrac={setIsGemTrac}
               setGemTracData={setGemTracData}
               gemTracData={gemTracData}
-              goBackToListView={goBackToListView}
+              goBackToListView={goBack}
             />
           ) : (
             <>
