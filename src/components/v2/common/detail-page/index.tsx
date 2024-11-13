@@ -124,12 +124,10 @@ export function DiamondDetailsComponent({
   }, [filterData, data]);
 
   const handleGemTrac = () => {
-    console.log('tabledata', tableData);
     triggerGemTracApi({
       product_id: tableData.id
     })
       .then((res: any) => {
-        console.log('res', res);
         // Assuming `gemTracData.traceability` comes from your API response
         const addImagesToTraceability = (traceabilityData: any) => {
           return traceabilityData.map((item: any, index: number) => ({
@@ -142,7 +140,7 @@ export function DiamondDetailsComponent({
           ...res.data,
           traceability: addImagesToTraceability(res.data.traceability)
         };
-        console.log('updatedGemTracData', updatedGemTracData);
+
         setGemTracData(updatedGemTracData);
       })
       .catch((e: any) => {

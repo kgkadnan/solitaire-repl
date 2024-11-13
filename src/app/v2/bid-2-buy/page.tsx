@@ -681,6 +681,7 @@ const BidToBuy = () => {
               setIsGemTrac={setIsGemTrac}
               setGemTracData={setGemTracData}
               gemTracData={gemTracData}
+              goBackToListView={goBack}
             />
           ) : (
             <>

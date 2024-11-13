@@ -943,6 +943,7 @@ const NewArrivals = () => {
               setIsGemTrac={setIsGemTrac}
               setGemTracData={setGemTracData}
               gemTracData={gemTracData}
+              goBackToListView={goBack}
             />
           ) : (
             <>

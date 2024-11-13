@@ -367,6 +367,7 @@ const OrderDetail: React.FC<IOrderDetail> = ({
                   setIsGemTrac={setIsGemTrac}
                   setGemTracData={setGemTracData}
                   gemTracData={gemTracData}
+                  goBackToListView={goBack}
                 />
               ) : (
                 <>

@@ -360,7 +360,7 @@ export const generateQueryParams = (state: IState) => {
       gte: Number(starLengthMin)
     });
 
-  showOnlyWithVideo && (queryParams['all_asset_required'] = showOnlyWithVideo);
+  queryParams['all_asset_required'] = showOnlyWithVideo;
 
   return queryParams;
 };

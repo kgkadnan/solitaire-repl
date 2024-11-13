@@ -1333,6 +1333,7 @@ const Turkey = () => {
               setIsGemTrac={setIsGemTrac}
               setGemTracData={setGemTracData}
               gemTracData={gemTracData}
+              goBackToListView={goBack}
             />
           ) : (
             <div>

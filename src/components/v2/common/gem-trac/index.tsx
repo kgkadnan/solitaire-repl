@@ -38,12 +38,14 @@ const GemTracPage = ({
   breadCrumLabel,
   setIsGemTrac,
   setGemTracData,
-  gemTracData
+  gemTracData,
+  goBackToListView
 }: {
   breadCrumLabel: string;
   setIsGemTrac: React.Dispatch<React.SetStateAction<boolean>>;
   setGemTracData: any;
   gemTracData: any;
+  goBackToListView: any;
 }) => {
   return (
     <div className="flex flex-col gap-10">
@@ -64,6 +66,7 @@ const GemTracPage = ({
               onClick={() => {
                 setIsGemTrac(false);
                 setGemTracData([]);
+                goBackToListView();
               }}
             >
               {breadCrumLabel}
@@ -294,9 +297,11 @@ const GemTracPage = ({
                               index === 2 || (index === 3 && '')
                             } `}
                           >
-                            <img
+                            <Image
                               src={gemTrac.url}
                               alt="images"
+                              width={397}
+                              height={420}
                               className={`lg:h-[397px] xl:h-[420px] object-fill lg:w-[580px] xl:w-[605px] ${
                                 index === 2 || index === 3
                                   ? 'rounded-[5px]'

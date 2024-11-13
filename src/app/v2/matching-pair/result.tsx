@@ -100,6 +100,8 @@ import {
   faSortDown,
   faSortUp
 } from '@fortawesome/free-solid-svg-icons';
+import GemTracPage from '@/components/v2/common/gem-trac';
+import { useLazyGetGemTracQuery } from '@/features/api/gem-trac';
 
 // Column mapper outside the component to avoid re-creation on each render
 
@@ -181,6 +183,11 @@ const MatchingPairResult = ({
 
   const [confirmStoneData, setConfirmStoneData] = useState<IProduct[]>([]);
   const [compareStoneData, setCompareStoneData] = useState<IProduct[]>([]);
+
+  const [triggerGemTracApi] = useLazyGetGemTracQuery({});
+
+  const [isGemTrac, setIsGemTrac] = useState(false);
+  const [gemTracData, setGemTracData] = useState<string[]>([]);
 
   const [commentValue, setCommentValue] = useState('');
   const [textAreaValue, setTextAreaValue] = useState('');
@@ -1378,142 +1385,157 @@ const MatchingPairResult = ({
 
       {isDetailPage && detailPageData?.length ? (
         <>
-          <MatchPairDetails
-            data={originalData}
-            filterData={detailPageData}
-            goBackToListView={goBack}
-            breadCrumLabel={
-              breadCrumLabel.length ? breadCrumLabel : 'Match Pair'
-            }
-            modalSetState={modalSetState}
-            setIsLoading={setIsLoading}
-            handleDetailImage={handleDetailImage}
-            setRowSelection={setRowSelection}
-            setSimilarData={setSimilarData}
-            similarData={similarData}
-            rowSelection={rowSelection}
-            setActivePreviewTab={setActivePreviewTab}
-            activePreviewTab={activePreviewTab}
-            setImageIndex={setImageIndex}
-            imageIndex={imageIndex}
-            setIsDiamondDetailLoading={setIsDiamondDetailLoading}
-            activeTab={activeTab}
-          />
-          <div className="p-[8px] flex justify-between items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow mb-1">
-            <div className="flex gap-4 h-[30px]">
-              {isDiamondDetailLoading ? (
-                <>
-                  {' '}
-                  <Skeleton
-                    width={60}
-                    sx={{ bgcolor: 'var(--neutral-200)' }}
-                    height={30}
-                    variant="rectangular"
-                    animation="wave"
-                    className="rounded-[4px]"
-                  />{' '}
-                  <Skeleton
-                    width={60}
-                    sx={{ bgcolor: 'var(--neutral-200)' }}
-                    height={30}
-                    variant="rectangular"
-                    animation="wave"
-                    className="rounded-[4px]"
-                  />
-                  <Skeleton
-                    width={60}
-                    sx={{ bgcolor: 'var(--neutral-200)' }}
-                    height={30}
-                    variant="rectangular"
-                    animation="wave"
-                    className="rounded-[4px]"
-                  />
-                </>
-              ) : (
-                <>
-                  <div className=" border-[1px] border-lengendInCardBorder rounded-[4px] bg-legendInCartFill text-legendInCart">
-                    <p className="text-mMedium font-medium px-[6px] py-[4px]">
-                      In Cart
-                    </p>
-                  </div>
-                  <div className=" border-[1px] border-lengendHoldBorder rounded-[4px] bg-legendHoldFill text-legendHold">
-                    <p className="text-mMedium font-medium px-[6px] py-[4px]">
-                      {' '}
-                      Hold
-                    </p>
-                  </div>
-                  <div className="border-[1px] border-lengendMemoBorder rounded-[4px] bg-legendMemoFill text-legendMemo">
-                    <p className="text-mMedium font-medium px-[6px] py-[4px]">
-                      {' '}
-                      Memo
-                    </p>
-                  </div>
-                </>
-              )}
-            </div>
-            {isDiamondDetailLoading ? (
-              <>
-                <div className="flex gap-3">
-                  {' '}
-                  <Skeleton
-                    width={128}
-                    sx={{ bgcolor: 'var(--neutral-200)' }}
-                    height={40}
-                    variant="rectangular"
-                    animation="wave"
-                    className="rounded-[4px]"
-                  />{' '}
-                  <Skeleton
-                    width={128}
-                    sx={{ bgcolor: 'var(--neutral-200)' }}
-                    height={40}
-                    variant="rectangular"
-                    animation="wave"
-                    className="rounded-[4px]"
-                  />
-                </div>
-              </>
-            ) : (
-              <ActionButton
-                actionButtonData={[
-                  {
-                    variant: isConfirmStone ? 'primary' : 'secondary',
-                    label: ManageLocales('app.searchResult.addToCart'),
-                    handler: () => {
-                      handleAddToCart(similarData?.products || []);
-                    }
-                  },
-
-                  {
-                    variant: 'primary',
-                    label: ManageLocales('app.searchResult.confirmStone'),
-                    isHidden: isConfirmStone,
-                    handler: () => {
-                      setBreadCrumLabel('Detail Page');
-
-                      handleConfirmStone({
-                        selectedRows: rowSelection,
-                        rows: dataTableState.rows,
-                        setIsError,
-                        setErrorText,
-                        setIsConfirmStone,
-                        setConfirmStoneData,
-                        setIsDetailPage,
-                        identifier: 'match-pair-detail',
-                        confirmStoneTrack: 'Matching-Pair-Details',
-                        dispatch,
-                        router,
-                        modalSetState,
-                        checkProductAvailability,
-                        setIsLoading,
-                        refreshSearchResults
-                      });
-                    }
-                  }
-                ]}
+          {isGemTrac ? (
+            <GemTracPage
+              breadCrumLabel={'Search Results'}
+              setIsGemTrac={setIsGemTrac}
+              setGemTracData={setGemTracData}
+              gemTracData={gemTracData}
+              goBackToListView={goBackToListView}
+            />
+          ) : (
+            <>
+              <MatchPairDetails
+                data={originalData}
+                filterData={detailPageData}
+                goBackToListView={goBack}
+                breadCrumLabel={
+                  breadCrumLabel.length ? breadCrumLabel : 'Match Pair'
+                }
+                modalSetState={modalSetState}
+                setIsLoading={setIsLoading}
+                handleDetailImage={handleDetailImage}
+                setRowSelection={setRowSelection}
+                setSimilarData={setSimilarData}
+                similarData={similarData}
+                rowSelection={rowSelection}
+                setActivePreviewTab={setActivePreviewTab}
+                activePreviewTab={activePreviewTab}
+                setImageIndex={setImageIndex}
+                imageIndex={imageIndex}
+                setIsDiamondDetailLoading={setIsDiamondDetailLoading}
+                activeTab={activeTab}
+                setIsGemTrac={setIsGemTrac}
+                setGemTracData={setGemTracData}
+                triggerGemTracApi={triggerGemTracApi}
               />
-            )}
-          </div>
+              <div className="p-[8px] flex justify-between items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow mb-1">
+                <div className="flex gap-4 h-[30px]">
+                  {isDiamondDetailLoading ? (
+                    <>
+                      {' '}
+                      <Skeleton
+                        width={60}
+                        sx={{ bgcolor: 'var(--neutral-200)' }}
+                        height={30}
+                        variant="rectangular"
+                        animation="wave"
+                        className="rounded-[4px]"
+                      />{' '}
+                      <Skeleton
+                        width={60}
+                        sx={{ bgcolor: 'var(--neutral-200)' }}
+                        height={30}
+                        variant="rectangular"
+                        animation="wave"
+                        className="rounded-[4px]"
+                      />
+                      <Skeleton
+                        width={60}
+                        sx={{ bgcolor: 'var(--neutral-200)' }}
+                        height={30}
+                        variant="rectangular"
+                        animation="wave"
+                        className="rounded-[4px]"
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <div className=" border-[1px] border-lengendInCardBorder rounded-[4px] bg-legendInCartFill text-legendInCart">
+                        <p className="text-mMedium font-medium px-[6px] py-[4px]">
+                          In Cart
+                        </p>
+                      </div>
+                      <div className=" border-[1px] border-lengendHoldBorder rounded-[4px] bg-legendHoldFill text-legendHold">
+                        <p className="text-mMedium font-medium px-[6px] py-[4px]">
+                          {' '}
+                          Hold
+                        </p>
+                      </div>
+                      <div className="border-[1px] border-lengendMemoBorder rounded-[4px] bg-legendMemoFill text-legendMemo">
+                        <p className="text-mMedium font-medium px-[6px] py-[4px]">
+                          {' '}
+                          Memo
+                        </p>
+                      </div>
+                    </>
+                  )}
+                </div>
+                {isDiamondDetailLoading ? (
+                  <>
+                    <div className="flex gap-3">
+                      {' '}
+                      <Skeleton
+                        width={128}
+                        sx={{ bgcolor: 'var(--neutral-200)' }}
+                        height={40}
+                        variant="rectangular"
+                        animation="wave"
+                        className="rounded-[4px]"
+                      />{' '}
+                      <Skeleton
+                        width={128}
+                        sx={{ bgcolor: 'var(--neutral-200)' }}
+                        height={40}
+                        variant="rectangular"
+                        animation="wave"
+                        className="rounded-[4px]"
+                      />
+                    </div>
+                  </>
+                ) : (
+                  <ActionButton
+                    actionButtonData={[
+                      {
+                        variant: isConfirmStone ? 'primary' : 'secondary',
+                        label: ManageLocales('app.searchResult.addToCart'),
+                        handler: () => {
+                          handleAddToCart(similarData?.products || []);
+                        }
+                      },
+
+                      {
+                        variant: 'primary',
+                        label: ManageLocales('app.searchResult.confirmStone'),
+                        isHidden: isConfirmStone,
+                        handler: () => {
+                          setBreadCrumLabel('Detail Page');
+
+                          handleConfirmStone({
+                            selectedRows: rowSelection,
+                            rows: dataTableState.rows,
+                            setIsError,
+                            setErrorText,
+                            setIsConfirmStone,
+                            setConfirmStoneData,
+                            setIsDetailPage,
+                            identifier: 'match-pair-detail',
+                            confirmStoneTrack: 'Matching-Pair-Details',
+                            dispatch,
+                            router,
+                            modalSetState,
+                            checkProductAvailability,
+                            setIsLoading,
+                            refreshSearchResults
+                          });
+                        }
+                      }
+                    ]}
+                  />
+                )}
+              </div>
+            </>
+          )}
         </>
       ) : (
         <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow">
