@@ -1,4 +1,3 @@
-import { traceabilityGemTrac } from '@/constants/v3/traceability';
 import Image from 'next/image';
 import React from 'react';
 import GemTracAnchorLink from '../gem-trac-anchor-link';
@@ -11,6 +10,10 @@ const keysToDisplay = [
   {
     key: 'lot_id',
     value: 'Stock No.'
+  },
+  {
+    key: 'certificate_number',
+    value: 'Report No'
   },
   {
     key: 'shape',
@@ -181,7 +184,8 @@ const GemTracPage = ({
                               </p>
                             </div>
                             <div className="flex gap-2">
-                              {index !== traceabilityGemTrac.length - 1 && (
+                              {index !==
+                                gemTracData.traceability.length - 1 && (
                                 <div className="xl:pl-[20px] lg:pl-[15px]">
                                   <div
                                     className={`border-l border-dotted border-gray-400 ${
@@ -198,11 +202,11 @@ const GemTracPage = ({
                               )}
                               <div
                                 className={`flex flex-col gap-2 ${
-                                  index !== traceabilityGemTrac.length - 1
+                                  index !== gemTracData.traceability.length - 1
                                     ? 'pl-[18px]'
                                     : 'pl-[43px]'
                                 } ${
-                                  index === traceabilityGemTrac.length - 1
+                                  index === gemTracData.traceability.length - 1
                                     ? 'lg:w-[474px]'
                                     : 'lg:w-[450px]'
                                 }   xl:w-full w-full`}
