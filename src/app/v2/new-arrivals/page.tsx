@@ -78,6 +78,8 @@ import {
   faSortDown,
   faSortUp
 } from '@fortawesome/free-solid-svg-icons';
+import GemTracPage from '@/components/v2/common/gem-trac';
+import { useLazyGetGemTracQuery } from '@/features/api/gem-trac';
 
 const NewArrivals = () => {
   const router = useRouter();
@@ -94,6 +96,10 @@ const NewArrivals = () => {
   const [isLoading, setIsLoading] = useState(false); // State to track loading
   const [isTabSwitch, setIsTabSwitch] = useState(false); // State to track
   const [searchLoading, setSearchLoading] = useState(false);
+
+  const [isGemTrac, setIsGemTrac] = useState(false);
+  const [gemTracData, setGemTracData] = useState([]);
+  const [triggerGemTracApi] = useLazyGetGemTracQuery({});
 
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
 
@@ -931,22 +937,37 @@ const NewArrivals = () => {
 
       {isDetailPage ? (
         <div className="mt-[16px]">
-          <DiamondDetailsComponent
-            data={
-              activeTab === 0
-                ? bid
-                : activeTab === 1
-                ? activeBid
-                : bidHistory?.data
-            }
-            filterData={detailPageData}
-            goBackToListView={goBack}
-            handleDetailPage={handleDetailPage}
-            breadCrumLabel={'New Arrival'}
-            modalSetState={modalSetState}
-            setIsLoading={setIsLoading}
-            activeTab={activeTab}
-          />
+          {isGemTrac ? (
+            <GemTracPage
+              breadCrumLabel={'New Arrival'}
+              setIsGemTrac={setIsGemTrac}
+              setGemTracData={setGemTracData}
+              gemTracData={gemTracData}
+              goBackToListView={goBack}
+            />
+          ) : (
+            <>
+              <DiamondDetailsComponent
+                data={
+                  activeTab === 0
+                    ? bid
+                    : activeTab === 1
+                    ? activeBid
+                    : bidHistory?.data
+                }
+                filterData={detailPageData}
+                goBackToListView={goBack}
+                handleDetailPage={handleDetailPage}
+                breadCrumLabel={'New Arrival'}
+                modalSetState={modalSetState}
+                setIsLoading={setIsLoading}
+                activeTab={activeTab}
+                setIsGemTrac={setIsGemTrac}
+                setGemTracData={setGemTracData}
+                triggerGemTracApi={triggerGemTracApi}
+              />
+            </>
+          )}
         </div>
       ) : showAppointmentForm ? (
         <>

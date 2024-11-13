@@ -50,6 +50,7 @@ import { matchingPairApi } from './features/api/match-pair';
 import trackPageApi from './features/api/track-page';
 import { funnelApi } from './features/api/funnel';
 import queryParamsReducer from './features/event-params/event-param-slice';
+import { gemTracApi } from './features/api/gem-trac';
 
 const appReducer = combineReducers({
   notificationBadge: notificationBadgeReducer,
@@ -67,6 +68,7 @@ const appReducer = combineReducers({
   logoutAll: LogoutReducer,
   kamLocation: KamLocationReducer,
   setConfirmStoneTrack: setConfirmStoneTrackReducer,
+
   [downloadExcelApi.reducerPath]: downloadExcelApi.reducer,
   [currentIPApi.reducerPath]: currentIPApi.reducer,
   [manageListingSequenceApi.reducerPath]: manageListingSequenceApi.reducer,
@@ -94,7 +96,8 @@ const appReducer = combineReducers({
   [trackApi.reducerPath]: trackApi.reducer,
   [matchingPairApi.reducerPath]: matchingPairApi.reducer,
   [trackPageApi.reducerPath]: trackPageApi.reducer,
-  [funnelApi.reducerPath]: funnelApi.reducer
+  [funnelApi.reducerPath]: funnelApi.reducer,
+  [gemTracApi.reducerPath]: gemTracApi.reducer
 });
 
 // Root reducer that resets state on logout
@@ -151,6 +154,7 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
         matchingPairApi.middleware,
         trackPageApi.middleware,
         funnelApi.middleware,
+        gemTracApi.middleware,
         handle410Middleware
       ),
     preloadedState

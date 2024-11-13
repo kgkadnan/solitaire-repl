@@ -38,6 +38,8 @@ import { getShapeDisplayName } from '@/utils/v2/detail-page';
 import { loadImages } from '@/components/v2/common/detail-page/helpers/load-images';
 import { checkImage } from '@/components/v2/common/detail-page/helpers/check-image';
 import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
+import GemTracPage from '@/components/v2/common/gem-trac';
+import { useLazyGetGemTracQuery } from '@/features/api/gem-trac';
 
 interface IOrderDetail {
   productDetailData: any;
@@ -66,12 +68,18 @@ const OrderDetail: React.FC<IOrderDetail> = ({
   const [isDetailPage, setIsDetailPage] = useState(false);
   const [detailPageData, setDetailPageData] = useState<any>({});
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
   const [tooltip, setTooltip] = useState({
     show: false,
     content: '',
     position: { left: 0 }
   });
   const [detailImageData, setDetailImageData] = useState<any>({});
+
+  const [isGemTrac, setIsGemTrac] = useState(false);
+  const [gemTracData, setGemTracData] = useState([]);
+  const [triggerGemTracApi] = useLazyGetGemTracQuery({});
+
   const handleDetailPage = ({ row }: { row: any }) => {
     setIsDetailPage(true);
     setDetailPageData(row);
@@ -353,15 +361,30 @@ const OrderDetail: React.FC<IOrderDetail> = ({
           {isDetailPage && detailPageData?.length ? (
             <>
               {' '}
-              <DiamondDetailsComponent
-                data={rows}
-                filterData={detailPageData}
-                goBackToListView={goBack}
-                handleDetailPage={handleDetailPage}
-                breadCrumLabel={'Search Results'}
-                modalSetState={modalSetState}
-                setIsLoading={setIsLoading}
-              />
+              {isGemTrac ? (
+                <GemTracPage
+                  breadCrumLabel={'Search Results'}
+                  setIsGemTrac={setIsGemTrac}
+                  setGemTracData={setGemTracData}
+                  gemTracData={gemTracData}
+                  goBackToListView={goBack}
+                />
+              ) : (
+                <>
+                  <DiamondDetailsComponent
+                    data={rows}
+                    filterData={detailPageData}
+                    goBackToListView={goBack}
+                    handleDetailPage={handleDetailPage}
+                    breadCrumLabel={'Search Results'}
+                    modalSetState={modalSetState}
+                    setIsLoading={setIsLoading}
+                    setIsGemTrac={setIsGemTrac}
+                    setGemTracData={setGemTracData}
+                    triggerGemTracApi={triggerGemTracApi}
+                  />
+                </>
+              )}
             </>
           ) : (
             <div>

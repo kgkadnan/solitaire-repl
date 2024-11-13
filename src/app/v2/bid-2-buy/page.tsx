@@ -66,6 +66,8 @@ import {
   faSortDown,
   faSortUp
 } from '@fortawesome/free-solid-svg-icons';
+import GemTracPage from '@/components/v2/common/gem-trac';
+import { useLazyGetGemTracQuery } from '@/features/api/gem-trac';
 
 const BidToBuy = () => {
   const router = useRouter();
@@ -86,6 +88,9 @@ const BidToBuy = () => {
   const [isTabSwitch, setIsTabSwitch] = useState(false); // State to track
 
   // const [checkStatus, setCheckStatus] = useState(false);
+  const [isGemTrac, setIsGemTrac] = useState(false);
+  const [gemTracData, setGemTracData] = useState([]);
+  const [triggerGemTracApi] = useLazyGetGemTracQuery({});
 
   const { setSearchUrl, searchUrl } = useValidationStateManagement();
   const { state, setState, carat } = useFormStateManagement();
@@ -670,23 +675,38 @@ const BidToBuy = () => {
 
       {isDetailPage ? (
         <div className="mt-[16px]">
-          <DiamondDetailsComponent
-            data={
-              activeTab === 0
-                ? bid
-                : activeTab === 1
-                ? activeBid
-                : bidHistory?.data
-            }
-            filterData={detailPageData}
-            goBackToListView={goBack}
-            handleDetailPage={handleDetailPage}
-            fromBid={true}
-            breadCrumLabel={'Bid to Buy'}
-            modalSetState={modalSetState}
-            setIsLoading={setIsLoading}
-            activeTab={activeTab}
-          />
+          {isGemTrac ? (
+            <GemTracPage
+              breadCrumLabel={'Bid to Buy'}
+              setIsGemTrac={setIsGemTrac}
+              setGemTracData={setGemTracData}
+              gemTracData={gemTracData}
+              goBackToListView={goBack}
+            />
+          ) : (
+            <>
+              <DiamondDetailsComponent
+                data={
+                  activeTab === 0
+                    ? bid
+                    : activeTab === 1
+                    ? activeBid
+                    : bidHistory?.data
+                }
+                filterData={detailPageData}
+                goBackToListView={goBack}
+                handleDetailPage={handleDetailPage}
+                fromBid={true}
+                breadCrumLabel={'Bid to Buy'}
+                modalSetState={modalSetState}
+                setIsLoading={setIsLoading}
+                activeTab={activeTab}
+                setIsGemTrac={setIsGemTrac}
+                setGemTracData={setGemTracData}
+                triggerGemTracApi={triggerGemTracApi}
+              />
+            </>
+          )}
         </div>
       ) : isLoading ||
         // isLoadingBidToBuyApi ||

@@ -90,6 +90,8 @@ import {
   faSortDown,
   faSortUp
 } from '@fortawesome/free-solid-svg-icons';
+import GemTracPage from '@/components/v2/common/gem-trac';
+import { useLazyGetGemTracQuery } from '@/features/api/gem-trac';
 
 const MyCart = () => {
   const dispatch = useAppDispatch();
@@ -126,6 +128,10 @@ const MyCart = () => {
   const [detailImageData, setDetailImageData] = useState<any>({});
 
   const [isSkeletonLoading, setIsSkeletonLoading] = useState<boolean>(true);
+
+  const [isGemTrac, setIsGemTrac] = useState(false);
+  const [gemTracData, setGemTracData] = useState([]);
+  const [triggerGemTracApi] = useLazyGetGemTracQuery({});
 
   const [showAppointmentForm, setShowAppointmentForm] = useState(false);
   const [appointmentPayload, setAppointmentPayload] =
@@ -522,8 +528,8 @@ const MyCart = () => {
                   res.status === 'success'
                     ? 'success'
                     : res.status === 'processing'
-                      ? 'info'
-                      : ''
+                    ? 'info'
+                    : ''
                 }
                 customPoppupBodyStyle="!mt-[70px]"
                 header={res.title}
@@ -1077,61 +1083,77 @@ const MyCart = () => {
 
       {isDetailPage && detailPageData?.length ? (
         <>
-          <DiamondDetailsComponent
-            data={dataTableState.rows}
-            filterData={detailPageData}
-            goBackToListView={goBack}
-            handleDetailPage={handleDetailPage}
-            breadCrumLabel={'My Cart'}
-            modalSetState={modalSetState}
-            setIsDiamondDetailLoading={setIsDiamondDetailLoading}
-            setIsLoading={setIsLoading}
-          />
-          <div className="p-[8px] flex justify-end items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow ">
-            {isDiamondDetailLoading ? (
-              <>
-                {' '}
-                <Skeleton
-                  width={128}
-                  sx={{ bgcolor: 'var(--neutral-200)' }}
-                  height={40}
-                  variant="rectangular"
-                  animation="wave"
-                  className="rounded-[4px]"
-                />{' '}
-              </>
-            ) : (
-              <ActionButton
-                actionButtonData={[
-                  {
-                    variant: 'primary',
-                    label: ManageLocales('app.searchResult.confirmStone'),
-                    isHidden: isConfirmStone,
-                    handler: () => {
-                      const { id } = detailPageData;
-                      const selectedRows = { [id]: true };
-                      handleConfirmStone({
-                        selectedRows: selectedRows,
-                        rows: dataTableState.rows,
-                        setIsError,
-                        setErrorText,
-                        setIsConfirmStone,
-                        setConfirmStoneData,
-                        setIsDetailPage,
-                        identifier: 'detailPage',
-                        confirmStoneTrack: 'DNA',
-                        dispatch,
-                        router,
-                        modalSetState,
-                        checkProductAvailability,
-                        setIsLoading
-                      });
-                    }
-                  }
-                ]}
+          {' '}
+          {isGemTrac ? (
+            <GemTracPage
+              breadCrumLabel={'My Cart'}
+              setIsGemTrac={setIsGemTrac}
+              setGemTracData={setGemTracData}
+              gemTracData={gemTracData}
+              goBackToListView={goBack}
+            />
+          ) : (
+            <>
+              <DiamondDetailsComponent
+                data={dataTableState.rows}
+                filterData={detailPageData}
+                goBackToListView={goBack}
+                handleDetailPage={handleDetailPage}
+                breadCrumLabel={'My Cart'}
+                modalSetState={modalSetState}
+                setIsDiamondDetailLoading={setIsDiamondDetailLoading}
+                setIsLoading={setIsLoading}
+                setIsGemTrac={setIsGemTrac}
+                setGemTracData={setGemTracData}
+                triggerGemTracApi={triggerGemTracApi}
               />
-            )}
-          </div>
+              <div className="p-[8px] flex justify-end items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow ">
+                {isDiamondDetailLoading ? (
+                  <>
+                    {' '}
+                    <Skeleton
+                      width={128}
+                      sx={{ bgcolor: 'var(--neutral-200)' }}
+                      height={40}
+                      variant="rectangular"
+                      animation="wave"
+                      className="rounded-[4px]"
+                    />{' '}
+                  </>
+                ) : (
+                  <ActionButton
+                    actionButtonData={[
+                      {
+                        variant: 'primary',
+                        label: ManageLocales('app.searchResult.confirmStone'),
+                        isHidden: isConfirmStone,
+                        handler: () => {
+                          const { id } = detailPageData;
+                          const selectedRows = { [id]: true };
+                          handleConfirmStone({
+                            selectedRows: selectedRows,
+                            rows: dataTableState.rows,
+                            setIsError,
+                            setErrorText,
+                            setIsConfirmStone,
+                            setConfirmStoneData,
+                            setIsDetailPage,
+                            identifier: 'detailPage',
+                            confirmStoneTrack: 'DNA',
+                            dispatch,
+                            router,
+                            modalSetState,
+                            checkProductAvailability,
+                            setIsLoading
+                          });
+                        }
+                      }
+                    ]}
+                  />
+                )}
+              </div>
+            </>
+          )}
         </>
       ) : (
         <div
@@ -1144,11 +1166,11 @@ const MyCart = () => {
               ? showAppointmentForm
                 ? 'h-[calc(100vh-113px)]'
                 : isConfirmStone
-                  ? 'h-[calc(100vh-184px)]'
-                  : 'h-[calc(100vh-210px)]'
+                ? 'h-[calc(100vh-184px)]'
+                : 'h-[calc(100vh-210px)]'
               : showAppointmentForm
-                ? 'h-[calc(100vh-43px)]'
-                : 'h-[calc(100vh-132px)]'
+              ? 'h-[calc(100vh-43px)]'
+              : 'h-[calc(100vh-132px)]'
           }  shadow-inputShadow`}
         >
           {isConfirmStone ? (
