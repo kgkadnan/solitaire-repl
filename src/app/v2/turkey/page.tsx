@@ -91,6 +91,8 @@ import crossIcon from '@public/v2/assets/icons/modal/cross.svg';
 import { handleComment } from '../search/result/helpers/handle-comment';
 import { generateQueryParams } from '../search/form/helpers/generate-query-parameters';
 import { constructUrlParams } from '@/utils/v2/construct-url-params';
+import GemTracPage from '@/components/v2/common/gem-trac';
+import { useLazyGetGemTracQuery } from '@/features/api/gem-trac';
 
 const Turkey = () => {
   const router = useRouter();
@@ -106,6 +108,10 @@ const Turkey = () => {
   const [searchLoading, setSearchLoading] = useState(false);
   const [triggerTurkeyProductApi] = useLazyGetAllTurkeyProductQuery();
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
+
+  const [isGemTrac, setIsGemTrac] = useState(false);
+  const [gemTracData, setGemTracData] = useState([]);
+  const [triggerGemTracApi] = useLazyGetGemTracQuery({});
 
   const { setSearchUrl, searchUrl } = useValidationStateManagement();
   const { state, setState, carat } = useFormStateManagement();
@@ -1106,8 +1112,8 @@ const Turkey = () => {
                   res.status === 'success'
                     ? 'success'
                     : res.status === 'processing'
-                      ? 'info'
-                      : ''
+                    ? 'info'
+                    : ''
                 }
                 customPoppupBodyStyle="!mt-[70px]"
                 header={res.title}
@@ -1321,59 +1327,72 @@ const Turkey = () => {
       />
       {isDetailPage ? (
         <div className="mt-[16px]">
-          <div>
-            <DiamondDetailsComponent
-              data={bid}
-              filterData={detailPageData}
-              goBackToListView={goBack}
-              handleDetailPage={handleDetailPage}
+          {isGemTrac ? (
+            <GemTracPage
               breadCrumLabel={'Diamond List'}
-              modalSetState={modalSetState}
-              setIsLoading={setIsLoading}
-              activeTab={activeTab}
+              setIsGemTrac={setIsGemTrac}
+              setGemTracData={setGemTracData}
+              gemTracData={gemTracData}
+              goBackToListView={goBack}
             />
-            <div className="p-[8px] flex justify-end items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow mb-1">
-              <ActionButton
-                actionButtonData={[
-                  {
-                    variant: isConfirmStone ? 'primary' : 'secondary',
-                    label: ManageLocales('app.searchResult.addToCart'),
-                    handler: handleAddToCartDetailPage,
-                    isDisable: true
-                  },
-
-                  {
-                    variant: 'primary',
-                    label: ManageLocales('app.searchResult.confirmStone'),
-                    isHidden: isConfirmStone,
-                    isDisable: true,
-                    handler: () => {
-                      // setBreadCrumLabel('Detail Page');
-                      const { id } = detailPageData;
-                      const selectedRows = { [id]: true };
-                      handleConfirmStone({
-                        selectedRows: selectedRows,
-                        rows: bid,
-                        setIsError,
-                        setErrorText,
-                        setIsConfirmStone,
-                        setConfirmStoneData,
-                        setIsDetailPage,
-                        identifier: 'detailPage',
-                        confirmStoneTrack: 'DNA',
-                        dispatch,
-                        router,
-                        modalSetState,
-                        checkProductAvailability,
-                        setIsLoading
-                        // refreshSearchResults
-                      });
-                    }
-                  }
-                ]}
+          ) : (
+            <div>
+              <DiamondDetailsComponent
+                data={bid}
+                filterData={detailPageData}
+                goBackToListView={goBack}
+                handleDetailPage={handleDetailPage}
+                breadCrumLabel={'Diamond List'}
+                modalSetState={modalSetState}
+                setIsLoading={setIsLoading}
+                activeTab={activeTab}
+                setIsGemTrac={setIsGemTrac}
+                setGemTracData={setGemTracData}
+                triggerGemTracApi={triggerGemTracApi}
               />
+              <div className="p-[8px] flex justify-end items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow mb-1">
+                <ActionButton
+                  actionButtonData={[
+                    {
+                      variant: isConfirmStone ? 'primary' : 'secondary',
+                      label: ManageLocales('app.searchResult.addToCart'),
+                      handler: handleAddToCartDetailPage,
+                      isDisable: true
+                    },
+
+                    {
+                      variant: 'primary',
+                      label: ManageLocales('app.searchResult.confirmStone'),
+                      isHidden: isConfirmStone,
+                      isDisable: true,
+                      handler: () => {
+                        // setBreadCrumLabel('Detail Page');
+                        const { id } = detailPageData;
+                        const selectedRows = { [id]: true };
+                        handleConfirmStone({
+                          selectedRows: selectedRows,
+                          rows: bid,
+                          setIsError,
+                          setErrorText,
+                          setIsConfirmStone,
+                          setConfirmStoneData,
+                          setIsDetailPage,
+                          identifier: 'detailPage',
+                          confirmStoneTrack: 'DNA',
+                          dispatch,
+                          router,
+                          modalSetState,
+                          checkProductAvailability,
+                          setIsLoading
+                          // refreshSearchResults
+                        });
+                      }
+                    }
+                  ]}
+                />
+              </div>
             </div>
-          </div>
+          )}
         </div>
       ) : isConfirmStone ? (
         <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow">
