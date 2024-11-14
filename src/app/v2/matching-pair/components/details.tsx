@@ -394,18 +394,24 @@ export function MatchPairDetails({
     switch (key) {
       case 'gem_trac':
         return (
-          <button
-            onClick={() => {
-              setIsGemTrac(true);
-              handleGemTrac(index);
-            }}
-            className="flex items-center justify-center gap-3 bg-primaryMain border-primaryBorder border-[1px] w-[134px] rounded-[4px] cursor-pointer"
-          >
-            <span className="text-lMedium font-extrabold text-neutral0">
-              GemTrac
-            </span>
-            <DragImage />
-          </button>
+          <>
+            {diamond.gemtrac ? (
+              <button
+                onClick={() => {
+                  setIsGemTrac(true);
+                  handleGemTrac(index);
+                }}
+                className="flex items-center justify-center gap-3 bg-primaryMain border-primaryBorder border-[1px] w-[134px] rounded-[4px] cursor-pointer"
+              >
+                <span className="text-lMedium font-extrabold text-neutral0">
+                  GemTrac
+                </span>
+                <DragImage />
+              </button>
+            ) : (
+              '-'
+            )}
+          </>
         );
       case 'location':
         return (
