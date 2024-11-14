@@ -159,10 +159,10 @@ const GemTrac = () => {
                                     {/* Text content */}
                                     <div className="flex flex-col">
                                       <p className="text-primaryMain text-headingM font-semiBold">
-                                        {figure.value}
+                                        {figure.key}
                                       </p>
                                       <p className="text-[12px] text-neutral600">
-                                        {figure.key}
+                                        {figure.value}
                                       </p>
                                     </div>
                                   </div>
@@ -184,10 +184,10 @@ const GemTrac = () => {
                                     {/* Text content */}
                                     <div className="flex flex-col">
                                       <p className="text-primaryMain text-headingM font-semiBold">
-                                        {figure.value}
+                                        {figure.key}
                                       </p>
                                       <p className="text-[12px] text-neutral600">
-                                        {figure.key}
+                                        {figure.value}
                                       </p>
                                     </div>
                                   </div>
