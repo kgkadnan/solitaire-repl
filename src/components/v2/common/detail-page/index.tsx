@@ -647,16 +647,18 @@ export function DiamondDetailsComponent({
                 {RenderNewArrivalLotId({ tableData })}
                 <div className="border-r-[1px] border-neutral-200 h-[20px]"></div>
 
-                <button
-                  onClick={() => {
-                    setIsGemTrac(true);
-                    handleGemTrac();
-                  }}
-                  className="ml-[10px] flex items-center justify-center gap-3 bg-primaryMain border-primaryBorder border-[1px] w-[134px] rounded-[4px] cursor-pointer"
-                >
-                  <GemTracLogo />
-                  <DragImage />
-                </button>
+                {tableData.gemtrac && (
+                  <button
+                    onClick={() => {
+                      setIsGemTrac(true);
+                      handleGemTrac();
+                    }}
+                    className="ml-[10px] flex items-center justify-center gap-3 bg-primaryMain border-primaryBorder border-[1px] w-[134px] rounded-[4px] cursor-pointer"
+                  >
+                    <GemTracLogo />
+                    <DragImage />
+                  </button>
+                )}
               </>
             ) : (
               <Skeleton
