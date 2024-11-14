@@ -151,9 +151,9 @@ export function MatchPairDetails({
   //   }
   // }, [imageLoadingStatus]);
 
-  const handleGemTrac = (index: number) => {
+  const handleGemTrac = (product_id: string) => {
     triggerGemTracApi({
-      product_id: originalData[index].id
+      product_id: product_id
     })
       .then((res: any) => {
         // Assuming `gemTracData.traceability` comes from your API response
@@ -399,7 +399,7 @@ export function MatchPairDetails({
               <button
                 onClick={() => {
                   setIsGemTrac(true);
-                  handleGemTrac(index);
+                  handleGemTrac(diamond.id);
                 }}
                 className="flex items-center justify-center gap-3 bg-primaryMain border-primaryBorder border-[1px] w-[134px] rounded-[4px] cursor-pointer"
               >
