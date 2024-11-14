@@ -92,6 +92,7 @@ import Tooltip from '@/components/v2/common/tooltip';
 export interface ISavedSearch {
   saveSearchName: string;
   isSavedSearch: boolean;
+  label: string;
   queryParams: Record<string, string | string[] | { lte: number; gte: number }>;
 }
 const Form = ({
@@ -773,8 +774,8 @@ const Form = ({
             saveSearchName:
               modifySearchResult[activeTab - 1]?.saveSearchName ||
               saveSearchName,
-            label: `Result ${
-              localStorageDataLength ? localStorageDataLength.length + 1 : 1
+            label: `${
+              localStorageDataLength ? modifySearchResult[activeTab - 1]?.label : 1
             }`,
             isSavedSearch: isSavedParams,
             searchId: data?.search_id,

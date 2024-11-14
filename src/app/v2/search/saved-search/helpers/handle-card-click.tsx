@@ -167,7 +167,7 @@ export const handleCardClick = ({
             );
             setIsDialogOpen(true);
           } else {
-            // Add the clicked search to local storage and navigate to the search result page
+            // Add the clicked search to local storage and navigate to the search result page              
 
             const localStorageData = [
               ...data,
@@ -176,7 +176,8 @@ export const handleCardClick = ({
                 isSavedSearch: true,
                 searchId: response?.data?.search_id,
                 queryParams: specificCardData[0].meta_data,
-                id: specificCardData[0].id
+                id: specificCardData[0].id,
+                label:(specificCardData[0].name.replace(/\s+/g, '') + ' ' + (data.length + 1))
               }
             ];
 
@@ -205,7 +206,8 @@ export const handleCardClick = ({
               isSavedSearch: true,
               searchId: response?.data?.search_id,
               queryParams: specificCardData[0].meta_data,
-              id: specificCardData[0].id
+              id: specificCardData[0].id,
+              label:(specificCardData[0].name.replace(/\s+/g, '') + ' ' + 1)
             }
           ];
 

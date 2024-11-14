@@ -1,5 +1,5 @@
 import Pill from '@/components/v2/common/search-breadcrum/pill';
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import Image from 'next/image';
 import Arrow from '@public/v2/assets/icons/chevron.svg';
 import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
@@ -13,12 +13,12 @@ import dropdownIcon from '@public/v2/assets/png/data-table/dropdown.png';
 const MAX_VISIBLE_PILLS = 2;
 
 const Breadcrum = ({
-  searchParameters,
+  searchParameters ,
   activeTab,
   handleCloseSpecificTab,
   isMatchingPair
 }: {
-  searchParameters: any;
+  searchParameters: any[];
   activeTab: number;
   setActiveTab: Dispatch<SetStateAction<number>>;
   handleCloseSpecificTab: (_id: number) => void;
@@ -34,7 +34,11 @@ const Breadcrum = ({
   const [dropdownPills, setDropdownPills] = useState(
     searchParameters.slice(MAX_VISIBLE_PILLS)
   );
-
+  useEffect(() => {
+    setVisiblePills(searchParameters.slice(0, MAX_VISIBLE_PILLS));
+    setDropdownPills(searchParameters.slice(MAX_VISIBLE_PILLS));
+  }, [searchParameters]);
+  
   const handleDropdownSelect = (selectedIndex: any) => {
     console.log('selectedIndex', selectedIndex);
     console.log('dropdownPills', dropdownPills);
@@ -48,12 +52,20 @@ const Breadcrum = ({
     // Replace the last visible pill (Result 4) with the selected dropdown pill
     newDropdownPills[selectedIndex] = newVisiblePills[MAX_VISIBLE_PILLS - 1];
     newVisiblePills[MAX_VISIBLE_PILLS - 1] = selectedPill;
-
+    
     // Update the state
     setVisiblePills(newVisiblePills);
-    setDropdownPills(newDropdownPills);
+    setDropdownPills(newDropdownPills); 
   };
   console.log('activeTab', activeTab);
+  if(dropdownPills.length > 0 && activeTab > (MAX_VISIBLE_PILLS - 1)) {
+    const activelabel = ('Result ' + activeTab); 
+    const index = dropdownPills.findIndex((item: any) => item?.saveSearchName != '' ? (item?.label === item?.saveSearchName.replace(/\s+/g, '') + ' ' + activeTab) : item?.label === activelabel);
+    if(index != -1)
+    {
+     handleDropdownSelect(index);
+    }    
+  }  
   return (
     <>
       {searchParameters.length > 0 && (
@@ -73,12 +85,14 @@ const Breadcrum = ({
         </div>
       )}
       {visiblePills.map((result: any, index: number) => {
-        console.log('index > MAX_VISIBLE_PILLS', result.label.split(' ')[1]);
+        console.log('index > MAX_VISIBLE_PILLS', result?.label?.split(' ')[1]);
+        const activePill = (result?.saveSearchName !== '') ? ((result.label) === (result?.saveSearchName.replace(/\s+/g, '') + ' ' +  activeTab)) : (activeTab === Number(result?.label?.split(' ')[1]));
+        const activeIndex = (Number(result?.label?.split(' ')[1]));
         return (
           // Object.keys(result).length > 0 && (
           <div key={`breadcrum-${index}`} className="flex items-center">
             <Pill
-              isActive={activeTab === Number(result.label.split(' ')[1])}
+              isActive={activePill}
               label={
                 result.saveSearchName !== ''
                   ? result.saveSearchName
@@ -89,9 +103,7 @@ const Breadcrum = ({
                 router.push(
                   `${
                     isMatchingPair ? Routes.MATCHING_PAIR : Routes.SEARCH
-                  }?active-tab=${SubRoutes.RESULT}-${Number(
-                    result.label.split(' ')[1]
-                  )}`
+                  }?active-tab=${SubRoutes.RESULT}-${activeIndex}`
                 );
               }}
               handlePillEdit={() => {
@@ -99,20 +111,21 @@ const Breadcrum = ({
                 router.push(
                   `${
                     isMatchingPair ? Routes.MATCHING_PAIR : Routes.SEARCH
-                  }?active-tab=${SubRoutes.RESULT}-${index + 1}&edit=${
+                  }?active-tab=${SubRoutes.RESULT}-${activeIndex}&edit=${
                     SubRoutes.RESULT
                   }`
                 );
               }}
               handlePillDelete={() => {
-                handleCloseSpecificTab(index + 1);
+                let labelId = (Number(result?.label?.split(' ')[1]));
+                handleCloseSpecificTab(labelId);
               }}
             />
           </div>
         );
         // );
-      })}
-      {dropdownPills.length > 0 && (
+      })}    
+      {dropdownPills.length > 0 && (        
         <Dropdown
           dropdownTrigger={
             <button
@@ -122,16 +135,14 @@ const Breadcrum = ({
               <Image src={dropdownIcon} alt="dropdownIcon" />
             </button>
           }
-          dropdownMenu={dropdownPills.map((result: any, index: any) => ({
+          dropdownMenu={dropdownPills.map((result: any, index: any) => ({            
             label: result.saveSearchName || result.label,
             handler: () => {
               handleDropdownSelect(index);
               router.push(
                 `${
                   isMatchingPair ? Routes.MATCHING_PAIR : Routes.SEARCH
-                }?active-tab=${SubRoutes.RESULT}-${Number(
-                  result.label.split(' ')[1]
-                )}`
+                }?active-tab=${SubRoutes.RESULT}-${(Number(result?.label?.split(' ')[1]))}`
               );
             }
           }))}
