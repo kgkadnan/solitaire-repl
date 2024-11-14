@@ -26,6 +26,7 @@ import DetailPageTabs from '@/components/v2/common/detail-page/components/tabs';
 import { Toast } from '@/components/v2/common/copy-and-share/toast';
 import { loadImages } from '@/components/v2/common/detail-page/helpers/load-images';
 import { checkImage } from '@/components/v2/common/detail-page/helpers/check-image';
+import DragImage from '@public/v2/assets/icons/detail-page/drag.svg?url';
 import {
   IManageListingSequenceResponse,
   IProduct
@@ -45,6 +46,15 @@ import { formatNumber } from '@/utils/fix-two-digit-number';
 import MatchPairDnaSkeleton from '@/components/v2/skeleton/match-pair/match-pair-dna-page';
 import { RednderLocation } from '@/components/v2/common/data-table/helpers/render-cell';
 import { SELECT_STONES } from '@/constants/error-messages/cart';
+//Gem Trac Imports
+import step1 from '@public/v3/traceability/gem-trac/step-1.png';
+import step2 from '@public/v3/traceability/gem-trac/step-2.png';
+import step3 from '@public/v3/traceability/gem-trac/step-3.png';
+import step4 from '@public/v3/traceability/gem-trac/step-4.png';
+import step5 from '@public/v3/traceability/gem-trac/step-5.png';
+import step6 from '@public/v3/traceability/gem-trac/step-6.png';
+
+const image = [step1, step2, step3, step4, step5, step6];
 
 export interface ITableColumn {
   key: string;
@@ -69,7 +79,11 @@ export function MatchPairDetails({
   activePreviewTab,
   setImageIndex,
   imageIndex,
-  setIsDiamondDetailLoading
+  setIsDiamondDetailLoading,
+  activeTab,
+  setIsGemTrac,
+  setGemTracData,
+  triggerGemTracApi
 }: {
   data: any;
   filterData: any;
@@ -86,7 +100,11 @@ export function MatchPairDetails({
   activePreviewTab: any;
   setImageIndex: any;
   imageIndex: any;
+  activeTab: any;
   setIsDiamondDetailLoading?: any;
+  setIsGemTrac?: any;
+  setGemTracData?: any;
+  triggerGemTracApi?: any;
 }) {
   const router = useRouter();
 
@@ -133,6 +151,31 @@ export function MatchPairDetails({
   //   }
   // }, [imageLoadingStatus]);
 
+  const handleGemTrac = (product_id: string) => {
+    triggerGemTracApi({
+      product_id: product_id
+    })
+      .then((res: any) => {
+        // Assuming `gemTracData.traceability` comes from your API response
+        const addImagesToTraceability = (traceabilityData: any) => {
+          return traceabilityData.map((item: any, index: number) => ({
+            ...item,
+            icon: image[index] // Use modulo to handle cases where the data length exceeds the images array
+          }));
+        };
+
+        const updatedGemTracData = {
+          ...res.data,
+          traceability: addImagesToTraceability(res.data.traceability)
+        };
+
+        setGemTracData(updatedGemTracData);
+      })
+      .catch((e: any) => {
+        console.log('e', e);
+      });
+  };
+
   const handleImageLoad = (index: number) => {
     // Set the specific image as loaded
     setImageLoadingStatus((prevState: any) => {
@@ -143,10 +186,14 @@ export function MatchPairDetails({
   };
 
   useEffect(() => {
+    let showOnlyWithVideo = JSON.parse(localStorage.getItem('MatchingPair')!);
+
     if (originalData.length >= 2) {
       triggerSimilarMatchingPairApi({
         product_id: originalData[0].id,
-        matching_product_id: originalData[1].id
+        matching_product_id: originalData[1].id,
+        show_only_with_video:
+          showOnlyWithVideo[activeTab - 1]?.queryParams?.all_asset_required
       })
         .unwrap()
         .then(res => setSimilarData(res))
@@ -159,15 +206,30 @@ export function MatchPairDetails({
     }
   }, [originalData]);
   function updateState(column: any) {
-    const updatedObj: any = { ...mappingColumn }; // Create a copy of newObj
+    const updatedObj: any = { ...mappingColumn }; // Create a copy of mappingColumn
+
     column?.forEach((obj: any) => {
       // Check if the key already exists in updatedObj
       if (!(obj.accessor in updatedObj)) {
         updatedObj[obj.accessor] = obj.short_label; // Use the dynamic key to update the object
       }
     });
-    setMappingColumn(updatedObj); // Update the state with the updated object
+
+    // Convert updatedObj to an array of key-value pairs
+    const entries: [string, unknown][] = Object.entries(updatedObj);
+
+    // Create the custom object entry with a tuple type
+    const customEntry: [string, unknown] = ['gem_trac', 'Gem Trac'];
+
+    // Insert the custom entry at the 3rd index
+    entries.splice(3, 0, customEntry);
+
+    // Convert the array back to an object
+    const updatedObjWithCustom = Object.fromEntries(entries);
+
+    setMappingColumn(updatedObjWithCustom); // Update the state with the updated object
   }
+
   useEffect(() => {
     if (viewSimilar === false) {
       const result = data.filter((subArray: any) =>
@@ -328,8 +390,29 @@ export function MatchPairDetails({
     setOriginalData(filterData);
   };
 
-  const dataFormatting = (diamond: any, key: string) => {
+  const dataFormatting = (diamond: any, key: string, index: number) => {
     switch (key) {
+      case 'gem_trac':
+        return (
+          <>
+            {diamond.gemtrac ? (
+              <button
+                onClick={() => {
+                  setIsGemTrac(true);
+                  handleGemTrac(diamond.id);
+                }}
+                className="flex items-center justify-center gap-3 bg-primaryMain border-primaryBorder border-[1px] w-[134px] rounded-[4px] cursor-pointer"
+              >
+                <span className="text-lMedium font-extrabold text-neutral0">
+                  GemTrac
+                </span>
+                <DragImage />
+              </button>
+            ) : (
+              '-'
+            )}
+          </>
+        );
       case 'location':
         return (
           <div className="flex gap-1 items-center">
@@ -1077,9 +1160,9 @@ export function MatchPairDetails({
                       </div>
                     ))}
                 </div>
-                <div className={`flex `}>
+                <div className={`flex items-center`}>
                   {originalData.length > 0 &&
-                    originalData.map((diamond: any) => (
+                    originalData.map((diamond: any, index: number) => (
                       <div
                         className={`${
                           originalData.length > 2
@@ -1098,16 +1181,16 @@ export function MatchPairDetails({
                             (key === 'lot_id' ? (
                               <div
                                 key={key}
-                                className="py-2 px-4 border-[1px] border-neutral200 h-[38px] whitespace-nowrap overflow-hidden overflow-ellipsis  bg-neutral0"
+                                className="flex items-center px-4 border-[1px] border-neutral200 h-[38px] whitespace-nowrap overflow-hidden overflow-ellipsis  bg-neutral0"
                               >
                                 {renderLotId(diamond)}
                               </div>
                             ) : (
                               <div
                                 key={key}
-                                className="py-2 px-4 border-[1px] border-neutral200 h-[38px] whitespace-nowrap overflow-hidden overflow-ellipsis  bg-neutral0"
+                                className="flex items-center px-4 border-[1px] border-neutral200 h-[38px] whitespace-nowrap overflow-hidden overflow-ellipsis  bg-neutral0"
                               >
-                                {dataFormatting(diamond, key)}
+                                {dataFormatting(diamond, key, index)}
                               </div>
                             ))
                         )}

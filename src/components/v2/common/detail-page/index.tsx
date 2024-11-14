@@ -5,6 +5,8 @@ import { useEffect, useState } from 'react';
 import backWardArrow from '@public/v2/assets/icons/my-diamonds/backwardArrow.svg';
 import LinkSvg from '@public/v2/assets/icons/detail-page/link.svg?url';
 import ExportExcel from '@public/v2/assets/icons/detail-page/export-excel.svg?url';
+import DragImage from '@public/v2/assets/icons/detail-page/drag.svg?url';
+import GemTracLogo from '@public/v2/assets/icons/detail-page/gem_trac_logo.svg?url';
 // import forwardArrow from '@public/v2/assets/icons/detail-page/forward-arrow.svg';
 // import backwardArrow from '@public/v2/assets/icons/detail-page/back-ward-arrow.svg';
 
@@ -30,6 +32,7 @@ import { Toast } from '../copy-and-share/toast';
 import Tooltip from '../tooltip';
 import ImagePreview from './components/image-preiview';
 import { getShapeDisplayName } from '@/utils/v2/detail-page';
+
 import ResponsiveTable from './components/CommonTable';
 import { HOLD_STATUS, MEMO_STATUS } from '@/constants/business-logic';
 // import ShowPopups from './components/popup';
@@ -51,6 +54,15 @@ import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
 import { trackEvent } from '@/utils/ga';
 import { Tracking_Search_By_Text } from '@/constants/funnel-tracking';
 import { dashboardIndentifier } from '@/app/v2/dashboard';
+//Gem Trac Imports
+import step1 from '@public/v3/traceability/gem-trac/step-1.png';
+import step2 from '@public/v3/traceability/gem-trac/step-2.png';
+import step3 from '@public/v3/traceability/gem-trac/step-3.png';
+import step4 from '@public/v3/traceability/gem-trac/step-4.png';
+import step5 from '@public/v3/traceability/gem-trac/step-5.png';
+import step6 from '@public/v3/traceability/gem-trac/step-6.png';
+
+const image = [step1, step2, step3, step4, step5, step6];
 
 export function DiamondDetailsComponent({
   data,
@@ -64,7 +76,10 @@ export function DiamondDetailsComponent({
   fromBid,
   setIsDiamondDetailLoading,
   identifier,
-  customerMobileNumber
+  customerMobileNumber,
+  setIsGemTrac,
+  setGemTracData,
+  triggerGemTracApi
 }: {
   data: any;
   filterData: any;
@@ -78,6 +93,9 @@ export function DiamondDetailsComponent({
   setIsDiamondDetailLoading?: any;
   identifier?: string;
   customerMobileNumber?: string;
+  setIsGemTrac?: any;
+  setGemTracData?: any;
+  triggerGemTracApi?: any;
 }) {
   const router = useRouter();
 
@@ -106,6 +124,31 @@ export function DiamondDetailsComponent({
 
     setTableData(copyData);
   }, [filterData, data]);
+
+  const handleGemTrac = () => {
+    triggerGemTracApi({
+      product_id: tableData.id
+    })
+      .then((res: any) => {
+        // Assuming `gemTracData.traceability` comes from your API response
+        const addImagesToTraceability = (traceabilityData: any) => {
+          return traceabilityData.map((item: any, index: number) => ({
+            ...item,
+            icon: image[index] // Use modulo to handle cases where the data length exceeds the images array
+          }));
+        };
+
+        const updatedGemTracData = {
+          ...res.data,
+          traceability: addImagesToTraceability(res.data.traceability)
+        };
+
+        setGemTracData(updatedGemTracData);
+      })
+      .catch((e: any) => {
+        console.log('e', e);
+      });
+  };
 
   const displayTable = (tableHeadArray: any) => {
     return (
@@ -301,7 +344,7 @@ export function DiamondDetailsComponent({
   return (
     <div className="text-black bg-neutral25 rounded-[8px]">
       <Toast show={showToast} message="Copied Successfully" />
-      <div className="flex items-center">
+      <div className="flex items-center bg-neutral0 py-1">
         <Image
           src={backWardArrow}
           alt="backWardArrow"
@@ -602,6 +645,20 @@ export function DiamondDetailsComponent({
                   <div className="border-r-[1px] border-neutral-200 h-[20px]"></div>
                 )}
                 {RenderNewArrivalLotId({ tableData })}
+                <div className="border-r-[1px] border-neutral-200 h-[20px]"></div>
+
+                {tableData.gemtrac && (
+                  <button
+                    onClick={() => {
+                      setIsGemTrac(true);
+                      handleGemTrac();
+                    }}
+                    className="ml-[10px] flex items-center justify-center gap-3 bg-primaryMain border-primaryBorder border-[1px] w-[134px] rounded-[4px] cursor-pointer"
+                  >
+                    <GemTracLogo />
+                    <DragImage />
+                  </button>
+                )}
               </>
             ) : (
               <Skeleton

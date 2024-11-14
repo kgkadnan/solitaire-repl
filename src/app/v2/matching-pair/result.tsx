@@ -40,20 +40,14 @@ import {
   useConfirmProductMutation
 } from '@/features/api/product';
 import { useLazyGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
-import { MRT_RowSelectionState } from 'material-react-table';
+import { MRT_RowSelectionState, MRT_SortingState } from 'material-react-table';
 import { notificationBadge } from '@/features/notification/notification-slice';
 import { useAddCartMutation } from '@/features/api/cart';
 import { useAppDispatch, useAppSelector } from '@/hooks/hook';
 import Image from 'next/image';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import { DialogComponent } from '@/components/v2/common/dialog';
-import {
-  clarity,
-  fluorescenceSortOrder,
-  sideBlackSortOrder,
-  tableBlackSortOrder,
-  tableInclusionSortOrder
-} from '@/constants/v2/form';
+
 import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
 import {
   SELECT_STONE_TO_PERFORM_ACTION,
@@ -100,6 +94,14 @@ import { useLazyGetCustomerQuery } from '@/features/api/dashboard';
 import { kamLocationAction } from '@/features/kam-location/kam-location';
 import { handleCompareStone } from '../search/result/helpers/handle-compare-stone';
 import { NO_PRODUCT_FOUND } from '@/constants/error-messages/saved';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faSort,
+  faSortDown,
+  faSortUp
+} from '@fortawesome/free-solid-svg-icons';
+import GemTracPage from '@/components/v2/common/gem-trac';
+import { useLazyGetGemTracQuery } from '@/features/api/gem-trac';
 
 // Column mapper outside the component to avoid re-creation on each render
 
@@ -117,7 +119,12 @@ const MatchingPairResult = ({
   isLoading,
   setSettingApplied,
   settingApplied,
-  setIsMPSOpen
+  setIsMPSOpen,
+  globalFilterActive,
+  setGlobalFilterActive,
+
+  setGlobalFilter,
+  globalFilter
 }: {
   activeTab: number;
   searchParameters: any;
@@ -133,6 +140,10 @@ const MatchingPairResult = ({
   setSettingApplied: any;
   settingApplied: any;
   setIsMPSOpen: any;
+  globalFilterActive: any;
+  setGlobalFilterActive: any;
+  setGlobalFilter: any;
+  globalFilter: any;
 }) => {
   const dispatch = useAppDispatch();
   const confirmTrack = useAppSelector(state => state.setConfirmStoneTrack);
@@ -141,6 +152,8 @@ const MatchingPairResult = ({
   const [isSkeletonLoading, setIsSkeletonLoading] = useState<boolean>(true);
   const [activePreviewTab, setActivePreviewTab] = useState('Image');
   const [imageIndex, setImageIndex] = useState<number>(0);
+
+  const [sorting, setSorting] = useState<MRT_SortingState>([]);
 
   const [triggerAvailableSlots] = useLazyGetAvailableMyAppointmentSlotsQuery(
     {}
@@ -171,6 +184,11 @@ const MatchingPairResult = ({
   const [confirmStoneData, setConfirmStoneData] = useState<IProduct[]>([]);
   const [compareStoneData, setCompareStoneData] = useState<IProduct[]>([]);
 
+  const [triggerGemTracApi] = useLazyGetGemTracQuery({});
+
+  const [isGemTrac, setIsGemTrac] = useState(false);
+  const [gemTracData, setGemTracData] = useState<string[]>([]);
+
   const [commentValue, setCommentValue] = useState('');
   const [textAreaValue, setTextAreaValue] = useState('');
   const [originalData, setOriginalData] = useState();
@@ -195,10 +213,13 @@ const MatchingPairResult = ({
   const [downloadExcel] = useDownloadExcelMutation();
   const [confirmProduct] = useConfirmProductMutation();
 
-  const [triggerColumn, { data: columnData }] =
+  let [triggerColumn, { data: columnData }] =
     useLazyGetManageListingSequenceQuery<IManageListingSequenceResponse>();
-  const [triggerMatchingPairApi, { data: matchingPairData }] =
-    useLazyGetAllMatchingPairQuery();
+
+  const [
+    triggerMatchingPairApi,
+    { data: matchingPairData, isFetching: isFetchingMatchPairData }
+  ] = useLazyGetAllMatchingPairQuery();
 
   // Fetch Products
 
@@ -213,9 +234,9 @@ const MatchingPairResult = ({
     const selections = JSON.parse(storedSelection);
 
     const url = constructUrlParams(selections[activeTab - 1]?.queryParams);
-    setSearchUrl(url);
+    setSearchUrl(`${url}`);
     triggerMatchingPairApi({
-      url,
+      url: `${url}`,
       limit: MATCHING_PAIR_DATA_LIMIT,
       offset: 0
     })
@@ -343,21 +364,44 @@ const MatchingPairResult = ({
       ?.filter(({ is_disabled }: any) => !is_disabled)
       ?.sort(({ sequence: a }: any, { sequence: b }: any) => a - b)
       .map(({ accessor, short_label, label }: any) => {
+        const currentSort = sorting.find(sort => sort.id === accessor);
+        const nonSortableAccessors = ['shape_full', 'details', 'fire_icon'];
+        // Check if sorting should be disabled for the column's accessor
+        const isSortable = !nonSortableAccessors.includes(accessor);
         const commonProps = {
           accessorKey: accessor,
           header: short_label,
           enableGlobalFilter: accessor === 'lot_id',
           // enableGrouping: accessor === 'shape',
 
-          minSize: 5,
-          maxSize: accessor === 'details' ? 100 : 200,
-          size: 5,
+          minSize: 0,
+          maxSize: 0,
+          size: 0,
           Header: ({ column }: any) => (
-            <Tooltip
-              tooltipTrigger={<span>{column.columnDef.header}</span>}
-              tooltipContent={label}
-              tooltipContentStyles={'z-[1000]'}
-            />
+            <div className="flex items-center group">
+              <Tooltip
+                tooltipTrigger={<span>{column.columnDef.header}</span>}
+                tooltipContent={label}
+                tooltipContentStyles={'z-[1000]'}
+              />
+              {isSortable &&
+                (currentSort ? (
+                  <FontAwesomeIcon
+                    icon={currentSort.desc ? faSortDown : faSortUp}
+                    width={8}
+                    height={8}
+                    style={{ marginLeft: '2px' }} // Optional styling for spacing
+                  />
+                ) : (
+                  <FontAwesomeIcon
+                    icon={faSort} // Default icon when not sorted
+                    width={8}
+                    height={8}
+                    className="opacity-0 transition-opacity duration-300 group-hover:opacity-100" // Show on hover
+                    style={{ marginLeft: '2px' }}
+                  />
+                ))}
+            </div>
           )
         };
         switch (accessor) {
@@ -390,72 +434,27 @@ const MatchingPairResult = ({
               }
             };
 
-          case 'clarity':
-            return {
-              ...commonProps,
-              sortingFn: (rowA: any, rowB: any, columnId: string) => {
-                const indexA = clarity.indexOf(rowA.original[columnId]);
-                const indexB = clarity.indexOf(rowB.original[columnId]);
-                return indexA - indexB;
-              }
-            };
           case 'table_inclusion':
             return {
               ...commonProps,
-              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-',
-              sortingFn: (rowA: any, rowB: any, columnId: string) => {
-                const indexA = tableInclusionSortOrder.indexOf(
-                  rowA.original[columnId]
-                );
-                const indexB = tableInclusionSortOrder.indexOf(
-                  rowB.original[columnId]
-                );
-                return indexA - indexB;
-              }
+              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-'
             };
           case 'table_black':
             return {
               ...commonProps,
-              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-',
-              sortingFn: (rowA: any, rowB: any, columnId: string) => {
-                const indexA = tableBlackSortOrder.indexOf(
-                  rowA.original[columnId]
-                );
-                const indexB = tableBlackSortOrder.indexOf(
-                  rowB.original[columnId]
-                );
-                return indexA - indexB;
-              }
+              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-'
             };
 
           case 'side_black':
             return {
               ...commonProps,
-              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-',
-              sortingFn: (rowA: any, rowB: any, columnId: string) => {
-                const indexA = sideBlackSortOrder.indexOf(
-                  rowA.original[columnId]
-                );
-                const indexB = sideBlackSortOrder.indexOf(
-                  rowB.original[columnId]
-                );
-                return indexA - indexB;
-              }
+              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-'
             };
 
           case 'fluorescence':
             return {
               ...commonProps,
-              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-',
-              sortingFn: (rowA: any, rowB: any, columnId: string) => {
-                const indexA = fluorescenceSortOrder.indexOf(
-                  rowA.original[columnId]
-                );
-                const indexB = fluorescenceSortOrder.indexOf(
-                  rowB.original[columnId]
-                );
-                return indexA - indexB;
-              }
+              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-'
             };
           case 'amount':
             return { ...commonProps, Cell: RenderAmount };
@@ -599,7 +598,7 @@ const MatchingPairResult = ({
   }, [dataTableState.rows]);
   const memoizedColumns = useMemo(
     () => mapColumns(dataTableState.columns),
-    [dataTableState.columns]
+    [dataTableState.columns, sorting]
   );
   const handleNewSearch = () => {
     router.push(`${Routes.MATCHING_PAIR}?active-tab=${SubRoutes.NEW_SEARCH}`);
@@ -926,18 +925,19 @@ const MatchingPairResult = ({
             actionButtonData={[
               {
                 variant: 'secondary',
-                label: ManageLocales('app.modal.addComment.cancel'),
+                label: ManageLocales('app.modal.addComment.saveComment'),
                 handler: () => {
+                  setCommentValue(textAreaValue);
                   setIsAddCommentDialogOpen(false);
                 },
                 customStyle: 'flex-1'
               },
               {
                 variant: 'primary',
-                label: ManageLocales('app.modal.addComment.saveComment'),
+                label: 'Confirm Stone',
                 handler: () => {
-                  setCommentValue(textAreaValue);
                   setIsAddCommentDialogOpen(false);
+                  confirmStone();
                 },
                 customStyle: 'flex-1'
               }
@@ -1385,141 +1385,157 @@ const MatchingPairResult = ({
 
       {isDetailPage && detailPageData?.length ? (
         <>
-          <MatchPairDetails
-            data={originalData}
-            filterData={detailPageData}
-            goBackToListView={goBack}
-            breadCrumLabel={
-              breadCrumLabel.length ? breadCrumLabel : 'Match Pair'
-            }
-            modalSetState={modalSetState}
-            setIsLoading={setIsLoading}
-            handleDetailImage={handleDetailImage}
-            setRowSelection={setRowSelection}
-            setSimilarData={setSimilarData}
-            similarData={similarData}
-            rowSelection={rowSelection}
-            setActivePreviewTab={setActivePreviewTab}
-            activePreviewTab={activePreviewTab}
-            setImageIndex={setImageIndex}
-            imageIndex={imageIndex}
-            setIsDiamondDetailLoading={setIsDiamondDetailLoading}
-          />
-          <div className="p-[8px] flex justify-between items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow mb-1">
-            <div className="flex gap-4 h-[30px]">
-              {isDiamondDetailLoading ? (
-                <>
-                  {' '}
-                  <Skeleton
-                    width={60}
-                    sx={{ bgcolor: 'var(--neutral-200)' }}
-                    height={30}
-                    variant="rectangular"
-                    animation="wave"
-                    className="rounded-[4px]"
-                  />{' '}
-                  <Skeleton
-                    width={60}
-                    sx={{ bgcolor: 'var(--neutral-200)' }}
-                    height={30}
-                    variant="rectangular"
-                    animation="wave"
-                    className="rounded-[4px]"
-                  />
-                  <Skeleton
-                    width={60}
-                    sx={{ bgcolor: 'var(--neutral-200)' }}
-                    height={30}
-                    variant="rectangular"
-                    animation="wave"
-                    className="rounded-[4px]"
-                  />
-                </>
-              ) : (
-                <>
-                  <div className=" border-[1px] border-lengendInCardBorder rounded-[4px] bg-legendInCartFill text-legendInCart">
-                    <p className="text-mMedium font-medium px-[6px] py-[4px]">
-                      In Cart
-                    </p>
-                  </div>
-                  <div className=" border-[1px] border-lengendHoldBorder rounded-[4px] bg-legendHoldFill text-legendHold">
-                    <p className="text-mMedium font-medium px-[6px] py-[4px]">
-                      {' '}
-                      Hold
-                    </p>
-                  </div>
-                  <div className="border-[1px] border-lengendMemoBorder rounded-[4px] bg-legendMemoFill text-legendMemo">
-                    <p className="text-mMedium font-medium px-[6px] py-[4px]">
-                      {' '}
-                      Memo
-                    </p>
-                  </div>
-                </>
-              )}
-            </div>
-            {isDiamondDetailLoading ? (
-              <>
-                <div className="flex gap-3">
-                  {' '}
-                  <Skeleton
-                    width={128}
-                    sx={{ bgcolor: 'var(--neutral-200)' }}
-                    height={40}
-                    variant="rectangular"
-                    animation="wave"
-                    className="rounded-[4px]"
-                  />{' '}
-                  <Skeleton
-                    width={128}
-                    sx={{ bgcolor: 'var(--neutral-200)' }}
-                    height={40}
-                    variant="rectangular"
-                    animation="wave"
-                    className="rounded-[4px]"
-                  />
-                </div>
-              </>
-            ) : (
-              <ActionButton
-                actionButtonData={[
-                  {
-                    variant: isConfirmStone ? 'primary' : 'secondary',
-                    label: ManageLocales('app.searchResult.addToCart'),
-                    handler: () => {
-                      handleAddToCart(similarData?.products || []);
-                    }
-                  },
-
-                  {
-                    variant: 'primary',
-                    label: ManageLocales('app.searchResult.confirmStone'),
-                    isHidden: isConfirmStone,
-                    handler: () => {
-                      setBreadCrumLabel('Detail Page');
-
-                      handleConfirmStone({
-                        selectedRows: rowSelection,
-                        rows: dataTableState.rows,
-                        setIsError,
-                        setErrorText,
-                        setIsConfirmStone,
-                        setConfirmStoneData,
-                        setIsDetailPage,
-                        identifier: 'match-pair-detail',
-                        confirmStoneTrack: 'Matching-Pair-Details',
-                        dispatch,
-                        router,
-                        modalSetState,
-                        checkProductAvailability,
-                        setIsLoading,
-                        refreshSearchResults
-                      });
-                    }
-                  }
-                ]}
+          {isGemTrac ? (
+            <GemTracPage
+              breadCrumLabel={'Search Results'}
+              setIsGemTrac={setIsGemTrac}
+              setGemTracData={setGemTracData}
+              gemTracData={gemTracData}
+              goBackToListView={goBack}
+            />
+          ) : (
+            <>
+              <MatchPairDetails
+                data={originalData}
+                filterData={detailPageData}
+                goBackToListView={goBack}
+                breadCrumLabel={
+                  breadCrumLabel.length ? breadCrumLabel : 'Match Pair'
+                }
+                modalSetState={modalSetState}
+                setIsLoading={setIsLoading}
+                handleDetailImage={handleDetailImage}
+                setRowSelection={setRowSelection}
+                setSimilarData={setSimilarData}
+                similarData={similarData}
+                rowSelection={rowSelection}
+                setActivePreviewTab={setActivePreviewTab}
+                activePreviewTab={activePreviewTab}
+                setImageIndex={setImageIndex}
+                imageIndex={imageIndex}
+                setIsDiamondDetailLoading={setIsDiamondDetailLoading}
+                activeTab={activeTab}
+                setIsGemTrac={setIsGemTrac}
+                setGemTracData={setGemTracData}
+                triggerGemTracApi={triggerGemTracApi}
               />
-            )}
-          </div>
+              <div className="p-[8px] flex justify-between items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow mb-1">
+                <div className="flex gap-4 h-[30px]">
+                  {isDiamondDetailLoading ? (
+                    <>
+                      {' '}
+                      <Skeleton
+                        width={60}
+                        sx={{ bgcolor: 'var(--neutral-200)' }}
+                        height={30}
+                        variant="rectangular"
+                        animation="wave"
+                        className="rounded-[4px]"
+                      />{' '}
+                      <Skeleton
+                        width={60}
+                        sx={{ bgcolor: 'var(--neutral-200)' }}
+                        height={30}
+                        variant="rectangular"
+                        animation="wave"
+                        className="rounded-[4px]"
+                      />
+                      <Skeleton
+                        width={60}
+                        sx={{ bgcolor: 'var(--neutral-200)' }}
+                        height={30}
+                        variant="rectangular"
+                        animation="wave"
+                        className="rounded-[4px]"
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <div className=" border-[1px] border-lengendInCardBorder rounded-[4px] bg-legendInCartFill text-legendInCart">
+                        <p className="text-mMedium font-medium px-[6px] py-[4px]">
+                          In Cart
+                        </p>
+                      </div>
+                      <div className=" border-[1px] border-lengendHoldBorder rounded-[4px] bg-legendHoldFill text-legendHold">
+                        <p className="text-mMedium font-medium px-[6px] py-[4px]">
+                          {' '}
+                          Hold
+                        </p>
+                      </div>
+                      <div className="border-[1px] border-lengendMemoBorder rounded-[4px] bg-legendMemoFill text-legendMemo">
+                        <p className="text-mMedium font-medium px-[6px] py-[4px]">
+                          {' '}
+                          Memo
+                        </p>
+                      </div>
+                    </>
+                  )}
+                </div>
+                {isDiamondDetailLoading ? (
+                  <>
+                    <div className="flex gap-3">
+                      {' '}
+                      <Skeleton
+                        width={128}
+                        sx={{ bgcolor: 'var(--neutral-200)' }}
+                        height={40}
+                        variant="rectangular"
+                        animation="wave"
+                        className="rounded-[4px]"
+                      />{' '}
+                      <Skeleton
+                        width={128}
+                        sx={{ bgcolor: 'var(--neutral-200)' }}
+                        height={40}
+                        variant="rectangular"
+                        animation="wave"
+                        className="rounded-[4px]"
+                      />
+                    </div>
+                  </>
+                ) : (
+                  <ActionButton
+                    actionButtonData={[
+                      {
+                        variant: isConfirmStone ? 'primary' : 'secondary',
+                        label: ManageLocales('app.searchResult.addToCart'),
+                        handler: () => {
+                          handleAddToCart(similarData?.products || []);
+                        }
+                      },
+
+                      {
+                        variant: 'primary',
+                        label: ManageLocales('app.searchResult.confirmStone'),
+                        isHidden: isConfirmStone,
+                        handler: () => {
+                          setBreadCrumLabel('Detail Page');
+
+                          handleConfirmStone({
+                            selectedRows: rowSelection,
+                            rows: dataTableState.rows,
+                            setIsError,
+                            setErrorText,
+                            setIsConfirmStone,
+                            setConfirmStoneData,
+                            setIsDetailPage,
+                            identifier: 'match-pair-detail',
+                            confirmStoneTrack: 'Matching-Pair-Details',
+                            dispatch,
+                            router,
+                            modalSetState,
+                            checkProductAvailability,
+                            setIsLoading,
+                            refreshSearchResults
+                          });
+                        }
+                      }
+                    ]}
+                  />
+                )}
+              </div>
+            </>
+          )}
         </>
       ) : (
         <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow">
@@ -1614,6 +1630,8 @@ const MatchingPairResult = ({
                   downloadExcel={downloadExcel}
                   setIsError={setIsError}
                   searchList={searchList}
+                  setSorting={setSorting}
+                  sorting={sorting}
                   setIsLoading={setIsLoading}
                   handleAddToCart={handleAddToCart}
                   setIsConfirmStone={setIsConfirmStone}
@@ -1631,6 +1649,11 @@ const MatchingPairResult = ({
                   setSettingApplied={setSettingApplied}
                   isLoading={isLoading}
                   countLimitReached={countLimitReached}
+                  isFetchingMatchPairData={isFetchingMatchPairData}
+                  globalFilterActive={globalFilterActive}
+                  setGlobalFilterActive={setGlobalFilterActive}
+                  globalFilter={globalFilter}
+                  setGlobalFilter={setGlobalFilter}
                 />
               )}
             </div>

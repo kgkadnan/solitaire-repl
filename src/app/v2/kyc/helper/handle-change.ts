@@ -34,12 +34,15 @@ const citiesByState: any = {
 
 export const handleInputChange = async (
   path: string,
-  value: string | string[] | number,
+  value: string | string[] | number | null,
   dispatch: any,
   screenName: string,
   key: string
   //   formState?: any
 ) => {
+  // Convert empty string to null
+  const normalizedValue = value === '' ? null : value;
+
   dispatch(
     updateFormState({
       name: `formErrorState.online.sections.${[screenName]}.${[key]}`,
@@ -47,7 +50,7 @@ export const handleInputChange = async (
     })
   );
 
-  dispatch(updateFormState({ name: path, value: value }));
+  dispatch(updateFormState({ name: path, value: normalizedValue }));
   dispatch(isEditingKYC(true));
 
   // Check if the path is for the city field

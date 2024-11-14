@@ -158,8 +158,8 @@ export const RenderOffline = ({
             country === countries.OTHER
               ? 'h-[380px]'
               : country === countries.BELGIUM || country === countries.USA
-              ? 'h-[20vh]'
-              : ''
+                ? 'h-[20vh]'
+                : ''
           } w-[100%] `}
         >
           <div
@@ -167,8 +167,8 @@ export const RenderOffline = ({
               country === countries.INDIA
                 ? 'max-h-[660px]'
                 : country === countries.OTHER
-                ? 'max-h-[360px]'
-                : 'max-h-[216px]'
+                  ? 'max-h-[360px]'
+                  : 'max-h-[216px]'
             } w-[100%] flex justify-center`}
           >
             <div className="w-[920px] flex flex-wrap flex-col  gap-x-[20px]">

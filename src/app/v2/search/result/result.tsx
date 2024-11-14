@@ -48,13 +48,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks/hook';
 import Image from 'next/image';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import { DialogComponent } from '@/components/v2/common/dialog';
-import {
-  clarity,
-  fluorescenceSortOrder,
-  sideBlackSortOrder,
-  tableBlackSortOrder,
-  tableInclusionSortOrder
-} from '@/constants/v2/form';
+
 import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
 import {
   SELECT_STONE_TO_PERFORM_ACTION,
@@ -103,6 +97,8 @@ import {
   faSortDown,
   faSortUp
 } from '@fortawesome/free-solid-svg-icons';
+import GemTracPage from '@/components/v2/common/gem-trac';
+import { useLazyGetGemTracQuery } from '@/features/api/gem-trac';
 
 // Column mapper outside the component to avoid re-creation on each render
 
@@ -189,6 +185,11 @@ const Result = ({
   const [triggerProductApi, { data: productData }] =
     useLazyGetAllProductQuery();
 
+  const [triggerGemTracApi] = useLazyGetGemTracQuery({});
+
+  const [isGemTrac, setIsGemTrac] = useState(false);
+  const [gemTracData, setGemTracData] = useState<string[]>([]);
+
   // Fetch Products
 
   const fetchProducts = async () => {
@@ -202,8 +203,12 @@ const Result = ({
     const selections = JSON.parse(storedSelection);
 
     const url = constructUrlParams(selections[activeTab - 1]?.queryParams);
-    setSearchUrl(url);
-    triggerProductApi({ url, limit: LISTING_PAGE_DATA_LIMIT, offset: 0 })
+    setSearchUrl(`${url}`);
+    triggerProductApi({
+      url: `${url}`,
+      limit: LISTING_PAGE_DATA_LIMIT,
+      offset: 0
+    })
       .then((res: any) => {
         if (columnData?.length > 0) {
           if (res?.error?.status === statusCode.UNAUTHORIZED) {
@@ -1001,18 +1006,19 @@ const Result = ({
             actionButtonData={[
               {
                 variant: 'secondary',
-                label: ManageLocales('app.modal.addComment.cancel'),
+                label: ManageLocales('app.modal.addComment.saveComment'),
                 handler: () => {
+                  setCommentValue(textAreaValue);
                   setIsAddCommentDialogOpen(false);
                 },
                 customStyle: 'flex-1'
               },
               {
                 variant: 'primary',
-                label: ManageLocales('app.modal.addComment.saveComment'),
+                label: 'Confirm Stone',
                 handler: () => {
-                  setCommentValue(textAreaValue);
                   setIsAddCommentDialogOpen(false);
+                  confirmStone();
                 },
                 customStyle: 'flex-1'
               }
@@ -1459,79 +1465,94 @@ const Result = ({
 
       {isDetailPage && detailPageData?.length ? (
         <>
-          <DiamondDetailsComponent
-            data={dataTableState.rows}
-            filterData={detailPageData}
-            goBackToListView={goBack}
-            handleDetailPage={handleDetailPage}
-            breadCrumLabel={
-              breadCrumLabel.length ? breadCrumLabel : 'Search Results'
-            }
-            modalSetState={modalSetState}
-            setIsLoading={setIsLoading}
-            setIsDiamondDetailLoading={setIsDiamondDetailLoading}
-          />
-          <div className="p-[8px] flex justify-end items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow mb-1">
-            {isDiamondDetailLoading ? (
-              <>
-                {' '}
-                <Skeleton
-                  width={128}
-                  sx={{ bgcolor: 'var(--neutral-200)' }}
-                  height={40}
-                  variant="rectangular"
-                  animation="wave"
-                  className="rounded-[4px]"
-                />{' '}
-                <Skeleton
-                  width={128}
-                  sx={{ bgcolor: 'var(--neutral-200)' }}
-                  height={40}
-                  variant="rectangular"
-                  animation="wave"
-                  className="rounded-[4px]"
-                />
-              </>
-            ) : (
-              <ActionButton
-                actionButtonData={[
-                  {
-                    variant: isConfirmStone ? 'primary' : 'secondary',
-                    label: ManageLocales('app.searchResult.addToCart'),
-                    handler: handleAddToCartDetailPage
-                  },
-
-                  {
-                    variant: 'primary',
-                    label: ManageLocales('app.searchResult.confirmStone'),
-                    isHidden: isConfirmStone,
-                    handler: () => {
-                      setBreadCrumLabel('Detail Page');
-                      const { id } = detailPageData;
-                      const selectedRows = { [id]: true };
-                      handleConfirmStone({
-                        selectedRows: selectedRows,
-                        rows: dataTableState.rows,
-                        setIsError,
-                        setErrorText,
-                        setIsConfirmStone,
-                        setConfirmStoneData,
-                        setIsDetailPage,
-                        identifier: 'detailPage',
-                        confirmStoneTrack: 'DNA',
-                        dispatch,
-                        router,
-                        modalSetState,
-                        checkProductAvailability,
-                        setIsLoading,
-                        refreshSearchResults
-                      });
-                    }
-                  }
-                ]}
+          {isGemTrac ? (
+            <GemTracPage
+              breadCrumLabel={'Search Results'}
+              setIsGemTrac={setIsGemTrac}
+              setGemTracData={setGemTracData}
+              gemTracData={gemTracData}
+              goBackToListView={goBack}
+            />
+          ) : (
+            <>
+              <DiamondDetailsComponent
+                data={dataTableState.rows}
+                filterData={detailPageData}
+                goBackToListView={goBack}
+                handleDetailPage={handleDetailPage}
+                breadCrumLabel={
+                  breadCrumLabel.length ? breadCrumLabel : 'Search Results'
+                }
+                modalSetState={modalSetState}
+                setIsLoading={setIsLoading}
+                setIsDiamondDetailLoading={setIsDiamondDetailLoading}
+                setIsGemTrac={setIsGemTrac}
+                setGemTracData={setGemTracData}
+                triggerGemTracApi={triggerGemTracApi}
               />
-            )}
-          </div>
+              <div className="p-[8px] flex justify-end items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow mb-1">
+                {isDiamondDetailLoading ? (
+                  <>
+                    {' '}
+                    <Skeleton
+                      width={128}
+                      sx={{ bgcolor: 'var(--neutral-200)' }}
+                      height={40}
+                      variant="rectangular"
+                      animation="wave"
+                      className="rounded-[4px]"
+                    />{' '}
+                    <Skeleton
+                      width={128}
+                      sx={{ bgcolor: 'var(--neutral-200)' }}
+                      height={40}
+                      variant="rectangular"
+                      animation="wave"
+                      className="rounded-[4px]"
+                    />
+                  </>
+                ) : (
+                  <ActionButton
+                    actionButtonData={[
+                      {
+                        variant: isConfirmStone ? 'primary' : 'secondary',
+                        label: ManageLocales('app.searchResult.addToCart'),
+                        handler: handleAddToCartDetailPage
+                      },
+
+                      {
+                        variant: 'primary',
+                        label: ManageLocales('app.searchResult.confirmStone'),
+                        isHidden: isConfirmStone,
+                        handler: () => {
+                          setBreadCrumLabel('Detail Page');
+                          const { id } = detailPageData;
+                          const selectedRows = { [id]: true };
+                          handleConfirmStone({
+                            selectedRows: selectedRows,
+                            rows: dataTableState.rows,
+                            setIsError,
+                            setErrorText,
+                            setIsConfirmStone,
+                            setConfirmStoneData,
+                            setIsDetailPage,
+                            identifier: 'detailPage',
+                            confirmStoneTrack: 'DNA',
+                            dispatch,
+                            router,
+                            modalSetState,
+                            checkProductAvailability,
+                            setIsLoading,
+                            refreshSearchResults
+                          });
+                        }
+                      }
+                    ]}
+                  />
+                )}
+              </div>
+            </>
+          )}
         </>
       ) : (
         <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow">

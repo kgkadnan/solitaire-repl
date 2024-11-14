@@ -63,6 +63,13 @@ import { Dropdown } from '@/components/v2/common/dropdown-menu';
 import Share from '@/components/v2/common/copy-and-share/share';
 import MathPairSkeleton from '@/components/v2/skeleton/match-pair';
 import { useLazyGetMatchingPairCountQuery } from '@/features/api/match-pair';
+import {
+  clarity,
+  fluorescenceSortOrder,
+  sideBlackSortOrder,
+  tableBlackSortOrder,
+  tableInclusionSortOrder
+} from '@/constants/v2/form';
 
 const theme = createTheme({
   typography: {
@@ -79,8 +86,8 @@ const theme = createTheme({
         root: {
           // Default state for the badge inside the cell - sorting icon not visible by default
           '& .MuiBadge-root': {
-            width: '15px !important',
-            marginLeft: '-3px',
+            width: '0px !important',
+            // marginLeft: '-3px',
             visibility: 'hidden'
           },
           // Hover state for the cell
@@ -189,6 +196,8 @@ const MatchPairTable = ({
   modalSetState,
   downloadExcel,
   matchingPairData,
+  setSorting,
+  sorting,
   setErrorText,
   setIsError,
   searchList,
@@ -209,7 +218,12 @@ const MatchPairTable = ({
   isLoading,
   countLimitReached,
   settingApplied,
-  setIsMPSOpen
+  setIsMPSOpen,
+  isFetchingMatchPairData,
+  globalFilterActive,
+  setGlobalFilterActive,
+  setGlobalFilter,
+  globalFilter
 }: any) => {
   // Fetching saved search data
   const router = useRouter();
@@ -234,7 +248,6 @@ const MatchPairTable = ({
 
   const [paginatedData, setPaginatedData] = useState<any>([]);
 
-  const [globalFilter, setGlobalFilter] = useState('');
   const path = useSearchParams().get('active-tab');
 
   const [isLoaded, setIsLoaded] = useState(false);
@@ -242,19 +255,26 @@ const MatchPairTable = ({
     if (globalFilter !== '') {
       // Remove all whitespace characters from globalFilter
       const trimmedFilter = globalFilter.replace(/\s+/g, '');
-      let data = rows.filter(
-        (data: any) => data?.lot_id?.startsWith(trimmedFilter)
+
+      // Filter the originalData array of arrays
+      let filteredData = originalData.filter((innerArray: any[]) =>
+        innerArray.some((data: any) => data?.lot_id?.startsWith(trimmedFilter))
       );
+
+      // Flatten the filtered data to work with pagination
+      let flattenedData = filteredData.flat();
+
       const startIndex = pagination.pageIndex * pagination.pageSize;
       const endIndex = startIndex + pagination.pageSize;
       // Slice the data to get the current page's data
-      const newData = data.slice(startIndex, endIndex);
+      const newData = flattenedData.slice(startIndex, endIndex);
       // Update the paginated data state
       setPaginatedData(newData);
     } else {
       setPaginatedData(rows);
     }
   }, [globalFilter]);
+
   useEffect(() => {
     // Calculate the start and end indices for the current page
     const startIndex = pagination.pageIndex * pagination.pageSize;
@@ -316,7 +336,9 @@ const MatchPairTable = ({
 
         const searchUrl = constructUrlParams(searchData.meta_data);
 
-        triggerMatchingPairCountApi({ searchUrl })
+        triggerMatchingPairCountApi({
+          searchUrl: `${searchUrl}`
+        })
           .then(response => {
             if (response?.data?.count > MAX_SAVED_SEARCH_COUNT) {
               setIsLoading(false);
@@ -561,37 +583,169 @@ const MatchPairTable = ({
             </div>
             <div className="flex flex-col justify-center items-center w-[350px]">
               <h1 className="text-neutral600 font-medium text-[16px] w-[340px] text-center mb-[10px]">
-                {countLimitReached
+                {globalFilter.length || globalFilterActive
+                  ? 'No matching stones found'
+                  : countLimitReached
                   ? `Your selection has more than 150 matching pairs. Please modify the filters or adjust the match pair settings to reduce the selection to fewer than 150 matching pairs.`
-                  : `We don't have any stones according to your selection. Please
+                  : !globalFilterActive &&
+                    `We don't have any stones according to your selection. Please
                 modify the filters or change the match pair settings.`}
               </h1>
 
-              <ActionButton
-                actionButtonData={[
-                  {
-                    variant: 'secondary',
-                    label: 'Edit Filter',
-                    handler: () => {
-                      router.push(
-                        `/v2/matching-pair?active-tab=${path}&edit=result`
-                      );
-                    }
-                  },
+              {!globalFilter.length && !globalFilterActive && (
+                <ActionButton
+                  actionButtonData={[
+                    {
+                      variant: 'secondary',
+                      label: 'Edit Filter',
+                      handler: () => {
+                        router.push(
+                          `/v2/matching-pair?active-tab=${path}&edit=result`
+                        );
+                      }
+                    },
 
-                  {
-                    variant: 'primary',
-                    label: 'Edit Match Pair Settings',
-                    handler: () => setIsMPSOpen(true)
-                  }
-                ]}
-              />
+                    {
+                      variant: 'primary',
+                      label: 'Edit Match Pair Settings',
+                      handler: () => setIsMPSOpen(true)
+                    }
+                  ]}
+                />
+              )}
             </div>
           </div>
         </div>
       )}
     </>
   );
+  const nonSortableAccessors = ['shape_full', 'details', 'fire_icon'];
+  const sortData = (data: any[][], sorting: any) => {
+    if (!data) return [];
+    if (!sorting.length) return data?.flat(); // If no sorting is applied, flatten and return data as-is
+
+    // Sort based on the first item of each sub-array
+    const sortedData = [...data].sort((groupA, groupB) => {
+      const rowA = groupA[0]; // Take the first item of groupA
+      const rowB = groupB[0]; // Take the first item of groupB
+
+      for (let sort of sorting) {
+        const columnId = sort.id;
+        const isDesc = sort.desc;
+
+        // Skip sorting for non-sortable accessors
+        if (nonSortableAccessors.includes(columnId)) {
+          continue;
+        }
+
+        const valueA = rowA[columnId];
+        const valueB = rowB[columnId];
+        let compareValue = 0;
+
+        switch (columnId) {
+          case 'clarity':
+            compareValue = clarity.indexOf(valueA) - clarity.indexOf(valueB);
+            break;
+          case 'table_inclusion':
+            compareValue =
+              tableInclusionSortOrder.indexOf(valueA) -
+              tableInclusionSortOrder.indexOf(valueB);
+            break;
+          case 'table_black':
+            compareValue =
+              tableBlackSortOrder.indexOf(valueA) -
+              tableBlackSortOrder.indexOf(valueB);
+            break;
+          case 'side_black':
+            compareValue =
+              sideBlackSortOrder.indexOf(valueA) -
+              sideBlackSortOrder.indexOf(valueB);
+            break;
+          case 'fluorescence':
+            compareValue =
+              fluorescenceSortOrder.indexOf(valueA) -
+              fluorescenceSortOrder.indexOf(valueB);
+            break;
+          case 'amount':
+            const amountA = rowA.variants?.[0]?.prices?.[0]?.amount ?? 0;
+            const amountB = rowB.variants?.[0]?.prices?.[0]?.amount ?? 0;
+            compareValue = amountA - amountB;
+            break;
+          default:
+            // Fallback to default comparison for other columns (numbers or strings)
+            if (valueA == null && valueB == null) {
+              compareValue = 0; // Both are null, considered equal
+            } else if (valueA == null) {
+              compareValue = -1; // Place null values before non-null values
+            } else if (valueB == null) {
+              compareValue = 1; // Place non-null values before null values
+            } else if (
+              typeof valueA === 'string' &&
+              typeof valueB === 'string'
+            ) {
+              compareValue = valueA.localeCompare(valueB, undefined, {
+                sensitivity: 'base'
+              });
+            } else {
+              compareValue = valueA > valueB ? 1 : valueA < valueB ? -1 : 0;
+            }
+        }
+
+        // Handle cases where the value might not be found in the custom array (indexOf returns -1)
+        if (compareValue === 0) {
+          continue; // If equal, move to the next sorting condition
+        }
+
+        // Apply sorting direction (ascending or descending)
+        return isDesc ? -compareValue : compareValue;
+      }
+      return 0;
+    });
+
+    // Flatten the sorted data before returning
+    return sortedData.flat();
+  };
+
+  // Handle sorting and pagination
+  useEffect(() => {
+    // Apply the sorting logic to the full dataset
+    const sortedFullData = sortData(originalData, sorting);
+    // Pagination logic
+    const startIndex = pagination.pageIndex * pagination.pageSize;
+    const endIndex = startIndex + pagination.pageSize;
+    const newData = sortedFullData.slice(startIndex, endIndex);
+    // Update the paginated data state
+    setPaginatedData(newData);
+  }, [
+    rows,
+    sorting, // Trigger sorting when sorting state changes
+    pagination.pageIndex, // Re-fetch when page index changes
+    pagination.pageSize // Re-fetch when page size changes
+  ]);
+  const handleSortingChange = (newSorting: any) => {
+    setSorting((currentSorting: any) => {
+      const existingSort = currentSorting.find(
+        (sort: any) => sort.id === newSorting()[0].id
+      );
+      if (existingSort) {
+        // If the current sort is ascending, change it to descending
+        if (!existingSort.desc) {
+          return currentSorting.map((sort: any) =>
+            sort.id === newSorting()[0].id ? { ...sort, desc: true } : sort
+          );
+        }
+        // If the current sort is descending, remove the sorting
+        else {
+          return currentSorting.filter(
+            (sort: any) => sort.id !== newSorting()[0].id
+          );
+        }
+      } else {
+        // If no sorting exists for the column, set sorting to ascending (default)
+        return [...currentSorting, { id: newSorting()[0].id, desc: false }];
+      }
+    });
+  };
   //pass table options to useMaterialReactTable
   const table = useMaterialReactTable({
     columns: paginatedData.length ? columns : [],
@@ -605,6 +759,7 @@ const MatchPairTable = ({
       pagination,
       globalFilter
     },
+
     enablePagination: paginatedData.length ? true : false,
     positionToolbarAlertBanner: 'none',
     enableColumnActions: false,
@@ -617,12 +772,14 @@ const MatchPairTable = ({
     enableExpandAll: false,
     enableColumnDragging: false,
     groupedColumnMode: 'remove',
-    enableSorting: false,
+    enableSorting: true,
     enableRowSelection: true,
     enableToolbarInternalActions: true,
     globalFilterFn: 'startsWith',
     selectAllMode: 'page',
 
+    manualSorting: true, // Enable manual sorting
+    onSortingChange: handleSortingChange, // Handle sorting change
     renderEmptyRowsFallback: NoResultsComponent,
     manualPagination: true,
     rowCount: rows.length,
@@ -632,7 +789,10 @@ const MatchPairTable = ({
     icons: {
       SearchIcon: () => (
         <Image src={searchIcon} alt={'searchIcon'} className="mr-[6px]" />
-      )
+      ),
+      SortIcon: () => null,
+      SyncAltIcon: () => null,
+      ArrowDownwardIcon: () => null
     },
     muiTableBodyRowProps: ({ row }) => {
       return {
@@ -713,7 +873,8 @@ const MatchPairTable = ({
       columnPinning: {
         left: ['mrt-row-select', 'fire_icon', 'lot_id', 'mrt-row-expand']
       },
-      pagination: pagination
+      pagination: pagination,
+      sorting: sorting
     },
 
     positionGlobalFilter: 'left',
@@ -768,7 +929,7 @@ const MatchPairTable = ({
               cell.column.id
             )
               ? '0px 6px'
-              : '0px 2px',
+              : '0px 1px',
             textAlign:
               cell.column.id === 'girdle_percentage'
                 ? 'center !important'
@@ -834,7 +995,7 @@ const MatchPairTable = ({
               column.id
             )
               ? '0px 6px'
-              : '0px 2px',
+              : '0px 1px',
             height: '20px',
             background: 'var(--neutral-50)',
             opacity: 1,
@@ -973,6 +1134,12 @@ const MatchPairTable = ({
           <div>
             <MRT_GlobalFilterTextField
               table={table}
+              onFocus={() => {
+                setGlobalFilterActive(true);
+              }}
+              onBlur={() => {
+                setGlobalFilterActive(false);
+              }}
               autoComplete="false"
               sx={{
                 boxShadow: 'var(--input-shadow) inset',
@@ -1241,15 +1408,23 @@ const MatchPairTable = ({
   }, []);
 
   useEffect(() => {
-    // if(isLoading)
+    let timer: any;
+
     setIsLoaded(false);
     setIsSkeletonLoading(true);
-    const timer = setTimeout(() => {
-      setIsLoaded(true), setIsSkeletonLoading(false);
-    }, 5000); // Small delay to ensure rendering phase is completed
 
+    if (isFetchingMatchPairData) {
+      clearTimeout(timer);
+    }
+    // Set a new timer with the updated delay
+    timer = setTimeout(() => {
+      setIsLoaded(true);
+      setIsSkeletonLoading(false);
+    }, 4000);
+
+    // Cleanup function to clear the timer on effect re-run or unmount
     return () => clearTimeout(timer);
-  }, [activeTab]);
+  }, [activeTab, isFetchingMatchPairData]);
 
   // const handleInputBlur = (index: number, field: string) => {
   //   const endValue = mps[index].end;

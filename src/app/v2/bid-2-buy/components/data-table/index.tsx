@@ -31,7 +31,7 @@ import { formatNumber } from '@/utils/fix-two-digit-number';
 import { handleDecrementDiscount } from '@/utils/v2/handle-decrement-discount';
 import { handleIncrementDiscount } from '@/utils/v2/handle-increment-discount';
 import { RenderBidToBuyLotIdColor } from '@/components/v2/common/data-table/helpers/render-cell';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import { SubRoutes } from '@/constants/v2/enums/routes';
 import { ManageLocales } from '@/utils/v2/translate';
 import BiddingSkeleton from '@/components/v2/skeleton/bidding';
@@ -45,6 +45,13 @@ import {
 import CommonPoppup from '@/app/v2/login/component/common-poppup';
 import { useAppSelector } from '@/hooks/hook';
 import { constructUrlParams } from '@/utils/v2/construct-url-params';
+import {
+  clarity,
+  fluorescenceSortOrder,
+  sideBlackSortOrder,
+  tableBlackSortOrder,
+  tableInclusionSortOrder
+} from '@/constants/v2/form';
 
 const theme = createTheme({
   typography: {
@@ -61,8 +68,8 @@ const theme = createTheme({
         root: {
           // Default state for the badge inside the cell - sorting icon not visible by default
           '& .MuiBadge-root': {
-            width: '15px !important',
-            marginLeft: '-3px',
+            width: '0px !important',
+            // marginLeft: '-3px',
             visibility: 'hidden'
           },
           // Hover state for the cell
@@ -176,13 +183,16 @@ const BidToBuyDataTable = ({
   renderFooter,
   router,
   filterData,
+  setSorting,
+  sorting,
   setBid,
   isSkeletonLoading,
   setIsSkeletonLoading,
   isTabSwitch,
   setIsTabSwitch,
 
-  setActiveBid // searchUrl
+  setActiveBid, // searchUrl
+  isInActive
 }: any) => {
   // Fetching saved search data
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -375,9 +385,8 @@ const BidToBuyDataTable = ({
               historyCount={historyCount}
             />
           </div>
-
           <div className="flex gap-[12px]" style={{ alignItems: 'inherit' }}>
-            {activeTab === 0 && (
+            {activeTab === 0 && isInActive !== 'INACTIVE_BID_TO_BUY' && (
               <div className="">
                 <button
                   onClick={() => {
@@ -618,6 +627,126 @@ const BidToBuyDataTable = ({
     triggerBidToBuyApi
     // { isLoading: isLoadingBidToBuyApi, isFetching: isFetchingBidToBuyApi }
   ] = useLazyGetAllBidStonesQuery();
+
+  const handleSortingChange = (newSorting: any) => {
+    setSorting((currentSorting: any) => {
+      const existingSort = currentSorting.find(
+        (sort: any) => sort.id === newSorting()[0].id
+      );
+      if (existingSort) {
+        // If the current sort is ascending, change it to descending
+        if (!existingSort.desc) {
+          return currentSorting.map((sort: any) =>
+            sort.id === newSorting()[0].id ? { ...sort, desc: true } : sort
+          );
+        }
+        // If the current sort is descending, remove the sorting
+        else {
+          return currentSorting.filter(
+            (sort: any) => sort.id !== newSorting()[0].id
+          );
+        }
+      } else {
+        // If no sorting exists for the column, set sorting to ascending (default)
+        return [...currentSorting, { id: newSorting()[0].id, desc: false }];
+      }
+    });
+  };
+  const nonSortableAccessors = ['shape_full', 'details', 'fire_icon'];
+  const sortData = (data: any, sorting: any) => {
+    if (!sorting.length) return data; // If no sorting is applied, return the data as-is
+    const sortedData = [...data].sort((rowA, rowB) => {
+      for (let sort of sorting) {
+        const columnId = sort.id;
+        const isDesc = sort.desc;
+        // Skip sorting for non-sortable accessors
+        if (nonSortableAccessors.includes(columnId)) {
+          continue; // Move to the next sorting criteria or return unsorted data
+        }
+        const valueA = rowA[columnId];
+        const valueB = rowB[columnId];
+        let compareValue = 0;
+        switch (columnId) {
+          case 'clarity':
+            compareValue = clarity.indexOf(valueA) - clarity.indexOf(valueB);
+            break;
+          case 'table_inclusion':
+            compareValue =
+              tableInclusionSortOrder.indexOf(valueA) -
+              tableInclusionSortOrder.indexOf(valueB);
+            break;
+          case 'table_black':
+            compareValue =
+              tableBlackSortOrder.indexOf(valueA) -
+              tableBlackSortOrder.indexOf(valueB);
+            break;
+          case 'side_black':
+            compareValue =
+              sideBlackSortOrder.indexOf(valueA) -
+              sideBlackSortOrder.indexOf(valueB);
+            break;
+          case 'fluorescence':
+            compareValue =
+              fluorescenceSortOrder.indexOf(valueA) -
+              fluorescenceSortOrder.indexOf(valueB);
+            break;
+
+          case 'amount':
+            const amountA = rowA.original?.price ?? 0;
+            const amountB = rowB.original?.price ?? 0;
+            compareValue = amountA - amountB;
+
+            break;
+          default:
+            // Fallback to default comparison for other columns (numbers or strings)
+            if (valueA == null && valueB == null) {
+              compareValue = 0; // Both are null, considered equal
+            } else if (valueA == null) {
+              compareValue = -1; // Place null values before non-null values
+            } else if (valueB == null) {
+              compareValue = 1; // Place non-null values before null values
+            } else if (
+              typeof valueA === 'string' &&
+              typeof valueB === 'string'
+            ) {
+              compareValue = valueA.localeCompare(valueB, undefined, {
+                sensitivity: 'base'
+              });
+            } else {
+              compareValue = valueA > valueB ? 1 : valueA < valueB ? -1 : 0;
+            }
+        }
+        // Handle cases where the value might not be found in the custom array (indexOf returns -1)
+        if (compareValue === 0) {
+          continue; // If equal, move to the next sorting condition
+        }
+        // Apply sorting direction (ascending or descending)
+        return isDesc ? -compareValue : compareValue;
+      }
+      return 0;
+    });
+    return sortedData;
+  };
+  // Handle sorting and pagination
+  useEffect(() => {
+    // Apply the sorting logic to the full dataset
+    const sortedFullData = sortData(rows, sorting);
+    // Pagination logic
+    const startIndex = pagination.pageIndex * pagination.pageSize;
+    const endIndex = startIndex + pagination.pageSize;
+    const newData = sortedFullData.slice(startIndex, endIndex);
+    // Update the paginated data state
+    setPaginatedData(newData);
+    // Optional skeleton loading logic
+
+    setIsSkeletonLoading(false);
+  }, [
+    rows,
+    sorting, // Trigger sorting when sorting state changes
+    pagination.pageIndex, // Re-fetch when page index changes
+    pagination.pageSize // Re-fetch when page size changes
+  ]);
+
   const table = useMaterialReactTable({
     columns: paginatedData.length ? columns : [],
     data: isTabSwitch ? [] : paginatedData, //must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
@@ -630,6 +759,7 @@ const BidToBuyDataTable = ({
       rowSelection,
       isFullScreen: isFullScreen,
       pagination,
+
       globalFilter
     },
     //filters
@@ -658,26 +788,16 @@ const BidToBuyDataTable = ({
     onPaginationChange: setPagination, //hoist pagination state to your state when it changes internally
     manualFiltering: true,
     onGlobalFilterChange: setGlobalFilter,
+    manualSorting: true, // Enable manual sorting
+    onSortingChange: handleSortingChange, // Handle sorting change
     icons: {
       SearchIcon: () => (
         <Image src={searchIcon} alt={'searchIcon'} className="mr-[6px]" />
       ),
 
-      ArrowDownwardIcon: (props: any) => (
-        <FontAwesomeIcon icon={faSortDown} {...props} width={8} height={8} />
-      ),
-      SyncAltIcon: (props: any) => (
-        <FontAwesomeIcon
-          icon={faSort}
-          {...props}
-          style={{ color: 'var(--neutral-400)' }}
-          className="transform !rotate-0 !pl-1"
-        />
-      ),
-
-      SortIcon: (props: any) => (
-        <FontAwesomeIcon icon={faSort} width={8} height={8} {...props} />
-      )
+      SortIcon: () => null,
+      SyncAltIcon: () => null,
+      ArrowDownwardIcon: () => null
     },
 
     // selectAllMode: undefined,
@@ -785,7 +905,8 @@ const BidToBuyDataTable = ({
       columnPinning: {
         left: ['mrt-row-select', 'lot_id', 'mrt-row-expand']
       },
-      pagination: pagination
+      pagination: pagination,
+      sorting: sorting
     },
 
     positionGlobalFilter: 'left',
@@ -850,7 +971,7 @@ const BidToBuyDataTable = ({
               cell.column.id
             )
               ? '0px 6px'
-              : '0px 4px',
+              : '0px 2px',
             textAlign:
               cell.column.id === 'girdle_percentage'
                 ? 'center !important'
@@ -921,7 +1042,7 @@ const BidToBuyDataTable = ({
           '&.MuiTableCell-root': {
             padding: ['discount', 'price_per_carat', 'rap'].includes(column.id)
               ? '0px 6px'
-              : '0px 4px',
+              : '0px 2px',
             background: 'var(--neutral-50)',
             opacity: 1,
             borderTop: '1px solid var(--neutral-200)',
@@ -1278,7 +1399,11 @@ const BidToBuyDataTable = ({
   return (
     <>
       {isSkeletonLoading ? (
-        <BiddingSkeleton />
+        !Object?.keys(localStorage.getItem('bid') ?? {}).length ? (
+          <></>
+        ) : (
+          <BiddingSkeleton />
+        )
       ) : (
         <ThemeProvider theme={theme}>
           <MaterialReactTable table={table} />

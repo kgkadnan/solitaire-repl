@@ -31,6 +31,7 @@ import { DialogComponent } from '@/components/v2/common/dialog';
 import ActionButton from '@/components/v2/common/action-button';
 import {
   MRT_RowSelectionState,
+  MRT_SortingState,
   MRT_TablePagination
 } from 'material-react-table';
 import useUser from '@/lib/use-auth';
@@ -59,13 +60,21 @@ import {
   useLazyGetAllBidStonesQuery
 } from '@/features/api/product';
 import { constructUrlParams } from '@/utils/v2/construct-url-params';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faSort,
+  faSortDown,
+  faSortUp
+} from '@fortawesome/free-solid-svg-icons';
+import GemTracPage from '@/components/v2/common/gem-trac';
+import { useLazyGetGemTracQuery } from '@/features/api/gem-trac';
 
 const BidToBuy = () => {
   const router = useRouter();
 
   const dispatch = useAppDispatch();
   const filterData: any = useAppSelector(state => state.filterBidToBuy);
-
+  const [sorting, setSorting] = useState<MRT_SortingState>([]);
   const [isDetailPage, setIsDetailPage] = useState(false);
   const [detailPageData, setDetailPageData] = useState<any>({});
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -79,6 +88,9 @@ const BidToBuy = () => {
   const [isTabSwitch, setIsTabSwitch] = useState(false); // State to track
 
   // const [checkStatus, setCheckStatus] = useState(false);
+  const [isGemTrac, setIsGemTrac] = useState(false);
+  const [gemTracData, setGemTracData] = useState([]);
+  const [triggerGemTracApi] = useLazyGetGemTracQuery({});
 
   const { setSearchUrl, searchUrl } = useValidationStateManagement();
   const { state, setState, carat } = useFormStateManagement();
@@ -105,24 +117,47 @@ const BidToBuy = () => {
     columns
       ?.filter(({ is_disabled }: any) => !is_disabled)
       .map(({ accessor, short_label, label }: any) => {
+        const currentSort = sorting.find(sort => sort.id === accessor);
+        const nonSortableAccessors = ['shape_full', 'details', 'fire_icon'];
+        // Check if sorting should be disabled for the column's accessor
+        const isSortable = !nonSortableAccessors.includes(accessor);
         const commonProps = {
           accessorKey: accessor,
           header: short_label,
           enableGlobalFilter: accessor === 'lot_id',
           // enableGrouping: accessor === 'shape',
-          enableSorting:
-            accessor !== 'shape_full' &&
-            accessor !== 'details' &&
-            accessor !== 'fire_icon',
-          minSize: 5,
-          maxSize: accessor === 'details' ? 100 : 200,
-          size: 5,
+          // enableSorting:
+          //   accessor !== 'shape_full' &&
+          //   accessor !== 'details' &&
+          //   accessor !== 'fire_icon',
+          minSize: 0,
+          maxSize: 0,
+          size: 0,
           Header: ({ column }: any) => (
-            <Tooltip
-              tooltipTrigger={<span>{column.columnDef.header}</span>}
-              tooltipContent={label}
-              tooltipContentStyles={'z-[1000]'}
-            />
+            <div className="flex items-center group">
+              <Tooltip
+                tooltipTrigger={<span>{column.columnDef.header}</span>}
+                tooltipContent={label}
+                tooltipContentStyles={'z-[1000]'}
+              />
+              {isSortable &&
+                (currentSort ? (
+                  <FontAwesomeIcon
+                    icon={currentSort.desc ? faSortDown : faSortUp}
+                    width={8}
+                    height={8}
+                    style={{ marginLeft: '2px' }} // Optional styling for spacing
+                  />
+                ) : (
+                  <FontAwesomeIcon
+                    icon={faSort} // Default icon when not sorted
+                    width={8}
+                    height={8}
+                    className="opacity-0 transition-opacity duration-300 group-hover:opacity-100" // Show on hover
+                    style={{ marginLeft: '2px' }}
+                  />
+                ))}
+            </div>
           )
         };
 
@@ -214,7 +249,7 @@ const BidToBuy = () => {
   const [activeTab, setActiveTab] = useState(0);
   const tabLabels = ['Bid Stone', 'Active Bid', 'Bid History'];
   const [timeDifference, setTimeDifference] = useState(null);
-
+  const [isInActive, setIsInActive] = useState('');
   const getBidToBuyHistoryData = () => {
     setIsLoading(true);
 
@@ -231,31 +266,51 @@ const BidToBuy = () => {
   useEffect(() => {
     let queryNew = constructUrlParams(JSON.parse(localStorage.getItem('bid')!));
     setIsLoading(true);
-    triggerBidToBuyApi({ searchUrl: queryNew })
+    triggerBidToBuyApi({
+      searchUrl: `${queryNew}`
+    })
       .unwrap()
       .then((response: any) => {
+        setIsInActive('');
+
         setTime(response?.endTime),
           setBid(queryNew.length ? response?.bidStone : []);
         setActiveBid(response?.activeStone);
         setIsLoading(false);
       })
       .catch(e => {
+        // if (e?.data?.error === 'INACTIVE_BID_TO_BUY') {
+        setIsInActive(e?.data?.error);
+        // }
+        setActiveBid([]);
+        setBid([]);
         setIsLoading(false);
       });
   }, []);
 
   useEffect(() => {
     let queryNew = constructUrlParams(JSON.parse(localStorage.getItem('bid')!));
+
     setIsLoading(true);
 
-    triggerBidToBuyApi({ searchUrl: queryNew })
+    triggerBidToBuyApi({
+      searchUrl: `${queryNew}`
+    })
       .unwrap()
       .then((response: any) => {
+        setIsInActive('');
+
         setBid(queryNew.length ? response?.bidStone : []);
         setActiveBid(response?.activeStone);
         setTime(response?.endTime), setIsLoading(false);
       })
       .catch(e => {
+        // if (e?.data?.error === 'INACTIVE_BID_TO_BUY') {
+        //   setIsInActive('INACTIVE_BID_TO_BUY');
+        // }
+        setIsInActive(e?.data?.error);
+        setActiveBid([]);
+        setBid([]);
         setIsLoading(false);
       });
   }, [localStorage.getItem('bid')]);
@@ -286,6 +341,7 @@ const BidToBuy = () => {
 
   const handleTabClick = (index: number) => {
     let queryNew = constructUrlParams(JSON.parse(localStorage.getItem('bid')!));
+
     if (index !== activeTab) {
       if (index === 0 && !queryNew.length) {
         setIsTabSwitch(false);
@@ -295,21 +351,6 @@ const BidToBuy = () => {
     }
     setActiveTab(index);
     setRowSelection({});
-    if (index === 1 && activeBid.length > 0) {
-      activeBid.map((row: any) => {
-        if (row.discount > row.my_current_bid) {
-          setRowSelection(prev => {
-            return { ...prev, [row.id]: true };
-          });
-        } else {
-          setRowSelection((prev: any) => {
-            let prevRows = { ...prev };
-            delete prevRows[row.id];
-            return prevRows;
-          });
-        }
-      });
-    }
   };
   const [activeBid, setActiveBid] = useState<any>();
   const [bid, setBid] = useState<any>();
@@ -325,7 +366,7 @@ const BidToBuy = () => {
 
   const memoizedColumns = useMemo(
     () => mapColumns(columnHeaders),
-    [columnHeaders]
+    [columnHeaders, sorting]
   );
   const { modalState, modalSetState } = useModalStateManagement();
   const { errorState, errorSetState } = useErrorStateManagement();
@@ -336,10 +377,7 @@ const BidToBuy = () => {
 
   const [downloadExcel] = useDownloadExcelMutation();
   const [deleteBid] = useDeleteBidMutation();
-  let [
-    triggerBidToBuyApi,
-    { isLoading: isLoadingBidToBuyApi, isFetching: isFetchingBidToBuyApi }
-  ] = useLazyGetAllBidStonesQuery();
+  let [triggerBidToBuyApi] = useLazyGetAllBidStonesQuery();
 
   const renderFooter = (table: any) => {
     if (activeTab === 0 && bid?.length > 0) {
@@ -637,34 +675,55 @@ const BidToBuy = () => {
 
       {isDetailPage ? (
         <div className="mt-[16px]">
-          <DiamondDetailsComponent
-            data={
-              activeTab === 0
-                ? bid
-                : activeTab === 1
-                ? activeBid
-                : bidHistory?.data
-            }
-            filterData={detailPageData}
-            goBackToListView={goBack}
-            handleDetailPage={handleDetailPage}
-            fromBid={true}
-            breadCrumLabel={'Bid to Buy'}
-            modalSetState={modalSetState}
-            setIsLoading={setIsLoading}
-            activeTab={activeTab}
-          />
+          {isGemTrac ? (
+            <GemTracPage
+              breadCrumLabel={'Bid to Buy'}
+              setIsGemTrac={setIsGemTrac}
+              setGemTracData={setGemTracData}
+              gemTracData={gemTracData}
+              goBackToListView={goBack}
+            />
+          ) : (
+            <>
+              <DiamondDetailsComponent
+                data={
+                  activeTab === 0
+                    ? bid
+                    : activeTab === 1
+                    ? activeBid
+                    : bidHistory?.data
+                }
+                filterData={detailPageData}
+                goBackToListView={goBack}
+                handleDetailPage={handleDetailPage}
+                fromBid={true}
+                breadCrumLabel={'Bid to Buy'}
+                modalSetState={modalSetState}
+                setIsLoading={setIsLoading}
+                activeTab={activeTab}
+                setIsGemTrac={setIsGemTrac}
+                setGemTracData={setGemTracData}
+                triggerGemTracApi={triggerGemTracApi}
+              />
+            </>
+          )}
         </div>
       ) : isLoading ||
         // isLoadingBidToBuyApi ||
         historyData === undefined ||
         activeBid === undefined ? (
-        <BiddingSkeleton />
+        !Object?.keys(localStorage.getItem('bid') ?? {}).length ||
+        subRoute === SubRoutes.BID_TO_BUY ? (
+          <CustomKGKLoader />
+        ) : (
+          <BiddingSkeleton />
+        )
       ) : (
         <>
           {(!Object?.keys(localStorage.getItem('bid') ?? {}).length &&
             time &&
-            activeTab === 0) ||
+            activeTab === 0 &&
+            isInActive !== 'INACTIVE_BID_TO_BUY') ||
           subRoute === SubRoutes.BID_TO_BUY ? (
             <Form
               searchUrl={searchUrl}
@@ -687,6 +746,7 @@ const BidToBuy = () => {
               setIsCommonLoading={setIsLoading}
               time={time}
               setRowSelection={setRowSelection}
+
               // setBid={setBid}
               // setActiveBid={setActiveBid}
             />
@@ -743,6 +803,8 @@ const BidToBuy = () => {
                     // filterData={filterData}
                     setBid={setBid}
                     setActiveBid={setActiveBid}
+                    setSorting={setSorting}
+                    sorting={sorting}
                     columns={
                       activeTab === 2
                         ? memoizedColumns.filter(
@@ -791,6 +853,7 @@ const BidToBuy = () => {
                     isSkeletonLoading={isSkeletonLoading}
                     setIsSkeletonLoading={setIsSkeletonLoading}
                     isLoading={isLoading}
+                    isInActive={isInActive}
                     // searchUrl={searchUrl}
                   />
                 </div>

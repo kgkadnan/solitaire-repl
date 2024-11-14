@@ -1,5 +1,7 @@
 import Image from 'next/image';
 import Media from '@public/v2/assets/icons/data-table/Media.svg';
+import disabledMedia from '@public/v2/assets/icons/data-table/disable-media.svg';
+
 import Link from 'next/link';
 import {
   GIA_LINK,
@@ -14,18 +16,38 @@ import Bel from '@public/v2/assets/png/data-table/BEL.png';
 import Dub from '@public/v2/assets/png/data-table/DUB.png';
 import { formatNumber } from '@/utils/fix-two-digit-number';
 import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
+import Tooltip from '../../tooltip';
 
 export const RenderDetails = ({ row, handleDetailImage }: any) => {
-  return (
-    <button
-      onClick={e => {
-        e.stopPropagation();
-        handleDetailImage({ row: row.original });
-      }}
-    >
-      <Image src={Media} alt="Media" />
-    </button>
+  const isEligible = Object.values(row.original.assets_pre_check).some(
+    value => value === true
   );
+
+  if (isEligible) {
+    return (
+      <button
+        onClick={e => {
+          e.stopPropagation();
+          handleDetailImage({ row: row.original });
+        }}
+      >
+        <Image src={Media} alt="Media" />
+      </button>
+    );
+  } else {
+    return (
+      <Tooltip
+        tooltipTrigger={
+          <button>
+            <Image src={disabledMedia} alt="Media" />
+          </button>
+        }
+        tooltipContent={'Images & Videos for this stone are not available'}
+        tooltipContentStyles={'z-[1000] w-[166px]'}
+        tooltipContentSide="right"
+      />
+    );
+  }
 };
 
 export const RenderLotId = ({

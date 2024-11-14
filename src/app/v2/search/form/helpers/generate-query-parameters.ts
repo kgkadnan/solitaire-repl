@@ -83,6 +83,7 @@ interface IState {
   starLengthMin: string;
   caratRangeData?: string[];
   selectionChecked: string;
+  showOnlyWithVideo: boolean;
 }
 
 // Define a function to generate query parameters based on the provided state
@@ -157,7 +158,8 @@ export const generateQueryParams = (state: IState) => {
     selectedGirdle,
     selectionChecked,
     caratMin,
-    caratMax
+    caratMax,
+    showOnlyWithVideo
   } = state;
 
   // Initialize an empty object to store query parameters
@@ -357,5 +359,8 @@ export const generateQueryParams = (state: IState) => {
       lte: Number(starLengthMax),
       gte: Number(starLengthMin)
     });
+
+  queryParams['all_asset_required'] = showOnlyWithVideo;
+
   return queryParams;
 };

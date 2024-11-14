@@ -88,6 +88,8 @@ import CountdownTimer from '@/components/v2/common/timer';
 import Tab from '@/components/v2/common/bid-tabs';
 import { useLazyGetBidToBuyHistoryQuery } from '@/features/api/dashboard';
 import Tooltip from '@/components/v2/common/tooltip';
+import CustomSwitch from '@/components/v2/common/switch/switch';
+// import { Switch } from '@/components/v2/ui/switch';
 
 export interface ISavedSearch {
   saveSearchName: string;
@@ -200,7 +202,8 @@ const Form = ({
     selectedIntensity,
     selectedOvertone,
     selectionChecked,
-    isSliderActive
+    isSliderActive,
+    showOnlyWithVideo
   } = state;
   const {
     setCaratMin,
@@ -227,7 +230,8 @@ const Form = ({
     setSelectedKeyToSymbol,
     setSelectedCaratRange,
     setSelectionChecked,
-    setIsSliderActive
+    setIsSliderActive,
+    setShowOnlyWithVideo
   } = setState;
 
   const {
@@ -328,6 +332,7 @@ const Form = ({
   useEffect(() => {
     if (subRoute === SubRoutes.NEW_ARRIVAL) {
       const query = parseQueryString(searchUrl);
+      delete query.all_asset_required;
 
       const filteredData =
         newArrivalFilterData?.bidData &&
@@ -344,7 +349,10 @@ const Form = ({
       // localStorage.setItem('bid',JSON.stringify(query))
       setErrorText('');
       setIsLoading(true);
-      triggerBidToBuyApi({ searchUrl: searchUrl, limit: 1 })
+      triggerBidToBuyApi({
+        searchUrl: `${searchUrl}`,
+        limit: 1
+      })
         .unwrap()
         .then((response: any) => {
           setData(response), setActiveCount(response?.activeStone?.length);
@@ -376,7 +384,9 @@ const Form = ({
       setErrorText('');
       setIsLoading(true);
       isMatchingPair
-        ? triggerMatchingPairCountApi({ searchUrl })
+        ? triggerMatchingPairCountApi({
+            searchUrl: `${searchUrl}`
+          })
             .unwrap()
             .then((response: any) => {
               setData(response), setError(''), setIsLoading(false);
@@ -384,7 +394,9 @@ const Form = ({
             .catch(e => {
               setError(e), setIsLoading(false);
             })
-        : triggerProductCountApi({ searchUrl })
+        : triggerProductCountApi({
+            searchUrl: `${searchUrl}`
+          })
             .unwrap()
             .then((response: any) => {
               setData(response), setError(''), setIsLoading(false);
@@ -407,7 +419,9 @@ const Form = ({
       const queryParams = generateQueryParams(state);
 
       if (!isValidationError && !isSliderActive && !minMaxError) {
-        setSearchUrl(constructUrlParams(queryParams));
+        if (Object.keys(queryParams).length > 1) {
+          setSearchUrl(constructUrlParams(queryParams));
+        }
       }
     };
 
@@ -517,8 +531,10 @@ const Form = ({
     }
   }, [modifySearchFrom]);
   useEffect(() => {
-    routePath === Routes.BID_TO_BUY &&
-      setModifySearch(JSON.parse(localStorage.getItem('bid')!), setState);
+    let bidToBuyBidDataQuery = JSON.parse(localStorage.getItem('bid')!);
+
+    subRoute === SubRoutes.BID_TO_BUY &&
+      setModifySearch(bidToBuyBidDataQuery, setState);
   }, []);
 
   useEffect(() => {
@@ -532,24 +548,6 @@ const Form = ({
       setAddSearches(data);
     }
   }, []);
-
-  // useEffect(()=>{
-  //   if (
-  //     caratMin ||
-  //     caratMax
-  //   ) {
-  //     const caratFrom = parseFloat((caratMin&&caratMin >= 0.15 )? caratMin:0.15).toFixed(2);
-  //     const caratTo = parseFloat((caratMax&& caratMax <= 50)? caratMax : 50).toFixed(2);
-  //     setCaratRangeSelection([
-  //       ...caratRangeSelection,
-  //       `${caratFrom}-${caratTo}`
-  //     ]);
-  //     // setSelectedCaratRange([
-  //     //   ...selectedCaratRange,
-  //     //   `${caratFrom}-${caratTo}`
-  //     // ]);
-  //   }
-  // },[caratMin,caratMax])
 
   // Reset form when a new search is initiated
   useEffect(() => {
@@ -612,10 +610,11 @@ const Form = ({
     } else if (routePath === Routes.BID_TO_BUY) {
       const queryParams = generateQueryParams(state);
       localStorage.setItem('bid', JSON.stringify(queryParams));
-
       setErrorText('');
       setIsLoading(true);
-      triggerBidToBuyApi({ searchUrl: searchUrl })
+      triggerBidToBuyApi({
+        searchUrl: `${searchUrl}`
+      })
         .unwrap()
         .then((response: any) => {
           setData(response),
@@ -928,6 +927,7 @@ const Form = ({
               let setDataOnLocalStorage = {
                 id: savedSearch.savedSearch.id,
                 queryParams: updatedMeta,
+
                 saveSearchName: savedSearch?.savedSearch?.name,
                 searchId: data?.search_id,
                 isSavedSearch: true
@@ -950,6 +950,7 @@ const Form = ({
           updatedMeta[activeTab - 1].queryParams = queryParams;
           let updateSaveSearchData = {
             id: updatedMeta[activeTab - 1].id,
+
             meta_data: updatedMeta[activeTab - 1].queryParams,
             diamond_count: parseInt(data?.count),
             is_matching_pair: isMatchingPair
@@ -1500,7 +1501,27 @@ const Form = ({
           </div>
 
           <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px]">
-            <Fluorescence state={state} setState={setState} />
+            <div className="flex flex-col gap-[27px]">
+              {(routePath.includes('v2/matching-pair') ||
+                routePath.includes('v2/bid-2-buy') ||
+                routePath.includes('v2/search')) && (
+                <div className="flex items-center  justify-between bg-neutral0 border-[1px] border-solid border-neutral200 rounded-[4px]">
+                  <p className="font-medium py-[5px] rounded-l-[4px]  px-[12px] bg-neutral50 text-neutral900 text-mMedium">
+                     Images & Videos Required
+                  </p>
+                  <div className="px-[15px] pt-1">
+                    <CustomSwitch
+                      isOn={showOnlyWithVideo}
+                      handleToggle={() => {
+                        setShowOnlyWithVideo((prev: any) => !prev);
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
+
+              <Fluorescence state={state} setState={setState} />
+            </div>
             <CountryOfOrigin
               selectedOrigin={selectedOrigin}
               setSelectedOrigin={setSelectedOrigin}

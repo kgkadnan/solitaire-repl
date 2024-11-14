@@ -2537,18 +2537,21 @@ const CompanyDetail = ({
                 {' '}
                 <InputField
                   label={'Ultimate Beneficiary Ownership%'}
-                  onChange={e =>
+                  onChange={e => {
+                    // Parse the input value as a float; if the input is empty, pass null instead of NaN
+                    const numericValue =
+                      e.target.value === '' ? null : parseFloat(e.target.value);
                     handleInputChange(
                       `formState.online.sections[${[
                         kycScreenIdentifierNames.COMPANY_DETAILS
                       ]}][ownership_percentage]`,
-                      e.target.value,
+                      numericValue,
                       dispatch,
                       kycScreenIdentifierNames.COMPANY_DETAILS,
                       'ownership_percentage'
-                    )
-                  }
-                  type="text"
+                    );
+                  }}
+                  type="number"
                   name={'Ultimate Beneficiary Ownership%'}
                   value={
                     formState?.online?.sections?.[
