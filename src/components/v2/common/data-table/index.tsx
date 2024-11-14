@@ -588,7 +588,8 @@ const DataTable = ({
                       isSavedSearch: true,
                       searchId: response?.data?.search_id,
                       queryParams: searchData.meta_data,
-                      id: searchData.id
+                      id: searchData.id,
+                      label:(searchData?.name?.replace(/\s+/g, '') + ' ' + (data.length + 1))
                     }
                   ];
 
