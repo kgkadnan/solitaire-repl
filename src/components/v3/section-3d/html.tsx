@@ -118,7 +118,7 @@ const HtmlAnimation = () => {
                 : windowHeight >= 850
                 ? '52%'
                 : windowHeight >= 700
-                ? '60%'
+                ? '60.5%'
                 : windowHeight >= 600
                 ? '68%'
                 : '95%',
@@ -208,7 +208,7 @@ const HtmlAnimation = () => {
                 : windowHeight >= 850
                 ? '52%'
                 : windowHeight >= 700
-                ? '60%'
+                ? '60.5%'
                 : windowHeight >= 600
                 ? '68%'
                 : '95%',
