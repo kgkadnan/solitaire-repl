@@ -40,8 +40,6 @@ const Breadcrum = ({
   }, [searchParameters]);
   
   const handleDropdownSelect = (selectedIndex: any) => {
-    console.log('selectedIndex', selectedIndex);
-    console.log('dropdownPills', dropdownPills);
     // Get the selected item from dropdownPills
     const selectedPill = dropdownPills[selectedIndex];
 
