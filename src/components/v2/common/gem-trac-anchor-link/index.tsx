@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 
 import { Link } from 'react-scroll';
 
-export interface IAnchorLink {
+export interface IGemTracAnchorLink {
   anchorNavigations: string[];
 }
-const AnchorLink: React.FC<IAnchorLink> = ({ anchorNavigations }) => {
+const GemTracAnchorLink: React.FC<IGemTracAnchorLink> = ({
+  anchorNavigations
+}) => {
   return (
     <div className={`flex items-center w-full`}>
       <div className="flex overflow-x-auto no-scrollbar py-[10px]">
@@ -19,7 +21,7 @@ const AnchorLink: React.FC<IAnchorLink> = ({ anchorNavigations }) => {
               to={links}
               spy={true}
               smooth={true}
-              offset={-20}
+              offset={-80}
               duration={100}
               delay={0}
               className={`${
@@ -36,4 +38,4 @@ const AnchorLink: React.FC<IAnchorLink> = ({ anchorNavigations }) => {
   );
 };
 
-export default AnchorLink;
+export default GemTracAnchorLink;

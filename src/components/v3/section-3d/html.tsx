@@ -111,13 +111,17 @@ const HtmlAnimation = () => {
           }`}
           style={{
             marginBottom:
-              windowHeight >= 850
-                ? '50%'
+              windowHeight >= 1080
+                ? '28%'
+                : windowHeight >= 900
+                ? '55%'
+                : windowHeight >= 850
+                ? '52%'
                 : windowHeight >= 700
-                  ? '60%'
-                  : windowHeight >= 600
-                    ? '75%'
-                    : '95%',
+                ? '60.5%'
+                : windowHeight >= 600
+                ? '68%'
+                : '95%',
             marginTop: 'auto'
           }}
         >
@@ -146,11 +150,13 @@ const HtmlAnimation = () => {
             backgroundImage: `url('/v3/home/phone-skeleton.png')`,
             zIndex: '10 !important',
             transform: phoneVisible
-              ? windowWidth >= 1280
+              ? windowHeight <= 700
+                ? 'translateY(calc(100vh - 900px))'
+                : windowWidth >= 1280
                 ? 'translateY(calc(100vh - 950px))'
                 : windowWidth >= 1024
-                  ? 'translateY(calc(100vh - 895px))'
-                  : 'translateY(calc(100vh - 800px))'
+                ? 'translateY(calc(100vh - 895px))'
+                : 'translateY(calc(100vh - 800px))'
               : 'translateY(100vh)'
           }}
         >
@@ -195,13 +201,17 @@ const HtmlAnimation = () => {
           }`}
           style={{
             marginBottom:
-              windowHeight >= 850
-                ? '50%'
+              windowHeight >= 1080
+                ? '28%'
+                : windowHeight >= 900
+                ? '55%'
+                : windowHeight >= 850
+                ? '52%'
                 : windowHeight >= 700
-                  ? '60%'
-                  : windowHeight >= 600
-                    ? '75%'
-                    : '95%',
+                ? '60.5%'
+                : windowHeight >= 600
+                ? '68%'
+                : '95%',
             marginTop: 'auto'
           }}
         >
