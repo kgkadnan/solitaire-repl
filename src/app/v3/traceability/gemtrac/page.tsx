@@ -96,10 +96,10 @@ const GemTrac = () => {
                               index === 0
                                 ? 'xl:h-[139%] lg:h-[158%]'
                                 : index === 2
-                                  ? 'xl:h-[120%] lg:h-[124%]'
-                                  : index === 4
-                                    ? 'xl:h-[116%] lg:h-[121%]'
-                                    : 'xl:h-[120%] lg:h-[120.5%]'
+                                ? 'xl:h-[120%] lg:h-[124%]'
+                                : index === 4
+                                ? 'xl:h-[116%] lg:h-[121%]'
+                                : 'xl:h-[120%] lg:h-[120.5%]'
                             }  xl:mt-[-12px] lg:mt-[-10px]`}
                           ></div>
                         </div>
@@ -159,10 +159,10 @@ const GemTrac = () => {
                                     {/* Text content */}
                                     <div className="flex flex-col">
                                       <p className="text-primaryMain text-headingM font-semiBold">
-                                        {figure.value}
+                                        {figure.key}
                                       </p>
                                       <p className="text-[12px] text-neutral600">
-                                        {figure.key}
+                                        {figure.value}
                                       </p>
                                     </div>
                                   </div>
@@ -184,10 +184,10 @@ const GemTrac = () => {
                                     {/* Text content */}
                                     <div className="flex flex-col">
                                       <p className="text-primaryMain text-headingM font-semiBold">
-                                        {figure.value}
+                                        {figure.key}
                                       </p>
                                       <p className="text-[12px] text-neutral600">
-                                        {figure.key}
+                                        {figure.value}
                                       </p>
                                     </div>
                                   </div>
