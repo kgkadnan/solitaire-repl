@@ -172,7 +172,6 @@ const Search = () => {
   ) => {
     let closeSpecificSearch = yourSelection.filter(
       (_items: ISavedSearch, index: number) => {
-       // result?.saveSearchName !== '') ? ((result.label) === (result?.saveSearchName.replace(/\s+/g, '') + ' ' +  activeTab)        
         return (_items?.saveSearchName !== '') ? ((_items.label) !== (_items?.saveSearchName.replace(/\s+/g, '') + ' ' +  removeDataIndex)) : (_items.label !== ('Result ' + removeDataIndex));
       }
     );

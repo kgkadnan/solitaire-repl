@@ -539,7 +539,7 @@ const Result = ({
       });
 
   useEffect(() => {
-    // setIsLoading(true)    
+    // setIsLoading(true)
     fetchProducts();
   }, [activeTab, columnData]);
 
