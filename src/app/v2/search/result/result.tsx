@@ -194,6 +194,7 @@ const Result = ({
 
   const fetchProducts = async () => {
     // setIsLoading(true);
+    setIsSkeletonLoading(true);
     const storedSelection = localStorage.getItem('Search');
 
     if (!storedSelection) return;
@@ -538,7 +539,7 @@ const Result = ({
       });
 
   useEffect(() => {
-    // setIsLoading(true)
+    // setIsLoading(true)    
     fetchProducts();
   }, [activeTab, columnData]);
 
