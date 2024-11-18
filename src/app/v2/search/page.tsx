@@ -172,24 +172,25 @@ const Search = () => {
   ) => {
     let closeSpecificSearch = yourSelection.filter(
       (_items: ISavedSearch, index: number) => {
-        return index !== removeDataIndex - 1;
+        return (_items?.saveSearchName !== '') ? ((_items.label) !== (_items?.saveSearchName.replace(/\s+/g, '') + ' ' +  removeDataIndex)) : (_items.label !== ('Result ' + removeDataIndex));
       }
     );
-
-    if (removeDataIndex === 1) {
+    
+    if (closeSpecificSearch.length === 0) {
       setSearchParameters([]);
       setAddSearches([]);
       handleReset(setState, errorSetState);
       router.push(`${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`);
     } else {
+      let activeindex = (Number(closeSpecificSearch[0]?.label?.split(' ')[1]));
       setSearchParameters(closeSpecificSearch);
       setAddSearches(closeSpecificSearch);
-      setActiveTab(removeDataIndex);
+      setActiveTab(activeindex);
       router.push(
-        `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${removeDataIndex - 1}`
+        `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${activeindex}`
       );
     }
-
+    localStorage.removeItem('Search');
     localStorage.setItem('Search', JSON.stringify(closeSpecificSearch));
   };
 

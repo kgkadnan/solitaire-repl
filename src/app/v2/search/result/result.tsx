@@ -194,6 +194,7 @@ const Result = ({
 
   const fetchProducts = async () => {
     // setIsLoading(true);
+    setIsSkeletonLoading(true);
     const storedSelection = localStorage.getItem('Search');
 
     if (!storedSelection) return;
@@ -1034,7 +1035,7 @@ const Result = ({
       setIsLoading(true);
       confirmProduct({
         variants: variantIds,
-        comments: commentValue,
+        comments: textAreaValue || '',
         identifier: confirmTrack.confirmStoneTrack
           ? confirmTrack.confirmStoneTrack
           : 'Searching'
@@ -1044,6 +1045,7 @@ const Result = ({
           if (res) {
             setIsLoading(false);
             setCommentValue('');
+            setTextAreaValue('');
             setIsDialogOpen(true);
             setRowSelection({});
             dispatch(setConfirmStoneTrack(''));
