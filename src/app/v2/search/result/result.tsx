@@ -1035,7 +1035,7 @@ const Result = ({
       setIsLoading(true);
       confirmProduct({
         variants: variantIds,
-        comments: commentValue,
+        comments: textAreaValue || '',
         identifier: confirmTrack.confirmStoneTrack
           ? confirmTrack.confirmStoneTrack
           : 'Searching'
@@ -1045,6 +1045,7 @@ const Result = ({
           if (res) {
             setIsLoading(false);
             setCommentValue('');
+            setTextAreaValue('');
             setIsDialogOpen(true);
             setRowSelection({});
             dispatch(setConfirmStoneTrack(''));
