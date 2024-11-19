@@ -5,11 +5,25 @@ import Linkedin from '@public/v3/social-media/linkedin.svg';
 import { leadership } from '@/constants/v3/about-us';
 import { CommonButton } from '@/components/v3/button';
 import AnimationSection from '@/components/v3/animated-text/scroll';
+import Script from 'next/script';
 
 export default function Leadership() {
   const [selectedProfile, setSelectedProfile] = useState<any>({});
   return (
     <div>
+      <Script src="https://widgets.tree-nation.com/js/widgets/v1/widgets.min.js?v=1.0" strategy="afterInteractive" onLoad={() => {
+          setTimeout(()=>{
+            if (window?.TreeNationOffsetWebsite) {
+              window
+                .TreeNationOffsetWebsite({
+                  code: '0f021e268485267a',
+                  lang: 'en',
+                  theme: 'light',
+                })
+                .render('#tree-nation-offset-website');
+            }
+          },2000);
+        }} />
       {Object.keys(selectedProfile).length === 0 && (
         <div className="min-h-[800px] pt-[160px] pb-[80px] flex items-center  bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom">
           <div className="scroll-container flex overflow-hidden  w-full justify-center">
