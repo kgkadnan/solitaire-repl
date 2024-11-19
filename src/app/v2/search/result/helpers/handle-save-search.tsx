@@ -50,7 +50,9 @@ export const handleSaveSearch = async ({
           saveSearchName,
           isSavedSearch: true,
           searchId: parseData[activeTab - 1].searchId,
-          label: parseData[activeTab - 1].label,
+          label: 
+          (!!saveSearchName) ? (saveSearchName?.replace(/\s+/g, '') + ' ' + ((activeTab))) :
+          parseData[activeTab - 1].label,
           queryParams: parseData[activeTab - 1].queryParams
         };
         isMatchingPair
