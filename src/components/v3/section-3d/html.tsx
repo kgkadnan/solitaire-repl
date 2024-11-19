@@ -14,7 +14,7 @@ import {
 import { isSessionValid } from '@/utils/manage-session';
 import { useLazyRegisterFunnelQuery } from '@/features/api/funnel';
 import { trackEvent } from '@/utils/ga';
-
+import Script from 'next/script';
 const HtmlAnimation = () => {
   const [phoneVisible, setPhoneVisible] = useState(false);
   const [showBanner, setShowBanner] = useState(false);
@@ -100,6 +100,20 @@ const HtmlAnimation = () => {
   ];
 
   return (
+    <>
+     <Script src="https://widgets.tree-nation.com/js/widgets/v1/widgets.min.js?v=1.0" strategy="afterInteractive" onLoad={() => {
+          setTimeout(()=>{
+            if (window?.TreeNationOffsetWebsite) {
+              window
+                .TreeNationOffsetWebsite({
+                  code: '0f021e268485267a',
+                  lang: 'en',
+                  theme: 'light',
+                })
+                .render('#tree-nation-offset-website');
+            }
+          },1000);
+        }} />    
     <div className="relative w-full" style={{ height: 'calc(100vh - 80px)' }}>
       <div className="flex justify-between relative xl:px-[112px] lg:px-[32px]">
         {/* Left div */}
@@ -279,6 +293,7 @@ const HtmlAnimation = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 
