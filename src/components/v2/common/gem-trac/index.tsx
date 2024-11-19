@@ -145,7 +145,7 @@ const GemTracPage = ({
                       <p className="text-primaryMain text-headingM font-semiBold">
                         {gemTracData.product[key]}
                       </p>
-                      <p className="text-[12px] text-neutral600">{value}</p>
+                      <p className="text-[12px] text-neutral600">{!!value ? value : '-'}</p>
                     </div>
                   </div>
                 );
