@@ -10,7 +10,7 @@ import { useAppDispatch } from '@/hooks/hook';
 import { Dropdown } from '../dropdown-menu';
 
 import dropdownIcon from '@public/v2/assets/png/data-table/dropdown.png';
-const MAX_VISIBLE_PILLS = 2;
+const MAX_VISIBLE_PILLS = 5;
 
 const Breadcrum = ({
   searchParameters ,
