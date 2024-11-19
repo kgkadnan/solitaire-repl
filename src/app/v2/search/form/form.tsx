@@ -716,7 +716,9 @@ const Form = ({
                 saveSearchName: savedSearch?.savedSearch?.name,
                 searchId: data?.search_id,
                 isSavedSearch: true,
-                label: `Result ${
+                label: 
+                (!!saveSearchName) ? (saveSearchName?.replace(/\s+/g, '') + ' ' + ((data?.length || 0 ) + 1)) :            
+                `Result ${
                   localStorageDataLength ? localStorageDataLength.length : 1
                 }`,
                 queryParams
@@ -773,7 +775,9 @@ const Form = ({
             saveSearchName:
               modifySearchResult[activeTab - 1]?.saveSearchName ||
               saveSearchName,
-            label: `${
+            label: 
+            (!!saveSearchName || modifySearchResult[activeTab - 1]?.saveSearchName) ? (modifySearchResult[activeTab - 1]?.saveSearchName?.replace(/\s+/g, '') + ' ' + (data?.length + 1)) :            
+            `${
               localStorageDataLength ? modifySearchResult[activeTab - 1]?.label : 1
             }`,
             isSavedSearch: isSavedParams,
@@ -798,7 +802,12 @@ const Form = ({
             id: id,
             saveSearchName: saveSearchName,
             searchId: data?.search_id,
-            label: `Result ${
+            label: 
+            // `Result ${
+            //   localStorageDataLength ? localStorageDataLength.length + 1 : 1
+            // }`,
+            (!!saveSearchName) ? (saveSearchName?.replace(/\s+/g, '') + ' ' + ((localStorageDataLength?.length || 0 ) + 1)) :
+            `Result ${
               localStorageDataLength ? localStorageDataLength.length + 1 : 1
             }`,
             isSavedSearch: isSavedParams,

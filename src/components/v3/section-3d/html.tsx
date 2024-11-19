@@ -250,7 +250,7 @@ const HtmlAnimation = () => {
 
       {/* Banner that appears after the phone and cards scroll up */}
       <div
-        className={`xl:h-[240px] lg:h-[190px] absolute bottom-0 w-full text-center bg-white flex justify-center shadow-lg transition-transform duration-700 ease-in-out ${
+        className={`xl:h-[240px] lg:h-[180px] absolute bottom-0 w-full text-center bg-white flex justify-center shadow-lg transition-transform duration-700 ease-in-out ${
           showBanner ? 'translate-y-0' : 'translate-y-full'
         }`}
         style={{
