@@ -19,7 +19,7 @@ const Pill = (props: {
         <Tooltip
           tooltipTrigger={
             <div
-              className={`flex border-[1px]  rounded-[20px] gap-[4px] px-[12px] py-[6px]  font-medium text-sMedium cursor-pointer ${
+              className={`flex border-[1px]  rounded-[20px] gap-[4px] px-[8px] py-[6px]  font-medium text-sMedium cursor-pointer ${
                 isActive
                   ? 'border-infoBorder text-infoMain bg-infoSurface'
                   : 'border-neutral200 text-neutral500 bg-neutral-0'
@@ -56,7 +56,7 @@ const Pill = (props: {
         />
       ) : (
         <div
-          className={`flex border-[1px]  rounded-[20px] gap-[4px] px-[12px] py-[6px]  font-medium text-sMedium cursor-pointer ${
+          className={`flex border-[1px]  rounded-[20px] gap-[4px] px-[8px] py-[6px]  font-medium text-sMedium cursor-pointer ${
             isActive
               ? 'border-infoBorder text-infoMain bg-infoSurface'
               : 'border-neutral200 text-neutral500 bg-neutral-0'
