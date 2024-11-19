@@ -165,7 +165,7 @@ const HtmlAnimation = () => {
             zIndex: '10 !important',
             transform: phoneVisible
               ? windowHeight <= 700
-                ? 'translateY(calc(100vh - 900px))'
+                ? 'translateY(calc(100vh - 880px))'
                 : windowWidth >= 1280
                 ? 'translateY(calc(100vh - 950px))'
                 : windowWidth >= 1024
