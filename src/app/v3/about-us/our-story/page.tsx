@@ -6,6 +6,7 @@ import TimelineBanner from '@public/v3/timeline/timeline-banner.png';
 import { aboutUsFirstFold } from '@/constants/v3/about-us';
 import TimelineComponent from '@/components/v3/timeline';
 import AnimationSection from '@/components/v3/animated-text/scroll';
+import Script from 'next/script';
 
 export default function AboutUs() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -100,6 +101,20 @@ export default function AboutUs() {
   }, []);
 
   return (
+    <>
+    <Script src="https://widgets.tree-nation.com/js/widgets/v1/widgets.min.js?v=1.0" strategy="afterInteractive" onLoad={() => {
+          setTimeout(()=>{
+            if (window?.TreeNationOffsetWebsite) {
+              window
+                .TreeNationOffsetWebsite({
+                  code: '0f021e268485267a',
+                  lang: 'en',
+                  theme: 'light',
+                })
+                .render('#tree-nation-offset-website');
+            }
+          },2000);
+        }} />
     <div className="relative">
       <div className="min-h-[800px] flex items-center justify-center xl:px-[112px] lg:px-[32px] bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom ">
         <div className="w-full">
@@ -186,5 +201,6 @@ export default function AboutUs() {
         </div>
       </div>
     </div>
+    </>
   );
 }
