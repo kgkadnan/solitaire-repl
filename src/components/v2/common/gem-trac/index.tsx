@@ -143,9 +143,9 @@ const GemTracPage = ({
                     {/* Text content */}
                     <div className="flex flex-col gap-4">
                       <p className="text-primaryMain text-headingM font-semiBold">
-                        {gemTracData.product[key]}
+                        {gemTracData.product[key]?gemTracData.product[key]:'-'}
                       </p>
-                      <p className="text-[12px] text-neutral600">{!!value ? value : '-'}</p>
+                      <p className="text-[12px] text-neutral600">{value}</p>
                     </div>
                   </div>
                 );
