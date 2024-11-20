@@ -776,7 +776,7 @@ const Form = ({
               modifySearchResult[activeTab - 1]?.saveSearchName ||
               saveSearchName,
             label: 
-            (!!saveSearchName || modifySearchResult[activeTab - 1]?.saveSearchName) ? (modifySearchResult[activeTab - 1]?.saveSearchName?.replace(/\s+/g, '') + ' ' + (data?.length + 1)) :            
+            (!!saveSearchName || modifySearchResult[activeTab - 1]?.saveSearchName) ? (modifySearchResult[activeTab - 1]?.saveSearchName?.replace(/\s+/g, '') + ' ' + (activeTab)) :            
             `${
               localStorageDataLength ? modifySearchResult[activeTab - 1]?.label : 1
             }`,
