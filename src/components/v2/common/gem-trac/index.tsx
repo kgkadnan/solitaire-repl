@@ -190,12 +190,12 @@ const GemTracPage = ({
                                   <div
                                     className={`border-l border-dotted border-gray-400 ${
                                       index === 0
-                                        ? 'xl:h-[139%] lg:h-[158%]'
-                                        : index === 2
-                                        ? 'xl:h-[120%] lg:h-[124%]'
-                                        : index === 4
-                                        ? 'xl:h-[116%] lg:h-[121%]'
-                                        : 'xl:h-[120%] lg:h-[120.5%]'
+                                      ? 'xl:h-[205%] lg:h-[220%]'
+                                      : index === 2
+                                      ? 'xl:h-[145%] lg:h-[145%]'
+                                      : index === 4
+                                      ? 'xl:h-[116%] lg:h-[121%]'
+                                      : 'xl:h-[145%] lg:h-[132.5%]'
                                     }  xl:mt-[-12px] lg:mt-[-10px]`}
                                   ></div>
                                 </div>

@@ -15,11 +15,11 @@ import lsGif from '@public/v3/traceability/gem-trac/LS.gif';
 
 export const gemTracAnchorLink = [
   'origin',
-  'Architecture',
-  'Laser Cutting',
-  'Crafting',
+  'architecture',
+  'laserCutting',
+  'crafting',
   'Grooming',
-  'Certification'
+  'certification'
 ];
 
 export const GemTrac = [
