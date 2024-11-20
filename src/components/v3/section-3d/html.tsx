@@ -101,19 +101,6 @@ const HtmlAnimation = () => {
 
   return (
     <>
-     <Script src="https://widgets.tree-nation.com/js/widgets/v1/widgets.min.js?v=1.0" strategy="afterInteractive" onLoad={() => {
-          setTimeout(()=>{
-            if (window?.TreeNationOffsetWebsite) {
-              window
-                .TreeNationOffsetWebsite({
-                  code: '0f021e268485267a',
-                  lang: 'en',
-                  theme: 'light',
-                })
-                .render('#tree-nation-offset-website');
-            }
-          },1000);
-        }} />    
     <div className="relative w-full" style={{ height: 'calc(100vh - 80px)' }}>
       <div className="flex justify-between relative xl:px-[112px] lg:px-[32px]">
         {/* Left div */}
