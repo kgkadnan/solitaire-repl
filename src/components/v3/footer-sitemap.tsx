@@ -10,6 +10,7 @@ import India from '@public/v3/flags/india.svg';
 
 import { toast } from './ui/use-toast';
 import { useGetCountryCodeQuery } from '@/features/api/current-ip';
+import Script from 'next/script';
 
 const FooterSiteMap = () => {
   const { data: currentCountryCode } = useGetCountryCodeQuery({});
@@ -37,6 +38,20 @@ Bandra East, Mumbai - 400051`,
     }
   }, [currentCountryCode]);
   return (
+    <>
+    <Script src="https://widgets.tree-nation.com/js/widgets/v1/widgets.min.js?v=1.0" strategy="afterInteractive" onLoad={() => {
+          setTimeout(()=>{
+            if (window?.TreeNationOffsetWebsite) {
+              window
+                .TreeNationOffsetWebsite({
+                  code: '0f021e268485267a',
+                  lang: 'en',
+                  theme: 'light',
+                })
+                .render('#tree-nation-offset-website');
+            }
+          },1000);
+        }} /> 
     <div className="flex xl:pr-[112px] lg:pr-[32px] justify-between gap-4 bg-[white]">
       <div className="w-[30%] flex flex-col gap-8">
         <Image src={Globe} alt="KGK Globe presence" width={250} />
@@ -47,8 +62,8 @@ Bandra East, Mumbai - 400051`,
           alt="KGK logo"
           className="ml-2 h-[48px] w-[36px]"
         />
-        <div className='flex justify-end relative mr-14 -top-14' id="tree-nation-offset-website"></div>
-        <div className="flex justify-between -mt-14">
+        <div className='flex justify-end relative mr-14 -top-14 h-1' id="tree-nation-offset-website"></div>
+        <div className="flex justify-between">
           {sitemap.map(site => (
             <div className="flex gap-4 flex-col" key={site.title}>
               <p className="text-[#667085] text-mMedium font-semiBold pl-2">
@@ -131,6 +146,7 @@ Bandra East, Mumbai - 400051`,
         </div>
       </div>
     </div>
+    </>
   );
 };
 
