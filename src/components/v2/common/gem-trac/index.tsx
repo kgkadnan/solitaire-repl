@@ -215,8 +215,7 @@ const GemTracPage = ({
                                   <p className="lg:text-[14px] xl:text-[16px] text-primaryMain font-medium">
                                     {gemTrac.title}
                                   </p>
-                                  <p className="lg:text-[14px] xl:text-[16px] font-regular text-neutral-900">
-                                    {gemTrac.description}
+                                  <p className="lg:text-[14px] xl:text-[16px] font-regular text-neutral-900 whitespace-normal overflow-visible">                                   {gemTrac.description}
                                   </p>
                                 </div>
                                 {gemTrac.chosenBy && gemTrac.details && (
@@ -229,7 +228,7 @@ const GemTracPage = ({
                                         {gemTrac.chosenBy}
                                       </p>
                                     </div>
-                                    <p className="xl:text-[16px] lg:text-[14px] text-neutral900 font-medium">
+                                    <p className="lg:text-[14px] xl:text-[16px] font-regular text-neutral-900 whitespace-normal overflow-visible">
                                       {gemTrac.details}
                                     </p>
                                   </div>
