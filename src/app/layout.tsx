@@ -122,6 +122,18 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
       });
     }
   });
+  useEffect(()=>{
+    setTimeout(()=>{
+      if (window?.TreeNationOffsetWebsite && isV3Route && !isMobile) {
+        window?.TreeNationOffsetWebsite({
+            code: '0f021e268485267a',
+            lang: 'en',
+            theme: 'light',
+          })
+          ?.render('#tree-nation-offset-website');
+      }
+    },1000);
+  },[isMobile == false]);
 
   return (
     <html lang="en">
@@ -208,19 +220,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
             `
           }}
         />
-         <Script src="https://widgets.tree-nation.com/js/widgets/v1/widgets.min.js?v=1.0" strategy="afterInteractive" onLoad={() => {
-          setTimeout(()=>{
-            if (window?.TreeNationOffsetWebsite && isV3Route) {
-              window
-                .TreeNationOffsetWebsite({
-                  code: '0f021e268485267a',
-                  lang: 'en',
-                  theme: 'light',
-                })
-                ?.render('#tree-nation-offset-website');
-            }
-          },1000);
-        }} /> 
+         <Script src="https://widgets.tree-nation.com/js/widgets/v1/widgets.min.js?v=1.0" strategy="afterInteractive" /> 
       </head>
       <Head>
         <link
