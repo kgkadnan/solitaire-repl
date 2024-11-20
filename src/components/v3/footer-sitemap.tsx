@@ -10,7 +10,6 @@ import India from '@public/v3/flags/india.svg';
 
 import { toast } from './ui/use-toast';
 import { useGetCountryCodeQuery } from '@/features/api/current-ip';
-import Script from 'next/script';
 
 const FooterSiteMap = () => {
   const { data: currentCountryCode } = useGetCountryCodeQuery({});
@@ -39,19 +38,6 @@ Bandra East, Mumbai - 400051`,
   }, [currentCountryCode]);
   return (
     <>
-    <Script src="https://widgets.tree-nation.com/js/widgets/v1/widgets.min.js?v=1.0" strategy="afterInteractive" onLoad={() => {
-          setTimeout(()=>{
-            if (window?.TreeNationOffsetWebsite) {
-              window
-                .TreeNationOffsetWebsite({
-                  code: '0f021e268485267a',
-                  lang: 'en',
-                  theme: 'light',
-                })
-                .render('#tree-nation-offset-website');
-            }
-          },1000);
-        }} /> 
     <div className="flex xl:pr-[112px] lg:pr-[32px] justify-between gap-4 bg-[white]">
       <div className="w-[30%] flex flex-col gap-8">
         <Image src={Globe} alt="KGK Globe presence" width={250} />
