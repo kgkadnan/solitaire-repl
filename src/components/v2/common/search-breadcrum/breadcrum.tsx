@@ -55,15 +55,17 @@ const Breadcrum = ({
     setVisiblePills(newVisiblePills);
     setDropdownPills(newDropdownPills); 
   };
-  console.log('activeTab', activeTab);
-  if(dropdownPills.length > 0 && activeTab > (MAX_VISIBLE_PILLS - 1)) {
-    const activelabel = ('Result ' + activeTab); 
-    const index = dropdownPills.findIndex((item: any) => item?.saveSearchName != '' ? (item?.label === item?.saveSearchName.replace(/\s+/g, '') + ' ' + activeTab) : item?.label === activelabel);
-    if(index != -1)
-    {
-     handleDropdownSelect(index);
-    }    
-  }  
+ 
+  useEffect(() => {
+    if(dropdownPills.length > 0 && activeTab > (MAX_VISIBLE_PILLS - 1)) {
+      const activelabel = ('Result ' + activeTab); 
+      const index = dropdownPills.findIndex((item: any) => item?.saveSearchName != '' ? (item?.label === item?.saveSearchName.replace(/\s+/g, '') + ' ' + activeTab) : item?.label === activelabel);
+      if(index != -1)
+      {
+       handleDropdownSelect(index);
+      }    
+    } 
+  }, []); 
   return (
     <>
       {searchParameters.length > 0 && (
