@@ -81,8 +81,8 @@ const Search = () => {
         ''
       );
       if (
-        parseInt(replaceSubrouteWithSearchResult!) &&
-        parseInt(replaceSubrouteWithSearchResult!) <= filteredSelection.length
+        parseInt(replaceSubrouteWithSearchResult!) 
+      //  && parseInt(replaceSubrouteWithSearchResult!) <= filteredSelection.length
       ) {
         setActiveTab(parseInt(replaceSubrouteWithSearchResult!));
       } else setActiveTab(-1);
