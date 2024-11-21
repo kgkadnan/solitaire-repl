@@ -279,8 +279,8 @@ const MatchingPair = () => {
         ''
       );
       if (
-        parseInt(replaceSubrouteWithSearchResult!) &&
-        parseInt(replaceSubrouteWithSearchResult!) <= filteredSelection.length
+        parseInt(replaceSubrouteWithSearchResult!) 
+      //  && parseInt(replaceSubrouteWithSearchResult!) <= filteredSelection.length
       ) {
         setActiveTab(parseInt(replaceSubrouteWithSearchResult!));
       } else setActiveTab(-1);
@@ -370,13 +370,18 @@ const MatchingPair = () => {
     removeDataIndex: number,
     yourSelection: ISavedSearch[]
   ) => {
+    // let closeSpecificSearch = yourSelection.filter(
+    //   (_items: ISavedSearch, index: number) => {
+    //     return index !== removeDataIndex - 1;
+    //   }
+    // );
     let closeSpecificSearch = yourSelection.filter(
       (_items: ISavedSearch, index: number) => {
-        return index !== removeDataIndex - 1;
+        return (_items?.saveSearchName !== '') ? ((_items.label) !== (_items?.saveSearchName.replace(/\s+/g, '') + ' ' +  removeDataIndex)) : (_items.label !== ('Result ' + removeDataIndex));
       }
     );
 
-    if (removeDataIndex === 1) {
+    if (closeSpecificSearch.length === 0) {
       setSearchParameters([]);
       setAddSearches([]);
       handleReset(setState, errorSetState);
@@ -384,16 +389,17 @@ const MatchingPair = () => {
         `${Routes.MATCHING_PAIR}?active-tab=${MatchSubRoutes.NEW_SEARCH}`
       );
     } else {
+      let activeindex = (Number(closeSpecificSearch[0]?.label?.split(' ')[1]));
       setSearchParameters(closeSpecificSearch);
       setAddSearches(closeSpecificSearch);
-      setActiveTab(removeDataIndex);
+      setActiveTab(activeindex);
       router.push(
         `${Routes.MATCHING_PAIR}?active-tab=${MatchSubRoutes.RESULT}-${
-          removeDataIndex - 1
+          activeindex
         }`
       );
     }
-
+    localStorage.removeItem('Search');
     localStorage.setItem('MatchingPair', JSON.stringify(closeSpecificSearch));
   };
 
