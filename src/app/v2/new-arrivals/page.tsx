@@ -524,7 +524,7 @@ const NewArrivals = () => {
       socketManager.emit('get_bid_stones');
     };
     socketManager.on('bid_stones', handleBidStones);
-    socketManager.on('error', handleError);
+    // socketManager.on('error', handleError);
     socketManager.on('bid_placed', handleBidPlaced);
     socketManager.on('bid_canceled', handleBidCanceled);
 
