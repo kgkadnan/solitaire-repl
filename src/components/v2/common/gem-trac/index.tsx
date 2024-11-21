@@ -143,8 +143,13 @@ const GemTracPage = ({
                     {/* Text content */}
                     <div className="flex flex-col gap-4">
                       <p className="text-primaryMain text-headingM font-semiBold">
-                        {gemTracData.product[key]?gemTracData.product[key]:'-'}
-                      </p>
+                          {gemTracData.product[key] !== undefined &&
+                          gemTracData.product[key] !== null
+                            ? typeof gemTracData.product[key] === 'number'
+                              ? gemTracData.product[key].toFixed(2)
+                              : gemTracData.product[key]
+                            : '-'}
+                        </p>
                       <p className="text-[12px] text-neutral600">{value}</p>
                     </div>
                   </div>
@@ -235,9 +240,9 @@ const GemTracPage = ({
                                 )}
 
                                 {gemTrac.metadata.length > 0 && (
-                                  <div className="flex  flex-wrap gap-28">
+                                  <div className="flex  flex-wrap">
                                     {/* Left Column */}
-                                    <div className="flex flex-col gap-6">
+                                    <div className="flex flex-col gap-6 pr-4">
                                       {gemTrac.metadata
                                         ?.slice(
                                           0,
@@ -253,8 +258,10 @@ const GemTracPage = ({
 
                                             {/* Text content */}
                                             <div className="flex flex-col">
-                                              <p className="text-primaryMain text-headingM font-semiBold">
-                                                {figure.key}
+                                            <p className="text-primaryMain text-headingM font-semiBold">
+                                                {typeof figure.key === 'number'
+                                                  ? figure.key.toFixed(2)
+                                                  : figure.key}
                                               </p>
                                               <p className="text-[12px] text-neutral600">
                                                 {figure.value}
