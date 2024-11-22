@@ -58,14 +58,13 @@ const Breadcrum = ({
  
   useEffect(() => {
     if(dropdownPills.length > 0 && activeTab > (MAX_VISIBLE_PILLS - 1)) {
-      const activelabel = ('Result ' + activeTab); 
-      const index = dropdownPills.findIndex((item: any) => item?.saveSearchName != '' ? (item?.label === item?.saveSearchName.replace(/\s+/g, '') + ' ' + activeTab) : item?.label === activelabel);
-      if(index != -1)
+      const index = dropdownPills.findIndex((item: any) => item?.searchId == searchParameters[activeTab - 1]?.searchId);
+      if(index >= 0)
       {
        handleDropdownSelect(index);
       }    
     } 
-  }, []); 
+  }, [searchParameters]); 
   return (
     <>
       {searchParameters.length > 0 && (
@@ -85,9 +84,8 @@ const Breadcrum = ({
         </div>
       )}
       {visiblePills.map((result: any, index: number) => {
-        console.log('index > MAX_VISIBLE_PILLS', result?.label?.split(' ')[1]);
-        const activePill = (result?.saveSearchName !== '') ? ((result.label) === (result?.saveSearchName.replace(/\s+/g, '') + ' ' +  activeTab)) : (activeTab === Number(result?.label?.split(' ')[1]));
-        const activeIndex = (Number(result?.label?.split(' ')[1]));
+        const activePill = searchParameters[activeTab - 1]?.searchId == result.searchId;
+        const activeIndex = searchParameters.findIndex(x => x.searchId == result.searchId) + 1;
         return (
           // Object.keys(result).length > 0 && (
           <div key={`breadcrum-${index}`} className="flex items-center">
@@ -117,8 +115,7 @@ const Breadcrum = ({
                 );
               }}
               handlePillDelete={() => {
-                let labelId = (Number(result?.label?.split(' ')[1]));
-                handleCloseSpecificTab(labelId);
+                handleCloseSpecificTab(activeIndex - 1);
               }}
             />
           </div>
@@ -142,7 +139,7 @@ const Breadcrum = ({
               router.push(
                 `${
                   isMatchingPair ? Routes.MATCHING_PAIR : Routes.SEARCH
-                }?active-tab=${SubRoutes.RESULT}-${(Number(result?.label?.split(' ')[1]))}`
+                }?active-tab=${SubRoutes.RESULT}-${searchParameters.findIndex(x => x.searchId == result.searchId) + 1}`
               );
             }
           }))}
