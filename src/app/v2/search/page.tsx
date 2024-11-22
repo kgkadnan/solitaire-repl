@@ -171,9 +171,7 @@ const Search = () => {
     yourSelection: ISavedSearch[]
   ) => {
     let closeSpecificSearch = yourSelection.filter(
-      (_items: ISavedSearch, index: number) => {
-        return (_items?.saveSearchName !== '') ? ((_items.label) !== (_items?.saveSearchName.replace(/\s+/g, '') + ' ' +  removeDataIndex)) : (_items.label !== ('Result ' + removeDataIndex));
-      }
+      (_items: ISavedSearch, index: number) => index != removeDataIndex
     );
     
     if (closeSpecificSearch.length === 0) {
@@ -182,13 +180,17 @@ const Search = () => {
       handleReset(setState, errorSetState);
       router.push(`${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`);
     } else {
-      let activeindex = (Number(closeSpecificSearch[0]?.label?.split(' ')[1]));
       setSearchParameters(closeSpecificSearch);
       setAddSearches(closeSpecificSearch);
-      setActiveTab(activeindex);
-      router.push(
-        `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${activeindex}`
-      );
+      if (activeTab == (removeDataIndex + 1)) {
+        setActiveTab(1);
+        router.push(`${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-1`);
+      }
+      else if (activeTab > (removeDataIndex + 1)) {
+        const newTab = activeTab - 1;
+        setActiveTab(newTab);
+        router.push(`${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${newTab}`); 
+      }
     }
     localStorage.removeItem('Search');
     localStorage.setItem('Search', JSON.stringify(closeSpecificSearch));
@@ -325,7 +327,7 @@ const Search = () => {
                         setIsInputDialogOpen,
                         setStoredSelection: setSearchParameters,
                         setSaveSearchName,
-                        setInputError
+                        setInputError,
                       });
                     }
                   }
