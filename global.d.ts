@@ -14,6 +14,7 @@ declare global {
       renew?: any;
     };
     CookieConsent?: any;
+    TreeNationOffsetWebsite: any; // Add 'TreeNationOffsetWebsite' to the 'window' object
   }
 }
 

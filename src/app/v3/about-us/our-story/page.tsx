@@ -100,6 +100,7 @@ export default function AboutUs() {
   }, []);
 
   return (
+    <>
     <div className="relative">
       <div className="min-h-[800px] flex items-center justify-center xl:px-[112px] lg:px-[32px] bg-animated-gradient bg-[length:200%_200%] bg-no-repeat animate-gradient blur-bottom ">
         <div className="w-full">
@@ -186,5 +187,6 @@ export default function AboutUs() {
         </div>
       </div>
     </div>
+    </>
   );
 }

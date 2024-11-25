@@ -14,7 +14,7 @@ import {
 import { isSessionValid } from '@/utils/manage-session';
 import { useLazyRegisterFunnelQuery } from '@/features/api/funnel';
 import { trackEvent } from '@/utils/ga';
-
+import Script from 'next/script';
 const HtmlAnimation = () => {
   const [phoneVisible, setPhoneVisible] = useState(false);
   const [showBanner, setShowBanner] = useState(false);
@@ -100,6 +100,7 @@ const HtmlAnimation = () => {
   ];
 
   return (
+    <>
     <div className="relative w-full" style={{ height: 'calc(100vh - 80px)' }}>
       <div className="flex justify-between relative xl:px-[112px] lg:px-[32px]">
         {/* Left div */}
@@ -111,13 +112,17 @@ const HtmlAnimation = () => {
           }`}
           style={{
             marginBottom:
-              windowHeight >= 850
-                ? '50%'
+              windowHeight >= 1080
+                ? '28%'
+                : windowHeight >= 900
+                ? '55%'
+                : windowHeight >= 850
+                ? '52%'
                 : windowHeight >= 700
-                  ? '60%'
-                  : windowHeight >= 600
-                    ? '75%'
-                    : '95%',
+                ? '60.5%'
+                : windowHeight >= 600
+                ? '68%'
+                : '95%',
             marginTop: 'auto'
           }}
         >
@@ -146,11 +151,13 @@ const HtmlAnimation = () => {
             backgroundImage: `url('/v3/home/phone-skeleton.png')`,
             zIndex: '10 !important',
             transform: phoneVisible
-              ? windowWidth >= 1280
+              ? windowHeight <= 700
+                ? 'translateY(calc(100vh - 880px))'
+                : windowWidth >= 1280
                 ? 'translateY(calc(100vh - 950px))'
                 : windowWidth >= 1024
-                  ? 'translateY(calc(100vh - 895px))'
-                  : 'translateY(calc(100vh - 800px))'
+                ? 'translateY(calc(100vh - 895px))'
+                : 'translateY(calc(100vh - 800px))'
               : 'translateY(100vh)'
           }}
         >
@@ -195,13 +202,17 @@ const HtmlAnimation = () => {
           }`}
           style={{
             marginBottom:
-              windowHeight >= 850
-                ? '50%'
+              windowHeight >= 1080
+                ? '28%'
+                : windowHeight >= 900
+                ? '55%'
+                : windowHeight >= 850
+                ? '52%'
                 : windowHeight >= 700
-                  ? '60%'
-                  : windowHeight >= 600
-                    ? '75%'
-                    : '95%',
+                ? '60.5%'
+                : windowHeight >= 600
+                ? '68%'
+                : '95%',
             marginTop: 'auto'
           }}
         >
@@ -226,7 +237,7 @@ const HtmlAnimation = () => {
 
       {/* Banner that appears after the phone and cards scroll up */}
       <div
-        className={`xl:h-[240px] lg:h-[190px] absolute bottom-0 w-full text-center bg-white flex justify-center shadow-lg transition-transform duration-700 ease-in-out ${
+        className={`xl:h-[240px] lg:h-[180px] absolute bottom-0 w-full text-center bg-white flex justify-center shadow-lg transition-transform duration-700 ease-in-out ${
           showBanner ? 'translate-y-0' : 'translate-y-full'
         }`}
         style={{
@@ -269,6 +280,7 @@ const HtmlAnimation = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

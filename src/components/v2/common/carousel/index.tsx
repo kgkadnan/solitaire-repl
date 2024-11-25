@@ -35,8 +35,8 @@ const DashboardCarousel: React.FC<IDashboardCarouselProps> = ({
         style={{
           position: 'absolute',
           bottom: '10px',
-          width: '100%',
-          textAlign: 'center'
+          width: '55%',
+          textAlign: 'end'
         }}
       >
         <ul style={{ margin: '0' }}> {dots} </ul>

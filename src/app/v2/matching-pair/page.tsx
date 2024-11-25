@@ -128,6 +128,8 @@ const MatchingPair = () => {
   // const currentPath = usePathname();
   const [activeTab, setActiveTab] = useState(0);
   const [isAddDemand, setIsAddDemand] = useState(false);
+  const [globalFilterActive, setGlobalFilterActive] = useState(false);
+  const [globalFilter, setGlobalFilter] = useState('');
 
   const [searchParameters, setSearchParameters] = useState<ISavedSearch[] | []>(
     []
@@ -277,8 +279,8 @@ const MatchingPair = () => {
         ''
       );
       if (
-        parseInt(replaceSubrouteWithSearchResult!) &&
-        parseInt(replaceSubrouteWithSearchResult!) <= filteredSelection.length
+        parseInt(replaceSubrouteWithSearchResult!) 
+      //  && parseInt(replaceSubrouteWithSearchResult!) <= filteredSelection.length
       ) {
         setActiveTab(parseInt(replaceSubrouteWithSearchResult!));
       } else setActiveTab(-1);
@@ -368,30 +370,36 @@ const MatchingPair = () => {
     removeDataIndex: number,
     yourSelection: ISavedSearch[]
   ) => {
+    // let closeSpecificSearch = yourSelection.filter(
+    //   (_items: ISavedSearch, index: number) => {
+    //     return index !== removeDataIndex - 1;
+    //   }
+    // );
     let closeSpecificSearch = yourSelection.filter(
-      (_items: ISavedSearch, index: number) => {
-        return index !== removeDataIndex - 1;
-      }
+      (_items: ISavedSearch, index: number) =>  index != removeDataIndex
     );
 
-    if (removeDataIndex === 1) {
+    if (closeSpecificSearch.length === 0) {
       setSearchParameters([]);
       setAddSearches([]);
       handleReset(setState, errorSetState);
-      router.push(
-        `${Routes.MATCHING_PAIR}?active-tab=${MatchSubRoutes.NEW_SEARCH}`
-      );
-    } else {
+      router.push(`${Routes.MATCHING_PAIR}?active-tab=${MatchSubRoutes.NEW_SEARCH}`);
+    } 
+    else {
       setSearchParameters(closeSpecificSearch);
       setAddSearches(closeSpecificSearch);
-      setActiveTab(removeDataIndex);
-      router.push(
-        `${Routes.MATCHING_PAIR}?active-tab=${MatchSubRoutes.RESULT}-${
-          removeDataIndex - 1
-        }`
-      );
+      if (activeTab == (removeDataIndex + 1)) {
+        setActiveTab(1);
+        router.push(`${Routes.MATCHING_PAIR}?active-tab=${MatchSubRoutes.RESULT}-1`);
+      }
+      else if (activeTab > (removeDataIndex + 1)) {
+        const newTab = activeTab - 1;
+        setActiveTab(newTab);
+        router.push(`${Routes.MATCHING_PAIR}?active-tab=${MatchSubRoutes.RESULT}-${newTab}`); 
+      }
     }
-
+    
+    localStorage.removeItem('Search');
     localStorage.setItem('MatchingPair', JSON.stringify(closeSpecificSearch));
   };
 
@@ -441,6 +449,8 @@ const MatchingPair = () => {
         setIsModified(false); // Disable the buttons
         setIsMPSOpen(false);
         setSettingApplied(!settingApplied);
+        setGlobalFilterActive(false);
+        setGlobalFilter('');
       });
   };
 
@@ -468,6 +478,8 @@ const MatchingPair = () => {
     setInitialMps(mps); // Set the current MPS as the new initial state after applying changes
     setIsModified(false); // Disable the buttons
     setSettingApplied(!settingApplied);
+    setGlobalFilterActive(false);
+    setGlobalFilter('');
   };
 
   const handleMPSInputChange = (
@@ -883,6 +895,10 @@ const MatchingPair = () => {
           setSettingApplied={setSettingApplied}
           settingApplied={settingApplied}
           setIsMPSOpen={setIsMPSOpen}
+          setGlobalFilterActive={setGlobalFilterActive}
+          globalFilterActive={globalFilterActive}
+          setGlobalFilter={setGlobalFilter}
+          globalFilter={globalFilter}
         />
       )}
     </div>

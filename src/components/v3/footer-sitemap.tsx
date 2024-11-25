@@ -37,6 +37,7 @@ Bandra East, Mumbai - 400051`,
     }
   }, [currentCountryCode]);
   return (
+    <>
     <div className="flex xl:pr-[112px] lg:pr-[32px] justify-between gap-4 bg-[white]">
       <div className="w-[30%] flex flex-col gap-8">
         <Image src={Globe} alt="KGK Globe presence" width={250} />
@@ -47,8 +48,8 @@ Bandra East, Mumbai - 400051`,
           alt="KGK logo"
           className="ml-2 h-[48px] w-[36px]"
         />
+        <div className='flex justify-end relative mr-14 -top-14 h-1' id="tree-nation-offset-website"></div>
         <div className="flex justify-between">
-          {/* <div className=" flex w-[60%]  justify-between gap-2"> */}
           {sitemap.map(site => (
             <div className="flex gap-4 flex-col" key={site.title}>
               <p className="text-[#667085] text-mMedium font-semiBold pl-2">
@@ -131,6 +132,7 @@ Bandra East, Mumbai - 400051`,
         </div>
       </div>
     </div>
+    </>
   );
 };
 

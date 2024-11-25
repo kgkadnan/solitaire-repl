@@ -81,8 +81,8 @@ const Search = () => {
         ''
       );
       if (
-        parseInt(replaceSubrouteWithSearchResult!) &&
-        parseInt(replaceSubrouteWithSearchResult!) <= filteredSelection.length
+        parseInt(replaceSubrouteWithSearchResult!) 
+      //  && parseInt(replaceSubrouteWithSearchResult!) <= filteredSelection.length
       ) {
         setActiveTab(parseInt(replaceSubrouteWithSearchResult!));
       } else setActiveTab(-1);
@@ -171,12 +171,10 @@ const Search = () => {
     yourSelection: ISavedSearch[]
   ) => {
     let closeSpecificSearch = yourSelection.filter(
-      (_items: ISavedSearch, index: number) => {
-        return index !== removeDataIndex - 1;
-      }
+      (_items: ISavedSearch, index: number) => index != removeDataIndex
     );
-
-    if (removeDataIndex === 1) {
+    
+    if (closeSpecificSearch.length === 0) {
       setSearchParameters([]);
       setAddSearches([]);
       handleReset(setState, errorSetState);
@@ -184,12 +182,17 @@ const Search = () => {
     } else {
       setSearchParameters(closeSpecificSearch);
       setAddSearches(closeSpecificSearch);
-      setActiveTab(removeDataIndex);
-      router.push(
-        `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${removeDataIndex - 1}`
-      );
+      if (activeTab == (removeDataIndex + 1)) {
+        setActiveTab(1);
+        router.push(`${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-1`);
+      }
+      else if (activeTab > (removeDataIndex + 1)) {
+        const newTab = activeTab - 1;
+        setActiveTab(newTab);
+        router.push(`${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${newTab}`); 
+      }
     }
-
+    localStorage.removeItem('Search');
     localStorage.setItem('Search', JSON.stringify(closeSpecificSearch));
   };
 
@@ -324,7 +327,7 @@ const Search = () => {
                         setIsInputDialogOpen,
                         setStoredSelection: setSearchParameters,
                         setSaveSearchName,
-                        setInputError
+                        setInputError,
                       });
                     }
                   }

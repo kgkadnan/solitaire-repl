@@ -94,6 +94,7 @@ import CustomSwitch from '@/components/v2/common/switch/switch';
 export interface ISavedSearch {
   saveSearchName: string;
   isSavedSearch: boolean;
+  label: string;
   queryParams: Record<string, string | string[] | { lte: number; gte: number }>;
 }
 const Form = ({
@@ -331,6 +332,7 @@ const Form = ({
   useEffect(() => {
     if (subRoute === SubRoutes.NEW_ARRIVAL) {
       const query = parseQueryString(searchUrl);
+      delete query.all_asset_required;
 
       const filteredData =
         newArrivalFilterData?.bidData &&
@@ -570,6 +572,12 @@ const Form = ({
     id?: string,
     formIdentifier = 'Search'
   ) => {
+    let localStorageDataLength = JSON.parse(
+      localStorage.getItem(formIdentifier)!
+    );
+
+    console.log('localStorageData', localStorageDataLength);
+
     let caratFrom;
     let caratTo;
     if (caratMin || caratMax) {
@@ -708,6 +716,11 @@ const Form = ({
                 saveSearchName: savedSearch?.savedSearch?.name,
                 searchId: data?.search_id,
                 isSavedSearch: true,
+                label: 
+                (!!saveSearchName) ? (saveSearchName?.replace(/\s+/g, '') + ' ' + ((data?.length || 0 ) + 1)) :            
+                `Result ${
+                  localStorageDataLength ? localStorageDataLength.length : 1
+                }`,
                 queryParams
               };
               let localStorageData = JSON.parse(
@@ -762,6 +775,11 @@ const Form = ({
             saveSearchName:
               modifySearchResult[activeTab - 1]?.saveSearchName ||
               saveSearchName,
+            label: 
+            (!!saveSearchName || modifySearchResult[activeTab - 1]?.saveSearchName) ? (modifySearchResult[activeTab - 1]?.saveSearchName?.replace(/\s+/g, '') + ' ' + (activeTab)) :            
+            `${
+              localStorageDataLength ? modifySearchResult[activeTab - 1]?.label : 1
+            }`,
             isSavedSearch: isSavedParams,
             searchId: data?.search_id,
             queryParams
@@ -784,6 +802,14 @@ const Form = ({
             id: id,
             saveSearchName: saveSearchName,
             searchId: data?.search_id,
+            label: 
+            // `Result ${
+            //   localStorageDataLength ? localStorageDataLength.length + 1 : 1
+            // }`,
+            (!!saveSearchName) ? (saveSearchName?.replace(/\s+/g, '') + ' ' + ((localStorageDataLength?.length || 0 ) + 1)) :
+            `Result ${
+              localStorageDataLength ? localStorageDataLength.length + 1 : 1
+            }`,
             isSavedSearch: isSavedParams,
             queryParams
           };
