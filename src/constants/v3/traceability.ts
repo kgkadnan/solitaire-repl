@@ -153,7 +153,7 @@ export const traceabilityGemTrac = [
     description: `A precise and powerful laser beam is set on the planned markings on the diamond by an expert. The laser divides the rough diamond into two and are forwarded to the faceting department.`,
     chosenBy: '', // Person who made the choice
     details: ``,
-    url: lsGif,
+    url:lsGif ,
     icon: step3,
     metadata: [
       {
