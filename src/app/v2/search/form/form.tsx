@@ -419,7 +419,7 @@ const Form = ({
       const queryParams = generateQueryParams(state);
 
       if (!isValidationError && !isSliderActive && !minMaxError) {
-        if (Object.keys(queryParams).length > 1) {
+        if (Object.keys(queryParams).length > 1 || queryParams.all_asset_required == true) {
           setSearchUrl(constructUrlParams(queryParams));
         }
       }
