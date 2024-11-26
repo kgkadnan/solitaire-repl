@@ -244,7 +244,7 @@ const DataTable = ({
 
   const [pagination, setPagination] = useState({
     pageIndex: 0,
-    pageSize: 20 //customize the default page size
+    pageSize: parseInt(localStorage.getItem("pageSize") ?? "20") //customize the default page size
   });
 
   const [paginatedData, setPaginatedData] = useState<any>([]);
@@ -771,7 +771,13 @@ const DataTable = ({
     renderEmptyRowsFallback: NoResultsComponent,
     manualPagination: showEmptyState ? false : true,
     rowCount: rows.length,
-    onPaginationChange: setPagination, //hoist pagination state to your state when it changes internally
+    onPaginationChange: (updater) => {
+      setPagination((prevState) => {
+        const newState = typeof updater === 'function' ? updater(prevState) : updater;
+        localStorage.setItem('pageSize', JSON.stringify(newState.pageSize));
+        return newState;
+      });
+    }, //hoist pagination state to your state when it changes internally
     manualFiltering: true,
     onGlobalFilterChange: setGlobalFilter,
     manualSorting: true, // Enable manual sorting
