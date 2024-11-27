@@ -165,11 +165,22 @@ export function DiamondDetailsComponent({
       </div>
     );
   };
+
   const images = [
     {
       name: getShapeDisplayName(tableData?.shape ?? ''),
-      url: `${FILE_URLS.IMG.replace('***', tableData?.lot_id ?? '')}`,
-      downloadUrl: `${FILE_URLS.IMG.replace('***', tableData?.lot_id ?? '')}`,
+      url: `${FILE_URLS.IMG.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
+      downloadUrl: `${FILE_URLS.IMG.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
       category: 'Image'
     },
     {
@@ -186,47 +197,104 @@ export function DiamondDetailsComponent({
     },
     {
       name: 'Video',
-      url: `${FILE_URLS.B2B.replace('***', tableData?.lot_id ?? '')}`,
+      url: `${FILE_URLS.B2B.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
       url_check: tableData?.assets_pre_check?.B2B_CHECK,
       category: 'Video'
     },
     {
       name: 'Sparkle',
-      url: `${FILE_URLS.B2B_SPARKLE.replace('***', tableData?.lot_id ?? '')}`,
+      url: `${FILE_URLS.B2B_SPARKLE.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
       url_check: tableData?.assets_pre_check?.B2B_SPARKLE_CHECK,
       category: 'Sparkle'
     },
 
     {
       name: 'Heart',
-      url: `${FILE_URLS.HEART.replace('***', tableData?.lot_id ?? '')}`,
-      downloadUrl: `${FILE_URLS.HEART.replace('***', tableData?.lot_id ?? '')}`,
+      url: `${FILE_URLS.HEART.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
+      downloadUrl: `${FILE_URLS.HEART.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
       category: 'Image'
     },
     {
       name: 'Arrow',
-      url: `${FILE_URLS.ARROW.replace('***', tableData?.lot_id ?? '')}`,
-      downloadUrl: `${FILE_URLS.ARROW.replace('***', tableData?.lot_id ?? '')}`,
+      url: `${FILE_URLS.ARROW.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
+      downloadUrl: `${FILE_URLS.ARROW.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
       category: 'Image'
     },
     {
       name: 'Aset',
-      url: `${FILE_URLS.ASET.replace('***', tableData?.lot_id ?? '')}`,
-      downloadUrl: `${FILE_URLS.ASET.replace('***', tableData?.lot_id ?? '')}`,
+      url: `${FILE_URLS.ASET.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
+      downloadUrl: `${FILE_URLS.ASET.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
       category: 'Image'
     },
     {
       name: 'Ideal',
-      url: `${FILE_URLS.IDEAL.replace('***', tableData?.lot_id ?? '')}`,
-      downloadUrl: `${FILE_URLS.IDEAL.replace('***', tableData?.lot_id ?? '')}`,
+      url: `${FILE_URLS.IDEAL.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
+      downloadUrl: `${FILE_URLS.IDEAL.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
       category: 'Image'
     },
     {
       name: 'Fluorescence',
-      url: `${FILE_URLS.FLUORESCENCE.replace('***', tableData?.lot_id ?? '')}`,
+      url: `${FILE_URLS.FLUORESCENCE.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
       downloadUrl: `${FILE_URLS.FLUORESCENCE.replace(
         '***',
-        tableData?.lot_id ?? ''
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
       )}`,
       category: 'Image'
     }
