@@ -600,13 +600,19 @@ const Form = ({
     if (subRoute === SubRoutes.NEW_ARRIVAL) {
       const queryParams = generateQueryParams(state);
       delete queryParams.all_asset_required;
-      dispatch(
-        filterFunction({
-          queryParams,
-          bidData: newArrivalFilterData.bidData,
-          bidFilterData: data?.products
-        })
-      );
+      if (!Object.keys(queryParams).length) {
+        dispatch(filterFunction({}));
+        setData({});
+      } else {
+        dispatch(
+          filterFunction({
+            queryParams,
+            bidData: newArrivalFilterData.bidData,
+            bidFilterData: data?.products
+          })
+        );
+      }
+       
       router.push(`/v2/new-arrivals`);
       setSearchUrl('');
     } else if (routePath === Routes.BID_TO_BUY) {
@@ -1093,10 +1099,6 @@ const Form = ({
       handler: () => {
         setBid(newArrivalFilterData.bidData)
         handleFormReset();
-        dispatch(
-          filterFunction({})
-        );
-        setData({});        
       } 
     },
 
