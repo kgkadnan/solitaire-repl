@@ -80,7 +80,9 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import GemTracPage from '@/components/v2/common/gem-trac';
 import { useLazyGetGemTracQuery } from '@/features/api/gem-trac';
-
+interface IBidValues {
+  [key: string]: number;
+}
 const NewArrivals = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -90,6 +92,7 @@ const NewArrivals = () => {
   useEffect(() => {
     filterDataRef.current = filterData;
   }, [filterData]);
+  const [bidValues, setBidValues] = useState<IBidValues>({});
   const [sorting, setSorting] = useState<MRT_SortingState>([]);
   const subRoute = useSearchParams().get('active-tab');
   const [isDetailPage, setIsDetailPage] = useState(false);
@@ -689,6 +692,14 @@ const NewArrivals = () => {
                             handler: () => {
                               socketManager.emit('cancel_bid', {
                                 product_ids: Object.keys(rowSelection)
+                               });
+                               setBidValues((prevValues: any) => {
+                                // Create a new object excluding keys in rowSelection
+                                const updatedValues = { ...prevValues };
+                                Object.keys(rowSelection).forEach((key) => {
+                                  delete updatedValues[key]; // Remove the key from the state
+                                });                              
+                                return updatedValues;
                               });
                             },
                             customStyle: 'flex-1 w-full'
@@ -1065,6 +1076,8 @@ const NewArrivals = () => {
                     setIsLoading={setIsLoading}
                     renderFooter={renderFooter}
                     router={router}
+                    setBidValues={setBidValues}
+                    bidValues={bidValues}
                   />
                 </div>
                 {/* {renderFooter()} */}
