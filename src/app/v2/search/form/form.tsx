@@ -122,7 +122,8 @@ const Form = ({
   isTurkey = false,
   time,
   setRowSelection,
-  setIsMPSOpen
+  setIsMPSOpen,
+  setBid
 }: {
   searchUrl: string;
   setSearchUrl: Dispatch<SetStateAction<string>>;
@@ -149,6 +150,7 @@ const Form = ({
   time?: any;
   setRowSelection?: any;
   setIsMPSOpen?: any;
+  setBid?: any
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -339,7 +341,7 @@ const Form = ({
         filterBidData(newArrivalFilterData?.bidData, query);
 
       setData({
-        count: filteredData.length,
+        count: filteredData?.length,
         products: filteredData
       });
 
@@ -597,7 +599,7 @@ const Form = ({
     }
     if (subRoute === SubRoutes.NEW_ARRIVAL) {
       const queryParams = generateQueryParams(state);
-
+      delete queryParams.all_asset_required;
       dispatch(
         filterFunction({
           queryParams,
@@ -1088,7 +1090,14 @@ const Form = ({
     {
       variant: 'secondary',
       label: ManageLocales('app.advanceSearch.reset'),
-      handler: handleFormReset
+      handler: () => {
+        setBid(newArrivalFilterData.bidData)
+        handleFormReset();
+        dispatch(
+          filterFunction({})
+        );
+        setData({});        
+      } 
     },
 
     {
