@@ -1097,7 +1097,8 @@ const Form = ({
       variant: 'secondary',
       label: ManageLocales('app.advanceSearch.reset'),
       handler: () => {
-        setBid(newArrivalFilterData.bidData);
+        if(setBid){
+        setBid(newArrivalFilterData.bidData);}
         handleFormReset();
       }
     },
