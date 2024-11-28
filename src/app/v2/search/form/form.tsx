@@ -1097,9 +1097,9 @@ const Form = ({
       variant: 'secondary',
       label: ManageLocales('app.advanceSearch.reset'),
       handler: () => {
-        setBid(newArrivalFilterData.bidData)
+        setBid(newArrivalFilterData.bidData);
         handleFormReset();
-      } 
+      }
     },
 
     {
@@ -1190,9 +1190,11 @@ const Form = ({
         : handleFormSearch,
 
       isDisable:
-        !searchUrl.length ||
-        minMaxError.length > 0 ||
-        validationError.length > 0
+        subRoute === SubRoutes.NEW_ARRIVAL
+          ? false
+          : !searchUrl.length ||
+            minMaxError.length > 0 ||
+            validationError.length > 0
           ? // errorText.length > 0
             true
           : false ||
