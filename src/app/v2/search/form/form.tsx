@@ -122,7 +122,8 @@ const Form = ({
   isTurkey = false,
   time,
   setRowSelection,
-  setIsMPSOpen
+  setIsMPSOpen,
+  setBid
 }: {
   searchUrl: string;
   setSearchUrl: Dispatch<SetStateAction<string>>;
@@ -149,6 +150,7 @@ const Form = ({
   time?: any;
   setRowSelection?: any;
   setIsMPSOpen?: any;
+  setBid?: any
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -339,7 +341,7 @@ const Form = ({
         filterBidData(newArrivalFilterData?.bidData, query);
 
       setData({
-        count: filteredData.length,
+        count: filteredData?.length,
         products: filteredData
       });
 
@@ -419,7 +421,7 @@ const Form = ({
       const queryParams = generateQueryParams(state);
 
       if (!isValidationError && !isSliderActive && !minMaxError) {
-        if (Object.keys(queryParams).length > 1) {
+        if (Object.keys(queryParams).length > 1 || queryParams.all_asset_required == true) {
           setSearchUrl(constructUrlParams(queryParams));
         }
       }
@@ -597,14 +599,20 @@ const Form = ({
     }
     if (subRoute === SubRoutes.NEW_ARRIVAL) {
       const queryParams = generateQueryParams(state);
-
-      dispatch(
-        filterFunction({
-          queryParams,
-          bidData: newArrivalFilterData.bidData,
-          bidFilterData: data?.products
-        })
-      );
+      delete queryParams.all_asset_required;
+      if (!Object.keys(queryParams).length) {
+        dispatch(filterFunction({}));
+        setData({});
+      } else {
+        dispatch(
+          filterFunction({
+            queryParams,
+            bidData: newArrivalFilterData.bidData,
+            bidFilterData: data?.products
+          })
+        );
+      }
+       
       router.push(`/v2/new-arrivals`);
       setSearchUrl('');
     } else if (routePath === Routes.BID_TO_BUY) {
@@ -1088,7 +1096,11 @@ const Form = ({
     {
       variant: 'secondary',
       label: ManageLocales('app.advanceSearch.reset'),
-      handler: handleFormReset
+      handler: () => {
+        if(setBid){
+        setBid(newArrivalFilterData.bidData);}
+        handleFormReset();
+      }
     },
 
     {
@@ -1179,9 +1191,11 @@ const Form = ({
         : handleFormSearch,
 
       isDisable:
-        !searchUrl.length ||
-        minMaxError.length > 0 ||
-        validationError.length > 0
+        subRoute === SubRoutes.NEW_ARRIVAL
+          ? false
+          : !searchUrl.length ||
+            minMaxError.length > 0 ||
+            validationError.length > 0
           ? // errorText.length > 0
             true
           : false ||

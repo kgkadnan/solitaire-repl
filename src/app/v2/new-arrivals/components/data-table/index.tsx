@@ -154,10 +154,6 @@ const theme = createTheme({
     }
   }
 });
-
-interface IBidValues {
-  [key: string]: number;
-}
 const NewArrivalDataTable = ({
   columns,
   modalSetState,
@@ -185,7 +181,9 @@ const NewArrivalDataTable = ({
   setIsSkeletonLoading,
   isSkeletonLoading,
   isTabSwitch,
-  setIsTabSwitch
+  setIsTabSwitch,
+  setBidValues,
+  bidValues
 }: any) => {
   // Fetching saved search data
 
@@ -195,7 +193,7 @@ const NewArrivalDataTable = ({
   }>({});
   const [pagination, setPagination] = useState({
     pageIndex: 0,
-    pageSize: 20 //customize the default page size
+    pageSize: parseInt(localStorage.getItem("pageSize") ?? "20")  //customize the default page size
   });
 
   const [paginatedData, setPaginatedData] = useState<any>([]);
@@ -419,8 +417,6 @@ const NewArrivalDataTable = ({
       page: 'New_Arrival'
     });
   };
-
-  const [bidValues, setBidValues] = useState<IBidValues>({});
   const [columnOrder] = useState(
     [
       'mrt-row-select',
@@ -694,7 +690,14 @@ const NewArrivalDataTable = ({
     renderEmptyRowsFallback: NoResultsComponent,
     manualPagination: true,
     rowCount: rows.length,
-    onPaginationChange: setPagination, //hoist pagination state to your state when it changes internally
+    onPaginationChange: (updater) => {
+      setRowSelection({});
+      setPagination((prevState) => {
+        const newState = typeof updater === 'function' ? updater(prevState) : updater;
+        localStorage.setItem('pageSize', JSON.stringify(newState.pageSize));
+        return newState;
+      });
+    }, //hoist pagination state to your state when it changes internally
     manualFiltering: true,
     onGlobalFilterChange: setGlobalFilter,
     // enableFilterMatchHighlighting:true,
@@ -1025,7 +1028,6 @@ const NewArrivalDataTable = ({
           bidValues[row.id] !== undefined
             ? bidValues[row.id]
             : parseFloat(row.original.current_max_bid).toFixed(2);
-
         // If the row is selected, return the detail panel content
         return (
           <div>
