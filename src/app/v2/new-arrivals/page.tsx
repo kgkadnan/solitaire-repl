@@ -1,5 +1,5 @@
 'use client';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import NewArrivalDataTable from './components/data-table';
 import {
   RenderCarat,
@@ -80,11 +80,19 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import GemTracPage from '@/components/v2/common/gem-trac';
 import { useLazyGetGemTracQuery } from '@/features/api/gem-trac';
-
+interface IBidValues {
+  [key: string]: number;
+}
 const NewArrivals = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const filterData = useAppSelector(state => state.filterNewArrival);
+  const filterDataRef = useRef(filterData);
+  // Keep the ref updated with the latest state
+  useEffect(() => {
+    filterDataRef.current = filterData;
+  }, [filterData]);
+  const [bidValues, setBidValues] = useState<IBidValues>({});
   const [sorting, setSorting] = useState<MRT_SortingState>([]);
   const subRoute = useSearchParams().get('active-tab');
   const [isDetailPage, setIsDetailPage] = useState(false);
@@ -308,7 +316,6 @@ const NewArrivals = () => {
       setBid(filterData.bidFilterData);
     }
   }, [filterData]);
-
   async function decompressData<T = unknown>(
     compressedData: Uint8Array | ArrayBuffer | any
   ): Promise<T> {
@@ -367,6 +374,7 @@ const NewArrivals = () => {
   const totalPartsMapBidToBuy: any = {};
   const handleBidStones = useCallback(
     async ({ part, total_parts, message_id, data }: any) => {
+      const currentFilterData = filterDataRef.current;
       try {
         const decompressedPart = await decompressData(data);
 
@@ -383,17 +391,17 @@ const NewArrivals = () => {
           // Optionally update UI or process allProducts here
 
           setActiveBid(allProducts.activeStone);
-
-          if (filterData?.queryParams) {
-            const filteredData =
-              filterData?.bidFilterData?.length > 0
-                ? filterData?.bidFilterData
-                : filterBidData(allProducts.bidStone, filterData.queryParams);
-
+          let activeStoneIds = allProducts.activeStone.map(x=>x.id);
+          if (currentFilterData?.queryParams) {
+            let filteredData = 
+            currentFilterData?.bidFilterData?.length > 0
+                ? currentFilterData?.bidFilterData
+                : filterBidData(allProducts.bidStone, currentFilterData.queryParams);
+            filteredData = filteredData.filter(x=>!activeStoneIds.includes(x.id));            
             dispatch(
               filterFunction({
                 bidData: allProducts.bidStone,
-                queryParams: filterData.queryParams,
+                queryParams: currentFilterData.queryParams,
                 bidFilterData: filteredData
               })
             );
@@ -434,47 +442,6 @@ const NewArrivals = () => {
     },
     []
   );
-
-  // const handleBidStones = useCallback((data: any) => {
-  //   setActiveBid(data.activeStone);
-
-  //   if (filterData?.queryParams) {
-  //     const filteredData =
-  //       filterData?.bidFilterData?.length > 0
-  //         ? filterData?.bidFilterData
-  //         : filterBidData(data.bidStone, filterData.queryParams);
-
-  //     dispatch(
-  //       filterFunction({
-  //         bidData: data.bidStone,
-  //         queryParams: filterData.queryParams,
-  //         bidFilterData: filteredData
-  //       })
-  //     );
-
-  //     setBid(filteredData);
-  //   } else {
-  //     setBid(data.bidStone);
-  //   }
-
-  //   setTime(data.endTime);
-  //   if (data.activeStone) {
-  //     data.activeStone.map((row: any) => {
-  //       if (row.current_max_bid > row.my_current_bid) {
-  //         setRowSelection(prev => {
-  //           return { ...prev, [row.id]: true };
-  //         });
-  //       } else {
-  //         setRowSelection((prev: any) => {
-  //           let prevRows = { ...prev };
-  //           delete prevRows[row.id];
-  //           return prevRows;
-  //         });
-  //       }
-  //     });
-  //   }
-  //   // Set other related state here
-  // }, []);
   const handleError = useCallback((data: any) => {
     if (data) {
       modalSetState.setIsDialogOpen(true);
@@ -524,7 +491,7 @@ const NewArrivals = () => {
       socketManager.emit('get_bid_stones');
     };
     socketManager.on('bid_stones', handleBidStones);
-    // socketManager.on('error', handleError);
+    socketManager.on('error', handleError);
     socketManager.on('bid_placed', handleBidPlaced);
     socketManager.on('bid_canceled', handleBidCanceled);
 
@@ -730,6 +697,14 @@ const NewArrivals = () => {
                             handler: () => {
                               socketManager.emit('cancel_bid', {
                                 product_ids: Object.keys(rowSelection)
+                               });
+                               setBidValues((prevValues: any) => {
+                                // Create a new object excluding keys in rowSelection
+                                const updatedValues = { ...prevValues };
+                                Object.keys(rowSelection).forEach((key) => {
+                                  delete updatedValues[key]; // Remove the key from the state
+                                });                              
+                                return updatedValues;
                               });
                             },
                             customStyle: 'flex-1 w-full'
@@ -1076,6 +1051,7 @@ const NewArrivals = () => {
               setIsCommonLoading={setIsLoading}
               isMatchingPair={false}
               isLoading={searchLoading}
+              setBid={setBid}
             />
           ) : (
             <>
@@ -1164,6 +1140,8 @@ const NewArrivals = () => {
                     setIsLoading={setIsLoading}
                     renderFooter={renderFooter}
                     router={router}
+                    setBidValues={setBidValues}
+                    bidValues={bidValues}
                   />
                 </div>
                 {/* {renderFooter()} */}

@@ -154,10 +154,6 @@ const theme = createTheme({
     }
   }
 });
-
-interface IBidValues {
-  [key: string]: number;
-}
 const NewArrivalDataTable = ({
   columns,
   modalSetState,
@@ -185,7 +181,9 @@ const NewArrivalDataTable = ({
   setIsSkeletonLoading,
   isSkeletonLoading,
   isTabSwitch,
-  setIsTabSwitch
+  setIsTabSwitch,
+  setBidValues,
+  bidValues
 }: any) => {
   // Fetching saved search data
 
@@ -419,8 +417,6 @@ const NewArrivalDataTable = ({
       page: 'New_Arrival'
     });
   };
-
-  const [bidValues, setBidValues] = useState<IBidValues>({});
   const [columnOrder] = useState(
     [
       'mrt-row-select',
@@ -695,6 +691,7 @@ const NewArrivalDataTable = ({
     manualPagination: true,
     rowCount: rows.length,
     onPaginationChange: (updater) => {
+      setRowSelection({});
       setPagination((prevState) => {
         const newState = typeof updater === 'function' ? updater(prevState) : updater;
         localStorage.setItem('pageSize', JSON.stringify(newState.pageSize));
@@ -1031,7 +1028,6 @@ const NewArrivalDataTable = ({
           bidValues[row.id] !== undefined
             ? bidValues[row.id]
             : parseFloat(row.original.current_max_bid).toFixed(2);
-
         // If the row is selected, return the detail panel content
         return (
           <div>
