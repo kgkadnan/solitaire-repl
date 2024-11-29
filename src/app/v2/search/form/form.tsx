@@ -150,7 +150,7 @@ const Form = ({
   time?: any;
   setRowSelection?: any;
   setIsMPSOpen?: any;
-  setBid?: any
+  setBid?: any;
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -334,7 +334,6 @@ const Form = ({
   useEffect(() => {
     if (subRoute === SubRoutes.NEW_ARRIVAL) {
       const query = parseQueryString(searchUrl);
-      delete query.all_asset_required;
 
       const filteredData =
         newArrivalFilterData?.bidData &&
@@ -581,8 +580,6 @@ const Form = ({
       localStorage.getItem(formIdentifier)!
     );
 
-    console.log('localStorageData', localStorageDataLength);
-
     let caratFrom;
     let caratTo;
     if (caratMin || caratMax) {
@@ -602,7 +599,7 @@ const Form = ({
     }
     if (subRoute === SubRoutes.NEW_ARRIVAL) {
       const queryParams = generateQueryParams(state);
-      delete queryParams.all_asset_required;
+
       if (!Object.keys(queryParams).length) {
         dispatch(filterFunction({}));
         setData({});
@@ -615,7 +612,7 @@ const Form = ({
           })
         );
       }
-       
+
       router.push(`/v2/new-arrivals`);
       setSearchUrl('');
     } else if (routePath === Routes.BID_TO_BUY) {
@@ -1116,8 +1113,9 @@ const Form = ({
       variant: 'secondary',
       label: ManageLocales('app.advanceSearch.reset'),
       handler: () => {
-        if(setBid){
-        setBid(newArrivalFilterData.bidData);}
+        if (setBid) {
+          setBid(newArrivalFilterData.bidData);
+        }
         handleFormReset();
       }
     },
@@ -1546,7 +1544,8 @@ const Form = ({
             <div className="flex flex-col gap-[27px]">
               {(routePath.includes('v2/matching-pair') ||
                 routePath.includes('v2/bid-2-buy') ||
-                routePath.includes('v2/search')) && (
+                routePath.includes('v2/search') ||
+                subRoute === SubRoutes.NEW_ARRIVAL) && (
                 <div className="flex items-center  justify-between bg-neutral0 border-[1px] border-solid border-neutral200 rounded-[4px]">
                   <p className="font-medium py-[5px] rounded-l-[4px]  px-[12px] bg-neutral50 text-neutral900 text-mMedium">
                      Images & Videos Required
