@@ -224,7 +224,7 @@ const MatchingPairResult = ({
   // Fetch Products
 
   const fetchProducts = async () => {
-    setIsLoading(true);
+    // setIsLoading(true);
     const storedSelection = localStorage.getItem('MatchingPair');
 
     if (!storedSelection) return;
