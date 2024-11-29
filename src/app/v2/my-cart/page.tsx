@@ -740,7 +740,6 @@ const MyCart = () => {
       )}`,
       downloadUrl: `${FILE_URLS.IMG.replace(
         '***',
-
         detailImageData.location === 'USA'
           ? detailImageData.memo_out_barcode ?? ''
           : detailImageData?.lot_id ?? ''
@@ -768,12 +767,24 @@ const MyCart = () => {
           ? detailImageData.memo_out_barcode ?? ''
           : detailImageData?.lot_id ?? ''
       )}`,
+      downloadUrl: `${FILE_URLS.B2B_DOWNLOAD_URL.replace(
+        '***',
+        detailImageData.location === 'USA'
+          ? detailImageData.memo_out_barcode ?? ''
+          : detailImageData?.lot_id ?? ''
+      )}`,
       url_check: detailImageData?.assets_pre_check?.B2B_CHECK,
       category: 'Video'
     },
     {
       name: 'Sparkle',
       url: `${FILE_URLS.B2B_SPARKLE.replace(
+        '***',
+        detailImageData.location === 'USA'
+          ? detailImageData.memo_out_barcode ?? ''
+          : detailImageData?.lot_id ?? ''
+      )}`,
+      downloadUrl: `${FILE_URLS.B2B_SPARKLE_DOWNLOAD_URL.replace(
         '***',
         detailImageData.location === 'USA'
           ? detailImageData.memo_out_barcode ?? ''
@@ -1091,6 +1102,7 @@ const MyCart = () => {
       )}
       <ImageModal
         isOpen={isModalOpen}
+        stockNumber={detailImageData?.lot_id ?? ''}
         onClose={() => {
           setValidImages([]);
           setDetailImageData({});

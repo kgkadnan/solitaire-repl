@@ -21,8 +21,9 @@ export const handleDownloadImage = async (
   setIsLoading?: any
 ) => {
   try {
-    // Place your async logic here
     setIsLoading(true);
+
+    // Fetch the base64 data for the file
     const response = await fetch(
       `${apiURL}public/get-blob-base64?url=${imageUrl}`
     );
@@ -39,13 +40,23 @@ export const handleDownloadImage = async (
       byteNumbers[i] = byteCharacters.charCodeAt(i);
     }
     const byteArray = new Uint8Array(byteNumbers);
-    const blob = new Blob([byteArray], {
-      type: name === 'Certificate' ? 'application/pdf' : 'image/jpeg'
-    });
+
+    // Determine the file type based on the name or context
+    let fileType;
+    if (name === 'Certificate') {
+      fileType = 'application/pdf';
+    } else if (name === 'Video' || name === 'Sparkle') {
+      fileType = 'video/mp4';
+    } else {
+      fileType = 'image/jpeg';
+    }
+
+    // Create a Blob for the file
+    const blob = new Blob([byteArray], { type: fileType });
 
     // Create URL for the Blob
     const blobUrl = URL.createObjectURL(blob);
-    setIsLoading(false);
+
     // Create a download link
     const a = document.createElement('a');
     a.href = blobUrl;
@@ -56,8 +67,10 @@ export const handleDownloadImage = async (
 
     // Clean up: remove the object URL after download
     URL.revokeObjectURL(blobUrl);
+
+    setIsLoading(false);
   } catch (error) {
-    // Handle any errors
-    console.error('Error fetching data:', error);
+    console.error('Error downloading file:', error);
+    setIsLoading(false);
   }
 };

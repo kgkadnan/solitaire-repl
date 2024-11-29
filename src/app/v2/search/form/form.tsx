@@ -419,7 +419,10 @@ const Form = ({
       const queryParams = generateQueryParams(state);
 
       if (!isValidationError && !isSliderActive && !minMaxError) {
-        if (Object.keys(queryParams).length > 1 || queryParams.all_asset_required == true) {
+        if (
+          Object.keys(queryParams).length > 1 ||
+          queryParams.all_asset_required == true
+        ) {
           setSearchUrl(constructUrlParams(queryParams));
         }
       }
@@ -716,11 +719,13 @@ const Form = ({
                 saveSearchName: savedSearch?.savedSearch?.name,
                 searchId: data?.search_id,
                 isSavedSearch: true,
-                label: 
-                (!!saveSearchName) ? (saveSearchName?.replace(/\s+/g, '') + ' ' + ((data?.length || 0 ) + 1)) :            
-                `Result ${
-                  localStorageDataLength ? localStorageDataLength.length : 1
-                }`,
+                label: !!saveSearchName
+                  ? saveSearchName?.replace(/\s+/g, '') +
+                    ' ' +
+                    ((data?.length || 0) + 1)
+                  : `Result ${
+                      localStorageDataLength ? localStorageDataLength.length : 1
+                    }`,
                 queryParams
               };
               let localStorageData = JSON.parse(
@@ -775,11 +780,20 @@ const Form = ({
             saveSearchName:
               modifySearchResult[activeTab - 1]?.saveSearchName ||
               saveSearchName,
-            label: 
-            (!!saveSearchName || modifySearchResult[activeTab - 1]?.saveSearchName) ? (modifySearchResult[activeTab - 1]?.saveSearchName?.replace(/\s+/g, '') + ' ' + (activeTab)) :            
-            `${
-              localStorageDataLength ? modifySearchResult[activeTab - 1]?.label : 1
-            }`,
+            label:
+              !!saveSearchName ||
+              modifySearchResult[activeTab - 1]?.saveSearchName
+                ? modifySearchResult[activeTab - 1]?.saveSearchName?.replace(
+                    /\s+/g,
+                    ''
+                  ) +
+                  ' ' +
+                  activeTab
+                : `${
+                    localStorageDataLength
+                      ? modifySearchResult[activeTab - 1]?.label
+                      : 1
+                  }`,
             isSavedSearch: isSavedParams,
             searchId: data?.search_id,
             queryParams
@@ -802,14 +816,19 @@ const Form = ({
             id: id,
             saveSearchName: saveSearchName,
             searchId: data?.search_id,
-            label: 
-            // `Result ${
-            //   localStorageDataLength ? localStorageDataLength.length + 1 : 1
-            // }`,
-            (!!saveSearchName) ? (saveSearchName?.replace(/\s+/g, '') + ' ' + ((localStorageDataLength?.length || 0 ) + 1)) :
-            `Result ${
-              localStorageDataLength ? localStorageDataLength.length + 1 : 1
-            }`,
+            label:
+              // `Result ${
+              //   localStorageDataLength ? localStorageDataLength.length + 1 : 1
+              // }`,
+              !!saveSearchName
+                ? saveSearchName?.replace(/\s+/g, '') +
+                  ' ' +
+                  ((localStorageDataLength?.length || 0) + 1)
+                : `Result ${
+                    localStorageDataLength
+                      ? localStorageDataLength.length + 1
+                      : 1
+                  }`,
             isSavedSearch: isSavedParams,
             queryParams
           };
