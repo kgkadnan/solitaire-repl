@@ -192,7 +192,10 @@ export function DiamondDetailsComponent({
       )}`,
       category: 'Certificate',
       downloadUrl: tableData?.assets_pre_check?.CERT_FILE
-        ? tableData?.certificate_url
+        ? `${FILE_URLS.CERT_PDF_DOWNLOAD_URL.replace(
+            '***',
+            tableData?.certificate_number ?? ''
+          )}`
         : '',
       url_check: tableData?.assets_pre_check?.CERT_IMG,
       id: tableData?.id

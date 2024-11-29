@@ -772,7 +772,6 @@ const DataTable = ({
     manualPagination: showEmptyState ? false : true,
     rowCount: rows.length,
     onPaginationChange: (updater) => {
-      setRowSelection({});
       setPagination((prevState) => {
         const newState = typeof updater === 'function' ? updater(prevState) : updater;
         localStorage.setItem('pageSize', JSON.stringify(newState.pageSize));
