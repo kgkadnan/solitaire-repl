@@ -1315,7 +1315,10 @@ const Result = ({
       )}`,
       category: 'Certificate',
       downloadUrl: detailImageData?.assets_pre_check?.CERT_FILE
-        ? detailImageData?.certificate_url
+        ? `${FILE_URLS.CERT_PDF_DOWNLOAD_URL.replace(
+            '***',
+            detailImageData?.certificate_number ?? ''
+          )}`
         : '',
       url_check: detailImageData?.assets_pre_check?.CERT_IMG
     },
