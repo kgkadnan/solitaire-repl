@@ -14,7 +14,15 @@ export function filterBidData(data: any[], query: any): any[] {
     'ETK'
   ];
 
+  // Extract all_asset_required from the query
+  const allAssetRequired = query.all_asset_required === 'true';
+
   return data.filter(item => {
+    // If all_asset_required is true, show only eligible data
+    if (allAssetRequired && !item.is_eligible) {
+      return false;
+    }
+
     // Check all properties from the query object
     for (const key in query) {
       if (skipKeys.includes(key)) {
