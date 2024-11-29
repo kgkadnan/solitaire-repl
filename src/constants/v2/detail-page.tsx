@@ -142,5 +142,7 @@ export const FILE_URLS = {
   B2B_DOWNLOAD_URL:
     'https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/***/video.mp4',
   B2B_SPARKLE_DOWNLOAD_URL:
-    'https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/***-S/video.mp4'
+    'https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/***-S/video.mp4',
+  CERT_PDF_DOWNLOAD_URL:
+    'https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/Certificates/***.pdf'
 };
