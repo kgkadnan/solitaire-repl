@@ -242,10 +242,17 @@ const OrderDetail: React.FC<IOrderDetail> = ({
   const images = [
     {
       name: getShapeDisplayName(detailImageData?.shape ?? ''),
-      url: `${FILE_URLS.IMG.replace('***', detailImageData?.lot_id ?? '')}`,
+      url: `${FILE_URLS.IMG.replace(
+        '***',
+        detailImageData.location === 'USA'
+          ? detailImageData.memo_out_barcode ?? ''
+          : detailImageData?.lot_id ?? ''
+      )}`,
       downloadUrl: `${FILE_URLS.IMG.replace(
         '***',
-        detailImageData?.lot_id ?? ''
+        detailImageData.location === 'USA'
+          ? detailImageData.memo_out_barcode ?? ''
+          : detailImageData?.lot_id ?? ''
       )}`,
       category: 'Image'
     },
@@ -264,7 +271,18 @@ const OrderDetail: React.FC<IOrderDetail> = ({
 
     {
       name: 'Video',
-      url: `${FILE_URLS.B2B.replace('***', detailImageData?.lot_id ?? '')}`,
+      url: `${FILE_URLS.B2B.replace(
+        '***',
+        detailImageData.location === 'USA'
+          ? detailImageData.memo_out_barcode ?? ''
+          : detailImageData?.lot_id ?? ''
+      )}`,
+      downloadUrl: `${FILE_URLS.B2B_DOWNLOAD_URL.replace(
+        '***',
+        detailImageData.location === 'USA'
+          ? detailImageData.memo_out_barcode ?? ''
+          : detailImageData?.lot_id ?? ''
+      )}`,
       url_check: detailImageData?.assets_pre_check?.B2B_CHECK,
       category: 'Video'
     },
@@ -272,7 +290,15 @@ const OrderDetail: React.FC<IOrderDetail> = ({
       name: 'Sparkle',
       url: `${FILE_URLS.B2B_SPARKLE.replace(
         '***',
-        detailImageData?.lot_id ?? ''
+        detailImageData.location === 'USA'
+          ? detailImageData.memo_out_barcode ?? ''
+          : detailImageData?.lot_id ?? ''
+      )}`,
+      downloadUrl: `${FILE_URLS.B2B_SPARKLE_DOWNLOAD_URL.replace(
+        '***',
+        detailImageData.location === 'USA'
+          ? detailImageData.memo_out_barcode ?? ''
+          : detailImageData?.lot_id ?? ''
       )}`,
       url_check: detailImageData?.assets_pre_check?.B2B_SPARKLE_CHECK,
       category: 'Sparkle'
@@ -280,37 +306,65 @@ const OrderDetail: React.FC<IOrderDetail> = ({
 
     {
       name: 'Heart',
-      url: `${FILE_URLS.HEART.replace('***', detailImageData?.lot_id ?? '')}`,
+      url: `${FILE_URLS.HEART.replace(
+        '***',
+        detailImageData.location === 'USA'
+          ? detailImageData.memo_out_barcode ?? ''
+          : detailImageData?.lot_id ?? ''
+      )}`,
       downloadUrl: `${FILE_URLS.HEART.replace(
         '***',
-        detailImageData?.lot_id ?? ''
+        detailImageData.location === 'USA'
+          ? detailImageData.memo_out_barcode ?? ''
+          : detailImageData?.lot_id ?? ''
       )}`,
       category: 'Image'
     },
     {
       name: 'Arrow',
-      url: `${FILE_URLS.ARROW.replace('***', detailImageData?.lot_id ?? '')}`,
+      url: `${FILE_URLS.ARROW.replace(
+        '***',
+        detailImageData.location === 'USA'
+          ? detailImageData.memo_out_barcode ?? ''
+          : detailImageData?.lot_id ?? ''
+      )}`,
       downloadUrl: `${FILE_URLS.ARROW.replace(
         '***',
-        detailImageData?.lot_id ?? ''
+        detailImageData.location === 'USA'
+          ? detailImageData.memo_out_barcode ?? ''
+          : detailImageData?.lot_id ?? ''
       )}`,
       category: 'Image'
     },
     {
       name: 'Aset',
-      url: `${FILE_URLS.ASET.replace('***', detailImageData?.lot_id ?? '')}`,
+      url: `${FILE_URLS.ASET.replace(
+        '***',
+        detailImageData.location === 'USA'
+          ? detailImageData.memo_out_barcode ?? ''
+          : detailImageData?.lot_id ?? ''
+      )}`,
       downloadUrl: `${FILE_URLS.ASET.replace(
         '***',
-        detailImageData?.lot_id ?? ''
+        detailImageData.location === 'USA'
+          ? detailImageData.memo_out_barcode ?? ''
+          : detailImageData?.lot_id ?? ''
       )}`,
       category: 'Image'
     },
     {
       name: 'Ideal',
-      url: `${FILE_URLS.IDEAL.replace('***', detailImageData?.lot_id ?? '')}`,
+      url: `${FILE_URLS.IDEAL.replace(
+        '***',
+        detailImageData.location === 'USA'
+          ? detailImageData.memo_out_barcode ?? ''
+          : detailImageData?.lot_id ?? ''
+      )}`,
       downloadUrl: `${FILE_URLS.IDEAL.replace(
         '***',
-        detailImageData?.lot_id ?? ''
+        detailImageData.location === 'USA'
+          ? detailImageData.memo_out_barcode ?? ''
+          : detailImageData?.lot_id ?? ''
       )}`,
       category: 'Image'
     },
@@ -318,11 +372,15 @@ const OrderDetail: React.FC<IOrderDetail> = ({
       name: 'Fluorescence',
       url: `${FILE_URLS.FLUORESCENCE.replace(
         '***',
-        detailImageData?.lot_id ?? ''
+        detailImageData.location === 'USA'
+          ? detailImageData.memo_out_barcode ?? ''
+          : detailImageData?.lot_id ?? ''
       )}`,
       downloadUrl: `${FILE_URLS.FLUORESCENCE.replace(
         '***',
-        detailImageData?.lot_id ?? ''
+        detailImageData.location === 'USA'
+          ? detailImageData.memo_out_barcode ?? ''
+          : detailImageData?.lot_id ?? ''
       )}`,
       category: 'Image'
     }
@@ -348,6 +406,7 @@ const OrderDetail: React.FC<IOrderDetail> = ({
     <>
       <ImageModal
         isOpen={isModalOpen}
+        stockNumber={detailImageData?.lot_id ?? ''}
         onClose={() => {
           setValidImages([]);
           setDetailImageData({});

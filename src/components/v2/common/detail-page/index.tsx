@@ -165,12 +165,24 @@ export function DiamondDetailsComponent({
       </div>
     );
   };
+
   const images = [
     {
       name: getShapeDisplayName(tableData?.shape ?? ''),
-      url: `${FILE_URLS.IMG.replace('***', tableData?.lot_id ?? '')}`,
-      downloadUrl: `${FILE_URLS.IMG.replace('***', tableData?.lot_id ?? '')}`,
-      category: 'Image'
+      url: `${FILE_URLS.IMG.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
+      downloadUrl: `${FILE_URLS.IMG.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
+      category: 'Image',
+      id: tableData?.id
     },
     {
       name: 'Certificate',
@@ -182,53 +194,130 @@ export function DiamondDetailsComponent({
       downloadUrl: tableData?.assets_pre_check?.CERT_FILE
         ? tableData?.certificate_url
         : '',
-      url_check: tableData?.assets_pre_check?.CERT_IMG
+      url_check: tableData?.assets_pre_check?.CERT_IMG,
+      id: tableData?.id
     },
     {
       name: 'Video',
-      url: `${FILE_URLS.B2B.replace('***', tableData?.lot_id ?? '')}`,
+      url: `${FILE_URLS.B2B.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
+      downloadUrl: `${FILE_URLS.B2B_DOWNLOAD_URL.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
       url_check: tableData?.assets_pre_check?.B2B_CHECK,
-      category: 'Video'
+      category: 'Video',
+      id: tableData?.id
     },
     {
       name: 'Sparkle',
-      url: `${FILE_URLS.B2B_SPARKLE.replace('***', tableData?.lot_id ?? '')}`,
+      url: `${FILE_URLS.B2B_SPARKLE.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
+      downloadUrl: `${FILE_URLS.B2B_SPARKLE_DOWNLOAD_URL.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
       url_check: tableData?.assets_pre_check?.B2B_SPARKLE_CHECK,
-      category: 'Sparkle'
+      category: 'Sparkle',
+      id: tableData?.id
     },
 
     {
       name: 'Heart',
-      url: `${FILE_URLS.HEART.replace('***', tableData?.lot_id ?? '')}`,
-      downloadUrl: `${FILE_URLS.HEART.replace('***', tableData?.lot_id ?? '')}`,
-      category: 'Image'
+      url: `${FILE_URLS.HEART.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
+      downloadUrl: `${FILE_URLS.HEART.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
+      category: 'Image',
+      id: tableData?.id
     },
     {
       name: 'Arrow',
-      url: `${FILE_URLS.ARROW.replace('***', tableData?.lot_id ?? '')}`,
-      downloadUrl: `${FILE_URLS.ARROW.replace('***', tableData?.lot_id ?? '')}`,
-      category: 'Image'
+      url: `${FILE_URLS.ARROW.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
+      downloadUrl: `${FILE_URLS.ARROW.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
+      category: 'Image',
+      id: tableData?.id
     },
     {
       name: 'Aset',
-      url: `${FILE_URLS.ASET.replace('***', tableData?.lot_id ?? '')}`,
-      downloadUrl: `${FILE_URLS.ASET.replace('***', tableData?.lot_id ?? '')}`,
-      category: 'Image'
+      url: `${FILE_URLS.ASET.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
+      downloadUrl: `${FILE_URLS.ASET.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
+      category: 'Image',
+      id: tableData?.id
     },
     {
       name: 'Ideal',
-      url: `${FILE_URLS.IDEAL.replace('***', tableData?.lot_id ?? '')}`,
-      downloadUrl: `${FILE_URLS.IDEAL.replace('***', tableData?.lot_id ?? '')}`,
-      category: 'Image'
+      url: `${FILE_URLS.IDEAL.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
+      downloadUrl: `${FILE_URLS.IDEAL.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
+      category: 'Image',
+      id: tableData?.id
     },
     {
       name: 'Fluorescence',
-      url: `${FILE_URLS.FLUORESCENCE.replace('***', tableData?.lot_id ?? '')}`,
+      url: `${FILE_URLS.FLUORESCENCE.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
       downloadUrl: `${FILE_URLS.FLUORESCENCE.replace(
         '***',
-        tableData?.lot_id ?? ''
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
       )}`,
-      category: 'Image'
+      category: 'Image',
+      id: tableData?.id
     }
   ];
 
@@ -341,6 +430,19 @@ export function DiamondDetailsComponent({
 
   let isNudge = localStorage.getItem('show-nudge') === 'MINI';
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
+
+  const filteredImages = validImages.filter(image => {
+    if (activePreviewTab === 'Video' && image.category === 'Video') return true;
+    if (activePreviewTab === 'Certificate' && image.category === 'Certificate')
+      return true;
+    if (activePreviewTab === 'Sparkle' && image.category === 'Sparkle')
+      return true;
+    if (activePreviewTab === 'Image' && image.category === 'Image') return true;
+    return false;
+  });
+
+  console.log('filteredImages.name', filteredImages[imageIndex]?.url);
+
   return (
     <div className="text-black bg-neutral25 rounded-[8px]">
       <Toast show={showToast} message="Copied Successfully" />
@@ -439,6 +541,8 @@ export function DiamondDetailsComponent({
                 setIsImageLoading={setIsImageLoading}
                 identifier={identifier}
                 customerMobileNumber={customerMobileNumber}
+                stockNumber={tableData?.lot_id ?? '-'}
+                filteredImages={filteredImages}
               />
             </div>
           </div>
@@ -514,6 +618,9 @@ export function DiamondDetailsComponent({
                         shareTrackIdentifier="Details"
                         dynamicTrackIdentifier={identifier}
                         customerMobileNumber={customerMobileNumber}
+                        isDnaPage={true}
+                        filteredImages={filteredImages}
+                        imageIndex={imageIndex}
                       />
                     </div>
                   </>

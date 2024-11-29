@@ -138,5 +138,9 @@ export const FILE_URLS = {
   IDEAL:
     'https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/***/IDEAL_White_BG.jpg',
   FLUORESCENCE:
-    'https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/***-F/still.jpg'
+    'https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/***-F/still.jpg',
+  B2B_DOWNLOAD_URL:
+    'https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/***/video.mp4',
+  B2B_SPARKLE_DOWNLOAD_URL:
+    'https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/***-S/video.mp4'
 };

@@ -10,11 +10,13 @@ import ExpandImg from '@public/v2/assets/icons/detail-page/expand.svg?url';
 import ImageModal from './image-modal';
 import { Skeleton } from '@mui/material';
 import forwardArrow from '@public/v2/assets/icons/arrow-forward.svg';
+import LinkSvg from '@public/v2/assets/icons/detail-page/linkv2.svg?url';
 import backwardArrow from '@public/v2/assets/icons/arrow-backword.svg';
 import backWardArrowDisable from '@public/v2/assets/icons/detail-page/back-ward-arrow-disable.svg';
 import forWardAarrowDisable from '@public/v2/assets/icons/detail-page/forward-arrow-disable.svg';
 import { Tracking_Search_By_Text } from '@/constants/funnel-tracking';
 import { trackEvent } from '@/utils/ga';
+import { Toast } from '../../copy-and-share/toast';
 
 interface IImagePreviewProps {
   images: IImagesType[];
@@ -26,6 +28,8 @@ interface IImagePreviewProps {
   isImageLoading: boolean;
   identifier?: string;
   customerMobileNumber?: string;
+  stockNumber: string;
+  filteredImages: any;
 }
 
 const ImagePreview: React.FC<IImagePreviewProps> = ({
@@ -37,22 +41,34 @@ const ImagePreview: React.FC<IImagePreviewProps> = ({
   isImageLoading,
   setIsImageLoading,
   identifier,
-  customerMobileNumber
+  customerMobileNumber,
+  stockNumber,
+  filteredImages
 }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [zoomLevel, setZoomLevel] = useState(1);
   const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 });
   const imageContainerRef = useRef<HTMLDivElement>(null);
+  const [showToast, setShowToast] = useState(false);
 
-  const filteredImages = images.filter(image => {
-    if (activePreviewTab === 'Video' && image.category === 'Video') return true;
-    if (activePreviewTab === 'Certificate' && image.category === 'Certificate')
-      return true;
-    if (activePreviewTab === 'Sparkle' && image.category === 'Sparkle')
-      return true;
-    if (activePreviewTab === 'Image' && image.category === 'Image') return true;
-    return false;
-  });
+  const copyLink = ({ url }: { url: string }) => {
+    navigator.clipboard.writeText(url).then(() => {
+      setShowToast(true); // Show the toast notification
+      setTimeout(() => {
+        setShowToast(false); // Hide the toast notification after some time
+      }, 4000);
+    });
+  };
+
+  // const filteredImages = images.filter(image => {
+  //   if (activePreviewTab === 'Video' && image.category === 'Video') return true;
+  //   if (activePreviewTab === 'Certificate' && image.category === 'Certificate')
+  //     return true;
+  //   if (activePreviewTab === 'Sparkle' && image.category === 'Sparkle')
+  //     return true;
+  //   if (activePreviewTab === 'Image' && image.category === 'Image') return true;
+  //   return false;
+  // });
 
   useEffect(() => {
     if (!isModalOpen) {
@@ -88,9 +104,12 @@ const ImagePreview: React.FC<IImagePreviewProps> = ({
     }
   };
 
+  console.log('isImageLoading', isImageLoading);
+
   return (
     <>
       <div className="flex flex-col gap-4">
+        <Toast show={showToast} message="Copied Successfully" />
         <div
           className="relative flex justify-center overflow-hidden w-[475px]"
           ref={imageContainerRef}
@@ -299,41 +318,62 @@ const ImagePreview: React.FC<IImagePreviewProps> = ({
                   </>
                 )}
               <div className="flex gap-2">
-                {!(
-                  activePreviewTab === 'Video' || activePreviewTab === 'Sparkle'
-                ) && (
-                  <Tooltip
-                    tooltipTrigger={
-                      <button
-                        onClick={() => {
-                          handleDownloadImage(
-                            filteredImages[imageIndex].downloadUrl || '',
-                            filteredImages[imageIndex].name,
-                            setIsLoading
-                          );
-                        }}
-                        disabled={
-                          !filteredImages[imageIndex].downloadUrl?.length
-                        }
-                        className={`rounded-[4px] bg-neutral0 disabled:!bg-neutral100 disabled:cursor-not-allowed hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm`}
-                      >
-                        <DownloadImg
-                          className={`stroke-[1.5] ${
-                            filteredImages[imageIndex].downloadUrl?.length
-                              ? 'stroke-neutral900'
-                              : 'stroke-neutral400'
-                          }`}
-                        />
-                      </button>
-                    }
-                    tooltipContent={
-                      activePreviewTab === 'Certificate'
-                        ? 'Download Certificate'
-                        : 'Download Image'
-                    }
-                    tooltipContentStyles={'z-[1000]'}
-                  />
-                )}
+                <Tooltip
+                  tooltipTrigger={
+                    <button
+                      onClick={() => {
+                        handleDownloadImage(
+                          filteredImages[imageIndex].downloadUrl || '',
+                          filteredImages[imageIndex].name,
+                          setIsLoading
+                        );
+                      }}
+                      disabled={!filteredImages[imageIndex].downloadUrl?.length}
+                      className={`rounded-[4px] bg-neutral0 disabled:!bg-neutral100 disabled:cursor-not-allowed hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm`}
+                    >
+                      <DownloadImg
+                        className={`stroke-[1.5] ${
+                          filteredImages[imageIndex].downloadUrl?.length
+                            ? 'stroke-neutral900'
+                            : 'stroke-neutral400'
+                        }`}
+                      />
+                    </button>
+                  }
+                  tooltipContent={
+                    activePreviewTab === 'Certificate'
+                      ? 'Download Certificate'
+                      : 'Download Image'
+                  }
+                  tooltipContentStyles={'z-[1000]'}
+                />
+                <Tooltip
+                  tooltipTrigger={
+                    <button
+                      onClick={() => {
+                        copyLink({
+                          url: filteredImages[imageIndex]?.url
+                        });
+                      }}
+                      disabled={!(filteredImages.length > 0)}
+                      className={`rounded-[4px] hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm ${
+                        filteredImages.length > 0
+                          ? 'bg-neutral0'
+                          : '!bg-neutral100 cursor-not-allowed'
+                      }`}
+                    >
+                      <LinkSvg
+                        className={`stroke-[1.5] ${
+                          filteredImages.length > 0
+                            ? '!stroke-neutral900'
+                            : '!stroke-neutral400'
+                        }`}
+                      />
+                    </button>
+                  }
+                  tooltipContent={'Media Link'}
+                  tooltipContentStyles={'z-[2000]'}
+                />
 
                 <Tooltip
                   tooltipTrigger={
@@ -378,6 +418,7 @@ const ImagePreview: React.FC<IImagePreviewProps> = ({
         images={images}
         activeTab={activePreviewTab}
         setIsLoading={setIsLoading}
+        stockNumber={stockNumber}
       />
     </>
   );

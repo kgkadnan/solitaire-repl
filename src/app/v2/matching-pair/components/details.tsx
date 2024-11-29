@@ -249,8 +249,18 @@ export function MatchPairDetails({
   const filterImageUrl = (tableData: any) => [
     {
       name: getShapeDisplayName(tableData?.shape ?? ''),
-      url: `${FILE_URLS.IMG.replace('***', tableData?.lot_id ?? '')}`,
-      downloadUrl: `${FILE_URLS.IMG.replace('***', tableData?.lot_id ?? '')}`,
+      url: `${FILE_URLS.IMG.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
+      downloadUrl: `${FILE_URLS.IMG.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
       category: 'Image',
       id: tableData?.id
     },
@@ -269,51 +279,122 @@ export function MatchPairDetails({
     },
     {
       name: 'Video',
-      url: `${FILE_URLS.B2B.replace('***', tableData?.lot_id ?? '')}`,
+      url: `${FILE_URLS.B2B.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
+      downloadUrl: `${FILE_URLS.B2B_DOWNLOAD_URL.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
       url_check: tableData?.assets_pre_check?.B2B_CHECK,
-      category: 'Video'
+      category: 'Video',
+      id: tableData?.id
     },
     {
       name: 'Sparkle',
-      url: `${FILE_URLS.B2B_SPARKLE.replace('***', tableData?.lot_id ?? '')}`,
+      url: `${FILE_URLS.B2B_SPARKLE.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
+      downloadUrl: `${FILE_URLS.B2B_SPARKLE_DOWNLOAD_URL.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
       url_check: tableData?.assets_pre_check?.B2B_SPARKLE_CHECK,
-      category: 'Sparkle'
+      category: 'Sparkle',
+      id: tableData?.id
     },
 
     {
       name: 'Heart',
-      url: `${FILE_URLS.HEART.replace('***', tableData?.lot_id ?? '')}`,
-      downloadUrl: `${FILE_URLS.HEART.replace('***', tableData?.lot_id ?? '')}`,
+      url: `${FILE_URLS.HEART.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
+      downloadUrl: `${FILE_URLS.HEART.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
       category: 'Image',
       id: tableData?.id
     },
     {
       name: 'Arrow',
-      url: `${FILE_URLS.ARROW.replace('***', tableData?.lot_id ?? '')}`,
-      downloadUrl: `${FILE_URLS.ARROW.replace('***', tableData?.lot_id ?? '')}`,
+      url: `${FILE_URLS.ARROW.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
+      downloadUrl: `${FILE_URLS.ARROW.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
       category: 'Image',
       id: tableData?.id
     },
     {
       name: 'Aset',
-      url: `${FILE_URLS.ASET.replace('***', tableData?.lot_id ?? '')}`,
-      downloadUrl: `${FILE_URLS.ASET.replace('***', tableData?.lot_id ?? '')}`,
+      url: `${FILE_URLS.ASET.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
+      downloadUrl: `${FILE_URLS.ASET.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
       category: 'Image',
       id: tableData?.id
     },
     {
       name: 'Ideal',
-      url: `${FILE_URLS.IDEAL.replace('***', tableData?.lot_id ?? '')}`,
-      downloadUrl: `${FILE_URLS.IDEAL.replace('***', tableData?.lot_id ?? '')}`,
+      url: `${FILE_URLS.IDEAL.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
+      downloadUrl: `${FILE_URLS.IDEAL.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
       category: 'Image',
       id: tableData?.id
     },
     {
       name: 'Fluorescence',
-      url: `${FILE_URLS.FLUORESCENCE.replace('***', tableData?.lot_id ?? '')}`,
+      url: `${FILE_URLS.FLUORESCENCE.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
       downloadUrl: `${FILE_URLS.FLUORESCENCE.replace(
         '***',
-        tableData?.lot_id ?? ''
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
       )}`,
       category: 'Image',
       id: tableData?.id
@@ -772,53 +853,48 @@ export function MatchPairDetails({
                           </>
                         )}
                       <div className="flex gap-2">
-                        {!(
-                          activePreviewTab === 'Video' ||
-                          activePreviewTab === 'Sparkle'
-                        ) && (
-                          <Tooltip
-                            tooltipTrigger={
-                              <button
-                                onClick={() => {
-                                  filteredImages.forEach((images: any) => {
-                                    if (Object.keys(rowSelection).length > 0) {
-                                      Object.keys(rowSelection).includes(
-                                        images[imageIndex].id
-                                      ) &&
-                                        handleDownloadImage(
-                                          images[imageIndex].downloadUrl || '',
-                                          images[imageIndex].name,
-                                          setIsLoading
-                                        );
-                                    } else {
-                                      setShowToast(true);
-                                    }
-                                  });
-                                }}
-                                disabled={
-                                  !filteredImages[0][imageIndex].downloadUrl
+                        <Tooltip
+                          tooltipTrigger={
+                            <button
+                              onClick={() => {
+                                filteredImages.forEach((images: any) => {
+                                  if (Object.keys(rowSelection).length > 0) {
+                                    Object.keys(rowSelection).includes(
+                                      images[imageIndex].id
+                                    ) &&
+                                      handleDownloadImage(
+                                        images[imageIndex].downloadUrl || '',
+                                        images[imageIndex].name,
+                                        setIsLoading
+                                      );
+                                  } else {
+                                    setShowToast(true);
+                                  }
+                                });
+                              }}
+                              disabled={
+                                !filteredImages[0][imageIndex].downloadUrl
+                                  ?.length
+                              }
+                              className={`rounded-[4px] bg-neutral0 disabled:!bg-neutral100 disabled:cursor-not-allowed hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm`}
+                            >
+                              <DownloadImg
+                                className={`stroke-[1.5] ${
+                                  filteredImages[0][imageIndex].downloadUrl
                                     ?.length
-                                }
-                                className={`rounded-[4px] bg-neutral0 disabled:!bg-neutral100 disabled:cursor-not-allowed hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm`}
-                              >
-                                <DownloadImg
-                                  className={`stroke-[1.5] ${
-                                    filteredImages[0][imageIndex].downloadUrl
-                                      ?.length
-                                      ? 'stroke-neutral900'
-                                      : 'stroke-neutral400'
-                                  }`}
-                                />
-                              </button>
-                            }
-                            tooltipContent={
-                              activePreviewTab === 'Certificate'
-                                ? 'Download Certificate'
-                                : 'Download Image'
-                            }
-                            tooltipContentStyles={'z-[1000]'}
-                          />
-                        )}
+                                    ? 'stroke-neutral900'
+                                    : 'stroke-neutral400'
+                                }`}
+                              />
+                            </button>
+                          }
+                          tooltipContent={
+                            activePreviewTab === 'Certificate'
+                              ? 'Download Certificate'
+                              : 'Download Image'
+                          }
+                          tooltipContentStyles={'z-[1000]'}
+                        />
                       </div>
                     </div>
                   ) : (
@@ -850,6 +926,9 @@ export function MatchPairDetails({
                       setErrorText={setErrorText}
                       identifier={breadCrumLabel}
                       shareTrackIdentifier="Match Pair Details"
+                      isDnaPage={true}
+                      imageIndex={imageIndex}
+                      filteredImages={filteredImages}
                     />
                   </div>
                 </div>
