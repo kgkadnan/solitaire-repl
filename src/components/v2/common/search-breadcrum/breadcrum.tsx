@@ -13,7 +13,7 @@ import dropdownIcon from '@public/v2/assets/png/data-table/dropdown.png';
 const MAX_VISIBLE_PILLS = 4;
 
 const Breadcrum = ({
-  searchParameters ,
+  searchParameters,
   activeTab,
   handleCloseSpecificTab,
   isMatchingPair
@@ -27,7 +27,7 @@ const Breadcrum = ({
 }) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  console.log('searchParameters', searchParameters);
+
   const [visiblePills, setVisiblePills] = useState(
     searchParameters.slice(0, MAX_VISIBLE_PILLS)
   );
@@ -38,7 +38,7 @@ const Breadcrum = ({
     setVisiblePills(searchParameters.slice(0, MAX_VISIBLE_PILLS));
     setDropdownPills(searchParameters.slice(MAX_VISIBLE_PILLS));
   }, [searchParameters]);
-  
+
   const handleDropdownSelect = (selectedIndex: any) => {
     // Get the selected item from dropdownPills
     const selectedPill = dropdownPills[selectedIndex];
@@ -50,21 +50,23 @@ const Breadcrum = ({
     // Replace the last visible pill (Result 4) with the selected dropdown pill
     newDropdownPills[selectedIndex] = newVisiblePills[MAX_VISIBLE_PILLS - 1];
     newVisiblePills[MAX_VISIBLE_PILLS - 1] = selectedPill;
-    
+
     // Update the state
     setVisiblePills(newVisiblePills);
-    setDropdownPills(newDropdownPills); 
+    setDropdownPills(newDropdownPills);
   };
- 
+
   useEffect(() => {
-    if(dropdownPills.length > 0 && activeTab > (MAX_VISIBLE_PILLS - 1)) {
-      const index = dropdownPills.findIndex((item: any) => item?.searchId == searchParameters[activeTab - 1]?.searchId);
-      if(index >= 0)
-      {
-       handleDropdownSelect(index);
-      }    
-    } 
-  }, [searchParameters]); 
+    if (dropdownPills.length > 0 && activeTab > MAX_VISIBLE_PILLS - 1) {
+      const index = dropdownPills.findIndex(
+        (item: any) =>
+          item?.searchId == searchParameters[activeTab - 1]?.searchId
+      );
+      if (index >= 0) {
+        handleDropdownSelect(index);
+      }
+    }
+  }, [searchParameters]);
   return (
     <>
       {searchParameters.length > 0 && (
@@ -84,8 +86,10 @@ const Breadcrum = ({
         </div>
       )}
       {visiblePills.map((result: any, index: number) => {
-        const activePill = searchParameters[activeTab - 1]?.searchId == result.searchId;
-        const activeIndex = searchParameters.findIndex(x => x.searchId == result.searchId) + 1;
+        const activePill =
+          searchParameters[activeTab - 1]?.searchId == result.searchId;
+        const activeIndex =
+          searchParameters.findIndex(x => x.searchId == result.searchId) + 1;
         return (
           // Object.keys(result).length > 0 && (
           <div key={`breadcrum-${index}`} className="flex items-center">
@@ -121,8 +125,8 @@ const Breadcrum = ({
           </div>
         );
         // );
-      })}    
-      {dropdownPills.length > 0 && (        
+      })}
+      {dropdownPills.length > 0 && (
         <Dropdown
           dropdownTrigger={
             <button
@@ -132,14 +136,18 @@ const Breadcrum = ({
               <Image src={dropdownIcon} alt="dropdownIcon" />
             </button>
           }
-          dropdownMenu={dropdownPills.map((result: any, index: any) => ({            
+          dropdownMenu={dropdownPills.map((result: any, index: any) => ({
             label: result.saveSearchName || result.label,
             handler: () => {
               handleDropdownSelect(index);
               router.push(
                 `${
                   isMatchingPair ? Routes.MATCHING_PAIR : Routes.SEARCH
-                }?active-tab=${SubRoutes.RESULT}-${searchParameters.findIndex(x => x.searchId == result.searchId) + 1}`
+                }?active-tab=${SubRoutes.RESULT}-${
+                  searchParameters.findIndex(
+                    x => x.searchId == result.searchId
+                  ) + 1
+                }`
               );
             }
           }))}
