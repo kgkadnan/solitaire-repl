@@ -25,7 +25,7 @@ export function filterBidData(data: any[], query: any): any[] {
 
     // Check all properties from the query object
     for (const key in query) {
-      if (skipKeys.includes(key)) {
+      if (skipKeys.includes(key) || key === 'all_asset_required') {
         continue;
       }
 
