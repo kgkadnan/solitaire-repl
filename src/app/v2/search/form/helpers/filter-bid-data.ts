@@ -102,7 +102,7 @@ export function filterBidData(data:any, query:any) {
           const itemValue = item[key];
 
           if (
-            !ranges.some(range => {
+            !ranges.some((range:any) => {
               const [min, max] = range.split('-').map(parseFloat);
               return itemValue >= min && itemValue <= max;
             })
