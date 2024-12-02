@@ -592,7 +592,7 @@ const Form = ({
         ]);
     }
     if (subRoute === SubRoutes.NEW_ARRIVAL) {
-      const queryParams = generateQueryParams(state);     
+      const queryParams = generateQueryParams(state);
       if (!Object.keys(queryParams).length) {
         dispatch(filterFunction({}));
         setData({});
