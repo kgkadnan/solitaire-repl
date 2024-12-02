@@ -28,6 +28,29 @@ interface IRegisterComponent {
   setOTPVerificationFormState: React.Dispatch<React.SetStateAction<IOtp>>;
   setIsLoading: any;
 }
+
+const salesPersonData = [
+  { key: 101, value: 'Lakshya' },
+  { key: 102, value: 'Bharat' },
+  { key: 103, value: 'Devanshu' },
+  { key: 104, value: 'Sambhav' },
+  { key: 105, value: 'Ayush' },
+  { key: 106, value: 'Apurv' },
+  { key: 107, value: 'Shubham' },
+  { key: 108, value: 'Akash' },
+  { key: 109, value: 'Sahan' },
+  { key: 110, value: 'Rishabh' },
+  { key: 111, value: 'Soham' },
+  { key: 112, value: 'Shreyans' },
+  { key: 113, value: 'Rahul' },
+  { key: 114, value: 'Amee' },
+  { key: 115, value: 'Sarthak' },
+  { key: 116, value: 'Ronak' },
+  { key: 117, value: 'Chetan' },
+  { key: 118, value: 'Ritik' },
+  { key: 119, value: 'Ajay' }
+];
+
 const RegisterComponent = ({
   registerSetState,
   registerState,
@@ -63,8 +86,44 @@ const RegisterComponent = ({
       setDialogContent,
       setOTPVerificationFormState,
       setIsLoading,
-      funnelTrack
+      funnelTrack,
+      referralCode
     });
+  };
+
+  const [suggestions, setSuggestions] = useState<
+    { key: number; value: string }[]
+  >([]);
+  const [referralName, setReferralName] = useState<string>('');
+  const [referralCode, setReferralCode] = useState<number | null>(null);
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setReferralName(value);
+    if (value) {
+      const filteredSuggestions = salesPersonData.filter(person =>
+        person.value.toLowerCase().startsWith(value.toLowerCase())
+      );
+      setSuggestions(filteredSuggestions);
+    } else {
+      setSuggestions([]);
+    }
+  };
+  const handleBlur = () => {
+    if (
+      referralName &&
+      !salesPersonData.some(
+        person => person.value.toLowerCase() === referralName.toLowerCase()
+      ) &&
+      suggestions.length === 0
+    ) {
+      setReferralName('');
+    }
+  };
+  const handleSuggestionClick = (name: string, key: number) => {
+    setReferralName(name);
+    setReferralCode(key);
+    setSuggestions([]);
   };
 
   useEffect(() => {
@@ -262,22 +321,49 @@ const RegisterComponent = ({
             />
             <InputField
               label="Referred by Salesperson"
-              onChange={event =>
-                handleRegisterChange({
-                  event,
-                  setRegisterFormState,
-                  setRegisterFormErrors
-                })
-              }
-              type="text"
-              name="referralName"
-              value={registerFormState.referralName}
-              errorText={registerFormErrors.referralName}
-              placeholder={'Salesperson’s Name'}
-              styles={{ inputMain: 'h-[64px]' }}
-              autoComplete="none"
+              onChange={handleInputChange}
+              value={referralName ?? ''}
+              placeholder="Salesperson’s Name"
+              type=""
+              onBlur={handleBlur}
             />
-            {/* </div> */}
+            {suggestions.length > 0 ? (
+              <div
+                className="border-neutral200 border-[1px] rounded-[4px]"
+                style={{
+                  marginTop: '-23px',
+                  boxShadow: '0px 4px 8px 0px rgba(16, 24, 40, 0.1)'
+                }}
+              >
+                {suggestions.map(person => (
+                  <div
+                    key={person.key}
+                    className="p-2 text-gray-500 w-full hover:bg-neutral50 hover:border-none text-neutral-900 text-left"
+                    onClick={() =>
+                      handleSuggestionClick(person.value, person.key)
+                    }
+                  >
+                    {person.value}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              referralName &&
+              !salesPersonData.some(
+                person =>
+                  person.value.toLowerCase() === referralName.toLowerCase()
+              ) && (
+                <div
+                  style={{
+                    marginTop: '-23px',
+                    boxShadow: '0px 4px 8px 0px rgba(16, 24, 40, 0.1)'
+                  }}
+                  className="p-2 text-gray-500 border-neutral200 border-[1px] rounded-[4px] w-full"
+                >
+                  No Result Found
+                </div>
+              )
+            )}
             <div className="flex flex-col gap-1">
               <IndividualActionButton
                 variant={'primary'}
