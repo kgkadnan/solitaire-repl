@@ -1205,7 +1205,8 @@ const Form = ({
           ? false
           : !searchUrl.length ||
             minMaxError.length > 0 ||
-            validationError.length > 0
+            validationError.length > 0 ||
+            (routePath === Routes.BID_TO_BUY && errorText === NO_STONE_FOUND)
           ? // errorText.length > 0
             true
           : false ||
