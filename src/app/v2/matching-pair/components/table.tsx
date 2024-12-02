@@ -243,7 +243,7 @@ const MatchPairTable = ({
 
   const [pagination, setPagination] = useState({
     pageIndex: 0,
-    pageSize: parseInt(localStorage.getItem("pageSize") ?? "20")  //customize the default page size
+    pageSize: parseInt(localStorage.getItem('pageSize') ?? '20') //customize the default page size
   });
 
   const [paginatedData, setPaginatedData] = useState<any>([]);
@@ -314,7 +314,6 @@ const MatchPairTable = ({
   }, []);
 
   const onDropDownClick = (value: any) => {
-    setIsLoading(true);
     setIsDropDownOpen(false);
 
     triggerSavedSearch({
@@ -447,9 +446,12 @@ const MatchPairTable = ({
                       saveSearchName: searchData.name,
                       isSavedSearch: true,
                       searchId: response?.data?.search_id,
-                      queryParams: searchData.meta_data,                      
+                      queryParams: searchData.meta_data,
                       id: searchData.id,
-                      label:(searchData?.name?.replace(/\s+/g, '') + ' ' + (data.length + 1))
+                      label:
+                        searchData?.name?.replace(/\s+/g, '') +
+                        ' ' +
+                        (data.length + 1)
                     }
                   ];
 
@@ -784,9 +786,10 @@ const MatchPairTable = ({
     renderEmptyRowsFallback: NoResultsComponent,
     manualPagination: true,
     rowCount: rows.length,
-    onPaginationChange: (updater) => {
-      setPagination((prevState) => {
-        const newState = typeof updater === 'function' ? updater(prevState) : updater;
+    onPaginationChange: updater => {
+      setPagination(prevState => {
+        const newState =
+          typeof updater === 'function' ? updater(prevState) : updater;
         localStorage.setItem('pageSize', JSON.stringify(newState.pageSize));
         return newState;
       });
