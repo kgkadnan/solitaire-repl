@@ -183,6 +183,7 @@ const MatchPairTable = ({
   columns,
   setRowSelection,
   rowSelection,
+  isProductFetching,
   // showCalculatedField = false,
   // isResult = false,
   myCart = false,
@@ -578,7 +579,7 @@ const MatchPairTable = ({
   const NoResultsComponent = () => (
     <>
       {' '}
-      {isLoaded && !isLoading && !isSkeletonLoading && (
+      {isLoaded && !(isProductFetching || isLoading) && !isSkeletonLoading && (
         <div className="flex justify-center mt-[50px]">
           <div>
             <div className="w-[350px] flex justify-center">
@@ -1463,7 +1464,7 @@ const MatchPairTable = ({
 
   return (
     <>
-      {isSkeletonLoading || !isLoaded || isLoading ? (
+      {isSkeletonLoading || !isLoaded || isLoading || isProductFetching ? (
         <MathPairSkeleton />
       ) : (
         <ThemeProvider theme={theme}>

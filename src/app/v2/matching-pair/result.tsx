@@ -212,6 +212,7 @@ const MatchingPairResult = ({
   const [isDiamondDetailLoading, setIsDiamondDetailLoading] = useState(true); //
   const [downloadExcel] = useDownloadExcelMutation();
   const [confirmProduct] = useConfirmProductMutation();
+  const [isProductFetching, setIsProductFetching] = useState(false);
 
   let [triggerColumn, { data: columnData }] =
     useLazyGetManageListingSequenceQuery<IManageListingSequenceResponse>();
@@ -225,6 +226,7 @@ const MatchingPairResult = ({
 
   const fetchProducts = async () => {
     // setIsLoading(true);
+    setIsProductFetching(true);
     const storedSelection = localStorage.getItem('MatchingPair');
 
     if (!storedSelection) return;
@@ -283,6 +285,7 @@ const MatchingPairResult = ({
         setErrorText('');
         setData(res.data);
         setIsLoading(false);
+        setIsProductFetching(false);
       })
       .catch(e => {
         if (e?.status === statusCode.UNAUTHORIZED) {
@@ -295,6 +298,7 @@ const MatchingPairResult = ({
         dataTableSetState.setRows([]);
         setIsLoading(false);
         setIsSkeletonLoading(false);
+        setIsProductFetching(false);
       });
   };
   const closeSearch = (
@@ -1708,6 +1712,7 @@ const MatchingPairResult = ({
                   setIsMPSOpen={setIsMPSOpen}
                   mps={mps}
                   setMps={setMps}
+                  isProductFetching={isProductFetching}
                   setSettingApplied={setSettingApplied}
                   isLoading={isLoading}
                   countLimitReached={countLimitReached}
