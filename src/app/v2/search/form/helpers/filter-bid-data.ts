@@ -86,7 +86,7 @@ export function filterBidData(data:any, query:any) {
 
           if (searchType === 'contain') {
             if (
-              !symbols.some(symbol => {
+              !symbols.some((symbol:any) => {
                 return item[key].includes(symbol);
               })
             ) {
