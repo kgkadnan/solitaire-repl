@@ -341,7 +341,10 @@ const ImagePreview: React.FC<IImagePreviewProps> = ({
                     </button>
                   }
                   tooltipContent={
-                    activePreviewTab === 'Certificate'
+                    activePreviewTab === 'Video' ||
+                    activePreviewTab === 'Sparkle'
+                      ? 'Download Video'
+                      : activePreviewTab === 'Certificate'
                       ? 'Download Certificate'
                       : 'Download Image'
                   }

@@ -889,7 +889,10 @@ export function MatchPairDetails({
                             </button>
                           }
                           tooltipContent={
-                            activePreviewTab === 'Certificate'
+                            activePreviewTab === 'Video' ||
+                            activePreviewTab === 'Sparkle'
+                              ? 'Download Video'
+                              : activePreviewTab === 'Certificate'
                               ? 'Download Certificate'
                               : 'Download Image'
                           }
