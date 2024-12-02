@@ -402,6 +402,7 @@ const MatchPairTable = ({
                     Number((path?.match(/result-(\d+)/) || [])[1])
                   ) {
                     setIsLoading(false);
+                    setIsSkeletonLoading(false);
                   } else {
                     router.push(
                       `${Routes.MATCHING_PAIR}?active-tab=${SubRoutes.RESULT}-${
@@ -443,6 +444,7 @@ const MatchPairTable = ({
                     />
                   );
                   modalSetState.setIsDialogOpen(true);
+                  setIsSkeletonLoading(false);
                 } else {
                   const localStorageData = [
                     ...data,
@@ -470,11 +472,10 @@ const MatchPairTable = ({
                   );
                 }
               }
-              setIsSkeletonLoading(false);
+
               setIsLoading(false);
             }
             setIsLoading(false);
-            setIsSkeletonLoading(false);
           })
           .catch(() => {
             setIsLoading(false);
