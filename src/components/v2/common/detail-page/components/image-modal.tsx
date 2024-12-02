@@ -127,7 +127,7 @@ const ImageModal: React.FC<IModalProps> = ({
                 </button>
               </div>
             </div>
-            <div className="flex flex-col items-center  gap-4">
+            <div className="flex flex-col items-center  gap-3">
               <div
                 className="flex justify-center"
                 style={{
@@ -411,9 +411,10 @@ const ImageModal: React.FC<IModalProps> = ({
                           </button>
                         }
                         tooltipContent={
-                          activePreviewTab === 'Video' ||
-                          activePreviewTab === 'Sparkle'
+                          activePreviewTab === 'Video'
                             ? 'Download Video'
+                            : activePreviewTab === 'Sparkle'
+                            ? 'Download Sparkle'
                             : activePreviewTab === 'Certificate'
                             ? 'Download Certificate'
                             : 'Download Image'
