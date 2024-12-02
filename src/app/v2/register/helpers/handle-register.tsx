@@ -21,6 +21,7 @@ interface IHandleRegister {
   setOTPVerificationFormState: React.Dispatch<React.SetStateAction<IOtp>>;
   setIsLoading: any;
   funnelTrack: any;
+  referralCode:any;
 }
 export const handleRegister = async ({
   role,
@@ -34,7 +35,8 @@ export const handleRegister = async ({
   setDialogContent,
   setOTPVerificationFormState,
   setIsLoading,
-  funnelTrack
+  funnelTrack,
+  referralCode
 }: IHandleRegister) => {
   const isFormValid = validateAllFields({
     formState: registerFormState,
@@ -53,7 +55,7 @@ export const handleRegister = async ({
     phone: registerFormState.mobileNumber,
     company_name: registerFormState.companyName,
     country_iso2_code: registerFormState.iso,
-    referral_code: registerFormState.referralName
+    referral_code: referralCode
   })
     .unwrap()
     .then((res: any) => {
