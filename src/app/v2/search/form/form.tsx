@@ -334,7 +334,6 @@ const Form = ({
   useEffect(() => {
     if (subRoute === SubRoutes.NEW_ARRIVAL) {
       const query = parseQueryString(searchUrl);
-
       const filteredData =
         newArrivalFilterData?.bidData &&
         filterBidData(newArrivalFilterData?.bidData, query);
@@ -593,8 +592,7 @@ const Form = ({
         ]);
     }
     if (subRoute === SubRoutes.NEW_ARRIVAL) {
-      const queryParams = generateQueryParams(state);
-
+      const queryParams = parseQueryString(searchUrl);
       if (!Object.keys(queryParams).length) {
         dispatch(filterFunction({}));
         setData({});
