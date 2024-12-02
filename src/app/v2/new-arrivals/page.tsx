@@ -391,13 +391,8 @@ const NewArrivals = () => {
           // Optionally update UI or process allProducts here
 
           setActiveBid(allProducts.activeStone);
-          let activeStoneIds = allProducts.activeStone.map(x=>x.id);
           if (currentFilterData?.queryParams) {
-            let filteredData = 
-            currentFilterData?.bidFilterData?.length > 0
-                ? currentFilterData?.bidFilterData
-                : filterBidData(allProducts.bidStone, currentFilterData.queryParams);
-            filteredData = filteredData.filter(x=>!activeStoneIds.includes(x.id));            
+            let filteredData =  filterBidData(allProducts.bidStone, currentFilterData.queryParams);
             dispatch(
               filterFunction({
                 bidData: allProducts.bidStone,
