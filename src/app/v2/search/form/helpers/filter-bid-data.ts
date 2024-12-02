@@ -93,7 +93,7 @@ export function filterBidData(data:any, query:any) {
               return false;
             }
           } else if (searchType === 'doesNotContain') {
-            if (symbols.some(symbol => item[key].includes(symbol))) {
+            if (symbols.some((symbol:any) => item[key].includes(symbol))) {
               return false;
             }
           }
