@@ -949,7 +949,7 @@ export function MatchPairDetails({
                   className={`${
                     originalData.length > 2
                       ? // ? originalData.length > 5
-                        'h-[370px] '
+                        'h-[400px] '
                       : // : 'h-[370px]  '
                         'h-[420px]'
                   }  items-center flex px-4 border-[0.5px] border-neutral200 bg-neutral50`}
@@ -979,7 +979,7 @@ export function MatchPairDetails({
                       ? // originalData.length > 5
                         //   ? 'h-[360px] '
                         //   :
-                        'h-[370px] '
+                        'h-[400px] '
                       : 'h-[420px]'
                   } `}
                 >
@@ -1003,7 +1003,7 @@ export function MatchPairDetails({
                               ? // originalData.length > 5
                                 //   ? 'h-[360px]'
                                 //   :
-                                'h-[370px]'
+                                'h-[400px]'
                               : 'h-[420px]'
                           } flex flex-col justify-between border-[0.5px]  border-neutral200 bg-neutral0 p-2 ${
                             originalData.length > 2 ? 'gap-[4px]' : 'gap-[6px]'
@@ -1176,67 +1176,70 @@ export function MatchPairDetails({
                               />
                             )}
                           </div>
-                          <div className="flex justify-center items-center">
-                            {!imageLoadingStatus[index] ? (
-                              <div className="text-mRegular font-medium text-neutral900">
-                                {filteredImages[index][imageIndex].name ?? '-'}
-                              </div>
-                            ) : (
+                          <div className="flex flex-col gap-2">
+                            <div className="flex justify-center items-center">
+                              {!imageLoadingStatus[index] ? (
+                                <div className="text-mRegular font-medium text-neutral900">
+                                  {filteredImages[index][imageIndex].name ??
+                                    '-'}
+                                </div>
+                              ) : (
+                                <div>
+                                  <Skeleton
+                                    width={88}
+                                    variant="rectangular"
+                                    height={20}
+                                    animation="wave"
+                                    sx={{ bgcolor: 'var(--neutral-200)' }}
+                                  />
+                                </div>
+                              )}
+                            </div>
+                            <div className="flex justify-between">
                               <div>
-                                <Skeleton
-                                  width={88}
-                                  variant="rectangular"
-                                  height={20}
-                                  animation="wave"
-                                  sx={{ bgcolor: 'var(--neutral-200)' }}
+                                <CheckboxComponent
+                                  onClick={() => handleClick(items.id)}
+                                  data-testid={'compare stone checkbox'}
+                                  isChecked={
+                                    Object.keys(rowSelection).includes(
+                                      items.id
+                                    ) || false
+                                  }
                                 />
                               </div>
-                            )}
-                          </div>
-                          <div className="flex justify-between">
-                            <div>
-                              <CheckboxComponent
-                                onClick={() => handleClick(items.id)}
-                                data-testid={'compare stone checkbox'}
-                                isChecked={
-                                  Object.keys(rowSelection).includes(
-                                    items.id
-                                  ) || false
-                                }
-                              />
-                            </div>
-                            <div>
-                              <button
-                                onClick={e => {
-                                  e.stopPropagation();
-                                  handleDetailImage({
-                                    row: items,
-                                    activePreviewTab
-                                  });
-                                }}
-                              >
-                                <Media
-                                  className={`stroke-[1.5] stroke-neutral900
+                              <div>
+                                <button
+                                  onClick={e => {
+                                    e.stopPropagation();
+                                    handleDetailImage({
+                                      row: items,
+                                      activePreviewTab
+                                    });
+                                  }}
+                                >
+                                  <Media
+                                    className={`stroke-[1.5] stroke-neutral900
                            `}
+                                  />
+                                </button>
+                              </div>
+                              <div
+                                className={`${styles.closeButton} cursor-pointer`}
+                                data-testid={'Remove Stone'}
+                                onClick={event =>
+                                  originalData.length > 2
+                                    ? handleClose(event, items.id)
+                                    : (setShowToast(true),
+                                      setErrorText(SELECT_STONES))
+                                }
+                              >
+                                <Image
+                                  src={CloseButton}
+                                  alt="Preview"
+                                  height={24}
+                                  width={24}
                                 />
-                              </button>
-                            </div>
-                            <div
-                              className={`${styles.closeButton} cursor-pointer`}
-                              data-testid={'Remove Stone'}
-                              onClick={event =>
-                                originalData.length > 2
-                                  ? handleClose(event, items.id)
-                                  : (setShowToast(true),
-                                    setErrorText(SELECT_STONES))
-                              }
-                            >
-                              <Image
-                                src={CloseButton}
-                                alt="Preview"
-                                height={24}
-                                width={24}
-                              />
+                              </div>
                             </div>
                           </div>
                         </div>
