@@ -411,7 +411,10 @@ const ImageModal: React.FC<IModalProps> = ({
                           </button>
                         }
                         tooltipContent={
-                          activePreviewTab === 'Certificate'
+                          activePreviewTab === 'Video' ||
+                          activePreviewTab === 'Sparkle'
+                            ? 'Download Video'
+                            : activePreviewTab === 'Certificate'
                             ? 'Download Certificate'
                             : 'Download Image'
                         }
