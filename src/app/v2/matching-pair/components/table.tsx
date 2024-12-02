@@ -316,6 +316,7 @@ const MatchPairTable = ({
 
   const onDropDownClick = (value: any) => {
     setIsDropDownOpen(false);
+    setIsSkeletonLoading(true);
 
     triggerSavedSearch({
       searchByName: value.value
@@ -342,6 +343,7 @@ const MatchPairTable = ({
           .then(response => {
             if (response?.data?.count > MAX_SAVED_SEARCH_COUNT) {
               setIsLoading(false);
+              setIsSkeletonLoading(false);
               modalSetState.setIsDialogOpen(true);
               modalSetState.setDialogContent(
                 <CommonPoppup
@@ -363,6 +365,7 @@ const MatchPairTable = ({
               );
             } else if (response?.data?.count === MIN_SAVED_SEARCH_COUNT) {
               setIsLoading(false);
+              setIsSkeletonLoading(false);
               modalSetState.setIsDialogOpen(true);
               modalSetState.setDialogContent(
                 <CommonPoppup
@@ -467,12 +470,15 @@ const MatchPairTable = ({
                   );
                 }
               }
+              setIsSkeletonLoading(false);
               setIsLoading(false);
             }
             setIsLoading(false);
+            setIsSkeletonLoading(false);
           })
           .catch(() => {
             setIsLoading(false);
+            setIsSkeletonLoading(false);
           });
       })
       .catch(() => {
