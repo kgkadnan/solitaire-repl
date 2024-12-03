@@ -337,12 +337,12 @@ const Form = ({
       const filteredData =
         newArrivalFilterData?.bidData &&
         filterBidData(newArrivalFilterData?.bidData, query);
-
-      setData({
-        count: filteredData?.length,
-        products: filteredData
-      });
-
+      if (searchUrl.length > 0) {
+        setData({
+          count: filteredData?.length,
+          products: filteredData
+        });
+      }
       setError('');
     } else if (routePath === Routes.BID_TO_BUY) {
       const query = parseQueryString(searchUrl);
@@ -1029,6 +1029,7 @@ const Form = ({
     setMinMaxError('');
     setValidationError('');
     handleReset(setState, errorSetState);
+    setData({});
   };
 
   const handleAddDemand = () => {
@@ -1076,7 +1077,6 @@ const Form = ({
       .catch(_err => setIsLoading(false));
   };
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
-
   let actionButtonData: IActionButtonDataItem[] = [
     {
       variant: 'secondary',
@@ -1202,9 +1202,10 @@ const Form = ({
 
       isDisable:
         subRoute === SubRoutes.NEW_ARRIVAL
-          ? data?.count > MAX_SEARCH_FORM_COUNT ||
-            minMaxError.length > 0 ||
-            validationError.length > 0
+          ? minMaxError.length > 0 ||
+            validationError.length > 0 ||
+            errorText === EXCEEDS_LIMITS ||
+            errorText === NO_STONE_FOUND
             ? true
             : false
           : !searchUrl.length ||
