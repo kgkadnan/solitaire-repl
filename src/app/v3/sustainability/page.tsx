@@ -320,9 +320,7 @@ const App: React.FC = () => {
               onContextMenu={e => e.preventDefault()}
             />
             <div className="ml-[25px] mt-[-40px]">
-              <p className="text-[16px]">
-                The report will be available in November 2024.
-              </p>
+              <p className="text-[16px]">The report will be available soon.</p>
             </div>
           </div>
         </div>
