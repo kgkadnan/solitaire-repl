@@ -1202,7 +1202,11 @@ const Form = ({
 
       isDisable:
         subRoute === SubRoutes.NEW_ARRIVAL
-          ? false
+          ? data?.count > MAX_SEARCH_FORM_COUNT ||
+            minMaxError.length > 0 ||
+            validationError.length > 0
+            ? true
+            : false
           : !searchUrl.length ||
             minMaxError.length > 0 ||
             validationError.length > 0 ||
