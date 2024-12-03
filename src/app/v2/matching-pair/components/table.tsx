@@ -183,6 +183,7 @@ const MatchPairTable = ({
   columns,
   setRowSelection,
   rowSelection,
+  isProductFetching,
   // showCalculatedField = false,
   // isResult = false,
   myCart = false,
@@ -243,7 +244,7 @@ const MatchPairTable = ({
 
   const [pagination, setPagination] = useState({
     pageIndex: 0,
-    pageSize: parseInt(localStorage.getItem("pageSize") ?? "20")  //customize the default page size
+    pageSize: parseInt(localStorage.getItem('pageSize') ?? '20') //customize the default page size
   });
 
   const [paginatedData, setPaginatedData] = useState<any>([]);
@@ -314,8 +315,8 @@ const MatchPairTable = ({
   }, []);
 
   const onDropDownClick = (value: any) => {
-    setIsLoading(true);
     setIsDropDownOpen(false);
+    setIsSkeletonLoading(true);
 
     triggerSavedSearch({
       searchByName: value.value
@@ -342,6 +343,7 @@ const MatchPairTable = ({
           .then(response => {
             if (response?.data?.count > MAX_SAVED_SEARCH_COUNT) {
               setIsLoading(false);
+              setIsSkeletonLoading(false);
               modalSetState.setIsDialogOpen(true);
               modalSetState.setDialogContent(
                 <CommonPoppup
@@ -363,6 +365,7 @@ const MatchPairTable = ({
               );
             } else if (response?.data?.count === MIN_SAVED_SEARCH_COUNT) {
               setIsLoading(false);
+              setIsSkeletonLoading(false);
               modalSetState.setIsDialogOpen(true);
               modalSetState.setDialogContent(
                 <CommonPoppup
@@ -399,6 +402,7 @@ const MatchPairTable = ({
                     Number((path?.match(/result-(\d+)/) || [])[1])
                   ) {
                     setIsLoading(false);
+                    setIsSkeletonLoading(false);
                   } else {
                     router.push(
                       `${Routes.MATCHING_PAIR}?active-tab=${SubRoutes.RESULT}-${
@@ -440,6 +444,7 @@ const MatchPairTable = ({
                     />
                   );
                   modalSetState.setIsDialogOpen(true);
+                  setIsSkeletonLoading(false);
                 } else {
                   const localStorageData = [
                     ...data,
@@ -447,9 +452,12 @@ const MatchPairTable = ({
                       saveSearchName: searchData.name,
                       isSavedSearch: true,
                       searchId: response?.data?.search_id,
-                      queryParams: searchData.meta_data,                      
+                      queryParams: searchData.meta_data,
                       id: searchData.id,
-                      label:(searchData?.name?.replace(/\s+/g, '') + ' ' + (data.length + 1))
+                      label:
+                        searchData?.name?.replace(/\s+/g, '') +
+                        ' ' +
+                        (data.length + 1)
                     }
                   ];
 
@@ -464,12 +472,14 @@ const MatchPairTable = ({
                   );
                 }
               }
+
               setIsLoading(false);
             }
             setIsLoading(false);
           })
           .catch(() => {
             setIsLoading(false);
+            setIsSkeletonLoading(false);
           });
       })
       .catch(() => {
@@ -576,7 +586,7 @@ const MatchPairTable = ({
   const NoResultsComponent = () => (
     <>
       {' '}
-      {isLoaded && !isLoading && !isSkeletonLoading && (
+      {isLoaded && !(isProductFetching || isLoading) && !isSkeletonLoading && (
         <div className="flex justify-center mt-[50px]">
           <div>
             <div className="w-[350px] flex justify-center">
@@ -784,10 +794,10 @@ const MatchPairTable = ({
     renderEmptyRowsFallback: NoResultsComponent,
     manualPagination: true,
     rowCount: rows.length,
-    onPaginationChange: (updater) => {
-      setRowSelection({});
-      setPagination((prevState) => {
-        const newState = typeof updater === 'function' ? updater(prevState) : updater;
+    onPaginationChange: updater => {
+      setPagination(prevState => {
+        const newState =
+          typeof updater === 'function' ? updater(prevState) : updater;
         localStorage.setItem('pageSize', JSON.stringify(newState.pageSize));
         return newState;
       });
@@ -1461,7 +1471,7 @@ const MatchPairTable = ({
 
   return (
     <>
-      {isSkeletonLoading || !isLoaded || isLoading ? (
+      {isSkeletonLoading || !isLoaded || isLoading || isProductFetching ? (
         <MathPairSkeleton />
       ) : (
         <ThemeProvider theme={theme}>

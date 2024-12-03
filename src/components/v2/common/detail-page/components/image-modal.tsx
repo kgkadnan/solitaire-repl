@@ -7,7 +7,7 @@ import Tooltip from '../../tooltip';
 import { handleDownloadImage } from '@/utils/v2/detail-page';
 import { IImagesType } from '../interface';
 import DownloadImg from '@public/v2/assets/icons/detail-page/download.svg?url';
-import LinkSvg from '@public/v2/assets/icons/detail-page/link.svg?url';
+import LinkSvg from '@public/v2/assets/icons/detail-page/linkv2.svg?url';
 import forwardArrow from '@public/v2/assets/icons/arrow-forward.svg';
 import backwardArrow from '@public/v2/assets/icons/arrow-backword.svg';
 import backWardArrowDisable from '@public/v2/assets/icons/detail-page/back-ward-arrow-disable.svg';
@@ -26,6 +26,7 @@ interface IModalProps {
   activeTab?: string;
   customerMobileNumber?: string;
   trackIdentifier?: string;
+  stockNumber: string;
 }
 
 const ImageModal: React.FC<IModalProps> = ({
@@ -36,7 +37,8 @@ const ImageModal: React.FC<IModalProps> = ({
   setIsLoading,
   activeTab,
   customerMobileNumber,
-  trackIdentifier
+  trackIdentifier,
+  stockNumber
 }) => {
   const [imageIndex, setImageIndex] = useState<number>(0);
   const [showToast, setShowToast] = useState(false);
@@ -97,7 +99,10 @@ const ImageModal: React.FC<IModalProps> = ({
       <div className="flex items-center justify-center min-h-screen">
         {/* Background overlay */}
         <div className="fixed inset-0 bg-[#101828] opacity-40"></div>
-        <div className="bg-neutral0 p-2 rounded-[4px] sm:min-w-[340px] lg:p-6 z-20 h-[681px]   lg:min-w-[630px] relative">
+        <div className="bg-neutral0 p-2 pt-1 rounded-[4px] sm:min-w-[340px] lg:p-6 lg:pt-3 z-20 h-[681px]   lg:min-w-[630px] relative">
+          <div className="text-neutral900 mb-1 font-[500] text-[18px] leading-[22px]">
+            Stock No:{stockNumber}
+          </div>
           <div className="flex flex-col  gap-4 ">
             <div className="w-full flex justify-end">
               <div className="flex justify-between w-[630px]">
@@ -122,7 +127,7 @@ const ImageModal: React.FC<IModalProps> = ({
                 </button>
               </div>
             </div>
-            <div className="flex flex-col items-center  gap-4">
+            <div className="flex flex-col items-center  gap-3">
               <div
                 className="flex justify-center"
                 style={{
@@ -381,42 +386,41 @@ const ImageModal: React.FC<IModalProps> = ({
                         </>
                       )}
                     <div className="flex gap-2">
-                      {!(
-                        activePreviewTab === 'Video' ||
-                        activePreviewTab === 'Sparkle'
-                      ) && (
-                        <Tooltip
-                          tooltipTrigger={
-                            <button
-                              onClick={() => {
-                                handleDownloadImage(
-                                  filteredImages[imageIndex].downloadUrl || '',
-                                  filteredImages[imageIndex].name,
-                                  setIsLoading
-                                );
-                              }}
-                              disabled={
-                                !filteredImages[imageIndex].downloadUrl?.length
-                              }
-                              className={`rounded-[4px] bg-neutral0 disabled:!bg-neutral100 disabled:cursor-not-allowed hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm`}
-                            >
-                              <DownloadImg
-                                className={`stroke-[1.5] ${
-                                  filteredImages[imageIndex].downloadUrl?.length
-                                    ? 'stroke-neutral900'
-                                    : 'stroke-neutral400'
-                                }`}
-                              />
-                            </button>
-                          }
-                          tooltipContent={
-                            activePreviewTab === 'Certificate'
-                              ? 'Download Certificate'
-                              : 'Download Image'
-                          }
-                          tooltipContentStyles={'z-[2000]'}
-                        />
-                      )}
+                      <Tooltip
+                        tooltipTrigger={
+                          <button
+                            onClick={() => {
+                              handleDownloadImage(
+                                filteredImages[imageIndex].downloadUrl || '',
+                                filteredImages[imageIndex].name,
+                                setIsLoading
+                              );
+                            }}
+                            disabled={
+                              !filteredImages[imageIndex].downloadUrl?.length
+                            }
+                            className={`rounded-[4px] bg-neutral0 disabled:!bg-neutral100 disabled:cursor-not-allowed hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm`}
+                          >
+                            <DownloadImg
+                              className={`stroke-[1.5] ${
+                                filteredImages[imageIndex].downloadUrl?.length
+                                  ? 'stroke-neutral900'
+                                  : 'stroke-neutral400'
+                              }`}
+                            />
+                          </button>
+                        }
+                        tooltipContent={
+                          activePreviewTab === 'Video'
+                            ? 'Download Video'
+                            : activePreviewTab === 'Sparkle'
+                            ? 'Download Sparkle'
+                            : activePreviewTab === 'Certificate'
+                            ? 'Download Certificate'
+                            : 'Download Image'
+                        }
+                        tooltipContentStyles={'z-[2000]'}
+                      />
 
                       <Tooltip
                         tooltipTrigger={
@@ -442,7 +446,15 @@ const ImageModal: React.FC<IModalProps> = ({
                             />
                           </button>
                         }
-                        tooltipContent={'Media Link'}
+                        tooltipContent={
+                          activePreviewTab === 'Video'
+                            ? 'Video Link'
+                            : activePreviewTab === 'Sparkle'
+                            ? 'Sparkle Link'
+                            : activePreviewTab === 'Certificate'
+                            ? 'Certificate Link'
+                            : 'Image Link'
+                        }
                         tooltipContentStyles={'z-[2000]'}
                       />
                     </div>

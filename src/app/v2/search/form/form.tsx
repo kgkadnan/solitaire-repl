@@ -150,7 +150,7 @@ const Form = ({
   time?: any;
   setRowSelection?: any;
   setIsMPSOpen?: any;
-  setBid?: any
+  setBid?: any;
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -333,18 +333,16 @@ const Form = ({
 
   useEffect(() => {
     if (subRoute === SubRoutes.NEW_ARRIVAL) {
-      const query = parseQueryString(searchUrl);
-      delete query.all_asset_required;
-
+      const query = generateQueryParams(state);
       const filteredData =
         newArrivalFilterData?.bidData &&
         filterBidData(newArrivalFilterData?.bidData, query);
-
-      setData({
-        count: filteredData?.length,
-        products: filteredData
-      });
-
+      if (searchUrl.length > 0) {
+        setData({
+          count: filteredData?.length,
+          products: filteredData
+        });
+      }
       setError('');
     } else if (routePath === Routes.BID_TO_BUY) {
       const query = parseQueryString(searchUrl);
@@ -421,9 +419,7 @@ const Form = ({
       const queryParams = generateQueryParams(state);
 
       if (!isValidationError && !isSliderActive && !minMaxError) {
-        if (Object.keys(queryParams).length > 1 || queryParams.all_asset_required == true) {
-          setSearchUrl(constructUrlParams(queryParams));
-        }
+        setSearchUrl(constructUrlParams(queryParams));
       }
     };
 
@@ -578,8 +574,6 @@ const Form = ({
       localStorage.getItem(formIdentifier)!
     );
 
-    console.log('localStorageData', localStorageDataLength);
-
     let caratFrom;
     let caratTo;
     if (caratMin || caratMax) {
@@ -599,7 +593,6 @@ const Form = ({
     }
     if (subRoute === SubRoutes.NEW_ARRIVAL) {
       const queryParams = generateQueryParams(state);
-      delete queryParams.all_asset_required;
       if (!Object.keys(queryParams).length) {
         dispatch(filterFunction({}));
         setData({});
@@ -612,7 +605,7 @@ const Form = ({
           })
         );
       }
-       
+
       router.push(`/v2/new-arrivals`);
       setSearchUrl('');
     } else if (routePath === Routes.BID_TO_BUY) {
@@ -724,11 +717,13 @@ const Form = ({
                 saveSearchName: savedSearch?.savedSearch?.name,
                 searchId: data?.search_id,
                 isSavedSearch: true,
-                label: 
-                (!!saveSearchName) ? (saveSearchName?.replace(/\s+/g, '') + ' ' + ((data?.length || 0 ) + 1)) :            
-                `Result ${
-                  localStorageDataLength ? localStorageDataLength.length : 1
-                }`,
+                label: !!saveSearchName
+                  ? saveSearchName?.replace(/\s+/g, '') +
+                    ' ' +
+                    ((data?.length || 0) + 1)
+                  : `Result ${
+                      localStorageDataLength ? localStorageDataLength.length : 1
+                    }`,
                 queryParams
               };
               let localStorageData = JSON.parse(
@@ -783,11 +778,20 @@ const Form = ({
             saveSearchName:
               modifySearchResult[activeTab - 1]?.saveSearchName ||
               saveSearchName,
-            label: 
-            (!!saveSearchName || modifySearchResult[activeTab - 1]?.saveSearchName) ? (modifySearchResult[activeTab - 1]?.saveSearchName?.replace(/\s+/g, '') + ' ' + (activeTab)) :            
-            `${
-              localStorageDataLength ? modifySearchResult[activeTab - 1]?.label : 1
-            }`,
+            label:
+              !!saveSearchName ||
+              modifySearchResult[activeTab - 1]?.saveSearchName
+                ? modifySearchResult[activeTab - 1]?.saveSearchName?.replace(
+                    /\s+/g,
+                    ''
+                  ) +
+                  ' ' +
+                  activeTab
+                : `${
+                    localStorageDataLength
+                      ? modifySearchResult[activeTab - 1]?.label
+                      : 1
+                  }`,
             isSavedSearch: isSavedParams,
             searchId: data?.search_id,
             queryParams
@@ -810,14 +814,19 @@ const Form = ({
             id: id,
             saveSearchName: saveSearchName,
             searchId: data?.search_id,
-            label: 
-            // `Result ${
-            //   localStorageDataLength ? localStorageDataLength.length + 1 : 1
-            // }`,
-            (!!saveSearchName) ? (saveSearchName?.replace(/\s+/g, '') + ' ' + ((localStorageDataLength?.length || 0 ) + 1)) :
-            `Result ${
-              localStorageDataLength ? localStorageDataLength.length + 1 : 1
-            }`,
+            label:
+              // `Result ${
+              //   localStorageDataLength ? localStorageDataLength.length + 1 : 1
+              // }`,
+              !!saveSearchName
+                ? saveSearchName?.replace(/\s+/g, '') +
+                  ' ' +
+                  ((localStorageDataLength?.length || 0) + 1)
+                : `Result ${
+                    localStorageDataLength
+                      ? localStorageDataLength.length + 1
+                      : 1
+                  }`,
             isSavedSearch: isSavedParams,
             queryParams
           };
@@ -1020,6 +1029,7 @@ const Form = ({
     setMinMaxError('');
     setValidationError('');
     handleReset(setState, errorSetState);
+    setData({});
   };
 
   const handleAddDemand = () => {
@@ -1067,7 +1077,6 @@ const Form = ({
       .catch(_err => setIsLoading(false));
   };
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
-
   let actionButtonData: IActionButtonDataItem[] = [
     {
       variant: 'secondary',
@@ -1097,8 +1106,9 @@ const Form = ({
       variant: 'secondary',
       label: ManageLocales('app.advanceSearch.reset'),
       handler: () => {
-        if(setBid){
-        setBid(newArrivalFilterData.bidData);}
+        if (setBid) {
+          setBid(newArrivalFilterData.bidData);
+        }
         handleFormReset();
       }
     },
@@ -1192,10 +1202,16 @@ const Form = ({
 
       isDisable:
         subRoute === SubRoutes.NEW_ARRIVAL
-          ? false
+          ? minMaxError.length > 0 ||
+            validationError.length > 0 ||
+            errorText === EXCEEDS_LIMITS ||
+            errorText === NO_STONE_FOUND
+            ? true
+            : false
           : !searchUrl.length ||
             minMaxError.length > 0 ||
-            validationError.length > 0
+            validationError.length > 0 ||
+            (routePath === Routes.BID_TO_BUY && errorText === NO_STONE_FOUND)
           ? // errorText.length > 0
             true
           : false ||
@@ -1527,7 +1543,8 @@ const Form = ({
             <div className="flex flex-col gap-[27px]">
               {(routePath.includes('v2/matching-pair') ||
                 routePath.includes('v2/bid-2-buy') ||
-                routePath.includes('v2/search')) && (
+                routePath.includes('v2/search') ||
+                subRoute === SubRoutes.NEW_ARRIVAL) && (
                 <div className="flex items-center  justify-between bg-neutral0 border-[1px] border-solid border-neutral200 rounded-[4px]">
                   <p className="font-medium py-[5px] rounded-l-[4px]  px-[12px] bg-neutral50 text-neutral900 text-mMedium">
                      Images & Videos Required

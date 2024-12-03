@@ -6,6 +6,9 @@ import CheckboxComponent from '../checkbox';
 import ShareButtonSvg from '@public/v2/assets/icons/data-table/share-button.svg?url';
 import Image from 'next/image';
 import crossIcon from '@public/v2/assets/icons/modal/cross.svg';
+import notepadIcon from '@public/v2/assets/icons/detail-page/notepad.svg';
+import whatsappIcon from '@public/v2/assets/icons/detail-page/whatsapp.svg';
+import emailIcon from '@public/v2/assets/icons/detail-page/email.svg';
 import { SELECT_STONE_TO_PERFORM_ACTION } from '@/constants/error-messages/search';
 import { Toast } from './toast';
 import { IProduct } from '@/app/v2/search/interface';
@@ -16,6 +19,7 @@ import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
 import { dashboardIndentifier } from '@/app/v2/dashboard';
 import { Tracking_Search_By_Text } from '@/constants/funnel-tracking';
 import { trackEvent } from '@/utils/ga';
+import { Dropdown } from '../dropdown-menu';
 
 const Share = ({
   rows,
@@ -27,7 +31,10 @@ const Share = ({
   shareTrackIdentifier,
   dynamicTrackIdentifier,
   customerMobileNumber,
-  isDisable
+  isDisable,
+  isDnaPage,
+  filteredImages,
+  imageIndex
 }: any) => {
   const [selectedRows, setSelectedRows] = useState<IProduct[]>(
     rows?.filter((row: IProduct) => row.id in selectedProducts)
@@ -420,54 +427,222 @@ const Share = ({
         renderContent={renderContentWithInput}
       />
       <Toast show={showToast} message="Copied Successfully" />
-      <div
-        onClick={() => {
-          if (!isDisable || !rows.length) {
-            if (Object.keys(selectedProducts).length > 0) {
-              setIsError(false);
-              setErrorText('');
-              setIsInputDialogOpen(true);
-              if (
-                dynamicTrackIdentifier === dashboardIndentifier ||
-                dynamicTrackIdentifier === 'dashboardSearchResult'
-              ) {
-                trackEvent({
-                  action:
-                    dynamicTrackIdentifier === 'dashboardSearchResult'
-                      ? Tracking_Search_By_Text.click_share_result_page
-                      : Tracking_Search_By_Text.click_share_dna_page,
-                  category: 'SearchByText',
-                  mobile_number: customerMobileNumber
-                });
-              }
-            } else {
-              setIsError(true);
-              setErrorText(SELECT_STONE_TO_PERFORM_ACTION);
-            }
-          }
-        }}
-        className="w-[39px] h-[39px]"
-      >
-        <Tooltip
-          tooltipTrigger={
-            <button
-              disabled={!rows.length || isDisable}
-              className={`disabled:!bg-neutral100 disabled:cursor-not-allowed disabled:text-neutral400 rounded-[4px] hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm ${'bg-neutral0'}`}
-            >
-              <ShareButtonSvg
-                className={`${
-                  !rows.length || isDisable
-                    ? 'stroke-neutral400'
-                    : 'stroke-neutral900'
-                }`}
+      {isDnaPage ? (
+        <Dropdown
+          dropdownTrigger={
+            <div className="w-[39px] h-[39px]">
+              <Tooltip
+                tooltipTrigger={
+                  <button
+                    className={`disabled:!bg-neutral100 disabled:cursor-not-allowed disabled:text-neutral400 rounded-[4px] hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm ${'bg-neutral0'}`}
+                  >
+                    <ShareButtonSvg className={`${'stroke-neutral900'}`} />
+                  </button>
+                }
+                tooltipContent={'Share'}
+                tooltipContentStyles={'z-[1000]'}
               />
-            </button>
+              {/* <Image src={shareButtonSvg} alt={'share'} width={38} height={38} /> */}
+            </div>
           }
-          tooltipContent={'Share'}
-          tooltipContentStyles={'z-[1000]'}
+          dropdownMenu={[
+            {
+              label: 'Share Diamond Detail',
+              handler: () => {
+                if (Object.keys(selectedProducts).length > 0) {
+                  setIsError(false);
+                  setErrorText('');
+                  setIsInputDialogOpen(true);
+                  if (
+                    dynamicTrackIdentifier === dashboardIndentifier ||
+                    dynamicTrackIdentifier === 'dashboardSearchResult'
+                  ) {
+                    trackEvent({
+                      action:
+                        dynamicTrackIdentifier === 'dashboardSearchResult'
+                          ? Tracking_Search_By_Text.click_share_result_page
+                          : Tracking_Search_By_Text.click_share_dna_page,
+                      category: 'SearchByText',
+                      mobile_number: customerMobileNumber
+                    });
+                  }
+                } else {
+                  setIsError(true);
+                  setErrorText(SELECT_STONE_TO_PERFORM_ACTION);
+                }
+                // handleCreateAppointment();
+              },
+              icon: notepadIcon,
+              isDisable: false
+            },
+            {
+              label: `Email ${
+                shareTrackIdentifier === 'Details'
+                  ? filteredImages[imageIndex]?.name ?? ''
+                  : filteredImages[0][imageIndex].name ?? ''
+              } Link`,
+              handler: () => {
+                if (Object.keys(selectedProducts).length > 0) {
+                  if (shareTrackIdentifier === 'Details') {
+                    // Email subject and body
+                    const emailSubject = 'Check out this link!';
+                    const emailBody = `Here is a link I wanted to share with you: ${filteredImages[imageIndex].downloadUrl}`;
+
+                    // Create mailto URL
+                    const mailtoURL = `mailto:?subject=${encodeURIComponent(
+                      emailSubject
+                    )}&body=${encodeURIComponent(emailBody)}`;
+
+                    // Open the user's default email client
+                    window.location.href = mailtoURL;
+                  } else {
+                    // Filter images based on selected product IDs
+                    const selectedImageLinks = filteredImages
+                      .filter((images: any) =>
+                        Object.keys(selectedProducts).includes(
+                          images[imageIndex].id
+                        )
+                      )
+                      .map((images: any) => images[imageIndex].downloadUrl);
+                    if (selectedImageLinks.length > 0) {
+                      // Email subject and body
+                      const emailSubject = 'Check out these links!';
+                      const emailBody = `Here are the links I wanted to share with you:\n\n${selectedImageLinks.join(
+                        '\n'
+                      )}`;
+
+                      // Create mailto URL
+                      const mailtoURL = `mailto:?subject=${encodeURIComponent(
+                        emailSubject
+                      )}&body=${encodeURIComponent(emailBody)}`;
+
+                      // Open the user's default email client
+                      window.location.href = mailtoURL;
+                    } else {
+                      setIsError(true);
+                      setErrorText('Link not found');
+                    }
+                  }
+                } else {
+                  setIsError(true);
+                  setErrorText(SELECT_STONE_TO_PERFORM_ACTION);
+                }
+              },
+              icon: emailIcon,
+              isDisable:
+                shareTrackIdentifier === 'Details'
+                  ? !filteredImages[imageIndex]?.name
+                  : !filteredImages[0][imageIndex].name
+            },
+            {
+              label: `WhatsApp ${
+                shareTrackIdentifier === 'Details'
+                  ? filteredImages[imageIndex]?.name ?? ''
+                  : filteredImages[0][imageIndex].name ?? ''
+              } Link`,
+              handler: () => {
+                if (Object.keys(selectedProducts).length > 0) {
+                  // Filter images based on selected product IDs
+
+                  if (shareTrackIdentifier === 'Details') {
+                    // Encode the URL for safety
+                    const encodedLink = encodeURIComponent(
+                      filteredImages[imageIndex].downloadUrl
+                    );
+
+                    // Create WhatsApp sharing URL
+                    const whatsappURL = `https://wa.me/?text=${encodedLink}`;
+
+                    // Open WhatsApp in a new tab or window
+                    window.open(whatsappURL, '_blank');
+                  } else {
+                    const selectedImageLinks = filteredImages
+                      .filter((images: any) => {
+                        console.log('images[imageIndex]', images[imageIndex]);
+                        return Object.keys(selectedProducts).includes(
+                          images[imageIndex].id
+                        );
+                      })
+                      .map((images: any) => images[imageIndex].downloadUrl);
+                    if (selectedImageLinks.length > 0) {
+                      // Create a single WhatsApp message with all the links
+                      const message = selectedImageLinks.join('\n'); // Separate links by a newline
+                      const encodedMessage = encodeURIComponent(message);
+
+                      // WhatsApp URL with all links
+                      const whatsappURL = `https://wa.me/?text=${encodedMessage}`;
+
+                      // Open WhatsApp in a new tab or window
+                      window.open(whatsappURL, '_blank');
+                    } else {
+                      setIsError(true);
+                      setErrorText('Link not found');
+                    }
+                  }
+                } else {
+                  setIsError(true);
+                  setErrorText(SELECT_STONE_TO_PERFORM_ACTION);
+                }
+              },
+              icon: whatsappIcon,
+              isDisable:
+                shareTrackIdentifier === 'Details'
+                  ? !filteredImages[imageIndex]?.name
+                  : !filteredImages[0][imageIndex].name
+            }
+          ]}
         />
-        {/* <Image src={shareButtonSvg} alt={'share'} width={38} height={38} /> */}
-      </div>
+      ) : (
+        <div
+          onClick={() => {
+            if (!isDisable || !rows.length) {
+              if (Object.keys(selectedProducts).length > 0) {
+                setIsError(false);
+                setErrorText('');
+                setIsInputDialogOpen(true);
+                if (
+                  dynamicTrackIdentifier === dashboardIndentifier ||
+                  dynamicTrackIdentifier === 'dashboardSearchResult'
+                ) {
+                  trackEvent({
+                    action:
+                      dynamicTrackIdentifier === 'dashboardSearchResult'
+                        ? Tracking_Search_By_Text.click_share_result_page
+                        : Tracking_Search_By_Text.click_share_dna_page,
+                    category: 'SearchByText',
+                    mobile_number: customerMobileNumber
+                  });
+                }
+              } else {
+                setIsError(true);
+                setErrorText(SELECT_STONE_TO_PERFORM_ACTION);
+              }
+            }
+          }}
+          className="w-[39px] h-[39px]"
+        >
+          <Tooltip
+            tooltipTrigger={
+              <button
+                disabled={!rows.length || isDisable}
+                className={`disabled:!bg-neutral100 disabled:cursor-not-allowed disabled:text-neutral400 rounded-[4px] hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm ${'bg-neutral0'}`}
+              >
+                <ShareButtonSvg
+                  className={`${
+                    !rows.length || isDisable
+                      ? 'stroke-neutral400'
+                      : 'stroke-neutral900'
+                  }`}
+                />
+              </button>
+            }
+            tooltipContent={'Share'}
+            tooltipContentStyles={'z-[1000]'}
+          />
+          {/* <Image src={shareButtonSvg} alt={'share'} width={38} height={38} /> */}
+        </div>
+      )}
+
       {/* {copied && <span>Copied!</span>} */}
     </>
   );

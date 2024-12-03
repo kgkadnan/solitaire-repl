@@ -16,6 +16,7 @@ interface IDropdownMenu {
   isHidden?: any;
   commingSoon?: boolean;
   isDisable?: boolean;
+  icon?: any;
 }
 export interface IDropdownData {
   dropdownTrigger: React.ReactNode;
@@ -65,7 +66,14 @@ export const Dropdown: React.FC<IDropdownData> = ({
                 }`}
               >
                 <DropdownMenuLabel>
-                  <div className="flex justify-between items-center">
+                  <div
+                    className={`flex ${
+                      items?.icon ? 'gap-1' : 'justify-between '
+                    } items-center`}
+                  >
+                    {items?.icon && (
+                      <Image src={items?.icon} alt="comming soon" />
+                    )}{' '}
                     {items.label}{' '}
                     {items?.commingSoon && (
                       <Image src={comingSoon} alt="comming soon" />

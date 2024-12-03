@@ -249,8 +249,18 @@ export function MatchPairDetails({
   const filterImageUrl = (tableData: any) => [
     {
       name: getShapeDisplayName(tableData?.shape ?? ''),
-      url: `${FILE_URLS.IMG.replace('***', tableData?.lot_id ?? '')}`,
-      downloadUrl: `${FILE_URLS.IMG.replace('***', tableData?.lot_id ?? '')}`,
+      url: `${FILE_URLS.IMG.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
+      downloadUrl: `${FILE_URLS.IMG.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
       category: 'Image',
       id: tableData?.id
     },
@@ -269,51 +279,122 @@ export function MatchPairDetails({
     },
     {
       name: 'Video',
-      url: `${FILE_URLS.B2B.replace('***', tableData?.lot_id ?? '')}`,
+      url: `${FILE_URLS.B2B.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
+      downloadUrl: `${FILE_URLS.B2B_DOWNLOAD_URL.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
       url_check: tableData?.assets_pre_check?.B2B_CHECK,
-      category: 'Video'
+      category: 'Video',
+      id: tableData?.id
     },
     {
       name: 'Sparkle',
-      url: `${FILE_URLS.B2B_SPARKLE.replace('***', tableData?.lot_id ?? '')}`,
+      url: `${FILE_URLS.B2B_SPARKLE.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
+      downloadUrl: `${FILE_URLS.B2B_SPARKLE_DOWNLOAD_URL.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
       url_check: tableData?.assets_pre_check?.B2B_SPARKLE_CHECK,
-      category: 'Sparkle'
+      category: 'Sparkle',
+      id: tableData?.id
     },
 
     {
       name: 'Heart',
-      url: `${FILE_URLS.HEART.replace('***', tableData?.lot_id ?? '')}`,
-      downloadUrl: `${FILE_URLS.HEART.replace('***', tableData?.lot_id ?? '')}`,
+      url: `${FILE_URLS.HEART.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
+      downloadUrl: `${FILE_URLS.HEART.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
       category: 'Image',
       id: tableData?.id
     },
     {
       name: 'Arrow',
-      url: `${FILE_URLS.ARROW.replace('***', tableData?.lot_id ?? '')}`,
-      downloadUrl: `${FILE_URLS.ARROW.replace('***', tableData?.lot_id ?? '')}`,
+      url: `${FILE_URLS.ARROW.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
+      downloadUrl: `${FILE_URLS.ARROW.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
       category: 'Image',
       id: tableData?.id
     },
     {
       name: 'Aset',
-      url: `${FILE_URLS.ASET.replace('***', tableData?.lot_id ?? '')}`,
-      downloadUrl: `${FILE_URLS.ASET.replace('***', tableData?.lot_id ?? '')}`,
+      url: `${FILE_URLS.ASET.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
+      downloadUrl: `${FILE_URLS.ASET.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
       category: 'Image',
       id: tableData?.id
     },
     {
       name: 'Ideal',
-      url: `${FILE_URLS.IDEAL.replace('***', tableData?.lot_id ?? '')}`,
-      downloadUrl: `${FILE_URLS.IDEAL.replace('***', tableData?.lot_id ?? '')}`,
+      url: `${FILE_URLS.IDEAL.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
+      downloadUrl: `${FILE_URLS.IDEAL.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
       category: 'Image',
       id: tableData?.id
     },
     {
       name: 'Fluorescence',
-      url: `${FILE_URLS.FLUORESCENCE.replace('***', tableData?.lot_id ?? '')}`,
+      url: `${FILE_URLS.FLUORESCENCE.replace(
+        '***',
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
+      )}`,
       downloadUrl: `${FILE_URLS.FLUORESCENCE.replace(
         '***',
-        tableData?.lot_id ?? ''
+        tableData.location === 'USA'
+          ? tableData.memo_out_barcode ?? ''
+          : tableData?.lot_id ?? ''
       )}`,
       category: 'Image',
       id: tableData?.id
@@ -772,53 +853,52 @@ export function MatchPairDetails({
                           </>
                         )}
                       <div className="flex gap-2">
-                        {!(
-                          activePreviewTab === 'Video' ||
-                          activePreviewTab === 'Sparkle'
-                        ) && (
-                          <Tooltip
-                            tooltipTrigger={
-                              <button
-                                onClick={() => {
-                                  filteredImages.forEach((images: any) => {
-                                    if (Object.keys(rowSelection).length > 0) {
-                                      Object.keys(rowSelection).includes(
-                                        images[imageIndex].id
-                                      ) &&
-                                        handleDownloadImage(
-                                          images[imageIndex].downloadUrl || '',
-                                          images[imageIndex].name,
-                                          setIsLoading
-                                        );
-                                    } else {
-                                      setShowToast(true);
-                                    }
-                                  });
-                                }}
-                                disabled={
-                                  !filteredImages[0][imageIndex].downloadUrl
+                        <Tooltip
+                          tooltipTrigger={
+                            <button
+                              onClick={() => {
+                                filteredImages.forEach((images: any) => {
+                                  if (Object.keys(rowSelection).length > 0) {
+                                    Object.keys(rowSelection).includes(
+                                      images[imageIndex].id
+                                    ) &&
+                                      handleDownloadImage(
+                                        images[imageIndex].downloadUrl || '',
+                                        images[imageIndex].name,
+                                        setIsLoading
+                                      );
+                                  } else {
+                                    setShowToast(true);
+                                  }
+                                });
+                              }}
+                              disabled={
+                                !filteredImages[0][imageIndex].downloadUrl
+                                  ?.length
+                              }
+                              className={`rounded-[4px] bg-neutral0 disabled:!bg-neutral100 disabled:cursor-not-allowed hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm`}
+                            >
+                              <DownloadImg
+                                className={`stroke-[1.5] ${
+                                  filteredImages[0][imageIndex].downloadUrl
                                     ?.length
-                                }
-                                className={`rounded-[4px] bg-neutral0 disabled:!bg-neutral100 disabled:cursor-not-allowed hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm`}
-                              >
-                                <DownloadImg
-                                  className={`stroke-[1.5] ${
-                                    filteredImages[0][imageIndex].downloadUrl
-                                      ?.length
-                                      ? 'stroke-neutral900'
-                                      : 'stroke-neutral400'
-                                  }`}
-                                />
-                              </button>
-                            }
-                            tooltipContent={
-                              activePreviewTab === 'Certificate'
-                                ? 'Download Certificate'
-                                : 'Download Image'
-                            }
-                            tooltipContentStyles={'z-[1000]'}
-                          />
-                        )}
+                                    ? 'stroke-neutral900'
+                                    : 'stroke-neutral400'
+                                }`}
+                              />
+                            </button>
+                          }
+                          tooltipContent={
+                            activePreviewTab === 'Video'
+                              ? 'Download Video'
+                              : activePreviewTab === 'Sparkle'
+                              ? 'Download Sparkle'
+                              : activePreviewTab === 'Certificate'
+                              ? 'Download Certificate'
+                              : 'Download Image'
+                          }
+                          tooltipContentStyles={'z-[1000]'}
+                        />
                       </div>
                     </div>
                   ) : (
@@ -850,6 +930,9 @@ export function MatchPairDetails({
                       setErrorText={setErrorText}
                       identifier={breadCrumLabel}
                       shareTrackIdentifier="Match Pair Details"
+                      isDnaPage={true}
+                      imageIndex={imageIndex}
+                      filteredImages={filteredImages}
                     />
                   </div>
                 </div>
@@ -866,7 +949,7 @@ export function MatchPairDetails({
                   className={`${
                     originalData.length > 2
                       ? // ? originalData.length > 5
-                        'h-[370px] '
+                        'h-[400px] '
                       : // : 'h-[370px]  '
                         'h-[420px]'
                   }  items-center flex px-4 border-[0.5px] border-neutral200 bg-neutral50`}
@@ -896,7 +979,7 @@ export function MatchPairDetails({
                       ? // originalData.length > 5
                         //   ? 'h-[360px] '
                         //   :
-                        'h-[370px] '
+                        'h-[400px] '
                       : 'h-[420px]'
                   } `}
                 >
@@ -920,7 +1003,7 @@ export function MatchPairDetails({
                               ? // originalData.length > 5
                                 //   ? 'h-[360px]'
                                 //   :
-                                'h-[370px]'
+                                'h-[400px]'
                               : 'h-[420px]'
                           } flex flex-col justify-between border-[0.5px]  border-neutral200 bg-neutral0 p-2 ${
                             originalData.length > 2 ? 'gap-[4px]' : 'gap-[6px]'
@@ -1093,67 +1176,70 @@ export function MatchPairDetails({
                               />
                             )}
                           </div>
-                          <div className="flex justify-center items-center">
-                            {!imageLoadingStatus[index] ? (
-                              <div className="text-mRegular font-medium text-neutral900">
-                                {filteredImages[index][imageIndex].name ?? '-'}
-                              </div>
-                            ) : (
+                          <div className="flex flex-col gap-2">
+                            <div className="flex justify-center items-center">
+                              {!imageLoadingStatus[index] ? (
+                                <div className="text-mRegular font-medium text-neutral900">
+                                  {filteredImages[index][imageIndex].name ??
+                                    '-'}
+                                </div>
+                              ) : (
+                                <div>
+                                  <Skeleton
+                                    width={88}
+                                    variant="rectangular"
+                                    height={20}
+                                    animation="wave"
+                                    sx={{ bgcolor: 'var(--neutral-200)' }}
+                                  />
+                                </div>
+                              )}
+                            </div>
+                            <div className="flex justify-between">
                               <div>
-                                <Skeleton
-                                  width={88}
-                                  variant="rectangular"
-                                  height={20}
-                                  animation="wave"
-                                  sx={{ bgcolor: 'var(--neutral-200)' }}
+                                <CheckboxComponent
+                                  onClick={() => handleClick(items.id)}
+                                  data-testid={'compare stone checkbox'}
+                                  isChecked={
+                                    Object.keys(rowSelection).includes(
+                                      items.id
+                                    ) || false
+                                  }
                                 />
                               </div>
-                            )}
-                          </div>
-                          <div className="flex justify-between">
-                            <div>
-                              <CheckboxComponent
-                                onClick={() => handleClick(items.id)}
-                                data-testid={'compare stone checkbox'}
-                                isChecked={
-                                  Object.keys(rowSelection).includes(
-                                    items.id
-                                  ) || false
-                                }
-                              />
-                            </div>
-                            <div>
-                              <button
-                                onClick={e => {
-                                  e.stopPropagation();
-                                  handleDetailImage({
-                                    row: items,
-                                    activePreviewTab
-                                  });
-                                }}
-                              >
-                                <Media
-                                  className={`stroke-[1.5] stroke-neutral900
+                              <div>
+                                <button
+                                  onClick={e => {
+                                    e.stopPropagation();
+                                    handleDetailImage({
+                                      row: items,
+                                      activePreviewTab
+                                    });
+                                  }}
+                                >
+                                  <Media
+                                    className={`stroke-[1.5] stroke-neutral900
                            `}
+                                  />
+                                </button>
+                              </div>
+                              <div
+                                className={`${styles.closeButton} cursor-pointer`}
+                                data-testid={'Remove Stone'}
+                                onClick={event =>
+                                  originalData.length > 2
+                                    ? handleClose(event, items.id)
+                                    : (setShowToast(true),
+                                      setErrorText(SELECT_STONES))
+                                }
+                              >
+                                <Image
+                                  src={CloseButton}
+                                  alt="Preview"
+                                  height={24}
+                                  width={24}
                                 />
-                              </button>
-                            </div>
-                            <div
-                              className={`${styles.closeButton} cursor-pointer`}
-                              data-testid={'Remove Stone'}
-                              onClick={event =>
-                                originalData.length > 2
-                                  ? handleClose(event, items.id)
-                                  : (setShowToast(true),
-                                    setErrorText(SELECT_STONES))
-                              }
-                            >
-                              <Image
-                                src={CloseButton}
-                                alt="Preview"
-                                height={24}
-                                width={24}
-                              />
+                              </div>
                             </div>
                           </div>
                         </div>
