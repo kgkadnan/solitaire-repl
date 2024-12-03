@@ -375,7 +375,15 @@ const ImagePreview: React.FC<IImagePreviewProps> = ({
                       />
                     </button>
                   }
-                  tooltipContent={'Media Link'}
+                  tooltipContent={
+                    activePreviewTab === 'Video'
+                      ? 'Video Link'
+                      : activePreviewTab === 'Sparkle'
+                      ? 'Sparkle Link'
+                      : activePreviewTab === 'Certificate'
+                      ? 'Certificate Link'
+                      : 'Image Link'
+                  }
                   tooltipContentStyles={'z-[2000]'}
                 />
 
