@@ -215,8 +215,12 @@ const TopNavigationBar = ({
             <ActionButton
               actionButtonData={[
                 {
-                  variant: 'primary',
-                  label: isNotified ? 'Notified Sales' : 'Notify Sales',
+                  variant: 'secondary',
+                  label:
+                    customerData?.customer?.notifySales !== 'Available' ||
+                    isNotified
+                      ? 'Notified Sales'
+                      : 'Notify Sales',
                   handler: () => {
                     handleNotifySales();
                   },
@@ -226,7 +230,7 @@ const TopNavigationBar = ({
                   customStyle: ''
                 },
                 {
-                  variant: 'secondary',
+                  variant: 'primary',
                   label: 'Complete KYC Now',
                   handler: () => {
                     localStorage.setItem(
