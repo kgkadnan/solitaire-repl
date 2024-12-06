@@ -1433,7 +1433,8 @@ const MatchingPairResult = ({
             ''
           ) : hasLimitExceeded ? (
             ''
-          ) : isSkeletonLoading ||
+          ) : isProductFetching ||
+            isSkeletonLoading ||
             isLoading ||
             (matchingPairData === undefined && !countLimitReached) ? (
             <Skeleton

@@ -447,7 +447,7 @@ const Share = ({
           }
           dropdownMenu={[
             {
-              label: 'Share Diamond Detail',
+              label: 'Share Diamond Details',
               handler: () => {
                 if (Object.keys(selectedProducts).length > 0) {
                   setIsError(false);
