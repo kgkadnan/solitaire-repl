@@ -161,9 +161,6 @@ const theme = createTheme({
   }
 });
 
-export interface IBidValues {
-  [key: string]: number;
-}
 const BidToBuyDataTable = ({
   columns,
   modalSetState,
@@ -190,7 +187,8 @@ const BidToBuyDataTable = ({
   setIsSkeletonLoading,
   isTabSwitch,
   setIsTabSwitch,
-
+  setBidValues,
+  bidValues,
   setActiveBid, // searchUrl
   isInActive
 }: any) => {
@@ -202,7 +200,7 @@ const BidToBuyDataTable = ({
 
   const [pagination, setPagination] = useState({
     pageIndex: 0,
-    pageSize: parseInt(localStorage.getItem("pageSize") ?? "20")  //customize the default page size
+    pageSize: parseInt(localStorage.getItem('pageSize') ?? '20') //customize the default page size
   });
   const [paginatedData, setPaginatedData] = useState<any>([]);
   const [globalFilter, setGlobalFilter] = useState('');
@@ -331,7 +329,6 @@ const BidToBuyDataTable = ({
     });
   };
 
-  const [bidValues, setBidValues] = useState<IBidValues>({});
   const [columnOrder] = useState(
     [
       'mrt-row-select',
@@ -785,9 +782,10 @@ const BidToBuyDataTable = ({
     renderEmptyRowsFallback: NoResultsComponent,
     manualPagination: true,
     rowCount: rows.length,
-    onPaginationChange: (updater) => {
-      setPagination((prevState) => {
-        const newState = typeof updater === 'function' ? updater(prevState) : updater;
+    onPaginationChange: updater => {
+      setPagination(prevState => {
+        const newState =
+          typeof updater === 'function' ? updater(prevState) : updater;
         localStorage.setItem('pageSize', JSON.stringify(newState.pageSize));
         return newState;
       });
@@ -1336,6 +1334,17 @@ const BidToBuyDataTable = ({
                                       setBid(response?.bidStone);
                                       setActiveBid(response?.activeStone);
                                       setIsLoading(false);
+
+                                      // const storedValue = JSON.parse(
+                                      //   localStorage.getItem('is_first_bid')!
+                                      // );
+                                      // // Set `is_first_bid` to true when the bid for the first time
+                                      // if (!storedValue) {
+                                      //   localStorage.setItem(
+                                      //     'is_first_bid',
+                                      //     JSON.stringify(true)
+                                      //   );
+                                      // }
                                     })
                                     .catch(e => {
                                       setIsLoading(false);
