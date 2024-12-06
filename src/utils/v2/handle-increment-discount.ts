@@ -1,4 +1,4 @@
-import { IBidValues } from '@/app/v2/bid-2-buy/components/data-table';
+import { IBidValues } from '@/app/v2/bid-2-buy/page';
 
 export const handleIncrementDiscount = (
   rowId: string,
