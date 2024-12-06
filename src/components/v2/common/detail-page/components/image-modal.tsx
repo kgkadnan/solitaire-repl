@@ -3,6 +3,10 @@ import React, { useEffect, useState } from 'react';
 import noImageFound from '@public/v2/assets/icons/detail-page/fall-back-img.svg';
 import closeSvg from '@public/v2/assets/icons/detail-page/close.svg';
 import { Toast } from '../../copy-and-share/toast';
+import whatsappIcon from '@public/v2/assets/icons/detail-page/whatsapp.svg';
+import emailIcon from '@public/v2/assets/icons/detail-page/email.svg';
+
+import ShareButtonSvg from '@public/v2/assets/icons/data-table/share-button.svg?url';
 import Tooltip from '../../tooltip';
 import { handleDownloadImage } from '@/utils/v2/detail-page';
 import { IImagesType } from '../interface';
@@ -16,6 +20,7 @@ import { Skeleton } from '@mui/material';
 import DetailPageTabs from './tabs';
 import { Tracking_Search_By_Text } from '@/constants/funnel-tracking';
 import { trackEvent } from '@/utils/ga';
+import { Dropdown } from '../../dropdown-menu';
 
 interface IModalProps {
   isOpen: boolean;
@@ -385,7 +390,7 @@ const ImageModal: React.FC<IModalProps> = ({
                           <div className="border-r-[1px] h-[40px] border-neutral200"></div>
                         </>
                       )}
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 ">
                       <Tooltip
                         tooltipTrigger={
                           <button
@@ -456,6 +461,68 @@ const ImageModal: React.FC<IModalProps> = ({
                             : 'Image Link'
                         }
                         tooltipContentStyles={'z-[2000]'}
+                      />
+
+                      <Dropdown
+                        dropdownTrigger={
+                          <div className="w-[39px] h-[39px]">
+                            <Tooltip
+                              tooltipTrigger={
+                                <button
+                                  className={`disabled:!bg-neutral100 disabled:cursor-not-allowed disabled:text-neutral400 rounded-[4px] hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm ${'bg-neutral0'}`}
+                                >
+                                  <ShareButtonSvg
+                                    className={`${'stroke-neutral900'}`}
+                                  />
+                                </button>
+                              }
+                              tooltipContent={'Share'}
+                              tooltipContentStyles={'z-[1000]'}
+                            />
+                            {/* <Image src={shareButtonSvg} alt={'share'} width={38} height={38} /> */}
+                          </div>
+                        }
+                        dropdownMenu={[
+                          {
+                            label: `Email ${
+                              filteredImages[imageIndex]?.name ?? ''
+                            } Link`,
+                            handler: () => {
+                              // Email subject and body
+                              const emailSubject = 'Check out this link!';
+                              const emailBody = `Here is a link I wanted to share with you: ${filteredImages[imageIndex].downloadUrl}`;
+
+                              // Create mailto URL
+                              const mailtoURL = `mailto:?subject=${encodeURIComponent(
+                                emailSubject
+                              )}&body=${encodeURIComponent(emailBody)}`;
+
+                              // Open the user's default email client
+                              window.location.href = mailtoURL;
+                            },
+                            icon: emailIcon,
+                            isDisable: !(filteredImages.length > 0)
+                          },
+                          {
+                            label: `WhatsApp ${
+                              filteredImages[imageIndex].name ?? ''
+                            } Link`,
+                            handler: () => {
+                              // Encode the URL for safety
+                              const encodedLink = encodeURIComponent(
+                                filteredImages[imageIndex].downloadUrl ?? ''
+                              );
+
+                              // Create WhatsApp sharing URL
+                              const whatsappURL = `https://wa.me/?text=${encodedLink}`;
+
+                              // Open WhatsApp in a new tab or window
+                              window.open(whatsappURL, '_blank');
+                            },
+                            icon: whatsappIcon,
+                            isDisable: !(filteredImages.length > 0)
+                          }
+                        ]}
                       />
                     </div>
                   </div>

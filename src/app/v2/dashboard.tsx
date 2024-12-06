@@ -190,6 +190,9 @@ const Dashboard = () => {
   const [isDiamondDetail, setIsDiamondDetail] = useState(false);
   const [isDiamondDetailLoading, setIsDiamondDetailLoading] = useState(true); //
 
+  const [isSomeStoneNotFoundShowed, setIsSomeStoneNotFoundShowed] =
+    useState(false);
+
   const [isGemTrac, setIsGemTrac] = useState(false);
   const [gemTracData, setGemTracData] = useState([]);
 
@@ -285,8 +288,12 @@ const Dashboard = () => {
       : [];
   }, [searchData?.foundProducts]);
   useEffect(() => {
-    if (searchData?.notFoundKeywords?.length > 0 && !showOnlyWithVideo) {
+    if (
+      searchData?.notFoundKeywords?.length > 0 &&
+      !isSomeStoneNotFoundShowed
+    ) {
       setError('Some stones are not available');
+      setIsSomeStoneNotFoundShowed(true);
     }
   }, [searchData?.notFoundKeywords]);
   useEffect(() => {
@@ -2194,6 +2201,7 @@ const Dashboard = () => {
                 onClick={() => {
                   setIsDetailPage(false);
                   setShowEmptyState(false);
+                  setIsSomeStoneNotFoundShowed(false);
                   setSorting([]);
                   setRowSelection({});
                   setShowOnlyWithVideo(false);
@@ -2211,6 +2219,7 @@ const Dashboard = () => {
                   onClick={() => {
                     setIsDetailPage(false);
                     setShowEmptyState(false);
+                    setIsSomeStoneNotFoundShowed(false);
                     setSorting([]);
                     setRowSelection({});
                     setShowOnlyWithVideo(false);

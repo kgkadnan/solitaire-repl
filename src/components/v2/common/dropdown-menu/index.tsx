@@ -41,7 +41,7 @@ export const Dropdown: React.FC<IDropdownData> = ({
       </DropdownMenuTrigger>
       {isDropdownOpen && (
         <DropdownMenuContent
-          className={`border-[1px] items-center border-solid border-neutral200  text-neutral900 rounded-[8px] relative `}
+          className={`border-[1px] z-[2000] items-center border-solid border-neutral200  text-neutral900 rounded-[8px] relative `}
         >
           {dropdownMenu.map(items => {
             if (items.isHidden) {
