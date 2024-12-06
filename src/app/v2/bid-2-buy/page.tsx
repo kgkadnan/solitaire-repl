@@ -69,6 +69,10 @@ import {
 import GemTracPage from '@/components/v2/common/gem-trac';
 import { useLazyGetGemTracQuery } from '@/features/api/gem-trac';
 
+export interface IBidValues {
+  [key: string]: number;
+}
+
 const BidToBuy = () => {
   const router = useRouter();
 
@@ -86,6 +90,8 @@ const BidToBuy = () => {
   const [searchLoading, setSearchLoading] = useState(false);
   const [isSkeletonLoading, setIsSkeletonLoading] = useState(true);
   const [isTabSwitch, setIsTabSwitch] = useState(false); // State to track
+
+  const [bidValues, setBidValues] = useState<IBidValues>({});
 
   // const [checkStatus, setCheckStatus] = useState(false);
   const [isGemTrac, setIsGemTrac] = useState(false);
@@ -478,6 +484,16 @@ const BidToBuy = () => {
                                       setBid(response?.bidStone);
                                       setActiveBid(response?.activeStone);
                                       setIsLoading(false);
+                                      setBidValues((prevValues: any) => {
+                                        // Create a new object excluding keys in rowSelection
+                                        const updatedValues = { ...prevValues };
+                                        Object.keys(rowSelection).forEach(
+                                          key => {
+                                            delete updatedValues[key]; // Remove the key from the state
+                                          }
+                                        );
+                                        return updatedValues;
+                                      });
                                     })
                                     .catch(e => {
                                       setIsLoading(false);
@@ -916,6 +932,8 @@ const BidToBuy = () => {
                     setIsSkeletonLoading={setIsSkeletonLoading}
                     isLoading={isLoading}
                     isInActive={isInActive}
+                    setBidValues={setBidValues}
+                    bidValues={bidValues}
                     // searchUrl={searchUrl}
                   />
                 </div>
