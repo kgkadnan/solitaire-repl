@@ -216,7 +216,11 @@ const TopNavigationBar = ({
               actionButtonData={[
                 {
                   variant: 'primary',
-                  label: isNotified ? 'Notified Sales' : 'Notify Sales',
+                  label:
+                    customerData?.customer?.notifySales !== 'Available' ||
+                    isNotified
+                      ? 'Notified Sales'
+                      : 'Notify Sales',
                   handler: () => {
                     handleNotifySales();
                   },
