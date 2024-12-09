@@ -1336,13 +1336,47 @@ const BidToBuyDataTable = ({
                                       setIsLoading(false);
 
                                       const storedValue = JSON.parse(
-                                        localStorage.getItem('is_first_bid')!
+                                        localStorage.getItem('user_bid_states')!
                                       );
-                                      // Set `is_first_bid` to true when the bid for the first time
+                                      const userData = JSON.parse(
+                                        localStorage.getItem('user')!
+                                      );
+
                                       if (!storedValue) {
+                                        // If the user doesn't exist, add the new user
+                                        const newUser = [
+                                          {
+                                            phone: userData.customer.phone
+                                          }
+                                        ];
+
                                         localStorage.setItem(
-                                          'is_first_bid',
-                                          JSON.stringify(true)
+                                          'user_bid_states',
+                                          JSON.stringify(newUser)
+                                        );
+                                      } else {
+                                        // Check if the user already exists
+                                        const isUserAlreadyExist =
+                                          storedValue?.find(
+                                            (user: any) =>
+                                              user?.phone ===
+                                              userData.customer.phone
+                                          );
+
+                                        if (isUserAlreadyExist) return;
+
+                                        // If the user doesn't exist, add the new user
+                                        const newUser = {
+                                          phone: userData.customer.phone
+                                        };
+                                        const updatedUserBidStates = [
+                                          ...storedValue,
+                                          newUser
+                                        ];
+
+                                        localStorage.setItem(
+                                          'user_bid_states',
+                                          JSON.stringify(updatedUserBidStates)
                                         );
                                       }
                                     })
