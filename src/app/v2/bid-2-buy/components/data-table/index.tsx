@@ -1335,16 +1335,16 @@ const BidToBuyDataTable = ({
                                       setActiveBid(response?.activeStone);
                                       setIsLoading(false);
 
-                                      // const storedValue = JSON.parse(
-                                      //   localStorage.getItem('is_first_bid')!
-                                      // );
-                                      // // Set `is_first_bid` to true when the bid for the first time
-                                      // if (!storedValue) {
-                                      //   localStorage.setItem(
-                                      //     'is_first_bid',
-                                      //     JSON.stringify(true)
-                                      //   );
-                                      // }
+                                      const storedValue = JSON.parse(
+                                        localStorage.getItem('is_first_bid')!
+                                      );
+                                      // Set `is_first_bid` to true when the bid for the first time
+                                      if (!storedValue) {
+                                        localStorage.setItem(
+                                          'is_first_bid',
+                                          JSON.stringify(true)
+                                        );
+                                      }
                                     })
                                     .catch(e => {
                                       setIsLoading(false);

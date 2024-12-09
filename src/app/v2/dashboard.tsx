@@ -24,6 +24,8 @@ import {
   useGetProductByIdMutation,
   useLazyGetProductCountQuery
 } from '@/features/api/product';
+import chevronDown from '@public/v2/assets/icons/dashboard/chevron-down.svg';
+import chevronUp from '@public/v2/assets/icons/dashboard/chevron-up.svg';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import { formatCreatedAt } from '@/utils/format-date';
 import { DisplayTable } from '@/components/v2/common/display-table';
@@ -122,6 +124,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import GemTracPage from '@/components/v2/common/gem-trac';
 import { useLazyGetGemTracQuery } from '@/features/api/gem-trac';
+import { IndividualActionButton } from '@/components/v2/common/action-button/individual-button';
+import { cardo } from '../layout';
 
 interface ITabs {
   label: string;
@@ -225,6 +229,11 @@ const Dashboard = () => {
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   const { errorSetState } = useErrorStateManagement();
   const { setIsError } = errorSetState;
+  const [isBottomSheetOpen, setBottomSheetOpen] = useState(false);
+
+  const toggleBottomSheet = () => {
+    setBottomSheetOpen(prev => !prev);
+  };
 
   const options = [
     {
@@ -2743,7 +2752,9 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
-          <div className="border-t-[1px] mt-auto border-l-[1px] border-r-[1px] rounded-[8px] p-4 flex justify-between border-neutral200 text-lRegular">
+          <div
+            className={`  border-t-[1px] mt-auto border-l-[1px] border-r-[1px] rounded-[8px] p-4 flex justify-between border-neutral200 text-lRegular`}
+          >
             {/* for fixed footer */}
             {/* fixed bottom-0 left-[84px] right-0 bg-white  */}
             <div className="text-infoMain  flex gap-6 cursor-pointer">
@@ -2767,6 +2778,90 @@ const Dashboard = () => {
               reserved.
             </p>
           </div>
+          {!JSON.parse(localStorage.getItem('is_first_bid')!) &&
+            !customerData?.customer?.bid_to_buy?.starts_at &&
+            customerData?.customer?.bid_to_buy?.count > 0 && (
+              <div className="h-4">..</div>
+            )}
+          {!JSON.parse(localStorage.getItem('is_first_bid')!) &&
+            !customerData?.customer?.bid_to_buy?.starts_at &&
+            customerData?.customer?.bid_to_buy?.count > 0 && (
+              <div className={` relative`}>
+                {/* Footer */}
+                <div
+                  className={`bg-neutral50 flex items-center border-neutral200 border-[1px] border-solid rounded-t-[4px] px-4 py-1 fixed bottom-0 left-[100px] z-50 w-full max-w-[1209px] mx-auto transition-transform duration-300 ${
+                    isBottomSheetOpen ? 'translate-y-[-274px]' : ''
+                  }`}
+                  style={{
+                    boxShadow: '0px -16px 14px 0px hsla(0, 0%, 48%, 0.1)'
+                  }}
+                >
+                  {/* Content Section */}
+                  <div className="flex items-center gap-2 flex-grow justify-center">
+                    <Image
+                      src={BidHammer}
+                      alt="BidHammer"
+                      className="h-[20px]"
+                    />
+                    <div className="text-neutral900 text-[500]">
+                      <span className="font-bold">Bid to Buy</span> - Monthly
+                      Opportunity to Secure Diamonds at Exclusive Prices!
+                    </div>
+                  </div>
+
+                  {/* Chevron Button */}
+                  <div onClick={toggleBottomSheet} className="cursor-pointer">
+                    <Image
+                      src={isBottomSheetOpen ? chevronUp : chevronDown}
+                      alt="Chevron"
+                    />
+                  </div>
+                </div>
+
+                {/* Bottom Sheet */}
+                <div
+                  className={` fixed bottom-0 left-[100px] right-0 z-40 bg-neutral25 border-solid border-[1px] border-t-0 border-neutral200 p-4 max-h-[293px] max-w-[1209px] overflow-y-auto shadow-lg transition-transform duration-300 ${
+                    isBottomSheetOpen ? 'translate-y-0' : 'translate-y-[100%]'
+                  }`}
+                >
+                  <div className="text-center py-[7px]">
+                    {/* Centered Text Container */}
+                    <div className="max-w-[700px] mx-auto">
+                      <h3
+                        className={`${cardo.className} text-[24px] font-normal`}
+                      >
+                        Bid Upto{' '}
+                        <span className="text-[28px] font-bold">5%</span> EXTRA
+                        off on P/cts value!
+                      </h3>
+                      <h1
+                        className={`${cardo.className} text-neutral900 text-headingXL font-medium `}
+                      >
+                        Bid To Buy
+                      </h1>
+                      <p className="text-neutral900 text-mRegular font-normal pb-3">
+                        Every month, we offer you the chance to bid on selected
+                        diamonds, available at prices up to 5% cheaper than
+                        usual. Browse the stones, place your bids, and secure
+                        the best deals on the market. Track your active bids and
+                        review bid history to stay informed and take advantage
+                        of this exclusive monthly event!
+                      </p>
+                      <IndividualActionButton
+                        onClick={() => {
+                          router.push('/v2/bid-2-buy');
+                        }}
+                        variant={'primary'}
+                        size={'custom'}
+                        className={`${cardo.className} rounded-[4px] w-[207px] h-[56px] z-[1]`}
+                      >
+                        BID NOW
+                      </IndividualActionButton>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
         </div>
       )}
     </>
