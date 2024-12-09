@@ -1915,6 +1915,12 @@ const Dashboard = () => {
     }
   };
 
+  const storedValue = JSON.parse(localStorage.getItem('user_bid_states')!);
+
+  const isPhoneExist = storedValue?.find(
+    (user: any) => user.phone === customerData?.customer.phone
+  );
+
   return (
     <>
       {error !== '' && (
@@ -2778,12 +2784,12 @@ const Dashboard = () => {
               reserved.
             </p>
           </div>
-          {!JSON.parse(localStorage.getItem('is_first_bid')!) &&
+          {!isPhoneExist &&
             !customerData?.customer?.bid_to_buy?.starts_at &&
             customerData?.customer?.bid_to_buy?.count > 0 && (
               <div className="h-4">..</div>
             )}
-          {!JSON.parse(localStorage.getItem('is_first_bid')!) &&
+          {!isPhoneExist &&
             !customerData?.customer?.bid_to_buy?.starts_at &&
             customerData?.customer?.bid_to_buy?.count > 0 && (
               <div className={` relative`}>
