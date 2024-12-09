@@ -2789,7 +2789,7 @@ const Dashboard = () => {
               <div className={` relative`}>
                 {/* Footer */}
                 <div
-                  className={`bg-neutral50 flex items-center border-neutral200 border-[1px] border-solid rounded-t-[4px] px-4 py-1 fixed bottom-0 left-[100px] z-50 w-full max-w-[1209px] mx-auto transition-transform duration-300 ${
+                  className={`bg-neutral50 flex items-center border-neutral200 border-[1px] border-solid rounded-t-[4px] px-4 py-1 fixed bottom-0 left-[100px] z-50  w-[calc(100vw-118px)] mx-auto transition-transform duration-300 ${
                     isBottomSheetOpen ? 'translate-y-[-274px]' : ''
                   }`}
                   style={{
@@ -2820,7 +2820,7 @@ const Dashboard = () => {
 
                 {/* Bottom Sheet */}
                 <div
-                  className={` fixed bottom-0 left-[100px] right-0 z-40 bg-neutral25 border-solid border-[1px] border-t-0 border-neutral200 p-4 max-h-[293px] max-w-[1209px] overflow-y-auto shadow-lg transition-transform duration-300 ${
+                  className={` fixed bottom-0 left-[100px] right-0 z-40 bg-neutral25 border-solid border-[1px] border-t-0 border-neutral200 p-4 max-h-[293px] w-[calc(100vw-118px)] overflow-y-auto shadow-lg transition-transform duration-300 ${
                     isBottomSheetOpen ? 'translate-y-0' : 'translate-y-[100%]'
                   }`}
                 >
