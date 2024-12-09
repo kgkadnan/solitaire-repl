@@ -2785,11 +2785,13 @@ const Dashboard = () => {
             </p>
           </div>
           {!isPhoneExist &&
+            isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED &&
             !customerData?.customer?.bid_to_buy?.starts_at &&
             customerData?.customer?.bid_to_buy?.count > 0 && (
               <div className="h-4">..</div>
             )}
           {!isPhoneExist &&
+            isKycVerified?.customer?.kyc?.status === kycStatus.APPROVED &&
             !customerData?.customer?.bid_to_buy?.starts_at &&
             customerData?.customer?.bid_to_buy?.count > 0 && (
               <div className={` relative`}>
