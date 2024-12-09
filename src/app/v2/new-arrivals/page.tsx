@@ -1,5 +1,11 @@
 'use client';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
 import NewArrivalDataTable from './components/data-table';
 import {
   RenderCarat,
@@ -392,16 +398,25 @@ const NewArrivals = () => {
 
           setActiveBid(allProducts.activeStone);
           if (currentFilterData?.queryParams) {
-            let filteredData =  filterBidData(allProducts.bidStone, currentFilterData.queryParams);
-            dispatch(
-              filterFunction({
-                bidData: allProducts.bidStone,
-                queryParams: currentFilterData.queryParams,
-                bidFilterData: filteredData
-              })
+            let filteredData = filterBidData(
+              allProducts.bidStone,
+              currentFilterData.queryParams
             );
 
-            setBid(filteredData);
+            if (filteredData.length > 0) {
+              dispatch(
+                filterFunction({
+                  bidData: allProducts.bidStone,
+                  queryParams: currentFilterData.queryParams,
+                  bidFilterData: filteredData
+                })
+              );
+
+              setBid(filteredData);
+            } else {
+              dispatch(filterFunction({}));
+              setBid(allProducts.bidStone);
+            }
           } else {
             setBid(allProducts.bidStone);
           }
@@ -692,13 +707,13 @@ const NewArrivals = () => {
                             handler: () => {
                               socketManager.emit('cancel_bid', {
                                 product_ids: Object.keys(rowSelection)
-                               });
-                               setBidValues((prevValues: any) => {
+                              });
+                              setBidValues((prevValues: any) => {
                                 // Create a new object excluding keys in rowSelection
                                 const updatedValues = { ...prevValues };
-                                Object.keys(rowSelection).forEach((key) => {
+                                Object.keys(rowSelection).forEach(key => {
                                   delete updatedValues[key]; // Remove the key from the state
-                                });                              
+                                });
                                 return updatedValues;
                               });
                             },
