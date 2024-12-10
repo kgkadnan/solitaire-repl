@@ -305,6 +305,18 @@ const Form = ({
     isAllowedToUnloadRef.current = isAllowedToUnload;
   }, [isAllowedToUnload]);
 
+  // Reset form when a new search is initiated
+  useEffect(() => {
+    if (
+      subRoute === SubRoutes.NEW_SEARCH ||
+      (subRoute === SubRoutes.NEW_ARRIVAL &&
+        !newArrivalFilterData.queryParams) ||
+      (subRoute === SubRoutes.BID_TO_BUY && !bidToBuyFilterData.queryParams)
+    ) {
+      handleFormReset();
+    }
+  }, [subRoute]);
+
   useEffect(() => {
     const handleBeforeUnload = async () => {
       if (isAllowedToUnloadRef.current && startTime && !endTime) {
@@ -547,17 +559,6 @@ const Form = ({
     }
   }, []);
 
-  // Reset form when a new search is initiated
-  useEffect(() => {
-    if (
-      subRoute === SubRoutes.NEW_SEARCH ||
-      (subRoute === SubRoutes.NEW_ARRIVAL &&
-        !newArrivalFilterData.queryParams) ||
-      (subRoute === SubRoutes.BID_TO_BUY && !bidToBuyFilterData.queryParams)
-    ) {
-      handleFormReset();
-    }
-  }, [subRoute]);
   useEffect(() => {
     if (isTurkey) {
       let queryData = constructUrlParams(queryParamsData.queryParams);
@@ -1336,6 +1337,7 @@ const Form = ({
       </>
     );
   };
+
   return (
     <div className=" flex flex-col gap-[24px]">
       <InputDialogComponent
