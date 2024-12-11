@@ -51,7 +51,7 @@ import { filterBidToBuyFunction } from '@/features/filter-bid-to-buy/filter-bid-
 import useValidationStateManagement from '../search/hooks/validation-state-management';
 import useFormStateManagement from '../search/form/hooks/form-state';
 import Form from '../search/form/form';
-import { SubRoutes } from '@/constants/v2/enums/routes';
+import { MatchRoutes, SubRoutes } from '@/constants/v2/enums/routes';
 import useNumericFieldValidation from '../search/form/hooks/numeric-field-validation-management';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import pako from 'pako';
@@ -105,8 +105,9 @@ const BidToBuy = () => {
 
   const subRoute = useSearchParams().get('active-tab');
   const handleDetailPage = ({ row }: { row: any }) => {
-    setIsDetailPage(true);
-    setDetailPageData(row);
+    router.push(
+      `/v2/${SubRoutes.Diamond_Detail}?path=${MatchRoutes.BID_TO_BUY}&stoneid=${row?.lot_id}`
+    );
   };
 
   const handleDetailImage = ({ row }: any) => {
