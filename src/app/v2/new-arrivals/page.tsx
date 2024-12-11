@@ -124,7 +124,7 @@ const NewArrivals = () => {
 
   const handleDetailPage = ({ row }: { row: any }) => {
     router.push(
-      `/v2/${SubRoutes.Diamond_Detail}?path=${MatchRoutes.NEW_ARRIVAL}&stoneid=${row?.lot_id}`
+      `/v2/${SubRoutes.Diamond_Detail}?path=${MatchRoutes.NEW_ARRIVAL}&stoneid=${row?.lot_id}-${row?.location}`
     );
   };
 

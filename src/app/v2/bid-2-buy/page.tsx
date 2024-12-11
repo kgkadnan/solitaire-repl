@@ -106,7 +106,7 @@ const BidToBuy = () => {
   const subRoute = useSearchParams().get('active-tab');
   const handleDetailPage = ({ row }: { row: any }) => {
     router.push(
-      `/v2/${SubRoutes.Diamond_Detail}?path=${MatchRoutes.BID_TO_BUY}&stoneid=${row?.lot_id}`
+      `/v2/${SubRoutes.Diamond_Detail}?path=${MatchRoutes.BID_TO_BUY}&stoneid=${row?.lot_id}-${row?.location}`
     );
   };
 

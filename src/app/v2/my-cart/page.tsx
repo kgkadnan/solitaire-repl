@@ -887,7 +887,7 @@ const MyCart = () => {
       setDetailPageData(row);
     } else {
       router.push(
-        `/v2/${SubRoutes.Diamond_Detail}?path=${MatchRoutes.MY_CART}&stoneid=${row?.lot_id}`
+        `/v2/${SubRoutes.Diamond_Detail}?path=${MatchRoutes.MY_CART}&stoneid=${row?.lot_id}-${row?.location}`
       );
     }
   };

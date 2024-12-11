@@ -345,8 +345,10 @@ const MatchingPairResult = ({
     let stoneids = row?.lot_id;
     if(result && result.length > 0)
     {
-      let lotids = result[0].map((x:any)=>x.lot_id);
-      stoneids = lotids.join();
+      const lotids_location = result[0].map((x: any) => ({
+        lotlocation: x.lot_id + '-' + x.location        
+      }));
+      stoneids = lotids_location.map((x:any)=>x.lotlocation).join();
     }
     router.push(
       `/v2/${SubRoutes.Diamond_Detail}?path=${MatchRoutes.MATCHING_PAIR}&stoneid=${stoneids}`

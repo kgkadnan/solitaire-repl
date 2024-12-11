@@ -1163,7 +1163,7 @@ const Dashboard = () => {
       });
     } else {
       router.push(
-        `/v2/${SubRoutes.Diamond_Detail}?path=${MatchRoutes.DASHBOARD}&stoneid=${row?.lot_id}`
+        `/v2/${SubRoutes.Diamond_Detail}?path=${MatchRoutes.DASHBOARD}&stoneid=${row?.lot_id}-${row?.location}`
       );
     } 
   };
