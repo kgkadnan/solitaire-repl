@@ -38,5 +38,6 @@ export enum MatchRoutes {
   SEARCH = 'search',
   MY_CART = 'my-cart',
   DASHBOARD = 'dash-board',
-  MATCHING_PAIR = 'matching-pair'
+  MATCHING_PAIR = 'matching-pair',
+  YOUR_ORDERS = 'your-orders',
 }
