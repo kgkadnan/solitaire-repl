@@ -31,6 +31,14 @@ export const productApi = createApi({
       }),
       invalidatesTags: ['Product']
     }),
+    fetchProductByIds: builder.mutation({
+      query: data => ({
+        url: `/store/products/v3/search`,
+        method: 'POST',
+        body: data
+      }),
+      invalidatesTags: ['Product']
+    }),
     checkProductAvailability: builder.mutation({
       query: data => ({
         url: `/store/products/confirm-time-check`,
@@ -93,6 +101,7 @@ export const {
   useLazyGetProductCountQuery,
   useConfirmProductMutation,
   useGetProductByIdMutation,
+  useFetchProductByIdsMutation,
   useAddDemandMutation,
   useCheckProductAvailabilityMutation,
   useLazyGetAllTurkeyProductQuery,

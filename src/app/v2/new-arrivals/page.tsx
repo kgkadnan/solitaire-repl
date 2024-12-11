@@ -75,7 +75,7 @@ import Form from '../search/form/form';
 import useValidationStateManagement from '../search/hooks/validation-state-management';
 import useFormStateManagement from '../search/form/hooks/form-state';
 import useNumericFieldValidation from '../search/form/hooks/numeric-field-validation-management';
-import { SubRoutes } from '@/constants/v2/enums/routes';
+import { MatchRoutes, SubRoutes } from '@/constants/v2/enums/routes';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import pako from 'pako';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -123,8 +123,9 @@ const NewArrivals = () => {
   const [isAddDemand, setIsAddDemand] = useState(false);
 
   const handleDetailPage = ({ row }: { row: any }) => {
-    setIsDetailPage(true);
-    setDetailPageData(row);
+    router.push(
+      `/v2/${SubRoutes.Diamond_Detail}?path=${MatchRoutes.NEW_ARRIVAL}&stoneid=${row?.lot_id}`
+    );
   };
 
   const handleDetailImage = ({ row }: any) => {
