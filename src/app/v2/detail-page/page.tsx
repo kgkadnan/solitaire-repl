@@ -242,8 +242,8 @@ export default function page() {
             ...allProducts.bidStone,
             ...allProducts.activeStone
           ];
-          let stonesData:any = lot_id_with_Location?.split(',');
-          let filteredData = productData.filter((x:any) => (x.lot_id == stonesData[0] && x.location == stonesData[0]));
+          let stonesData:any = lot_id_with_Location?.split('-');
+          let filteredData = productData.filter((x:any) => (x.lot_id == stonesData[0] && x.location == stonesData[1]));
           setBid(productData);
           setDetailPageData(filteredData[0]);
           setIsDetailPage(true);
