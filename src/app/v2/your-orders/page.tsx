@@ -460,6 +460,7 @@ const MyDiamonds = () => {
               modalSetState={modalSetState}
               setIsLoading={setIsLoading}
               router={router}
+              activeTab={activeTab}
             />
           );
         case IN_TRANSIT:
@@ -476,6 +477,7 @@ const MyDiamonds = () => {
               modalSetState={modalSetState}
               setIsLoading={setIsLoading}
               router={router}
+              activeTab={activeTab}
             />
           );
         case PAST:
@@ -488,6 +490,7 @@ const MyDiamonds = () => {
               setIsLoading={setIsLoading}
               identifier={PAST_INVOICE_BREADCRUMB_LABEL}
               router={router}
+              activeTab={activeTab}
             />
           );
         // Add more cases as needed for other tabs

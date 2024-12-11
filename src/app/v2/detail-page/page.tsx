@@ -53,16 +53,19 @@ import { handleComment } from '../search/result/helpers/handle-comment';
 import { MatchPairDetails } from '../matching-pair/components/details';
 import { NOT_MORE_THAN_300 } from '@/constants/error-messages/search';
 import { NO_STONES_SELECTED } from '@/constants/error-messages/cart';
+import { IN_TRANSIT, PAST, PENDING } from '@/constants/business-logic';
 export default function page() {
   const router = useRouter();
   const mainPathName = usePathname(); // Get the current path (excluding query params)  
-  const lot_id = useSearchParams().get('stoneid');
+  const lot_id_with_Location = useSearchParams().get('stoneid');
   const path = useSearchParams().get('path');
+  const activeTabPath = useSearchParams().get('activeTab');
   const { authToken } = useUser();
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   useEffect(() => {    
     if(!isKycVerified) {
-      const redirectUrl = `${mainPathName}?path=${path}&stoneid=${lot_id}`;
+      let activeTabData = (!!activeTabPath) ? `&activeTab=${activeTabPath}` : '';
+      const redirectUrl = `${mainPathName}?path=${path}${activeTabData}&stoneid=${lot_id_with_Location}`;
       localStorage.setItem('redirectUrl', redirectUrl);
     }   
   },[]);
@@ -137,10 +140,11 @@ export default function page() {
 
   useEffect(() => {
     if (path !== MatchRoutes.NEW_ARRIVAL) {
-      let stones:any = lot_id?.split(',');
+      let stonesData:any = lot_id_with_Location?.split(',');
+      const stoneIds = stonesData?.map((item:any) => item?.split('-')[0]);
       setIsLoading(true);
       fetchProductByIds({
-        stones: stones
+        stones: stoneIds
       })
         .unwrap()
         .then((res: any) => {
@@ -149,14 +153,23 @@ export default function page() {
           const searchData: any = Array.isArray(res?.products)
             ? res?.products
             : [];
-          setBid(searchData);
-          setSearchData(searchData);
-          setDetailPageData(searchData[0]);
+          const filteredData = searchData.filter(
+            (item: any) =>
+              stoneIds.includes(item?.lot_id) &&
+              stonesData.some((stone: any) =>
+                stone.includes(
+                  item?.lot_id?.toString() + '-' + item?.location?.toString()
+                )
+              )
+          );
+          setBid(filteredData);
+          setSearchData(filteredData);
+          setDetailPageData(filteredData[0]);
           setIsDetailPage(true);
           if(path == MatchRoutes.MATCHING_PAIR)
           {
             let matchPairData:any = [];
-            matchPairData.push(searchData);
+            matchPairData.push(filteredData);
             setSearchData(matchPairData);
             setIsMatchpair(true);
           }
@@ -176,10 +189,6 @@ export default function page() {
         });
     }
   }, []);
-
-  // useEffect(() => {
-  //   refetchCustomerData();
-  // }, []);
 
   useEffect(() => {
     const breadCrumLabelPath =
@@ -233,7 +242,8 @@ export default function page() {
             ...allProducts.bidStone,
             ...allProducts.activeStone
           ];
-          let filteredData = productData.filter(x => x.lot_id == lot_id);
+          let stonesData:any = lot_id_with_Location?.split(',');
+          let filteredData = productData.filter((x:any) => (x.lot_id == stonesData[0] && x.location == stonesData[0]));
           setBid(productData);
           setDetailPageData(filteredData[0]);
           setIsDetailPage(true);
@@ -915,7 +925,7 @@ export default function page() {
   };
   return (
     <>
-    {isError && (
+      {isError && (
         <Toast show={isError} message={errorText} isSuccess={false} />
       )}
       {error !== '' && (
@@ -947,6 +957,20 @@ export default function page() {
       />
       {isDetailPage ? (
         <div className="mt-[16px]">
+          {!!activeTabPath ? (
+            <div className="flex  py-[8px] items-center">
+              <p className="text-lMedium font-medium text-neutral900">
+                {activeTabPath === PENDING
+                  ? ManageLocales('app.yourOrder.header.pendingInvoiceDetails')
+                  : activeTabPath === IN_TRANSIT
+                  ? ManageLocales('app.yourOrder.header.activeInvoiceDetails')
+                  : activeTabPath === PAST &&
+                    ManageLocales('app.yourOrder.header.pastInvoicesDetails')}
+              </p>
+            </div>
+          ) : (
+            ''
+          )}
           {isGemTrac ? (
             <GemTracPage
               breadCrumLabel={breadCrumLabel}
@@ -956,32 +980,32 @@ export default function page() {
               goBackToListView={goBack}
             />
           ) : isMatchpair ? (
-            <>                 
-                 <MatchPairDetails
-                   data={searchData}
-                   filterData={detailPageData}
-                   goBackToListView={goBack}
-                   breadCrumLabel={
-                     breadCrumLabel.length ? breadCrumLabel : 'Match Pair'
-                   }
-                   modalSetState={modalSetState}
-                   setIsLoading={setIsLoading}
-                   handleDetailImage={handleDetailImage}
-                   setRowSelection={setRowSelection}
-                   setSimilarData={setSimilarData}
-                   similarData={similarData}
-                   rowSelection={rowSelection}
-                   setActivePreviewTab={setActivePreviewTab}
-                   activePreviewTab={activePreviewTab}
-                   setImageIndex={setImageIndex}
-                   imageIndex={imageIndex}
-                   setIsDiamondDetailLoading={setIsDiamondDetailLoading}
-                   activeTab={activeTab}
-                   setIsGemTrac={setIsGemTrac}
-                   setGemTracData={setGemTracData}
-                   triggerGemTracApi={triggerGemTracApi}
-                 />
-                 <div className="p-[8px] flex justify-between items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow mb-1">
+            <>
+              <MatchPairDetails
+                data={searchData}
+                filterData={detailPageData}
+                goBackToListView={goBack}
+                breadCrumLabel={
+                  breadCrumLabel.length ? breadCrumLabel : 'Match Pair'
+                }
+                modalSetState={modalSetState}
+                setIsLoading={setIsLoading}
+                handleDetailImage={handleDetailImage}
+                setRowSelection={setRowSelection}
+                setSimilarData={setSimilarData}
+                similarData={similarData}
+                rowSelection={rowSelection}
+                setActivePreviewTab={setActivePreviewTab}
+                activePreviewTab={activePreviewTab}
+                setImageIndex={setImageIndex}
+                imageIndex={imageIndex}
+                setIsDiamondDetailLoading={setIsDiamondDetailLoading}
+                activeTab={activeTab}
+                setIsGemTrac={setIsGemTrac}
+                setGemTracData={setGemTracData}
+                triggerGemTracApi={triggerGemTracApi}
+              />
+              <div className="p-[8px] flex justify-between items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow mb-1">
                 <div className="flex gap-4 h-[30px]">
                   {isDiamondDetailLoading ? (
                     <>
@@ -1087,8 +1111,8 @@ export default function page() {
                             router,
                             modalSetState,
                             checkProductAvailability,
-                            setIsLoading,
-                           // refreshSearchResults
+                            setIsLoading
+                            // refreshSearchResults
                           });
                         }
                       }
@@ -1097,17 +1121,10 @@ export default function page() {
                 )}
               </div>
             </>
-                  )
-              : 
-              (  <>
+          ) : (
+            <>
               <DiamondDetailsComponent
-                data={
-                  activeTab === 0
-                    ? bid
-                    : activeTab === 1
-                    ? activeBid
-                    : bidHistory?.data
-                }
+                data={bid}
                 identifier={path == MatchRoutes.DASHBOARD ? 'Dashboard' : ''}
                 filterData={detailPageData}
                 goBackToListView={goBack}
@@ -1217,7 +1234,6 @@ export default function page() {
               </div>
             </>
           )}
-              
         </div>
       ) : isConfirmStone ? (
         <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow mt-[16px]">
