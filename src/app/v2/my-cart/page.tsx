@@ -66,7 +66,7 @@ import { FILE_URLS } from '@/constants/v2/detail-page';
 import ImageModal from '@/components/v2/common/detail-page/components/image-modal';
 import { getShapeDisplayName } from '@/utils/v2/detail-page';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
-import { SubRoutes } from '@/constants/v2/enums/routes';
+import { MatchRoutes, SubRoutes } from '@/constants/v2/enums/routes';
 import { Toast } from '@/components/v2/common/copy-and-share/toast';
 import { kycStatus } from '@/constants/enums/kyc';
 import { loadImages } from '@/components/v2/common/detail-page/helpers/load-images';
@@ -880,10 +880,16 @@ const MyCart = () => {
   ];
 
   const handleDetailPage = ({ row }: { row: any }) => {
-    setIsDetailPage(true);
-    setIsError(false);
-    setErrorText('');
-    setDetailPageData(row);
+    if(isConfirmStone) {
+      setIsDetailPage(true);
+      setIsError(false);
+      setErrorText('');
+      setDetailPageData(row);
+    } else {
+      router.push(
+        `/v2/${SubRoutes.Diamond_Detail}?path=${MatchRoutes.MY_CART}&stoneid=${row?.lot_id}`
+      );
+    }
   };
 
   const handleDetailImage = ({ row }: any) => {
