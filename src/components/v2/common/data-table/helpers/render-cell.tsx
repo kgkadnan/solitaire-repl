@@ -17,6 +17,9 @@ import Dub from '@public/v2/assets/png/data-table/DUB.png';
 import { formatNumber } from '@/utils/fix-two-digit-number';
 import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
 import Tooltip from '../../tooltip';
+import lockIcon from '@public/v2/assets/icons/data-table/lock-icon.svg';
+import { kycStatus } from '@/constants/enums/kyc';
+import { handleUnlockPricing } from '@/app/v2/search/result/helpers/sale-team';
 
 export const RenderDetails = ({ row, handleDetailImage }: any) => {
   const isEligible = Object.values(row.original.assets_pre_check).some(
@@ -207,69 +210,252 @@ export const RenderLab = ({
   );
 };
 
-export const RenderDiscount = ({ renderedCellValue }: any) => {
+export const RenderDiscount = ({
+  renderedCellValue,
+  setContactSaleTeamInputValue,
+  modalSetState
+}: any) => {
+  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   return (
-    <div
-      className={`${
-        renderedCellValue !== null && renderedCellValue !== undefined
-          ? 'text-successMain border-[1px] border-successBorder bg-successSurface '
-          : ''
-      } px-[4px] py-[2px] w-[65px] text-center rounded-[4px]`}
-    >
-      {renderedCellValue !== null && renderedCellValue !== undefined
-        ? renderedCellValue === 0
-          ? '0.00%'
-          : formatNumber(renderedCellValue) + '%'
-        : '-'}
-    </div>
+    <>
+      {isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED ? (
+        <div
+          className={`${
+            renderedCellValue !== null && renderedCellValue !== undefined
+              ? 'text-successMain border-[1px] border-successBorder bg-successSurface '
+              : ''
+          } px-[4px] py-[2px] w-[65px] text-center rounded-[4px]`}
+        >
+          {renderedCellValue !== null && renderedCellValue !== undefined ? (
+            renderedCellValue === 0 ? (
+              '0.00%'
+            ) : (
+              formatNumber(renderedCellValue) + '%'
+            )
+          ) : (
+            <div
+              className="group relative"
+              onClick={() => {
+                handleUnlockPricing(
+                  setContactSaleTeamInputValue,
+                  modalSetState
+                );
+              }}
+            >
+              {/* Lock Icon */}
+              <Image
+                src={lockIcon}
+                alt="lockIcon"
+                className="group-hover:hidden transition-all"
+              />
+
+              {/* Tooltip for "Unlock" on hover */}
+              <div className="  font-medium text-infoMain text-sMedium  hidden group-hover:flex transition-all">
+                Unlock
+              </div>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div
+          className={`${
+            renderedCellValue !== null && renderedCellValue !== undefined
+              ? 'text-successMain border-[1px] border-successBorder bg-successSurface '
+              : ''
+          } px-[4px] py-[2px] w-[65px] text-center rounded-[4px]`}
+        >
+          {renderedCellValue !== null && renderedCellValue !== undefined
+            ? renderedCellValue === 0
+              ? '0.00%'
+              : formatNumber(renderedCellValue) + '%'
+            : '-'}
+        </div>
+      )}
+    </>
   );
 };
 
-export const DiscountWithCross = ({ renderedCellValue }: any) => {
+export const RenderBidDiscount = ({
+  renderedCellValue,
+  handleBidUnLockPricing
+}: any) => {
+  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   return (
-    <span
-      style={{
-        position: 'relative',
-        display: 'inline-block',
-        padding: '2px 4px',
-        width: '65px',
-        textAlign: 'center',
-        borderRadius: '4px',
-        background:
-          renderedCellValue !== null && renderedCellValue !== undefined
-            ? 'var(--neutral-100)'
-            : '',
-        color:
-          renderedCellValue !== null && renderedCellValue !== undefined
-            ? 'var(--neutral-500)'
-            : '',
-        border:
-          renderedCellValue !== null && renderedCellValue !== undefined
-            ? '1px solid var(--neutral-200)'
-            : ''
-      }}
-    >
-      {renderedCellValue !== null && renderedCellValue !== undefined
-        ? renderedCellValue === 0
-          ? '0.00%'
-          : formatNumber(renderedCellValue) + '%'
-        : '-'}
-      {renderedCellValue !== null && renderedCellValue !== undefined ? (
+    <>
+      {isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED ? (
+        <div
+          className={`${
+            renderedCellValue !== null && renderedCellValue !== undefined
+              ? 'text-successMain border-[1px] border-successBorder bg-successSurface '
+              : ''
+          } px-[4px] py-[2px] w-[65px] text-center rounded-[4px]`}
+        >
+          {renderedCellValue !== null && renderedCellValue !== undefined ? (
+            renderedCellValue === 0 ? (
+              '0.00%'
+            ) : (
+              formatNumber(renderedCellValue) + '%'
+            )
+          ) : (
+            <div
+              className="group relative"
+              onClick={() => {
+                handleBidUnLockPricing();
+              }}
+            >
+              {/* Lock Icon */}
+              <Image
+                src={lockIcon}
+                alt="lockIcon"
+                className="group-hover:hidden transition-all"
+              />
+
+              {/* Tooltip for "Unlock" on hover */}
+              <div className="  font-medium text-infoMain text-sMedium  hidden group-hover:flex transition-all">
+                Unlock
+              </div>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div
+          className={`${
+            renderedCellValue !== null && renderedCellValue !== undefined
+              ? 'text-successMain border-[1px] border-successBorder bg-successSurface '
+              : ''
+          } px-[4px] py-[2px] w-[65px] text-center rounded-[4px]`}
+        >
+          {renderedCellValue !== null && renderedCellValue !== undefined
+            ? renderedCellValue === 0
+              ? '0.00%'
+              : formatNumber(renderedCellValue) + '%'
+            : '-'}
+        </div>
+      )}
+    </>
+  );
+};
+
+export const DiscountWithCross = ({
+  renderedCellValue,
+  handleBidUnLockPricing
+}: any) => {
+  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
+  return (
+    <>
+      {isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED ? (
+        <>
+          {renderedCellValue === null ? (
+            <div
+              className="group relative"
+              onClick={() => {
+                handleBidUnLockPricing();
+              }}
+            >
+              {/* Lock Icon */}
+              <Image
+                src={lockIcon}
+                alt="lockIcon"
+                className="group-hover:hidden transition-all"
+              />
+
+              {/* Tooltip for "Unlock" on hover */}
+              <div className="  font-medium text-infoMain text-sMedium  hidden group-hover:flex transition-all">
+                Unlock
+              </div>
+            </div>
+          ) : (
+            <span
+              style={{
+                position: 'relative',
+                display: 'inline-block',
+                padding: '2px 4px',
+                width: '65px',
+                textAlign: 'center',
+                borderRadius: '4px',
+                background:
+                  renderedCellValue !== null && renderedCellValue !== undefined
+                    ? 'var(--neutral-100)'
+                    : '',
+                color:
+                  renderedCellValue !== null && renderedCellValue !== undefined
+                    ? 'var(--neutral-500)'
+                    : '',
+                border:
+                  renderedCellValue !== null && renderedCellValue !== undefined
+                    ? '1px solid var(--neutral-200)'
+                    : ''
+              }}
+            >
+              {renderedCellValue !== null && renderedCellValue !== undefined
+                ? renderedCellValue === 0
+                  ? '0.00%'
+                  : formatNumber(renderedCellValue) + '%'
+                : '-'}
+              {renderedCellValue !== null && renderedCellValue !== undefined ? (
+                <span
+                  style={{
+                    position: 'absolute',
+                    top: '50%',
+                    right: '6px',
+                    width: '85%',
+                    height: '1px',
+                    backgroundColor: 'black',
+                    transform: 'translateY(-50%) rotate(-15deg)'
+                  }}
+                ></span>
+              ) : (
+                ''
+              )}
+            </span>
+          )}
+        </>
+      ) : (
         <span
           style={{
-            position: 'absolute',
-            top: '50%',
-            right: '6px',
-            width: '85%',
-            height: '1px',
-            backgroundColor: 'black',
-            transform: 'translateY(-50%) rotate(-15deg)'
+            position: 'relative',
+            display: 'inline-block',
+            padding: '2px 4px',
+            width: '65px',
+            textAlign: 'center',
+            borderRadius: '4px',
+            background:
+              renderedCellValue !== null && renderedCellValue !== undefined
+                ? 'var(--neutral-100)'
+                : '',
+            color:
+              renderedCellValue !== null && renderedCellValue !== undefined
+                ? 'var(--neutral-500)'
+                : '',
+            border:
+              renderedCellValue !== null && renderedCellValue !== undefined
+                ? '1px solid var(--neutral-200)'
+                : ''
           }}
-        ></span>
-      ) : (
-        ''
+        >
+          {renderedCellValue !== null && renderedCellValue !== undefined
+            ? renderedCellValue === 0
+              ? '0.00%'
+              : formatNumber(renderedCellValue) + '%'
+            : '-'}
+          {renderedCellValue !== null && renderedCellValue !== undefined ? (
+            <span
+              style={{
+                position: 'absolute',
+                top: '50%',
+                right: '6px',
+                width: '85%',
+                height: '1px',
+                backgroundColor: 'black',
+                transform: 'translateY(-50%) rotate(-15deg)'
+              }}
+            ></span>
+          ) : (
+            ''
+          )}
+        </span>
       )}
-    </span>
+    </>
   );
 };
 
@@ -281,24 +467,189 @@ export const RenderCarat = ({ renderedCellValue }: any) => {
   );
 };
 
-export const RenderNumericFields = ({ renderedCellValue }: any) => {
+export const RenderNumericFields = ({
+  renderedCellValue,
+  setContactSaleTeamInputValue,
+  modalSetState
+}: any) => {
+  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   return (
-    <span>{`${
-      renderedCellValue ? `$${formatNumberWithCommas(renderedCellValue)}` : '-'
-    }`}</span>
+    <>
+      {isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED ? (
+        renderedCellValue ? (
+          <span>{formatNumberWithCommas(renderedCellValue)}</span>
+        ) : (
+          <div
+            className="group relative"
+            onClick={() => {
+              handleUnlockPricing(setContactSaleTeamInputValue, modalSetState);
+            }}
+          >
+            {/* Lock Icon */}
+            <Image
+              src={lockIcon}
+              alt="lockIcon"
+              className="group-hover:hidden transition-all"
+            />
+
+            {/* Tooltip for "Unlock" on hover */}
+            <div className="  font-medium text-infoMain text-sMedium  hidden group-hover:flex transition-all">
+              Unlock
+            </div>
+          </div>
+        )
+      ) : (
+        <span>{`${
+          renderedCellValue
+            ? `$${formatNumberWithCommas(renderedCellValue)}`
+            : '-'
+        }`}</span>
+      )}
+    </>
   );
 };
 
-export const RenderAmount = ({ row }: any) => {
+export const RenderBidNumericFields = ({
+  renderedCellValue,
+  handleBidUnLockPricing
+}: any) => {
+  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   return (
-    <span>{`${
-      row.original.variants[0].prices[0]?.amount === null ||
-      row.original.variants[0].prices[0]?.amount === undefined
-        ? '-'
-        : `$${formatNumberWithCommas(
-            row.original.variants[0].prices[0]?.amount
-          )}`
-    }`}</span>
+    <>
+      {isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED ? (
+        renderedCellValue ? (
+          <span>{formatNumberWithCommas(renderedCellValue)}</span>
+        ) : (
+          <div
+            className="group relative"
+            onClick={() => {
+              handleBidUnLockPricing();
+            }}
+          >
+            {/* Lock Icon */}
+            <Image
+              src={lockIcon}
+              alt="lockIcon"
+              className="group-hover:hidden transition-all"
+            />
+
+            {/* Tooltip for "Unlock" on hover */}
+            <div className="  font-medium text-infoMain text-sMedium  hidden group-hover:flex transition-all">
+              Unlock
+            </div>
+          </div>
+        )
+      ) : (
+        <span>{`${
+          renderedCellValue
+            ? `$${formatNumberWithCommas(renderedCellValue)}`
+            : '-'
+        }`}</span>
+      )}
+    </>
+  );
+};
+
+export const RenderPricePerCarat = ({
+  renderedCellValue,
+  setContactSaleTeamInputValue,
+  modalSetState
+}: any) => {
+  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
+
+  return (
+    <>
+      {isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED ? (
+        <>
+          {renderedCellValue !== null ? (
+            <span>{formatNumberWithCommas(renderedCellValue)}</span>
+          ) : (
+            <div
+              className="group relative"
+              onClick={() => {
+                handleUnlockPricing(
+                  setContactSaleTeamInputValue,
+                  modalSetState
+                );
+              }}
+            >
+              {/* Lock Icon */}
+              <Image
+                src={lockIcon}
+                alt="lockIcon"
+                className="group-hover:hidden transition-all"
+              />
+
+              {/* Tooltip for "Unlock" on hover */}
+              <div className="  font-medium text-infoMain text-sMedium  hidden group-hover:flex transition-all">
+                Unlock
+              </div>
+            </div>
+          )}
+        </>
+      ) : (
+        <span>{`${
+          renderedCellValue !== null
+            ? `$${formatNumberWithCommas(renderedCellValue)}`
+            : '-'
+        }`}</span>
+      )}
+    </>
+  );
+};
+
+export const RenderAmount = ({
+  row,
+  modalSetState,
+  setContactSaleTeamInputValue
+}: any) => {
+  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
+  return (
+    <>
+      {isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED ? (
+        <>
+          {row.original.variants[0].prices[0]?.amount === null ||
+          row.original.variants[0].prices[0]?.amount === undefined ? (
+            <div
+              className="group relative"
+              onClick={() => {
+                handleUnlockPricing(
+                  setContactSaleTeamInputValue,
+                  modalSetState
+                );
+              }}
+            >
+              {/* Lock Icon */}
+              <Image
+                src={lockIcon}
+                alt="lockIcon"
+                className="group-hover:hidden transition-all"
+              />
+
+              {/* Tooltip for "Unlock" on hover */}
+              <div className="  font-medium text-infoMain text-sMedium  hidden group-hover:flex transition-all">
+                Unlock
+              </div>
+            </div>
+          ) : (
+            <span>
+              {formatNumberWithCommas(
+                row.original.variants[0].prices[0]?.amount
+              )}
+            </span>
+          )}
+        </>
+      ) : (
+        <span>{`${
+          row.original.variants[0].prices[0]?.amount === null ||
+          row.original.variants[0].prices[0]?.amount === undefined
+            ? '-'
+            : `$${formatNumberWithCommas(
+                row.original.variants[0].prices[0]?.amount
+              )}`
+        }`}</span>
+      )}
+    </>
   );
 };
 
@@ -312,44 +663,155 @@ export const RenderMeasurements = ({ row }: any) => {
   );
 };
 
-export const RenderNewArrivalPrice = ({ row }: any) => {
+export const RenderNewArrivalPrice = ({ row, handleBidUnLockPricing }: any) => {
+  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   return (
-    <span>{`${
-      row?.original?.price === null || row?.original?.price === undefined
-        ? '-'
-        : `$${formatNumberWithCommas(row?.original?.price)}`
-    }`}</span>
+    <>
+      {isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED ? (
+        <>
+          {row?.original?.price === null ? (
+            <div
+              className="group relative"
+              onClick={() => {
+                handleBidUnLockPricing();
+              }}
+            >
+              {/* Lock Icon */}
+              <Image
+                src={lockIcon}
+                alt="lockIcon"
+                className="group-hover:hidden transition-all"
+              />
+
+              {/* Tooltip for "Unlock" on hover */}
+              <div className="  font-medium text-infoMain text-sMedium  hidden group-hover:flex transition-all">
+                Unlock
+              </div>
+            </div>
+          ) : (
+            <span>{formatNumberWithCommas(row?.original?.price)}</span>
+          )}
+        </>
+      ) : (
+        <span>{`${
+          row?.original?.price === null
+            ? '-'
+            : `$${formatNumberWithCommas(row?.original?.price)}`
+        }`}</span>
+      )}
+    </>
   );
 };
 
-export const RenderNewArrivalPricePerCarat = ({ row }: any) => {
+export const RenderNewArrivalPricePerCarat = ({
+  row,
+  handleBidUnLockPricing
+}: any) => {
+  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   return (
-    <span>{`${
-      row?.original?.price_per_carat === null ||
-      row?.original?.price_per_carat === undefined
-        ? '-'
-        : `$${formatNumberWithCommas(row?.original?.price_per_carat)}`
-    }`}</span>
+    <>
+      {isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED ? (
+        <>
+          {row?.original?.price_per_carat === null ? (
+            <div
+              className="group relative"
+              onClick={() => {
+                handleBidUnLockPricing();
+              }}
+            >
+              {/* Lock Icon */}
+              <Image
+                src={lockIcon}
+                alt="lockIcon"
+                className="group-hover:hidden transition-all"
+              />
+
+              {/* Tooltip for "Unlock" on hover */}
+              <div className="  font-medium text-infoMain text-sMedium  hidden group-hover:flex transition-all">
+                Unlock
+              </div>
+            </div>
+          ) : (
+            <span>
+              {formatNumberWithCommas(row?.original?.price_per_carat)}
+            </span>
+          )}
+        </>
+      ) : (
+        <span>{`${
+          row?.original?.price_per_carat === null
+            ? '-'
+            : `$${formatNumberWithCommas(row?.original?.price_per_carat)}`
+        }`}</span>
+      )}
+    </>
   );
 };
 
-export const RenderNewArrivalBidDiscount = ({ renderedCellValue }: any) => {
+export const RenderNewArrivalBidDiscount = ({
+  renderedCellValue,
+  handleBidUnLockPricing
+}: any) => {
+  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   return (
-    <div className="w-full flex justify-center items-center">
-      <div
-        className={`${
-          renderedCellValue !== null && renderedCellValue !== undefined
-            ? 'text-infoMain border-[1px] border-infoBorder bg-infoSurface'
-            : ''
-        }  px-[4px] py-[2px] w-[65px] rounded-[4px] text-center`}
-      >
-        {renderedCellValue !== null && renderedCellValue !== undefined
-          ? renderedCellValue === 0
-            ? '0.00%'
-            : formatNumber(renderedCellValue) + '%'
-          : '-'}
-      </div>
-    </div>
+    <>
+      {isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED ? (
+        <>
+          {renderedCellValue === null ? (
+            <div
+              className="group relative"
+              onClick={() => {
+                handleBidUnLockPricing();
+              }}
+            >
+              {/* Lock Icon */}
+              <Image
+                src={lockIcon}
+                alt="lockIcon"
+                className="group-hover:hidden transition-all"
+              />
+
+              {/* Tooltip for "Unlock" on hover */}
+              <div className="  font-medium text-infoMain text-sMedium  hidden group-hover:flex transition-all">
+                Unlock
+              </div>
+            </div>
+          ) : (
+            <div className="w-full flex justify-center items-center">
+              <div
+                className={`${
+                  renderedCellValue !== null
+                    ? 'text-infoMain border-[1px] border-infoBorder bg-infoSurface'
+                    : ''
+                }  px-[4px] py-[2px] w-[65px] rounded-[4px] text-center`}
+              >
+                {renderedCellValue !== null
+                  ? renderedCellValue === 0
+                    ? '0.00%'
+                    : formatNumber(renderedCellValue) + '%'
+                  : '-'}
+              </div>
+            </div>
+          )}
+        </>
+      ) : (
+        <div className="w-full flex justify-center items-center">
+          <div
+            className={`${
+              renderedCellValue !== null
+                ? 'text-infoMain border-[1px] border-infoBorder bg-infoSurface'
+                : ''
+            }  px-[4px] py-[2px] w-[65px] rounded-[4px] text-center`}
+          >
+            {renderedCellValue !== null
+              ? renderedCellValue === 0
+                ? '0.00%'
+                : formatNumber(renderedCellValue) + '%'
+              : '-'}
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

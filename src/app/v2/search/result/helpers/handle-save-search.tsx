@@ -28,7 +28,7 @@ export const handleSaveSearch = async ({
   setSaveSearchName,
   setInputError,
   setStoredSelection,
-  isMatchingPair,
+  isMatchingPair
 }: IHandleSaveSearch) => {
   // Retrieve the array from localStorage
   const searchData = isMatchingPair
@@ -52,9 +52,9 @@ export const handleSaveSearch = async ({
           saveSearchName,
           isSavedSearch: true,
           searchId: parseData[activeTab - 1].searchId,
-          label: 
-          (!!saveSearchName) ? (saveSearchName?.replace(/\s+/g, '') + ' ' + ((activeTab))) :
-          parseData[activeTab - 1].label,
+          label: !!saveSearchName
+            ? saveSearchName?.replace(/\s+/g, '') + ' ' + activeTab
+            : parseData[activeTab - 1].label,
           queryParams: parseData[activeTab - 1].queryParams
         };
         isMatchingPair
@@ -62,7 +62,7 @@ export const handleSaveSearch = async ({
           : localStorage.setItem('Search', JSON.stringify(parseData));
         setStoredSelection(parseData);
         setIsInputDialogOpen(false);
-        setSaveSearchName('');      
+        setSaveSearchName('');
       })
 
       .catch((error: any) => {

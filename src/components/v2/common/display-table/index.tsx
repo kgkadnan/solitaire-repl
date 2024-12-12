@@ -72,7 +72,7 @@ export const DisplayTable: React.FC<IDisplayTableProps> = ({
                     >
                       {Array.isArray(row[accessor]) && row[accessor].length > 1
                         ? row[accessor].toString().substring(0, 3).concat('...')
-                        : (row[accessor] ?? '-')}
+                        : row[accessor] ?? '-'}
                     </TableCell>
                   );
                 })}

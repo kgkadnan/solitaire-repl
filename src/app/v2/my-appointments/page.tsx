@@ -416,8 +416,8 @@ const MyAppointments = () => {
                           ? 'w-[30%]'
                           : 'w-[25%]'
                         : activeTab === PAST_APPOINTMENTS
-                          ? 'w-[20%]'
-                          : 'w-[15%]'
+                        ? 'w-[20%]'
+                        : 'w-[15%]'
                     }`}
                   >
                     {label}
@@ -439,8 +439,8 @@ const MyAppointments = () => {
                               ? 'w-[30%]'
                               : 'w-[25%]'
                             : activeTab === PAST_APPOINTMENTS
-                              ? 'w-[20%]'
-                              : 'w-[15%]'
+                            ? 'w-[20%]'
+                            : 'w-[15%]'
                         }`}
                       >
                         {renderCellContent(label, accessor, items)}
@@ -518,8 +518,8 @@ const MyAppointments = () => {
             ? 'h-[calc(100vh-103px)]'
             : 'h-[calc(100vh-184px)]'
           : showAppointmentForm
-            ? 'h-[calc(100vh-43px)]'
-            : 'h-[calc(100vh-124px)]'
+          ? 'h-[calc(100vh-43px)]'
+          : 'h-[calc(100vh-124px)]'
       }
       `}
       >
