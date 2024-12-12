@@ -52,6 +52,7 @@ import { funnelApi } from './features/api/funnel';
 import queryParamsReducer from './features/event-params/event-param-slice';
 import { gemTracApi } from './features/api/gem-trac';
 import { notifySalesApi } from './features/api/notify-sales';
+import { requestCallBackApi } from './features/api/request-call-back';
 
 const appReducer = combineReducers({
   notificationBadge: notificationBadgeReducer,
@@ -75,6 +76,7 @@ const appReducer = combineReducers({
   [manageListingSequenceApi.reducerPath]: manageListingSequenceApi.reducer,
   [savedSearchesApi.reducerPath]: savedSearchesApi.reducer,
   [cartApi.reducerPath]: cartApi.reducer,
+  [requestCallBackApi.reducerPath]: requestCallBackApi.reducer,
   [notifySalesApi.reducerPath]: notifySalesApi.reducer,
   [changePasswordApi.reducerPath]: changePasswordApi.reducer,
   [productApi.reducerPath]: productApi.reducer,
@@ -132,6 +134,7 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
         changePasswordApi.middleware,
         downloadExcelApi.middleware,
         cartApi.middleware,
+        requestCallBackApi.middleware,
         notifySalesApi.middleware,
         savedSearchesApi.middleware,
         productApi.middleware,

@@ -113,7 +113,14 @@ const OrderDetail: React.FC<IOrderDetail> = ({
         switch (accessor) {
           case 'rap':
           case 'rap_value':
-            return { ...commonProps, Cell: RenderNumericFields };
+            return {
+              ...commonProps,
+              Cell: ({ renderedCellValue }: any) => {
+                return RenderNumericFields({
+                  renderedCellValue
+                });
+              }
+            };
           case 'amount':
             return { ...commonProps, Cell: RenderAmount };
           case 'carats':

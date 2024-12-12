@@ -8,6 +8,9 @@
   "app.advanceSearch.savedSearch.input.header": "Save search parameters",
   "app.advanceSearch.savedSearch.input.content": "Great news! You can save your current search parameters for quick access later. This will help you pick up right where you left off. Give your saved search a name and click 'Save' to keep things organized.",
 
+
+
+
   "app.sideNavigationBar.search": "Search",
   "app.sideNavigationBar.matchingPair": "Match Pair",
 
@@ -204,5 +207,9 @@
   "app.myAppointments.cancel": "Cancel",
   "app.myAppointments.confirmAppointments": "Confirm Appointment",
   "app.myAppointments.rescheduleAppointments": "Reschedule Appointment",
-  "app.myAppointment.header": "Book Your Appointment"
+  "app.myAppointment.header": "Book Your Appointment",
+
+
+     "app.contactSaleTeam.header": "Contact Sales Team",
+     "app.contactSaleTeam.subHeader": "Talk to our sales team to unlock exclusive tools & features"
 }
