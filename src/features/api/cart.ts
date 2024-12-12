@@ -16,7 +16,7 @@ export const cartApi = createApi({
       invalidatesTags: ['cart']
     }),
     getCart: builder.query({
-      query: () => `store/customers/me/cart`,
+      query: ({ page }) => `store/customers/me/cart?page=${page}`,
       providesTags: ['cart']
     }),
     deleteCart: builder.mutation({

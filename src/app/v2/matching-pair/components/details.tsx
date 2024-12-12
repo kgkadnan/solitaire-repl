@@ -192,8 +192,9 @@ export function MatchPairDetails({
       triggerSimilarMatchingPairApi({
         product_id: originalData[0].id,
         matching_product_id: originalData[1].id,
-        show_only_with_video: showOnlyWithVideo ?
-          showOnlyWithVideo[activeTab - 1]?.queryParams?.all_asset_required : false
+        show_only_with_video: showOnlyWithVideo
+          ? showOnlyWithVideo[activeTab - 1]?.queryParams?.all_asset_required
+          : false
       })
         .unwrap()
         .then(res => setSimilarData(res))

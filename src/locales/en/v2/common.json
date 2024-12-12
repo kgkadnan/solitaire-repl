@@ -204,5 +204,8 @@
   "app.myAppointments.cancel": "Cancel",
   "app.myAppointments.confirmAppointments": "Confirm Appointment",
   "app.myAppointments.rescheduleAppointments": "Reschedule Appointment",
-  "app.myAppointment.header": "Book Your Appointment"
+  "app.myAppointment.header": "Book Your Appointment",
+
+  "app.contactSaleTeam.header": "Contact Sales Team",
+  "app.contactSaleTeam.subHeader": "Talk to our sales team to unlock exclusive tools & features"
 }

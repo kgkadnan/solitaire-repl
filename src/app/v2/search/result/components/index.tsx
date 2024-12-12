@@ -96,10 +96,24 @@ const ConfirmStone = ({
 
         switch (accessor) {
           case 'amount':
-            return { ...commonProps, Cell: RenderAmount };
+            return {
+              ...commonProps,
+              Cell: ({ row }: any) => {
+                return RenderAmount({
+                  row
+                });
+              }
+            };
           case 'rap':
           case 'rap_value':
-            return { ...commonProps, Cell: RenderNumericFields };
+            return {
+              ...commonProps,
+              Cell: ({ renderedCellValue }: any) => {
+                return RenderNumericFields({
+                  renderedCellValue
+                });
+              }
+            };
           case 'carats':
           case 'table_percentage':
           case 'depth_percentage':
