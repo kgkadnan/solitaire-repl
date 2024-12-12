@@ -31,7 +31,7 @@ import chevronUp from '@public/v2/assets/icons/dashboard/chevron-up.svg';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import { formatCreatedAt } from '@/utils/format-date';
 import { DisplayTable } from '@/components/v2/common/display-table';
-import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
+import { MatchRoutes, Routes, SubRoutes } from '@/constants/v2/enums/routes';
 import { modifySavedSearch } from '@/features/saved-search/saved-search';
 import { useDispatch } from 'react-redux';
 import Link from 'next/link';
@@ -1368,17 +1368,21 @@ const Dashboard = () => {
   const handleDetailPage = ({ row }: { row: any }) => {
     if (isConfirmStone) {
       setBreadCrumLabel('Confirm Stone');
-    }
-    setIsDiamondDetail(true);
-    setIsError(false);
-    setError('');
-    setDetailPageData(row);
+      setIsDiamondDetail(true);
+      setIsError(false);
+      setError('');
+      setDetailPageData(row);
 
-    trackEvent({
-      action: Tracking_Search_By_Text.click_stone_dna_page,
-      category: 'SearchByText',
-      mobile_number: customerMobileNumber
-    });
+      trackEvent({
+        action: Tracking_Search_By_Text.click_stone_dna_page,
+        category: 'SearchByText',
+        mobile_number: customerMobileNumber
+      });
+    } else {
+      router.push(
+        `/v2/${SubRoutes.Diamond_Detail}?path=${MatchRoutes.DASHBOARD}&stoneid=${row?.lot_id}-${row?.location}`
+      );
+    } 
   };
 
   const handleDetailImage = ({ row }: any) => {

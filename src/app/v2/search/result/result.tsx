@@ -19,7 +19,7 @@ import { constructUrlParams } from '@/utils/v2/construct-url-params';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ManageLocales } from '@/utils/v2/translate';
 import ActionButton from '@/components/v2/common/action-button';
-import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
+import { MatchRoutes, Routes, SubRoutes } from '@/constants/v2/enums/routes';
 import Tooltip from '@/components/v2/common/tooltip';
 import crossIcon from '@public/v2/assets/icons/modal/cross.svg';
 import contactIcon from '@public/v2/assets/icons/modal/contact-sale.svg';
@@ -361,11 +361,15 @@ const Result = ({
   const handleDetailPage = ({ row }: { row: any }) => {
     if (isConfirmStone) {
       setBreadCrumLabel('Confirm Stone');
-    }
-    setIsDetailPage(true);
-    setIsError(false);
-    setErrorText('');
-    setDetailPageData(row);
+      setIsDetailPage(true);
+      setIsError(false);
+      setErrorText('');
+      setDetailPageData(row);
+    } else {
+      router.push(
+        `/v2/${SubRoutes.Diamond_Detail}?path=${MatchRoutes.SEARCH}&stoneid=${row?.lot_id}-${row?.location}`
+      );
+    }   
   };
 
   const handleDetailImage = ({ row }: any) => {

@@ -19,7 +19,7 @@ import noImageFound from '@public/v2/assets/icons/detail-page/fall-back-img.svg'
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ManageLocales } from '@/utils/v2/translate';
 import ActionButton from '@/components/v2/common/action-button';
-import { MatchSubRoutes, Routes, SubRoutes } from '@/constants/v2/enums/routes';
+import { MatchRoutes, MatchSubRoutes, Routes, SubRoutes } from '@/constants/v2/enums/routes';
 import Tooltip from '@/components/v2/common/tooltip';
 
 import {
@@ -202,7 +202,7 @@ const MatchingPairResult = ({
 
   const [commentValue, setCommentValue] = useState('');
   const [textAreaValue, setTextAreaValue] = useState('');
-  const [originalData, setOriginalData] = useState();
+  const [originalData, setOriginalData] = useState<any>();
   const [showAppointmentForm, setShowAppointmentForm] = useState(false);
   const [appointmentPayload, setAppointmentPayload] =
     useState<IAppointmentPayload>({
@@ -366,10 +366,24 @@ const MatchingPairResult = ({
     if (isConfirmStone) {
       setBreadCrumLabel('Confirm Stone');
     }
-    setIsDetailPage(true);
+    //setIsDetailPage(true);
     setIsError(false);
     setErrorText('');
-    setDetailPageData(row);
+    //setDetailPageData(row);
+    let result:any = originalData.filter((subArray: any) =>
+      subArray.some((obj: any) => obj.lot_id === row.lot_id)
+    );
+    let stoneids = row?.lot_id;
+    if(result && result.length > 0)
+    {
+      const lotids_location = result[0].map((x: any) => ({
+        lotlocation: x.lot_id + '-' + x.location        
+      }));
+      stoneids = lotids_location.map((x:any)=>x.lotlocation).join();
+    }
+    router.push(
+      `/v2/${SubRoutes.Diamond_Detail}?path=${MatchRoutes.MATCHING_PAIR}&stoneid=${stoneids}`
+    );
   };
 
   const handleDetailImage = ({ row }: any) => {
