@@ -59,14 +59,20 @@ export default function page() {
   const mainPathName = usePathname(); // Get the current path (excluding query params)
   const lot_id_with_Location = useSearchParams().get('stoneid');
   const path = useSearchParams().get('path');
-  const activeTabPath = useSearchParams().get('activeTab');
+  const activeTabPath: any = useSearchParams().get('activeTab');
   const { authToken } = useUser();
+  const [activeTab, setActiveTab] = useState(0);
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   useEffect(() => {
     if (!isKycVerified) {
-      let activeTabData = !!activeTabPath ? `&activeTab=${activeTabPath}` : '';
+      let activeTabData =
+        !!activeTabPath && path == MatchRoutes.YOUR_ORDERS
+          ? `&activeTab=${activeTabPath}`
+          : '';
       const redirectUrl = `${mainPathName}?path=${path}${activeTabData}&stoneid=${lot_id_with_Location}`;
       localStorage.setItem('redirectUrl', redirectUrl);
+    } else {
+      setActiveTab(parseInt(activeTabPath));
     }
   }, []);
   useEffect(() => {
@@ -85,7 +91,6 @@ export default function page() {
   const [triggerGemTracApi] = useLazyGetGemTracQuery({});
   const { modalState, modalSetState } = useModalStateManagement();
   const [isLoading, setIsLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState(0);
   const [bid, setBid] = useState<any>();
   const [searchData, setSearchData] = useState([]);
   const [activeBid, setActiveBid] = useState<any>();
@@ -310,9 +315,15 @@ export default function page() {
   const goBack = () => {
     setIsDetailPage(false);
     setDetailPageData({});
+    let queryPath = '';
+    if (path == MatchRoutes.SEARCH || path == MatchRoutes.MATCHING_PAIR) {
+      queryPath = !!activeTab
+        ? path + '?active-tab=' + SubRoutes.RESULT + '-' + activeTab
+        : path + '?active-tab=new-search';
+    }
     const routePath =
       path == MatchRoutes.SEARCH || path == MatchRoutes.MATCHING_PAIR
-        ? path + '?active-tab=new-search'
+        ? queryPath
         : path;
     if (path == MatchRoutes.DASHBOARD) {
       router.push(`/v2`);

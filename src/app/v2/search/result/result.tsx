@@ -367,7 +367,7 @@ const Result = ({
       setDetailPageData(row);
     } else {
       router.push(
-        `/v2/${SubRoutes.Diamond_Detail}?path=${MatchRoutes.SEARCH}&stoneid=${row?.lot_id}-${row?.location}`
+        `/v2/${SubRoutes.Diamond_Detail}?path=${MatchRoutes.SEARCH}&activeTab=${activeTab}&stoneid=${row?.lot_id}-${row?.location}`
       );
     }
   };
