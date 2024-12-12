@@ -424,7 +424,7 @@ const Result = ({
               value={contactSaleTeamInputValue}
               name="textarea"
               rows={5}
-              className="w-full bg-neutral0 text-visRed rounded-[4px] resize-none focus:outline-none p-2 border-neutral-200 border-[1px] mt-2"
+              className="w-full bg-neutral0 text-neutral700 rounded-[4px] resize-none focus:outline-none p-2 border-neutral-200 border-[1px] mt-2"
               style={{ boxShadow: 'var(--input-shadow) inset' }}
               onChange={e =>
                 handleContactSaleTeam(e, setContactSaleTeamInputValue)
@@ -432,7 +432,7 @@ const Result = ({
             />
           </div>
 
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col  gap-2">
             <ActionButton
               actionButtonData={[
                 {
@@ -480,7 +480,7 @@ const Result = ({
                 }
               ]}
             />
-            <div>Or</div>
+            <div className="text-center">Or</div>
             <ActionButton
               actionButtonData={[
                 {
@@ -648,8 +648,50 @@ const Result = ({
                       modalSetState.setIsInputDialogOpen(false);
                       setRequestCallTimeSlots({});
                       setRowSelection({});
+                      modalSetState.setIsDialogOpen(true);
+                      modalSetState.setDialogContent(
+                        <CommonPoppup
+                          content=""
+                          status="success"
+                          customPoppupBodyStyle="!mt-[70px]"
+                          header={
+                            'Your appointment has been booked successfully'
+                          }
+                          actionButtonData={[
+                            {
+                              variant: 'primary',
+                              label: ManageLocales('app.modal.okay'),
+                              handler: () =>
+                                modalSetState.setIsDialogOpen(false),
+                              customStyle: 'flex-1 w-full h-10'
+                            }
+                          ]}
+                        />
+                      );
                     })
-                    .catch(() => {});
+                    .catch(error => {
+                      modalSetState.setIsInputDialogOpen(false);
+                      setRequestCallTimeSlots({});
+                      setRowSelection({});
+                      modalSetState.setIsDialogOpen(true);
+                      modalSetState.setDialogContent(
+                        <CommonPoppup
+                          content=""
+                          status="error"
+                          customPoppupBodyStyle="!mt-[70px]"
+                          header={error.data.message}
+                          actionButtonData={[
+                            {
+                              variant: 'primary',
+                              label: ManageLocales('app.modal.okay'),
+                              handler: () =>
+                                modalSetState.setIsDialogOpen(false),
+                              customStyle: 'flex-1 w-full h-10'
+                            }
+                          ]}
+                        />
+                      );
+                    });
                 },
                 customStyle: 'flex-1 w-full',
                 isDisable: !selectedSlot.length
