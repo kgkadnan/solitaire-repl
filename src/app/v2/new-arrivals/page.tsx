@@ -975,9 +975,9 @@ const NewArrivals = () => {
                   handler: () => {
                     handleCreateAppointment();
                   },
-                  isDisable: !Object.keys(rowSelection).length,
-                  commingSoon:
-                    isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED
+                  isDisable:
+                    isKycVerified?.customer?.kyc?.status !==
+                      kycStatus.APPROVED || !Object.keys(rowSelection).length
                 }
               ]}
             />
