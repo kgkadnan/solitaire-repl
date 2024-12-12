@@ -81,8 +81,8 @@ const Search = () => {
         ''
       );
       if (
-        parseInt(replaceSubrouteWithSearchResult!) 
-      //  && parseInt(replaceSubrouteWithSearchResult!) <= filteredSelection.length
+        parseInt(replaceSubrouteWithSearchResult!)
+        //  && parseInt(replaceSubrouteWithSearchResult!) <= filteredSelection.length
       ) {
         setActiveTab(parseInt(replaceSubrouteWithSearchResult!));
       } else setActiveTab(-1);
@@ -173,7 +173,7 @@ const Search = () => {
     let closeSpecificSearch = yourSelection.filter(
       (_items: ISavedSearch, index: number) => index != removeDataIndex
     );
-    
+
     if (closeSpecificSearch.length === 0) {
       setSearchParameters([]);
       setAddSearches([]);
@@ -182,14 +182,15 @@ const Search = () => {
     } else {
       setSearchParameters(closeSpecificSearch);
       setAddSearches(closeSpecificSearch);
-      if (activeTab == (removeDataIndex + 1)) {
+      if (activeTab == removeDataIndex + 1) {
         setActiveTab(1);
         router.push(`${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-1`);
-      }
-      else if (activeTab > (removeDataIndex + 1)) {
+      } else if (activeTab > removeDataIndex + 1) {
         const newTab = activeTab - 1;
         setActiveTab(newTab);
-        router.push(`${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${newTab}`); 
+        router.push(
+          `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${newTab}`
+        );
       }
     }
     localStorage.removeItem('Search');
@@ -327,7 +328,7 @@ const Search = () => {
                         setIsInputDialogOpen,
                         setStoredSelection: setSearchParameters,
                         setSaveSearchName,
-                        setInputError,
+                        setInputError
                       });
                     }
                   }

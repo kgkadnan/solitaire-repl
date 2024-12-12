@@ -1,6 +1,6 @@
 import { keyToSymbolWithoutAll, shape } from '@/constants/v2/form';
 
-export function filterBidData(data:any, query:any) {
+export function filterBidData(data: any, query: any) {
   const skipKeys = ['key_to_symbol_search_type'];
   const girdleOrder = [
     'ETN',
@@ -15,9 +15,10 @@ export function filterBidData(data:any, query:any) {
   ];
 
   // Extract all_asset_required from the query
-  const allAssetRequired = query.all_asset_required === true || query.all_asset_required === 'true';
+  const allAssetRequired =
+    query.all_asset_required === true || query.all_asset_required === 'true';
 
-  return data.filter((item:any) => {
+  return data.filter((item: any) => {
     // If all_asset_required is true, show only eligible data
     if (allAssetRequired && !item.is_eligible) {
       return false;
@@ -70,7 +71,10 @@ export function filterBidData(data:any, query:any) {
 
             if (conditionKey === 'lte' && !(itemValue <= parseFloat(value))) {
               return false;
-            } else if (conditionKey === 'gte' && !(itemValue >= parseFloat(value))) {
+            } else if (
+              conditionKey === 'gte' &&
+              !(itemValue >= parseFloat(value))
+            ) {
               return false;
             }
           }
@@ -86,14 +90,14 @@ export function filterBidData(data:any, query:any) {
 
           if (searchType === 'contain') {
             if (
-              !symbols.some((symbol:any) => {
+              !symbols.some((symbol: any) => {
                 return item[key].includes(symbol);
               })
             ) {
               return false;
             }
           } else if (searchType === 'doesNotContain') {
-            if (symbols.some((symbol:any) => item[key].includes(symbol))) {
+            if (symbols.some((symbol: any) => item[key].includes(symbol))) {
               return false;
             }
           }
@@ -102,7 +106,7 @@ export function filterBidData(data:any, query:any) {
           const itemValue = item[key];
 
           if (
-            !ranges.some((range:any) => {
+            !ranges.some((range: any) => {
               const [min, max] = range.split('-').map(parseFloat);
               return itemValue >= min && itemValue <= max;
             })

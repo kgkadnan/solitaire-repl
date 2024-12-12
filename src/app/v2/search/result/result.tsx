@@ -369,7 +369,7 @@ const Result = ({
       router.push(
         `/v2/${SubRoutes.Diamond_Detail}?path=${MatchRoutes.SEARCH}&stoneid=${row?.lot_id}-${row?.location}`
       );
-    }   
+    }
   };
 
   const handleDetailImage = ({ row }: any) => {

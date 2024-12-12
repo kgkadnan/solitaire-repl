@@ -56,24 +56,23 @@ import { NO_STONES_SELECTED } from '@/constants/error-messages/cart';
 import { IN_TRANSIT, PAST, PENDING } from '@/constants/business-logic';
 export default function page() {
   const router = useRouter();
-  const mainPathName = usePathname(); // Get the current path (excluding query params)  
+  const mainPathName = usePathname(); // Get the current path (excluding query params)
   const lot_id_with_Location = useSearchParams().get('stoneid');
   const path = useSearchParams().get('path');
   const activeTabPath = useSearchParams().get('activeTab');
   const { authToken } = useUser();
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
-  useEffect(() => {    
-    if(!isKycVerified) {
-      let activeTabData = (!!activeTabPath) ? `&activeTab=${activeTabPath}` : '';
+  useEffect(() => {
+    if (!isKycVerified) {
+      let activeTabData = !!activeTabPath ? `&activeTab=${activeTabPath}` : '';
       const redirectUrl = `${mainPathName}?path=${path}${activeTabData}&stoneid=${lot_id_with_Location}`;
       localStorage.setItem('redirectUrl', redirectUrl);
-    }   
-  },[]);
+    }
+  }, []);
   useEffect(() => {
     if (authToken) {
-      useSocket(socketManager, authToken) ;
-    } 
-    
+      useSocket(socketManager, authToken);
+    }
   }, [authToken]);
   const [similarData, setSimilarData] = useState<any>();
   const [activePreviewTab, setActivePreviewTab] = useState('Image');
@@ -91,7 +90,7 @@ export default function page() {
   const [searchData, setSearchData] = useState([]);
   const [activeBid, setActiveBid] = useState<any>();
   const { data: bidHistory } = useGetBidHistoryQuery({});
-  
+
   const [fetchProductByIds] = useFetchProductByIdsMutation();
   const socketManager = useMemo(() => new SocketManager(), []);
   const [error, setError] = useState('');
@@ -111,7 +110,6 @@ export default function page() {
   const [customerMobileNumber, setCustomerMobileNumber] = useState('');
   const [showAddToCartButton, setShowAddToCartButton] = useState(false);
   const [showConfirmStoneButton, setShowConfirmStoneButton] = useState(false);
-  
 
   useEffect(() => {
     const fetchColumns = async () => {
@@ -140,8 +138,8 @@ export default function page() {
 
   useEffect(() => {
     if (path !== MatchRoutes.NEW_ARRIVAL) {
-      let stonesData:any = lot_id_with_Location?.split(',');
-      const stoneIds = stonesData?.map((item:any) => item?.split('-')[0]);
+      let stonesData: any = lot_id_with_Location?.split(',');
+      const stoneIds = stonesData?.map((item: any) => item?.split('-')[0]);
       setIsLoading(true);
       fetchProductByIds({
         stones: stoneIds
@@ -166,9 +164,8 @@ export default function page() {
           setSearchData(filteredData);
           setDetailPageData(filteredData[0]);
           setIsDetailPage(true);
-          if(path == MatchRoutes.MATCHING_PAIR)
-          {
-            let matchPairData:any = [];
+          if (path == MatchRoutes.MATCHING_PAIR) {
+            let matchPairData: any = [];
             matchPairData.push(filteredData);
             setSearchData(matchPairData);
             setIsMatchpair(true);
@@ -198,8 +195,8 @@ export default function page() {
         ? 'Bid to Buy'
         : path == MatchRoutes.MY_CART
         ? 'My Cart'
-        : path == MatchRoutes.MATCHING_PAIR 
-        ? 'Match Pair'           
+        : path == MatchRoutes.MATCHING_PAIR
+        ? 'Match Pair'
         : 'Search Results';
     setBreadCrumLabel(breadCrumLabelPath);
     if (path == MatchRoutes.MY_CART) {
@@ -242,8 +239,10 @@ export default function page() {
             ...allProducts.bidStone,
             ...allProducts.activeStone
           ];
-          let stonesData:any = lot_id_with_Location?.split('-');
-          let filteredData = productData.filter((x:any) => (x.lot_id == stonesData[0] && x.location == stonesData[1]));
+          let stonesData: any = lot_id_with_Location?.split('-');
+          let filteredData = productData.filter(
+            (x: any) => x.lot_id == stonesData[0] && x.location == stonesData[1]
+          );
           setBid(productData);
           setDetailPageData(filteredData[0]);
           setIsDetailPage(true);
@@ -312,7 +311,9 @@ export default function page() {
     setIsDetailPage(false);
     setDetailPageData({});
     const routePath =
-      ((path == MatchRoutes.SEARCH) || (path == MatchRoutes.MATCHING_PAIR)) ? path + '?active-tab=new-search' : path;
+      path == MatchRoutes.SEARCH || path == MatchRoutes.MATCHING_PAIR
+        ? path + '?active-tab=new-search'
+        : path;
     if (path == MatchRoutes.DASHBOARD) {
       router.push(`/v2`);
     } else {
@@ -337,21 +338,19 @@ export default function page() {
         : path == MatchRoutes.BID_TO_BUY
         ? 'Bid to Buy'
         : path == MatchRoutes.MY_CART
-        ? 'My Cart' 
-        : path == MatchRoutes.MATCHING_PAIR 
+        ? 'My Cart'
+        : path == MatchRoutes.MATCHING_PAIR
         ? 'Match Pair'
         : 'Search Results';
     setBreadCrumLabel(breadCrumLabelPath);
     if (path == MatchRoutes.MY_CART) {
       setIsDiamondDetailLoading(true);
       setShowConfirmStoneButton(true);
-    }
-    else if (path == MatchRoutes.SEARCH || path == MatchRoutes.DASHBOARD) {
+    } else if (path == MatchRoutes.SEARCH || path == MatchRoutes.DASHBOARD) {
       setIsDiamondDetailLoading(true);
       setShowAddToCartButton(true);
       setShowConfirmStoneButton(true);
-    }
-    else if(path == MatchRoutes.MATCHING_PAIR) {
+    } else if (path == MatchRoutes.MATCHING_PAIR) {
       setIsDiamondDetailLoading(true);
     }
   };
@@ -395,7 +394,7 @@ export default function page() {
   const [isAddCommentDialogOpen, setIsAddCommentDialogOpen] = useState(false);
   const { setIsDialogOpen, setDialogContent } = modalSetState;
   const { errorState, errorSetState } = useErrorStateManagement();
-  const { setIsError, setErrorText } = errorSetState;  
+  const { setIsError, setErrorText } = errorSetState;
   const { isError, errorText } = errorState;
   const [searchUrl, setSearchUrl] = useState('');
   const dispatch = useAppDispatch();

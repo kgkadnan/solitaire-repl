@@ -110,10 +110,10 @@ const DetailPageTabs = ({
               label === 'Video'
                 ? Tracking_Search_By_Text.click_stone_b2b_dna_page
                 : label === 'Sparkle'
-                  ? Tracking_Search_By_Text.click_stone_sparkle_dna_page
-                  : label === 'Certificate'
-                    ? Tracking_Search_By_Text.click_stone_certificate_dna_page
-                    : '',
+                ? Tracking_Search_By_Text.click_stone_sparkle_dna_page
+                : label === 'Certificate'
+                ? Tracking_Search_By_Text.click_stone_certificate_dna_page
+                : '',
             category: 'SearchByText',
             mobile_number: customerMobileNumber
           });
@@ -125,10 +125,10 @@ const DetailPageTabs = ({
               label === 'Video'
                 ? Tracking_Search_By_Text.click_stone_b2b_result_page
                 : label === 'Sparkle'
-                  ? Tracking_Search_By_Text.click_stone_sparkle_result_page
-                  : label === 'Certificate'
-                    ? Tracking_Search_By_Text.click_stone_certificate_result_page
-                    : '',
+                ? Tracking_Search_By_Text.click_stone_sparkle_result_page
+                : label === 'Certificate'
+                ? Tracking_Search_By_Text.click_stone_certificate_result_page
+                : '',
             category: 'SearchByText',
             mobile_number: customerMobileNumber
           });
@@ -183,14 +183,14 @@ const DetailPageTabs = ({
               index === 0
                 ? 'rounded-l-[8px]'
                 : TabsData.length - 1 === index
-                  ? 'rounded-r-[8px]'
-                  : ''
+                ? 'rounded-r-[8px]'
+                : ''
             } ${
               tab.isDisable
                 ? 'bg-neutral100 cursor-not-allowed text-neutral400 stroke-neutral400'
                 : activePreviewTab === tab.label
-                  ? 'bg-primaryMain text-neutral0 stroke-neutral0'
-                  : 'bg-neutral0 text-neutral900 stroke-neutral900'
+                ? 'bg-primaryMain text-neutral0 stroke-neutral0'
+                : 'bg-neutral0 text-neutral900 stroke-neutral900'
             } `}
             disabled={tab.isDisable}
             key={tab.label}

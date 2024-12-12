@@ -1071,7 +1071,7 @@ const MyCart = () => {
   ];
 
   const handleDetailPage = ({ row }: { row: any }) => {
-    if(isConfirmStone) {
+    if (isConfirmStone) {
       setIsDetailPage(true);
       setIsError(false);
       setErrorText('');

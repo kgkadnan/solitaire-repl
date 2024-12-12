@@ -69,22 +69,22 @@ export const KycStatusScreen: React.FC<IKycStatusScreen> = ({ status }) => {
                 status === kycStatus.PENDING
                   ? 'border-lengendInCardBorder bg-legendInCartFill text-legendInCart'
                   : status === kycStatus.REJECTED
-                    ? 'border-primaryModalFillRed bg-primaryModalRingRed text-dangerMain'
-                    : 'border-successBorder bg-primaryModalRing text-successMain'
+                  ? 'border-primaryModalFillRed bg-primaryModalRingRed text-dangerMain'
+                  : 'border-successBorder bg-primaryModalRing text-successMain'
               } rounded py-[1px] px-[6px] flex justify-center items-center`}
             >
               {status === kycStatus.PENDING
                 ? 'Pending'
                 : status === kycStatus.REJECTED
-                  ? 'Rejected'
-                  : 'Approved'}
+                ? 'Rejected'
+                : 'Approved'}
             </p>
             <p className="text-lRegular font-regular text-neutral600 text-center">
               {status === kycStatus.PENDING
                 ? 'We have received your KYC, we are reviewing it. We will give an update over it soon, by then you can explore our website'
                 : status === kycStatus.REJECTED
-                  ? 'Your KYC verification has not been successful. To ensure compliance with our regulatory requirements and for further assistance, please contact your Key Account Manager directly. We appreciate your cooperation and understanding in this matter.'
-                  : 'Thank you for completing the KYC process. Your identity has been successfully verified, ensuring a secure experience for you on our platform.'}
+                ? 'Your KYC verification has not been successful. To ensure compliance with our regulatory requirements and for further assistance, please contact your Key Account Manager directly. We appreciate your cooperation and understanding in this matter.'
+                : 'Thank you for completing the KYC process. Your identity has been successfully verified, ensuring a secure experience for you on our platform.'}
             </p>
           </div>
           {status === kycStatus.REJECTED ? (

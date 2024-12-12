@@ -19,7 +19,12 @@ import noImageFound from '@public/v2/assets/icons/detail-page/fall-back-img.svg'
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ManageLocales } from '@/utils/v2/translate';
 import ActionButton from '@/components/v2/common/action-button';
-import { MatchRoutes, MatchSubRoutes, Routes, SubRoutes } from '@/constants/v2/enums/routes';
+import {
+  MatchRoutes,
+  MatchSubRoutes,
+  Routes,
+  SubRoutes
+} from '@/constants/v2/enums/routes';
 import Tooltip from '@/components/v2/common/tooltip';
 
 import {
@@ -370,16 +375,15 @@ const MatchingPairResult = ({
     setIsError(false);
     setErrorText('');
     //setDetailPageData(row);
-    let result:any = originalData.filter((subArray: any) =>
+    let result: any = originalData.filter((subArray: any) =>
       subArray.some((obj: any) => obj.lot_id === row.lot_id)
     );
     let stoneids = row?.lot_id;
-    if(result && result.length > 0)
-    {
+    if (result && result.length > 0) {
       const lotids_location = result[0].map((x: any) => ({
-        lotlocation: x.lot_id + '-' + x.location        
+        lotlocation: x.lot_id + '-' + x.location
       }));
-      stoneids = lotids_location.map((x:any)=>x.lotlocation).join();
+      stoneids = lotids_location.map((x: any) => x.lotlocation).join();
     }
     router.push(
       `/v2/${SubRoutes.Diamond_Detail}?path=${MatchRoutes.MATCHING_PAIR}&stoneid=${stoneids}`

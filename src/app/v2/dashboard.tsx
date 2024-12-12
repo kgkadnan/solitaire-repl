@@ -1382,7 +1382,7 @@ const Dashboard = () => {
       router.push(
         `/v2/${SubRoutes.Diamond_Detail}?path=${MatchRoutes.DASHBOARD}&stoneid=${row?.lot_id}-${row?.location}`
       );
-    } 
+    }
   };
 
   const handleDetailImage = ({ row }: any) => {

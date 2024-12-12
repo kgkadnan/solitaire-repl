@@ -38,100 +38,103 @@ Bandra East, Mumbai - 400051`,
   }, [currentCountryCode]);
   return (
     <>
-    <div className="flex xl:pr-[112px] lg:pr-[32px] justify-between gap-4 bg-[white]">
-      <div className="w-[30%] flex flex-col gap-8">
-        <Image src={Globe} alt="KGK Globe presence" width={250} />
-      </div>
-      <div className="w-[70%] py-4 flex flex-col justify-center gap-2">
-        <Image
-          src={kgkLogo}
-          alt="KGK logo"
-          className="ml-2 h-[48px] w-[36px]"
-        />
-        <div className='flex justify-end relative mr-14 -top-14 h-1' id="tree-nation-offset-website"></div>
-        <div className="flex justify-between">
-          {sitemap.map(site => (
-            <div className="flex gap-4 flex-col" key={site.title}>
-              <p className="text-[#667085] text-mMedium font-semiBold pl-2">
-                {site.title}
-              </p>
-              <div className="flex flex-col gap-0">
-                {site.content.map(link => (
-                  <div className="flex" key={link.data}>
-                    {' '}
-                    <a
-                      href={link.link}
-                      className="text-[#475467] hover:text-neutral900 hover:bg-neutral50 px-[8px] rounded-[8px] h-[38px] text-lMedium flex items-center"
-                    >
-                      {link.data}
-                    </a>{' '}
-                    {link.isNew && (
-                      <div className="rounded-[16px] px-2 py-[2px] bg-[#ECFDF3] text-[#027A48] text-sMedium font-medium">
-                        New
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-          {/* </div> */}
-          <div className="w-[45%] flex flex-col gap-4">
-            <p className="text-[#667085] text-mMedium font-semiBold">
-              Contact us
-            </p>
-            <div className="flex flex-col gap-2">
-              <p className="text-[#475467] text-lRegular">
-                {footerData.address}
-              </p>
-              <a
-                href={`tel:${footerData.phone}`}
-                className="flex gap-1 items-center"
-              >
-                <div className=" flex items-center ">
-                  <Image src={Phone} alt={'Phone'} height={24} width={24} />
-                </div>
-                <Image
-                  src={footerData.flag}
-                  alt={'Phone'}
-                  height={24}
-                  width={24}
-                />
-                <p className="text-neutral600 text-lRegular">
-                  {footerData.phone}
+      <div className="flex xl:pr-[112px] lg:pr-[32px] justify-between gap-4 bg-[white]">
+        <div className="w-[30%] flex flex-col gap-8">
+          <Image src={Globe} alt="KGK Globe presence" width={250} />
+        </div>
+        <div className="w-[70%] py-4 flex flex-col justify-center gap-2">
+          <Image
+            src={kgkLogo}
+            alt="KGK logo"
+            className="ml-2 h-[48px] w-[36px]"
+          />
+          <div
+            className="flex justify-end relative mr-14 -top-14 h-1"
+            id="tree-nation-offset-website"
+          ></div>
+          <div className="flex justify-between">
+            {sitemap.map(site => (
+              <div className="flex gap-4 flex-col" key={site.title}>
+                <p className="text-[#667085] text-mMedium font-semiBold pl-2">
+                  {site.title}
                 </p>
-              </a>
-              <div className="flex gap-1 items-center">
+                <div className="flex flex-col gap-0">
+                  {site.content.map(link => (
+                    <div className="flex" key={link.data}>
+                      {' '}
+                      <a
+                        href={link.link}
+                        className="text-[#475467] hover:text-neutral900 hover:bg-neutral50 px-[8px] rounded-[8px] h-[38px] text-lMedium flex items-center"
+                      >
+                        {link.data}
+                      </a>{' '}
+                      {link.isNew && (
+                        <div className="rounded-[16px] px-2 py-[2px] bg-[#ECFDF3] text-[#027A48] text-sMedium font-medium">
+                          New
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+            {/* </div> */}
+            <div className="w-[45%] flex flex-col gap-4">
+              <p className="text-[#667085] text-mMedium font-semiBold">
+                Contact us
+              </p>
+              <div className="flex flex-col gap-2">
+                <p className="text-[#475467] text-lRegular">
+                  {footerData.address}
+                </p>
                 <a
-                  href={`mailto:${footerData.email}`}
+                  href={`tel:${footerData.phone}`}
                   className="flex gap-1 items-center"
                 >
-                  {' '}
-                  <div className="flex items-center ">
-                    <Image src={Mail} alt={'Mail'} height={24} width={24} />
+                  <div className=" flex items-center ">
+                    <Image src={Phone} alt={'Phone'} height={24} width={24} />
                   </div>
+                  <Image
+                    src={footerData.flag}
+                    alt={'Phone'}
+                    height={24}
+                    width={24}
+                  />
                   <p className="text-neutral600 text-lRegular">
-                    {footerData.email}{' '}
+                    {footerData.phone}
                   </p>
                 </a>
-                <Image
-                  src={Copy}
-                  alt={'Copy'}
-                  className="cursor-pointer"
-                  onClick={() => {
-                    navigator.clipboard.writeText(footerData.email).then(() =>
-                      toast({
-                        description: 'Copied successfully'
-                      })
-                    );
-                  }}
-                />
+                <div className="flex gap-1 items-center">
+                  <a
+                    href={`mailto:${footerData.email}`}
+                    className="flex gap-1 items-center"
+                  >
+                    {' '}
+                    <div className="flex items-center ">
+                      <Image src={Mail} alt={'Mail'} height={24} width={24} />
+                    </div>
+                    <p className="text-neutral600 text-lRegular">
+                      {footerData.email}{' '}
+                    </p>
+                  </a>
+                  <Image
+                    src={Copy}
+                    alt={'Copy'}
+                    className="cursor-pointer"
+                    onClick={() => {
+                      navigator.clipboard.writeText(footerData.email).then(() =>
+                        toast({
+                          description: 'Copied successfully'
+                        })
+                      );
+                    }}
+                  />
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
     </>
   );
 };

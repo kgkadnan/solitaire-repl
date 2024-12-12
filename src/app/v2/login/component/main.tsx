@@ -164,14 +164,13 @@ const Login = () => {
         localStorage.removeItem('MatchingPair');
 
         userLoggedIn(token.token);
-        const redirectUrl:any = localStorage.getItem('redirectUrl');
+        const redirectUrl: any = localStorage.getItem('redirectUrl');
         localStorage.removeItem('redirectUrl');
-        if(router && redirectUrl?.length > 0) 
-        {
+        if (router && redirectUrl?.length > 0) {
           router.push(redirectUrl);
         } else {
           router && router.push('/v2/');
-        }        
+        }
       } else {
         setCurrentState('otpVerification');
         setOTPVerificationFormState(prev => ({

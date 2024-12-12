@@ -50,7 +50,7 @@ interface IOrderDetail {
   setIsLoading: any;
   router: any;
   identifier?: string;
-  activeTab?:any;
+  activeTab?: any;
 }
 
 const OrderDetail: React.FC<IOrderDetail> = ({

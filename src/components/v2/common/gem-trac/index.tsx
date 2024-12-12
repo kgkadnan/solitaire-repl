@@ -143,13 +143,13 @@ const GemTracPage = ({
                     {/* Text content */}
                     <div className="flex flex-col gap-4">
                       <p className="text-primaryMain text-headingM font-semiBold">
-                          {gemTracData.product[key] !== undefined &&
-                          gemTracData.product[key] !== null
-                            ? typeof gemTracData.product[key] === 'number'
-                              ? gemTracData.product[key].toFixed(2)
-                              : gemTracData.product[key]
-                            : '-'}
-                        </p>
+                        {gemTracData.product[key] !== undefined &&
+                        gemTracData.product[key] !== null
+                          ? typeof gemTracData.product[key] === 'number'
+                            ? gemTracData.product[key].toFixed(2)
+                            : gemTracData.product[key]
+                          : '-'}
+                      </p>
                       <p className="text-[12px] text-neutral600">{value}</p>
                     </div>
                   </div>
@@ -195,12 +195,12 @@ const GemTracPage = ({
                                   <div
                                     className={`border-l border-dotted border-gray-400 ${
                                       index === 0
-                                      ? 'xl:h-[205%] lg:h-[220%]'
-                                      : index === 2
-                                      ? 'xl:h-[145%] lg:h-[145%]'
-                                      : index === 4
-                                      ? 'xl:h-[116%] lg:h-[121%]'
-                                      : 'xl:h-[145%] lg:h-[132.5%]'
+                                        ? 'xl:h-[205%] lg:h-[220%]'
+                                        : index === 2
+                                        ? 'xl:h-[145%] lg:h-[145%]'
+                                        : index === 4
+                                        ? 'xl:h-[116%] lg:h-[121%]'
+                                        : 'xl:h-[145%] lg:h-[132.5%]'
                                     }  xl:mt-[-12px] lg:mt-[-10px]`}
                                   ></div>
                                 </div>
@@ -220,7 +220,9 @@ const GemTracPage = ({
                                   <p className="lg:text-[14px] xl:text-[16px] text-primaryMain font-medium">
                                     {gemTrac.title}
                                   </p>
-                                  <p className="lg:text-[14px] xl:text-[16px] font-regular text-neutral-900 whitespace-normal overflow-visible">                                   {gemTrac.description}
+                                  <p className="lg:text-[14px] xl:text-[16px] font-regular text-neutral-900 whitespace-normal overflow-visible">
+                                    {' '}
+                                    {gemTrac.description}
                                   </p>
                                 </div>
                                 {gemTrac.chosenBy && gemTrac.details && (
@@ -258,7 +260,7 @@ const GemTracPage = ({
 
                                             {/* Text content */}
                                             <div className="flex flex-col">
-                                            <p className="text-primaryMain text-headingM font-semiBold">
+                                              <p className="text-primaryMain text-headingM font-semiBold">
                                                 {typeof figure.key === 'number'
                                                   ? figure.key.toFixed(2)
                                                   : figure.key}

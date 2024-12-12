@@ -279,8 +279,8 @@ const MatchingPair = () => {
         ''
       );
       if (
-        parseInt(replaceSubrouteWithSearchResult!) 
-      //  && parseInt(replaceSubrouteWithSearchResult!) <= filteredSelection.length
+        parseInt(replaceSubrouteWithSearchResult!)
+        //  && parseInt(replaceSubrouteWithSearchResult!) <= filteredSelection.length
       ) {
         setActiveTab(parseInt(replaceSubrouteWithSearchResult!));
       } else setActiveTab(-1);
@@ -376,29 +376,33 @@ const MatchingPair = () => {
     //   }
     // );
     let closeSpecificSearch = yourSelection.filter(
-      (_items: ISavedSearch, index: number) =>  index != removeDataIndex
+      (_items: ISavedSearch, index: number) => index != removeDataIndex
     );
 
     if (closeSpecificSearch.length === 0) {
       setSearchParameters([]);
       setAddSearches([]);
       handleReset(setState, errorSetState);
-      router.push(`${Routes.MATCHING_PAIR}?active-tab=${MatchSubRoutes.NEW_SEARCH}`);
-    } 
-    else {
+      router.push(
+        `${Routes.MATCHING_PAIR}?active-tab=${MatchSubRoutes.NEW_SEARCH}`
+      );
+    } else {
       setSearchParameters(closeSpecificSearch);
       setAddSearches(closeSpecificSearch);
-      if (activeTab == (removeDataIndex + 1)) {
+      if (activeTab == removeDataIndex + 1) {
         setActiveTab(1);
-        router.push(`${Routes.MATCHING_PAIR}?active-tab=${MatchSubRoutes.RESULT}-1`);
-      }
-      else if (activeTab > (removeDataIndex + 1)) {
+        router.push(
+          `${Routes.MATCHING_PAIR}?active-tab=${MatchSubRoutes.RESULT}-1`
+        );
+      } else if (activeTab > removeDataIndex + 1) {
         const newTab = activeTab - 1;
         setActiveTab(newTab);
-        router.push(`${Routes.MATCHING_PAIR}?active-tab=${MatchSubRoutes.RESULT}-${newTab}`); 
+        router.push(
+          `${Routes.MATCHING_PAIR}?active-tab=${MatchSubRoutes.RESULT}-${newTab}`
+        );
       }
     }
-    
+
     localStorage.removeItem('Search');
     localStorage.setItem('MatchingPair', JSON.stringify(closeSpecificSearch));
   };

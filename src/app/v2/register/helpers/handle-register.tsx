@@ -21,7 +21,7 @@ interface IHandleRegister {
   setOTPVerificationFormState: React.Dispatch<React.SetStateAction<IOtp>>;
   setIsLoading: any;
   funnelTrack: any;
-  referralCode:any;
+  referralCode: any;
 }
 export const handleRegister = async ({
   role,
