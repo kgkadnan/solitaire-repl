@@ -398,7 +398,7 @@ const MyCart = () => {
 
   useEffect(() => {
     const fetchMyAPI = async () => {
-      await tiggerCart({})
+      await tiggerCart({ page: 'cart' })
         .then((response: any) => {
           const { filteredRows, counts } = processCartItems({
             cartItems: response.data.cart.items,
@@ -748,7 +748,7 @@ const MyCart = () => {
             );
             setCommentValue('');
 
-            tiggerCart({}).then((response: any) => {
+            tiggerCart({ page: 'cart' }).then((response: any) => {
               const { filteredRows, counts } = processCartItems({
                 cartItems: response.data.cart.items,
                 activeTab
