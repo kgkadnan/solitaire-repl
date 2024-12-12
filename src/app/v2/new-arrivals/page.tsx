@@ -309,8 +309,50 @@ const NewArrivals = () => {
                       modalSetState.setIsInputDialogOpen(false);
                       setRequestCallTimeSlots({});
                       setRowSelection({});
+                      modalSetState.setIsDialogOpen(true);
+                      modalSetState.setDialogContent(
+                        <CommonPoppup
+                          content=""
+                          status="success"
+                          customPoppupBodyStyle="!mt-[70px]"
+                          header={
+                            'Your appointment has been booked successfully'
+                          }
+                          actionButtonData={[
+                            {
+                              variant: 'primary',
+                              label: ManageLocales('app.modal.okay'),
+                              handler: () =>
+                                modalSetState.setIsDialogOpen(false),
+                              customStyle: 'flex-1 w-full h-10'
+                            }
+                          ]}
+                        />
+                      );
                     })
-                    .catch(() => {});
+                    .catch(error => {
+                      modalSetState.setIsInputDialogOpen(false);
+                      setRequestCallTimeSlots({});
+                      setRowSelection({});
+                      modalSetState.setIsDialogOpen(true);
+                      modalSetState.setDialogContent(
+                        <CommonPoppup
+                          content=""
+                          status="error"
+                          customPoppupBodyStyle="!mt-[70px]"
+                          header={error.data.message}
+                          actionButtonData={[
+                            {
+                              variant: 'primary',
+                              label: ManageLocales('app.modal.okay'),
+                              handler: () =>
+                                modalSetState.setIsDialogOpen(false),
+                              customStyle: 'flex-1 w-full h-10'
+                            }
+                          ]}
+                        />
+                      );
+                    });
                 },
                 customStyle: 'flex-1 w-full',
                 isDisable: !selectedSlot.length
