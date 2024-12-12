@@ -1449,7 +1449,7 @@ const MyCart = () => {
                 }
               ]}
             />
-            <div className="text-center">Or</div>
+            <div className="text-center">or</div>
             <ActionButton
               actionButtonData={[
                 {
