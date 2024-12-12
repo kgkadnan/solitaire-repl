@@ -386,7 +386,7 @@ const MatchingPairResult = ({
       stoneids = lotids_location.map((x: any) => x.lotlocation).join();
     }
     router.push(
-      `/v2/${SubRoutes.Diamond_Detail}?path=${MatchRoutes.MATCHING_PAIR}&stoneid=${stoneids}`
+      `/v2/${SubRoutes.Diamond_Detail}?path=${MatchRoutes.MATCHING_PAIR}&activeTab=${activeTab}&stoneid=${stoneids}`
     );
   };
 
