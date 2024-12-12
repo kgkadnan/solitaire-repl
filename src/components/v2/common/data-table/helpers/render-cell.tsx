@@ -215,6 +215,7 @@ export const RenderDiscount = ({
   setContactSaleTeamInputValue,
   modalSetState
 }: any) => {
+  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   return (
     <>
       {isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED ? (
@@ -278,6 +279,7 @@ export const RenderBidDiscount = ({
   renderedCellValue,
   handleBidUnLockPricing
 }: any) => {
+  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   return (
     <>
       {isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED ? (
@@ -338,6 +340,7 @@ export const DiscountWithCross = ({
   renderedCellValue,
   handleBidUnLockPricing
 }: any) => {
+  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   return (
     <>
       {isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED ? (
@@ -463,12 +466,13 @@ export const RenderCarat = ({ renderedCellValue }: any) => {
     }`}</span>
   );
 };
-const isKycVerified = JSON.parse(localStorage.getItem('user')!);
+
 export const RenderNumericFields = ({
   renderedCellValue,
   setContactSaleTeamInputValue,
   modalSetState
 }: any) => {
+  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   return (
     <>
       {isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED ? (
@@ -509,6 +513,7 @@ export const RenderBidNumericFields = ({
   renderedCellValue,
   handleBidUnLockPricing
 }: any) => {
+  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   return (
     <>
       {isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED ? (
@@ -550,7 +555,8 @@ export const RenderPricePerCarat = ({
   setContactSaleTeamInputValue,
   modalSetState
 }: any) => {
-  console.log('renderedCellValue', renderedCellValue !== null);
+  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
+
   return (
     <>
       {isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED ? (
@@ -597,6 +603,7 @@ export const RenderAmount = ({
   modalSetState,
   setContactSaleTeamInputValue
 }: any) => {
+  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   return (
     <>
       {isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED ? (
@@ -657,6 +664,7 @@ export const RenderMeasurements = ({ row }: any) => {
 };
 
 export const RenderNewArrivalPrice = ({ row, handleBidUnLockPricing }: any) => {
+  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   return (
     <>
       {isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED ? (
@@ -699,6 +707,7 @@ export const RenderNewArrivalPricePerCarat = ({
   row,
   handleBidUnLockPricing
 }: any) => {
+  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   return (
     <>
       {isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED ? (
@@ -743,6 +752,7 @@ export const RenderNewArrivalBidDiscount = ({
   renderedCellValue,
   handleBidUnLockPricing
 }: any) => {
+  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   return (
     <>
       {isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED ? (
