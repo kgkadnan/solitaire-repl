@@ -476,7 +476,7 @@ export const RenderNumericFields = ({
   return (
     <>
       {isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED ? (
-        renderedCellValue ? (
+        renderedCellValue !== null ? (
           <span>{formatNumberWithCommas(renderedCellValue)}</span>
         ) : (
           <div
@@ -500,7 +500,7 @@ export const RenderNumericFields = ({
         )
       ) : (
         <span>{`${
-          renderedCellValue
+          renderedCellValue !== null
             ? `$${formatNumberWithCommas(renderedCellValue)}`
             : '-'
         }`}</span>
@@ -517,7 +517,7 @@ export const RenderBidNumericFields = ({
   return (
     <>
       {isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED ? (
-        renderedCellValue ? (
+        renderedCellValue !== null ? (
           <span>{formatNumberWithCommas(renderedCellValue)}</span>
         ) : (
           <div
