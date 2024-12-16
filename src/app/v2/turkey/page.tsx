@@ -1722,6 +1722,7 @@ const Turkey = () => {
                       console.log('data', data);
                       setRequestCallTimeSlots(data);
                       setSelectedDate(Number(data.timeSlots.dates[0].date));
+                      setSelectedSlot('');
                     });
                   },
                   customStyle: 'flex-1 w-full'
