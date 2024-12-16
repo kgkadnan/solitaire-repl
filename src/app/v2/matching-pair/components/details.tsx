@@ -262,6 +262,7 @@ export function MatchPairDetails({
           ? tableData.memo_out_barcode ?? ''
           : tableData?.lot_id ?? ''
       )}`,
+      url_check: tableData?.assets_pre_check?.IMG,
       category: 'Image',
       id: tableData?.id
     },
@@ -329,6 +330,7 @@ export function MatchPairDetails({
           ? tableData.memo_out_barcode ?? ''
           : tableData?.lot_id ?? ''
       )}`,
+      url_check: tableData?.assets_pre_check?.HEART,
       category: 'Image',
       id: tableData?.id
     },
@@ -346,6 +348,7 @@ export function MatchPairDetails({
           ? tableData.memo_out_barcode ?? ''
           : tableData?.lot_id ?? ''
       )}`,
+      url_check: tableData?.assets_pre_check?.ARROW,
       category: 'Image',
       id: tableData?.id
     },
@@ -363,6 +366,7 @@ export function MatchPairDetails({
           ? tableData.memo_out_barcode ?? ''
           : tableData?.lot_id ?? ''
       )}`,
+      url_check: tableData?.assets_pre_check?.ASET,
       category: 'Image',
       id: tableData?.id
     },
@@ -380,6 +384,7 @@ export function MatchPairDetails({
           ? tableData.memo_out_barcode ?? ''
           : tableData?.lot_id ?? ''
       )}`,
+      url_check: tableData?.assets_pre_check?.IDEAL,
       category: 'Image',
       id: tableData?.id
     },
@@ -397,6 +402,7 @@ export function MatchPairDetails({
           ? tableData.memo_out_barcode ?? ''
           : tableData?.lot_id ?? ''
       )}`,
+      url_check: tableData?.assets_pre_check?.FLUORESCENCE,
       category: 'Image',
       id: tableData?.id
     }
