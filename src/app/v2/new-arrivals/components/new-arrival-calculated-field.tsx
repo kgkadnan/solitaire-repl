@@ -1,3 +1,4 @@
+import { kycStatus } from '@/constants/enums/kyc';
 import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
 import { ManageLocales } from '@/utils/v2/translate';
 import React, { useEffect, useState } from 'react';
@@ -17,7 +18,15 @@ const NewArrivalCalculatedField = ({
   );
 
   useEffect(() => {
-    setSelectedRows(rows.filter((row: any) => row.id in selectedProducts));
+    const isKycVerified = JSON.parse(localStorage.getItem('user') || '{}');
+    setSelectedRows(
+      rows.filter(
+        (row: any) =>
+          row.id in selectedProducts &&
+          row.price !== null &&
+          isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED
+      )
+    );
   }, [selectedProducts]);
 
   let computeTotal = (type: string) => {
