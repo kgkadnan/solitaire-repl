@@ -323,9 +323,9 @@ const BidToBuy = () => {
           case 'rap_value':
             return {
               ...commonProps,
-              Cell: ({ row }: any) => {
+              Cell: ({ renderedCellValue }: any) => {
                 return RenderBidNumericFields({
-                  row,
+                  renderedCellValue,
                   handleBidUnLockPricing
                 });
               }
