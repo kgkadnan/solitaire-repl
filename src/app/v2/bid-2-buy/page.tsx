@@ -230,6 +230,7 @@ const BidToBuy = () => {
                     let { data } = res.data;
                     setRequestCallTimeSlots(data);
                     setSelectedDate(Number(data.timeSlots.dates[0].date));
+                    setSelectedSlot('');
                     modalSetState.setIsDialogOpen(false);
                     setIsBidUnlockPricingPopup(false);
                     modalSetState.setDialogContent(<></>);
