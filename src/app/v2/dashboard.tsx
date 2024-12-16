@@ -546,9 +546,7 @@ const Dashboard = () => {
                           content=""
                           status="success"
                           customPoppupBodyStyle="!mt-[70px]"
-                          header={
-                            'Your appointment has been booked successfully'
-                          }
+                          header={'Your callback has been scheduled'}
                           actionButtonData={[
                             {
                               variant: 'primary',
