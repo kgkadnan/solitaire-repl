@@ -419,6 +419,8 @@ const Share = ({
     );
   };
 
+  console.log('filteredImages', filteredImages);
+
   return (
     <>
       <ShareDialog
@@ -479,7 +481,9 @@ const Share = ({
               label: `Email ${
                 shareTrackIdentifier === 'Details'
                   ? filteredImages[imageIndex]?.name ?? ''
-                  : filteredImages[0][imageIndex].name ?? ''
+                  : filteredImages[0][imageIndex].url_check
+                  ? filteredImages[0][imageIndex].name
+                  : ''
               } Link`,
               handler: () => {
                 if (Object.keys(selectedProducts).length > 0) {
@@ -532,13 +536,15 @@ const Share = ({
               isDisable:
                 shareTrackIdentifier === 'Details'
                   ? !filteredImages[imageIndex]?.name
-                  : !filteredImages[0][imageIndex].name
+                  : !filteredImages[0][imageIndex].url_check
             },
             {
               label: `WhatsApp ${
                 shareTrackIdentifier === 'Details'
                   ? filteredImages[imageIndex]?.name ?? ''
-                  : filteredImages[0][imageIndex].name ?? ''
+                  : filteredImages[0][imageIndex].url_check
+                  ? filteredImages[0][imageIndex].name
+                  : ''
               } Link`,
               handler: () => {
                 if (Object.keys(selectedProducts).length > 0) {
@@ -588,7 +594,7 @@ const Share = ({
               isDisable:
                 shareTrackIdentifier === 'Details'
                   ? !filteredImages[imageIndex]?.name
-                  : !filteredImages[0][imageIndex].name
+                  : !filteredImages[0][imageIndex].url_check
             }
           ]}
         />
