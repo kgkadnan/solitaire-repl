@@ -221,12 +221,12 @@ export const RenderDiscount = ({
       {isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED ? (
         <div
           className={`${
-            renderedCellValue !== null && renderedCellValue !== undefined
+            renderedCellValue !== null
               ? 'text-successMain border-[1px] border-successBorder bg-successSurface '
               : ''
           } px-[4px] py-[2px] w-[65px] text-center rounded-[4px]`}
         >
-          {renderedCellValue !== null && renderedCellValue !== undefined ? (
+          {renderedCellValue !== null ? (
             renderedCellValue === 0 ? (
               '0.00%'
             ) : (
@@ -259,12 +259,12 @@ export const RenderDiscount = ({
       ) : (
         <div
           className={`${
-            renderedCellValue !== null && renderedCellValue !== undefined
+            renderedCellValue !== null
               ? 'text-successMain border-[1px] border-successBorder bg-successSurface '
               : ''
           } px-[4px] py-[2px] w-[65px] text-center rounded-[4px]`}
         >
-          {renderedCellValue !== null && renderedCellValue !== undefined
+          {renderedCellValue !== null
             ? renderedCellValue === 0
               ? '0.00%'
               : formatNumber(renderedCellValue) + '%'
