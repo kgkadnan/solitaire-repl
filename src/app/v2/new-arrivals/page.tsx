@@ -518,10 +518,11 @@ const NewArrivals = () => {
           case 'rap_value':
             return {
               ...commonProps,
-              Cell: ({ renderedCellValue }: any) => {
+              Cell: ({ renderedCellValue, row }: any) => {
                 return RenderBidNumericFields({
                   renderedCellValue,
-                  handleBidUnLockPricing
+                  handleBidUnLockPricing,
+                  row
                 });
               }
             };
@@ -557,20 +558,22 @@ const NewArrivals = () => {
           case 'discount':
             return {
               ...commonProps,
-              Cell: ({ renderedCellValue }: any) => {
+              Cell: ({ renderedCellValue, row }: any) => {
                 return RenderBidDiscount({
                   renderedCellValue,
-                  handleBidUnLockPricing
+                  handleBidUnLockPricing,
+                  row
                 });
               }
             };
           case 'current_max_bid':
             return {
               ...commonProps,
-              Cell: ({ renderedCellValue }: any) => {
+              Cell: ({ renderedCellValue, row }: any) => {
                 return RenderNewArrivalBidDiscount({
                   renderedCellValue,
-                  handleBidUnLockPricing
+                  handleBidUnLockPricing,
+                  row
                 });
               }
             };

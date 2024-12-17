@@ -323,10 +323,11 @@ const BidToBuy = () => {
           case 'rap_value':
             return {
               ...commonProps,
-              Cell: ({ renderedCellValue }: any) => {
+              Cell: ({ renderedCellValue, row }: any) => {
                 return RenderBidNumericFields({
                   renderedCellValue,
-                  handleBidUnLockPricing
+                  handleBidUnLockPricing,
+                  row
                 });
               }
             };
@@ -348,30 +349,33 @@ const BidToBuy = () => {
           case 'original_discount':
             return {
               ...commonProps,
-              Cell: ({ renderedCellValue }: any) => {
+              Cell: ({ renderedCellValue, row }: any) => {
                 return DiscountWithCross({
                   renderedCellValue,
-                  handleBidUnLockPricing
+                  handleBidUnLockPricing,
+                  row
                 });
               }
             };
           case 'discount':
             return {
               ...commonProps,
-              Cell: ({ renderedCellValue }: any) => {
+              Cell: ({ renderedCellValue, row }: any) => {
                 return RenderBidDiscount({
                   renderedCellValue,
-                  handleBidUnLockPricing
+                  handleBidUnLockPricing,
+                  row
                 });
               }
             };
           case 'my_current_bid':
             return {
               ...commonProps,
-              Cell: ({ renderedCellValue }: any) => {
+              Cell: ({ renderedCellValue, row }: any) => {
                 return RenderBidDiscount({
                   renderedCellValue,
-                  handleBidUnLockPricing
+                  handleBidUnLockPricing,
+                  row
                 });
               }
             };
