@@ -819,11 +819,12 @@ const Result = ({
           case 'rap_value':
             return {
               ...commonProps,
-              Cell: ({ renderedCellValue }: any) => {
+              Cell: ({ renderedCellValue, row }: any) => {
                 return RenderNumericFields({
                   renderedCellValue,
                   modalSetState,
-                  setContactSaleTeamInputValue
+                  setContactSaleTeamInputValue,
+                  row
                 });
               }
             };
@@ -849,11 +850,12 @@ const Result = ({
           case 'discount':
             return {
               ...commonProps,
-              Cell: ({ renderedCellValue }: any) => {
+              Cell: ({ renderedCellValue, row }: any) => {
                 return RenderDiscount({
                   renderedCellValue,
                   modalSetState,
-                  setContactSaleTeamInputValue
+                  setContactSaleTeamInputValue,
+                  row
                 });
               }
             };
@@ -880,11 +882,12 @@ const Result = ({
           case 'price_per_carat':
             return {
               ...commonProps,
-              Cell: ({ renderedCellValue }: any) => {
+              Cell: ({ renderedCellValue, row }: any) => {
                 return RenderPricePerCarat({
                   renderedCellValue,
                   modalSetState,
-                  setContactSaleTeamInputValue
+                  setContactSaleTeamInputValue,
+                  row
                 });
               }
             };

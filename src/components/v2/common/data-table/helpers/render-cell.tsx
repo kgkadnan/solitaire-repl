@@ -213,26 +213,15 @@ export const RenderLab = ({
 export const RenderDiscount = ({
   renderedCellValue,
   setContactSaleTeamInputValue,
-  modalSetState
+  modalSetState,
+  row
 }: any) => {
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   return (
     <>
       {isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED ? (
-        <div
-          className={`${
-            renderedCellValue !== null
-              ? 'text-successMain border-[1px] border-successBorder bg-successSurface '
-              : ''
-          } px-[4px] py-[2px] w-[65px] text-center rounded-[4px]`}
-        >
-          {renderedCellValue !== null ? (
-            renderedCellValue === 0 ? (
-              '0.00%'
-            ) : (
-              formatNumber(renderedCellValue) + '%'
-            )
-          ) : (
+        <>
+          {row.original.variants[0].prices[0]?.amount === null ? (
             <div
               className="group relative"
               onClick={() => {
@@ -254,8 +243,22 @@ export const RenderDiscount = ({
                 Unlock
               </div>
             </div>
+          ) : (
+            <div
+              className={`${
+                renderedCellValue !== null
+                  ? 'text-successMain border-[1px] border-successBorder bg-successSurface '
+                  : ''
+              } px-[4px] py-[2px] w-[65px] text-center rounded-[4px]`}
+            >
+              {renderedCellValue !== null
+                ? renderedCellValue === 0
+                  ? '0.00%'
+                  : formatNumber(renderedCellValue) + '%'
+                : '-'}
+            </div>
           )}
-        </div>
+        </>
       ) : (
         <div
           className={`${
@@ -277,26 +280,15 @@ export const RenderDiscount = ({
 
 export const RenderBidDiscount = ({
   renderedCellValue,
-  handleBidUnLockPricing
+  handleBidUnLockPricing,
+  row
 }: any) => {
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   return (
     <>
       {isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED ? (
-        <div
-          className={`${
-            renderedCellValue !== null && renderedCellValue !== undefined
-              ? 'text-successMain border-[1px] border-successBorder bg-successSurface '
-              : ''
-          } px-[4px] py-[2px] w-[65px] text-center rounded-[4px]`}
-        >
-          {renderedCellValue !== null && renderedCellValue !== undefined ? (
-            renderedCellValue === 0 ? (
-              '0.00%'
-            ) : (
-              formatNumber(renderedCellValue) + '%'
-            )
-          ) : (
+        <>
+          {row.original.price === null ? (
             <div
               className="group relative"
               onClick={() => {
@@ -315,8 +307,22 @@ export const RenderBidDiscount = ({
                 Unlock
               </div>
             </div>
+          ) : (
+            <div
+              className={`${
+                renderedCellValue !== null
+                  ? 'text-successMain border-[1px] border-successBorder bg-successSurface '
+                  : ''
+              } px-[4px] py-[2px] w-[65px] text-center rounded-[4px]`}
+            >
+              {renderedCellValue !== null
+                ? renderedCellValue === 0
+                  ? '0.00%'
+                  : formatNumber(renderedCellValue) + '%'
+                : '-'}
+            </div>
           )}
-        </div>
+        </>
       ) : (
         <div
           className={`${
@@ -338,14 +344,15 @@ export const RenderBidDiscount = ({
 
 export const DiscountWithCross = ({
   renderedCellValue,
-  handleBidUnLockPricing
+  handleBidUnLockPricing,
+  row
 }: any) => {
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   return (
     <>
       {isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED ? (
         <>
-          {renderedCellValue === null ? (
+          {row.original.price === null ? (
             <div
               className="group relative"
               onClick={() => {
@@ -470,100 +477,15 @@ export const RenderCarat = ({ renderedCellValue }: any) => {
 export const RenderNumericFields = ({
   renderedCellValue,
   setContactSaleTeamInputValue,
-  modalSetState
+  modalSetState,
+  row
 }: any) => {
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
-  return (
-    <>
-      {isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED ? (
-        renderedCellValue !== null ? (
-          <span>{formatNumberWithCommas(renderedCellValue)}</span>
-        ) : (
-          <div
-            className="group relative"
-            onClick={() => {
-              handleUnlockPricing(setContactSaleTeamInputValue, modalSetState);
-            }}
-          >
-            {/* Lock Icon */}
-            <Image
-              src={lockIcon}
-              alt="lockIcon"
-              className="group-hover:hidden transition-all"
-            />
-
-            {/* Tooltip for "Unlock" on hover */}
-            <div className="  font-medium text-infoMain text-sMedium  hidden group-hover:flex transition-all">
-              Unlock
-            </div>
-          </div>
-        )
-      ) : (
-        <span>{`${
-          renderedCellValue !== null
-            ? `$${formatNumberWithCommas(renderedCellValue)}`
-            : '-'
-        }`}</span>
-      )}
-    </>
-  );
-};
-
-export const RenderBidNumericFields = ({
-  renderedCellValue,
-  handleBidUnLockPricing
-}: any) => {
-  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
-  return (
-    <>
-      {isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED ? (
-        renderedCellValue !== null ? (
-          <span>{formatNumberWithCommas(renderedCellValue)}</span>
-        ) : (
-          <div
-            className="group relative"
-            onClick={() => {
-              handleBidUnLockPricing();
-            }}
-          >
-            {/* Lock Icon */}
-            <Image
-              src={lockIcon}
-              alt="lockIcon"
-              className="group-hover:hidden transition-all"
-            />
-
-            {/* Tooltip for "Unlock" on hover */}
-            <div className="  font-medium text-infoMain text-sMedium  hidden group-hover:flex transition-all">
-              Unlock
-            </div>
-          </div>
-        )
-      ) : (
-        <span>{`${
-          renderedCellValue
-            ? `$${formatNumberWithCommas(renderedCellValue)}`
-            : '-'
-        }`}</span>
-      )}
-    </>
-  );
-};
-
-export const RenderPricePerCarat = ({
-  renderedCellValue,
-  setContactSaleTeamInputValue,
-  modalSetState
-}: any) => {
-  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
-
   return (
     <>
       {isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED ? (
         <>
-          {renderedCellValue !== null ? (
-            <span>{formatNumberWithCommas(renderedCellValue)}</span>
-          ) : (
+          {row.original.variants[0].prices[0]?.amount === null ? (
             <div
               className="group relative"
               onClick={() => {
@@ -585,6 +507,122 @@ export const RenderPricePerCarat = ({
                 Unlock
               </div>
             </div>
+          ) : (
+            <>
+              {' '}
+              {renderedCellValue !== null ? (
+                <span>{formatNumberWithCommas(renderedCellValue)}</span>
+              ) : (
+                '-'
+              )}
+            </>
+          )}
+        </>
+      ) : (
+        <span>{`${
+          renderedCellValue !== null
+            ? `$${formatNumberWithCommas(renderedCellValue)}`
+            : '-'
+        }`}</span>
+      )}
+    </>
+  );
+};
+
+export const RenderBidNumericFields = ({
+  renderedCellValue,
+  handleBidUnLockPricing,
+  row
+}: any) => {
+  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
+  return (
+    <>
+      {isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED ? (
+        <>
+          {row.original.price === null ? (
+            <div
+              className="group relative"
+              onClick={() => {
+                handleBidUnLockPricing();
+              }}
+            >
+              {/* Lock Icon */}
+              <Image
+                src={lockIcon}
+                alt="lockIcon"
+                className="group-hover:hidden transition-all"
+              />
+
+              {/* Tooltip for "Unlock" on hover */}
+              <div className="  font-medium text-infoMain text-sMedium  hidden group-hover:flex transition-all">
+                Unlock
+              </div>
+            </div>
+          ) : (
+            <>
+              {' '}
+              {renderedCellValue !== null ? (
+                <span>{formatNumberWithCommas(renderedCellValue)}</span>
+              ) : (
+                '-'
+              )}
+            </>
+          )}
+        </>
+      ) : (
+        <span>{`${
+          renderedCellValue
+            ? `$${formatNumberWithCommas(renderedCellValue)}`
+            : '-'
+        }`}</span>
+      )}
+    </>
+  );
+};
+
+export const RenderPricePerCarat = ({
+  renderedCellValue,
+  setContactSaleTeamInputValue,
+  modalSetState,
+  row
+}: any) => {
+  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
+
+  return (
+    <>
+      {isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED ? (
+        <>
+          {row.original.variants[0].prices[0]?.amount === null ? (
+            <div
+              className="group relative"
+              onClick={() => {
+                handleUnlockPricing(
+                  setContactSaleTeamInputValue,
+                  modalSetState
+                );
+              }}
+            >
+              {/* Lock Icon */}
+              <Image
+                src={lockIcon}
+                alt="lockIcon"
+                className="group-hover:hidden transition-all"
+              />
+
+              {/* Tooltip for "Unlock" on hover */}
+              <div className="  font-medium text-infoMain text-sMedium  hidden group-hover:flex transition-all">
+                Unlock
+              </div>
+            </div>
+          ) : (
+            <>
+              {' '}
+              {renderedCellValue !== null ? (
+                <span>{formatNumberWithCommas(renderedCellValue)}</span>
+              ) : (
+                '-'
+              )}
+            </>
           )}
         </>
       ) : (
@@ -712,7 +750,7 @@ export const RenderNewArrivalPricePerCarat = ({
     <>
       {isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED ? (
         <>
-          {row?.original?.price_per_carat === null ? (
+          {row.original.price === null ? (
             <div
               className="group relative"
               onClick={() => {
@@ -732,9 +770,15 @@ export const RenderNewArrivalPricePerCarat = ({
               </div>
             </div>
           ) : (
-            <span>
-              {formatNumberWithCommas(row?.original?.price_per_carat)}
-            </span>
+            <>
+              {row?.original?.price_per_carat === null ? (
+                '-'
+              ) : (
+                <span>
+                  {formatNumberWithCommas(row?.original?.price_per_carat)}
+                </span>
+              )}
+            </>
           )}
         </>
       ) : (
@@ -750,14 +794,15 @@ export const RenderNewArrivalPricePerCarat = ({
 
 export const RenderNewArrivalBidDiscount = ({
   renderedCellValue,
-  handleBidUnLockPricing
+  handleBidUnLockPricing,
+  row
 }: any) => {
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   return (
     <>
       {isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED ? (
         <>
-          {renderedCellValue === null ? (
+          {row.original.price === null ? (
             <div
               className="group relative"
               onClick={() => {
@@ -777,21 +822,27 @@ export const RenderNewArrivalBidDiscount = ({
               </div>
             </div>
           ) : (
-            <div className="w-full flex justify-center items-center">
-              <div
-                className={`${
-                  renderedCellValue !== null
-                    ? 'text-infoMain border-[1px] border-infoBorder bg-infoSurface'
-                    : ''
-                }  px-[4px] py-[2px] w-[65px] rounded-[4px] text-center`}
-              >
-                {renderedCellValue !== null
-                  ? renderedCellValue === 0
-                    ? '0.00%'
-                    : formatNumber(renderedCellValue) + '%'
-                  : '-'}
-              </div>
-            </div>
+            <>
+              {renderedCellValue === null ? (
+                '-'
+              ) : (
+                <div className="w-full flex justify-center items-center">
+                  <div
+                    className={`${
+                      renderedCellValue !== null
+                        ? 'text-infoMain border-[1px] border-infoBorder bg-infoSurface'
+                        : ''
+                    }  px-[4px] py-[2px] w-[65px] rounded-[4px] text-center`}
+                  >
+                    {renderedCellValue !== null
+                      ? renderedCellValue === 0
+                        ? '0.00%'
+                        : formatNumber(renderedCellValue) + '%'
+                      : '-'}
+                  </div>
+                </div>
+              )}
+            </>
           )}
         </>
       ) : (
