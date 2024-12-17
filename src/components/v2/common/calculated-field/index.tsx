@@ -16,12 +16,17 @@ const CalculatedField = ({ rows, selectedProducts }: ICalculatedField) => {
   useEffect(() => {
     const isKycVerified = JSON.parse(localStorage.getItem('user') || '{}');
     setSelectedRows(
-      rows.filter(
-        (row: IProduct) =>
-          row.id in selectedProducts &&
-          row.variants[0].prices[0].amount !== null &&
-          isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED
-      )
+      rows.filter((row: IProduct) => {
+        const isKycNotApproved =
+          isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED;
+
+        // Apply price check only if KYC is not approved
+        const hasValidPrice = isKycNotApproved
+          ? row.variants[0]?.prices[0]?.amount !== null
+          : true;
+
+        return row.id in selectedProducts && hasValidPrice;
+      })
     );
   }, [selectedProducts]);
 
