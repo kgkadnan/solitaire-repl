@@ -40,6 +40,7 @@ import { checkImage } from '@/components/v2/common/detail-page/helpers/check-ima
 import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
 import GemTracPage from '@/components/v2/common/gem-trac';
 import { useLazyGetGemTracQuery } from '@/features/api/gem-trac';
+import { MatchRoutes, SubRoutes } from '@/constants/v2/enums/routes';
 
 interface IOrderDetail {
   productDetailData: any;
@@ -49,6 +50,7 @@ interface IOrderDetail {
   setIsLoading: any;
   router: any;
   identifier?: string;
+  activeTab?: any;
 }
 
 const OrderDetail: React.FC<IOrderDetail> = ({
@@ -58,7 +60,8 @@ const OrderDetail: React.FC<IOrderDetail> = ({
   modalSetState,
   setIsLoading,
   router,
-  identifier
+  identifier,
+  activeTab
 }) => {
   const [triggerColumn] =
     useLazyGetManageListingSequenceQuery<IManageListingSequenceResponse>();
@@ -81,8 +84,11 @@ const OrderDetail: React.FC<IOrderDetail> = ({
   const [triggerGemTracApi] = useLazyGetGemTracQuery({});
 
   const handleDetailPage = ({ row }: { row: any }) => {
-    setIsDetailPage(true);
-    setDetailPageData(row);
+    // setIsDetailPage(true);
+    // setDetailPageData(row);
+    router.push(
+      `/v2/${SubRoutes.Diamond_Detail}?path=${MatchRoutes.YOUR_ORDERS}&activeTab=${activeTab}&stoneid=${row?.lot_id}-${row?.location}`
+    );
   };
 
   const handleDetailImage = ({ row }: any) => {
@@ -113,7 +119,14 @@ const OrderDetail: React.FC<IOrderDetail> = ({
         switch (accessor) {
           case 'rap':
           case 'rap_value':
-            return { ...commonProps, Cell: RenderNumericFields };
+            return {
+              ...commonProps,
+              Cell: ({ renderedCellValue }: any) => {
+                return RenderNumericFields({
+                  renderedCellValue
+                });
+              }
+            };
           case 'amount':
             return { ...commonProps, Cell: RenderAmount };
           case 'carats':

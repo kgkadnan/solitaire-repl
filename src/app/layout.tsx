@@ -1,7 +1,7 @@
 'use client';
 import React, { ReactNode, FC, useEffect, useState } from 'react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
-import { Inter } from 'next/font/google';
+import { Inter, Cardo } from 'next/font/google';
 import '../../styles/_globals.scss';
 import { Provider } from 'react-redux';
 import { setupStore } from '@/store';
@@ -32,6 +32,10 @@ import CookieBot from 'react-cookiebot';
 const store = setupStore();
 
 const inter = Inter({ subsets: ['latin'] });
+export const cardo = Cardo({
+  subsets: ['latin'], // Specify subset (optional)
+  weight: ['400', '700'] // Specify font weights
+});
 
 Sentry.init({
   dsn: process.env.NEXT_PUBLIC_SENTRY_DSN, // Replace with your Sentry DSN
@@ -122,20 +126,22 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
       });
     }
   });
-  useEffect(()=>{
-    setTimeout(()=>{
+  useEffect(() => {
+    setTimeout(() => {
       if (window?.TreeNationOffsetWebsite && isV3Route && !isMobile) {
         const element = document.querySelector('#tree-nation-offset-website');
         if (!element || !element.hasChildNodes()) {
-          window?.TreeNationOffsetWebsite({
-            code: '0f021e268485267a',
-            lang: 'en',
-            theme: 'light',
-          })?.render('#tree-nation-offset-website');
+          window
+            ?.TreeNationOffsetWebsite({
+              code: '0f021e268485267a',
+              lang: 'en',
+              theme: 'light'
+            })
+            ?.render('#tree-nation-offset-website');
         }
       }
-    },1000);
-  },[!isMobile,[]]);
+    }, 1000);
+  }, [!isMobile, []]);
 
   return (
     <html lang="en">
@@ -222,7 +228,10 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
             `
           }}
         />
-         <Script src="https://widgets.tree-nation.com/js/widgets/v1/widgets.min.js?v=1.0" strategy="afterInteractive" /> 
+        <Script
+          src="https://widgets.tree-nation.com/js/widgets/v1/widgets.min.js?v=1.0"
+          strategy="afterInteractive"
+        />
       </head>
       <Head>
         <link

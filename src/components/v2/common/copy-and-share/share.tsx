@@ -419,6 +419,8 @@ const Share = ({
     );
   };
 
+  console.log('filteredImages', filteredImages);
+
   return (
     <>
       <ShareDialog
@@ -447,7 +449,7 @@ const Share = ({
           }
           dropdownMenu={[
             {
-              label: 'Share Diamond Detail',
+              label: 'Share Diamond Details',
               handler: () => {
                 if (Object.keys(selectedProducts).length > 0) {
                   setIsError(false);
@@ -496,12 +498,13 @@ const Share = ({
                     // Open the user's default email client
                     window.location.href = mailtoURL;
                   } else {
-                    // Filter images based on selected product IDs
+                    // Filter images based on selected product IDs and url_check
                     const selectedImageLinks = filteredImages
-                      .filter((images: any) =>
-                        Object.keys(selectedProducts).includes(
-                          images[imageIndex].id
-                        )
+                      .filter(
+                        (images: any) =>
+                          Object.keys(selectedProducts).includes(
+                            images[imageIndex].id
+                          ) && images[imageIndex].url_check !== false
                       )
                       .map((images: any) => images[imageIndex].downloadUrl);
                     if (selectedImageLinks.length > 0) {
@@ -532,7 +535,19 @@ const Share = ({
               isDisable:
                 shareTrackIdentifier === 'Details'
                   ? !filteredImages[imageIndex]?.name
-                  : !filteredImages[0][imageIndex].name
+                  : Object.keys(selectedProducts).length > 0
+                  ? !filteredImages
+                      .filter((images: any) => {
+                        return Object.keys(selectedProducts).includes(
+                          images[imageIndex].id
+                        );
+                      })
+                      .some(
+                        (images: any) => images[imageIndex]?.url_check === true
+                      )
+                  : !filteredImages.some(
+                      (images: any) => images[imageIndex]?.url_check === true
+                    )
             },
             {
               label: `WhatsApp ${
@@ -556,14 +571,16 @@ const Share = ({
                     // Open WhatsApp in a new tab or window
                     window.open(whatsappURL, '_blank');
                   } else {
+                    // Filter images based on selected product IDs and url_check
                     const selectedImageLinks = filteredImages
-                      .filter((images: any) => {
-                        console.log('images[imageIndex]', images[imageIndex]);
-                        return Object.keys(selectedProducts).includes(
-                          images[imageIndex].id
-                        );
-                      })
+                      .filter(
+                        (images: any) =>
+                          Object.keys(selectedProducts).includes(
+                            images[imageIndex].id
+                          ) && images[imageIndex].url_check !== false
+                      )
                       .map((images: any) => images[imageIndex].downloadUrl);
+
                     if (selectedImageLinks.length > 0) {
                       // Create a single WhatsApp message with all the links
                       const message = selectedImageLinks.join('\n'); // Separate links by a newline
@@ -588,7 +605,19 @@ const Share = ({
               isDisable:
                 shareTrackIdentifier === 'Details'
                   ? !filteredImages[imageIndex]?.name
-                  : !filteredImages[0][imageIndex].name
+                  : Object.keys(selectedProducts).length > 0
+                  ? !filteredImages
+                      .filter((images: any) => {
+                        return Object.keys(selectedProducts).includes(
+                          images[imageIndex].id
+                        );
+                      })
+                      .some(
+                        (images: any) => images[imageIndex]?.url_check === true
+                      )
+                  : !filteredImages.some(
+                      (images: any) => images[imageIndex]?.url_check === true
+                    )
             }
           ]}
         />

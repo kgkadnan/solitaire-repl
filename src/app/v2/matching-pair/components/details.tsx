@@ -192,8 +192,9 @@ export function MatchPairDetails({
       triggerSimilarMatchingPairApi({
         product_id: originalData[0].id,
         matching_product_id: originalData[1].id,
-        show_only_with_video:
-          showOnlyWithVideo[activeTab - 1]?.queryParams?.all_asset_required
+        show_only_with_video: showOnlyWithVideo
+          ? showOnlyWithVideo[activeTab - 1]?.queryParams?.all_asset_required
+          : false
       })
         .unwrap()
         .then(res => setSimilarData(res))
@@ -261,6 +262,7 @@ export function MatchPairDetails({
           ? tableData.memo_out_barcode ?? ''
           : tableData?.lot_id ?? ''
       )}`,
+      url_check: tableData?.assets_pre_check?.IMG,
       category: 'Image',
       id: tableData?.id
     },
@@ -328,6 +330,7 @@ export function MatchPairDetails({
           ? tableData.memo_out_barcode ?? ''
           : tableData?.lot_id ?? ''
       )}`,
+      url_check: tableData?.assets_pre_check?.HEART,
       category: 'Image',
       id: tableData?.id
     },
@@ -345,6 +348,7 @@ export function MatchPairDetails({
           ? tableData.memo_out_barcode ?? ''
           : tableData?.lot_id ?? ''
       )}`,
+      url_check: tableData?.assets_pre_check?.ARROW,
       category: 'Image',
       id: tableData?.id
     },
@@ -362,6 +366,7 @@ export function MatchPairDetails({
           ? tableData.memo_out_barcode ?? ''
           : tableData?.lot_id ?? ''
       )}`,
+      url_check: tableData?.assets_pre_check?.ASET,
       category: 'Image',
       id: tableData?.id
     },
@@ -379,6 +384,7 @@ export function MatchPairDetails({
           ? tableData.memo_out_barcode ?? ''
           : tableData?.lot_id ?? ''
       )}`,
+      url_check: tableData?.assets_pre_check?.IDEAL,
       category: 'Image',
       id: tableData?.id
     },
@@ -396,6 +402,7 @@ export function MatchPairDetails({
           ? tableData.memo_out_barcode ?? ''
           : tableData?.lot_id ?? ''
       )}`,
+      url_check: tableData?.assets_pre_check?.FLUORESCENCE,
       category: 'Image',
       id: tableData?.id
     }
@@ -515,7 +522,9 @@ export function MatchPairDetails({
 
       case 'rap':
       case 'rap_value':
-        return diamond[key] ? `$${formatNumberWithCommas(diamond[key])}` : '-';
+        return diamond[key] !== null
+          ? `$${formatNumberWithCommas(diamond[key])}`
+          : '-';
       case 'price_per_carat':
         return diamond[key] !== undefined || diamond[key] !== null
           ? `$${formatNumberWithCommas(diamond[key])}`
@@ -536,7 +545,7 @@ export function MatchPairDetails({
       case 'star_length':
         return diamond[key] ? `${formatNumber(diamond[key])}` : '-';
       case 'discount':
-        return diamond[key] ? `${formatNumber(diamond[key])}%` : '-';
+        return diamond[key] !== null ? `${formatNumber(diamond[key])}%` : '-';
 
       case 'key_to_symbol':
       case 'report_comments':

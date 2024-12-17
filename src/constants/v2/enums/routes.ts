@@ -22,11 +22,22 @@ export enum SubRoutes {
   NEW_SEARCH = 'new-search',
   RESULT = 'result',
   SAVED_SEARCH = 'saved-search',
-  NEW_ARRIVAL = 'new-arrival'
+  NEW_ARRIVAL = 'new-arrival',
+  Diamond_Detail = 'detail-page'
 }
 
 export enum MatchSubRoutes {
   NEW_SEARCH = 'new-search',
   RESULT = 'result',
   SAVED_SEARCH = 'saved-search'
+}
+
+export enum MatchRoutes {
+  NEW_ARRIVAL = 'new-arrivals',
+  BID_TO_BUY = 'bid-2-buy',
+  SEARCH = 'search',
+  MY_CART = 'my-cart',
+  DASHBOARD = 'dash-board',
+  MATCHING_PAIR = 'matching-pair',
+  YOUR_ORDERS = 'your-orders'
 }

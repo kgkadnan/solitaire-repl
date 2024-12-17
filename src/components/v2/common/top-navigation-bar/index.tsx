@@ -19,6 +19,7 @@ import Notification from './components/notification/notification';
 import { useLazyGetProfilePhotoQuery } from '@/features/api/my-profile';
 import { useAppSelector } from '@/hooks/hook';
 import {
+  useGetCustomerQuery,
   useLazyGetLogoutAllQuery,
   useLazyGetLogoutQuery
 } from '@/features/api/dashboard';
@@ -31,6 +32,8 @@ import {
   Tracking_KYC_Entry_Point
 } from '@/constants/funnel-tracking';
 import { trackEvent } from '@/utils/ga';
+import { useNotifySalesMutation } from '@/features/api/notify-sales';
+import CommonPoppup from '@/app/v2/login/component/common-poppup';
 
 export interface IUserAccountInfo {
   customer: {
@@ -65,17 +68,25 @@ const TopNavigationBar = ({
   const [showNudge, setShowNudge] = useState(
     localStorage.getItem('show-nudge')
   );
+  const { data: customerData } = useGetCustomerQuery(
+    {},
+    { refetchOnMountOrArgChange: true }
+  );
   const [isLogout, setIsLogout] = useState<boolean>(false);
   const [triggerGetProfilePhoto, { isSuccess }] = useLazyGetProfilePhotoQuery(
     {}
   );
+
+  const [notifySales] = useNotifySalesMutation();
   const [triggerLogout] = useLazyGetLogoutQuery({});
   const [triggerLogoutAll] = useLazyGetLogoutAllQuery({});
   const { userLoggedOut } = useUser();
   const [modalContent, setModalContent] = useState<any>();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [userAccountInfo, setUserAccountInfo] = useState<IUserAccountInfo>();
   const [imageUrl, setImageUrl] = useState('');
   const [isImageApiLoaded, setIsImageApiLoaded] = useState(false);
+  const [isNotified, setIsNotified] = useState(false);
 
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   useEffect(() => {
@@ -129,6 +140,40 @@ const TopNavigationBar = ({
       .catch(_err => console.log('error'));
   };
 
+  const handleNotifySales = () => {
+    notifySales({})
+      .unwrap()
+      .then(res => {
+        console.log('res', res);
+        setIsNotified(true);
+
+        setIsDialogOpen(true);
+
+        setModalContent(
+          <CommonPoppup
+            status="success"
+            content={
+              'Your request has been successfully submitted. Our sales team will review your account details and activate it shortly. You will be notified once the activation is complete'
+            }
+            customPoppupBodyStyle="!mt-[70px]"
+            header={'Thank You for Notifying Sales!'}
+            actionButtonData={[
+              {
+                variant: 'primary',
+                label: 'Okay',
+                handler: () => {
+                  setIsDialogOpen(false);
+                  setModalContent(<></>);
+                },
+                customStyle: 'flex-1 w-full'
+              }
+            ]}
+          />
+        );
+      })
+      .catch(e => {});
+  };
+
   const handleLogout = () => {
     triggerLogout({})
       .then(_res => {
@@ -140,26 +185,30 @@ const TopNavigationBar = ({
   };
   return (
     <div className="min-h-[60px] border-b-[1px] border-neutral200 sticky top-0 bg-neutral0 z-[3] flex flex-col justify-end ">
-      <DialogComponent dialogContent={modalContent} isOpens={isLogout} />
+      <DialogComponent
+        dialogContent={modalContent}
+        isOpens={isLogout || isDialogOpen}
+      />
       {showNudge === 'MINI' &&
         (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
           isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED) &&
         currentPath !== '/v2/kyc' &&
         v2Routes.includes(currentPath) && (
           <div
-            className={`bg-primaryMain pr-[32px] flex justify-between px-[32px] py-[8px] transition ease-in-out duration-500 items-center ${
+            className={`bg-infoSurface pr-[32px] flex justify-between px-[14px] py-[8px] transition ease-in-out duration-500 items-center ${
               showNudge === 'MINI' ? 'translate-y-0' : '-translate-y-full'
             }`}
           >
             <div className="flex">
               <div className="w-[84px]"></div>
               <div>
-                <p className="text-lMedium medium text-neutral0">
-                  Unlock Exclusive Benefits: Complete Your KYC Now!
+                <p className="text-neutral900 font-normal text-mRegular">
+                  As a first-time account user, please complete your KYC to
+                  access exclusive features and services.
                 </p>
-                <p className="text-neutral50 text-mRegular">
-                  Take a moment to verify your identity and access exclusive
-                  features and services.
+                <p className="text-neutral900 font-normal text-mRegular">
+                  If you're an existing customer, kindly notify our sales team
+                  for quicker account activation.
                 </p>
               </div>
             </div>
@@ -167,6 +216,21 @@ const TopNavigationBar = ({
               actionButtonData={[
                 {
                   variant: 'secondary',
+                  label:
+                    customerData?.customer?.notifySales !== 'Available' ||
+                    isNotified
+                      ? 'Notified Sales'
+                      : 'Notify Sales',
+                  handler: () => {
+                    handleNotifySales();
+                  },
+                  isDisable:
+                    customerData?.customer?.notifySales !== 'Available' ||
+                    isNotified,
+                  customStyle: ''
+                },
+                {
+                  variant: 'primary',
                   label: 'Complete KYC Now',
                   handler: () => {
                     localStorage.setItem(
@@ -181,7 +245,7 @@ const TopNavigationBar = ({
                       });
                     router.push('/v2/kyc');
                   },
-                  customStyle: 'flex-1 w-full'
+                  customStyle: ''
                 }
               ]}
             />

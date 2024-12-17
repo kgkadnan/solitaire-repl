@@ -276,27 +276,27 @@ const MyAccount = () => {
                         kycStatus.INPROGRESS
                         ? 'border-lengendInCardBorder bg-legendInCartFill text-legendInCart'
                         : userAccountInfo?.customer?.kyc?.status ===
-                            kycStatus.REJECTED
-                          ? 'border-primaryModalFillRed bg-primaryModalRingRed text-dangerMain'
-                          : userAccountInfo?.customer?.kyc?.status ===
-                              kycStatus.APPROVED
-                            ? 'border-successBorder bg-primaryModalRing text-successMain'
-                            : '-'
+                          kycStatus.REJECTED
+                        ? 'border-primaryModalFillRed bg-primaryModalRingRed text-dangerMain'
+                        : userAccountInfo?.customer?.kyc?.status ===
+                          kycStatus.APPROVED
+                        ? 'border-successBorder bg-primaryModalRing text-successMain'
+                        : '-'
                     } rounded py-[6px] px-[4px] flex justify-center items-center`}
                   >
                     {userAccountInfo?.customer?.kyc?.status ===
                     kycStatus.PENDING
                       ? 'KYC Pending'
                       : userAccountInfo?.customer?.kyc?.status ===
-                          kycStatus.REJECTED
-                        ? 'KYC Rejected'
-                        : userAccountInfo?.customer?.kyc?.status ===
-                            kycStatus.INPROGRESS
-                          ? 'KYC In-progress'
-                          : userAccountInfo?.customer?.kyc?.status ===
-                              kycStatus.APPROVED
-                            ? 'KYC Approved'
-                            : '-'}
+                        kycStatus.REJECTED
+                      ? 'KYC Rejected'
+                      : userAccountInfo?.customer?.kyc?.status ===
+                        kycStatus.INPROGRESS
+                      ? 'KYC In-progress'
+                      : userAccountInfo?.customer?.kyc?.status ===
+                        kycStatus.APPROVED
+                      ? 'KYC Approved'
+                      : '-'}
                   </p>
                 </div>
                 <div className="flex items-center gap-[6px]">

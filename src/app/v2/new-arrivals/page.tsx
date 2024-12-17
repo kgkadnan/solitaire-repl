@@ -1,5 +1,11 @@
 'use client';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
 import NewArrivalDataTable from './components/data-table';
 import {
   RenderCarat,
@@ -15,7 +21,9 @@ import {
   RenderNewArrivalPricePerCarat,
   RenderCartLotId,
   RenderBidDate,
-  RenderNumericFields
+  RenderNumericFields,
+  RenderBidNumericFields,
+  RenderBidDiscount
 } from '@/components/v2/common/data-table/helpers/render-cell';
 import Tooltip from '@/components/v2/common/tooltip';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
@@ -69,7 +77,7 @@ import Form from '../search/form/form';
 import useValidationStateManagement from '../search/hooks/validation-state-management';
 import useFormStateManagement from '../search/form/hooks/form-state';
 import useNumericFieldValidation from '../search/form/hooks/numeric-field-validation-management';
-import { SubRoutes } from '@/constants/v2/enums/routes';
+import { MatchRoutes, SubRoutes } from '@/constants/v2/enums/routes';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import pako from 'pako';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -80,6 +88,16 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import GemTracPage from '@/components/v2/common/gem-trac';
 import { useLazyGetGemTracQuery } from '@/features/api/gem-trac';
+import KgkIcon from '@public/v2/assets/icons/sidebar-icons/vector.svg';
+import tick from '@public/v2/assets/icons/stepper/completed.svg';
+import {
+  useLazyGetRequestCallBackTimeSlotsQuery,
+  useReuestCallBackMutation
+} from '@/features/api/request-call-back';
+import chevronDown from '@public/v2/assets/icons/dashboard/chevron-down.svg';
+import crossIcon from '@public/v2/assets/icons/modal/cross.svg';
+import chevronUp from '@public/v2/assets/icons/dashboard/chevron-up.svg';
+import { InputDialogComponent } from '@/components/v2/common/input-dialog';
 interface IBidValues {
   [key: string]: number;
 }
@@ -115,15 +133,335 @@ const NewArrivals = () => {
   const { state, setState, carat } = useFormStateManagement();
   const [isSkeletonLoading, setIsSkeletonLoading] = useState(true);
   const [isAddDemand, setIsAddDemand] = useState(false);
+  const [isBidUnlockPricingPopup, setIsBidUnlockPricingPopup] = useState(false);
+  const [requestCallTimeSlots, setRequestCallTimeSlots] = useState<any>({});
+  const [selectedDate, setSelectedDate] = useState<number>(0);
+  const [selectedSlot, setSelectedSlot] = useState('');
+
+  const handleSelectData = ({ date }: { date: string }) => {
+    if (Number(date) !== selectedDate) {
+      setSelectedDate(Number(date));
+      setSelectedSlot('');
+    }
+  };
+
+  const handleSelectSlot = ({ slot }: { slot: string }) => {
+    setSelectedSlot(prevSlot => (prevSlot === slot ? '' : slot));
+  };
+
+  const [triggerRequestCallTimeSlots] = useLazyGetRequestCallBackTimeSlotsQuery(
+    {}
+  );
+  const [reuestCallBack] = useReuestCallBackMutation({});
 
   const handleDetailPage = ({ row }: { row: any }) => {
-    setIsDetailPage(true);
-    setDetailPageData(row);
+    router.push(
+      `/v2/${SubRoutes.Diamond_Detail}?path=${MatchRoutes.NEW_ARRIVAL}&stoneid=${row?.lot_id}-${row?.location}`
+    );
   };
 
   const handleDetailImage = ({ row }: any) => {
     setDetailImageData(row);
     setIsModalOpen(true);
+  };
+
+  const [openSection, setOpenSection] = useState<string | null>(null);
+
+  const toggleSection = (key: string) => {
+    setOpenSection(openSection === key ? null : key);
+  };
+  const renderRequestCallTimeSlot = () => {
+    return (
+      <div className="">
+        {' '}
+        <div className="flex flex-col gap-[8px]">
+          <div className="flex justify-between items-center">
+            <div className="text-headingS text-neutral900 font-medium">
+              Schedule Callback
+            </div>
+            <div
+              className=" cursor-pointer"
+              onClick={() => {
+                modalSetState.setIsInputDialogOpen(false);
+                setRequestCallTimeSlots({});
+              }}
+            >
+              <Image src={crossIcon} alt="crossIcon" />
+            </div>
+          </div>
+          <div>
+            If you're currently busy and unable to take a call, you can schedule
+            a more convenient time for our sales team to reach out to you.
+          </div>
+        </div>
+        <div className="flex flex-col gap-[15px] pt-[12px] w-[330px]">
+          {/* select data */}
+          <div className="">
+            <div className="text-sMedium text-neutral900 font-[500]">
+              Select date*
+            </div>
+            <div className="flex justify-between bg-neutral0 border-solid border-[1px] border-neutral200 p-[8px] rounded-[4px]">
+              {requestCallTimeSlots?.timeSlots?.dates?.map((date: any) => {
+                return (
+                  <button
+                    onClick={() => {
+                      handleSelectData({ date: date.date });
+                    }}
+                    key={date.date}
+                    className={`flex flex-col cursor-pointer  items-center p-[20px]  w-[44px] rounded-[4px]
+                        ${
+                          selectedDate === Number(date.date)
+                            ? 'bg-primaryMain text-neutral0'
+                            : 'bg-neutral50 text-neutral700'
+                        }
+                    `}
+                  >
+                    <div className="text-sRegular font-normal">{date.day}</div>
+                    <p className="text-mMedium font-medium ">{date.date}</p>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+          {/* Select Time Slot */}
+          <div className="flex flex-col gap-1 w-full">
+            {/* Title */}
+            <div className="text-sMedium text-neutral900 font-[500]">
+              Select time slot*
+            </div>
+            <div className="flex flex-col gap-[8px]">
+              {requestCallTimeSlots?.timeSlots?.slots &&
+                requestCallTimeSlots?.timeSlots?.slots[Number(selectedDate)] &&
+                Object.keys(
+                  requestCallTimeSlots?.timeSlots?.slots[Number(selectedDate)]
+                ).map(key => {
+                  const keys = Object.keys(
+                    requestCallTimeSlots?.timeSlots?.slots[selectedDate][key]
+                  );
+                  const values: {
+                    datetimeString: string;
+                    isAvailable: boolean;
+                  }[] = Object.values(
+                    requestCallTimeSlots?.timeSlots?.slots[selectedDate][key]
+                  );
+
+                  return (
+                    <div
+                      key={key}
+                      className="flex flex-col gap-[4px] font-normal"
+                    >
+                      {/* Section Header */}
+                      <div
+                        className="text-sMobileRegular font-medium text-neutral800 capitalize flex justify-between items-center cursor-pointer"
+                        onClick={() => toggleSection(key)}
+                      >
+                        {key}
+                        {key === 'Afternoon' && (
+                          <Image
+                            src={openSection === key ? chevronUp : chevronDown}
+                            alt="Chevron"
+                          />
+                        )}
+                      </div>
+
+                      {/* Time Slots */}
+                      {(key !== 'Afternoon' || openSection === key) && (
+                        <div className="flex flex-wrap gap-x-[14px] gap-y-2 bg-neutral0 rounded-[4px] p-[8px] border-solid border-[1px] border-neutral200">
+                          {keys.map((timeSlot, index) => (
+                            <button
+                              key={timeSlot}
+                              disabled={!values[index].isAvailable}
+                              className={`w-[94px] text-sMobileRegular rounded-[4px] p-[8px]
+                          ${
+                            selectedSlot === values[index].datetimeString
+                              ? 'bg-primaryMain text-neutral0'
+                              : !values[index].isAvailable
+                              ? 'bg-neutral100 text-neutral400 cursor-not-allowed'
+                              : 'bg-neutral50 text-neutral700'
+                          }`}
+                              onClick={() =>
+                                handleSelectSlot({
+                                  slot: values[index].datetimeString
+                                })
+                              }
+                            >
+                              {timeSlot}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+            </div>
+          </div>
+          <ActionButton
+            actionButtonData={[
+              {
+                variant: 'primary',
+                label: 'Request Callback',
+                handler: () => {
+                  reuestCallBack({
+                    callback_at: selectedSlot
+                  })
+                    .unwrap()
+                    .then(() => {
+                      modalSetState.setIsInputDialogOpen(false);
+                      setRequestCallTimeSlots({});
+                      setRowSelection({});
+                      modalSetState.setIsDialogOpen(true);
+                      modalSetState.setDialogContent(
+                        <CommonPoppup
+                          content=""
+                          status="success"
+                          customPoppupBodyStyle="!mt-[70px]"
+                          header={'Your callback has been scheduled'}
+                          actionButtonData={[
+                            {
+                              variant: 'primary',
+                              label: ManageLocales('app.modal.okay'),
+                              handler: () =>
+                                modalSetState.setIsDialogOpen(false),
+                              customStyle: 'flex-1 w-full h-10'
+                            }
+                          ]}
+                        />
+                      );
+                    })
+                    .catch(error => {
+                      modalSetState.setIsInputDialogOpen(false);
+                      setRequestCallTimeSlots({});
+                      setRowSelection({});
+                      modalSetState.setIsDialogOpen(true);
+                      modalSetState.setDialogContent(
+                        <CommonPoppup
+                          content=""
+                          status="error"
+                          customPoppupBodyStyle="!mt-[70px]"
+                          header={error.data.message}
+                          actionButtonData={[
+                            {
+                              variant: 'primary',
+                              label: ManageLocales('app.modal.okay'),
+                              handler: () =>
+                                modalSetState.setIsDialogOpen(false),
+                              customStyle: 'flex-1 w-full h-10'
+                            }
+                          ]}
+                        />
+                      );
+                    });
+                },
+                customStyle: 'flex-1 w-full',
+                isDisable: !selectedSlot.length
+              }
+            ]}
+          />
+        </div>
+      </div>
+    );
+  };
+  //Modal
+  const handleBidUnLockPricing = () => {
+    modalSetState.setIsDialogOpen(true);
+    setIsBidUnlockPricingPopup(true);
+    modalSetState.setDialogContent(
+      <div className="flex flex-col gap-y-[24px]">
+        <div className="flex justify-center ">
+          <Image src={KgkIcon} alt="KGK logo" />
+        </div>
+        <div className="flex flex-col gap-[12px] text-center">
+          <div>
+            <h3 className="text-headingS text-neutral900">
+              Ready to Access Premium Features?
+            </h3>
+            <h5 className="text-lMedium text-neutral900">
+              Complete KYC to Unlock your Full Buying Experience
+            </h5>
+          </div>
+          <p className="text-mMedium text-neutral700">
+            Obtain a competitive edge in the diamond marketplace by unlocking
+            exclusive tools and features:
+          </p>
+        </div>
+        <div className="border-neutral200 border-solid border-[1px] rounded-[8px]">
+          <div className="p-[20px] flex flex-col gap-[20px]">
+            <div className="flex  items-center gap-3">
+              <Image src={tick} alt="tick" />
+              <h3>Benefits of KYC Verification</h3>
+            </div>
+            <hr className=" border-none h-[1px] w-[90%] text-center bg-neutral200" />
+            <div>
+              <ul className="text-mMedium text-neutral900 font-medium flex flex-col gap-5  ">
+                <li className="flex items-center gap-3">
+                  {' '}
+                  <Image src={tick} alt="tick" />
+                  Unlock Real-Time Pricing Insights
+                </li>
+                <li className="flex items-center gap-3">
+                  {' '}
+                  <Image src={tick} alt="tick" />
+                  Secure Stones Instantly
+                </li>
+                <li className="flex items-center gap-3">
+                  {' '}
+                  <Image src={tick} alt="tick" />
+                  Get Priority Access to the Latest Diamond Arrivals
+                </li>
+                <li className="flex items-center gap-3">
+                  {' '}
+                  <Image src={tick} alt="tick" />
+                  Bid Competitively to Secure Desired Stones
+                </li>
+                <li className="flex items-center gap-3">
+                  {' '}
+                  <Image src={tick} alt="tick" />
+                  Book Personalized Consultations with Account Experts
+                </li>
+                <li className="flex items-center gap-3">
+                  {' '}
+                  <Image src={tick} alt="tick" />
+                  Unlimited Searches of Full Diamond Inventory
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <hr className=" border-none h-[1px] w-[489px] ml-[-23px] bg-neutral200" />
+        <div>
+          <ActionButton
+            actionButtonData={[
+              {
+                variant: 'secondary',
+                label: 'Request Callback',
+                handler: () => {
+                  triggerRequestCallTimeSlots({}).then(res => {
+                    let { data } = res.data;
+                    setRequestCallTimeSlots(data);
+                    setSelectedDate(Number(data.timeSlots.dates[0].date));
+                    setSelectedSlot('');
+                    modalSetState.setIsDialogOpen(false);
+                    setIsBidUnlockPricingPopup(false);
+                    modalSetState.setDialogContent(<></>);
+                    modalSetState.setIsInputDialogOpen(true);
+                  });
+                },
+                customStyle: 'flex-1'
+              },
+              {
+                variant: 'primary',
+                label: 'Complete KYC Now',
+                handler: () => {
+                  router.push('/v2/kyc');
+                },
+                customStyle: 'flex-1'
+              }
+            ]}
+          />
+        </div>
+      </div>
+    );
   };
 
   const { data: bidHistory } = useGetBidHistoryQuery({});
@@ -178,9 +516,26 @@ const NewArrivals = () => {
         switch (accessor) {
           case 'rap':
           case 'rap_value':
-            return { ...commonProps, Cell: RenderNumericFields };
+            return {
+              ...commonProps,
+              Cell: ({ renderedCellValue, row }: any) => {
+                return RenderBidNumericFields({
+                  renderedCellValue,
+                  handleBidUnLockPricing,
+                  row
+                });
+              }
+            };
           case 'amount':
-            return { ...commonProps, Cell: RenderNewArrivalPrice };
+            return {
+              ...commonProps,
+              Cell: ({ row }: any) => {
+                return RenderNewArrivalPrice({
+                  row,
+                  handleBidUnLockPricing
+                });
+              }
+            };
           case 'measurements':
             return { ...commonProps, Cell: RenderMeasurements };
           case 'shape_full':
@@ -201,9 +556,27 @@ const NewArrivals = () => {
           case 'star_length':
             return { ...commonProps, Cell: RenderCarat };
           case 'discount':
-            return { ...commonProps, Cell: RenderDiscount };
+            return {
+              ...commonProps,
+              Cell: ({ renderedCellValue, row }: any) => {
+                return RenderBidDiscount({
+                  renderedCellValue,
+                  handleBidUnLockPricing,
+                  row
+                });
+              }
+            };
           case 'current_max_bid':
-            return { ...commonProps, Cell: RenderNewArrivalBidDiscount };
+            return {
+              ...commonProps,
+              Cell: ({ renderedCellValue, row }: any) => {
+                return RenderNewArrivalBidDiscount({
+                  renderedCellValue,
+                  handleBidUnLockPricing,
+                  row
+                });
+              }
+            };
           case 'last_bid_date':
             return { ...commonProps, Cell: RenderBidDate };
 
@@ -243,7 +616,15 @@ const NewArrivals = () => {
             return { ...commonProps, Cell: RednderLocation };
 
           case 'price_per_carat':
-            return { ...commonProps, Cell: RenderNewArrivalPricePerCarat };
+            return {
+              ...commonProps,
+              Cell: ({ row }: any) => {
+                return RenderNewArrivalPricePerCarat({
+                  row,
+                  handleBidUnLockPricing
+                });
+              }
+            };
 
           case 'tracr_id':
             return { ...commonProps, Cell: RenderTracerId };
@@ -392,16 +773,25 @@ const NewArrivals = () => {
 
           setActiveBid(allProducts.activeStone);
           if (currentFilterData?.queryParams) {
-            let filteredData =  filterBidData(allProducts.bidStone, currentFilterData.queryParams);
-            dispatch(
-              filterFunction({
-                bidData: allProducts.bidStone,
-                queryParams: currentFilterData.queryParams,
-                bidFilterData: filteredData
-              })
+            let filteredData = filterBidData(
+              allProducts.bidStone,
+              currentFilterData.queryParams
             );
 
-            setBid(filteredData);
+            if (filteredData.length > 0) {
+              dispatch(
+                filterFunction({
+                  bidData: allProducts.bidStone,
+                  queryParams: currentFilterData.queryParams,
+                  bidFilterData: filteredData
+                })
+              );
+
+              setBid(filteredData);
+            } else {
+              dispatch(filterFunction({}));
+              setBid(allProducts.bidStone);
+            }
           } else {
             setBid(allProducts.bidStone);
           }
@@ -629,9 +1019,9 @@ const NewArrivals = () => {
                   handler: () => {
                     handleCreateAppointment();
                   },
-                  isDisable: !Object.keys(rowSelection).length,
-                  commingSoon:
-                    isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED
+                  isDisable:
+                    isKycVerified?.customer?.kyc?.status !==
+                      kycStatus.APPROVED || !Object.keys(rowSelection).length
                 }
               ]}
             />
@@ -692,13 +1082,13 @@ const NewArrivals = () => {
                             handler: () => {
                               socketManager.emit('cancel_bid', {
                                 product_ids: Object.keys(rowSelection)
-                               });
-                               setBidValues((prevValues: any) => {
+                              });
+                              setBidValues((prevValues: any) => {
                                 // Create a new object excluding keys in rowSelection
                                 const updatedValues = { ...prevValues };
-                                Object.keys(rowSelection).forEach((key) => {
+                                Object.keys(rowSelection).forEach(key => {
                                   delete updatedValues[key]; // Remove the key from the state
-                                });                              
+                                });
                                 return updatedValues;
                               });
                             },
@@ -950,6 +1340,13 @@ const NewArrivals = () => {
       )}
       {(isLoading || isTabSwitch) && <CustomKGKLoader />}
 
+      <InputDialogComponent
+        isOpen={modalState.isInputDialogOpen}
+        onClose={() => modalSetState.setIsInputDialogOpen(false)}
+        renderContent={renderRequestCallTimeSlot}
+        dialogStyle={'!max-w-[376px]'}
+      />
+
       <ImageModal
         isOpen={isModalOpen}
         stockNumber={detailImageData?.lot_id ?? ''}
@@ -964,7 +1361,13 @@ const NewArrivals = () => {
       <DialogComponent
         dialogContent={modalState.dialogContent}
         isOpens={modalState.isDialogOpen}
-        dialogStyle={{ dialogContent: isAddDemand ? 'min-h-[280px]' : '' }}
+        dialogStyle={{
+          dialogContent: isBidUnlockPricingPopup
+            ? '!min-h-[660px] !max-w-[490px]'
+            : isAddDemand
+            ? 'min-h-[280px]'
+            : ''
+        }}
       />
 
       {isDetailPage ? (

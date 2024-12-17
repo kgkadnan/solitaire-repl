@@ -1,4 +1,5 @@
 import { IProduct } from '@/app/v2/search/interface';
+import { kycStatus } from '@/constants/enums/kyc';
 import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
 import { ManageLocales } from '@/utils/v2/translate';
 import React, { useEffect, useState } from 'react';
@@ -13,7 +14,20 @@ const CalculatedField = ({ rows, selectedProducts }: ICalculatedField) => {
   );
 
   useEffect(() => {
-    setSelectedRows(rows.filter((row: IProduct) => row.id in selectedProducts));
+    const isKycVerified = JSON.parse(localStorage.getItem('user') || '{}');
+    setSelectedRows(
+      rows.filter((row: IProduct) => {
+        const isKycNotApproved =
+          isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED;
+
+        // Apply price check only if KYC is not approved
+        const hasValidPrice = isKycNotApproved
+          ? row.variants[0]?.prices[0]?.amount !== null
+          : true;
+
+        return row.id in selectedProducts && hasValidPrice;
+      })
+    );
   }, [selectedProducts]);
 
   let computeTotal = (type: string) => {

@@ -19,9 +19,12 @@ import { constructUrlParams } from '@/utils/v2/construct-url-params';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ManageLocales } from '@/utils/v2/translate';
 import ActionButton from '@/components/v2/common/action-button';
-import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
+import { MatchRoutes, Routes, SubRoutes } from '@/constants/v2/enums/routes';
 import Tooltip from '@/components/v2/common/tooltip';
 import crossIcon from '@public/v2/assets/icons/modal/cross.svg';
+import contactIcon from '@public/v2/assets/icons/modal/contact-sale.svg';
+import chevronDown from '@public/v2/assets/icons/dashboard/chevron-down.svg';
+import chevronUp from '@public/v2/assets/icons/dashboard/chevron-up.svg';
 import {
   RenderCarat,
   RenderDiscount,
@@ -33,7 +36,8 @@ import {
   RenderShape,
   RenderMeasurements,
   RenderTracerId,
-  RenderNumericFields
+  RenderNumericFields,
+  RenderPricePerCarat
 } from '@/components/v2/common/data-table/helpers/render-cell';
 import {
   useCheckProductAvailabilityMutation,
@@ -97,8 +101,19 @@ import {
   faSortDown,
   faSortUp
 } from '@fortawesome/free-solid-svg-icons';
+
 import GemTracPage from '@/components/v2/common/gem-trac';
 import { useLazyGetGemTracQuery } from '@/features/api/gem-trac';
+import { InputDialogComponent } from '@/components/v2/common/input-dialog';
+import { InputField } from '@/components/v2/common/input-field';
+import {
+  handleContactSaleTeam,
+  handleUnlockPricing
+} from './helpers/sale-team';
+import {
+  useLazyGetRequestCallBackTimeSlotsQuery,
+  useReuestCallBackMutation
+} from '@/features/api/request-call-back';
 
 // Column mapper outside the component to avoid re-creation on each render
 
@@ -128,6 +143,7 @@ const Result = ({
   const [triggerAvailableSlots] = useLazyGetAvailableMyAppointmentSlotsQuery(
     {}
   );
+  const [reuestCallBack] = useReuestCallBackMutation({});
   const [sorting, setSorting] = useState<MRT_SortingState>([]);
   const [triggerGetCustomer] = useLazyGetCustomerQuery({});
   const { data: searchList }: { data?: IItem[] } =
@@ -168,6 +184,26 @@ const Result = ({
       storeAddresses: [],
       timeSlots: { dates: [{ date: '', day: '' }], slots: {} }
     });
+
+  const [requestCallTimeSlots, setRequestCallTimeSlots] = useState<any>({});
+
+  const [selectedDate, setSelectedDate] = useState<number>(0);
+  const [selectedSlot, setSelectedSlot] = useState('');
+
+  const handleSelectData = ({ date }: { date: string }) => {
+    if (Number(date) !== selectedDate) {
+      setSelectedDate(Number(date));
+      setSelectedSlot('');
+    }
+  };
+
+  const handleSelectSlot = ({ slot }: { slot: string }) => {
+    setSelectedSlot(prevSlot => (prevSlot === slot ? '' : slot));
+  };
+
+  const [triggerRequestCallTimeSlots] = useLazyGetRequestCallBackTimeSlotsQuery(
+    {}
+  );
   const [lotIds, setLotIds] = useState<string[]>([]);
   const [hasLimitExceeded, setHasLimitExceeded] = useState(false);
   // UseMutation to add items to the cart
@@ -189,6 +225,9 @@ const Result = ({
 
   const [isGemTrac, setIsGemTrac] = useState(false);
   const [gemTracData, setGemTracData] = useState<string[]>([]);
+
+  const [contactSaleTeamInputValue, setContactSaleTeamInputValue] =
+    useState('');
 
   // Fetch Products
 
@@ -322,11 +361,15 @@ const Result = ({
   const handleDetailPage = ({ row }: { row: any }) => {
     if (isConfirmStone) {
       setBreadCrumLabel('Confirm Stone');
+      setIsDetailPage(true);
+      setIsError(false);
+      setErrorText('');
+      setDetailPageData(row);
+    } else {
+      router.push(
+        `/v2/${SubRoutes.Diamond_Detail}?path=${MatchRoutes.SEARCH}&activeTab=${activeTab}&stoneid=${row?.lot_id}-${row?.location}`
+      );
     }
-    setIsDetailPage(true);
-    setIsError(false);
-    setErrorText('');
-    setDetailPageData(row);
   };
 
   const handleDetailImage = ({ row }: any) => {
@@ -350,6 +393,314 @@ const Result = ({
     activeTab,
     dataTableState.rows
   ]);
+
+  const renderContactSalesTeamContent = () => {
+    return (
+      <>
+        {' '}
+        <div className="absolute left-[-84px] top-[-84px]">
+          <Image src={contactIcon} alt="contactIcon" />
+        </div>
+        <div
+          className="absolute cursor-pointer left-[400px] top-[39px]"
+          onClick={() => {
+            modalSetState.setIsInputDialogOpen(false);
+          }}
+        >
+          <Image src={crossIcon} alt="crossIcon" />
+        </div>
+        <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[400px]">
+          <div>
+            <h1 className="text-headingS text-neutral900">
+              {' '}
+              {ManageLocales('app.contactSaleTeam.header')}
+            </h1>
+            <p className="text-neutral600 text-mRegular">
+              {ManageLocales('app.contactSaleTeam.subHeader')}
+            </p>
+          </div>
+          <div>
+            <textarea
+              value={contactSaleTeamInputValue}
+              name="textarea"
+              rows={5}
+              className="w-full bg-neutral0 text-neutral700 rounded-[4px] resize-none focus:outline-none p-2 border-neutral-200 border-[1px] mt-2"
+              style={{ boxShadow: 'var(--input-shadow) inset' }}
+              onChange={e =>
+                handleContactSaleTeam(e, setContactSaleTeamInputValue)
+              }
+            />
+          </div>
+
+          <div className="flex flex-col  gap-2">
+            <ActionButton
+              actionButtonData={[
+                {
+                  variant: 'secondary',
+                  label: 'Email',
+                  handler: () => {
+                    const customerDetail = JSON.parse(
+                      localStorage.getItem('user')!
+                    );
+                    // Email subject and body
+                    const emailSubject = 'Completing KYC to Access Pricing';
+                    const emailBody = contactSaleTeamInputValue;
+
+                    // Create mailto URL
+                    const mailtoURL = `mailto:${encodeURIComponent(
+                      customerDetail?.customer?.kam?.email
+                    )}?cc=${encodeURIComponent(
+                      'shashank.giri@kgkmail.com'
+                    )}&subject=${encodeURIComponent(
+                      emailSubject
+                    )}&body=${encodeURIComponent(emailBody)}`;
+
+                    // Open the user's default email client
+                    window.location.href = mailtoURL;
+                  },
+                  isDisable: !contactSaleTeamInputValue.length,
+                  customStyle: 'flex-1'
+                },
+                {
+                  variant: 'primary',
+                  label: 'WhatsApp',
+                  isDisable: !contactSaleTeamInputValue.length,
+                  handler: () => {
+                    const encodedMessage = encodeURIComponent(
+                      contactSaleTeamInputValue
+                    );
+
+                    // WhatsApp URL with all links
+                    const whatsappURL = `https://wa.me/?text=${encodedMessage}`;
+
+                    // Open WhatsApp in a new tab or window
+                    window.open(whatsappURL, '_blank');
+                  },
+                  customStyle: 'flex-1'
+                }
+              ]}
+            />
+            <div className="text-center">or</div>
+            <ActionButton
+              actionButtonData={[
+                {
+                  variant: 'secondary',
+                  label: 'Request Callback',
+                  handler: () => {
+                    triggerRequestCallTimeSlots({}).then(res => {
+                      let { data } = res.data;
+                      console.log('data', data);
+                      setRequestCallTimeSlots(data);
+                      setSelectedDate(Number(data.timeSlots.dates[0].date));
+                      setSelectedSlot('');
+                    });
+                  },
+                  customStyle: 'flex-1 w-full'
+                }
+              ]}
+            />
+          </div>
+        </div>
+      </>
+    );
+  };
+
+  const [openSection, setOpenSection] = useState<string | null>(null);
+
+  const toggleSection = (key: string) => {
+    setOpenSection(openSection === key ? null : key);
+  };
+  const renderRequestCallTimeSlot = () => {
+    return (
+      <div className="">
+        {' '}
+        <div className="flex flex-col gap-[8px]">
+          <div className="flex justify-between items-center">
+            <div className="text-headingS text-neutral900 font-medium">
+              Schedule Callback
+            </div>
+            <div
+              className=" cursor-pointer "
+              onClick={() => {
+                modalSetState.setIsInputDialogOpen(false);
+                setRequestCallTimeSlots({});
+              }}
+            >
+              <Image src={crossIcon} alt="crossIcon" />
+            </div>
+          </div>
+          <div>
+            If you're currently busy and unable to take a call, you can schedule
+            a more convenient time for our sales team to reach out to you.
+          </div>
+        </div>
+        <div className="flex flex-col gap-[15px] pt-[12px] w-[330px]">
+          {/* select data */}
+          <div className="">
+            <div className="text-sMedium text-neutral900 font-[500]">
+              Select date*
+            </div>
+            <div className="flex justify-between bg-neutral0 border-solid border-[1px] border-neutral200 p-[8px] rounded-[4px]">
+              {requestCallTimeSlots?.timeSlots?.dates?.map((date: any) => {
+                return (
+                  <button
+                    onClick={() => {
+                      handleSelectData({ date: date.date });
+                    }}
+                    key={date.date}
+                    className={`flex flex-col cursor-pointer  items-center p-[20px]  w-[44px] rounded-[4px]
+                        ${
+                          selectedDate === Number(date.date)
+                            ? 'bg-primaryMain text-neutral0'
+                            : 'bg-neutral50 text-neutral700'
+                        }
+                    `}
+                  >
+                    <div className="text-sRegular font-normal">{date.day}</div>
+                    <p className="text-mMedium font-medium ">{date.date}</p>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+          {/* Select Time Slot */}
+          <div className="flex flex-col gap-1 w-full">
+            {/* Title */}
+            <div className="text-sMedium text-neutral900 font-[500]">
+              Select time slot*
+            </div>
+            <div className="flex flex-col gap-[8px]">
+              {requestCallTimeSlots?.timeSlots?.slots &&
+                requestCallTimeSlots?.timeSlots?.slots[Number(selectedDate)] &&
+                Object.keys(
+                  requestCallTimeSlots?.timeSlots?.slots[Number(selectedDate)]
+                ).map(key => {
+                  const keys = Object.keys(
+                    requestCallTimeSlots?.timeSlots?.slots[selectedDate][key]
+                  );
+                  const values: {
+                    datetimeString: string;
+                    isAvailable: boolean;
+                  }[] = Object.values(
+                    requestCallTimeSlots?.timeSlots?.slots[selectedDate][key]
+                  );
+
+                  return (
+                    <div
+                      key={key}
+                      className="flex flex-col gap-[4px] font-normal"
+                    >
+                      {/* Section Header */}
+                      <div
+                        className="text-sMobileRegular font-medium text-neutral800 capitalize flex justify-between items-center cursor-pointer"
+                        onClick={() => toggleSection(key)}
+                      >
+                        {key}
+                        {key === 'Afternoon' && (
+                          <Image
+                            src={openSection === key ? chevronUp : chevronDown}
+                            alt="Chevron"
+                          />
+                        )}
+                      </div>
+
+                      {/* Time Slots */}
+                      {(key !== 'Afternoon' || openSection === key) && (
+                        <div className="flex flex-wrap gap-x-[14px] gap-y-2 bg-neutral0 rounded-[4px] p-[8px] border-solid border-[1px] border-neutral200">
+                          {keys.map((timeSlot, index) => (
+                            <button
+                              key={timeSlot}
+                              disabled={!values[index].isAvailable}
+                              className={`w-[94px] text-sMobileRegular rounded-[4px] p-[8px]
+                          ${
+                            selectedSlot === values[index].datetimeString
+                              ? 'bg-primaryMain text-neutral0'
+                              : !values[index].isAvailable
+                              ? 'bg-neutral100 text-neutral400 cursor-not-allowed'
+                              : 'bg-neutral50 text-neutral700'
+                          }`}
+                              onClick={() =>
+                                handleSelectSlot({
+                                  slot: values[index].datetimeString
+                                })
+                              }
+                            >
+                              {timeSlot}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+            </div>
+          </div>
+          <ActionButton
+            actionButtonData={[
+              {
+                variant: 'primary',
+                label: 'Request Callback',
+                handler: () => {
+                  reuestCallBack({
+                    callback_at: selectedSlot
+                  })
+                    .unwrap()
+                    .then(() => {
+                      modalSetState.setIsInputDialogOpen(false);
+                      setRequestCallTimeSlots({});
+                      setRowSelection({});
+                      modalSetState.setIsDialogOpen(true);
+                      modalSetState.setDialogContent(
+                        <CommonPoppup
+                          content=""
+                          status="success"
+                          customPoppupBodyStyle="!mt-[70px]"
+                          header={'Your callback has been scheduled'}
+                          actionButtonData={[
+                            {
+                              variant: 'primary',
+                              label: ManageLocales('app.modal.okay'),
+                              handler: () =>
+                                modalSetState.setIsDialogOpen(false),
+                              customStyle: 'flex-1 w-full h-10'
+                            }
+                          ]}
+                        />
+                      );
+                    })
+                    .catch(error => {
+                      modalSetState.setIsInputDialogOpen(false);
+                      setRequestCallTimeSlots({});
+                      setRowSelection({});
+                      modalSetState.setIsDialogOpen(true);
+                      modalSetState.setDialogContent(
+                        <CommonPoppup
+                          content=""
+                          status="error"
+                          customPoppupBodyStyle="!mt-[70px]"
+                          header={error.data.message}
+                          actionButtonData={[
+                            {
+                              variant: 'primary',
+                              label: ManageLocales('app.modal.okay'),
+                              handler: () =>
+                                modalSetState.setIsDialogOpen(false),
+                              customStyle: 'flex-1 w-full h-10'
+                            }
+                          ]}
+                        />
+                      );
+                    });
+                },
+                customStyle: 'flex-1 w-full',
+                isDisable: !selectedSlot.length
+              }
+            ]}
+          />
+        </div>
+      </div>
+    );
+  };
 
   const mapColumns = (columns: any) =>
     columns
@@ -453,11 +804,30 @@ const Result = ({
               Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-'
             };
           case 'amount':
-            return { ...commonProps, Cell: RenderAmount };
+            return {
+              ...commonProps,
+              Cell: ({ row }: any) => {
+                return RenderAmount({
+                  row,
+                  modalSetState,
+                  setContactSaleTeamInputValue
+                });
+              }
+            };
 
           case 'rap':
           case 'rap_value':
-            return { ...commonProps, Cell: RenderNumericFields };
+            return {
+              ...commonProps,
+              Cell: ({ renderedCellValue, row }: any) => {
+                return RenderNumericFields({
+                  renderedCellValue,
+                  modalSetState,
+                  setContactSaleTeamInputValue,
+                  row
+                });
+              }
+            };
           case 'measurements':
             return { ...commonProps, Cell: RenderMeasurements };
           case 'shape_full':
@@ -478,7 +848,17 @@ const Result = ({
           case 'star_length':
             return { ...commonProps, Cell: RenderCarat };
           case 'discount':
-            return { ...commonProps, Cell: RenderDiscount };
+            return {
+              ...commonProps,
+              Cell: ({ renderedCellValue, row }: any) => {
+                return RenderDiscount({
+                  renderedCellValue,
+                  modalSetState,
+                  setContactSaleTeamInputValue,
+                  row
+                });
+              }
+            };
           case 'details':
             return {
               ...commonProps,
@@ -502,13 +882,14 @@ const Result = ({
           case 'price_per_carat':
             return {
               ...commonProps,
-              Cell: ({ renderedCellValue }: { renderedCellValue: any }) => (
-                <span>{`${
-                  renderedCellValue === null || renderedCellValue === undefined
-                    ? '-'
-                    : `$${formatNumberWithCommas(renderedCellValue)}`
-                }`}</span>
-              )
+              Cell: ({ renderedCellValue, row }: any) => {
+                return RenderPricePerCarat({
+                  renderedCellValue,
+                  modalSetState,
+                  setContactSaleTeamInputValue,
+                  row
+                });
+              }
             };
           case 'lab':
             return { ...commonProps, Cell: RenderLab };
@@ -1476,6 +1857,21 @@ const Result = ({
       {isError && (
         <Toast show={isError} message={errorText} isSuccess={false} />
       )}
+
+      <InputDialogComponent
+        isOpen={modalState.isInputDialogOpen}
+        onClose={() => modalSetState.setIsInputDialogOpen(false)}
+        renderContent={
+          Object.keys(requestCallTimeSlots)?.length > 0
+            ? renderRequestCallTimeSlot
+            : renderContactSalesTeamContent
+        }
+        dialogStyle={
+          Object.keys(requestCallTimeSlots)?.length > 0
+            ? '!max-w-[376px]'
+            : '!min-h-[470px] !max-w-[450px]'
+        }
+      />
       <ImageModal
         setIsLoading={setIsLoading}
         isOpen={isModalOpen}

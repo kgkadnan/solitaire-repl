@@ -47,8 +47,8 @@ const ResponsiveTable: React.FC<IResponsiveTableProps> = ({
                   index === 0
                     ? 'rounded-tl-[4px]'
                     : index === tableHead.length - 1
-                      ? 'rounded-tr-[4px]'
-                      : ''
+                    ? 'rounded-tr-[4px]'
+                    : ''
                 }`}
               >
                 {validImages.length > 0 ? column.label : ''}
@@ -103,16 +103,14 @@ const ResponsiveTable: React.FC<IResponsiveTableProps> = ({
                         )
                       ) : column.key === 'rap' ? (
                         row[column.key] === undefined ||
-                        row[column.key] === null ||
-                        row[column.key] === 0 ? (
+                        row[column.key] === null ? (
                           '-'
                         ) : (
                           `$${formatNumberWithCommas(row[column.key])}`
                         )
                       ) : column.key === 'rap_value' ? (
                         row[column.key] === undefined ||
-                        row[column.key] === null ||
-                        row[column.key] === 0 ? (
+                        row[column.key] === null ? (
                           '-'
                         ) : (
                           `$${formatNumberWithCommas(row[column.key])}`
@@ -125,7 +123,7 @@ const ResponsiveTable: React.FC<IResponsiveTableProps> = ({
                             : `$${formatNumberWithCommas(row[column.key])}`
                         }`
                       ) : typeof row[column.key] === 'number' ? (
-                        (formatNumber(row[column.key]) ?? '-')
+                        formatNumber(row[column.key]) ?? '-'
                       ) : typeof row[column.key] === 'string' ? (
                         row[column.key]
                       ) : (

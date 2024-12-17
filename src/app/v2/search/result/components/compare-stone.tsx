@@ -450,16 +450,14 @@ const CompareStone = ({
                           </div>
                         ) : key === 'rap' ? (
                           diamond[key] === undefined ||
-                          diamond[key] === null ||
-                          diamond[key] === 0 ? (
+                          diamond[key] === null ? (
                             '-'
                           ) : (
                             `$${formatNumberWithCommas(diamond[key])}`
                           )
                         ) : key === 'rap_value' ? (
                           diamond[key] === undefined ||
-                          diamond[key] === null ||
-                          diamond[key] === 0 ? (
+                          diamond[key] === null ? (
                             '-'
                           ) : (
                             `$${formatNumberWithCommas(diamond[key])}`
@@ -475,15 +473,15 @@ const CompareStone = ({
                             diamond[key] === undefined || diamond[key] === null
                               ? '-'
                               : diamond[key] === 0
-                                ? '0.00%'
-                                : `${formatNumberWithCommas(diamond[key])}%`
+                              ? '0.00%'
+                              : `${formatNumberWithCommas(diamond[key])}%`
                           }`
                         ) : typeof diamond[key] === 'number' ? (
                           diamond[key] === null ||
                           diamond[key] === undefined ? (
                             '-'
                           ) : (
-                            (formatNumber(diamond[key]) ?? '-')
+                            formatNumber(diamond[key]) ?? '-'
                           )
                         ) : (
                           diamond[key] || '-'

@@ -31,8 +31,8 @@ module.exports = {
   },
   webpackFinal: async config => {
     // Exclude SVGs from file-loader
-    const fileLoaderRule = config.module.rules.find(rule =>
-      rule.test?.test('.svg')
+    const fileLoaderRule = config.module.rules.find(
+      rule => rule.test?.test('.svg')
     );
     if (fileLoaderRule) {
       fileLoaderRule.exclude = /\.svg$/;
