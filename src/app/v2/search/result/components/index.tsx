@@ -108,9 +108,10 @@ const ConfirmStone = ({
           case 'rap_value':
             return {
               ...commonProps,
-              Cell: ({ renderedCellValue }: any) => {
+              Cell: ({ renderedCellValue, row }: any) => {
                 return RenderNumericFields({
-                  renderedCellValue
+                  renderedCellValue,
+                  row
                 });
               }
             };
