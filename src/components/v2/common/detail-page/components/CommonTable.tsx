@@ -103,16 +103,14 @@ const ResponsiveTable: React.FC<IResponsiveTableProps> = ({
                         )
                       ) : column.key === 'rap' ? (
                         row[column.key] === undefined ||
-                        row[column.key] === null ||
-                        row[column.key] === 0 ? (
+                        row[column.key] === null ? (
                           '-'
                         ) : (
                           `$${formatNumberWithCommas(row[column.key])}`
                         )
                       ) : column.key === 'rap_value' ? (
                         row[column.key] === undefined ||
-                        row[column.key] === null ||
-                        row[column.key] === 0 ? (
+                        row[column.key] === null ? (
                           '-'
                         ) : (
                           `$${formatNumberWithCommas(row[column.key])}`

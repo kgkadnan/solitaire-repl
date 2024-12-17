@@ -543,7 +543,7 @@ export function MatchPairDetails({
       case 'star_length':
         return diamond[key] ? `${formatNumber(diamond[key])}` : '-';
       case 'discount':
-        return diamond[key] ? `${formatNumber(diamond[key])}%` : '-';
+        return diamond[key] !== null ? `${formatNumber(diamond[key])}%` : '-';
 
       case 'key_to_symbol':
       case 'report_comments':
