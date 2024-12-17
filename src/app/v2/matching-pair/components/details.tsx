@@ -522,7 +522,9 @@ export function MatchPairDetails({
 
       case 'rap':
       case 'rap_value':
-        return diamond[key] ? `$${formatNumberWithCommas(diamond[key])}` : '-';
+        return diamond[key] !== null
+          ? `$${formatNumberWithCommas(diamond[key])}`
+          : '-';
       case 'price_per_carat':
         return diamond[key] !== undefined || diamond[key] !== null
           ? `$${formatNumberWithCommas(diamond[key])}`
