@@ -20,12 +20,15 @@ const NewArrivalCalculatedField = ({
   useEffect(() => {
     const isKycVerified = JSON.parse(localStorage.getItem('user') || '{}');
     setSelectedRows(
-      rows.filter(
-        (row: any) =>
-          row.id in selectedProducts &&
-          row.price !== null &&
-          isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED
-      )
+      rows.filter((row: any) => {
+        const isKycNotApproved =
+          isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED;
+
+        // Apply price check only if KYC is not approved
+        const hasValidPrice = isKycNotApproved ? row.price !== null : true;
+
+        return row.id in selectedProducts && hasValidPrice;
+      })
     );
   }, [selectedProducts]);
 
