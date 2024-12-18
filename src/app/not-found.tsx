@@ -1,41 +1,133 @@
-import diamond from '@public/v2/assets/icons/not-found.svg';
-import Image from 'next/image';
-
+'use client';
+import ActionButton from '@/components/v2/common/action-button';
+import CommonHeader from '@/components/v3/navigation-menu/header';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 export default function NotFound() {
+  const [isClient, setIsClient] = useState(false);
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+  const router = useRouter();
+  const handleGoHome = () => {
+    try {
+      const auth = localStorage.getItem('auth');
+      const isLoggedIn = auth ? JSON.parse(auth) : false;
+      if (isLoggedIn) {
+        router.push('/v2');
+      } else {
+        router.push('/v2/login');
+      }
+    } catch (error) {
+      console.error('Failed to navigate:', error);
+    }
+  };
+
+  useEffect(() => {
+    try {
+      const auth = localStorage.getItem('auth');
+      const isLoggedIn = auth ? JSON.parse(auth) : false;
+      if (isLoggedIn) {
+        setIsClient(false);
+        router.push('/v2');
+      }
+    } catch (error) {
+      console.error('Failed to navigate:', error);
+    }
+  }, []);
+
   return (
-    <div className="mx-auto flex justify-center h-screen">
-      <div className="absolute flex flex-col items-center gap-[60px] text-[20px]">
-        <Image className="relative w-[204px] h-[204px]" alt="" src={diamond} />
-        <div className="flex flex-col items-center justify-start gap-[30px]">
-          <svg
-            width="284"
-            height="121"
-            viewBox="0 0 284 121"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M51.0317 118.1V99.06H-0.00830078V81.06L36.8717 2.9H58.8717L21.9917 81.06H51.0317V51.06H70.5517V81.06H81.3517V99.06H70.5517V118.1H51.0317Z"
-              fill="#CED2D2"
-            />
-            <path
-              d="M141.975 120.5C133.815 120.5 126.615 118.767 120.375 115.3C114.135 111.78 109.255 106.9 105.735 100.66C102.269 94.42 100.535 87.22 100.535 79.06V41.94C100.535 33.78 102.269 26.58 105.735 20.34C109.255 14.1 114.135 9.24666 120.375 5.78C126.615 2.26 133.815 0.5 141.975 0.5C150.135 0.5 157.309 2.26 163.495 5.78C169.735 9.24666 174.615 14.1 178.135 20.34C181.655 26.58 183.415 33.78 183.415 41.94V79.06C183.415 87.22 181.655 94.42 178.135 100.66C174.615 106.9 169.735 111.78 163.495 115.3C157.309 118.767 150.135 120.5 141.975 120.5ZM141.975 102.18C146.029 102.18 149.709 101.22 153.015 99.3C156.322 97.3267 158.935 94.7133 160.855 91.46C162.775 88.1533 163.735 84.4733 163.735 80.42V40.5C163.735 36.3933 162.775 32.7133 160.855 29.46C158.935 26.1533 156.322 23.54 153.015 21.62C149.709 19.6467 146.029 18.66 141.975 18.66C137.922 18.66 134.242 19.6467 130.935 21.62C127.629 23.54 125.015 26.1533 123.095 29.46C121.175 32.7133 120.215 36.3933 120.215 40.5V80.42C120.215 84.4733 121.175 88.1533 123.095 91.46C125.015 94.7133 127.629 97.3267 130.935 99.3C134.242 101.22 137.922 102.18 141.975 102.18Z"
-              fill="#CED2D2"
-            />
-            <path
-              d="M253.688 118.1V99.06H202.648V81.06L239.528 2.9H261.528L224.648 81.06H253.688V51.06H273.208V81.06H284.008V99.06H273.208V118.1H253.688Z"
-              fill="#CED2D2"
-            />
-          </svg>
-          <div className="relative tracking-[0.16em] uppercase font-medium">
-            Diamonds in the rough: This page needs polishing
+    <>
+      {isClient ? (
+        <>
+          <CommonHeader />
+          <div className="flex flex-col items-center justify-center min-h-screen gap-[30px] text-center px-4">
+            {/* 404 Icon SVG */}
+            <svg
+              width="276"
+              height="107"
+              viewBox="0 0 276 107"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className="max-w-full h-auto sm:w-3/4 md:w-1/2 lg:w-1/3"
+            >
+              <path
+                d="M0 85.9219V68.8477L42.8107 1.40199H57.5316V25.0355H48.8192L21.831 67.7461V68.5472H82.6673V85.9219H0ZM49.2198 103.947V80.7145L49.6204 73.1538V1.40199H69.9492V103.947H49.2198Z"
+                fill="#475467"
+              ></path>
+              <path
+                d="M192.636 85.9219V68.8477L235.446 1.40199H250.167V25.0355H241.455L214.467 67.7461V68.5472H275.303V85.9219H192.636ZM241.856 103.947V80.7145L242.256 73.1538V1.40199H262.585V103.947H241.856Z"
+                fill="#475467"
+              ></path>
+              <mask
+                id="mask0_18635_24995"
+                maskUnits="userSpaceOnUse"
+                x="82"
+                y="0"
+                width="111"
+                height="110"
+              >
+                <path d="M82.6514 0H192.651V110H82.6514V0Z" fill="white"></path>
+              </mask>
+              <g mask="url(#mask0_18635_24995)">
+                <path
+                  d="M89.5264 47.025L103.001 18.15L116.476 47.025H89.5264Z"
+                  fill="#9A9FB8"
+                ></path>
+                <path
+                  d="M103.001 18.15H137.651L116.476 47.025L103.001 18.15Z"
+                  fill="#C6CCE0"
+                ></path>
+                <path
+                  d="M185.777 47.025L172.302 18.15L158.827 47.025H185.777Z"
+                  fill="#9A9FB8"
+                ></path>
+                <path
+                  d="M172.301 18.15H137.651L158.826 47.025L172.301 18.15ZM116.476 47.025L137.651 93.0875L89.5264 47.025H116.476Z"
+                  fill="#C6CCE0"
+                ></path>
+                <path
+                  d="M158.826 47.025L137.651 93.0875L185.776 47.025H158.826Z"
+                  fill="#787B94"
+                ></path>
+                <path
+                  d="M116.476 47.025H158.826L137.651 18.15L116.476 47.025Z"
+                  fill="#ECF0FA"
+                ></path>
+                <path
+                  d="M116.476 47.025L137.651 93.0875L158.826 47.025H116.476Z"
+                  fill="#9A9FB8"
+                ></path>
+              </g>
+            </svg>
+            {/* Page Not Found Title */}
+            <div className="relative tracking-[0.16em] uppercase font-medium text-[#475467] text-2xl sm:text-3xl md:text-4xl">
+              Page Not Found!
+            </div>
+            {/* Message */}
+            <div className="relative text-[16px] sm:text-[18px] font-medium text-center inline-block w-full sm:w-3/4 lg:w-1/2 text-[#475467]">
+              Sorry, but the page you are looking for does not exist, has been
+              removed, name changed, or is temporarily unavailable.
+            </div>
+            {/* Button to Go to Home */}
+            <div className="action-button_ctaContainer___JSuJ">
+              <div className="undefined">
+                <ActionButton
+                  actionButtonData={[
+                    {
+                      variant: 'primary',
+                      label: 'Go to Homepage',
+                      handler: handleGoHome
+                    }
+                  ]}
+                />
+              </div>
+            </div>
           </div>
-          <div className="relative text-[16px] font-medium text-center inline-block w-[659px]">
-            Sorry but the page you are looking for does not exist, have been
-            removed, name changed or is temporarily unavailable
-          </div>
-        </div>
-      </div>
-    </div>
+        </>
+      ) : (
+        ''
+      )}
+    </>
   );
 }
