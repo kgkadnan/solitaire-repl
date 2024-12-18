@@ -617,101 +617,101 @@ const BidToBuy = () => {
                     setRowSelection({});
                   },
                   isDisable: !Object.keys(rowSelection).length
-                },
-                {
-                  variant: 'primary',
-                  label: 'Cancel Bid',
-                  handler: () => {
-                    modalSetState.setIsDialogOpen(true);
-                    modalSetState.setDialogContent(
-                      <CommonPoppup
-                        content=""
-                        status="warning"
-                        customPoppupBodyStyle="mt-[70px]"
-                        header={'Are you sure you want to cancel this bid?'}
-                        actionButtonData={[
-                          {
-                            variant: 'secondary',
-                            label: 'Go Back',
-                            handler: () => {
-                              modalSetState.setIsDialogOpen(false);
-                            },
-                            customStyle: 'flex-1 w-full'
-                          },
-                          {
-                            variant: 'primary',
-                            label: 'Cancel Bid',
-                            handler: () => {
-                              // socketManager.emit('cancel_bidtobuy', {
-                              //   product_ids: Object.keys(rowSelection)
-                              // });
-                              deleteBid({
-                                product_ids: Object.keys(rowSelection)
-                              })
-                                .unwrap()
-                                .then(res => {
-                                  modalSetState.setIsDialogOpen(true);
-                                  modalSetState.setDialogContent(
-                                    <CommonPoppup
-                                      content=""
-                                      header={'Bid Canceled Successfully'}
-                                      handleClick={() =>
-                                        modalSetState.setIsDialogOpen(false)
-                                      }
-                                      buttonText="Okay"
-                                      status="success"
-                                    />
-                                  );
-                                  triggerBidToBuyApi({
-                                    searchUrl: constructUrlParams(
-                                      JSON.parse(localStorage.getItem('bid')!)
-                                    ),
-                                    limit: 300
-                                  })
-                                    .unwrap()
-                                    .then((response: any) => {
-                                      setBid(response?.bidStone);
-                                      setActiveBid(response?.activeStone);
-                                      setIsLoading(false);
-                                      setBidValues((prevValues: any) => {
-                                        // Create a new object excluding keys in rowSelection
-                                        const updatedValues = { ...prevValues };
-                                        Object.keys(rowSelection).forEach(
-                                          key => {
-                                            delete updatedValues[key]; // Remove the key from the state
-                                          }
-                                        );
-                                        return updatedValues;
-                                      });
-                                    })
-                                    .catch(e => {
-                                      setIsLoading(false);
-                                    });
-                                })
-                                .catch(e => {
-                                  modalSetState.setIsDialogOpen(true);
-                                  modalSetState.setDialogContent(
-                                    <CommonPoppup
-                                      header={e?.data?.message}
-                                      content={''}
-                                      handleClick={() =>
-                                        modalSetState.setIsDialogOpen(false)
-                                      }
-                                      buttonText="Okay"
-                                    />
-                                  );
-                                });
-                              modalSetState.setIsDialogOpen(false);
-                            },
-                            customStyle: 'flex-1 w-full'
-                          }
-                        ]}
-                      />
-                    );
-                  },
-
-                  isDisable: !Object.keys(rowSelection).length
                 }
+                // {
+                //   variant: 'primary',
+                //   label: 'Cancel Bid',
+                //   handler: () => {
+                //     modalSetState.setIsDialogOpen(true);
+                //     modalSetState.setDialogContent(
+                //       <CommonPoppup
+                //         content=""
+                //         status="warning"
+                //         customPoppupBodyStyle="mt-[70px]"
+                //         header={'Are you sure you want to cancel this bid?'}
+                //         actionButtonData={[
+                //           {
+                //             variant: 'secondary',
+                //             label: 'Go Back',
+                //             handler: () => {
+                //               modalSetState.setIsDialogOpen(false);
+                //             },
+                //             customStyle: 'flex-1 w-full'
+                //           },
+                //           {
+                //             variant: 'primary',
+                //             label: 'Cancel Bid',
+                //             handler: () => {
+                //               // socketManager.emit('cancel_bidtobuy', {
+                //               //   product_ids: Object.keys(rowSelection)
+                //               // });
+                //               deleteBid({
+                //                 product_ids: Object.keys(rowSelection)
+                //               })
+                //                 .unwrap()
+                //                 .then(res => {
+                //                   modalSetState.setIsDialogOpen(true);
+                //                   modalSetState.setDialogContent(
+                //                     <CommonPoppup
+                //                       content=""
+                //                       header={'Bid Canceled Successfully'}
+                //                       handleClick={() =>
+                //                         modalSetState.setIsDialogOpen(false)
+                //                       }
+                //                       buttonText="Okay"
+                //                       status="success"
+                //                     />
+                //                   );
+                //                   triggerBidToBuyApi({
+                //                     searchUrl: constructUrlParams(
+                //                       JSON.parse(localStorage.getItem('bid')!)
+                //                     ),
+                //                     limit: 300
+                //                   })
+                //                     .unwrap()
+                //                     .then((response: any) => {
+                //                       setBid(response?.bidStone);
+                //                       setActiveBid(response?.activeStone);
+                //                       setIsLoading(false);
+                //                       setBidValues((prevValues: any) => {
+                //                         // Create a new object excluding keys in rowSelection
+                //                         const updatedValues = { ...prevValues };
+                //                         Object.keys(rowSelection).forEach(
+                //                           key => {
+                //                             delete updatedValues[key]; // Remove the key from the state
+                //                           }
+                //                         );
+                //                         return updatedValues;
+                //                       });
+                //                     })
+                //                     .catch(e => {
+                //                       setIsLoading(false);
+                //                     });
+                //                 })
+                //                 .catch(e => {
+                //                   modalSetState.setIsDialogOpen(true);
+                //                   modalSetState.setDialogContent(
+                //                     <CommonPoppup
+                //                       header={e?.data?.message}
+                //                       content={''}
+                //                       handleClick={() =>
+                //                         modalSetState.setIsDialogOpen(false)
+                //                       }
+                //                       buttonText="Okay"
+                //                     />
+                //                   );
+                //                 });
+                //               modalSetState.setIsDialogOpen(false);
+                //             },
+                //             customStyle: 'flex-1 w-full'
+                //           }
+                //         ]}
+                //       />
+                //     );
+                //   },
+
+                //   isDisable: !Object.keys(rowSelection).length
+                // }
               ]}
             />
           </div>
