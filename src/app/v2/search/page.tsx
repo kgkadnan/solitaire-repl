@@ -1,9 +1,16 @@
-import { Metadata } from 'next';
 import Search from '.';
 
-export const metadata: Metadata = {
-  title: 'KGK - Search'
-};
+export async function generateMetadata({
+  searchParams
+}: {
+  searchParams: { [key: string]: string };
+}) {
+  const keyword = searchParams.keyword || '';
+  return {
+    title: keyword ? `KGK - Search Results for "${keyword}"` : 'KGK - Search'
+  };
+}
+
 export default function MainSearch() {
   return (
     <>
