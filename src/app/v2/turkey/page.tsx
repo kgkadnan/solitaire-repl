@@ -43,7 +43,7 @@ import { checkImage } from '@/components/v2/common/detail-page/helpers/check-ima
 import { Dropdown } from '@/components/v2/common/dropdown-menu';
 import threeDotsSvg from '@public/v2/assets/icons/threedots.svg';
 import { ManageLocales } from '@/utils/v2/translate';
-import { IAppointmentPayload } from '../my-appointments/page';
+import { IAppointmentPayload } from '../my-appointments';
 import { useLazyGetAvailableMyAppointmentSlotsQuery } from '@/features/api/my-appointments';
 import {
   SELECT_STONE_TO_PERFORM_ACTION,
