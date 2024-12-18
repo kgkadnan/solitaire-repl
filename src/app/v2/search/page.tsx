@@ -1,16 +1,19 @@
-import Search from '.'; // Check that this import path is correct
+import { Metadata } from 'next';
+import Search from '.';
+
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({
   searchParams
 }: {
-  searchParams?: { keyword?: string };
-}) {
-  const keyword = searchParams?.keyword || '';
+  searchParams: any;
+}): Promise<Metadata> {
   return {
-    title: keyword ? `KGK - Search Results for "${keyword}"` : 'KGK - Search'
+    title: `KGK - ${
+      searchParams['active-tab'] == 'saved-search' ? 'Saved Search' : 'Search'
+    }`
   };
 }
-
 export default function MainSearch() {
   return (
     <>
