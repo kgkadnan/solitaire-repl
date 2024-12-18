@@ -1,4 +1,4 @@
-import Search from '.';
+import SearchM from '.';
 
 export async function generateMetadata({
   searchParams
@@ -14,7 +14,7 @@ export async function generateMetadata({
 export default function MainSearch() {
   return (
     <>
-      <Search />
+      <SearchM />
     </>
   );
 }

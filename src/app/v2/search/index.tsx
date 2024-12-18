@@ -26,7 +26,7 @@ import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
 import { handleSaveSearch } from './result/helpers/handle-save-search';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 
-const Search = () => {
+const SearchM = () => {
   const subRoute = useSearchParams().get('active-tab');
   const editRoute = useSearchParams().get('edit');
 
@@ -413,4 +413,4 @@ const Search = () => {
   );
 };
 
-export default Search;
+export default SearchM;
