@@ -1,11 +1,11 @@
-import SearchM from '.';
+import Search from '.'; // Check that this import path is correct
 
 export async function generateMetadata({
   searchParams
 }: {
-  searchParams: { [key: string]: string };
+  searchParams?: { keyword?: string };
 }) {
-  const keyword = searchParams.keyword || '';
+  const keyword = searchParams?.keyword || '';
   return {
     title: keyword ? `KGK - Search Results for "${keyword}"` : 'KGK - Search'
   };
@@ -14,7 +14,7 @@ export async function generateMetadata({
 export default function MainSearch() {
   return (
     <>
-      <SearchM />
+      <Search />
     </>
   );
 }
