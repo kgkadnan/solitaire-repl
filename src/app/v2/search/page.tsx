@@ -1,17 +1,13 @@
-import Search from '.';
 import { Metadata } from 'next';
+import Search from '.';
 
-export async function generateMetadata({
-  searchParams
-}: {
-  searchParams: any;
-}): Promise<Metadata> {
-  return {
-    title: `KGK - ${
-      searchParams['active-tab'] == 'saved-search' ? 'Saved Search' : 'Search'
-    }`
-  };
-}
+export const metadata: Metadata = {
+  title: 'KGK - Search'
+};
 export default function MainSearch() {
-  return <Search />;
+  return (
+    <>
+      <Search />
+    </>
+  );
 }
