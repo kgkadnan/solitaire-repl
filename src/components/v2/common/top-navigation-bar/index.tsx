@@ -192,6 +192,7 @@ const TopNavigationBar = ({
       })
       .catch(_err => console.log('error'));
   };
+
   return (
     <div className="min-h-[60px] border-b-[1px] border-neutral200 sticky top-0 bg-neutral0 z-[3] flex flex-col justify-end ">
       <DialogComponent
@@ -266,8 +267,8 @@ const TopNavigationBar = ({
             <Image src={customerSupportSvg} alt="profile" />
           </PopoverTrigger>
           {/* Popover content with radio buttons */}
-          <PopoverContent className="z-[999]">
-            <div className="bg-neutral25 border-[1px] border-solid border-primaryBorder shadow-popupsShadow  rounded-[8px] relative top-[5px] right-[13%]">
+          <PopoverContent className="z-[999] relative h-[150px]">
+            <div className="bg-neutral25 border-[1px] border-solid border-primaryBorder shadow-popupsShadow  rounded-[8px] relative top-[5px] right-[39%]">
               <div className="flex items-center border-b-[1px] border-solid border-primaryBorder p-[16px] gap-[8px]">
                 <Avatar className="bg-primaryMain flex items-center justify-center">
                   {userAccountInfo?.customer.kam.image !== null ? (
@@ -299,7 +300,7 @@ const TopNavigationBar = ({
               </div>
 
               <div
-                className={`flex items-center  p-[16px] gap-[8px]    ${
+                className={`flex items-center py-[5px]  px-[16px] gap-[8px]    ${
                   isInMaintenanceMode
                     ? 'cursor-not-allowed bg-neutral100'
                     : 'cursor-pointer hover:bg-slate-50'
@@ -314,12 +315,18 @@ const TopNavigationBar = ({
                   {userAccountInfo?.customer.kam.phone ?? '-'}
                 </p>
               </div>
-              <div
-                className={`flex items-center  p-[16px] gap-[8px]    ${
+              <Link
+                className={`flex items-center py-[5px]  px-[16px] gap-[8px]    ${
                   isInMaintenanceMode
                     ? 'cursor-not-allowed bg-neutral100'
                     : 'cursor-pointer hover:bg-slate-50'
                 }`}
+                href={`https://wa.me/${userAccountInfo?.customer.kam.phone.replace(
+                  /\s+/g,
+                  ''
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 <WhatsappSvg />
                 <p
@@ -329,7 +336,7 @@ const TopNavigationBar = ({
                 >
                   {userAccountInfo?.customer.kam.phone ?? '-'}
                 </p>
-              </div>
+              </Link>
             </div>
           </PopoverContent>
         </Popover>
