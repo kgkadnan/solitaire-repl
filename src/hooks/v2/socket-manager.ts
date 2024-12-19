@@ -10,7 +10,7 @@ export class SocketManager {
         transportOptions: {
           polling: {
             extraHeaders: {
-              'user-agent': 'website'
+              // 'user-agent': 'website'
             }
           }
         }
