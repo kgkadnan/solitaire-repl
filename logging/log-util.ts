@@ -90,23 +90,19 @@ export function setLogLevel(level: LogLevel): void {
   }
 }
 
-function getUserFromLocalStorage() {
-  try {
-    const user = localStorage.getItem('user');
-    return user ? JSON.parse(user) : null;
-  } catch (error) {
-    console.error('Error parsing user data from localStorage:', error);
-    return null;
-  }
-}
-
 export function log(level: LogLevel, message: any): void {
   if (levels[level] <= currentLevel) {
     // Optionally log to console
     // console[level](message);
 
     if (message) {
-      const user = getUserFromLocalStorage();
+      let user = null;
+
+      // Check if running in a browser environment
+      if (typeof window !== 'undefined' && localStorage) {
+        const userData = localStorage.getItem('user');
+        user = userData ? JSON.parse(userData) : null;
+      }
 
       // Set user information in Sentry
       if (user) {
