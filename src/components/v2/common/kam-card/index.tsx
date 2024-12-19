@@ -105,9 +105,7 @@ const KAMCard: React.FC<IKAMCardProps> = ({
 
               <a
                 aria-label="Chat on WhatsApp"
-                href={`https://wa.me/${
-                  phoneNumber ? phoneNumber.replace(/\s+/g, '') : ''
-                }`}
+                href={`https://wa.me/${phoneNumber?.replace(/\s+/g, '') || ''}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
