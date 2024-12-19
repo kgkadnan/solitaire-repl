@@ -268,7 +268,6 @@ export const handleConfirmStone = ({
             />
           );
         }
-        console.log('err', err);
       });
   } else {
     setIsError(true);
