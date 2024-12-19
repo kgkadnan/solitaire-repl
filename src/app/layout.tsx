@@ -36,6 +36,12 @@ export const cardo = Cardo({
   subsets: ['latin'], // Specify subset (optional)
   weight: ['400', '700'] // Specify font weights
 });
+// Add this type declaration at the top of your file
+declare global {
+  interface Window {
+    OneSignal?: any; // You can replace 'any' with a more specific type if available
+  }
+}
 
 Sentry.init({
   dsn: process.env.NEXT_PUBLIC_SENTRY_DSN, // Replace with your Sentry DSN
@@ -143,6 +149,26 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
     }, 1000);
   }, [!isMobile, []]);
 
+  useEffect(() => {
+    console.log('window.OneSignal', window.OneSignal);
+    if (typeof window !== 'undefined' && window.OneSignal) {
+      console.log('window', window.OneSignal);
+      window.OneSignal = window.OneSignal || [];
+      window.OneSignal.push(() => {
+        console.log('OneSignal initialized');
+        window.OneSignal.init({
+          appId: '378b2db1-01ba-4f45-b8cf-9500ea88056b',
+          safari_web_id:
+            'web.onesignal.auto.017f9378-7499-4b97-8d47-e55f2bb151c0',
+          notifyButton: {
+            enable: true
+          },
+          allowLocalhostAsSecureOrigin: true
+        });
+      });
+    }
+  }, []);
+
   return (
     <html lang="en">
       <head>
@@ -189,10 +215,17 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
         `
           }}
         />
+
+        <Script
+          src="https://cdn.onesignal.com/sdks/OneSignalSDK.js"
+          strategy="beforeInteractive"
+          onLoad={() => console.log('OneSignal SDK script loaded')}
+        />
         <Script
           strategy="afterInteractive"
           src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA}`}
         />
+
         {/* <script
           dangerouslySetInnerHTML={{
             __html: `
