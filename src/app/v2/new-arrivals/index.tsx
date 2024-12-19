@@ -1055,51 +1055,51 @@ const NewArrivals = () => {
                     setRowSelection({});
                   },
                   isDisable: !Object.keys(rowSelection).length
-                },
-                {
-                  variant: 'primary',
-                  label: 'Cancel Bid',
-                  handler: () => {
-                    modalSetState.setIsDialogOpen(true);
-                    modalSetState.setDialogContent(
-                      <CommonPoppup
-                        content={''}
-                        status="warning"
-                        customPoppupBodyStyle="mt-[70px]"
-                        header={`Are you sure you want to cancel this bid?`}
-                        actionButtonData={[
-                          {
-                            variant: 'secondary',
-                            label: 'Go Back',
-                            handler: () => {
-                              modalSetState.setIsDialogOpen(false);
-                            },
-                            customStyle: 'flex-1 w-full'
-                          }
-                          // {
-                          //   variant: 'primary',
-                          //   label: 'Cancel Bid',
-                          //   handler: () => {
-                          //     socketManager.emit('cancel_bid', {
-                          //       product_ids: Object.keys(rowSelection)
-                          //     });
-                          //     setBidValues((prevValues: any) => {
-                          //       // Create a new object excluding keys in rowSelection
-                          //       const updatedValues = { ...prevValues };
-                          //       Object.keys(rowSelection).forEach(key => {
-                          //         delete updatedValues[key]; // Remove the key from the state
-                          //       });
-                          //       return updatedValues;
-                          //     });
-                          //   },
-                          //   customStyle: 'flex-1 w-full'
-                          // }
-                        ]}
-                      />
-                    );
-                  },
-                  isDisable: !Object.keys(rowSelection).length
                 }
+                // {
+                //   variant: 'primary',
+                //   label: 'Cancel Bid',
+                //   handler: () => {
+                //     modalSetState.setIsDialogOpen(true);
+                //     modalSetState.setDialogContent(
+                //       <CommonPoppup
+                //         content={''}
+                //         status="warning"
+                //         customPoppupBodyStyle="mt-[70px]"
+                //         header={`Are you sure you want to cancel this bid?`}
+                //         actionButtonData={[
+                //           {
+                //             variant: 'secondary',
+                //             label: 'Go Back',
+                //             handler: () => {
+                //               modalSetState.setIsDialogOpen(false);
+                //             },
+                //             customStyle: 'flex-1 w-full'
+                //           }
+                //           // {
+                //           //   variant: 'primary',
+                //           //   label: 'Cancel Bid',
+                //           //   handler: () => {
+                //           //     socketManager.emit('cancel_bid', {
+                //           //       product_ids: Object.keys(rowSelection)
+                //           //     });
+                //           //     setBidValues((prevValues: any) => {
+                //           //       // Create a new object excluding keys in rowSelection
+                //           //       const updatedValues = { ...prevValues };
+                //           //       Object.keys(rowSelection).forEach(key => {
+                //           //         delete updatedValues[key]; // Remove the key from the state
+                //           //       });
+                //           //       return updatedValues;
+                //           //     });
+                //           //   },
+                //           //   customStyle: 'flex-1 w-full'
+                //           // }
+                //         ]}
+                //       />
+                //     );
+                //   },
+                //   isDisable: !Object.keys(rowSelection).length
+                // }
               ]}
             />
             <Dropdown
