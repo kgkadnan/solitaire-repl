@@ -197,7 +197,7 @@ const NewArrivalDataTable = ({
     pageIndex: 0,
     pageSize: parseInt(localStorage.getItem('pageSize') ?? '20') //customize the default page size
   });
-  const [isHovered, setIsHovered] = useState('');
+  const [hoveredRowId, setHoveredRowId] = useState('');
   const [paginatedData, setPaginatedData] = useState<any>([]);
   const [globalFilter, setGlobalFilter] = useState('');
   useEffect(() => {
@@ -1236,17 +1236,13 @@ const NewArrivalDataTable = ({
                     />
                     <div className="relative">
                       <Image
-                        onMouseEnter={() =>
-                          setIsHovered(
-                            'You can only increase your bid percentage after placing it. Canceling or lowering a bid is restricted.'
-                          )
-                        }
-                        onMouseLeave={() => setIsHovered('')}
+                        onMouseEnter={() => setHoveredRowId(row.id)}
+                        onMouseLeave={() => setHoveredRowId('')}
                         src={infoIcon}
                         alt="order meta data"
                       />
-                      {isHovered !== '' && (
-                        <div className="absolute bg-[#ECF2FC] w-[320px] border-[1px] border-[#B6CFF3] rounded-[8px] p-4 text-[#475467] left-0  gap-2 right-[0px] ">
+                      {hoveredRowId === row.id && (
+                        <div className="absolute bg-[#ECF2FC] z-[999] w-[320px] border-[1px] border-[#B6CFF3] rounded-[8px] p-4 text-[#475467] left-0  gap-2 right-[0px] ">
                           <div className="flex flex-col gap-2">
                             <div className="flex gap-1 items-center">
                               <Image src={infoHover} alt="your orders" />{' '}
@@ -1255,7 +1251,9 @@ const NewArrivalDataTable = ({
                               </p>
                             </div>
                             <p className="text-neutral600 text-[14px]">
-                              {isHovered}
+                              You can only increase your bid percentage after
+                              placing it. Canceling or lowering a bid is
+                              restricted.
                             </p>
                           </div>
                         </div>
