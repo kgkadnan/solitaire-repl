@@ -322,9 +322,8 @@ const TopNavigationBar = ({
                     : 'cursor-pointer hover:bg-slate-50'
                 }`}
                 href={`https://wa.me/${
-                  userAccountInfo
-                    ? userAccountInfo?.customer.kam.phone.replace(/\s+/g, '')
-                    : ''
+                  userAccountInfo?.customer?.kam?.phone?.replace(/\s+/g, '') ||
+                  ''
                 }`}
                 target="_blank"
                 rel="noopener noreferrer"
