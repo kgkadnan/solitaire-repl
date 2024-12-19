@@ -106,7 +106,7 @@ import {
   STONE_NOT_AVAILABLE_MODIFY_SEARCH
 } from '@/constants/error-messages/confirm-stone';
 import { useLazyGetAvailableMyAppointmentSlotsQuery } from '@/features/api/my-appointments';
-import { IAppointmentPayload } from './my-appointments/page';
+
 import BookAppointment from './my-appointments/components/book-appointment/book-appointment';
 import { Skeleton } from '@mui/material';
 import CommonPoppup from './login/component/common-poppup';
@@ -135,6 +135,7 @@ import {
   useLazyGetRequestCallBackTimeSlotsQuery,
   useReuestCallBackMutation
 } from '@/features/api/request-call-back';
+import { IAppointmentPayload } from './my-appointments';
 
 interface ITabs {
   label: string;

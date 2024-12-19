@@ -1,4 +1,4 @@
-import { IBidValues } from '@/app/v2/bid-2-buy/page';
+import { IBidValues } from '@/app/v2/bid-2-buy';
 
 export const handleDecrementDiscount = (
   rowId: string,

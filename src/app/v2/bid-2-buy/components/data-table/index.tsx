@@ -31,8 +31,9 @@ import { formatNumber } from '@/utils/fix-two-digit-number';
 import { handleDecrementDiscount } from '@/utils/v2/handle-decrement-discount';
 import { handleIncrementDiscount } from '@/utils/v2/handle-increment-discount';
 import { RenderBidToBuyLotIdColor } from '@/components/v2/common/data-table/helpers/render-cell';
-
+import infoIcon from '@public/v2/assets/icons/new-arrivals/info-icon.svg';
 import { SubRoutes } from '@/constants/v2/enums/routes';
+import infoHover from '@public/v2/assets/icons/info.svg';
 import { ManageLocales } from '@/utils/v2/translate';
 import BiddingSkeleton from '@/components/v2/skeleton/bidding';
 import SearchInputField from '@/components/v2/common/search-input/search-input';
@@ -197,6 +198,7 @@ const BidToBuyDataTable = ({
   const [bidError, setBidError] = useState<{
     [key: string]: string;
   }>({});
+  const [isHovered, setIsHovered] = useState('');
 
   const [pagination, setPagination] = useState({
     pageIndex: 0,
@@ -1275,7 +1277,7 @@ const BidToBuyDataTable = ({
                       <IncrementIcon />
                     </div>
                   </div>
-                  <div className="flex items-end">
+                  <div className="flex items-center gap-3">
                     <ActionButton
                       actionButtonData={[
                         {
@@ -1429,6 +1431,34 @@ const BidToBuyDataTable = ({
                         }
                       ]}
                     />
+
+                    <div className="relative">
+                      <Image
+                        onMouseEnter={() =>
+                          setIsHovered(
+                            'You can only increase your bid percentage after placing it. Canceling or lowering a bid is restricted.'
+                          )
+                        }
+                        onMouseLeave={() => setIsHovered('')}
+                        src={infoIcon}
+                        alt="order meta data"
+                      />
+                      {isHovered !== '' && (
+                        <div className="absolute bg-[#ECF2FC] w-[320px] border-[1px] border-[#B6CFF3] rounded-[8px] p-4 text-[#475467] left-0  gap-2 right-[0px] ">
+                          <div className="flex flex-col gap-2">
+                            <div className="flex gap-1 items-center">
+                              <Image src={infoHover} alt="your orders" />{' '}
+                              <p className="text-neutral900 font-medium text-mMedium">
+                                Bid Cancellation Policy
+                              </p>
+                            </div>
+                            <p className="text-neutral600 text-[14px]">
+                              {isHovered}
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
                 <div className=" text-dangerMain text-sRegular">
