@@ -85,7 +85,7 @@ import EmptyScreen from '@/components/v2/common/empty-screen';
 import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
 import CommonPoppup from '../login/component/common-poppup';
 import BookAppointment from '../my-appointments/components/book-appointment/book-appointment';
-import { IAppointmentPayload } from '../my-appointments/page';
+import { IAppointmentPayload } from '../my-appointments';
 import { ISavedSearch } from '../search/form/form';
 import { IProduct, IManageListingSequenceResponse } from '../search/interface';
 import ConfirmStone from '../search/result/components';

@@ -7,7 +7,7 @@ import {
   IRescheduleAppointmentData,
   IAppointmentPayload,
   ISlots
-} from '../../page';
+} from '../../';
 import { BOOK_APPOINTMENT_COMMENT_MAX_CHARACTERS } from '@/constants/business-logic';
 import ActionButton from '@/components/v2/common/action-button';
 import { ManageLocales } from '@/utils/v2/translate';
