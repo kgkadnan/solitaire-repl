@@ -153,7 +153,6 @@ const TopNavigationBar = ({
     notifySales({})
       .unwrap()
       .then(res => {
-        console.log('res', res);
         setIsNotified(true);
 
         setIsDialogOpen(true);

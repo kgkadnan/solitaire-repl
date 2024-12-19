@@ -2281,7 +2281,7 @@ const Dashboard = () => {
                   handler: () => {
                     triggerRequestCallTimeSlots({}).then(res => {
                       let { data } = res.data;
-                      console.log('data', data);
+
                       setRequestCallTimeSlots(data);
                       setSelectedDate(Number(data.timeSlots.dates[0].date));
                       setSelectedSlot('');
