@@ -16,7 +16,12 @@ import styles from './side-navigation.module.scss';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import Tooltip from '../tooltip';
-import { MatchSubRoutes, Routes, SubRoutes } from '@/constants/v2/enums/routes';
+import {
+  MatchRoutes,
+  MatchSubRoutes,
+  Routes,
+  SubRoutes
+} from '@/constants/v2/enums/routes';
 import { Button } from '../../ui/button';
 import { kycStatus } from '@/constants/enums/kyc';
 import { useAppDispatch } from '@/hooks/hook';
@@ -40,6 +45,8 @@ const SideNavigationBar = ({
 
   const currentRoute = usePathname();
   const currentSubRoute = useSearchParams().get('active-tab');
+  const currentDetailPath = useSearchParams().get('path');
+
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   const [showPulse, setShowPulse] = useState(false);
   const [showEvent, setShowEvent] = useState(false);
@@ -93,21 +100,28 @@ const SideNavigationBar = ({
       src: <DashboardIcon />,
       title: ManageLocales('app.sideNavigationBar.dashboard'),
       link: Routes.DASHBOARD,
-      isActive: currentRoute === Routes.DASHBOARD || currentRoute === '/',
+      isActive:
+        currentRoute === Routes.DASHBOARD ||
+        currentRoute === '/' ||
+        currentDetailPath === MatchRoutes.DASHBOARD,
       isVisible: true
     },
     {
       src: <ArrivalIcon />,
       title: ManageLocales('app.sideNavigationBar.newArrivals'),
       link: Routes.NEW_ARRIVAL,
-      isActive: currentRoute === Routes.NEW_ARRIVAL,
+      isActive:
+        currentRoute === Routes.NEW_ARRIVAL ||
+        currentDetailPath === MatchRoutes.NEW_ARRIVAL,
       isVisible: true
     },
     {
       src: <Bid2BuyIcon />,
       title: ManageLocales('app.sideNavigationBar.bidToBuy'),
       link: `${Routes.BID_TO_BUY}`,
-      isActive: currentRoute === Routes.BID_TO_BUY,
+      isActive:
+        currentRoute === Routes.BID_TO_BUY ||
+        currentDetailPath === MatchRoutes.BID_TO_BUY,
       isVisible: true
     },
     {
@@ -123,7 +137,9 @@ const SideNavigationBar = ({
         ),
       title: 'Turkey Show',
       link: Routes.TURKEY,
-      isActive: currentRoute === Routes.TURKEY,
+      isActive:
+        currentRoute === Routes.TURKEY ||
+        currentDetailPath === MatchRoutes.TURKEY,
       isVisible: showEvent
     },
     {
@@ -135,8 +151,10 @@ const SideNavigationBar = ({
       title: ManageLocales('app.sideNavigationBar.search'),
       link: `${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`,
       isActive:
-        currentRoute === Routes.SEARCH &&
-        currentSubRoute !== SubRoutes.SAVED_SEARCH,
+        (currentRoute === Routes.SEARCH &&
+          currentSubRoute !== SubRoutes.SAVED_SEARCH) ||
+        (currentDetailPath === MatchRoutes.SEARCH &&
+          currentSubRoute !== SubRoutes.SAVED_SEARCH),
       isVisible: true
     },
     {
@@ -144,8 +162,10 @@ const SideNavigationBar = ({
       title: ManageLocales('app.sideNavigationBar.matchingPair'),
       link: `${Routes.MATCHING_PAIR}?active-tab=${MatchSubRoutes.NEW_SEARCH}`,
       isActive:
-        currentRoute === Routes.MATCHING_PAIR &&
-        currentSubRoute !== MatchSubRoutes.SAVED_SEARCH,
+        (currentRoute === Routes.MATCHING_PAIR &&
+          currentSubRoute !== MatchSubRoutes.SAVED_SEARCH) ||
+        (currentDetailPath === MatchRoutes.MATCHING_PAIR &&
+          currentSubRoute !== SubRoutes.SAVED_SEARCH),
       isVisible: true
     },
 
@@ -164,14 +184,18 @@ const SideNavigationBar = ({
       src: <CartIcon />,
       title: ManageLocales('app.sideNavigationBar.myCart'),
       link: Routes.MY_CART,
-      isActive: currentRoute === Routes.MY_CART,
+      isActive:
+        currentRoute === Routes.MY_CART ||
+        currentDetailPath === MatchRoutes.MY_CART,
       isVisible: true
     },
     {
       src: <MyDaimondsIcon />,
       title: ManageLocales('app.sideNavigationBar.yourOrders'),
       link: Routes.YOUR_ORDERS,
-      isActive: currentRoute === Routes.YOUR_ORDERS,
+      isActive:
+        currentRoute === Routes.YOUR_ORDERS ||
+        currentDetailPath === MatchRoutes.YOUR_ORDERS,
       isVisible: true
     },
     {

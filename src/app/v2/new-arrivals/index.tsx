@@ -856,20 +856,20 @@ const NewArrivals = () => {
       );
     }
   }, []);
-  const handleBidCanceled = useCallback((data: any) => {
-    if (data && data['status'] === 'success') {
-      modalSetState.setIsDialogOpen(true);
-      modalSetState.setDialogContent(
-        <CommonPoppup
-          content=""
-          header={'Bid Canceled Successfully'}
-          handleClick={() => modalSetState.setIsDialogOpen(false)}
-          buttonText="Okay"
-          status="success"
-        />
-      );
-    }
-  }, []);
+  // const handleBidCanceled = useCallback((data: any) => {
+  //   if (data && data['status'] === 'success') {
+  //     modalSetState.setIsDialogOpen(true);
+  //     modalSetState.setDialogContent(
+  //       <CommonPoppup
+  //         content=""
+  //         header={'Bid Canceled Successfully'}
+  //         handleClick={() => modalSetState.setIsDialogOpen(false)}
+  //         buttonText="Okay"
+  //         status="success"
+  //       />
+  //     );
+  //   }
+  // }, []);
 
   useEffect(() => {
     const handleRequestGetBidStones = (_data: any) => {
@@ -878,7 +878,7 @@ const NewArrivals = () => {
     socketManager.on('bid_stones', handleBidStones);
     socketManager.on('error', handleError);
     socketManager.on('bid_placed', handleBidPlaced);
-    socketManager.on('bid_canceled', handleBidCanceled);
+    // socketManager.on('bid_canceled', handleBidCanceled);
 
     // Setting up the event listener for "request_get_bid_stones"
     socketManager.on('request_get_bid_stones', handleRequestGetBidStones);
@@ -1075,25 +1075,25 @@ const NewArrivals = () => {
                               modalSetState.setIsDialogOpen(false);
                             },
                             customStyle: 'flex-1 w-full'
-                          },
-                          {
-                            variant: 'primary',
-                            label: 'Cancel Bid',
-                            handler: () => {
-                              socketManager.emit('cancel_bid', {
-                                product_ids: Object.keys(rowSelection)
-                              });
-                              setBidValues((prevValues: any) => {
-                                // Create a new object excluding keys in rowSelection
-                                const updatedValues = { ...prevValues };
-                                Object.keys(rowSelection).forEach(key => {
-                                  delete updatedValues[key]; // Remove the key from the state
-                                });
-                                return updatedValues;
-                              });
-                            },
-                            customStyle: 'flex-1 w-full'
                           }
+                          // {
+                          //   variant: 'primary',
+                          //   label: 'Cancel Bid',
+                          //   handler: () => {
+                          //     socketManager.emit('cancel_bid', {
+                          //       product_ids: Object.keys(rowSelection)
+                          //     });
+                          //     setBidValues((prevValues: any) => {
+                          //       // Create a new object excluding keys in rowSelection
+                          //       const updatedValues = { ...prevValues };
+                          //       Object.keys(rowSelection).forEach(key => {
+                          //         delete updatedValues[key]; // Remove the key from the state
+                          //       });
+                          //       return updatedValues;
+                          //     });
+                          //   },
+                          //   customStyle: 'flex-1 w-full'
+                          // }
                         ]}
                       />
                     );
