@@ -104,8 +104,6 @@ const ImagePreview: React.FC<IImagePreviewProps> = ({
     }
   };
 
-  console.log('isImageLoading', isImageLoading);
-
   return (
     <>
       <div className="flex flex-col gap-4">
