@@ -11,7 +11,6 @@ const UserAuthenticationLayout: React.FC<IUserAuthenticationLayoutProps> = ({
   screen
 }) => {
   const playerRef = useRef<YT.Player | null>(null);
-  const [isPlaying, setIsPlaying] = useState(true);
 
   // Load the YouTube IFrame API
   useEffect(() => {
@@ -51,7 +50,6 @@ const UserAuthenticationLayout: React.FC<IUserAuthenticationLayoutProps> = ({
       events: {
         onReady: event => {
           event.target.playVideo();
-          setIsPlaying(true);
         }
       }
     });
@@ -64,10 +62,8 @@ const UserAuthenticationLayout: React.FC<IUserAuthenticationLayoutProps> = ({
 
     if (playerState === window.YT.PlayerState.PLAYING) {
       playerRef.current.pauseVideo();
-      setIsPlaying(false);
     } else {
       playerRef.current.playVideo();
-      setIsPlaying(true);
     }
   };
 
