@@ -193,6 +193,16 @@ const TopNavigationBar = ({
       .catch(_err => console.log('error'));
   };
 
+  const getInitials = (obj: any, path: string) => {
+    const name = get(obj, path, ''); // Get the name string or default to an empty string
+    return (
+      name
+        ?.split(' ') // Split the name into words
+        ?.map((word: any) => word[0]?.toUpperCase()) // Get the first letter of each word and uppercase it
+        ?.join('') || ''
+    ); // Join the initials or return an empty string
+  };
+
   return (
     <div className="min-h-[60px] border-b-[1px] border-neutral200 sticky top-0 bg-neutral0 z-[3] flex flex-col justify-end ">
       <DialogComponent
@@ -282,10 +292,7 @@ const TopNavigationBar = ({
                     />
                   ) : (
                     <p className="text-center text-mRegular text-neutral0 leading-[10]">
-                      {get(userAccountInfo, 'customer.kam.kam_name', '')
-                        ?.split(' ') // Split the string into words
-                        ?.map(word => word[0]?.toUpperCase()) // Get the first letter of each word and uppercase it
-                        ?.join('')}
+                      {getInitials(userAccountInfo, 'customer.kam.kam_name')}
                     </p>
                   )}
                 </Avatar>
