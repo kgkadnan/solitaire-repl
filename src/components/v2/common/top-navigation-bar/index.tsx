@@ -272,7 +272,9 @@ const TopNavigationBar = ({
               <div className="absolute w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-b-[10px] border-b-neutral200 top-[-10px] right-[15px] before:absolute before:content-[''] before:w-0 before:h-0 before:border-l-[10px] before:border-l-transparent before:border-r-[10px] before:border-r-transparent before:border-b-[9px] before:border-b-white before:top-[2px] before:left-[-9px]"></div>{' '}
               <div className="flex items-center border-b-[1px] border-solid border-primaryBorder p-[16px] gap-[8px]">
                 <Avatar className="bg-primaryMain flex items-center justify-center">
-                  {userAccountInfo?.customer.kam.image !== null ? (
+                  {userAccountInfo &&
+                  userAccountInfo?.customer.kam.image !== null &&
+                  userAccountInfo?.customer.kam.image.length ? (
                     <img
                       src={userAccountInfo?.customer.kam.image}
                       alt="profile"
