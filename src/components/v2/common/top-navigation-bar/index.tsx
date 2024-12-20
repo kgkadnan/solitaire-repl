@@ -274,15 +274,15 @@ const TopNavigationBar = ({
               <div className="flex items-center border-b-[1px] border-solid border-primaryBorder p-[16px] gap-[8px]">
                 <Avatar className="bg-primaryMain flex items-center justify-center">
                   {userAccountInfo &&
-                  get(userAccountInfo, 'customer.kam.image') ? (
+                  get(userAccountInfo, 'customer.kam.image', '') ? (
                     <img
-                      src={userAccountInfo.customer.kam.image}
+                      src={get(userAccountInfo, 'customer.kam.image', '')}
                       alt="profile"
                       className="w-[40px] h-[40px] rounded-full object-cover border-none"
                     />
                   ) : (
                     <p className="text-center text-mRegular text-neutral0 leading-[10]">
-                      {userAccountInfo?.customer?.kam?.kam_name
+                      {get(userAccountInfo, 'customer.kam.kam_name', '')
                         ?.split(' ') // Split the string into words
                         ?.map(word => word[0]?.toUpperCase()) // Get the first letter of each word and uppercase it
                         ?.join('')}
