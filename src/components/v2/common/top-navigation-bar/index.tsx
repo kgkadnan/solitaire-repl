@@ -299,11 +299,11 @@ const TopNavigationBar = ({
                 <div>
                   <h1 className="text-lRegular font-regular text-neutral-900">
                     {' '}
-                    {`${userAccountInfo?.customer.kam.kam_name}`}
+                    {`${userAccountInfo?.customer?.kam?.kam_name ?? '-'}`}
                   </h1>
                   <p className="text-mRegular font-regular text-neutral-600">
                     {' '}
-                    {userAccountInfo?.customer.kam.post ?? '-'}
+                    {userAccountInfo?.customer?.kam?.post ?? '-'}
                   </p>
                 </div>
               </div>
@@ -320,7 +320,7 @@ const TopNavigationBar = ({
                     isInMaintenanceMode ? 'text-neutral400' : 'text-neutral900'
                   }`}
                 >
-                  {userAccountInfo?.customer.kam.phone ?? '-'}
+                  {userAccountInfo?.customer?.kam?.phone ?? '-'}
                 </p>
               </div>
               <Link
@@ -342,7 +342,7 @@ const TopNavigationBar = ({
                     isInMaintenanceMode ? 'text-neutral400' : 'text-neutral900'
                   }`}
                 >
-                  {userAccountInfo?.customer.kam.phone ?? '-'}
+                  {userAccountInfo?.customer?.kam?.phone ?? '-'}
                 </p>
               </Link>
             </div>
