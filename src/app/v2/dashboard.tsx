@@ -261,6 +261,7 @@ const Dashboard = () => {
     {}
   );
 
+  console.log('fixes');
   const toggleBottomSheet = () => {
     setBottomSheetOpen(prev => !prev);
   };

@@ -7,6 +7,7 @@ import { MobileInput } from '@/components/v2/common/input-field/mobile';
 import { ManageLocales } from '@/utils/v2/translate';
 import { IndividualActionButton } from '@/components/v2/common/action-button/individual-button';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { InputField } from '@/components/v2/common/input-field';
 
 const ForgotComponent = ({
   handlePhone,
@@ -15,7 +16,14 @@ const ForgotComponent = ({
   state,
   setState,
   value,
-  errorText
+  errorText,
+  setForgotByEmail,
+  forgotByEmail,
+  setEmailErrorText,
+  setPhoneErrorText,
+  setEmail,
+  email,
+  emailErrorText
 }: any) => {
   const router = useRouter();
   const pathName = useSearchParams().get('path');
@@ -35,18 +43,100 @@ const ForgotComponent = ({
           {ManageLocales('app.forgotPassword.title')}
         </div>
 
-        <MobileInput
-          label={ManageLocales('app.register.mobileNumber')}
-          onChange={event => handlePhone(event)}
-          type="number"
-          name="mobileNumber"
-          errorText={errorText}
-          placeholder={ManageLocales('app.register.mobileNumber.placeholder')}
-          registerFormState={state}
-          setRegisterFormState={setState}
-          value={value}
-          onKeyDown={handleKeyDown}
-        />
+        <div className="flex h-[40px]">
+          <button
+            className={`pt-[8px] px-4 text-mMedium font-medium h-[40px] ${
+              !forgotByEmail
+                ? 'text-neutral900 border-b-[2px] border-primaryMain pb-[7px]'
+                : 'text-neutral600 border-b-[1px] border-[#E4E7EC] pb-[8px]'
+            }`}
+            key={'Mobile'}
+            onClick={() => {
+              setForgotByEmail(false);
+
+              const emailInput = document.querySelector(
+                'input[name="email"]'
+              ) as HTMLInputElement;
+
+              // Clear the value of the input element
+              if (emailInput) {
+                emailInput.value = '';
+
+                setPhoneErrorText('');
+                setEmail('');
+                setEmailErrorText('');
+                setState((prev: any) => ({
+                  ...prev,
+                  phoneNumber: ''
+                }));
+              }
+            }}
+          >
+            Mobile
+          </button>
+          <button
+            className={`pt-[8px] px-4 text-mMedium font-medium h-[40px] ${
+              forgotByEmail
+                ? 'text-neutral900 border-b-[2px] border-primaryMain pb-[7px]'
+                : 'text-neutral600 border-b-[1px] border-[#E4E7EC] pb-[8px]'
+            }`}
+            key={'Email'}
+            onClick={() => {
+              setForgotByEmail(true);
+
+              const mobileInput = document.querySelector(
+                'input[name="mobileNumber"]'
+              ) as HTMLInputElement;
+
+              // Clear the value of the input element
+              if (mobileInput) {
+                mobileInput.value = '';
+                setPhoneErrorText('');
+                setEmail('');
+                setEmailErrorText('');
+                setState((prev: any) => ({
+                  ...prev,
+                  phoneNumber: ''
+                }));
+              }
+            }}
+          >
+            Email
+          </button>
+        </div>
+
+        {forgotByEmail ? (
+          <div className=" h-[65px]">
+            <InputField
+              label={ManageLocales('app.register.email')}
+              onChange={event => {
+                setEmail(event.target.value);
+                setEmailErrorText('');
+              }}
+              type="email"
+              name="email"
+              value={email}
+              errorText={emailErrorText}
+              placeholder={ManageLocales('app.register.email.placeholder')}
+              styles={{ inputMain: 'h-[64px]' }}
+              autoComplete="none"
+            />
+          </div>
+        ) : (
+          <MobileInput
+            label={ManageLocales('app.register.mobileNumber')}
+            onChange={event => handlePhone(event)}
+            type="number"
+            name="mobileNumber"
+            errorText={errorText}
+            placeholder={ManageLocales('app.register.mobileNumber.placeholder')}
+            registerFormState={state}
+            setRegisterFormState={setState}
+            value={value}
+            onKeyDown={handleKeyDown}
+          />
+        )}
+
         <div className="flex flex-col gap-1">
           <IndividualActionButton
             onClick={handleForgotPassword}

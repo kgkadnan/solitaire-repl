@@ -21,6 +21,7 @@ import { useGetCountryCodeQuery } from '@/features/api/current-ip';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import { ManageLocales } from '@/utils/v2/translate';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
+import { isEmailValid } from '@/utils/validate-email';
 
 const initialTokenState = {
   token: '',
@@ -32,10 +33,13 @@ const ForgotPassword = () => {
     countryCode: string;
     phoneNumber: string;
   }>({ countryCode: '', phoneNumber: '' });
+  const [email, setEmail] = useState<string>('');
+  const [forgotByEmail, setForgotByEmail] = useState<boolean>(false);
   const { modalState, modalSetState } = useModalStateManagement();
   const [currentState, setCurrentState] = useState('forgotPassword');
   const { dialogContent, isDialogOpen } = modalState;
   const [phoneErrorText, setPhoneErrorText] = useState<string>('');
+  const [emailErrorText, setEmailErrorText] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
 
   const { setIsDialogOpen, setDialogContent } = modalSetState;
@@ -83,7 +87,9 @@ const ForgotPassword = () => {
 
   const handleForgotPassword = async () => {
     setIsLoading(true);
-    if (
+
+    if (isEmailValid(email) && email.length && forgotByEmail) {
+    } else if (
       phoneNumber.phoneNumber.length &&
       isPhoneNumberValid(phoneNumber.phoneNumber)
     ) {
@@ -150,6 +156,13 @@ const ForgotPassword = () => {
             setState={setPhoneNumber}
             value={phoneNumber.phoneNumber}
             errorText={phoneErrorText}
+            setForgotByEmail={setForgotByEmail}
+            forgotByEmail={forgotByEmail}
+            setEmailErrorText={setEmailErrorText}
+            setPhoneErrorText={setPhoneErrorText}
+            setEmail={setEmail}
+            email={email}
+            emailErrorText={emailErrorText}
           />
         );
 
