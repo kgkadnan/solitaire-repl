@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-
+import { get } from 'lodash';
 import Image from 'next/image';
 import { Avatar } from '../../ui/avatar';
 import { kycStatus } from '@/constants/enums/kyc';
 import { usePathname, useRouter } from 'next/navigation';
 import ActionButton from '../action-button';
 import { v2Routes } from '@/constants/routes';
+
 import {
   Popover,
   PopoverContent,
@@ -273,20 +274,18 @@ const TopNavigationBar = ({
               <div className="flex items-center border-b-[1px] border-solid border-primaryBorder p-[16px] gap-[8px]">
                 <Avatar className="bg-primaryMain flex items-center justify-center">
                   {userAccountInfo &&
-                  userAccountInfo?.customer.kam.image !== null &&
-                  userAccountInfo?.customer.kam.image.length ? (
+                  get(userAccountInfo, 'customer.kam.image') ? (
                     <img
-                      src={userAccountInfo?.customer.kam.image}
+                      src={userAccountInfo.customer.kam.image}
                       alt="profile"
                       className="w-[40px] h-[40px] rounded-full object-cover border-none"
                     />
                   ) : (
                     <p className="text-center text-mRegular text-neutral0 leading-[10]">
-                      {`${userAccountInfo?.customer.kam.kam_name
-                        .split(' ') // Split the string into words
-                        .map(word => word[0]?.toUpperCase()) // Get the first letter of each word and uppercase it
-                        .join('')}
-                        `}
+                      {userAccountInfo?.customer?.kam?.kam_name
+                        ?.split(' ') // Split the string into words
+                        ?.map(word => word[0]?.toUpperCase()) // Get the first letter of each word and uppercase it
+                        ?.join('')}
                     </p>
                   )}
                 </Avatar>
