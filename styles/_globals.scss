@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+#onesignal-slidedown-container #onesignal-slidedown-dialog .slidedown-button.primary {
+  background: var(--primary-main) !important ;
+    color: #fff !important;
+    transition: 75ms linear;
+}
+html body #onesignal-slidedown-container #onesignal-slidedown-dialog .slidedown-button.secondary {
+  color: var(--primary-main) !important;
+  background: #fff !important;
+  border: 1px solid var(--primary-main) !important;
+}
+
+
+
 @layer utilities {
   /* Hide scrollbar for Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {
@@ -476,6 +489,7 @@
   background-color: transparent !important;
 }
 
+
 @keyframes clock-reveal {
   0% {
     transform: rotate(0deg);
@@ -502,3 +516,6 @@
 .animate-clock-reveal {
   animation: clock-reveal 1s linear forwards;
 }
+
+
+
