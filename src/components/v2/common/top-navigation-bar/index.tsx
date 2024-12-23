@@ -281,7 +281,7 @@ const TopNavigationBar = ({
             <div className="bg-neutral25 border-[1px] border-solid border-primaryBorder shadow-popupsShadow  rounded-[8px] relative top-[5px] right-[39%]">
               {/* Add the triangular tip above the card */}
               <div className="absolute w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-b-[10px] border-b-neutral200 top-[-10px] right-[15px] before:absolute before:content-[''] before:w-0 before:h-0 before:border-l-[10px] before:border-l-transparent before:border-r-[10px] before:border-r-transparent before:border-b-[9px] before:border-b-white before:top-[2px] before:left-[-9px]"></div>{' '}
-              <div className="flex items-center border-b-[1px] border-solid border-primaryBorder p-[16px] gap-[8px]">
+              <div className="flex items-center  px-[16px] py-[14px] gap-[8px]">
                 <Avatar className="bg-primaryMain flex items-center justify-center">
                   {userAccountInfo &&
                   get(userAccountInfo, 'customer.kam.image', '') ? (
@@ -296,6 +296,7 @@ const TopNavigationBar = ({
                     </p>
                   )}
                 </Avatar>
+
                 <div>
                   <h1 className="text-lRegular font-regular text-neutral-900">
                     {' '}
@@ -307,8 +308,9 @@ const TopNavigationBar = ({
                   </p>
                 </div>
               </div>
+              <hr className="border-[1px] border-solid border-primaryBorder w-[80%] ml-[20px]" />
               <div
-                className={`flex items-center py-[5px]  px-[16px] gap-[8px]    ${
+                className={`flex items-center py-[5px]  px-[16px] gap-[2px]    ${
                   isInMaintenanceMode
                     ? 'cursor-not-allowed bg-neutral100'
                     : 'cursor-pointer hover:bg-slate-50'
@@ -324,7 +326,7 @@ const TopNavigationBar = ({
                 </p>
               </div>
               <Link
-                className={`flex items-center py-[5px]  px-[16px] gap-[8px]    ${
+                className={`flex items-center py-[5px]  px-[16px] gap-[2px]    ${
                   isInMaintenanceMode
                     ? 'cursor-not-allowed bg-neutral100'
                     : 'cursor-pointer hover:bg-slate-50'
