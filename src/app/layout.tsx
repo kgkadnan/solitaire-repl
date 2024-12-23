@@ -160,7 +160,22 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
           safari_web_id:
             'web.onesignal.auto.017f9378-7499-4b97-8d47-e55f2bb151c0',
           notifyButton: {
-            enable: true
+            enable: false
+          },
+          promptOptions: {
+            slidedown: {
+              enabled: true
+            },
+            customlink: {
+              enabled: true,
+              style: {
+                size: 'medium', // Options: small, medium, large
+                color: {
+                  button: '#ffffff', // Change button color
+                  text: '#000000' // Change text color
+                }
+              }
+            }
           },
           allowLocalhostAsSecureOrigin: true
         });
