@@ -390,7 +390,7 @@ const Search = () => {
             label="Page not found"
             contentReactNode={
               <p className="text-neutral900  w-[17%] text-center">
-                Page you are looking for doesnot exists
+                Page you are looking for does not exists
               </p>
             }
             onClickHandler={() => {}}

@@ -36,8 +36,7 @@ import { DialogComponent } from '@/components/v2/common/dialog';
 import ConfirmStone from '../search/result/components';
 import { useLazyGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
 import { MRT_RowSelectionState, MRT_SortingState } from 'material-react-table';
-import { FILE_URLS } from '@/constants/v2/detail-page';
-import { getShapeDisplayName } from '@/utils/v2/detail-page';
+
 import { trackEvent } from '@/utils/ga';
 import { Tracking_Search_By_Text } from '@/constants/funnel-tracking';
 import { STONE_LOCATION } from '@/constants/v2/enums/location';
