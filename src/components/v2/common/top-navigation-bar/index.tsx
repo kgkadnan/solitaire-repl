@@ -278,7 +278,7 @@ const TopNavigationBar = ({
           </PopoverTrigger>
           {/* Popover content with radio buttons */}
           <PopoverContent className="z-[999] relative h-[150px]">
-            <div className="bg-neutral25 border-[1px] border-solid border-primaryBorder shadow-popupsShadow  rounded-[8px] relative top-[5px] right-[39%]">
+            <div className="bg-neutral25 border-[1px] border-solid border-primaryBorder shadow-popupsShadow  rounded-[8px] relative top-[10px] right-[39%]">
               {/* Add the triangular tip above the card */}
               <div className="absolute w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-b-[10px] border-b-neutral200 top-[-10px] right-[15px] before:absolute before:content-[''] before:w-0 before:h-0 before:border-l-[10px] before:border-l-transparent before:border-r-[10px] before:border-r-transparent before:border-b-[9px] before:border-b-white before:top-[2px] before:left-[-9px]"></div>{' '}
               <div className="flex items-center  px-[16px] py-[14px] gap-[8px]">

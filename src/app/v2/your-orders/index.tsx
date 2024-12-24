@@ -41,6 +41,7 @@ import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import { Skeleton } from '@mui/material';
 import { kycStatus } from '@/constants/enums/kyc';
 import { Events } from '@/constants/enums/event';
+import { Toast } from '@/components/v2/common/copy-and-share/toast';
 
 interface IDataItem {
   id: number;
@@ -92,7 +93,7 @@ const MyDiamonds = () => {
   let recentConfirmlimit = MAX_RECENT_CONFIRMATION_COUNT;
   let myInvoicelimit = MAX_MY_INVOICE_LIMIT_COUNT;
   const singleExpand = 'items.variant.product%2Citems.variant.prices';
-
+  const [error, setError] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
 
   const [triggerProductDetail] = useLazyGetProductDetailsQuery();
@@ -245,9 +246,13 @@ const MyDiamonds = () => {
 
   const handleShowDetails = (itemId: string) => {
     setShowDetail(true);
-    triggerProductDetail({ id: itemId, singleExpand }).then(res => {
-      setProductDetailData(res.data.order);
-    });
+    triggerProductDetail({ id: itemId, singleExpand })
+      .then(res => {
+        setProductDetailData(res.data.order);
+      })
+      .catch(e => {
+        setError(`Order you are looking for does not exist`);
+      });
   };
 
   const goBackToListView = () => {
@@ -699,6 +704,9 @@ const MyDiamonds = () => {
           : 'h-[89vh]'
       } `}
     >
+      {error !== '' && (
+        <Toast show={error !== ''} message={error} isSuccess={false} />
+      )}
       <DialogComponent dialogContent={dialogContent} isOpens={isDialogOpen} />
       {isLoading && <CustomKGKLoader />}
       <div className="flex  py-[8px] items-center">
