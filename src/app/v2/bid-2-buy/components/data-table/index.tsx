@@ -1325,6 +1325,7 @@ const BidToBuyDataTable = ({
                                       status="success"
                                     />
                                   );
+
                                   triggerBidToBuyApi({
                                     searchUrl: constructUrlParams(
                                       JSON.parse(localStorage.getItem('bid')!)
@@ -1387,6 +1388,13 @@ const BidToBuyDataTable = ({
                                     });
                                 })
                                 .catch(e => {
+                                  setBidValues((prevValues: any) => {
+                                    // Create a new object excluding keys in rowSelection
+                                    const updatedValues = { ...prevValues };
+                                    delete updatedValues[row.id]; // Remove the key from the state
+
+                                    return updatedValues;
+                                  });
                                   modalSetState.setIsDialogOpen(true);
                                   modalSetState.setDialogContent(
                                     <CommonPoppup

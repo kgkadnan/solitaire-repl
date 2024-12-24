@@ -1220,6 +1220,14 @@ const NewArrivalDataTable = ({
                                   delete prevRows[row.id];
                                   return prevRows;
                                 });
+
+                              setBidValues((prevValues: any) => {
+                                const updatedValues = { ...prevValues };
+
+                                delete updatedValues[row.id]; // Remove the key from the state
+
+                                return updatedValues;
+                              });
                               setBidError(prevError => {
                                 return {
                                   ...prevError,
