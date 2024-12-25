@@ -274,7 +274,7 @@ const MatchPairTable = ({
       setPaginatedData(newData);
     } else {
       // Apply the sorting logic to the full dataset
-      const sortedFullData = sortData(rows, sorting);
+      const sortedFullData = sortData(originalData, sorting);
 
       // Pagination logic
       const startIndex = pagination.pageIndex * pagination.pageSize;
@@ -648,6 +648,7 @@ const MatchPairTable = ({
     // Sort based on the first item of each sub-array
     const sortedData = [...data].sort((groupA, groupB) => {
       const rowA = groupA[0]; // Take the first item of groupA
+
       const rowB = groupB[0]; // Take the first item of groupB
 
       for (let sort of sorting) {
