@@ -254,6 +254,7 @@ const MatchPairTable = ({
   const [isLoaded, setIsLoaded] = useState(false);
   useEffect(() => {
     if (globalFilter !== '') {
+      setRowSelection({});
       // Remove all whitespace characters from globalFilter
       const trimmedFilter = globalFilter.replace(/\s+/g, '');
 
@@ -272,7 +273,16 @@ const MatchPairTable = ({
       // Update the paginated data state
       setPaginatedData(newData);
     } else {
-      setPaginatedData(rows);
+      // Apply the sorting logic to the full dataset
+      const sortedFullData = sortData(rows, sorting);
+
+      // Pagination logic
+      const startIndex = pagination.pageIndex * pagination.pageSize;
+      const endIndex = startIndex + pagination.pageSize;
+      const newData = sortedFullData.slice(startIndex, endIndex);
+
+      // Update the paginated data state
+      setPaginatedData(newData);
     }
   }, [globalFilter]);
 

@@ -225,6 +225,7 @@ const BidToBuyDataTable = ({
 
   useEffect(() => {
     if (globalFilter !== '') {
+      setRowSelection({});
       // Remove all whitespace characters from globalFilter
       const trimmedFilter = globalFilter.replace(/\s+/g, '');
       let data = rows.filter(
@@ -238,7 +239,16 @@ const BidToBuyDataTable = ({
       setPaginatedData(newData);
       setIsSkeletonLoading(false);
     } else {
-      setPaginatedData(rows);
+      // Apply the sorting logic to the full dataset
+      const sortedFullData = sortData(rows, sorting);
+
+      // Pagination logic
+      const startIndex = pagination.pageIndex * pagination.pageSize;
+      const endIndex = startIndex + pagination.pageSize;
+      const newData = sortedFullData.slice(startIndex, endIndex);
+
+      // Update the paginated data state
+      setPaginatedData(newData);
       setIsSkeletonLoading(false);
     }
   }, [globalFilter]);
@@ -1228,7 +1238,16 @@ const BidToBuyDataTable = ({
                         value={bidValue}
                         onChange={e => {
                           const newValue = e.target.value;
-                          if (newValue < row.original.discount) {
+                          console.log(
+                            'row.original.discount',
+                            row.original.discount
+                          );
+
+                          let discount =
+                            activeTab === 1
+                              ? row.original.my_current_bid
+                              : row.original.discount;
+                          if (newValue < discount) {
                             setBidError(prevError => {
                               return {
                                 ...prevError,
