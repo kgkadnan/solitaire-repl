@@ -171,6 +171,7 @@ const TurkeyDataTable = ({
   const [globalFilter, setGlobalFilter] = useState('');
   useEffect(() => {
     if (globalFilter !== '') {
+      setRowSelection({});
       // Remove all whitespace characters from globalFilter
       const trimmedFilter = globalFilter.replace(/\s+/g, '');
       let data = rows.filter(
