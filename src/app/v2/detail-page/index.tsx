@@ -144,13 +144,13 @@ export default function page() {
     if (path !== MatchRoutes.NEW_ARRIVAL) {
       let stonesData: any = lot_id_with_Location?.split(',');
       const stoneIds = stonesData?.map((item: any) => item?.split('-')[0]);
-      setIsLoading(true);
+      // setIsLoading(true);
       fetchProductByIds({
         stones: stoneIds
       })
         .unwrap()
         .then((res: any) => {
-          setIsLoading(false);
+          // setIsLoading(false);
           setError('');
           const searchData: any = Array.isArray(res?.products)
             ? res?.products
