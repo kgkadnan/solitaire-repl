@@ -6,6 +6,7 @@ interface IHandleResendOTP {
   setResendTimer: React.Dispatch<React.SetStateAction<number>>;
   sendOtp: any;
   setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  forgotByEmail: boolean;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   setDialogContent: React.Dispatch<React.SetStateAction<React.ReactNode>>;
   setToken: React.Dispatch<React.SetStateAction<IToken>>;
@@ -19,12 +20,21 @@ export const handleResendOTP = ({
   setDialogContent,
   setToken,
   setOtpValues,
-  setIsLoading
+  setIsLoading,
+  forgotByEmail
 }: IHandleResendOTP) => {
   setIsLoading(true);
+
+  let payload: any = forgotByEmail
+    ? { email: otpVerificationFormState.email } // If `forgotByEmail` is true, send an email
+    : {
+        phone: otpVerificationFormState.otpMobileNumber,
+        country_code: otpVerificationFormState.countryCode
+      };
+
   sendOtp({
-    phone: otpVerificationFormState.otpMobileNumber,
-    country_code: otpVerificationFormState.countryCode
+    data: payload,
+    query: forgotByEmail ? 'email' : 'sms' // Use `email` or `sms` for the query dynamically
   })
     .unwrap()
     .then((res: any) => {

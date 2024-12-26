@@ -25,7 +25,9 @@ const OTPComponent = ({
   setCurrentState,
   token,
   setIsLoading,
-  isLoading
+  isLoading,
+  forgotByEmail,
+  email
 }: any) => {
   const router = useRouter();
   const [error, setError] = useState('');
@@ -62,8 +64,12 @@ const OTPComponent = ({
         </div>
 
         <div className="text-mRegular text-neutral900 flex items-center justify-center gap-[3px]">
-          OTP has been sent to +{phoneNumber.countryCode}{' '}
-          {phoneNumber.phoneNumber}
+          OTP has been sent to{' '}
+          {`${
+            forgotByEmail
+              ? email
+              : `+${phoneNumber.countryCode}${phoneNumber.phoneNumber}`
+          }`}
           <div
             className="cursor-pointer"
             onClick={() => {
@@ -99,7 +105,8 @@ const OTPComponent = ({
                     setDialogContent,
                     setToken,
                     setOtpValues,
-                    setIsLoading
+                    setIsLoading,
+                    forgotByEmail
                   })
             }
           >
@@ -119,7 +126,9 @@ const OTPComponent = ({
                     verifyResetOTP,
                     phoneNumber,
                     setToken,
-                    setIsLoading
+                    setIsLoading,
+                    forgotByEmail,
+                    email
                   }),
                   setError(''))
                 : setError(
