@@ -266,12 +266,12 @@ const MatchPairTable = ({
       // Flatten the filtered data to work with pagination
       let flattenedData = filteredData.flat();
 
-      const startIndex = pagination.pageIndex * pagination.pageSize;
-      const endIndex = startIndex + pagination.pageSize;
-      // Slice the data to get the current page's data
-      const newData = flattenedData.slice(startIndex, endIndex);
+      // const startIndex = pagination.pageIndex * pagination.pageSize;
+      // const endIndex = startIndex + pagination.pageSize;
+      // // Slice the data to get the current page's data
+      // const newData = flattenedData.slice(startIndex, endIndex);
       // Update the paginated data state
-      setPaginatedData(newData);
+      setPaginatedData(flattenedData);
     } else {
       // Apply the sorting logic to the full dataset
       const sortedFullData = sortData(originalData, sorting);
