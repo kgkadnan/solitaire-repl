@@ -6,6 +6,7 @@ interface IHandleResetOTP {
   otpValues: string[];
   token: IToken;
   setCurrentState: React.Dispatch<React.SetStateAction<string>>;
+  setOtpValues: React.Dispatch<React.SetStateAction<string[]>>;
   setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   forgotByEmail: boolean;
@@ -26,7 +27,8 @@ export const handleResetOTP = ({
   setToken,
   setIsLoading,
   forgotByEmail,
-  email
+  email,
+  setOtpValues
 }: IHandleResetOTP) => {
   const enteredOtp = otpValues.join('');
   setIsLoading(true);
@@ -74,5 +76,6 @@ export const handleResetOTP = ({
           ]}
         />
       );
+      setOtpValues(['', '', '', '', '', '']);
     });
 };
