@@ -166,7 +166,7 @@
   "app.login.password.placeholder": "Enter your password",
   "app.forgotPassword": "Forgot Password?",
   "app.forgotPassword.title.number": "Please enter your registered phone number",
-  "app.forgotPassword.title.email": "Please enter your registered email",
+  "app.forgotPassword.title.email": "Please enter your registered email id",
   "app.sendOTP": "Send OTP",
   "app.goBackToLogin": "Go back to Login",
   "app.verifyOTP": "Verify OTP",
