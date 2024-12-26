@@ -208,12 +208,12 @@ const NewArrivalDataTable = ({
       let data = rows.filter(
         (data: any) => data?.lot_id?.startsWith(trimmedFilter)
       );
-      const startIndex = pagination.pageIndex * pagination.pageSize;
-      const endIndex = startIndex + pagination.pageSize;
-      // Slice the data to get the current page's data
-      const newData = data.slice(startIndex, endIndex);
+      // const startIndex = pagination.pageIndex * pagination.pageSize;
+      // const endIndex = startIndex + pagination.pageSize;
+      // // Slice the data to get the current page's data
+      // const newData = data.slice(startIndex, endIndex);
       // Update the paginated data state
-      setPaginatedData(newData);
+      setPaginatedData(data);
       setIsSkeletonLoading(false);
     } else {
       // Apply the sorting logic to the full dataset
