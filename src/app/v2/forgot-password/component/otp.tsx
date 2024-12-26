@@ -128,7 +128,8 @@ const OTPComponent = ({
                     setToken,
                     setIsLoading,
                     forgotByEmail,
-                    email
+                    email,
+                    setOtpValues
                   }),
                   setError(''))
                 : setError(
