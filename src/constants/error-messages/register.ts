@@ -7,5 +7,5 @@ export const PLEASE_ENTER_VALID_PASSWORD = 'Please enter a valid password.';
 export const INCORRECT_LOGIN_CREDENTIALS = `Oops! It seems there's an issue with your credentials. Please double-check and try again.`;
 export const ENTER_PASSWORD = 'Please enter password';
 export const ENTER_PHONE = 'Please enter mobile number';
-export const INVALID_PHONE = 'Please enter a valid phone number';
+export const INVALID_PHONE = 'Please enter a valid mobile number';
 export const INVALID_MOBILE = 'Please enter a valid mobile number';
