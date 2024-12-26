@@ -21,6 +21,7 @@ export interface IOtp {
   countryCode: string;
   codeAndNumber: string;
   iso?: string;
+  email?: string;
 }
 
 interface IOTPVerification {

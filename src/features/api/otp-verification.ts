@@ -36,19 +36,19 @@ export const otpVerificationApi = createApi({
       })
     }),
     verifyResetOTP: builder.mutation({
-      query: filter => ({
-        url: `/store/customers/sms/password-reset-otp/verify`,
+      query: ({ data, query }) => ({
+        url: `/store/customers/${query}/password-reset-otp/verify`,
         method: 'POST',
-        body: filter
+        body: data
       }),
 
       invalidatesTags: ['OtpVerification']
     }),
     sendResetOtp: builder.mutation({
-      query: filter => ({
-        url: `/store/customers/sms/password-reset-otp/send`,
+      query: ({ data, query }) => ({
+        url: `/store/customers/${query}/password-reset-otp/send`,
         method: 'POST',
-        body: filter
+        body: data
       }),
       invalidatesTags: ['OtpVerification']
     }),

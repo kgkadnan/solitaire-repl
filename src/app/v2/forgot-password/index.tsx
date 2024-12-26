@@ -1,7 +1,10 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { useForgotPasswordMutation } from '@/features/api/forgot-password';
-import { INVALID_PHONE } from '@/constants/error-messages/register';
+import {
+  INVALID_EMAIL_FORMAT,
+  INVALID_PHONE
+} from '@/constants/error-messages/register';
 import { Events } from '@/constants/enums/event';
 import { statusCode } from '@/constants/enums/status-code';
 import CommonPoppup from '../login/component/common-poppup';
@@ -21,6 +24,7 @@ import { useGetCountryCodeQuery } from '@/features/api/current-ip';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import { ManageLocales } from '@/utils/v2/translate';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
+import { isEmailValid } from '@/utils/validate-email';
 
 const initialTokenState = {
   token: '',
@@ -32,10 +36,13 @@ const ForgotPassword = () => {
     countryCode: string;
     phoneNumber: string;
   }>({ countryCode: '', phoneNumber: '' });
+  const [email, setEmail] = useState<string>('');
+  const [forgotByEmail, setForgotByEmail] = useState<boolean>(false);
   const { modalState, modalSetState } = useModalStateManagement();
   const [currentState, setCurrentState] = useState('forgotPassword');
   const { dialogContent, isDialogOpen } = modalState;
   const [phoneErrorText, setPhoneErrorText] = useState<string>('');
+  const [emailErrorText, setEmailErrorText] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
 
   const { setIsDialogOpen, setDialogContent } = modalSetState;
@@ -83,19 +90,32 @@ const ForgotPassword = () => {
 
   const handleForgotPassword = async () => {
     setIsLoading(true);
+
     if (
-      phoneNumber.phoneNumber.length &&
-      isPhoneNumberValid(phoneNumber.phoneNumber)
+      (isEmailValid(email) && email.length && forgotByEmail) ||
+      (!forgotByEmail &&
+        phoneNumber.phoneNumber.length &&
+        isPhoneNumberValid(phoneNumber.phoneNumber))
     ) {
+      let payload: any = forgotByEmail
+        ? { email: email } // If `forgotByEmail` is true, send an email
+        : {
+            phone: phoneNumber.phoneNumber,
+            country_code: phoneNumber.countryCode // Otherwise, send phone-related data
+          };
+
+      console.log('payload', payload, forgotByEmail);
+
       let res: any = await forgotPassword({
-        phone: phoneNumber.phoneNumber,
-        country_code: phoneNumber.countryCode
+        data: payload,
+        query: forgotByEmail ? 'email' : 'sms' // Use `email` or `sms` for the query dynamically
       });
       setOTPVerificationFormState(prev => ({
         ...prev,
         otpMobileNumber: `${phoneNumber.phoneNumber}`,
         countryCode: `${phoneNumber.countryCode}`,
-        codeAndNumber: `${phoneNumber.countryCode} ${phoneNumber.phoneNumber}`
+        codeAndNumber: `${phoneNumber.countryCode} ${phoneNumber.phoneNumber}`,
+        email: email
       }));
 
       if (res?.data?.statusCode === statusCode.SUCCESS) {
@@ -127,7 +147,12 @@ const ForgotPassword = () => {
       }
       setIsLoading(false);
     } else {
-      setPhoneErrorText(INVALID_PHONE);
+      if (forgotByEmail) {
+        setEmailErrorText(INVALID_EMAIL_FORMAT);
+      } else {
+        setPhoneErrorText(INVALID_PHONE);
+      }
+
       setIsLoading(false);
     }
   };
@@ -150,6 +175,13 @@ const ForgotPassword = () => {
             setState={setPhoneNumber}
             value={phoneNumber.phoneNumber}
             errorText={phoneErrorText}
+            setForgotByEmail={setForgotByEmail}
+            forgotByEmail={forgotByEmail}
+            setEmailErrorText={setEmailErrorText}
+            setPhoneErrorText={setPhoneErrorText}
+            setEmail={setEmail}
+            email={email}
+            emailErrorText={emailErrorText}
           />
         );
 
@@ -173,6 +205,8 @@ const ForgotPassword = () => {
             phoneNumber={phoneNumber}
             setIsLoading={setIsLoading}
             isLoading={isLoading}
+            forgotByEmail={forgotByEmail}
+            email={email}
           />
         );
       case 'resetPassword':
