@@ -216,7 +216,6 @@ const DataTable = ({
   setCompareStoneData,
   setIsInputDialogOpen,
   isDashboard,
-  setIsDetailPage,
   handleCreateAppointment,
   setIsSkeletonLoading,
   isSkeletonLoading,
@@ -224,7 +223,8 @@ const DataTable = ({
   customerMobileNumber,
   showOnlyWithVideo,
   setShowOnlyWithVideo,
-  showEmptyState
+  showEmptyState,
+  setIsDetailPage
 }: any) => {
   // Fetching saved search data
   const router = useRouter();
@@ -1118,6 +1118,7 @@ const DataTable = ({
                 setActiveTab={setActiveTab}
                 handleCloseSpecificTab={handleCloseSpecificTab}
                 setIsLoading={setIsLoading}
+                setGlobalFilter={setGlobalFilter}
               />
             </div>
             <div className="pr-[2px] flex gap-[12px] w-[500px]  justify-end flex-wrap relative">
