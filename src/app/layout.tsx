@@ -151,33 +151,29 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.OneSignal) {
-      console.log('window', window.OneSignal);
       window.OneSignal = window.OneSignal || [];
       window.OneSignal.push(() => {
         console.log('OneSignal initialized');
+
         window.OneSignal.init({
           appId: '378b2db1-01ba-4f45-b8cf-9500ea88056b',
           safari_web_id:
             'web.onesignal.auto.017f9378-7499-4b97-8d47-e55f2bb151c0',
           notifyButton: {
-            enable: false
+            enable: false // Disable OneSignal's default notification button
           },
-          promptOptions: {
-            slidedown: {
-              enabled: true
-            },
-            customlink: {
-              enabled: true,
-              style: {
-                size: 'medium', // Options: small, medium, large
-                color: {
-                  button: '#ffffff', // Change button color
-                  text: '#000000' // Change text color
-                }
-              }
-            }
-          },
+
           allowLocalhostAsSecureOrigin: true
+        });
+
+        // Directly trigger the browser notification prompt
+        window.OneSignal.getNotificationPermission().then((permission: any) => {
+          if (permission === 'default') {
+            // Request notification permissions from the browser
+            window.OneSignal.registerForPushNotifications();
+          } else {
+            console.log('Browser notification permission:', permission);
+          }
         });
       });
     }
