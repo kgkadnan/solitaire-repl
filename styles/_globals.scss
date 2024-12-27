@@ -2,23 +2,52 @@
 @tailwind components;
 @tailwind utilities;
 
-#onesignal-slidedown-container #onesignal-slidedown-dialog .slidedown-button.primary {
+#onesignal-slidedown-container
+  #onesignal-slidedown-dialog
+  .slidedown-button.primary {
   background: var(--primary-main) !important ;
-    color: #fff !important;
-    transition: 75ms linear;
+  color: #fff !important;
+  transition: 75ms linear;
 }
-html body #onesignal-slidedown-container #onesignal-slidedown-dialog .slidedown-button.secondary {
+html
+  body
+  #onesignal-slidedown-container
+  #onesignal-slidedown-dialog
+  .slidedown-button.secondary {
   color: var(--primary-main) !important;
   background: #fff !important;
   border: 1px solid var(--primary-main) !important;
 }
 
-#onesignal-slidedown-container #onesignal-slidedown-dialog .slidedown-body-icon{
+#onesignal-slidedown-container.slide-down {
+  bottom: 0 !important;
+}
+
+#onesignal-slidedown-container {
+  font-size: 16px;
+  position: fixed;
+  z-index: 2258594000;
+  right: 0;
+}
+
+#onesignal-slidedown-container #onesignal-slidedown-dialog .slidedown-button {
+  padding: 0.5em 1.5em;
+  font-size: 1em;
+  border-radius: 0.25em;
+  font-weight: 400;
+  box-shadow: unset;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+#onesignal-slidedown-container
+  #onesignal-slidedown-dialog
+  .slidedown-body-icon {
   box-sizing: border-box;
-    float: left;
-    width: 75px !important;
-    height: 80px;
-    position: relative;
+  float: left;
+  width: 63px !important;
+  height: 80px;
+  position: relative;
 }
 
 @layer utilities {
@@ -495,7 +524,6 @@ html body #onesignal-slidedown-container #onesignal-slidedown-dialog .slidedown-
   background-color: transparent !important;
 }
 
-
 @keyframes clock-reveal {
   0% {
     transform: rotate(0deg);
@@ -522,6 +550,3 @@ html body #onesignal-slidedown-container #onesignal-slidedown-dialog .slidedown-
 .animate-clock-reveal {
   animation: clock-reveal 1s linear forwards;
 }
-
-
-
