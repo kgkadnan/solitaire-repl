@@ -223,7 +223,8 @@ const DataTable = ({
   customerMobileNumber,
   showOnlyWithVideo,
   setShowOnlyWithVideo,
-  showEmptyState
+  showEmptyState,
+  setIsDetailPage
 }: any) => {
   // Fetching saved search data
   const router = useRouter();
