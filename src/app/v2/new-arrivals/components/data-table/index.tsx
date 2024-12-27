@@ -200,7 +200,8 @@ const NewArrivalDataTable = ({
   const [hoveredRowId, setHoveredRowId] = useState('');
   const [paginatedData, setPaginatedData] = useState<any>([]);
   const [globalFilter, setGlobalFilter] = useState('');
-  useEffect(() => {
+
+  const handleGlobalFilter = () => {
     if (globalFilter !== '') {
       setRowSelection({});
       // Remove all whitespace characters from globalFilter
@@ -228,6 +229,10 @@ const NewArrivalDataTable = ({
       setPaginatedData(newData);
       setIsSkeletonLoading(false);
     }
+  };
+
+  useEffect(() => {
+    handleGlobalFilter();
   }, [globalFilter]);
   useEffect(() => {
     if (activeTab !== 2) {
@@ -556,6 +561,11 @@ const NewArrivalDataTable = ({
                 },
                 '& .MuiInputAdornment-root': {
                   display: 'none'
+                }
+              }}
+              onKeyDown={event => {
+                if (event.key === 'Enter') {
+                  handleGlobalFilter();
                 }
               }}
             />

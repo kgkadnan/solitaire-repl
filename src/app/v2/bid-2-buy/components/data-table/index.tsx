@@ -223,7 +223,7 @@ const BidToBuyDataTable = ({
   };
   const filterDataState: any = useAppSelector(state => state.filterBidToBuy);
 
-  useEffect(() => {
+  const handleGlobalFilter = () => {
     if (globalFilter !== '') {
       setRowSelection({});
       // Remove all whitespace characters from globalFilter
@@ -251,6 +251,9 @@ const BidToBuyDataTable = ({
       setPaginatedData(newData);
       setIsSkeletonLoading(false);
     }
+  };
+  useEffect(() => {
+    handleGlobalFilter();
   }, [globalFilter]);
   useEffect(() => {
     if ((activeTab === 0 && searchableId === '') || activeTab === 1) {
@@ -499,6 +502,11 @@ const BidToBuyDataTable = ({
                   },
                   '& .MuiInputAdornment-root': {
                     display: 'none'
+                  }
+                }}
+                onKeyDown={event => {
+                  if (event.key === 'Enter') {
+                    handleGlobalFilter();
                   }
                 }}
               />
