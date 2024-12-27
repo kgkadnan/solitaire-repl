@@ -27,6 +27,8 @@ html
 #onesignal-slidedown-container {
   right: 0 !important;
   left: unset !important;
+  transition: none !important; /* Disables any CSS transition */
+  animation: none !important; /* Disables any CSS animation */
 }
 
 #onesignal-slidedown-container #onesignal-slidedown-dialog .slidedown-button {
