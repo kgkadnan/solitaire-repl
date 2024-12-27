@@ -169,7 +169,7 @@ const TurkeyDataTable = ({
 
   const [paginatedData, setPaginatedData] = useState<any>([]);
   const [globalFilter, setGlobalFilter] = useState('');
-  useEffect(() => {
+  const handleGlobalFilter = () => {
     if (globalFilter !== '') {
       setRowSelection({});
       // Remove all whitespace characters from globalFilter
@@ -188,6 +188,10 @@ const TurkeyDataTable = ({
       setPaginatedData(rows);
       setIsSkeletonLoading(false);
     }
+  };
+
+  useEffect(() => {
+    handleGlobalFilter();
   }, [globalFilter]);
 
   useEffect(() => {
@@ -324,6 +328,11 @@ const TurkeyDataTable = ({
               },
               '& .MuiInputAdornment-root': {
                 display: 'none'
+              }
+            }}
+            onKeyDown={event => {
+              if (event.key === 'Enter') {
+                handleGlobalFilter();
               }
             }}
           />

@@ -252,7 +252,8 @@ const MatchPairTable = ({
   const path = useSearchParams().get('active-tab');
 
   const [isLoaded, setIsLoaded] = useState(false);
-  useEffect(() => {
+
+  const handleGlobalFilter = () => {
     if (globalFilter !== '') {
       setRowSelection({});
       // Remove all whitespace characters from globalFilter
@@ -284,6 +285,9 @@ const MatchPairTable = ({
       // Update the paginated data state
       setPaginatedData(newData);
     }
+  };
+  useEffect(() => {
+    handleGlobalFilter();
   }, [globalFilter]);
 
   useEffect(() => {
@@ -1168,6 +1172,11 @@ const MatchPairTable = ({
               }}
               onBlur={() => {
                 setGlobalFilterActive(false);
+              }}
+              onKeyDown={event => {
+                if (event.key === 'Enter') {
+                  handleGlobalFilter();
+                }
               }}
               autoComplete="false"
               sx={{

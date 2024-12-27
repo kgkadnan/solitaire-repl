@@ -251,7 +251,8 @@ const DataTable = ({
   const [globalFilter, setGlobalFilter] = useState('');
 
   const path = useSearchParams().get('active-tab');
-  useEffect(() => {
+
+  const handleGlobalFilter = () => {
     if (globalFilter !== '') {
       setRowSelection({});
       // Remove all whitespace characters from globalFilter
@@ -277,6 +278,10 @@ const DataTable = ({
       // Update the paginated data state
       setPaginatedData(newData);
     }
+  };
+
+  useEffect(() => {
+    handleGlobalFilter();
   }, [globalFilter]);
 
   useEffect(() => {
@@ -1209,6 +1214,11 @@ const DataTable = ({
                 },
                 '& .MuiInputAdornment-root': {
                   display: 'none'
+                }
+              }}
+              onKeyDown={event => {
+                if (event.key === 'Enter') {
+                  handleGlobalFilter();
                 }
               }}
             />
