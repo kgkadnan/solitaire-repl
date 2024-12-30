@@ -150,7 +150,9 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
   }, [!isMobile, []]);
 
   useEffect(() => {
+    console.log('window', window);
     if (typeof window !== 'undefined' && window.OneSignal) {
+      console.log('window.OneSignal', window.OneSignal);
       window.OneSignal = window.OneSignal || [];
       window.OneSignal.push(() => {
         console.log('OneSignal initialized');
