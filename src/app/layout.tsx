@@ -150,25 +150,21 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
   }, [!isMobile, []]);
 
   useEffect(() => {
-    console.log('window', window);
-    if (typeof window !== 'undefined' && window.OneSignal) {
-      console.log('window.OneSignal', window.OneSignal);
-      window.OneSignal = window.OneSignal || [];
-      window.OneSignal.push(() => {
-        console.log('OneSignal initialized');
-
-        window.OneSignal.init({
-          appId: '378b2db1-01ba-4f45-b8cf-9500ea88056b',
-          safari_web_id:
-            'web.onesignal.auto.017f9378-7499-4b97-8d47-e55f2bb151c0',
-          notifyButton: {
-            enable: false // Disable OneSignal's default notification button
-          },
-
-          allowLocalhostAsSecureOrigin: true
+    if (!window.OneSignal) {
+      const script = document.createElement('script');
+      script.src = 'https://cdn.onesignal.com/sdks/OneSignalSDK.js';
+      script.async = true;
+      script.onload = () => {
+        console.log('OneSignal SDK dynamically loaded');
+        window.OneSignal = window.OneSignal || [];
+        window.OneSignal.push(() => {
+          console.log('OneSignal initialized');
+          window.OneSignal.init({
+            appId: '378b2db1-01ba-4f45-b8cf-9500ea88056b',
+            safari_web_id:
+              'web.onesignal.auto.017f9378-7499-4b97-8d47-e55f2bb151c0'
+          });
         });
-
-        // Directly trigger the browser notification prompt
         window.OneSignal.getNotificationPermission().then((permission: any) => {
           if (permission === 'default') {
             // Request notification permissions from the browser
@@ -177,7 +173,8 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
             console.log('Browser notification permission:', permission);
           }
         });
-      });
+      };
+      document.head.appendChild(script);
     }
   }, []);
 
@@ -228,11 +225,11 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
           }}
         />
 
-        <Script
+        {/* <Script
           src="https://cdn.onesignal.com/sdks/OneSignalSDK.js"
           strategy="beforeInteractive"
           onLoad={() => console.log('OneSignal SDK script loaded')}
-        />
+        /> */}
         <Script
           strategy="afterInteractive"
           src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA}`}
