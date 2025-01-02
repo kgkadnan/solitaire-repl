@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-
+import { get } from 'lodash';
 import Image from 'next/image';
 import { Avatar } from '../../ui/avatar';
 import { kycStatus } from '@/constants/enums/kyc';
 import { usePathname, useRouter } from 'next/navigation';
 import ActionButton from '../action-button';
 import { v2Routes } from '@/constants/routes';
+
 import {
   Popover,
   PopoverContent,
@@ -32,6 +33,9 @@ import {
   Tracking_KYC_Entry_Point
 } from '@/constants/funnel-tracking';
 import { trackEvent } from '@/utils/ga';
+import customerSupportSvg from '@public/v2/assets/icons/dashboard/customer-support.svg';
+import WhatsappSvg from '@public/v2/assets/icons/dashboard/whatsapp.svg?url';
+import PhoneSvg from '@public/v2/assets/icons/dashboard/phone.svg?url';
 import { useNotifySalesMutation } from '@/features/api/notify-sales';
 import CommonPoppup from '@/app/v2/login/component/common-poppup';
 
@@ -45,6 +49,12 @@ export interface IUserAccountInfo {
     deleted_at: string | null;
     email: string;
     kyc: string | null;
+    kam: {
+      image: string;
+      kam_name: string;
+      post: string;
+      phone: string;
+    };
     id: string;
     last_name: string;
     metadata: string | null;
@@ -144,7 +154,6 @@ const TopNavigationBar = ({
     notifySales({})
       .unwrap()
       .then(res => {
-        console.log('res', res);
         setIsNotified(true);
 
         setIsDialogOpen(true);
@@ -183,6 +192,17 @@ const TopNavigationBar = ({
       })
       .catch(_err => console.log('error'));
   };
+
+  const getInitials = (obj: any, path: string) => {
+    const name = get(obj, path, ''); // Get the name string or default to an empty string
+    return (
+      name
+        ?.split(' ') // Split the name into words
+        ?.map((word: any) => word[0]?.toUpperCase()) // Get the first letter of each word and uppercase it
+        ?.join('') || ''
+    ); // Join the initials or return an empty string
+  };
+
   return (
     <div className="min-h-[60px] border-b-[1px] border-neutral200 sticky top-0 bg-neutral0 z-[3] flex flex-col justify-end ">
       <DialogComponent
@@ -251,7 +271,85 @@ const TopNavigationBar = ({
             />
           </div>
         )}
-      <div className="z-50 flex gap-[16px] justify-end px-[32px] py-[10px]">
+      <div className="z-50 flex gap-[16px] items-center justify-end px-[32px] py-[10px]">
+        <Popover>
+          <PopoverTrigger className="flex justify-center">
+            <Image src={customerSupportSvg} alt="profile" />
+          </PopoverTrigger>
+          {/* Popover content with radio buttons */}
+          <PopoverContent className="z-[999] relative h-[150px]">
+            <div className="bg-neutral25 border-[1px] border-solid border-primaryBorder shadow-popupsShadow  rounded-[8px] relative top-[10px] right-[39%]">
+              {/* Add the triangular tip above the card */}
+              <div className="absolute w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-b-[10px] border-b-neutral200 top-[-10px] right-[15px] before:absolute before:content-[''] before:w-0 before:h-0 before:border-l-[10px] before:border-l-transparent before:border-r-[10px] before:border-r-transparent before:border-b-[9px] before:border-b-white before:top-[2px] before:left-[-9px]"></div>{' '}
+              <div className="flex items-center  px-[16px] py-[14px] gap-[8px]">
+                <Avatar className="bg-primaryMain flex items-center justify-center">
+                  {userAccountInfo &&
+                  get(userAccountInfo, 'customer.kam.image', '') ? (
+                    <img
+                      src={get(userAccountInfo, 'customer.kam.image', '')}
+                      alt="profile"
+                      className="w-[40px] h-[40px] rounded-full object-cover border-none"
+                    />
+                  ) : (
+                    <p className="text-center text-mRegular text-neutral0 leading-[10]">
+                      {getInitials(userAccountInfo, 'customer.kam.kam_name')}
+                    </p>
+                  )}
+                </Avatar>
+
+                <div>
+                  <h1 className="text-lRegular font-regular text-neutral-900">
+                    {' '}
+                    {`${userAccountInfo?.customer?.kam?.kam_name ?? '-'}`}
+                  </h1>
+                  <p className="text-mRegular font-regular text-neutral-600">
+                    {' '}
+                    {userAccountInfo?.customer?.kam?.post ?? '-'}
+                  </p>
+                </div>
+              </div>
+              <hr className="border-[1px] border-solid border-primaryBorder w-[80%] ml-[20px]" />
+              <div
+                className={`flex items-center py-[5px]  px-[16px] gap-[2px]    ${
+                  isInMaintenanceMode
+                    ? 'cursor-not-allowed bg-neutral100'
+                    : 'cursor-pointer hover:bg-slate-50'
+                }`}
+              >
+                <PhoneSvg />
+                <p
+                  className={`text-mRegular font-regular ${
+                    isInMaintenanceMode ? 'text-neutral400' : 'text-neutral900'
+                  }`}
+                >
+                  {userAccountInfo?.customer?.kam?.phone ?? '-'}
+                </p>
+              </div>
+              <Link
+                className={`flex items-center py-[5px]  px-[16px] gap-[2px]    ${
+                  isInMaintenanceMode
+                    ? 'cursor-not-allowed bg-neutral100'
+                    : 'cursor-pointer hover:bg-slate-50'
+                }`}
+                href={`https://wa.me/${
+                  userAccountInfo?.customer?.kam?.phone?.replace(/\s+/g, '') ||
+                  ''
+                }`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <WhatsappSvg />
+                <p
+                  className={`text-mRegular font-regular ${
+                    isInMaintenanceMode ? 'text-neutral400' : 'text-neutral900'
+                  }`}
+                >
+                  {userAccountInfo?.customer?.kam?.phone ?? '-'}
+                </p>
+              </Link>
+            </div>
+          </PopoverContent>
+        </Popover>
         <Notification isInMaintenanceMode={isInMaintenanceMode} />
 
         <Popover>

@@ -81,7 +81,7 @@ import { statusCode } from '@/constants/enums/status-code';
 import { loadImages } from '@/components/v2/common/detail-page/helpers/load-images';
 import { checkImage } from '@/components/v2/common/detail-page/helpers/check-image';
 import { useLazyGetAvailableMyAppointmentSlotsQuery } from '@/features/api/my-appointments';
-import { IAppointmentPayload } from '../../my-appointments/page';
+import { IAppointmentPayload } from '../../my-appointments';
 import BookAppointment from '../../my-appointments/components/book-appointment/book-appointment';
 import styles from './style.module.scss';
 import DataTableSkeleton from '@/components/v2/skeleton/data-table';
@@ -233,7 +233,7 @@ const Result = ({
 
   const fetchProducts = async () => {
     // setIsLoading(true);
-    setIsSkeletonLoading(true);
+    // setIsSkeletonLoading(true);
     const storedSelection = localStorage.getItem('Search');
 
     if (!storedSelection) return;
@@ -284,7 +284,6 @@ const Result = ({
                 />
               );
             }
-            res.data?.products;
           }
 
           setRowSelection({});
@@ -489,7 +488,7 @@ const Result = ({
                   handler: () => {
                     triggerRequestCallTimeSlots({}).then(res => {
                       let { data } = res.data;
-                      console.log('data', data);
+
                       setRequestCallTimeSlots(data);
                       setSelectedDate(Number(data.timeSlots.dates[0].date));
                       setSelectedSlot('');

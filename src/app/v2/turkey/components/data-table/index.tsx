@@ -169,24 +169,29 @@ const TurkeyDataTable = ({
 
   const [paginatedData, setPaginatedData] = useState<any>([]);
   const [globalFilter, setGlobalFilter] = useState('');
-  useEffect(() => {
+  const handleGlobalFilter = () => {
     if (globalFilter !== '') {
+      setRowSelection({});
       // Remove all whitespace characters from globalFilter
       const trimmedFilter = globalFilter.replace(/\s+/g, '');
       let data = rows.filter(
         (data: any) => data?.lot_id?.startsWith(trimmedFilter)
       );
-      const startIndex = pagination.pageIndex * pagination.pageSize;
-      const endIndex = startIndex + pagination.pageSize;
-      // Slice the data to get the current page's data
-      const newData = data.slice(startIndex, endIndex);
+      // const startIndex = pagination.pageIndex * pagination.pageSize;
+      // const endIndex = startIndex + pagination.pageSize;
+      // // Slice the data to get the current page's data
+      // const newData = data.slice(startIndex, endIndex);
       // Update the paginated data state
-      setPaginatedData(newData);
+      setPaginatedData(data);
       setIsSkeletonLoading(false);
     } else {
       setPaginatedData(rows);
       setIsSkeletonLoading(false);
     }
+  };
+
+  useEffect(() => {
+    handleGlobalFilter();
   }, [globalFilter]);
 
   useEffect(() => {
@@ -323,6 +328,11 @@ const TurkeyDataTable = ({
               },
               '& .MuiInputAdornment-root': {
                 display: 'none'
+              }
+            }}
+            onKeyDown={event => {
+              if (event.key === 'Enter') {
+                handleGlobalFilter();
               }
             }}
           />

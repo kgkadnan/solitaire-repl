@@ -444,8 +444,6 @@ export function DiamondDetailsComponent({
     return false;
   });
 
-  console.log('filteredImages.name', filteredImages[imageIndex]?.url);
-
   return (
     <div className="text-black bg-neutral25 rounded-[8px]">
       <Toast show={showToast} message="Copied Successfully" />

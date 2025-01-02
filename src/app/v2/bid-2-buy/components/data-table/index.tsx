@@ -31,8 +31,9 @@ import { formatNumber } from '@/utils/fix-two-digit-number';
 import { handleDecrementDiscount } from '@/utils/v2/handle-decrement-discount';
 import { handleIncrementDiscount } from '@/utils/v2/handle-increment-discount';
 import { RenderBidToBuyLotIdColor } from '@/components/v2/common/data-table/helpers/render-cell';
-
+import infoIcon from '@public/v2/assets/icons/new-arrivals/info-icon.svg';
 import { SubRoutes } from '@/constants/v2/enums/routes';
+import infoHover from '@public/v2/assets/icons/info.svg';
 import { ManageLocales } from '@/utils/v2/translate';
 import BiddingSkeleton from '@/components/v2/skeleton/bidding';
 import SearchInputField from '@/components/v2/common/search-input/search-input';
@@ -197,6 +198,7 @@ const BidToBuyDataTable = ({
   const [bidError, setBidError] = useState<{
     [key: string]: string;
   }>({});
+  const [hoveredRowId, setHoveredRowId] = useState('');
 
   const [pagination, setPagination] = useState({
     pageIndex: 0,
@@ -221,24 +223,37 @@ const BidToBuyDataTable = ({
   };
   const filterDataState: any = useAppSelector(state => state.filterBidToBuy);
 
-  useEffect(() => {
+  const handleGlobalFilter = () => {
     if (globalFilter !== '') {
+      setRowSelection({});
       // Remove all whitespace characters from globalFilter
       const trimmedFilter = globalFilter.replace(/\s+/g, '');
       let data = rows.filter(
         (data: any) => data?.lot_id?.startsWith(trimmedFilter)
       );
+      // const startIndex = pagination.pageIndex * pagination.pageSize;
+      // const endIndex = startIndex + pagination.pageSize;
+      // Slice the data to get the current page's data
+      // const newData = data.slice(startIndex, endIndex);
+      // Update the paginated data state
+      setPaginatedData(data);
+      setIsSkeletonLoading(false);
+    } else {
+      // Apply the sorting logic to the full dataset
+      const sortedFullData = sortData(rows, sorting);
+
+      // Pagination logic
       const startIndex = pagination.pageIndex * pagination.pageSize;
       const endIndex = startIndex + pagination.pageSize;
-      // Slice the data to get the current page's data
-      const newData = data.slice(startIndex, endIndex);
+      const newData = sortedFullData.slice(startIndex, endIndex);
+
       // Update the paginated data state
       setPaginatedData(newData);
       setIsSkeletonLoading(false);
-    } else {
-      setPaginatedData(rows);
-      setIsSkeletonLoading(false);
     }
+  };
+  useEffect(() => {
+    handleGlobalFilter();
   }, [globalFilter]);
   useEffect(() => {
     if ((activeTab === 0 && searchableId === '') || activeTab === 1) {
@@ -487,6 +502,11 @@ const BidToBuyDataTable = ({
                   },
                   '& .MuiInputAdornment-root': {
                     display: 'none'
+                  }
+                }}
+                onKeyDown={event => {
+                  if (event.key === 'Enter') {
+                    handleGlobalFilter();
                   }
                 }}
               />
@@ -1226,7 +1246,12 @@ const BidToBuyDataTable = ({
                         value={bidValue}
                         onChange={e => {
                           const newValue = e.target.value;
-                          if (newValue < row.original.discount) {
+
+                          let discount =
+                            activeTab === 1
+                              ? row.original.my_current_bid
+                              : row.original.discount;
+                          if (newValue < discount) {
                             setBidError(prevError => {
                               return {
                                 ...prevError,
@@ -1275,7 +1300,7 @@ const BidToBuyDataTable = ({
                       <IncrementIcon />
                     </div>
                   </div>
-                  <div className="flex items-end">
+                  <div className="flex items-center gap-3">
                     <ActionButton
                       actionButtonData={[
                         {
@@ -1323,6 +1348,7 @@ const BidToBuyDataTable = ({
                                       status="success"
                                     />
                                   );
+
                                   triggerBidToBuyApi({
                                     searchUrl: constructUrlParams(
                                       JSON.parse(localStorage.getItem('bid')!)
@@ -1385,6 +1411,13 @@ const BidToBuyDataTable = ({
                                     });
                                 })
                                 .catch(e => {
+                                  setBidValues((prevValues: any) => {
+                                    // Create a new object excluding keys in rowSelection
+                                    const updatedValues = { ...prevValues };
+                                    delete updatedValues[row.id]; // Remove the key from the state
+
+                                    return updatedValues;
+                                  });
                                   modalSetState.setIsDialogOpen(true);
                                   modalSetState.setDialogContent(
                                     <CommonPoppup
@@ -1429,6 +1462,32 @@ const BidToBuyDataTable = ({
                         }
                       ]}
                     />
+
+                    <div className="relative">
+                      <Image
+                        onMouseEnter={() => setHoveredRowId(row.id)}
+                        onMouseLeave={() => setHoveredRowId('')}
+                        src={infoIcon}
+                        alt="order meta data"
+                      />
+                      {hoveredRowId === row.id && (
+                        <div className="absolute z-[999] bg-[#ECF2FC] w-[320px] border-[1px] border-[#B6CFF3] rounded-[8px] p-4 text-[#475467] left-0  gap-2 right-[0px] ">
+                          <div className="flex flex-col gap-2">
+                            <div className="flex gap-1 items-center">
+                              <Image src={infoHover} alt="your orders" />{' '}
+                              <p className="text-neutral900 font-medium text-mMedium">
+                                Bid Cancellation Policy
+                              </p>
+                            </div>
+                            <p className="text-neutral600 text-[14px]">
+                              You can only increase your bid percentage after
+                              placing it. Canceling or lowering a bid is
+                              restricted.
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
                 <div className=" text-dangerMain text-sRegular">

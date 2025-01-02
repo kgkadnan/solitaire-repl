@@ -6,11 +6,14 @@ interface IHandleResetOTP {
   otpValues: string[];
   token: IToken;
   setCurrentState: React.Dispatch<React.SetStateAction<string>>;
+  setOtpValues: React.Dispatch<React.SetStateAction<string[]>>;
   setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  forgotByEmail: boolean;
   setDialogContent: React.Dispatch<React.SetStateAction<React.ReactNode>>;
   verifyResetOTP: any;
   phoneNumber?: any;
+  email: string;
   setToken?: any;
 }
 export const handleResetOTP = ({
@@ -22,15 +25,26 @@ export const handleResetOTP = ({
   verifyResetOTP,
   phoneNumber,
   setToken,
-  setIsLoading
+  setIsLoading,
+  forgotByEmail,
+  email,
+  setOtpValues
 }: IHandleResetOTP) => {
   const enteredOtp = otpValues.join('');
   setIsLoading(true);
+
+  let payload: any = forgotByEmail
+    ? { email: email, token: token.phoneToken, otp: enteredOtp } // If `forgotByEmail` is true, send an email
+    : {
+        phone: phoneNumber.phoneNumber,
+        country_code: phoneNumber.countryCode,
+        token: token.phoneToken,
+        otp: enteredOtp
+      };
+
   verifyResetOTP({
-    token: token.phoneToken,
-    otp: enteredOtp,
-    phone: phoneNumber.phoneNumber,
-    country_code: phoneNumber.countryCode
+    data: payload,
+    query: forgotByEmail ? 'email' : 'sms' // Use `email` or `sms` for the query dynamically
   })
     .unwrap()
     .then((res: any) => {
@@ -62,5 +76,6 @@ export const handleResetOTP = ({
           ]}
         />
       );
+      setOtpValues(['', '', '', '', '', '']);
     });
 };

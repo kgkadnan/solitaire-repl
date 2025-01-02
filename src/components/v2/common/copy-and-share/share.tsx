@@ -419,8 +419,6 @@ const Share = ({
     );
   };
 
-  console.log('filteredImages', filteredImages);
-
   return (
     <>
       <ShareDialog

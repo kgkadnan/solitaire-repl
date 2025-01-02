@@ -8,8 +8,8 @@ export const forgotPasswordApi = createApi({
 
   endpoints: builder => ({
     forgotPassword: builder.mutation({
-      query: data => ({
-        url: `/store/customers/sms/password-reset-otp/send`,
+      query: ({ data, query }) => ({
+        url: `/store/customers/${query}/password-reset-otp/send`,
         method: 'POST',
         body: data
       }),

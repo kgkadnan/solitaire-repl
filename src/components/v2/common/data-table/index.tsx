@@ -216,7 +216,6 @@ const DataTable = ({
   setCompareStoneData,
   setIsInputDialogOpen,
   isDashboard,
-  setIsDetailPage,
   handleCreateAppointment,
   setIsSkeletonLoading,
   isSkeletonLoading,
@@ -224,7 +223,8 @@ const DataTable = ({
   customerMobileNumber,
   showOnlyWithVideo,
   setShowOnlyWithVideo,
-  showEmptyState
+  showEmptyState,
+  setIsDetailPage
 }: any) => {
   // Fetching saved search data
   const router = useRouter();
@@ -251,22 +251,37 @@ const DataTable = ({
   const [globalFilter, setGlobalFilter] = useState('');
 
   const path = useSearchParams().get('active-tab');
-  useEffect(() => {
+
+  const handleGlobalFilter = () => {
     if (globalFilter !== '') {
+      setRowSelection({});
       // Remove all whitespace characters from globalFilter
       const trimmedFilter = globalFilter.replace(/\s+/g, '');
       let data = rows.filter(
         (data: any) => data?.lot_id?.startsWith(trimmedFilter)
       );
+      // const startIndex = pagination.pageIndex * pagination.pageSize;
+      // const endIndex = startIndex + pagination.pageSize;
+      // Slice the data to get the current page's data
+      // const newData = data.slice(startIndex, endIndex);
+      // Update the paginated data state
+      setPaginatedData(data);
+    } else {
+      // Apply the sorting logic to the full dataset
+      const sortedFullData = sortData(rows, sorting);
+
+      // Pagination logic
       const startIndex = pagination.pageIndex * pagination.pageSize;
       const endIndex = startIndex + pagination.pageSize;
-      // Slice the data to get the current page's data
-      const newData = data.slice(startIndex, endIndex);
+      const newData = sortedFullData.slice(startIndex, endIndex);
+
       // Update the paginated data state
       setPaginatedData(newData);
-    } else {
-      setPaginatedData(rows);
     }
+  };
+
+  useEffect(() => {
+    handleGlobalFilter();
   }, [globalFilter]);
 
   useEffect(() => {
@@ -1103,6 +1118,7 @@ const DataTable = ({
                 setActiveTab={setActiveTab}
                 handleCloseSpecificTab={handleCloseSpecificTab}
                 setIsLoading={setIsLoading}
+                setGlobalFilter={setGlobalFilter}
               />
             </div>
             <div className="pr-[2px] flex gap-[12px] w-[500px]  justify-end flex-wrap relative">
@@ -1199,6 +1215,11 @@ const DataTable = ({
                 },
                 '& .MuiInputAdornment-root': {
                   display: 'none'
+                }
+              }}
+              onKeyDown={event => {
+                if (event.key === 'Enter') {
+                  handleGlobalFilter();
                 }
               }}
             />

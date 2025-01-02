@@ -30,6 +30,8 @@ import empty from '@public/v2/assets/icons/data-table/empty-new-arrivals.svg';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import { RenderNewArrivalLotIdColor } from '@/components/v2/common/data-table/helpers/render-cell';
 import Tooltip from '@/components/v2/common/tooltip';
+import infoIcon from '@public/v2/assets/icons/new-arrivals/info-icon.svg';
+import infoHover from '@public/v2/assets/icons/info.svg';
 import { kycStatus } from '@/constants/enums/kyc';
 import { formatNumber } from '@/utils/fix-two-digit-number';
 import { handleIncrementDiscount } from '@/utils/v2/handle-increment-discount';
@@ -195,27 +197,42 @@ const NewArrivalDataTable = ({
     pageIndex: 0,
     pageSize: parseInt(localStorage.getItem('pageSize') ?? '20') //customize the default page size
   });
-
+  const [hoveredRowId, setHoveredRowId] = useState('');
   const [paginatedData, setPaginatedData] = useState<any>([]);
   const [globalFilter, setGlobalFilter] = useState('');
-  useEffect(() => {
+
+  const handleGlobalFilter = () => {
     if (globalFilter !== '') {
+      setRowSelection({});
       // Remove all whitespace characters from globalFilter
       const trimmedFilter = globalFilter.replace(/\s+/g, '');
       let data = rows.filter(
         (data: any) => data?.lot_id?.startsWith(trimmedFilter)
       );
+      // const startIndex = pagination.pageIndex * pagination.pageSize;
+      // const endIndex = startIndex + pagination.pageSize;
+      // // Slice the data to get the current page's data
+      // const newData = data.slice(startIndex, endIndex);
+      // Update the paginated data state
+      setPaginatedData(data);
+      setIsSkeletonLoading(false);
+    } else {
+      // Apply the sorting logic to the full dataset
+      const sortedFullData = sortData(rows, sorting);
+
+      // Pagination logic
       const startIndex = pagination.pageIndex * pagination.pageSize;
       const endIndex = startIndex + pagination.pageSize;
-      // Slice the data to get the current page's data
-      const newData = data.slice(startIndex, endIndex);
+      const newData = sortedFullData.slice(startIndex, endIndex);
+
       // Update the paginated data state
       setPaginatedData(newData);
       setIsSkeletonLoading(false);
-    } else {
-      setPaginatedData(rows);
-      setIsSkeletonLoading(false);
     }
+  };
+
+  useEffect(() => {
+    handleGlobalFilter();
   }, [globalFilter]);
   useEffect(() => {
     if (activeTab !== 2) {
@@ -544,6 +561,11 @@ const NewArrivalDataTable = ({
                 },
                 '& .MuiInputAdornment-root': {
                   display: 'none'
+                }
+              }}
+              onKeyDown={event => {
+                if (event.key === 'Enter') {
+                  handleGlobalFilter();
                 }
               }}
             />
@@ -1184,7 +1206,7 @@ const NewArrivalDataTable = ({
                       <IncrementIcon />
                     </div>
                   </div>
-                  <div className="flex items-end">
+                  <div className="flex items-center gap-3">
                     <ActionButton
                       actionButtonData={[
                         {
@@ -1218,6 +1240,14 @@ const NewArrivalDataTable = ({
                                   delete prevRows[row.id];
                                   return prevRows;
                                 });
+
+                              setBidValues((prevValues: any) => {
+                                const updatedValues = { ...prevValues };
+
+                                delete updatedValues[row.id]; // Remove the key from the state
+
+                                return updatedValues;
+                              });
                               setBidError(prevError => {
                                 return {
                                   ...prevError,
@@ -1232,6 +1262,31 @@ const NewArrivalDataTable = ({
                         }
                       ]}
                     />
+                    <div className="relative">
+                      <Image
+                        onMouseEnter={() => setHoveredRowId(row.id)}
+                        onMouseLeave={() => setHoveredRowId('')}
+                        src={infoIcon}
+                        alt="order meta data"
+                      />
+                      {hoveredRowId === row.id && (
+                        <div className="absolute bg-[#ECF2FC] z-[999] w-[320px] border-[1px] border-[#B6CFF3] rounded-[8px] p-4 text-[#475467] left-0  gap-2 right-[0px] ">
+                          <div className="flex flex-col gap-2">
+                            <div className="flex gap-1 items-center">
+                              <Image src={infoHover} alt="your orders" />{' '}
+                              <p className="text-neutral900 font-medium text-mMedium">
+                                Bid Cancellation Policy
+                              </p>
+                            </div>
+                            <p className="text-neutral600 text-[14px]">
+                              You can only increase your bid percentage after
+                              placing it. Canceling or lowering a bid is
+                              restricted.
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
                 <div className=" text-dangerMain text-sRegular">

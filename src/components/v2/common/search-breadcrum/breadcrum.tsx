@@ -16,11 +16,13 @@ const Breadcrum = ({
   searchParameters,
   activeTab,
   handleCloseSpecificTab,
-  isMatchingPair
+  isMatchingPair,
+  setGlobalFilter
 }: {
   searchParameters: any[];
   activeTab: number;
   setActiveTab: Dispatch<SetStateAction<number>>;
+  setGlobalFilter?: Dispatch<SetStateAction<string>>;
   handleCloseSpecificTab: (_id: number) => void;
   setIsLoading?: any;
   isMatchingPair?: boolean;
@@ -107,9 +109,11 @@ const Breadcrum = ({
                     isMatchingPair ? Routes.MATCHING_PAIR : Routes.SEARCH
                   }?active-tab=${SubRoutes.RESULT}-${activeIndex}`
                 );
+                setGlobalFilter && setGlobalFilter('');
               }}
               handlePillEdit={() => {
                 // setIsLoading(true);
+                setGlobalFilter && setGlobalFilter('');
                 router.push(
                   `${
                     isMatchingPair ? Routes.MATCHING_PAIR : Routes.SEARCH
@@ -119,6 +123,7 @@ const Breadcrum = ({
                 );
               }}
               handlePillDelete={() => {
+                setGlobalFilter && setGlobalFilter('');
                 handleCloseSpecificTab(activeIndex - 1);
               }}
             />
@@ -139,6 +144,7 @@ const Breadcrum = ({
           dropdownMenu={dropdownPills.map((result: any, index: any) => ({
             label: result.saveSearchName || result.label,
             handler: () => {
+              setGlobalFilter && setGlobalFilter('');
               handleDropdownSelect(index);
               router.push(
                 `${

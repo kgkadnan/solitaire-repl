@@ -252,8 +252,10 @@ const MatchPairTable = ({
   const path = useSearchParams().get('active-tab');
 
   const [isLoaded, setIsLoaded] = useState(false);
-  useEffect(() => {
+
+  const handleGlobalFilter = () => {
     if (globalFilter !== '') {
+      setRowSelection({});
       // Remove all whitespace characters from globalFilter
       const trimmedFilter = globalFilter.replace(/\s+/g, '');
 
@@ -265,15 +267,27 @@ const MatchPairTable = ({
       // Flatten the filtered data to work with pagination
       let flattenedData = filteredData.flat();
 
+      // const startIndex = pagination.pageIndex * pagination.pageSize;
+      // const endIndex = startIndex + pagination.pageSize;
+      // // Slice the data to get the current page's data
+      // const newData = flattenedData.slice(startIndex, endIndex);
+      // Update the paginated data state
+      setPaginatedData(flattenedData);
+    } else {
+      // Apply the sorting logic to the full dataset
+      const sortedFullData = sortData(originalData, sorting);
+
+      // Pagination logic
       const startIndex = pagination.pageIndex * pagination.pageSize;
       const endIndex = startIndex + pagination.pageSize;
-      // Slice the data to get the current page's data
-      const newData = flattenedData.slice(startIndex, endIndex);
+      const newData = sortedFullData.slice(startIndex, endIndex);
+
       // Update the paginated data state
       setPaginatedData(newData);
-    } else {
-      setPaginatedData(rows);
     }
+  };
+  useEffect(() => {
+    handleGlobalFilter();
   }, [globalFilter]);
 
   useEffect(() => {
@@ -638,6 +652,7 @@ const MatchPairTable = ({
     // Sort based on the first item of each sub-array
     const sortedData = [...data].sort((groupA, groupB) => {
       const rowA = groupA[0]; // Take the first item of groupA
+
       const rowB = groupB[0]; // Take the first item of groupB
 
       for (let sort of sorting) {
@@ -1090,6 +1105,7 @@ const MatchPairTable = ({
                 handleCloseSpecificTab={handleCloseSpecificTab}
                 setIsLoading={setIsLoading}
                 isMatchingPair={true}
+                setGlobalFilter={setGlobalFilter}
               />
             </div>
             <div className="pr-[2px] flex gap-[12px] w-[500px]  justify-end flex-wrap relative">
@@ -1157,6 +1173,11 @@ const MatchPairTable = ({
               }}
               onBlur={() => {
                 setGlobalFilterActive(false);
+              }}
+              onKeyDown={event => {
+                if (event.key === 'Enter') {
+                  handleGlobalFilter();
+                }
               }}
               autoComplete="false"
               sx={{
