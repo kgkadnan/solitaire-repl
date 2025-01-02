@@ -690,8 +690,8 @@ const Form = ({
     ) {
       if (
         (formIdentifier === 'MatchingPair'
-          ? data?.count < MAX_SEARCH_FORM_COUNT / 2
-          : data?.count < MAX_SEARCH_FORM_COUNT) &&
+          ? data?.count <= MAX_SEARCH_FORM_COUNT / 2
+          : data?.count <= MAX_SEARCH_FORM_COUNT) &&
         data?.count > MIN_SEARCH_FORM_COUNT
       ) {
         const queryParams = generateQueryParams(state);
