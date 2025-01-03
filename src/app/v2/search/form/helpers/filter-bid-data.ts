@@ -14,6 +14,21 @@ export function filterBidData(data: any, query: any) {
     'ETK'
   ];
 
+  const predefinedShapes = [
+    'BR',
+    'PS',
+    'EM',
+    'AS',
+    'CU',
+    'RAD',
+    'PR',
+    'OV',
+    'MQ',
+    'HS'
+  ];
+
+  console.log('query', query);
+
   // Extract all_asset_required from the query
   const allAssetRequired =
     query.all_asset_required === true || query.all_asset_required === 'true';
@@ -30,7 +45,7 @@ export function filterBidData(data: any, query: any) {
         continue;
       }
 
-      // Check for shape key and handle 'All' case
+      // Check for shape key and handle 'All' and 'OTHER' cases
       if (key === 'shape') {
         let shapes = query[key];
 
@@ -39,6 +54,16 @@ export function filterBidData(data: any, query: any) {
           shapes = shape
             .filter(s => s.short_name !== 'All')
             .map(s => s.short_name);
+        }
+
+        if (shapes.includes('OTHER')) {
+          // Allow items that are not in predefinedShapes
+          if (
+            !predefinedShapes.includes(item[key]) ||
+            shapes.includes(item[key])
+          ) {
+            continue; // Include items with "OTHER" shapes
+          }
         }
 
         // Check if the item's shape is in the selected shapes
