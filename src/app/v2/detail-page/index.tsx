@@ -53,7 +53,7 @@ import { MatchPairDetails } from '../matching-pair/components/details';
 import { NOT_MORE_THAN_300 } from '@/constants/error-messages/search';
 import { NO_STONES_SELECTED } from '@/constants/error-messages/cart';
 import { IN_TRANSIT, PAST, PENDING } from '@/constants/business-logic';
-export default function page() {
+export default function DetailPage() {
   const router = useRouter();
   const mainPathName = usePathname(); // Get the current path (excluding query params)
   const lot_id_with_Location = useSearchParams().get('stoneid');
@@ -92,8 +92,6 @@ export default function page() {
   const [isLoading, setIsLoading] = useState(false);
   const [bid, setBid] = useState<any>();
   const [searchData, setSearchData] = useState([]);
-  const [activeBid, setActiveBid] = useState<any>();
-  const { data: bidHistory } = useGetBidHistoryQuery({});
 
   const [fetchProductByIds] = useFetchProductByIdsMutation();
   const socketManager = useMemo(() => new SocketManager(), []);
@@ -144,13 +142,12 @@ export default function page() {
     if (path !== MatchRoutes.NEW_ARRIVAL) {
       let stonesData: any = lot_id_with_Location?.split(',');
       const stoneIds = stonesData?.map((item: any) => item?.split('-')[0]);
-      // setIsLoading(true);
+
       fetchProductByIds({
         stones: stoneIds
       })
         .unwrap()
         .then((res: any) => {
-          // setIsLoading(false);
           setError('');
           const searchData: any = Array.isArray(res?.products)
             ? res?.products
@@ -166,6 +163,7 @@ export default function page() {
           );
           setBid(filteredData);
           setSearchData(filteredData);
+
           setDetailPageData(filteredData[0]);
           setIsDetailPage(true);
           if (path == MatchRoutes.MATCHING_PAIR) {
@@ -176,7 +174,6 @@ export default function page() {
           }
         })
         .catch((_e: any) => {
-          setIsLoading(false);
           if (
             _e?.status === statusCode.NOT_FOUND ||
             _e?.status === statusCode.INVALID_DATA
@@ -248,8 +245,13 @@ export default function page() {
             (x: any) => x.lot_id == stonesData[0] && x.location == stonesData[1]
           );
           setBid(productData);
-          setDetailPageData(filteredData[0]);
-          setIsDetailPage(true);
+
+          if (filteredData?.length) {
+            setDetailPageData(filteredData[0]);
+            setIsDetailPage(true);
+          } else {
+            setError(`We couldn't find any results for this search`);
+          }
         }
       } catch (error) {
         console.error(

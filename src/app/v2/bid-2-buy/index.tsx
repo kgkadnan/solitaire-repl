@@ -446,16 +446,11 @@ const BidToBuy = () => {
   const [timeDifference, setTimeDifference] = useState(null);
   const [isInActive, setIsInActive] = useState('');
   const getBidToBuyHistoryData = () => {
-    setIsLoading(true);
-
     triggerBidToBuyHistory({})
       .then(res => {
-        setIsLoading(false);
         setBidHistory(res.data);
       })
-      .catch(() => {
-        setIsLoading(false);
-      });
+      .catch(() => {});
   };
 
   useEffect(() => {

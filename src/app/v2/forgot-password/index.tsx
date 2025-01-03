@@ -25,6 +25,7 @@ import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import { ManageLocales } from '@/utils/v2/translate';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import { isEmailValid } from '@/utils/validate-email';
+import { useRouter } from 'next/navigation';
 
 const initialTokenState = {
   token: '',
@@ -32,6 +33,7 @@ const initialTokenState = {
   tempToken: ''
 };
 const ForgotPassword = () => {
+  const router = useRouter();
   const [phoneNumber, setPhoneNumber] = useState<{
     countryCode: string;
     phoneNumber: string;
@@ -54,7 +56,13 @@ const ForgotPassword = () => {
   const [sendResetOtp] = useSendResetOtpMutation();
 
   const [token, setToken] = useState(initialTokenState);
-  const { userLoggedIn } = useUser();
+  const { isTokenChecked, authToken, userLoggedIn } = useUser();
+
+  useEffect(() => {
+    if (isTokenChecked) {
+      authToken && router && router.push('/v2/');
+    }
+  }, [isTokenChecked]);
 
   // Handle Enter key press for login
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {

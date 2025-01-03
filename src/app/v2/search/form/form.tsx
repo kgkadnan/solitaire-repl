@@ -459,7 +459,8 @@ const Form = ({
           (isMatchingPair
             ? data?.count > MAX_SEARCH_FORM_COUNT / 2
             : data?.count > MAX_SEARCH_FORM_COUNT) &&
-          data?.count > MIN_SEARCH_FORM_COUNT
+          data?.count > MIN_SEARCH_FORM_COUNT &&
+          routePath !== Routes.NEW_ARRIVAL
         ) {
           setIsError(true);
           setErrorText(
@@ -688,9 +689,10 @@ const Form = ({
       data?.count > MIN_SEARCH_FORM_COUNT &&
       minMaxError.length === 0
     ) {
+      console.log();
       if (
         (formIdentifier === 'MatchingPair'
-          ? data?.count <= MAX_SEARCH_FORM_COUNT / 2
+          ? data?.count < MAX_SEARCH_FORM_COUNT / 2
           : data?.count <= MAX_SEARCH_FORM_COUNT) &&
         data?.count > MIN_SEARCH_FORM_COUNT
       ) {
