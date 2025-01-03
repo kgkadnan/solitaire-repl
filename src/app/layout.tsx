@@ -155,7 +155,6 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
       script.src = 'https://cdn.onesignal.com/sdks/OneSignalSDK.js';
       script.async = true;
       script.onload = () => {
-        console.log('OneSignal SDK dynamically loaded layout');
         window.OneSignal = window.OneSignal || [];
         window.OneSignal.push(() => {
           console.log('OneSignal initialized');

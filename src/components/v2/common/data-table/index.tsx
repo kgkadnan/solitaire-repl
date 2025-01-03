@@ -207,6 +207,8 @@ const DataTable = ({
   searchList,
   setIsLoading,
   handleAddToCart,
+  dispatch,
+  dashboardResultPageData,
   // handleConfirmStone,
   setIsConfirmStone,
   setConfirmStoneData,
@@ -223,8 +225,7 @@ const DataTable = ({
   customerMobileNumber,
   showOnlyWithVideo,
   setShowOnlyWithVideo,
-  showEmptyState,
-  setIsDetailPage
+  showEmptyState
 }: any) => {
   // Fetching saved search data
   const router = useRouter();
@@ -281,6 +282,7 @@ const DataTable = ({
   };
 
   useEffect(() => {
+    console.log('handleGlobalFilter', handleGlobalFilter);
     handleGlobalFilter();
   }, [globalFilter]);
 
@@ -755,12 +757,29 @@ const DataTable = ({
         </div>
       );
     } else {
-      return <></>;
+      if (!paginatedData.length && globalFilter.length) {
+        return (
+          <div
+            className={`flex flex-col items-center justify-center gap-5 ${
+              isFullScreen ? 'h-[69vh]' : !rows.length ? 'h-[55vh]' : 'h-[60vh]'
+            }  `}
+          >
+            <div className="text-center">
+              <Image src={empty} alt="empty" />
+              <p className="text-neutral900 w-[220px] mx-auto">
+                No matching stones found.
+              </p>
+            </div>
+          </div>
+        );
+      } else {
+        return <></>;
+      }
     }
   };
   //pass table options to useMaterialReactTable
   const table = useMaterialReactTable({
-    columns: showEmptyState ? [] : columns,
+    columns: showEmptyState || !paginatedData.length ? [] : columns,
     data: showEmptyState ? [] : paginatedData, //must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
 
     getRowId: originalRow => originalRow?.id,
@@ -787,7 +806,7 @@ const DataTable = ({
     globalFilterFn: 'startsWith',
     selectAllMode: 'page',
     renderEmptyRowsFallback: NoResultsComponent,
-    manualPagination: showEmptyState ? false : true,
+    manualPagination: showEmptyState || !paginatedData.length ? false : true,
     rowCount: rows.length,
     onPaginationChange: updater => {
       setPagination(prevState => {
@@ -1392,7 +1411,9 @@ const DataTable = ({
                               setErrorText,
                               setIsConfirmStone,
                               setConfirmStoneData,
-                              setIsDetailPage,
+
+                              dispatch,
+                              dashboardResultPageData,
                               checkProductAvailability,
                               modalSetState,
                               router,

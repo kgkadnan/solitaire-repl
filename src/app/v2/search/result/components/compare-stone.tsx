@@ -48,7 +48,9 @@ const CompareStone = ({
   isMatchingPair = false,
   modalSetState,
   setIsCompareStone,
-  refreshCompareStone
+  refreshCompareStone,
+  dispatch,
+  dashboardResultPageData
 }: any) => {
   const [mappingColumn, setMappingColumn] = useState<any>({});
   const [checkProductAvailability] = useCheckProductAvailabilityMutation({});
@@ -555,7 +557,9 @@ const CompareStone = ({
                   checkProductAvailability,
                   setIsLoading,
                   setSelectedCheckboxes,
-                  refreshSearchResults: refreshCompareStone
+                  refreshSearchResults: refreshCompareStone,
+                  dispatch,
+                  dashboardResultPageData
                 });
               }
             }

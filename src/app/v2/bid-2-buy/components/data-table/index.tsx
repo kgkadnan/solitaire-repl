@@ -195,6 +195,7 @@ const BidToBuyDataTable = ({
 }: any) => {
   // Fetching saved search data
   const [isFullScreen, setIsFullScreen] = useState(false);
+
   const [bidError, setBidError] = useState<{
     [key: string]: string;
   }>({});

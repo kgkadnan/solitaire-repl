@@ -665,6 +665,13 @@ const NewArrivalDataTable = ({
             additions soon.
           </p>
         </>
+      ) : !paginatedData.length && globalFilter.length ? (
+        <div className="text-center">
+          <Image src={empty} alt="empty" />
+          <p className="text-neutral900 w-[220px] mx-auto">
+            No matching stones found.
+          </p>
+        </div>
       ) : rows.length ? (
         ''
       ) : (
@@ -680,7 +687,7 @@ const NewArrivalDataTable = ({
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   //pass table options to useMaterialReactTable
   const table = useMaterialReactTable({
-    columns,
+    columns: paginatedData.length ? columns : [],
     data: isTabSwitch ? [] : paginatedData, //must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
 
     getRowId: originalRow => originalRow.id,
@@ -709,6 +716,7 @@ const NewArrivalDataTable = ({
     selectAllMode: 'page',
     renderTopToolbar,
     renderBottomToolbar,
+    enablePagination: !paginatedData.length ? false : true,
     renderEmptyRowsFallback: NoResultsComponent,
     manualPagination: true,
     rowCount: rows.length,
