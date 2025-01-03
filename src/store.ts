@@ -29,6 +29,7 @@ import { forgotPasswordApi } from './features/api/forgot-password';
 import kycReducer from './features/kyc/kyc';
 import LogoutReducer from './features/logout/logout-slice';
 import KamLocationReducer from './features/kam-location/kam-location';
+import DashboardResultPageReducer from './features/dashboard/dashboard-slice';
 import setConfirmStoneTrackReducer from './features/confirm-stone-track/confirm-stone-track-slice';
 import { kycApi } from './features/api/kyc';
 import { otpVerificationApi } from './features/api/otp-verification';
@@ -69,6 +70,7 @@ const appReducer = combineReducers({
   kyc: kycReducer,
   logoutAll: LogoutReducer,
   kamLocation: KamLocationReducer,
+  dashboardResultPage: DashboardResultPageReducer,
   setConfirmStoneTrack: setConfirmStoneTrackReducer,
 
   [downloadExcelApi.reducerPath]: downloadExcelApi.reducer,

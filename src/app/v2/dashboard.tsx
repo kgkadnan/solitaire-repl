@@ -48,7 +48,6 @@ import { Dropdown } from '@/components/v2/common/dropdown-menu';
 import { statusCode } from '@/constants/enums/status-code';
 import infoSvg from '@public/v2/assets/icons/dashboard/info.svg';
 import infoHover from '@public/v2/assets/icons/info.svg';
-
 import { useAddCartMutation } from '@/features/api/cart';
 import { DialogComponent } from '@/components/v2/common/dialog';
 import { handleConfirmStone } from './search/result/helpers/handle-confirm-stone';
@@ -136,6 +135,7 @@ import {
   useReuestCallBackMutation
 } from '@/features/api/request-call-back';
 import { IAppointmentPayload } from './my-appointments';
+import { dashboardResultPage } from '@/features/dashboard/dashboard-slice';
 
 interface ITabs {
   label: string;
@@ -166,6 +166,10 @@ const Dashboard = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const confirmTrack = useAppSelector(state => state.setConfirmStoneTrack);
+  const dashboardResultPageData = useAppSelector(
+    state => state.dashboardResultPage
+  );
+
   const [showOnlyWithVideo, setShowOnlyWithVideo] = useState(false);
   const { data: customerData, refetch: refetchCustomerData } =
     useGetCustomerQuery({}, { refetchOnMountOrArgChange: true });
@@ -183,7 +187,7 @@ const Dashboard = () => {
     'linear-gradient(90deg, #DBF2FC 0%, #E8E8FF 100%)'
   ];
   const [stoneId, setStoneId] = useState('');
-  const [searchData, setSearchData] = useState<any>();
+  // const [searchData, setSearchData] = useState<any>();
   const [searchColumn, setSearchColumn] = useState<any>();
 
   const [error, setError] = useState('');
@@ -200,7 +204,7 @@ const Dashboard = () => {
   const [commentValue, setCommentValue] = useState('');
   const [detailPageData, setDetailPageData] = useState<any>({});
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [isDetailPage, setIsDetailPage] = useState(false);
+  // const [isDetailPage, setIsDetailPage] = useState(false);
   const [isDiamondDetail, setIsDiamondDetail] = useState(false);
   const [isDiamondDetailLoading, setIsDiamondDetailLoading] = useState(true); //
 
@@ -261,7 +265,6 @@ const Dashboard = () => {
     {}
   );
 
-  console.log('fixes');
   const toggleBottomSheet = () => {
     setBottomSheetOpen(prev => !prev);
   };
@@ -328,19 +331,19 @@ const Dashboard = () => {
 
   const memoizedRows = useMemo(() => {
     setBreadCrumLabel('Dashboard');
-    return Array.isArray(searchData?.foundProducts)
-      ? searchData?.foundProducts
+    return Array.isArray(dashboardResultPageData?.resultPageData?.foundProducts)
+      ? dashboardResultPageData?.resultPageData?.foundProducts
       : [];
-  }, [searchData?.foundProducts]);
+  }, [dashboardResultPageData?.resultPageData?.foundProducts]);
   useEffect(() => {
     if (
-      searchData?.notFoundKeywords?.length > 0 &&
+      dashboardResultPageData?.resultPageData?.notFoundKeywords?.length > 0 &&
       !isSomeStoneNotFoundShowed
     ) {
       setError('Some stones are not available');
       setIsSomeStoneNotFoundShowed(true);
     }
-  }, [searchData?.notFoundKeywords]);
+  }, [dashboardResultPageData?.resultPageData?.notFoundKeywords]);
   useEffect(() => {
     const fetchColumns = async () => {
       const response = await triggerColumn({});
@@ -374,7 +377,8 @@ const Dashboard = () => {
           additionalColumn,
           addFireIconCol
         ];
-        setSearchColumn(updatedColumns);
+        // setSearchColumn(updatedColumns);
+        dispatch(dashboardResultPage({ columnData: updatedColumns }));
       }
     };
 
@@ -389,7 +393,12 @@ const Dashboard = () => {
     }, 4000);
 
     return () => clearTimeout(timeout);
-  }, [isDetailPage, isConfirmStone, isCompareStone, searchData?.foundProducts]);
+  }, [
+    dashboardResultPageData?.isResultPage,
+    isConfirmStone,
+    isCompareStone,
+    dashboardResultPageData?.resultPageData?.foundProducts
+  ]);
 
   const handleTrackEvent = () => {
     trackEvent({
@@ -818,8 +827,8 @@ const Dashboard = () => {
         }
       });
   const memoizedColumns = useMemo(
-    () => mapColumns(searchColumn),
-    [searchColumn, sorting]
+    () => mapColumns(dashboardResultPageData.columnData),
+    [dashboardResultPageData.columnData, sorting]
   );
   const handleEdit = (stone: string, identifier = false) => {
     let savedSearchEditData = customerData?.customer?.saved_searches?.filter(
@@ -1125,9 +1134,12 @@ const Dashboard = () => {
         .unwrap()
         .then((res: any) => {
           setIsLoading(false);
-          setSearchData(res);
+          // setSearchData(res);
+          // setIsDetailPage(true);
+          dispatch(
+            dashboardResultPage({ isResultPage: true, resultPageData: res })
+          );
           setError('');
-          setIsDetailPage(true);
           setLastEventTime(null);
           trackEvent({
             action: Tracking_Search_By_Text.search_by_text_executed,
@@ -1167,9 +1179,12 @@ const Dashboard = () => {
         .unwrap()
         .then((res: any) => {
           setIsLoading(false);
-          setSearchData(res);
+          // setSearchData(res);
+          // setIsDetailPage(true);
+          dispatch(
+            dashboardResultPage({ isResultPage: true, resultPageData: res })
+          );
           setError('');
-          setIsDetailPage(true);
           setLastEventTime(null);
           trackEvent({
             action: Tracking_Search_By_Text.search_by_text_executed,
@@ -1252,8 +1267,14 @@ const Dashboard = () => {
                   label: ManageLocales('app.modal.continue'),
                   handler: () => {
                     setIsDialogOpen(false);
-                    setIsDetailPage(false);
-                    // setSearchData({});
+
+                    dispatch(
+                      dashboardResultPage({
+                        isResultPage: false,
+                        resultPageData: dashboardResultPageData?.resultPageData
+                      })
+                    );
+                    // setIsDetailPage(false);
                   },
                   customStyle: 'flex-1 w-full h-10'
                 },
@@ -1274,9 +1295,12 @@ const Dashboard = () => {
             .unwrap()
             .then((res: any) => {
               // setIsLoading(false);
-              setSearchData(res);
+              // setSearchData(res);
+              // setIsDetailPage(true);
+              dispatch(
+                dashboardResultPage({ isResultPage: true, resultPageData: res })
+              );
               setError('');
-              setIsDetailPage(true);
             })
             .catch((_e: any) => {
               if (
@@ -1325,7 +1349,13 @@ const Dashboard = () => {
       setBreadCrumLabel('');
     }
     setRowSelection({});
-    setIsDetailPage(true);
+    // setIsDetailPage(true);
+    dispatch(
+      dashboardResultPage({
+        isResultPage: true,
+        resultPageData: dashboardResultPageData?.resultPageData
+      })
+    );
 
     setIsConfirmStone(false);
     setConfirmStoneData([]);
@@ -1598,25 +1628,28 @@ const Dashboard = () => {
     let selectedIds = Object.keys(rowSelection);
 
     if (selectedIds.length > 0) {
-      const hasMemoOut = selectedIds?.some((id: string) => {
-        const stone = searchData?.foundProducts.find(
-          (row: IProduct) => row?.id === id
-        );
-        return stone?.diamond_status === MEMO_STATUS;
-      });
+      // const hasMemoOut = selectedIds?.some((id: string) => {
+      //   const stone =
+      //     dashboardResultPageData?.resultPageData?.foundProducts.find(
+      //       (row: any) => row?.id === id
+      //     );
+      //   return stone?.diamond_status === MEMO_STATUS;
+      // });
 
       const hasHold = selectedIds?.some((id: string) => {
-        const stone = searchData?.foundProducts.find(
-          (row: IProduct) => row?.id === id
-        );
+        const stone: any =
+          dashboardResultPageData?.resultPageData?.foundProducts.find(
+            (row: IProduct) => row?.id === id
+          );
         return stone?.diamond_status === HOLD_STATUS;
       });
 
       // Check for stones with AVAILABLE_STATUS
       const hasAvailable = selectedIds?.some((id: string) => {
-        const stone = searchData?.foundProducts.find(
-          (row: IProduct) => row?.id === id
-        );
+        const stone: any =
+          dashboardResultPageData?.resultPageData?.foundProducts.find(
+            (row: IProduct) => row?.id === id
+          );
         return stone?.diamond_status === AVAILABLE_STATUS;
       });
 
@@ -1642,9 +1675,10 @@ const Dashboard = () => {
         });
 
         const lotIdsWithCountry = selectedIds?.map((id: string) => {
-          const foundProduct =
-            searchData?.foundProducts.find((row: IProduct) => row?.id === id) ??
-            {};
+          const foundProduct: any =
+            dashboardResultPageData?.resultPageData?.foundProducts.find(
+              (row: IProduct) => row?.id === id
+            ) ?? {};
 
           if (foundProduct) {
             const lotId = foundProduct?.lot_id;
@@ -1669,9 +1703,12 @@ const Dashboard = () => {
       .unwrap()
       .then((res: any) => {
         setShowEmptyState(false);
-        setSearchData(res);
+        // setSearchData(res);
+        // setIsDetailPage(true);
+        dispatch(
+          dashboardResultPage({ isResultPage: true, resultPageData: res })
+        );
         setError('');
-        setIsDetailPage(true);
         setIsLoading(false);
         if (isDiamondDetail) {
           let detailPageUpdatedData = res.foundProducts.filter(
@@ -1772,7 +1809,14 @@ const Dashboard = () => {
                         mobile_number: customerMobileNumber
                       });
                       goBackToListView();
-                      setIsDetailPage(false);
+                      // setIsDetailPage(false);
+                      dispatch(
+                        dashboardResultPage({
+                          isResultPage: false,
+                          resultPageData:
+                            dashboardResultPageData?.resultPageData
+                        })
+                      );
                       setRowSelection({});
                       setError('');
                       setIsAddCommentDialogOpen(false);
@@ -2004,10 +2048,12 @@ const Dashboard = () => {
       setIsLoading(true);
       const variantIds = selectedIds
         ?.map((id: string) => {
-          const myCartCheck: IProduct | object =
-            searchData?.foundProducts.find((row: IProduct) => {
-              return row?.id === id;
-            }) ?? {};
+          const myCartCheck: IProduct | object | any =
+            dashboardResultPageData?.resultPageData?.foundProducts.find(
+              (row: IProduct) => {
+                return row?.id === id;
+              }
+            ) ?? {};
 
           if (myCartCheck && 'variants' in myCartCheck) {
             return myCartCheck.variants[0]?.id;
@@ -2041,7 +2087,14 @@ const Dashboard = () => {
                     variant: 'secondary',
                     label: ManageLocales('app.modal.continue'),
                     handler: () => {
-                      setIsDialogOpen(false), setIsDetailPage(true);
+                      setIsDialogOpen(false);
+                      dispatch(
+                        dashboardResultPage({
+                          isResultPage: true,
+                          resultPageData:
+                            dashboardResultPageData?.resultPageData
+                        })
+                      );
                     },
                     customStyle: 'flex-1 w-full h-10 '
                   },
@@ -2065,9 +2118,15 @@ const Dashboard = () => {
             })
               .unwrap()
               .then((res: any) => {
-                setSearchData(res);
+                // setSearchData(res);
+                // setIsDetailPage(true);
+                dispatch(
+                  dashboardResultPage({
+                    isResultPage: true,
+                    resultPageData: res
+                  })
+                );
                 setError('');
-                setIsDetailPage(true);
               })
               .catch((_e: any) => {
                 if (
@@ -2354,7 +2413,7 @@ const Dashboard = () => {
           ) : (
             <>
               <DiamondDetailsComponent
-                data={searchData?.foundProducts}
+                data={dashboardResultPageData?.resultPageData?.foundProducts}
                 filterData={detailPageData}
                 goBackToListView={goBack}
                 handleDetailPage={handleDetailPage}
@@ -2417,7 +2476,14 @@ const Dashboard = () => {
                           label: ManageLocales('app.searchResult.confirmStone'),
                           // isHidden: isConfirmStone,
                           handler: () => {
-                            setIsDetailPage(false);
+                            // setIsDetailPage(false);
+                            dispatch(
+                              dashboardResultPage({
+                                isResultPage: false,
+                                resultPageData:
+                                  dashboardResultPageData?.resultPageData
+                              })
+                            );
                             const { id } = detailPageData;
                             const selectedRows = { [id]: true };
                             trackEvent({
@@ -2428,7 +2494,8 @@ const Dashboard = () => {
                             });
                             handleConfirmStone({
                               selectedRows: selectedRows,
-                              rows: searchData?.foundProducts,
+                              rows: dashboardResultPageData?.resultPageData
+                                ?.foundProducts,
                               setIsError,
                               setErrorText: setError,
                               setIsConfirmStone,
@@ -2562,7 +2629,8 @@ const Dashboard = () => {
               setDialogContent={setDialogContent}
               setIsConfirmStone={setIsConfirmStone}
               setConfirmStoneData={setConfirmStoneData}
-              setIsDetailPage={setIsDetailPage}
+              dispatch={dispatch}
+              dashboardResultPageData={dashboardResultPageData}
               modalSetState={modalSetState}
               refreshCompareStone={refreshSearchResults}
               setIsCompareStone={setIsCompareStone}
@@ -2591,7 +2659,9 @@ const Dashboard = () => {
             />
           </div>
         </>
-      ) : isDetailPage && searchData && Object.keys(searchData).length > 0 ? (
+      ) : dashboardResultPageData?.isResultPage &&
+        dashboardResultPageData?.resultPageData &&
+        dashboardResultPageData?.resultPageData?.foundProducts?.length ? (
         <div className="mb-[10px]">
           <div className="flex py-[8px] items-center ">
             <p className="text-lMedium font-medium text-neutral900">
@@ -2606,7 +2676,17 @@ const Dashboard = () => {
                 src={backWardArrow}
                 alt="backWardArrow"
                 onClick={() => {
-                  setIsDetailPage(false);
+                  // setIsDetailPage(false);
+                  dispatch(
+                    dashboardResultPage({
+                      isResultPage: false,
+                      resultPageData: {
+                        foundKeywords: [],
+                        foundProducts: [],
+                        notFoundKeywords: []
+                      }
+                    })
+                  );
                   setShowEmptyState(false);
                   setIsSomeStoneNotFoundShowed(false);
                   setSorting([]);
@@ -2624,7 +2704,17 @@ const Dashboard = () => {
                 <button
                   className="text-neutral600 text-sMedium font-regular cursor-pointer"
                   onClick={() => {
-                    setIsDetailPage(false);
+                    // setIsDetailPage(false);
+                    dispatch(
+                      dashboardResultPage({
+                        isResultPage: false,
+                        resultPageData: {
+                          foundKeywords: [],
+                          foundProducts: [],
+                          notFoundKeywords: []
+                        }
+                      })
+                    );
                     setShowEmptyState(false);
                     setIsSomeStoneNotFoundShowed(false);
                     setSorting([]);
@@ -2664,7 +2754,6 @@ const Dashboard = () => {
               setIsConfirmStone={setIsConfirmStone}
               setConfirmStoneData={setConfirmStoneData}
               isDashboard={true}
-              setIsDetailPage={setIsDetailPage}
               setIsCompareStone={setIsCompareStone}
               setCompareStoneData={setCompareStoneData}
               handleCreateAppointment={handleCreateAppointment}
@@ -2673,6 +2762,8 @@ const Dashboard = () => {
               showOnlyWithVideo={showOnlyWithVideo}
               setShowOnlyWithVideo={setShowOnlyWithVideo}
               showEmptyState={showEmptyState}
+              dispatch={dispatch}
+              dashboardResultPageData={dashboardResultPageData}
             />
           </div>
         </div>
