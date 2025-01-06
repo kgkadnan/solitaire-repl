@@ -865,12 +865,12 @@ const NewArrivalDataTable = ({
           ? isNudge &&
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-            ? 'calc(100vh - 254px)'
+            ? 'calc(100vh - 355px)'
             : 'calc(100vh - 260px)'
           : isNudge &&
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-          ? 'calc(100vh - 254px)'
+          ? 'calc(100vh - 355px)'
           : !rows.length
           ? 'calc(100vh - 260px)'
           : !rows.length
@@ -884,12 +884,12 @@ const NewArrivalDataTable = ({
           ? isNudge &&
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-            ? 'calc(100vh - 362px)'
+            ? 'calc(100vh - 355px)'
             : 'calc(100vh - 260px)'
           : isNudge &&
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-          ? 'calc(100vh - 362px)'
+          ? 'calc(100vh - 355px)'
           : 'calc(100vh - 260px)'
       }
     },

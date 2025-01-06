@@ -689,7 +689,6 @@ const Form = ({
       data?.count > MIN_SEARCH_FORM_COUNT &&
       minMaxError.length === 0
     ) {
-      console.log();
       if (
         (formIdentifier === 'MatchingPair'
           ? data?.count < MAX_SEARCH_FORM_COUNT / 2

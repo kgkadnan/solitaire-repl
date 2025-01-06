@@ -195,7 +195,8 @@ const OTPVerification = ({
                     setIsDialogOpen,
                     setDialogContent,
                     setToken,
-                    token
+                    token,
+                    setOtpValues
                   });
               funnelTrack({
                 step: Tracking.Click_Resend,

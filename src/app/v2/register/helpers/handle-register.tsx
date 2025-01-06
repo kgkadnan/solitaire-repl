@@ -68,7 +68,8 @@ export const handleRegister = async ({
           ...prev,
           otpMobileNumber: `${registerFormState.mobileNumber}`,
           countryCode: `${registerFormState.countryCode}`,
-          codeAndNumber: `${registerFormState.countryCode} ${registerFormState.mobileNumber}`
+          codeAndNumber: `${registerFormState.countryCode} ${registerFormState.mobileNumber}`,
+          iso: registerFormState.iso
         }));
         localStorage.setItem(
           'userIp',

@@ -190,7 +190,7 @@ const BidToBuyDataTable = ({
   setIsTabSwitch,
   setBidValues,
   bidValues,
-  setActiveBid, // searchUrl
+  setActiveBid,
   isInActive
 }: any) => {
   // Fetching saved search data
@@ -618,7 +618,8 @@ const BidToBuyDataTable = ({
               can bid to buy. Stay tuned.
             </p>
           </>
-        ) : !paginatedData.length && searchableId.length ? (
+        ) : !paginatedData.length &&
+          (searchableId.length || globalFilter.length) ? (
           <div className="text-center">
             <Image src={empty} alt="empty" />
             <p className="text-neutral900 w-[220px] mx-auto">
@@ -948,12 +949,12 @@ const BidToBuyDataTable = ({
           ? isNudge &&
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-            ? 'calc(100vh - 254px)'
+            ? 'calc(100vh - 355px)'
             : 'calc(100vh - 260px)'
           : isNudge &&
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-          ? 'calc(100vh - 254px)'
+          ? 'calc(100vh - 355px)'
           : !rows.length
           ? 'calc(100vh - 260px)'
           : !rows.length
@@ -967,12 +968,12 @@ const BidToBuyDataTable = ({
           ? isNudge &&
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-            ? 'calc(100vh - 362px)'
+            ? 'calc(100vh - 355px)'
             : 'calc(100vh - 260px)'
           : isNudge &&
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-          ? 'calc(100vh - 362px)'
+          ? 'calc(100vh - 355px)'
           : 'calc(100vh - 260px)'
       }
     },

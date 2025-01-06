@@ -8,6 +8,7 @@ interface IHandleResendOTP {
   setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setDialogContent: React.Dispatch<React.SetStateAction<React.ReactNode>>;
   setToken: React.Dispatch<React.SetStateAction<IToken>>;
+  setOtpValues: React.Dispatch<React.SetStateAction<string[]>>;
   token: any;
 }
 export const handleRegisterResendOTP = ({
@@ -17,7 +18,8 @@ export const handleRegisterResendOTP = ({
   setIsDialogOpen,
   setDialogContent,
   setToken,
-  token
+  token,
+  setOtpValues
 }: IHandleResendOTP) => {
   sendOtp({
     phone: otpVerificationFormState.otpMobileNumber,
@@ -49,6 +51,7 @@ export const handleRegisterResendOTP = ({
           ]}
         />
       );
+      setOtpValues(['', '', '', '', '', '']);
       setResendTimer(60);
     })
     .catch((e: any) => {
