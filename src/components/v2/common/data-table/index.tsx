@@ -282,7 +282,6 @@ const DataTable = ({
   };
 
   useEffect(() => {
-    console.log('handleGlobalFilter', handleGlobalFilter);
     handleGlobalFilter();
   }, [globalFilter]);
 

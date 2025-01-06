@@ -83,6 +83,8 @@ const MyDiamonds = () => {
 
   // State to manage the search input value
   const [search, setSearch] = useState<string>('');
+  const [searched, setSearched] = useState(false);
+
   // Query parameters for API request
   let resentConfiramtionStatus = 'pending';
   let resentConfiramtionInvoiceStatus = 'pending';
@@ -204,6 +206,7 @@ const MyDiamonds = () => {
   const handleTabs = ({ tab }: { tab: string }) => {
     setActiveTab(tab);
     setSearch('');
+    setSearched(false);
     setDate(undefined);
     setPendingDataState(pendingInvoicesData?.orders);
     setPastDataState(invoiceHistoryData?.orders);
@@ -311,10 +314,12 @@ const MyDiamonds = () => {
     if (!search) {
       setPendingDataState(pendingInvoicesData?.orders);
     }
+    setSearched(true);
   };
 
   const handleClearInput = () => {
     setSearch('');
+    setSearched(false);
     setPendingDataState(pendingInvoicesData?.orders);
     setPastDataState(invoiceHistoryData?.orders);
     setInTransitDataState(activeInvoicesData?.orders);
@@ -342,6 +347,7 @@ const MyDiamonds = () => {
   };
   const handleApplyFilter = (date: any, reset: string) => {
     setSearch('');
+    setSearched(false);
     const fromDate = new Date(date.from);
     const toDate = new Date(date.to);
     switch (activeTab) {
@@ -680,10 +686,18 @@ const MyDiamonds = () => {
                   router.push(`/v2/search?active-tab=${SubRoutes.NEW_SEARCH}`)
                 }
                 contentReactNode={
-                  <p className="text-neutral900  w-[17%] text-center">
-                    Looks like you haven't placed any orders yet. Let’s place
-                    some orders!
-                  </p>
+                  search.length && searched ? (
+                    <p className="text-neutral900  w-[33%] text-center">
+                      We couldn't find any orders with this number. Please
+                      double-check the order number or contact support for
+                      assistance.
+                    </p>
+                  ) : (
+                    <p className="text-neutral900  w-[17%] text-center">
+                      Looks like you haven't placed any orders yet. Let’s place
+                      some orders!
+                    </p>
+                  )
                 }
                 imageSrc={emptyOrderSvg}
               />

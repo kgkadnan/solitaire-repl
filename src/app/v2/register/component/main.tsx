@@ -233,6 +233,8 @@ const Register = () => {
                 token,
                 funnelTrack
               });
+              setOtpValues(['', '', '', '', '', '']);
+              setResendTimer(60);
             }}
             variant={'primary'}
             size={'custom'}
