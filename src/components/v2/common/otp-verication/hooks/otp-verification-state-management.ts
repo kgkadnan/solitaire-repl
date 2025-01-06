@@ -4,7 +4,8 @@ import { IOtp } from '..';
 export const initialOTPFormState: IOtp = {
   otpMobileNumber: '',
   countryCode: '',
-  codeAndNumber: ''
+  codeAndNumber: '',
+  iso: ''
 };
 
 export const useOtpVerificationStateManagement = () => {
