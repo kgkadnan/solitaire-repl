@@ -8,7 +8,7 @@ export const RadioButton: React.FC<any> = ({
   onError,
   customStyle
 }) => {
-  const { label, value, name, checked, inputs, inputCustomStyle } =
+  const { label, value, name, checked, inputs, inputCustomStyle, disabled } =
     radioMetaData;
 
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -32,6 +32,7 @@ export const RadioButton: React.FC<any> = ({
           value={value}
           checked={checked}
           onClick={handleRadioChange}
+          disabled={disabled}
         />
         <div className={`${onError && 'text-dangerMain'}`}>{label}</div>
         <span
