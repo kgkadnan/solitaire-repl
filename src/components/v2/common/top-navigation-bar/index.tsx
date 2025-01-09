@@ -10,6 +10,7 @@ import searchIcon from '@public/v2/assets/icons/dashboard/search-icon.svg';
 import searchIconWhite from '@public/v2/assets/icons/dashboard/search-icon-white.svg';
 import debounce from 'lodash.debounce';
 import { Toast } from '@/components/v2/common/copy-and-share/toast';
+
 import {
   Popover,
   PopoverContent,
@@ -156,6 +157,13 @@ const TopNavigationBar = ({
       })
     );
   };
+
+  useEffect(() => {
+    error &&
+      setTimeout(() => {
+        setError(''); // Hide the toast notification after some time
+      }, 4000);
+  }, [error]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -398,7 +406,7 @@ const TopNavigationBar = ({
   //       ?.join('') || ''
   //   ); // Join the initials or return an empty string
   // };
-  const [inputWidth, setInputWidth] = useState(600); // Starting width, e.g., 450px.
+  const [inputWidth, setInputWidth] = useState(650); // Starting width, e.g., 450px.
 
   useEffect(() => {
     const handleScroll = debounce(() => {
@@ -413,7 +421,7 @@ const TopNavigationBar = ({
       }
 
       // Dynamically adjust width
-      const newWidth = Math.max(398, 600 - scrollTop); // Decrease width, but not below 398px.
+      const newWidth = Math.max(430, 650 - scrollTop); // Decrease width, but not below 398px.
       setInputWidth(newWidth);
     }, 1); // Debounce delay
 
@@ -425,7 +433,7 @@ const TopNavigationBar = ({
 
   const renderSearchField = () => {
     return (
-      <div className="relative ml-[85px] h-[40px] transition-all duration-300 ease-in-out">
+      <div className="relative ml-[74px] h-[40px] transition-all duration-300 ease-in-out">
         {/* Overlay Background */}
         {showRadios && (
           <div
@@ -442,7 +450,7 @@ const TopNavigationBar = ({
                   ? isSearchVisible
                     ? `${inputWidth + 7}px`
                     : '' // Dynamic width applied here.
-                  : '405px',
+                  : '437px',
               transition: 'width 0.3s ease' // Smooth transition for width change.
             }}
             className="absolute bg-white  z-[100] h-[105px]  top-[-5px] right-[-3px] rounded-[4px]"
@@ -458,12 +466,13 @@ const TopNavigationBar = ({
                 ? isSearchVisible
                   ? `${inputWidth}px`
                   : '' // Dynamic width applied here.
-                : '398px',
-            transition: 'width 0.3s ease' // Smooth transition for width change.
+                : '430px',
+            transition: 'width 0.3s ease', // Smooth transition for width change.
+            boxShadow: 'var(--input-shadow) inset'
           }}
         >
           {/* Input Box */}
-          <div className="relative flex w-full items-center">
+          <div className="relative flex w-full items-center ">
             <input
               className="pr-10 py-1 w-full text-gray-600 rounded-lg focus:outline-none"
               type="text"
@@ -473,6 +482,26 @@ const TopNavigationBar = ({
               onKeyDown={handleKeyDown}
               value={dashboardResultPageData.stoneId}
             />
+            {dashboardResultPageData?.stoneId?.length ? (
+              <>
+                <div
+                  className="absolute flex items-center right-[42px] cursor-pointer rounded-[4px]"
+                  onClick={() => {
+                    dispatch(
+                      dashboardResultPage({
+                        stoneId: ''
+                      })
+                    );
+                  }}
+                >
+                  <Image src={crossIcon} alt="crossIcon" className="mr-1" />
+                  <hr className="h-[24px] w-[1px] bg-neutral200 border-0" />
+                </div>
+              </>
+            ) : (
+              ''
+            )}
+
             <div
               className="absolute right-0 cursor-pointer rounded-[4px]"
               onClick={handleInputSearch}

@@ -2151,7 +2151,31 @@ const Dashboard = () => {
                         onClick={() => setShowRadios(!showRadios)} // Show radios on input click
                         onChange={handleStoneId}
                         onKeyDown={handleKeyDown}
+                        value={dashboardResultPageData.stoneId}
                       />
+                      {dashboardResultPageData?.stoneId?.length ? (
+                        <>
+                          <div
+                            className="absolute flex items-center right-[42px] cursor-pointer rounded-[4px]"
+                            onClick={() => {
+                              dispatch(
+                                dashboardResultPage({
+                                  stoneId: ''
+                                })
+                              );
+                            }}
+                          >
+                            <Image
+                              src={crossIcon}
+                              alt="crossIcon"
+                              className="mr-1"
+                            />
+                            <hr className="h-[24px] w-[1px] bg-neutral200 border-0" />
+                          </div>
+                        </>
+                      ) : (
+                        ''
+                      )}
                       <div
                         className="absolute right-0 cursor-pointer rounded-[4px]"
                         onClick={handleInputSearch}
