@@ -474,7 +474,7 @@ const TopNavigationBar = ({
           {/* Input Box */}
           <div className="relative flex w-full items-center ">
             <input
-              className="pr-10 py-1 w-full text-neutral900 rounded-lg focus:outline-none"
+              className="pr-[77px] py-1 w-full text-neutral900 rounded-lg focus:outline-none"
               type="text"
               placeholder="Search by stone id or certificate number"
               onClick={() => setShowRadios(!showRadios)} // Show radios on input click
