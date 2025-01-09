@@ -109,7 +109,7 @@ const NewArrivals = () => {
   const dashboardResultPageData = useAppSelector(
     state => state.dashboardResultPage
   );
-  const shouldSkipCleanup = useRef(false);
+
   const filterDataRef = useRef(filterData);
   // Keep the ref updated with the latest state
   useEffect(() => {
@@ -160,7 +160,6 @@ const NewArrivals = () => {
   const [reuestCallBack] = useReuestCallBackMutation({});
 
   const handleDetailPage = ({ row }: { row: any }) => {
-    shouldSkipCleanup.current = true;
     router.push(
       `/v2/${SubRoutes.Diamond_Detail}?path=${MatchRoutes.NEW_ARRIVAL}&stoneid=${row?.lot_id}-${row?.location}`
     );
@@ -367,28 +366,6 @@ const NewArrivals = () => {
       </div>
     );
   };
-
-  useEffect(() => {
-    return () => {
-      if (!shouldSkipCleanup.current) {
-        dispatch(
-          dashboardResultPage({
-            isResultPage: false,
-            resultPageData: {
-              foundKeywords: [],
-              foundProducts: [],
-              notFoundKeywords: []
-            },
-            stoneId: '',
-            columnData: [],
-            searchType: 'normal'
-          })
-        );
-        console.log('isCleanup RUn?');
-        dispatch(filterFunction({}));
-      }
-    };
-  }, [dispatch]);
 
   //Modal
   const handleBidUnLockPricing = () => {

@@ -44,10 +44,11 @@ import { useNotifySalesMutation } from '@/features/api/notify-sales';
 import CommonPoppup from '@/app/v2/login/component/common-poppup';
 import { RadioButton } from '../radio';
 import { useGetProductByIdMutation } from '@/features/api/product';
-import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
+import { Routes } from '@/constants/v2/enums/routes';
 import { dashboardResultPage } from '@/features/dashboard/dashboard-slice';
 import { useDispatch } from 'react-redux';
 import { statusCode } from '@/constants/enums/status-code';
+import { filterFunction } from '@/features/filter-new-arrival/filter-new-arrival-slice';
 
 export interface IUserAccountInfo {
   customer: {
@@ -116,10 +117,8 @@ const TopNavigationBar = ({
   const [isLoading, setIsLoading] = useState(false);
   const [showRadios, setShowRadios] = useState(false);
   const [error, setError] = useState('');
-  const [stoneId, setStoneId] = useState('');
 
   const [lastEventTime, setLastEventTime] = useState<number | null>(null);
-  const [selectedOption, setSelectedOption] = useState('normal'); // Default selection
 
   // Options for Radio Buttons
   const radioOptions = [
@@ -128,7 +127,6 @@ const TopNavigationBar = ({
     { label: 'Bid to Buy', value: 'BidToBuy', name: 'searchFrom' }
   ];
   const handleRadioChange = (value: string) => {
-    setSelectedOption(value);
     dispatch(
       dashboardResultPage({
         searchType: value
@@ -157,8 +155,6 @@ const TopNavigationBar = ({
         stoneId: e.target.value
       })
     );
-
-    setStoneId(e.target.value);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -184,19 +180,19 @@ const TopNavigationBar = ({
               status: 'Success'
             });
 
-            if (selectedOption === 'normal') {
+            if (dashboardResultPageData.searchType === 'normal') {
               dispatch(
                 dashboardResultPage({
                   resultPageData: res
                 })
               );
               router.push(`${Routes.STOCK_SEARCH}?path=${currentPath}`);
-            } else if (selectedOption === 'BidToBuy') {
+            } else if (dashboardResultPageData.searchType === 'BidToBuy') {
               console.log('res', res);
               dispatch(
                 dashboardResultPage({
                   resultPageData: res,
-                  stoneId: stoneId,
+                  stoneId: dashboardResultPageData.stoneId,
                   textSearchReportId: res.textSearchReportId
                 })
               );
@@ -251,18 +247,18 @@ const TopNavigationBar = ({
               mobile_number: `+${customerData.customer.country_code}${customerData.customer.phone}`,
               status: 'Success'
             });
-            if (selectedOption === 'normal') {
+            if (dashboardResultPageData.searchType === 'normal') {
               dispatch(
                 dashboardResultPage({
                   resultPageData: res
                 })
               );
               router.push(`${Routes.STOCK_SEARCH}?path=${Routes.DASHBOARD}`);
-            } else if (selectedOption === 'BidToBuy') {
+            } else if (dashboardResultPageData.searchType === 'BidToBuy') {
               dispatch(
                 dashboardResultPage({
                   resultPageData: res,
-                  stoneId: stoneId,
+                  stoneId: dashboardResultPageData.stoneId,
                   textSearchReportId: res.textSearchReportId
                 })
               );
@@ -769,6 +765,24 @@ const TopNavigationBar = ({
                       ? 'cursor-not-allowed bg-neutral100'
                       : 'cursor-pointer hover:bg-slate-50'
                   }`}
+                  onClick={() => {
+                    dispatch(
+                      dashboardResultPage({
+                        isResultPage: false,
+                        resultPageData: {
+                          foundKeywords: [],
+                          foundProducts: [],
+                          notFoundKeywords: []
+                        },
+                        stoneId: '',
+                        columnData: [],
+                        searchType: 'normal',
+                        textSearchReportId: null
+                      })
+                    );
+                    localStorage.removeItem('bid');
+                    dispatch(filterFunction({}));
+                  }}
                   href={isInMaintenanceMode ? '' : '/v2/my-account'}
                 >
                   <MyAccountIcon
@@ -825,6 +839,22 @@ const TopNavigationBar = ({
                                 variant: 'secondary',
                                 label: 'Log out this device',
                                 handler: () => {
+                                  dispatch(
+                                    dashboardResultPage({
+                                      isResultPage: false,
+                                      resultPageData: {
+                                        foundKeywords: [],
+                                        foundProducts: [],
+                                        notFoundKeywords: []
+                                      },
+                                      stoneId: '',
+                                      columnData: [],
+                                      searchType: 'normal',
+                                      textSearchReportId: null
+                                    })
+                                  );
+                                  localStorage.removeItem('bid');
+                                  dispatch(filterFunction({}));
                                   handleLogout();
                                 },
                                 customStyle: 'flex-1 w-full h-10'
@@ -833,6 +863,22 @@ const TopNavigationBar = ({
                                 variant: 'primary',
                                 label: 'Log out all devices',
                                 handler: () => {
+                                  dispatch(
+                                    dashboardResultPage({
+                                      isResultPage: false,
+                                      resultPageData: {
+                                        foundKeywords: [],
+                                        foundProducts: [],
+                                        notFoundKeywords: []
+                                      },
+                                      stoneId: '',
+                                      columnData: [],
+                                      searchType: 'normal',
+                                      textSearchReportId: null
+                                    })
+                                  );
+                                  localStorage.removeItem('bid');
+                                  dispatch(filterFunction({}));
                                   handleLogoutAll();
                                 },
                                 customStyle: 'flex-1 w-full h-10'

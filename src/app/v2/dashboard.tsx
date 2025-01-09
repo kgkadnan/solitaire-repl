@@ -145,7 +145,6 @@ const Dashboard = () => {
   );
 
   const [showRadios, setShowRadios] = useState(false);
-  const [selectedOption, setSelectedOption] = useState('normal'); // Default selection
 
   // Options for Radio Buttons
   const radioOptions = [
@@ -155,7 +154,11 @@ const Dashboard = () => {
   ];
 
   const handleRadioChange = (value: string) => {
-    setSelectedOption(value);
+    dispatch(
+      dashboardResultPage({
+        searchType: value
+      })
+    );
   };
 
   const [inputWidth, setInputWidth] = useState(720); // Starting width, e.g., 720px.
@@ -223,32 +226,14 @@ const Dashboard = () => {
   const [customerMobileNumber, setCustomerMobileNumber] = useState('');
 
   const [checkProductAvailability] = useCheckProductAvailabilityMutation({});
-  const [reuestCallBack] = useReuestCallBackMutation({});
 
   let isNudge = localStorage.getItem('show-nudge')! === 'MINI';
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   const { errorSetState } = useErrorStateManagement();
   const { setIsError } = errorSetState;
   const [isBottomSheetOpen, setBottomSheetOpen] = useState(false);
-  const [requestCallTimeSlots, setRequestCallTimeSlots] = useState<any>({});
 
   const [selectedDate, setSelectedDate] = useState<number>(0);
-  const [selectedSlot, setSelectedSlot] = useState('');
-
-  const handleSelectData = ({ date }: { date: string }) => {
-    if (Number(date) !== selectedDate) {
-      setSelectedDate(Number(date));
-      setSelectedSlot('');
-    }
-  };
-
-  const handleSelectSlot = ({ slot }: { slot: string }) => {
-    setSelectedSlot(prevSlot => (prevSlot === slot ? '' : slot));
-  };
-
-  const [triggerRequestCallTimeSlots] = useLazyGetRequestCallBackTimeSlotsQuery(
-    {}
-  );
 
   const toggleBottomSheet = () => {
     setBottomSheetOpen(prev => !prev);
@@ -647,6 +632,11 @@ const Dashboard = () => {
         mobile_number: customerMobileNumber
       });
     }
+    dispatch(
+      dashboardResultPage({
+        stoneId: e.target.value
+      })
+    );
 
     setStoneId(e.target.value);
   };
@@ -654,10 +644,10 @@ const Dashboard = () => {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       setIsLoading(true);
-      if (selectedOption !== 'NewArrivals') {
+      if (dashboardResultPageData.searchType !== 'NewArrivals') {
         getProductById({
-          search_keyword: stoneId,
-          search_type: selectedOption
+          search_keyword: dashboardResultPageData.stoneId,
+          search_type: dashboardResultPageData.searchType
         })
           .unwrap()
           .then((res: any) => {
@@ -674,16 +664,14 @@ const Dashboard = () => {
               status: 'Success'
             });
 
-            if (selectedOption === 'normal') {
+            if (dashboardResultPageData.searchType === 'normal') {
               dispatch(
                 dashboardResultPage({
-                  resultPageData: res,
-                  stoneId: stoneId,
-                  searchType: selectedOption
+                  resultPageData: res
                 })
               );
               router.push(`${Routes.STOCK_SEARCH}?path=${Routes.DASHBOARD}`);
-            } else if (selectedOption === 'BidToBuy') {
+            } else if (dashboardResultPageData.searchType === 'BidToBuy') {
               dispatch(
                 dashboardResultPage({
                   resultPageData: res,
@@ -723,10 +711,10 @@ const Dashboard = () => {
   const handleInputSearch = () => {
     if (stoneId.length > 0) {
       setIsLoading(true);
-      if (selectedOption !== 'NewArrivals') {
+      if (dashboardResultPageData.searchType !== 'NewArrivals') {
         getProductById({
-          search_keyword: stoneId,
-          search_type: selectedOption
+          search_keyword: dashboardResultPageData.stoneId,
+          search_type: dashboardResultPageData.searchType
         })
           .unwrap()
           .then((res: any) => {
@@ -742,17 +730,14 @@ const Dashboard = () => {
               mobile_number: customerMobileNumber,
               status: 'Success'
             });
-            if (selectedOption === 'normal') {
-              console.log('res', res);
+            if (dashboardResultPageData.searchType === 'normal') {
               dispatch(
                 dashboardResultPage({
-                  resultPageData: res,
-                  stoneId: stoneId,
-                  searchType: selectedOption
+                  resultPageData: res
                 })
               );
               router.push(`${Routes.STOCK_SEARCH}?path=${Routes.DASHBOARD}`);
-            } else if (selectedOption === 'BidToBuy') {
+            } else if (dashboardResultPageData.searchType === 'BidToBuy') {
               dispatch(
                 dashboardResultPage({
                   resultPageData: res,
@@ -2194,7 +2179,9 @@ const Dashboard = () => {
                                 label: option.label,
                                 value: option.value,
                                 name: option.name,
-                                checked: selectedOption === option.value
+                                checked:
+                                  dashboardResultPageData.searchType ===
+                                  option.value
                               }}
                               onChange={handleRadioChange}
                               customStyle={{
