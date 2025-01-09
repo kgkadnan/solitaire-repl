@@ -345,6 +345,7 @@ const Form = ({
 
   useEffect(() => {
     if (subRoute === SubRoutes.NEW_ARRIVAL) {
+      console.log('newArrivalFilterData?.bidData', newArrivalFilterData);
       const query = generateQueryParams(state);
       const filteredData =
         newArrivalFilterData?.bidData &&
