@@ -147,28 +147,6 @@ const BidToBuy = () => {
     );
   };
 
-  useEffect(() => {
-    return () => {
-      if (!shouldSkipCleanup.current) {
-        dispatch(
-          dashboardResultPage({
-            isResultPage: false,
-            resultPageData: {
-              foundKeywords: [],
-              foundProducts: [],
-              notFoundKeywords: []
-            },
-            stoneId: '',
-            columnData: [],
-            searchType: 'normal',
-            textSearchReportId: null
-          })
-        );
-      }
-      localStorage.removeItem('bid');
-    };
-  }, [dispatch]);
-
   const handleDetailImage = ({ row }: any) => {
     setDetailImageData(row);
     setIsModalOpen(true);

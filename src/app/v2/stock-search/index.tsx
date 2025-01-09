@@ -98,7 +98,7 @@ const StockSearch = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const path = useSearchParams().get('path');
-  const shouldSkipCleanup = useRef(false);
+
   const [downloadExcel] = useDownloadExcelMutation();
   const { errorSetState } = useErrorStateManagement();
   const [getProductById] = useGetProductByIdMutation();
@@ -164,26 +164,6 @@ const StockSearch = () => {
   const [lotIds, setLotIds] = useState<string[]>([]);
 
   const [requestCallTimeSlots, setRequestCallTimeSlots] = useState<any>({});
-
-  useEffect(() => {
-    return () => {
-      if (!shouldSkipCleanup.current) {
-        dispatch(
-          dashboardResultPage({
-            isResultPage: false,
-            resultPageData: {
-              foundKeywords: [],
-              foundProducts: [],
-              notFoundKeywords: []
-            },
-            stoneId: '',
-            columnData: [],
-            searchType: 'normal'
-          })
-        );
-      }
-    };
-  }, [dispatch]);
 
   const memoizedRows = useMemo(() => {
     setBreadCrumLabel(getBreadcrumbLabel(path ?? ''));
@@ -549,7 +529,6 @@ const StockSearch = () => {
         mobile_number: customerMobileNumber
       });
     } else {
-      shouldSkipCleanup.current = true;
       router.push(
         `/v2/${SubRoutes.Diamond_Detail}?path=${MatchRoutes.DASHBOARD}&stoneid=${row?.lot_id}-${row?.location}`
       );
