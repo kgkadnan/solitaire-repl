@@ -429,7 +429,7 @@ const TopNavigationBar = ({
 
   const renderSearchField = () => {
     return (
-      <div className="relative ml-[160px] h-[40px] transition-all duration-300 ease-in-out">
+      <div className="relative ml-[30px] h-[40px] transition-all duration-300 ease-in-out">
         {/* Overlay Background */}
         {showRadios && (
           <div

@@ -384,6 +384,7 @@ const NewArrivals = () => {
             searchType: 'normal'
           })
         );
+        console.log('isCleanup RUn?');
         dispatch(filterFunction({}));
       }
     };
@@ -853,6 +854,7 @@ const NewArrivals = () => {
               setBid(allProducts.bidStone);
             }
           } else {
+            console.log('allProducts.bidStone', allProducts.bidStone);
             setBid(allProducts.bidStone);
           }
 
