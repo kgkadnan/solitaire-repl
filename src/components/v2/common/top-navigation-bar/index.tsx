@@ -123,9 +123,26 @@ const TopNavigationBar = ({
 
   // Options for Radio Buttons
   const radioOptions = [
-    { label: 'Stock Search', value: 'normal', name: 'searchFrom' },
-    { label: 'New Arrivals', value: 'NewArrivals', name: 'searchFrom' },
-    { label: 'Bid to Buy', value: 'BidToBuy', name: 'searchFrom' }
+    {
+      label: 'Stock Search',
+      value: 'normal',
+      name: 'searchFrom',
+      disable: false
+    },
+    {
+      label: 'New Arrivals',
+      value: 'NewArrivals',
+      name: 'searchFrom',
+      disable: !customerData?.customer?.new_arrivals_count
+    },
+    {
+      label: 'Bid to Buy',
+      value: 'BidToBuy',
+      name: 'searchFrom',
+      disable:
+        customerData?.customer?.bid_to_buy?.starts_at &&
+        customerData?.customer?.bid_to_buy?.count <= 0
+    }
   ];
   const handleRadioChange = (value: string) => {
     dispatch(
@@ -530,7 +547,8 @@ const TopNavigationBar = ({
                       value: option.value,
                       name: option.name,
                       checked:
-                        dashboardResultPageData.searchType === option.value
+                        dashboardResultPageData.searchType === option.value,
+                      disabled: option.disable
                     }}
                     onChange={handleRadioChange}
                     customStyle={{

@@ -143,14 +143,33 @@ const Dashboard = () => {
   const dashboardResultPageData = useAppSelector(
     state => state.dashboardResultPage
   );
+  const { data: customerData, refetch: refetchCustomerData } =
+    useGetCustomerQuery({}, { refetchOnMountOrArgChange: true });
 
   const [showRadios, setShowRadios] = useState(false);
 
   // Options for Radio Buttons
   const radioOptions = [
-    { label: 'Stock Search', value: 'normal', name: 'searchFrom' },
-    { label: 'New Arrivals', value: 'NewArrivals', name: 'searchFrom' },
-    { label: 'Bid to Buy', value: 'BidToBuy', name: 'searchFrom' }
+    {
+      label: 'Stock Search',
+      value: 'normal',
+      name: 'searchFrom',
+      disable: false
+    },
+    {
+      label: 'New Arrivals',
+      value: 'NewArrivals',
+      name: 'searchFrom',
+      disable: !customerData?.customer?.new_arrivals_count
+    },
+    {
+      label: 'Bid to Buy',
+      value: 'BidToBuy',
+      name: 'searchFrom',
+      disable:
+        customerData?.customer?.bid_to_buy?.starts_at &&
+        customerData?.customer?.bid_to_buy?.count <= 0
+    }
   ];
 
   const handleRadioChange = (value: string) => {
@@ -176,8 +195,6 @@ const Dashboard = () => {
     };
   }, []);
 
-  const { data: customerData, refetch: refetchCustomerData } =
-    useGetCustomerQuery({}, { refetchOnMountOrArgChange: true });
   const [validImages, setValidImages] = useState<any>([]);
   const [activeTab, setActiveTab] = useState<string>('');
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
@@ -2203,6 +2220,7 @@ const Dashboard = () => {
                                 label: option.label,
                                 value: option.value,
                                 name: option.name,
+                                disabled: option.disable,
                                 checked:
                                   dashboardResultPageData.searchType ===
                                   option.value
