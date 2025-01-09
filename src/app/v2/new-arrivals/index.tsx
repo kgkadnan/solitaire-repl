@@ -98,6 +98,7 @@ import chevronDown from '@public/v2/assets/icons/dashboard/chevron-down.svg';
 import crossIcon from '@public/v2/assets/icons/modal/cross.svg';
 import chevronUp from '@public/v2/assets/icons/dashboard/chevron-up.svg';
 import { InputDialogComponent } from '@/components/v2/common/input-dialog';
+import { dashboardResultPage } from '@/features/dashboard/dashboard-slice';
 interface IBidValues {
   [key: string]: number;
 }
@@ -105,6 +106,10 @@ const NewArrivals = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const filterData = useAppSelector(state => state.filterNewArrival);
+  const dashboardResultPageData = useAppSelector(
+    state => state.dashboardResultPage
+  );
+  const shouldSkipCleanup = useRef(false);
   const filterDataRef = useRef(filterData);
   // Keep the ref updated with the latest state
   useEffect(() => {
@@ -155,6 +160,7 @@ const NewArrivals = () => {
   const [reuestCallBack] = useReuestCallBackMutation({});
 
   const handleDetailPage = ({ row }: { row: any }) => {
+    shouldSkipCleanup.current = true;
     router.push(
       `/v2/${SubRoutes.Diamond_Detail}?path=${MatchRoutes.NEW_ARRIVAL}&stoneid=${row?.lot_id}-${row?.location}`
     );
@@ -361,6 +367,28 @@ const NewArrivals = () => {
       </div>
     );
   };
+
+  useEffect(() => {
+    return () => {
+      if (!shouldSkipCleanup.current) {
+        dispatch(
+          dashboardResultPage({
+            isResultPage: false,
+            resultPageData: {
+              foundKeywords: [],
+              foundProducts: [],
+              notFoundKeywords: []
+            },
+            stoneId: '',
+            columnData: [],
+            searchType: 'normal'
+          })
+        );
+        dispatch(filterFunction({}));
+      }
+    };
+  }, [dispatch]);
+
   //Modal
   const handleBidUnLockPricing = () => {
     modalSetState.setIsDialogOpen(true);
@@ -730,6 +758,31 @@ const NewArrivals = () => {
     }
   }
 
+  const filterByStoneId = (
+    allProducts: any[],
+    dashboardResultPageData: any
+  ) => {
+    if (!Array.isArray(allProducts)) {
+      return [];
+    }
+
+    const { stoneId } = dashboardResultPageData;
+
+    if (!stoneId) {
+      return allProducts; // Return unfiltered if stoneId is not provided
+    }
+
+    // Split stoneId by spaces or commas and trim each value
+    const stoneIdArray = stoneId.split(/[\s,]+/).map((id: string) => id.trim());
+
+    // Filter products based on matching lot_id or certificate_number
+    return allProducts.filter((product: any) =>
+      stoneIdArray.some(
+        (id: any) => product.lot_id === id || product.certificate_number === id
+      )
+    );
+  };
+
   type Part = {
     endTime: string | null;
     bidStone: any[]; // Use the actual type if you know it
@@ -765,11 +818,18 @@ const NewArrivals = () => {
         }
         receivedPartsMapBidToBuy[message_id].push(decompressedPart);
         if (part === total_parts) {
-          const allProducts = await mergeParts(
+          let allProducts = await mergeParts(
             receivedPartsMapBidToBuy[message_id]
           );
 
           // Optionally update UI or process allProducts here
+
+          if (dashboardResultPageData?.stoneId?.length) {
+            allProducts.bidStone = filterByStoneId(
+              allProducts.bidStone,
+              dashboardResultPageData
+            );
+          }
 
           setActiveBid(allProducts.activeStone);
           if (currentFilterData?.queryParams) {
