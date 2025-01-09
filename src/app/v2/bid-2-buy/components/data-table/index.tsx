@@ -53,6 +53,7 @@ import {
   tableBlackSortOrder,
   tableInclusionSortOrder
 } from '@/constants/v2/form';
+import { dashboardResultPage } from '@/features/dashboard/dashboard-slice';
 
 const theme = createTheme({
   typography: {
@@ -191,7 +192,8 @@ const BidToBuyDataTable = ({
   setBidValues,
   bidValues,
   setActiveBid,
-  isInActive
+  isInActive,
+  dispatch
 }: any) => {
   // Fetching saved search data
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -401,21 +403,63 @@ const BidToBuyDataTable = ({
           <div className="flex gap-[12px]" style={{ alignItems: 'inherit' }}>
             {activeTab === 0 && isInActive !== 'INACTIVE_BID_TO_BUY' && (
               <div className="">
-                <button
-                  onClick={() => {
-                    router.push(
-                      `/v2/bid-2-buy?active-tab=${SubRoutes.BID_TO_BUY}`
-                    );
-                  }}
-                  className={`flex w-full shadow-sm justify-center py-[8px] h-[39px] px-[16px]  items-center font-medium  rounded-[4px] gap-1  border-[1px]  border-solid border-neutral200 text-mMedium  cursor-pointer  ${'bg-primaryMain text-neutral0 hover:bg-primaryHover'}`}
-                >
-                  <FilterIcon
-                    stroke={`${'var(--neutral-0)'}`}
-                    fill={`${'var(--neutral-0)'}`}
-                  />
+                {Object?.keys(localStorage.getItem('bid') ?? {}).length ? (
+                  <button
+                    onClick={() => {
+                      dispatch(
+                        dashboardResultPage({
+                          resultPageData: {
+                            foundKeywords: [],
+                            foundProducts: [],
+                            notFoundKeywords: []
+                          }
+                        })
+                      );
+                      router.push(
+                        `/v2/bid-2-buy?active-tab=${SubRoutes.BID_TO_BUY}`
+                      );
+                    }}
+                    className={`flex w-full shadow-sm justify-center py-[8px] h-[39px] px-[16px]  items-center font-medium  rounded-[4px] gap-1  border-[1px]  border-solid border-neutral200 text-mMedium  cursor-pointer  ${'bg-primaryMain text-neutral0 hover:bg-primaryHover'}`}
+                  >
+                    <FilterIcon
+                      stroke={`${'var(--neutral-0)'}`}
+                      fill={`${'var(--neutral-0)'}`}
+                    />
 
-                  <p className="w-[80%]">{ManageLocales('app.modifyFilter')}</p>
-                </button>
+                    <p className="w-[80%]">
+                      {ManageLocales('app.modifyFilter')}
+                    </p>
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => {
+                      dispatch(
+                        dashboardResultPage({
+                          resultPageData: {
+                            foundKeywords: [],
+                            foundProducts: [],
+                            notFoundKeywords: []
+                          }
+                        })
+                      );
+                      router.push(
+                        `/v2/bid-2-buy?active-tab=${SubRoutes.BID_TO_BUY}`
+                      );
+                    }}
+                    disabled={!rows.length}
+                    className={`flex justify-center  shadow-sm disabled:!bg-neutral100 disabled:cursor-not-allowed disabled:text-neutral400 py-[8px] h-[39px] px-[16px] items-center font-medium  rounded-[4px] gap-1  border-[1px]  border-solid border-neutral200 text-mMedium  cursor-pointer  ${'text-neutral900 bg-neutral0 hover:bg-neutral50'}`}
+                  >
+                    <FilterIcon
+                      stroke={`${
+                        !rows.length
+                          ? 'var(--neutral-400)'
+                          : 'var(--neutral-900)'
+                      }`}
+                    />
+
+                    <p>{ManageLocales('app.applyFilter')}</p>
+                  </button>
+                )}
               </div>
             )}
             {activeTab === 0 ? (
@@ -646,6 +690,10 @@ const BidToBuyDataTable = ({
     triggerBidToBuyApi
     // { isLoading: isLoadingBidToBuyApi, isFetching: isFetchingBidToBuyApi }
   ] = useLazyGetAllBidStonesQuery();
+
+  const dashboardResultPageData = useAppSelector(
+    state => state.dashboardResultPage
+  );
 
   const handleSortingChange = (newSorting: any) => {
     setSorting((currentSorting: any) => {
@@ -1355,7 +1403,10 @@ const BidToBuyDataTable = ({
                                     searchUrl: constructUrlParams(
                                       JSON.parse(localStorage.getItem('bid')!)
                                     ),
-                                    limit: 300
+                                    limit: 300,
+                                    textSearchReportId:
+                                      dashboardResultPageData?.textSearchReportId ??
+                                      null
                                   })
                                     .unwrap()
                                     .then((response: any) => {

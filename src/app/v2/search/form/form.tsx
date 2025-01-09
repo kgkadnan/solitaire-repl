@@ -281,10 +281,10 @@ const Form = ({
     triggerProductCountApi,
     { isLoading: isLoadingProductApi, isFetching: isFetchingProductApi }
   ] = useLazyGetProductCountQuery();
-  let [
-    triggerBidToBuyApi,
-    { isLoading: isLoadingBidToBuyApi, isFetching: isFetchingBidToBuyApi }
-  ] = useLazyGetAllBidStonesQuery();
+  let [triggerBidToBuyApi] = useLazyGetAllBidStonesQuery();
+  const dashboardResultPageData = useAppSelector(
+    state => state.dashboardResultPage
+  );
   let [
     triggerMatchingPairCountApi,
     { isLoading: isLoadingMatchPairApi, isFetching: isFetchingMatchPairApi }
@@ -363,7 +363,8 @@ const Form = ({
       setIsLoading(true);
       triggerBidToBuyApi({
         searchUrl: `${searchUrl}`,
-        limit: 1
+        limit: 1,
+        textSearchReportId: dashboardResultPageData?.textSearchReportId ?? null
       })
         .unwrap()
         .then((response: any) => {
@@ -616,7 +617,8 @@ const Form = ({
       setErrorText('');
       setIsLoading(true);
       triggerBidToBuyApi({
-        searchUrl: `${searchUrl}`
+        searchUrl: `${searchUrl}`,
+        textSearchReportId: dashboardResultPageData?.textSearchReportId ?? null
       })
         .unwrap()
         .then((response: any) => {
