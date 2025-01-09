@@ -291,7 +291,7 @@ const SideNavigationBar = ({
                           </Button>
                         </div>
                       }
-                      tooltipContentStyles={'z-50 text-sMedium'}
+                      tooltipContentStyles={'z-[60] text-sMedium'}
                       tooltipContent={items.title}
                     />
                   ) : (
