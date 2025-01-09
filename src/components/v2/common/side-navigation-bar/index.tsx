@@ -28,6 +28,8 @@ import { useAppDispatch } from '@/hooks/hook';
 import { setStartTime } from '@/features/track-page-event/track-page-event-slice';
 import { useGetNavigationQuery } from '@/features/api/faqs';
 import { useLazyGetAllBidStonesQuery } from '@/features/api/product';
+import { filterFunction } from '@/features/filter-new-arrival/filter-new-arrival-slice';
+import { dashboardResultPage } from '@/features/dashboard/dashboard-slice';
 
 interface ISideNavigationBar {
   src?: React.ReactNode;
@@ -222,7 +224,25 @@ const SideNavigationBar = ({
         <Image
           src={KgkIcon}
           alt="KGK logo"
-          onClick={() => router.push(Routes.DASHBOARD)}
+          onClick={() => {
+            dispatch(
+              dashboardResultPage({
+                isResultPage: false,
+                resultPageData: {
+                  foundKeywords: [],
+                  foundProducts: [],
+                  notFoundKeywords: []
+                },
+                stoneId: '',
+                columnData: [],
+                searchType: 'normal',
+                textSearchReportId: null
+              })
+            );
+            localStorage.removeItem('bid');
+            dispatch(filterFunction({}));
+            router.push(Routes.DASHBOARD);
+          }}
         />
       </div>
       <div className="flex flex-col justify-between h-full">
@@ -267,6 +287,25 @@ const SideNavigationBar = ({
                                 dispatch(
                                   setStartTime(new Date().toISOString())
                                 );
+                              }
+
+                              if (currentRoute !== items.link) {
+                                dispatch(
+                                  dashboardResultPage({
+                                    isResultPage: false,
+                                    resultPageData: {
+                                      foundKeywords: [],
+                                      foundProducts: [],
+                                      notFoundKeywords: []
+                                    },
+                                    stoneId: '',
+                                    columnData: [],
+                                    searchType: 'normal',
+                                    textSearchReportId: null
+                                  })
+                                );
+                                localStorage.removeItem('bid');
+                                dispatch(filterFunction({}));
                               }
 
                               router.push(items.link!);
@@ -327,7 +366,26 @@ const SideNavigationBar = ({
                         }`}
                       >
                         <Button
-                          onClick={() => router.push(items.link!)}
+                          onClick={() => {
+                            dispatch(
+                              dashboardResultPage({
+                                isResultPage: false,
+                                resultPageData: {
+                                  foundKeywords: [],
+                                  foundProducts: [],
+                                  notFoundKeywords: []
+                                },
+                                stoneId: '',
+                                columnData: [],
+                                searchType: 'normal',
+                                textSearchReportId: null
+                              })
+                            );
+                            localStorage.removeItem('bid');
+                            dispatch(filterFunction({}));
+
+                            router.push(items.link!);
+                          }}
                           className={
                             items.isActive && !isInMaintenanceMode
                               ? `bg-primaryMain p-[8px] rounded stroke-neutral25`
