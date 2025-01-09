@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { get } from 'lodash';
 import Image from 'next/image';
 import { Avatar } from '../../ui/avatar';
@@ -6,7 +6,10 @@ import { kycStatus } from '@/constants/enums/kyc';
 import { usePathname, useRouter } from 'next/navigation';
 import ActionButton from '../action-button';
 import { v2Routes } from '@/constants/routes';
-
+import searchIcon from '@public/v2/assets/icons/dashboard/search-icon.svg';
+import searchIconWhite from '@public/v2/assets/icons/dashboard/search-icon-white.svg';
+import debounce from 'lodash.debounce';
+import { Toast } from '@/components/v2/common/copy-and-share/toast';
 import {
   Popover,
   PopoverContent,
@@ -30,7 +33,8 @@ import crossIcon from '@public/v2/assets/icons/modal/cross.svg';
 import { Skeleton } from '@mui/material';
 import {
   Tracking_KYC,
-  Tracking_KYC_Entry_Point
+  Tracking_KYC_Entry_Point,
+  Tracking_Search_By_Text
 } from '@/constants/funnel-tracking';
 import { trackEvent } from '@/utils/ga';
 import customerSupportSvg from '@public/v2/assets/icons/dashboard/customer-support.svg';
@@ -38,6 +42,12 @@ import WhatsappSvg from '@public/v2/assets/icons/dashboard/whatsapp.svg?url';
 import PhoneSvg from '@public/v2/assets/icons/dashboard/phone.svg?url';
 import { useNotifySalesMutation } from '@/features/api/notify-sales';
 import CommonPoppup from '@/app/v2/login/component/common-poppup';
+import { RadioButton } from '../radio';
+import { useGetProductByIdMutation } from '@/features/api/product';
+import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
+import { dashboardResultPage } from '@/features/dashboard/dashboard-slice';
+import { useDispatch } from 'react-redux';
+import { statusCode } from '@/constants/enums/status-code';
 
 export interface IUserAccountInfo {
   customer: {
@@ -74,6 +84,7 @@ const TopNavigationBar = ({
   isInMaintenanceMode: boolean;
 }) => {
   const router = useRouter();
+  const dispatch = useDispatch();
   const currentPath = usePathname();
   const [showNudge, setShowNudge] = useState(
     localStorage.getItem('show-nudge')
@@ -81,6 +92,9 @@ const TopNavigationBar = ({
   const { data: customerData } = useGetCustomerQuery(
     {},
     { refetchOnMountOrArgChange: true }
+  );
+  const dashboardResultPageData = useAppSelector(
+    state => state.dashboardResultPage
   );
   const [isLogout, setIsLogout] = useState<boolean>(false);
   const [triggerGetProfilePhoto, { isSuccess }] = useLazyGetProfilePhotoQuery(
@@ -91,12 +105,198 @@ const TopNavigationBar = ({
   const [triggerLogout] = useLazyGetLogoutQuery({});
   const [triggerLogoutAll] = useLazyGetLogoutAllQuery({});
   const { userLoggedOut } = useUser();
+  const [getProductById] = useGetProductByIdMutation();
   const [modalContent, setModalContent] = useState<any>();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [userAccountInfo, setUserAccountInfo] = useState<IUserAccountInfo>();
   const [imageUrl, setImageUrl] = useState('');
   const [isImageApiLoaded, setIsImageApiLoaded] = useState(false);
   const [isNotified, setIsNotified] = useState(false);
+  const [isSearchVisible, setIsSearchVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [showRadios, setShowRadios] = useState(false);
+  const [error, setError] = useState('');
+  const [stoneId, setStoneId] = useState('');
+
+  const [lastEventTime, setLastEventTime] = useState<number | null>(null);
+  const [selectedOption, setSelectedOption] = useState('normal'); // Default selection
+
+  // Options for Radio Buttons
+  const radioOptions = [
+    { label: 'Stock Search', value: 'normal', name: 'searchFrom' },
+    { label: 'New Arrivals', value: 'NewArrivals', name: 'searchFrom' },
+    { label: 'Bid to Buy', value: 'BidToBuy', name: 'searchFrom' }
+  ];
+  const handleRadioChange = (value: string) => {
+    setSelectedOption(value);
+    dispatch(
+      dashboardResultPage({
+        searchType: value
+      })
+    );
+  };
+
+  // Check if 10 minutes have passed since the last event
+  const canTrackEvent = useCallback(() => {
+    if (!lastEventTime) return true;
+    return Date.now() - lastEventTime >= 10 * 60 * 1000; // 10 minutes in ms
+  }, [lastEventTime]);
+
+  const handleStoneId = (e: any) => {
+    if (e.target.value.length >= 1 && canTrackEvent()) {
+      setLastEventTime(Date.now()); // Update the timestamp in state
+      trackEvent({
+        action: Tracking_Search_By_Text.search_by_text_initiated,
+        category: 'SearchByText',
+        mobile_number: `+${customerData.customer.country_code}${customerData.customer.phone}`
+      });
+    }
+
+    dispatch(
+      dashboardResultPage({
+        stoneId: e.target.value
+      })
+    );
+
+    setStoneId(e.target.value);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      setIsLoading(true);
+      if (dashboardResultPageData.searchType !== 'NewArrivals') {
+        getProductById({
+          search_keyword: dashboardResultPageData.stoneId,
+          search_type: dashboardResultPageData.searchType
+        })
+          .unwrap()
+          .then((res: any) => {
+            setIsLoading(false);
+            // setSearchData(res);
+            // setIsDetailPage(true);
+
+            setError('');
+            setLastEventTime(null);
+            trackEvent({
+              action: Tracking_Search_By_Text.search_by_text_executed,
+              category: 'SearchByText',
+              mobile_number: `+${customerData.customer.country_code}${customerData.customer.phone}`,
+              status: 'Success'
+            });
+
+            if (selectedOption === 'normal') {
+              dispatch(
+                dashboardResultPage({
+                  resultPageData: res
+                })
+              );
+              router.push(`${Routes.STOCK_SEARCH}?path=${currentPath}`);
+            } else if (selectedOption === 'BidToBuy') {
+              console.log('res', res);
+              dispatch(
+                dashboardResultPage({
+                  resultPageData: res,
+                  stoneId: stoneId,
+                  textSearchReportId: res.textSearchReportId
+                })
+              );
+              router.push(Routes.BID_TO_BUY);
+            }
+          })
+          .catch((_e: any) => {
+            setIsLoading(false);
+            setLastEventTime(null);
+            trackEvent({
+              action: Tracking_Search_By_Text.search_by_text_executed,
+              category: 'SearchByText',
+              mobile_number: `+${customerData.customer.country_code}${customerData.customer.phone}`,
+              status: 'Fail'
+            });
+            if (
+              _e?.status === statusCode.NOT_FOUND ||
+              _e?.status === statusCode.INVALID_DATA
+            ) {
+              setError(`We couldn't find any results for this search`);
+            } else if (_e?.status === statusCode.UNAUTHORIZED) {
+              setError(_e?.data?.message?.message);
+            } else {
+              setError('Something went wrong');
+            }
+          });
+      } else {
+        router.push(Routes.NEW_ARRIVAL);
+        setIsLoading(false);
+      }
+    }
+  };
+  const handleInputSearch = () => {
+    if (dashboardResultPageData.stoneId.length > 0) {
+      setIsLoading(true);
+      if (dashboardResultPageData.searchType !== 'NewArrivals') {
+        getProductById({
+          search_keyword: dashboardResultPageData.stoneId,
+          search_type: dashboardResultPageData.searchType
+        })
+          .unwrap()
+          .then((res: any) => {
+            setIsLoading(false);
+            // setSearchData(res);
+            // setIsDetailPage(true);
+
+            setError('');
+            setLastEventTime(null);
+            trackEvent({
+              action: Tracking_Search_By_Text.search_by_text_executed,
+              category: 'SearchByText',
+              mobile_number: `+${customerData.customer.country_code}${customerData.customer.phone}`,
+              status: 'Success'
+            });
+            if (selectedOption === 'normal') {
+              dispatch(
+                dashboardResultPage({
+                  resultPageData: res
+                })
+              );
+              router.push(`${Routes.STOCK_SEARCH}?path=${Routes.DASHBOARD}`);
+            } else if (selectedOption === 'BidToBuy') {
+              dispatch(
+                dashboardResultPage({
+                  resultPageData: res,
+                  stoneId: stoneId,
+                  textSearchReportId: res.textSearchReportId
+                })
+              );
+              router.push(Routes.BID_TO_BUY);
+            }
+          })
+          .catch((_e: any) => {
+            setIsLoading(false);
+            setLastEventTime(null);
+            trackEvent({
+              action: Tracking_Search_By_Text.search_by_text_executed,
+              category: 'SearchByText',
+              mobile_number: `+${customerData.customer.country_code}${customerData.customer.phone}`,
+              status: 'Fail'
+            });
+            if (
+              _e?.status === statusCode.NOT_FOUND ||
+              _e?.status === statusCode.INVALID_DATA
+            ) {
+              setError(`We couldn't find any results for this search`);
+            } else if (_e?.status === statusCode.UNAUTHORIZED) {
+              setError(_e?.data?.message?.message);
+            } else {
+              setError('Something went wrong');
+            }
+          });
+      } else {
+        router.push(Routes.NEW_ARRIVAL);
+        setIsLoading(false);
+      }
+    } else {
+      setError('Please enter stone id or certificate number');
+    }
+  };
 
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   useEffect(() => {
@@ -193,22 +393,143 @@ const TopNavigationBar = ({
       .catch(_err => console.log('error'));
   };
 
-  const getInitials = (obj: any, path: string) => {
-    const name = get(obj, path, ''); // Get the name string or default to an empty string
+  // const getInitials = (obj: any, path: string) => {
+  //   const name = get(obj, path, ''); // Get the name string or default to an empty string
+  //   return (
+  //     name
+  //       ?.split(' ') // Split the name into words
+  //       ?.map((word: any) => word[0]?.toUpperCase()) // Get the first letter of each word and uppercase it
+  //       ?.join('') || ''
+  //   ); // Join the initials or return an empty string
+  // };
+  const [inputWidth, setInputWidth] = useState(600); // Starting width, e.g., 450px.
+
+  useEffect(() => {
+    const handleScroll = debounce(() => {
+      const scrollTop = window.scrollY;
+
+      // Adjust search visibility based on scroll position
+      if (scrollTop >= 50) {
+        setIsSearchVisible(true);
+      } else {
+        setShowRadios(false);
+        setIsSearchVisible(false);
+      }
+
+      // Dynamically adjust width
+      const newWidth = Math.max(398, 600 - scrollTop); // Decrease width, but not below 398px.
+      setInputWidth(newWidth);
+    }, 1); // Debounce delay
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  const renderSearchField = () => {
     return (
-      name
-        ?.split(' ') // Split the name into words
-        ?.map((word: any) => word[0]?.toUpperCase()) // Get the first letter of each word and uppercase it
-        ?.join('') || ''
-    ); // Join the initials or return an empty string
+      <div className="relative ml-[160px] h-[40px] transition-all duration-300 ease-in-out">
+        {/* Overlay Background */}
+        {showRadios && (
+          <div
+            className="fixed inset-0 bg-[#101828] opacity-40 z-[100]"
+            onClick={() => setShowRadios(false)} // Close overlay when clicking outside
+          ></div>
+        )}
+
+        {showRadios && (
+          <div
+            style={{
+              width:
+                currentPath === '/v2'
+                  ? isSearchVisible
+                    ? `${inputWidth + 7}px`
+                    : '' // Dynamic width applied here.
+                  : '405px',
+              transition: 'width 0.3s ease' // Smooth transition for width change.
+            }}
+            className="absolute bg-white  z-[100] h-[105px]  top-[-5px] right-[-3px] rounded-[4px]"
+            onClick={() => setShowRadios(false)} // Close overlay when clicking outside
+          ></div>
+        )}
+
+        <div
+          className={`relative z-[110] flex flex-col items-start bg-neutral0 rounded-[4px] overflow-hidden border-[1px] border-primaryBorder  px-[12px] py-[5px]`}
+          style={{
+            width:
+              currentPath === '/v2'
+                ? isSearchVisible
+                  ? `${inputWidth}px`
+                  : '' // Dynamic width applied here.
+                : '398px',
+            transition: 'width 0.3s ease' // Smooth transition for width change.
+          }}
+        >
+          {/* Input Box */}
+          <div className="relative flex w-full items-center">
+            <input
+              className="pr-10 py-1 w-full text-gray-600 rounded-lg focus:outline-none"
+              type="text"
+              placeholder="Search by stone id or certificate number"
+              onClick={() => setShowRadios(!showRadios)} // Show radios on input click
+              onChange={handleStoneId}
+              onKeyDown={handleKeyDown}
+              value={dashboardResultPageData.stoneId}
+            />
+            <div
+              className="absolute right-0 cursor-pointer rounded-[4px]"
+              onClick={handleInputSearch}
+            >
+              <Image
+                src={!showRadios ? searchIconWhite : searchIcon}
+                alt="searchIcon"
+              />
+            </div>
+          </div>
+        </div>
+        {/* Custom Radio Buttons */}
+        {showRadios && (
+          <>
+            {/* Absolute Radio Buttons */}
+            <div className="absolute left-0 w-full bg-white shadow-lg z-[110] rounded-b-[4px] px-1 py-[7px]">
+              <div className="text-neutral400 text-sRegular pb-[4px]">
+                Search From
+              </div>
+              <div className="flex gap-4">
+                {radioOptions.map(option => (
+                  <RadioButton
+                    key={option.value}
+                    radioMetaData={{
+                      label: option.label,
+                      value: option.value,
+                      name: option.name,
+                      checked:
+                        dashboardResultPageData.searchType === option.value
+                    }}
+                    onChange={handleRadioChange}
+                    customStyle={{
+                      radio: '!text-mMedium !text-neutral900'
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
+          </>
+        )}
+      </div>
+    );
   };
 
   return (
-    <div className="min-h-[60px] border-b-[1px] border-neutral200 sticky top-0 bg-neutral0 z-[3] flex flex-col justify-end ">
+    <div className="min-h-[60px] border-b-[1px] border-neutral200 sticky top-0 left-[116px] bg-neutral0 z-[55] flex flex-col justify-end w-[calc(100vw-85px)]">
       <DialogComponent
         dialogContent={modalContent}
         isOpens={isLogout || isDialogOpen}
       />
+      {error !== '' && (
+        <Toast show={error !== ''} message={error} isSuccess={false} />
+      )}
       {showNudge === 'MINI' &&
         (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
           isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED) &&
@@ -271,128 +592,118 @@ const TopNavigationBar = ({
             />
           </div>
         )}
-      <div className="z-50 flex gap-[16px] items-center justify-end px-[32px] py-[10px]">
-        <Popover>
-          <PopoverTrigger className="flex justify-center">
-            <Image src={customerSupportSvg} alt="profile" />
-          </PopoverTrigger>
-          {/* Popover content with radio buttons */}
-          <PopoverContent className="z-[999] relative h-[150px]">
-            <div className="bg-neutral25 border-[1px] border-solid border-primaryBorder shadow-popupsShadow  rounded-[8px] relative top-[10px] right-[39%]">
-              {/* Add the triangular tip above the card */}
-              <div className="absolute w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-b-[10px] border-b-neutral200 top-[-10px] right-[15px] before:absolute before:content-[''] before:w-0 before:h-0 before:border-l-[10px] before:border-l-transparent before:border-r-[10px] before:border-r-transparent before:border-b-[9px] before:border-b-white before:top-[2px] before:left-[-9px]"></div>{' '}
-              <div className="flex items-center  px-[16px] py-[14px] gap-[8px]">
-                <Avatar className="bg-primaryMain flex items-center justify-center">
-                  {userAccountInfo &&
-                  get(userAccountInfo, 'customer.kam.image', '') ? (
-                    <img
-                      src={get(userAccountInfo, 'customer.kam.image', '')}
-                      alt="profile"
-                      className="w-[40px] h-[40px] rounded-full object-cover border-none"
-                    />
-                  ) : (
-                    <p className="text-center text-mRegular text-neutral0 leading-[10]">
-                      {getInitials(userAccountInfo, 'customer.kam.kam_name')}
-                    </p>
-                  )}
-                </Avatar>
 
-                <div>
-                  <h1 className="text-lRegular font-regular text-neutral-900">
-                    {' '}
-                    {`${userAccountInfo?.customer?.kam?.kam_name ?? '-'}`}
-                  </h1>
-                  <p className="text-mRegular font-regular text-neutral-600">
-                    {' '}
-                    {userAccountInfo?.customer?.kam?.post ?? '-'}
+      <div className="flex px-[32px] py-[10px] z-[55] justify-between items-center">
+        {/* Left section (empty for now, but can add other content if needed) */}
+        <div className="flex"></div>
+
+        {/* Middle section (Search Field) */}
+        <div className="flex-grow flex justify-center">
+          {currentPath === '/v2'
+            ? isSearchVisible && renderSearchField()
+            : renderSearchField()}
+        </div>
+        <div className="flex gap-[16px] items-center justify-end ">
+          <Popover>
+            <PopoverTrigger className="flex justify-center">
+              <Image src={customerSupportSvg} alt="profile" />
+            </PopoverTrigger>
+            {/* Popover content with radio buttons */}
+            <PopoverContent className="z-[999] relative h-[150px]">
+              <div className="bg-neutral25 border-[1px] border-solid border-primaryBorder shadow-popupsShadow  rounded-[8px] relative top-[10px] right-[39%]">
+                {/* Add the triangular tip above the card */}
+                <div className="absolute w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-b-[10px] border-b-neutral200 top-[-10px] right-[15px] before:absolute before:content-[''] before:w-0 before:h-0 before:border-l-[10px] before:border-l-transparent before:border-r-[10px] before:border-r-transparent before:border-b-[9px] before:border-b-white before:top-[2px] before:left-[-9px]"></div>{' '}
+                <div className="flex items-center  px-[16px] py-[14px] gap-[8px]">
+                  <Avatar className="bg-primaryMain flex items-center justify-center">
+                    {userAccountInfo?.customer?.kam?.image ? (
+                      <img
+                        src={userAccountInfo?.customer?.kam?.image}
+                        alt="profile"
+                        className="w-[40px] h-[40px] rounded-full object-cover border-none"
+                      />
+                    ) : (
+                      <p className="text-center text-mRegular text-neutral0 leading-[10]">
+                        {`${
+                          userAccountInfo?.customer?.kam?.kam_name
+                            ?.split(' ') // Split the string into words
+                            ?.map(word => word[0]?.toUpperCase()) // Get the first letter of each word and uppercase it
+                            ?.join('') || ''
+                        }
+                     `}
+                      </p>
+                    )}
+                  </Avatar>
+
+                  <div>
+                    <h1 className="text-lRegular font-regular text-neutral-900">
+                      {' '}
+                      {`${userAccountInfo?.customer?.kam?.kam_name ?? '-'}`}
+                    </h1>
+                    <p className="text-mRegular font-regular text-neutral-600">
+                      {' '}
+                      {userAccountInfo?.customer?.kam?.post ?? '-'}
+                    </p>
+                  </div>
+                </div>
+                <hr className="border-[1px] border-solid border-primaryBorder w-[80%] ml-[20px]" />
+                <div
+                  className={`flex items-center py-[5px]  px-[16px] gap-[2px]    ${
+                    isInMaintenanceMode
+                      ? 'cursor-not-allowed bg-neutral100'
+                      : 'cursor-pointer hover:bg-slate-50'
+                  }`}
+                >
+                  <PhoneSvg />
+                  <p
+                    className={`text-mRegular font-regular ${
+                      isInMaintenanceMode
+                        ? 'text-neutral400'
+                        : 'text-neutral900'
+                    }`}
+                  >
+                    {userAccountInfo?.customer?.kam?.phone ?? '-'}
                   </p>
                 </div>
-              </div>
-              <hr className="border-[1px] border-solid border-primaryBorder w-[80%] ml-[20px]" />
-              <div
-                className={`flex items-center py-[5px]  px-[16px] gap-[2px]    ${
-                  isInMaintenanceMode
-                    ? 'cursor-not-allowed bg-neutral100'
-                    : 'cursor-pointer hover:bg-slate-50'
-                }`}
-              >
-                <PhoneSvg />
-                <p
-                  className={`text-mRegular font-regular ${
-                    isInMaintenanceMode ? 'text-neutral400' : 'text-neutral900'
+                <Link
+                  className={`flex items-center py-[5px]  px-[16px] gap-[2px]    ${
+                    isInMaintenanceMode
+                      ? 'cursor-not-allowed bg-neutral100'
+                      : 'cursor-pointer hover:bg-slate-50'
                   }`}
-                >
-                  {userAccountInfo?.customer?.kam?.phone ?? '-'}
-                </p>
-              </div>
-              <Link
-                className={`flex items-center py-[5px]  px-[16px] gap-[2px]    ${
-                  isInMaintenanceMode
-                    ? 'cursor-not-allowed bg-neutral100'
-                    : 'cursor-pointer hover:bg-slate-50'
-                }`}
-                href={`https://wa.me/${
-                  userAccountInfo?.customer?.kam?.phone?.replace(/\s+/g, '') ||
-                  ''
-                }`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <WhatsappSvg />
-                <p
-                  className={`text-mRegular font-regular ${
-                    isInMaintenanceMode ? 'text-neutral400' : 'text-neutral900'
+                  href={`https://wa.me/${
+                    userAccountInfo?.customer?.kam?.phone?.replace(
+                      /\s+/g,
+                      ''
+                    ) || ''
                   }`}
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
-                  {userAccountInfo?.customer?.kam?.phone ?? '-'}
-                </p>
-              </Link>
-            </div>
-          </PopoverContent>
-        </Popover>
-        <Notification isInMaintenanceMode={isInMaintenanceMode} />
-
-        <Popover>
-          <PopoverTrigger className="flex justify-center">
-            {isImageApiLoaded ? (
-              <Avatar
-                className={`${
-                  imageUrl.length <= 0 && 'bg-primaryMain'
-                } flex items-center justify-center`}
-              >
-                {imageUrl?.length ? (
-                  <img
-                    src={imageUrl}
-                    alt="profile"
-                    className="w-[40px] h-[40px] rounded-full object-cover border-none"
-                  />
-                ) : (
-                  <p className="text-center text-mRegular text-neutral0">
-                    {`${userAccountInfo?.customer?.first_name
-                      ?.charAt(0)
-                      .toUpperCase()}${userAccountInfo?.customer?.last_name
-                      ?.charAt(0)
-                      .toUpperCase()}`}
+                  <WhatsappSvg />
+                  <p
+                    className={`text-mRegular font-regular ${
+                      isInMaintenanceMode
+                        ? 'text-neutral400'
+                        : 'text-neutral900'
+                    }`}
+                  >
+                    {userAccountInfo?.customer?.kam?.phone ?? '-'}
                   </p>
-                )}
-              </Avatar>
-            ) : (
-              <Skeleton
-                width={40}
-                sx={{ bgcolor: 'var(--neutral-200)' }}
-                height={40}
-                variant="rectangular"
-                animation="wave"
-                className="rounded-[50%]"
-              />
-            )}
-          </PopoverTrigger>
-          {/* Popover content with radio buttons */}
-          <PopoverContent className="z-[999]">
-            <div className="bg-neutral25 border-[1px] border-solid border-primaryBorder shadow-popupsShadow  rounded-[8px] relative top-[5px] right-[13%]">
-              <div className="flex items-center border-b-[1px] border-solid border-primaryBorder p-[16px] gap-[8px]">
-                <Avatar className="bg-primaryMain flex items-center justify-center">
-                  {imageUrl.length ? (
+                </Link>
+              </div>
+            </PopoverContent>
+          </Popover>
+          <Notification isInMaintenanceMode={isInMaintenanceMode} />
+
+          <Popover>
+            <PopoverTrigger className="flex justify-center">
+              {isImageApiLoaded ? (
+                <Avatar
+                  className={`${
+                    imageUrl.length <= 0 && 'bg-primaryMain'
+                  } flex items-center justify-center`}
+                >
+                  {imageUrl?.length ? (
                     <img
                       src={imageUrl}
                       alt="profile"
@@ -408,106 +719,141 @@ const TopNavigationBar = ({
                     </p>
                   )}
                 </Avatar>
-                <div>
-                  <h1 className="text-lRegular font-regular text-neutral-900">
-                    {' '}
-                    {`${userAccountInfo?.customer?.first_name} ${userAccountInfo?.customer?.last_name}`}
-                  </h1>
-                  <p className="text-mRegular font-regular text-neutral-600">
-                    {' '}
-                    {userAccountInfo?.customer?.email ?? '-'}
-                  </p>
-                </div>
-              </div>
-
-              <Link
-                className={`flex items-center border-b-[1px] border-solid border-primaryBorder p-[16px] gap-[8px]    ${
-                  isInMaintenanceMode
-                    ? 'cursor-not-allowed bg-neutral100'
-                    : 'cursor-pointer hover:bg-slate-50'
-                }`}
-                href={isInMaintenanceMode ? '' : '/v2/my-account'}
-              >
-                <MyAccountIcon
-                  className={`${
-                    isInMaintenanceMode
-                      ? 'stroke-neutral400'
-                      : 'stroke-neutral900'
-                  }`}
+              ) : (
+                <Skeleton
+                  width={40}
+                  sx={{ bgcolor: 'var(--neutral-200)' }}
+                  height={40}
+                  variant="rectangular"
+                  animation="wave"
+                  className="rounded-[50%]"
                 />
-                <p
-                  className={`text-mRegular font-regular ${
-                    isInMaintenanceMode ? 'text-neutral400' : 'text-neutral900'
-                  }`}
-                >
-                  {' '}
-                  My Account
-                </p>
-              </Link>
-              <button
-                className="flex w-full items-center border-b-[1px] border-solid border-primaryBorder p-[16px] gap-[8px] cursor-pointer hover:bg-slate-50 "
-                onClick={() => {
-                  setIsLogout(true);
-                  setModalContent(
-                    <>
-                      <div className="absolute left-[-84px] top-[-84px]">
-                        <Image
-                          src={logoutConfirmIcon}
-                          alt="logoutConfirmIcon"
-                        />
-                      </div>
-                      <div
-                        className="cursor-pointer"
-                        onClick={() => {
-                          setIsLogout(false);
-                        }}
-                      >
-                        {' '}
-                        <Image
-                          src={crossIcon}
-                          alt="crossIcon"
-                          className="absolute left-[360px] top-[15px]"
-                        />
-                      </div>
+              )}
+            </PopoverTrigger>
+            {/* Popover content with radio buttons */}
+            <PopoverContent className="z-[999]">
+              <div className="bg-neutral25 border-[1px] border-solid border-primaryBorder shadow-popupsShadow  rounded-[8px] relative top-[5px] right-[13%]">
+                <div className="flex items-center border-b-[1px] border-solid border-primaryBorder p-[16px] gap-[8px]">
+                  <Avatar className="bg-primaryMain flex items-center justify-center">
+                    {imageUrl.length ? (
+                      <img
+                        src={imageUrl}
+                        alt="profile"
+                        className="w-[40px] h-[40px] rounded-full object-cover border-none"
+                      />
+                    ) : (
+                      <p className="text-center text-mRegular text-neutral0">
+                        {`${userAccountInfo?.customer?.first_name
+                          ?.charAt(0)
+                          .toUpperCase()}${userAccountInfo?.customer?.last_name
+                          ?.charAt(0)
+                          .toUpperCase()}`}
+                      </p>
+                    )}
+                  </Avatar>
+                  <div>
+                    <h1 className="text-lRegular font-regular text-neutral-900">
+                      {' '}
+                      {`${userAccountInfo?.customer?.first_name} ${userAccountInfo?.customer?.last_name}`}
+                    </h1>
+                    <p className="text-mRegular font-regular text-neutral-600">
+                      {' '}
+                      {userAccountInfo?.customer?.email ?? '-'}
+                    </p>
+                  </div>
+                </div>
 
-                      <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                        <h1 className="text-headingS text-neutral900 !font-medium	">
-                          Do you want to log out from all devices?
-                        </h1>
-                        <ActionButton
-                          actionButtonData={[
-                            {
-                              variant: 'secondary',
-                              label: 'Log out this device',
-                              handler: () => {
-                                handleLogout();
+                <Link
+                  className={`flex items-center border-b-[1px] border-solid border-primaryBorder p-[16px] gap-[8px]    ${
+                    isInMaintenanceMode
+                      ? 'cursor-not-allowed bg-neutral100'
+                      : 'cursor-pointer hover:bg-slate-50'
+                  }`}
+                  href={isInMaintenanceMode ? '' : '/v2/my-account'}
+                >
+                  <MyAccountIcon
+                    className={`${
+                      isInMaintenanceMode
+                        ? 'stroke-neutral400'
+                        : 'stroke-neutral900'
+                    }`}
+                  />
+                  <p
+                    className={`text-mRegular font-regular ${
+                      isInMaintenanceMode
+                        ? 'text-neutral400'
+                        : 'text-neutral900'
+                    }`}
+                  >
+                    {' '}
+                    My Account
+                  </p>
+                </Link>
+                <button
+                  className="flex w-full items-center border-b-[1px] border-solid border-primaryBorder p-[16px] gap-[8px] cursor-pointer hover:bg-slate-50 "
+                  onClick={() => {
+                    setIsLogout(true);
+                    setModalContent(
+                      <>
+                        <div className="absolute left-[-84px] top-[-84px]">
+                          <Image
+                            src={logoutConfirmIcon}
+                            alt="logoutConfirmIcon"
+                          />
+                        </div>
+                        <div
+                          className="cursor-pointer"
+                          onClick={() => {
+                            setIsLogout(false);
+                          }}
+                        >
+                          {' '}
+                          <Image
+                            src={crossIcon}
+                            alt="crossIcon"
+                            className="absolute left-[360px] top-[15px]"
+                          />
+                        </div>
+
+                        <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+                          <h1 className="text-headingS text-neutral900 !font-medium	">
+                            Do you want to log out from all devices?
+                          </h1>
+                          <ActionButton
+                            actionButtonData={[
+                              {
+                                variant: 'secondary',
+                                label: 'Log out this device',
+                                handler: () => {
+                                  handleLogout();
+                                },
+                                customStyle: 'flex-1 w-full h-10'
                               },
-                              customStyle: 'flex-1 w-full h-10'
-                            },
-                            {
-                              variant: 'primary',
-                              label: 'Log out all devices',
-                              handler: () => {
-                                handleLogoutAll();
-                              },
-                              customStyle: 'flex-1 w-full h-10'
-                            }
-                          ]}
-                        />
-                      </div>
-                    </>
-                  );
-                }}
-              >
-                <Image src={logoutIcon} alt="logoutIcon" />
-                <p className="text-mRegular font-regular text-neutral-900">
-                  {' '}
-                  Logout
-                </p>
-              </button>
-            </div>
-          </PopoverContent>
-        </Popover>
+                              {
+                                variant: 'primary',
+                                label: 'Log out all devices',
+                                handler: () => {
+                                  handleLogoutAll();
+                                },
+                                customStyle: 'flex-1 w-full h-10'
+                              }
+                            ]}
+                          />
+                        </div>
+                      </>
+                    );
+                  }}
+                >
+                  <Image src={logoutIcon} alt="logoutIcon" />
+                  <p className="text-mRegular font-regular text-neutral-900">
+                    {' '}
+                    Logout
+                  </p>
+                </button>
+              </div>
+            </PopoverContent>
+          </Popover>
+        </div>
       </div>
     </div>
   );

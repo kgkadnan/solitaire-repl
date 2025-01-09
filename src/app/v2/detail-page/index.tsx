@@ -316,21 +316,28 @@ export default function DetailPage() {
   const goBack = () => {
     setIsDetailPage(false);
     setDetailPageData({});
-    let queryPath = '';
-    if (path == MatchRoutes.SEARCH || path == MatchRoutes.MATCHING_PAIR) {
-      queryPath = !!activeTab
-        ? path + '?active-tab=' + SubRoutes.RESULT + '-' + activeTab
-        : path + '?active-tab=new-search';
-    }
-    const routePath =
-      path == MatchRoutes.SEARCH || path == MatchRoutes.MATCHING_PAIR
-        ? queryPath
-        : path;
-    if (path == MatchRoutes.DASHBOARD) {
-      router.push(`/v2`);
+
+    if (path?.length) {
+      router.back();
     } else {
-      router.push(`/v2/${routePath}`);
+      router.push(`/v2`);
     }
+
+    // let queryPath = '';
+    // if (path == MatchRoutes.SEARCH || path == MatchRoutes.MATCHING_PAIR) {
+    //   queryPath = !!activeTab
+    //     ? path + '?active-tab=' + SubRoutes.RESULT + '-' + activeTab
+    //     : path + '?active-tab=new-search';
+    // }
+    // const routePath =
+    //   path == MatchRoutes.SEARCH || path == MatchRoutes.MATCHING_PAIR
+    //     ? queryPath
+    //     : path;
+    // if (path == MatchRoutes.DASHBOARD) {
+    //   router.push(`/v2`);
+    // } else {
+    //   router.push(`/v2/${routePath}`);
+    // }
     setConfirmStoneData([]);
   };
   const goBackToListView = (isFrom?: string) => {

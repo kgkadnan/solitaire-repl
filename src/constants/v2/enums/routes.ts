@@ -1,5 +1,6 @@
 export enum Routes {
   DASHBOARD = '/v2',
+  STOCK_SEARCH = '/v2/stock-search',
   SEARCH = '/v2/search',
   YOUR_ORDERS = '/v2/your-orders',
   SAVED_SEARCH = '/v2/saved-searches',
