@@ -100,7 +100,9 @@ const SideNavigationBar = ({
       isActive:
         currentRoute === Routes.DASHBOARD ||
         currentRoute === '/' ||
-        currentDetailPath === Routes.DASHBOARD,
+        currentDetailPath === Routes.DASHBOARD ||
+        (currentRoute === Routes.STOCK_SEARCH &&
+          currentDetailPath === Routes.DETAIL_PAGE),
       isVisible: true
     },
     {
