@@ -648,8 +648,10 @@ const BidToBuyDataTable = ({
     return (
       <div
         className={`flex flex-col items-center justify-center gap-5 ${
-          isFullScreen ? 'h-[69vh]' : !rows.length ? 'h-[55vh]' : 'h-[60vh]'
-        }   mt-[50px] ${!paginatedData.length && '!h-[47vh]  !mt-[20px]'}`}
+          isFullScreen ? 'h-[71vh]' : !rows.length ? 'h-[55vh]' : 'h-[60vh]'
+        }   mt-[50px] ${
+          !paginatedData.length && !isFullScreen && '!h-[47vh]  !mt-[20px]'
+        }`}
       >
         {(activeTab === 1 && activeCount === 0) ||
         (activeTab === 0 && bidCount === 0) ||
@@ -759,8 +761,8 @@ const BidToBuyDataTable = ({
             break;
 
           case 'amount':
-            const amountA = rowA.original?.price ?? 0;
-            const amountB = rowB.original?.price ?? 0;
+            const amountA = (rowA?.price || rowA?.amount) ?? 0;
+            const amountB = (rowB?.price || rowB?.amount) ?? 0;
             compareValue = amountA - amountB;
 
             break;
@@ -1247,13 +1249,15 @@ const BidToBuyDataTable = ({
                           (activeTab === 1
                             ? row.original.my_current_bid
                             : row.original.discount)
-                        ? formatNumber(row.original.price)
+                        ? formatNumber(
+                            row.original.price || row.original.amount
+                          )
                         : formatNumber(
                             row.original.rap *
                               (1 + bidValues[row.id] / 100) *
                               row.original.carats
                           )
-                      : formatNumber(row.original.price)
+                      : formatNumber(row.original.price || row.original.amount)
                   }
                   disabled
                 />
