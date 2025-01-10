@@ -14,7 +14,8 @@ export enum Routes {
   MY_ACCOUNT = '/v2/my-account',
   FAQS = '/v2/faqs',
   MATCHING_PAIR = '/v2/matching-pair',
-  TURKEY = '/v2/turkey'
+  TURKEY = '/v2/turkey',
+  DETAIL_PAGE = '/v2/detail-page'
 }
 // Enum using the enum keyword
 export enum SubRoutes {

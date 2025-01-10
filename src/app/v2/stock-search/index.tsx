@@ -1846,18 +1846,27 @@ const StockSearch = () => {
                   alt="backWardArrow"
                   onClick={() => {
                     // setIsDetailPage(false);
+
                     dispatch(
                       dashboardResultPage({
+                        isResultPage: false,
                         resultPageData: {
                           foundKeywords: [],
                           foundProducts: [],
-                          notFoundKeywords: [],
-                          stoneId: '',
-                          searchType: ''
-                        }
+                          notFoundKeywords: []
+                        },
+                        stoneId: '',
+                        columnData: [],
+                        searchType: 'normal',
+                        textSearchReportId: null
                       })
                     );
-                    router.back();
+                    if (breadCrumLabel === 'Dashboard') {
+                      router.push('/v2');
+                    } else {
+                      router.back();
+                    }
+
                     setShowEmptyState(false);
                     setIsSomeStoneNotFoundShowed(false);
                     setSorting([]);
@@ -1882,13 +1891,19 @@ const StockSearch = () => {
                           resultPageData: {
                             foundKeywords: [],
                             foundProducts: [],
-                            notFoundKeywords: [],
-                            stoneId: '',
-                            searchType: ''
-                          }
+                            notFoundKeywords: []
+                          },
+                          stoneId: '',
+                          columnData: [],
+                          searchType: 'normal',
+                          textSearchReportId: null
                         })
                       );
-                      router.back();
+                      if (breadCrumLabel === 'Dashboard') {
+                        router.push('/v2');
+                      } else {
+                        router.back();
+                      }
                       setShowEmptyState(false);
                       setIsSomeStoneNotFoundShowed(false);
                       setSorting([]);

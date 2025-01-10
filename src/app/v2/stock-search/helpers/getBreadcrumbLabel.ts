@@ -6,6 +6,8 @@ export const getBreadcrumbLabel = (path: string): string => {
   switch (path) {
     case Routes.DASHBOARD:
       return 'Dashboard';
+    case Routes.DETAIL_PAGE:
+      return 'Dashboard';
     case Routes.STOCK_SEARCH:
       return 'Stock Search';
     case Routes.SEARCH:
