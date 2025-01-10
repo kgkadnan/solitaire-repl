@@ -173,12 +173,6 @@ const StockSearch = () => {
   }, [dispatch, dashboardResultPageData?.resultPageData]);
 
   useEffect(() => {
-    if (!dashboardResultPageData?.resultPageData?.foundProducts.length) {
-      router.push(path || '/v2');
-    }
-  }, [dashboardResultPageData?.resultPageData?.foundProducts]);
-
-  useEffect(() => {
     if (
       dashboardResultPageData?.resultPageData?.notFoundKeywords?.length > 0 &&
       !isSomeStoneNotFoundShowed

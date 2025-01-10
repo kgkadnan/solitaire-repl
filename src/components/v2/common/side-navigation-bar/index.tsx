@@ -16,12 +16,7 @@ import styles from './side-navigation.module.scss';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import Tooltip from '../tooltip';
-import {
-  MatchRoutes,
-  MatchSubRoutes,
-  Routes,
-  SubRoutes
-} from '@/constants/v2/enums/routes';
+import { MatchSubRoutes, Routes, SubRoutes } from '@/constants/v2/enums/routes';
 import { Button } from '../../ui/button';
 import { kycStatus } from '@/constants/enums/kyc';
 import { useAppDispatch } from '@/hooks/hook';
@@ -105,7 +100,7 @@ const SideNavigationBar = ({
       isActive:
         currentRoute === Routes.DASHBOARD ||
         currentRoute === '/' ||
-        currentDetailPath === MatchRoutes.DASHBOARD,
+        currentDetailPath === Routes.DASHBOARD,
       isVisible: true
     },
     {
@@ -114,7 +109,7 @@ const SideNavigationBar = ({
       link: Routes.NEW_ARRIVAL,
       isActive:
         currentRoute === Routes.NEW_ARRIVAL ||
-        currentDetailPath === MatchRoutes.NEW_ARRIVAL,
+        currentDetailPath === Routes.NEW_ARRIVAL,
       isVisible: true
     },
     {
@@ -123,7 +118,7 @@ const SideNavigationBar = ({
       link: `${Routes.BID_TO_BUY}`,
       isActive:
         currentRoute === Routes.BID_TO_BUY ||
-        currentDetailPath === MatchRoutes.BID_TO_BUY,
+        currentDetailPath === Routes.BID_TO_BUY,
       isVisible: true
     },
     {
@@ -140,8 +135,7 @@ const SideNavigationBar = ({
       title: 'Turkey Show',
       link: Routes.TURKEY,
       isActive:
-        currentRoute === Routes.TURKEY ||
-        currentDetailPath === MatchRoutes.TURKEY,
+        currentRoute === Routes.TURKEY || currentDetailPath === Routes.TURKEY,
       isVisible: showEvent
     },
     {
@@ -155,7 +149,7 @@ const SideNavigationBar = ({
       isActive:
         (currentRoute === Routes.SEARCH &&
           currentSubRoute !== SubRoutes.SAVED_SEARCH) ||
-        (currentDetailPath === MatchRoutes.SEARCH &&
+        (currentDetailPath === Routes.SEARCH &&
           currentSubRoute !== SubRoutes.SAVED_SEARCH),
       isVisible: true
     },
@@ -166,7 +160,7 @@ const SideNavigationBar = ({
       isActive:
         (currentRoute === Routes.MATCHING_PAIR &&
           currentSubRoute !== MatchSubRoutes.SAVED_SEARCH) ||
-        (currentDetailPath === MatchRoutes.MATCHING_PAIR &&
+        (currentDetailPath === Routes.MATCHING_PAIR &&
           currentSubRoute !== SubRoutes.SAVED_SEARCH),
       isVisible: true
     },
@@ -187,8 +181,7 @@ const SideNavigationBar = ({
       title: ManageLocales('app.sideNavigationBar.myCart'),
       link: Routes.MY_CART,
       isActive:
-        currentRoute === Routes.MY_CART ||
-        currentDetailPath === MatchRoutes.MY_CART,
+        currentRoute === Routes.MY_CART || currentDetailPath === Routes.MY_CART,
       isVisible: true
     },
     {
@@ -197,7 +190,7 @@ const SideNavigationBar = ({
       link: Routes.YOUR_ORDERS,
       isActive:
         currentRoute === Routes.YOUR_ORDERS ||
-        currentDetailPath === MatchRoutes.YOUR_ORDERS,
+        currentDetailPath === Routes.YOUR_ORDERS,
       isVisible: true
     },
     {
