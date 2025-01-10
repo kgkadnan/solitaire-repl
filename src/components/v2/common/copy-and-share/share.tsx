@@ -181,7 +181,7 @@ const Share = ({
               const amount =
                 product?.variants && product?.variants[0]?.prices[0]?.amount
                   ? product?.variants[0]?.prices[0]?.amount
-                  : product?.amount;
+                  : product?.price || product?.amount;
               return `Amt ($): ${
                 amount === undefined || amount === null
                   ? '-'

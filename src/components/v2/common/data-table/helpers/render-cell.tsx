@@ -707,7 +707,7 @@ export const RenderNewArrivalPrice = ({ row, handleBidUnLockPricing }: any) => {
     <>
       {isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED ? (
         <>
-          {row?.original?.price === null ? (
+          {row?.original?.price === null && row?.original?.amount === null ? (
             <div
               className="group relative"
               onClick={() => {
@@ -727,14 +727,20 @@ export const RenderNewArrivalPrice = ({ row, handleBidUnLockPricing }: any) => {
               </div>
             </div>
           ) : (
-            <span>{formatNumberWithCommas(row?.original?.price)}</span>
+            <span>
+              {formatNumberWithCommas(
+                row?.original?.price || row?.original?.amount
+              )}
+            </span>
           )}
         </>
       ) : (
         <span>{`${
-          row?.original?.price === null
+          row?.original?.price === null && row?.original?.amount === null
             ? '-'
-            : `$${formatNumberWithCommas(row?.original?.price)}`
+            : `$${formatNumberWithCommas(
+                row?.original?.price || row?.original?.amount
+              )}`
         }`}</span>
       )}
     </>
