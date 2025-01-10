@@ -25,7 +25,9 @@ const NewArrivalCalculatedField = ({
           isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED;
 
         // Apply price check only if KYC is not approved
-        const hasValidPrice = isKycNotApproved ? row.price !== null : true;
+        const hasValidPrice = isKycNotApproved
+          ? row.price !== null || row.amount !== null
+          : true;
 
         return row.id in selectedProducts && hasValidPrice;
       })
@@ -36,8 +38,8 @@ const NewArrivalCalculatedField = ({
     let total = 0;
     if (selectedRows?.length > 0) {
       selectedRows.forEach(row => {
-        if (type === 'amount' && row.price !== null) {
-          total += row.price;
+        if (type === 'amount' && (row.price !== null || row.amount !== null)) {
+          total += row.price || row.amount;
         } else if (type === 'carats' && row.carats !== null) {
           total += row.carats;
         } else if (type === 'rap_value' && row.rap_value !== null) {

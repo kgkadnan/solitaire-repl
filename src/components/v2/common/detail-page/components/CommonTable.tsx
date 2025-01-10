@@ -96,6 +96,8 @@ const ResponsiveTable: React.FC<IResponsiveTableProps> = ({
                           ) : (
                             '-'
                           )
+                        ) : row?.price ? (
+                          `$${formatNumberWithCommas(row?.price) ?? '-'}`
                         ) : row?.amount ? (
                           `$${formatNumberWithCommas(row?.amount) ?? '-'}`
                         ) : (
