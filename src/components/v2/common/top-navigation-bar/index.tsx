@@ -140,8 +140,10 @@ const TopNavigationBar = ({
       value: 'BidToBuy',
       name: 'searchFrom',
       disable:
-        customerData?.customer?.bid_to_buy?.starts_at &&
-        customerData?.customer?.bid_to_buy?.count <= 0
+        (customerData?.customer?.bid_to_buy?.starts_at &&
+          customerData?.customer?.bid_to_buy?.count) ||
+        (customerData?.customer?.bid_to_buy?.starts_at &&
+          !customerData?.customer?.bid_to_buy?.count)
     }
   ];
   const handleRadioChange = (value: string) => {
