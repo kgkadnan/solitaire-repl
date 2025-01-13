@@ -750,12 +750,17 @@ const NewArrivals = () => {
       return allProducts; // Return unfiltered if stoneId is not provided
     }
 
-    // Split stoneId by spaces or commas and trim each value
-    const stoneIdArray = stoneId.split(/[\s,]+/).map((id: string) => id.trim());
+    // Split stoneId by spaces or commas, trim each value, and remove duplicates
+    const stoneIdArray = Array.from(
+      new Set(stoneId.split(/[\s,]+/).map((id: string) => id.trim()))
+    );
+
+    // Limit the array to the first 5000 IDs if it exceeds the limit
+    const limitedStoneIdArray = stoneIdArray.slice(0, 5000);
 
     // Filter products based on matching lot_id or certificate_number
     return allProducts.filter((product: any) =>
-      stoneIdArray.some(
+      limitedStoneIdArray.some(
         (id: any) => product.lot_id === id || product.certificate_number === id
       )
     );
@@ -831,7 +836,6 @@ const NewArrivals = () => {
               setBid(allProducts.bidStone);
             }
           } else {
-            console.log('allProducts.bidStone', allProducts.bidStone);
             setBid(allProducts.bidStone);
           }
 
