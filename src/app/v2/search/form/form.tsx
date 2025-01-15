@@ -281,10 +281,10 @@ const Form = ({
     triggerProductCountApi,
     { isLoading: isLoadingProductApi, isFetching: isFetchingProductApi }
   ] = useLazyGetProductCountQuery();
-  let [
-    triggerBidToBuyApi,
-    { isLoading: isLoadingBidToBuyApi, isFetching: isFetchingBidToBuyApi }
-  ] = useLazyGetAllBidStonesQuery();
+  let [triggerBidToBuyApi] = useLazyGetAllBidStonesQuery();
+  const dashboardResultPageData = useAppSelector(
+    state => state.dashboardResultPage
+  );
   let [
     triggerMatchingPairCountApi,
     { isLoading: isLoadingMatchPairApi, isFetching: isFetchingMatchPairApi }
@@ -345,6 +345,7 @@ const Form = ({
 
   useEffect(() => {
     if (subRoute === SubRoutes.NEW_ARRIVAL) {
+      console.log('newArrivalFilterData?.bidData', newArrivalFilterData);
       const query = generateQueryParams(state);
       const filteredData =
         newArrivalFilterData?.bidData &&
@@ -363,7 +364,8 @@ const Form = ({
       setIsLoading(true);
       triggerBidToBuyApi({
         searchUrl: `${searchUrl}`,
-        limit: 1
+        limit: 1,
+        textSearchReportId: dashboardResultPageData?.textSearchReportId ?? null
       })
         .unwrap()
         .then((response: any) => {
@@ -459,7 +461,8 @@ const Form = ({
           (isMatchingPair
             ? data?.count > MAX_SEARCH_FORM_COUNT / 2
             : data?.count > MAX_SEARCH_FORM_COUNT) &&
-          data?.count > MIN_SEARCH_FORM_COUNT
+          data?.count > MIN_SEARCH_FORM_COUNT &&
+          routePath !== Routes.NEW_ARRIVAL
         ) {
           setIsError(true);
           setErrorText(
@@ -615,7 +618,8 @@ const Form = ({
       setErrorText('');
       setIsLoading(true);
       triggerBidToBuyApi({
-        searchUrl: `${searchUrl}`
+        searchUrl: `${searchUrl}`,
+        textSearchReportId: dashboardResultPageData?.textSearchReportId ?? null
       })
         .unwrap()
         .then((response: any) => {
@@ -690,7 +694,7 @@ const Form = ({
     ) {
       if (
         (formIdentifier === 'MatchingPair'
-          ? data?.count <= MAX_SEARCH_FORM_COUNT / 2
+          ? data?.count < MAX_SEARCH_FORM_COUNT / 2
           : data?.count <= MAX_SEARCH_FORM_COUNT) &&
         data?.count > MIN_SEARCH_FORM_COUNT
       ) {

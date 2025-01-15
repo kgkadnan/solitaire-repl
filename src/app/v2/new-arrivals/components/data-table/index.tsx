@@ -293,8 +293,8 @@ const NewArrivalDataTable = ({
               fluorescenceSortOrder.indexOf(valueB);
             break;
           case 'amount':
-            const amountA = rowA.original?.price ?? 0;
-            const amountB = rowB.original?.price ?? 0;
+            const amountA = (rowA?.price || rowA?.amount) ?? 0;
+            const amountB = (rowB?.price || rowB?.amount) ?? 0;
             compareValue = amountA - amountB;
 
             break;
@@ -651,7 +651,7 @@ const NewArrivalDataTable = ({
   const NoResultsComponent = () => (
     <div
       className={`flex flex-col items-center justify-center gap-5 ${
-        isFullScreen ? 'h-[69vh]' : !rows.length ? 'h-[55vh]' : 'h-[60vh]'
+        isFullScreen ? 'h-[71vh]' : !rows.length ? 'h-[55vh]' : 'h-[60vh]'
       }  mt-[50px]`}
     >
       {(activeTab === 1 && activeCount === 0) ||
@@ -665,6 +665,13 @@ const NewArrivalDataTable = ({
             additions soon.
           </p>
         </>
+      ) : !paginatedData.length && globalFilter.length ? (
+        <div className="text-center">
+          <Image src={empty} alt="empty" />
+          <p className="text-neutral900 w-[220px] mx-auto">
+            No matching stones found.
+          </p>
+        </div>
       ) : rows.length ? (
         ''
       ) : (
@@ -680,7 +687,7 @@ const NewArrivalDataTable = ({
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   //pass table options to useMaterialReactTable
   const table = useMaterialReactTable({
-    columns,
+    columns: paginatedData.length ? columns : [],
     data: isTabSwitch ? [] : paginatedData, //must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
 
     getRowId: originalRow => originalRow.id,
@@ -709,6 +716,7 @@ const NewArrivalDataTable = ({
     selectAllMode: 'page',
     renderTopToolbar,
     renderBottomToolbar,
+    enablePagination: !paginatedData.length ? false : true,
     renderEmptyRowsFallback: NoResultsComponent,
     manualPagination: true,
     rowCount: rows.length,
@@ -857,12 +865,12 @@ const NewArrivalDataTable = ({
           ? isNudge &&
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-            ? 'calc(100vh - 254px)'
+            ? 'calc(100vh - 355px)'
             : 'calc(100vh - 260px)'
           : isNudge &&
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-          ? 'calc(100vh - 254px)'
+          ? 'calc(100vh - 355px)'
           : !rows.length
           ? 'calc(100vh - 260px)'
           : !rows.length
@@ -876,12 +884,12 @@ const NewArrivalDataTable = ({
           ? isNudge &&
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-            ? 'calc(100vh - 362px)'
+            ? 'calc(100vh - 355px)'
             : 'calc(100vh - 260px)'
           : isNudge &&
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-          ? 'calc(100vh - 362px)'
+          ? 'calc(100vh - 355px)'
           : 'calc(100vh - 260px)'
       }
     },
@@ -1106,13 +1114,15 @@ const NewArrivalDataTable = ({
                   value={
                     bidValues[row.id] !== undefined
                       ? !bidValue || bidValue <= row.original.current_max_bid
-                        ? formatNumber(row.original.price)
+                        ? formatNumber(
+                            row.original.price || row.original.amount
+                          )
                         : formatNumber(
                             row.original.rap *
                               (1 + bidValues[row.id] / 100) *
                               row.original.carats
                           )
-                      : formatNumber(row.original.price)
+                      : formatNumber(row.original.price || row.original.amount)
                   }
                   disabled
                 />

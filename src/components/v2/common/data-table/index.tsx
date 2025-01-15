@@ -73,6 +73,7 @@ import {
   tableInclusionSortOrder
 } from '@/constants/v2/form';
 import CustomSwitch from '../switch/switch';
+// import { dashboardIndentifier } from '@/app/v2/page';
 // import { Switch } from '../../ui/switch';
 
 const theme = createTheme({
@@ -207,6 +208,8 @@ const DataTable = ({
   searchList,
   setIsLoading,
   handleAddToCart,
+  dispatch,
+  dashboardResultPageData,
   // handleConfirmStone,
   setIsConfirmStone,
   setConfirmStoneData,
@@ -223,8 +226,7 @@ const DataTable = ({
   customerMobileNumber,
   showOnlyWithVideo,
   setShowOnlyWithVideo,
-  showEmptyState,
-  setIsDetailPage
+  showEmptyState
 }: any) => {
   // Fetching saved search data
   const router = useRouter();
@@ -302,7 +304,11 @@ const DataTable = ({
     const newData = rows.slice(startIndex, endIndex);
     // Update the paginated data state
     setPaginatedData(newData);
-    if (isResult && setIsSkeletonLoading && newData.length > 0) {
+    if (
+      (isResult || isDashboard) &&
+      setIsSkeletonLoading &&
+      newData.length > 0
+    ) {
       setIsSkeletonLoading(false);
     } else if (myCart && setIsSkeletonLoading) {
       setIsSkeletonLoading(false);
@@ -755,12 +761,29 @@ const DataTable = ({
         </div>
       );
     } else {
-      return <></>;
+      if (!paginatedData.length && globalFilter.length) {
+        return (
+          <div
+            className={`flex flex-col items-center justify-center gap-5 ${
+              isFullScreen ? 'h-[69vh]' : !rows.length ? 'h-[55vh]' : 'h-[60vh]'
+            }  `}
+          >
+            <div className="text-center">
+              <Image src={empty} alt="empty" />
+              <p className="text-neutral900 w-[220px] mx-auto">
+                No matching stones found.
+              </p>
+            </div>
+          </div>
+        );
+      } else {
+        return <></>;
+      }
     }
   };
   //pass table options to useMaterialReactTable
   const table = useMaterialReactTable({
-    columns: showEmptyState ? [] : columns,
+    columns: showEmptyState || !paginatedData.length ? [] : columns,
     data: showEmptyState ? [] : paginatedData, //must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
 
     getRowId: originalRow => originalRow?.id,
@@ -787,7 +810,7 @@ const DataTable = ({
     globalFilterFn: 'startsWith',
     selectAllMode: 'page',
     renderEmptyRowsFallback: NoResultsComponent,
-    manualPagination: showEmptyState ? false : true,
+    manualPagination: showEmptyState || !paginatedData.length ? false : true,
     rowCount: rows.length,
     onPaginationChange: updater => {
       setPagination(prevState => {
@@ -1392,7 +1415,9 @@ const DataTable = ({
                               setErrorText,
                               setIsConfirmStone,
                               setConfirmStoneData,
-                              setIsDetailPage,
+
+                              dispatch,
+                              dashboardResultPageData,
                               checkProductAvailability,
                               modalSetState,
                               router,

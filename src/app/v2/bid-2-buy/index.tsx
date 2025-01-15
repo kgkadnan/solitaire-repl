@@ -1,5 +1,5 @@
 'use client';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import BidToBuyDataTable from './components/data-table';
 import {
   RenderCarat,
@@ -25,7 +25,6 @@ import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
 import { columnHeaders } from './constant';
-import { SocketManager, useSocket } from '@/hooks/v2/socket-manager';
 import CountdownTimer from '@components/v2/common/timer/index';
 import { useLazyGetBidToBuyHistoryQuery } from '@/features/api/dashboard';
 
@@ -36,7 +35,6 @@ import {
   MRT_SortingState,
   MRT_TablePagination
 } from 'material-react-table';
-import useUser from '@/lib/use-auth';
 import { DiamondDetailsComponent } from '@/components/v2/common/detail-page';
 import { getShapeDisplayName } from '@/utils/v2/detail-page';
 import ImageModal from '@/components/v2/common/detail-page/components/image-modal';
@@ -48,8 +46,7 @@ import { checkImage } from '@/components/v2/common/detail-page/helpers/check-ima
 import CommonPoppup from '../login/component/common-poppup';
 import BiddingSkeleton from '@/components/v2/skeleton/bidding';
 import { useAppDispatch, useAppSelector } from '@/hooks/hook';
-import { filterBidData } from '../search/form/helpers/filter-bid-data';
-import { filterBidToBuyFunction } from '@/features/filter-bid-to-buy/filter-bid-to-buy-slice';
+
 import useValidationStateManagement from '../search/hooks/validation-state-management';
 import useFormStateManagement from '../search/form/hooks/form-state';
 import Form from '../search/form/form';
@@ -82,13 +79,14 @@ import {
 } from '@/features/api/request-call-back';
 import { InputDialogComponent } from '@/components/v2/common/input-dialog';
 import { ManageLocales } from '@/utils/v2/translate';
+import { dashboardResultPage } from '@/features/dashboard/dashboard-slice';
 export interface IBidValues {
   [key: string]: number;
 }
 
 const BidToBuy = () => {
   const router = useRouter();
-
+  const shouldSkipCleanup = useRef(false);
   const dispatch = useAppDispatch();
   const filterData: any = useAppSelector(state => state.filterBidToBuy);
   const [sorting, setSorting] = useState<MRT_SortingState>([]);
@@ -121,6 +119,10 @@ const BidToBuy = () => {
   const [selectedDate, setSelectedDate] = useState<number>(0);
   const [selectedSlot, setSelectedSlot] = useState('');
 
+  const dashboardResultPageData = useAppSelector(
+    state => state.dashboardResultPage
+  );
+
   const handleSelectData = ({ date }: { date: string }) => {
     if (Number(date) !== selectedDate) {
       setSelectedDate(Number(date));
@@ -139,6 +141,7 @@ const BidToBuy = () => {
 
   const subRoute = useSearchParams().get('active-tab');
   const handleDetailPage = ({ row }: { row: any }) => {
+    shouldSkipCleanup.current = true;
     router.push(
       `/v2/${SubRoutes.Diamond_Detail}?path=${MatchRoutes.BID_TO_BUY}&stoneid=${row?.lot_id}-${row?.location}`
     );
@@ -446,30 +449,32 @@ const BidToBuy = () => {
   const [timeDifference, setTimeDifference] = useState(null);
   const [isInActive, setIsInActive] = useState('');
   const getBidToBuyHistoryData = () => {
-    setIsLoading(true);
-
     triggerBidToBuyHistory({})
       .then(res => {
-        setIsLoading(false);
         setBidHistory(res.data);
       })
-      .catch(() => {
-        setIsLoading(false);
-      });
+      .catch(() => {});
   };
 
   useEffect(() => {
     let queryNew = constructUrlParams(JSON.parse(localStorage.getItem('bid')!));
+
     setIsLoading(true);
+
     triggerBidToBuyApi({
-      searchUrl: `${queryNew}`
+      searchUrl: `${queryNew}`,
+      textSearchReportId: dashboardResultPageData?.textSearchReportId ?? null
     })
       .unwrap()
       .then((response: any) => {
         setIsInActive('');
 
         setTime(response?.endTime),
-          setBid(queryNew.length ? response?.bidStone : []);
+          setBid(
+            queryNew.length || dashboardResultPageData?.textSearchReportId
+              ? response?.bidStone
+              : []
+          );
         setActiveBid(response?.activeStone);
         setIsLoading(false);
       })
@@ -489,13 +494,18 @@ const BidToBuy = () => {
     setIsLoading(true);
 
     triggerBidToBuyApi({
-      searchUrl: `${queryNew}`
+      searchUrl: `${queryNew}`,
+      textSearchReportId: dashboardResultPageData?.textSearchReportId ?? null
     })
       .unwrap()
       .then((response: any) => {
         setIsInActive('');
 
-        setBid(queryNew.length ? response?.bidStone : []);
+        setBid(
+          queryNew.length || dashboardResultPageData?.textSearchReportId
+            ? response?.bidStone
+            : []
+        );
         setActiveBid(response?.activeStone);
         setTime(response?.endTime), setIsLoading(false);
       })
@@ -508,7 +518,7 @@ const BidToBuy = () => {
         setBid([]);
         setIsLoading(false);
       });
-  }, [localStorage.getItem('bid')]);
+  }, [localStorage.getItem('bid'), dashboardResultPageData.textSearchReportId]);
 
   useEffect(() => {
     if (activeTab === 2) {
@@ -1197,11 +1207,13 @@ const BidToBuy = () => {
         )
       ) : (
         <>
-          {(!Object?.keys(localStorage.getItem('bid') ?? {}).length &&
+          {((!Object?.keys(localStorage.getItem('bid') ?? {}).length &&
             time &&
             activeTab === 0 &&
             isInActive !== 'INACTIVE_BID_TO_BUY') ||
-          subRoute === SubRoutes.BID_TO_BUY ? (
+            subRoute === SubRoutes.BID_TO_BUY) &&
+          (!dashboardResultPageData.textSearchReportId ||
+            !dashboardResultPageData.resultPageData.foundProducts.length) ? (
             <Form
               searchUrl={searchUrl}
               setSearchUrl={setSearchUrl}
@@ -1333,6 +1345,7 @@ const BidToBuy = () => {
                     isInActive={isInActive}
                     setBidValues={setBidValues}
                     bidValues={bidValues}
+
                     // searchUrl={searchUrl}
                   />
                 </div>

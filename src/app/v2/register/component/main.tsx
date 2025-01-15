@@ -34,7 +34,7 @@ import { isSessionValid } from '@/utils/manage-session';
 import { Tracking } from '@/constants/funnel-tracking';
 import { useLazyRegisterFunnelQuery } from '@/features/api/funnel';
 import { trackEvent } from '@/utils/ga';
-// import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 export interface IOtp {
   otpMobileNumber: string;
@@ -87,7 +87,14 @@ const Register = () => {
 
   const [token, setToken] = useState(initialTokenState);
 
-  const { userLoggedIn } = useUser();
+  const { isTokenChecked, authToken, userLoggedIn } = useUser();
+
+  useEffect(() => {
+    if (isTokenChecked) {
+      authToken && router && router.push('/v2/');
+    }
+  }, [isTokenChecked]);
+
   const { data: userData } = useGetAuthDataQuery(token.token, {
     skip: !token.token
   });
@@ -99,7 +106,7 @@ const Register = () => {
   const [sendOtp] = useSendOtpMutation();
   let [funnelTrack] = useLazyRegisterFunnelQuery();
 
-  // const router = useRouter();
+  const router = useRouter();
   useEffect(() => {
     const userIp = JSON.parse(localStorage.getItem('userIp')!);
 
@@ -226,6 +233,8 @@ const Register = () => {
                 token,
                 funnelTrack
               });
+              setOtpValues(['', '', '', '', '', '']);
+              setResendTimer(60);
             }}
             variant={'primary'}
             size={'custom'}

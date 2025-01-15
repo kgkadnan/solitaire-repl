@@ -1,5 +1,6 @@
 export enum Routes {
   DASHBOARD = '/v2',
+  STOCK_SEARCH = '/v2/stock-search',
   SEARCH = '/v2/search',
   YOUR_ORDERS = '/v2/your-orders',
   SAVED_SEARCH = '/v2/saved-searches',
@@ -13,7 +14,8 @@ export enum Routes {
   MY_ACCOUNT = '/v2/my-account',
   FAQS = '/v2/faqs',
   MATCHING_PAIR = '/v2/matching-pair',
-  TURKEY = '/v2/turkey'
+  TURKEY = '/v2/turkey',
+  DETAIL_PAGE = '/v2/detail-page'
 }
 // Enum using the enum keyword
 export enum SubRoutes {

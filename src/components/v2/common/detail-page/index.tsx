@@ -727,9 +727,11 @@ export function DiamondDetailsComponent({
                             ) ?? ''
                           }`
                         : ''
+                      : tableData?.price
+                      ? `$${formatNumberWithCommas(tableData?.price)}`
                       : tableData?.amount
-                      ? `$${formatNumberWithCommas(tableData?.amount) ?? ''}`
-                      : ''}
+                      ? `$${formatNumberWithCommas(tableData?.amount)}`
+                      : '-'}
                   </div>
                   <p
                     className={`text-successMain text-mMedium px-[8px] py-[2px] rounded-[4px]`}

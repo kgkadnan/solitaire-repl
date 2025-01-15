@@ -53,6 +53,7 @@ import {
   tableBlackSortOrder,
   tableInclusionSortOrder
 } from '@/constants/v2/form';
+import { dashboardResultPage } from '@/features/dashboard/dashboard-slice';
 
 const theme = createTheme({
   typography: {
@@ -190,11 +191,13 @@ const BidToBuyDataTable = ({
   setIsTabSwitch,
   setBidValues,
   bidValues,
-  setActiveBid, // searchUrl
-  isInActive
+  setActiveBid,
+  isInActive,
+  dispatch
 }: any) => {
   // Fetching saved search data
   const [isFullScreen, setIsFullScreen] = useState(false);
+
   const [bidError, setBidError] = useState<{
     [key: string]: string;
   }>({});
@@ -400,21 +403,63 @@ const BidToBuyDataTable = ({
           <div className="flex gap-[12px]" style={{ alignItems: 'inherit' }}>
             {activeTab === 0 && isInActive !== 'INACTIVE_BID_TO_BUY' && (
               <div className="">
-                <button
-                  onClick={() => {
-                    router.push(
-                      `/v2/bid-2-buy?active-tab=${SubRoutes.BID_TO_BUY}`
-                    );
-                  }}
-                  className={`flex w-full shadow-sm justify-center py-[8px] h-[39px] px-[16px]  items-center font-medium  rounded-[4px] gap-1  border-[1px]  border-solid border-neutral200 text-mMedium  cursor-pointer  ${'bg-primaryMain text-neutral0 hover:bg-primaryHover'}`}
-                >
-                  <FilterIcon
-                    stroke={`${'var(--neutral-0)'}`}
-                    fill={`${'var(--neutral-0)'}`}
-                  />
+                {Object?.keys(localStorage.getItem('bid') ?? {}).length ? (
+                  <button
+                    onClick={() => {
+                      dispatch(
+                        dashboardResultPage({
+                          resultPageData: {
+                            foundKeywords: [],
+                            foundProducts: [],
+                            notFoundKeywords: []
+                          }
+                        })
+                      );
+                      router.push(
+                        `/v2/bid-2-buy?active-tab=${SubRoutes.BID_TO_BUY}`
+                      );
+                    }}
+                    className={`flex w-full shadow-sm justify-center py-[8px] h-[39px] px-[16px]  items-center font-medium  rounded-[4px] gap-1  border-[1px]  border-solid border-neutral200 text-mMedium  cursor-pointer  ${'bg-primaryMain text-neutral0 hover:bg-primaryHover'}`}
+                  >
+                    <FilterIcon
+                      stroke={`${'var(--neutral-0)'}`}
+                      fill={`${'var(--neutral-0)'}`}
+                    />
 
-                  <p className="w-[80%]">{ManageLocales('app.modifyFilter')}</p>
-                </button>
+                    <p className="w-[80%]">
+                      {ManageLocales('app.modifyFilter')}
+                    </p>
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => {
+                      dispatch(
+                        dashboardResultPage({
+                          resultPageData: {
+                            foundKeywords: [],
+                            foundProducts: [],
+                            notFoundKeywords: []
+                          }
+                        })
+                      );
+                      router.push(
+                        `/v2/bid-2-buy?active-tab=${SubRoutes.BID_TO_BUY}`
+                      );
+                    }}
+                    disabled={!rows.length}
+                    className={`flex justify-center  shadow-sm disabled:!bg-neutral100 disabled:cursor-not-allowed disabled:text-neutral400 py-[8px] h-[39px] px-[16px] items-center font-medium  rounded-[4px] gap-1  border-[1px]  border-solid border-neutral200 text-mMedium  cursor-pointer  ${'text-neutral900 bg-neutral0 hover:bg-neutral50'}`}
+                  >
+                    <FilterIcon
+                      stroke={`${
+                        !rows.length
+                          ? 'var(--neutral-400)'
+                          : 'var(--neutral-900)'
+                      }`}
+                    />
+
+                    <p>{ManageLocales('app.applyFilter')}</p>
+                  </button>
+                )}
               </div>
             )}
             {activeTab === 0 ? (
@@ -603,8 +648,10 @@ const BidToBuyDataTable = ({
     return (
       <div
         className={`flex flex-col items-center justify-center gap-5 ${
-          isFullScreen ? 'h-[69vh]' : !rows.length ? 'h-[55vh]' : 'h-[60vh]'
-        }   mt-[50px] ${!paginatedData.length && '!h-[47vh]  !mt-[20px]'}`}
+          isFullScreen ? 'h-[71vh]' : !rows.length ? 'h-[55vh]' : 'h-[60vh]'
+        }   mt-[50px] ${
+          !paginatedData.length && !isFullScreen && '!h-[47vh]  !mt-[20px]'
+        }`}
       >
         {(activeTab === 1 && activeCount === 0) ||
         (activeTab === 0 && bidCount === 0) ||
@@ -617,7 +664,8 @@ const BidToBuyDataTable = ({
               can bid to buy. Stay tuned.
             </p>
           </>
-        ) : !paginatedData.length && searchableId.length ? (
+        ) : !paginatedData.length &&
+          (searchableId.length || globalFilter.length) ? (
           <div className="text-center">
             <Image src={empty} alt="empty" />
             <p className="text-neutral900 w-[220px] mx-auto">
@@ -644,6 +692,10 @@ const BidToBuyDataTable = ({
     triggerBidToBuyApi
     // { isLoading: isLoadingBidToBuyApi, isFetching: isFetchingBidToBuyApi }
   ] = useLazyGetAllBidStonesQuery();
+
+  const dashboardResultPageData = useAppSelector(
+    state => state.dashboardResultPage
+  );
 
   const handleSortingChange = (newSorting: any) => {
     setSorting((currentSorting: any) => {
@@ -709,8 +761,8 @@ const BidToBuyDataTable = ({
             break;
 
           case 'amount':
-            const amountA = rowA.original?.price ?? 0;
-            const amountB = rowB.original?.price ?? 0;
+            const amountA = (rowA?.price || rowA?.amount) ?? 0;
+            const amountB = (rowB?.price || rowB?.amount) ?? 0;
             compareValue = amountA - amountB;
 
             break;
@@ -947,12 +999,12 @@ const BidToBuyDataTable = ({
           ? isNudge &&
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-            ? 'calc(100vh - 254px)'
+            ? 'calc(100vh - 355px)'
             : 'calc(100vh - 260px)'
           : isNudge &&
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-          ? 'calc(100vh - 254px)'
+          ? 'calc(100vh - 355px)'
           : !rows.length
           ? 'calc(100vh - 260px)'
           : !rows.length
@@ -966,12 +1018,12 @@ const BidToBuyDataTable = ({
           ? isNudge &&
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-            ? 'calc(100vh - 362px)'
+            ? 'calc(100vh - 355px)'
             : 'calc(100vh - 260px)'
           : isNudge &&
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-          ? 'calc(100vh - 362px)'
+          ? 'calc(100vh - 355px)'
           : 'calc(100vh - 260px)'
       }
     },
@@ -1197,13 +1249,15 @@ const BidToBuyDataTable = ({
                           (activeTab === 1
                             ? row.original.my_current_bid
                             : row.original.discount)
-                        ? formatNumber(row.original.price)
+                        ? formatNumber(
+                            row.original.price || row.original.amount
+                          )
                         : formatNumber(
                             row.original.rap *
                               (1 + bidValues[row.id] / 100) *
                               row.original.carats
                           )
-                      : formatNumber(row.original.price)
+                      : formatNumber(row.original.price || row.original.amount)
                   }
                   disabled
                 />
@@ -1353,7 +1407,10 @@ const BidToBuyDataTable = ({
                                     searchUrl: constructUrlParams(
                                       JSON.parse(localStorage.getItem('bid')!)
                                     ),
-                                    limit: 300
+                                    limit: 300,
+                                    textSearchReportId:
+                                      dashboardResultPageData?.textSearchReportId ??
+                                      null
                                   })
                                     .unwrap()
                                     .then((response: any) => {

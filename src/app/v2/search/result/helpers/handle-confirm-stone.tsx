@@ -17,6 +17,7 @@ import CommonPoppup from '@/app/v2/login/component/common-poppup';
 import { ManageLocales } from '@/utils/v2/translate';
 import { Tracking_Search_By_Text } from '@/constants/funnel-tracking';
 import { trackEvent } from '@/utils/ga';
+import { dashboardResultPage } from '@/features/dashboard/dashboard-slice';
 
 /**
  * Handles the confirmation of selected stones.
@@ -39,10 +40,12 @@ interface IHandleConfirmStone {
   setIsDetailPage?: any;
   identifier?: string;
   confirmStoneTrack?: string;
-  dispatch?: any;
+
   checkProductAvailability?: any;
   modalSetState?: any;
   router?: any;
+  dispatch?: any;
+  dashboardResultPageData?: any;
   setIsLoading: any;
   refreshSearchResults?: any;
   setSelectedCheckboxes?: any;
@@ -58,14 +61,16 @@ export const handleConfirmStone = ({
   setIsDetailPage,
   identifier,
   confirmStoneTrack,
-  dispatch,
+
   checkProductAvailability,
   modalSetState,
   router,
   setIsLoading,
   refreshSearchResults,
   setSelectedCheckboxes,
-  customerMobileNumber
+  customerMobileNumber,
+  dispatch,
+  dashboardResultPageData
 }: IHandleConfirmStone) => {
   let selectedIds = Object.keys(selectedRows);
   const hasMemoOut = selectedIds?.some(id => {
@@ -130,6 +135,14 @@ export const handleConfirmStone = ({
           setIsConfirmStone(true);
           setConfirmStoneData(confirmStone);
           setIsDetailPage && setIsDetailPage(false);
+          dispatch &&
+            dashboardResultPageData &&
+            dispatch(
+              dashboardResultPage({
+                isResultPage: false,
+                resultPageData: dashboardResultPageData?.resultPageData
+              })
+            );
           if (identifier === 'dashboard') {
             trackEvent({
               action: Tracking_Search_By_Text.click_confirm_stone_result_page,
@@ -225,6 +238,15 @@ export const handleConfirmStone = ({
                     setIsConfirmStone(true);
                     setConfirmStoneData(availableStones);
                     setIsDetailPage && setIsDetailPage(false);
+                    dispatch &&
+                      dashboardResultPageData &&
+                      dispatch(
+                        dashboardResultPage({
+                          isResultPage: false,
+                          resultPageData:
+                            dashboardResultPageData?.resultPageData
+                        })
+                      );
                     confirmStoneTrack &&
                       dispatch &&
                       dispatch(setConfirmStoneTrack(confirmStoneTrack));
