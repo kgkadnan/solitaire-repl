@@ -4,7 +4,8 @@ import VideoSvg from '@public/v2/assets/icons/detail-page/video.svg?url';
 import PdfSvg from '@public/v2/assets/icons/detail-page/pdf.svg?url';
 import { trackEvent } from '@/utils/ga';
 import { Tracking_Search_By_Text } from '@/constants/funnel-tracking';
-import { dashboardIndentifier } from '@/app/v2/dashboard';
+import { dashboardIndentifier } from '@/app/v2/page';
+
 // import { IImagesType } from '../interface';
 
 interface IDetailPageTabs {

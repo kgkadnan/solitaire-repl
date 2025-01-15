@@ -64,7 +64,7 @@ import { faSort, faSortDown } from '@fortawesome/free-solid-svg-icons';
 import DataTableSkeleton from '../../skeleton/data-table';
 import { Tracking_Search_By_Text } from '@/constants/funnel-tracking';
 import { trackEvent } from '@/utils/ga';
-import { dashboardIndentifier } from '@/app/v2/dashboard';
+
 import {
   clarity,
   fluorescenceSortOrder,
@@ -73,7 +73,8 @@ import {
   tableInclusionSortOrder
 } from '@/constants/v2/form';
 import CustomSwitch from '../switch/switch';
-// import { dashboardIndentifier } from '@/app/v2/page';
+import { dashboardIndentifier } from '@/app/v2/page';
+
 // import { Switch } from '../../ui/switch';
 
 const theme = createTheme({
@@ -770,7 +771,7 @@ const DataTable = ({
           >
             <div className="text-center">
               <Image src={empty} alt="empty" />
-              <p className="text-neutral900 w-[220px] mx-auto">
+              <p className="text-neutral900 text-lMedium w-[220px] mx-auto">
                 No matching stones found.
               </p>
             </div>
@@ -1205,6 +1206,7 @@ const DataTable = ({
           <div>
             <MRT_GlobalFilterTextField
               table={table}
+              placeholder="Search by Stone ID"
               autoComplete="false"
               sx={{
                 boxShadow: 'var(--input-shadow) inset',
