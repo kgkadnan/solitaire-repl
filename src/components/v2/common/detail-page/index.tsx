@@ -53,7 +53,7 @@ import { useRouter } from 'next/navigation';
 import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
 import { trackEvent } from '@/utils/ga';
 import { Tracking_Search_By_Text } from '@/constants/funnel-tracking';
-import { dashboardIndentifier } from '@/app/v2/dashboard';
+
 //Gem Trac Imports
 import step1 from '@public/v3/traceability/gem-trac/step-1.png';
 import step2 from '@public/v3/traceability/gem-trac/step-2.png';
@@ -61,6 +61,7 @@ import step3 from '@public/v3/traceability/gem-trac/step-3.png';
 import step4 from '@public/v3/traceability/gem-trac/step-4.png';
 import step5 from '@public/v3/traceability/gem-trac/step-5.png';
 import step6 from '@public/v3/traceability/gem-trac/step-6.png';
+import { dashboardIndentifier } from '@/app/v2/page';
 
 const image = [step1, step2, step3, step4, step5, step6];
 
