@@ -159,7 +159,8 @@ export const location = [
   { title: 'Dubai', short_name: 'DUB' },
   { title: 'India', short_name: 'IND' },
   { title: 'Israel', short_name: 'ISR' },
-  { title: 'USA', short_name: 'USA' }
+  { title: 'USA', short_name: 'USA' },
+  { title: 'USA-BD', short_name: 'USA-BD' }
 ];
 export const countryOfOrigin = [
   'Angola',
