@@ -1838,7 +1838,7 @@ const StockSearch = () => {
               className="rounded-[4px]"
             />
           )}
-          {columnData?.length ? (
+          {columnData?.length && memoizedRows?.length ? (
             <div className="border-[1px] border-neutral200 rounded-[8px]">
               <div className="flex items-center border-b-[1px] border-neutral200 p-2">
                 <Image
