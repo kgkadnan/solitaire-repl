@@ -100,7 +100,7 @@ const EmailVerification = ({
           className="flex flex-col items-center cursor-pointer"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
-          onClick={() => router.push('/v3')}
+          onClick={() => router.push('/v2')}
         >
           <KgkIcon
             fill={isHovered ? '#5D6969' : '#23302C'}
