@@ -2,14 +2,13 @@ import { Routes } from '@/constants/v2/enums/routes';
 
 // Utility function to get breadcrumb label based on the route
 export const getBreadcrumbLabel = (path: string): string => {
-  console.log('path', path);
   switch (path) {
     case Routes.DASHBOARD:
       return 'Dashboard';
     case Routes.DETAIL_PAGE:
       return 'Dashboard';
     case Routes.STOCK_SEARCH:
-      return 'Stock Search';
+      return 'Dashboard';
     case Routes.SEARCH:
       return 'Search';
     case Routes.YOUR_ORDERS:

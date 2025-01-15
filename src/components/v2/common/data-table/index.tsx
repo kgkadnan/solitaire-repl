@@ -73,6 +73,7 @@ import {
   tableInclusionSortOrder
 } from '@/constants/v2/form';
 import CustomSwitch from '../switch/switch';
+// import { dashboardIndentifier } from '@/app/v2/page';
 // import { Switch } from '../../ui/switch';
 
 const theme = createTheme({
@@ -303,7 +304,11 @@ const DataTable = ({
     const newData = rows.slice(startIndex, endIndex);
     // Update the paginated data state
     setPaginatedData(newData);
-    if (isResult && setIsSkeletonLoading && newData.length > 0) {
+    if (
+      (isResult || isDashboard) &&
+      setIsSkeletonLoading &&
+      newData.length > 0
+    ) {
       setIsSkeletonLoading(false);
     } else if (myCart && setIsSkeletonLoading) {
       setIsSkeletonLoading(false);
