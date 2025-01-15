@@ -143,6 +143,9 @@ export const RednderLocation = ({ renderedCellValue }: any) => {
     case 'USA':
       imageSrc = Usa;
       break;
+    case 'USA-BD':
+      imageSrc = Usa;
+      break;
     case 'DUB':
       imageSrc = Dub;
       break;
