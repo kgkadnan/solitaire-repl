@@ -1,4 +1,4 @@
-import { dashboardIndentifier } from '@/app/v2/dashboard';
+import { dashboardIndentifier } from '@/app/v2/page';
 import {
   MAX_COMPARE_STONE,
   MIN_COMPARE_STONE

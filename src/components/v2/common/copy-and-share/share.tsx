@@ -16,10 +16,11 @@ import Tooltip from '../tooltip';
 import { formatNumber } from '@/utils/fix-two-digit-number';
 import { useLazyShareEventQuery } from '@/features/api/track-interaction';
 import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
-import { dashboardIndentifier } from '@/app/v2/dashboard';
+
 import { Tracking_Search_By_Text } from '@/constants/funnel-tracking';
 import { trackEvent } from '@/utils/ga';
 import { Dropdown } from '../dropdown-menu';
+import { dashboardIndentifier } from '@/app/v2/page';
 
 const Share = ({
   rows,

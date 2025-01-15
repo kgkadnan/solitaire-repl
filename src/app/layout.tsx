@@ -53,7 +53,6 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
   const isApplicationRoutes = applicationRoutes.includes(path);
   const isV2Route = v2Routes.includes(path);
   const isV3Route = v3Routes.includes(path) || path.includes('/v3');
-
   const [open, setOpen] = useState(false);
   const [showLPHeader, setShowLPHeader] = useState(false);
   const showHeader = isApplicationRoutes && !headerlessRoutes.includes(path);
@@ -327,24 +326,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
         )}
         <Provider store={store}>
           <ThemeProviders>
-            {isV3Route ? (
-              <>
-                {isMobile ? (
-                  <AppDownloadPopup></AppDownloadPopup>
-                ) : (
-                  <main className="">
-                    <Toaster />
-                    {showLPHeader && <CommonHeader />}
-                    <div>{children}</div>
-                    <div style={{ zIndex: 100 }}>
-                      <SubscribeNewsLetter />
-                      <FooterSiteMap />
-                      <Footer />
-                    </div>
-                  </main>
-                )}
-              </>
-            ) : isV2Route ? (
+            {isV2Route ? (
               <>
                 {isMobile ? (
                   <AppDownloadPopup></AppDownloadPopup>

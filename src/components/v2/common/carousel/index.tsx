@@ -119,7 +119,7 @@ const DashboardCarousel: React.FC<IDashboardCarouselProps> = ({
                               label: data.cta,
                               isDisable: !data.is_button_actionable,
                               handler: () => {
-                                data.link.includes('kgkdiamonds.com')
+                                data.link.includes('platform.kgkdiamonds.com')
                                   ? router.push(data.link)
                                   : window.open(data.link);
                               },
@@ -165,7 +165,7 @@ const DashboardCarousel: React.FC<IDashboardCarouselProps> = ({
                         label: images[0].cta,
                         isDisable: !images[0].is_button_actionable,
                         handler: () => {
-                          images[0].link.includes('kgkdiamonds.com')
+                          images[0].link.includes('platform.kgkdiamonds.com')
                             ? router.push(images[0].link)
                             : window.open(images[0].link);
                         },

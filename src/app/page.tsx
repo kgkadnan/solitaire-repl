@@ -1,21 +1,13 @@
-import logger from 'logging/log-util';
-// import Dashboard from './v2/page';
 import { Metadata } from 'next';
-import LandingPage from './v3/page';
+import Dashboard from './v2/page';
 
 export const metadata: Metadata = {
-  title: 'Buy Diamonds in Few Clicks | KGK Diamonds',
-  description:
-    'Simplify your diamond buying with KGK Diamonds. where you can manage your diamonds, orders, and preferences seamlessly.'
+  title: 'KGK - Dashboard'
 };
-
-export default function Home() {
-  logger.setLogLevel('debug');
-
-  logger.info('This is an info message');
+export default function MainDashboard() {
   return (
     <>
-      <LandingPage />
+      <Dashboard />
     </>
   );
 }

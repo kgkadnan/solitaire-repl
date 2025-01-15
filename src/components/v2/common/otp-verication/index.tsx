@@ -121,7 +121,7 @@ const OTPVerification = ({
                 entry_point: localStorage.getItem('entryPoint') || '',
                 category: 'Registration'
               });
-            router.push('/v3');
+            router.push('/v2');
           }}
         >
           <KgkIcon

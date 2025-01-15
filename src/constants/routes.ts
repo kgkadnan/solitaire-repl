@@ -5,18 +5,20 @@ export const v3Routes = [
   '/v3/blogs',
   '/v3',
   '/v3/sustainability',
-  '/',
+  // '/',
   '/v3/traceability'
 ];
 export const headerlessRoutes = [
   '/v2/register',
   '/v2/login',
   '/v2/forgot-password',
-  '/privacy-policy',
-  ...v3Routes
+  '/privacy-policy'
+
+  // ...v3Routes
 ];
 
 export const v2Routes = [
+  '/',
   '/v2',
   '/v2/stock-search',
   '/v2/search',
