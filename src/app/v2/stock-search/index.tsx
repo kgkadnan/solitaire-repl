@@ -113,6 +113,8 @@ const StockSearch = () => {
     {}
   );
 
+  const [isSkeletonLoading, setIsSkeletonLoading] = useState(true);
+
   const [confirmProduct] = useConfirmProductMutation();
 
   const confirmTrack = useAppSelector(state => state.setConfirmStoneTrack);
@@ -1840,51 +1842,14 @@ const StockSearch = () => {
           )}
           {columnData?.length && memoizedRows?.length ? (
             <div className="border-[1px] border-neutral200 rounded-[8px]">
-              <div className="flex items-center border-b-[1px] border-neutral200 p-2">
-                <Image
-                  src={backWardArrow}
-                  alt="backWardArrow"
-                  onClick={() => {
-                    // setIsDetailPage(false);
-
-                    dispatch(
-                      dashboardResultPage({
-                        isResultPage: false,
-                        resultPageData: {
-                          foundKeywords: [],
-                          foundProducts: [],
-                          notFoundKeywords: []
-                        },
-                        stoneId: '',
-                        columnData: [],
-                        searchType: 'normal',
-                        textSearchReportId: null
-                      })
-                    );
-                    if (breadCrumLabel === 'Dashboard') {
-                      router.push('/v2');
-                    } else {
-                      router.back();
-                    }
-
-                    setShowEmptyState(false);
-                    setIsSomeStoneNotFoundShowed(false);
-                    setSorting([]);
-                    setRowSelection({});
-                    setShowOnlyWithVideo(false);
-                    trackEvent({
-                      action: Tracking_Search_By_Text.click_back_results_page,
-                      category: 'SearchByText',
-                      mobile_number: customerMobileNumber
-                    });
-                  }}
-                  className="cursor-pointer"
-                />
-                <div className="flex gap-[8px] items-center">
-                  <button
-                    className="text-neutral600 text-sMedium font-regular cursor-pointer"
+              {!isSkeletonLoading ? (
+                <div className="flex items-center border-b-[1px] border-neutral200 p-2">
+                  <Image
+                    src={backWardArrow}
+                    alt="backWardArrow"
                     onClick={() => {
                       // setIsDetailPage(false);
+
                       dispatch(
                         dashboardResultPage({
                           isResultPage: false,
@@ -1904,6 +1869,7 @@ const StockSearch = () => {
                       } else {
                         router.back();
                       }
+
                       setShowEmptyState(false);
                       setIsSomeStoneNotFoundShowed(false);
                       setSorting([]);
@@ -1915,15 +1881,56 @@ const StockSearch = () => {
                         mobile_number: customerMobileNumber
                       });
                     }}
-                  >
-                    {breadCrumLabel}
-                  </button>
-                  <span className="text-neutral600">/</span>
-                  <p className="text-neutral700 p-[8px] bg-neutral100 rounded-[4px] text-sMedium font-medium">
-                    Search Results
-                  </p>
+                    className="cursor-pointer"
+                  />
+                  <div className="flex gap-[8px] items-center">
+                    <button
+                      className="text-neutral600 text-sMedium font-regular cursor-pointer"
+                      onClick={() => {
+                        // setIsDetailPage(false);
+                        dispatch(
+                          dashboardResultPage({
+                            isResultPage: false,
+                            resultPageData: {
+                              foundKeywords: [],
+                              foundProducts: [],
+                              notFoundKeywords: []
+                            },
+                            stoneId: '',
+                            columnData: [],
+                            searchType: 'normal',
+                            textSearchReportId: null
+                          })
+                        );
+                        if (breadCrumLabel === 'Dashboard') {
+                          router.push('/v2');
+                        } else {
+                          router.back();
+                        }
+                        setShowEmptyState(false);
+                        setIsSomeStoneNotFoundShowed(false);
+                        setSorting([]);
+                        setRowSelection({});
+                        setShowOnlyWithVideo(false);
+                        trackEvent({
+                          action:
+                            Tracking_Search_By_Text.click_back_results_page,
+                          category: 'SearchByText',
+                          mobile_number: customerMobileNumber
+                        });
+                      }}
+                    >
+                      {breadCrumLabel}
+                    </button>
+                    <span className="text-neutral600">/</span>
+                    <p className="text-neutral700 p-[8px] bg-neutral100 rounded-[4px] text-sMedium font-medium">
+                      Search Results
+                    </p>
+                  </div>
                 </div>
-              </div>
+              ) : (
+                ''
+              )}
               <DataTable
                 rows={memoizedRows}
                 columns={memoizedColumns}
@@ -1934,6 +1941,8 @@ const StockSearch = () => {
                 modalSetState={modalSetState}
                 setErrorText={setError}
                 downloadExcel={downloadExcel}
+                isSkeletonLoading={isSkeletonLoading}
+                setIsSkeletonLoading={setIsSkeletonLoading}
                 setSorting={setSorting}
                 sorting={sorting}
                 setIsError={setIsError}
