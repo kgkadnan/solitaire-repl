@@ -172,13 +172,13 @@ export function DiamondDetailsComponent({
       name: getShapeDisplayName(tableData?.shape ?? ''),
       url: `${FILE_URLS.IMG.replace(
         '***',
-        tableData.location === 'USA' || tableData.location === 'USA-BD'
+        tableData.location === 'USA-BD'
           ? tableData.memo_out_barcode ?? ''
           : tableData?.lot_id ?? ''
       )}`,
       downloadUrl: `${FILE_URLS.IMG.replace(
         '***',
-        tableData.location === 'USA' || tableData.location === 'USA-BD'
+        tableData.location === 'USA-BD'
           ? tableData.memo_out_barcode ?? ''
           : tableData?.lot_id ?? ''
       )}`,
@@ -205,13 +205,13 @@ export function DiamondDetailsComponent({
       name: 'Video',
       url: `${FILE_URLS.B2B.replace(
         '***',
-        tableData.location === 'USA' || tableData.location === 'USA-BD'
+        tableData.location === 'USA-BD'
           ? tableData.memo_out_barcode ?? ''
           : tableData?.lot_id ?? ''
       )}`,
       downloadUrl: `${FILE_URLS.B2B_DOWNLOAD_URL.replace(
         '***',
-        tableData.location === 'USA' || tableData.location === 'USA-BD'
+        tableData.location === 'USA-BD'
           ? tableData.memo_out_barcode ?? ''
           : tableData?.lot_id ?? ''
       )}`,
@@ -223,13 +223,13 @@ export function DiamondDetailsComponent({
       name: 'Sparkle',
       url: `${FILE_URLS.B2B_SPARKLE.replace(
         '***',
-        tableData.location === 'USA' || tableData.location === 'USA-BD'
+        tableData.location === 'USA-BD'
           ? tableData.memo_out_barcode ?? ''
           : tableData?.lot_id ?? ''
       )}`,
       downloadUrl: `${FILE_URLS.B2B_SPARKLE_DOWNLOAD_URL.replace(
         '***',
-        tableData.location === 'USA' || tableData.location === 'USA-BD'
+        tableData.location === 'USA-BD'
           ? tableData.memo_out_barcode ?? ''
           : tableData?.lot_id ?? ''
       )}`,
@@ -242,13 +242,13 @@ export function DiamondDetailsComponent({
       name: 'Heart',
       url: `${FILE_URLS.HEART.replace(
         '***',
-        tableData.location === 'USA' || tableData.location === 'USA-BD'
+        tableData.location === 'USA-BD'
           ? tableData.memo_out_barcode ?? ''
           : tableData?.lot_id ?? ''
       )}`,
       downloadUrl: `${FILE_URLS.HEART.replace(
         '***',
-        tableData.location === 'USA' || tableData.location === 'USA-BD'
+        tableData.location === 'USA-BD'
           ? tableData.memo_out_barcode ?? ''
           : tableData?.lot_id ?? ''
       )}`,
@@ -259,13 +259,13 @@ export function DiamondDetailsComponent({
       name: 'Arrow',
       url: `${FILE_URLS.ARROW.replace(
         '***',
-        tableData.location === 'USA' || tableData.location === 'USA-BD'
+        tableData.location === 'USA-BD'
           ? tableData.memo_out_barcode ?? ''
           : tableData?.lot_id ?? ''
       )}`,
       downloadUrl: `${FILE_URLS.ARROW.replace(
         '***',
-        tableData.location === 'USA' || tableData.location === 'USA-BD'
+        tableData.location === 'USA-BD'
           ? tableData.memo_out_barcode ?? ''
           : tableData?.lot_id ?? ''
       )}`,
@@ -276,13 +276,13 @@ export function DiamondDetailsComponent({
       name: 'Aset',
       url: `${FILE_URLS.ASET.replace(
         '***',
-        tableData.location === 'USA' || tableData.location === 'USA-BD'
+        tableData.location === 'USA-BD'
           ? tableData.memo_out_barcode ?? ''
           : tableData?.lot_id ?? ''
       )}`,
       downloadUrl: `${FILE_URLS.ASET.replace(
         '***',
-        tableData.location === 'USA' || tableData.location === 'USA-BD'
+        tableData.location === 'USA-BD'
           ? tableData.memo_out_barcode ?? ''
           : tableData?.lot_id ?? ''
       )}`,
@@ -293,13 +293,13 @@ export function DiamondDetailsComponent({
       name: 'Ideal',
       url: `${FILE_URLS.IDEAL.replace(
         '***',
-        tableData.location === 'USA' || tableData.location === 'USA-BD'
+        tableData.location === 'USA-BD'
           ? tableData.memo_out_barcode ?? ''
           : tableData?.lot_id ?? ''
       )}`,
       downloadUrl: `${FILE_URLS.IDEAL.replace(
         '***',
-        tableData.location === 'USA' || tableData.location === 'USA-BD'
+        tableData.location === 'USA-BD'
           ? tableData.memo_out_barcode ?? ''
           : tableData?.lot_id ?? ''
       )}`,
@@ -310,13 +310,13 @@ export function DiamondDetailsComponent({
       name: 'Fluorescence',
       url: `${FILE_URLS.FLUORESCENCE.replace(
         '***',
-        tableData.location === 'USA' || tableData.location === 'USA-BD'
+        tableData.location === 'USA-BD'
           ? tableData.memo_out_barcode ?? ''
           : tableData?.lot_id ?? ''
       )}`,
       downloadUrl: `${FILE_URLS.FLUORESCENCE.replace(
         '***',
-        tableData.location === 'USA' || tableData.location === 'USA-BD'
+        tableData.location === 'USA-BD'
           ? tableData.memo_out_barcode ?? ''
           : tableData?.lot_id ?? ''
       )}`,
