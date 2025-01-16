@@ -1675,13 +1675,13 @@ const Result = ({
       name: getShapeDisplayName(detailImageData?.shape ?? ''),
       url: `${FILE_URLS.IMG.replace(
         '***',
-        detailImageData.location === 'USA'
+        detailImageData.location === 'USA-BD'
           ? detailImageData.memo_out_barcode ?? ''
           : detailImageData?.lot_id ?? ''
       )}`,
       downloadUrl: `${FILE_URLS.IMG.replace(
         '***',
-        detailImageData.location === 'USA'
+        detailImageData.location === 'USA-BD'
           ? detailImageData.memo_out_barcode ?? ''
           : detailImageData?.lot_id ?? ''
       )}`,
@@ -1707,13 +1707,13 @@ const Result = ({
       name: 'Video',
       url: `${FILE_URLS.B2B.replace(
         '***',
-        detailImageData.location === 'USA'
+        detailImageData.location === 'USA-BD'
           ? detailImageData.memo_out_barcode ?? ''
           : detailImageData?.lot_id ?? ''
       )}`,
       downloadUrl: `${FILE_URLS.B2B_DOWNLOAD_URL.replace(
         '***',
-        detailImageData.location === 'USA'
+        detailImageData.location === 'USA-BD'
           ? detailImageData.memo_out_barcode ?? ''
           : detailImageData?.lot_id ?? ''
       )}`,
@@ -1724,13 +1724,13 @@ const Result = ({
       name: 'Sparkle',
       url: `${FILE_URLS.B2B_SPARKLE.replace(
         '***',
-        detailImageData.location === 'USA'
+        detailImageData.location === 'USA-BD'
           ? detailImageData.memo_out_barcode ?? ''
           : detailImageData?.lot_id ?? ''
       )}`,
       downloadUrl: `${FILE_URLS.B2B_SPARKLE_DOWNLOAD_URL.replace(
         '***',
-        detailImageData.location === 'USA'
+        detailImageData.location === 'USA-BD'
           ? detailImageData.memo_out_barcode ?? ''
           : detailImageData?.lot_id ?? ''
       )}`,
@@ -1742,13 +1742,13 @@ const Result = ({
       name: 'Heart',
       url: `${FILE_URLS.HEART.replace(
         '***',
-        detailImageData.location === 'USA'
+        detailImageData.location === 'USA-BD'
           ? detailImageData.memo_out_barcode ?? ''
           : detailImageData?.lot_id ?? ''
       )}`,
       downloadUrl: `${FILE_URLS.HEART.replace(
         '***',
-        detailImageData.location === 'USA'
+        detailImageData.location === 'USA-BD'
           ? detailImageData.memo_out_barcode ?? ''
           : detailImageData?.lot_id ?? ''
       )}`,
@@ -1758,13 +1758,13 @@ const Result = ({
       name: 'Arrow',
       url: `${FILE_URLS.ARROW.replace(
         '***',
-        detailImageData.location === 'USA'
+        detailImageData.location === 'USA-BD'
           ? detailImageData.memo_out_barcode ?? ''
           : detailImageData?.lot_id ?? ''
       )}`,
       downloadUrl: `${FILE_URLS.ARROW.replace(
         '***',
-        detailImageData.location === 'USA'
+        detailImageData.location === 'USA-BD'
           ? detailImageData.memo_out_barcode ?? ''
           : detailImageData?.lot_id ?? ''
       )}`,
@@ -1774,13 +1774,13 @@ const Result = ({
       name: 'Aset',
       url: `${FILE_URLS.ASET.replace(
         '***',
-        detailImageData.location === 'USA'
+        detailImageData.location === 'USA-BD'
           ? detailImageData.memo_out_barcode ?? ''
           : detailImageData?.lot_id ?? ''
       )}`,
       downloadUrl: `${FILE_URLS.ASET.replace(
         '***',
-        detailImageData.location === 'USA'
+        detailImageData.location === 'USA-BD'
           ? detailImageData.memo_out_barcode ?? ''
           : detailImageData?.lot_id ?? ''
       )}`,
@@ -1790,13 +1790,13 @@ const Result = ({
       name: 'Ideal',
       url: `${FILE_URLS.IDEAL.replace(
         '***',
-        detailImageData.location === 'USA'
+        detailImageData.location === 'USA-BD'
           ? detailImageData.memo_out_barcode ?? ''
           : detailImageData?.lot_id ?? ''
       )}`,
       downloadUrl: `${FILE_URLS.IDEAL.replace(
         '***',
-        detailImageData.location === 'USA'
+        detailImageData.location === 'USA-BD'
           ? detailImageData.memo_out_barcode ?? ''
           : detailImageData?.lot_id ?? ''
       )}`,
@@ -1806,13 +1806,13 @@ const Result = ({
       name: 'Fluorescence',
       url: `${FILE_URLS.FLUORESCENCE.replace(
         '***',
-        detailImageData.location === 'USA'
+        detailImageData.location === 'USA-BD'
           ? detailImageData.memo_out_barcode ?? ''
           : detailImageData?.lot_id ?? ''
       )}`,
       downloadUrl: `${FILE_URLS.FLUORESCENCE.replace(
         '***',
-        detailImageData.location === 'USA'
+        detailImageData.location === 'USA-BD'
           ? detailImageData.memo_out_barcode ?? ''
           : detailImageData?.lot_id ?? ''
       )}`,
