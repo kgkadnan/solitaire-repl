@@ -3,7 +3,7 @@ export const STONE_LOCATION = {
   DUB: 'Dubai',
   BEL: 'Belgium',
   USA: 'USA',
-  'USA-BD': 'USA-BD'
+  'USA-BD': 'USA'
 };
 
 export const STONE_LOCATION_SHORT = {
@@ -11,5 +11,5 @@ export const STONE_LOCATION_SHORT = {
   Dubai: 'DUB',
   Belgium: 'BEL',
   USA: 'USA',
-  'USA-BD': 'USA-BD'
+  'USA-BD': 'USA'
 };
