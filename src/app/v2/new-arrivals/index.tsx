@@ -142,6 +142,7 @@ const NewArrivals = () => {
   const [requestCallTimeSlots, setRequestCallTimeSlots] = useState<any>({});
   const [selectedDate, setSelectedDate] = useState<number>(0);
   const [selectedSlot, setSelectedSlot] = useState('');
+  const [allProducts, setAllProducts] = useState<any>({});
 
   const handleSelectData = ({ date }: { date: string }) => {
     if (Number(date) !== selectedDate) {
@@ -856,7 +857,7 @@ const NewArrivals = () => {
             });
           }
           // Set other related state here
-
+          setAllProducts(allProducts);
           // Clean up
           delete receivedPartsMapBidToBuy[message_id];
           delete totalPartsMapBidToBuy[message_id];
@@ -870,6 +871,46 @@ const NewArrivals = () => {
     },
     []
   );
+
+  const filterAndSetBidData = (bid: any) => {
+    const currentFilterData = filterDataRef.current;
+    // Check if `dashboardResultPageData` contains `stoneId` for filtering
+    let bidData;
+    if (dashboardResultPageData?.stoneId?.length) {
+      bidData = filterByStoneId(bid, dashboardResultPageData);
+    }
+    if (currentFilterData?.queryParams) {
+      let filteredData = filterBidData(
+        bidData ?? bid,
+        currentFilterData.queryParams
+      );
+
+      if (filteredData.length > 0) {
+        dispatch(
+          filterFunction({
+            bidData: bidData ?? bid,
+            queryParams: currentFilterData.queryParams,
+            bidFilterData: filteredData
+          })
+        );
+
+        setBid(filteredData);
+      } else {
+        dispatch(filterFunction({}));
+        setBid(bidData ?? bid);
+      }
+    } else {
+      setBid(bidData ?? bid);
+    }
+  };
+
+  // Emit `handleBidStones` when `dashboard.stoneId` changes
+  useEffect(() => {
+    if (allProducts?.bidStone?.length) {
+      filterAndSetBidData(allProducts?.bidStone);
+    }
+  }, [dashboardResultPageData?.isNewArrival]);
+
   const handleError = useCallback((data: any) => {
     if (data) {
       modalSetState.setIsDialogOpen(true);
