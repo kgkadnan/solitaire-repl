@@ -248,6 +248,11 @@ const TopNavigationBar = ({
           });
       } else {
         router.push(Routes.NEW_ARRIVAL);
+        dispatch(
+          dashboardResultPage({
+            isNewArrival: !dashboardResultPageData.isNewArrival
+          })
+        );
         setIsLoading(false);
       }
     }
@@ -314,6 +319,11 @@ const TopNavigationBar = ({
           });
       } else {
         router.push(Routes.NEW_ARRIVAL);
+        dispatch(
+          dashboardResultPage({
+            isNewArrival: !dashboardResultPageData.isNewArrival
+          })
+        );
         setIsLoading(false);
       }
     } else {
@@ -508,7 +518,8 @@ const TopNavigationBar = ({
                   onClick={() => {
                     dispatch(
                       dashboardResultPage({
-                        stoneId: ''
+                        stoneId: '',
+                        isNewArrival: !dashboardResultPageData.isNewArrival
                       })
                     );
                   }}

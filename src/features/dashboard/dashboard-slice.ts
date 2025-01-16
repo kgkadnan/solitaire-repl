@@ -10,7 +10,8 @@ const initialState = {
   stoneId: '',
   columnData: [],
   searchType: 'normal',
-  textSearchReportId: null
+  textSearchReportId: null,
+  isNewArrival: false
 };
 
 const DashboardResultPageSlice = createSlice({
@@ -23,6 +24,7 @@ const DashboardResultPageSlice = createSlice({
       state.columnData = payload.columnData ?? state.columnData; // Preserve previous value
       state.stoneId = payload.stoneId ?? state.stoneId;
       state.searchType = payload.searchType ?? state.searchType;
+      state.isNewArrival = payload.isNewArrival ?? state.isNewArrival;
       state.textSearchReportId =
         payload.textSearchReportId === null
           ? null
