@@ -312,7 +312,9 @@ const Share = ({
             ) {
               return `Public URL: ${
                 process.env.NEXT_PUBLIC_DNA_URL
-              }${product?.public_url.split('/').pop()}`;
+              }${product?.public_url
+                .split('/')
+                .pop()}?location=${product?.location}`;
             }
             // For other attributes, continue as before
             const option = shareOptions.find(opt => opt.state === attribute);
