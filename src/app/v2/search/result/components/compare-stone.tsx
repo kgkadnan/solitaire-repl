@@ -350,8 +350,7 @@ const CompareStone = ({
                         // className="!h-[175px] !w-[180px]"
                         src={`${FILE_URLS.IMG.replace(
                           '***',
-                          items.location === 'USA' ||
-                            items.location === 'USA-BD'
+                          items.location === 'USA-BD'
                             ? items.memo_out_barcode ?? ''
                             : items?.lot_id ?? ''
                         )}`}
