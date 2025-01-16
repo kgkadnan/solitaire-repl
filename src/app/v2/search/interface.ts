@@ -58,6 +58,7 @@ export interface IProduct {
   fluorescence: string | null;
   lab: string | null;
   rpt_number: string | null;
+  memo_out_barcode: string | null;
   certificate_url: string | null;
   girdle: string | null;
   location: string | null;
