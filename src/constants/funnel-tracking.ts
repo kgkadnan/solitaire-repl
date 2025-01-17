@@ -121,3 +121,7 @@ export const Tracking_KYC_Entry_Point = {
   KYC_Top_Button: 'KYC_Top_Button',
   KYC_Registration_Page: 'KYC_Registration_Page'
 };
+
+export const Tacking_Dashboard = {
+  page_view: 'page_view'
+};

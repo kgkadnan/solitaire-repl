@@ -615,7 +615,7 @@ const MatchPairTable = ({
               <Image src={NoDataSvg} alt={'empty'} />
             </div>
             <div className="flex flex-col justify-center items-center w-[350px]">
-              <h1 className="text-neutral600 font-medium text-[16px] w-[340px] text-center mb-[10px]">
+              <h1 className="text-neutral600  text-lMedium font-medium  w-[340px] text-center mb-[10px]">
                 {globalFilter.length || globalFilterActive
                   ? 'No matching stones found'
                   : countLimitReached
@@ -1176,6 +1176,7 @@ const MatchPairTable = ({
           <div>
             <MRT_GlobalFilterTextField
               table={table}
+              placeholder="Search by Stone ID"
               onFocus={() => {
                 setGlobalFilterActive(true);
               }}

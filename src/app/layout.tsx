@@ -131,22 +131,6 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
       });
     }
   });
-  useEffect(() => {
-    setTimeout(() => {
-      if (window?.TreeNationOffsetWebsite && isV3Route && !isMobile) {
-        const element = document.querySelector('#tree-nation-offset-website');
-        if (!element || !element.hasChildNodes()) {
-          window
-            ?.TreeNationOffsetWebsite({
-              code: '0f021e268485267a',
-              lang: 'en',
-              theme: 'light'
-            })
-            ?.render('#tree-nation-offset-website');
-        }
-      }
-    }, 1000);
-  }, [!isMobile, []]);
 
   useEffect(() => {
     if (!window.OneSignal) {
@@ -267,10 +251,6 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
               gtag("set", "url_passthrough", false);
             `
           }}
-        />
-        <Script
-          src="https://widgets.tree-nation.com/js/widgets/v1/widgets.min.js?v=1.0"
-          strategy="afterInteractive"
         />
       </head>
       <Head>

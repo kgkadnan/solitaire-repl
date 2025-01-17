@@ -58,7 +58,7 @@ const UserAuthenticationLayout: React.FC<IUserAuthenticationLayoutProps> = ({
   const togglePlayPause = () => {
     if (!playerRef.current) return;
 
-    const playerState = playerRef.current.getPlayerState();
+    const playerState = playerRef?.current?.getPlayerState();
 
     if (playerState === window.YT.PlayerState.PLAYING) {
       playerRef.current.pauseVideo();

@@ -13,6 +13,7 @@ declare global {
       };
       renew?: any;
     };
+    dataLayer: Record<string, any>[];
     CookieConsent?: any;
     TreeNationOffsetWebsite: any; // Add 'TreeNationOffsetWebsite' to the 'window' object
   }
