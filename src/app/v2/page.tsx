@@ -94,7 +94,10 @@ import { STONE_LOCATION } from '@/constants/v2/enums/location';
 import { kamLocationAction } from '@/features/kam-location/kam-location';
 import { handleCompareStone } from './search/result/helpers/handle-compare-stone';
 import { trackEvent } from '@/utils/ga';
-import { Tracking_Search_By_Text } from '@/constants/funnel-tracking';
+import {
+  Tacking_Dashboard,
+  Tracking_Search_By_Text
+} from '@/constants/funnel-tracking';
 
 import GemTracPage from '@/components/v2/common/gem-trac';
 import { useLazyGetGemTracQuery } from '@/features/api/gem-trac';
@@ -256,8 +259,6 @@ const Dashboard = () => {
   const toggleBottomSheet = () => {
     setBottomSheetOpen(prev => !prev);
   };
-
-  console.log('windows', window);
 
   const options = [
     {
@@ -433,6 +434,14 @@ const Dashboard = () => {
   ];
   useEffect(() => {
     refetchCustomerData();
+    if (window?.dataLayer) {
+      console.log('it came here');
+      window?.dataLayer.push({
+        event: Tacking_Dashboard.page_view,
+        page_name: 'dashboard',
+        user_id: customerData?.customer?.id
+      });
+    }
   }, []);
 
   useEffect(() => {
