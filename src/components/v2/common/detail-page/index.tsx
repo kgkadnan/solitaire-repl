@@ -357,7 +357,7 @@ export function DiamondDetailsComponent({
   const copyLink = () => {
     const link = `${process.env.NEXT_PUBLIC_DNA_URL}${filterData?.public_url
       .split('/')
-      .pop()}?location=${filterData?.location}`;
+      .pop()}`;
     navigator.clipboard.writeText(link).then(() => {
       setShowToast(true); // Show the toast notification
       setTimeout(() => {
