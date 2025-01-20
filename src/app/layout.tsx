@@ -150,6 +150,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
 
         // Check notification permissions
         window.OneSignal.getNotificationPermission().then((permission: any) => {
+          console.log('permission', permission);
           if (permission === 'default') {
             // Request notification permissions from the browser
             window.OneSignal.registerForPushNotifications();
