@@ -559,7 +559,7 @@ const TopNavigationBar = ({
           className={`relative z-[110] flex flex-col items-start bg-neutral0 rounded-[4px] overflow-hidden border-[1px] border-primaryBorder  px-[12px] py-[5px]`}
           style={{
             width:
-              currentPath === '/v2'
+              currentPath === '/v2' || currentPath === '/'
                 ? isSearchVisible
                   ? `${inputWidth}px`
                   : '' // Dynamic width applied here.
