@@ -54,6 +54,7 @@ import queryParamsReducer from './features/event-params/event-param-slice';
 import { gemTracApi } from './features/api/gem-trac';
 import { notifySalesApi } from './features/api/notify-sales';
 import { requestCallBackApi } from './features/api/request-call-back';
+import { deviceUUIDApi } from './features/api/device-uuid';
 
 const appReducer = combineReducers({
   notificationBadge: notificationBadgeReducer,
@@ -74,6 +75,7 @@ const appReducer = combineReducers({
   setConfirmStoneTrack: setConfirmStoneTrackReducer,
 
   [downloadExcelApi.reducerPath]: downloadExcelApi.reducer,
+  [deviceUUIDApi.reducerPath]: deviceUUIDApi.reducer,
   [currentIPApi.reducerPath]: currentIPApi.reducer,
   [manageListingSequenceApi.reducerPath]: manageListingSequenceApi.reducer,
   [savedSearchesApi.reducerPath]: savedSearchesApi.reducer,
@@ -135,6 +137,7 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
         manageListingSequenceApi.middleware,
         changePasswordApi.middleware,
         downloadExcelApi.middleware,
+        deviceUUIDApi.middleware,
         cartApi.middleware,
         requestCallBackApi.middleware,
         notifySalesApi.middleware,

@@ -1138,12 +1138,6 @@ const MyCart = () => {
       sessionStorage.getItem('is_side_navigation_bar') || 'false'
     );
 
-    console.log('sourcePage', sourcePage, isSideNavigationBar);
-
-    console.log(
-      'myCartTabs',
-      diamondStatusCounts.Available + diamondStatusCounts.BidToBuy
-    );
     const pushToDataLayer = (
       event: string,
       destinationPage: string,
@@ -1759,7 +1753,6 @@ const MyCart = () => {
               <div className="flex h-[72px] items-center border-b-[1px] border-neutral200">
                 <div className="flex border-b border-neutral200 w-full ml-3 text-mMedium font-medium">
                   {myCartTabs.map(({ label, status, count }) => {
-                    console.log('count', count);
                     return (
                       <button
                         className={`px-[16px] py-[8px] ${
