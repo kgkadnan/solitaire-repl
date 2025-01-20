@@ -25,6 +25,7 @@ import { useGetNavigationQuery } from '@/features/api/faqs';
 import { useLazyGetAllBidStonesQuery } from '@/features/api/product';
 import { filterFunction } from '@/features/filter-new-arrival/filter-new-arrival-slice';
 import { dashboardResultPage } from '@/features/dashboard/dashboard-slice';
+import { Tracking_Dashboard } from '@/constants/funnel-tracking';
 
 interface ISideNavigationBar {
   src?: React.ReactNode;
@@ -38,6 +39,12 @@ const SideNavigationBar = ({
 }: {
   isInMaintenanceMode: boolean;
 }) => {
+  // constants
+  const DASHBOARD_ROUTE = '/v2';
+  const SEARCH_ROUTE = `${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`;
+  const MATCH_PAIR_ROUTE = `${Routes.MATCHING_PAIR}?active-tab=${MatchSubRoutes.NEW_SEARCH}`;
+  const SAVED_SEARCH_ROUTE = `${Routes.SEARCH}?active-tab=${SubRoutes.SAVED_SEARCH}`;
+
   const dispatch = useAppDispatch();
 
   const currentRoute = usePathname();
@@ -220,6 +227,19 @@ const SideNavigationBar = ({
           src={KgkIcon}
           alt="KGK logo"
           onClick={() => {
+            if (currentRoute === DASHBOARD_ROUTE || currentRoute === '/') {
+              if (window?.dataLayer) {
+                window.dataLayer.push({
+                  event: Tracking_Dashboard.click_kgk_logo,
+                  source_page: 'dashboard',
+                  user_id: isKycVerified?.customer?.id,
+                  destination_page: 'dashboard',
+                  side_navigation: true
+                });
+              } else {
+                console.error('DataLayer is not defined.');
+              }
+            }
             dispatch(
               dashboardResultPage({
                 isResultPage: false,
@@ -275,6 +295,31 @@ const SideNavigationBar = ({
                         >
                           <Button
                             onClick={() => {
+                              if (
+                                currentRoute === DASHBOARD_ROUTE ||
+                                currentRoute === '/'
+                              ) {
+                                if (
+                                  items.link === SEARCH_ROUTE ||
+                                  items.link === MATCH_PAIR_ROUTE ||
+                                  items.link === Routes.NEW_ARRIVAL ||
+                                  items.link === Routes.BID_TO_BUY ||
+                                  items.link === SAVED_SEARCH_ROUTE ||
+                                  items.link === Routes.YOUR_ORDERS ||
+                                  items.link === Routes.MY_CART ||
+                                  items.link === Routes.MY_APPOINTMENTS
+                                ) {
+                                  sessionStorage.setItem(
+                                    'source_page',
+                                    'dashboard'
+                                  );
+                                  sessionStorage.setItem(
+                                    'is_side_navigation_bar',
+                                    JSON.stringify(true) // Converts boolean to string
+                                  );
+                                }
+                              }
+
                               if (
                                 items.link ===
                                 `${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`
@@ -378,6 +423,17 @@ const SideNavigationBar = ({
                             );
                             localStorage.removeItem('bid');
                             dispatch(filterFunction({}));
+
+                            if (items.link === Routes.FAQS) {
+                              sessionStorage.setItem(
+                                'source_page',
+                                'dashboard'
+                              );
+                              sessionStorage.setItem(
+                                'is_side_navigation_bar',
+                                JSON.stringify(true) // Converts boolean to string
+                              );
+                            }
 
                             router.push(items.link!);
                           }}

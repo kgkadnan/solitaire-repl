@@ -42,6 +42,10 @@ import { Skeleton } from '@mui/material';
 import { kycStatus } from '@/constants/enums/kyc';
 import { Events } from '@/constants/enums/event';
 import { Toast } from '@/components/v2/common/copy-and-share/toast';
+import {
+  Tracking_Dashboard,
+  Tracking_Dashboard_Destination_Page
+} from '@/constants/funnel-tracking';
 
 interface IDataItem {
   id: number;
@@ -316,6 +320,43 @@ const MyDiamonds = () => {
     }
     setSearched(true);
   };
+
+  useEffect(() => {
+    const sourcePage = sessionStorage.getItem('source_page');
+    const isSideNavigationBar = JSON.parse(
+      sessionStorage.getItem('is_side_navigation_bar') || 'false'
+    );
+
+    console.log('sourcePage', sourcePage, isSideNavigationBar);
+
+    const pushToDataLayer = (
+      event: string,
+      destinationPage: string,
+      isSideNavigationBar: boolean
+    ) => {
+      if (window?.dataLayer) {
+        window.dataLayer.push({
+          event,
+          source_page: sourcePage || 'unknown', // Fallback to 'unknown' if not set
+          user_id: isKycVerified?.customer?.id,
+          destination_page: destinationPage,
+          side_navigation: isSideNavigationBar
+        });
+        sessionStorage.removeItem('source_page');
+        sessionStorage.removeItem('is_side_navigation_bar');
+      } else {
+        console.error('DataLayer is not defined.');
+      }
+    };
+
+    if (sourcePage === 'dashboard') {
+      pushToDataLayer(
+        Tracking_Dashboard.click_your_orders,
+        Tracking_Dashboard_Destination_Page.your_orders,
+        isSideNavigationBar
+      );
+    }
+  }, []);
 
   const handleClearInput = () => {
     setSearch('');
