@@ -7,6 +7,7 @@ import NoImageFound from '@public/v2/assets/images/carousel/fallback.svg';
 
 import ActionButton from '../action-button';
 import { Skeleton } from '@mui/material';
+import { Tracking_Dashboard } from '@/constants/funnel-tracking';
 interface IImageData {
   link: string;
   image_app?: string;
@@ -19,10 +20,12 @@ interface IImageData {
 export interface IDashboardCarouselProps {
   images: IImageData[];
   router: any;
+  customerData: any;
 }
 const DashboardCarousel: React.FC<IDashboardCarouselProps> = ({
   images,
-  router
+  router,
+  customerData
 }) => {
   const settings = {
     dots: true, // Show dot indicators
@@ -78,6 +81,21 @@ const DashboardCarousel: React.FC<IDashboardCarouselProps> = ({
 
   const imageUrl = images && getSuitableImageUrl(images[0]?.image_web);
 
+  const pushToDataLayer = (event: string, destinationPage: string) => {
+    if (window?.dataLayer) {
+      window.dataLayer.push({
+        event,
+        source_page: 'dashboard',
+        user_id: customerData?.customer?.id,
+        destination_page: destinationPage
+      });
+      sessionStorage.removeItem('source_page');
+      sessionStorage.removeItem('is_side_navigation_bar');
+    } else {
+      console.error('DataLayer is not defined.');
+    }
+  };
+
   return (
     <div className="dashboard-carousel">
       {images !== undefined ? (
@@ -119,6 +137,11 @@ const DashboardCarousel: React.FC<IDashboardCarouselProps> = ({
                               label: data.cta,
                               isDisable: !data.is_button_actionable,
                               handler: () => {
+                                pushToDataLayer(
+                                  Tracking_Dashboard.click_on_carousel,
+                                  data.link
+                                );
+
                                 data.link.includes('platform.kgkdiamonds.com')
                                   ? router.push(data.link)
                                   : window.open(data.link);
@@ -165,6 +188,10 @@ const DashboardCarousel: React.FC<IDashboardCarouselProps> = ({
                         label: images[0].cta,
                         isDisable: !images[0].is_button_actionable,
                         handler: () => {
+                          pushToDataLayer(
+                            Tracking_Dashboard.click_on_carousel,
+                            images[0].link
+                          );
                           images[0].link.includes('platform.kgkdiamonds.com')
                             ? router.push(images[0].link)
                             : window.open(images[0].link);

@@ -58,6 +58,10 @@ import { kycStatus } from '@/constants/enums/kyc';
 import { Toast } from '@/components/v2/common/copy-and-share/toast';
 import SavedSearchSkeleton from '@/components/v2/skeleton/saved-search';
 import { useLazyGetMatchingPairCountQuery } from '@/features/api/match-pair';
+import {
+  Tracking_Dashboard,
+  Tracking_Dashboard_Destination_Page
+} from '@/constants/funnel-tracking';
 
 const SavedSearch = ({ setIsLoading }: any) => {
   const router = useRouter();
@@ -207,6 +211,44 @@ const SavedSearch = ({ setIsLoading }: any) => {
         setIsError(false); // Hide the toast notification after some time
       }, 4000);
   }, [isError]);
+
+  useEffect(() => {
+    const sourcePage = sessionStorage.getItem('source_page');
+    const isSideNavigationBar = JSON.parse(
+      sessionStorage.getItem('is_side_navigation_bar') || 'false'
+    );
+
+    console.log('sourcePage', sourcePage, isSideNavigationBar);
+
+    const pushToDataLayer = (
+      event: string,
+      destinationPage: string,
+      isSideNavigationBar: boolean
+    ) => {
+      if (window?.dataLayer) {
+        window.dataLayer.push({
+          event,
+          source_page: sourcePage || 'unknown', // Fallback to 'unknown' if not set
+          user_id: isKycVerified?.customer?.id,
+          destination_page: destinationPage,
+          side_navigation: isSideNavigationBar
+        });
+        sessionStorage.removeItem('source_page');
+        sessionStorage.removeItem('is_side_navigation_bar');
+      } else {
+        console.error('DataLayer is not defined.');
+      }
+    };
+
+    if (sourcePage === 'dashboard') {
+      pushToDataLayer(
+        Tracking_Dashboard.click_saved_search,
+        Tracking_Dashboard_Destination_Page.saved_search,
+        isSideNavigationBar
+      );
+    }
+  }, []);
+
   return (
     <div className="mb-[20px]">
       {isError && (
