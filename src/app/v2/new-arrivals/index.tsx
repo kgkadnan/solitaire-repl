@@ -99,6 +99,10 @@ import crossIcon from '@public/v2/assets/icons/modal/cross.svg';
 import chevronUp from '@public/v2/assets/icons/dashboard/chevron-up.svg';
 import { InputDialogComponent } from '@/components/v2/common/input-dialog';
 import { dashboardResultPage } from '@/features/dashboard/dashboard-slice';
+import {
+  Tracking_Dashboard,
+  Tracking_Dashboard_Destination_Page
+} from '@/constants/funnel-tracking';
 interface IBidValues {
   [key: string]: number;
 }
@@ -367,6 +371,44 @@ const NewArrivals = () => {
       </div>
     );
   };
+
+  useEffect(() => {
+    const sourcePage = sessionStorage.getItem('source_page');
+    const isSideNavigationBar = JSON.parse(
+      sessionStorage.getItem('is_side_navigation_bar') || 'false'
+    );
+
+    console.log('sourcePage', sourcePage, isSideNavigationBar);
+
+    const pushToDataLayer = (
+      event: string,
+      destinationPage: string,
+      isSideNavigationBar: boolean
+    ) => {
+      if (window?.dataLayer) {
+        window.dataLayer.push({
+          event,
+          source_page: sourcePage || 'unknown', // Fallback to 'unknown' if not set
+          user_id: isKycVerified?.customer?.id,
+          stone_count: isKycVerified?.customer?.new_arrivals_count,
+          destination_page: destinationPage,
+          side_navigation: isSideNavigationBar
+        });
+        sessionStorage.removeItem('source_page');
+        sessionStorage.removeItem('is_side_navigation_bar');
+      } else {
+        console.error('DataLayer is not defined.');
+      }
+    };
+
+    if (sourcePage === 'dashboard') {
+      pushToDataLayer(
+        Tracking_Dashboard.click_new_arrivals,
+        Tracking_Dashboard_Destination_Page.new_arrivals,
+        isSideNavigationBar
+      );
+    }
+  }, []);
 
   //Modal
   const handleBidUnLockPricing = () => {

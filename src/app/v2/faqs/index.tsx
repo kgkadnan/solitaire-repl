@@ -1,12 +1,57 @@
 'use client';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Collapsible from './collapsible';
 import { Skeleton, Typography } from '@mui/material';
 import { useGetAllFaqsQuery } from '@/features/api/faqs';
 import ActionButton from '@/components/v2/common/action-button';
+import {
+  Tracking_Dashboard,
+  Tracking_Dashboard_Destination_Page
+} from '@/constants/funnel-tracking';
 
 const FAQs = () => {
   const { data: faqData } = useGetAllFaqsQuery({});
+
+  const customerData = JSON.parse(localStorage.getItem('user')!);
+
+  useEffect(() => {
+    const sourcePage = sessionStorage.getItem('source_page');
+    const isSideNavigationBar = JSON.parse(
+      sessionStorage.getItem('is_side_navigation_bar') || 'false'
+    );
+
+    console.log('sourcePage', sourcePage, isSideNavigationBar);
+
+    const pushToDataLayer = (
+      event: string,
+      destinationPage: string,
+      isSideNavigationBar: boolean
+    ) => {
+      if (window?.dataLayer) {
+        window.dataLayer.push({
+          event,
+          source_page: sourcePage || 'unknown', // Fallback to 'unknown' if not set
+          user_id: customerData?.customer?.id,
+
+          destination_page: destinationPage,
+          side_navigation: isSideNavigationBar
+        });
+        sessionStorage.removeItem('source_page');
+        sessionStorage.removeItem('is_side_navigation_bar');
+      } else {
+        console.error('DataLayer is not defined.');
+      }
+    };
+
+    if (sourcePage === 'dashboard') {
+      pushToDataLayer(
+        Tracking_Dashboard.click_faqs,
+        Tracking_Dashboard_Destination_Page.faqs,
+        isSideNavigationBar
+      );
+    }
+  }, []);
+
   return (
     <div className="flex flex-col items-center gap-4 py-4">
       <div

@@ -89,6 +89,10 @@ import Tab from '@/components/v2/common/bid-tabs';
 import { useLazyGetBidToBuyHistoryQuery } from '@/features/api/dashboard';
 import Tooltip from '@/components/v2/common/tooltip';
 import CustomSwitch from '@/components/v2/common/switch/switch';
+import {
+  Tracking_Dashboard,
+  Tracking_Dashboard_Destination_Page
+} from '@/constants/funnel-tracking';
 // import { Switch } from '@/components/v2/ui/switch';
 
 export interface ISavedSearch {
@@ -344,8 +348,58 @@ const Form = ({
   }, [startTime]);
 
   useEffect(() => {
+    const sourcePage = sessionStorage.getItem('source_page');
+    const isSideNavigationBar = JSON.parse(
+      sessionStorage.getItem('is_side_navigation_bar') || 'false'
+    );
+
+    console.log('sourcePage', sourcePage, routePath, isSideNavigationBar);
+
+    const pushToDataLayer = (
+      event: string,
+      destinationPage: string,
+      isSideNavigationBar: boolean
+    ) => {
+      if (window?.dataLayer) {
+        window.dataLayer.push({
+          event,
+          source_page: sourcePage || 'unknown', // Fallback to 'unknown' if not set
+          user_id: isKycVerified?.customer?.id,
+          destination_page: destinationPage,
+          side_navigation: isSideNavigationBar
+        });
+        sessionStorage.removeItem('source_page');
+        sessionStorage.removeItem('is_side_navigation_bar');
+      } else {
+        console.error('DataLayer is not defined.');
+      }
+    };
+
+    if (
+      routePath === Routes.SEARCH &&
+      subRoute === 'new-search' &&
+      sourcePage === 'dashboard'
+    ) {
+      pushToDataLayer(
+        Tracking_Dashboard.click_search,
+        Tracking_Dashboard_Destination_Page.search_form,
+        isSideNavigationBar
+      );
+    } else if (
+      routePath === Routes.MATCHING_PAIR &&
+      subRoute === 'new-search' &&
+      sourcePage === 'dashboard'
+    ) {
+      pushToDataLayer(
+        Tracking_Dashboard.click_match_pair_search,
+        Tracking_Dashboard_Destination_Page.match_pair_form,
+        isSideNavigationBar
+      );
+    }
+  }, []);
+
+  useEffect(() => {
     if (subRoute === SubRoutes.NEW_ARRIVAL) {
-      console.log('newArrivalFilterData?.bidData', newArrivalFilterData);
       const query = generateQueryParams(state);
       const filteredData =
         newArrivalFilterData?.bidData &&

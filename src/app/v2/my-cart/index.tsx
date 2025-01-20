@@ -102,6 +102,10 @@ import {
 } from '@/features/api/request-call-back';
 import chevronDown from '@public/v2/assets/icons/dashboard/chevron-down.svg';
 import chevronUp from '@public/v2/assets/icons/dashboard/chevron-up.svg';
+import {
+  Tracking_Dashboard,
+  Tracking_Dashboard_Destination_Page
+} from '@/constants/funnel-tracking';
 
 const MyCart = () => {
   const dispatch = useAppDispatch();
@@ -1125,6 +1129,44 @@ const MyCart = () => {
       category: 'Image'
     }
   ];
+
+  useEffect(() => {
+    const sourcePage = sessionStorage.getItem('source_page');
+    const isSideNavigationBar = JSON.parse(
+      sessionStorage.getItem('is_side_navigation_bar') || 'false'
+    );
+
+    console.log('sourcePage', sourcePage, isSideNavigationBar);
+
+    const pushToDataLayer = (
+      event: string,
+      destinationPage: string,
+      isSideNavigationBar: boolean
+    ) => {
+      if (window?.dataLayer) {
+        window.dataLayer.push({
+          event,
+          source_page: sourcePage || 'unknown', // Fallback to 'unknown' if not set
+          user_id: isKycVerified?.customer?.id,
+          stone_count: myCartTabs[0].count,
+          destination_page: destinationPage,
+          side_navigation: isSideNavigationBar
+        });
+        sessionStorage.removeItem('source_page');
+        sessionStorage.removeItem('is_side_navigation_bar');
+      } else {
+        console.error('DataLayer is not defined.');
+      }
+    };
+
+    if (sourcePage === 'dashboard') {
+      pushToDataLayer(
+        Tracking_Dashboard.click_on_my_cart,
+        Tracking_Dashboard_Destination_Page.my_cart,
+        isSideNavigationBar
+      );
+    }
+  }, []);
 
   const handleDetailPage = ({ row }: { row: any }) => {
     if (isConfirmStone) {

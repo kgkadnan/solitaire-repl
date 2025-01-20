@@ -80,6 +80,10 @@ import {
 import { InputDialogComponent } from '@/components/v2/common/input-dialog';
 import { ManageLocales } from '@/utils/v2/translate';
 import { dashboardResultPage } from '@/features/dashboard/dashboard-slice';
+import {
+  Tracking_Dashboard,
+  Tracking_Dashboard_Destination_Page
+} from '@/constants/funnel-tracking';
 export interface IBidValues {
   [key: string]: number;
 }
@@ -924,6 +928,48 @@ const BidToBuy = () => {
         setIsError(false); // Hide the toast notification after some time
       }, 4000);
   }, [isError]);
+
+  useEffect(() => {
+    const sourcePage = sessionStorage.getItem('source_page');
+    const isSideNavigationBar = JSON.parse(
+      sessionStorage.getItem('is_side_navigation_bar') || 'false'
+    );
+
+    const pushToDataLayer = (
+      event: string,
+      destinationPage: string,
+      isSideNavigationBar: boolean
+    ) => {
+      const customerData = JSON.parse(localStorage.getItem('user')!);
+      if (window?.dataLayer) {
+        window.dataLayer.push({
+          event,
+          source_page: sourcePage || 'unknown', // Fallback to 'unknown' if not set
+          user_id: customerData?.customer?.id,
+          stone_count: customerData?.customer?.bid_to_buy?.count,
+          status:
+            !customerData?.customer?.bid_to_buy?.start_at &&
+            customerData?.customer?.bid_to_buy?.count > 0
+              ? 'active'
+              : 'inactive',
+          destination_page: destinationPage,
+          side_navigation: isSideNavigationBar
+        });
+        sessionStorage.removeItem('source_page');
+        sessionStorage.removeItem('is_side_navigation_bar');
+      } else {
+        console.error('DataLayer is not defined.');
+      }
+    };
+
+    if (sourcePage === 'dashboard') {
+      pushToDataLayer(
+        Tracking_Dashboard.click_bid_to_buy,
+        Tracking_Dashboard_Destination_Page.bid_to_buy,
+        isSideNavigationBar
+      );
+    }
+  }, []);
 
   useEffect(() => {
     if (images.length > 0 && images[0].name.length)
