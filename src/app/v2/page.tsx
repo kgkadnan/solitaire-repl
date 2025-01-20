@@ -475,6 +475,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (customerData) {
+      localStorage.setItem('user', JSON.stringify(customerData));
       setCustomerMobileNumber(
         `+${customerData.customer.country_code}${customerData.customer.phone}`
       );
@@ -607,8 +608,6 @@ const Dashboard = () => {
       ? 'pendingInvoice'
       : ''
   ] || { keys: [], data: [] };
-
-  console.log('data', data);
 
   const redirectLink = () => {
     let link = '/';

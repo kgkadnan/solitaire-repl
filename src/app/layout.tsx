@@ -134,58 +134,51 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
 
   useEffect(() => {
     if (!window.OneSignal) {
-      console.log('OneSignal not loaded yet. Adding script...');
       const script = document.createElement('script');
       script.src = 'https://cdn.onesignal.com/sdks/OneSignalSDK.js';
       script.async = true;
       script.onload = () => {
-        console.log('OneSignal script loaded successfully.');
-
-        // Initialize OneSignal
         window.OneSignal = window.OneSignal || [];
         window.OneSignal.push(() => {
-          try {
-            window.OneSignal.init({
-              appId: '378b2db1-01ba-4f45-b8cf-9500ea88056b',
-              safari_web_id:
-                'web.onesignal.auto.017f9378-7499-4b97-8d47-e55f2bb151c0',
-              allowLocalhostAsSecureOrigin: true
-            });
-            console.log('OneSignal initialized successfully.');
-          } catch (error) {
-            console.error('Error initializing OneSignal:', error);
-          }
-        });
+          console.log('Initializing OneSignal...');
+          window.OneSignal.init({
+            appId: '378b2db1-01ba-4f45-b8cf-9500ea88056b',
+            safari_web_id:
+              'web.onesignal.auto.017f9378-7499-4b97-8d47-e55f2bb151c0',
+            allowLocalhostAsSecureOrigin: true
+          });
 
-        window.OneSignal.push(() => {
-          window.OneSignal.getNotificationPermission()
-            .then((permission: any) => {
-              if (permission === 'default') {
-                // Request notification permissions from the browser
-                window.OneSignal.registerForPushNotifications();
-              } else if (permission === 'granted') {
-                // Retrieve the UUID (Player ID) only when the user grants permission
-                window.OneSignal.getUserId().then((userId: string | null) => {
-                  if (userId) {
-                    console.log('User UUID (Player ID):', userId);
-                    // Perform further actions with the UUID here if needed
-                  } else {
-                    console.log('User UUID not available yet');
-                  }
-                });
-              } else {
-                console.log('Browser notification permission:', permission);
-              }
-            })
-            .catch((error: any) => {
-              console.error('Error getting notification permission:', error);
-            });
+          // Always attempt to fetch the UUID (Player ID) on every load
+          window.OneSignal.push(() => {
+            window.OneSignal.getNotificationPermission()
+              .then((permission: any) => {
+                // Handle notification permissions
+                if (permission === 'default') {
+                  window.OneSignal.registerForPushNotifications();
+                } else if (permission === 'granted') {
+                  window.OneSignal.getUserId().then((userId: string | null) => {
+                    if (userId) {
+                      console.log('User UUID (Player ID):', userId);
+                    } else {
+                      console.log('User UUID not yet available.');
+                    }
+                  });
+                } else {
+                  console.log('Notification permission denied.');
+                }
+              })
+              .catch((error: any) => {
+                console.error('Error fetching notification permission:', error);
+              });
+          });
         });
       };
 
+      script.onerror = () => {
+        console.error('Failed to load OneSignal script.');
+      };
+
       document.head.appendChild(script);
-    } else {
-      console.log('OneSignal already loaded.');
     }
   }, []);
 
