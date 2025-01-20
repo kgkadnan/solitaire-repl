@@ -543,7 +543,7 @@ const TopNavigationBar = ({
           <div
             style={{
               width:
-                currentPath === '/v2'
+                currentPath === '/v2' || currentPath === '/'
                   ? isSearchVisible
                     ? `${inputWidth + 7}px`
                     : '' // Dynamic width applied here.
@@ -769,7 +769,7 @@ const TopNavigationBar = ({
 
         {/* Middle section (Search Field) */}
         <div className="flex-grow flex justify-center">
-          {currentPath === '/v2'
+          {currentPath === '/v2' || currentPath === '/'
             ? isSearchVisible && renderSearchField()
             : renderSearchField()}
         </div>
