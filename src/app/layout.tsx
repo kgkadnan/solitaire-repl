@@ -147,10 +147,22 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
               'web.onesignal.auto.017f9378-7499-4b97-8d47-e55f2bb151c0'
           });
         });
+
+        // Check notification permissions
         window.OneSignal.getNotificationPermission().then((permission: any) => {
           if (permission === 'default') {
             // Request notification permissions from the browser
             window.OneSignal.registerForPushNotifications();
+          } else if (permission === 'granted') {
+            // Retrieve the UUID (Player ID) only when the user grants permission
+            window.OneSignal.getUserId().then((userId: string | null) => {
+              if (userId) {
+                console.log('User UUID (Player ID):', userId);
+                // Perform further actions with the UUID here if needed
+              } else {
+                console.log('User UUID not available yet');
+              }
+            });
           } else {
             console.log('Browser notification permission:', permission);
           }
