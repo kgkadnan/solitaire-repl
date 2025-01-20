@@ -113,6 +113,7 @@ import {
 import { IAppointmentPayload } from './my-appointments';
 import { dashboardResultPage } from '@/features/dashboard/dashboard-slice';
 import { RadioButton } from '@/components/v2/common/radio';
+import { useAddDeviceUUIDMutation } from '@/features/api/device-uuid';
 
 interface ITabs {
   label: string;
@@ -149,6 +150,7 @@ const Dashboard = () => {
   const { data: customerData, refetch: refetchCustomerData } =
     useGetCustomerQuery({}, { refetchOnMountOrArgChange: true });
 
+  const [addDeviceUUID] = useAddDeviceUUIDMutation();
   const [showRadios, setShowRadios] = useState(false);
 
   // Options for Radio Buttons
@@ -917,6 +919,23 @@ const Dashboard = () => {
         setError(''); // Hide the toast notification after some time
       }, 4000);
   }, [error]);
+
+  useEffect(() => {
+    let userUuid = JSON.parse(localStorage.getItem('device_uuid')!);
+    if (userUuid?.length && customerData) {
+      let payload = {
+        device_uuid: userUuid,
+        platform_type: 'web',
+        customer_id: customerData?.customer?.id
+      };
+      addDeviceUUID(payload)
+        .unwrap()
+        .then(res => {
+          console.log(res);
+          localStorage.removeItem('device_uuid');
+        });
+    }
+  }, []);
 
   const goBack = () => {
     setIsDiamondDetail(false);
