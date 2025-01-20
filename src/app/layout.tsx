@@ -134,42 +134,58 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
 
   useEffect(() => {
     if (!window.OneSignal) {
+      console.log('OneSignal not loaded yet. Adding script...');
       const script = document.createElement('script');
       script.src = 'https://cdn.onesignal.com/sdks/OneSignalSDK.js';
       script.async = true;
       script.onload = () => {
+        console.log('OneSignal script loaded successfully.');
+
+        // Initialize OneSignal
         window.OneSignal = window.OneSignal || [];
         window.OneSignal.push(() => {
-          console.log('OneSignal initialized');
-          window.OneSignal.init({
-            appId: '378b2db1-01ba-4f45-b8cf-9500ea88056b',
-            safari_web_id:
-              'web.onesignal.auto.017f9378-7499-4b97-8d47-e55f2bb151c0'
-          });
-        });
-
-        // Check notification permissions
-        window.OneSignal.getNotificationPermission().then((permission: any) => {
-          console.log('permission', permission);
-          if (permission === 'default') {
-            // Request notification permissions from the browser
-            window.OneSignal.registerForPushNotifications();
-          } else if (permission === 'granted') {
-            // Retrieve the UUID (Player ID) only when the user grants permission
-            window.OneSignal.getUserId().then((userId: string | null) => {
-              if (userId) {
-                console.log('User UUID (Player ID):', userId);
-                // Perform further actions with the UUID here if needed
-              } else {
-                console.log('User UUID not available yet');
-              }
+          try {
+            window.OneSignal.init({
+              appId: '378b2db1-01ba-4f45-b8cf-9500ea88056b',
+              safari_web_id:
+                'web.onesignal.auto.017f9378-7499-4b97-8d47-e55f2bb151c0',
+              allowLocalhostAsSecureOrigin: true
             });
-          } else {
-            console.log('Browser notification permission:', permission);
+            console.log('OneSignal initialized successfully.');
+          } catch (error) {
+            console.error('Error initializing OneSignal:', error);
           }
         });
+
+        window.OneSignal.push(() => {
+          window.OneSignal.getNotificationPermission()
+            .then((permission: any) => {
+              if (permission === 'default') {
+                // Request notification permissions from the browser
+                window.OneSignal.registerForPushNotifications();
+              } else if (permission === 'granted') {
+                // Retrieve the UUID (Player ID) only when the user grants permission
+                window.OneSignal.getUserId().then((userId: string | null) => {
+                  if (userId) {
+                    console.log('User UUID (Player ID):', userId);
+                    // Perform further actions with the UUID here if needed
+                  } else {
+                    console.log('User UUID not available yet');
+                  }
+                });
+              } else {
+                console.log('Browser notification permission:', permission);
+              }
+            })
+            .catch((error: any) => {
+              console.error('Error getting notification permission:', error);
+            });
+        });
       };
+
       document.head.appendChild(script);
+    } else {
+      console.log('OneSignal already loaded.');
     }
   }, []);
 
