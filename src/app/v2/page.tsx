@@ -259,6 +259,13 @@ const Dashboard = () => {
 
   const toggleBottomSheet = () => {
     setBottomSheetOpen(prev => !prev);
+    if (window?.dataLayer) {
+      window.dataLayer.push({
+        event: Tracking_Dashboard.click_bid_to_buy_dropdown,
+        source_page: 'dashboard',
+        user_id: customerData?.customer?.id
+      });
+    }
   };
 
   const options = [
@@ -600,6 +607,8 @@ const Dashboard = () => {
       ? 'pendingInvoice'
       : ''
   ] || { keys: [], data: [] };
+
+  console.log('data', data);
 
   const redirectLink = () => {
     let link = '/';
@@ -2567,7 +2576,7 @@ const Dashboard = () => {
                                         user_id: customerData?.customer?.id,
                                         destination_page:
                                           Tracking_Dashboard_Destination_Page.individual_order,
-                                        order_id: items.order_id,
+                                        order_id: items.id,
                                         order_type:
                                           activeTab === 'In-transit'
                                             ? 'in_transit'
@@ -2963,14 +2972,6 @@ const Dashboard = () => {
                       </p>
                       <IndividualActionButton
                         onClick={() => {
-                          if (window?.dataLayer) {
-                            window.dataLayer.push({
-                              event:
-                                Tracking_Dashboard.click_bid_to_buy_dropdown,
-                              source_page: 'dashboard',
-                              user_id: customerData?.customer?.id
-                            });
-                          }
                           router.push('/v2/bid-2-buy');
                         }}
                         variant={'primary'}
