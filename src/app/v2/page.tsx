@@ -464,7 +464,7 @@ const Dashboard = () => {
         });
       }
     }
-  }, [JSON.parse(localStorage.getItem('user')!)]);
+  }, []);
 
   useEffect(() => {
     if (customerData) {
