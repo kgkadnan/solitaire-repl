@@ -170,7 +170,9 @@ const MyCart = () => {
     Sold: 0,
     BidToBuy: 0
   });
-  const [tiggerCart, { data: cartdata }] = useLazyGetCartQuery();
+  const [tiggerCart, { data: cartdata, isSuccess }] = useLazyGetCartQuery();
+  const [eventTriggered, setEventTriggered] = useState(false);
+
   const subRoute = useSearchParams().get('path');
   // Mutation for deleting items from the cart
   const [deleteCart] = useDeleteCartMutation();
@@ -1138,6 +1140,10 @@ const MyCart = () => {
 
     console.log('sourcePage', sourcePage, isSideNavigationBar);
 
+    console.log(
+      'myCartTabs',
+      diamondStatusCounts.Available + diamondStatusCounts.BidToBuy
+    );
     const pushToDataLayer = (
       event: string,
       destinationPage: string,
@@ -1148,25 +1154,27 @@ const MyCart = () => {
           event,
           source_page: sourcePage || 'unknown', // Fallback to 'unknown' if not set
           user_id: isKycVerified?.customer?.id,
-          stone_count: myCartTabs[0].count,
+          stone_count:
+            diamondStatusCounts.Available + diamondStatusCounts.BidToBuy,
           destination_page: destinationPage,
           side_navigation: isSideNavigationBar
         });
         sessionStorage.removeItem('source_page');
         sessionStorage.removeItem('is_side_navigation_bar');
+        setEventTriggered(true);
       } else {
         console.error('DataLayer is not defined.');
       }
     };
 
-    if (sourcePage === 'dashboard') {
+    if (sourcePage === 'dashboard' && isSuccess && !eventTriggered) {
       pushToDataLayer(
         Tracking_Dashboard.click_on_my_cart,
         Tracking_Dashboard_Destination_Page.my_cart,
         isSideNavigationBar
       );
     }
-  }, []);
+  }, [isSuccess]);
 
   const handleDetailPage = ({ row }: { row: any }) => {
     if (isConfirmStone) {
@@ -1751,6 +1759,7 @@ const MyCart = () => {
               <div className="flex h-[72px] items-center border-b-[1px] border-neutral200">
                 <div className="flex border-b border-neutral200 w-full ml-3 text-mMedium font-medium">
                   {myCartTabs.map(({ label, status, count }) => {
+                    console.log('count', count);
                     return (
                       <button
                         className={`px-[16px] py-[8px] ${

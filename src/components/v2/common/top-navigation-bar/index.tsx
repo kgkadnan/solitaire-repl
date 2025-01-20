@@ -654,7 +654,10 @@ const TopNavigationBar = ({
     );
   };
 
-  const pushToDataLayer = (event: string, destinationPage: string | null) => {
+  const pushToDataLayer = (
+    event: string,
+    destinationPage: string | undefined
+  ) => {
     if (window?.dataLayer) {
       window.dataLayer.push({
         event,
@@ -717,7 +720,7 @@ const TopNavigationBar = ({
                     ) {
                       pushToDataLayer(
                         Tracking_Dashboard.click_notify_sales,
-                        null
+                        undefined
                       );
                     }
                     handleNotifySales();
@@ -779,7 +782,10 @@ const TopNavigationBar = ({
                   window?.dataLayer &&
                   (currentPath === '/v2' || currentPath === '/')
                 ) {
-                  pushToDataLayer(Tracking_Dashboard.click_support_icon, null);
+                  pushToDataLayer(
+                    Tracking_Dashboard.click_support_icon,
+                    undefined
+                  );
                 }
               }}
             >
@@ -885,7 +891,7 @@ const TopNavigationBar = ({
                 ) {
                   pushToDataLayer(
                     Tracking_Dashboard.click_top_right_navigation,
-                    null
+                    undefined
                   );
                 }
               }}
