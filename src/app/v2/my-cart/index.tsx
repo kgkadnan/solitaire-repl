@@ -1152,7 +1152,6 @@ const MyCart = () => {
         });
         sessionStorage.removeItem('source_page');
         sessionStorage.removeItem('is_side_navigation_bar');
-        setEventTriggered(false);
       } else {
         console.error('DataLayer is not defined.');
       }
@@ -1165,7 +1164,7 @@ const MyCart = () => {
         isSideNavigationBar
       );
     }
-  }, [isSuccess]);
+  }, [isSuccess, eventTriggered]);
 
   const handleDetailPage = ({ row }: { row: any }) => {
     if (isConfirmStone) {
