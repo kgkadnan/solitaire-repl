@@ -1020,6 +1020,15 @@ const TopNavigationBar = ({
                   className="flex w-full items-center border-b-[1px] border-solid border-primaryBorder p-[16px] gap-[8px] cursor-pointer hover:bg-slate-50 "
                   onClick={() => {
                     setIsLogout(true);
+                    if (
+                      window?.dataLayer &&
+                      (currentPath === '/v2' || currentPath === '/')
+                    ) {
+                      pushToDataLayer(
+                        Tracking_Dashboard.click_on_logout,
+                        Tracking_Dashboard_Destination_Page.login
+                      );
+                    }
                     setModalContent(
                       <>
                         <div className="absolute left-[-84px] top-[-84px]">
@@ -1052,16 +1061,6 @@ const TopNavigationBar = ({
                                 variant: 'secondary',
                                 label: 'Log out this device',
                                 handler: () => {
-                                  if (
-                                    window?.dataLayer &&
-                                    (currentPath === '/v2' ||
-                                      currentPath === '/')
-                                  ) {
-                                    pushToDataLayer(
-                                      Tracking_Dashboard.click_on_logout,
-                                      Tracking_Dashboard_Destination_Page.login
-                                    );
-                                  }
                                   dispatch(
                                     dashboardResultPage({
                                       isResultPage: false,
@@ -1086,16 +1085,6 @@ const TopNavigationBar = ({
                                 variant: 'primary',
                                 label: 'Log out all devices',
                                 handler: () => {
-                                  if (
-                                    window?.dataLayer &&
-                                    (currentPath === '/v2' ||
-                                      currentPath === '/')
-                                  ) {
-                                    pushToDataLayer(
-                                      Tracking_Dashboard.click_on_logout,
-                                      Tracking_Dashboard_Destination_Page.login
-                                    );
-                                  }
                                   dispatch(
                                     dashboardResultPage({
                                       isResultPage: false,
