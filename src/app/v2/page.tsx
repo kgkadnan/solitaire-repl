@@ -150,7 +150,7 @@ const Dashboard = () => {
   const { data: customerData, refetch: refetchCustomerData } =
     useGetCustomerQuery({}, { refetchOnMountOrArgChange: true });
 
-  const [addDeviceUUID] = useAddDeviceUUIDMutation();
+  // const [addDeviceUUID] = useAddDeviceUUIDMutation();
   const [showRadios, setShowRadios] = useState(false);
 
   // Options for Radio Buttons
@@ -920,22 +920,22 @@ const Dashboard = () => {
       }, 4000);
   }, [error]);
 
-  useEffect(() => {
-    let userUuid = JSON.parse(localStorage.getItem('device_uuid')!);
-    if (userUuid?.length && customerData) {
-      let payload = {
-        device_uuid: userUuid,
-        platform_type: 'web',
-        customer_id: customerData?.customer?.id
-      };
-      addDeviceUUID(payload)
-        .unwrap()
-        .then(res => {
-          console.log(res);
-          localStorage.removeItem('device_uuid');
-        });
-    }
-  }, []);
+  // useEffect(() => {
+  //   let userUuid = JSON.parse(localStorage.getItem('device_uuid')!);
+  //   if (userUuid?.length && customerData) {
+  //     let payload = {
+  //       device_uuid: userUuid,
+  //       platform_type: 'web',
+  //       customer_id: customerData?.customer?.id
+  //     };
+  //     addDeviceUUID(payload)
+  //       .unwrap()
+  //       .then(res => {
+  //         console.log(res);
+  //         localStorage.removeItem('device_uuid');
+  //       });
+  //   }
+  // }, []);
 
   const goBack = () => {
     setIsDiamondDetail(false);
