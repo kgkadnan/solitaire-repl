@@ -198,10 +198,6 @@ const MyCart = () => {
   };
   const [reuestCallBack] = useReuestCallBackMutation({});
 
-  const [triggerRequestCallTimeSlots] = useLazyGetRequestCallBackTimeSlotsQuery(
-    {}
-  );
-
   const [openSection, setOpenSection] = useState<string | null>(null);
 
   const toggleSection = (key: string) => {
@@ -453,6 +449,7 @@ const MyCart = () => {
 
           setCartItems(filteredRows);
           setDiamondStatusCounts(counts);
+          setEventTriggered(true);
           setRowSelection({});
           setIsLoading(false);
         })
@@ -1155,13 +1152,13 @@ const MyCart = () => {
         });
         sessionStorage.removeItem('source_page');
         sessionStorage.removeItem('is_side_navigation_bar');
-        setEventTriggered(true);
+        setEventTriggered(false);
       } else {
         console.error('DataLayer is not defined.');
       }
     };
 
-    if (sourcePage === 'dashboard' && isSuccess && !eventTriggered) {
+    if (sourcePage === 'dashboard' && isSuccess && eventTriggered) {
       pushToDataLayer(
         Tracking_Dashboard.click_on_my_cart,
         Tracking_Dashboard_Destination_Page.my_cart,
