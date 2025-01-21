@@ -35,6 +35,10 @@ import BookAppointment from './components/book-appointment/book-appointment';
 import CommonPoppup from '../login/component/common-poppup';
 import MyAppointmentSkeleton from '@/components/v2/skeleton/my-appointment';
 import { Skeleton } from '@mui/material';
+import {
+  Tracking_Dashboard,
+  Tracking_Dashboard_Destination_Page
+} from '@/constants/funnel-tracking';
 
 export interface ISlot {
   datetimeString: string;
@@ -201,6 +205,43 @@ const MyAppointments = () => {
       stones: rescheduleData.stones
     });
   };
+
+  useEffect(() => {
+    const sourcePage = sessionStorage.getItem('source_page');
+    const isSideNavigationBar = JSON.parse(
+      sessionStorage.getItem('is_side_navigation_bar') || 'false'
+    );
+
+    console.log('sourcePage', sourcePage, isSideNavigationBar);
+
+    const pushToDataLayer = (
+      event: string,
+      destinationPage: string,
+      isSideNavigationBar: boolean
+    ) => {
+      if (window?.dataLayer) {
+        window.dataLayer.push({
+          event,
+          source_page: sourcePage || 'unknown', // Fallback to 'unknown' if not set
+          user_id: isKycVerified?.customer?.id,
+          destination_page: destinationPage,
+          side_navigation: isSideNavigationBar
+        });
+        sessionStorage.removeItem('source_page');
+        sessionStorage.removeItem('is_side_navigation_bar');
+      } else {
+        console.error('DataLayer is not defined.');
+      }
+    };
+
+    if (sourcePage === 'dashboard') {
+      pushToDataLayer(
+        Tracking_Dashboard.click_my_appointments,
+        Tracking_Dashboard_Destination_Page.my_appointments,
+        isSideNavigationBar
+      );
+    }
+  }, []);
 
   const goBackToListView = () => {
     setRescheduleAppointmentData(undefined);

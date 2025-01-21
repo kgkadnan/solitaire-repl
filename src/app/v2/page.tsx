@@ -94,7 +94,11 @@ import { STONE_LOCATION } from '@/constants/v2/enums/location';
 import { kamLocationAction } from '@/features/kam-location/kam-location';
 import { handleCompareStone } from './search/result/helpers/handle-compare-stone';
 import { trackEvent } from '@/utils/ga';
-import { Tracking_Search_By_Text } from '@/constants/funnel-tracking';
+import {
+  Tracking_Dashboard,
+  Tracking_Dashboard_Destination_Page,
+  Tracking_Search_By_Text
+} from '@/constants/funnel-tracking';
 
 import GemTracPage from '@/components/v2/common/gem-trac';
 import { useLazyGetGemTracQuery } from '@/features/api/gem-trac';
@@ -109,6 +113,7 @@ import {
 import { IAppointmentPayload } from './my-appointments';
 import { dashboardResultPage } from '@/features/dashboard/dashboard-slice';
 import { RadioButton } from '@/components/v2/common/radio';
+import { useAddDeviceUUIDMutation } from '@/features/api/device-uuid';
 
 interface ITabs {
   label: string;
@@ -145,6 +150,7 @@ const Dashboard = () => {
   const { data: customerData, refetch: refetchCustomerData } =
     useGetCustomerQuery({}, { refetchOnMountOrArgChange: true });
 
+  // const [addDeviceUUID] = useAddDeviceUUIDMutation();
   const [showRadios, setShowRadios] = useState(false);
 
   // Options for Radio Buttons
@@ -255,9 +261,14 @@ const Dashboard = () => {
 
   const toggleBottomSheet = () => {
     setBottomSheetOpen(prev => !prev);
+    if (window?.dataLayer) {
+      window.dataLayer.push({
+        event: Tracking_Dashboard.click_bid_to_buy_dropdown,
+        source_page: 'dashboard',
+        user_id: customerData?.customer?.id
+      });
+    }
   };
-
-  console.log('windows', window);
 
   const options = [
     {
@@ -370,6 +381,20 @@ const Dashboard = () => {
       }
     );
 
+    if (window?.dataLayer) {
+      if (customerData) {
+        window?.dataLayer.push({
+          search_name: savedSearchEditData[0]?.name,
+          event: Tracking_Dashboard.click_individual_saved_search,
+          page_name: 'dashboard',
+          user_id: customerData?.customer?.id,
+          destination_page: identifier
+            ? Tracking_Dashboard_Destination_Page.match_pair_form
+            : Tracking_Dashboard_Destination_Page.search_form
+        });
+      }
+    }
+
     dispatch(modifySavedSearch({ savedSearch: savedSearchEditData[0] }));
 
     identifier
@@ -436,7 +461,23 @@ const Dashboard = () => {
   }, []);
 
   useEffect(() => {
+    if (window?.dataLayer) {
+      const customerDataFromLocalStorage = JSON.parse(
+        localStorage.getItem('user')!
+      );
+      if (customerDataFromLocalStorage) {
+        window?.dataLayer.push({
+          event: Tracking_Dashboard.page_view,
+          page_name: 'dashboard',
+          user_id: customerDataFromLocalStorage?.customer?.id
+        });
+      }
+    }
+  }, []);
+
+  useEffect(() => {
     if (customerData) {
+      localStorage.setItem('user', JSON.stringify(customerData));
       setCustomerMobileNumber(
         `+${customerData.customer.country_code}${customerData.customer.phone}`
       );
@@ -662,7 +703,7 @@ const Dashboard = () => {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && stoneId.length > 0) {
       setIsLoading(true);
       if (dashboardResultPageData.searchType !== 'NewArrivals') {
         getProductById({
@@ -683,6 +724,20 @@ const Dashboard = () => {
               mobile_number: customerMobileNumber,
               status: 'Success'
             });
+
+            if (window?.dataLayer) {
+              window.dataLayer.push({
+                event: Tracking_Dashboard.click_enter_search_by_text,
+                source_page: 'dashboard',
+                user_id: customerData?.customer?.id,
+                destination_page:
+                  dashboardResultPageData.searchType === 'normal'
+                    ? Tracking_Dashboard_Destination_Page.search_form_results
+                    : Tracking_Dashboard_Destination_Page.bid_to_buy,
+                stone_count: res?.foundProducts?.length,
+                search_result: 'success'
+              });
+            }
 
             if (dashboardResultPageData.searchType === 'normal') {
               dispatch(
@@ -711,6 +766,21 @@ const Dashboard = () => {
               mobile_number: customerMobileNumber,
               status: 'Fail'
             });
+
+            if (window?.dataLayer) {
+              window.dataLayer.push({
+                event: Tracking_Dashboard.click_enter_search_by_text,
+                source_page: 'dashboard',
+                user_id: customerData?.customer?.id,
+                destination_page:
+                  dashboardResultPageData.searchType === 'normal'
+                    ? Tracking_Dashboard_Destination_Page.search_form_results
+                    : Tracking_Dashboard_Destination_Page.bid_to_buy,
+                stone_count: 0,
+                search_result: 'fail'
+              });
+            }
+
             if (
               _e?.status === statusCode.NOT_FOUND ||
               _e?.status === statusCode.INVALID_DATA
@@ -723,6 +793,17 @@ const Dashboard = () => {
             }
           });
       } else {
+        if (window?.dataLayer) {
+          window.dataLayer.push({
+            event: Tracking_Dashboard.click_enter_search_by_text,
+            source_page: 'dashboard',
+            user_id: customerData?.customer?.id,
+            destination_page: Tracking_Dashboard_Destination_Page.new_arrivals,
+            stone_count: 0,
+            search_result: 'success'
+          });
+        }
+
         router.push(`${Routes.NEW_ARRIVAL}`);
         setIsLoading(false);
       }
@@ -741,7 +822,19 @@ const Dashboard = () => {
             setIsLoading(false);
             // setSearchData(res);
             // setIsDetailPage(true);
-
+            if (window?.dataLayer) {
+              window.dataLayer.push({
+                event: Tracking_Dashboard.click_enter_search_by_text,
+                source_page: 'dashboard',
+                user_id: customerData?.customer?.id,
+                destination_page:
+                  dashboardResultPageData.searchType === 'normal'
+                    ? Tracking_Dashboard_Destination_Page.search_form_results
+                    : Tracking_Dashboard_Destination_Page.bid_to_buy,
+                stone_count: res?.foundProducts?.length,
+                search_result: 'success'
+              });
+            }
             setError('');
             setLastEventTime(null);
             trackEvent({
@@ -777,6 +870,19 @@ const Dashboard = () => {
               mobile_number: customerMobileNumber,
               status: 'Fail'
             });
+            if (window?.dataLayer) {
+              window.dataLayer.push({
+                event: Tracking_Dashboard.click_enter_search_by_text,
+                source_page: 'dashboard',
+                user_id: customerData?.customer?.id,
+                destination_page:
+                  dashboardResultPageData.searchType === 'normal'
+                    ? Tracking_Dashboard_Destination_Page.search_form_results
+                    : Tracking_Dashboard_Destination_Page.bid_to_buy,
+                stone_count: 0,
+                search_result: 'fail'
+              });
+            }
             if (
               _e?.status === statusCode.NOT_FOUND ||
               _e?.status === statusCode.INVALID_DATA
@@ -789,6 +895,16 @@ const Dashboard = () => {
             }
           });
       } else {
+        if (window?.dataLayer) {
+          window.dataLayer.push({
+            event: Tracking_Dashboard.click_enter_search_by_text,
+            source_page: 'dashboard',
+            user_id: customerData?.customer?.id,
+            destination_page: Tracking_Dashboard_Destination_Page.new_arrivals,
+            stone_count: 0,
+            search_result: 'success'
+          });
+        }
         router.push(`${Routes.NEW_ARRIVAL}`);
         setIsLoading(false);
       }
@@ -803,6 +919,23 @@ const Dashboard = () => {
         setError(''); // Hide the toast notification after some time
       }, 4000);
   }, [error]);
+
+  // useEffect(() => {
+  //   let userUuid = JSON.parse(localStorage.getItem('device_uuid')!);
+  //   if (userUuid?.length && customerData) {
+  //     let payload = {
+  //       device_uuid: userUuid,
+  //       platform_type: 'web',
+  //       customer_id: customerData?.customer?.id
+  //     };
+  //     addDeviceUUID(payload)
+  //       .unwrap()
+  //       .then(res => {
+  //         console.log(res);
+  //         localStorage.removeItem('device_uuid');
+  //       });
+  //   }
+  // }, []);
 
   const goBack = () => {
     setIsDiamondDetail(false);
@@ -2184,7 +2317,14 @@ const Dashboard = () => {
                         className="pr-[77px] py-1 w-full text-neutral900 rounded-lg focus:outline-none"
                         type="text"
                         placeholder="Search by stone id or certificate number"
-                        onClick={() => setShowRadios(!showRadios)} // Show radios on input click
+                        onClick={() => {
+                          window.dataLayer.push({
+                            event: Tracking_Dashboard.click_search_by_text,
+                            source_page: 'dashboard',
+                            user_id: customerData?.customer?.id
+                          });
+                          setShowRadios(!showRadios);
+                        }} // Show radios on input click
                         onChange={handleStoneId}
                         onKeyDown={handleKeyDown}
                         value={dashboardResultPageData.stoneId}
@@ -2301,6 +2441,20 @@ const Dashboard = () => {
                           ? () => {}
                           : data.isAvailable
                           ? () => {
+                              if (
+                                data.link === Routes.NEW_ARRIVAL ||
+                                data.link === Routes.BID_TO_BUY ||
+                                data.link === Routes.APPOINTMENTS
+                              ) {
+                                sessionStorage.setItem(
+                                  'source_page',
+                                  'dashboard'
+                                );
+                                sessionStorage.setItem(
+                                  'is_side_navigation_bar',
+                                  JSON.stringify(false)
+                                );
+                              }
                               router.push(data.link);
                             }
                           : () => {}
@@ -2432,6 +2586,22 @@ const Dashboard = () => {
                                 <div
                                   key={items.order_id}
                                   onClick={() => {
+                                    if (window?.dataLayer) {
+                                      window.dataLayer.push({
+                                        event:
+                                          Tracking_Dashboard.click_individual_order,
+                                        source_page: 'dashboard',
+                                        user_id: customerData?.customer?.id,
+                                        destination_page:
+                                          Tracking_Dashboard_Destination_Page.individual_order,
+                                        order_id: items.id,
+                                        order_type:
+                                          activeTab === 'In-transit'
+                                            ? 'in_transit'
+                                            : 'pending'
+                                      });
+                                    }
+
                                     if (activeTab === 'In-transit') {
                                       router.push(
                                         `/v2/your-orders?path=${IN_TRANSIT}&id=${items?.id}`
@@ -2509,6 +2679,13 @@ const Dashboard = () => {
                       </div>
                       <Link
                         href={'v2/search?active-tab=saved-search'}
+                        onClick={() => {
+                          sessionStorage.setItem('source_page', 'dashboard');
+                          sessionStorage.setItem(
+                            'is_side_navigation_bar',
+                            JSON.stringify(false)
+                          );
+                        }}
                         className="cursor-pointer text-infoMain text-sRegular flex items-center"
                       >
                         View All
@@ -2537,7 +2714,9 @@ const Dashboard = () => {
                                 setDialogContent,
                                 setIsDialogOpen,
                                 isMatchingPair: searchData.is_matching_pair,
-                                setIsLoading
+                                setIsLoading,
+                                trackEvent: true,
+                                customerData
                               })
                             }
                           >
@@ -2652,6 +2831,7 @@ const Dashboard = () => {
                   <DashboardCarousel
                     images={customerData?.customer?.carousel_items}
                     router={router}
+                    customerData={customerData}
                   />
                 ) : (
                   <Skeleton
@@ -2685,6 +2865,7 @@ const Dashboard = () => {
                     phoneNumber={customerData?.customer.kam?.phone ?? '-'}
                     email={customerData?.customer.kam?.email ?? '-'}
                     image={customerData?.customer.kam?.image ?? ''}
+                    customerData={customerData}
                   />
                 )}
               </div>
@@ -2697,16 +2878,36 @@ const Dashboard = () => {
             {/* fixed bottom-0 left-[84px] right-0 bg-white  */}
             <div className="text-infoMain  flex gap-6 cursor-pointer">
               <p
-                onClick={() =>
-                  router.push('/v2/my-account?path=terms-and-conditions')
-                }
+                onClick={() => {
+                  if (window?.dataLayer) {
+                    window.dataLayer.push({
+                      event: Tracking_Dashboard.click_terms_and_conditions,
+                      source_page: 'dashboard',
+                      user_id: customerData?.customer?.id,
+                      destination_page:
+                        Tracking_Dashboard_Destination_Page.terms_and_conditions
+                    });
+                  }
+                  router.push('/v2/my-account?path=terms-and-conditions');
+                }}
               >
                 Terms & Conditions
               </p>
               <p
-                onClick={() =>
-                  router.push('/v2/my-account?path=privacy-policy')
-                }
+                onClick={() => {
+                  {
+                    if (window?.dataLayer) {
+                      window.dataLayer.push({
+                        event: Tracking_Dashboard.click_privacy_policy,
+                        source_page: 'dashboard',
+                        user_id: customerData?.customer?.id,
+                        destination_page:
+                          Tracking_Dashboard_Destination_Page.privacy_policy
+                      });
+                    }
+                    router.push('/v2/my-account?path=privacy-policy');
+                  }
+                }}
               >
                 Privacy Policy
               </p>

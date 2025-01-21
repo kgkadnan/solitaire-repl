@@ -102,6 +102,10 @@ import {
 } from '@/features/api/request-call-back';
 import chevronDown from '@public/v2/assets/icons/dashboard/chevron-down.svg';
 import chevronUp from '@public/v2/assets/icons/dashboard/chevron-up.svg';
+import {
+  Tracking_Dashboard,
+  Tracking_Dashboard_Destination_Page
+} from '@/constants/funnel-tracking';
 
 const MyCart = () => {
   const dispatch = useAppDispatch();
@@ -166,7 +170,9 @@ const MyCart = () => {
     Sold: 0,
     BidToBuy: 0
   });
-  const [tiggerCart, { data: cartdata }] = useLazyGetCartQuery();
+  const [tiggerCart, { data: cartdata, isSuccess }] = useLazyGetCartQuery();
+  const [eventTriggered, setEventTriggered] = useState(false);
+
   const subRoute = useSearchParams().get('path');
   // Mutation for deleting items from the cart
   const [deleteCart] = useDeleteCartMutation();
@@ -191,10 +197,6 @@ const MyCart = () => {
     setSelectedSlot(prevSlot => (prevSlot === slot ? '' : slot));
   };
   const [reuestCallBack] = useReuestCallBackMutation({});
-
-  const [triggerRequestCallTimeSlots] = useLazyGetRequestCallBackTimeSlotsQuery(
-    {}
-  );
 
   const [openSection, setOpenSection] = useState<string | null>(null);
 
@@ -447,6 +449,7 @@ const MyCart = () => {
 
           setCartItems(filteredRows);
           setDiamondStatusCounts(counts);
+          setEventTriggered(true);
           setRowSelection({});
           setIsLoading(false);
         })
@@ -1125,6 +1128,43 @@ const MyCart = () => {
       category: 'Image'
     }
   ];
+
+  useEffect(() => {
+    const sourcePage = sessionStorage.getItem('source_page');
+    const isSideNavigationBar = JSON.parse(
+      sessionStorage.getItem('is_side_navigation_bar') || 'false'
+    );
+
+    const pushToDataLayer = (
+      event: string,
+      destinationPage: string,
+      isSideNavigationBar: boolean
+    ) => {
+      if (window?.dataLayer) {
+        window.dataLayer.push({
+          event,
+          source_page: sourcePage || 'unknown', // Fallback to 'unknown' if not set
+          user_id: isKycVerified?.customer?.id,
+          stone_count:
+            diamondStatusCounts.Available + diamondStatusCounts.BidToBuy,
+          destination_page: destinationPage,
+          side_navigation: isSideNavigationBar
+        });
+        sessionStorage.removeItem('source_page');
+        sessionStorage.removeItem('is_side_navigation_bar');
+      } else {
+        console.error('DataLayer is not defined.');
+      }
+    };
+
+    if (sourcePage === 'dashboard' && isSuccess && eventTriggered) {
+      pushToDataLayer(
+        Tracking_Dashboard.click_on_my_cart,
+        Tracking_Dashboard_Destination_Page.my_cart,
+        isSideNavigationBar
+      );
+    }
+  }, [isSuccess, eventTriggered]);
 
   const handleDetailPage = ({ row }: { row: any }) => {
     if (isConfirmStone) {

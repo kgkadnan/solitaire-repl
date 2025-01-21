@@ -23,7 +23,7 @@ import Link from 'next/link';
 // import logger from 'logging/log-util';
 import { SocketManager, useSocket } from '@/hooks/v2/socket-manager';
 import useUser from '@/lib/use-auth';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import {
   IN_TRANSIT,
   AVAILABLE_STATUS,
@@ -34,6 +34,7 @@ import {
   SOLD_STATUS
 } from '@/constants/business-logic';
 import NotificationSkeleton from '@/components/v2/skeleton/notification';
+import { Tracking_Dashboard } from '@/constants/funnel-tracking';
 
 interface INotification {
   created_at: string;
@@ -46,11 +47,14 @@ interface INotification {
   title: string;
 }
 const Notification = ({
-  isInMaintenanceMode
+  isInMaintenanceMode,
+  pushToDataLayer
 }: {
   isInMaintenanceMode: boolean;
+  pushToDataLayer: any;
 }) => {
   const router = useRouter();
+  const currentPath = usePathname();
   const [triggerNotification] = useLazyGetNotificationQuery({});
   const [readAllNotification] = useReadAllNotificationMutation({});
   const { data } = useGetNotificationQuery({});
@@ -212,6 +216,12 @@ const Notification = ({
         }`}
         onClick={_e => {
           callNotification();
+          if (
+            window?.dataLayer &&
+            (currentPath === '/v2' || currentPath === '/')
+          ) {
+            pushToDataLayer(Tracking_Dashboard.click_notifications);
+          }
         }}
       >
         {

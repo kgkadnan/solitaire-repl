@@ -121,3 +121,54 @@ export const Tracking_KYC_Entry_Point = {
   KYC_Top_Button: 'KYC_Top_Button',
   KYC_Registration_Page: 'KYC_Registration_Page'
 };
+
+export const Tracking_Dashboard = {
+  page_view: 'page_view',
+  click_search_by_text: 'click_search_by_text',
+  click_enter_search_by_text: 'click_enter_search_by_text',
+  click_search: 'click_search',
+  click_match_pair_search: 'click_match_pair_search',
+  click_new_arrivals: 'click_new_arrivals',
+  click_bid_to_buy: 'click_bid_to_buy',
+  click_individual_saved_search: 'click_individual_saved_search',
+  click_saved_search: 'click_saved_search',
+  click_individual_order: 'click_individual_order',
+  click_your_orders: 'click_your_orders',
+  click_on_carousel: 'click_on_carousel',
+  click_on_my_cart: 'click_on_my_cart',
+  click_kam_card: 'click_kam_card',
+  click_terms_and_conditions: 'click_terms_and_conditions',
+  click_privacy_policy: 'click_privacy_policy',
+  click_my_appointments: 'click_my_appointments',
+  click_faqs: 'click_faqs',
+  click_support_icon: 'click_support_icon',
+  click_notifications: 'click_notifications',
+  click_top_right_navigation: 'click_top_right_navigation',
+  click_on_my_account: 'click_on_my_account',
+  click_on_logout: 'click_on_logout',
+  click_kgk_logo: 'click_kgk_logo',
+  click_bid_to_buy_dropdown: 'click_bid_to_buy_dropdown',
+  click_notify_sales: 'click_notify_sales',
+  click_complete_kyc: 'click_complete_kyc'
+};
+
+export const Tracking_Dashboard_Destination_Page = {
+  search_form_results: 'search_form_results',
+  new_arrivals: 'new_arrivals',
+  bid_to_buy: 'bid_to_buy',
+  search_form: 'search_form',
+  match_pair_form: 'match_pair_form',
+  match_pair_results: 'match_pair_results',
+  saved_search: 'saved_search',
+  individual_order: 'individual_order',
+  your_orders: 'your_orders',
+  my_cart: 'my_cart',
+  terms_and_conditions: 'terms_and_conditions',
+  privacy_policy: 'privacy_policy',
+  my_appointment_form: 'my_appointment_form',
+  my_appointments: 'my_appointments',
+  faqs: 'faqs',
+  my_account: 'my_account',
+  login: 'login',
+  kyc: 'kyc'
+};

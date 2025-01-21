@@ -13,6 +13,10 @@ import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
 import { ManageLocales } from '@/utils/v2/translate';
 import { ReactNode } from 'react';
 import CommonPoppup from '@/app/v2/login/component/common-poppup';
+import {
+  Tracking_Dashboard,
+  Tracking_Dashboard_Destination_Page
+} from '@/constants/funnel-tracking';
 
 export const isSearchAlreadyExist = (data: any, nameToFind: string) => {
   const foundSearch = data?.find(
@@ -31,7 +35,9 @@ export const handleCardClick = ({
   setDialogContent,
   setIsDialogOpen,
   isMatchingPair,
-  setIsLoading
+  setIsLoading,
+  trackEvent,
+  customerData
 }: {
   id: string;
   savedSearchData: ISavedSearchData[];
@@ -41,6 +47,8 @@ export const handleCardClick = ({
   setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   isMatchingPair?: boolean;
+  trackEvent?: boolean;
+  customerData?: any;
 }) => {
   // Filter the saved search data to get the clicked card's data
   setIsLoading(true);
@@ -229,6 +237,21 @@ export const handleCardClick = ({
               );
 
           setIsLoading(false);
+        }
+        if (trackEvent) {
+          if (window?.dataLayer) {
+            if (customerData) {
+              window?.dataLayer.push({
+                search_name: cardClickData[0]?.name,
+                event: Tracking_Dashboard.click_individual_saved_search,
+                page_name: 'dashboard',
+                user_id: customerData?.customer?.id,
+                destination_page: isMatchingPair
+                  ? Tracking_Dashboard_Destination_Page.match_pair_results
+                  : Tracking_Dashboard_Destination_Page.search_form_results
+              });
+            }
+          }
         }
       }
     }

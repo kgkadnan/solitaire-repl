@@ -33,6 +33,8 @@ import logoutConfirmIcon from '@public/v2/assets/icons/modal/logout.svg';
 import crossIcon from '@public/v2/assets/icons/modal/cross.svg';
 import { Skeleton } from '@mui/material';
 import {
+  Tracking_Dashboard,
+  Tracking_Dashboard_Destination_Page,
   Tracking_KYC,
   Tracking_KYC_Entry_Point,
   Tracking_Search_By_Text
@@ -207,6 +209,22 @@ const TopNavigationBar = ({
               status: 'Success'
             });
 
+            if (currentPath === '/v2' || currentPath === '/') {
+              if (window?.dataLayer) {
+                window.dataLayer.push({
+                  event: Tracking_Dashboard.click_enter_search_by_text,
+                  source_page: 'dashboard',
+                  user_id: customerData?.customer?.id,
+                  destination_page:
+                    dashboardResultPageData.searchType === 'normal'
+                      ? Tracking_Dashboard_Destination_Page.search_form_results
+                      : Tracking_Dashboard_Destination_Page.bid_to_buy,
+                  stone_count: res?.foundProducts?.length,
+                  search_result: 'success'
+                });
+              }
+            }
+
             if (dashboardResultPageData.searchType === 'normal') {
               dispatch(
                 dashboardResultPage({
@@ -229,6 +247,23 @@ const TopNavigationBar = ({
           .catch((_e: any) => {
             setIsLoading(false);
             setLastEventTime(null);
+
+            if (currentPath === '/v2' || currentPath === '/') {
+              if (window?.dataLayer) {
+                window.dataLayer.push({
+                  event: Tracking_Dashboard.click_enter_search_by_text,
+                  source_page: 'dashboard',
+                  user_id: customerData?.customer?.id,
+                  destination_page:
+                    dashboardResultPageData.searchType === 'normal'
+                      ? Tracking_Dashboard_Destination_Page.search_form_results
+                      : Tracking_Dashboard_Destination_Page.bid_to_buy,
+                  stone_count: 0,
+                  search_result: 'fail'
+                });
+              }
+            }
+
             trackEvent({
               action: Tracking_Search_By_Text.search_by_text_executed,
               category: 'SearchByText',
@@ -279,6 +314,23 @@ const TopNavigationBar = ({
               mobile_number: `+${customerData.customer.country_code}${customerData.customer.phone}`,
               status: 'Success'
             });
+
+            if (currentPath === '/v2' || currentPath === '/') {
+              if (window?.dataLayer) {
+                window.dataLayer.push({
+                  event: Tracking_Dashboard.click_enter_search_by_text,
+                  source_page: 'dashboard',
+                  user_id: customerData?.customer?.id,
+                  destination_page:
+                    dashboardResultPageData.searchType === 'normal'
+                      ? Tracking_Dashboard_Destination_Page.search_form_results
+                      : Tracking_Dashboard_Destination_Page.bid_to_buy,
+                  stone_count: res?.foundProducts?.length,
+                  search_result: 'success'
+                });
+              }
+            }
+
             if (dashboardResultPageData.searchType === 'normal') {
               dispatch(
                 dashboardResultPage({
@@ -306,6 +358,22 @@ const TopNavigationBar = ({
               mobile_number: `+${customerData.customer.country_code}${customerData.customer.phone}`,
               status: 'Fail'
             });
+
+            if (currentPath === '/v2' || currentPath === '/') {
+              if (window?.dataLayer) {
+                window.dataLayer.push({
+                  event: Tracking_Dashboard.click_enter_search_by_text,
+                  source_page: 'dashboard',
+                  user_id: customerData?.customer?.id,
+                  destination_page:
+                    dashboardResultPageData.searchType === 'normal'
+                      ? Tracking_Dashboard_Destination_Page.search_form_results
+                      : Tracking_Dashboard_Destination_Page.bid_to_buy,
+                  stone_count: 0,
+                  search_result: 'fail'
+                });
+              }
+            }
             if (
               _e?.status === statusCode.NOT_FOUND ||
               _e?.status === statusCode.INVALID_DATA
@@ -475,7 +543,7 @@ const TopNavigationBar = ({
           <div
             style={{
               width:
-                currentPath === '/v2'
+                currentPath === '/v2' || currentPath === '/'
                   ? isSearchVisible
                     ? `${inputWidth + 7}px`
                     : '' // Dynamic width applied here.
@@ -491,7 +559,7 @@ const TopNavigationBar = ({
           className={`relative z-[110] flex flex-col items-start bg-neutral0 rounded-[4px] overflow-hidden border-[1px] border-primaryBorder  px-[12px] py-[5px]`}
           style={{
             width:
-              currentPath === '/v2'
+              currentPath === '/v2' || currentPath === '/'
                 ? isSearchVisible
                   ? `${inputWidth}px`
                   : '' // Dynamic width applied here.
@@ -506,7 +574,16 @@ const TopNavigationBar = ({
               className="pr-[77px] py-1 w-full text-neutral900 rounded-lg focus:outline-none"
               type="text"
               placeholder="Search by stone id or certificate number"
-              onClick={() => setShowRadios(!showRadios)} // Show radios on input click
+              onClick={() => {
+                if (currentPath === '/v2' || currentPath === '/') {
+                  window.dataLayer.push({
+                    event: Tracking_Dashboard.click_search_by_text,
+                    source_page: 'dashboard',
+                    user_id: customerData?.customer?.id
+                  });
+                }
+                setShowRadios(!showRadios);
+              }} // Show radios on input click
               onChange={handleStoneId}
               onKeyDown={handleKeyDown}
               value={dashboardResultPageData.stoneId}
@@ -577,6 +654,24 @@ const TopNavigationBar = ({
     );
   };
 
+  const pushToDataLayer = (
+    event: string,
+    destinationPage: string | undefined
+  ) => {
+    if (window?.dataLayer) {
+      window.dataLayer.push({
+        event,
+        source_page: 'dashboard',
+        user_id: isKycVerified?.customer?.id,
+        destination_page: destinationPage
+      });
+      sessionStorage.removeItem('source_page');
+      sessionStorage.removeItem('is_side_navigation_bar');
+    } else {
+      console.error('DataLayer is not defined.');
+    }
+  };
+
   return (
     <div className="min-h-[60px] border-b-[1px] border-neutral200 sticky top-0 left-[116px] bg-neutral0 z-[55] flex flex-col justify-end w-[calc(100vw-85px)]">
       <DialogComponent
@@ -619,6 +714,15 @@ const TopNavigationBar = ({
                       ? 'Notified Sales'
                       : 'Notify Sales',
                   handler: () => {
+                    if (
+                      window?.dataLayer &&
+                      (currentPath === '/v2' || currentPath === '/')
+                    ) {
+                      pushToDataLayer(
+                        Tracking_Dashboard.click_notify_sales,
+                        undefined
+                      );
+                    }
                     handleNotifySales();
                   },
                   isDisable:
@@ -641,6 +745,16 @@ const TopNavigationBar = ({
                         category: 'KYC'
                       });
                     router.push('/v2/kyc');
+
+                    if (
+                      window?.dataLayer &&
+                      (currentPath === '/v2' || currentPath === '/')
+                    ) {
+                      pushToDataLayer(
+                        Tracking_Dashboard.click_complete_kyc,
+                        Tracking_Dashboard_Destination_Page.kyc
+                      );
+                    }
                   },
                   customStyle: ''
                 }
@@ -655,13 +769,26 @@ const TopNavigationBar = ({
 
         {/* Middle section (Search Field) */}
         <div className="flex-grow flex justify-center">
-          {currentPath === '/v2'
+          {currentPath === '/v2' || currentPath === '/'
             ? isSearchVisible && renderSearchField()
             : renderSearchField()}
         </div>
         <div className="flex gap-[16px] items-center justify-end ">
           <Popover>
-            <PopoverTrigger className="flex justify-center">
+            <PopoverTrigger
+              className="flex justify-center"
+              onClick={() => {
+                if (
+                  window?.dataLayer &&
+                  (currentPath === '/v2' || currentPath === '/')
+                ) {
+                  pushToDataLayer(
+                    Tracking_Dashboard.click_support_icon,
+                    undefined
+                  );
+                }
+              }}
+            >
               <Image src={customerSupportSvg} alt="profile" />
             </PopoverTrigger>
             {/* Popover content with radio buttons */}
@@ -749,10 +876,26 @@ const TopNavigationBar = ({
               </div>
             </PopoverContent>
           </Popover>
-          <Notification isInMaintenanceMode={isInMaintenanceMode} />
+          <Notification
+            isInMaintenanceMode={isInMaintenanceMode}
+            pushToDataLayer={pushToDataLayer}
+          />
 
           <Popover>
-            <PopoverTrigger className="flex justify-center">
+            <PopoverTrigger
+              className="flex justify-center"
+              onClick={() => {
+                if (
+                  window?.dataLayer &&
+                  (currentPath === '/v2' || currentPath === '/')
+                ) {
+                  pushToDataLayer(
+                    Tracking_Dashboard.click_top_right_navigation,
+                    undefined
+                  );
+                }
+              }}
+            >
               {isImageApiLoaded ? (
                 <Avatar
                   className={`${
@@ -840,6 +983,16 @@ const TopNavigationBar = ({
                         textSearchReportId: null
                       })
                     );
+                    if (
+                      !isInMaintenanceMode &&
+                      window?.dataLayer &&
+                      (currentPath === '/v2' || currentPath === '/')
+                    ) {
+                      pushToDataLayer(
+                        Tracking_Dashboard.click_on_my_account,
+                        Tracking_Dashboard_Destination_Page.my_account
+                      );
+                    }
                     localStorage.removeItem('bid');
                     dispatch(filterFunction({}));
                   }}
@@ -867,6 +1020,15 @@ const TopNavigationBar = ({
                   className="flex w-full items-center border-b-[1px] border-solid border-primaryBorder p-[16px] gap-[8px] cursor-pointer hover:bg-slate-50 "
                   onClick={() => {
                     setIsLogout(true);
+                    if (
+                      window?.dataLayer &&
+                      (currentPath === '/v2' || currentPath === '/')
+                    ) {
+                      pushToDataLayer(
+                        Tracking_Dashboard.click_on_logout,
+                        Tracking_Dashboard_Destination_Page.login
+                      );
+                    }
                     setModalContent(
                       <>
                         <div className="absolute left-[-84px] top-[-84px]">

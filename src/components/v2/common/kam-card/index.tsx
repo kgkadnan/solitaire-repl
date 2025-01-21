@@ -10,6 +10,7 @@ import { Toast } from '../copy-and-share/toast';
 import { useState } from 'react';
 import { RednderLocation } from '../data-table/helpers/render-cell';
 import { STONE_LOCATION_SHORT } from '@/constants/v2/enums/location';
+import { Tracking_Dashboard } from '@/constants/funnel-tracking';
 
 interface IKAMCardProps {
   name: string;
@@ -18,6 +19,7 @@ interface IKAMCardProps {
   email: string;
   image?: string | null;
   location: string;
+  customerData: any;
 }
 
 const styles = {
@@ -34,11 +36,29 @@ const KAMCard: React.FC<IKAMCardProps> = ({
   phoneNumber,
   email,
   image,
-  location
+  location,
+  customerData
 }) => {
   const [showToast, setShowToast] = useState(false);
+
+  const pushToDataLayer = (event: string, click_on: string) => {
+    if (window?.dataLayer) {
+      window.dataLayer.push({
+        event,
+        source_page: 'dashboard',
+        user_id: customerData?.customer?.id,
+        click_on: click_on
+      });
+      sessionStorage.removeItem('source_page');
+      sessionStorage.removeItem('is_side_navigation_bar');
+    } else {
+      console.error('DataLayer is not defined.');
+    }
+  };
+
   const handleCopy = (email: string) => {
     navigator.clipboard.writeText(email);
+    pushToDataLayer(Tracking_Dashboard.click_kam_card, 'copy_email');
     setShowToast(true); // Show the toast notification
     setTimeout(() => {
       setShowToast(false); // Hide the toast notification after some time
@@ -98,7 +118,15 @@ const KAMCard: React.FC<IKAMCardProps> = ({
               <span>{location}</span>
             </div>
             <div className="flex items-center gap-2 cursor-pointer">
-              <a href={`tel:${phoneNumber}`}>
+              <a
+                href={`tel:${phoneNumber}`}
+                onClick={() => {
+                  pushToDataLayer(
+                    Tracking_Dashboard.click_kam_card,
+                    'phone_call'
+                  );
+                }}
+              >
                 {' '}
                 <Phone />
               </a>
@@ -108,6 +136,12 @@ const KAMCard: React.FC<IKAMCardProps> = ({
                 href={`https://wa.me/${phoneNumber?.replace(/\s+/g, '') || ''}`}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => {
+                  pushToDataLayer(
+                    Tracking_Dashboard.click_kam_card,
+                    'whatsapp'
+                  );
+                }}
               >
                 {' '}
                 <WhatsApp />
@@ -115,7 +149,13 @@ const KAMCard: React.FC<IKAMCardProps> = ({
               <span className="">{phoneNumber}</span>
             </div>
             <div className="flex items-center gap-2  cursor-pointer">
-              <a href={`mailto:${email}`} className="flex gap-2 items-center">
+              <a
+                href={`mailto:${email}`}
+                className="flex gap-2 items-center"
+                onClick={() => {
+                  pushToDataLayer(Tracking_Dashboard.click_kam_card, 'email');
+                }}
+              >
                 {' '}
                 <Mail /> <span className="">{email}</span>{' '}
               </a>
