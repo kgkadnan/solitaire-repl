@@ -2444,7 +2444,7 @@ const Dashboard = () => {
                               if (
                                 data.link === Routes.NEW_ARRIVAL ||
                                 data.link === Routes.BID_TO_BUY ||
-                                data.link === Routes.APPOINTMENTS ||
+                                data.link === Routes.MY_APPOINTMENTS ||
                                 data.link === Routes.MY_CART
                               ) {
                                 sessionStorage.setItem(
