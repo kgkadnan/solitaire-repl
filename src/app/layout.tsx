@@ -158,6 +158,10 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
                 } else if (permission === 'granted') {
                   window.OneSignal.getUserId().then((userId: string | null) => {
                     if (userId) {
+                      localStorage.setItem(
+                        'device_uuid',
+                        JSON.stringify(userId)
+                      );
                       console.log('User UUID (Player ID):', userId);
                     } else {
                       console.log('User UUID not yet available.');
