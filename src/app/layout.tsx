@@ -29,6 +29,7 @@ import { useMediaQuery } from 'react-responsive';
 import * as Sentry from '@sentry/nextjs';
 import Script from 'next/script';
 import CookieBot from 'react-cookiebot';
+
 const store = setupStore();
 
 const inter = Inter({ subsets: ['latin'] });
@@ -155,14 +156,6 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
                 // Handle notification permissions
                 if (permission === 'default') {
                   window.OneSignal.registerForPushNotifications();
-                } else if (permission === 'granted') {
-                  window.OneSignal.getUserId().then((userId: string | null) => {
-                    if (userId) {
-                      console.log('User UUID (Player ID):', userId);
-                    } else {
-                      console.log('User UUID not yet available.');
-                    }
-                  });
                 } else {
                   console.log('Notification permission denied.');
                 }
