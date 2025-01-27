@@ -921,19 +921,26 @@ const Dashboard = () => {
   }, [error]);
 
   useEffect(() => {
-    let userUuid = JSON.parse(localStorage.getItem('device_uuid')!);
-    if (userUuid?.length && customerData) {
-      let payload = {
-        device_uuid: userUuid,
-        platform_type: 'web',
-        customer_id: customerData?.customer?.id
-      };
-      addDeviceUUID(payload)
-        .unwrap()
-        .then(res => {
-          console.log(res);
-          localStorage.removeItem('device_uuid');
-        });
+    if (window.OneSignal) {
+      window.OneSignal.getUserId().then((userId: string | null) => {
+        if (userId) {
+          console.log('userId', userId);
+          if (customerData) {
+            let payload = {
+              device_uuid: userId,
+              platform_type: 'web',
+              customer_id: customerData?.customer?.id
+            };
+            addDeviceUUID(payload)
+              .unwrap()
+              .then(res => {
+                console.log(res);
+              });
+          }
+        } else {
+          console.log('User UUID not yet available.');
+        }
+      });
     }
   }, []);
 
