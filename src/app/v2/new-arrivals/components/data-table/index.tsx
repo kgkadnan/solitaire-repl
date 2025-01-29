@@ -563,6 +563,7 @@ const NewArrivalDataTable = ({
                   display: 'none'
                 }
               }}
+              placeholder="Search by Stone ID"
               onKeyDown={event => {
                 if (event.key === 'Enter') {
                   handleGlobalFilter();
@@ -668,7 +669,7 @@ const NewArrivalDataTable = ({
       ) : !paginatedData.length && globalFilter.length ? (
         <div className="text-center">
           <Image src={empty} alt="empty" />
-          <p className="text-neutral900 w-[220px] mx-auto">
+          <p className="text-neutral900 text-lMedium  w-[220px] mx-auto">
             No matching stones found.
           </p>
         </div>
