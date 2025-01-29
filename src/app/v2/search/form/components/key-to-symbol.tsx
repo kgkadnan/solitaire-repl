@@ -60,7 +60,7 @@ export const KeyToSymbol = ({
       name: 'keyToSymbols',
       id: '2',
       value: false,
-      label: 'Does not contains',
+      label: 'Does not contain',
       checked: selectionChecked === 'doesNotContain'
     }
   ];

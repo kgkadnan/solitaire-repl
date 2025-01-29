@@ -41,6 +41,13 @@ import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
 import GemTracPage from '@/components/v2/common/gem-trac';
 import { useLazyGetGemTracQuery } from '@/features/api/gem-trac';
 import { MatchRoutes, SubRoutes } from '@/constants/v2/enums/routes';
+import { MRT_SortingState } from 'material-react-table';
+import {
+  faSort,
+  faSortDown,
+  faSortUp
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface IOrderDetail {
   productDetailData: any;
@@ -71,6 +78,7 @@ const OrderDetail: React.FC<IOrderDetail> = ({
   const [isDetailPage, setIsDetailPage] = useState(false);
   const [detailPageData, setDetailPageData] = useState<any>({});
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [sorting, setSorting] = useState<MRT_SortingState>([]);
 
   const [tooltip, setTooltip] = useState({
     show: false,
@@ -101,18 +109,42 @@ const OrderDetail: React.FC<IOrderDetail> = ({
       ?.filter(({ is_disabled }: any) => !is_disabled)
       ?.sort(({ sequence: a }: any, { sequence: b }: any) => a - b)
       .map(({ accessor, short_label, label }: any) => {
+        const currentSort = sorting.find(sort => sort.id === accessor);
+        const nonSortableAccessors = ['shape_full', 'details', 'fire_icon'];
+
+        // Check if sorting should be disabled for the column's accessor
+        const isSortable = !nonSortableAccessors.includes(accessor);
         const commonProps = {
           accessorKey: accessor,
           header: short_label,
-          minSize: 5,
-          maxSize: accessor === 'details' ? 100 : 200,
-          size: accessor === 'measurements' ? 183 : 5,
+          minSize: 0,
+          maxSize: 0,
+          size: 0,
           Header: ({ column }: any) => (
-            <Tooltip
-              tooltipTrigger={<span>{column.columnDef.header}</span>}
-              tooltipContent={label}
-              tooltipContentStyles={'z-[1000]'}
-            />
+            <div className="flex items-center group">
+              <Tooltip
+                tooltipTrigger={<span>{column.columnDef.header}</span>}
+                tooltipContent={label}
+                tooltipContentStyles={'z-[1000]'}
+              />
+              {isSortable &&
+                (currentSort ? (
+                  <FontAwesomeIcon
+                    icon={currentSort.desc ? faSortDown : faSortUp}
+                    width={8}
+                    height={8}
+                    style={{ marginLeft: '2px' }} // Optional styling for spacing
+                  />
+                ) : (
+                  <FontAwesomeIcon
+                    icon={faSort} // Default icon when not sorted
+                    width={8}
+                    height={8}
+                    className="opacity-0 transition-opacity duration-300 group-hover:opacity-100" // Show on hover
+                    style={{ marginLeft: '2px' }}
+                  />
+                ))}
+            </div>
           )
         };
 
@@ -227,7 +259,10 @@ const OrderDetail: React.FC<IOrderDetail> = ({
     fetchColumns();
   }, []);
 
-  const memoizedColumns = useMemo(() => mapColumns(columns), [columns]);
+  const memoizedColumns = useMemo(
+    () => mapColumns(columns),
+    [columns, sorting]
+  );
 
   const handleDownloadExcel = () => {
     let selectedIds = Object.keys(rowSelection);
@@ -677,6 +712,8 @@ const OrderDetail: React.FC<IOrderDetail> = ({
                 setRowSelection={setRowSelection}
                 rowSelection={rowSelection}
                 isOrderDetail={true}
+                setSorting={setSorting}
+                sorting={sorting}
               />
               <div className="px-[16px] py-2">
                 <ActionButton

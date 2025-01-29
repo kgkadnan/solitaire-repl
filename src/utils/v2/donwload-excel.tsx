@@ -75,7 +75,7 @@ export const downloadExcelHandler = async ({
                   content={''}
                   status="success"
                   customPoppupBodyStyle="!mt-[70px]"
-                  header={'Download Excel Successfully'}
+                  header={'Excel Downloaded Successfully'}
                   actionButtonData={[
                     {
                       variant: 'primary',
