@@ -330,6 +330,7 @@ const TurkeyDataTable = ({
                 display: 'none'
               }
             }}
+            placeholder="Search by Stone ID"
             onKeyDown={event => {
               if (event.key === 'Enter') {
                 handleGlobalFilter();
