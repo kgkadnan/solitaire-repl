@@ -101,37 +101,37 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
     ? authorizedLogin(ChildrenComponent)
     : ChildrenComponent;
 
-  useEffect(() => {
-    if (
-      typeof window !== 'undefined' &&
-      typeof window.navigator !== 'undefined' &&
-      typeof navigator !== 'undefined' &&
-      navigator.userAgent
-    ) {
-      const disableDevtool = require('disable-devtool');
-      disableDevtool({
-        disableMenu: true,
-        ondevtoolopen(type: any, _next: any) {
-          // if ( _type === 5) {
-          // Additional check: Confirm if dev tools are really open (optional)
-          if (
-            type === 6
-            // window.outerWidth - window.innerWidth > 200 ||
-            // window.outerHeight - window.innerHeight > 200
-          ) {
-            // This checks if the window has shrunk in size due to dev tools being opened
-            setOpen(true);
-            // }else{
-            //   setOpen(false)
-          }
-          // }
-        },
-        ignore: () => {
-          return process.env.NEXT_PUBLIC_ENV !== 'production';
-        }
-      });
-    }
-  });
+  // useEffect(() => {
+  //   if (
+  //     typeof window !== 'undefined' &&
+  //     typeof window.navigator !== 'undefined' &&
+  //     typeof navigator !== 'undefined' &&
+  //     navigator.userAgent
+  //   ) {
+  //     const disableDevtool = require('disable-devtool');
+  //     disableDevtool({
+  //       disableMenu: true,
+  //       ondevtoolopen(type: any, _next: any) {
+  //         // if ( _type === 5) {
+  //         // Additional check: Confirm if dev tools are really open (optional)
+  //         if (
+  //           type === 6
+  //           // window.outerWidth - window.innerWidth > 200 ||
+  //           // window.outerHeight - window.innerHeight > 200
+  //         ) {
+  //           // This checks if the window has shrunk in size due to dev tools being opened
+  //           setOpen(true);
+  //           // }else{
+  //           //   setOpen(false)
+  //         }
+  //         // }
+  //       },
+  //       ignore: () => {
+  //         return process.env.NEXT_PUBLIC_ENV !== 'production';
+  //       }
+  //     });
+  //   }
+  // });
 
   useEffect(() => {
     if (!window.OneSignal) {
