@@ -165,6 +165,8 @@
   "app.login.keepSignedIn": "Keep me signed in",
   "app.login.password.placeholder": "Enter your password",
   "app.forgotPassword": "Forgot Password?",
+  "app.mobileVerfication": "Mobile Verification",
+  "app.emailVerfication": "Email Verification",
   "app.forgotPassword.title.number": "Please enter your registered mobile number",
   "app.forgotPassword.title.email": "Please enter your registered email id",
   "app.sendOTP": "Send OTP",
@@ -178,6 +180,7 @@
 
   "app.OTPVerification.cancel": "Cancel",
   "app.OTPVerification.save": "Save",
+  "app.OTPVerification.sendOtp": "Send OTP",
 
   "app.setPassword": "Set new password",
   "app.setPassword.title": "Your new password must be different to previously used passwords.",
