@@ -423,7 +423,7 @@ const MyAccount = () => {
         </div>
 
         <div className="flex justify-center py-[10px]">
-          <p className="text-neutral900 pr-10">Didn’t receive the email?</p>
+          <p className="text-neutral900 pr-10">Haven’t received any OTP ?</p>
           <p
             className={`${
               resendTimer > 0 ? 'text-neutral500' : 'text-infoMain'
