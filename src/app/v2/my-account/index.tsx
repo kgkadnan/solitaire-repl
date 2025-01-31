@@ -93,9 +93,7 @@ const MyAccount = () => {
   );
   const [imageUrl, setImageUrl] = useState('');
   const [triggerCustomerCheck] = useLazyCustomerCheckQuery({});
-  const [verifyResetOTP] = useVerifyResetOTPMutation();
-  const [sendResetOtp] = useSendResetOtpMutation();
-  const [resendEmailOTP] = useResendEmailOTPMutation();
+
   const [updateCustomerProfile] = useUpdateCustomerProfileMutation();
 
   const [mobileInfoError, setMobileInfoError] = useState('');
@@ -324,43 +322,18 @@ const MyAccount = () => {
               triggerCustomerCheck({
                 email,
                 phone: mobileNumberState.mobileNumber,
-                country_code: mobileNumberState.countryCode
+                country_code: mobileNumberState.countryCode,
+                channel: contactInfoAction === 'email' ? 'email' : 'sms'
               })
-                .then(() => {
-                  let payload: any =
-                    contactInfoAction === 'email'
-                      ? { email: email }
-                      : {
-                          phone: mobileNumberState.mobileNumber,
-                          country_code: mobileNumberState.countryCode
-                        };
-
-                  sendResetOtp({
-                    data: payload,
-                    query: contactInfoAction === 'email' ? 'email' : 'sms' // Use `email` or `sms` for the query dynamically
-                  })
-                    .then((res: any) => {
-                      setIsRenderContactInfo(false);
-                      setIsRenderOtpVerification(true);
-                      console.log('resssss', res);
-                      setOtpValues(['', '', '', '', '', '']);
-                      setResendTimer(60);
-                      setToken(res?.token || '');
-                      setIsLoading(false);
-                    })
-                    .catch((e: any) => {
-                      setIsLoading(false);
-                      modalSetState.setIsDialogOpen(true);
-                      modalSetState.setDialogContent(
-                        <CommonPoppup
-                          content=""
-                          header={e?.data?.message}
-                          handleClick={() =>
-                            modalSetState.setIsDialogOpen(false)
-                          }
-                        />
-                      );
-                    });
+                .unwrap()
+                .then(res => {
+                  setIsRenderContactInfo(false);
+                  setIsRenderOtpVerification(true);
+                  console.log('resssss', res);
+                  setOtpValues(['', '', '', '', '', '']);
+                  setResendTimer(60);
+                  setToken(res?.token || '');
+                  setIsLoading(false);
                 })
                 .catch(e => {
                   setIsLoading(false);
@@ -400,7 +373,7 @@ const MyAccount = () => {
 
   const resendLabel = resendTimer > 0 ? `(${resendTimer}Sec)` : '';
   useEffect(() => {
-    if (contactInfoAction === 'otpVerification') {
+    if (isRenderOtpVerification) {
       let countdownInterval: NodeJS.Timeout;
 
       if (resendTimer > 0) {
@@ -411,18 +384,18 @@ const MyAccount = () => {
 
       return () => clearInterval(countdownInterval);
     }
-  }, [resendTimer, contactInfoAction]);
+  }, [resendTimer, isRenderOtpVerification]);
 
   const renderOtpVerificationScreen = () => {
     return (
-      <div className="flex flex-col gap-[18px] items-center">
-        <div className="text-headingM text-neutral900 font-medium mt-[-75px]">
+      <div className="flex flex-col gap-[18px]">
+        <div className="text-headingM text-neutral900 font-medium mt-[-5px] flex justify-start">
           {contactInfoAction === 'email'
             ? ManageLocales('app.emailVerfication')
             : ManageLocales('app.mobileVerfication')}
         </div>
 
-        <div className="text-mRegular text-neutral900 flex items-center justify-center gap-[3px]">
+        <div className="text-mRegular text-neutral900 flex items-center justify-start gap-[3px] ">
           OTP has been sent to{' '}
           {`${
             contactInfoAction === 'email'
@@ -458,21 +431,49 @@ const MyAccount = () => {
             onClick={() =>
               resendTimer > 0
                 ? {}
-                : resendEmailOTP({})
+                : triggerCustomerCheck({
+                    email,
+                    phone: mobileNumberState.mobileNumber,
+                    country_code: mobileNumberState.countryCode,
+                    channel: contactInfoAction === 'email' ? 'email' : 'sms'
+                  })
                     .unwrap()
-                    .then((res: any) => {
-                      if (res) {
-                        setToken(res?.token ?? '');
-                        setResendTimer(60);
-                        setOtpValues(['', '', '', '', '', '']);
-                      }
+                    .then(res => {
+                      setResendTimer(60);
+                      setOtpValues(['', '', '', '', '', '']);
+                      setToken(res?.token || '');
+                      setIsLoading(false);
+                      modalSetState.setIsDialogOpen(true);
+                      modalSetState.setDialogContent(
+                        <CommonPoppup
+                          content={''}
+                          status="success"
+                          customPoppupBodyStyle="!mt-[70px]"
+                          header={'OTP sent successfully'}
+                          actionButtonData={[
+                            {
+                              variant: 'primary',
+                              label: 'Okay',
+                              handler: () => {
+                                modalSetState.setIsDialogOpen(false);
+                              },
+                              customStyle: 'flex-1 w-full h-10'
+                            }
+                          ]}
+                        />
+                      );
                     })
-                    .catch((e: any) => {
+                    .catch(e => {
+                      setIsLoading(false);
+
                       modalSetState.setIsDialogOpen(true);
                       modalSetState.setDialogContent(
                         <CommonPoppup
                           content=""
-                          header={e?.data?.message}
+                          header={
+                            e?.data?.message ||
+                            'Something went wrong. Please try again.'
+                          }
                           handleClick={() =>
                             modalSetState.setIsDialogOpen(false)
                           }
@@ -488,73 +489,74 @@ const MyAccount = () => {
           {' '}
           <IndividualActionButton
             onClick={() => {
-              checkOTPEntry(otpValues)
-                ? (setIsLoading(true),
-                  verifyResetOTP({
-                    token: token,
-                    otp: otpValues.join('')
-                  })
-                    .unwrap()
-                    .then((res: any) => {
-                      setIsLoading(false);
+              if (!checkOTPEntry(otpValues)) {
+                setOtpError(
+                  "We're sorry, but the OTP you entered is incorrect or has expired"
+                );
+                return;
+              }
 
-                      if (res) {
-                        setContactInfoAction('');
-                        setIsRenderOtpVerification(false);
-                        setIsRenderContactInfo(false);
-                        let payload: any =
-                          contactInfoAction === 'email'
-                            ? { email: email }
-                            : {
-                                phone: mobileNumberState.mobileNumber,
-                                country_code: mobileNumberState.countryCode
-                              };
+              setOtpError('');
+              setIsLoading(true);
 
-                        updateCustomerProfile(payload)
-                          .then(res => {
-                            modalSetState.setIsDialogOpen(true);
-                            modalSetState.setDialogContent(
-                              <CommonPoppup
-                                content={''}
-                                status="success"
-                                customPoppupBodyStyle="!mt-[65px]"
-                                customPoppupStyle="h-[200px]"
-                                header={
-                                  'Your email has been verified successfully'
-                                }
-                                actionButtonData={[
-                                  {
-                                    variant: 'primary',
-                                    label: 'Next',
-                                    handler: () => {
-                                      modalSetState.setIsDialogOpen(false);
-                                    },
-                                    customStyle: 'flex-1 w-full h-10'
-                                  }
-                                ]}
-                              />
-                            );
-                          })
-                          .catch(e => {});
-                      }
-                    })
-                    .catch((e: any) => {
-                      setIsLoading(false);
-                      modalSetState.setIsDialogOpen(true);
-                      modalSetState.setDialogContent(
-                        <CommonPoppup
-                          content=""
-                          header={e?.data?.message}
-                          handleClick={() =>
-                            modalSetState.setIsDialogOpen(false)
-                          }
-                        />
-                      );
-                    }),
-                  setOtpError(''))
-                : setOtpError(
-                    `We're sorry, but the OTP you entered is incorrect or has expired`
+              let payload: any = {
+                token: token,
+                otp: otpValues.join(''),
+                channel: contactInfoAction === 'email' ? 'email' : 'sms'
+              };
+
+              if (contactInfoAction === 'email') {
+                payload.email = email;
+              } else {
+                payload.phone = mobileNumberState.mobileNumber;
+                payload.country_code = mobileNumberState.countryCode;
+              }
+
+              updateCustomerProfile(payload)
+                .unwrap()
+                .then(res => {
+                  setContactInfoAction('');
+                  setIsRenderOtpVerification(false);
+                  setIsRenderContactInfo(false);
+                  modalSetState.setIsDialogOpen(true);
+
+                  modalSetState.setDialogContent(
+                    <CommonPoppup
+                      content=""
+                      status="success"
+                      customPoppupBodyStyle="!mt-[65px]"
+                      customPoppupStyle="h-[181px]"
+                      header={res?.message}
+                      actionButtonData={[
+                        {
+                          variant: 'primary',
+                          label: 'Okay',
+                          handler: () => modalSetState.setIsDialogOpen(false),
+                          customStyle: 'flex-1 w-full h-10'
+                        }
+                      ]}
+                    />
                   );
+                  setUserAccountInfo(res);
+
+                  localStorage.setItem('user', JSON.stringify(res));
+                  setIsLoading(false);
+                })
+                .catch(e => {
+                  console.error('Error:', e);
+                  setIsLoading(false);
+                  modalSetState.setIsDialogOpen(true);
+                  modalSetState.setDialogContent(
+                    <CommonPoppup
+                      content=""
+                      header={
+                        e?.data?.message ||
+                        'Something went wrong. Please try again.'
+                      }
+                      handleClick={() => modalSetState.setIsDialogOpen(false)}
+                    />
+                  );
+                });
             }}
             disabled={isLoading}
             variant={'primary'}
@@ -595,7 +597,7 @@ const MyAccount = () => {
         }
         dialogStyle={`${
           isRenderOtpVerification
-            ? 'h-[350px] min-h-[350px]'
+            ? 'h-[330px] min-h-[330px]'
             : 'h-[220px] min-h-[220px]'
         }`}
       />

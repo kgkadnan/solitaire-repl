@@ -179,8 +179,8 @@
   "app.modifyFilter": "Modify Filter",
 
   "app.OTPVerification.cancel": "Cancel",
-  "app.OTPVerification.save": "Save",
   "app.OTPVerification.sendOtp": "Send OTP",
+  "app.OTPVerification.save": "Save",
 
   "app.setPassword": "Set new password",
   "app.setPassword.title": "Your new password must be different to previously used passwords.",

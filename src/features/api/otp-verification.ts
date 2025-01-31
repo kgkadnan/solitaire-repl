@@ -37,7 +37,7 @@ export const otpVerificationApi = createApi({
     }),
     verifyResetOTP: builder.mutation({
       query: ({ data, query }) => ({
-        url: `/store/customers/${query}/verify`,
+        url: `/store/customers/${query}/password-reset-otp/verify`,
         method: 'POST',
         body: data
       }),
@@ -46,7 +46,7 @@ export const otpVerificationApi = createApi({
     }),
     sendResetOtp: builder.mutation({
       query: ({ data, query }) => ({
-        url: `/store/customers/${query}/send`,
+        url: `/store/customers/${query}/password-reset-otp/send`,
         method: 'POST',
         body: data
       }),
