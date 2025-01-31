@@ -686,16 +686,19 @@ const MyAccount = () => {
                     {' '}
                     {userAccountInfo?.customer?.email ?? '-'}
                   </p>
-                  <div
-                    className="cursor-pointer"
-                    onClick={() => {
-                      setContactInfoAction('email');
-                      setIsRenderContactInfo(true);
-                      setEmail(userAccountInfo?.customer?.email);
-                    }}
-                  >
-                    <Edit />
-                  </div>
+                  {userAccountInfo?.customer?.kyc?.status ===
+                    kycStatus.APPROVED && (
+                    <div
+                      className="cursor-pointer"
+                      onClick={() => {
+                        setContactInfoAction('email');
+                        setIsRenderContactInfo(true);
+                        setEmail(userAccountInfo?.customer?.email);
+                      }}
+                    >
+                      <Edit />
+                    </div>
+                  )}
                 </div>
                 <div className="flex items-center gap-[6px]">
                   {' '}
@@ -705,23 +708,26 @@ const MyAccount = () => {
                     {`+${userAccountInfo?.customer?.country_code} ${userAccountInfo?.customer?.phone}` ??
                       '-'}
                   </p>
-                  <div
-                    className="cursor-pointer"
-                    onClick={() => {
-                      setContactInfoAction('mobile');
-                      setIsRenderContactInfo(true);
-                      setMobileNumberState({
-                        iso:
-                          userAccountInfo?.customer?.country_iso2_code.toLocaleUpperCase() ??
-                          '',
-                        mobileNumber: userAccountInfo?.customer?.phone ?? '',
-                        countryCode:
-                          userAccountInfo?.customer?.country_code ?? ''
-                      });
-                    }}
-                  >
-                    <Edit />
-                  </div>
+                  {userAccountInfo?.customer?.kyc?.status ===
+                    kycStatus.APPROVED && (
+                    <div
+                      className="cursor-pointer"
+                      onClick={() => {
+                        setContactInfoAction('mobile');
+                        setIsRenderContactInfo(true);
+                        setMobileNumberState({
+                          iso:
+                            userAccountInfo?.customer?.country_iso2_code.toLocaleUpperCase() ??
+                            '',
+                          mobileNumber: userAccountInfo?.customer?.phone ?? '',
+                          countryCode:
+                            userAccountInfo?.customer?.country_code ?? ''
+                        });
+                      }}
+                    >
+                      <Edit />
+                    </div>
+                  )}
                 </div>
               </div>
             )}
