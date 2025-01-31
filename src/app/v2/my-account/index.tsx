@@ -20,7 +20,9 @@ import { useSearchParams } from 'next/navigation';
 import ProfileUpdate from './components/profile-update/profile-update';
 import {
   useDeleteProfileMutation,
-  useLazyGetProfilePhotoQuery
+  useLazyCustomerCheckQuery,
+  useLazyGetProfilePhotoQuery,
+  useUpdateCustomerProfileMutation
 } from '@/features/api/my-profile';
 import { useLazyGetAuthDataQuery } from '@/features/api/login';
 import { useAppDispatch, useAppSelector } from '@/hooks/hook';
@@ -28,6 +30,21 @@ import {
   profileUpdate,
   deleteProfileStore
 } from '@/features/profile/profile-update-slice';
+import Edit from '@public/v2/assets/icons/edit-number.svg?url';
+import { InputDialogComponent } from '@/components/v2/common/input-dialog';
+import { MobileInput } from '@/components/v2/common/input-field/mobile';
+import { IndividualActionButton } from '@/components/v2/common/action-button/individual-button';
+import { useOtpVerificationStateManagement } from '@/components/v2/common/otp-verication/hooks/otp-verification-state-management';
+import { InputField } from '@/components/v2/common/input-field';
+import CommonPoppup from '../login/component/common-poppup';
+import OtpInput from '@/components/v2/common/otp';
+import { setOptions } from 'leaflet';
+import {
+  useSendResetOtpMutation,
+  useVerifyResetOTPMutation
+} from '@/features/api/otp-verification';
+import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
+import { useResendEmailOTPMutation } from '@/features/api/kyc';
 // import logger from 'logging/log-util';
 
 interface IUserAccountInfo {
@@ -51,14 +68,20 @@ interface IUserAccountInfo {
     has_account: boolean;
     is_email_verified: boolean;
     is_phone_verified: boolean;
+    country_iso2_code: string;
   };
 }
-
+const initialTokenState = {
+  token: '',
+  phoneToken: '',
+  tempToken: ''
+};
 const MyAccount = () => {
   const dispatch = useAppDispatch();
   const [deleteProfile] = useDeleteProfileMutation({});
   const updatePhoto: any = useAppSelector((store: any) => store.profileUpdate);
 
+  const [isLoading, setIsLoading] = useState(false);
   const subRoute = useSearchParams().get('path');
   const [triggerGetProfilePhoto] = useLazyGetProfilePhotoQuery({});
   const [triggerAuth] = useLazyGetAuthDataQuery();
@@ -69,6 +92,30 @@ const MyAccount = () => {
     myAccount.TABLE_PREFRENCES
   );
   const [imageUrl, setImageUrl] = useState('');
+  const [triggerCustomerCheck] = useLazyCustomerCheckQuery({});
+
+  const [updateCustomerProfile] = useUpdateCustomerProfileMutation();
+
+  const [mobileInfoError, setMobileInfoError] = useState('');
+  const [isRenderCotanctInfo, setIsRenderContactInfo] = useState(false);
+  const [isRenderOtpVerification, setIsRenderOtpVerification] = useState(false);
+  const [mobileNumberState, setMobileNumberState] = useState({
+    iso: '',
+    mobileNumber: '',
+    countryCode: ''
+  });
+
+  const [contactInfoAction, setContactInfoAction] = useState('');
+  const [token, setToken] = useState('');
+  const [email, setEmail] = useState('');
+  const [emailErrorText, setEmailErrorText] = useState('');
+  //otp verification state
+  const [errorOtp, setOtpError] = useState('');
+
+  const { otpVericationState, otpVerificationSetState } =
+    useOtpVerificationStateManagement();
+  const { otpValues, resendTimer } = otpVericationState;
+  const { setOtpValues, setResendTimer } = otpVerificationSetState;
 
   const getPhoto = async () => {
     await triggerGetProfilePhoto({ size: 128 })
@@ -209,6 +256,320 @@ const MyAccount = () => {
     }
   };
 
+  const handleEditContactInfo = ({
+    event,
+    setMobileNumberState
+  }: {
+    event:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLSelectElement>;
+    setMobileNumberState: React.Dispatch<React.SetStateAction<any>>;
+  }) => {
+    const { name, value } = event.target;
+    console.log('name', name, value);
+    setMobileNumberState((prev: any) => ({ ...prev, [name]: value }));
+  };
+
+  const renderContentWithInput = () => {
+    return (
+      <div className="flex gap-[12px] flex-col w-full h-[199px]">
+        <div className="flex gap-[16px] flex-col  align-left">
+          <p className="text-headingS text-neutral900 font-medium">
+            {contactInfoAction === 'email'
+              ? 'Update Email ID'
+              : 'Update Mobile Number'}
+          </p>
+        </div>
+        <div className="pb-2">
+          {contactInfoAction === 'email' ? (
+            <div className=" h-[65px]">
+              <InputField
+                label={ManageLocales('app.register.email')}
+                onChange={event => {
+                  setEmail(event.target.value);
+                  setEmailErrorText('');
+                }}
+                type="email"
+                name="email"
+                value={email}
+                errorText={emailErrorText}
+                placeholder={ManageLocales('app.register.email.placeholder')}
+                styles={{ inputMain: 'h-[64px]' }}
+                autoComplete="none"
+              />
+            </div>
+          ) : (
+            <MobileInput
+              label={ManageLocales('app.register.mobileNumber')}
+              onChange={event => {
+                setMobileInfoError('');
+                handleEditContactInfo({ event, setMobileNumberState });
+              }}
+              type="number"
+              name="mobileNumber"
+              errorText={mobileInfoError}
+              placeholder={'Enter mobile number'}
+              registerFormState={mobileNumberState}
+              setRegisterFormState={setMobileNumberState}
+              value={mobileNumberState.mobileNumber}
+            />
+          )}
+        </div>
+        <div className="flex flex-1">
+          <IndividualActionButton
+            onClick={() => {
+              setIsLoading(true);
+              triggerCustomerCheck({
+                email,
+                phone: mobileNumberState.mobileNumber,
+                country_code: mobileNumberState.countryCode,
+                channel: contactInfoAction === 'email' ? 'email' : 'sms'
+              })
+                .unwrap()
+                .then(res => {
+                  setIsRenderContactInfo(false);
+                  setIsRenderOtpVerification(true);
+                  console.log('resssss', res);
+                  setOtpValues(['', '', '', '', '', '']);
+                  setResendTimer(60);
+                  setToken(res?.token || '');
+                  setIsLoading(false);
+                })
+                .catch(e => {
+                  setIsLoading(false);
+                  console.log('eeeeeee', e);
+                  if (contactInfoAction === 'email') {
+                    setEmailErrorText(e?.data?.message);
+                  } else {
+                    setMobileInfoError(e?.data?.message);
+                  }
+                });
+            }}
+            disabled={
+              !(mobileNumberState.mobileNumber.length || email.length) ||
+              mobileNumberState.mobileNumber ===
+                userAccountInfo?.customer?.phone ||
+              email === userAccountInfo?.customer?.email
+            }
+            variant={'primary'}
+            size={'custom'}
+            className="rounded-[4px] flex-1 h-10"
+          >
+            {ManageLocales('app.OTPVerification.sendOtp')}
+          </IndividualActionButton>
+        </div>
+      </div>
+    );
+  };
+
+  function checkOTPEntry(otpEntry: string[]) {
+    for (let i = 0; i < otpEntry.length; i++) {
+      if (otpEntry[i] === '') {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  const resendLabel = resendTimer > 0 ? `(${resendTimer}Sec)` : '';
+  useEffect(() => {
+    if (isRenderOtpVerification) {
+      let countdownInterval: NodeJS.Timeout;
+
+      if (resendTimer > 0) {
+        countdownInterval = setInterval(() => {
+          setResendTimer((prevTimer: number) => prevTimer - 1);
+        }, 1000);
+      }
+
+      return () => clearInterval(countdownInterval);
+    }
+  }, [resendTimer, isRenderOtpVerification]);
+
+  const renderOtpVerificationScreen = () => {
+    return (
+      <div className="flex flex-col gap-[18px]">
+        <div className="text-headingM text-neutral900 font-medium mt-[-5px] flex justify-start">
+          {contactInfoAction === 'email'
+            ? ManageLocales('app.emailVerfication')
+            : ManageLocales('app.mobileVerfication')}
+        </div>
+
+        <div className="text-mRegular text-neutral900 flex items-center justify-start gap-[3px] ">
+          OTP has been sent to{' '}
+          {`${
+            contactInfoAction === 'email'
+              ? email
+              : `+${mobileNumberState.countryCode}${mobileNumberState.mobileNumber}`
+          }`}
+          <div
+            className="cursor-pointer"
+            onClick={() => {
+              setResendTimer(60);
+              setOtpValues(['', '', '', '', '', '']);
+              setIsRenderOtpVerification(false);
+              setIsRenderContactInfo(true);
+            }}
+          >
+            <Edit />
+          </div>
+        </div>
+        <div className="w-[100%] mt-[10px]">
+          <OtpInput
+            setOtpValues={setOtpValues}
+            otpValues={otpValues}
+            error={errorOtp}
+          />
+        </div>
+
+        <div className="flex justify-center py-[10px]">
+          <p className="text-neutral900 pr-10">Didn’t receive the email?</p>
+          <p
+            className={`${
+              resendTimer > 0 ? 'text-neutral500' : 'text-infoMain'
+            } cursor-pointer`}
+            onClick={() =>
+              resendTimer > 0
+                ? {}
+                : triggerCustomerCheck({
+                    email,
+                    phone: mobileNumberState.mobileNumber,
+                    country_code: mobileNumberState.countryCode,
+                    channel: contactInfoAction === 'email' ? 'email' : 'sms'
+                  })
+                    .unwrap()
+                    .then(res => {
+                      setResendTimer(60);
+                      setOtpValues(['', '', '', '', '', '']);
+                      setToken(res?.token || '');
+                      setIsLoading(false);
+                      modalSetState.setIsDialogOpen(true);
+                      modalSetState.setDialogContent(
+                        <CommonPoppup
+                          content={''}
+                          status="success"
+                          customPoppupBodyStyle="!mt-[70px]"
+                          header={'OTP sent successfully'}
+                          actionButtonData={[
+                            {
+                              variant: 'primary',
+                              label: 'Okay',
+                              handler: () => {
+                                modalSetState.setIsDialogOpen(false);
+                              },
+                              customStyle: 'flex-1 w-full h-10'
+                            }
+                          ]}
+                        />
+                      );
+                    })
+                    .catch(e => {
+                      setIsLoading(false);
+
+                      modalSetState.setIsDialogOpen(true);
+                      modalSetState.setDialogContent(
+                        <CommonPoppup
+                          content=""
+                          header={
+                            e?.data?.message ||
+                            'Something went wrong. Please try again.'
+                          }
+                          handleClick={() =>
+                            modalSetState.setIsDialogOpen(false)
+                          }
+                        />
+                      );
+                    })
+            }
+          >
+            {ManageLocales('app.OTPVerification.resend')} {resendLabel}
+          </p>
+        </div>
+        <div className="w-[100%]">
+          {' '}
+          <IndividualActionButton
+            onClick={() => {
+              if (!checkOTPEntry(otpValues)) {
+                setOtpError(
+                  "We're sorry, but the OTP you entered is incorrect or has expired"
+                );
+                return;
+              }
+
+              setOtpError('');
+              setIsLoading(true);
+
+              let payload: any = {
+                token: token,
+                otp: otpValues.join(''),
+                channel: contactInfoAction === 'email' ? 'email' : 'sms'
+              };
+
+              if (contactInfoAction === 'email') {
+                payload.email = email;
+              } else {
+                payload.phone = mobileNumberState.mobileNumber;
+                payload.country_code = mobileNumberState.countryCode;
+              }
+
+              updateCustomerProfile(payload)
+                .unwrap()
+                .then(res => {
+                  setContactInfoAction('');
+                  setIsRenderOtpVerification(false);
+                  setIsRenderContactInfo(false);
+                  modalSetState.setIsDialogOpen(true);
+
+                  modalSetState.setDialogContent(
+                    <CommonPoppup
+                      content=""
+                      status="success"
+                      customPoppupBodyStyle="!mt-[65px]"
+                      customPoppupStyle="h-[181px]"
+                      header={res?.message}
+                      actionButtonData={[
+                        {
+                          variant: 'primary',
+                          label: 'Okay',
+                          handler: () => modalSetState.setIsDialogOpen(false),
+                          customStyle: 'flex-1 w-full h-10'
+                        }
+                      ]}
+                    />
+                  );
+                  setUserAccountInfo(res);
+
+                  localStorage.setItem('user', JSON.stringify(res));
+                  setIsLoading(false);
+                })
+                .catch(e => {
+                  console.error('Error:', e);
+                  setIsLoading(false);
+                  modalSetState.setIsDialogOpen(true);
+                  modalSetState.setDialogContent(
+                    <CommonPoppup
+                      content=""
+                      header={
+                        e?.data?.message ||
+                        'Something went wrong. Please try again.'
+                      }
+                      handleClick={() => modalSetState.setIsDialogOpen(false)}
+                    />
+                  );
+                });
+            }}
+            disabled={isLoading}
+            variant={'primary'}
+            size={'custom'}
+            className="rounded-[4px] w-[100%] h-10"
+          >
+            {ManageLocales('app.verifyOTP')}
+          </IndividualActionButton>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="mt-[16px] relative">
       <DialogComponent
@@ -220,6 +581,25 @@ const MyAccount = () => {
               ? 'min-h-[250px]'
               : 'min-h-[222px]'
         }}
+      />
+      {isLoading && <CustomKGKLoader />}
+      <InputDialogComponent
+        isOpen={isRenderCotanctInfo || isRenderOtpVerification}
+        onClose={() => {
+          setContactInfoAction('');
+          setIsRenderContactInfo(false);
+          setIsRenderOtpVerification(false);
+        }}
+        renderContent={
+          isRenderOtpVerification
+            ? renderOtpVerificationScreen
+            : renderContentWithInput
+        }
+        dialogStyle={`${
+          isRenderOtpVerification
+            ? 'h-[330px] min-h-[330px]'
+            : 'h-[220px] min-h-[220px]'
+        }`}
       />
       <div
         className="border-[1px] border-solid border-neutral-200 rounded-[8px]"
@@ -306,6 +686,16 @@ const MyAccount = () => {
                     {' '}
                     {userAccountInfo?.customer?.email ?? '-'}
                   </p>
+                  <div
+                    className="cursor-pointer"
+                    onClick={() => {
+                      setContactInfoAction('email');
+                      setIsRenderContactInfo(true);
+                      setEmail(userAccountInfo?.customer?.email);
+                    }}
+                  >
+                    <Edit />
+                  </div>
                 </div>
                 <div className="flex items-center gap-[6px]">
                   {' '}
@@ -315,6 +705,23 @@ const MyAccount = () => {
                     {`+${userAccountInfo?.customer?.country_code} ${userAccountInfo?.customer?.phone}` ??
                       '-'}
                   </p>
+                  <div
+                    className="cursor-pointer"
+                    onClick={() => {
+                      setContactInfoAction('mobile');
+                      setIsRenderContactInfo(true);
+                      setMobileNumberState({
+                        iso:
+                          userAccountInfo?.customer?.country_iso2_code.toLocaleUpperCase() ??
+                          '',
+                        mobileNumber: userAccountInfo?.customer?.phone ?? '',
+                        countryCode:
+                          userAccountInfo?.customer?.country_code ?? ''
+                      });
+                    }}
+                  >
+                    <Edit />
+                  </div>
                 </div>
               </div>
             )}

@@ -276,6 +276,7 @@
   "app.OTPVerification.verify": "Verify",
   "app.OTPVerification.resend": "Resend",
   "app.OTPVerification.save": "Save",
+  "app.OTPVerification.sendOtp": "Send Otp",
   "app.OTPVerification.cancel": "Cancel",
 
   "app.successfullyCreated.exploreWebsite": "Explore Website",
