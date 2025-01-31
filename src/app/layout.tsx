@@ -235,6 +235,23 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
           }}
         />
       </Head>
+      {/* Cookie Consent Listener and GTM Loading */}
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `
+      if (typeof window !== 'undefined') {
+        window.addEventListener("CookieConsentDeclaration", function() {
+          if (Cookiebot.consents.statistics) {
+            var gtmScript = document.createElement("script");
+            gtmScript.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-P4DSD2MS';
+            gtmScript.async = true;
+            document.head.appendChild(gtmScript);
+          }
+        });
+      }
+    `
+        }}
+      />
       <body className={inter.className}>
         <DialogComponent
           dialogContent={
