@@ -175,6 +175,32 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
     }
   }, []);
 
+  useEffect(() => {
+    // Ensure this runs only on the client side
+    if (typeof window !== 'undefined') {
+      window.addEventListener('CookieConsentDeclaration', function () {
+        if (
+          window.Cookiebot !== undefined &&
+          window?.Cookiebot.consent !== undefined &&
+          window?.Cookiebot.consent.statistics
+        ) {
+          var gtmScript = document.createElement('script');
+          gtmScript.src =
+            'https://www.googletagmanager.com/gtm.js?id=GTM-P4DSD2MS';
+          gtmScript.async = true;
+          document.head.appendChild(gtmScript);
+        }
+      });
+    }
+
+    return () => {
+      // Clean up the event listener when the component unmounts
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('CookieConsentDeclaration', () => {});
+      }
+    };
+  }, []); // Empty dependency array means this runs only once after the component mounts
+
   return (
     <html lang="en">
       <head>
@@ -236,22 +262,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
         />
       </Head>
       {/* Cookie Consent Listener and GTM Loading */}
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `
-      if (typeof window !== 'undefined') {
-        window.addEventListener("CookieConsentDeclaration", function() {
-          if (Cookiebot.consents.statistics) {
-            var gtmScript = document.createElement("script");
-            gtmScript.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-P4DSD2MS';
-            gtmScript.async = true;
-            document.head.appendChild(gtmScript);
-          }
-        });
-      }
-    `
-        }}
-      />
+
       <body className={inter.className}>
         <DialogComponent
           dialogContent={
