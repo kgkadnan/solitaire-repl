@@ -26,6 +26,28 @@ export const myProfileApi = createApi({
         body: data
       }),
       invalidatesTags: ['myProfile']
+    }),
+    customerCheck: builder.query({
+      query: ({ email, phone, country_code, channel }) => {
+        // Construct query parameters dynamically
+        const params = new URLSearchParams();
+        if (email) params.append('email', email);
+        if (phone) params.append('phone', phone);
+        if (country_code) params.append('country_code', country_code);
+
+        // Construct the base URL with the optional channel parameter
+        const baseUrl = `/store/account/profile/customer/check/${channel}`;
+
+        return `${baseUrl}?${params.toString()}`;
+      }
+    }),
+    // PATCH: Update customer contact info
+    updateCustomerProfile: builder.mutation({
+      query: body => ({
+        url: '/store/account/profile/customer',
+        method: 'PATCH',
+        body
+      })
     })
   })
 });
@@ -33,5 +55,7 @@ export const myProfileApi = createApi({
 export const {
   useLazyGetProfilePhotoQuery,
   useUpdateProfilePhotoMutation,
-  useDeleteProfileMutation
+  useDeleteProfileMutation,
+  useLazyCustomerCheckQuery,
+  useUpdateCustomerProfileMutation
 } = myProfileApi;

@@ -179,92 +179,41 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
     <html lang="en">
       <head>
         <script
-          id="ga-consent"
-          // strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
-              function loadGA() {
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-                gtag('config', ${process.env.NEXT_PUBLIC_GA}, { 'anonymize_ip': true });
-              }
-              
-              // Check Cookiebot Consent API
-              window.addEventListener("CookieConsentDeclaration", function() {
-                if (Cookiebot.consent.statistics) {
-                  loadGA();
-                }
-              });
-            `
-          }}
-        />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-          (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-          new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-          j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-          'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-          })(window,document,'script','dataLayer','GTM-P4DSD2MS');
-        `
-          }}
-        />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-          (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-          new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-          j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-          'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-          })(window,document,'script','dataLayer','GTM-5J5J2RFB');
-        `
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-P4DSD2MS');
+      `
           }}
         />
 
         {/* <Script
-          src="https://cdn.onesignal.com/sdks/OneSignalSDK.js"
-          strategy="beforeInteractive"
-          onLoad={() => console.log('OneSignal SDK script loaded')}
-        /> */}
-        <Script
-          strategy="afterInteractive"
-          src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA}`}
-        />
+    src="https://cdn.onesignal.com/sdks/OneSignalSDK.js"
+    strategy="beforeInteractive"
+    onLoad={() => console.log('OneSignal SDK script loaded')}
+  /> */}
 
-        {/* <script
-          dangerouslySetInnerHTML={{
-            __html: `
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', '${process.env.NEXT_PUBLIC_GA}', { 'anonymize_ip': true });
-          `
-          }}
-        /> */}
         <Script
           id="cookie-consent"
-          // strategy="afterInteractive"
           data-cookieconsent="ignore"
           dangerouslySetInnerHTML={{
             __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag() {
-                dataLayer.push(arguments);
-              }
-              gtag("consent", "default", {
-                ad_personalization: "denied",
-                ad_storage: "denied",
-                ad_user_data: "denied",
-                analytics_storage: "denied",
-                functionality_storage: "denied",
-                personalization_storage: "denied",
-                security_storage: "granted",
-                wait_for_update: 500,
-              });
-              gtag("set", "ads_data_redaction", true);
-              gtag("set", "url_passthrough", false);
-            `
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag("consent", "default", {
+          ad_personalization: "denied",
+          ad_storage: "denied",
+          ad_user_data: "denied",
+          analytics_storage: "denied",
+          functionality_storage: "denied",
+          personalization_storage: "denied",
+          security_storage: "granted",
+          wait_for_update: 500,
+        });
+      `
           }}
         />
       </head>
@@ -277,12 +226,12 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
         <script
           dangerouslySetInnerHTML={{
             __html: `
-                if (typeof window !== 'undefined') {
-                  document.addEventListener('contextmenu', function(e) {
-                    e.preventDefault();
-                  });
-                }
-              `
+        if (typeof window !== 'undefined') {
+          document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+          });
+        }
+      `
           }}
         />
       </Head>
@@ -300,22 +249,15 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
           }
           isOpens={open}
         />
-        <noscript>
-          <iframe
-            src="https://www.googletagmanager.com/ns.html?id=GTM-P4DSD2MS"
-            height="0"
-            width="0"
-            style={{ display: 'none', visibility: 'hidden' }}
-          ></iframe>
-        </noscript>
-        <noscript>
-          <iframe
-            src={`https://www.googletagmanager.com/ns.html?id=GTM-5J5J2RFB`}
-            height="0"
-            width="0"
-            style={{ display: 'none', visibility: 'hidden' }}
-          ></iframe>
-        </noscript>
+        <noscript
+          dangerouslySetInnerHTML={{
+            __html: `
+      <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P4DSD2MS"
+      height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    `
+          }}
+        />
+
         {(isV3Route || isV2Route) && (
           <CookieBot domainGroupId={'86ce1cb4-4338-418c-acca-d54a1b81cccc'} />
         )}
