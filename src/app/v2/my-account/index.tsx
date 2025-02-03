@@ -422,7 +422,7 @@ const MyAccount = () => {
           />
         </div>
 
-        <div className="flex justify-center py-[10px]">
+        <div className="flex justify-start py-[10px]">
           <p className="text-neutral900 pr-10">Haven’t received any OTP ?</p>
           <p
             className={`${
@@ -558,8 +558,9 @@ const MyAccount = () => {
                   );
                 });
             }}
-            disabled={isLoading}
-            variant={'primary'}
+            variant={
+              !checkOTPEntry(otpValues) || isLoading ? 'disable' : 'primary'
+            }
             size={'custom'}
             className="rounded-[4px] w-[100%] h-10"
           >
@@ -569,6 +570,8 @@ const MyAccount = () => {
       </div>
     );
   };
+
+  const contactInfo = JSON.parse(localStorage.getItem('userIp')!);
 
   return (
     <div className="mt-[16px] relative">
@@ -716,12 +719,9 @@ const MyAccount = () => {
                         setContactInfoAction('mobile');
                         setIsRenderContactInfo(true);
                         setMobileNumberState({
-                          iso:
-                            userAccountInfo?.customer?.country_iso2_code.toLocaleUpperCase() ??
-                            '',
+                          iso: contactInfo?.iso?.toLocaleUpperCase() ?? '',
                           mobileNumber: userAccountInfo?.customer?.phone ?? '',
-                          countryCode:
-                            userAccountInfo?.customer?.country_code ?? ''
+                          countryCode: contactInfo?.countryCode ?? ''
                         });
                       }}
                     >
