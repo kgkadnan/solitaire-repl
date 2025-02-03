@@ -348,9 +348,13 @@ const MyAccount = () => {
             }}
             disabled={
               !(mobileNumberState.mobileNumber.length || email.length) ||
-              mobileNumberState.mobileNumber ===
-                userAccountInfo?.customer?.phone ||
-              email === userAccountInfo?.customer?.email
+              (mobileNumberState.mobileNumber ===
+                userAccountInfo?.customer?.phone &&
+                mobileNumberState.countryCode ===
+                  userAccountInfo?.customer?.country_code) ||
+              (email === userAccountInfo?.customer?.email &&
+                mobileNumberState.countryCode ===
+                  userAccountInfo?.customer?.country_code)
             }
             variant={'primary'}
             size={'custom'}
