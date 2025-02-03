@@ -38,14 +38,15 @@ import { useOtpVerificationStateManagement } from '@/components/v2/common/otp-ve
 import { InputField } from '@/components/v2/common/input-field';
 import CommonPoppup from '../login/component/common-poppup';
 import OtpInput from '@/components/v2/common/otp';
-import { setOptions } from 'leaflet';
-import {
-  useSendResetOtpMutation,
-  useVerifyResetOTPMutation
-} from '@/features/api/otp-verification';
+
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
-import { useResendEmailOTPMutation } from '@/features/api/kyc';
 import { findIso } from '../kyc/components/personal-detail';
+import { isEmailValid } from '@/utils/validate-email';
+import { isPhoneNumberValid } from '@/utils/validate-phone';
+import {
+  INVALID_EMAIL_FORMAT,
+  INVALID_PHONE
+} from '@/constants/error-messages/register';
 // import logger from 'logging/log-util';
 
 interface IUserAccountInfo {
@@ -319,32 +320,44 @@ const MyAccount = () => {
         <div className="flex flex-1">
           <IndividualActionButton
             onClick={() => {
-              setIsLoading(true);
-              triggerCustomerCheck({
-                email,
-                phone: mobileNumberState.mobileNumber,
-                country_code: mobileNumberState.countryCode,
-                channel: contactInfoAction === 'email' ? 'email' : 'sms'
-              })
-                .unwrap()
-                .then(res => {
-                  setIsRenderContactInfo(false);
-                  setIsRenderOtpVerification(true);
-                  console.log('resssss', res);
-                  setOtpValues(['', '', '', '', '', '']);
-                  setResendTimer(60);
-                  setToken(res?.token || '');
-                  setIsLoading(false);
+              if (
+                (isEmailValid(email) && contactInfoAction === 'email') ||
+                (contactInfoAction === 'mobile' &&
+                  isPhoneNumberValid(mobileNumberState.mobileNumber))
+              ) {
+                setIsLoading(true);
+                triggerCustomerCheck({
+                  email,
+                  phone: mobileNumberState.mobileNumber,
+                  country_code: mobileNumberState.countryCode,
+                  channel: contactInfoAction === 'email' ? 'email' : 'sms'
                 })
-                .catch(e => {
-                  setIsLoading(false);
-                  console.log('eeeeeee', e);
-                  if (contactInfoAction === 'email') {
-                    setEmailErrorText(e?.data?.message);
-                  } else {
-                    setMobileInfoError(e?.data?.message);
-                  }
-                });
+                  .unwrap()
+                  .then(res => {
+                    setIsRenderContactInfo(false);
+                    setIsRenderOtpVerification(true);
+                    console.log('resssss', res);
+                    setOtpValues(['', '', '', '', '', '']);
+                    setResendTimer(60);
+                    setToken(res?.token || '');
+                    setIsLoading(false);
+                  })
+                  .catch(e => {
+                    setIsLoading(false);
+                    console.log('eeeeeee', e);
+                    if (contactInfoAction === 'email') {
+                      setEmailErrorText(e?.data?.message);
+                    } else {
+                      setMobileInfoError(e?.data?.message);
+                    }
+                  });
+              } else {
+                if (contactInfoAction === 'email') {
+                  setEmailErrorText(INVALID_EMAIL_FORMAT);
+                } else {
+                  setMobileInfoError(INVALID_PHONE);
+                }
+              }
             }}
             disabled={
               !(mobileNumberState.mobileNumber.length || email.length) ||
@@ -703,6 +716,7 @@ const MyAccount = () => {
                         setContactInfoAction('email');
                         setIsRenderContactInfo(true);
                         setEmail(userAccountInfo?.customer?.email);
+                        setEmailErrorText('');
                       }}
                     >
                       <Edit />
@@ -728,6 +742,7 @@ const MyAccount = () => {
                       onClick={() => {
                         setContactInfoAction('mobile');
                         setIsRenderContactInfo(true);
+                        setMobileInfoError('');
                         setMobileNumberState({
                           iso:
                             findIso[
