@@ -45,6 +45,7 @@ import {
 } from '@/features/api/otp-verification';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import { useResendEmailOTPMutation } from '@/features/api/kyc';
+import { findIso } from '../kyc/components/personal-detail';
 // import logger from 'logging/log-util';
 
 interface IUserAccountInfo {
@@ -474,9 +475,10 @@ const MyAccount = () => {
                             e?.data?.message ||
                             'Something went wrong. Please try again.'
                           }
-                          handleClick={() =>
-                            modalSetState.setIsDialogOpen(false)
-                          }
+                          handleClick={() => {
+                            setOtpValues(['', '', '', '', '', '']);
+                            modalSetState.setIsDialogOpen(false);
+                          }}
                         />
                       );
                     })
@@ -708,8 +710,12 @@ const MyAccount = () => {
                   <Phone />
                   <p className="text-mRegular font-regular text-neutral-600">
                     {' '}
-                    {`+${userAccountInfo?.customer?.country_code} ${userAccountInfo?.customer?.phone}` ??
-                      '-'}
+                    {`+${
+                      userAccountInfo?.customer?.country_code?.replace(
+                        /^\+/,
+                        ''
+                      ) || ''
+                    } ${userAccountInfo?.customer?.phone}` ?? '-'}
                   </p>
                   {userAccountInfo?.customer?.kyc?.status ===
                     kycStatus.APPROVED && (
@@ -719,9 +725,16 @@ const MyAccount = () => {
                         setContactInfoAction('mobile');
                         setIsRenderContactInfo(true);
                         setMobileNumberState({
-                          iso: contactInfo?.iso?.toLocaleUpperCase() ?? '',
+                          iso:
+                            findIso[
+                              userAccountInfo?.customer?.country_code?.replace(
+                                /^\+/,
+                                ''
+                              ) || ''
+                            ] ?? '',
                           mobileNumber: userAccountInfo?.customer?.phone ?? '',
-                          countryCode: contactInfo?.countryCode ?? ''
+                          countryCode:
+                            userAccountInfo?.customer?.country_code ?? ''
                         });
                       }}
                     >
