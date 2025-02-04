@@ -471,7 +471,7 @@ const BidToBuyDataTable = ({
                   onChange={e => {
                     setSearchableId(e.target.value);
                   }}
-                  placeholder={'Search by stone id'}
+                  placeholder={'Search by Stone ID'}
                   customStyle={`${searchableId && '!pr-[110px]'} !w-[250px]`}
                 />
                 {searchableId && (
@@ -511,7 +511,7 @@ const BidToBuyDataTable = ({
               <MRT_GlobalFilterTextField
                 table={table}
                 autoComplete="false"
-                placeholder="Search by stone id"
+                placeholder="Search by Stone ID"
                 className="max-[1092px]:w-[110px]   max-[1160px]:w-[180px] max-xl:w-auto"
                 sx={{
                   boxShadow: 'var(--input-shadow) inset',
@@ -668,7 +668,7 @@ const BidToBuyDataTable = ({
           (searchableId.length || globalFilter.length) ? (
           <div className="text-center">
             <Image src={empty} alt="empty" />
-            <p className="text-neutral900 w-[220px] mx-auto">
+            <p className="text-neutral900 text-lMedium w-[220px] mx-auto">
               No matching stones found.
             </p>
           </div>

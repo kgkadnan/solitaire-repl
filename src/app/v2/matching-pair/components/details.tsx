@@ -735,6 +735,23 @@ export function MatchPairDetails({
                             setImageLoadingStatus(updatedImageLoadingStatus);
                           }
 
+                          if (viewSimilar) {
+                            // Extract IDs from `similarData.products`
+                            const similarProductIds = similarData.products.map(
+                              (product: any) => product.id
+                            );
+
+                            // Filter out the similar product IDs from rowSelection
+                            setRowSelection((prevSelection: any) =>
+                              Object.keys(prevSelection)
+                                .filter(id => !similarProductIds.includes(id))
+                                .reduce((acc: any, id: any) => {
+                                  acc[id] = true;
+                                  return acc;
+                                }, {})
+                            );
+                          }
+
                           setViewSimilar(!viewSimilar);
                         }
                       }}

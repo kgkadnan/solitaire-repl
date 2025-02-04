@@ -125,7 +125,7 @@ export const handleRegister = async ({
       if (e.status === statusCode.DUPLICATE && e.data.field === 'email') {
         setDialogContent(
           <CommonPoppup
-            content="Email already in use. Please log in with the mobile number linked to this email."
+            content="This email is already registered. Please use a different email or log in to your account."
             header={'Duplicate email.'}
             handleClick={() => setIsDialogOpen(false)}
             buttonText={'Okay'}
@@ -137,8 +137,8 @@ export const handleRegister = async ({
       ) {
         setDialogContent(
           <CommonPoppup
-            content="This mobile number is already registered. Please log in or use a different number."
-            header={'Duplicate phone no'}
+            content=" This mobile number is already registered. Please use a different number or log in to your account."
+            header={'Duplicate Mobile Number'}
             handleClick={() => setIsDialogOpen(false)}
             buttonText={'Okay'}
           />

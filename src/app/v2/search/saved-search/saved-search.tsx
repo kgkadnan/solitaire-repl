@@ -308,6 +308,7 @@ const SavedSearch = ({ setIsLoading }: any) => {
                       setShowSuggestions
                     })
                   }
+                  placeholder="Search by Saved Filter Name"
                   setShowSuggestions={setShowSuggestions}
                   showSuggestions={showSuggestions}
                   handleSuggestionClick={handleSuggestionClick}

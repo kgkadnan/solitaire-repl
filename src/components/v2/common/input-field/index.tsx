@@ -55,7 +55,7 @@ export const InputField = ({
           autoComplete={autoComplete}
         />
       </div>
-      <p className="text-dangerMain h-1">
+      <p className="text-dangerMain h-auto pt-[4px] leading-[1.2] text-sMedium">
         {errorText && showError && errorText}
       </p>
     </div>

@@ -98,8 +98,8 @@ export const tableBlackSortOrder = ['B0', 'BPP', 'B1', 'B2', 'B3'];
 export const sideBlackSortOrder = ['SB0', 'SBPP', 'SB1', 'SB2', 'SB3'];
 export const fluorescenceSortOrder = [
   'NON',
-  'FNT',
   'VSL',
+  'FNT',
   'SLT',
   'MED',
   'STG',
@@ -136,8 +136,8 @@ export const clarity = [
 
 export const fluorescence = [
   { title: 'None', short_name: 'NON' },
-  { title: 'Faint', short_name: 'FNT' },
   { title: 'Very Slight', short_name: 'VSL' },
+  { title: 'Faint', short_name: 'FNT' },
   { title: 'Slight', short_name: 'SLT' },
   { title: 'Medium', short_name: 'MED' },
   { title: 'Strong', short_name: 'STG' },
