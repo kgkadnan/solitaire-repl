@@ -268,7 +268,6 @@ const MyAccount = () => {
     setMobileNumberState: React.Dispatch<React.SetStateAction<any>>;
   }) => {
     const { name, value } = event.target;
-    console.log('name', name, value);
     setMobileNumberState((prev: any) => ({ ...prev, [name]: value }));
   };
 
@@ -284,22 +283,19 @@ const MyAccount = () => {
         </div>
         <div className="pb-2">
           {contactInfoAction === 'email' ? (
-            <div className=" h-[65px]">
-              <InputField
-                label={ManageLocales('app.register.email')}
-                onChange={event => {
-                  setEmail(event.target.value);
-                  setEmailErrorText('');
-                }}
-                type="email"
-                name="email"
-                value={email}
-                errorText={emailErrorText}
-                placeholder={ManageLocales('app.register.email.placeholder')}
-                styles={{ inputMain: 'h-[64px]' }}
-                autoComplete="none"
-              />
-            </div>
+            <InputField
+              label={ManageLocales('app.register.email')}
+              onChange={event => {
+                setEmail(event.target.value);
+                setEmailErrorText('');
+              }}
+              type="email"
+              name="email"
+              value={email}
+              errorText={emailErrorText}
+              placeholder={ManageLocales('app.register.email.placeholder')}
+              autoComplete="none"
+            />
           ) : (
             <MobileInput
               label={ManageLocales('app.register.mobileNumber')}
@@ -590,8 +586,6 @@ const MyAccount = () => {
     );
   };
 
-  const contactInfo = JSON.parse(localStorage.getItem('userIp')!);
-
   return (
     <div className="mt-[16px] relative">
       <DialogComponent
@@ -719,6 +713,7 @@ const MyAccount = () => {
                         setIsRenderContactInfo(true);
                         setEmail(userAccountInfo?.customer?.email);
                         setEmailErrorText('');
+                        setMobileInfoError('');
                       }}
                     >
                       <Edit />
@@ -744,6 +739,7 @@ const MyAccount = () => {
                       onClick={() => {
                         setContactInfoAction('mobile');
                         setIsRenderContactInfo(true);
+                        setEmailErrorText('');
                         setMobileInfoError('');
                         setMobileNumberState({
                           iso:
