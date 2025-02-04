@@ -101,37 +101,37 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
     ? authorizedLogin(ChildrenComponent)
     : ChildrenComponent;
 
-  // useEffect(() => {
-  //   if (
-  //     typeof window !== 'undefined' &&
-  //     typeof window.navigator !== 'undefined' &&
-  //     typeof navigator !== 'undefined' &&
-  //     navigator.userAgent
-  //   ) {
-  //     const disableDevtool = require('disable-devtool');
-  //     disableDevtool({
-  //       disableMenu: true,
-  //       ondevtoolopen(type: any, _next: any) {
-  //         // if ( _type === 5) {
-  //         // Additional check: Confirm if dev tools are really open (optional)
-  //         if (
-  //           type === 6
-  //           // window.outerWidth - window.innerWidth > 200 ||
-  //           // window.outerHeight - window.innerHeight > 200
-  //         ) {
-  //           // This checks if the window has shrunk in size due to dev tools being opened
-  //           setOpen(true);
-  //           // }else{
-  //           //   setOpen(false)
-  //         }
-  //         // }
-  //       },
-  //       ignore: () => {
-  //         return process.env.NEXT_PUBLIC_ENV !== 'production';
-  //       }
-  //     });
-  //   }
-  // });
+  useEffect(() => {
+    if (
+      typeof window !== 'undefined' &&
+      typeof window.navigator !== 'undefined' &&
+      typeof navigator !== 'undefined' &&
+      navigator.userAgent
+    ) {
+      const disableDevtool = require('disable-devtool');
+      disableDevtool({
+        disableMenu: true,
+        ondevtoolopen(type: any, _next: any) {
+          // if ( _type === 5) {
+          // Additional check: Confirm if dev tools are really open (optional)
+          if (
+            type === 6
+            // window.outerWidth - window.innerWidth > 200 ||
+            // window.outerHeight - window.innerHeight > 200
+          ) {
+            // This checks if the window has shrunk in size due to dev tools being opened
+            setOpen(true);
+            // }else{
+            //   setOpen(false)
+          }
+          // }
+        },
+        ignore: () => {
+          return process.env.NEXT_PUBLIC_ENV !== 'production';
+        }
+      });
+    }
+  });
 
   useEffect(() => {
     if (!window.OneSignal) {
@@ -175,85 +175,70 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
     }
   }, []);
 
+  useEffect(() => {
+    // Ensure this runs only on the client side
+    if (typeof window !== 'undefined') {
+      window.addEventListener('CookieConsentDeclaration', function () {
+        if (
+          window.Cookiebot !== undefined &&
+          window?.Cookiebot.consent !== undefined &&
+          window?.Cookiebot.consent.statistics
+        ) {
+          var gtmScript = document.createElement('script');
+          gtmScript.src =
+            'https://www.googletagmanager.com/gtm.js?id=GTM-P4DSD2MS';
+          gtmScript.async = true;
+          document.head.appendChild(gtmScript);
+        }
+      });
+    }
+
+    return () => {
+      // Clean up the event listener when the component unmounts
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('CookieConsentDeclaration', () => {});
+      }
+    };
+  }, []); // Empty dependency array means this runs only once after the component mounts
+
   return (
     <html lang="en">
       <head>
-        <script
-          id="ga-consent"
-          // strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-              function loadGA() {
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-                gtag('config', ${process.env.NEXT_PUBLIC_GA}, { 'anonymize_ip': true });
-              }
-              
-              // Check Cookiebot Consent API
-              window.addEventListener("CookieConsentDeclaration", function() {
-                if (Cookiebot.consent.statistics) {
-                  loadGA();
-                }
-              });
-            `
-          }}
-        />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-      })(window,document,'script','dataLayer','GTM-P4DSD2MS');
-    `
-          }}
-        />
-
         {/* <Script
-          src="https://cdn.onesignal.com/sdks/OneSignalSDK.js"
-          strategy="beforeInteractive"
-          onLoad={() => console.log('OneSignal SDK script loaded')}
-        /> */}
-        <Script
-          strategy="afterInteractive"
-          src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA}`}
-        />
+    src="https://cdn.onesignal.com/sdks/OneSignalSDK.js"
+    strategy="beforeInteractive"
+    onLoad={() => console.log('OneSignal SDK script loaded')}
+  /> */}
 
-        {/* <script
-          dangerouslySetInnerHTML={{
-            __html: `
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', '${process.env.NEXT_PUBLIC_GA}', { 'anonymize_ip': true });
-          `
-          }}
-        /> */}
         <Script
           id="cookie-consent"
-          // strategy="afterInteractive"
           data-cookieconsent="ignore"
           dangerouslySetInnerHTML={{
             __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag() {
-                dataLayer.push(arguments);
-              }
-              gtag("consent", "default", {
-                ad_personalization: "denied",
-                ad_storage: "denied",
-                ad_user_data: "denied",
-                analytics_storage: "denied",
-                functionality_storage: "denied",
-                personalization_storage: "denied",
-                security_storage: "granted",
-                wait_for_update: 500,
-              });
-              gtag("set", "ads_data_redaction", true);
-              gtag("set", "url_passthrough", false);
-            `
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag("consent", "default", {
+          ad_personalization: "denied",
+          ad_storage: "denied",
+          ad_user_data: "denied",
+          analytics_storage: "denied",
+          functionality_storage: "denied",
+          personalization_storage: "denied",
+          security_storage: "granted",
+          wait_for_update: 500,
+        });
+      `
+          }}
+        />
+        <Script
+          dangerouslySetInnerHTML={{
+            __html: `
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-P4DSD2MS');
+      `
           }}
         />
       </head>
@@ -266,15 +251,17 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
         <script
           dangerouslySetInnerHTML={{
             __html: `
-                if (typeof window !== 'undefined') {
-                  document.addEventListener('contextmenu', function(e) {
-                    e.preventDefault();
-                  });
-                }
-              `
+        if (typeof window !== 'undefined') {
+          document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+          });
+        }
+      `
           }}
         />
       </Head>
+      {/* Cookie Consent Listener and GTM Loading */}
+
       <body className={inter.className}>
         <DialogComponent
           dialogContent={
@@ -297,6 +284,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
     `
           }}
         />
+
         {(isV3Route || isV2Route) && (
           <CookieBot domainGroupId={'86ce1cb4-4338-418c-acca-d54a1b81cccc'} />
         )}
