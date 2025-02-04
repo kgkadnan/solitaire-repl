@@ -238,7 +238,9 @@ export const MobileInput = ({
             }}
           />
         </div>
-        <p className="text-dangerMain h-1">{errorText && errorText}</p>
+        <p className="text-dangerMain h-auto text-sMedium">
+          {errorText && errorText}
+        </p>
       </div>
     </>
   );
