@@ -620,6 +620,8 @@ const MyAccount = () => {
         dialogStyle={`${
           isRenderOtpVerification
             ? 'h-[330px] min-h-[330px]'
+            : mobileInfoError.length || emailErrorText.length
+            ? 'h-[240px] min-h-[240px]'
             : 'h-[220px] min-h-[220px]'
         }`}
       />
