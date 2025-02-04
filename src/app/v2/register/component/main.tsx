@@ -183,7 +183,6 @@ const Register = () => {
                 ...prev,
                 otpMobileNumber: ''
               }));
-
               handleOTPChange({ event, setOTPVerificationFormState });
             }}
             type="number"

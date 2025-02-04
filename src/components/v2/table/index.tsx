@@ -13,6 +13,14 @@ import { Box } from '@mui/material';
 import Image from 'next/image';
 import { ManageLocales } from '@/utils/v2/translate';
 import { kycStatus } from '@/constants/enums/kyc';
+import { useEffect, useState } from 'react';
+import {
+  clarity,
+  fluorescenceSortOrder,
+  sideBlackSortOrder,
+  tableBlackSortOrder,
+  tableInclusionSortOrder
+} from '@/constants/v2/form';
 
 interface ITable {
   rows: MRT_ColumnDef<MRT_RowData, any>[];
@@ -27,6 +35,8 @@ interface ITable {
   isOrderDetail?: boolean;
   identifier?: string;
   isMatchingPair?: boolean;
+  setSorting?: any;
+  sorting?: any;
 }
 
 const Table = ({
@@ -41,9 +51,13 @@ const Table = ({
   breadCrumLabel,
   isOrderDetail = false,
   identifier,
-  isMatchingPair = false
+  isMatchingPair = false,
+  setSorting,
+  sorting
 }: ITable) => {
   // Fetching saved search data
+
+  const [paginatedData, setPaginatedData] = useState<any>([]);
 
   const theme = createTheme({
     typography: {
@@ -60,6 +74,7 @@ const Table = ({
           root: {
             // Default state for the badge inside the cell
             '& .MuiBadge-root': {
+              width: '0px !important',
               visibility: 'hidden'
             },
             // Hover state for the cell
@@ -125,10 +140,133 @@ const Table = ({
   let isNudge = localStorage.getItem('show-nudge') === 'MINI';
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
 
+  const nonSortableAccessors = ['shape_full', 'details', 'fire_icon'];
+
+  const sortData = (data: any, sorting: any) => {
+    if (!sorting.length) return data; // If no sorting is applied, return the data as-is
+
+    const sortedData = [...data].sort((rowA, rowB) => {
+      for (let sort of sorting) {
+        const columnId = sort.id;
+        const isDesc = sort.desc;
+
+        // Skip sorting for non-sortable accessors
+        if (nonSortableAccessors.includes(columnId)) {
+          continue; // Move to the next sorting criteria or return unsorted data
+        }
+
+        const valueA = rowA[columnId];
+        const valueB = rowB[columnId];
+
+        let compareValue = 0;
+
+        switch (columnId) {
+          case 'clarity':
+            compareValue = clarity.indexOf(valueA) - clarity.indexOf(valueB);
+
+            break;
+          case 'table_inclusion':
+            compareValue =
+              tableInclusionSortOrder.indexOf(valueA) -
+              tableInclusionSortOrder.indexOf(valueB);
+            break;
+          case 'table_black':
+            compareValue =
+              tableBlackSortOrder.indexOf(valueA) -
+              tableBlackSortOrder.indexOf(valueB);
+            break;
+          case 'side_black':
+            compareValue =
+              sideBlackSortOrder.indexOf(valueA) -
+              sideBlackSortOrder.indexOf(valueB);
+            break;
+          case 'fluorescence':
+            compareValue =
+              fluorescenceSortOrder.indexOf(valueA) -
+              fluorescenceSortOrder.indexOf(valueB);
+            break;
+          case 'amount':
+            const amountA = rowA.variants?.[0]?.prices?.[0]?.amount ?? 0;
+            const amountB = rowB.variants?.[0]?.prices?.[0]?.amount ?? 0;
+            compareValue = amountA - amountB;
+
+            break;
+          default:
+            // Fallback to default comparison for other columns (numbers or strings)
+            if (valueA == null && valueB == null) {
+              compareValue = 0; // Both are null, considered equal
+            } else if (valueA == null) {
+              compareValue = -1; // Place null values before non-null values
+            } else if (valueB == null) {
+              compareValue = 1; // Place non-null values before null values
+            } else if (
+              typeof valueA === 'string' &&
+              typeof valueB === 'string'
+            ) {
+              compareValue = valueA.localeCompare(valueB, undefined, {
+                sensitivity: 'base'
+              });
+            } else {
+              compareValue = valueA > valueB ? 1 : valueA < valueB ? -1 : 0;
+            }
+        }
+
+        // Handle cases where the value might not be found in the custom array (indexOf returns -1)
+        if (compareValue === 0) {
+          continue; // If equal, move to the next sorting condition
+        }
+
+        // Apply sorting direction (ascending or descending)
+        return isDesc ? -compareValue : compareValue;
+      }
+      return 0;
+    });
+
+    return sortedData;
+  };
+
+  // Handle sorting and pagination
+  useEffect(() => {
+    // Apply the sorting logic to the full dataset
+    const sortedFullData = sortData(rows, sorting);
+
+    // Update the paginated data state
+    setPaginatedData(sortedFullData);
+  }, [
+    rows,
+    sorting // Trigger sorting when sorting state changes
+  ]);
+
+  const handleSortingChange = (newSorting: any) => {
+    setSorting((currentSorting: any) => {
+      const existingSort = currentSorting.find(
+        (sort: any) => sort.id === newSorting()[0].id
+      );
+
+      if (existingSort) {
+        // If the current sort is ascending, change it to descending
+        if (!existingSort.desc) {
+          return currentSorting.map((sort: any) =>
+            sort.id === newSorting()[0].id ? { ...sort, desc: true } : sort
+          );
+        }
+        // If the current sort is descending, remove the sorting
+        else {
+          return currentSorting.filter(
+            (sort: any) => sort.id !== newSorting()[0].id
+          );
+        }
+      } else {
+        // If no sorting exists for the column, set sorting to ascending (default)
+        return [...currentSorting, { id: newSorting()[0].id, desc: false }];
+      }
+    });
+  };
+
   //pass table options to useMaterialReactTable
   const table = useMaterialReactTable({
     columns,
-    data: rows, //must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
+    data: paginatedData, //must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
 
     getRowId: originalRow => originalRow?.id,
     onRowSelectionChange: setRowSelection,
@@ -136,13 +274,13 @@ const Table = ({
     positionToolbarAlertBanner: 'none',
     enableFilters: showGloablFilter,
     enableColumnActions: false,
-    enableSorting: false,
     enableDensityToggle: false,
     enableHiding: false,
     enableColumnFilters: false,
     enablePagination: false,
     enableStickyHeader: true,
     enableBottomToolbar: false,
+    onSortingChange: handleSortingChange, // Handle sorting change
     enableTopToolbar: isEnableTopToolBar,
     enableRowSelection: isRowSelectionNeeded,
     enableToolbarInternalActions: false,
@@ -150,7 +288,10 @@ const Table = ({
     icons: {
       SearchIcon: () => (
         <Image src={searchIcon} alt={'searchIcon'} className="mr-[6px]" />
-      )
+      ),
+      SortIcon: () => null,
+      SyncAltIcon: () => null,
+      ArrowDownwardIcon: () => null
     },
     muiTablePaperProps: {
       elevation: 0, //change the mui box shadow
@@ -161,6 +302,17 @@ const Table = ({
       }
     },
     displayColumnDefOptions: {
+      'mrt-row-expand': {
+        size: 100,
+
+        muiTableHeadCellProps: {
+          sx: {
+            display: 'none',
+            whiteSpace: 'nowrap',
+            fontSize: '12px'
+          }
+        }
+      },
       'mrt-row-select': {
         size: 40,
         minSize: 40,
@@ -193,7 +345,8 @@ const Table = ({
       showGlobalFilter: showGloablFilter,
       columnPinning: {
         left: ['mrt-row-select', 'lot_id']
-      }
+      },
+      sorting: sorting
     },
 
     muiTableContainerProps: {
@@ -242,13 +395,15 @@ const Table = ({
         boxShadow: 'none'
       }
     },
-    muiTableBodyCellProps: ({ row }) => {
+    muiTableBodyCellProps: ({ cell, row }) => {
       return {
         sx: {
           color: 'var(--neutral-900)',
-          '&.MuiTableCell-root': {
-            padding: '0px 4px'
-          },
+          padding: ['discount', 'price_per_carat', 'rap', 'amount'].includes(
+            cell.column.id
+          )
+            ? '0px 6px'
+            : '0px 1px',
           whiteSpace: 'nowrap',
           borderBottom: '1px solid var(--neutral-50)',
           fontSize: '12px !important',
@@ -256,7 +411,7 @@ const Table = ({
         }
       };
     },
-    muiTableHeadCellProps: () => {
+    muiTableHeadCellProps: ({ column }) => {
       return {
         sx: {
           color: 'var(--neutral-700)',
@@ -264,7 +419,14 @@ const Table = ({
             background: 'var(--neutral-50)',
             opacity: 1,
             borderTop: '1px solid var(--neutral-200)',
-            padding: '0px 4px',
+            padding: ['discount', 'price_per_carat', 'rap', 'amount'].includes(
+              column.id
+            )
+              ? '0px 6px'
+              : '0px 1px',
+            paddingRight: ['shape_full', 'details'].includes(column.id)
+              ? '12px'
+              : '0px',
             height: '20px',
             fontSize: '12px !important',
             fontWeight: 500
@@ -353,6 +515,7 @@ const Table = ({
               <MRT_GlobalFilterTextField
                 table={table}
                 autoComplete="false"
+                placeholder="Search by Stone ID"
                 sx={{
                   boxShadow: 'var(--input-shadow) inset',
                   border: 'none',

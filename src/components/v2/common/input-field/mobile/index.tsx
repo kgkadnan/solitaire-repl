@@ -31,6 +31,7 @@ export const MobileInput = ({
   registerFormState,
   setRegisterFormState
 }: IMobileInputField) => {
+  console.log('registerFormState', registerFormState);
   const { data: getAllCountryCode } = useGetAllCountryCodeQuery({});
   const [isFlagLoaded, setIsFlagLoaded] = useState(true);
 
@@ -237,7 +238,9 @@ export const MobileInput = ({
             }}
           />
         </div>
-        <p className="text-dangerMain h-1">{errorText && errorText}</p>
+        <p className="text-dangerMain h-auto pt-[4px] leading-[1.2] text-sMedium">
+          {errorText && errorText}
+        </p>
       </div>
     </>
   );
