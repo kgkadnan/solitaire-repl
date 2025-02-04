@@ -14,9 +14,16 @@ import {
   RenderDiscount,
   RenderLab
 } from '@/components/v2/table/helpers/render-cell';
+import {
+  faSort,
+  faSortDown,
+  faSortUp
+} from '@fortawesome/free-solid-svg-icons';
 import { Tracking_Search_By_Text } from '@/constants/funnel-tracking';
 import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
 import { trackEvent } from '@/utils/ga';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { MRT_SortingState } from 'material-react-table';
 
 import React, { useEffect, useMemo, useState } from 'react';
 
@@ -33,6 +40,9 @@ const ConfirmStone = ({
   customerMobileNumber
 }: any) => {
   const [rowSelection, setRowSelection] = useState({});
+  const [sorting, setSorting] = useState<MRT_SortingState>([]);
+
+  console.log('rows', rows);
 
   const [breadCrumLabel, setBreadCrumLabel] = useState('');
 
@@ -40,7 +50,7 @@ const ConfirmStone = ({
     if (isFrom === 'My Cart') {
       setBreadCrumLabel('My Cart');
     }
-    if (isFrom.length) {
+    if (isFrom?.length) {
       setBreadCrumLabel(isFrom);
     } else {
       const storedSelection = isMatchingPair
@@ -78,19 +88,43 @@ const ConfirmStone = ({
       ?.filter(({ is_disabled }: any) => !is_disabled)
       ?.sort(({ sequence: a }: any, { sequence: b }: any) => a - b)
       .map(({ accessor, short_label, label }: any) => {
+        const currentSort = sorting.find(sort => sort.id === accessor);
+        const nonSortableAccessors = ['shape_full', 'details', 'fire_icon'];
+
+        // Check if sorting should be disabled for the column's accessor
+        const isSortable = !nonSortableAccessors.includes(accessor);
         const commonProps = {
           accessorKey: accessor,
           header: short_label,
           enableGlobalFilter: accessor === 'lot_id',
-          minSize: 5,
-          maxSize: accessor === 'details' ? 100 : 200,
-          size: accessor === 'measurements' ? 183 : 5,
+          minSize: 0,
+          maxSize: 0,
+          size: 0,
           Header: ({ column }: any) => (
-            <Tooltip
-              tooltipTrigger={<span>{column.columnDef.header}</span>}
-              tooltipContent={label}
-              tooltipContentStyles={'z-[1000]'}
-            />
+            <div className="flex items-center group">
+              <Tooltip
+                tooltipTrigger={<span>{column.columnDef.header}</span>}
+                tooltipContent={label}
+                tooltipContentStyles={'z-[1000]'}
+              />
+              {isSortable &&
+                (currentSort ? (
+                  <FontAwesomeIcon
+                    icon={currentSort.desc ? faSortDown : faSortUp}
+                    width={8}
+                    height={8}
+                    style={{ marginLeft: '2px' }} // Optional styling for spacing
+                  />
+                ) : (
+                  <FontAwesomeIcon
+                    icon={faSort} // Default icon when not sorted
+                    width={8}
+                    height={8}
+                    className="opacity-0 transition-opacity duration-300 group-hover:opacity-100" // Show on hover
+                    style={{ marginLeft: '2px' }}
+                  />
+                ))}
+            </div>
           )
         };
 
@@ -190,7 +224,10 @@ const ConfirmStone = ({
             };
         }
       });
-  const memoizedColumns = useMemo(() => mapColumns(columns), [columns]);
+  const memoizedColumns = useMemo(
+    () => mapColumns(columns),
+    [columns, sorting]
+  );
 
   return (
     <>
@@ -213,6 +250,8 @@ const ConfirmStone = ({
             }
             goBackToListView(isFrom);
           }}
+          setSorting={setSorting}
+          sorting={sorting}
           breadCrumLabel={breadCrumLabel}
           identifier={identifier}
           isMatchingPair={isMatchingPair}
