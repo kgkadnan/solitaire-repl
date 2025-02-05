@@ -1074,6 +1074,8 @@ const NewArrivalDataTable = ({
         const bidValue =
           bidValues[row.id] !== undefined
             ? bidValues[row.id]
+            : activeTab === 1
+            ? parseFloat(row.original.my_current_bid).toFixed(2)
             : parseFloat(row.original.current_max_bid).toFixed(2);
         // If the row is selected, return the detail panel content
         return (
@@ -1094,7 +1096,11 @@ const NewArrivalDataTable = ({
                     input:
                       '!bg-infoSurface !border-infoBorder !text-infoMain !h-[30px]  text-sMedium'
                   }}
-                  value={`${formatNumber(row.original.current_max_bid)}%`}
+                  value={`${formatNumber(
+                    activeTab === 1
+                      ? row.original.my_current_bid
+                      : row.original.current_max_bid
+                  )}%`}
                   disabled
                 />
               </div>
@@ -1105,7 +1111,11 @@ const NewArrivalDataTable = ({
                   type="text"
                   value={
                     bidValues[row.id] !== undefined
-                      ? !bidValue || bidValue <= row.original.current_max_bid
+                      ? !bidValue ||
+                        bidValue <=
+                          (activeTab === 1
+                            ? row.original.my_current_bid
+                            : row.original.current_max_bid)
                         ? formatNumber(row.original.price_per_carat)
                         : formatNumber(
                             row.original.rap * (1 + bidValues[row.id] / 100)
@@ -1132,7 +1142,11 @@ const NewArrivalDataTable = ({
                   }}
                   value={
                     bidValues[row.id] !== undefined
-                      ? !bidValue || bidValue <= row.original.current_max_bid
+                      ? !bidValue ||
+                        bidValue <=
+                          (activeTab === 1
+                            ? row.original.my_current_bid
+                            : row.original.current_max_bid)
                         ? formatNumber(
                             row.original.price || row.original.amount
                           )
@@ -1150,7 +1164,10 @@ const NewArrivalDataTable = ({
                 <div className="text-sRegular text-neutral700">Bid Disc%</div>
                 <div className="gap-6 flex">
                   <div className="h-[30px] flex gap-1">
-                    {bidValue <= row.original.current_max_bid ? (
+                    {bidValue <=
+                    (activeTab === 1
+                      ? row.original.my_current_bid
+                      : row.original.current_max_bid) ? (
                       <div className="cursor-not-allowed">
                         <DisableDecrementIcon />
                       </div>
@@ -1159,7 +1176,9 @@ const NewArrivalDataTable = ({
                         onClick={() =>
                           handleDecrementDiscount(
                             row.id,
-                            row.original.current_max_bid,
+                            activeTab === 1
+                              ? row.original.my_current_bid
+                              : row.original.current_max_bid,
                             setBidError,
                             setBidValues
                           )
@@ -1178,7 +1197,11 @@ const NewArrivalDataTable = ({
                         value={bidValue}
                         onChange={e => {
                           const newValue = e.target.value;
-                          if (newValue < row.original.current_max_bid) {
+                          let discount =
+                            activeTab === 1
+                              ? row.original.my_current_bid
+                              : row.original.current_max_bid;
+                          if (newValue < discount) {
                             setBidError(prevError => {
                               return {
                                 ...prevError,
@@ -1226,7 +1249,10 @@ const NewArrivalDataTable = ({
                       onClick={() =>
                         handleIncrementDiscount(
                           row.id,
-                          row.original.current_max_bid,
+
+                          activeTab === 1
+                            ? row.original.my_current_bid
+                            : row.original.current_max_bid,
                           setBidError,
                           setBidValues
                         )
@@ -1240,14 +1266,21 @@ const NewArrivalDataTable = ({
                       actionButtonData={[
                         {
                           variant:
-                            bidValue <= row.original.current_max_bid
+                            bidValue <=
+                            (activeTab === 1
+                              ? row.original.my_current_bid
+                              : row.original.current_max_bid)
                               ? 'disable'
                               : 'primary',
 
                           label: activeTab === 0 ? 'Add Bid' : 'Update Bid',
                           handler: () => {
                             if (!bidError[row.id]) {
-                              if (bidValue < row.original.current_max_bid) {
+                              let discount =
+                                activeTab === 1
+                                  ? row.original.my_current_bid
+                                  : row.original.current_max_bid;
+                              if (bidValue < discount) {
                                 setBidError(prevError => {
                                   return {
                                     ...prevError,
@@ -1285,7 +1318,11 @@ const NewArrivalDataTable = ({
                               });
                             }
                           },
-                          isDisable: bidValue <= row.original.current_max_bid,
+                          isDisable:
+                            bidValue <=
+                            (activeTab === 1
+                              ? row.original.my_current_bid
+                              : row.original.current_max_bid),
                           customStyle: 'flex-1 w-full h-[30px] text-sMedium',
                           customCtaStyle: '!h-[30px] !text-[12px]'
                         }
