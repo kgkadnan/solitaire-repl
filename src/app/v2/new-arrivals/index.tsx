@@ -604,18 +604,29 @@ const NewArrivals = () => {
           case 'lower_half':
           case 'star_length':
             return { ...commonProps, Cell: RenderCarat };
-          case 'discount':
+          // case 'discount':
+          //   return {
+          //     ...commonProps,
+          //     Cell: ({ renderedCellValue, row }: any) => {
+          //       return RenderBidDiscount({
+          //         renderedCellValue,
+          //         handleBidUnLockPricing,
+          //         row
+          //       });
+          //     }
+          //   };
+          case 'current_max_bid':
             return {
               ...commonProps,
               Cell: ({ renderedCellValue, row }: any) => {
-                return RenderBidDiscount({
+                return RenderNewArrivalBidDiscount({
                   renderedCellValue,
                   handleBidUnLockPricing,
                   row
                 });
               }
             };
-          case 'current_max_bid':
+          case 'my_current_bid':
             return {
               ...commonProps,
               Cell: ({ renderedCellValue, row }: any) => {
@@ -708,21 +719,21 @@ const NewArrivals = () => {
     }
 
     setRowSelection({});
-    if (index === 1 && activeBid.length > 0) {
-      activeBid.map((row: any) => {
-        if (row.current_max_bid > row.my_current_bid) {
-          setRowSelection(prev => {
-            return { ...prev, [row.id]: true };
-          });
-        } else {
-          setRowSelection((prev: any) => {
-            let prevRows = { ...prev };
-            delete prevRows[row.id];
-            return prevRows;
-          });
-        }
-      });
-    }
+    // if (index === 1 && activeBid.length > 0) {
+    //   activeBid.map((row: any) => {
+    //     if (row.current_max_bid > row.my_current_bid) {
+    //       setRowSelection(prev => {
+    //         return { ...prev, [row.id]: true };
+    //       });
+    //     } else {
+    //       setRowSelection((prev: any) => {
+    //         let prevRows = { ...prev };
+    //         delete prevRows[row.id];
+    //         return prevRows;
+    //       });
+    //     }
+    //   });
+    // }
   };
   const [activeBid, setActiveBid] = useState<any>();
   const [bid, setBid] = useState<any>();
@@ -883,21 +894,21 @@ const NewArrivals = () => {
           }
 
           setTime(allProducts?.endTime ?? undefined);
-          if (allProducts.activeStone) {
-            allProducts.activeStone.map((row: any) => {
-              if (row.current_max_bid > row.my_current_bid) {
-                setRowSelection(prev => {
-                  return { ...prev, [row.id]: true };
-                });
-              } else {
-                setRowSelection((prev: any) => {
-                  let prevRows = { ...prev };
-                  delete prevRows[row.id];
-                  return prevRows;
-                });
-              }
-            });
-          }
+          // if (allProducts.activeStone) {
+          //   allProducts.activeStone.map((row: any) => {
+          //     if (row.current_max_bid > row.my_current_bid) {
+          //       setRowSelection(prev => {
+          //         return { ...prev, [row.id]: true };
+          //       });
+          //     } else {
+          //       setRowSelection((prev: any) => {
+          //         let prevRows = { ...prev };
+          //         delete prevRows[row.id];
+          //         return prevRows;
+          //       });
+          //     }
+          //   });
+          // }
           // Set other related state here
           setAllProducts(allProducts);
           // Clean up
@@ -1021,6 +1032,7 @@ const NewArrivals = () => {
     () => mapColumns(columnHeaders),
     [columnHeaders, sorting]
   );
+
   const { modalState, modalSetState } = useModalStateManagement();
   const { errorState, errorSetState } = useErrorStateManagement();
   const formErrorState = useNumericFieldValidation();
@@ -1112,8 +1124,10 @@ const NewArrivals = () => {
     if (activeTab === 0 && bid?.length > 0) {
       return (
         <div className="flex items-center justify-between px-4 py-0">
-          <div></div>
-          <MRT_TablePagination table={table} />
+          {/* <div></div> */}
+          <div className="flex  ml-[85px] justify-center flex-1">
+            <MRT_TablePagination table={table} />
+          </div>
           <div className="flex items-center gap-3">
             <ActionButton
               actionButtonData={[
@@ -1157,20 +1171,9 @@ const NewArrivals = () => {
     } else if (activeTab === 1 && activeBid?.length > 0) {
       return (
         <div className="flex items-center justify-between px-4 py-0">
-          <div className="flex gap-4">
-            <div className=" border-[1px] border-successBorder rounded-[4px] bg-successSurface text-successMain">
-              <p className="text-mMedium font-medium px-[6px] py-[4px]">
-                Winning
-              </p>
-            </div>
-            <div className=" border-[1px] border-dangerBorder rounded-[4px] bg-dangerSurface text-dangerMain">
-              <p className="text-mMedium font-medium px-[6px] py-[4px]">
-                {' '}
-                Losing
-              </p>
-            </div>
+          <div className="flex  ml-[85px] justify-center flex-1">
+            <MRT_TablePagination table={table} />
           </div>
-          <MRT_TablePagination table={table} />
           <div className="flex items-center gap-3">
             <ActionButton
               actionButtonData={[
@@ -1181,51 +1184,51 @@ const NewArrivals = () => {
                     setRowSelection({});
                   },
                   isDisable: !Object.keys(rowSelection).length
+                },
+                {
+                  variant: 'primary',
+                  label: 'Cancel Bid',
+                  handler: () => {
+                    modalSetState.setIsDialogOpen(true);
+                    modalSetState.setDialogContent(
+                      <CommonPoppup
+                        content={''}
+                        status="warning"
+                        customPoppupBodyStyle="mt-[70px]"
+                        header={`Are you sure you want to cancel this bid?`}
+                        actionButtonData={[
+                          {
+                            variant: 'secondary',
+                            label: 'Go Back',
+                            handler: () => {
+                              modalSetState.setIsDialogOpen(false);
+                            },
+                            customStyle: 'flex-1 w-full'
+                          },
+                          {
+                            variant: 'primary',
+                            label: 'Cancel Bid',
+                            handler: () => {
+                              socketManager.emit('cancel_bid', {
+                                product_ids: Object.keys(rowSelection)
+                              });
+                              setBidValues((prevValues: any) => {
+                                // Create a new object excluding keys in rowSelection
+                                const updatedValues = { ...prevValues };
+                                Object.keys(rowSelection).forEach(key => {
+                                  delete updatedValues[key]; // Remove the key from the state
+                                });
+                                return updatedValues;
+                              });
+                            },
+                            customStyle: 'flex-1 w-full'
+                          }
+                        ]}
+                      />
+                    );
+                  },
+                  isDisable: !Object.keys(rowSelection).length
                 }
-                // {
-                //   variant: 'primary',
-                //   label: 'Cancel Bid',
-                //   handler: () => {
-                //     modalSetState.setIsDialogOpen(true);
-                //     modalSetState.setDialogContent(
-                //       <CommonPoppup
-                //         content={''}
-                //         status="warning"
-                //         customPoppupBodyStyle="mt-[70px]"
-                //         header={`Are you sure you want to cancel this bid?`}
-                //         actionButtonData={[
-                //           {
-                //             variant: 'secondary',
-                //             label: 'Go Back',
-                //             handler: () => {
-                //               modalSetState.setIsDialogOpen(false);
-                //             },
-                //             customStyle: 'flex-1 w-full'
-                //           }
-                //           // {
-                //           //   variant: 'primary',
-                //           //   label: 'Cancel Bid',
-                //           //   handler: () => {
-                //           //     socketManager.emit('cancel_bid', {
-                //           //       product_ids: Object.keys(rowSelection)
-                //           //     });
-                //           //     setBidValues((prevValues: any) => {
-                //           //       // Create a new object excluding keys in rowSelection
-                //           //       const updatedValues = { ...prevValues };
-                //           //       Object.keys(rowSelection).forEach(key => {
-                //           //         delete updatedValues[key]; // Remove the key from the state
-                //           //       });
-                //           //       return updatedValues;
-                //           //     });
-                //           //   },
-                //           //   customStyle: 'flex-1 w-full'
-                //           // }
-                //         ]}
-                //       />
-                //     );
-                //   },
-                //   isDisable: !Object.keys(rowSelection).length
-                // }
               ]}
             />
             <Dropdown
@@ -1251,24 +1254,6 @@ const NewArrivals = () => {
               ]}
             />
           </div>
-        </div>
-      );
-    } else if (activeTab === 2 && bidHistory?.data?.length > 0) {
-      return (
-        <div className="flex items-center justify-between px-4 py-0">
-          <div className="flex gap-4 py-2">
-            <div className=" border-[1px] border-successBorder rounded-[4px] bg-successSurface text-successMain">
-              <p className="text-mMedium font-medium px-[6px] py-[4px]">Won</p>
-            </div>
-            <div className=" border-[1px] border-dangerBorder rounded-[4px] bg-dangerSurface text-dangerMain">
-              <p className="text-mMedium font-medium px-[6px] py-[4px]">
-                {' '}
-                Lost
-              </p>
-            </div>
-          </div>
-          {/* <MRT_TablePagination table={table} /> */}
-          <div></div>
         </div>
       );
     } else {
@@ -1647,10 +1632,13 @@ const NewArrivals = () => {
                         ? memoizedColumns.filter(
                             (data: any) =>
                               data.accessorKey !== 'last_bid_date' &&
-                              data.accessorKey !== 'shape'
+                              data.accessorKey !== 'shape' &&
+                              data.accessorKey !== 'current_max_bid'
                           )
                         : memoizedColumns.filter(
-                            (data: any) => data.accessorKey !== 'last_bid_date'
+                            (data: any) =>
+                              data.accessorKey !== 'last_bid_date' &&
+                              data.accessorKey !== 'my_current_bid'
                           )
                     }
                     isTabSwitch={isTabSwitch}

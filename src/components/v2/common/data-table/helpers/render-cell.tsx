@@ -839,7 +839,7 @@ export const RenderNewArrivalBidDiscount = ({
                   <div
                     className={`${
                       renderedCellValue !== null
-                        ? 'text-infoMain border-[1px] border-infoBorder bg-infoSurface'
+                        ? 'text-successMain border-[1px] border-successBorder bg-successSurface'
                         : ''
                     }  px-[4px] py-[2px] w-[65px] rounded-[4px] text-center`}
                   >
@@ -859,7 +859,7 @@ export const RenderNewArrivalBidDiscount = ({
           <div
             className={`${
               renderedCellValue !== null
-                ? 'text-infoMain border-[1px] border-infoBorder bg-infoSurface'
+                ? 'text-successMain border-[1px] border-successBorder bg-successSurface'
                 : ''
             }  px-[4px] py-[2px] w-[65px] rounded-[4px] text-center`}
           >
