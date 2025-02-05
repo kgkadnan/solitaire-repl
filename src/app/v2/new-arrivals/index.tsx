@@ -131,7 +131,7 @@ const NewArrivals = () => {
   const [isLoading, setIsLoading] = useState(false); // State to track loading
   const [isTabSwitch, setIsTabSwitch] = useState(false); // State to track
   const [searchLoading, setSearchLoading] = useState(false);
-
+  const [activeTab, setActiveTab] = useState(0);
   const [isGemTrac, setIsGemTrac] = useState(false);
   const [gemTracData, setGemTracData] = useState([]);
   const [triggerGemTracApi] = useLazyGetGemTracQuery({});
@@ -164,11 +164,20 @@ const NewArrivals = () => {
   );
   const [reuestCallBack] = useReuestCallBackMutation({});
 
-  const handleDetailPage = ({ row }: { row: any }) => {
-    router.push(
-      `/v2/${SubRoutes.Diamond_Detail}?path=${MatchRoutes.NEW_ARRIVAL}&stoneid=${row?.lot_id}-${row?.location}`
-    );
-  };
+  const activeTabRef = useRef(activeTab);
+
+  useEffect(() => {
+    activeTabRef.current = activeTab; // Keep ref updated with latest value
+  }, [activeTab]);
+  const handleDetailPage = useCallback(
+    ({ row }: { row: any }) => {
+      console.log('activeTab', activeTabRef.current); // Always logs the latest value
+      router.push(
+        `/v2/${SubRoutes.Diamond_Detail}?path=${MatchRoutes.NEW_ARRIVAL}&stoneid=${row?.lot_id}-${row?.location}&activeTab=${activeTabRef.current}`
+      );
+    },
+    [router] // No `activeTab` dependency to prevent stale closure
+  );
 
   const handleDetailImage = ({ row }: any) => {
     setDetailImageData(row);
@@ -697,7 +706,8 @@ const NewArrivals = () => {
             };
         }
       });
-  const [activeTab, setActiveTab] = useState(0);
+
+  console.log('activeTab', activeTab);
   const tabLabels = ['Bid Stone', 'Active Bid', 'Bid History'];
   const [timeDifference, setTimeDifference] = useState(null);
 
@@ -1220,6 +1230,7 @@ const NewArrivals = () => {
                                 });
                                 return updatedValues;
                               });
+                              modalSetState.setIsDialogOpen(false);
                             },
                             customStyle: 'flex-1 w-full'
                           }
