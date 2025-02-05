@@ -137,7 +137,7 @@ export const columnHeaders = [
   },
   {
     label: 'Discount',
-    accessor: 'discount',
+    accessor: 'current_max_bid',
     sequence: 15,
     is_fixed: false,
     short_label: 'Disc %',
@@ -145,14 +145,23 @@ export const columnHeaders = [
     id: 'cus_ma-lis-seq_01HQSNF0TT2MZS9M0YHPDH3E8F'
   },
   {
-    label: 'Current Max. Bid%',
-    accessor: 'current_max_bid',
+    label: 'Discount',
+    accessor: 'my_current_bid',
     sequence: 16,
     is_fixed: false,
-    short_label: 'Curr Max. Bid%',
+    short_label: 'Disc %',
     is_disabled: false,
     id: 'cus_ma-lis-seq_01HQSNF0TT2MZS9M0YHPDH3E8F'
   },
+  // {
+  //   label: 'Current Max. Bid%',
+  //   accessor: 'current_max_bid',
+  //   sequence: 16,
+  //   is_fixed: false,
+  //   short_label: 'Curr Max. Bid%',
+  //   is_disabled: false,
+  //   id: 'cus_ma-lis-seq_01HQSNF0TT2MZS9M0YHPDH3E8F'
+  // },
   {
     label: 'Price/Carat',
     accessor: 'price_per_carat',

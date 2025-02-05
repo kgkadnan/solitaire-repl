@@ -439,6 +439,21 @@ const NewArrivalDataTable = ({
       'mrt-row-select',
       'lot_id',
       'last_bid_date',
+      'details',
+      'location',
+      'lab',
+      'shape',
+      'shape_full',
+      'carats',
+      'color',
+      'clarity',
+      'cut',
+      'polish',
+      'symmetry',
+      'fluorescence',
+      'rap_value',
+      'current_max_bid',
+      'my_current_bid',
       ...columns.map((c: any) => c.accessorKey)
     ] //array of column ids (Initializing is optional as of v2.10.0)
   );
@@ -744,8 +759,8 @@ const NewArrivalDataTable = ({
     },
 
     muiTableBodyRowProps: ({ row }) => {
-      const isHighlightBackground =
-        activeTab !== 0 && RenderNewArrivalLotIdColor({ row });
+      // const isHighlightBackground =
+      //   activeTab !== 0 && RenderNewArrivalLotIdColor({ row });
 
       return {
         onClick: row.id.includes('shape')
@@ -763,9 +778,10 @@ const NewArrivalDataTable = ({
             // Target the specific cell that matches the lot_id column within a hovered row
             '& .MuiTableCell-root[data-index="1"]::after': {
               // Change the background color to red if isHighlightBackground is true, otherwise maintain the default hover color
-              backgroundColor: isHighlightBackground
-                ? `${isHighlightBackground.background} !important`
-                : 'var(--neutral-50)'
+              // backgroundColor: isHighlightBackground
+              //   ? `${isHighlightBackground.background} !important`
+              //   : 'var(--neutral-50)'
+              backgroundColor: 'var(--neutral-50)'
             }
           },
           '&.MuiTableRow-root .MuiTableCell-root::after': {
@@ -901,10 +917,10 @@ const NewArrivalDataTable = ({
       }
     },
     muiTableBodyCellProps: ({ cell, row }) => {
-      const isHighlightBackground =
-        activeTab !== 0 &&
-        cell.column.id === 'lot_id' &&
-        RenderNewArrivalLotIdColor({ row });
+      // const isHighlightBackground =
+      //   activeTab !== 0 &&
+      //   cell.column.id === 'lot_id' &&
+      //   RenderNewArrivalLotIdColor({ row });
       return {
         sx: {
           color: 'var(--neutral-900)',
@@ -917,15 +933,17 @@ const NewArrivalDataTable = ({
             fontSize: '12px !important',
             fontWeight: rowSelection[row.id] ? 500 : 400,
 
-            background: isHighlightBackground
-              ? `${isHighlightBackground.background} !important `
-              : 'White',
-            color: isHighlightBackground && isHighlightBackground.text,
+            background: 'White',
+            // background: isHighlightBackground
+            //   ? `${isHighlightBackground.background} !important `
+            //   : 'White',
+            // color: isHighlightBackground && isHighlightBackground.text,
             opacity: 1,
             '&:hover': {
-              background: isHighlightBackground
-                ? isHighlightBackground.background
-                : 'White'
+              background: 'White'
+              // background: isHighlightBackground
+              //   ? isHighlightBackground.background
+              //   : 'White'
             },
             visibility:
               (cell.id === 'shape:RAD_lot_id' ||
