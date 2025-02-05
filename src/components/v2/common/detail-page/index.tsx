@@ -737,19 +737,28 @@ export function DiamondDetailsComponent({
                   <p
                     className={`text-successMain text-mMedium px-[8px] py-[2px] rounded-[4px]`}
                   >
-                    {fromBid
-                      ? tableData.original_discount !== null &&
-                        tableData.original_discount !== undefined
-                        ? tableData.original_discount === 0
+                    {(() => {
+                      const formatBidValue = (
+                        value: number | null | undefined
+                      ) => {
+                        if (value === null || value === undefined) return '';
+                        return value === 0
                           ? '0.00%'
-                          : formatNumber(tableData.original_discount) + '%'
-                        : ''
-                      : tableData.discount !== null &&
-                        tableData.discount !== undefined
-                      ? tableData.discount === 0
-                        ? '0.00%'
-                        : formatNumber(tableData.discount) + '%'
-                      : ''}
+                          : `${formatNumber(value)}%`;
+                      };
+
+                      if (identifier === 'NewArrivals') {
+                        return activeTab === 0
+                          ? formatBidValue(tableData.current_max_bid)
+                          : formatBidValue(tableData.my_current_bid);
+                      }
+
+                      if (fromBid) {
+                        return formatBidValue(tableData.original_discount);
+                      }
+
+                      return formatBidValue(tableData.discount);
+                    })()}
                   </p>
                 </div>
                 {statusValue.length > 0 && (
