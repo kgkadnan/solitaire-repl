@@ -31,6 +31,8 @@ import {
   useLazyGetMatchingPairSettingQuery,
   useLazyGetResetMatchingPairSettingQuery
 } from '@/features/api/match-pair';
+import infoHover from '@public/v2/assets/icons/info.svg';
+import infoSvg from '@public/v2/assets/icons/dashboard/info.svg';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import { MPSDialogComponent } from './components/mps';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
@@ -130,10 +132,11 @@ const MatchingPair = () => {
   const [isAddDemand, setIsAddDemand] = useState(false);
   const [globalFilterActive, setGlobalFilterActive] = useState(false);
   const [globalFilter, setGlobalFilter] = useState('');
-
+  const [isHovered, setIsHovered] = useState('');
   const [searchParameters, setSearchParameters] = useState<ISavedSearch[] | []>(
     []
   );
+  const [isFetchProduct, setIsFetchProduct] = useState(false);
   const [resetMPS] = useLazyGetResetMatchingPairSettingQuery({});
   const [applyMPS] = useApplyMatchingPairSettingMutation({});
   const { setSearchUrl, searchUrl, addSearches, setAddSearches } =
@@ -183,7 +186,7 @@ const MatchingPair = () => {
       key: 'clarity',
       down: 0,
       display: 'Clarity',
-      is_equal: false,
+      is_equal: true,
       priority: 2,
       start: 0,
       end: 10,
@@ -192,7 +195,7 @@ const MatchingPair = () => {
     {
       up: 0.0,
       key: 'length',
-      down: 0.0,
+      down: 0.05,
       display: 'Length',
       is_equal: false,
       priority: 3,
@@ -203,7 +206,7 @@ const MatchingPair = () => {
     {
       up: 0.0,
       key: 'width',
-      down: 0.0,
+      down: 2.0,
       display: 'Width',
       is_equal: false,
       priority: 4,
@@ -223,9 +226,9 @@ const MatchingPair = () => {
       placeHolder: '0.00'
     },
     {
-      up: 1.0,
+      up: 0.0,
       key: 'depth_percentage',
-      down: 0.0,
+      down: 1.7,
       display: 'Depth %',
       is_equal: false,
       priority: 6,
@@ -248,7 +251,7 @@ const MatchingPair = () => {
     {
       up: 0.0,
       key: 'carats',
-      down: 0.0,
+      down: 0.05,
       display: 'Carat',
       is_equal: false,
       priority: 8,
@@ -354,7 +357,7 @@ const MatchingPair = () => {
     };
 
     fetchMyAPI();
-  }, [localStorage.getItem('MatchingPair')!]);
+  }, [localStorage.getItem('MatchingPair')!, isFetchProduct]);
 
   const handleCloseAllTabs = () => {
     localStorage.removeItem('MatchingPair');
@@ -379,6 +382,12 @@ const MatchingPair = () => {
       (_items: ISavedSearch, index: number) => index != removeDataIndex
     );
 
+    // Reformat the searchId for remaining results to be sequential
+    closeSpecificSearch = closeSpecificSearch.map((search, index) => ({
+      ...search,
+      label: `Result ${index + 1}` // Update searchId to be sequential
+    }));
+
     if (closeSpecificSearch.length === 0) {
       setSearchParameters([]);
       setAddSearches([]);
@@ -390,6 +399,7 @@ const MatchingPair = () => {
       setSearchParameters(closeSpecificSearch);
       setAddSearches(closeSpecificSearch);
       if (activeTab == removeDataIndex + 1) {
+        setIsFetchProduct(!isFetchProduct);
         setActiveTab(1);
         router.push(
           `${Routes.MATCHING_PAIR}?active-tab=${MatchSubRoutes.RESULT}-1`
@@ -556,9 +566,36 @@ const MatchingPair = () => {
     return (
       <div>
         <div className="flex justify-between w-full p-4 items-center">
-          <p className="text-headingS font-medium text-neutral900">
-            Match Pair Settings
-          </p>
+          <div className="flex items-center gap-1">
+            <p className="text-headingS font-medium text-neutral900">
+              Match Pair Settings
+            </p>
+            <div className="relative">
+              <Image
+                onMouseEnter={() =>
+                  setIsHovered(
+                    'Use Match Pair Settings to find perfectly matched diamonds for earrings or other paired jewelry. This ensures symmetry, saves time, and allows you to customize pairing based on attributes like carat, clarity, color, etc.'
+                  )
+                }
+                onMouseLeave={() => setIsHovered('')}
+                src={infoSvg}
+                alt="order meta data"
+              />
+              {isHovered !== '' && (
+                <div className="absolute z-10 bg-[#ECF2FC] w-[320px] border-[1px] border-[#B6CFF3] rounded-[8px] p-4 text-[#475467] left-[23px] top-[-66px] gap-2 right-[0px] ">
+                  <div className="flex flex-col gap-2">
+                    <div className="flex gap-1 items-center">
+                      <Image src={infoHover} alt="your orders" />{' '}
+                      <p className="text-neutral900 font-medium text-mMedium">
+                        Information
+                      </p>
+                    </div>
+                    <p className="text-neutral600 text-[14px]">{isHovered}</p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
           <div
             className="cursor-pointer"
             onClick={() => {
@@ -610,8 +647,8 @@ const MatchingPair = () => {
           <p className="w-[60px] px-3">Rank</p>
           <p className="w-[150px]">Name</p>
           <div className="w-[80px] flex justify-center">Equal</div>
-          <p className="w-[67px] flex justify-start">Up</p>
-          <p className="w-[80px] flex justify-start mr-[12px]">Down</p>
+          <p className="w-[67px] flex justify-start">From</p>
+          <p className="w-[80px] flex justify-start mr-[12px]">To</p>
           <div className="w-[87px]">Action</div>
         </div>
 
@@ -656,40 +693,55 @@ const MatchingPair = () => {
                                 />
                               </div>
 
-                              <div className="w-[80px] py-1">
-                                <InputField
-                                  onChange={e =>
-                                    handleMPSInputChange(
-                                      index,
-                                      e.target.value,
-                                      'up'
-                                    )
-                                  }
-                                  onBlur={() => handleInputBlur(index, 'up')}
-                                  type="number"
-                                  value={item.up}
-                                  placeholder={item.placeHolder}
-                                  styles={{ inputMain: 'h-[40px]' }}
-                                  disabled={item.is_equal}
-                                />
-                              </div>
+                              <div>
+                                <div className="flex gap-[12px]">
+                                  <div className="w-[80px] py-1">
+                                    <InputField
+                                      onChange={e =>
+                                        handleMPSInputChange(
+                                          index,
+                                          e.target.value,
+                                          'up'
+                                        )
+                                      }
+                                      onBlur={() =>
+                                        handleInputBlur(index, 'up')
+                                      }
+                                      type="number"
+                                      value={item.up}
+                                      placeholder={item.placeHolder}
+                                      styles={{ inputMain: 'h-[40px]' }}
+                                      disabled={item.is_equal}
+                                    />
+                                  </div>
 
-                              <div className="w-[80px] py-1">
-                                <InputField
-                                  onChange={e =>
-                                    handleMPSInputChange(
-                                      index,
-                                      e.target.value,
-                                      'down'
-                                    )
-                                  }
-                                  onBlur={() => handleInputBlur(index, 'down')}
-                                  type="number"
-                                  value={item.down}
-                                  placeholder={item.placeHolder}
-                                  styles={{ inputMain: 'h-[40px]' }}
-                                  disabled={item.is_equal}
-                                />
+                                  <div className="w-[80px] py-1">
+                                    <InputField
+                                      onChange={e =>
+                                        handleMPSInputChange(
+                                          index,
+                                          e.target.value,
+                                          'down'
+                                        )
+                                      }
+                                      onBlur={() =>
+                                        handleInputBlur(index, 'down')
+                                      }
+                                      type="number"
+                                      value={item.down}
+                                      placeholder={item.placeHolder}
+                                      styles={{ inputMain: 'h-[40px]' }}
+                                      disabled={item.is_equal}
+                                    />
+                                  </div>
+                                </div>
+                                {!item.is_equal &&
+                                  parseFloat(item.up) >
+                                    parseFloat(item.down) && (
+                                    <p className="text-visRed text-sRegular  mt-[1px]">
+                                      {`To has to be >= From.`}
+                                    </p>
+                                  )}
                               </div>
 
                               <div
