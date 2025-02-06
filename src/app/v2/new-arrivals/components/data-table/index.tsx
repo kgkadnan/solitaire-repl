@@ -12,7 +12,6 @@ import crossIcon from '@public/v2/assets/icons/new-arrivals/cross-icon.svg';
 import Image from 'next/image';
 import DisableDecrementIcon from '@public/v2/assets/icons/new-arrivals/disable-decrement.svg?url';
 import searchIcon from '@public/v2/assets/icons/data-table/search-icon.svg';
-import { faSort, faSortDown } from '@fortawesome/free-solid-svg-icons';
 // theme.js
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import FilterIcon from '@public/v2/assets/icons/new-arrivals/filter-icon.svg?url';
@@ -28,15 +27,13 @@ import DecrementIcon from '@public/v2/assets/icons/new-arrivals/decrement.svg?ur
 import IncrementIcon from '@public/v2/assets/icons/new-arrivals/increment.svg?url';
 import empty from '@public/v2/assets/icons/data-table/empty-new-arrivals.svg';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
-import { RenderNewArrivalLotIdColor } from '@/components/v2/common/data-table/helpers/render-cell';
 import Tooltip from '@/components/v2/common/tooltip';
-import infoIcon from '@public/v2/assets/icons/new-arrivals/info-icon.svg';
-import infoHover from '@public/v2/assets/icons/info.svg';
+// import infoIcon from '@public/v2/assets/icons/new-arrivals/info-icon.svg';
+// import infoHover from '@public/v2/assets/icons/info.svg';
 import { kycStatus } from '@/constants/enums/kyc';
 import { formatNumber } from '@/utils/fix-two-digit-number';
 import { handleIncrementDiscount } from '@/utils/v2/handle-increment-discount';
 import { handleDecrementDiscount } from '@/utils/v2/handle-decrement-discount';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ManageLocales } from '@/utils/v2/translate';
 import { SubRoutes } from '@/constants/v2/enums/routes';
 import { filterFunction } from '@/features/filter-new-arrival/filter-new-arrival-slice';
@@ -1328,7 +1325,7 @@ const NewArrivalDataTable = ({
                         }
                       ]}
                     />
-                    <div className="relative">
+                    {/* <div className="relative">
                       <Image
                         onMouseEnter={() => setHoveredRowId(row.id)}
                         onMouseLeave={() => setHoveredRowId('')}
@@ -1352,7 +1349,7 @@ const NewArrivalDataTable = ({
                           </div>
                         </div>
                       )}
-                    </div>
+                    </div> */}
                   </div>
                 </div>
                 <div className=" text-dangerMain text-sRegular">
