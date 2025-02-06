@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { ManageLocales } from '@/utils/translate';
 import { AccordionComponent } from '@/components/v2/common/accordion';
 import Tile from '@/components/v2/common/tile';
@@ -50,7 +50,8 @@ const Inclusions = ({ state, setState }: any) => {
     setNaturalGirdle,
     setNaturalPavilion,
     setSurfaceGraining,
-    setInternalGraining
+    setInternalGraining,
+    setSelectedShade
   } = setState;
 
   // Create an array of other parameter data with respective change handlers and state
@@ -140,6 +141,49 @@ const Inclusions = ({ state, setState }: any) => {
     };
   });
 
+  const handleFilterChange = ({
+    data,
+    selectedTile,
+    setSelectedTile
+  }: {
+    data: string;
+    selectedTile: string[];
+    setSelectedTile: Dispatch<SetStateAction<string[]>>;
+  }) => {
+    setSelectedTile(prevSelectedFilters => {
+      let updatedFilters = prevSelectedFilters.includes(data)
+        ? prevSelectedFilters.filter(selected => selected !== data)
+        : [...prevSelectedFilters, data];
+
+      // If "M0" is selected/deselected, update the main selection state
+      if (data === 'M0') {
+        setSelectedShade((prevSelectedShades: any) => {
+          let updatedShades = [...prevSelectedShades];
+
+          if (updatedFilters.includes('M0')) {
+            // Ensure "No BGM" is selected when "M0" and its dependencies are selected
+            const noBgmDependencies = ['None', 'White', 'Yellow'];
+            if (
+              noBgmDependencies.every(dep => updatedShades.includes(dep)) &&
+              updatedFilters.includes('M0')
+            ) {
+              if (!updatedShades.includes('No BGM')) {
+                updatedShades.push('No BGM');
+              }
+            }
+          } else {
+            // Remove "No BGM" if M0 is removed
+            updatedShades = updatedShades.filter(item => item !== 'No BGM');
+          }
+
+          return updatedShades;
+        });
+      }
+
+      return updatedFilters;
+    });
+  };
+
   return (
     <>
       {
@@ -171,7 +215,11 @@ const Inclusions = ({ state, setState }: any) => {
                             tileData={data.elementValue}
                             selectedTile={data.state}
                             setSelectedTile={data.setState}
-                            handleTileClick={handleSelection}
+                            handleTileClick={
+                              data.elementKey === 'Milky'
+                                ? handleFilterChange
+                                : handleSelection
+                            }
                           />
                         </div>
                       </div>
