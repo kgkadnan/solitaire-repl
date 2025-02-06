@@ -100,6 +100,7 @@
   "app.modal.verifyMyKYCNow": "Verify my KYC now",
   "app.modal.browseWebsite": "Browse Website",
   "app.modal.login": "Login",
+  "app.noNetwork.reloadPage": "Reload Page",
 
   "app.myCart.mycart": "My Cart",
   "app.myCart.actionButton.delete": "Delete",

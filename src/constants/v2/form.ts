@@ -236,6 +236,7 @@ export const keyToSymbolWithoutAll = [
 ];
 
 export const shade = [
+  'No BGM',
   'None',
   'White',
   'Mixed',

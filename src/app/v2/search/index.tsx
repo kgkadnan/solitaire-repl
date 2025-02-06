@@ -174,6 +174,12 @@ const Search = () => {
       (_items: ISavedSearch, index: number) => index != removeDataIndex
     );
 
+    // Reformat the searchId for remaining results to be sequential
+    closeSpecificSearch = closeSpecificSearch.map((search, index) => ({
+      ...search,
+      label: `Result ${index + 1}` // Update searchId to be sequential
+    }));
+
     if (closeSpecificSearch.length === 0) {
       setSearchParameters([]);
       setAddSearches([]);
@@ -199,7 +205,7 @@ const Search = () => {
 
   const handleCloseSpecificTab = (id: number) => {
     let yourSelection = JSON.parse(localStorage.getItem('Search')!);
-
+    closeSearch(id, yourSelection);
     // if (!yourSelection[id - 1]?.isSavedSearch) {
     //   setIsDialogOpen(true);
     //   setDialogContent(
@@ -250,7 +256,7 @@ const Search = () => {
     //     />
     //   );
     // } else {
-    closeSearch(id, yourSelection);
+
     // }
   };
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
