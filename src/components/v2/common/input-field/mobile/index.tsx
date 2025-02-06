@@ -31,7 +31,6 @@ export const MobileInput = ({
   registerFormState,
   setRegisterFormState
 }: IMobileInputField) => {
-  console.log('registerFormState', registerFormState);
   const { data: getAllCountryCode } = useGetAllCountryCodeQuery({});
   const [isFlagLoaded, setIsFlagLoaded] = useState(true);
 

@@ -29,6 +29,7 @@ import { useMediaQuery } from 'react-responsive';
 import * as Sentry from '@sentry/nextjs';
 import Script from 'next/script';
 import CookieBot from 'react-cookiebot';
+import OfflineIndicator from '@/components/v2/common/no-internet';
 
 const store = setupStore();
 
@@ -276,6 +277,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
           }
           isOpens={open}
         />
+        <OfflineIndicator />
         <noscript
           dangerouslySetInnerHTML={{
             __html: `

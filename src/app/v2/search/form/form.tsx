@@ -196,6 +196,7 @@ const Form = ({
     selectedLocation,
     selectedOrigin,
     selectedShade,
+    milky,
     discountMin, //discountFrom
     discountMax, //discountTo
     amountRangeMin, //priceRangeFrom
@@ -221,6 +222,7 @@ const Form = ({
     setCaratRangeSelection,
     setSelectedWhiteColor,
     setSelectedFancyColor,
+    setMilky,
     setSelectedIntensity,
     setSelectedOvertone,
     setSelectedLab,
@@ -1630,6 +1632,8 @@ const Form = ({
           <Shade
             selectedShade={selectedShade}
             setSelectedShade={setSelectedShade}
+            setMilky={setMilky}
+            milky={milky}
           />
           {isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED ? (
             <></>

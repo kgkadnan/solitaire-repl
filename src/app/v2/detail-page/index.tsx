@@ -1143,7 +1143,13 @@ export default function DetailPage() {
             <>
               <DiamondDetailsComponent
                 data={bid}
-                identifier={path == MatchRoutes.DASHBOARD ? 'Dashboard' : ''}
+                identifier={
+                  path == MatchRoutes.DASHBOARD
+                    ? 'Dashboard'
+                    : path == MatchRoutes.NEW_ARRIVAL
+                    ? 'NewArrivals'
+                    : ''
+                }
                 filterData={detailPageData}
                 goBackToListView={goBack}
                 handleDetailPage={handleDetailPage}
