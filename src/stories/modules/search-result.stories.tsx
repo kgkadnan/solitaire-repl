@@ -45,6 +45,7 @@ export const Docs = () => {
     setIsAddCommentDialogOpen={() => {}}
     setIsDialogOpen={() => {}}
     handleConfirmStone={() => {}}
+    isFetchProduct={false}
   />`}
           </pre>
         </div>
@@ -115,6 +116,7 @@ const Template: Story<typeof Result> = () => {
       setSearchParameters={() => {}}
       setIsLoading={() => {}}
       setIsInputDialogOpen={() => {}}
+      isFetchProduct={false}
     />
   );
 };
