@@ -14,6 +14,22 @@ export const priceDetailsHeadForBid = [
   { key: 'rap', label: 'Rap ($)' }
 ];
 
+export const priceDetailsHeadForMyBid = [
+  { key: 'rap_value', label: 'Rap Val' },
+  { key: 'my_current_bid', label: 'Disc %' },
+  { key: 'price_per_carat', label: 'Pr/Ct' },
+  { key: 'amount', label: 'Amt ($)' },
+  { key: 'rap', label: 'Rap ($)' }
+];
+
+export const priceDetailsHeadForCurrentBid = [
+  { key: 'rap_value', label: 'Rap Val' },
+  { key: 'current_max_bid', label: 'Disc %' },
+  { key: 'price_per_carat', label: 'Pr/Ct' },
+  { key: 'amount', label: 'Amt ($)' },
+  { key: 'rap', label: 'Rap ($)' }
+];
+
 export const basicDetailsHead1 = [
   { key: 'lot_id', label: 'Stock No' }, //n
   { key: 'carats', label: 'Carats' },
