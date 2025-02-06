@@ -70,7 +70,7 @@ const OfflineIndicator = () => {
                       window.location.reload();
                     } else {
                       setError(
-                        'Please check your internet connection and try again'
+                        'No internet connection. Please check your network and try again.'
                       );
                     }
                   }
