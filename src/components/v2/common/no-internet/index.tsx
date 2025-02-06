@@ -1,4 +1,3 @@
-// components/OfflineIndicator.js
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import noNetworkImg from '@public/v2/assets/icons/no-internet.svg';
@@ -9,6 +8,7 @@ import { Toast } from '@/components/v2/common/copy-and-share/toast';
 const OfflineIndicator = () => {
   const [isOnline, setIsOnline] = useState(true);
   const [error, setError] = useState('');
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   const handleOnline = () => setIsOnline(true);
   const handleOffline = () => setIsOnline(false);
@@ -19,11 +19,17 @@ const OfflineIndicator = () => {
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
 
+    // Preload the image regardless of online status
+    const img: HTMLImageElement = new window.Image(); // ✅ Explicitly define type
+    img.src = noNetworkImg.src;
+    img.onload = () => setImageLoaded(true);
+
     return () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
     };
   }, []);
+
   useEffect(() => {
     error &&
       setTimeout(() => {
@@ -40,7 +46,16 @@ const OfflineIndicator = () => {
       {!isOnline && (
         <div className="fixed inset-0 bg-white z-50 flex items-center justify-center">
           <div className="bg-white p-8 rounded-lg flex flex-col items-center justify-center gap-5 max-w-md w-full mx-4">
-            <Image src={noNetworkImg} alt={'noNetworkImg'} />
+            {imageLoaded && (
+              <Image
+                src={noNetworkImg}
+                alt={'No network connection'}
+                width={200}
+                height={200}
+                priority
+                loading="eager"
+              />
+            )}
 
             <div className="flex flex-col gap-[12px]">
               <div className="flex flex-col gap-[4px] text-center">
