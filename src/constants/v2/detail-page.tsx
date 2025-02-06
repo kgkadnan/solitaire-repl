@@ -24,7 +24,7 @@ export const priceDetailsHeadForMyBid = [
 
 export const priceDetailsHeadForCurrentBid = [
   { key: 'rap_value', label: 'Rap Val' },
-  { key: 'current_max_bid', label: 'Disc %' },
+  { key: 'discount', label: 'Disc %' },
   { key: 'price_per_carat', label: 'Pr/Ct' },
   { key: 'amount', label: 'Amt ($)' },
   { key: 'rap', label: 'Rap ($)' }

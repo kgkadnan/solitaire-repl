@@ -137,7 +137,7 @@ export const columnHeaders = [
   },
   {
     label: 'Discount',
-    accessor: 'current_max_bid',
+    accessor: 'discount',
     sequence: 15,
     is_fixed: false,
     short_label: 'Disc %',

@@ -751,7 +751,7 @@ export function DiamondDetailsComponent({
 
                       if (identifier === 'NewArrivals') {
                         return activeTab === 0
-                          ? formatBidValue(tableData.current_max_bid)
+                          ? formatBidValue(tableData.discount)
                           : formatBidValue(tableData.my_current_bid);
                       }
 
