@@ -624,7 +624,7 @@ const NewArrivals = () => {
           //       });
           //     }
           //   };
-          case 'current_max_bid':
+          case 'discount':
             return {
               ...commonProps,
               Cell: ({ renderedCellValue, row }: any) => {
@@ -731,7 +731,7 @@ const NewArrivals = () => {
     setRowSelection({});
     // if (index === 1 && activeBid.length > 0) {
     //   activeBid.map((row: any) => {
-    //     if (row.current_max_bid > row.my_current_bid) {
+    //     if (row.discount > row.my_current_bid) {
     //       setRowSelection(prev => {
     //         return { ...prev, [row.id]: true };
     //       });
@@ -747,6 +747,7 @@ const NewArrivals = () => {
   };
   const [activeBid, setActiveBid] = useState<any>();
   const [bid, setBid] = useState<any>();
+  console.log('490160286', bid);
   const [time, setTime] = useState<any>();
   useEffect(() => {
     const currentTime: any = new Date();
@@ -906,7 +907,7 @@ const NewArrivals = () => {
           setTime(allProducts?.endTime ?? undefined);
           // if (allProducts.activeStone) {
           //   allProducts.activeStone.map((row: any) => {
-          //     if (row.current_max_bid > row.my_current_bid) {
+          //     if (row.discount > row.my_current_bid) {
           //       setRowSelection(prev => {
           //         return { ...prev, [row.id]: true };
           //       });
@@ -1636,15 +1637,15 @@ const NewArrivals = () => {
                       activeTab === 2
                         ? memoizedColumns.filter(
                             (data: any) =>
-                              data.accessorKey !== 'current_max_bid' &&
+                              data.accessorKey !== 'discount' &&
                               data.accessorKey !== 'shape'
-                          ) // Filter out data with accessor key 'current_max_bid'
+                          ) // Filter out data with accessor key 'discount'
                         : activeTab === 1
                         ? memoizedColumns.filter(
                             (data: any) =>
                               data.accessorKey !== 'last_bid_date' &&
                               data.accessorKey !== 'shape' &&
-                              data.accessorKey !== 'current_max_bid'
+                              data.accessorKey !== 'discount'
                           )
                         : memoizedColumns.filter(
                             (data: any) =>

@@ -449,7 +449,7 @@ const NewArrivalDataTable = ({
       'symmetry',
       'fluorescence',
       'rap_value',
-      'current_max_bid',
+      'discount',
       'my_current_bid',
       ...columns.map((c: any) => c.accessorKey)
     ] //array of column ids (Initializing is optional as of v2.10.0)
@@ -1073,7 +1073,7 @@ const NewArrivalDataTable = ({
             ? bidValues[row.id]
             : activeTab === 1
             ? parseFloat(row.original.my_current_bid).toFixed(2)
-            : parseFloat(row.original.current_max_bid).toFixed(2);
+            : parseFloat(row.original.discount).toFixed(2);
         // If the row is selected, return the detail panel content
         return (
           <div>
@@ -1096,7 +1096,7 @@ const NewArrivalDataTable = ({
                   value={`${formatNumber(
                     activeTab === 1
                       ? row.original.my_current_bid
-                      : row.original.current_max_bid
+                      : row.original.discount
                   )}%`}
                   disabled
                 />
@@ -1112,7 +1112,7 @@ const NewArrivalDataTable = ({
                         bidValue <=
                           (activeTab === 1
                             ? row.original.my_current_bid
-                            : row.original.current_max_bid)
+                            : row.original.discount)
                         ? formatNumber(row.original.price_per_carat)
                         : formatNumber(
                             row.original.rap * (1 + bidValues[row.id] / 100)
@@ -1143,7 +1143,7 @@ const NewArrivalDataTable = ({
                         bidValue <=
                           (activeTab === 1
                             ? row.original.my_current_bid
-                            : row.original.current_max_bid)
+                            : row.original.discount)
                         ? formatNumber(
                             row.original.price || row.original.amount
                           )
@@ -1164,7 +1164,7 @@ const NewArrivalDataTable = ({
                     {bidValue <=
                     (activeTab === 1
                       ? row.original.my_current_bid
-                      : row.original.current_max_bid) ? (
+                      : row.original.discount) ? (
                       <div className="cursor-not-allowed">
                         <DisableDecrementIcon />
                       </div>
@@ -1175,7 +1175,7 @@ const NewArrivalDataTable = ({
                             row.id,
                             activeTab === 1
                               ? row.original.my_current_bid
-                              : row.original.current_max_bid,
+                              : row.original.discount,
                             setBidError,
                             setBidValues
                           )
@@ -1197,7 +1197,7 @@ const NewArrivalDataTable = ({
                           let discount =
                             activeTab === 1
                               ? row.original.my_current_bid
-                              : row.original.current_max_bid;
+                              : row.original.discount;
                           if (newValue < discount) {
                             setBidError(prevError => {
                               return {
@@ -1237,7 +1237,7 @@ const NewArrivalDataTable = ({
                         //       [row.id]: e.target.value
                         //     };
 
-                        //     // If no bid value for this row yet, start from current_max_bid and add 0.5
+                        //     // If no bid value for this row yet, start from discount and add 0.5
                         //   });
                         // }}
                       />
@@ -1249,7 +1249,7 @@ const NewArrivalDataTable = ({
 
                           activeTab === 1
                             ? row.original.my_current_bid
-                            : row.original.current_max_bid,
+                            : row.original.discount,
                           setBidError,
                           setBidValues
                         )
@@ -1266,7 +1266,7 @@ const NewArrivalDataTable = ({
                             bidValue <=
                             (activeTab === 1
                               ? row.original.my_current_bid
-                              : row.original.current_max_bid)
+                              : row.original.discount)
                               ? 'disable'
                               : 'primary',
 
@@ -1276,7 +1276,7 @@ const NewArrivalDataTable = ({
                               let discount =
                                 activeTab === 1
                                   ? row.original.my_current_bid
-                                  : row.original.current_max_bid;
+                                  : row.original.discount;
                               if (bidValue < discount) {
                                 setBidError(prevError => {
                                   return {
@@ -1319,7 +1319,7 @@ const NewArrivalDataTable = ({
                             bidValue <=
                             (activeTab === 1
                               ? row.original.my_current_bid
-                              : row.original.current_max_bid),
+                              : row.original.discount),
                           customStyle: 'flex-1 w-full h-[30px] text-sMedium',
                           customCtaStyle: '!h-[30px] !text-[12px]'
                         }
