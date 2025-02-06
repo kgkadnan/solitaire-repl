@@ -26,7 +26,9 @@ import {
   mesurementsDetails,
   otherInformationDetails,
   priceDetails,
-  priceDetailsForBid
+  priceDetailsForBid,
+  priceDetailsHeadForCurrentBid,
+  priceDetailsHeadForMyBid
 } from '@/constants/v2/detail-page';
 import { Toast } from '../copy-and-share/toast';
 import Tooltip from '../tooltip';
@@ -807,7 +809,26 @@ export function DiamondDetailsComponent({
               />
             )}
 
-            {displayTable(fromBid ? priceDetailsForBid : priceDetails)}
+            {validImages.length > 0 ? (
+              displayTable(
+                identifier === 'NewArrivals'
+                  ? activeTab === 0
+                    ? priceDetailsHeadForCurrentBid
+                    : priceDetailsHeadForMyBid
+                  : fromBid
+                  ? priceDetailsForBid
+                  : priceDetails
+              )
+            ) : (
+              <Skeleton
+                width="100%"
+                height={100}
+                sx={{ bgcolor: 'var(--neutral-200)' }}
+                className="rounded-[4px]"
+                variant="rectangular"
+                animation="wave"
+              />
+            )}
           </div>
           <div className="pt-8 max-w-[100%] pr-[10px]">
             {validImages.length > 0 ? (
