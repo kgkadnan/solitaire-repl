@@ -125,7 +125,8 @@ const Result = ({
   handleCloseSpecificTab,
   setSearchParameters,
   setIsLoading,
-  setIsInputDialogOpen
+  setIsInputDialogOpen,
+  isFetchProduct
 }: {
   activeTab: number;
   searchParameters: any;
@@ -135,6 +136,7 @@ const Result = ({
   handleCloseSpecificTab: (_id: number) => void;
   setIsLoading: any;
   setIsInputDialogOpen: any;
+  isFetchProduct: boolean;
 }) => {
   const dispatch = useAppDispatch();
   const confirmTrack = useAppSelector(state => state.setConfirmStoneTrack);
@@ -919,9 +921,10 @@ const Result = ({
       });
 
   useEffect(() => {
+    console.log('activeTab00004664', activeTab);
     // setIsLoading(true)
     fetchProducts();
-  }, [activeTab, columnData]);
+  }, [activeTab, columnData, isFetchProduct]);
 
   useEffect(() => {
     setErrorText('');

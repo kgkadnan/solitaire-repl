@@ -35,6 +35,7 @@ const Search = () => {
   const [searchParameters, setSearchParameters] = useState<ISavedSearch[] | []>(
     []
   );
+  const [isFetchProduct, setIsFetchProduct] = useState(false);
 
   const { setSearchUrl, searchUrl, addSearches, setAddSearches } =
     useValidationStateManagement();
@@ -188,8 +189,10 @@ const Search = () => {
     } else {
       setSearchParameters(closeSpecificSearch);
       setAddSearches(closeSpecificSearch);
+      console.log('activeTab', activeTab);
       if (activeTab == removeDataIndex + 1) {
         setActiveTab(1);
+        setIsFetchProduct(!isFetchProduct);
         router.push(`${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-1`);
       } else if (activeTab > removeDataIndex + 1) {
         const newTab = activeTab - 1;
@@ -413,6 +416,7 @@ const Search = () => {
           handleCloseSpecificTab={handleCloseSpecificTab}
           setIsLoading={setIsLoading}
           setIsInputDialogOpen={setIsInputDialogOpen}
+          isFetchProduct={isFetchProduct}
         />
       )}
     </div>
