@@ -102,9 +102,9 @@ const Share = ({
       } else if (identifier === 'New Arrival') {
         if (activeTab === 2) {
           fieldToAdd = { name: 'Date', state: 'last_bid_date' };
-          fieldToRemove = { state: 'current_max_bid' };
+          // fieldToRemove = { state: 'current_max_bid' };
         } else {
-          fieldToAdd = { name: 'Current Max Bid', state: 'current_max_bid' };
+          // fieldToAdd = { name: 'Current Max Bid', state: 'current_max_bid' };
           fieldToRemove = { state: 'last_bid_date' };
         }
       }
@@ -134,14 +134,16 @@ const Share = ({
       );
 
       if (!isFieldToAddAlreadyAdded) {
-        // Add the field to shareOptions
-        setShareOptions(prev => [...prev, fieldToAdd]);
+        // Add the field to shareOptions only if fieldToAdd is defined
+        if (fieldToAdd) {
+          setShareOptions(prev => [...prev, fieldToAdd]);
 
-        // Update selected attributes
-        setSelectedAttributes((prev: any) => ({
-          ...prev,
-          [fieldToAdd.state]: true
-        }));
+          // Update selected attributes
+          setSelectedAttributes((prev: any) => ({
+            ...prev,
+            [fieldToAdd.state]: true
+          }));
+        }
       }
     }
   }, [identifier, activeTab, shareOptions]);
