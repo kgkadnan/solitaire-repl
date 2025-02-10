@@ -1081,7 +1081,7 @@ const NewArrivalDataTable = ({
               className="flex gap-6"
               onClick={event => event.stopPropagation()}
             >
-              <div className="w-[110px] ml-7">
+              {/* <div className="w-[110px] ml-7">
                 <div className="text-sRegular text-neutral700">
                   Current Max Bid%
                 </div>
@@ -1100,7 +1100,7 @@ const NewArrivalDataTable = ({
                   )}%`}
                   disabled
                 />
-              </div>
+              </div> */}
               <div className="w-[110px]">
                 <div className="text-sRegular text-neutral700">Bid Pr/Ct</div>
 

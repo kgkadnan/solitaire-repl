@@ -102,7 +102,6 @@ export function DiamondDetailsComponent({
   setGemTracData?: any;
   triggerGemTracApi?: any;
 }) {
-  console.log('identifier', identifier);
   const router = useRouter();
 
   const [tableData, setTableData] = useState<any>([]);
@@ -157,7 +156,6 @@ export function DiamondDetailsComponent({
   };
 
   const displayTable = (tableHeadArray: any) => {
-    console.log('tableHeadArrayisse', tableHeadArray);
     return (
       <div>
         {tableHeadArray.map((item: ITableColumn[], index: any) => (

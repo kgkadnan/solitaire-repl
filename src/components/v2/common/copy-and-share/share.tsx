@@ -50,7 +50,7 @@ const Share = ({
   const [showToast, setShowToast] = useState(false);
 
   const [trackShareEvent] = useLazyShareEventQuery({});
-
+  console.log('active and ide', activeTab, identifier);
   const [shareOptions, setShareOptions] = useState([
     { name: 'Stock No', state: 'lot_id' },
     { name: 'Shape', state: 'shape' },
@@ -72,7 +72,14 @@ const Share = ({
     { name: 'Rap ($)', state: 'rap' },
     {
       name: 'Disc %',
-      state: identifier === 'Bid to Buy' ? 'original_discount' : 'discount'
+      state:
+        identifier === 'New Arrival'
+          ? activeTab === 0
+            ? 'discount'
+            : 'my_current_bid'
+          : identifier === 'Bid to Buy'
+          ? 'original_discount'
+          : 'discount'
     },
     { name: 'Pr/Ct', state: 'price_per_carat' },
     { name: 'Amt ($)', state: 'amount' },
@@ -147,6 +154,7 @@ const Share = ({
       }
     }
   }, [identifier, activeTab, shareOptions]);
+  console.log('share', shareOptions);
 
   const { setIsInputDialogOpen } = modalSetState;
 
@@ -221,12 +229,25 @@ const Share = ({
                   : `${formatNumberWithCommas(rapValue)}%`
               }`;
             }
+            console.log('my_current_bid', attribute, identifier);
             if (identifier === 'Bid to Buy') {
               if (
                 attribute === 'original_discount' &&
                 selectedAttributes['original_discount']
               ) {
                 const rapValue = product.original_discount;
+                return `Disc %:  ${
+                  rapValue === undefined || rapValue === null
+                    ? '-'
+                    : `${formatNumberWithCommas(rapValue)}%`
+                }`;
+              }
+            } else if (identifier === 'New Arrival' && activeTab !== 0) {
+              if (
+                attribute === 'my_current_bid' &&
+                selectedAttributes['my_current_bid']
+              ) {
+                const rapValue = product.my_current_bid;
                 return `Disc %:  ${
                   rapValue === undefined || rapValue === null
                     ? '-'
@@ -289,7 +310,7 @@ const Share = ({
               attribute === 'my_current_bid' &&
               selectedAttributes['my_current_bid']
             ) {
-              return `Max Disc %: ${formatNumber(product?.my_current_bid)}`;
+              return `Disc %: ${formatNumber(product?.my_current_bid)}`;
             }
 
             if (attribute === 'discount' && selectedAttributes['discount']) {
