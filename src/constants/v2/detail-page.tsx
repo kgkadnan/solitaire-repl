@@ -109,6 +109,8 @@ export const otherInformationHead1 = [
   { key: 'total_grade', label: 'Total Grade' }
 ];
 
+export const priceDetailsBidNewArrival = [priceDetailsHeadForMyBid];
+export const priceDetailsCurrentBidNewArrival = [priceDetailsHeadForCurrentBid];
 export const priceDetails = [priceDetailsHead];
 export const priceDetailsForBid = [priceDetailsHeadForBid];
 
