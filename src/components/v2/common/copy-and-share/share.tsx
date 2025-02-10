@@ -50,42 +50,76 @@ const Share = ({
   const [showToast, setShowToast] = useState(false);
 
   const [trackShareEvent] = useLazyShareEventQuery({});
-  console.log('active and ide', activeTab, identifier);
-  const [shareOptions, setShareOptions] = useState([
-    { name: 'Stock No', state: 'lot_id' },
-    { name: 'Shape', state: 'shape' },
-    { name: 'Carats', state: 'carats' },
-    { name: 'Color', state: 'color' },
-    { name: 'Clarity', state: 'clarity' },
-    { name: 'Cut', state: 'cut' },
-    { name: 'Polish', state: 'polish' },
-    { name: 'Symmetry', state: 'symmetry' },
-    { name: 'Fluorescence', state: 'fluorescence' },
-    { name: 'Measurements', state: 'measurements' },
-    { name: 'Table %', state: 'table_percentage' },
-    { name: 'Depth %', state: 'depth_percentage' },
-    {
-      name: 'Certificate Number',
-      state: 'certificate_number'
-    },
-    { name: 'Rap Val ($)', state: 'rap_value' },
-    { name: 'Rap ($)', state: 'rap' },
-    {
-      name: 'Disc %',
-      state:
-        identifier === 'New Arrival'
-          ? activeTab === 0
-            ? 'discount'
-            : 'my_current_bid'
-          : identifier === 'Bid to Buy'
-          ? 'original_discount'
-          : 'discount'
-    },
-    { name: 'Pr/Ct', state: 'price_per_carat' },
-    { name: 'Amt ($)', state: 'amount' },
+  const [shareOptions, setShareOptions] = useState(() => {
+    const baseOptions = [
+      { name: 'Stock No', state: 'lot_id' },
+      { name: 'Shape', state: 'shape' },
+      { name: 'Carats', state: 'carats' },
+      { name: 'Color', state: 'color' },
+      { name: 'Clarity', state: 'clarity' },
+      { name: 'Cut', state: 'cut' },
+      { name: 'Polish', state: 'polish' },
+      { name: 'Symmetry', state: 'symmetry' },
+      { name: 'Fluorescence', state: 'fluorescence' },
+      { name: 'Measurements', state: 'measurements' },
+      { name: 'Table %', state: 'table_percentage' },
+      { name: 'Depth %', state: 'depth_percentage' },
+      { name: 'Certificate Number', state: 'certificate_number' },
+      { name: 'Rap Val ($)', state: 'rap_value' },
+      { name: 'Rap ($)', state: 'rap' },
+      { name: 'Pr/Ct', state: 'price_per_carat' },
+      { name: 'Amt ($)', state: 'amount' },
+      { name: 'Public URL', state: 'public_url' },
+      {
+        name: 'Disc %',
+        state:
+          identifier === 'New Arrival'
+            ? activeTab !== 0
+              ? 'my_current_bid'
+              : 'discount'
+            : identifier === 'Bid to Buy'
+            ? 'original_discount'
+            : 'discount'
+      }
+    ];
 
-    { name: 'Public URL', state: 'public_url' }
-  ]);
+    return baseOptions;
+  });
+
+  useEffect(() => {
+    setShareOptions(prevOptions => {
+      const updatedOptions = [...prevOptions];
+      const discountOptionIndex = updatedOptions.findIndex(
+        option =>
+          option.state === 'my_current_bid' ||
+          option.state === 'discount' ||
+          option.state === 'original_discount'
+      );
+
+      if (discountOptionIndex !== -1) {
+        updatedOptions.splice(discountOptionIndex, 1);
+      }
+
+      const newDiscountOption = {
+        name: 'Disc %',
+        state:
+          identifier === 'New Arrival'
+            ? activeTab !== 0
+              ? 'my_current_bid'
+              : 'discount'
+            : identifier === 'Bid to Buy'
+            ? 'original_discount'
+            : 'discount'
+      };
+
+      updatedOptions.push(newDiscountOption);
+      return updatedOptions.sort((a, b) => {
+        if (a.state === 'depth_percentage') return -1;
+        if (b.state === 'depth_percentage') return 1;
+        return 0;
+      });
+    });
+  }, [activeTab, identifier]);
 
   useEffect(() => {
     if (
@@ -154,16 +188,24 @@ const Share = ({
       }
     }
   }, [identifier, activeTab, shareOptions]);
-  console.log('share', shareOptions);
 
   const { setIsInputDialogOpen } = modalSetState;
 
-  const [selectedAttributes, setSelectedAttributes] = useState(
+  const [selectedAttributes, setSelectedAttributes] = useState(() =>
     shareOptions.reduce((acc: any, option) => {
       acc[option?.state] = true; // Initialize all options as selected
       return acc;
     }, {})
   );
+
+  useEffect(() => {
+    setSelectedAttributes(
+      shareOptions.reduce((acc: any, option) => {
+        acc[option?.state] = true; // Update all options as selected when shareOptions changes
+        return acc;
+      }, {})
+    );
+  }, [shareOptions]);
   const handleAttributeToggle = (attribute: any) => {
     setSelectedAttributes((prev: any) => ({
       ...prev,
@@ -229,7 +271,6 @@ const Share = ({
                   : `${formatNumberWithCommas(rapValue)}%`
               }`;
             }
-            console.log('my_current_bid', attribute, identifier);
             if (identifier === 'Bid to Buy') {
               if (
                 attribute === 'original_discount' &&
@@ -310,7 +351,7 @@ const Share = ({
               attribute === 'my_current_bid' &&
               selectedAttributes['my_current_bid']
             ) {
-              return `Disc %: ${formatNumber(product?.my_current_bid)}`;
+              return `Max Disc %: ${formatNumber(product?.my_current_bid)}`;
             }
 
             if (attribute === 'discount' && selectedAttributes['discount']) {
