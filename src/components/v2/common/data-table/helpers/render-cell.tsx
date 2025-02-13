@@ -53,11 +53,7 @@ export const RenderDetails = ({ row, handleDetailImage }: any) => {
   }
 };
 
-export const RenderLotId = ({
-  renderedCellValue,
-  row,
-  handleDetailPage
-}: any) => {
+export const RenderLotId = ({ renderedCellValue, row }: any) => {
   let statusClass = '';
   let borderClass = '';
   if (row.original.diamond_status === MEMO_STATUS) {
@@ -79,10 +75,6 @@ export const RenderLotId = ({
   return (
     <span
       className={`rounded-[4px] ${statusClass} border-[1px] px-[8px] py-[3px] ${borderClass} flex !w-[85px]`}
-      onClick={e => {
-        e.stopPropagation();
-        handleDetailPage({ row: row.original });
-      }}
     >
       {renderedCellValue}
     </span>
@@ -213,70 +205,22 @@ export const RenderLab = ({
   );
 };
 
-export const RenderDiscount = ({
-  renderedCellValue,
-  setContactSaleTeamInputValue,
-  modalSetState,
-  row
-}: any) => {
-  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
+export const RenderDiscount = ({ renderedCellValue }: any) => {
   return (
     <>
-      {isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED ? (
-        <>
-          {row.original.variants[0].prices[0]?.amount === null ? (
-            <div
-              className="group relative"
-              onClick={() => {
-                handleUnlockPricing(
-                  setContactSaleTeamInputValue,
-                  modalSetState
-                );
-              }}
-            >
-              {/* Lock Icon */}
-              <Image
-                src={lockIcon}
-                alt="lockIcon"
-                className="group-hover:hidden transition-all"
-              />
-
-              {/* Tooltip for "Unlock" on hover */}
-              <div className="  font-medium text-infoMain text-sMedium  hidden group-hover:flex transition-all">
-                Unlock
-              </div>
-            </div>
-          ) : (
-            <div
-              className={`${
-                renderedCellValue !== null
-                  ? 'text-successMain border-[1px] border-successBorder bg-successSurface '
-                  : ''
-              } px-[4px] py-[2px] w-[65px] text-center rounded-[4px]`}
-            >
-              {renderedCellValue !== null
-                ? renderedCellValue === 0
-                  ? '0.00%'
-                  : formatNumber(renderedCellValue) + '%'
-                : '-'}
-            </div>
-          )}
-        </>
-      ) : (
-        <div
-          className={`${
-            renderedCellValue !== null
-              ? 'text-successMain border-[1px] border-successBorder bg-successSurface '
-              : ''
-          } px-[4px] py-[2px] w-[65px] text-center rounded-[4px]`}
-        >
-          {renderedCellValue !== null
-            ? renderedCellValue === 0
-              ? '0.00%'
-              : formatNumber(renderedCellValue) + '%'
-            : '-'}
-        </div>
-      )}
+      <div
+        className={`${
+          renderedCellValue !== null
+            ? 'text-successMain border-[1px] border-successBorder bg-successSurface '
+            : ''
+        } px-[4px] py-[2px] w-[65px] text-center rounded-[4px]`}
+      >
+        {renderedCellValue !== null
+          ? renderedCellValue === 0
+            ? '0.00%'
+            : formatNumber(renderedCellValue) + '%'
+          : '-'}
+      </div>
     </>
   );
 };
@@ -477,57 +421,14 @@ export const RenderCarat = ({ renderedCellValue }: any) => {
   );
 };
 
-export const RenderNumericFields = ({
-  renderedCellValue,
-  setContactSaleTeamInputValue,
-  modalSetState,
-  row
-}: any) => {
-  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
+export const RenderNumericFields = ({ renderedCellValue }: any) => {
   return (
     <>
-      {isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED ? (
-        <>
-          {row.original.variants[0].prices[0]?.amount === null ? (
-            <div
-              className="group relative"
-              onClick={() => {
-                handleUnlockPricing(
-                  setContactSaleTeamInputValue,
-                  modalSetState
-                );
-              }}
-            >
-              {/* Lock Icon */}
-              <Image
-                src={lockIcon}
-                alt="lockIcon"
-                className="group-hover:hidden transition-all"
-              />
-
-              {/* Tooltip for "Unlock" on hover */}
-              <div className="  font-medium text-infoMain text-sMedium  hidden group-hover:flex transition-all">
-                Unlock
-              </div>
-            </div>
-          ) : (
-            <>
-              {' '}
-              {renderedCellValue !== null ? (
-                <span>{formatNumberWithCommas(renderedCellValue)}</span>
-              ) : (
-                '-'
-              )}
-            </>
-          )}
-        </>
-      ) : (
-        <span>{`${
-          renderedCellValue !== null
-            ? `$${formatNumberWithCommas(renderedCellValue)}`
-            : '-'
-        }`}</span>
-      )}
+      <span>{`${
+        renderedCellValue !== null
+          ? `$${formatNumberWithCommas(renderedCellValue)}`
+          : '-'
+      }`}</span>
     </>
   );
 };
@@ -583,113 +484,29 @@ export const RenderBidNumericFields = ({
   );
 };
 
-export const RenderPricePerCarat = ({
-  renderedCellValue,
-  setContactSaleTeamInputValue,
-  modalSetState,
-  row
-}: any) => {
-  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
-
+export const RenderPricePerCarat = ({ renderedCellValue }: any) => {
   return (
     <>
-      {isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED ? (
-        <>
-          {row.original.variants[0].prices[0]?.amount === null ? (
-            <div
-              className="group relative"
-              onClick={() => {
-                handleUnlockPricing(
-                  setContactSaleTeamInputValue,
-                  modalSetState
-                );
-              }}
-            >
-              {/* Lock Icon */}
-              <Image
-                src={lockIcon}
-                alt="lockIcon"
-                className="group-hover:hidden transition-all"
-              />
-
-              {/* Tooltip for "Unlock" on hover */}
-              <div className="  font-medium text-infoMain text-sMedium  hidden group-hover:flex transition-all">
-                Unlock
-              </div>
-            </div>
-          ) : (
-            <>
-              {' '}
-              {renderedCellValue !== null ? (
-                <span>{formatNumberWithCommas(renderedCellValue)}</span>
-              ) : (
-                '-'
-              )}
-            </>
-          )}
-        </>
-      ) : (
-        <span>{`${
-          renderedCellValue !== null
-            ? `$${formatNumberWithCommas(renderedCellValue)}`
-            : '-'
-        }`}</span>
-      )}
+      <span>{`${
+        renderedCellValue !== null
+          ? `$${formatNumberWithCommas(renderedCellValue)}`
+          : '-'
+      }`}</span>
     </>
   );
 };
 
-export const RenderAmount = ({
-  row,
-  modalSetState,
-  setContactSaleTeamInputValue
-}: any) => {
-  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
+export const RenderAmount = ({ row }: any) => {
   return (
     <>
-      {isKycVerified?.customer?.kyc?.status !== kycStatus.APPROVED ? (
-        <>
-          {row.original.variants[0].prices[0]?.amount === null ||
-          row.original.variants[0].prices[0]?.amount === undefined ? (
-            <div
-              className="group relative"
-              onClick={() => {
-                handleUnlockPricing(
-                  setContactSaleTeamInputValue,
-                  modalSetState
-                );
-              }}
-            >
-              {/* Lock Icon */}
-              <Image
-                src={lockIcon}
-                alt="lockIcon"
-                className="group-hover:hidden transition-all"
-              />
-
-              {/* Tooltip for "Unlock" on hover */}
-              <div className="  font-medium text-infoMain text-sMedium  hidden group-hover:flex transition-all">
-                Unlock
-              </div>
-            </div>
-          ) : (
-            <span>
-              {formatNumberWithCommas(
-                row.original.variants[0].prices[0]?.amount
-              )}
-            </span>
-          )}
-        </>
-      ) : (
-        <span>{`${
-          row.original.variants[0].prices[0]?.amount === null ||
-          row.original.variants[0].prices[0]?.amount === undefined
-            ? '-'
-            : `$${formatNumberWithCommas(
-                row.original.variants[0].prices[0]?.amount
-              )}`
-        }`}</span>
-      )}
+      <span>{`${
+        row.original.variants[0].prices[0]?.amount === null ||
+        row.original.variants[0].prices[0]?.amount === undefined
+          ? '-'
+          : `$${formatNumberWithCommas(
+              row.original.variants[0].prices[0]?.amount
+            )}`
+      }`}</span>
     </>
   );
 };

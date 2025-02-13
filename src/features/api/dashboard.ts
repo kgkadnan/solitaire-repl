@@ -7,16 +7,11 @@ export const dashboardApi = createApi({
   tagTypes: ['dashboard'],
 
   endpoints: builder => ({
-    getCustomer: builder.query({
-      query: () => `store/customers/me?dashboard=new`,
+    getSalePerson: builder.query({
+      query: () => `salesperson/me`,
       providesTags: ['dashboard']
     }),
-    getBidHistory: builder.query({
-      query: () => `store/customers/me/bid-history`
-    }),
-    getBidToBuyHistory: builder.query({
-      query: () => `store/customers/me/bidtobuy-history`
-    }),
+
     getLogoutAll: builder.query({
       query: () => `store/customers/me/logout-all`
     }),
@@ -26,11 +21,7 @@ export const dashboardApi = createApi({
   })
 });
 export const {
-  useLazyGetCustomerQuery,
-  useGetCustomerQuery,
-  useGetBidHistoryQuery,
-  useGetBidToBuyHistoryQuery,
-  useLazyGetBidToBuyHistoryQuery,
+  useLazyGetSalePersonQuery,
   useLazyGetLogoutAllQuery,
   useLazyGetLogoutQuery,
   util

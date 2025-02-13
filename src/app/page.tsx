@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import Dashboard from './v2/page';
+import Search from './v2/search';
 
 export const metadata: Metadata = {
   title: 'KGK - Dashboard'
@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 export default function MainDashboard() {
   return (
     <>
-      <Dashboard />
+      <Search />
     </>
   );
 }

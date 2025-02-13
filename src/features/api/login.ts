@@ -8,10 +8,10 @@ export const loginApi = createApi({
 
   endpoints: builder => ({
     verifyLogin: builder.mutation({
-      query: filter => ({
-        url: `/store/auth/token`,
+      query: ({ body, markup }) => ({
+        url: `/salesperson/auth/token?markup=${markup}`,
         method: 'POST', // Use the appropriate HTTP method
-        body: filter // Modify this to match your API's payload
+        body: body // Modify this to match your API's payload
       }),
       invalidatesTags: ['Login']
     }),

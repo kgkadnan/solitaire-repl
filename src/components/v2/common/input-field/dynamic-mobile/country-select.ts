@@ -1,4 +1,6 @@
-export const colourStyles = (error: any, isDisabled?: boolean) => {
+import zIndex from '@mui/material/styles/zIndex';
+
+export const colourStyles = (error?: any, isDisabled?: boolean) => {
   return {
     control: (styles: any) => ({
       ...styles,
@@ -6,18 +8,19 @@ export const colourStyles = (error: any, isDisabled?: boolean) => {
 
       backgroundColor: 'var(--neutral-0)',
       borderRadius: '4px ',
-      border: error.length
+      border: error?.length
         ? '1px solid var(--danger-main)'
         : '1px solid var(--neutral-200)',
       // borderRight: 'none',
-      width: '250px',
+      width: '100px',
       boxShadow: 'var(--input-shadow) inset',
+      zIndex: 1000, // Increased z-index to ensure the drawer is not hiding
 
       // This line disable the blue border
       cursor: isDisabled ? 'not-allowed' : 'default', // Change cursor to "not allowed" if isDisabled is true
 
       '&:hover': {
-        border: error.length
+        border: error?.length
           ? '1px solid var(--danger-main)'
           : '1px solid var(--neutral-200)'
         // borderRight: 'none'
@@ -47,14 +50,14 @@ export const colourStyles = (error: any, isDisabled?: boolean) => {
     }),
     menu: (styles: any) => ({
       ...styles,
-
-      marginTop: '12px !important'
+      zIndex: 999,
+      marginTop: '5px !important'
     }),
     menuList: (styles: any) => ({
       ...styles,
       backgroundColor: 'var(--neutral-0)',
-      minHeight: '28vh',
-      height: '17vh'
+      minHeight: '15vh',
+      height: '15vh'
     }),
     option: (styles: { [x: string]: any }) => {
       return {

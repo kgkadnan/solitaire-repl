@@ -65,7 +65,14 @@ const ActionButton = ({
               'bg-neutral100 text-neutral400 !shadow-none cursor-not-allowed'
             } ${customCtaStyle}`}
                 >
-                  {svg && <Image src={svg} alt={label ?? 'icon-button'} />}
+                  {svg && (
+                    <Image
+                      src={svg}
+                      alt={label ?? 'icon-button'}
+                      width={20}
+                      height={20}
+                    />
+                  )}
                   <div className="flex gap-1">
                     {label}
                     {isLoading && <ButtonLoader />}

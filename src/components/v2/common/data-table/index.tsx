@@ -1,5 +1,4 @@
 import { Box, Stack } from '@mui/material';
-import styles from './data-table.module.scss';
 import {
   MRT_ExpandButton,
   MRT_GlobalFilterTextField,
@@ -7,64 +6,25 @@ import {
   MaterialReactTable,
   useMaterialReactTable
 } from 'material-react-table';
+import Select from 'react-select';
 import empty from '@public/v2/assets/icons/data-table/empty-table.svg';
 import ExpandImg from '@public/v2/assets/icons/detail-page/expand.svg?url';
+import lightBulb from '@public/v2/assets/icons/light-bulb-svgrepo-com.svg';
 import CollapsIcon from '@public/v2/assets/icons/collapse-icon.svg?url';
 import ExportExcel from '@public/v2/assets/icons/detail-page/export-excel.svg?url';
-import saveIcon from '@public/v2/assets/icons/data-table/bookmark.svg';
+import ExportEmailViaEmail from '@public/v2/assets/icons/excel-via-email-icon.svg?url';
 import BinIcon from '@public/v2/assets/icons/bin.svg';
-import DownloadAllIcon from '@public/v2/assets/icons/download-all.svg';
 import NewSearchIcon from '@public/v2/assets/icons/new-search.svg';
-import chevronDown from '@public/v2/assets/icons/save-search-dropdown/chevronDown.svg';
-import Image from 'next/image';
 import searchIcon from '@public/v2/assets/icons/data-table/search-icon.svg';
-import threeDotsSvg from '@public/v2/assets/icons/threedots.svg';
-
-// theme.js
+import Image from 'next/image';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CalculatedField from '../calculated-field';
 import ActionButton from '../action-button';
 import { ManageLocales } from '@/utils/v2/translate';
 import Breadcrum from '../search-breadcrum/breadcrum';
-import {
-  useLazyGetAllSavedSearchesQuery,
-  useUpdateSavedSearchMutation
-} from '@/features/api/saved-searches';
 import { useEffect, useState } from 'react';
-import SavedSearchDropDown from '../saved-search-dropdown';
-import {
-  useCheckProductAvailabilityMutation,
-  useLazyGetProductCountQuery
-} from '@/features/api/product';
-import { constructUrlParams } from '@/utils/v2/construct-url-params';
-import {
-  AVAILABLE_STATUS,
-  HOLD_STATUS,
-  MAX_SAVED_SEARCH_COUNT,
-  MAX_SEARCH_TAB_LIMIT,
-  MIN_SAVED_SEARCH_COUNT
-} from '@/constants/business-logic';
-import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
-import { useRouter, useSearchParams } from 'next/navigation';
-import {
-  MODIFY_SEARCH_STONES_EXCEEDS_LIMIT,
-  NO_PRODUCT_FOUND
-} from '@/constants/error-messages/saved';
-import { isSearchAlreadyExist } from '@/app/v2/search/saved-search/helpers/handle-card-click';
+import { useRouter } from 'next/navigation';
 import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
-import Share from '../copy-and-share/share';
-import Tooltip from '../tooltip';
-import { Dropdown } from '../dropdown-menu';
-import { kycStatus } from '@/constants/enums/kyc';
-import { handleConfirmStone } from '@app/v2/search/result/helpers/handle-confirm-stone';
-import { handleCompareStone } from '@/app/v2/search/result/helpers/handle-compare-stone';
-import CommonPoppup from '@/app/v2/login/component/common-poppup';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSort, faSortDown } from '@fortawesome/free-solid-svg-icons';
-import DataTableSkeleton from '../../skeleton/data-table';
-import { Tracking_Search_By_Text } from '@/constants/funnel-tracking';
-import { trackEvent } from '@/utils/ga';
-
 import {
   clarity,
   fluorescenceSortOrder,
@@ -72,8 +32,10 @@ import {
   tableBlackSortOrder,
   tableInclusionSortOrder
 } from '@/constants/v2/form';
-import CustomSwitch from '../switch/switch';
-import { dashboardIndentifier } from '@/app/v2/page';
+import Tooltip from '../tooltip';
+import DataTableSkeleton from '../../skeleton/data-table';
+import CommonPoppup from '@/app/v2/login/component/common-poppup';
+import { colourStyles } from '../input-field/dynamic-mobile/country-select';
 
 // import { Switch } from '../../ui/switch';
 
@@ -191,54 +153,43 @@ const DataTable = ({
   rowSelection,
   showCalculatedField = false,
   isResult = false,
-  myCart = false,
+  barcodeScan = false,
   activeTab,
+  dataTableSetState,
   searchParameters,
   setActiveTab,
   handleCloseAllTabs,
   handleCloseSpecificTab,
   handleNewSearch,
-  setSearchParameters,
   modalSetState,
   downloadExcel,
-  data,
-  setErrorText,
-  setSorting,
-  sorting,
   setIsError,
-  searchList,
+  setSorting,
+  selectedOption,
+  sorting,
+  setErrorText,
   setIsLoading,
-  handleAddToCart,
-  dispatch,
-  dashboardResultPageData,
-  // handleConfirmStone,
-  setIsConfirmStone,
-  setConfirmStoneData,
-  deleteCartHandler,
-  activeCartTab,
-  setIsCompareStone,
-  setCompareStoneData,
-  setIsInputDialogOpen,
+
   isDashboard,
-  handleCreateAppointment,
+
   setIsSkeletonLoading,
   isSkeletonLoading,
-  refreshSearchResults,
-  customerMobileNumber,
-  showOnlyWithVideo,
-  setShowOnlyWithVideo,
+  handleStateChange,
   showEmptyState
 }: any) => {
+  const userStates = JSON.parse(localStorage.getItem('user')!)?.salesperson
+    ?.inventories_access;
+  console.log('userStates', userStates);
+  const options = [
+    { value: 'All', label: 'All' },
+    ...userStates.map((state: string) => ({ value: state, label: state }))
+  ];
+
+  console.log('options', options);
+
   // Fetching saved search data
   const router = useRouter();
 
-  const [checkProductAvailability] = useCheckProductAvailabilityMutation({});
-  const [triggerSavedSearch] = useLazyGetAllSavedSearchesQuery({});
-  let [triggerProductCountApi] = useLazyGetProductCountQuery();
-  const [isDropDownOpen, setIsDropDownOpen] = useState(false);
-  const handleDropdown = () => {
-    setIsDropDownOpen(!isDropDownOpen);
-  };
   const [isFullScreen, setIsFullScreen] = useState(false);
   const toggleFullScreen = () => {
     localStorage.setItem('isFullScreen', JSON.stringify(!isFullScreen));
@@ -252,8 +203,6 @@ const DataTable = ({
 
   const [paginatedData, setPaginatedData] = useState<any>([]);
   const [globalFilter, setGlobalFilter] = useState('');
-
-  const path = useSearchParams().get('active-tab');
 
   const handleGlobalFilter = () => {
     if (globalFilter !== '') {
@@ -288,16 +237,6 @@ const DataTable = ({
   }, [globalFilter]);
 
   useEffect(() => {
-    if (isDashboard) {
-      trackEvent({
-        action: Tracking_Search_By_Text.results_page_pageview,
-        category: 'SearchByText',
-        mobile_number: customerMobileNumber
-      });
-    }
-  }, []);
-
-  useEffect(() => {
     // Calculate the start and end indices for the current page
     const startIndex = pagination.pageIndex * pagination.pageSize;
     const endIndex = startIndex + pagination.pageSize;
@@ -311,7 +250,7 @@ const DataTable = ({
       newData.length > 0
     ) {
       setIsSkeletonLoading(false);
-    } else if (myCart && setIsSkeletonLoading) {
+    } else if (barcodeScan && setIsSkeletonLoading) {
       setIsSkeletonLoading(false);
     }
   }, [
@@ -421,7 +360,7 @@ const DataTable = ({
     // Optional skeleton loading logic
     if (isResult && setIsSkeletonLoading && newData.length > 0) {
       setIsSkeletonLoading(false);
-    } else if (myCart && setIsSkeletonLoading) {
+    } else if (barcodeScan && setIsSkeletonLoading) {
       setIsSkeletonLoading(false);
     }
   }, [
@@ -477,171 +416,6 @@ const DataTable = ({
     };
   }, []);
 
-  const onDropDownClick = (value: any) => {
-    setIsLoading(true);
-    setIsDropDownOpen(false);
-
-    triggerSavedSearch({
-      searchByName: value.value
-    })
-      .then(res => {
-        let searchData: any;
-
-        if (res.data.savedSearches.length > 1) {
-          let savedSearchData = res.data.savedSearches;
-
-          let filteredData = savedSearchData.filter((savedSearch: any) => {
-            return savedSearch.name.toLowerCase() === value.value.toLowerCase();
-          })[0];
-
-          searchData = filteredData;
-        } else {
-          searchData = res.data.savedSearches[0];
-        }
-
-        const searchUrl = constructUrlParams(searchData.meta_data);
-
-        triggerProductCountApi({
-          searchUrl: `${searchUrl}`
-        })
-          .then(response => {
-            if (response?.data?.count > MAX_SAVED_SEARCH_COUNT) {
-              setIsLoading(false);
-              modalSetState.setIsDialogOpen(true);
-              modalSetState.setDialogContent(
-                <CommonPoppup
-                  content={''}
-                  status="warning"
-                  customPoppupBodyStyle="!mt-[70px]"
-                  header={MODIFY_SEARCH_STONES_EXCEEDS_LIMIT}
-                  actionButtonData={[
-                    {
-                      variant: 'primary',
-                      label: ManageLocales('app.modal.okay'),
-                      handler: () => {
-                        modalSetState.setIsDialogOpen(false);
-                      },
-                      customStyle: 'flex-1'
-                    }
-                  ]}
-                />
-              );
-            } else if (response?.data?.count === MIN_SAVED_SEARCH_COUNT) {
-              setIsLoading(false);
-              modalSetState.setIsDialogOpen(true);
-              modalSetState.setDialogContent(
-                <CommonPoppup
-                  status="warning"
-                  content={''}
-                  customPoppupBodyStyle="!mt-[70px]"
-                  header={NO_PRODUCT_FOUND}
-                  actionButtonData={[
-                    {
-                      variant: 'primary',
-                      label: ManageLocales('app.modal.okay'),
-                      handler: () => {
-                        modalSetState.setIsDialogOpen(false);
-                      },
-                      customStyle: 'flex-1 h-10'
-                    }
-                  ]}
-                />
-              );
-            } else {
-              const data: any = JSON.parse(localStorage.getItem('Search')!);
-
-              if (data?.length) {
-                let isAlreadyOpenIndex = isSearchAlreadyExist(
-                  data,
-                  searchData.name
-                );
-                if (isAlreadyOpenIndex >= 0 && isAlreadyOpenIndex !== null) {
-                  if (
-                    isAlreadyOpenIndex + 1 ===
-                    Number((path?.match(/result-(\d+)/) || [])[1])
-                  ) {
-                    setIsLoading(false);
-                  } else {
-                    router.push(
-                      `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
-                        isAlreadyOpenIndex + 1
-                      }`
-                    );
-                  }
-                  return;
-                } else if (data?.length >= MAX_SEARCH_TAB_LIMIT) {
-                  modalSetState.setDialogContent(
-                    <CommonPoppup
-                      content={ManageLocales(
-                        'app.savedSearch.maxTabReached.content'
-                      )}
-                      status="warning"
-                      customPoppupBodyStyle="!mt-[70px]"
-                      header={ManageLocales('app.savedSearch.maxTabReached')}
-                      actionButtonData={[
-                        {
-                          variant: 'secondary',
-                          label: ManageLocales('app.modal.cancel'),
-                          handler: () => {
-                            modalSetState.setIsDialogOpen(false);
-                          },
-                          customStyle: 'flex-1'
-                        },
-                        {
-                          variant: 'primary',
-                          label: ManageLocales('app.modal.manageTabs'),
-                          handler: () => {
-                            router.push(
-                              `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-1`
-                            );
-                            modalSetState.setIsDialogOpen(false);
-                          },
-                          customStyle: 'flex-1'
-                        }
-                      ]}
-                    />
-                  );
-                  modalSetState.setIsDialogOpen(true);
-                } else {
-                  const localStorageData = [
-                    ...data,
-                    {
-                      saveSearchName: searchData.name,
-                      isSavedSearch: true,
-                      searchId: response?.data?.search_id,
-                      queryParams: searchData.meta_data,
-                      id: searchData.id,
-                      label:
-                        searchData?.name?.replace(/\s+/g, '') +
-                        ' ' +
-                        (data.length + 1)
-                    }
-                  ];
-
-                  localStorage.setItem(
-                    'Search',
-                    JSON.stringify(localStorageData)
-                  );
-                  router.push(
-                    `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
-                      data.length + 1
-                    }`
-                  );
-                }
-              }
-              setIsLoading(false);
-            }
-            setIsLoading(false);
-          })
-          .catch(() => {
-            setIsLoading(false);
-          });
-      })
-      .catch(() => {
-        setIsLoading(false);
-      });
-  };
-
   const getShapeDisplayName = ({ value }: { value: string }) => {
     switch (value) {
       case 'EM':
@@ -669,42 +443,11 @@ const DataTable = ({
     }
   };
 
-  const [updateSavedSearch] = useUpdateSavedSearchMutation();
-
-  const handleUpdateSaveSearch = () => {
-    const yourSelection = JSON.parse(localStorage.getItem('Search')!);
-    const updateSaveSearchData = {
-      id: yourSelection[activeTab - 1]?.id,
-      meta_data: yourSelection[activeTab - 1]?.queryParams,
-      diamond_count: parseInt(data?.count)
-    };
-
-    yourSelection[activeTab - 1] = {
-      id: yourSelection[activeTab - 1]?.id,
-      saveSearchName: yourSelection[activeTab - 1]?.saveSearchName,
-      searchId: yourSelection[activeTab - 1]?.searchId,
-      label: yourSelection[activeTab - 1]?.label,
-      isSavedSearch: true,
-      queryParams: yourSelection[activeTab - 1].queryParams
-    };
-    localStorage.setItem('Search', JSON.stringify(yourSelection));
-    setSearchParameters(yourSelection);
-    updateSavedSearch(updateSaveSearchData);
-  };
-
   const handleDownloadExcel = () => {
     let selectedIds = Object.keys(rowSelection);
     const allProductIds = rows.map(({ id }: { id: string }) => {
       return id;
     });
-
-    if (isDashboard) {
-      trackEvent({
-        action: Tracking_Search_By_Text.click_download_excel_result_page,
-        category: 'SearchByText',
-        mobile_number: customerMobileNumber
-      });
-    }
 
     downloadExcelHandler({
       products: selectedIds.length > 0 ? selectedIds : allProductIds,
@@ -713,45 +456,110 @@ const DataTable = ({
       setRowSelection,
       setIsLoading: setIsLoading,
       router,
-      page: isResult
-        ? 'Normal_Search'
-        : myCart
-        ? 'My_Cart'
-        : isDashboard
-        ? 'Dashboard_Search'
-        : ''
+      page: 'Normal_Search'
     });
   };
 
-  const downloadAllSearchTabsExcelHandler = () => {
-    const searchTabsData = JSON.parse(localStorage.getItem('Search')!);
-    const allTabsIds = searchTabsData.map((tab: any) => tab.searchId);
-    downloadExcelHandler({
-      previousSearch: allTabsIds,
-      downloadExcelApi: downloadExcel,
-      modalSetState,
-      setRowSelection,
-      router,
-      setIsLoading: setIsLoading,
-      page: isResult
-        ? 'Normal_Search'
-        : myCart
-        ? 'My_Cart'
-        : isDashboard
-        ? 'Dashboard_Search'
-        : ''
-    });
+  const handleSpaceCode = async () => {
+    if (Object.keys(rowSelection).length === 0) {
+      setIsError(true);
+      setErrorText('Please pick a stone.');
+      console.log('hererer');
+      return; // Exit if no selection is made
+    }
+
+    let selectedIds = Object.keys(rowSelection)
+      .map(id => rows.find((row: any) => row.id === id)?.rfid) // Get rfid for each selected id
+      .filter((rfid): rfid is string => rfid !== undefined && rfid !== null); // Filter out nulls and ensure uniqueness
+
+    if (selectedIds.length === 0) {
+      setIsError(true);
+      setErrorText('No RFID found for the selected stones.');
+      return; // Exit if all RFID values are empty
+    }
+
+    const token = JSON.parse(localStorage.getItem('user')!)?.salesperson
+      ?.rfid_smartdrawer_token;
+    const firstName = JSON.parse(localStorage.getItem('user')!)?.salesperson
+      ?.firstName;
+    const lastName = JSON.parse(localStorage.getItem('user')!)?.salesperson
+      ?.lastName;
+    const location = JSON.parse(localStorage.getItem('user')!)?.salesperson
+      ?.location;
+
+    if (!token) {
+      setIsError(true);
+      setErrorText('Token not found in localStorage.');
+      return; // Exit if token is not found
+    }
+
+    const payload = {
+      display_name: `${firstName} ${lastName}`,
+      rfid_list: selectedIds,
+      location: location
+    };
+
+    try {
+      const response = await fetch(
+        'http://20.244.26.74:9898/api/spacecode/smartdrawer-light',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+          },
+          body: JSON.stringify(payload)
+        }
+      );
+
+      const data = await response.json();
+      if (!response.ok) {
+        setIsError(true);
+        setErrorText(data.message || 'Failed to send data to the API.');
+        return; // Exit if the API call fails
+      }
+
+      modalSetState.setIsDialogOpen(true);
+      modalSetState.setDialogContent(
+        <CommonPoppup
+          status="success"
+          content={''}
+          customPoppupBodyStyle="!mt-[70px]"
+          header={'Succesfull'}
+          actionButtonData={[
+            {
+              variant: 'primary',
+              label: ManageLocales('app.modal.okay'),
+              handler: () => {
+                modalSetState.setIsDialogOpen(false);
+              },
+              customStyle: 'flex-1 h-10'
+            }
+          ]}
+        />
+      );
+      console.log('API response:', data);
+    } catch (error) {
+      setIsError(true);
+      console.error('Error during API call:', error);
+      setErrorText('An error occurred while making the API call.');
+    }
+
+    console.log('selectedIds', selectedIds);
+    // const allProductIds = rows.map(({ id }: { id: string }) => {
+    //   return id;
+    // });
   };
 
-  let isNudge = localStorage.getItem('show-nudge') === 'MINI';
-  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   const NoResultsComponent = () => {
     if (showEmptyState) {
       return (
         <div
           className={`flex flex-col items-center justify-center gap-5 ${
             isFullScreen ? 'h-[69vh]' : 'h-[60vh]'
-          }   mt-[50px] ${'!h-[47vh]  !mt-[20px]'}`}
+          }   mt-[50px] ${
+            barcodeScan ? '!h-[62vh]' : '!h-[47vh]'
+          } ${'  !mt-[20px]'}`}
         >
           <div className="text-center">
             <Image src={empty} alt="empty" />
@@ -795,6 +603,7 @@ const DataTable = ({
       pagination,
       globalFilter
     },
+
     positionToolbarAlertBanner: 'none',
     enableColumnActions: false,
     enableDensityToggle: false,
@@ -925,7 +734,7 @@ const DataTable = ({
       expanded: true,
       grouping: ['shape'],
       columnPinning: {
-        left: ['mrt-row-select', 'fire_icon', 'lot_id', 'mrt-row-expand']
+        left: ['mrt-row-select', 'lot_id', 'mrt-row-expand']
       },
       pagination: pagination,
       sorting: sorting
@@ -937,54 +746,30 @@ const DataTable = ({
       sx: {
         height: isFullScreen ? '70vh' : 'calc(100vh - 300px)',
         minHeight: isFullScreen
-          ? myCart
+          ? barcodeScan
             ? showCalculatedField
               ? 'calc(100vh - 130px)'
               : 'calc(100vh - 90px)'
             : isDashboard
             ? 'calc(100vh - 180px)'
             : 'calc(100vh - 230px)'
-          : myCart
+          : barcodeScan
           ? showCalculatedField
-            ? isNudge &&
-              (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
-                isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-              ? 'calc(100vh - 420px)'
-              : 'calc(100vh - 343px)'
-            : isNudge &&
-              (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
-                isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-            ? 'calc(100vh - 380px)'
+            ? 'calc(100vh - 212px)'
             : 'calc(100vh - 303px)'
-          : isNudge &&
-            (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
-              isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-          ? 'calc(100vh - 405px)'
           : 'calc(100vh - 300px)',
         maxHeight: isFullScreen
-          ? myCart
+          ? barcodeScan
             ? showCalculatedField
               ? 'calc(100vh - 130px)'
               : 'calc(100vh - 90px)'
             : isDashboard
             ? 'calc(100vh - 180px)'
             : 'calc(100vh - 230px)'
-          : myCart
+          : barcodeScan
           ? showCalculatedField
-            ? isNudge &&
-              (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
-                isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-              ? 'calc(100vh - 420px)'
-              : 'calc(100vh - 343px)'
-            : isNudge &&
-              (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
-                isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-            ? 'calc(100vh - 380px)'
+            ? 'calc(100vh - 212px)'
             : 'calc(100vh - 303px)'
-          : isNudge &&
-            (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
-              isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-          ? 'calc(100vh - 405px)'
           : 'calc(100vh - 300px)'
       }
     },
@@ -1146,13 +931,6 @@ const DataTable = ({
               />
             </div>
             <div className="pr-[2px] flex gap-[12px] w-[500px]  justify-end flex-wrap relative">
-              <button
-                onClick={handleDropdown}
-                className={`flex items-center px-[16px] py-[8px] text-mMedium font-medium text-neutral900 !h-[40px] ${styles.ctaStyle} ${styles.ctaSecondaryStyle}`}
-              >
-                {ManageLocales('app.search.savedSearch')}
-                <Image src={chevronDown} alt="chevronDown" />
-              </button>
               <ActionButton
                 actionButtonData={[
                   {
@@ -1166,13 +944,6 @@ const DataTable = ({
                   },
                   {
                     variant: 'secondary',
-                    svg: DownloadAllIcon,
-                    handler: downloadAllSearchTabsExcelHandler,
-                    customStyle: 'w-[40px] h-[40px]',
-                    tooltip: 'Download all search results'
-                  },
-                  {
-                    variant: 'secondary',
                     svg: BinIcon,
                     handler: handleCloseAllTabs,
                     customStyle: 'w-[40px] h-[40px]',
@@ -1180,14 +951,6 @@ const DataTable = ({
                   }
                 ]}
                 containerStyle="flex gap-[12px]!important"
-              />
-              <SavedSearchDropDown
-                handleClose={handleDropdown}
-                isOpen={isDropDownOpen}
-                options={searchList?.filter(
-                  (item: any) => item.is_matching_pair === false
-                )}
-                onDropDownClick={onDropDownClick}
               />
             </div>
           </div>
@@ -1248,45 +1011,54 @@ const DataTable = ({
                 }
               }}
             />
-            {/* <StylesSearchBar table={table} autoComplete="false" /> */}
           </div>
 
           <div className="flex gap-[12px]" style={{ alignItems: 'inherit' }}>
-            {isDashboard && (
-              <div className="flex items-center py-[2px]  justify-between bg-neutral0 border-[1px] border-solid border-neutral200 rounded-[4px]">
-                <p className="font-medium  rounded-l-[4px]  px-[12px] text-neutral900 text-mMedium">
-                   Images & Videos Required
-                </p>
-                <div className="px-[15px] pt-1">
-                  <CustomSwitch
-                    isOn={showOnlyWithVideo}
-                    handleToggle={() => {
-                      setShowOnlyWithVideo((prev: any) => !prev);
-                      refreshSearchResults(!showOnlyWithVideo);
-                    }}
-                  />
-                </div>
-              </div>
+            {barcodeScan && (
+              <Select
+                options={options}
+                defaultValue={options[0]} // Set default to 'All'
+                onChange={handleStateChange}
+                value={selectedOption}
+                styles={colourStyles()}
+              />
             )}
-            {isResult &&
-              (searchParameters &&
-              !searchParameters[activeTab - 1]?.isSavedSearch ? (
-                <button
-                  className=" flex border-[1px] border-neutral200 rounded-[4px] px-2 py-1 shadow-sm bg-neutral0 items-center cursor-pointer h-[37px]"
-                  onClick={() => {
-                    searchParameters[activeTab - 1].saveSearchName.length
-                      ? handleUpdateSaveSearch()
-                      : setIsInputDialogOpen(true);
-                  }}
-                >
-                  <Image src={saveIcon} alt={'save search'} />
-                  <p className="pl-1 text-mMedium font-medium text-primaryMain">
-                    Save Search
-                  </p>
-                </button>
-              ) : (
-                ''
-              ))}
+
+            <div className="flex gap-[12px]">
+              {barcodeScan && (
+                <ActionButton
+                  actionButtonData={[
+                    {
+                      variant: 'secondary',
+                      label: 'Delete Row',
+                      handler: () => {
+                        const selectedIds = Object.keys(rowSelection); // Get the array of selected IDs
+                        const updatedRows = rows.filter(
+                          (row: any) => !selectedIds.includes(row.id)
+                        ); // Filter out selected rows using the selected IDs
+                        dataTableSetState.setRows(updatedRows); // Update the state with the filtered rows
+                      },
+                      isDisable: showEmptyState,
+                      customStyle: 'flex-1 h-10'
+                    }
+                  ]}
+                />
+              )}
+              <ActionButton
+                actionButtonData={[
+                  {
+                    variant: 'secondary',
+                    label: 'Space code',
+                    handler: () => {
+                      handleSpaceCode();
+                    },
+                    customStyle: 'flex-1 h-10',
+                    svg: lightBulb,
+                    isDisable: showEmptyState
+                  }
+                ]}
+              />
+            </div>
 
             <div
               className=" rounded-[4px] cursor-pointer"
@@ -1299,6 +1071,36 @@ const DataTable = ({
                     className={`disabled:!bg-neutral100 disabled:cursor-not-allowed disabled:text-neutral400 rounded-[4px] hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm ${'bg-neutral0'}`}
                   >
                     <ExportExcel
+                      className={`${
+                        showEmptyState
+                          ? 'stroke-neutral400'
+                          : 'stroke-neutral900'
+                      }`}
+                    />
+                  </button>
+                }
+                tooltipContent={'Download Excel'}
+                tooltipContentStyles={'z-[1000]'}
+              />
+            </div>
+            <div
+              className=" rounded-[4px] cursor-pointer"
+              onClick={
+                showEmptyState
+                  ? () => {}
+                  : () => {
+                      console.log('herere i');
+                      modalSetState.setIsInputDialogOpen(true);
+                    }
+              }
+            >
+              <Tooltip
+                tooltipTrigger={
+                  <button
+                    disabled={showEmptyState}
+                    className={`disabled:!bg-neutral100 disabled:cursor-not-allowed disabled:text-neutral400 rounded-[4px] hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm ${'bg-neutral0'}`}
+                  >
+                    <ExportEmailViaEmail
                       className={`${
                         showEmptyState
                           ? 'stroke-neutral400'
@@ -1346,17 +1148,17 @@ const DataTable = ({
             </div>
 
             <div className="flex  rounded-[4px] cursor-pointer">
-              <Share
+              {/* <Share
                 rows={rows}
                 selectedProducts={rowSelection}
                 setErrorText={setErrorText}
                 setIsError={setIsError}
                 shareTrackIdentifier={
-                  myCart ? 'Cart' : isDashboard ? 'Dashboard' : 'Search Results'
+                  barcodeScan ? 'Cart' : isDashboard ? 'Dashboard' : 'Search Results'
                 }
                 dynamicTrackIdentifier={isDashboard && 'dashboardSearchResult'}
                 isDisable={showEmptyState}
-              />
+              /> */}
             </div>
           </div>
         </Box>
@@ -1368,204 +1170,13 @@ const DataTable = ({
       } else {
         return (
           <div
-            className={`px-[16px] border-t-[1px] border-neutral200 ${
+            className={`px-[16px] flex items-center justify-center border-t-[1px] border-neutral200 ${
               isDashboard && 'border-b-[1px]'
             }`}
           >
-            {(isResult || isDashboard) && (
-              <div className="flex items-center justify-between">
-                <div className="flex gap-4 h-[30px]">
-                  <div className=" border-[1px] border-lengendInCardBorder rounded-[4px] bg-legendInCartFill text-legendInCart">
-                    <p className="text-mMedium font-medium px-[6px] py-[4px]">
-                      In Cart
-                    </p>
-                  </div>
-                  <div className=" border-[1px] border-lengendHoldBorder rounded-[4px] bg-legendHoldFill text-legendHold">
-                    <p className="text-mMedium font-medium px-[6px] py-[4px]">
-                      {' '}
-                      Hold
-                    </p>
-                  </div>
-                  <div className="border-[1px] border-lengendMemoBorder rounded-[4px] bg-legendMemoFill text-legendMemo">
-                    <p className="text-mMedium font-medium px-[6px] py-[4px]">
-                      {' '}
-                      Memo
-                    </p>
-                  </div>
-                </div>
-                <MRT_TablePagination table={table} />
-                <div className="flex items-center gap-3">
-                  <ActionButton
-                    actionButtonData={[
-                      {
-                        variant: 'secondary',
-                        label: ManageLocales('app.searchResult.addToCart'),
-                        handler: () => handleAddToCart(),
-                        isDisable: !Object.keys(rowSelection).length
-                      },
-
-                      {
-                        variant: 'primary',
-                        label: ManageLocales('app.searchResult.confirmStone'),
-                        isDisable: !Object.keys(rowSelection).length,
-                        handler: () => {
-                          if (isDashboard) {
-                            handleConfirmStone({
-                              selectedRows: rowSelection,
-                              rows: rows,
-                              setIsError,
-                              setErrorText,
-                              setIsConfirmStone,
-                              setConfirmStoneData,
-
-                              dispatch,
-                              dashboardResultPageData,
-                              checkProductAvailability,
-                              modalSetState,
-                              router,
-                              identifier: 'dashboard',
-                              customerMobileNumber,
-                              setIsLoading,
-                              refreshSearchResults
-                            });
-                          } else {
-                            handleConfirmStone({
-                              selectedRows: rowSelection,
-                              rows: rows,
-                              setIsError,
-                              setErrorText,
-                              setIsConfirmStone,
-                              setConfirmStoneData,
-                              checkProductAvailability,
-                              modalSetState,
-                              router,
-                              setIsLoading
-                            });
-                          }
-                        }
-                      }
-                    ]}
-                  />
-                  <Dropdown
-                    dropdownTrigger={
-                      <Image
-                        src={threeDotsSvg}
-                        alt="threeDotsSvg"
-                        width={43}
-                        height={43}
-                      />
-                    }
-                    dropdownMenu={[
-                      {
-                        label: 'Compare Stone',
-                        handler: () =>
-                          handleCompareStone({
-                            isCheck: rowSelection,
-                            setIsError,
-                            setErrorText,
-                            activeCartRows: rows,
-                            setIsCompareStone,
-                            setCompareStoneData,
-                            identifier: isDashboard ? dashboardIndentifier : '',
-                            customerMobileNumber
-                          }),
-                        isDisable: !Object.keys(rowSelection).length
-                      },
-                      {
-                        label: ManageLocales(
-                          'app.search.actionButton.bookAppointment'
-                        ),
-                        handler: () => {
-                          handleCreateAppointment();
-                        },
-                        isDisable:
-                          !Object.keys(rowSelection).length ||
-                          isKycVerified?.customer?.kyc?.status !==
-                            kycStatus.APPROVED
-                      }
-                    ]}
-                  />
-                </div>
-              </div>
-            )}
-            {myCart && (
-              <div className="flex items-center  justify-between">
-                <div className=""></div>
-                <MRT_TablePagination table={table} />
-                <div className="flex gap-2">
-                  <ActionButton
-                    actionButtonData={[
-                      {
-                        variant: 'secondary',
-                        label: ManageLocales('app.myCart.actionButton.delete'),
-                        handler: deleteCartHandler,
-                        isDisable: !Object.keys(rowSelection).length
-                      },
-
-                      {
-                        variant: 'primary',
-                        label: ManageLocales(
-                          'app.myCart.actionButton.confirmStone'
-                        ),
-                        isDisable: !Object.keys(rowSelection).length,
-                        handler: () => {
-                          handleConfirmStone({
-                            selectedRows: rowSelection,
-                            rows: rows,
-                            setIsError,
-                            setErrorText,
-                            setIsConfirmStone,
-                            setConfirmStoneData,
-                            checkProductAvailability,
-                            modalSetState,
-                            router,
-                            setIsLoading
-                          });
-                        },
-                        isHidden: activeCartTab !== AVAILABLE_STATUS
-                      }
-                    ]}
-                  />
-                  <Dropdown
-                    dropdownTrigger={
-                      <Image
-                        src={threeDotsSvg}
-                        alt="threeDotsSvg"
-                        width={43}
-                        height={43}
-                      />
-                    }
-                    dropdownMenu={[
-                      {
-                        label: ManageLocales(
-                          'app.myCart.actionButton.bookAppointment'
-                        ),
-                        handler: () => {
-                          handleCreateAppointment();
-                        },
-                        isDisable: !Object.keys(rowSelection).length,
-                        commingSoon:
-                          isKycVerified?.customer?.kyc?.status !==
-                          kycStatus.APPROVED,
-
-                        isHidden: !(
-                          activeCartTab === AVAILABLE_STATUS ||
-                          activeCartTab === HOLD_STATUS
-                        )
-                      },
-                      {
-                        label: ManageLocales(
-                          'app.myCart.actionButton.viewSimilarStone'
-                        ),
-                        handler: () => {},
-                        isHidden: activeCartTab === AVAILABLE_STATUS,
-                        commingSoon: true
-                      }
-                    ]}
-                  />
-                </div>
-              </div>
-            )}
+            <div className="flex items-center justify-center">
+              <MRT_TablePagination table={table} />
+            </div>
           </div>
         );
       }
@@ -1575,7 +1186,7 @@ const DataTable = ({
   return (
     <>
       {isSkeletonLoading ? (
-        <DataTableSkeleton identifier={myCart ? 'myCart' : undefined} />
+        <DataTableSkeleton />
       ) : (
         <ThemeProvider theme={theme}>
           <MaterialReactTable table={table} />

@@ -9,7 +9,15 @@ export const downloadExcelApi = createApi({
   endpoints: builder => ({
     downloadExcel: builder.mutation({
       query: filter => ({
-        url: `/store/products/export-excel`,
+        url: `/salesperson/products/export-excel`,
+        method: 'POST', // Use the appropriate HTTP method
+        body: filter // Modify this to match your API's payload
+      }),
+      invalidatesTags: ['downloadExcel']
+    }),
+    emailExcel: builder.mutation({
+      query: filter => ({
+        url: `/salesperson/products/email-excel`,
         method: 'POST', // Use the appropriate HTTP method
         body: filter // Modify this to match your API's payload
       }),
@@ -18,4 +26,5 @@ export const downloadExcelApi = createApi({
   })
 });
 
-export const { useDownloadExcelMutation } = downloadExcelApi;
+export const { useDownloadExcelMutation, useEmailExcelMutation } =
+  downloadExcelApi;

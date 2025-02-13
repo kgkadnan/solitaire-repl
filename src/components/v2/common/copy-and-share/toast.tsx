@@ -5,8 +5,6 @@ export const Toast = ({ message, show, isSuccess = true }: any) => {
   // Dismiss the toast after 3 seconds
 
   if (!show) return null;
-  let isNudge = localStorage.getItem('show-nudge') === 'MINI';
-  let isKycVerified = JSON.parse(localStorage.getItem('user')!);
 
   return (
     <div
@@ -18,13 +16,7 @@ export const Toast = ({ message, show, isSuccess = true }: any) => {
           ? 'bg-successSurface border-successBorder'
           : 'bg-dangerSurface border-dangerBorder'
       }
-    ${
-      isNudge &&
-      (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
-        isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-        ? 'top-[134px]'
-        : 'top-[74px]'
-    }
+    ${'top-[74px]'}
     `}
     >
       {message}

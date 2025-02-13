@@ -12,7 +12,6 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Box } from '@mui/material';
 import Image from 'next/image';
 import { ManageLocales } from '@/utils/v2/translate';
-import { kycStatus } from '@/constants/enums/kyc';
 import { useEffect, useState } from 'react';
 import {
   clarity,
@@ -138,7 +137,6 @@ const Table = ({
   });
 
   let isNudge = localStorage.getItem('show-nudge') === 'MINI';
-  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
 
   const nonSortableAccessors = ['shape_full', 'details', 'fire_icon'];
 
@@ -351,42 +349,36 @@ const Table = ({
 
     muiTableContainerProps: {
       sx: {
-        minHeight:
-          isNudge &&
-          (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
-            isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-            ? isOrderDetail
-              ? 'calc(100vh - 550px)'
-              : 'calc(100vh - 315px)'
-            : isOrderDetail
-            ? 'calc(100vh - 390px)'
-            : identifier === 'result'
-            ? 'calc(100vh - 240px)'
-            : identifier === 'Dashboard'
-            ? 'calc(100vh - 220px)'
-            : identifier === 'myCart'
-            ? 'calc(100vh - 266px)'
-            : isMatchingPair
-            ? 'calc(100vh - 240px)'
-            : identifier === 'Event'
-            ? 'calc(100vh - 200px)'
-            : 'calc(100vh - 310px)',
-        maxHeight:
-          isNudge &&
-          (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
-            isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-            ? isOrderDetail
-              ? 'calc(100vh - 550px)'
-              : 'calc(100vh - 315px)'
-            : isOrderDetail
-            ? 'calc(100vh - 390px)'
-            : identifier === 'result'
-            ? 'calc(100vh - 240px)'
-            : identifier === 'Dashboard'
-            ? 'calc(100vh - 220px)'
-            : identifier === 'Event'
-            ? 'calc(100vh - 200px)'
-            : 'calc(100vh - 310px)'
+        minHeight: isNudge
+          ? isOrderDetail
+            ? 'calc(100vh - 550px)'
+            : 'calc(100vh - 315px)'
+          : isOrderDetail
+          ? 'calc(100vh - 390px)'
+          : identifier === 'result'
+          ? 'calc(100vh - 240px)'
+          : identifier === 'Dashboard'
+          ? 'calc(100vh - 220px)'
+          : identifier === 'myCart'
+          ? 'calc(100vh - 266px)'
+          : isMatchingPair
+          ? 'calc(100vh - 240px)'
+          : identifier === 'Event'
+          ? 'calc(100vh - 200px)'
+          : 'calc(100vh - 310px)',
+        maxHeight: isNudge
+          ? isOrderDetail
+            ? 'calc(100vh - 550px)'
+            : 'calc(100vh - 315px)'
+          : isOrderDetail
+          ? 'calc(100vh - 390px)'
+          : identifier === 'result'
+          ? 'calc(100vh - 240px)'
+          : identifier === 'Dashboard'
+          ? 'calc(100vh - 220px)'
+          : identifier === 'Event'
+          ? 'calc(100vh - 200px)'
+          : 'calc(100vh - 310px)'
       }
     },
     muiTableHeadRowProps: {

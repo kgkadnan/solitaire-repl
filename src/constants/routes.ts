@@ -12,7 +12,8 @@ export const headerlessRoutes = [
   '/v2/register',
   '/v2/login',
   '/v2/forgot-password',
-  '/privacy-policy'
+  '/privacy-policy',
+  '/v2/scanner'
 
   // ...v3Routes
 ];
@@ -20,6 +21,9 @@ export const headerlessRoutes = [
 export const v2Routes = [
   '/',
   '/v2',
+  '/v2/search-type',
+  '/v2/scanner',
+  '/v2/diamond-barcode-scanner',
   '/v2/stock-search',
   '/v2/search',
   '/v2/kyc',

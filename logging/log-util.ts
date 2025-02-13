@@ -98,22 +98,7 @@ export function log(level: LogLevel, message: any): void {
     if (message) {
       let user = null;
 
-      // Check if running in a browser environment
-      if (typeof window !== 'undefined' && localStorage) {
-        const userData = localStorage.getItem('user');
-        user = userData ? JSON.parse(userData) : null;
-      }
-
-      // Set user information in Sentry
-      if (user) {
-        Sentry.setUser({
-          id: user.customer.id,
-          username: user.customer.first_name,
-          email: user.customer.email
-        });
-      } else {
-        Sentry.setUser(null); // Clear user data if not available
-      }
+      Sentry.setUser(null); // Clear user data if not available
 
       switch (level) {
         case 'error':

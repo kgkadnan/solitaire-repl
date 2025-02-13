@@ -11,10 +11,10 @@ const useUser = () => {
   useEffect(() => {
     const storedUser = localStorage.getItem('auth');
 
+    setIsTokenChecked(true); // Set to true after checking localStorage
     if (storedUser) {
       setAuthToken(JSON.parse(storedUser));
     }
-    setIsTokenChecked(true); // Set to true after checking localStorage
   }, []);
 
   const userLoggedIn = (userData: any) => {

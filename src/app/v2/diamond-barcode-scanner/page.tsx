@@ -1,3 +1,4 @@
+'use client';
 import React, {
   useEffect,
   useMemo,
@@ -30,15 +31,16 @@ import {
   RenderNumericFields,
   RenderPricePerCarat
 } from '@/components/v2/common/data-table/helpers/render-cell';
-import { useLazyGetAllProductQuery } from '@/features/api/product';
+import {
+  useLazyGetAllProductQuery,
+  useLazyGetProductByScanningBarcodeQuery
+} from '@/features/api/product';
 import { MRT_RowSelectionState, MRT_SortingState } from 'material-react-table';
 
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import { DialogComponent } from '@/components/v2/common/dialog';
 
 import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
-
-import { ISavedSearch } from '../form/form';
 
 import {
   useDownloadExcelMutation,
@@ -55,7 +57,6 @@ import { checkImage } from '@/components/v2/common/detail-page/helpers/check-ima
 
 import DataTableSkeleton from '@/components/v2/skeleton/data-table';
 import { Skeleton } from '@mui/material';
-import CommonPoppup from '../../login/component/common-poppup';
 
 import { NO_PRODUCT_FOUND } from '@/constants/error-messages/saved';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -65,42 +66,27 @@ import {
   faSortUp
 } from '@fortawesome/free-solid-svg-icons';
 
-import { columns } from '../constant/column';
 import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
 import { InputDialogComponent } from '@/components/v2/common/input-dialog';
-import useValidationStateManagement from '../hooks/validation-state-management';
+
 import Image from 'next/image';
 import ActionButton from '@/components/v2/common/action-button';
 import { isEmailValid } from '@/utils/validate-email';
 import { INVALID_EMAIL_FORMAT } from '@/constants/error-messages/register';
+import CommonPoppup from '../login/component/common-poppup';
+import { columns } from '../search/constant/column';
+import useValidationStateManagement from '../search/hooks/validation-state-management';
+import { ISavedSearch } from '../search/form/form';
 
 // Column mapper outside the component to avoid re-creation on each render
 
-const Result = ({
-  activeTab,
-  searchParameters,
-  setActiveTab,
-  handleCloseAllTabs,
-  handleCloseSpecificTab,
-  setSearchParameters,
-  setIsLoading,
-
-  isFetchProduct
-}: {
-  activeTab: number;
-  searchParameters: any;
-  setSearchParameters: Dispatch<SetStateAction<ISavedSearch[]>>;
-  setActiveTab: Dispatch<SetStateAction<number>>;
-  handleCloseAllTabs: () => void;
-  handleCloseSpecificTab: (_id: number) => void;
-  setIsLoading: any;
-  isFetchProduct: boolean;
-}) => {
+const DiamondBarcodeScanner = () => {
   const [sorting, setSorting] = useState<MRT_SortingState>([]);
   const [detailImageData, setDetailImageData] = useState<any>({});
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();
   const { errorState, errorSetState } = useErrorStateManagement();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { setIsError, setErrorText } = errorSetState;
   const { isError, errorText } = errorState;
   const { modalState, modalSetState } = useModalStateManagement();
@@ -110,19 +96,23 @@ const Result = ({
   const { setSaveSearchName, saveSearchName, setInputError, inputError } =
     useValidationStateManagement();
 
+  const [triggerBarcodeScanApi] = useLazyGetProductByScanningBarcodeQuery({});
+
+  const [showEmptyState, setShowEmptyState] = useState(false);
+
   const [validImages, setValidImages] = useState<any>([]);
   const [data, setData] = useState([]);
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
-
+  const [selectedOption, setSelectedOption] = useState<{
+    value: string;
+    label: string;
+  } | null>(null);
   const [isSkeletonLoading, setIsSkeletonLoading] = useState<boolean>(true);
 
   const editRoute = useSearchParams().get('edit');
   const router = useRouter();
 
   const [downloadExcel] = useDownloadExcelMutation();
-
-  const [triggerProductApi, { data: productData }] =
-    useLazyGetAllProductQuery();
 
   // Fetch Products
 
@@ -131,72 +121,101 @@ const Result = ({
     setIsModalOpen(true);
   };
 
-  const fetchProducts = async () => {
-    // setIsLoading(true);
-    // setIsSkeletonLoading(true);
-    const storedSelection = localStorage.getItem('Search');
+  const handleStateChange = (selectedOption: {
+    value: string;
+    label: string;
+  }) => {
+    // Handle the state change logic here
+    console.log('Selected state:', selectedOption);
+    setSelectedOption(selectedOption);
+  };
 
-    if (!storedSelection) return;
+  useEffect(() => {
+    let scanTimeout: NodeJS.Timeout;
 
-    if (activeTab <= 0) return;
+    let barcode = '';
+    const handleKeydown = (event: KeyboardEvent) => {
+      if (event.key.length === 1) {
+        barcode += event.key; // Directly modify the variable
+      }
 
-    const selections = JSON.parse(storedSelection);
+      clearTimeout(scanTimeout);
+      scanTimeout = setTimeout(async () => {
+        if (barcode) {
+          console.log('Scanned Barcode:', barcode);
+          triggerBarcodeScanApi({
+            barcode,
+            location: selectedOption ? selectedOption.value : 'All'
+          })
+            .unwrap()
+            .then(res => {
+              const newData = res?.products || [];
+              const existingRows = dataTableState.rows || [];
 
-    const url = constructUrlParams(selections[activeTab - 1]?.queryParams);
+              // Create a map to track existing rows by id and location
+              const existingMap = new Map(
+                existingRows.map(row => [`${row.id}-${row.location}`, row])
+              );
 
-    triggerProductApi({
-      url: `${url}`,
-      limit: LISTING_PAGE_DATA_LIMIT,
-      offset: 0
-    })
-      .unwrap()
-      .then((res: any) => {
-        if (columns.length > 0) {
-          console.log('res?.error?.status', res?.error?.status);
-          if (res?.error?.status === statusCode.UNAUTHORIZED) {
-            dataTableSetState.setRows([]);
-          } else {
-            if (res?.products.length > 0) {
-              dataTableSetState.setRows(res?.products);
-            } else {
+              // Update existing rows or add new ones
+              newData.forEach((newRow: any) => {
+                const key = `${newRow.id}-${newRow.location}`;
+                existingMap.set(key, { ...existingMap.get(key), ...newRow }); // Update existing row or add new one
+              });
+
+              // Convert the map back to an array
+              const updatedRows = Array.from(existingMap.values());
+
+              // If there is no data to show, set showEmptyState to true
+              if (updatedRows.length === 0) {
+                setShowEmptyState(true);
+              } else {
+                // Set the updated rows
+                dataTableSetState.setRows(updatedRows);
+              }
+            })
+            .catch(error => {
               modalSetState.setIsDialogOpen(true);
               modalSetState.setDialogContent(
                 <CommonPoppup
-                  status="warning"
                   content={''}
-                  customPoppupBodyStyle="!mt-[70px]"
-                  header={NO_PRODUCT_FOUND}
+                  customPoppupBodyStyle="mt-[70px]"
+                  header={error?.data?.message}
                   actionButtonData={[
                     {
                       variant: 'primary',
                       label: ManageLocales('app.modal.okay'),
                       handler: () => {
-                        closeSearch(
-                          activeTab,
-                          JSON.parse(localStorage.getItem('Search')!)
-                        );
-
                         modalSetState.setIsDialogOpen(false);
                       },
-                      customStyle: 'flex-1 h-10'
+                      customStyle: 'flex-1 w-full h-10'
                     }
                   ]}
                 />
               );
-            }
-          }
+            });
 
-          setRowSelection({});
-          setErrorText('');
-          setData(res.data);
-          setIsLoading(false);
+          barcode = ''; // Reset barcode after processing
+        } else {
+          setShowEmptyState(true);
         }
-      })
-      .catch(e => {
-        console.log('eee', e);
-        setIsLoading(false);
-      });
-  };
+      }, 300);
+    };
+
+    window.addEventListener('keydown', handleKeydown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeydown);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!dataTableState?.rows.length) {
+      setShowEmptyState(true);
+    } else {
+      setShowEmptyState(false);
+    }
+  }, [dataTableState.rows]);
 
   const mapColumns = (columns: any) =>
     columns
@@ -374,12 +393,6 @@ const Result = ({
             };
         }
       });
-
-  useEffect(() => {
-    console.log('activeTab00004664', activeTab);
-    // setIsLoading(true)
-    fetchProducts();
-  }, [activeTab, isFetchProduct]);
 
   useEffect(() => {
     setErrorText('');
@@ -582,32 +595,6 @@ const Result = ({
     }
   }, [validImages]);
 
-  const closeSearch = (
-    removeDataIndex: number,
-    yourSelection: ISavedSearch[]
-  ) => {
-    let closeSpecificSearch = yourSelection.filter(
-      (_items: ISavedSearch, index: number) => {
-        return index !== removeDataIndex - 1;
-      }
-    );
-
-    if (removeDataIndex === 1) {
-      setSearchParameters([]);
-      // setAddSearches([]);
-      // handleReset(setState, errorSetState);
-      router.push(`${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`);
-    } else {
-      setSearchParameters(closeSpecificSearch);
-      // setAddSearches(closeSpecificSearch);
-      setActiveTab(removeDataIndex);
-      router.push(
-        `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${removeDataIndex - 1}`
-      );
-    }
-
-    localStorage.setItem('Search', JSON.stringify(closeSpecificSearch));
-  };
   const memoizedRows = useMemo(() => {
     return Array.isArray(dataTableState.rows) ? dataTableState.rows : [];
   }, [dataTableState.rows]);
@@ -615,9 +602,6 @@ const Result = ({
     () => mapColumns(dataTableState.columns),
     [dataTableState.columns, sorting]
   );
-  const handleNewSearch = () => {
-    router.push(`${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`);
-  };
 
   useEffect(() => {
     isError &&
@@ -657,7 +641,7 @@ const Result = ({
               styles={{
                 inputMain: 'w-full',
                 input: `h-[40px] p-2 flex-grow block w-[100%] !text-primaryMain min-w-0 rounded-r-sm text-mRegular shadow-[var(--input-shadow)] border-[1px] border-neutral200 rounded-r-[4px]
-                ${inputError ? 'border-dangerMain' : 'border-neutral200'}`
+                  ${inputError ? 'border-dangerMain' : 'border-neutral200'}`
               }}
             />
 
@@ -871,42 +855,30 @@ const Result = ({
 
       <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow">
         <div className="">
-          {productData === undefined &&
-          !memoizedRows.length &&
-          !data?.length ? (
-            <DataTableSkeleton />
-          ) : (
-            <DataTable
-              rows={memoizedRows}
-              columns={memoizedColumns}
-              setRowSelection={setRowSelection}
-              rowSelection={rowSelection}
-              showCalculatedField={true}
-              isResult={true}
-              activeTab={activeTab}
-              setSorting={setSorting}
-              sorting={sorting}
-              searchParameters={searchParameters}
-              setActiveTab={setActiveTab}
-              handleCloseAllTabs={handleCloseAllTabs}
-              handleCloseSpecificTab={handleCloseSpecificTab}
-              handleNewSearch={handleNewSearch}
-              setSearchParameters={setSearchParameters}
-              modalSetState={modalSetState}
-              data={data}
-              setErrorText={setErrorText}
-              downloadExcel={downloadExcel}
-              setIsError={setIsError}
-              searchList={[]}
-              setIsLoading={setIsLoading}
-              handleCreateAppointment={() => {}}
-              setIsSkeletonLoading={setIsSkeletonLoading}
-              isSkeletonLoading={isSkeletonLoading}
-            />
-          )}
+          <DataTable
+            rows={memoizedRows}
+            columns={memoizedColumns}
+            setRowSelection={setRowSelection}
+            rowSelection={rowSelection}
+            showCalculatedField={true}
+            modalSetState={modalSetState}
+            downloadExcel={downloadExcel}
+            dataTableSetState={dataTableSetState}
+            barcodeScan={true}
+            setIsError={setIsError}
+            setErrorText={setErrorText}
+            setIsLoading={setIsLoading}
+            setSorting={setSorting}
+            sorting={sorting}
+            setIsSkeletonLoading={setIsSkeletonLoading}
+            isSkeletonLoading={isSkeletonLoading}
+            showEmptyState={showEmptyState}
+            handleStateChange={handleStateChange}
+            selectedOption={selectedOption}
+          />
         </div>
       </div>
     </div>
   );
 };
-export default Result;
+export default DiamondBarcodeScanner;

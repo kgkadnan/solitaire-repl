@@ -15,7 +15,10 @@ export enum Routes {
   FAQS = '/v2/faqs',
   MATCHING_PAIR = '/v2/matching-pair',
   TURKEY = '/v2/turkey',
-  DETAIL_PAGE = '/v2/detail-page'
+  DETAIL_PAGE = '/v2/detail-page',
+  SCAN_BARCODE = '/v2/scanner',
+  SEARCH_TYPE = '/v2/search-type',
+  DIAMOND_BARCODE_SCANNER = '/v2/diamond-barcode-scanner'
 }
 // Enum using the enum keyword
 export enum SubRoutes {
