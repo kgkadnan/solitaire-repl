@@ -1,7 +1,8 @@
 {
-  "name": "solitaire",
+  "name": "KGK Barcode Scanner",
   "version": "0.1.0",
   "private": true,
+  "main": "main.js",
   "scripts": {
     "dev": "next dev | pino-pretty ",
     "build": "next build",
@@ -10,7 +11,9 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "test": "react-scripts test ",
-    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,scss,md}\""
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,scss,md}\"",
+    "export": "next export",
+    "electron": "electron ."
   },
   "jest": {
     "collectCoverageFrom": [
@@ -40,6 +43,7 @@
     "@azure/storage-blob": "^12.24.0",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
+    "@fortawesome/fontawesome-svg-core": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.5.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@mui/icons-material": "^5.15.6",
@@ -133,6 +137,7 @@
     "react-switch-selector": "^2.2.1",
     "react-tooltip": "^5.27.1",
     "react-visibility-sensor": "^5.1.1",
+    "serve-handler": "^6.1.6",
     "sharp": "^0.33.4",
     "slick-carousel": "^1.8.1",
     "socket.io-client": "^4.7.4",
@@ -179,6 +184,7 @@
     "@types/testing-library__react": "^10.2.0",
     "@typescript-eslint/eslint-plugin": "^6.13.2",
     "@typescript-eslint/parser": "^6.13.2",
+    "electron": "^34.2.0",
     "eslint": "8.46.0",
     "eslint-plugin-prettier": "^5.0.1",
     "eslint-plugin-storybook": "^0.6.13",
