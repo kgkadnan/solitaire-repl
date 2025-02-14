@@ -138,10 +138,6 @@ const DiamondBarcodeScanner = () => {
     setSelectedOption(selectedOption);
   };
 
-
-
-
-  
   useEffect(() => {
     let scanTimeout: NodeJS.Timeout;
 
