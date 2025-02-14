@@ -150,6 +150,7 @@ const DiamondBarcodeScanner = () => {
             .unwrap()
             .then(res => {
               const newData = res?.products || [];
+              console.log("newData", newData)
               const existingRows = dataTableState.rows || [];
 
               // Create a map to track existing rows by id and location
@@ -165,7 +166,7 @@ const DiamondBarcodeScanner = () => {
 
               // Convert the map back to an array
               const updatedRows = Array.from(existingMap.values());
-
+              console.log("updatedRows", updatedRows)
               // If there is no data to show, set showEmptyState to true
               if (updatedRows.length === 0) {
                 setShowEmptyState(true);

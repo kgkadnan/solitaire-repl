@@ -500,11 +500,11 @@ export const RenderAmount = ({ row }: any) => {
   return (
     <>
       <span>{`${
-        row.original.variants[0].prices[0]?.amount === null ||
-        row.original.variants[0].prices[0]?.amount === undefined
+        row.original.price === null ||
+        row.original.price === undefined
           ? '-'
           : `$${formatNumberWithCommas(
-              row.original.variants[0].prices[0]?.amount
+              row.original.price
             )}`
       }`}</span>
     </>
