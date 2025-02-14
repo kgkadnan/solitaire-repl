@@ -27,9 +27,9 @@ const ScanBarcode = () => {
     return decrypted;
   }
   useEffect(() => {
-    userLoggedIn(
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzYWxlc3BlcnNvbl9pZCI6MSwiZG9tYWluIjoic3RvcmUiLCJzYWxlc3BlcnNvbl9lbWFpbCI6ImFtYXJlc2gucGFyaWRhQGtna21haWwuY29tIiwibWFya3VwIjoiMTAiLCJpYXQiOjE3Mzk0NDMxMjEsImV4cCI6MTczOTQ0NjcyMX0.YAA1CtpwrlgykhD0BnT6o8Md3dPzbkwwZu5v1FMoni8'
-    );
+    // userLoggedIn(
+    //   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzYWxlc3BlcnNvbl9pZCI6MSwiZG9tYWluIjoic3RvcmUiLCJzYWxlc3BlcnNvbl9lbWFpbCI6ImFtYXJlc2gucGFyaWRhQGtna21haWwuY29tIiwibWFya3VwIjoiMTAiLCJpYXQiOjE3Mzk0NDMxMjEsImV4cCI6MTczOTQ0NjcyMX0.YAA1CtpwrlgykhD0BnT6o8Md3dPzbkwwZu5v1FMoni8'
+    // );
     let scanTimeout: NodeJS.Timeout;
 
     let barcode = '';
