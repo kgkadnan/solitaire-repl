@@ -28,6 +28,7 @@ export interface IProduct {
   thumbnail: string | null;
   collection_id: string | null;
   type_id: string | null;
+  price: number | null;
   weight: number | null;
   length: number | null;
   height: number | null;

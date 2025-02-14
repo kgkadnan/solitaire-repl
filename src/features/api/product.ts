@@ -24,9 +24,12 @@ export const productApi = createApi({
       providesTags: ['Product']
     }),
     getProductByScanningBarcode: builder.query({
-      query: ({ barcode = '', location = 'All' }) => ({
-        url: `/salesperson/stone/${barcode}?location=${location}`
-      }),
+      query: ({ barcode = '', location = '' }) => {
+        const url = location
+          ? `/salesperson/stone/${barcode}?location=${location}`
+          : `/salesperson/stone/${barcode}`;
+        return { url };
+      },
       providesTags: ['Product']
     })
   })

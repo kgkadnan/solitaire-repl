@@ -29,11 +29,13 @@ const CalculatedField = ({ rows, selectedProducts }: ICalculatedField) => {
     if (selectedRows?.length > 0) {
       selectedRows.forEach(row => {
         if (type === 'amount') {
-          const variant = row.variants.find(
+          const variant = row?.variants?.find(
             (variant: any) => variant.prices.length > 0
           );
           if (variant) {
             total += variant.prices[0].amount;
+          } else if (row?.price) {
+            total += row?.price; // Take value from row.prices if no variants
           }
         } else if (type === 'carats' && row.carats !== null) {
           total += row.carats;
