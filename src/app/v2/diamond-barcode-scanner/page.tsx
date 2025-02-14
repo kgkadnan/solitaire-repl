@@ -4,7 +4,8 @@ import React, {
   useMemo,
   useState,
   SetStateAction,
-  Dispatch
+  Dispatch,
+  useRef
 } from 'react';
 import DataTable from '@/components/v2/common/data-table';
 import { useDataTableStateManagement } from '@/components/v2/common/data-table/hooks/data-table-state-management';
@@ -107,6 +108,7 @@ const DiamondBarcodeScanner = () => {
     value: string;
     label: string;
   } | null>(null);
+  const locationRef = useRef<string | undefined>(selectedOption?.value);
   const [isSkeletonLoading, setIsSkeletonLoading] = useState<boolean>(true);
 
   const editRoute = useSearchParams().get('edit');
@@ -145,12 +147,13 @@ const DiamondBarcodeScanner = () => {
           console.log('Scanned Barcode:', barcode);
           triggerBarcodeScanApi({
             barcode,
-            location: selectedOption ? selectedOption.value : 'All'
+
+            location: locationRef.current
           })
             .unwrap()
             .then(res => {
               const newData = res?.products || [];
-              console.log("newData", newData)
+              console.log('newData', newData);
               const existingRows = dataTableState.rows || [];
 
               // Create a map to track existing rows by id and location
@@ -166,7 +169,7 @@ const DiamondBarcodeScanner = () => {
 
               // Convert the map back to an array
               const updatedRows = Array.from(existingMap.values());
-              console.log("updatedRows", updatedRows)
+              console.log('updatedRows', updatedRows);
               // If there is no data to show, set showEmptyState to true
               if (updatedRows.length === 0) {
                 setShowEmptyState(true);
