@@ -28,13 +28,6 @@ const ScanBarcode = () => {
   }
 
   useEffect(() => {
-    // let stringifyData = {
-    //   email: 'amaresh.parida@kgkmail.com',
-    //   password: 'abc123',
-    //   markup: 4
-    // };
-    // let encryptValue = encrypt(JSON.stringify(stringifyData));
-    // console.log('encryptValue', encryptValue);
     // userLoggedIn(
     //   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzYWxlc3BlcnNvbl9pZCI6MSwiZG9tYWluIjoic3RvcmUiLCJzYWxlc3BlcnNvbl9lbWFpbCI6ImFtYXJlc2gucGFyaWRhQGtna21haWwuY29tIiwibWFya3VwIjoiMTAiLCJpYXQiOjE3Mzk1MTk4OTcsImV4cCI6MTczOTUyMzQ5N30.wWXMDqkaYnGCQDKvd158KfaBCCosaDhXxo5ExmEcIyY'
     // );
@@ -52,53 +45,15 @@ const ScanBarcode = () => {
         if (barcode) {
           console.log('Scanned Barcode:', barcode);
 
-          let decryptedValue = decrypt(barcode);
-          console.log('Decrypted Data:', decryptedValue);
+          const [loginKey, markup] = barcode.split('-'); // Extract loginKey and markup from barcode
 
-          try {
-            let parsedData = JSON.parse(decryptedValue);
-            const { email, password, markup } = parsedData;
-
-            if (!email || !password || markup === undefined) {
-              setIsDialogOpen(true);
-              setDialogContent(
-                <CommonPoppup
-                  content={''}
-                  customPoppupBodyStyle="mt-[70px]"
-                  header={'Invalid data extracted from barcode'}
-                  actionButtonData={[
-                    {
-                      variant: 'primary',
-                      label: ManageLocales('app.modal.okay'),
-                      handler: () => {
-                        setIsDialogOpen(false);
-                      },
-                      customStyle: 'flex-1 w-full h-10'
-                    }
-                  ]}
-                />
-              );
-              return;
-            }
-
-            setLoginKey(decryptedValue);
-
-            let res: any = await verifyLogin({
-              body: { email, password },
-              markup: markup
-            });
-
-            userLoggedIn(res.data.access_token);
-
-            router.push('/v2/search-type');
-            console.log('Login Response:', res);
-          } catch (error) {
+          if (!loginKey || markup === undefined) {
             setIsDialogOpen(true);
             setDialogContent(
               <CommonPoppup
                 content={''}
                 customPoppupBodyStyle="mt-[70px]"
-                header={'Error parsing decrypted data'}
+                header={'Invalid data extracted from barcode'}
                 actionButtonData={[
                   {
                     variant: 'primary',
@@ -111,10 +66,41 @@ const ScanBarcode = () => {
                 ]}
               />
             );
-            console.error('Error parsing decrypted data:', error);
+            return;
           }
 
-          barcode = ''; // Reset barcode after processing
+          setLoginKey(loginKey); // Set loginKey from barcode
+
+          try {
+            let res: any = await verifyLogin({
+              body: { login_key: loginKey }, // Use loginKey in payload
+              markup: markup
+            });
+
+            userLoggedIn(res.data.access_token);
+            router.push('/v2/search-type');
+            console.log('Login Response:', res);
+          } catch (error) {
+            console.error('Login error:', error);
+            setIsDialogOpen(true);
+            setDialogContent(
+              <CommonPoppup
+                content={''}
+                customPoppupBodyStyle="mt-[70px]"
+                header={'Login failed. Please try again.'}
+                actionButtonData={[
+                  {
+                    variant: 'primary',
+                    label: ManageLocales('app.modal.okay'),
+                    handler: () => {
+                      setIsDialogOpen(false);
+                    },
+                    customStyle: 'flex-1 w-full h-10'
+                  }
+                ]}
+              />
+            );
+          }
         }
       }, 300);
     };

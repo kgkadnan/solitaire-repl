@@ -9,7 +9,7 @@ export const loginApi = createApi({
   endpoints: builder => ({
     verifyLogin: builder.mutation({
       query: ({ body, markup }) => ({
-        url: `/salesperson/auth/token?markup=${markup}`,
+        url: `/salesperson/v2/auth/token?markup=${markup}`,
         method: 'POST', // Use the appropriate HTTP method
         body: body // Modify this to match your API's payload
       }),
