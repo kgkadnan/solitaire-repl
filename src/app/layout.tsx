@@ -47,7 +47,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
   const isV2Route = v2Routes.includes(path);
 
   const showHeader = isApplicationRoutes && !headerlessRoutes.includes(path);
-  const isMobile = useMediaQuery({ maxWidth: 1024 });
+  const isMobile = useMediaQuery({ maxWidth: 768 });
 
   // Create a component that just renders children, with children as an optional prop
   const ChildrenComponent: FC<{ children?: ReactNode }> = ({ children }) => (
