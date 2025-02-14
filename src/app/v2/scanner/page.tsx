@@ -26,9 +26,17 @@ const ScanBarcode = () => {
     );
     return decrypted;
   }
+
   useEffect(() => {
+    // let stringifyData = {
+    //   email: 'amaresh.parida@kgkmail.com',
+    //   password: 'abc123',
+    //   markup: 4
+    // };
+    // let encryptValue = encrypt(JSON.stringify(stringifyData));
+    // console.log('encryptValue', encryptValue);
     // userLoggedIn(
-    //   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzYWxlc3BlcnNvbl9pZCI6MSwiZG9tYWluIjoic3RvcmUiLCJzYWxlc3BlcnNvbl9lbWFpbCI6ImFtYXJlc2gucGFyaWRhQGtna21haWwuY29tIiwibWFya3VwIjoiMTAiLCJpYXQiOjE3Mzk0NDMxMjEsImV4cCI6MTczOTQ0NjcyMX0.YAA1CtpwrlgykhD0BnT6o8Md3dPzbkwwZu5v1FMoni8'
+    //   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzYWxlc3BlcnNvbl9pZCI6MSwiZG9tYWluIjoic3RvcmUiLCJzYWxlc3BlcnNvbl9lbWFpbCI6ImFtYXJlc2gucGFyaWRhQGtna21haWwuY29tIiwibWFya3VwIjoiMTAiLCJpYXQiOjE3Mzk1MTk4OTcsImV4cCI6MTczOTUyMzQ5N30.wWXMDqkaYnGCQDKvd158KfaBCCosaDhXxo5ExmEcIyY'
     // );
     let scanTimeout: NodeJS.Timeout;
 
@@ -43,6 +51,7 @@ const ScanBarcode = () => {
       scanTimeout = setTimeout(async () => {
         if (barcode) {
           console.log('Scanned Barcode:', barcode);
+
           let decryptedValue = decrypt(barcode);
           console.log('Decrypted Data:', decryptedValue);
 

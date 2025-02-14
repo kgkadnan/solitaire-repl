@@ -36,6 +36,7 @@ import Tooltip from '../tooltip';
 import DataTableSkeleton from '../../skeleton/data-table';
 import CommonPoppup from '@/app/v2/login/component/common-poppup';
 import { colourStyles } from '../input-field/dynamic-mobile/country-select';
+import { STONE_LOCATION_SPACE_CODE } from '@/constants/v2/enums/location';
 
 // import { Switch } from '../../ui/switch';
 
@@ -468,8 +469,12 @@ const DataTable = ({
       return; // Exit if no selection is made
     }
 
-    let selectedIds = Object.keys(rowSelection)
-      .map(id => rows.find((row: any) => row.id === id)?.rfid) // Get rfid for each selected id
+    let selectedRows = Object.keys(rowSelection).map(id =>
+      rows.find((row: any) => row.id === id)
+    ); // Get each selected row
+
+    let selectedIds = selectedRows
+      .map(row => row?.rfid) // Get rfid for each selected row
       .filter((rfid): rfid is string => rfid !== undefined && rfid !== null); // Filter out nulls and ensure uniqueness
 
     if (selectedIds.length === 0) {
@@ -484,8 +489,6 @@ const DataTable = ({
       ?.firstName;
     const lastName = JSON.parse(localStorage.getItem('user')!)?.salesperson
       ?.lastName;
-    const location = JSON.parse(localStorage.getItem('user')!)?.salesperson
-      ?.location;
 
     if (!token) {
       setIsError(true);
@@ -493,10 +496,21 @@ const DataTable = ({
       return; // Exit if token is not found
     }
 
+    // Check if all selected stones have the same location
+    const locations = selectedRows.map(row => row?.location);
+    const uniqueLocations = new Set(locations);
+
+    if (uniqueLocations.size > 1) {
+      setIsError(true);
+      setErrorText('All selected stones must be from the same location.');
+      return; // Exit if locations are different
+    }
+
+    const location = locations[0] as keyof typeof STONE_LOCATION_SPACE_CODE;
     const payload = {
       display_name: `${firstName} ${lastName}`,
       rfid_list: selectedIds,
-      location: location
+      location: STONE_LOCATION_SPACE_CODE[location] // Use the location of the first stone
     };
 
     try {
@@ -546,9 +560,6 @@ const DataTable = ({
     }
 
     console.log('selectedIds', selectedIds);
-    // const allProductIds = rows.map(({ id }: { id: string }) => {
-    //   return id;
-    // });
   };
 
   const NoResultsComponent = () => {

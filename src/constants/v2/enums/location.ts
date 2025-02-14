@@ -6,6 +6,14 @@ export const STONE_LOCATION = {
   'USA-BD': 'USA'
 };
 
+export const STONE_LOCATION_SPACE_CODE = {
+  IND: 'surat',
+  DUB: 'dubai',
+  BEL: 'antwerp',
+  USA: 'ny',
+  'USA-BD': 'ny'
+};
+
 export const STONE_LOCATION_SHORT = {
   India: 'IND',
   Dubai: 'DUB',
