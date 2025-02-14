@@ -108,7 +108,13 @@ const DiamondBarcodeScanner = () => {
     value: string;
     label: string;
   } | null>(null);
-  const locationRef = useRef<string | undefined>(selectedOption?.value);
+
+  const locationRef = useRef<string | undefined>(undefined);
+
+  useEffect(() => {
+    locationRef.current = selectedOption?.value;
+  }, [selectedOption]); // Update when selectedOption changes
+
   const [isSkeletonLoading, setIsSkeletonLoading] = useState<boolean>(true);
 
   const editRoute = useSearchParams().get('edit');
@@ -132,6 +138,10 @@ const DiamondBarcodeScanner = () => {
     setSelectedOption(selectedOption);
   };
 
+
+
+
+  
   useEffect(() => {
     let scanTimeout: NodeJS.Timeout;
 
@@ -144,10 +154,9 @@ const DiamondBarcodeScanner = () => {
       clearTimeout(scanTimeout);
       scanTimeout = setTimeout(async () => {
         if (barcode) {
-          console.log('Scanned Barcode:', barcode);
+          console.log('Scanned Barcode:', barcode, locationRef);
           triggerBarcodeScanApi({
             barcode,
-
             location: locationRef.current
           })
             .unwrap()
