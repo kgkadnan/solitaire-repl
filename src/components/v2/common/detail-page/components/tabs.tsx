@@ -4,7 +4,6 @@ import VideoSvg from '@public/v2/assets/icons/detail-page/video.svg?url';
 import PdfSvg from '@public/v2/assets/icons/detail-page/pdf.svg?url';
 import { trackEvent } from '@/utils/ga';
 import { Tracking_Search_By_Text } from '@/constants/funnel-tracking';
-import { dashboardIndentifier } from '@/app/v2/page';
 
 // import { IImagesType } from '../interface';
 
@@ -104,22 +103,7 @@ const DetailPageTabs = ({
 
   const handleTabs = (label: string) => {
     if (label !== activePreviewTab) {
-      if (identifier === dashboardIndentifier) {
-        if (label !== 'Image') {
-          trackEvent({
-            action:
-              label === 'Video'
-                ? Tracking_Search_By_Text.click_stone_b2b_dna_page
-                : label === 'Sparkle'
-                ? Tracking_Search_By_Text.click_stone_sparkle_dna_page
-                : label === 'Certificate'
-                ? Tracking_Search_By_Text.click_stone_certificate_dna_page
-                : '',
-            category: 'SearchByText',
-            mobile_number: customerMobileNumber
-          });
-        }
-      } else if (identifier === 'resultPageDetails') {
+      if (identifier === 'resultPageDetails') {
         if (label !== 'Image') {
           trackEvent({
             action:
