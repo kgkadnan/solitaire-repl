@@ -489,6 +489,8 @@ const DataTable = ({
       ?.firstName;
     const lastName = JSON.parse(localStorage.getItem('user')!)?.salesperson
       ?.lastName;
+    const salesPersonLocation = JSON.parse(localStorage.getItem('user')!)
+      ?.salesperson?.location;
 
     if (!token) {
       setIsError(true);
@@ -503,6 +505,14 @@ const DataTable = ({
     if (uniqueLocations.size > 1) {
       setIsError(true);
       setErrorText('All selected stones must be from the same location.');
+      return; // Exit if locations are different
+    }
+
+    if (
+      locations[0].toLowerCase() !== salesPersonLocation.toLowerCase().trim()
+    ) {
+      setIsError(true);
+      setErrorText('Access Denied.');
       return; // Exit if locations are different
     }
 

@@ -54,7 +54,7 @@ const SearchType = () => {
       </div>
 
       <div className="w-[100%] flex flex-col gap-[16px] items-center">
-        {['barcode', 'manual'].map(option => (
+        {['barcode', 'manual'].map((option: any) => (
           <div
             key={option}
             className={`flex items-center mt-4 justify-between bg-neutral0 p-4 rounded-[8px] cursor-pointer border border-solid w-[471px]  ${
