@@ -193,6 +193,9 @@ const Result = ({
         }
       })
       .catch(e => {
+        if (e.data.type === statusCode.UNAUTHORIZED) {
+          router.push('/v2/scanner');
+        }
         console.log('eee', e);
         setIsLoading(false);
       });
@@ -421,14 +424,14 @@ const Result = ({
       url: `${FILE_URLS.IMG.replace(
         '***',
         detailImageData.location === 'USA-BD'
-          ? detailImageData.memo_out_barcode ?? ''
-          : detailImageData?.lot_id ?? ''
+          ? (detailImageData.memo_out_barcode ?? '')
+          : (detailImageData?.lot_id ?? '')
       )}`,
       downloadUrl: `${FILE_URLS.IMG.replace(
         '***',
         detailImageData.location === 'USA-BD'
-          ? detailImageData.memo_out_barcode ?? ''
-          : detailImageData?.lot_id ?? ''
+          ? (detailImageData.memo_out_barcode ?? '')
+          : (detailImageData?.lot_id ?? '')
       )}`,
       category: 'Image'
     },
@@ -453,14 +456,14 @@ const Result = ({
       url: `${FILE_URLS.B2B.replace(
         '***',
         detailImageData.location === 'USA-BD'
-          ? detailImageData.memo_out_barcode ?? ''
-          : detailImageData?.lot_id ?? ''
+          ? (detailImageData.memo_out_barcode ?? '')
+          : (detailImageData?.lot_id ?? '')
       )}`,
       downloadUrl: `${FILE_URLS.B2B_DOWNLOAD_URL.replace(
         '***',
         detailImageData.location === 'USA-BD'
-          ? detailImageData.memo_out_barcode ?? ''
-          : detailImageData?.lot_id ?? ''
+          ? (detailImageData.memo_out_barcode ?? '')
+          : (detailImageData?.lot_id ?? '')
       )}`,
       url_check: detailImageData?.assets_pre_check?.B2B_CHECK,
       category: 'Video'
@@ -470,14 +473,14 @@ const Result = ({
       url: `${FILE_URLS.B2B_SPARKLE.replace(
         '***',
         detailImageData.location === 'USA-BD'
-          ? detailImageData.memo_out_barcode ?? ''
-          : detailImageData?.lot_id ?? ''
+          ? (detailImageData.memo_out_barcode ?? '')
+          : (detailImageData?.lot_id ?? '')
       )}`,
       downloadUrl: `${FILE_URLS.B2B_SPARKLE_DOWNLOAD_URL.replace(
         '***',
         detailImageData.location === 'USA-BD'
-          ? detailImageData.memo_out_barcode ?? ''
-          : detailImageData?.lot_id ?? ''
+          ? (detailImageData.memo_out_barcode ?? '')
+          : (detailImageData?.lot_id ?? '')
       )}`,
       url_check: detailImageData?.assets_pre_check?.B2B_SPARKLE_CHECK,
       category: 'Sparkle'
@@ -488,14 +491,14 @@ const Result = ({
       url: `${FILE_URLS.HEART.replace(
         '***',
         detailImageData.location === 'USA-BD'
-          ? detailImageData.memo_out_barcode ?? ''
-          : detailImageData?.lot_id ?? ''
+          ? (detailImageData.memo_out_barcode ?? '')
+          : (detailImageData?.lot_id ?? '')
       )}`,
       downloadUrl: `${FILE_URLS.HEART.replace(
         '***',
         detailImageData.location === 'USA-BD'
-          ? detailImageData.memo_out_barcode ?? ''
-          : detailImageData?.lot_id ?? ''
+          ? (detailImageData.memo_out_barcode ?? '')
+          : (detailImageData?.lot_id ?? '')
       )}`,
       category: 'Image'
     },
@@ -504,14 +507,14 @@ const Result = ({
       url: `${FILE_URLS.ARROW.replace(
         '***',
         detailImageData.location === 'USA-BD'
-          ? detailImageData.memo_out_barcode ?? ''
-          : detailImageData?.lot_id ?? ''
+          ? (detailImageData.memo_out_barcode ?? '')
+          : (detailImageData?.lot_id ?? '')
       )}`,
       downloadUrl: `${FILE_URLS.ARROW.replace(
         '***',
         detailImageData.location === 'USA-BD'
-          ? detailImageData.memo_out_barcode ?? ''
-          : detailImageData?.lot_id ?? ''
+          ? (detailImageData.memo_out_barcode ?? '')
+          : (detailImageData?.lot_id ?? '')
       )}`,
       category: 'Image'
     },
@@ -520,14 +523,14 @@ const Result = ({
       url: `${FILE_URLS.ASET.replace(
         '***',
         detailImageData.location === 'USA-BD'
-          ? detailImageData.memo_out_barcode ?? ''
-          : detailImageData?.lot_id ?? ''
+          ? (detailImageData.memo_out_barcode ?? '')
+          : (detailImageData?.lot_id ?? '')
       )}`,
       downloadUrl: `${FILE_URLS.ASET.replace(
         '***',
         detailImageData.location === 'USA-BD'
-          ? detailImageData.memo_out_barcode ?? ''
-          : detailImageData?.lot_id ?? ''
+          ? (detailImageData.memo_out_barcode ?? '')
+          : (detailImageData?.lot_id ?? '')
       )}`,
       category: 'Image'
     },
@@ -536,14 +539,14 @@ const Result = ({
       url: `${FILE_URLS.IDEAL.replace(
         '***',
         detailImageData.location === 'USA-BD'
-          ? detailImageData.memo_out_barcode ?? ''
-          : detailImageData?.lot_id ?? ''
+          ? (detailImageData.memo_out_barcode ?? '')
+          : (detailImageData?.lot_id ?? '')
       )}`,
       downloadUrl: `${FILE_URLS.IDEAL.replace(
         '***',
         detailImageData.location === 'USA-BD'
-          ? detailImageData.memo_out_barcode ?? ''
-          : detailImageData?.lot_id ?? ''
+          ? (detailImageData.memo_out_barcode ?? '')
+          : (detailImageData?.lot_id ?? '')
       )}`,
       category: 'Image'
     },
@@ -552,14 +555,14 @@ const Result = ({
       url: `${FILE_URLS.FLUORESCENCE.replace(
         '***',
         detailImageData.location === 'USA-BD'
-          ? detailImageData.memo_out_barcode ?? ''
-          : detailImageData?.lot_id ?? ''
+          ? (detailImageData.memo_out_barcode ?? '')
+          : (detailImageData?.lot_id ?? '')
       )}`,
       downloadUrl: `${FILE_URLS.FLUORESCENCE.replace(
         '***',
         detailImageData.location === 'USA-BD'
-          ? detailImageData.memo_out_barcode ?? ''
-          : detailImageData?.lot_id ?? ''
+          ? (detailImageData.memo_out_barcode ?? '')
+          : (detailImageData?.lot_id ?? '')
       )}`,
       category: 'Image'
     }

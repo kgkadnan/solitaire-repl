@@ -7,6 +7,7 @@ import search from '@public/v2/assets/icons/search-bg-green-icon.png';
 import { useRouter } from 'next/navigation';
 import { useLazyGetSalePersonQuery } from '@/features/api/dashboard';
 import { Routes } from '@/constants/v2/enums/routes';
+import { statusCode } from '@/constants/enums/status-code';
 
 const SearchType = () => {
   const router = useRouter();
@@ -36,6 +37,10 @@ const SearchType = () => {
         localStorage.setItem('user', JSON.stringify(res));
       })
       .catch(e => {
+        if (e.data.type === statusCode.UNAUTHORIZED) {
+          router.push('/v2/scanner');
+          return;
+        }
         console.log('eeee', e);
       });
   }, []);

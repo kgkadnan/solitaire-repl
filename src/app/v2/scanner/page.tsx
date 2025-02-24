@@ -29,7 +29,7 @@ const ScanBarcode = () => {
 
   useEffect(() => {
     // userLoggedIn(
-    //   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzYWxlc3BlcnNvbl9pZCI6MSwiZG9tYWluIjoic3RvcmUiLCJzYWxlc3BlcnNvbl9lbWFpbCI6ImFtYXJlc2gucGFyaWRhQGtna21haWwuY29tIiwibWFya3VwIjoiMTAiLCJpYXQiOjE3Mzk1MTk4OTcsImV4cCI6MTczOTUyMzQ5N30.wWXMDqkaYnGCQDKvd158KfaBCCosaDhXxo5ExmEcIyY'
+    //   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzYWxlc3BlcnNvbl9pZCI6MSwiZG9tYWluIjoic3RvcmUiLCJzYWxlc3BlcnNvbl9lbWFpbCI6ImFtYXJlc2gucGFyaWRhQGtna21haWwuY29tIiwibWFya3VwIjoiMTAiLCJpYXQiOjE3NDAzOTAxNDAsImV4cCI6MTc0MDM5NzM0MH0.tjeEvWxIhzwqPOMQzzTE3afHsATLEKXlaBU7EDtRKUA'
     // );
     let scanTimeout: NodeJS.Timeout;
 

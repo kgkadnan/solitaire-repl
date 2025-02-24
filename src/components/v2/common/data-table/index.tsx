@@ -12,6 +12,7 @@ import ExpandImg from '@public/v2/assets/icons/detail-page/expand.svg?url';
 import lightBulb from '@public/v2/assets/icons/light-bulb-svgrepo-com.svg';
 import CollapsIcon from '@public/v2/assets/icons/collapse-icon.svg?url';
 import ExportExcel from '@public/v2/assets/icons/detail-page/export-excel.svg?url';
+import PrintIcon from '@public/v2/assets/icons/print-icon.svg?url';
 import ExportEmailViaEmail from '@public/v2/assets/icons/excel-via-email-icon.svg?url';
 import BinIcon from '@public/v2/assets/icons/bin.svg';
 import NewSearchIcon from '@public/v2/assets/icons/new-search.svg';
@@ -22,7 +23,7 @@ import CalculatedField from '../calculated-field';
 import ActionButton from '../action-button';
 import { ManageLocales } from '@/utils/v2/translate';
 import Breadcrum from '../search-breadcrum/breadcrum';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
 import {
@@ -37,6 +38,8 @@ import DataTableSkeleton from '../../skeleton/data-table';
 import CommonPoppup from '@/app/v2/login/component/common-poppup';
 import { colourStyles } from '../input-field/dynamic-mobile/country-select';
 import { STONE_LOCATION_SPACE_CODE } from '@/constants/v2/enums/location';
+import { columnsForPrint } from '@/app/v2/search/constant/column';
+import { formatNumberWithCommas } from '@/utils/format-number-with-comma';
 
 // import { Switch } from '../../ui/switch';
 
@@ -180,13 +183,9 @@ const DataTable = ({
 }: any) => {
   const userStates = JSON.parse(localStorage.getItem('user')!)?.salesperson
     ?.inventories_access;
-  console.log('userStates', userStates);
-  const options = [
-    { value: 'All', label: 'All' },
-    ...userStates.map((state: string) => ({ value: state, label: state }))
-  ];
-
-  console.log('options', options);
+  const options = userStates
+    ? [...userStates.map((state: string) => ({ value: state, label: state }))]
+    : [{}];
 
   // Fetching saved search data
   const router = useRouter();
@@ -210,8 +209,8 @@ const DataTable = ({
       setRowSelection({});
       // Remove all whitespace characters from globalFilter
       const trimmedFilter = globalFilter.replace(/\s+/g, '');
-      let data = rows.filter(
-        (data: any) => data?.lot_id?.startsWith(trimmedFilter)
+      let data = rows.filter((data: any) =>
+        data?.lot_id?.startsWith(trimmedFilter)
       );
       // const startIndex = pagination.pageIndex * pagination.pageSize;
       // const endIndex = startIndex + pagination.pageSize;
@@ -231,6 +230,107 @@ const DataTable = ({
       // Update the paginated data state
       setPaginatedData(newData);
     }
+  };
+  const handlePrint = () => {
+    if (!Object.keys(rowSelection).length) {
+      setErrorText('Please pick a stone.');
+      setIsError(true);
+      return;
+    }
+    // Select the table element directly using class
+    const tableElement = document.querySelector('.MuiTable-root');
+
+    if (!tableElement) {
+      console.warn('Table not found in DOM!');
+      return;
+    }
+
+    if (Object.keys(rowSelection).length === 0) {
+      console.warn('No row selected!');
+      return;
+    }
+
+    const selectedRowIds = Object.keys(rowSelection); // Get all selected row IDs
+    const selectedData = rows.filter((row: any) =>
+      selectedRowIds.includes(row.id)
+    ); // Find all selected rows
+
+    if (selectedData.length === 0) return;
+
+    // Create a printable window
+    const printWindow = window.open('', '_blank')!;
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>Print Selected Rows</title>
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              padding: 10px;
+              font-size: '4px' !important;
+              text-align: center;
+            }
+            h2 {
+              margin-bottom: 15px;
+              color: #333;
+            }
+            table {
+              width: 80%;
+              margin: auto;
+              border-collapse: collapse;
+              font-size: '4px' !important;
+              box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            }
+            th, td {
+              padding: 8px;
+              border: 1px solid #ddd;
+              text-align: left;
+                 font-size: '4px' !important;
+            }
+            th {
+              background-color: #000;
+              color: white;
+              font-weight: bold;
+              font-size: '4px' !important;
+            }
+            tr:nth-child(even) {
+              background-color: #f9f9f9;
+            }
+          </style>
+        </head>
+        <body>
+          <h2>Selected Rows</h2>
+          <table>
+            <tr>
+              ${columnsForPrint.map(header => `<th>${header.label}</th>`).join('')}
+            </tr>
+            ${selectedData
+              .map(
+                (row: any) =>
+                  `<tr>${columnsForPrint
+                    .map(header => {
+                      if (header.accessor === 'amount') {
+                        return row.variants && row.variants.length > 0
+                          ? row.variants[0].prices[0]?.amount === null ||
+                            row.variants[0].prices[0]?.amount === undefined
+                            ? '<td>-</td>'
+                            : `<td>$${formatNumberWithCommas(row.variants[0].prices[0]?.amount)}</td>`
+                          : row.price === null || row.price === undefined
+                            ? '<td>-</td>'
+                            : `<td>$${formatNumberWithCommas(row.price)}</td>`;
+                      }
+                      return `<td>${row[header.accessor] !== null ? row[header.accessor] : '-'}</td>`;
+                    })
+                    .join('')}</tr>`
+              )
+              .join('')}
+          </table>
+        </body>
+      </html>
+    `);
+
+    printWindow.document.close();
+    printWindow.print();
   };
 
   useEffect(() => {
@@ -465,7 +565,7 @@ const DataTable = ({
     if (Object.keys(rowSelection).length === 0) {
       setIsError(true);
       setErrorText('Please pick a stone.');
-      console.log('hererer');
+
       return; // Exit if no selection is made
     }
 
@@ -568,8 +668,6 @@ const DataTable = ({
       console.error('Error during API call:', error);
       setErrorText('An error occurred while making the API call.');
     }
-
-    console.log('selectedIds', selectedIds);
   };
 
   const NoResultsComponent = () => {
@@ -772,26 +870,26 @@ const DataTable = ({
               ? 'calc(100vh - 130px)'
               : 'calc(100vh - 90px)'
             : isDashboard
-            ? 'calc(100vh - 180px)'
-            : 'calc(100vh - 230px)'
+              ? 'calc(100vh - 180px)'
+              : 'calc(100vh - 230px)'
           : barcodeScan
-          ? showCalculatedField
-            ? 'calc(100vh - 212px)'
-            : 'calc(100vh - 303px)'
-          : 'calc(100vh - 300px)',
+            ? showCalculatedField
+              ? 'calc(100vh - 212px)'
+              : 'calc(100vh - 303px)'
+            : 'calc(100vh - 300px)',
         maxHeight: isFullScreen
           ? barcodeScan
             ? showCalculatedField
               ? 'calc(100vh - 130px)'
               : 'calc(100vh - 90px)'
             : isDashboard
-            ? 'calc(100vh - 180px)'
-            : 'calc(100vh - 230px)'
+              ? 'calc(100vh - 180px)'
+              : 'calc(100vh - 230px)'
           : barcodeScan
-          ? showCalculatedField
-            ? 'calc(100vh - 212px)'
-            : 'calc(100vh - 303px)'
-          : 'calc(100vh - 300px)'
+            ? showCalculatedField
+              ? 'calc(100vh - 212px)'
+              : 'calc(100vh - 303px)'
+            : 'calc(100vh - 300px)'
       }
     },
     muiTableHeadRowProps: {
@@ -1083,6 +1181,32 @@ const DataTable = ({
 
             <div
               className=" rounded-[4px] cursor-pointer"
+              onClick={() => {
+                handlePrint();
+              }}
+            >
+              <Tooltip
+                tooltipTrigger={
+                  <button
+                    disabled={showEmptyState}
+                    className={`disabled:!bg-neutral100 disabled:cursor-not-allowed disabled:text-neutral400 rounded-[4px] hover:bg-neutral50 flex items-center justify-center w-[37px] h-[37px] text-center  border-[1px] border-solid border-neutral200 shadow-sm ${'bg-neutral0'}`}
+                  >
+                    <PrintIcon
+                      className={`${
+                        showEmptyState
+                          ? 'stroke-neutral400'
+                          : 'stroke-neutral900'
+                      }`}
+                    />
+                  </button>
+                }
+                tooltipContent={'Print'}
+                tooltipContentStyles={'z-[1000]'}
+              />
+            </div>
+
+            <div
+              className=" rounded-[4px] cursor-pointer"
               onClick={showEmptyState ? () => {} : handleDownloadExcel}
             >
               <Tooltip
@@ -1110,7 +1234,6 @@ const DataTable = ({
                 showEmptyState
                   ? () => {}
                   : () => {
-                      console.log('herere i');
                       modalSetState.setIsInputDialogOpen(true);
                     }
               }

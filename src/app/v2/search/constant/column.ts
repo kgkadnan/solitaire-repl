@@ -432,3 +432,187 @@ export const columns = [
     id: 'cus_ma-lis-seq_01J8SG2RYFWWRYC8Y9XAJKCJPN'
   }
 ];
+
+export const columnsForPrint = [
+  {
+    label: 'Stock No.',
+    accessor: 'lot_id',
+    sequence: 1,
+    is_fixed: true,
+    short_label: 'Stock No.',
+    is_disabled: false,
+    id: 'cus_ma-lis-seq_01J8SG2RYBTVH40MBKEWTFGG5R'
+  },
+  {
+    label: 'Diamond Status',
+    accessor: 'diamond_status',
+    sequence: 3,
+    is_fixed: true,
+    short_label: 'Status',
+    is_disabled: false,
+    id: 'cus_ma-lis-seq_01J8SG2RYBTDCFQK726JYFZWSJ'
+  },
+  {
+    label: 'Lab',
+    accessor: 'lab',
+    sequence: 5,
+    is_fixed: false,
+    short_label: 'Lab',
+    is_disabled: false,
+    id: 'cus_ma-lis-seq_01J8SG2RYB516HKC1KVRQ2CZSJ'
+  },
+  {
+    label: 'Shape',
+    accessor: 'shape',
+    sequence: 6,
+    is_fixed: false,
+    short_label: 'Shape',
+    is_disabled: false,
+    id: 'cus_ma-lis-seq_01J8SG2RYBDWGS831X45DTS1XT'
+  },
+  {
+    label: 'Cut',
+    accessor: 'cut',
+    sequence: 7,
+    is_fixed: false,
+    short_label: 'Cut',
+    is_disabled: false,
+    id: 'cus_ma-lis-seq_01J8SG2RYCVZ9DTRQGMP39WBDV'
+  },
+  {
+    label: 'Carats',
+    accessor: 'carats',
+    sequence: 8,
+    is_fixed: false,
+    short_label: 'Carats',
+    is_disabled: false,
+    id: 'cus_ma-lis-seq_01J8SG2RYCXWWC0F27Z4FKYN6S'
+  },
+  {
+    label: 'Color',
+    accessor: 'color',
+    sequence: 9,
+    is_fixed: false,
+    short_label: 'Color',
+    is_disabled: false,
+    id: 'cus_ma-lis-seq_01J8SG2RYC8V2ZCPAJ587GKG1H'
+  },
+  {
+    label: 'Clarity',
+    accessor: 'clarity',
+    sequence: 10,
+    is_fixed: false,
+    short_label: 'Clarity',
+    is_disabled: false,
+    id: 'cus_ma-lis-seq_01J8SG2RYC2AHRMBKP0GKBSACS'
+  },
+  {
+    label: 'Polish',
+    accessor: 'polish',
+    sequence: 11,
+    is_fixed: false,
+    short_label: 'Pol',
+    is_disabled: false,
+    id: 'cus_ma-lis-seq_01J8SG2RYCKK97BK6WGMEJYESB'
+  },
+  {
+    label: 'Symmetry',
+    accessor: 'symmetry',
+    sequence: 12,
+    is_fixed: false,
+    short_label: 'Sym',
+    is_disabled: false,
+    id: 'cus_ma-lis-seq_01J8SG2RYC39SY828644JW82T5'
+  },
+  {
+    label: 'Fluorescence',
+    accessor: 'fluorescence',
+    sequence: 13,
+    is_fixed: false,
+    short_label: 'Fluo',
+    is_disabled: false,
+    id: 'cus_ma-lis-seq_01J8SG2RYCE0KHX4YK51GSMN7F'
+  },
+  {
+    label: 'Discount',
+    accessor: 'discount',
+    sequence: 14,
+    is_fixed: false,
+    short_label: 'Disc %',
+    is_disabled: false,
+    id: 'cus_ma-lis-seq_01J8SG2RYCSR8XSXQFEFDDJ00Q'
+  },
+  {
+    label: 'Price/Carat',
+    accessor: 'price_per_carat',
+    sequence: 15,
+    is_fixed: false,
+    short_label: 'Pr/Ct',
+    is_disabled: false,
+    id: 'cus_ma-lis-seq_01J8SG2RYC71KMSRFH5B69PPDF'
+  },
+  {
+    label: 'Rap ($)',
+    accessor: 'rap',
+    sequence: 16,
+    is_fixed: false,
+    short_label: 'Rap ($)',
+    is_disabled: false,
+    id: 'cus_ma-lis-seq_01J8SG2RYC5MD8PPF6PXCTFP5Q'
+  },
+  {
+    label: 'Rap Value',
+    accessor: 'rap_value',
+    sequence: 17,
+    is_fixed: false,
+    short_label: 'Rap Value',
+    is_disabled: false,
+    id: 'cus_ma-lis-seq_01J8SG2RYDT9ZA75JFBEWS0WPM'
+  },
+  {
+    label: 'Amount',
+    accessor: 'amount',
+    sequence: 18,
+    is_fixed: false,
+    short_label: 'Amt ($)',
+    is_disabled: false,
+    id: 'cus_ma-lis-seq_01J8SG2RYDKBY64JPGDGWAJ169'
+  },
+
+  {
+    label: 'Table%',
+    accessor: 'table_percentage',
+    sequence: 20,
+    is_fixed: false,
+    short_label: 'Table %',
+    is_disabled: false,
+    id: 'cus_ma-lis-seq_01J8SG2RYD8PMVQ45VFQPK0VZJ'
+  },
+  {
+    label: 'Depth%',
+    accessor: 'depth_percentage',
+    sequence: 21,
+    is_fixed: false,
+    short_label: 'Depth%',
+    is_disabled: false,
+    id: 'cus_ma-lis-seq_01J8SG2RYDDZ34NRDS03YM4NDG'
+  },
+  {
+    label: 'Certificate Number',
+    accessor: 'certificate_number',
+    sequence: 22,
+    is_fixed: false,
+    short_label: 'Cert No',
+    is_disabled: false,
+    id: 'cus_ma-lis-seq_01J8SG2RYDEWPZPDP5Y4A0YK7D'
+  },
+  {
+    label: 'Report Comments',
+    accessor: 'report_comments',
+    sequence: 43,
+    is_fixed: false,
+    short_label: 'RPT Com',
+    is_disabled: false,
+    id: 'cus_ma-lis-seq_01J8SG2RYEMKZDQGNJDQ3K8KBZ'
+  }
+];
