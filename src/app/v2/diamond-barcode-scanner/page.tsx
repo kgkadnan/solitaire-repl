@@ -143,6 +143,17 @@ const DiamondBarcodeScanner = () => {
 
     let barcode = '';
     const handleKeydown = (event: KeyboardEvent) => {
+
+      if (
+        event.target instanceof HTMLInputElement ||
+        event.target instanceof HTMLTextAreaElement ||
+        event.target instanceof HTMLSelectElement
+      ) {
+        return; // Exit if typing in an input field
+      }
+
+
+  
       if (event.key.length === 1) {
         barcode += event.key; // Directly modify the variable
       }

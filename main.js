@@ -5,9 +5,12 @@ const next = require('next');
 
 let mainWindow;
 let nextJsServer;
+console.log("app.isPackaged", app.isPackaged)
+const isPackaged = app.isPackaged;
+const nextDir = isPackaged ? path.join(process.resourcesPath, 'app') : __dirname;
 
 // Initialize Next.js in production mode
-const nextApp = next({ dev: false }); // Set dev to false for production
+const nextApp = next({ dev: false, dir: nextDir });
 const nextHandle = nextApp.getRequestHandler();
 
 function startNextJsServer() {
@@ -36,11 +39,11 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
-    icon: path.join(__dirname, 'icons', 'logo.png'),
+    icon: path.join(nextDir, 'icons', 'logo.png'),
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      preload: path.join(__dirname, 'preload.js'),
+      preload: path.join(nextDir, 'preload.js'),
       devTools: true
     }
   });
