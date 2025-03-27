@@ -1253,7 +1253,7 @@ const DataTable = ({
                     />
                   </button>
                 }
-                tooltipContent={'Download Excel'}
+                tooltipContent={'Email Excel'}
                 tooltipContentStyles={'z-[1000]'}
               />
             </div>
