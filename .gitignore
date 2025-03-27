@@ -39,3 +39,5 @@ next-env.d.ts
 .vscode/extensions.json
 /.scannerwork/
 public/v3/globe/
+
+/KGK-win32-x64
