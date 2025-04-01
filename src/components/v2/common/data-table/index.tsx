@@ -586,9 +586,9 @@ const DataTable = ({
     const token = JSON.parse(localStorage.getItem('user')!)?.salesperson
       ?.rfid_smartdrawer_token;
     const firstName = JSON.parse(localStorage.getItem('user')!)?.salesperson
-      ?.firstName;
+      ?.first_name;
     const lastName = JSON.parse(localStorage.getItem('user')!)?.salesperson
-      ?.lastName;
+      ?.last_name;
     const salesPersonLocation = JSON.parse(localStorage.getItem('user')!)
       ?.salesperson?.location;
 
@@ -1167,7 +1167,7 @@ const DataTable = ({
                 actionButtonData={[
                   {
                     variant: 'secondary',
-                    label: 'Space code',
+                    label: 'Drawer',
                     handler: () => {
                       handleSpaceCode();
                     },
