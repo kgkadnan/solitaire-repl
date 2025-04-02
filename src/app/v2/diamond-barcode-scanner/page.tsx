@@ -138,6 +138,8 @@ const DiamondBarcodeScanner = () => {
     setSelectedOption(selectedOption);
   };
 
+
+
   useEffect(() => {
     let scanTimeout: NodeJS.Timeout;
 
@@ -170,29 +172,32 @@ const DiamondBarcodeScanner = () => {
             .then(res => {
               const newData = res?.products || [];
               console.log('newData', newData);
-              const existingRows = dataTableState.rows || [];
 
-              // Create a map to track existing rows by id and location
-              const existingMap = new Map(
-                existingRows.map(row => [`${row.id}-${row.location}`, row])
-              );
 
-              // Update existing rows or add new ones
-              newData.forEach((newRow: any) => {
-                const key = `${newRow.id}-${newRow.location}`;
-                existingMap.set(key, { ...existingMap.get(key), ...newRow }); // Update existing row or add new one
+              dataTableSetState.setRows(prevRows => {
+                const existingRows = prevRows || []; // Preserve previous rows
+
+                // Create a map to track existing rows by id and location
+                const existingMap = new Map(
+                  existingRows.map(row => [`${row.id}-${row.location}`, row])
+                );
+
+                // Update existing rows or add new ones
+                newData.forEach((newRow: any) => {
+                  const key = `${newRow.id}-${newRow.location}`;
+                  existingMap.set(key, { ...existingMap.get(key) ?? {}, ...newRow });
+                });
+
+                const updatedRows = Array.from(existingMap.values());
+                console.log('updatedRows', updatedRows);
+
+                // If no rows exist, show empty state
+                if (updatedRows.length === 0) {
+                  setShowEmptyState(true);
+                }
+                return updatedRows; // Preserve previous data while adding new rows
+
               });
-
-              // Convert the map back to an array
-              const updatedRows = Array.from(existingMap.values());
-              console.log('updatedRows', updatedRows);
-              // If there is no data to show, set showEmptyState to true
-              if (updatedRows.length === 0) {
-                setShowEmptyState(true);
-              } else {
-                // Set the updated rows
-                dataTableSetState.setRows(updatedRows);
-              }
             })
             .catch(error => {
               if (error.data.type === statusCode.UNAUTHORIZED) {
