@@ -35,15 +35,7 @@ export const columns = [
     is_disabled: false,
     id: 'cus_ma-lis-seq_01J8SG2RYB7R1R6N72TAYSJZQV'
   },
-  {
-    label: 'Lab',
-    accessor: 'lab',
-    sequence: 5,
-    is_fixed: false,
-    short_label: 'Lab',
-    is_disabled: false,
-    id: 'cus_ma-lis-seq_01J8SG2RYB516HKC1KVRQ2CZSJ'
-  },
+
   {
     label: 'Shape',
     accessor: 'shape',
@@ -52,15 +44,6 @@ export const columns = [
     short_label: 'Shape',
     is_disabled: false,
     id: 'cus_ma-lis-seq_01J8SG2RYBDWGS831X45DTS1XT'
-  },
-  {
-    label: 'Cut',
-    accessor: 'cut',
-    sequence: 7,
-    is_fixed: false,
-    short_label: 'Cut',
-    is_disabled: false,
-    id: 'cus_ma-lis-seq_01J8SG2RYCVZ9DTRQGMP39WBDV'
   },
   {
     label: 'Carats',
@@ -90,6 +73,72 @@ export const columns = [
     id: 'cus_ma-lis-seq_01J8SG2RYC2AHRMBKP0GKBSACS'
   },
   {
+    label: 'Lab',
+    accessor: 'lab',
+    sequence: 5,
+    is_fixed: false,
+    short_label: 'Lab',
+    is_disabled: false,
+    id: 'cus_ma-lis-seq_01J8SG2RYB516HKC1KVRQ2CZSJ'
+  },
+  {
+    label: 'Rap ($)',
+    accessor: 'rap',
+    sequence: 16,
+    is_fixed: false,
+    short_label: 'Rap ($)',
+    is_disabled: false,
+    id: 'cus_ma-lis-seq_01J8SG2RYC5MD8PPF6PXCTFP5Q'
+  },
+  {
+    label: 'Rap Value',
+    accessor: 'rap_value',
+    sequence: 17,
+    is_fixed: false,
+    short_label: 'Rap Value',
+    is_disabled: false,
+    id: 'cus_ma-lis-seq_01J8SG2RYDT9ZA75JFBEWS0WPM'
+  },
+  {
+    label: 'Discount',
+    accessor: 'discount',
+    sequence: 14,
+    is_fixed: false,
+    short_label: 'Disc %',
+    is_disabled: false,
+    id: 'cus_ma-lis-seq_01J8SG2RYCSR8XSXQFEFDDJ00Q'
+  },
+  {
+    label: 'Price/Carat',
+    accessor: 'price_per_carat',
+    sequence: 15,
+    is_fixed: false,
+    short_label: 'Pr/Ct',
+    is_disabled: false,
+    id: 'cus_ma-lis-seq_01J8SG2RYC71KMSRFH5B69PPDF'
+  },
+
+  {
+    label: 'Amount',
+    accessor: 'amount',
+    sequence: 18,
+    is_fixed: false,
+    short_label: 'Amt ($)',
+    is_disabled: false,
+    id: 'cus_ma-lis-seq_01J8SG2RYDKBY64JPGDGWAJ169'
+  },
+
+  {
+    label: 'Cut',
+    accessor: 'cut',
+    sequence: 7,
+    is_fixed: false,
+    short_label: 'Cut',
+    is_disabled: false,
+    id: 'cus_ma-lis-seq_01J8SG2RYCVZ9DTRQGMP39WBDV'
+  },
+
+  {
     label: 'Polish',
     accessor: 'polish',
     sequence: 11,
@@ -117,58 +166,13 @@ export const columns = [
     id: 'cus_ma-lis-seq_01J8SG2RYCE0KHX4YK51GSMN7F'
   },
   {
-    label: 'Discount',
-    accessor: 'discount',
-    sequence: 14,
+    label: 'Depth%',
+    accessor: 'depth_percentage',
+    sequence: 21,
     is_fixed: false,
-    short_label: 'Disc %',
+    short_label: 'Depth%',
     is_disabled: false,
-    id: 'cus_ma-lis-seq_01J8SG2RYCSR8XSXQFEFDDJ00Q'
-  },
-  {
-    label: 'Price/Carat',
-    accessor: 'price_per_carat',
-    sequence: 15,
-    is_fixed: false,
-    short_label: 'Pr/Ct',
-    is_disabled: false,
-    id: 'cus_ma-lis-seq_01J8SG2RYC71KMSRFH5B69PPDF'
-  },
-  {
-    label: 'Rap ($)',
-    accessor: 'rap',
-    sequence: 16,
-    is_fixed: false,
-    short_label: 'Rap ($)',
-    is_disabled: false,
-    id: 'cus_ma-lis-seq_01J8SG2RYC5MD8PPF6PXCTFP5Q'
-  },
-  {
-    label: 'Rap Value',
-    accessor: 'rap_value',
-    sequence: 17,
-    is_fixed: false,
-    short_label: 'Rap Value',
-    is_disabled: false,
-    id: 'cus_ma-lis-seq_01J8SG2RYDT9ZA75JFBEWS0WPM'
-  },
-  {
-    label: 'Amount',
-    accessor: 'amount',
-    sequence: 18,
-    is_fixed: false,
-    short_label: 'Amt ($)',
-    is_disabled: false,
-    id: 'cus_ma-lis-seq_01J8SG2RYDKBY64JPGDGWAJ169'
-  },
-  {
-    label: 'Shade',
-    accessor: 'shade',
-    sequence: 19,
-    is_fixed: false,
-    short_label: 'Shade',
-    is_disabled: false,
-    id: 'cus_ma-lis-seq_01J8SG2RYDYWY755SXY0KHDS8R'
+    id: 'cus_ma-lis-seq_01J8SG2RYDDZ34NRDS03YM4NDG'
   },
   {
     label: 'Table%',
@@ -179,23 +183,35 @@ export const columns = [
     is_disabled: false,
     id: 'cus_ma-lis-seq_01J8SG2RYD8PMVQ45VFQPK0VZJ'
   },
+
   {
-    label: 'Depth%',
-    accessor: 'depth_percentage',
-    sequence: 21,
+    label: 'Shade',
+    accessor: 'shade',
+    sequence: 19,
     is_fixed: false,
-    short_label: 'Depth%',
+    short_label: 'Shade',
     is_disabled: false,
-    id: 'cus_ma-lis-seq_01J8SG2RYDDZ34NRDS03YM4NDG'
+    id: 'cus_ma-lis-seq_01J8SG2RYDYWY755SXY0KHDS8R'
   },
+
   {
-    label: 'Certificate Number',
-    accessor: 'certificate_number',
-    sequence: 22,
+    label: 'Milky',
+    accessor: 'milky',
+    sequence: 41,
     is_fixed: false,
-    short_label: 'Cert No',
+    short_label: 'Milky',
     is_disabled: false,
-    id: 'cus_ma-lis-seq_01J8SG2RYDEWPZPDP5Y4A0YK7D'
+    id: 'cus_ma-lis-seq_01J8SG2RYEJF52ZN20M3B3AH1N'
+  },
+
+  {
+    label: 'Luster',
+    accessor: 'luster',
+    sequence: 46,
+    is_fixed: false,
+    short_label: 'Luster',
+    is_disabled: false,
+    id: 'cus_ma-lis-seq_01J8SG2RYFR0RKBK0XFWJJ3WVX'
   },
   {
     label: 'Ratio',
@@ -205,96 +221,6 @@ export const columns = [
     short_label: 'Ratio',
     is_disabled: false,
     id: 'cus_ma-lis-seq_01J8SG2RYDH5F4BG6SCJGN5DH9'
-  },
-  {
-    label: 'Measurements(L*W*D)',
-    accessor: 'measurements',
-    sequence: 24,
-    is_fixed: false,
-    short_label: 'Measurements(L*W*D)',
-    is_disabled: false,
-    id: 'cus_ma-lis-seq_01J8SG2RYD04H2TBWEB5RZ6DDQ'
-  },
-  {
-    label: 'Crown Angle',
-    accessor: 'crown_angle',
-    sequence: 25,
-    is_fixed: false,
-    short_label: 'CA',
-    is_disabled: false,
-    id: 'cus_ma-lis-seq_01J8SG2RYD83W67562WWX5YFJ8'
-  },
-  {
-    label: 'Crown Height',
-    accessor: 'crown_height',
-    sequence: 26,
-    is_fixed: false,
-    short_label: 'CH',
-    is_disabled: false,
-    id: 'cus_ma-lis-seq_01J8SG2RYDRDGRGNMMC6MCMDT8'
-  },
-  {
-    label: 'Girdle%',
-    accessor: 'girdle_percentage',
-    sequence: 27,
-    is_fixed: false,
-    short_label: 'Girdle%',
-    is_disabled: false,
-    id: 'cus_ma-lis-seq_01J8SG2RYDMKV05Q7F49R1RN7M'
-  },
-  {
-    label: 'Pavilion Angle',
-    accessor: 'pavilion_angle',
-    sequence: 28,
-    is_fixed: false,
-    short_label: 'PA',
-    is_disabled: false,
-    id: 'cus_ma-lis-seq_01J8SG2RYDGQQHMZBNA93KPATY'
-  },
-  {
-    label: 'Pavilion Height',
-    accessor: 'pavilion_height',
-    sequence: 29,
-    is_fixed: false,
-    short_label: 'PH',
-    is_disabled: false,
-    id: 'cus_ma-lis-seq_01J8SG2RYDA4PSX1BE94NGDSMD'
-  },
-  {
-    label: 'Lower Half',
-    accessor: 'lower_half',
-    sequence: 30,
-    is_fixed: false,
-    short_label: 'LH',
-    is_disabled: false,
-    id: 'cus_ma-lis-seq_01J8SG2RYDRJJ23PJK7ZSJRQ5N'
-  },
-  {
-    label: 'Star Length',
-    accessor: 'star_length',
-    sequence: 31,
-    is_fixed: false,
-    short_label: 'SL',
-    is_disabled: false,
-    id: 'cus_ma-lis-seq_01J8SG2RYERPT2GB9TTR3SWSZH'
-  },
-  {
-    label: 'Culet',
-    accessor: 'culet',
-    sequence: 32,
-    is_fixed: false,
-    short_label: 'Culet',
-    is_disabled: false,
-    id: 'cus_ma-lis-seq_01J8SG2RYEN71H78SJW9PRK2RR'
-  },
-  {
-    label: 'Girdle',
-    accessor: 'girdle',
-    sequence: 33,
-    is_fixed: false,
-    short_label: 'Girdle',
-    is_disabled: false,
-    id: 'cus_ma-lis-seq_01J8SG2RYE83D3QZ24RJ31A16T'
   },
   {
     label: 'Table Black',
@@ -332,6 +258,99 @@ export const columns = [
     is_disabled: false,
     id: 'cus_ma-lis-seq_01J8SG2RYEDNBYTZ3TW3JCAQ4R'
   },
+
+  {
+    label: 'Girdle',
+    accessor: 'girdle',
+    sequence: 33,
+    is_fixed: false,
+    short_label: 'Girdle',
+    is_disabled: false,
+    id: 'cus_ma-lis-seq_01J8SG2RYE83D3QZ24RJ31A16T'
+  },
+  {
+    label: 'Girdle%',
+    accessor: 'girdle_percentage',
+    sequence: 27,
+    is_fixed: false,
+    short_label: 'Girdle%',
+    is_disabled: false,
+    id: 'cus_ma-lis-seq_01J8SG2RYDMKV05Q7F49R1RN7M'
+  },
+  {
+    label: 'Culet',
+    accessor: 'culet',
+    sequence: 32,
+    is_fixed: false,
+    short_label: 'Culet',
+    is_disabled: false,
+    id: 'cus_ma-lis-seq_01J8SG2RYEN71H78SJW9PRK2RR'
+  },
+  {
+    label: 'Measurements(L*W*D)',
+    accessor: 'measurements',
+    sequence: 24,
+    is_fixed: false,
+    short_label: 'Measurements(L*W*D)',
+    is_disabled: false,
+    id: 'cus_ma-lis-seq_01J8SG2RYD04H2TBWEB5RZ6DDQ'
+  },
+  {
+    label: 'Crown Angle',
+    accessor: 'crown_angle',
+    sequence: 25,
+    is_fixed: false,
+    short_label: 'CA',
+    is_disabled: false,
+    id: 'cus_ma-lis-seq_01J8SG2RYD83W67562WWX5YFJ8'
+  },
+  {
+    label: 'Crown Height',
+    accessor: 'crown_height',
+    sequence: 26,
+    is_fixed: false,
+    short_label: 'CH',
+    is_disabled: false,
+    id: 'cus_ma-lis-seq_01J8SG2RYDRDGRGNMMC6MCMDT8'
+  },
+
+  {
+    label: 'Pavilion Angle',
+    accessor: 'pavilion_angle',
+    sequence: 28,
+    is_fixed: false,
+    short_label: 'PA',
+    is_disabled: false,
+    id: 'cus_ma-lis-seq_01J8SG2RYDGQQHMZBNA93KPATY'
+  },
+  {
+    label: 'Pavilion Height',
+    accessor: 'pavilion_height',
+    sequence: 29,
+    is_fixed: false,
+    short_label: 'PH',
+    is_disabled: false,
+    id: 'cus_ma-lis-seq_01J8SG2RYDA4PSX1BE94NGDSMD'
+  },
+  {
+    label: 'Star Length',
+    accessor: 'star_length',
+    sequence: 31,
+    is_fixed: false,
+    short_label: 'SL',
+    is_disabled: false,
+    id: 'cus_ma-lis-seq_01J8SG2RYERPT2GB9TTR3SWSZH'
+  },
+  {
+    label: 'Lower Half',
+    accessor: 'lower_half',
+    sequence: 30,
+    is_fixed: false,
+    short_label: 'LH',
+    is_disabled: false,
+    id: 'cus_ma-lis-seq_01J8SG2RYDRJJ23PJK7ZSJRQ5N'
+  },
+
   {
     label: 'Table Open',
     accessor: 'table_open',
@@ -359,15 +378,7 @@ export const columns = [
     is_disabled: false,
     id: 'cus_ma-lis-seq_01J8SG2RYE8YGGRN20FWAWHR88'
   },
-  {
-    label: 'Milky',
-    accessor: 'milky',
-    sequence: 41,
-    is_fixed: false,
-    short_label: 'Milky',
-    is_disabled: false,
-    id: 'cus_ma-lis-seq_01J8SG2RYEJF52ZN20M3B3AH1N'
-  },
+
   {
     label: 'Eye Clean',
     accessor: 'eye_clean',
@@ -405,32 +416,33 @@ export const columns = [
     id: 'cus_ma-lis-seq_01J8SG2RYF9C9J3YDHSH27AC90'
   },
   {
-    label: 'Luster',
-    accessor: 'luster',
-    sequence: 46,
+    label: 'Certificate Number',
+    accessor: 'certificate_number',
+    sequence: 22,
     is_fixed: false,
-    short_label: 'Luster',
+    short_label: 'Cert No',
     is_disabled: false,
-    id: 'cus_ma-lis-seq_01J8SG2RYFR0RKBK0XFWJJ3WVX'
-  },
-  {
-    label: 'Country of Origin',
-    accessor: 'origin_country',
-    sequence: 47,
-    is_fixed: false,
-    short_label: 'Origin',
-    is_disabled: false,
-    id: 'cus_ma-lis-seq_01J8SG2RYFYDYRCGM237ER5CQ1'
-  },
-  {
-    label: 'Tracr ID',
-    accessor: 'tracr_id',
-    sequence: 48,
-    is_fixed: false,
-    short_label: 'Tracr ID',
-    is_disabled: false,
-    id: 'cus_ma-lis-seq_01J8SG2RYFWWRYC8Y9XAJKCJPN'
+    id: 'cus_ma-lis-seq_01J8SG2RYDEWPZPDP5Y4A0YK7D'
   }
+
+  // {
+  //   label: 'Country of Origin',
+  //   accessor: 'origin_country',
+  //   sequence: 47,
+  //   is_fixed: false,
+  //   short_label: 'Origin',
+  //   is_disabled: false,
+  //   id: 'cus_ma-lis-seq_01J8SG2RYFYDYRCGM237ER5CQ1'
+  // },
+  // {
+  //   label: 'Tracr ID',
+  //   accessor: 'tracr_id',
+  //   sequence: 48,
+  //   is_fixed: false,
+  //   short_label: 'Tracr ID',
+  //   is_disabled: false,
+  //   id: 'cus_ma-lis-seq_01J8SG2RYFWWRYC8Y9XAJKCJPN'
+  // }
 ];
 
 export const columnsForPrint = [
