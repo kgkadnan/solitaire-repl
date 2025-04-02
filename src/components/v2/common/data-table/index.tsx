@@ -557,7 +557,7 @@ const DataTable = ({
       setRowSelection,
       setIsLoading: setIsLoading,
       router,
-      page: 'Normal_Search'
+      page: 'barcode_scanner_app'
     });
   };
 

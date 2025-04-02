@@ -726,7 +726,7 @@ const DiamondBarcodeScanner = () => {
     // Explicitly type res to include unwrap method
     emailExcel({
       products: selectedIds.length > 0 ? selectedIds : allProductIds,
-      page: 'Normal_Search',
+      page: 'barcode_scanner_app',
       email: saveSearchName
     })
       .unwrap()
