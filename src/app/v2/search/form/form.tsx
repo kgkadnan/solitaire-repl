@@ -68,6 +68,7 @@ import CommonPoppup from '../../login/component/common-poppup';
 import { kycStatus } from '@/constants/enums/kyc';
 
 import CustomSwitch from '@/components/v2/common/switch/switch';
+import { Event } from './components/event';
 
 // import { Switch } from '@/components/v2/ui/switch';
 
@@ -174,7 +175,8 @@ const Form = ({
     selectedOvertone,
     selectionChecked,
     isSliderActive,
-    showOnlyWithVideo
+    showOnlyWithVideo,
+    selectedEvent
   } = state;
   const {
     setCaratMin,
@@ -203,7 +205,8 @@ const Form = ({
     setSelectedCaratRange,
     setSelectionChecked,
     setIsSliderActive,
-    setShowOnlyWithVideo
+    setShowOnlyWithVideo,
+    setSelectedEvent
   } = setState;
 
   const {
@@ -725,6 +728,11 @@ const Form = ({
             setMinMaxError={setMinMaxError}
           />
 
+          <Event
+            selectedEvent={selectedEvent}
+            setSelectedEvent={setSelectedEvent}
+          />
+
           <Parameters
             state={state}
             setState={setState}
@@ -772,10 +780,10 @@ const Form = ({
                 {isLoadingProductApi || isLoading || isFetchingProductApi
                   ? ''
                   : minMaxError.length
-                  ? minMaxError
-                  : validationError.length
-                  ? validationError
-                  : !isValidationError && errorText}
+                    ? minMaxError
+                    : validationError.length
+                      ? validationError
+                      : !isValidationError && errorText}
               </span>
             </div>
           )}

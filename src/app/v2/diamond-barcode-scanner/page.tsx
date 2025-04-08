@@ -138,14 +138,11 @@ const DiamondBarcodeScanner = () => {
     setSelectedOption(selectedOption);
   };
 
-
-
   useEffect(() => {
     let scanTimeout: NodeJS.Timeout;
 
     let barcode = '';
     const handleKeydown = (event: KeyboardEvent) => {
-
       if (
         event.target instanceof HTMLInputElement ||
         event.target instanceof HTMLTextAreaElement ||
@@ -154,8 +151,6 @@ const DiamondBarcodeScanner = () => {
         return; // Exit if typing in an input field
       }
 
-
-  
       if (event.key.length === 1) {
         barcode += event.key; // Directly modify the variable
       }
@@ -171,8 +166,6 @@ const DiamondBarcodeScanner = () => {
             .unwrap()
             .then(res => {
               const newData = res?.products || [];
-              console.log('newData', newData);
-
 
               dataTableSetState.setRows(prevRows => {
                 const existingRows = prevRows || []; // Preserve previous rows
@@ -185,7 +178,10 @@ const DiamondBarcodeScanner = () => {
                 // Update existing rows or add new ones
                 newData.forEach((newRow: any) => {
                   const key = `${newRow.id}-${newRow.location}`;
-                  existingMap.set(key, { ...existingMap.get(key) ?? {}, ...newRow });
+                  existingMap.set(key, {
+                    ...(existingMap.get(key) ?? {}),
+                    ...newRow
+                  });
                 });
 
                 const updatedRows = Array.from(existingMap.values());
@@ -196,7 +192,6 @@ const DiamondBarcodeScanner = () => {
                   setShowEmptyState(true);
                 }
                 return updatedRows; // Preserve previous data while adding new rows
-
               });
             })
             .catch(error => {

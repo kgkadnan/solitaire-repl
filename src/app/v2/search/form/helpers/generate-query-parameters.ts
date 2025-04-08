@@ -84,6 +84,7 @@ interface IState {
   caratRangeData?: string[];
   selectionChecked: string;
   showOnlyWithVideo: boolean;
+  selectedEvent: string;
 }
 
 // Define a function to generate query parameters based on the provided state
@@ -159,7 +160,8 @@ export const generateQueryParams = (state: IState) => {
     selectionChecked,
     caratMin,
     caratMax,
-    showOnlyWithVideo
+    showOnlyWithVideo,
+    selectedEvent
   } = state;
 
   // Initialize an empty object to store query parameters
@@ -234,6 +236,8 @@ export const generateQueryParams = (state: IState) => {
   selectedLab?.length !== 0 && (queryParams['lab'] = selectedLab);
   selectedLocation?.length !== 0 &&
     (queryParams['location'] = selectedLocation);
+  selectedEvent?.length !== 0 &&
+    (queryParams[`${selectedEvent.toLowerCase()}_event`] = true);
   selectedOrigin?.length !== 0 &&
     (queryParams['origin_country'] = selectedOrigin);
   amountRangeMin?.length !== 0 &&

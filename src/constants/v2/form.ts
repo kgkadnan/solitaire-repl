@@ -88,6 +88,7 @@ export const anchor = [
   'Country of Origin',
   'Shade',
   'Discount% Price/Ct Amount Range',
+  'Event',
   'Parameters',
   'Inclusions',
   'Key to Symbol'

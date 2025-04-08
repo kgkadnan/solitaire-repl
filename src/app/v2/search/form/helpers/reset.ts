@@ -73,7 +73,8 @@ export const handleReset = (setState: any, errorSetState: any) => {
     setStarLengthMax,
     setStarLengthMin,
     setSelectedGirdle,
-    setShowOnlyWithVideo
+    setShowOnlyWithVideo,
+    setSelectedEvent
   } = setState;
 
   const {
@@ -113,6 +114,7 @@ export const handleReset = (setState: any, errorSetState: any) => {
   setSelectedLab([]);
   setCaratRangeSelectionTemp([]);
   setCaratRangeSelection([]);
+  setSelectedEvent([]);
   setAmountRangeMin('');
   setAmountRangeMax('');
   setDiscountMin('');
