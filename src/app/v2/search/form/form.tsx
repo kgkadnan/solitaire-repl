@@ -728,10 +728,7 @@ const Form = ({
             setMinMaxError={setMinMaxError}
           />
 
-          <Event
-            selectedEvent={selectedEvent}
-            setSelectedEvent={setSelectedEvent}
-          />
+        
 
           <Parameters
             state={state}
@@ -742,12 +739,19 @@ const Form = ({
           />
 
           <Inclusions state={state} setState={setState} />
+
           <KeyToSymbol
             selectedKeyToSymbol={selectedKeyToSymbol}
             setSelectedKeyToSymbol={setSelectedKeyToSymbol}
             setSelectionChecked={setSelectionChecked}
             selectionChecked={selectionChecked}
           />
+
+          <Event
+            selectedEvent={selectedEvent}
+            setSelectedEvent={setSelectedEvent}
+          />
+          
         </div>
       </div>
       <div

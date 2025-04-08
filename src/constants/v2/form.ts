@@ -88,10 +88,10 @@ export const anchor = [
   'Country of Origin',
   'Shade',
   'Discount% Price/Ct Amount Range',
-  'Event',
   'Parameters',
   'Inclusions',
-  'Key to Symbol'
+  'Key to Symbol',
+  'Event'
 ];
 
 export const tableInclusionSortOrder = ['T0', 'T1', 'T2', 'T3'];
